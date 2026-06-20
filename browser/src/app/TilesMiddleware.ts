@@ -10,57 +10,58 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-/// Static facade — preserves the static TileManager API used by all call sites.
-class TileManager {
+/// Static facade exposing the RenderManager API as static methods.
+class RenderManager {
 	private static _instance: BitmapTileManager;
 
 	private static ensureInstance(): BitmapTileManager {
-		if (!TileManager._instance) TileManager._instance = new BitmapTileManager();
-		return TileManager._instance;
+		if (!RenderManager._instance)
+			RenderManager._instance = new BitmapTileManager();
+		return RenderManager._instance;
 	}
 
 	static get tileSize(): number {
-		return TileManager.ensureInstance().tileSize;
+		return RenderManager.ensureInstance().tileSize;
 	}
 
 	static initialize(): void {
-		TileManager.ensureInstance().initialize();
+		RenderManager.ensureInstance().initialize();
 	}
 
 	static appendAfterFirstTileTask(task: AfterFirstTileTask): void {
-		TileManager.ensureInstance().appendAfterFirstTileTask(task);
+		RenderManager.ensureInstance().appendAfterFirstTileTask(task);
 	}
 
 	static updateOverlayMessages(): void {
-		TileManager.ensureInstance().updateOverlayMessages();
+		RenderManager.ensureInstance().updateOverlayMessages();
 	}
 
 	static getExpiryFactor(tile: Tile): number {
-		return TileManager.ensureInstance().getExpiryFactor(tile);
+		return RenderManager.ensureInstance().getExpiryFactor(tile);
 	}
 
 	static beginTransaction(): void {
-		TileManager.ensureInstance().beginTransaction();
+		RenderManager.ensureInstance().beginTransaction();
 	}
 
 	static endTransaction(callback: any = null): void {
-		TileManager.ensureInstance().endTransaction(callback);
+		RenderManager.ensureInstance().endTransaction(callback);
 	}
 
 	static refreshTilesInBackground(): void {
-		TileManager.ensureInstance().refreshTilesInBackground();
+		RenderManager.ensureInstance().refreshTilesInBackground();
 	}
 
 	static setDebugDeltas(state: boolean): void {
-		TileManager.ensureInstance().setDebugDeltas(state);
+		RenderManager.ensureInstance().setDebugDeltas(state);
 	}
 
 	static get(coords: TileCoordData): Tile {
-		return TileManager.ensureInstance().get(coords);
+		return RenderManager.ensureInstance().get(coords);
 	}
 
 	static getTiles(): Map<string, Tile> {
-		return TileManager.ensureInstance().getTiles();
+		return RenderManager.ensureInstance().getTiles();
 	}
 
 	static overlapInvalidatedRectangleWithView(
@@ -70,7 +71,7 @@ class TileManager {
 		invalidatedRectangle: cool.SimpleRectangle,
 		textMsg: string,
 	): void {
-		TileManager.ensureInstance().overlapInvalidatedRectangleWithView(
+		RenderManager.ensureInstance().overlapInvalidatedRectangleWithView(
 			part,
 			mode,
 			wireId,
@@ -80,74 +81,74 @@ class TileManager {
 	}
 
 	static resetPreFetching(resetBorder: boolean): void {
-		TileManager.ensureInstance().resetPreFetching(resetBorder);
+		RenderManager.ensureInstance().resetPreFetching(resetBorder);
 	}
 
 	static clearPreFetch(): void {
-		TileManager.ensureInstance().clearPreFetch();
+		RenderManager.ensureInstance().clearPreFetch();
 	}
 
 	static sendProcessedResponse(): void {
-		TileManager.ensureInstance().sendProcessedResponse();
+		RenderManager.ensureInstance().sendProcessedResponse();
 	}
 
 	static onTileMsg(textMsg: string, img: any): void {
-		TileManager.ensureInstance().onTileMsg(textMsg, img);
+		RenderManager.ensureInstance().onTileMsg(textMsg, img);
 	}
 
 	static predictTilesToSlurp(): number {
-		return TileManager.ensureInstance().predictTilesToSlurp();
+		return RenderManager.ensureInstance().predictTilesToSlurp();
 	}
 
 	static pruneTiles(): void {
-		TileManager.ensureInstance().pruneTiles();
+		RenderManager.ensureInstance().pruneTiles();
 	}
 
 	static reclaimGraphicsMemory(): void {
-		TileManager.ensureInstance().reclaimGraphicsMemory();
+		RenderManager.ensureInstance().reclaimGraphicsMemory();
 	}
 
 	static discardAllCache(): void {
-		TileManager.ensureInstance().discardAllCache();
+		RenderManager.ensureInstance().discardAllCache();
 	}
 
 	static isValidTile(coords: TileCoordData): boolean {
-		return TileManager.ensureInstance().isValidTile(coords);
+		return RenderManager.ensureInstance().isValidTile(coords);
 	}
 
 	static redraw(): BitmapTileManager {
-		return TileManager.ensureInstance().redraw();
+		return RenderManager.ensureInstance().redraw();
 	}
 
 	static update(center: any = null, zoom: number = null): void {
-		TileManager.ensureInstance().update(center, zoom);
+		RenderManager.ensureInstance().update(center, zoom);
 	}
 
 	static onWorkerEndTransaction(e: any): void {
-		TileManager.ensureInstance().onWorkerEndTransaction(e);
+		RenderManager.ensureInstance().onWorkerEndTransaction(e);
 	}
 
 	static onWorkerError(e: any): void {
-		TileManager.ensureInstance().onWorkerError(e);
+		RenderManager.ensureInstance().onWorkerError(e);
 	}
 
 	static updateOnChangePart(): void {
-		TileManager.ensureInstance().updateOnChangePart();
+		RenderManager.ensureInstance().updateOnChangePart();
 	}
 
 	static expandTileRange(range: cool.Bounds): cool.Bounds {
-		return TileManager.ensureInstance().expandTileRange(range);
+		return RenderManager.ensureInstance().expandTileRange(range);
 	}
 
 	static pxBoundsToTileRange(bounds: any): cool.Bounds {
-		return TileManager.ensureInstance().pxBoundsToTileRange(bounds);
+		return RenderManager.ensureInstance().pxBoundsToTileRange(bounds);
 	}
 
 	static checkRequestTiles(
 		currentCoordList: TileCoordData[],
 		sendTileCombine: boolean = true,
 	): TileCoordData[] {
-		return TileManager.ensureInstance().checkRequestTiles(
+		return RenderManager.ensureInstance().checkRequestTiles(
 			currentCoordList,
 			sendTileCombine,
 		);
@@ -158,7 +159,7 @@ class TileManager {
 		zoomFrameBounds: any = null,
 		forZoom: any = null,
 	): TileCoordData[] {
-		return TileManager.ensureInstance().updateFileBasedView(
+		return RenderManager.ensureInstance().updateFileBasedView(
 			checkOnly,
 			zoomFrameBounds,
 			forZoom,
@@ -166,12 +167,12 @@ class TileManager {
 	}
 
 	static invalidateTile(key: string, wireId: number): void {
-		TileManager.ensureInstance().invalidateTile(key, wireId);
+		RenderManager.ensureInstance().invalidateTile(key, wireId);
 	}
 
 	static touchImage(tile: Tile): void {
-		TileManager.ensureInstance().touchImage(tile);
+		RenderManager.ensureInstance().touchImage(tile);
 	}
 }
 
-(window as any).TileManager = TileManager;
+(window as any).RenderManager = RenderManager;

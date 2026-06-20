@@ -196,7 +196,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Track Changes', function (
 		// with content:
 		cy.getFrameWindow().then(function(win) {
 			cy.wrap(null).should(function() {
-				const tiles = win.TileManager.getTiles();
+				const tiles = win.RenderManager.getTiles();
 				let hasMode1 = false;
 				let hasMode2 = false;
 				tiles.forEach(function(tile) {

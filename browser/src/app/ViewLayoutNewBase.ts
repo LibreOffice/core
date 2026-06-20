@@ -239,7 +239,7 @@ class ViewLayoutNewBase extends ViewLayoutBase {
 	} {
 		this.currentCoordList.length = 0;
 		const zoom = Math.round(app.map.getZoom());
-		const tileSize = TileManager.tileSize;
+		const tileSize = RenderManager.tileSize;
 
 		const documentAnchor = this.getDocumentAnchorSection();
 		const view = cool.SimpleRectangle.fromCorePixels([
@@ -292,7 +292,8 @@ class ViewLayoutNewBase extends ViewLayoutBase {
 				if (added.has(key)) continue;
 				added.add(key);
 
-				if (TileManager.isValidTile(coords)) this.currentCoordList.push(coords);
+				if (RenderManager.isValidTile(coords))
+					this.currentCoordList.push(coords);
 			}
 		}
 	}

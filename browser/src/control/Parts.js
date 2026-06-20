@@ -13,7 +13,7 @@
  */
 
 /* global app _ cool */
-/* global _ JSDialog app OtherViewCellCursorSection TileManager TextCursorSection OtherViewGraphicSelectionSection */
+/* global _ JSDialog app OtherViewCellCursorSection RenderManager TextCursorSection OtherViewGraphicSelectionSection */
 
 window.L.Map.include({
 	/*
@@ -123,8 +123,8 @@ window.L.Map.include({
 		TextCursorSection.updateVisibilities();
 		OtherViewGraphicSelectionSection.updateVisibilities();
 		docLayer._clearSelections(calledFromSetPartHandler);
-		TileManager.updateOnChangePart();
-		TileManager.pruneTiles();
+		RenderManager.updateOnChangePart();
+		RenderManager.pruneTiles();
 		docLayer._prevSelectedPartNeedsUpdate = true;
 		if (docLayer._invalidatePreviews) {
 			docLayer._invalidatePreviews();

@@ -326,7 +326,7 @@ class ViewLayoutBase {
 		let allReady = true;
 
 		for (let i = 0; i < this.currentCoordList.length; i++) {
-			const tempTile = TileManager.get(this.currentCoordList[i]);
+			const tempTile = RenderManager.get(this.currentCoordList[i]);
 
 			if (!tempTile || !tempTile.isReady()) allReady = false;
 		}
@@ -339,28 +339,29 @@ class ViewLayoutBase {
 		const zoom = Math.round(app.map.getZoom());
 
 		const columnCount = Math.ceil(
-			this._viewedRectangle.pWidth / TileManager.tileSize,
+			this._viewedRectangle.pWidth / RenderManager.tileSize,
 		);
 		const rowCount = Math.ceil(
-			this._viewedRectangle.pHeight / TileManager.tileSize,
+			this._viewedRectangle.pHeight / RenderManager.tileSize,
 		);
 		const startX =
-			Math.floor(this._viewedRectangle.pX1 / TileManager.tileSize) *
-			TileManager.tileSize;
+			Math.floor(this._viewedRectangle.pX1 / RenderManager.tileSize) *
+			RenderManager.tileSize;
 		const startY =
-			Math.floor(this._viewedRectangle.pY1 / TileManager.tileSize) *
-			TileManager.tileSize;
+			Math.floor(this._viewedRectangle.pY1 / RenderManager.tileSize) *
+			RenderManager.tileSize;
 
 		for (let i = 0; i <= columnCount; i++) {
 			for (let j = 0; j <= rowCount; j++) {
 				const coords = new TileCoordData(
-					startX + i * TileManager.tileSize,
-					startY + j * TileManager.tileSize,
+					startX + i * RenderManager.tileSize,
+					startY + j * RenderManager.tileSize,
 					zoom,
 					0,
 				);
 
-				if (TileManager.isValidTile(coords)) this.currentCoordList.push(coords);
+				if (RenderManager.isValidTile(coords))
+					this.currentCoordList.push(coords);
 			}
 		}
 	}

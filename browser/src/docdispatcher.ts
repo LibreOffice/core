@@ -846,7 +846,7 @@ class Dispatcher {
 				// Do this only if we are switching to Writer normal layout.
 				// Try to handle this in constructor for compare-changes layout.
 				if (commandState) {
-					TileManager.redraw();
+					RenderManager.redraw();
 					app.map._docLayer._fitWidthZoom(null, null, true);
 					app.activeDocument.activeLayout.sendClientVisibleArea();
 					app.sectionContainer.requestReDraw();
@@ -880,7 +880,7 @@ class Dispatcher {
 				app.activeDocument?.activeLayout?.type === 'ViewLayoutCompareChanges'
 			) {
 				app.activeDocument.activeLayout = new ViewLayoutWriter();
-				TileManager.redraw();
+				RenderManager.redraw();
 				app.map._docLayer._fitWidthZoom(null, null, true);
 				app.activeDocument.activeLayout.sendClientVisibleArea();
 				app.sectionContainer.requestReDraw();

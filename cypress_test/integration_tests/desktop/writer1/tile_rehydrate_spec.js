@@ -37,7 +37,7 @@ describe(['tagdesktop'], 'Tile rehydrate from cache.', function() {
 		// (and the fix).
 		var stuckKey;
 		cy.getFrameWindow().then(function(win) {
-			var tiles = win.TileManager.getTiles();
+			var tiles = win.RenderManager.getTiles();
 			var stuck = null;
 			tiles.forEach(function(tile, key) {
 				if (stuck) return;
@@ -67,7 +67,7 @@ describe(['tagdesktop'], 'Tile rehydrate from cache.', function() {
 			expect(stuck.requestingTooFast(new Date()),
 				'requestingTooFast after corruption').to.be.true;
 
-			win.TileManager.update();
+			win.RenderManager.update();
 		});
 
 		cy.getFrameWindow().then(function(win) {
@@ -80,7 +80,7 @@ describe(['tagdesktop'], 'Tile rehydrate from cache.', function() {
 		// by the cooldown we pinned above.
 		cy.getFrameWindow().then(function(win) {
 			cy.wrap(null).should(function() {
-				var tile = win.TileManager.getTiles().get(stuckKey);
+				var tile = win.RenderManager.getTiles().get(stuckKey);
 				expect(tile, 'tile still present after update').to.not.be.undefined;
 				expect(tile.image, 'tile rehydrated from cache').to.not.be.null;
 			});

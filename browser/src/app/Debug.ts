@@ -21,7 +21,7 @@
  * - &randomUser=true URL parameter (global.js)
  */
 
-/* global app L _ InvalidationRectangleSection TileManager */
+/* global app L _ InvalidationRectangleSection RenderManager */
 
 type TimeoutHdl = ReturnType<typeof setTimeout>;
 
@@ -556,10 +556,10 @@ class DebugManager {
 			category: 'Logging',
 			startsOn: false,
 			onAdd: function () {
-				TileManager.setDebugDeltas(true);
+				RenderManager.setDebugDeltas(true);
 			},
 			onRemove: function () {
-				TileManager.setDebugDeltas(false);
+				RenderManager.setDebugDeltas(false);
 			},
 		});
 

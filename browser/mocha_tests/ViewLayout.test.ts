@@ -210,9 +210,9 @@ describe('View Layout Tests', function () {
 		);
 	}
 
-	// Clear the TileManager singleton's state between tests so earlier
+	// Clear the RenderManager singleton's state between tests so earlier
 	// scenarios do not leak rendered tiles into later assertions.
-	function resetTileManagerState(tileMgr: any): void {
+	function resetRenderManagerState(tileMgr: any): void {
 		tileMgr.tiles.clear();
 		if (tileMgr.tileBitmapList) tileMgr.tileBitmapList.length = 0;
 	}
@@ -221,7 +221,7 @@ describe('View Layout Tests', function () {
 	// Shared test context and scenario assertions
 	// ========================================================================
 
-	// Create a test context: reset the TileManager singleton, install
+	// Create a test context: reset the RenderManager singleton, install
 	// monkey-patches, and return everything needed for lifecycle
 	// assertions. Caller must call ctx.restore() in a finally block.
 	function createTestContext(layout: any): {
@@ -231,9 +231,9 @@ describe('View Layout Tests', function () {
 		renderedKeys: Set<string>;
 		restore: () => void;
 	} {
-		void TileManager.tileSize;
-		const tileMgr: any = (TileManager as any)._instance;
-		resetTileManagerState(tileMgr);
+		void RenderManager.tileSize;
+		const tileMgr: any = (RenderManager as any)._instance;
+		resetRenderManagerState(tileMgr);
 		const tileCombine = instrumentTileCombineRequests(tileMgr);
 		const rendering = instrumentTileRendering(tileMgr);
 		return {
@@ -253,7 +253,7 @@ describe('View Layout Tests', function () {
 	// list.
 	function requestAndRenderAll(ctx: any): TileCoordData[] {
 		(ctx.layout as any).refreshCurrentCoordList();
-		TileManager.checkRequestTiles(
+		RenderManager.checkRequestTiles(
 			ctx.layout.getCurrentCoordList().slice(),
 		);
 		const visibleCoords: TileCoordData[] =
@@ -271,7 +271,7 @@ describe('View Layout Tests', function () {
 
 		const before = ctx.sentRequests.length;
 		(ctx.layout as any).refreshCurrentCoordList();
-		TileManager.checkRequestTiles(
+		RenderManager.checkRequestTiles(
 			ctx.layout.getCurrentCoordList().slice(),
 		);
 		nodeassert.strictEqual(
@@ -289,7 +289,7 @@ describe('View Layout Tests', function () {
 		}
 
 		(ctx.layout as any).refreshCurrentCoordList();
-		TileManager.checkRequestTiles(
+		RenderManager.checkRequestTiles(
 			ctx.layout.getCurrentCoordList().slice(),
 		);
 
@@ -335,7 +335,7 @@ describe('View Layout Tests', function () {
 
 		const before = ctx.sentRequests.length;
 		(ctx.layout as any).refreshCurrentCoordList();
-		TileManager.checkRequestTiles(
+		RenderManager.checkRequestTiles(
 			ctx.layout.getCurrentCoordList().slice(),
 		);
 
@@ -371,7 +371,7 @@ describe('View Layout Tests', function () {
 	// in flight survives the stale response.
 	function assertRaceProtection(ctx: any): void {
 		(ctx.layout as any).refreshCurrentCoordList();
-		TileManager.checkRequestTiles(
+		RenderManager.checkRequestTiles(
 			ctx.layout.getCurrentCoordList().slice(),
 		);
 
@@ -398,7 +398,7 @@ describe('View Layout Tests', function () {
 
 		const before = ctx.sentRequests.length;
 		(ctx.layout as any).refreshCurrentCoordList();
-		TileManager.checkRequestTiles(
+		RenderManager.checkRequestTiles(
 			ctx.layout.getCurrentCoordList().slice(),
 		);
 
@@ -533,12 +533,12 @@ describe('View Layout Tests', function () {
 
 		const multiPageViewLayout = new ViewLayoutMultiPage();
 
-		// TileManager.tileSize forces lazy singleton creation; then we reach
+		// RenderManager.tileSize forces lazy singleton creation; then we reach
 		// into the BitmapTileManager instance and install monkey patches for
 		// the two observation points: the tile-combine request queue and the
 		// bitmap production/reclamation state machine.
-		void TileManager.tileSize;
-		const tileMgr: any = (TileManager as any)._instance;
+		void RenderManager.tileSize;
+		const tileMgr: any = (RenderManager as any)._instance;
 
 		const tileCombine = instrumentTileCombineRequests(tileMgr);
 		const rendering = instrumentTileRendering(tileMgr);
@@ -563,7 +563,7 @@ describe('View Layout Tests', function () {
 		// wrapper records a queue equal to the visible list.
 		const triggerRequest = (): void => {
 			(multiPageViewLayout as any).refreshCurrentCoordList();
-			TileManager.checkRequestTiles(
+			RenderManager.checkRequestTiles(
 				multiPageViewLayout.getCurrentCoordList().slice(),
 			);
 		};
@@ -776,9 +776,9 @@ describe('View Layout Tests', function () {
 
 		const layout = new ViewLayoutMultiPage();
 
-		void TileManager.tileSize;
-		const tileMgr: any = (TileManager as any)._instance;
-		resetTileManagerState(tileMgr);
+		void RenderManager.tileSize;
+		const tileMgr: any = (RenderManager as any)._instance;
+		resetRenderManagerState(tileMgr);
 
 		const tileCombine = instrumentTileCombineRequests(tileMgr);
 		const rendering = instrumentTileRendering(tileMgr);
@@ -818,7 +818,7 @@ describe('View Layout Tests', function () {
 			].sort();
 
 			(layout as any).refreshCurrentCoordList();
-			TileManager.checkRequestTiles(
+			RenderManager.checkRequestTiles(
 				layout.getCurrentCoordList().slice(),
 			);
 

@@ -216,7 +216,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Compare Changes view.', fu
 
 		cy.getFrameWindow().then(function(win) {
 			cy.wrap(null).should(function() {
-				var tiles = win.TileManager.getTiles();
+				var tiles = win.RenderManager.getTiles();
 				var hasMode1 = false;
 				var hasMode2 = false;
 				tiles.forEach(function(tile) {

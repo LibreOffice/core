@@ -12,7 +12,7 @@
  * Impress tile layer is used to display a presentation document
  */
 
-/* global app $ cool TileManager ViewLayoutBase ViewLayoutFileBased */
+/* global app $ cool RenderManager ViewLayoutBase ViewLayoutFileBased */
 
 // Single source of truth for Impress view modes. Keyed by the core
 // 'contextchange' context. 'mode' is the persisted string, 'uno' enters the
@@ -101,8 +101,8 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 
 		if (isDrawOrNotesPage) {
 			app.activeDocument.activeModes = [viewMode.activeMode];
-			TileManager.refreshTilesInBackground();
-			TileManager.update();
+			RenderManager.refreshTilesInBackground();
+			RenderManager.update();
 		}
 
 		if (newContext === 'MasterPage' || oldContext === 'MasterPage') {
@@ -377,7 +377,7 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 		// while activeLayout still points at the previous ViewLayoutBase.
 		app.file.fileBasedView = true;
 		this._updateMaxBounds(true, true);
-		TileManager.updateFileBasedView();
+		RenderManager.updateFileBasedView();
 	},
 
 	_onCommandValuesMsg: function (textMsg) {
@@ -509,7 +509,7 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 				this._selectedPart = statusJSON.selectedpart;
 			}
 
-			TileManager.resetPreFetching(true);
+			RenderManager.resetPreFetching(true);
 
 			// partdimensions is only included in statusJSON in case of current page resize or switching to a page having different size
 			// The following statements seems unnecessary in those cases
@@ -554,7 +554,7 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 		}
 
 		if (app.file.fileBasedView)
-			TileManager.updateFileBasedView();
+			RenderManager.updateFileBasedView();
 
 		if (this.invalidatePreviewsUponContextChange === true) {
 			this._invalidateAllPreviews();

@@ -100,7 +100,7 @@ function onDemandRenderer(
 	};
 
 	// If no first tile yet, delay sending the render request.
-	TileManager.appendAfterFirstTileTask(setupOnDemandRenderer);
+	RenderManager.appendAfterFirstTileTask(setupOnDemandRenderer);
 }
 
 JSDialog.OnDemandRenderer = onDemandRenderer;

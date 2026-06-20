@@ -253,9 +253,9 @@ class ViewLayoutFileBased extends ViewLayoutNewBase {
 		this.sendClientVisibleArea();
 
 		this.refreshCurrentCoordList();
-		TileManager.beginTransaction();
-		TileManager.checkRequestTiles(this.currentCoordList);
-		TileManager.endTransaction(null);
+		RenderManager.beginTransaction();
+		RenderManager.checkRequestTiles(this.currentCoordList);
+		RenderManager.endTransaction(null);
 	}
 
 	public override documentToViewX(point: cool.SimplePoint): number {

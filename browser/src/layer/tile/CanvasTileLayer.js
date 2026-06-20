@@ -3,7 +3,7 @@
  * window.L.CanvasTileLayer is a layer with canvas based rendering.
  */
 
-/* global app JSDialog CanvasSectionContainer GraphicSelection CanvasOverlay CursorHeaderSection $ _ CPolyUtil CPolygon Cursor UNOKey cool OtherViewCellCursorSection TileManager SplitSection TextSelections CellSelectionMarkers URLPopUpSection CalcValidityDropDown DocumentBase CellCursorSection FormFieldButton TextCursorSection CStyleData CSelections CReferences OtherViewGraphicSelectionSection CompareChangesLabelSection InternPointUtil InternBoundsUtil */
+/* global app JSDialog CanvasSectionContainer GraphicSelection CanvasOverlay CursorHeaderSection $ _ CPolyUtil CPolygon Cursor UNOKey cool OtherViewCellCursorSection RenderManager SplitSection TextSelections CellSelectionMarkers URLPopUpSection CalcValidityDropDown DocumentBase CellCursorSection FormFieldButton TextCursorSection CStyleData CSelections CReferences OtherViewGraphicSelectionSection CompareChangesLabelSection InternPointUtil InternBoundsUtil */
 
 function clamp(num, min, max)
 {
@@ -424,7 +424,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		this._moveTileRequests = [];
 		this._canonicalIdInitialized = false;
 
-		TileManager.initialize();
+		RenderManager.initialize();
 	},
 
 	_initContainer: function () {
@@ -497,13 +497,13 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		}
 		this._map.on('zoomend', this._painter.update, this._painter);
 		this._map.on('splitposchanged', function () {
-			TileManager.update();
+			RenderManager.update();
 		}, this);
 		this._map.on('sheetgeometrychanged', this._painter.update, this._painter);
 		this._map.on('move', this._syncTilePanePos, this);
 
 		this._map.on('viewrowcolumnheaders', this._painter.update, this._painter);
-		this._map.on('messagesdone', TileManager.sendProcessedResponse, TileManager);
+		this._map.on('messagesdone', RenderManager.sendProcessedResponse, RenderManager);
 
 		if (this._docType === 'spreadsheet') {
 			const calcGridSection = new app.definitions.calcGridSection();
@@ -559,9 +559,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		// in other applications while we hold onto lots of video memory.
 		this.onDocumentBlurTimeout = setTimeout(() => {
 			this.onDocumentBlurTimeout = null;
-			TileManager.clearPreFetch();
-			TileManager.pruneTiles();
-			TileManager.reclaimGraphicsMemory();
+			RenderManager.clearPreFetch();
+			RenderManager.pruneTiles();
+			RenderManager.reclaimGraphicsMemory();
 		}, 500);
 	},
 
@@ -572,7 +572,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			return;
 		}
 
-		TileManager.resetPreFetching();
+		RenderManager.resetPreFetching();
 
 		// We may want to consider touching tiles in an area surrounding the visible area
 		// for enhanced interactivity on the first scroll after refocusing.
@@ -594,16 +594,16 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 			if (app.tile.size.x === 0 || app.tile.size.y === 0) {
 				let tileWidthTwips = this.options.tileWidthTwips;
-				app.twipsToPixels =  TileManager.tileSize / tileWidthTwips;
+				app.twipsToPixels =  RenderManager.tileSize / tileWidthTwips;
 				app.pixelsToTwips = 1 / app.twipsToPixels;
-				app.tile.size.pX = app.tile.size.pY = TileManager.tileSize;
+				app.tile.size.pX = app.tile.size.pY = RenderManager.tileSize;
 			}
 
 			if (!window.L.Browser.mobileWebkit)
-				TileManager.update(this._map.getCenter(), tileZoom);
+				RenderManager.update(this._map.getCenter(), tileZoom);
 
 			if (tileZoomChanged)
-				TileManager.pruneTiles();
+				RenderManager.pruneTiles();
 
 			if (this._docType === 'spreadsheet')
 				this._syncTileContainerSize();
@@ -639,9 +639,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		const factor = Math.pow(1.2, (this._map.options.zoom - this._tileZoom));
 		const tileWidthTwips = Math.round(this.options.tileWidthTwips * factor);
 
-		app.twipsToPixels = TileManager.tileSize / tileWidthTwips;
+		app.twipsToPixels = RenderManager.tileSize / tileWidthTwips;
 		app.pixelsToTwips = 1 / app.twipsToPixels;
-		app.tile.size.pX = app.tile.size.pY = TileManager.tileSize;
+		app.tile.size.pX = app.tile.size.pY = RenderManager.tileSize;
 
 		if (this._docType === 'spreadsheet')
 			this._syncTileContainerSize();
@@ -655,8 +655,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		// cells downwards and to the right, like we have on desktop
 		var viewSize = this._map.getSize();
 		var scale = this._map.getZoomScale(newZoom);
-		var width = app.activeDocument.fileSize.x / app.tile.size.x * TileManager.tileSize * scale;
-		var height = app.activeDocument.fileSize.y / app.tile.size.y * TileManager.tileSize * scale;
+		var width = app.activeDocument.fileSize.x / app.tile.size.x * RenderManager.tileSize * scale;
+		var height = app.activeDocument.fileSize.y / app.tile.size.y * RenderManager.tileSize * scale;
 		if (width < viewSize.x || height < viewSize.y) {
 			// if after zoomimg the document becomes smaller than the viewing area
 			width = Math.max(width, viewSize.x);
@@ -678,7 +678,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	},
 
 	_moveStart: function () {
-		TileManager.resetPreFetching();
+		RenderManager.resetPreFetching();
 		this._moveInProgress = true;
 		this._moveTileRequests = [];
 	},
@@ -693,8 +693,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		if (!this._moveInProgress)
 			return;
 
-		TileManager.update();
-		TileManager.resetPreFetching(true);
+		RenderManager.update();
+		RenderManager.resetPreFetching(true);
 	},
 
 	_isInternInView: function (position) {
@@ -715,15 +715,15 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 	_requestNewTiles: function () {
 		this.handleInvalidateTilesMsg('invalidatetiles: EMPTY');
-		TileManager.update();
+		RenderManager.update();
 	},
 
 	_sendClientZoom: function (forceUpdate) {
 		if (!this._map._docLoaded)
 			return;
 
-		var newClientZoom = 'tilepixelwidth=' + TileManager.tileSize + ' ' +
-		    'tilepixelheight=' + TileManager.tileSize + ' ' +
+		var newClientZoom = 'tilepixelwidth=' + RenderManager.tileSize + ' ' +
+		    'tilepixelheight=' + RenderManager.tileSize + ' ' +
 		    'tiletwipwidth=' + app.tile.size.x + ' ' +
 		    'tiletwipheight=' + app.tile.size.y + ' ' +
 		    'dpiscale=' + window.devicePixelRatio + ' ' +
@@ -828,7 +828,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		this._saveMessageForReplay(textMsg);
 		// 'tile:' is the most common message type; keep this the first.
 		if (textMsg.startsWith('tile:') || textMsg.startsWith('delta:')) {
-			TileManager.onTileMsg(textMsg, img);
+			RenderManager.onTileMsg(textMsg, img);
 		}
 		else if (textMsg.startsWith('commandvalues:')) {
 			this._onCommandValuesMsg(textMsg);
@@ -901,7 +901,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			this._onStatusMsg(textMsg);
 
 			// update tiles and selection because mode could be changed
-			TileManager.update();
+			RenderManager.update();
 			OtherViewGraphicSelectionSection.updateVisibilities();
 			TextCursorSection.updateVisibilities();
 		}
@@ -1140,11 +1140,11 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			}
 			if (!this._canonicalIdInitialized) {
 				this._canonicalIdInitialized = true;
-				TileManager.update();
+				RenderManager.update();
 			} else {
 				this._requestNewTiles();
 				this._invalidateAllPreviews();
-				TileManager.redraw();
+				RenderManager.redraw();
 			}
 		}
 		else if (textMsg.startsWith('comment:')) {
@@ -1333,7 +1333,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			command.mode = app.activeDocument.activeModes[0];
 
 		const invalidArea = new cool.SimpleRectangle(command.x, command.y, command.width, command.height);
-		TileManager.overlapInvalidatedRectangleWithView(command.part, command.mode, command.wireId, invalidArea, textMsg);
+		RenderManager.overlapInvalidatedRectangleWithView(command.part, command.mode, command.wireId, invalidArea, textMsg);
 
 		if (this.isImpress() || this.isDraw()) {
 			if (command.part === this._selectedPart &&
@@ -2361,7 +2361,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 				}
 
 				this._map._docLayer._preview._scrollViewToPartPosition(this._lastSearchResult.part);
-				TileManager.updateFileBasedView();
+				RenderManager.updateFileBasedView();
 				setTimeout(function () {app.sectionContainer.requestReDraw();}, 100);
 			}
 
@@ -2886,7 +2886,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		}
 
 		this._requestNewTiles();
-		TileManager.redraw();
+		RenderManager.redraw();
 	},
 
 	// Given a character code and a UNO keycode, send a "key" message to coolwsd.
@@ -3500,8 +3500,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 	requestCellCursor: function() {
 		app.socket.sendMessage('commandvalues command=.uno:CellCursor'
-			+ '?outputHeight=' + TileManager.tileSize
-			+ '&outputWidth=' + TileManager.tileSize
+			+ '?outputHeight=' + RenderManager.tileSize
+			+ '&outputWidth=' + RenderManager.tileSize
 			+ '&tileHeight=' + app.tile.size.x
 			+ '&tileWidth=' + app.tile.size.y);
 	},
@@ -4035,7 +4035,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			if (e.detail.perm !== 'edit') {
 				this._clearSelections();
 			}
-			TileManager.update();
+			RenderManager.update();
 		}.bind(this));
 
 		map.setPermission(app.file.permission);
@@ -4054,7 +4054,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		// unless we have the tiles in the cache already
 		// This will only fetch the tiles which are invalid or does not exist
 		map.on('sizeincreased', function() {
-			TileManager.update();
+			RenderManager.update();
 		}.bind(this));
 	},
 
@@ -4063,7 +4063,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		map._removeZoomLimit(this);
 		this._container = null;
 		this._tileZoom = null;
-		TileManager.clearPreFetch();
+		RenderManager.clearPreFetch();
 		clearTimeout(this._previewInvalidator);
 
 		app.activeDocument.activeView.clearTextSelection();
@@ -4204,8 +4204,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 	_twipsToCssPixels: function (twips) {
 		return new cool.Point(
-			(twips.x / app.tile.size.x) * (TileManager.tileSize / app.dpiScale),
-			(twips.y / app.tile.size.y) * (TileManager.tileSize / app.dpiScale));
+			(twips.x / app.tile.size.x) * (RenderManager.tileSize / app.dpiScale),
+			(twips.y / app.tile.size.y) * (RenderManager.tileSize / app.dpiScale));
 	},
 
 	_cssPixelsToTwips: function (pixels) {
@@ -4338,7 +4338,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 	// Used with file based view. Check the most visible part and set the selected part if needed.
 	_checkSelectedPart: function () {
-		var queue = TileManager.updateFileBasedView(true);
+		var queue = RenderManager.updateFileBasedView(true);
 		if (queue.length > 0) {
 			var partToSelect = this._getMostVisiblePart(queue);
 			if (this._selectedPart !== partToSelect) {
@@ -4360,14 +4360,14 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		if (!this._debug.debugOn)
 			return;
 
-		const tile = TileManager.get(key);
+		const tile = RenderManager.get(key);
 		tile._debugTime = this._debug.getTimeArray();
 	},
 
 	_coordsToPixBounds: function (coords) {
 		// coords.x and coords.y are the pixel coordinates of the top-left corner of the tile.
 		var topLeft = new cool.Point(coords.x, coords.y);
-		var bottomRight = topLeft.add(new cool.Point(TileManager.tileSize, TileManager.tileSize));
+		var bottomRight = topLeft.add(new cool.Point(RenderManager.tileSize, RenderManager.tileSize));
 		return new cool.Bounds(topLeft, bottomRight);
 	},
 

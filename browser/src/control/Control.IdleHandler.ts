@@ -14,7 +14,7 @@
  * Class for idle handling of the view.
  */
 
-/* global app L TileManager */
+/* global app L RenderManager */
 
 // FIXME: These should surely be somewhere else and not in this random .ts file.
 declare var mode: any;
@@ -209,7 +209,7 @@ class IdleHandler {
 
 		this._sendInactiveMessage();
 
-		TileManager.clearPreFetch();
+		RenderManager.clearPreFetch();
 	}
 
 	notifyActive() {

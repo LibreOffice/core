@@ -12,7 +12,7 @@
  * Writer tile layer is used to display a text document
  */
 
-/* global app GraphicSelection cool TileManager */
+/* global app GraphicSelection cool RenderManager */
 window.L.WriterTileLayer = window.L.CanvasTileLayer.extend({
 
 	newAnnotation: function (commentData) {
@@ -208,7 +208,7 @@ window.L.WriterTileLayer = window.L.CanvasTileLayer.extend({
 			pages: this._pages,
 			docType: this._docType
 		});
-		TileManager.resetPreFetching(true);
+		RenderManager.resetPreFetching(true);
 
 		if (this._savedCursorPos && this._savedCursorPos.center[0] <= statusJSON.width && this._savedCursorPos.center[1] <= statusJSON.height) {
 			this._postMouseEvent('buttondown', this._savedCursorPos.center[0], this._savedCursorPos.center[1], 1, 1, 0);

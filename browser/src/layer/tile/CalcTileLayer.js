@@ -13,7 +13,7 @@
  * Calc tile layer is used to display a spreadsheet document
  */
 
-/* global app TileManager cool FocusCellSection SplitterLinesSection InternBoundsUtil */
+/* global app RenderManager cool FocusCellSection SplitterLinesSection InternBoundsUtil */
 
 window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 	options: {
@@ -179,7 +179,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		this._sendClientZoom();
 		if (this.sheetGeometry) {
 			this.sheetGeometry.setTileGeometryData(app.tile.size.x, app.tile.size.y,
-				TileManager.tileSize);
+				RenderManager.tileSize);
 		}
 		this._restrictDocumentSize();
 		this.dontSendSplitPosToCore = true;
@@ -536,7 +536,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 				partNames: this._partNames
 			});
 
-			TileManager.resetPreFetching(true);
+			RenderManager.resetPreFetching(true);
 
 			/*
 				Side note: There is a getPrintRanges function on the core side that sends the JSON inside a printranges object.
@@ -829,7 +829,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			this._sheetGeomFirstWait = false;
 			this.sheetGeometry = new cool.SheetGeometry(jsonMsgObj,
 				app.tile.size.x, app.tile.size.y,
-				TileManager.tileSize, this._selectedPart);
+				RenderManager.tileSize, this._selectedPart);
 
 			app.sectionContainer.addSection(new cool.CornerHeader());
 			app.sectionContainer.addSection(new app.definitions.rowHeader());
@@ -1183,7 +1183,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		this._refreshRowColumnHeaders();
 		if (!this._gotFirstCellCursor) {
 			this.allowDrawing();
-			TileManager.update();
+			RenderManager.update();
 			this.enableDrawing();
 		}
 	},

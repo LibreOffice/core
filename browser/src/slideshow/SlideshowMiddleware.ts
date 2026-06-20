@@ -10,7 +10,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-/* global app JSDialog _ $ errorMessages Uint8Array brandProductName GraphicSelection TileManager */
+/* global app JSDialog _ $ errorMessages Uint8Array brandProductName GraphicSelection RenderManager */
 
 // SlideBitmapManager handles the layers for the slideshow
 // It provides utility to decompress the row data from zstd and then make bitmaps from it

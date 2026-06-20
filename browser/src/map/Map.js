@@ -3,7 +3,7 @@
  * window.L.Map is the central class of the API - it is used to create a map.
  */
 
-/* global app _ Cursor JSDialog TileManager cool InternPointUtil InternBoundsUtil */
+/* global app _ Cursor JSDialog RenderManager cool InternPointUtil InternBoundsUtil */
 
 window.L.Map = window.L.Evented.extend({
 
@@ -414,7 +414,7 @@ window.L.Map = window.L.Evented.extend({
 			if (this._docLayer.options.sheetGeometryDataEnabled)
 				this._docLayer.requestSheetGeometryData();
 			this._docLayer.refreshViewData();
-			TileManager.update();
+			RenderManager.update();
 		}
 		// For calc parsing this will need SheetGeometry, so send after
 		// requesting that

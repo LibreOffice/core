@@ -33,8 +33,8 @@ class PreloadMapSection extends CanvasSectionObject {
 		var zoom = Math.round(app.map.getZoom());
 		var part = docLayer._selectedPart;
 		var tileRanges = ctx.paneBoundsList.map(
-			TileManager.pxBoundsToTileRange,
-			TileManager,
+			RenderManager.pxBoundsToTileRange,
+			RenderManager,
 		);
 
 		// Get the 'main' view
@@ -46,12 +46,12 @@ class PreloadMapSection extends CanvasSectionObject {
 
 		// stop annoying jitter as the view fits different numbers of tiles.
 		var viewWidth = Math.floor(
-			(app.sectionContainer.getWidth() + TileManager.tileSize - 1) /
-				TileManager.tileSize,
+			(app.sectionContainer.getWidth() + RenderManager.tileSize - 1) /
+				RenderManager.tileSize,
 		);
 		var viewHeight = Math.floor(
-			(app.sectionContainer.getHeight() + TileManager.tileSize - 1) /
-				TileManager.tileSize,
+			(app.sectionContainer.getHeight() + RenderManager.tileSize - 1) /
+				RenderManager.tileSize,
 		);
 
 		// writer defaults
@@ -100,13 +100,13 @@ class PreloadMapSection extends CanvasSectionObject {
 				for (var i: number = range.min.x; i <= range.max.x; ++i) {
 					if (i >= 0 && j >= 0 && range.part >= 0) {
 						var coords = new TileCoordData(
-							i * TileManager.tileSize,
-							j * TileManager.tileSize,
+							i * RenderManager.tileSize,
+							j * RenderManager.tileSize,
 							zoom,
 							range.part,
 							app.activeDocument.activeModes[0],
 						);
-						const tile: Tile = TileManager.get(coords);
+						const tile: Tile = RenderManager.get(coords);
 
 						if (!tile)
 							canvas.fillStyle = 'rgba(128, 128, 128, 0.5)'; // grey
@@ -120,7 +120,7 @@ class PreloadMapSection extends CanvasSectionObject {
 						else if (tile.distanceFromView <= 0)
 							canvas.fillStyle = 'rgba(0, 255, 0, 0.5)'; // visible
 						else {
-							const expFactor = TileManager.getExpiryFactor(tile);
+							const expFactor = RenderManager.getExpiryFactor(tile);
 							if (expFactor >= 0)
 								// expiry shown by more blue, and less green
 								canvas.fillStyle =

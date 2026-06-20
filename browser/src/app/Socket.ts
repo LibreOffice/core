@@ -686,7 +686,7 @@ class Socket {
 		const docLayer = this._map ? this._map._docLayer : undefined;
 		if (docLayer && docLayer.filterSlurpedMessage(e)) return;
 
-		const predictedTiles = TileManager.predictTilesToSlurp();
+		const predictedTiles = RenderManager.predictTilesToSlurp();
 		// scale delay, to a max of 50ms, according to the number of
 		// tiles predicted to arrive.
 		const delayMS = Math.max(Math.min(predictedTiles, 50), 1);
@@ -898,7 +898,7 @@ class Socket {
 			{ '_slurpQueue.length': String(queueLength) },
 		);
 		if (this._map && this._map._docLayer) {
-			TileManager.beginTransaction();
+			RenderManager.beginTransaction();
 			this._inLayerTransaction = true;
 
 			// Queue an instant timeout early to try to measure the
@@ -1015,7 +1015,7 @@ class Socket {
 
 			if (this._inLayerTransaction && this._map._docLayer) {
 				// Resume with redraw if dirty due to previous _onMessage() calls.
-				TileManager.endTransaction(completeCallback);
+				RenderManager.endTransaction(completeCallback);
 			} else {
 				completeCallback();
 			}
@@ -1094,7 +1094,7 @@ class Socket {
 		} else if (this._reconnecting) {
 			// we are reconnecting ...
 			this._map._docLayer._resetClientVisArea();
-			TileManager.refreshTilesInBackground();
+			RenderManager.refreshTilesInBackground();
 			this._map.fire('statusindicator', { statusType: 'reconnected' });
 
 			const darkTheme = window.prefs.getBoolean('darkTheme');
@@ -2159,7 +2159,7 @@ class Socket {
 
 		if (textMsg === 'idle' || textMsg === 'oom') {
 			app.idleHandler._dim();
-			TileManager.discardAllCache();
+			RenderManager.discardAllCache();
 		}
 
 		if (postMsgData['Reason']) {

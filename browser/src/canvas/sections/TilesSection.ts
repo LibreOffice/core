@@ -81,7 +81,7 @@ export class TilesSection extends CanvasSectionObject {
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	private paintWithPanes (tile: any, ctx: any, async: boolean): void {
 		var tileTopLeft = tile.coords.getPos();
-		var tileBounds = new cool.Bounds(tileTopLeft, tileTopLeft.add(new cool.Point(TileManager.tileSize, TileManager.tileSize)));
+		var tileBounds = new cool.Bounds(tileTopLeft, tileTopLeft.add(new cool.Point(RenderManager.tileSize, RenderManager.tileSize)));
 
 		for (var i = 0; i < ctx.paneBoundsList.length; ++i) {
 			// co-ordinates of this pane in core document pixels
@@ -177,7 +177,7 @@ export class TilesSection extends CanvasSectionObject {
 			// For the full view area repaint, whole canvas is cleared by section container.
 			// Whole canvas is not cleared after zoom has changed, so clear it per tile as they arrive even if not async.
 			this.context.fillStyle = this.containerObject.getClearColor();
-			this.context.fillRect(tilePos.vX, tilePos.vY, TileManager.tileSize, TileManager.tileSize);
+			this.context.fillRect(tilePos.vX, tilePos.vY, RenderManager.tileSize, RenderManager.tileSize);
 		}
 
 		if (app.file.fileBasedView) {
@@ -214,10 +214,10 @@ export class TilesSection extends CanvasSectionObject {
 				// the next page may be narrower or positioned differently,
 				// leaving a visible bleed strip. drawTileToCanvasCrop only
 				// draws the in-page portion of the tile.
-				const drawW = Math.min(TileManager.tileSize, docRect.pWidth - tile.coords.x);
-				const drawH = Math.min(TileManager.tileSize, docRect.pHeight - tile.coords.y);
+				const drawW = Math.min(RenderManager.tileSize, docRect.pWidth - tile.coords.x);
+				const drawH = Math.min(RenderManager.tileSize, docRect.pHeight - tile.coords.y);
 				if (drawW <= 0 || drawH <= 0) return;
-				if (drawW < TileManager.tileSize || drawH < TileManager.tileSize) {
+				if (drawW < RenderManager.tileSize || drawH < RenderManager.tileSize) {
 					this.drawTileToCanvasCrop(
 						tile, this.context,
 						0, 0, drawW, drawH,
@@ -234,7 +234,7 @@ export class TilesSection extends CanvasSectionObject {
 			}
 		}
 
-		this.drawTileToCanvas(tile, this.context, tilePos.vX - this.myTopLeft[0], tilePos.vY - this.myTopLeft[1], TileManager.tileSize, TileManager.tileSize);
+		this.drawTileToCanvas(tile, this.context, tilePos.vX - this.myTopLeft[0], tilePos.vY - this.myTopLeft[1], RenderManager.tileSize, RenderManager.tileSize);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -255,13 +255,13 @@ export class TilesSection extends CanvasSectionObject {
 
 	private forEachTileInView(zoom: number, part: number, mode: number, ctx: any,
 		callback: (tile: any, coords: any) => boolean) {
-		var tileRanges = ctx.paneBoundsList.map(TileManager.pxBoundsToTileRange, TileManager);
+		var tileRanges = ctx.paneBoundsList.map(RenderManager.pxBoundsToTileRange, RenderManager);
 
 		if (app.file.fileBasedView) {
-			const coordList = TileManager.updateFileBasedView(true);
+			const coordList = RenderManager.updateFileBasedView(true);
 
 			for (var k: number = 0; k < coordList.length; k++) {
-				const tile: Tile = TileManager.get(coordList[k]);
+				const tile: Tile = RenderManager.get(coordList[k]);
 				if (!callback(tile, coordList[k]))
 					return;
 			}
@@ -272,13 +272,13 @@ export class TilesSection extends CanvasSectionObject {
 				for (var j = tileRange.min.y; j <= tileRange.max.y; ++j) {
 					for (var i: number = tileRange.min.x; i <= tileRange.max.x; ++i) {
 						var coords = new TileCoordData(
-							i * TileManager.tileSize,
-							j * TileManager.tileSize,
+							i * RenderManager.tileSize,
+							j * RenderManager.tileSize,
 							zoom,
 							part,
 							mode);
 
-						const tile: Tile = TileManager.get(coords);
+						const tile: Tile = RenderManager.get(coords);
 
 						if (!callback(tile, coords))
 							return;
@@ -462,24 +462,24 @@ export class TilesSection extends CanvasSectionObject {
 		const visibleCoordList: Array<TileCoordData> = view.getCurrentCoordList();
 
 		for (let i = 0; i < visibleCoordList.length; i++) {
-			const tile = TileManager.get(visibleCoordList[i]);
+			const tile = RenderManager.get(visibleCoordList[i]);
 
 			if (tile && tile.isReadyToDraw()) {
 				const tilePos = tile.coords.getPosSimplePoint();
 
 				const layoutRectangle1 = view.documentRectangles[view.getClosestRectangleIndex(tilePos)];
-				const layoutRectangle2 = view.documentRectangles[view.getClosestRectangleIndex(cool.SimplePoint.fromCorePixels([tilePos.pX, tilePos.pY + TileManager.tileSize]))];
+				const layoutRectangle2 = view.documentRectangles[view.getClosestRectangleIndex(cool.SimplePoint.fromCorePixels([tilePos.pX, tilePos.pY + RenderManager.tileSize]))];
 
 				if (layoutRectangle1.part === layoutRectangle2.part)
-					this.drawTileToCanvas(tile, this.context, tilePos.vX, tilePos.vY, TileManager.tileSize, TileManager.tileSize);
+					this.drawTileToCanvas(tile, this.context, tilePos.vX, tilePos.vY, RenderManager.tileSize, RenderManager.tileSize);
 				else {
 					// A tile in Writer may intersect 2 pages.
 					const height1 = layoutRectangle1.pY2 - tilePos.pY + this.sectionProperties.multiPageViewMagicHeightFix;
-					this.drawTileToCanvasCrop(tile, this.context, 0, 0, TileManager.tileSize, height1, tilePos.vX, tilePos.vY, TileManager.tileSize, height1);
+					this.drawTileToCanvasCrop(tile, this.context, 0, 0, RenderManager.tileSize, height1, tilePos.vX, tilePos.vY, RenderManager.tileSize, height1);
 
-					tilePos.pY += TileManager.tileSize;
-					const height2 = TileManager.tileSize - height1;
-					this.drawTileToCanvasCrop(tile, this.context, 0, height1, TileManager.tileSize, height2, tilePos.vX, tilePos.vY - height2, TileManager.tileSize, height2);
+					tilePos.pY += RenderManager.tileSize;
+					const height2 = RenderManager.tileSize - height1;
+					this.drawTileToCanvasCrop(tile, this.context, 0, height1, RenderManager.tileSize, height2, tilePos.vX, tilePos.vY - height2, RenderManager.tileSize, height2);
 				}
 			}
 		}
@@ -491,12 +491,12 @@ export class TilesSection extends CanvasSectionObject {
 		const visibleCoordList: Array<TileCoordData> = view.getCurrentCoordList();
 
 		for (let i = 0; i < visibleCoordList.length; i++) {
-			const tile = TileManager.get(visibleCoordList[i]);
+			const tile = RenderManager.get(visibleCoordList[i]);
 
 			if (tile && tile.isReadyToDraw()) {
 				const tilePos = tile.coords.getPosSimplePoint();
 
-				this.drawTileToCanvas(tile, this.context, tilePos.vX, tilePos.vY, TileManager.tileSize, TileManager.tileSize);
+				this.drawTileToCanvas(tile, this.context, tilePos.vX, tilePos.vY, RenderManager.tileSize, RenderManager.tileSize);
 			}
 		}
 	}
@@ -556,7 +556,7 @@ export class TilesSection extends CanvasSectionObject {
 				return true;
 
 			// Ensure tile is within document bounds.
-			if (tile && TileManager.isValidTile(coords)) {
+			if (tile && RenderManager.isValidTile(coords)) {
 				if (!this.isJSDOM) { // perf-test code
 					if (tile.isReadyToDraw() || this.map._debug.tileOverlaysOn) { // Ensure tile is loaded
 						this.paint(tile, ctx, false /* async? */);
@@ -600,11 +600,11 @@ export class TilesSection extends CanvasSectionObject {
 		callback: (tile: any, coords: TileCoordData, section: TilesSection) => boolean) {
 
 		if (app.file.fileBasedView) {
-			const coordList = TileManager.updateFileBasedView(true, area, zoom);
+			const coordList = RenderManager.updateFileBasedView(true, area, zoom);
 
 			for (var k: number = 0; k < coordList.length; k++) {
 				const coords = coordList[k];
-				const tile: Tile = TileManager.get(coords);
+				const tile: Tile = RenderManager.get(coords);
 				if (tile)
 					callback(tile, coords, this);
 			}
@@ -612,18 +612,18 @@ export class TilesSection extends CanvasSectionObject {
 			return;
 		}
 
-		var tileRange = TileManager.pxBoundsToTileRange(area);
+		var tileRange = RenderManager.pxBoundsToTileRange(area);
 
 		for (var j = tileRange.min.y; j <= tileRange.max.y; ++j) {
 			for (var i = tileRange.min.x; i <= tileRange.max.x; ++i) {
 				const coords = new TileCoordData(
-					i * TileManager.tileSize,
-					j * TileManager.tileSize,
+					i * RenderManager.tileSize,
+					j * RenderManager.tileSize,
 					zoom,
 					part,
 					mode);
 
-				const tile: Tile = TileManager.get(coords);
+				const tile: Tile = RenderManager.get(coords);
 				if (tile)
 					callback(tile, coords, this);
 			}
@@ -675,7 +675,7 @@ export class TilesSection extends CanvasSectionObject {
 					if (app.file.fileBasedView) {
 						var layout = app.activeDocument.activeLayout;
 						if (layout && layout.type === 'ViewLayoutFileBased') {
-							var ratio = TileManager.tileSize * relScale / app.tile.size.y;
+							var ratio = RenderManager.tileSize * relScale / app.tile.size.y;
 							var rect = (layout as ViewLayoutFileBased).getViewPartRectAtRatio(coords.part, ratio);
 							if (rect) {
 								tilePos.x = rect.x + tilePos.x;
@@ -684,7 +684,7 @@ export class TilesSection extends CanvasSectionObject {
 						}
 					}
 
-					var tileBounds = new cool.Bounds(tilePos, tilePos.add(new cool.Point(TileManager.tileSize, TileManager.tileSize)));
+					var tileBounds = new cool.Bounds(tilePos, tilePos.add(new cool.Point(RenderManager.tileSize, RenderManager.tileSize)));
 					var interFrac = TilesSection.getTileIntersectionAreaFraction(tileBounds, areaAtZoom);
 
 					// Add to score how much of tile area is available.
@@ -719,7 +719,7 @@ export class TilesSection extends CanvasSectionObject {
 							dx: number, dy: number, dWidth: number, dHeight: number): void
 	{
 		this.drawTileToCanvasCrop(tile, canvas,
-								  0, 0, TileManager.tileSize, TileManager.tileSize,
+								  0, 0, RenderManager.tileSize, RenderManager.tileSize,
 								  dx, dy, dWidth, dHeight);
 	}
 
@@ -760,7 +760,7 @@ export class TilesSection extends CanvasSectionObject {
 								sx: number, sy: number, sWidth: number, sHeight: number,
 								dx: number, dy: number, dWidth: number, dHeight: number): void
 	{
-		TileManager.touchImage(tile);
+		RenderManager.touchImage(tile);
 
 		/* if (!(tile.wireId % 4)) // great for debugging tile grid alignment.
 				canvas.drawImage(this.checkpattern, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
@@ -961,14 +961,14 @@ export class TilesSection extends CanvasSectionObject {
 
 			this.beforeDraw(canvasContext);
 			this.forEachTileInArea(docRangeScaled, bestZoomSrc, part, mode, ctx, function (tile, coords, section): boolean {
-				if (!tile || !tile.isReadyToDraw() || !TileManager.isValidTile(coords))
+				if (!tile || !tile.isReadyToDraw() || !RenderManager.isValidTile(coords))
 					return false;
 
 				var tileCoords = tile.coords.getPos();
 				if (app.file.fileBasedView) {
 					var layout = app.activeDocument.activeLayout;
 					if (layout && layout.type === 'ViewLayoutFileBased') {
-						var ratio = TileManager.tileSize * relScale / app.tile.size.y;
+						var ratio = RenderManager.tileSize * relScale / app.tile.size.y;
 						var rect = (layout as ViewLayoutFileBased).getViewPartRectAtRatio(tile.coords.part, ratio);
 						if (rect) {
 							tileCoords.x = rect.x + tileCoords.x;
@@ -976,7 +976,7 @@ export class TilesSection extends CanvasSectionObject {
 						}
 					}
 				}
-				var tileBounds = new cool.Bounds(tileCoords, tileCoords.add(new cool.Point(TileManager.tileSize, TileManager.tileSize)));
+				var tileBounds = new cool.Bounds(tileCoords, tileCoords.add(new cool.Point(RenderManager.tileSize, RenderManager.tileSize)));
 
 				var crop = new cool.Bounds(tileBounds.min, tileBounds.max);
 				crop.min.x = Math.max(docRangeScaled.min.x, tileBounds.min.x);
@@ -1036,8 +1036,8 @@ export class TilesSection extends CanvasSectionObject {
 		var convScale = this.map.getZoomScale(toZoom, fromZoom);
 
 		if (docLayer.sheetGeometry) {
-			var toScale = convScale * TileManager.tileSize * 15.0 / app.tile.size.x;
-			toScale = TileManager.tileSize * 15.0 / Math.round(15.0 * TileManager.tileSize / toScale);
+			var toScale = convScale * RenderManager.tileSize * 15.0 / app.tile.size.x;
+			toScale = RenderManager.tileSize * 15.0 / Math.round(15.0 * RenderManager.tileSize / toScale);
 			var posScaled = docLayer.sheetGeometry.getCorePixelsAtZoom(pos, toScale);
 			return posScaled;
 		}

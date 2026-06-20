@@ -28,7 +28,7 @@ interface ViewSetting {
 
 class ServerConnectionService {
 	public constructor() {
-		TileManager.appendAfterFirstTileTask(this.onFirstTileReceived.bind(this));
+		RenderManager.appendAfterFirstTileTask(this.onFirstTileReceived.bind(this));
 	}
 
 	// below methods should be sorted in expected order of execution to help understand the init
