@@ -1,0 +1,87 @@
+--- c/shared/absfont/absfont_dump.cpp
++++ c/shared/absfont/absfont_dump.cpp
+@@ -552,11 +552,11 @@
+         // dumpInstr(cb, " %.3f %.3f %s", edge0, edge1, (flags & ABF_VERT_STEM)? "vstem3": "hstem3");
+     } else {
+         float width = RND(edge1 - edge0);
+-        if (width == ABF_EDGE_HINT_LO) {
++        if (width == float(ABF_EDGE_HINT_LO)) {
+             writeReal(buf, bufLen, edge1);
+             STRCAT_S(buf, bufLen, (flags & ABF_VERT_STEM) ? " leftedge" : " bottomedge");
+             // dumpInstr(cb, " %.3f %s", edge1, (flags & ABF_VERT_STEM)? "leftedge": "bottomedge");
+-        } else if (width == ABF_EDGE_HINT_HI) {
++        } else if (width == float(ABF_EDGE_HINT_HI)) {
+             writeReal(buf, bufLen, edge0);
+             STRCAT_S(buf, bufLen, (flags & ABF_VERT_STEM) ? " rightedge" : " topedge");
+             // dumpInstr(cb, " %.3f %s", edge0, (flags & ABF_VERT_STEM)? "rightedge": "topedge");
+--- c/shared/cffwrite/cffwrite_t2cstr.cpp
++++ c/shared/cffwrite/cffwrite_t2cstr.cpp
+@@ -1643,7 +1643,7 @@
+ #endif
+ 
+     delta = edge1 - edge0;
+-    if (delta < 0 && delta != ABF_EDGE_HINT_LO && delta != ABF_EDGE_HINT_HI) {
++    if (delta < 0 && delta != float(ABF_EDGE_HINT_LO) && delta != float(ABF_EDGE_HINT_HI)) {
+         if (!(h->g->flags & CFW_NO_HINT_WARNINGS))
+             addWarn(h, warn_hint0);
+         _new.edge0v.value = edge1;
+@@ -1716,7 +1716,7 @@
+ #endif
+ 
+     delta = edge1 - edge0;
+-    if (delta < 0 && delta != ABF_EDGE_HINT_LO && delta != ABF_EDGE_HINT_HI) {
++    if (delta < 0 && delta != float(ABF_EDGE_HINT_LO) && delta != float(ABF_EDGE_HINT_HI)) {
+         if (!(h->g->flags & CFW_NO_HINT_WARNINGS))
+             addWarn(h, warn_hint0);
+         _new.edge0v = *edge1v;
+--- c/shared/include/varsupport.h
++++ c/shared/include/varsupport.h
+@@ -463,7 +463,7 @@
+     ivsOffset   - offset to the IVS data from the beginning of the
+                   container table.
+     */
+-    itemVariationStore() {}
++    itemVariationStore();
+     itemVariationStore(ctlSharedStmCallbacks *sscb, uint32_t tableOffset,
+                        uint32_t tableLength, uint32_t ivsOffset);
+ 
+@@ -594,16 +594,7 @@
+ 
+     void write(VarWriter &vw);
+ 
+-    void reset(bool clearAxisCount = false) {
+-        if (clearAxisCount)
+-            axisCount = 0;
+-        regions.clear();
+-        regionMap.clear();
+-        subtables.clear();
+-        values.clear();
+-        models.clear();
+-        locationSetMap.clear();
+-    }
++    void reset(bool clearAxisCount = false);
+ 
+  private:
+     uint32_t getRegionListSize() {
+--- c/shared/varsupport.cpp
++++ c/shared/varsupport.cpp
+@@ -673,6 +673,19 @@
+     }
+ }
+ 
++itemVariationStore::itemVariationStore() {}
++
++void itemVariationStore::reset(bool clearAxisCount) {
++    if (clearAxisCount)
++        axisCount = 0;
++    regions.clear();
++    regionMap.clear();
++    subtables.clear();
++    values.clear();
++    models.clear();
++    locationSetMap.clear();
++}
++
+ /* item variation store sub-table */
+ 
+ itemVariationStore::itemVariationStore(ctlSharedStmCallbacks *sscb,
