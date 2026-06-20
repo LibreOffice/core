@@ -58,6 +58,7 @@ void SpifPolicyTest::testParse()
         <spif:tagCategory name="OPS" lacv="21745403334774611" obsolete="true">
           <spif:excludedClass>OFFICIAL</spif:excludedClass>
         </spif:tagCategory>
+        <spif:tagCategory name="REL" lacv="99" requiredClass="OFFICIAL" obsolete="false" />
       </spif:securityCategoryTag>
     </spif:securityCategoryTagSet>
   </spif:securityCategoryTagSets>
@@ -117,6 +118,10 @@ void SpifPolicyTest::testParse()
     CPPUNIT_ASSERT(!rNtkTag.aCategories[0].isSelectable(u"OFFICIAL"_ustr)); // INT excludes OFFICIAL
     CPPUNIT_ASSERT_EQUAL(u"OPS"_ustr, rNtkTag.aCategories[1].aName);
     CPPUNIT_ASSERT(!rNtkTag.aCategories[1].isSelectable(u"SECRET"_ustr)); // OPS obsolete
+    CPPUNIT_ASSERT_EQUAL(u"REL"_ustr, rNtkTag.aCategories[2].aName);
+    CPPUNIT_ASSERT_EQUAL(u"OFFICIAL"_ustr, rNtkTag.aCategories[2].aRequiredClass);
+    CPPUNIT_ASSERT(rNtkTag.aCategories[2].isSelectable(u"OFFICIAL"_ustr));
+    CPPUNIT_ASSERT(!rNtkTag.aCategories[2].isSelectable(u"SECRET"_ustr)); // requiredClass=OFFICIAL
 
     // Marking derivation walks only categories selectable under the classification
     // (matching the dialog's filtered rows). Under SECRET: CANADA, UNITED KINGDOM,

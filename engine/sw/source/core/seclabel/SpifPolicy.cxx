@@ -35,6 +35,7 @@ SpifTagCategory parseTagCategory(tools::XmlWalker& rWalker)
     aCategory.aName = toOU(rWalker.attribute("name"_ostr));
     aCategory.nLacv = rWalker.attribute("lacv"_ostr).toInt64();
     aCategory.bObsolete = rWalker.attribute("obsolete"_ostr) == "true";
+    aCategory.aRequiredClass = toOU(rWalker.attribute("requiredClass"_ostr));
 
     rWalker.children();
     while (rWalker.isValid())
@@ -205,6 +206,8 @@ OUString SpifPolicy::buildMarking(const OUString& rClassification,
 bool SpifTagCategory::isSelectable(const OUString& rClassification) const
 {
     if (bObsolete)
+        return false;
+    if (!aRequiredClass.isEmpty() && aRequiredClass != rClassification)
         return false;
     return std::find(aExcludedClasses.begin(), aExcludedClasses.end(), rClassification)
            == aExcludedClasses.end();

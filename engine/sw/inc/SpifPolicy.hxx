@@ -34,10 +34,11 @@ struct SW_DLLPUBLIC SpifTagCategory
     OUString aName; ///< tagCategory/@name
     sal_Int64 nLacv = 0; ///< @lacv (may exceed 32 bits)
     bool bObsolete = false; ///< @obsolete: not for newly created labels
+    OUString aRequiredClass; ///< @requiredClass: classification required when this category is used
     std::vector<OUString> aExcludedClasses; ///< excludedClass: classifications this category excludes
 
     /// Whether this category may be selected for a NEW label under rClassification
-    /// (not obsolete and not excluded by that classification).
+    /// (not obsolete, not excluded, and requiredClass, if set, matches).
     bool isSelectable(const OUString& rClassification) const;
 };
 
