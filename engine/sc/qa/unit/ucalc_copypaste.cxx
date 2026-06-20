@@ -10185,6 +10185,44 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyFromClipCrossDocSameNameNoBind)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyToClipMultiRangeGapTable)
+{
+    // A non-contiguous copy must carry only the tables that lie inside a copied
+    // range, not one sitting in the gap between two ranges. The gap table is
+    // inside the bounding box of the selection but none of its cells are copied.
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    // Column-direction multi-selection A1:B3 and E1:F3; the gap is columns C, D.
+
+    // InRangeTable at A1:B3 lies inside the first range. The clip carries it.
+    auto pInRange
+        = std::make_unique<ScDBData>(u"InRangeTable"_ustr, 0, 0, 0, 1, 2, true, true);
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().insert(std::move(pInRange)));
+
+    // GapTable at C1:D3 lies in the gap. The clip leaves it out.
+    auto pGap
+        = std::make_unique<ScDBData>(u"GapTable"_ustr, 0, 2, 0, 3, 2, true, true);
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().insert(std::move(pGap)));
+
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    ScClipParam aClipParam;
+    aClipParam.meDirection = ScClipParam::Column;
+    aClipParam.maRanges.push_back(ScRange(0, 0, 0, 1, 2, 0)); // A1:B3
+    aClipParam.maRanges.push_back(ScRange(4, 0, 0, 5, 2, 0)); // E1:F3
+
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
+
+    ScDBCollection::NamedDBs& rClipDBs = aClipDoc.GetDBCollection()->getNamedDBs();
+    CPPUNIT_ASSERT_MESSAGE("a table inside a copied range is carried",
+                           rClipDBs.findByUpperName(u"INRANGETABLE"_ustr));
+    CPPUNIT_ASSERT_MESSAGE("a table in the gap between copied ranges must not be carried",
+                           !rClipDBs.findByUpperName(u"GAPTABLE"_ustr));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteFormulasExternalDoc)
 {
     SfxMedium* pMedium = new SfxMedium(u"file:///source.fake"_ustr, StreamMode::STD_READWRITE);

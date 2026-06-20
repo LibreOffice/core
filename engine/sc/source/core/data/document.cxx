@@ -2321,7 +2321,7 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
 
     sc::CopyToClipContext aCxt(*pClipDoc, bKeepScenarioFlags);
     CopyRangeNamesToClip(pClipDoc, aClipRange, pMarks);
-    CopyDBsToClip(pClipDoc, aClipRange, pMarks);
+    CopyDBsToClip(pClipDoc, rClipParam.maRanges, pMarks);
 
     // 1. Copy selected cells
     for (SCTAB i = 0; i < nEndTab; ++i)
@@ -2589,7 +2589,7 @@ void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClip
 // copied formulas have no ScDBData to resolve against on the clip side,
 // so any later stringification of those formulas writes #REF! in place
 // of the column name.
-void ScDocument::CopyDBsToClip(ScDocument* pClipDoc, const ScRange& rClipRange, const ScMarkData* pMarks)
+void ScDocument::CopyDBsToClip(ScDocument* pClipDoc, const ScRangeList& rClipRanges, const ScMarkData* pMarks)
 {
     if (!pDBCollection || pDBCollection->getNamedDBs().empty())
         return;
@@ -2605,7 +2605,10 @@ void ScDocument::CopyDBsToClip(ScDocument* pClipDoc, const ScRange& rClipRange, 
         rxSrc->GetArea(aArea);
         if (pMarks && !pMarks->GetTableSelect(aArea.aStart.Tab()))
             continue;
-        if (!aArea.Intersects(rClipRange))
+        // Carry only a table that overlaps a copied range. A table sitting in
+        // the gap of a non-contiguous selection falls inside the bounding box
+        // but in none of the copied ranges, and its cells are not copied.
+        if (!rClipRanges.Intersects(aArea))
             continue;
         auto pClone = std::make_unique<ScDBData>(*rxSrc);
         rDest.insert(std::move(pClone));
