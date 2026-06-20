@@ -128,6 +128,7 @@
 
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star;
 using namespace ::sfx2;
 
@@ -219,7 +220,7 @@ static void lcl_processCompatibleSfxHint( const uno::Reference< script::vba::XVB
     if (rHint.GetId() != SfxHintId::ThisIsAnSfxEventHint)
         return;
 
-    uno::Sequence< uno::Any > aArgs;
+    uno::Sequence< cpo::uno::Any > aArgs;
     switch (static_cast<const SfxEventHint&>(rHint).GetEventId())
     {
         case SfxEventHintId::CreateDoc:
@@ -255,7 +256,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
             case SfxEventHintId::CreateDoc:
             case SfxEventHintId::OpenDoc:
             {
-                uno::Sequence< css::uno::Any > aArgs;
+                uno::Sequence< cpo::uno::Any > aArgs;
                 SwModule::get()->CallAutomationApplicationEventSinks(u"DocumentChange"_ustr, aArgs);
                 break;
             }
@@ -267,17 +268,17 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             case SfxEventHintId::CreateDoc:
                 {
-                    uno::Any aDocument;
+                    cpo::uno::Any aDocument;
                     aDocument <<= mxAutomationDocumentObject;
-                    uno::Sequence< uno::Any > aArgs{ aDocument };
+                    uno::Sequence< cpo::uno::Any > aArgs{ aDocument };
                     SwModule::get()->CallAutomationApplicationEventSinks( u"NewDocument"_ustr, aArgs );
                 }
                 break;
             case SfxEventHintId::OpenDoc:
                 {
-                    uno::Any aDocument;
+                    cpo::uno::Any aDocument;
                     aDocument <<= mxAutomationDocumentObject;
-                    uno::Sequence< uno::Any > aArgs{ aDocument };
+                    uno::Sequence< cpo::uno::Any > aArgs{ aDocument };
                     SwModule::get()->CallAutomationApplicationEventSinks( u"DocumentOpen"_ustr, aArgs );
                 }
                 break;
@@ -360,13 +361,13 @@ bool SwDocShell::PrepareClose( bool bUI )
     // in Automation clients veto it.
     if (bRet && m_xDoc && IsInPrepareClose())
     {
-        uno::Any aDocument;
+        cpo::uno::Any aDocument;
         aDocument <<= mxAutomationDocumentObject;
 
-        uno::Sequence<uno::Any> aArgs{ // Arg 0: Document
+        uno::Sequence<cpo::uno::Any> aArgs{ // Arg 0: Document
                                        aDocument,
                                        // Arg 1: Cancel
-                                       uno::Any(false)
+                                       cpo::uno::Any(false)
         };
 
         SwModule::get()->CallAutomationApplicationEventSinks(u"DocumentBeforeClose"_ustr, aArgs);
@@ -388,7 +389,7 @@ bool SwDocShell::PrepareClose( bool bUI )
         if( xVbaEvents.is() )
         {
             using namespace com::sun::star::script::vba::VBAEventId;
-            uno::Sequence< uno::Any > aNoArgs;
+            uno::Sequence< cpo::uno::Any > aNoArgs;
             xVbaEvents->processVbaEvent(AUTO_CLOSE, aNoArgs);
             xVbaEvents->processVbaEvent(DOCUMENT_CLOSE, aNoArgs);
         }
@@ -1383,13 +1384,13 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
 #if defined(_WIN32)
 bool SwDocShell::DdeGetData( const OUString& rItem, const OUString& rMimeType,
-                             uno::Any & rValue )
+                             cpo::uno::Any & rValue )
 {
     return m_xDoc->getIDocumentLinksAdministration().GetData( rItem, rMimeType, rValue );
 }
 
 bool SwDocShell::DdeSetData( const OUString& rItem, const OUString& /*rMimeType*/,
-                             const uno::Any & /*rValue*/ )
+                             const cpo::uno::Any & /*rValue*/ )
 {
     m_xDoc->getIDocumentLinksAdministration().SetData( rItem );
     return false;
@@ -1765,7 +1766,7 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
     std::unique_ptr<SfxMedium> xMed(new SfxMedium( aTmpObj.GetMainURL(
                              INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ));
     if (xIHandler)
-        xMed->GetItemSet().Put(SfxUnoAnyItem(SID_INTERACTIONHANDLER, uno::Any(xIHandler)));
+        xMed->GetItemSet().Put(SfxUnoAnyItem(SID_INTERACTIONHANDLER, cpo::uno::Any(xIHandler)));
     if( INetProtocol::File == aTmpObj.GetProtocol() )
         xMed->Download(); // Touch the medium (download it)
 

@@ -25,7 +25,7 @@
 
 #include <vector>
 
-namespace com::sun::star::uno { class Any; }
+namespace cpo::uno { class Any; }
 class DateTime;
 class SfxItemSet;
 
@@ -33,7 +33,7 @@ namespace SWUnoHelper {
 
 // calls over the compherl the getEnumAsInt32 function and handle the
 // exceptions.
-sal_Int32 GetEnumAsInt32( const css::uno::Any& rVal );
+sal_Int32 GetEnumAsInt32( const cpo::uno::Any& rVal );
 
 // methods for UCB actions:
     // delete the file under this URL

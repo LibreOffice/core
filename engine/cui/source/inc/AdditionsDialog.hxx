@@ -169,8 +169,8 @@ public:
     handle(css::uno::Reference<css::task::XInteractionRequest> const& xRequest) override;
 
     // XProgressHandler
-    virtual void SAL_CALL push(css::uno::Any const& Status) override;
-    virtual void SAL_CALL update(css::uno::Any const& Status) override;
+    virtual void SAL_CALL push(cpo::uno::Any const& Status) override;
+    virtual void SAL_CALL update(cpo::uno::Any const& Status) override;
     virtual void SAL_CALL pop() override;
 };
 

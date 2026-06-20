@@ -73,7 +73,7 @@ uno::Reference<awt::XBitmap> SdExportTest1::getBitmapFromTable(OUString const& r
     {
         uno::Reference<container::XNameAccess> xBitmapTable(
             xFactory->createInstance(u"com.sun.star.drawing.BitmapTable"_ustr), uno::UNO_QUERY);
-        uno::Any rValue = xBitmapTable->getByName(rName);
+        cpo::uno::Any rValue = xBitmapTable->getByName(rName);
         if (rValue.has<uno::Reference<awt::XBitmap>>())
         {
             return rValue.get<uno::Reference<awt::XBitmap>>();
@@ -103,7 +103,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest1, testBackgroundImage)
         uno::Reference<drawing::XDrawPage> xPage(getPage(0));
 
         uno::Reference<beans::XPropertySet> xPropertySet(xPage, uno::UNO_QUERY);
-        uno::Any aAny = xPropertySet->getPropertyValue(u"Background"_ustr);
+        cpo::uno::Any aAny = xPropertySet->getPropertyValue(u"Background"_ustr);
         if (aAny.has<uno::Reference<beans::XPropertySet>>())
         {
             uno::Reference<beans::XPropertySet> xBackgroundPropSet;
@@ -128,7 +128,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest1, testBackgroundImage)
         uno::Reference<drawing::XDrawPage> xPage(getPage(0));
 
         uno::Reference<beans::XPropertySet> xPropertySet(xPage, uno::UNO_QUERY);
-        uno::Any aAny = xPropertySet->getPropertyValue(u"Background"_ustr);
+        cpo::uno::Any aAny = xPropertySet->getPropertyValue(u"Background"_ustr);
         if (aAny.hasValue())
         {
             uno::Reference<beans::XPropertySet> xBackgroundPropSet;
@@ -153,7 +153,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest1, testBackgroundImage)
         uno::Reference<drawing::XDrawPage> xPage(getPage(0));
 
         uno::Reference<beans::XPropertySet> xPropertySet(xPage, uno::UNO_QUERY);
-        uno::Any aAny = xPropertySet->getPropertyValue(u"Background"_ustr);
+        cpo::uno::Any aAny = xPropertySet->getPropertyValue(u"Background"_ustr);
         if (aAny.hasValue())
         {
             uno::Reference<beans::XPropertySet> xBackgroundPropSet;

@@ -71,7 +71,7 @@ public:
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
 // css::uno::XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override;
     virtual void SAL_CALL release() noexcept override;
 
@@ -88,18 +88,18 @@ public:
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
     virtual bool SAL_CALL convertFastPropertyValue(
-                            css::uno::Any & rConvertedValue,
-                            css::uno::Any & rOldValue,
+                            cpo::uno::Any & rConvertedValue,
+                            cpo::uno::Any & rOldValue,
                             sal_Int32 nHandle,
-                            const css::uno::Any& rValue ) override;
+                            const cpo::uno::Any& rValue ) override;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
-                                const css::uno::Any& rValue
+                                const cpo::uno::Any& rValue
                                                  ) override;
-    virtual void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const override;
+    virtual void SAL_CALL getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
 // css::sdbc::XWarningsSupplier
-    virtual css::uno::Any SAL_CALL getWarnings(  ) override;
+    virtual cpo::uno::Any SAL_CALL getWarnings(  ) override;
     virtual void SAL_CALL clearWarnings(  ) override;
 
 // css::util::XCancellable

@@ -278,7 +278,7 @@ public:
     void resize( size_t n ) { mvTokens.resize( n ); }
 
     /** Appends a new token with the passed op-code, returns its data field. */
-    css::uno::Any&      append( sal_Int32 nOpCode );
+    cpo::uno::Any&      append( sal_Int32 nOpCode );
 
     /** Appends a new token with the passed op-code and data. */
     template< typename Type >
@@ -656,7 +656,7 @@ public:
 
         @param rMatrix  The matrix containing double values or strings.
      */
-    static OUString generateApiArray( const Matrix< css::uno::Any >& rMatrix );
+    static OUString generateApiArray( const Matrix< cpo::uno::Any >& rMatrix );
 
     /** Tries to extract a single cell reference from a formula token sequence.
 
@@ -669,7 +669,7 @@ public:
             com.sun.star.sheet.ComplexReference object. If the token sequence
             contains too many, or unexpected tokens, an empty Any is returned.
      */
-    css::uno::Any
+    cpo::uno::Any
                         extractReference( const ApiTokenSequence& rTokens ) const;
 
     /** Tries to extract a cell range address from a formula token sequence.

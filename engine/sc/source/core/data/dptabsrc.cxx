@@ -58,7 +58,7 @@
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::sheet::DataPilotFieldAutoShowInfo;
 
 #define SC_MINCOUNT_LIMIT   1000000
@@ -85,7 +85,7 @@ SC_SIMPLE_SERVICE_INFO( ScDPMember,      u"ScDPMember"_ustr,      u"com.sun.star
 //  DataDescription / NumberFormat are internal
 
 //TODO: move to a header?
-static bool lcl_GetBoolFromAny( const uno::Any& aAny )
+static bool lcl_GetBoolFromAny( const cpo::uno::Any& aAny )
 {
     auto b = o3tl::tryAccess<bool>(aAny);
     return b.has_value() && *b;
@@ -1204,7 +1204,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPSource::getPropertySetInfo(
     return aRef;
 }
 
-void SAL_CALL ScDPSource::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
+void SAL_CALL ScDPSource::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     if (aPropertyName == SC_UNO_DP_COLGRAND)
         mbColumnGrand = lcl_GetBoolFromAny(aValue);
@@ -1227,9 +1227,9 @@ void SAL_CALL ScDPSource::setPropertyValue( const OUString& aPropertyName, const
     }
 }
 
-uno::Any SAL_CALL ScDPSource::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ScDPSource::getPropertyValue( const OUString& aPropertyName )
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if ( aPropertyName == SC_UNO_DP_COLGRAND )
         aRet <<= mbColumnGrand;
     else if ( aPropertyName == SC_UNO_DP_ROWGRAND )
@@ -1307,20 +1307,20 @@ void ScDPDimensions::CountChanged()
 
 // very simple XNameAccess implementation using getCount/getByIndex
 
-uno::Any SAL_CALL ScDPDimensions::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL ScDPDimensions::getByName( const OUString& aName )
 {
     sal_Int32 nCount = getCount();
     for (sal_Int32 i=0; i<nCount; i++)
         if ( getByIndex(i)->getName() == aName )
         {
             uno::Reference<container::XNamed> xNamed = getByIndex(i);
-            uno::Any aRet;
+            cpo::uno::Any aRet;
             aRet <<= xNamed;
             return aRet;
         }
 
     throw container::NoSuchElementException();
-//    return uno::Any();
+//    return cpo::uno::Any();
 }
 
 uno::Sequence<OUString> SAL_CALL ScDPDimensions::getElementNames()
@@ -1541,7 +1541,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetIn
     return aRef;
 }
 
-void SAL_CALL ScDPDimension::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
+void SAL_CALL ScDPDimension::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     if ( aPropertyName == SC_UNO_DP_USEDHIERARCHY )
     {
@@ -1623,9 +1623,9 @@ void SAL_CALL ScDPDimension::setPropertyValue( const OUString& aPropertyName, co
     }
 }
 
-uno::Any SAL_CALL ScDPDimension::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ScDPDimension::getPropertyValue( const OUString& aPropertyName )
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if ( aPropertyName == SC_UNO_DP_POSITION )
         aRet <<= pSource->GetPosition( nDim );
     else if ( aPropertyName == SC_UNO_DP_USEDHIERARCHY )
@@ -1745,14 +1745,14 @@ ScDPHierarchies::~ScDPHierarchies()
 
 // very simple XNameAccess implementation using getCount/getByIndex
 
-uno::Any SAL_CALL ScDPHierarchies::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL ScDPHierarchies::getByName( const OUString& aName )
 {
     tools::Long nCount = getCount();
     for (tools::Long i=0; i<nCount; i++)
         if ( getByIndex(i)->getName() == aName )
         {
             uno::Reference<container::XNamed> xNamed = getByIndex(i);
-            uno::Any aRet;
+            cpo::uno::Any aRet;
             aRet <<= xNamed;
             return aRet;
         }
@@ -1906,14 +1906,14 @@ ScDPLevels::~ScDPLevels()
 
 // very simple XNameAccess implementation using getCount/getByIndex
 
-uno::Any SAL_CALL ScDPLevels::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL ScDPLevels::getByName( const OUString& aName )
 {
     tools::Long nCount = getCount();
     for (tools::Long i=0; i<nCount; i++)
         if ( getByIndex(i)->getName() == aName )
         {
             uno::Reference<container::XNamed> xNamed = getByIndex(i);
-            uno::Any aRet;
+            cpo::uno::Any aRet;
             aRet <<= xNamed;
             return aRet;
         }
@@ -2209,7 +2209,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPLevel::getPropertySetInfo()
     return aRef;
 }
 
-void SAL_CALL ScDPLevel::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
+void SAL_CALL ScDPLevel::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     if ( aPropertyName == SC_UNO_DP_SHOWEMPTY )
         bShowEmpty = lcl_GetBoolFromAny(aValue);
@@ -2238,9 +2238,9 @@ void SAL_CALL ScDPLevel::setPropertyValue( const OUString& aPropertyName, const 
     }
 }
 
-uno::Any SAL_CALL ScDPLevel::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ScDPLevel::getPropertyValue( const OUString& aPropertyName )
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if ( aPropertyName == SC_UNO_DP_SHOWEMPTY )
         aRet <<= bShowEmpty;
     else if ( aPropertyName == SC_UNO_DP_REPEATITEMLABELS )
@@ -2390,13 +2390,13 @@ sal_Int32 ScDPMembers::GetIndexFromName( const OUString& rName ) const
         return -1;                      // not found
 }
 
-uno::Any SAL_CALL ScDPMembers::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL ScDPMembers::getByName( const OUString& aName )
 {
     sal_Int32 nIndex = GetIndexFromName( aName );
     if ( nIndex >= 0 )
     {
         uno::Reference<container::XNamed> xNamed = getByIndex(nIndex);
-        uno::Any aRet;
+        cpo::uno::Any aRet;
         aRet <<= xNamed;
         return aRet;
     }
@@ -2676,7 +2676,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPMember::getPropertySetInfo(
     return aRef;
 }
 
-void SAL_CALL ScDPMember::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
+void SAL_CALL ScDPMember::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     if ( aPropertyName == SC_UNO_DP_ISVISIBLE )
         bVisible = lcl_GetBoolFromAny(aValue);
@@ -2696,9 +2696,9 @@ void SAL_CALL ScDPMember::setPropertyValue( const OUString& aPropertyName, const
     }
 }
 
-uno::Any SAL_CALL ScDPMember::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ScDPMember::getPropertyValue( const OUString& aPropertyName )
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if ( aPropertyName == SC_UNO_DP_ISVISIBLE )
         aRet <<= bVisible;
     else if ( aPropertyName == SC_UNO_DP_SHOWDETAILS )

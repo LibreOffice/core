@@ -41,6 +41,7 @@
 
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 
 // Perform the UNO call

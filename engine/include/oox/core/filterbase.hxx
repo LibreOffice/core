@@ -213,7 +213,7 @@ public:
             filter implementations may support different arguments.
      */
     virtual void SAL_CALL initialize(
-                            const css::uno::Sequence< css::uno::Any >& rArgs ) override;
+                            const css::uno::Sequence< cpo::uno::Any >& rArgs ) override;
 
     // com.sun.star.document.XImporter interface ------------------------------
 

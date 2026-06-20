@@ -35,10 +35,10 @@ public:
         OUString& rText, const IntlWrapper& rIntlWrapper ) const override;
 
     virtual bool QueryValue(
-        css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+        cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
 
     virtual bool PutValue(
-        const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+        const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     virtual SfxInt64Item* Clone( SfxItemPool* pOther = nullptr ) const override;
 

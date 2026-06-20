@@ -384,14 +384,14 @@ CPPUNIT_TEST_FIXTURE(Test, testHTMLEmbeddedImagePaste)
         }
 
         // XTransferable
-        uno::Any SAL_CALL getTransferData(const datatransfer::DataFlavor& aFlavor) override
+        cpo::uno::Any SAL_CALL getTransferData(const datatransfer::DataFlavor& aFlavor) override
         {
             if (!isDataFlavorSupported(aFlavor))
                 return {};
             SvFileStream aStream(m_aFileURL, StreamMode::READ);
             uno::Sequence<sal_Int8> bytes(aStream.remainingSize());
             aStream.ReadBytes(bytes.getArray(), aStream.remainingSize());
-            return uno::Any(bytes);
+            return cpo::uno::Any(bytes);
         }
         uno::Sequence<datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override
         {

@@ -34,6 +34,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 SwPageFootnoteInfoItem::SwPageFootnoteInfoItem( SwPageFootnoteInfo const & rInfo) :
     SfxPoolItem( FN_PARAM_FTN_INFO ),
@@ -237,13 +238,13 @@ bool SwUINumRuleItem::operator==( const SfxPoolItem& rAttr ) const
         && *m_pRule == *static_cast<const SwUINumRuleItem&>(rAttr).m_pRule;
 }
 
-bool SwUINumRuleItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SwUINumRuleItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     uno::Reference< container::XIndexReplace >xRules = new SwXNumberingRules(*m_pRule);
     rVal <<= xRules;
     return true;
 }
-bool SwUINumRuleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SwUINumRuleItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     uno::Reference< container::XIndexReplace> xRulesRef;
     if(rVal >>= xRulesRef)

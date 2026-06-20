@@ -77,9 +77,9 @@ namespace dxcanvas
 
     }
 
-    uno::Any SAL_CALL CanvasBitmap::getFastPropertyValue( sal_Int32 nHandle )
+    cpo::uno::Any SAL_CALL CanvasBitmap::getFastPropertyValue( sal_Int32 nHandle )
     {
-        uno::Any aRes;
+        cpo::uno::Any aRes;
         // 0 ... get Bitmap
         // 1 ... get Pixbuf with bitmap RGB content
         // 2 ... get Pixbuf with bitmap alpha mask
@@ -95,7 +95,7 @@ namespace dxcanvas
                 HBITMAP aHBmp;
                 mpBitmap->getBitmap()->GetHBITMAP(Gdiplus::Color(), &aHBmp );
 
-                uno::Sequence< uno::Any > args{ uno::Any(reinterpret_cast<sal_Int64>(aHBmp)) };
+                uno::Sequence< cpo::uno::Any > args{ cpo::uno::Any(reinterpret_cast<sal_Int64>(aHBmp)) };
                 aRes <<= args;
             }
             break;

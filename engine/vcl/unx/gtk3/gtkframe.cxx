@@ -5048,7 +5048,7 @@ public:
     {
     }
 
-    virtual css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override
+    virtual cpo::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override
     {
         css::datatransfer::DataFlavor aFlavor(rFlavor);
         if (aFlavor.MimeType == "text/plain;charset=utf-16")
@@ -5056,9 +5056,9 @@ public:
 
         auto it = m_aMimeTypeToGtkType.find(aFlavor.MimeType);
         if (it == m_aMimeTypeToGtkType.end())
-            return css::uno::Any();
+            return cpo::uno::Any();
 
-        css::uno::Any aRet;
+        cpo::uno::Any aRet;
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
         /* like gtk_clipboard_wait_for_contents run a sub loop

@@ -66,7 +66,7 @@ const ::chart::tPropertyValueMap& StaticDataTableDefaults()
         ::chart::PropertyHelper::setPropertyValueDefault(aMap, DataTableProperty_Keys, false);
 
         ::chart::PropertyHelper::setPropertyValue(
-            aMap, ::chart::LinePropertiesHelper::PROP_LINE_WIDTH, uno::Any(sal_Int32(1)));
+            aMap, ::chart::LinePropertiesHelper::PROP_LINE_WIDTH, cpo::uno::Any(sal_Int32(1)));
 
         ::chart::PropertyHelper::setPropertyValueDefault(
             aMap, ::chart::FillProperties::PROP_FILL_STYLE, drawing::FillStyle_NONE);
@@ -153,7 +153,7 @@ void DataTable::firePropertyChangeEvent()
 }
 
 // ____ OPropertySet ____
-void DataTable::GetDefaultValue(sal_Int32 nHandle, uno::Any& rAny) const
+void DataTable::GetDefaultValue(sal_Int32 nHandle, cpo::uno::Any& rAny) const
 {
     const tPropertyValueMap& rStaticDefaults = StaticDataTableDefaults();
     auto aFound = rStaticDefaults.find(nHandle);
@@ -202,7 +202,8 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2(DataTable, DataTable_Base, ::property::OPropert
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_chart2_DataTable_get_implementation(
-    css::uno::XComponentContext* /*pComponentContext*/, uno::Sequence<uno::Any> const& /*rAny*/)
+    css::uno::XComponentContext* /*pComponentContext*/,
+    uno::Sequence<cpo::uno::Any> const& /*rAny*/)
 {
     return cppu::acquire(new ::chart::DataTable);
 }

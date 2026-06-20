@@ -38,6 +38,7 @@ using namespace com::sun::star::datatransfer::dnd::DNDConstants;
 using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star;
 using namespace comphelper;
 

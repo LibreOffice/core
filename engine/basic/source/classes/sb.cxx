@@ -59,8 +59,9 @@ constexpr OUString SB_RTLNAME = u"@SBRTL"_ustr;
 //  i#i68894#
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using com::sun::star::uno::Reference;
-using com::sun::star::uno::Any;
+using cpo::uno::Any;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::lang::XMultiServiceFactory;
 
@@ -457,7 +458,7 @@ SbxObjectRef SbiFactory::CreateObject( const OUString& rClass )
             Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), UNO_SET_THROW );
             OUString aServiceName(u"ooo.vba.FileSystemObject"_ustr);
             Reference< XInterface > xInterface( xFactory->createInstance( aServiceName ), UNO_SET_THROW );
-            return new SbUnoObject( aServiceName, uno::Any( xInterface ) );
+            return new SbUnoObject( aServiceName, cpo::uno::Any( xInterface ) );
         }
         catch(const Exception& )
         {
@@ -1865,7 +1866,7 @@ std::pair<bool, sal_uInt32> StarBASIC::StoreData( SvStream& r ) const
     return { true, nVersion };
 }
 
-bool StarBASIC::GetUNOConstant( const OUString& rName, css::uno::Any& aOut )
+bool StarBASIC::GetUNOConstant( const OUString& rName, cpo::uno::Any& aOut )
 {
     bool bRes = false;
     SbUnoObject* pGlobs = dynamic_cast<SbUnoObject*>( Find( rName, SbxClassType::DontCare ) );

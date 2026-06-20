@@ -107,10 +107,10 @@ DMLPresetShapeExporter::GetAdjustmentValues() const
     return m_AdjustmentValues;
 };
 
-css::uno::Any DMLPresetShapeExporter::GetHandleValueOfModificationPoint(sal_Int32 nPoint,
+cpo::uno::Any DMLPresetShapeExporter::GetHandleValueOfModificationPoint(sal_Int32 nPoint,
                                                                         std::u16string_view sType)
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if (GetHandleValues().getLength() > nPoint)
     {
         for (sal_Int32 i = 0; i < GetHandleValues()[nPoint].getLength(); i++)

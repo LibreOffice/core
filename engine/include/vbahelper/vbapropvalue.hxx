@@ -19,7 +19,7 @@
 #ifndef SC_VBA_PROPVALULE_HXX
 #define SC_VBA_PROPVALULE_HXX
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/XPropValue.hpp>
 #include <rtl/ustring.hxx>
@@ -30,8 +30,8 @@
 class VBAHELPER_DLLPUBLIC PropListener
 {
 public:
-    virtual void setValueEvent( const css::uno::Any& value ) = 0;
-    virtual css::uno::Any getValueEvent() = 0;
+    virtual void setValueEvent( const cpo::uno::Any& value ) = 0;
+    virtual cpo::uno::Any getValueEvent() = 0;
 
 protected:
     ~PropListener() {}
@@ -45,8 +45,8 @@ public:
     ScVbaPropValue( PropListener* pListener );
 
     // Attributes
-    virtual css::uno::Any SAL_CALL getValue() override;
-    virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+    virtual cpo::uno::Any SAL_CALL getValue() override;
+    virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
 
     OUString SAL_CALL getDefaultPropertyName() override { return u"Value"_ustr; }
 

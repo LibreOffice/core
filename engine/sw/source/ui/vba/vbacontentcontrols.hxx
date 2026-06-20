@@ -28,14 +28,14 @@ public:
                          const OUString& rTitle);
 
     // XContentControls
-    //css::uno::Reference<ooo::vba::word::XContentControl> SAL_CALL Add(const css::uno::Any& Type, const css::uno::Any& Range) override;
+    //css::uno::Reference<ooo::vba::word::XContentControl> SAL_CALL Add(const cpo::uno::Any& Type, const cpo::uno::Any& Range) override;
 
     // XEnumerationAccess
     css::uno::Type SAL_CALL getElementType() override;
     css::uno::Reference<css::container::XEnumeration> SAL_CALL createEnumeration() override;
 
     // SwVbaContentControls_BASE
-    css::uno::Any createCollectionObject(const css::uno::Any& aSource) override;
+    cpo::uno::Any createCollectionObject(const cpo::uno::Any& aSource) override;
     OUString getServiceImplName() override;
     css::uno::Sequence<OUString> getServiceNames() override;
 };

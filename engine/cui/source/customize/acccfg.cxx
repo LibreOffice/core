@@ -1339,8 +1339,8 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*, void
         // don't forget to release the storage afterwards!
         uno::Reference<lang::XSingleServiceFactory> xStorageFactory(
             embed::StorageFactory::create(m_xContext));
-        uno::Sequence<uno::Any> lArgs{ uno::Any(sCfgName),
-                                       uno::Any(css::embed::ElementModes::READ) };
+        uno::Sequence<cpo::uno::Any> lArgs{ cpo::uno::Any(sCfgName),
+                                            cpo::uno::Any(css::embed::ElementModes::READ) };
 
         xRootStorage.set(xStorageFactory->createInstanceWithArguments(lArgs), uno::UNO_QUERY_THROW);
         uno::Reference<embed::XStorage> xUIConfig
@@ -1409,7 +1409,8 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, void
     {
         uno::Reference<lang::XSingleServiceFactory> xStorageFactory(
             embed::StorageFactory::create(m_xContext));
-        uno::Sequence<uno::Any> lArgs{ uno::Any(sCfgName), uno::Any(embed::ElementModes::WRITE) };
+        uno::Sequence<cpo::uno::Any> lArgs{ cpo::uno::Any(sCfgName),
+                                            cpo::uno::Any(embed::ElementModes::WRITE) };
 
         xRootStorage.set(xStorageFactory->createInstanceWithArguments(lArgs), uno::UNO_QUERY_THROW);
 
@@ -1423,7 +1424,8 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, void
         xUIConfigProps->getPropertyValue(MEDIATYPE_PROPNAME) >>= sMediaType;
         if (sMediaType.isEmpty())
             xUIConfigProps->setPropertyValue(
-                MEDIATYPE_PROPNAME, uno::Any(u"application/vnd.sun.xml.ui.configuration"_ustr));
+                MEDIATYPE_PROPNAME,
+                cpo::uno::Any(u"application/vnd.sun.xml.ui.configuration"_ustr));
 
         uno::Reference<ui::XUIConfigurationManager2> xCfgMgr
             = ui::UIConfigurationManager::create(m_xContext);
@@ -1499,7 +1501,7 @@ bool SfxAcceleratorConfigPage::FillItemSet(SfxItemSet*)
         xFrameProps->getPropertyValue(u"LayoutManager"_ustr) >>= xLayoutManager;
         css::uno::Reference<css::beans::XPropertySet> xLayoutProps(xLayoutManager,
                                                                    css::uno::UNO_QUERY_THROW);
-        xLayoutProps->setPropertyValue(u"RefreshContextToolbarToolTip"_ustr, css::uno::Any(true));
+        xLayoutProps->setPropertyValue(u"RefreshContextToolbarToolTip"_ustr, cpo::uno::Any(true));
     }
     catch (const uno::RuntimeException&)
     {

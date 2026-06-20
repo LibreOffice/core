@@ -64,6 +64,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
@@ -871,7 +872,7 @@ Sequence< OUString > SAL_CALL Hyphenator::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 lingucomponent_Hyphenator_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new Hyphenator());
 }

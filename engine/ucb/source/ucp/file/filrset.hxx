@@ -213,14 +213,14 @@ class XResultSet_impl :
                 return css::uno::Reference< css::io::XInputStream >();
         }
 
-        virtual css::uno::Any SAL_CALL
+        virtual cpo::uno::Any SAL_CALL
         getObject( sal_Int32 columnIndex,
             const css::uno::Reference< css::container::XNameAccess >& typeMap ) override
         {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getObject( columnIndex,typeMap );
             else
-                return css::uno::Any();
+                return cpo::uno::Any();
         }
 
         virtual css::uno::Reference< css::sdbc::XRef > SAL_CALL
@@ -362,9 +362,9 @@ class XResultSet_impl :
 
         virtual void SAL_CALL setPropertyValue(
             const OUString& aPropertyName,
-            const css::uno::Any& aValue ) override;
+            const cpo::uno::Any& aValue ) override;
 
-        virtual css::uno::Any SAL_CALL
+        virtual cpo::uno::Any SAL_CALL
         getPropertyValue(
             const OUString& PropertyName ) override;
 

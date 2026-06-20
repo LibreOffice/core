@@ -263,7 +263,7 @@ void SAL_CALL OHierarchyElement_Impl::disposing( const lang::EventObject& Source
     }
     catch( uno::Exception& ex )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException( ex.Message,
                         nullptr, anyEx ); // no exception must happen here, usually an exception means disaster
     }
@@ -299,7 +299,7 @@ void SAL_CALL OHierarchyElement_Impl::commited( const css::lang::EventObject& /*
     }
     catch( const uno::Exception& )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
                             u"Can not commit storage sequence!"_ustr,
                             uno::Reference< uno::XInterface >(),

@@ -60,7 +60,7 @@ public:
             The type of the returned node varies with the requested node.
             It is empty when the node was not found.
     */
-    css::uno::Any GetConfigurationNode (
+    cpo::uno::Any GetConfigurationNode (
         const OUString& rsPathToNode);
 
     /** Return a configuration node below the given node.
@@ -72,7 +72,7 @@ public:
             The type of the returned node varies with the requested node.
             It is empty when the node was not found.
     */
-    static css::uno::Any GetConfigurationNode (
+    static cpo::uno::Any GetConfigurationNode (
         const css::uno::Reference<css::container::XHierarchicalNameAccess>& rxNode,
         const OUString& rsPathToNode);
 
@@ -88,7 +88,7 @@ public:
     */
     typedef ::std::function<void (
         const OUString&,
-        const std::vector<css::uno::Any>&) > Functor;
+        const std::vector<cpo::uno::Any>&) > Functor;
 
 private:
     css::uno::Reference<css::uno::XInterface> mxRoot;

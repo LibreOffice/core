@@ -56,20 +56,20 @@ public:
     void setGraphic( css::uno::Reference< css::graphic::XGraphic > const & rXGraphic );
 
     std::shared_ptr< ::oox::drawingml::Color > maBulletColorPtr;
-    css::uno::Any               mbBulletColorFollowText;
-    css::uno::Any               mbBulletFontFollowText;
-    css::uno::Any               mbBulletSizeFollowText;
+    cpo::uno::Any               mbBulletColorFollowText;
+    cpo::uno::Any               mbBulletFontFollowText;
+    cpo::uno::Any               mbBulletSizeFollowText;
     ::oox::drawingml::TextFont  maBulletFont;
-    css::uno::Any               msBulletChar;
-    css::uno::Any               mnStartAt;
-    css::uno::Any               mnNumberingType;
-    css::uno::Any               msNumberingPrefix;
-    css::uno::Any               msNumberingSuffix;
-    css::uno::Any               mnSize;
-    css::uno::Any               mnAspectRatio; // Width/Height
-    css::uno::Any               mnFontSize;
-    css::uno::Any               maStyleName;
-    css::uno::Any               maGraphic;
+    cpo::uno::Any               msBulletChar;
+    cpo::uno::Any               mnStartAt;
+    cpo::uno::Any               mnNumberingType;
+    cpo::uno::Any               msNumberingPrefix;
+    cpo::uno::Any               msNumberingSuffix;
+    cpo::uno::Any               mnSize;
+    cpo::uno::Any               mnAspectRatio; // Width/Height
+    cpo::uno::Any               mnFontSize;
+    cpo::uno::Any               maStyleName;
+    cpo::uno::Any               maGraphic;
 };
 
 class TextParagraphProperties

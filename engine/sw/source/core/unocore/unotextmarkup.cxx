@@ -467,9 +467,9 @@ SwXStringKeyMap::SwXStringKeyMap()
 {
 }
 
-uno::Any SAL_CALL SwXStringKeyMap::getValue(const OUString & aKey)
+cpo::uno::Any SAL_CALL SwXStringKeyMap::getValue(const OUString & aKey)
 {
-    std::map< OUString, uno::Any >::const_iterator aIter = maMap.find( aKey );
+    std::map< OUString, cpo::uno::Any >::const_iterator aIter = maMap.find( aKey );
     if ( aIter == maMap.end() )
         throw container::NoSuchElementException();
 
@@ -481,9 +481,9 @@ bool SAL_CALL SwXStringKeyMap::hasValue(const OUString & aKey)
     return maMap.contains(aKey);
 }
 
-void SAL_CALL SwXStringKeyMap::insertValue(const OUString & aKey, const uno::Any & aValue)
+void SAL_CALL SwXStringKeyMap::insertValue(const OUString & aKey, const cpo::uno::Any & aValue)
 {
-    std::map< OUString, uno::Any >::const_iterator aIter = maMap.find( aKey );
+    std::map< OUString, cpo::uno::Any >::const_iterator aIter = maMap.find( aKey );
     if ( aIter != maMap.end() )
         throw container::ElementExistException();
 
@@ -503,12 +503,12 @@ OUString SAL_CALL SwXStringKeyMap::getKeyByIndex(::sal_Int32 nIndex)
     return OUString();
 }
 
-uno::Any SAL_CALL SwXStringKeyMap::getValueByIndex(::sal_Int32 nIndex)
+cpo::uno::Any SAL_CALL SwXStringKeyMap::getValueByIndex(::sal_Int32 nIndex)
 {
     if ( o3tl::make_unsigned(nIndex) >= maMap.size() )
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

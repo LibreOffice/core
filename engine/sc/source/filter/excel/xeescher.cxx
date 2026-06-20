@@ -1381,7 +1381,7 @@ void XclExpTbxControlObj::SaveXml( XclExpXmlStream& rStrm )
 
                 try
                 {
-                    css::uno::Any mAny;
+                    cpo::uno::Any mAny;
 
                     mAny = rXPropSet->getPropertyValue(u"TextLeftDistance"_ustr);
                     if (mAny.hasValue())
@@ -1418,7 +1418,7 @@ void XclExpTbxControlObj::SaveXml( XclExpXmlStream& rStrm )
 
                     try
                     {
-                        css::uno::Any mAny;
+                        cpo::uno::Any mAny;
 
                         mAny = rXPropSet->getPropertyValue(u"TextAutoGrowHeight"_ustr);
                         if (mAny.hasValue())

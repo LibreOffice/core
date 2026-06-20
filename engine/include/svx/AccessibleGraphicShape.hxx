@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_ACCESSIBLEGRAPHICSHAPE_HXX
 
 #include <com/sun/star/accessibility/XAccessibleImage.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <rtl/ustring.hxx>
@@ -60,7 +60,7 @@ public:
 
     //=====  XInterface  ======================================================
 
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
         queryInterface (const css::uno::Type & rType) override;
 
     virtual void SAL_CALL

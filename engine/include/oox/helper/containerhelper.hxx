@@ -32,8 +32,8 @@
 namespace com::sun::star {
     namespace container { class XNameAccess; }
     namespace container { class XNameContainer; }
-    namespace uno { class Any; }
 }
+namespace cpo::uno { class Any; }
 
 namespace oox {
 
@@ -166,7 +166,7 @@ public:
     static bool         insertByName(
                             const css::uno::Reference< css::container::XNameContainer >& rxNameContainer,
                             const OUString& rName,
-                            const css::uno::Any& rObject );
+                            const cpo::uno::Any& rObject );
 
     /** Inserts an object into a name container.
 
@@ -194,7 +194,7 @@ public:
                             const css::uno::Reference< css::container::XNameContainer >& rxNameContainer,
                             const OUString& rSuggestedName,
                             sal_Unicode cSeparator,
-                            const css::uno::Any& rObject );
+                            const cpo::uno::Any& rObject );
 
     // std::vector and std::map element access --------------------------------
 

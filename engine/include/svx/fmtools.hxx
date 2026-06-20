@@ -52,7 +52,7 @@ enum class SdrObjKind : sal_uInt16;
 void displayException(const css::sdbc::SQLException&, const css::uno::Reference<css::awt::XWindow>& rParent);
 SVXCORE_DLLPUBLIC void displayException(const css::sdb::SQLContext&, const css::uno::Reference<css::awt::XWindow>& rParent);
 void displayException(const css::sdb::SQLErrorEvent&, const css::uno::Reference<css::awt::XWindow>& rParent);
-void displayException(const css::uno::Any&, const css::uno::Reference<css::awt::XWindow>& rParent);
+void displayException(const cpo::uno::Any&, const css::uno::Reference<css::awt::XWindow>& rParent);
 
 sal_Int32 getElementPos(const css::uno::Reference< css::container::XIndexAccess>& xCont, const css::uno::Reference< css::uno::XInterface>& xElement);
 
@@ -98,11 +98,11 @@ public:
     // css::uno::Reference< css::sdbcx::XRowLocate>
     /// @throws css::sdbc::SQLException
     /// @throws css::uno::RuntimeException
-    css::uno::Any getBookmark()
+    cpo::uno::Any getBookmark()
     { return m_xBookmarkOperations->getBookmark(); }
     /// @throws css::sdbc::SQLException
     /// @throws css::uno::RuntimeException
-    bool moveToBookmark(const css::uno::Any& bookmark) { return m_xBookmarkOperations->moveToBookmark(bookmark); }
+    bool moveToBookmark(const cpo::uno::Any& bookmark) { return m_xBookmarkOperations->moveToBookmark(bookmark); }
 
     // css::sdbc::XResultSet
     bool isBeforeFirst() const              { return m_xMoveOperations->isBeforeFirst(); }

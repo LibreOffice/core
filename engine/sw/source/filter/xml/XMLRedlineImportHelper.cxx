@@ -48,6 +48,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::xmloff::token;
 
 using ::com::sun::star::text::XTextCursor;
@@ -805,7 +806,7 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
         if (!pRedlineInfo->m_aStyleName.isEmpty())
         {
             // Named character style.
-            uno::Any aStyleName;
+            cpo::uno::Any aStyleName;
             aStyleName <<= pRedlineInfo->m_aStyleName;
             SwUnoCursorHelper::SetCharStyle(*pDoc, aStyleName, aItemSet);
         }

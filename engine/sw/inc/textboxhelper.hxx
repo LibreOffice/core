@@ -14,7 +14,7 @@
 #include <set>
 #include <vector>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <svx/swframetypes.hxx>
@@ -72,20 +72,20 @@ public:
     /// to the given pObject shape.
     static void destroy(const SwFrameFormat* pShape, const SdrObject* pObject);
     /// Get interface of a shape's TextBox, if there is any.
-    static css::uno::Any queryInterface(const SwFrameFormat* pShape, const css::uno::Type& rType,
+    static cpo::uno::Any queryInterface(const SwFrameFormat* pShape, const css::uno::Type& rType,
                                         SdrObject* pObj);
 
     /// Sync property of TextBox with the one of the shape.
     static void syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID,
-                             const css::uno::Any& rValue, SdrObject* pObj = nullptr);
+                             const cpo::uno::Any& rValue, SdrObject* pObj = nullptr);
     /// Does the same, but works on properties which lack an sw-specific WID / MemberID.
     static void syncProperty(SwFrameFormat* pShape, std::u16string_view rPropertyName,
-                             const css::uno::Any& rValue, SdrObject* pObj = nullptr);
+                             const cpo::uno::Any& rValue, SdrObject* pObj = nullptr);
     /// Get a property of the underlying TextFrame.
     static void getProperty(SwFrameFormat const* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID,
-                            css::uno::Any& rValue);
+                            cpo::uno::Any& rValue);
     /// Get a property of the underlying TextFrame.
-    static css::uno::Any getProperty(SwFrameFormat const* pShape, const OUString& rPropName);
+    static cpo::uno::Any getProperty(SwFrameFormat const* pShape, const OUString& rPropName);
 
     /// There are two types of enum of anchor type, so this function maps this.
     static css::text::TextContentAnchorType mapAnchorType(const RndStdIds& rAnchorID);
@@ -163,7 +163,7 @@ public:
     /// Get a shape by index, excluding TextBoxes.
     ///
     /// @throws css::lang::IndexOutOfBoundsException
-    static css::uno::Any getByIndex(SdrPage const* pPage, sal_Int32 nIndex);
+    static cpo::uno::Any getByIndex(SdrPage const* pPage, sal_Int32 nIndex);
     /// Get the order of the shape, excluding TextBoxes.
     static sal_Int32 getOrdNum(const SdrObject* pObject);
     /// If pTextBox is a textbox, then set rWrapThrough to the surround of its shape.

@@ -56,10 +56,10 @@ XMLSettingsExportHelper::~XMLSettingsExportHelper()
 {
 }
 
-void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
+void XMLSettingsExportHelper::CallTypeFunction(const cpo::uno::Any& rAny,
                                             const OUString& rName) const
 {
-    uno::Any aAny( rAny );
+    cpo::uno::Any aAny( rAny );
     ManipulateSetting( aAny, rName );
 
     uno::TypeClass eClass = aAny.getValueTypeClass();
@@ -312,7 +312,7 @@ void XMLSettingsExportHelper::exportSymbolDescriptors(
         pSymbol[XML_SYMBOL_DESCRIPTOR_CHARACTER].Name       = u"Character"_ustr;
         pSymbol[XML_SYMBOL_DESCRIPTOR_CHARACTER].Value  <<= pDescriptor->nCharacter;
 
-        xBox->insertByIndex(nIndex, uno::Any( aSequence ));
+        xBox->insertByIndex(nIndex, cpo::uno::Any( aSequence ));
     }
 
     exportIndexAccess( xBox, rName );
@@ -334,7 +334,7 @@ void XMLSettingsExportHelper::exportbase64Binary(
     m_rContext.EndElement( false );
 }
 
-void XMLSettingsExportHelper::exportMapEntry(const uno::Any& rAny,
+void XMLSettingsExportHelper::exportMapEntry(const cpo::uno::Any& rAny,
                                         const OUString& rName,
                                         const bool bNameAccess) const
 {
@@ -429,7 +429,7 @@ void XMLSettingsExportHelper::exportForbiddenCharacters(
             pForChar[XML_FORBIDDEN_CHARACTER_BEGIN_LINE].Value <<= aChars.beginLine;
             pForChar[XML_FORBIDDEN_CHARACTER_END_LINE].Name    = u"EndLine"_ustr;
             pForChar[XML_FORBIDDEN_CHARACTER_END_LINE].Value <<= aChars.endLine;
-            xBox->insertByIndex(nPos++, uno::Any( aSequence ));
+            xBox->insertByIndex(nPos++, cpo::uno::Any( aSequence ));
         }
     }
 
@@ -449,7 +449,7 @@ void XMLSettingsExportHelper::exportAllSettings(
  * from their XML settings representation. This is your chance to do
  * so!
  */
-void XMLSettingsExportHelper::ManipulateSetting( uno::Any& rAny, std::u16string_view rName ) const
+void XMLSettingsExportHelper::ManipulateSetting( cpo::uno::Any& rAny, std::u16string_view rName ) const
 {
     if( rName == u"PrinterIndependentLayout" )
     {

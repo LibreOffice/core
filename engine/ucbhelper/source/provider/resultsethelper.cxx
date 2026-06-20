@@ -154,7 +154,7 @@ void SAL_CALL ResultSetImplHelper::setListener(
 
     init( false );
 
-    uno::Any aInfo;
+    cpo::uno::Any aInfo;
     aInfo <<= css::ucb::WelcomeDynamicResultSetStruct(
         m_xResultSet1 /* "old" */,
         m_xResultSet2 /* "new" */ );

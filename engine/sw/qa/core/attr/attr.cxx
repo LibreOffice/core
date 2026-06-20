@@ -50,7 +50,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSwAttrSet)
     datatransfer::DataFlavor aFlavor;
     aFlavor.MimeType = u"text/plain;charset=utf-16"_ustr;
     aFlavor.DataType = cppu::UnoType<OUString>::get();
-    uno::Any aData = xTransferable->getTransferData(aFlavor);
+    cpo::uno::Any aData = xTransferable->getTransferData(aFlavor);
 
     // Then make sure we get data without crashing:
     CPPUNIT_ASSERT(aData.hasValue());

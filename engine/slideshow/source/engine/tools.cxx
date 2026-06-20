@@ -135,7 +135,7 @@ namespace slideshow::internal
 
         /// extract unary double value from Any
         bool extractValue( double&                      o_rValue,
-                           const uno::Any&              rSourceAny,
+                           const cpo::uno::Any&              rSourceAny,
                            const ShapeSharedPtr&        rShape,
                            const ::basegfx::B2DVector&  rSlideBounds )
         {
@@ -170,7 +170,7 @@ namespace slideshow::internal
 
         /// extract enum/constant group value from Any
         bool extractValue( sal_Int32&                       o_rValue,
-                           const uno::Any&                  rSourceAny,
+                           const cpo::uno::Any&                  rSourceAny,
                            const ShapeSharedPtr&            /*rShape*/,
                            const ::basegfx::B2DVector&      /*rSlideBounds*/ )
         {
@@ -215,7 +215,7 @@ namespace slideshow::internal
 
         /// extract enum/constant group value from Any
         bool extractValue( sal_Int16&                       o_rValue,
-                           const uno::Any&                  rSourceAny,
+                           const cpo::uno::Any&                  rSourceAny,
                            const ShapeSharedPtr&            rShape,
                            const ::basegfx::B2DVector&      rSlideBounds )
         {
@@ -236,7 +236,7 @@ namespace slideshow::internal
 
         /// extract color value from Any
         bool extractValue( RGBColor&                    o_rValue,
-                           const uno::Any&              rSourceAny,
+                           const cpo::uno::Any&              rSourceAny,
                            const ShapeSharedPtr&        /*rShape*/,
                            const ::basegfx::B2DVector&  /*rSlideBounds*/ )
         {
@@ -318,7 +318,7 @@ namespace slideshow::internal
 
         /// extract color value from Any
         bool extractValue( HSLColor&                    o_rValue,
-                           const uno::Any&              rSourceAny,
+                           const cpo::uno::Any&              rSourceAny,
                            const ShapeSharedPtr&        /*rShape*/,
                            const ::basegfx::B2DVector&  /*rSlideBounds*/ )
         {
@@ -357,7 +357,7 @@ namespace slideshow::internal
 
         /// extract plain string from Any
         bool extractValue( OUString&             o_rValue,
-                           const uno::Any&              rSourceAny,
+                           const cpo::uno::Any&              rSourceAny,
                            const ShapeSharedPtr&        /*rShape*/,
                            const ::basegfx::B2DVector&  /*rSlideBounds*/ )
         {
@@ -367,7 +367,7 @@ namespace slideshow::internal
 
         /// extract bool value from Any
         bool extractValue( bool&                        o_rValue,
-                           const uno::Any&              rSourceAny,
+                           const cpo::uno::Any&              rSourceAny,
                            const ShapeSharedPtr&        /*rShape*/,
                            const ::basegfx::B2DVector&  /*rSlideBounds*/ )
         {
@@ -407,7 +407,7 @@ namespace slideshow::internal
 
         /// extract double 2-tuple from Any
         bool extractValue( ::basegfx::B2DTuple&         o_rPair,
-                           const uno::Any&              rSourceAny,
+                           const cpo::uno::Any&              rSourceAny,
                            const ShapeSharedPtr&        rShape,
                            const ::basegfx::B2DVector&  rSlideBounds )
         {

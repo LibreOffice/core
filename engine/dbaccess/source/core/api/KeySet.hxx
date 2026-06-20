@@ -126,7 +126,7 @@ namespace dbaccess
 
         static void impl_convertValue_throw(const ORowSetRow& _rInsertRow,const SelectColumnDescription& i_aMetaData);
         void initColumns();
-        void findTableColumnsMatching_throw( const css::uno::Any& i_aTable,
+        void findTableColumnsMatching_throw( const cpo::uno::Any& i_aTable,
                                              const OUString& i_rUpdateTableName,
                                              const css::uno::Reference< css::sdbc::XDatabaseMetaData>& i_xMeta,
                                              const css::uno::Reference< css::container::XNameAccess>& i_xQueryColumns,
@@ -176,7 +176,7 @@ namespace dbaccess
         virtual css::util::DateTime SAL_CALL getTimestamp( sal_Int32 columnIndex ) override;
         virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getBinaryStream( sal_Int32 columnIndex ) override;
         virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getCharacterStream( sal_Int32 columnIndex ) override;
-        virtual css::uno::Any SAL_CALL getObject( sal_Int32 columnIndex, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual cpo::uno::Any SAL_CALL getObject( sal_Int32 columnIndex, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
         virtual css::uno::Reference< css::sdbc::XRef > SAL_CALL getRef( sal_Int32 columnIndex ) override;
         virtual css::uno::Reference< css::sdbc::XBlob > SAL_CALL getBlob( sal_Int32 columnIndex ) override;
         virtual css::uno::Reference< css::sdbc::XClob > SAL_CALL getClob( sal_Int32 columnIndex ) override;
@@ -203,15 +203,15 @@ namespace dbaccess
         void ensureRowForData(  );
         virtual void refreshRow(  ) override;
         // css::sdbcx::XRowLocate
-        virtual css::uno::Any getBookmark() override;
+        virtual cpo::uno::Any getBookmark() override;
 
-        virtual bool moveToBookmark( const css::uno::Any& bookmark ) override;
+        virtual bool moveToBookmark( const cpo::uno::Any& bookmark ) override;
 
-        virtual sal_Int32 compareBookmarks( const css::uno::Any& first, const css::uno::Any& second ) override;
+        virtual sal_Int32 compareBookmarks( const cpo::uno::Any& first, const cpo::uno::Any& second ) override;
 
         virtual bool hasOrderedBookmarks(  ) override;
 
-        virtual sal_Int32 hashBookmark( const css::uno::Any& bookmark ) override;
+        virtual sal_Int32 hashBookmark( const cpo::uno::Any& bookmark ) override;
 
         // css::sdbc::XResultSetUpdate
         virtual void updateRow(const ORowSetRow& _rInsertRow,const ORowSetRow& _rOriginalRow,const connectivity::OSQLTable& _xTable   ) override;

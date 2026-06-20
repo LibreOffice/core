@@ -705,7 +705,7 @@ void SlideshowLayerRenderer::resolveEffect(CustomAnimationEffectPtr const& rEffe
     sal_Int32 nParagraph = -1;
     uno::Reference<drawing::XShape> xShape;
 
-    uno::Any aTargetAny(rEffect->getTarget());
+    cpo::uno::Any aTargetAny(rEffect->getTarget());
 
     if ((aTargetAny >>= xShape) && xShape.is())
     {
@@ -746,7 +746,7 @@ void SlideshowLayerRenderer::resolveEffect(CustomAnimationEffectPtr const& rEffe
     AnimationLayerInfo aLayerInfo;
 
     std::optional<bool> bVisible;
-    uno::Any aAny
+    cpo::uno::Any aAny
         = rEffect->getProperty(animations::AnimationNodeType::SET, u"Visibility", EValue::To);
     if (aAny.hasValue())
     {

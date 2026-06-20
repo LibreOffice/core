@@ -26,6 +26,7 @@
 #include <editeng/xmlcnitm.hxx>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::xml;
 
@@ -62,7 +63,7 @@ bool SvXMLAttrContainerItem::GetPresentation(
     return false;
 }
 
-bool SvXMLAttrContainerItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvXMLAttrContainerItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     Reference<XNameContainer> xContainer
         = new SvUnoAttributeContainer(std::make_unique<SvXMLAttrContainerData>(maContainerData));
@@ -71,7 +72,7 @@ bool SvXMLAttrContainerItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMembe
     return true;
 }
 
-bool SvXMLAttrContainerItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvXMLAttrContainerItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     Reference<XInterface> xTunnel(rVal, UNO_QUERY);
     if (auto pContainer = dynamic_cast<SvUnoAttributeContainer*>(xTunnel.get()))

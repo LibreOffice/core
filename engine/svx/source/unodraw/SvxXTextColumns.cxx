@@ -28,7 +28,7 @@
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/text/ColumnSeparatorStyle.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 #include <com/sun/star/util/Color.hpp>
 
 #include <cppuhelper/supportsservice.hxx>
@@ -87,8 +87,8 @@ public:
     virtual css::uno::Reference<css::beans::XPropertySetInfo>
         SAL_CALL getPropertySetInfo() override;
     virtual void SAL_CALL setPropertyValue(const OUString& aPropertyName,
-                                           const css::uno::Any& aValue) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName) override;
+                                           const cpo::uno::Any& aValue) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName) override;
     virtual void SAL_CALL addPropertyChangeListener(
         const OUString& aPropertyName,
         const css::uno::Reference<css::beans::XPropertyChangeListener>& xListener) override;
@@ -194,7 +194,7 @@ css::uno::Reference<css::beans::XPropertySetInfo> SvxXTextColumns::getPropertySe
     return m_aPropSet.getPropertySetInfo();
 }
 
-void SvxXTextColumns::setPropertyValue(const OUString& rPropertyName, const css::uno::Any& aValue)
+void SvxXTextColumns::setPropertyValue(const OUString& rPropertyName, const cpo::uno::Any& aValue)
 {
     const SfxItemPropertyMapEntry* pEntry = m_aPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
@@ -261,14 +261,14 @@ void SvxXTextColumns::setPropertyValue(const OUString& rPropertyName, const css:
     }
 }
 
-css::uno::Any SvxXTextColumns::getPropertyValue(const OUString& rPropertyName)
+cpo::uno::Any SvxXTextColumns::getPropertyValue(const OUString& rPropertyName)
 {
     const SfxItemPropertyMapEntry* pEntry = m_aPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
         throw css::beans::UnknownPropertyException("Unknown property: " + rPropertyName,
                                                    getXWeak());
 
-    css::uno::Any aRet;
+    cpo::uno::Any aRet;
     switch (pEntry->nWID)
     {
         case WID_TXTCOL_LINE_WIDTH:
@@ -331,7 +331,7 @@ css::uno::Reference<css::uno::XInterface> SvxXTextColumns_createInstance() noexc
 
 extern "C" SVXCORE_DLLPUBLIC css::uno::XInterface*
 com_sun_star_comp_svx_TextColumns_get_implementation(css::uno::XComponentContext*,
-                                                     css::uno::Sequence<css::uno::Any> const&)
+                                                     css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SvxXTextColumns);
 }

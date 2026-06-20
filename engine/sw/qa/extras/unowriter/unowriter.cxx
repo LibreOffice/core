@@ -134,14 +134,14 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testDefaultCharStyle)
     xCursor->goLeft(1, true);
 
     uno::Reference<beans::XPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
-    xCursorProps->setPropertyValue(u"CharStyleName"_ustr, uno::Any(u"Emphasis"_ustr));
+    xCursorProps->setPropertyValue(u"CharStyleName"_ustr, cpo::uno::Any(u"Emphasis"_ustr));
     CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
                          getProperty<awt::FontSlant>(xCursorProps, u"CharPosture"_ustr));
 
     // Now reset the char style and assert that the font slant is back to none.
     // This resulted in a lang.IllegalArgumentException, Standard was not
     // mapped to 'Default Style'.
-    xCursorProps->setPropertyValue(u"CharStyleName"_ustr, uno::Any(u"Standard"_ustr));
+    xCursorProps->setPropertyValue(u"CharStyleName"_ustr, cpo::uno::Any(u"Standard"_ustr));
     CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
                          getProperty<awt::FontSlant>(xCursorProps, u"CharPosture"_ustr));
 }
@@ -159,7 +159,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testInsertStringExpandsHints)
     xCursor->goRight(1, true);
     CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
                          getProperty<awt::FontSlant>(xProps, u"CharPosture"_ustr));
-    xProps->setPropertyValue(u"CharPosture"_ustr, uno::Any(awt::FontSlant_ITALIC));
+    xProps->setPropertyValue(u"CharPosture"_ustr, cpo::uno::Any(awt::FontSlant_ITALIC));
     xCursor->collapseToEnd();
     xText->insertString(xCursor, u"x"_ustr, false);
     xCursor->goLeft(1, true);
@@ -182,7 +182,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testInsertTextPortionNotExpandsHints)
     xCursor->goRight(1, true);
     CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
                          getProperty<awt::FontSlant>(xProps, u"CharPosture"_ustr));
-    xProps->setPropertyValue(u"CharPosture"_ustr, uno::Any(awt::FontSlant_ITALIC));
+    xProps->setPropertyValue(u"CharPosture"_ustr, cpo::uno::Any(awt::FontSlant_ITALIC));
     xCursor->collapseToEnd();
     xTextA->insertTextPortion(u"x"_ustr, uno::Sequence<beans::PropertyValue>(), xCursor);
     xCursor->goLeft(1, true);
@@ -205,7 +205,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testInsertTextContentExpandsHints)
     xCursor->goRight(1, true);
     CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
                          getProperty<awt::FontSlant>(xProps, u"CharPosture"_ustr));
-    xProps->setPropertyValue(u"CharPosture"_ustr, uno::Any(awt::FontSlant_ITALIC));
+    xProps->setPropertyValue(u"CharPosture"_ustr, cpo::uno::Any(awt::FontSlant_ITALIC));
     xCursor->collapseToEnd();
     uno::Reference<text::XTextContent> const xContent(
         xFactory->createInstance(u"com.sun.star.text.Footnote"_ustr), uno::UNO_QUERY);
@@ -231,7 +231,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testInsertTextContentWithPropertiesNotExpandsH
     xCursor->goRight(1, true);
     CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
                          getProperty<awt::FontSlant>(xProps, u"CharPosture"_ustr));
-    xProps->setPropertyValue(u"CharPosture"_ustr, uno::Any(awt::FontSlant_ITALIC));
+    xProps->setPropertyValue(u"CharPosture"_ustr, cpo::uno::Any(awt::FontSlant_ITALIC));
     xCursor->collapseToEnd();
     uno::Reference<text::XTextContent> const xContent(
         xFactory->createInstance(u"com.sun.star.text.Footnote"_ustr), uno::UNO_QUERY);
@@ -253,9 +253,9 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testGraphicDescriptorURL)
         xFactory->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
 
     // Set a URL on it.
-    xTextGraphic->setPropertyValue(u"GraphicURL"_ustr, uno::Any(createFileURL(u"test.jpg")));
+    xTextGraphic->setPropertyValue(u"GraphicURL"_ustr, cpo::uno::Any(createFileURL(u"test.jpg")));
     xTextGraphic->setPropertyValue(u"AnchorType"_ustr,
-                                   uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+                                   cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
 
     // Insert it.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -277,14 +277,14 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testGraphicDescriptorURLBitmap)
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameContainer> xBitmaps(
         xFactory->createInstance(u"com.sun.star.drawing.BitmapTable"_ustr), uno::UNO_QUERY);
-    xBitmaps->insertByName(u"test"_ustr, uno::Any(createFileURL(u"test.jpg")));
+    xBitmaps->insertByName(u"test"_ustr, cpo::uno::Any(createFileURL(u"test.jpg")));
 
     // Create a graphic.
     uno::Reference<beans::XPropertySet> xTextGraphic(
         xFactory->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
     xTextGraphic->setPropertyValue(u"GraphicURL"_ustr, xBitmaps->getByName(u"test"_ustr));
     xTextGraphic->setPropertyValue(u"AnchorType"_ustr,
-                                   uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+                                   cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
 
     // Insert it.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -589,7 +589,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSectionAnchorProperties)
     auto xSecFromProp = getProperty<uno::Reference<text::XTextContent>>(xAnchorProp, u"TextSection"_ustr);
     CPPUNIT_ASSERT_EQUAL(xSection, xSecFromProp);
 
-    xAnchorProp->setPropertyValue(u"CharHeight"_ustr, uno::Any(float(64)));
+    xAnchorProp->setPropertyValue(u"CharHeight"_ustr, cpo::uno::Any(float(64)));
     CPPUNIT_ASSERT_EQUAL(float(64), getProperty<float>(xAnchorProp, u"CharHeight"_ustr));
     uno::Reference<beans::XPropertyState> const xAnchorState(xAnchor, uno::UNO_QUERY);
     // TODO: why does this return DEFAULT_VALUE instead of DIRECT_VALUE?
@@ -861,7 +861,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf62603)
     xCursor->collapseToEnd();
 
     // Inserts 2nd string 'test' with italic font style
-    xCursorProps->setPropertyValue(u"CharPosture"_ustr, uno::Any(awt::FontSlant_ITALIC));
+    xCursorProps->setPropertyValue(u"CharPosture"_ustr, cpo::uno::Any(awt::FontSlant_ITALIC));
     xText->insertString(xCursor, u"test"_ustr, false);
     xCursor->goLeft(4, true); // selects 2nd string
     CPPUNIT_ASSERT_EQUAL(u"test"_ustr, xCursor->getString());
@@ -870,15 +870,15 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf62603)
     xCursor->collapseToEnd();
 
     // Insert 3rd string '? ' with 28 pt font height
-    xCursorProps->setPropertyValue(u"CharPosture"_ustr, uno::Any(awt::FontSlant_NONE)); // no font style
-    xCursorProps->setPropertyValue(u"CharHeight"_ustr, uno::Any(float(28.0)));
+    xCursorProps->setPropertyValue(u"CharPosture"_ustr, cpo::uno::Any(awt::FontSlant_NONE)); // no font style
+    xCursorProps->setPropertyValue(u"CharHeight"_ustr, cpo::uno::Any(float(28.0)));
     xText->insertString(xCursor, u"? "_ustr, false);
     xCursor->goLeft(2, true); // selects 3rd string
     CPPUNIT_ASSERT_EQUAL(float(28.0), getProperty<float>(xCursorProps, u"CharHeight"_ustr));
     xCursor->collapseToEnd();
 
     // Insert 4th string 'who' with default 12 pt font height
-    xCursorProps->setPropertyValue(u"CharHeight"_ustr, uno::Any(float(12.0)));
+    xCursorProps->setPropertyValue(u"CharHeight"_ustr, cpo::uno::Any(float(12.0)));
     xText->insertString(xCursor, u"who"_ustr, false);
     xCursor->goLeft(3, true); // selects 4rd string
     CPPUNIT_ASSERT_EQUAL(float(12.0), getProperty<float>(xCursorProps, u"CharHeight"_ustr));
@@ -936,7 +936,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testRenderablePagePosition)
     createSwDoc("renderable-page-position.odt");
     // Make sure that the document has 2 pages.
 
-    uno::Any aSelection(mxComponent);
+    cpo::uno::Any aSelection(mxComponent);
 
     uno::Reference<awt::XToolkit> xToolkit = VCLUnoHelper::CreateToolkit();
     uno::Reference<awt::XDevice> xDevice(xToolkit->createScreenCompatibleDevice(32, 32));
@@ -1096,11 +1096,11 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testChapterNumberingCharStyle)
     uno::Reference<beans::XPropertySet> xStyle(
         xDoc->createInstance(u"com.sun.star.style.CharacterStyle"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XNamed> xStyleN(xStyle, uno::UNO_QUERY);
-    xStyle->setPropertyValue(u"CharColor"_ustr, uno::Any(COL_LIGHTRED));
+    xStyle->setPropertyValue(u"CharColor"_ustr, cpo::uno::Any(COL_LIGHTRED));
     uno::Reference<style::XStyleFamiliesSupplier> xSFS(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameContainer> xStyles(
         xSFS->getStyleFamilies()->getByName(u"CharacterStyles"_ustr), uno::UNO_QUERY);
-    xStyles->insertByName(u"red"_ustr, uno::Any(xStyle));
+    xStyles->insertByName(u"red"_ustr, cpo::uno::Any(xStyle));
 
     uno::Reference<text::XChapterNumberingSupplier> xCNS(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexReplace> xOutline(xCNS->getChapterNumberingRules());
@@ -1109,7 +1109,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testChapterNumberingCharStyle)
         hashMap[u"CharStyleName"_ustr] <<= u"red"_ustr;
         uno::Sequence<beans::PropertyValue> props;
         hashMap >> props;
-        xOutline->replaceByIndex(0, uno::Any(props));
+        xOutline->replaceByIndex(0, cpo::uno::Any(props));
     }
     // now rename the style
     xStyleN->setName(u"reddishred"_ustr);
@@ -1166,7 +1166,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testXTextCursor_setPropertyValues)
 
     uno::Reference<beans::XMultiPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
     uno::Sequence<OUString> aPropNames = { u"OneUnknownProperty"_ustr, u"CharStyleName"_ustr };
-    uno::Sequence<uno::Any> aPropValues = { uno::Any(), uno::Any(u"Emphasis"_ustr) };
+    uno::Sequence<cpo::uno::Any> aPropValues = { cpo::uno::Any(), cpo::uno::Any(u"Emphasis"_ustr) };
     CPPUNIT_ASSERT_THROW(xCursorProps->setPropertyValues(aPropNames, aPropValues),
                          lang::WrappedTargetException);
     CPPUNIT_ASSERT_EQUAL(u"Emphasis"_ustr,
@@ -1191,11 +1191,11 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testShapeAllowOverlap)
 
     // The property is on by default, turn it off & verify.
     uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
-    xShapeProperties->setPropertyValue(u"AllowOverlap"_ustr, uno::Any(false));
+    xShapeProperties->setPropertyValue(u"AllowOverlap"_ustr, cpo::uno::Any(false));
     CPPUNIT_ASSERT(!getProperty<bool>(xShapeProperties, u"AllowOverlap"_ustr));
 
     // Turn it back to on & verify.
-    xShapeProperties->setPropertyValue(u"AllowOverlap"_ustr, uno::Any(true));
+    xShapeProperties->setPropertyValue(u"AllowOverlap"_ustr, cpo::uno::Any(true));
     CPPUNIT_ASSERT(getProperty<bool>(xShapeProperties, u"AllowOverlap"_ustr));
 }
 
@@ -1261,10 +1261,10 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testMultiSelect)
     // Create a search descriptor and find all occurrences of search string
     css::uno::Reference<css::util::XSearchable> xSearchable(mxComponent, css::uno::UNO_QUERY_THROW);
     auto xSearchDescriptor = xSearchable->createSearchDescriptor();
-    xSearchDescriptor->setPropertyValue(u"SearchStyles"_ustr, css::uno::Any(false));
-    xSearchDescriptor->setPropertyValue(u"SearchCaseSensitive"_ustr, css::uno::Any(false));
-    xSearchDescriptor->setPropertyValue(u"SearchBackwards"_ustr, css::uno::Any(true));
-    xSearchDescriptor->setPropertyValue(u"SearchRegularExpression"_ustr, css::uno::Any(false));
+    xSearchDescriptor->setPropertyValue(u"SearchStyles"_ustr, cpo::uno::Any(false));
+    xSearchDescriptor->setPropertyValue(u"SearchCaseSensitive"_ustr, cpo::uno::Any(false));
+    xSearchDescriptor->setPropertyValue(u"SearchBackwards"_ustr, cpo::uno::Any(true));
+    xSearchDescriptor->setPropertyValue(u"SearchRegularExpression"_ustr, cpo::uno::Any(false));
     xSearchDescriptor->setSearchString(u"abc"_ustr);
     auto xSearchResult = xSearchable->findAll(xSearchDescriptor);
 
@@ -1272,7 +1272,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testMultiSelect)
     auto xController = xTextDocument->getCurrentController();
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(
         xController, css::uno::UNO_QUERY_THROW);
-    xSelectionSupplier->select(css::uno::Any(xSearchResult));
+    xSelectionSupplier->select(cpo::uno::Any(xSearchResult));
     css::uno::Reference<css::container::XIndexAccess> xSelection(xSelectionSupplier->getSelection(),
                                                                  css::uno::UNO_QUERY_THROW);
     // Now check that they all are selected in the reverse order ("SearchBackwards").
@@ -1297,7 +1297,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTransparentText)
     // Set a custom transparency.
     uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
     sal_Int16 nExpected = 42;
-    xParagraph->setPropertyValue(u"CharTransparence"_ustr, uno::Any(nExpected));
+    xParagraph->setPropertyValue(u"CharTransparence"_ustr, cpo::uno::Any(nExpected));
 
     // Get the transparency & verify.
     CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int16>(xParagraph, u"CharTransparence"_ustr));
@@ -1321,8 +1321,8 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf129839)
     css::uno::Reference<css::beans::XPropertySet> xCellRange(
         xTableCellRange->getCellRangeByPosition(0, 0, 1, 1), css::uno::UNO_QUERY_THROW);
     // Test retrieval of VertOrient property - this crashed
-    css::uno::Any aOrient = xCellRange->getPropertyValue(u"VertOrient"_ustr);
-    CPPUNIT_ASSERT_EQUAL(css::uno::Any(css::text::VertOrientation::NONE), aOrient);
+    cpo::uno::Any aOrient = xCellRange->getPropertyValue(u"VertOrient"_ustr);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(css::text::VertOrientation::NONE), aOrient);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf129841)
@@ -1347,9 +1347,9 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf129841)
         xTableCellRange->getCellRangeByName(u"A1:A1"_ustr), css::uno::UNO_QUERY_THROW);
     static constexpr OUString sBackColor = u"BackColor"_ustr;
     // Apply background color to table cursor, and read background color from cell range
-    css::uno::Any aRefColor(COL_LIGHTRED);
+    cpo::uno::Any aRefColor(COL_LIGHTRED);
     xTableCursor->setPropertyValue(sBackColor, aRefColor);
-    css::uno::Any aColor = xCellRange->getPropertyValue(sBackColor);
+    cpo::uno::Any aColor = xCellRange->getPropertyValue(sBackColor);
     // This failed
     CPPUNIT_ASSERT_EQUAL(aRefColor, aColor);
     // Now the other way round
@@ -1367,7 +1367,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf141525)
 
     // Insert "Line with Arrow/Circle" shape with CTRL key
     uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "KeyModifier", uno::Any(KEY_MOD1) } }));
+        comphelper::InitPropertySequence({ { "KeyModifier", cpo::uno::Any(KEY_MOD1) } }));
     dispatchCommand(mxComponent, u".uno:LineArrowCircle"_ustr, aArgs);
 
     // Asserts line shape has been inserted into the doc
@@ -1388,7 +1388,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf160278)
 {
     createSwDoc();
     uno::Reference<beans::XPropertySet> xParaProps(getParagraph(1), uno::UNO_QUERY);
-    xParaProps->setPropertyValue(u"CharFontName"_ustr, uno::Any(u"DejaVu Sans"_ustr));
+    xParaProps->setPropertyValue(u"CharFontName"_ustr, cpo::uno::Any(u"DejaVu Sans"_ustr));
     auto xTextDocument(mxComponent.queryThrow<css::text::XTextDocument>());
     auto xText(xTextDocument->getText());
     xText->setString(u"123"_ustr);
@@ -1439,7 +1439,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf162480)
     createSwDoc();
 
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "Name", uno::Any(createFileURL(u"textboxInColumn2.fodt")) },
+        { "Name", cpo::uno::Any(createFileURL(u"textboxInColumn2.fodt")) },
     });
 
     // Inserting a document with text box attached in a table's second column must not crash

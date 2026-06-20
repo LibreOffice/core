@@ -64,10 +64,10 @@ namespace frm
         // <properties>
         css::uno::Reference< css::awt::XDevice >
                                     m_xReferenceDevice;
-        css::uno::Any  m_aTabStop;
-        css::uno::Any  m_aBackgroundColor;
-        css::uno::Any  m_aBorderColor;
-        css::uno::Any  m_aVerticalAlignment;
+        cpo::uno::Any  m_aTabStop;
+        cpo::uno::Any  m_aBackgroundColor;
+        cpo::uno::Any  m_aBorderColor;
+        cpo::uno::Any  m_aVerticalAlignment;
         OUString             m_sDefaultControl;
         OUString             m_sHelpText;
         OUString             m_sHelpURL;
@@ -89,7 +89,7 @@ namespace frm
         // </properties>
 
         // <properties_for_awt_edit_compatibility>
-        css::uno::Any  m_aAlign;
+        cpo::uno::Any  m_aAlign;
         sal_Int16                   m_nEchoChar;
         sal_Int16                   m_nMaxTextLength;
         bool                    m_bMultiLine;
@@ -107,7 +107,7 @@ namespace frm
 
         // UNO
         DECLARE_UNO3_AGG_DEFAULTS( ORichTextModel, OControlModel )
-        virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
@@ -131,11 +131,11 @@ namespace frm
         virtual void SAL_CALL removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
         // XPropertySet and friends
-        virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle ) const override;
-        virtual bool SAL_CALL convertFastPropertyValue(css::uno::Any& rConvertedValue, css::uno::Any& rOldValue,
-                                            sal_Int32 nHandle, const css::uno::Any& rValue ) override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const css::uno::Any& rValue) override;
-        virtual css::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const override;
+        virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
+        virtual bool SAL_CALL convertFastPropertyValue(cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue,
+                                            sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
+        virtual cpo::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const override;
 
         // OControlModel's property handling
         virtual void describeFixedProperties(

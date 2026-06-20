@@ -68,9 +68,9 @@ void SAL_CALL SvXMLImportContext::characters(const OUString &/*rChars*/)
 }
 
 // XInterface
-css::uno::Any SAL_CALL SvXMLImportContext::queryInterface( const css::uno::Type& aType )
+cpo::uno::Any SAL_CALL SvXMLImportContext::queryInterface( const css::uno::Type& aType )
 {
-    css::uno::Any a = ::cppu::queryInterface(
+    cpo::uno::Any a = ::cppu::queryInterface(
                 aType,
                 static_cast< XFastContextHandler* >(this),
                 static_cast< XTypeProvider* >(this),

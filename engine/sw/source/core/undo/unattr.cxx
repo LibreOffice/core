@@ -767,7 +767,7 @@ SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxPoolItem& rAttr,
     const SfxPoolItem* pItem = m_AttrSet.GetItem(RES_TXTATR_CHARFMT);
     if (pItem)
     {
-        uno::Any aValue;
+        cpo::uno::Any aValue;
         pItem->QueryValue(aValue, RES_TXTATR_CHARFMT);
         OUString sTmp;
         if (aValue >>= sTmp)
@@ -795,7 +795,7 @@ SwUndoAttr::SwUndoAttr( const SwPaM& rRange, SfxItemSet aSet,
     const SfxPoolItem* pItem = m_AttrSet.GetItem(RES_TXTATR_CHARFMT);
     if (pItem)
     {
-        uno::Any aValue;
+        cpo::uno::Any aValue;
         pItem->QueryValue(aValue, RES_TXTATR_CHARFMT);
         OUString sTmp;
         if (aValue >>= sTmp)

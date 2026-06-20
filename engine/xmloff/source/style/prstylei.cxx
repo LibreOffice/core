@@ -46,6 +46,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::container;
@@ -522,18 +523,18 @@ void XMLPropStyleContext::Finish( bool bOverwrite )
     }
     if (!aLinked.isEmpty() && xPropSetInfo->hasPropertyByName(u"LinkStyle"_ustr))
     {
-        uno::Any aAny = xPropSet->getPropertyValue(u"LinkStyle"_ustr);
+        cpo::uno::Any aAny = xPropSet->getPropertyValue(u"LinkStyle"_ustr);
         OUString aCurrentLinked;
         aAny >>= aCurrentLinked;
         if (aCurrentLinked != aLinked)
         {
-            xPropSet->setPropertyValue(u"LinkStyle"_ustr, uno::Any(aLinked));
+            xPropSet->setPropertyValue(u"LinkStyle"_ustr, cpo::uno::Any(aLinked));
         }
     }
 
     if ( xPropSetInfo->hasPropertyByName( u"Hidden"_ustr ) )
     {
-        xPropSet->setPropertyValue( u"Hidden"_ustr, uno::Any( IsHidden( ) ) );
+        xPropSet->setPropertyValue( u"Hidden"_ustr, cpo::uno::Any( IsHidden( ) ) );
     }
 
 }

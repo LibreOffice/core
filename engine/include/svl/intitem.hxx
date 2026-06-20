@@ -60,10 +60,10 @@ public:
 
     virtual boost::property_tree::ptree dumpAsJSON() const override;
 
-    virtual bool QueryValue( css::uno::Any& rVal,
+    virtual bool QueryValue( cpo::uno::Any& rVal,
                              sal_uInt8 nMemberId = 0 ) const override;
 
-    virtual bool PutValue( const css::uno::Any& rVal,
+    virtual bool PutValue( const cpo::uno::Any& rVal,
                            sal_uInt8 nMemberId ) override;
 
     virtual SfxInt16Item* Clone(SfxItemPool * = nullptr) const override;

@@ -376,7 +376,7 @@ sal_Int32 ScAccessibleEditObject::GetFgBgColor( const OUString &strPropColor)
                 uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
                 if ( xIndex.is() )
                 {
-                    uno::Any aTable = xIndex->getByIndex(m_curCellAddress.Tab());
+                    cpo::uno::Any aTable = xIndex->getByIndex(m_curCellAddress.Tab());
                     uno::Reference<sheet::XSpreadsheet> xTable;
                     if (aTable>>=xTable)
                     {
@@ -386,7 +386,7 @@ sal_Int32 ScAccessibleEditObject::GetFgBgColor( const OUString &strPropColor)
                             uno::Reference<beans::XPropertySet> xCellProps(xCell, uno::UNO_QUERY);
                             if (xCellProps.is())
                             {
-                                uno::Any aAny = xCellProps->getPropertyValue(strPropColor);
+                                cpo::uno::Any aAny = xCellProps->getPropertyValue(strPropColor);
                                 aAny >>= nColor;
                             }
                         }

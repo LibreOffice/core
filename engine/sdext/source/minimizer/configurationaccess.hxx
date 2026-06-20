@@ -22,7 +22,7 @@
 
 #include <vector>
 #include "pppoptimizertoken.hxx"
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -81,8 +81,8 @@ class ConfigurationAccess
         void SaveConfiguration();
 
         // access to current OptimizerSettings (stored in the first entry of maSettings)
-        css::uno::Any GetConfigProperty( const PPPOptimizerTokenEnum ) const;
-        void SetConfigProperty( const PPPOptimizerTokenEnum, const css::uno::Any& aValue );
+        cpo::uno::Any GetConfigProperty( const PPPOptimizerTokenEnum ) const;
+        void SetConfigProperty( const PPPOptimizerTokenEnum, const cpo::uno::Any& aValue );
 
         bool GetConfigProperty( const PPPOptimizerTokenEnum, const bool bDefault ) const;
         sal_Int16 GetConfigProperty( const PPPOptimizerTokenEnum, const sal_Int16 nDefault ) const;

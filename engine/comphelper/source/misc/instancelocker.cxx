@@ -103,7 +103,7 @@ void SAL_CALL OInstanceLocker::removeEventListener( const uno::Reference< lang::
 
 // XInitialization
 
-void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArguments )
+void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< cpo::uno::Any >& aArguments )
 {
     std::unique_lock aGuard( m_aMutex );
     if ( m_bInitialized )
@@ -439,7 +439,7 @@ void OLockListener::Init()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_embed_InstanceLocker(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new OInstanceLocker());
 }

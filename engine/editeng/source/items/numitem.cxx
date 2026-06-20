@@ -62,6 +62,7 @@ constexpr sal_uInt16 NUMITEM_VERSION_04 = 0x04;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::style;
@@ -1162,13 +1163,13 @@ SvxNumBulletItem* SvxNumBulletItem::Clone( SfxItemPool * ) const
     return new SvxNumBulletItem(*this);
 }
 
-bool SvxNumBulletItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxNumBulletItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= SvxCreateNumRule( maNumRule );
     return true;
 }
 
-bool SvxNumBulletItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvxNumBulletItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     uno::Reference< container::XIndexReplace > xRule;
     if( rVal >>= xRule )

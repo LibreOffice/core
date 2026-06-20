@@ -64,6 +64,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 
 #define COMMON_FLDTYP_PROPERTIES \
@@ -1379,7 +1380,7 @@ std::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPropertyMa
             {
                 static SfxItemPropertyMapEntry const aMailMergeMap[] =
                 {
-                    { UNO_NAME_SELECTION,             WID_SELECTION,              cppu::UnoType< cppu::UnoSequenceType<css::uno::Any> >::get(),      PROPERTY_NONE, 0},
+                    { UNO_NAME_SELECTION,             WID_SELECTION,              cppu::UnoType< cppu::UnoSequenceType<cpo::uno::Any> >::get(),      PROPERTY_NONE, 0},
                     { UNO_NAME_RESULT_SET,            WID_RESULT_SET,             cppu::UnoType<css::sdbc::XResultSet>::get(), PROPERTY_NONE, 0},
                     { UNO_NAME_CONNECTION,            WID_CONNECTION,             cppu::UnoType<css::sdbc::XConnection>::get(), PROPERTY_NONE, 0},
                     { UNO_NAME_MODEL,                 WID_MODEL,                  cppu::UnoType<css::frame::XModel>::get(),    PropertyAttribute::READONLY, 0},

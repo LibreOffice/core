@@ -87,7 +87,7 @@ private:
     void setCmisProperty(const std::string& rName, const std::string& rValue,
             const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
-    css::uno::Any getBadArgExcept();
+    cpo::uno::Any getBadArgExcept();
 
     css::uno::Reference< css::sdbc::XRow >
         getPropertyValues(
@@ -103,7 +103,7 @@ private:
 
     /// @throws css::uno::Exception
     /// @throws libcmis::Exception
-    css::uno::Any open(const css::ucb::OpenCommandArgument2 & rArg,
+    cpo::uno::Any open(const css::ucb::OpenCommandArgument2 & rArg,
         const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
     /// @throws css::uno::Exception
@@ -128,7 +128,7 @@ private:
     static void copyData( const css::uno::Reference< css::io::XInputStream >& xIn,
         const css::uno::Reference< css::io::XOutputStream >& xOut );
 
-    css::uno::Sequence< css::uno::Any >
+    css::uno::Sequence< cpo::uno::Any >
         setPropertyValues( const css::uno::Sequence< css::beans::PropertyValue >& rValues,
             const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
@@ -158,7 +158,7 @@ public:
         getProperties( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
 
     libcmis::ObjectPtr updateProperties(
-            const css::uno::Any& iCmisProps,
+            const cpo::uno::Any& iCmisProps,
             const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv);
 
     virtual css::uno::Sequence< css::ucb::CommandInfo >
@@ -167,7 +167,7 @@ public:
     virtual OUString getParentURL() override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         noexcept override;
     virtual void SAL_CALL release()
@@ -185,7 +185,7 @@ public:
     virtual OUString SAL_CALL
     getContentType() override;
 
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
         execute( const css::ucb::Command& aCommand,
         sal_Int32 CommandId,
         const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override;

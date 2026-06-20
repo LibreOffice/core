@@ -893,7 +893,7 @@ sal_uInt16 addFieldInit(
         case codemaker::UnoType::Sort::Any:
             code->loadLocalReference(0);
             code->instrGetstatic(
-                "com/sun/star/uno/Any"_ostr, "VOID"_ostr, "Lcom/sun/star/uno/Any;"_ostr);
+                "cpo/uno/Any"_ostr, "VOID"_ostr, "Lcpo/uno/Any;"_ostr);
             code->instrPutfield(className, name, "Ljava/lang/Object;"_ostr);
             return 2;
         case codemaker::UnoType::Sort::Enum:
@@ -1034,7 +1034,7 @@ sal_uInt16 addLoadLocal(
                 break;
             case codemaker::UnoType::Sort::UnsignedShort:
                 if (any) {
-                    code->instrNew("com/sun/star/uno/Any"_ostr);
+                    code->instrNew("cpo/uno/Any"_ostr);
                     code->instrDup();
                     code->instrGetstatic(
                         "com/sun/star/uno/Type"_ostr, "UNSIGNED_SHORT"_ostr,
@@ -1045,7 +1045,7 @@ sal_uInt16 addLoadLocal(
                     code->instrInvokespecial(
                         "java/lang/Short"_ostr, "<init>"_ostr, "(S)V"_ostr);
                     code->instrInvokespecial(
-                        "com/sun/star/uno/Any"_ostr, "<init>"_ostr,
+                        "cpo/uno/Any"_ostr, "<init>"_ostr,
                         "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V"_ostr);
                     stack = 6;
                 } else {
@@ -1070,7 +1070,7 @@ sal_uInt16 addLoadLocal(
                 break;
             case codemaker::UnoType::Sort::UnsignedLong:
                 if (any) {
-                    code->instrNew("com/sun/star/uno/Any"_ostr);
+                    code->instrNew("cpo/uno/Any"_ostr);
                     code->instrDup();
                     code->instrGetstatic(
                         "com/sun/star/uno/Type"_ostr, "UNSIGNED_LONG"_ostr,
@@ -1081,7 +1081,7 @@ sal_uInt16 addLoadLocal(
                     code->instrInvokespecial(
                         "java/lang/Integer"_ostr, "<init>"_ostr, "(I)V"_ostr);
                     code->instrInvokespecial(
-                        "com/sun/star/uno/Any"_ostr, "<init>"_ostr,
+                        "cpo/uno/Any"_ostr, "<init>"_ostr,
                         "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V"_ostr);
                     stack = 6;
                 } else {
@@ -1106,7 +1106,7 @@ sal_uInt16 addLoadLocal(
                 break;
             case codemaker::UnoType::Sort::UnsignedHyper:
                 if (any) {
-                    code->instrNew("com/sun/star/uno/Any"_ostr);
+                    code->instrNew("cpo/uno/Any"_ostr);
                     code->instrDup();
                     code->instrGetstatic(
                         "com/sun/star/uno/Type"_ostr, "UNSIGNED_HYPER"_ostr,
@@ -1117,7 +1117,7 @@ sal_uInt16 addLoadLocal(
                     code->instrInvokespecial(
                         "java/lang/Long"_ostr, "<init>"_ostr, "(J)V"_ostr);
                     code->instrInvokespecial(
-                        "com/sun/star/uno/Any"_ostr, "<init>"_ostr,
+                        "cpo/uno/Any"_ostr, "<init>"_ostr,
                         "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V"_ostr);
                     stack = 7;
                 } else {
@@ -1183,7 +1183,7 @@ sal_uInt16 addLoadLocal(
             case codemaker::UnoType::Sort::PlainStruct:
             case codemaker::UnoType::Sort::InstantiatedPolymorphicStruct:
                 if (any) {
-                    code->instrNew("com/sun/star/uno/Any"_ostr);
+                    code->instrNew("cpo/uno/Any"_ostr);
                     code->instrDup();
                     code->instrNew("com/sun/star/uno/Type"_ostr);
                     code->instrDup();
@@ -1199,7 +1199,7 @@ sal_uInt16 addLoadLocal(
                         "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V"_ostr);
                     code->loadLocalReference(*index);
                     code->instrInvokespecial(
-                        "com/sun/star/uno/Any"_ostr, "<init>"_ostr,
+                        "cpo/uno/Any"_ostr, "<init>"_ostr,
                         "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V"_ostr);
                     stack = 6;
                 } else {
@@ -1210,7 +1210,7 @@ sal_uInt16 addLoadLocal(
                 break;
             case codemaker::UnoType::Sort::Interface:
                 if (any && nucleus != "com.sun.star.uno.XInterface") {
-                    code->instrNew("com/sun/star/uno/Any"_ostr);
+                    code->instrNew("cpo/uno/Any"_ostr);
                     code->instrDup();
                     code->instrNew("com/sun/star/uno/Type"_ostr);
                     code->instrDup();
@@ -1224,7 +1224,7 @@ sal_uInt16 addLoadLocal(
                         "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V"_ostr);
                     code->loadLocalReference(*index);
                     code->instrInvokespecial(
-                        "com/sun/star/uno/Any"_ostr, "<init>"_ostr,
+                        "cpo/uno/Any"_ostr, "<init>"_ostr,
                         "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V"_ostr);
                     stack = 6;
                 } else {
@@ -1281,7 +1281,7 @@ sal_uInt16 addLoadLocal(
                 }
             }
             if (bWrap) {
-                code->instrNew("com/sun/star/uno/Any"_ostr);
+                code->instrNew("cpo/uno/Any"_ostr);
                 code->instrDup();
                 code->instrNew("com/sun/star/uno/Type"_ostr);
                 code->instrDup();
@@ -1292,7 +1292,7 @@ sal_uInt16 addLoadLocal(
                     "com/sun/star/uno/Type"_ostr, "<init>"_ostr, "(Ljava/lang/String;)V"_ostr);
                 code->loadLocalReference(*index);
                 code->instrInvokespecial(
-                    "com/sun/star/uno/Any"_ostr, "<init>"_ostr,
+                    "cpo/uno/Any"_ostr, "<init>"_ostr,
                     "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V"_ostr);
                 stack = 5;
             } else {
@@ -2361,16 +2361,16 @@ void handleSingleton(
     // stack: value
     code->instrDup();
     // stack: value value
-    code->instrInstanceof("com/sun/star/uno/Any"_ostr);
+    code->instrInstanceof("cpo/uno/Any"_ostr);
     // stack: value 0/1
     ClassFile::Code::Branch branch1 = code->instrIfeq();
     // stack: value
-    code->instrCheckcast("com/sun/star/uno/Any"_ostr);
+    code->instrCheckcast("cpo/uno/Any"_ostr);
     // stack: value
     code->instrDup();
     // stack: value value
     code->instrInvokevirtual(
-        "com/sun/star/uno/Any"_ostr, "getType"_ostr, "()Lcom/sun/star/uno/Type;"_ostr);
+        "cpo/uno/Any"_ostr, "getType"_ostr, "()Lcom/sun/star/uno/Type;"_ostr);
     // stack: value type
     code->instrInvokevirtual(
         "com/sun/star/uno/Type"_ostr, "getTypeClass"_ostr,
@@ -2383,7 +2383,7 @@ void handleSingleton(
     ClassFile::Code::Branch branch2 = code->instrIfAcmpne();
     // stack: value
     code->instrInvokevirtual(
-        "com/sun/star/uno/Any"_ostr, "getObject"_ostr, "()Ljava/lang/Object;"_ostr);
+        "cpo/uno/Any"_ostr, "getObject"_ostr, "()Ljava/lang/Object;"_ostr);
     // stack: value
     code->branchHere(branch1);
     code->instrNew("com/sun/star/uno/Type"_ostr);

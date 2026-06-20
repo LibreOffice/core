@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_HELPER_MODELOBJECTHELPER_HXX
 #define INCLUDED_OOX_HELPER_MODELOBJECTHELPER_HXX
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
@@ -54,12 +54,12 @@ public:
     /** Returns true, if the object with the passed name exists in the container. */
     bool                hasObject( const OUString& rObjName ) const;
 
-    css::uno::Any getObject( const OUString& rObjName ) const;
+    cpo::uno::Any getObject( const OUString& rObjName ) const;
 
     /** Inserts the passed object into the container, returns its final name. */
     OUString     insertObject(
                             const OUString& rObjName,
-                            const css::uno::Any& rObj,
+                            const cpo::uno::Any& rObj,
                             bool bInsertByUnusedName );
 
 private:

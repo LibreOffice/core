@@ -46,9 +46,9 @@ public:
     const Point&             GetValue() const { return aVal; }
             void             SetValue( const Point& rNewVal ) { ASSERT_CHANGE_REFCOUNTED_ITEM; aVal = rNewVal; }
 
-    virtual bool             QueryValue( css::uno::Any& rVal,
+    virtual bool             QueryValue( cpo::uno::Any& rVal,
                                           sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool             PutValue( const css::uno::Any& rVal,
+    virtual bool             PutValue( const cpo::uno::Any& rVal,
                                           sal_uInt8 nMemberId ) override;
 };
 

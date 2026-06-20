@@ -46,7 +46,7 @@ namespace svt
         ~JavaContext();
 
         // XInterface
-        virtual css::uno::Any SAL_CALL queryInterface(
+        virtual cpo::uno::Any SAL_CALL queryInterface(
             const css::uno::Type& aType ) override;
 
         virtual void SAL_CALL acquire() noexcept override;
@@ -54,7 +54,7 @@ namespace svt
         virtual void SAL_CALL release() noexcept override;
 
         // XCurrentContext
-        virtual css::uno::Any SAL_CALL getValueByName( const OUString& Name ) override;
+        virtual cpo::uno::Any SAL_CALL getValueByName( const OUString& Name ) override;
 
     private:
         JavaContext(JavaContext const &) = delete;

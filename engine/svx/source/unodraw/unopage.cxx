@@ -59,6 +59,7 @@
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::drawing;
@@ -319,7 +320,7 @@ sal_Int32 SAL_CALL SvxDrawPage::getCount()
     return static_cast<sal_Int32>( mpPage->GetObjCount() );
 }
 
-uno::Any SAL_CALL SvxDrawPage::getByIndex( sal_Int32 Index )
+cpo::uno::Any SAL_CALL SvxDrawPage::getByIndex( sal_Int32 Index )
 {
     SolarMutexGuard aGuard;
 
@@ -383,7 +384,7 @@ void SvxDrawPage::SelectObjectsInView( const Reference< drawing::XShapes > & aSh
     tools::Long nCount = aShapes->getCount();
     for( tools::Long i = 0; i < nCount; i++ )
     {
-        uno::Any aAny( aShapes->getByIndex(i) );
+        cpo::uno::Any aAny( aShapes->getByIndex(i) );
         Reference< drawing::XShape > xShape;
         if( aAny >>= xShape )
             lcl_markSdrObjectOfShape( xShape, *mpView, *pPageView );

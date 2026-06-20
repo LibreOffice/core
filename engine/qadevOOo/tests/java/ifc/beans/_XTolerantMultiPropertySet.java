@@ -138,7 +138,7 @@ public class _XTolerantMultiPropertySet extends MultiMethodTest {
             for (int i = 0; i < GPR.length; i++) {
                 boolean localres = true;
 
-                if (!(GPR[i].Value instanceof com.sun.star.uno.Any)) {
+                if (!(GPR[i].Value instanceof cpo.uno.Any)) {
                     localres = ValueComparer.equalValue(GPR[i].Value,
                                                         valuesOfProperties[i]);
 
@@ -195,7 +195,7 @@ public class _XTolerantMultiPropertySet extends MultiMethodTest {
                 GetPropertyTolerantResult[] GPR = oObj.getPropertyValuesTolerant(
                                                           namesOfProperties);
 
-                if ((!(GPR[i].Value instanceof com.sun.star.uno.Any)) &&
+                if ((!(GPR[i].Value instanceof cpo.uno.Any)) &&
                         (SPTF[i].Result == com.sun.star.beans.TolerantPropertySetResultType.SUCCESS)) {
                     localres = ValueComparer.equalValue(GPR[i].Value,
                                                         valuesOfProperties[i]);
@@ -318,7 +318,7 @@ public class _XTolerantMultiPropertySet extends MultiMethodTest {
         Object[] newValues = new Object[oldValues.length];
 
         for (int i = 0; i < oldValues.length; i++) {
-            if (oldValues[i] instanceof com.sun.star.uno.Any) {
+            if (oldValues[i] instanceof cpo.uno.Any) {
                 newValues[i] = oldValues[i];
             } else {
                 newValues[i] = ValueChanger.changePValue(oldValues[i]);

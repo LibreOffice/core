@@ -71,7 +71,7 @@ public:
     explicit ValueSetAcc(ValueSet* pValueSet);
     virtual ~ValueSetAcc() override;
 
-    void                FireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
+    void                FireAccessibleEvent( short nEventId, const cpo::uno::Any& rOldValue, const cpo::uno::Any& rNewValue );
     bool                HasAccessibleListeners() const;
 
 public:
@@ -168,7 +168,7 @@ public:
 
     void    ValueSetItemDestroyed();
 
-    void    FireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
+    void    FireAccessibleEvent( short nEventId, const cpo::uno::Any& rOldValue, const cpo::uno::Any& rNewValue );
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;

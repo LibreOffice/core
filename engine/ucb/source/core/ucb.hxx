@@ -68,7 +68,7 @@ public:
 
     // XInitialization
     virtual void SAL_CALL
-    initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XContentProviderManager
     virtual css::uno::Reference< css::ucb::XContentProvider > SAL_CALL
@@ -97,7 +97,7 @@ public:
     // XCommandProcessor
     virtual sal_Int32 SAL_CALL
     createCommandIdentifier() override;
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
     execute( const css::ucb::Command& aCommand,
              sal_Int32 CommandId,
              const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override;
@@ -128,7 +128,7 @@ private:
             const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
     /// @throws css::uno::Exception
-    css::uno::Any checkIn( const css::ucb::CheckinArgument& rArg,
+    cpo::uno::Any checkIn( const css::ucb::CheckinArgument& rArg,
             const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
 
@@ -148,7 +148,7 @@ private:
     css::uno::Reference<
         css::util::XChangesNotifier > m_xNotifier;
 
-    css::uno::Sequence< css::uno::Any > m_aArguments;
+    css::uno::Sequence< cpo::uno::Any > m_aArguments;
     ProviderMap_Impl m_aProviders;
     osl::Mutex m_aMutex;
     std::unique_ptr<comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>> m_pDisposeEventListeners;

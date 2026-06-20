@@ -229,8 +229,8 @@ namespace pcr
         */
         void    firePropertyChange(
                     const OUString& _rName,
-                    const css::uno::Any& _rOldValue,
-                    const css::uno::Any& _rNewValue
+                    const cpo::uno::Any& _rOldValue,
+                    const cpo::uno::Any& _rNewValue
                 ) const;
 
     private:

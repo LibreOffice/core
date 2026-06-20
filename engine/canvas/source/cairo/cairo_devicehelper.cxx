@@ -194,19 +194,19 @@ namespace cairocanvas
         return uno::Reference< rendering::XVolatileBitmap >();
     }
 
-    uno::Any DeviceHelper::isAccelerated() const
+    cpo::uno::Any DeviceHelper::isAccelerated() const
     {
-        return css::uno::Any(false);
+        return cpo::uno::Any(false);
     }
 
-    uno::Any DeviceHelper::getDeviceHandle() const
+    cpo::uno::Any DeviceHelper::getDeviceHandle() const
     {
-        return uno::Any( reinterpret_cast< sal_Int64 >(mpRefDevice.get()) );
+        return cpo::uno::Any( reinterpret_cast< sal_Int64 >(mpRefDevice.get()) );
     }
 
-    uno::Any DeviceHelper::getSurfaceHandle() const
+    cpo::uno::Any DeviceHelper::getSurfaceHandle() const
     {
-        return uno::Any();
+        return cpo::uno::Any();
     }
 
     uno::Reference<rendering::XColorSpace> const & DeviceHelper::getColorSpace() const

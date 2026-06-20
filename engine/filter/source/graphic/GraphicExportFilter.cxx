@@ -246,13 +246,13 @@ void SAL_CALL GraphicExportFilter::setSourceDocument( const uno::Reference< lang
     mxDocument = xDocument;
 }
 
-void SAL_CALL GraphicExportFilter::initialize( const uno::Sequence< uno::Any > & )
+void SAL_CALL GraphicExportFilter::initialize( const uno::Sequence< cpo::uno::Any > & )
 {
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_GraphicExportFilter_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new GraphicExportFilter(context));
 }

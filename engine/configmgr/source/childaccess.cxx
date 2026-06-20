@@ -26,7 +26,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
@@ -179,7 +179,7 @@ void ChildAccess::setNode(rtl::Reference< Node > const & node) {
 }
 
 void ChildAccess::setProperty(
-    css::uno::Any const & value, Modifications * localModifications)
+    cpo::uno::Any const & value, Modifications * localModifications)
 {
     assert(localModifications != nullptr);
     Type type = TYPE_ERROR;
@@ -225,13 +225,13 @@ void ChildAccess::setProperty(
 }
 
 
-css::uno::Any ChildAccess::asValue()
+cpo::uno::Any ChildAccess::asValue()
 {
     if (changedValue_)
     {
         return *changedValue_;
     }
-    css::uno::Any value;
+    cpo::uno::Any value;
     if (!asSimpleValue(node_, value, getComponents()))
     {
         if (node_->kind() == Node::KIND_LOCALIZED_PROPERTY)
@@ -241,7 +241,7 @@ css::uno::Any ChildAccess::asValue()
                 rtl::Reference< ChildAccess > child(getChild("*" + locale));
                 // As a last resort, return a nil value even though it may be
                 // illegal for the given property:
-                return child.is() ? child->asValue() : css::uno::Any();
+                return child.is() ? child->asValue() : cpo::uno::Any();
             }
         }
         value <<= css::uno::Reference< css::uno::XInterface >(getXWeak());
@@ -251,7 +251,7 @@ css::uno::Any ChildAccess::asValue()
 
 /// Can we quickly extract a simple value into value ? if so returns true
 bool ChildAccess::asSimpleValue(const rtl::Reference< Node > &rNode,
-                                css::uno::Any &value,
+                                cpo::uno::Any &value,
                                 Components &components)
 {
     switch (rNode->kind()) {
@@ -315,12 +315,12 @@ void ChildAccess::addSupportedServiceNames(
         : u"com.sun.star.configuration.SetElement"_ustr);
 }
 
-css::uno::Any ChildAccess::queryInterface(css::uno::Type const & aType)
+cpo::uno::Any ChildAccess::queryInterface(css::uno::Type const & aType)
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    css::uno::Any res(Access::queryInterface(aType));
+    cpo::uno::Any res(Access::queryInterface(aType));
     return res.hasValue()
         ? res
         : cppu::queryInterface(

@@ -33,6 +33,7 @@
 namespace dbtools
 {
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::sdbc;
     using namespace ::comphelper;
@@ -104,7 +105,7 @@ SQLExceptionInfo& SQLExceptionInfo::operator=(const css::sdb::SQLErrorEvent& _rE
 }
 
 
-SQLExceptionInfo& SQLExceptionInfo::operator=(const css::uno::Any& _rCaughtSQLException)
+SQLExceptionInfo& SQLExceptionInfo::operator=(const cpo::uno::Any& _rCaughtSQLException)
 {
     m_aContent = _rCaughtSQLException;
     implDetermineType();
@@ -112,7 +113,7 @@ SQLExceptionInfo& SQLExceptionInfo::operator=(const css::uno::Any& _rCaughtSQLEx
 }
 
 
-SQLExceptionInfo::SQLExceptionInfo(const css::uno::Any& _rError)
+SQLExceptionInfo::SQLExceptionInfo(const cpo::uno::Any& _rError)
 {
     const css::uno::Type& aSQLExceptionType = cppu::UnoType<css::sdbc::SQLException>::get();
     bool bValid = isAssignableFrom(aSQLExceptionType, _rError.getValueType());
@@ -350,7 +351,7 @@ void throwFunctionSequenceException(const Reference< XInterface >& Context, cons
 }
 
 void throwInvalidIndexException(const css::uno::Reference< css::uno::XInterface >& Context,
-        const css::uno::Any& Next)
+        const cpo::uno::Any& Next)
 {
     ::connectivity::SharedResources aResources;
     throw SQLException(
@@ -375,7 +376,7 @@ void throwFunctionNotSupportedSQLException(const OUString& _rFunctionName,
         _rxContext,
         getStandardSQLState( StandardSQLState::FUNCTION_NOT_SUPPORTED ),
         0,
-        css::uno::Any()
+        cpo::uno::Any()
     );
 }
 

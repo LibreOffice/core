@@ -20,7 +20,7 @@
 
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 
 namespace chart
 {
@@ -51,9 +51,9 @@ public:
 
     void InvertNormal( bool bInvertNormal );
 
-    css::uno::Any         getPolyPolygonShape3D() const;
-    css::uno::Any         getNormalsPolygon() const;
-    static css::uno::Any  getTexturePolygon( short nRotatedTexture ); //0 to 7 are the different possibilities
+    cpo::uno::Any         getPolyPolygonShape3D() const;
+    cpo::uno::Any         getNormalsPolygon() const;
+    static cpo::uno::Any  getTexturePolygon( short nRotatedTexture ); //0 to 7 are the different possibilities
 
 private:
     css::drawing::Position3D m_aPoint1;

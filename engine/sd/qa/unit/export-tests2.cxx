@@ -257,7 +257,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testTdf128985)
         xPropSet->getPropertyValue(u"WritingMode"_ustr) >>= nWritingMode;
         CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, nWritingMode);
 
-        xPropSet->setPropertyValue(u"WritingMode"_ustr, uno::Any(text::WritingMode2::LR_TB));
+        xPropSet->setPropertyValue(u"WritingMode"_ustr, cpo::uno::Any(text::WritingMode2::LR_TB));
 
         saveAndReload(TestFilter::ODP);
     }

@@ -52,7 +52,7 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/text/TextMarkupType.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkConnectException.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <unotools/lingucfg.hxx>
@@ -340,7 +340,7 @@ void lclShowCURLErrorInteraction(const css::uno::Reference<css::uno::XComponentC
     if (!xInteractionHandler.is())
         return;
 
-    css::uno::Any aInteraction;
+    cpo::uno::Any aInteraction;
 
     rtl::Reference<comphelper::OInteractionApprove> pApprove
         = new comphelper::OInteractionApprove();
@@ -578,11 +578,11 @@ uno::Sequence<OUString> SAL_CALL LanguageToolGrammarChecker::getSupportedService
     return { SN_GRAMMARCHECKER };
 }
 
-void SAL_CALL LanguageToolGrammarChecker::initialize(const uno::Sequence<uno::Any>&) {}
+void SAL_CALL LanguageToolGrammarChecker::initialize(const uno::Sequence<cpo::uno::Any>&) {}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 lingucomponent_LanguageToolGrammarChecker_get_implementation(
-    css::uno::XComponentContext* pContext, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* pContext, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new LanguageToolGrammarChecker(pContext));
 }

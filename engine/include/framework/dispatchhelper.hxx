@@ -23,7 +23,7 @@
 #include <com/sun/star/frame/XDispatchHelper.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 #include <cppuhelper/implbase.hxx>
 #include <framework/fwkdllapi.h>
@@ -59,7 +59,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) DispatchHelper final
     std::condition_variable m_aBlock;
     bool m_aBlockFlag;
 
-    css::uno::Any m_aResult;
+    cpo::uno::Any m_aResult;
 
     css::uno::Reference<css::uno::XInterface> m_xBroadcaster;
 
@@ -77,14 +77,14 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XDispatchHelper
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
     executeDispatch(const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider,
                     const OUString& sURL, const OUString& sTargetFrameName, sal_Int32 nSearchFlags,
                     const css::uno::Sequence<css::beans::PropertyValue>& lArguments) override;
 
     // not a public XDispatchHelper-method, need in sfx2/source/control/statcach.cxx for extensions
     /// @throws css::uno::RuntimeException
-    const css::uno::Any&
+    const cpo::uno::Any&
     executeDispatch(const css::uno::Reference<css::frame::XDispatch>& xDispatch,
                     const css::util::URL& aURL, bool SyncronFlag,
                     const css::uno::Sequence<css::beans::PropertyValue>& lArguments);

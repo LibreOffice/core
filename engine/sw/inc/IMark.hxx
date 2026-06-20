@@ -232,7 +232,7 @@ namespace sw::mark
         : public MarkBase
     {
     public:
-        typedef std::map< OUString, css::uno::Any> parameter_map_t;
+        typedef std::map< OUString, cpo::uno::Any> parameter_map_t;
 
         Fieldmark(const SwPaM& rPaM);
 

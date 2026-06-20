@@ -71,6 +71,7 @@ namespace basctl
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::frame;
 
 static void lcl_InvalidateZoomSlots(SfxBindings* pBindings)
@@ -336,7 +337,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                         }
 
                         if ( xStatusIndicator.is() )
-                            rReq.AppendItem( SfxUnoAnyItem( SID_PROGRESS_STATUSBAR_CONTROL, uno::Any( xStatusIndicator ) ) );
+                            rReq.AppendItem( SfxUnoAnyItem( SID_PROGRESS_STATUSBAR_CONTROL, cpo::uno::Any( xStatusIndicator ) ) );
                     }
 
                     aDocument.saveDocument( xStatusIndicator );
@@ -1458,7 +1459,7 @@ void Shell::ManageToolbars()
         return;
 
     Reference< css::frame::XLayoutManager > xLayoutManager;
-    uno::Any a = xFrameProps->getPropertyValue( u"LayoutManager"_ustr );
+    cpo::uno::Any a = xFrameProps->getPropertyValue( u"LayoutManager"_ustr );
     a >>= xLayoutManager;
     if ( !xLayoutManager.is() )
         return;

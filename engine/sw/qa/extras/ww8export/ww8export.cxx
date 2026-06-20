@@ -616,7 +616,7 @@ reading page numbers at sections > 255, in this case 256
     uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextCursor> xTextCursor = textDocument->getText()->createTextCursor( );
     uno::Reference<beans::XPropertySet> xProps(xTextCursor, uno::UNO_QUERY);
-    uno::Any aOffset = xProps->getPropertyValue(u"PageNumberOffset"_ustr);
+    cpo::uno::Any aOffset = xProps->getPropertyValue(u"PageNumberOffset"_ustr);
     sal_Int16 nOffset = 0;
     aOffset >>= nOffset;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(256), nOffset);

@@ -152,8 +152,8 @@ class BaseFrameProperties_Impl
 public:
     virtual ~BaseFrameProperties_Impl();
 
-    void            SetProperty(sal_uInt16 nWID, sal_uInt8 nMemberId, const uno::Any& rVal);
-    const uno::Any* GetProperty(sal_uInt16 nWID, sal_uInt8 nMemberId);
+    void            SetProperty(sal_uInt16 nWID, sal_uInt8 nMemberId, const cpo::uno::Any& rVal);
+    const cpo::uno::Any* GetProperty(sal_uInt16 nWID, sal_uInt8 nMemberId);
     bool FillBaseProperties(SfxItemSet& rToSet, const SfxItemSet &rFromSet, bool& rSizeFound);
 
     virtual bool AnyToItemSet( SwDoc& rDoc, SfxItemSet& rFrameSet, SfxItemSet& rSet, bool& rSizeFound) = 0;
@@ -163,14 +163,14 @@ BaseFrameProperties_Impl::~BaseFrameProperties_Impl()
 {
 }
 
-void BaseFrameProperties_Impl::SetProperty(sal_uInt16 nWID, sal_uInt8 nMemberId, const uno::Any& rVal)
+void BaseFrameProperties_Impl::SetProperty(sal_uInt16 nWID, sal_uInt8 nMemberId, const cpo::uno::Any& rVal)
 {
     m_aAnyMap.SetValue( nWID, nMemberId, rVal );
 }
 
-const uno::Any* BaseFrameProperties_Impl::GetProperty(sal_uInt16 nWID, sal_uInt8 nMemberId)
+const cpo::uno::Any* BaseFrameProperties_Impl::GetProperty(sal_uInt16 nWID, sal_uInt8 nMemberId)
 {
-    const uno::Any* pAny = nullptr;
+    const cpo::uno::Any* pAny = nullptr;
     m_aAnyMap.FillValue(nWID, nMemberId, pAny);
     return pAny;
 }
@@ -187,23 +187,23 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     bool bRet = true;
     // always add an anchor to the set
     SwFormatAnchor aAnchor ( rFromSet.Get ( RES_ANCHOR ) );
-    if (const uno::Any* pAnchorType = GetProperty(RES_ANCHOR, MID_ANCHOR_ANCHORTYPE))
+    if (const cpo::uno::Any* pAnchorType = GetProperty(RES_ANCHOR, MID_ANCHOR_ANCHORTYPE))
         bRet &= aAnchor.PutValue(*pAnchorType, MID_ANCHOR_ANCHORTYPE);
-    if (const uno::Any* pAnchorPgNo = GetProperty(RES_ANCHOR, MID_ANCHOR_PAGENUM))
+    if (const cpo::uno::Any* pAnchorPgNo = GetProperty(RES_ANCHOR, MID_ANCHOR_PAGENUM))
         bRet &= aAnchor.PutValue(*pAnchorPgNo, MID_ANCHOR_PAGENUM);
 
     rToSet.Put(aAnchor);
 
     // check for SvxBrushItem (RES_BACKGROUND) properties
-    const uno::Any* pCol = GetProperty(RES_BACKGROUND, MID_BACK_COLOR);
-    const uno::Any* pRGBCol = GetProperty(RES_BACKGROUND, MID_BACK_COLOR_R_G_B);
-    const uno::Any* pColTrans = GetProperty(RES_BACKGROUND, MID_BACK_COLOR_TRANSPARENCY);
-    const uno::Any* pTrans = GetProperty(RES_BACKGROUND, MID_GRAPHIC_TRANSPARENT);
-    const uno::Any* pGrLoc = GetProperty(RES_BACKGROUND, MID_GRAPHIC_POSITION);
-    const uno::Any* pGraphic = GetProperty(RES_BACKGROUND, MID_GRAPHIC);
-    const uno::Any* pGrFilter = GetProperty(RES_BACKGROUND, MID_GRAPHIC_FILTER);
-    const uno::Any* pGraphicURL = GetProperty(RES_BACKGROUND, MID_GRAPHIC_URL);
-    const uno::Any* pGrTransparency = GetProperty(RES_BACKGROUND, MID_GRAPHIC_TRANSPARENCY);
+    const cpo::uno::Any* pCol = GetProperty(RES_BACKGROUND, MID_BACK_COLOR);
+    const cpo::uno::Any* pRGBCol = GetProperty(RES_BACKGROUND, MID_BACK_COLOR_R_G_B);
+    const cpo::uno::Any* pColTrans = GetProperty(RES_BACKGROUND, MID_BACK_COLOR_TRANSPARENCY);
+    const cpo::uno::Any* pTrans = GetProperty(RES_BACKGROUND, MID_GRAPHIC_TRANSPARENT);
+    const cpo::uno::Any* pGrLoc = GetProperty(RES_BACKGROUND, MID_GRAPHIC_POSITION);
+    const cpo::uno::Any* pGraphic = GetProperty(RES_BACKGROUND, MID_GRAPHIC);
+    const cpo::uno::Any* pGrFilter = GetProperty(RES_BACKGROUND, MID_GRAPHIC_FILTER);
+    const cpo::uno::Any* pGraphicURL = GetProperty(RES_BACKGROUND, MID_GRAPHIC_URL);
+    const cpo::uno::Any* pGrTransparency = GetProperty(RES_BACKGROUND, MID_GRAPHIC_TRANSPARENCY);
     const bool bSvxBrushItemPropertiesUsed(
         pCol ||
         pTrans ||
@@ -216,39 +216,39 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         pRGBCol);
 
     // check for FillStyle properties in the range XATTR_FILL_FIRST, XATTR_FILL_LAST
-    const uno::Any* pXFillStyleItem = GetProperty(XATTR_FILLSTYLE, 0);
-    const uno::Any* pXFillColorItem = GetProperty(XATTR_FILLCOLOR, 0);
+    const cpo::uno::Any* pXFillStyleItem = GetProperty(XATTR_FILLSTYLE, 0);
+    const cpo::uno::Any* pXFillColorItem = GetProperty(XATTR_FILLCOLOR, 0);
 
     // XFillGradientItem: two possible slots supported in UNO API
-    const uno::Any* pXFillGradientItem = GetProperty(XATTR_FILLGRADIENT, MID_FILLGRADIENT);
-    const uno::Any* pXFillGradientNameItem = GetProperty(XATTR_FILLGRADIENT, MID_NAME);
+    const cpo::uno::Any* pXFillGradientItem = GetProperty(XATTR_FILLGRADIENT, MID_FILLGRADIENT);
+    const cpo::uno::Any* pXFillGradientNameItem = GetProperty(XATTR_FILLGRADIENT, MID_NAME);
 
     // XFillHatchItem: two possible slots supported in UNO API
-    const uno::Any* pXFillHatchItem = GetProperty(XATTR_FILLHATCH, MID_FILLHATCH);
-    const uno::Any* pXFillHatchNameItem = GetProperty(XATTR_FILLHATCH, MID_NAME);
+    const cpo::uno::Any* pXFillHatchItem = GetProperty(XATTR_FILLHATCH, MID_FILLHATCH);
+    const cpo::uno::Any* pXFillHatchNameItem = GetProperty(XATTR_FILLHATCH, MID_NAME);
 
     // XFillBitmapItem: three possible slots supported in UNO API
-    const uno::Any* pXFillBitmapItem = GetProperty(XATTR_FILLBITMAP, MID_BITMAP);
-    const uno::Any* pXFillBitmapNameItem = GetProperty(XATTR_FILLBITMAP, MID_NAME);
+    const cpo::uno::Any* pXFillBitmapItem = GetProperty(XATTR_FILLBITMAP, MID_BITMAP);
+    const cpo::uno::Any* pXFillBitmapNameItem = GetProperty(XATTR_FILLBITMAP, MID_NAME);
 
-    const uno::Any* pXFillTransparenceItem = GetProperty(XATTR_FILLTRANSPARENCE, 0);
-    const uno::Any* pXGradientStepCountItem = GetProperty(XATTR_GRADIENTSTEPCOUNT, 0);
-    const uno::Any* pXFillBmpPosItem = GetProperty(XATTR_FILLBMP_POS, 0);
-    const uno::Any* pXFillBmpSizeXItem = GetProperty(XATTR_FILLBMP_SIZEX, 0);
-    const uno::Any* pXFillBmpSizeYItem = GetProperty(XATTR_FILLBMP_SIZEY, 0);
+    const cpo::uno::Any* pXFillTransparenceItem = GetProperty(XATTR_FILLTRANSPARENCE, 0);
+    const cpo::uno::Any* pXGradientStepCountItem = GetProperty(XATTR_GRADIENTSTEPCOUNT, 0);
+    const cpo::uno::Any* pXFillBmpPosItem = GetProperty(XATTR_FILLBMP_POS, 0);
+    const cpo::uno::Any* pXFillBmpSizeXItem = GetProperty(XATTR_FILLBMP_SIZEX, 0);
+    const cpo::uno::Any* pXFillBmpSizeYItem = GetProperty(XATTR_FILLBMP_SIZEY, 0);
 
     // XFillFloatTransparenceItem: two possible slots supported in UNO API
-    const uno::Any* pXFillFloatTransparenceItem = GetProperty(XATTR_FILLFLOATTRANSPARENCE, MID_FILLGRADIENT);
-    const uno::Any* pXFillFloatTransparenceNameItem = GetProperty(XATTR_FILLFLOATTRANSPARENCE, MID_NAME);
+    const cpo::uno::Any* pXFillFloatTransparenceItem = GetProperty(XATTR_FILLFLOATTRANSPARENCE, MID_FILLGRADIENT);
+    const cpo::uno::Any* pXFillFloatTransparenceNameItem = GetProperty(XATTR_FILLFLOATTRANSPARENCE, MID_NAME);
 
-    const uno::Any* pXSecondaryFillColorItem = GetProperty(XATTR_SECONDARYFILLCOLOR, 0);
-    const uno::Any* pXFillBmpSizeLogItem = GetProperty(XATTR_FILLBMP_SIZELOG, 0);
-    const uno::Any* pXFillBmpTileOffsetXItem = GetProperty(XATTR_FILLBMP_TILEOFFSETX, 0);
-    const uno::Any* pXFillBmpTileOffsetYItem = GetProperty(XATTR_FILLBMP_TILEOFFSETY, 0);
-    const uno::Any* pXFillBmpPosOffsetXItem = GetProperty(XATTR_FILLBMP_POSOFFSETX, 0);
-    const uno::Any* pXFillBmpPosOffsetYItem = GetProperty(XATTR_FILLBMP_POSOFFSETY, 0);
-    const uno::Any* pXFillBackgroundItem = GetProperty(XATTR_FILLBACKGROUND, 0);
-    const uno::Any* pOwnAttrFillBmpItem = GetProperty(OWN_ATTR_FILLBMP_MODE, 0);
+    const cpo::uno::Any* pXSecondaryFillColorItem = GetProperty(XATTR_SECONDARYFILLCOLOR, 0);
+    const cpo::uno::Any* pXFillBmpSizeLogItem = GetProperty(XATTR_FILLBMP_SIZELOG, 0);
+    const cpo::uno::Any* pXFillBmpTileOffsetXItem = GetProperty(XATTR_FILLBMP_TILEOFFSETX, 0);
+    const cpo::uno::Any* pXFillBmpTileOffsetYItem = GetProperty(XATTR_FILLBMP_TILEOFFSETY, 0);
+    const cpo::uno::Any* pXFillBmpPosOffsetXItem = GetProperty(XATTR_FILLBMP_POSOFFSETX, 0);
+    const cpo::uno::Any* pXFillBmpPosOffsetYItem = GetProperty(XATTR_FILLBMP_POSOFFSETY, 0);
+    const cpo::uno::Any* pXFillBackgroundItem = GetProperty(XATTR_FILLBACKGROUND, 0);
+    const cpo::uno::Any* pOwnAttrFillBmpItem = GetProperty(OWN_ATTR_FILLBMP_MODE, 0);
 
     // tdf#91140: ignore SOLID fill style for determining if fill style is used
     // but there is a Graphic
@@ -620,9 +620,9 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         }
     }
     {
-        const uno::Any* pCont = GetProperty(RES_PROTECT, MID_PROTECT_CONTENT);
-        const uno::Any* pPos = GetProperty(RES_PROTECT, MID_PROTECT_POSITION);
-        const uno::Any* pName = GetProperty(RES_PROTECT, MID_PROTECT_SIZE);
+        const cpo::uno::Any* pCont = GetProperty(RES_PROTECT, MID_PROTECT_CONTENT);
+        const cpo::uno::Any* pPos = GetProperty(RES_PROTECT, MID_PROTECT_POSITION);
+        const cpo::uno::Any* pName = GetProperty(RES_PROTECT, MID_PROTECT_SIZE);
         if(pCont||pPos||pName)
         {
             SvxProtectItem aProt ( rFromSet.Get ( RES_PROTECT ) );
@@ -636,10 +636,10 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         }
     }
     {
-        const uno::Any* pHori = GetProperty(RES_HORI_ORIENT, MID_HORIORIENT_ORIENT);
-        const uno::Any* pHoriP = GetProperty(RES_HORI_ORIENT, MID_HORIORIENT_POSITION|CONVERT_TWIPS);
-        const uno::Any* pHoriR = GetProperty(RES_HORI_ORIENT, MID_HORIORIENT_RELATION);
-        const uno::Any* pPageT = GetProperty(RES_HORI_ORIENT, MID_HORIORIENT_PAGETOGGLE);
+        const cpo::uno::Any* pHori = GetProperty(RES_HORI_ORIENT, MID_HORIORIENT_ORIENT);
+        const cpo::uno::Any* pHoriP = GetProperty(RES_HORI_ORIENT, MID_HORIORIENT_POSITION|CONVERT_TWIPS);
+        const cpo::uno::Any* pHoriR = GetProperty(RES_HORI_ORIENT, MID_HORIORIENT_RELATION);
+        const cpo::uno::Any* pPageT = GetProperty(RES_HORI_ORIENT, MID_HORIORIENT_PAGETOGGLE);
         if(pHori||pHoriP||pHoriR||pPageT)
         {
             SwFormatHoriOrient aOrient ( rFromSet.Get ( RES_HORI_ORIENT ) );
@@ -656,9 +656,9 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     }
 
     {
-        const uno::Any* pVert = GetProperty(RES_VERT_ORIENT, MID_VERTORIENT_ORIENT);
-        const uno::Any* pVertP = GetProperty(RES_VERT_ORIENT, MID_VERTORIENT_POSITION|CONVERT_TWIPS);
-        const uno::Any* pVertR = GetProperty(RES_VERT_ORIENT, MID_VERTORIENT_RELATION);
+        const cpo::uno::Any* pVert = GetProperty(RES_VERT_ORIENT, MID_VERTORIENT_ORIENT);
+        const cpo::uno::Any* pVertP = GetProperty(RES_VERT_ORIENT, MID_VERTORIENT_POSITION|CONVERT_TWIPS);
+        const cpo::uno::Any* pVertR = GetProperty(RES_VERT_ORIENT, MID_VERTORIENT_RELATION);
         if(pVert||pVertP||pVertR)
         {
             SwFormatVertOrient aOrient ( rFromSet.Get ( RES_VERT_ORIENT ) );
@@ -672,10 +672,10 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         }
     }
     {
-        const uno::Any* pURL = GetProperty(RES_URL, MID_URL_URL);
-        const uno::Any* pTarget = GetProperty(RES_URL, MID_URL_TARGET);
-        const uno::Any* pHyLNm = GetProperty(RES_URL, MID_URL_HYPERLINKNAME);
-        const uno::Any* pHySMp = GetProperty(RES_URL, MID_URL_SERVERMAP);
+        const cpo::uno::Any* pURL = GetProperty(RES_URL, MID_URL_URL);
+        const cpo::uno::Any* pTarget = GetProperty(RES_URL, MID_URL_TARGET);
+        const cpo::uno::Any* pHyLNm = GetProperty(RES_URL, MID_URL_HYPERLINKNAME);
+        const cpo::uno::Any* pHySMp = GetProperty(RES_URL, MID_URL_SERVERMAP);
         if(pURL||pTarget||pHyLNm||pHySMp)
         {
             SwFormatURL aURL ( rFromSet.Get ( RES_URL ) );
@@ -690,8 +690,8 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             rToSet.Put(aURL);
         }
     }
-    const uno::Any* pL = GetProperty(RES_LR_SPACE, MID_L_MARGIN | CONVERT_TWIPS);
-    const uno::Any* pR = GetProperty(RES_LR_SPACE, MID_R_MARGIN | CONVERT_TWIPS);
+    const cpo::uno::Any* pL = GetProperty(RES_LR_SPACE, MID_L_MARGIN | CONVERT_TWIPS);
+    const cpo::uno::Any* pR = GetProperty(RES_LR_SPACE, MID_R_MARGIN | CONVERT_TWIPS);
     if(pL||pR)
     {
         SvxLRSpaceItem aLR ( rFromSet.Get ( RES_LR_SPACE ) );
@@ -701,8 +701,8 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             bRet &= aLR.PutValue(*pR, MID_R_MARGIN | CONVERT_TWIPS);
         rToSet.Put(aLR);
     }
-    const uno::Any* pT = GetProperty(RES_UL_SPACE, MID_UP_MARGIN | CONVERT_TWIPS);
-    const uno::Any* pB = GetProperty(RES_UL_SPACE, MID_LO_MARGIN | CONVERT_TWIPS);
+    const cpo::uno::Any* pT = GetProperty(RES_UL_SPACE, MID_UP_MARGIN | CONVERT_TWIPS);
+    const cpo::uno::Any* pB = GetProperty(RES_UL_SPACE, MID_LO_MARGIN | CONVERT_TWIPS);
     if(pT||pB)
     {
         SvxULSpaceItem aTB ( rFromSet.Get ( RES_UL_SPACE ) );
@@ -712,55 +712,55 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             bRet &= aTB.PutValue(*pB, MID_LO_MARGIN | CONVERT_TWIPS);
         rToSet.Put(aTB);
     }
-    if (const uno::Any* pOp = GetProperty(RES_OPAQUE, 0))
+    if (const cpo::uno::Any* pOp = GetProperty(RES_OPAQUE, 0))
     {
         SvxOpaqueItem aOp ( rFromSet.Get ( RES_OPAQUE ) );
         bRet &= aOp.PutValue(*pOp, 0);
         rToSet.Put(aOp);
     }
-    if (const uno::Any* pPrt = GetProperty(RES_PRINT, 0))
+    if (const cpo::uno::Any* pPrt = GetProperty(RES_PRINT, 0))
     {
         SvxPrintItem aPrt ( rFromSet.Get ( RES_PRINT ) );
         bRet &= aPrt.PutValue(*pPrt, 0);
         rToSet.Put(aPrt);
     }
-    if (const uno::Any* pSh = GetProperty(RES_SHADOW, CONVERT_TWIPS))
+    if (const cpo::uno::Any* pSh = GetProperty(RES_SHADOW, CONVERT_TWIPS))
     {
         SvxShadowItem aSh ( rFromSet.Get ( RES_SHADOW ) );
         bRet &= aSh.PutValue(*pSh, CONVERT_TWIPS);
         rToSet.Put(aSh);
     }
-    if (const uno::Any* pShTr = GetProperty(RES_SHADOW, MID_SHADOW_TRANSPARENCE);
+    if (const cpo::uno::Any* pShTr = GetProperty(RES_SHADOW, MID_SHADOW_TRANSPARENCE);
         pShTr && rToSet.HasItem(RES_SHADOW))
     {
         SvxShadowItem aSh(rToSet.Get(RES_SHADOW));
         bRet &= aSh.PutValue(*pShTr, MID_SHADOW_TRANSPARENCE);
         rToSet.Put(aSh);
     }
-    const uno::Any* pSur = GetProperty(RES_SURROUND, MID_SURROUND_SURROUNDTYPE);
-    const uno::Any* pSurAnch = GetProperty(RES_SURROUND, MID_SURROUND_ANCHORONLY);
+    const cpo::uno::Any* pSur = GetProperty(RES_SURROUND, MID_SURROUND_SURROUNDTYPE);
+    const cpo::uno::Any* pSurAnch = GetProperty(RES_SURROUND, MID_SURROUND_ANCHORONLY);
     if(pSur || pSurAnch)
     {
         SwFormatSurround aSrnd ( rFromSet.Get ( RES_SURROUND ) );
         if(pSur)
             bRet &= aSrnd.PutValue(*pSur, MID_SURROUND_SURROUNDTYPE);
-        if (const uno::Any* pSurCont = GetProperty(RES_SURROUND, MID_SURROUND_CONTOUR))
+        if (const cpo::uno::Any* pSurCont = GetProperty(RES_SURROUND, MID_SURROUND_CONTOUR))
             bRet &= aSrnd.PutValue(*pSurCont, MID_SURROUND_CONTOUR);
         if(pSurAnch)
             bRet &= aSrnd.PutValue(*pSurAnch, MID_SURROUND_ANCHORONLY);
         rToSet.Put(aSrnd);
     }
-    const uno::Any* pLeft = GetProperty(RES_BOX, LEFT_BORDER | CONVERT_TWIPS);
-    const uno::Any* pRight = GetProperty(RES_BOX, CONVERT_TWIPS | RIGHT_BORDER);
-    const uno::Any* pTop = GetProperty(RES_BOX, CONVERT_TWIPS | TOP_BORDER);
-    const uno::Any* pBottom = GetProperty(RES_BOX, CONVERT_TWIPS | BOTTOM_BORDER);
-    const uno::Any* pDistance = GetProperty(RES_BOX, CONVERT_TWIPS | BORDER_DISTANCE);
-    const uno::Any* pLeftDistance = GetProperty(RES_BOX, CONVERT_TWIPS | LEFT_BORDER_DISTANCE);
-    const uno::Any* pRightDistance = GetProperty(RES_BOX, CONVERT_TWIPS | RIGHT_BORDER_DISTANCE);
-    const uno::Any* pTopDistance = GetProperty(RES_BOX, CONVERT_TWIPS | TOP_BORDER_DISTANCE);
-    const uno::Any* pBottomDistance = GetProperty(RES_BOX, CONVERT_TWIPS | BOTTOM_BORDER_DISTANCE);
-    const uno::Any* pLineStyle = GetProperty(RES_BOX, LINE_STYLE);
-    const uno::Any* pLineWidth = GetProperty(RES_BOX, LINE_WIDTH);
+    const cpo::uno::Any* pLeft = GetProperty(RES_BOX, LEFT_BORDER | CONVERT_TWIPS);
+    const cpo::uno::Any* pRight = GetProperty(RES_BOX, CONVERT_TWIPS | RIGHT_BORDER);
+    const cpo::uno::Any* pTop = GetProperty(RES_BOX, CONVERT_TWIPS | TOP_BORDER);
+    const cpo::uno::Any* pBottom = GetProperty(RES_BOX, CONVERT_TWIPS | BOTTOM_BORDER);
+    const cpo::uno::Any* pDistance = GetProperty(RES_BOX, CONVERT_TWIPS | BORDER_DISTANCE);
+    const cpo::uno::Any* pLeftDistance = GetProperty(RES_BOX, CONVERT_TWIPS | LEFT_BORDER_DISTANCE);
+    const cpo::uno::Any* pRightDistance = GetProperty(RES_BOX, CONVERT_TWIPS | RIGHT_BORDER_DISTANCE);
+    const cpo::uno::Any* pTopDistance = GetProperty(RES_BOX, CONVERT_TWIPS | TOP_BORDER_DISTANCE);
+    const cpo::uno::Any* pBottomDistance = GetProperty(RES_BOX, CONVERT_TWIPS | BOTTOM_BORDER_DISTANCE);
+    const cpo::uno::Any* pLineStyle = GetProperty(RES_BOX, LINE_STYLE);
+    const cpo::uno::Any* pLineWidth = GetProperty(RES_BOX, LINE_WIDTH);
     if( pLeft || pRight || pTop ||  pBottom || pDistance ||
         pLeftDistance  || pRightDistance || pTopDistance || pBottomDistance ||
         pLineStyle || pLineWidth )
@@ -791,17 +791,17 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         rToSet.Put(aBox);
     }
     {
-        const uno::Any* pRelH = GetProperty(RES_FRM_SIZE, MID_FRMSIZE_REL_HEIGHT);
-        const uno::Any* pRelHRelation = GetProperty(RES_FRM_SIZE, MID_FRMSIZE_REL_HEIGHT_RELATION);
-        const uno::Any* pRelW = GetProperty(RES_FRM_SIZE, MID_FRMSIZE_REL_WIDTH);
-        const uno::Any* pRelWRelation = GetProperty(RES_FRM_SIZE, MID_FRMSIZE_REL_WIDTH_RELATION);
-        const uno::Any* pSyncWidth = GetProperty(RES_FRM_SIZE, MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT);
-        const uno::Any* pSyncHeight = GetProperty(RES_FRM_SIZE, MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH);
-        const uno::Any* pWidth = GetProperty(RES_FRM_SIZE, MID_FRMSIZE_WIDTH | CONVERT_TWIPS);
-        const uno::Any* pHeight = GetProperty(RES_FRM_SIZE, MID_FRMSIZE_HEIGHT | CONVERT_TWIPS);
-        const uno::Any* pSize = GetProperty(RES_FRM_SIZE, MID_FRMSIZE_SIZE | CONVERT_TWIPS);
-        const uno::Any* pSizeType = GetProperty(RES_FRM_SIZE, MID_FRMSIZE_SIZE_TYPE);
-        const uno::Any* pWidthType = GetProperty(RES_FRM_SIZE, MID_FRMSIZE_WIDTH_TYPE);
+        const cpo::uno::Any* pRelH = GetProperty(RES_FRM_SIZE, MID_FRMSIZE_REL_HEIGHT);
+        const cpo::uno::Any* pRelHRelation = GetProperty(RES_FRM_SIZE, MID_FRMSIZE_REL_HEIGHT_RELATION);
+        const cpo::uno::Any* pRelW = GetProperty(RES_FRM_SIZE, MID_FRMSIZE_REL_WIDTH);
+        const cpo::uno::Any* pRelWRelation = GetProperty(RES_FRM_SIZE, MID_FRMSIZE_REL_WIDTH_RELATION);
+        const cpo::uno::Any* pSyncWidth = GetProperty(RES_FRM_SIZE, MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT);
+        const cpo::uno::Any* pSyncHeight = GetProperty(RES_FRM_SIZE, MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH);
+        const cpo::uno::Any* pWidth = GetProperty(RES_FRM_SIZE, MID_FRMSIZE_WIDTH | CONVERT_TWIPS);
+        const cpo::uno::Any* pHeight = GetProperty(RES_FRM_SIZE, MID_FRMSIZE_HEIGHT | CONVERT_TWIPS);
+        const cpo::uno::Any* pSize = GetProperty(RES_FRM_SIZE, MID_FRMSIZE_SIZE | CONVERT_TWIPS);
+        const cpo::uno::Any* pSizeType = GetProperty(RES_FRM_SIZE, MID_FRMSIZE_SIZE_TYPE);
+        const cpo::uno::Any* pWidthType = GetProperty(RES_FRM_SIZE, MID_FRMSIZE_WIDTH_TYPE);
         if( pWidth || pHeight ||pRelH || pRelHRelation || pRelW || pRelWRelation || pSize ||pSizeType ||
             pWidthType ||pSyncWidth || pSyncHeight )
         {
@@ -843,19 +843,19 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             awt::Size aSize;
             aSize.Width = constTwips_1cm;
             aSize.Height = constTwips_1cm;
-            ::uno::Any aSizeVal;
+            ::cpo::uno::Any aSizeVal;
             aSizeVal <<= aSize;
             aFrameSz.PutValue(aSizeVal, MID_FRMSIZE_SIZE | CONVERT_TWIPS);
             rToSet.Put(aFrameSz);
         }
     }
-    if (const uno::Any* pFrameDirection = GetProperty(RES_FRAMEDIR, 0))
+    if (const cpo::uno::Any* pFrameDirection = GetProperty(RES_FRAMEDIR, 0))
     {
         SvxFrameDirectionItem aAttr(SvxFrameDirection::Horizontal_LR_TB, RES_FRAMEDIR);
         aAttr.PutValue(*pFrameDirection, 0);
         rToSet.Put(aAttr);
     }
-    if (const uno::Any* pUnknown = GetProperty(RES_UNKNOWNATR_CONTAINER, 0))
+    if (const cpo::uno::Any* pUnknown = GetProperty(RES_UNKNOWNATR_CONTAINER, 0))
     {
         SvXMLAttrContainerItem aAttr(RES_UNKNOWNATR_CONTAINER);
         aAttr.PutValue(*pUnknown, 0);
@@ -863,7 +863,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     }
 
     // #i18732#
-    if (const uno::Any* pFollowTextFlow = GetProperty(RES_FOLLOW_TEXT_FLOW, MID_FOLLOW_TEXT_FLOW))
+    if (const cpo::uno::Any* pFollowTextFlow = GetProperty(RES_FOLLOW_TEXT_FLOW, MID_FOLLOW_TEXT_FLOW))
     {
         SwFormatFollowTextFlow aFormatFollowTextFlow;
         aFormatFollowTextFlow.PutValue(*pFollowTextFlow, MID_FOLLOW_TEXT_FLOW);
@@ -871,8 +871,8 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     }
 
     // #i28701# - RES_WRAP_INFLUENCE_ON_OBJPOS
-    const uno::Any* pWrapInfluenceOnObjPos = GetProperty(RES_WRAP_INFLUENCE_ON_OBJPOS, MID_WRAP_INFLUENCE);
-    const uno::Any* pAllowOverlap = GetProperty(RES_WRAP_INFLUENCE_ON_OBJPOS, MID_ALLOW_OVERLAP);
+    const cpo::uno::Any* pWrapInfluenceOnObjPos = GetProperty(RES_WRAP_INFLUENCE_ON_OBJPOS, MID_WRAP_INFLUENCE);
+    const cpo::uno::Any* pAllowOverlap = GetProperty(RES_WRAP_INFLUENCE_ON_OBJPOS, MID_ALLOW_OVERLAP);
     if ( pWrapInfluenceOnObjPos || pAllowOverlap )
     {
         SwFormatWrapInfluenceOnObjPos aFormatWrapInfluenceOnObjPos;
@@ -883,28 +883,28 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         rToSet.Put(aFormatWrapInfluenceOnObjPos);
     }
 
-    if (const uno::Any* pTextVertAdjust = GetProperty(RES_TEXT_VERT_ADJUST, 0))
+    if (const cpo::uno::Any* pTextVertAdjust = GetProperty(RES_TEXT_VERT_ADJUST, 0))
     {
         SdrTextVertAdjustItem aTextVertAdjust(rFromSet.Get(RES_TEXT_VERT_ADJUST));
         bRet &= aTextVertAdjust.PutValue(*pTextVertAdjust, 0);
         rToSet.Put(aTextVertAdjust);
     }
 
-    if (const uno::Any* pDecorative = GetProperty(RES_DECORATIVE, 0))
+    if (const cpo::uno::Any* pDecorative = GetProperty(RES_DECORATIVE, 0))
     {
         SfxBoolItem item(RES_DECORATIVE);
         bRet &= item.PutValue(*pDecorative, 0);
         rToSet.Put(item);
     }
 
-    if (const uno::Any* pFlySplit = GetProperty(RES_FLY_SPLIT, 0))
+    if (const cpo::uno::Any* pFlySplit = GetProperty(RES_FLY_SPLIT, 0))
     {
         SwFormatFlySplit aSplit(true);
         bRet &= aSplit.PutValue(*pFlySplit, 0);
         rToSet.Put(aSplit);
     }
 
-    if (const uno::Any* pWrapTextAtFlyStart = GetProperty(RES_WRAP_TEXT_AT_FLY_START, 0))
+    if (const cpo::uno::Any* pWrapTextAtFlyStart = GetProperty(RES_WRAP_TEXT_AT_FLY_START, 0))
     {
         SwFormatWrapTextAtFlyStart aWrapTextAtFlyStart(true);
         bRet &= aWrapTextAtFlyStart.PutValue(*pWrapTextAtFlyStart, 0);
@@ -934,7 +934,7 @@ SwFrameProperties_Impl::SwFrameProperties_Impl():
 
 void SwFrameProperties_Impl::FillCol(SfxItemSet& rToSet, const SfxItemSet& rFromSet)
 {
-    if (const uno::Any* pColumns = GetProperty(RES_COL, MID_COLUMNS))
+    if (const cpo::uno::Any* pColumns = GetProperty(RES_COL, MID_COLUMNS))
     {
         SwFormatCol aCol ( rFromSet.Get ( RES_COL ) );
         aCol.PutValue(*pColumns, MID_COLUMNS);
@@ -948,7 +948,7 @@ bool SwFrameProperties_Impl::AnyToItemSet(SwDoc& rDoc, SfxItemSet& rSet, SfxItem
     SwDocStyleSheet* pStyle = nullptr;
     bool bRet;
 
-    if (const uno::Any* pStyleName = GetProperty(FN_UNO_FRAME_STYLE_NAME, 0))
+    if (const cpo::uno::Any* pStyleName = GetProperty(FN_UNO_FRAME_STYLE_NAME, 0))
     {
         OUString sStyleProgName;
         *pStyleName >>= sStyleProgName;
@@ -974,7 +974,7 @@ bool SwFrameProperties_Impl::AnyToItemSet(SwDoc& rDoc, SfxItemSet& rSet, SfxItem
         bRet = FillBaseProperties( rSet, *pItemSet, rSizeFound );
         FillCol(rSet, *pItemSet);
     }
-    if (const uno::Any* pEdit = GetProperty(RES_EDIT_IN_READONLY, 0))
+    if (const cpo::uno::Any* pEdit = GetProperty(RES_EDIT_IN_READONLY, 0))
     {
         SwFormatEditInReadonly item(RES_EDIT_IN_READONLY);
         item.PutValue(*pEdit, 0);
@@ -1003,9 +1003,9 @@ SwGraphicProperties_Impl::SwGraphicProperties_Impl( ) :
 
 bool SwGraphicProperties_Impl::FillMirror (SfxItemSet &rToSet, const SfxItemSet &rFromSet)
 {
-    const uno::Any* pHEvenMirror = GetProperty(RES_GRFATR_MIRRORGRF, MID_MIRROR_HORZ_EVEN_PAGES);
-    const uno::Any* pHOddMirror = GetProperty(RES_GRFATR_MIRRORGRF, MID_MIRROR_HORZ_ODD_PAGES);
-    const uno::Any* pVMirror = GetProperty(RES_GRFATR_MIRRORGRF, MID_MIRROR_VERT);
+    const cpo::uno::Any* pHEvenMirror = GetProperty(RES_GRFATR_MIRRORGRF, MID_MIRROR_HORZ_EVEN_PAGES);
+    const cpo::uno::Any* pHOddMirror = GetProperty(RES_GRFATR_MIRRORGRF, MID_MIRROR_HORZ_ODD_PAGES);
+    const cpo::uno::Any* pVMirror = GetProperty(RES_GRFATR_MIRRORGRF, MID_MIRROR_VERT);
     bool bRet = true;
     if(pHEvenMirror || pHOddMirror || pVMirror )
     {
@@ -1031,7 +1031,7 @@ bool SwGraphicProperties_Impl::AnyToItemSet(
     bool bRet;
     SwDocStyleSheet* pStyle = nullptr;
 
-    if (const uno::Any* pStyleName = GetProperty(FN_UNO_FRAME_STYLE_NAME, 0))
+    if (const cpo::uno::Any* pStyleName = GetProperty(FN_UNO_FRAME_STYLE_NAME, 0))
     {
         OUString sStyleProgName;
         *pStyleName >>= sStyleProgName;
@@ -1075,7 +1075,7 @@ bool SwGraphicProperties_Impl::AnyToItemSet(
     for (auto nID : nIDs)
     {
         sal_uInt8 nMId = RES_GRFATR_CROPGRF == nID ? CONVERT_TWIPS : 0;
-        if (const uno::Any* pAny = GetProperty(nID, nMId))
+        if (const cpo::uno::Any* pAny = GetProperty(nID, nMId))
         {
             std::unique_ptr<SfxPoolItem> pItem(::GetDfltAttr(nID)->Clone());
             bRet &= pItem->PutValue(*pAny, nMId );
@@ -1148,7 +1148,7 @@ SwXFrame::SwXFrame(FlyCntType eSet, const ::SfxItemPropertySet* pSet, SwDoc *pDo
     // Get the style families
     uno::Reference < XNameAccess > xFamilies = xModel->getStyleFamilies();
     // Get the Frame family (and keep it for later)
-    const ::uno::Any aAny = xFamilies->getByName (u"FrameStyles"_ustr);
+    const ::cpo::uno::Any aAny = xFamilies->getByName (u"FrameStyles"_ustr);
     aAny >>= mxStyleFamily;
     // In the derived class, we'll ask mxStyleFamily for the relevant default style
     // mxStyleFamily is initialised in the SwXFrame constructor
@@ -1156,21 +1156,21 @@ SwXFrame::SwXFrame(FlyCntType eSet, const ::SfxItemPropertySet* pSet, SwDoc *pDo
     {
         case FLYCNTTYPE_FRM:
         {
-            uno::Any aAny2 = mxStyleFamily->getByName (u"Frame"_ustr);
+            cpo::uno::Any aAny2 = mxStyleFamily->getByName (u"Frame"_ustr);
             aAny2 >>= mxStyleData;
             m_pProps.reset(new SwFrameProperties_Impl);
         }
         break;
         case FLYCNTTYPE_GRF:
         {
-            uno::Any aAny2 = mxStyleFamily->getByName (u"Graphics"_ustr);
+            cpo::uno::Any aAny2 = mxStyleFamily->getByName (u"Graphics"_ustr);
             aAny2 >>= mxStyleData;
             m_pProps.reset(new SwGraphicProperties_Impl);
         }
         break;
         case FLYCNTTYPE_OLE:
         {
-            uno::Any aAny2 = mxStyleFamily->getByName (u"OLE"_ustr);
+            cpo::uno::Any aAny2 = mxStyleFamily->getByName (u"OLE"_ustr);
             aAny2 >>= mxStyleData;
             m_pProps.reset(new SwOLEProperties_Impl);
         }
@@ -1316,7 +1316,7 @@ SdrObject *SwXFrame::GetOrCreateSdrObject(SwFlyFrameFormat &rFormat)
     return pObject;
 }
 
-static SwFrameFormat *lcl_GetFrameFormat( const ::uno::Any& rValue, SwDoc& rDoc )
+static SwFrameFormat *lcl_GetFrameFormat( const ::cpo::uno::Any& rValue, SwDoc& rDoc )
 {
     SwFrameFormat *pRet = nullptr;
     SwDocShell* pDocSh = rDoc.GetDocShell();
@@ -1337,7 +1337,7 @@ static SwFrameFormat *lcl_GetFrameFormat( const ::uno::Any& rValue, SwDoc& rDoc 
     return pRet;
 }
 
-void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any& _rValue)
+void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::cpo::uno::Any& _rValue)
 {
     SolarMutexGuard aGuard;
     SwFrameFormat* pFormat = GetFrameFormat();
@@ -1372,7 +1372,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
     }
 
     const sal_uInt8 nMemberId(pEntry->nMemberId);
-    uno::Any aValue(_rValue);
+    cpo::uno::Any aValue(_rValue);
 
     // check for needed metric translation
     if(pEntry->nMoreFlags & PropertyMoreFlags::METRIC_ITEM)
@@ -1887,7 +1887,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             aValue >>= sStyleName;
             try
             {
-                uno::Any aAny = mxStyleFamily->getByName ( sStyleName );
+                cpo::uno::Any aAny = mxStyleFamily->getByName ( sStyleName );
                 aAny >>= mxStyleData;
             }
             catch ( container::NoSuchElementException const & )
@@ -1943,11 +1943,11 @@ public:
 };
 }
 
-uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
+cpo::uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
     DisplayLockGuard aDisplayGuard;
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     SwFrameFormat* pFormat = GetFrameFormat();
     const SfxItemPropertyMapEntry* pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
@@ -2286,7 +2286,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             throw uno::RuntimeException();
         if(WID_LAYOUT_SIZE != pEntry->nWID)  // there is no LayoutSize in a descriptor
         {
-            if (const uno::Any* pAny = m_pProps->GetProperty(pEntry->nWID, nMemberId))
+            if (const cpo::uno::Any* pAny = m_pProps->GetProperty(pEntry->nWID, nMemberId))
                 aAny = *pAny;
             else
                 aAny = mxStyleData->getPropertyValue( rPropertyName );
@@ -2544,10 +2544,10 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
 
 }
 
-uno::Any SwXFrame::getPropertyDefault( const OUString& rPropertyName )
+cpo::uno::Any SwXFrame::getPropertyDefault( const OUString& rPropertyName )
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     SwFrameFormat* pFormat = GetFrameFormat();
     if(pFormat)
     {
@@ -2759,7 +2759,7 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
     }
 
     SwFrameFormat *pParentFrameFormat = nullptr;
-    if (const uno::Any* pStyle = m_pProps->GetProperty(FN_UNO_FRAME_STYLE_NAME, 0))
+    if (const cpo::uno::Any* pStyle = m_pProps->GetProperty(FN_UNO_FRAME_STYLE_NAME, 0))
         pParentFrameFormat = lcl_GetFrameFormat( *pStyle, *pDoc );
 
     SwFlyFrameFormat* pFormat = nullptr;
@@ -2819,7 +2819,7 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
         Graphic aGraphic;
 
         // Read graphic URL from the descriptor, if it has any.
-        if (const uno::Any* pGraphicURL = m_pProps->GetProperty(FN_UNO_GRAPHIC_URL, 0))
+        if (const cpo::uno::Any* pGraphicURL = m_pProps->GetProperty(FN_UNO_GRAPHIC_URL, 0))
         {
             OUString sGraphicURL;
             uno::Reference<awt::XBitmap> xBitmap;
@@ -2833,7 +2833,7 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
             }
         }
 
-        if (const uno::Any* pGraphicAny = m_pProps->GetProperty(FN_UNO_GRAPHIC, 0))
+        if (const cpo::uno::Any* pGraphicAny = m_pProps->GetProperty(FN_UNO_GRAPHIC, 0))
         {
             uno::Reference<graphic::XGraphic> xGraphic;
             (*pGraphicAny) >>= xGraphic;
@@ -2841,7 +2841,7 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
         }
 
         OUString sFilterName;
-        if (const uno::Any* pFilterAny = m_pProps->GetProperty(FN_UNO_GRAPHIC_FILTER, 0))
+        if (const cpo::uno::Any* pFilterAny = m_pProps->GetProperty(FN_UNO_GRAPHIC_FILTER, 0))
         {
             (*pFilterAny) >>= sFilterName;
         }
@@ -2861,22 +2861,22 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
                 pDoc->SetFlyName(*pFormat, m_sName);
 
         }
-        if (const uno::Any* pSurroundContour = m_pProps->GetProperty(RES_SURROUND, MID_SURROUND_CONTOUR))
+        if (const cpo::uno::Any* pSurroundContour = m_pProps->GetProperty(RES_SURROUND, MID_SURROUND_CONTOUR))
             setPropertyValue(UNO_NAME_SURROUND_CONTOUR, *pSurroundContour);
-        if (const uno::Any* pContourOutside = m_pProps->GetProperty(RES_SURROUND, MID_SURROUND_CONTOUROUTSIDE))
+        if (const cpo::uno::Any* pContourOutside = m_pProps->GetProperty(RES_SURROUND, MID_SURROUND_CONTOUROUTSIDE))
             setPropertyValue(UNO_NAME_CONTOUR_OUTSIDE, *pContourOutside);
-        if (const ::uno::Any* pContourPoly = m_pProps->GetProperty(FN_PARAM_CONTOUR_PP, 0))
+        if (const ::cpo::uno::Any* pContourPoly = m_pProps->GetProperty(FN_PARAM_CONTOUR_PP, 0))
             setPropertyValue(UNO_NAME_CONTOUR_POLY_POLYGON, *pContourPoly);
-        if (const uno::Any* pPixelContour = m_pProps->GetProperty(FN_UNO_IS_PIXEL_CONTOUR, 0))
+        if (const cpo::uno::Any* pPixelContour = m_pProps->GetProperty(FN_UNO_IS_PIXEL_CONTOUR, 0))
             setPropertyValue(UNO_NAME_IS_PIXEL_CONTOUR, *pPixelContour);
-        if (const uno::Any* pAutoContour = m_pProps->GetProperty(FN_UNO_IS_AUTOMATIC_CONTOUR, 0))
+        if (const cpo::uno::Any* pAutoContour = m_pProps->GetProperty(FN_UNO_IS_AUTOMATIC_CONTOUR, 0))
             setPropertyValue(UNO_NAME_IS_AUTOMATIC_CONTOUR, *pAutoContour);
     }
     else
     {
-        const uno::Any* pCLSID = m_pProps->GetProperty(FN_UNO_CLSID, 0);
-        const uno::Any* pStreamName = m_pProps->GetProperty(FN_UNO_STREAM_NAME, 0);
-        const uno::Any* pEmbeddedObject = m_pProps->GetProperty(FN_EMBEDDED_OBJECT, 0);
+        const cpo::uno::Any* pCLSID = m_pProps->GetProperty(FN_UNO_CLSID, 0);
+        const cpo::uno::Any* pStreamName = m_pProps->GetProperty(FN_UNO_STREAM_NAME, 0);
+        const cpo::uno::Any* pEmbeddedObject = m_pProps->GetProperty(FN_EMBEDDED_OBJECT, 0);
         if (!pCLSID && !pStreamName && !pEmbeddedObject)
         {
             throw uno::RuntimeException();
@@ -3049,26 +3049,26 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
     }
     if( pFormat && pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
         GetOrCreateSdrObject(*pFormat);
-    if (const uno::Any* pOrder = m_pProps->GetProperty(FN_UNO_Z_ORDER, 0))
+    if (const cpo::uno::Any* pOrder = m_pProps->GetProperty(FN_UNO_Z_ORDER, 0))
         setPropertyValue(UNO_NAME_Z_ORDER, *pOrder);
-    if (const uno::Any* pReplacement = m_pProps->GetProperty(FN_UNO_REPLACEMENT_GRAPHIC, 0))
+    if (const cpo::uno::Any* pReplacement = m_pProps->GetProperty(FN_UNO_REPLACEMENT_GRAPHIC, 0))
         setPropertyValue(UNO_NAME_GRAPHIC, *pReplacement);
     // new attribute Title
-    if (const uno::Any* pTitle = m_pProps->GetProperty(FN_UNO_TITLE, 0))
+    if (const cpo::uno::Any* pTitle = m_pProps->GetProperty(FN_UNO_TITLE, 0))
     {
         setPropertyValue(UNO_NAME_TITLE, *pTitle);
     }
     // new attribute Description
-    if (const uno::Any* pDescription = m_pProps->GetProperty(FN_UNO_DESCRIPTION, 0))
+    if (const cpo::uno::Any* pDescription = m_pProps->GetProperty(FN_UNO_DESCRIPTION, 0))
     {
         setPropertyValue(UNO_NAME_DESCRIPTION, *pDescription);
     }
-    if (const uno::Any* pVisible = m_pProps->GetProperty(RES_GRFATR_VISIBLE, 0))
+    if (const cpo::uno::Any* pVisible = m_pProps->GetProperty(RES_GRFATR_VISIBLE, 0))
         setPropertyValue(UNO_NAME_VISIBLE, *pVisible);
 
 
     // For grabbag
-    if (const uno::Any* pFrameIntropgrabbagItem = m_pProps->GetProperty(RES_FRMATR_GRABBAG, 0))
+    if (const cpo::uno::Any* pFrameIntropgrabbagItem = m_pProps->GetProperty(RES_FRMATR_GRABBAG, 0))
     {
         setPropertyValue(UNO_NAME_FRAME_INTEROP_GRAB_BAG, *pFrameIntropgrabbagItem);
     }
@@ -3132,14 +3132,14 @@ void SwXFrame::setPosition(const awt::Point& /*aPosition*/)
 
 awt::Size SwXFrame::getSize()
 {
-    const ::uno::Any aVal = getPropertyValue(u"Size"_ustr);
+    const ::cpo::uno::Any aVal = getPropertyValue(u"Size"_ustr);
     awt::Size const * pRet =  o3tl::doAccess<awt::Size>(aVal);
     return *pRet;
 }
 
 void SwXFrame::setSize(const awt::Size& aSize)
 {
-    const ::uno::Any aVal(&aSize, ::cppu::UnoType<awt::Size>::get());
+    const ::cpo::uno::Any aVal(&aSize, ::cppu::UnoType<awt::Size>::get());
     setPropertyValue(u"Size"_ustr, aVal);
 }
 
@@ -3181,9 +3181,9 @@ void SAL_CALL SwXTextFrame::release(  )noexcept
     SwXFrame::release();
 }
 
-::uno::Any SAL_CALL SwXTextFrame::queryInterface( const uno::Type& aType )
+::cpo::uno::Any SAL_CALL SwXTextFrame::queryInterface( const uno::Type& aType )
 {
-    ::uno::Any aRet = SwXFrame::queryInterface(aType);
+    ::cpo::uno::Any aRet = SwXFrame::queryInterface(aType);
     if(aRet.getValueType() == cppu::UnoType<void>::get())
         aRet = SwXText::queryInterface(aType);
     if(aRet.getValueType() == cppu::UnoType<void>::get())
@@ -3361,10 +3361,10 @@ uno::Reference<container::XNameReplace > SAL_CALL SwXTextFrame::getEvents()
     return new SwFrameEventDescriptor( *this );
 }
 
-::uno::Any SwXTextFrame::getPropertyValue(const OUString& rPropertyName)
+::cpo::uno::Any SwXTextFrame::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
-    ::uno::Any aRet;
+    ::cpo::uno::Any aRet;
     if(rPropertyName == UNO_NAME_START_REDLINE||
             rPropertyName == UNO_NAME_END_REDLINE)
     {

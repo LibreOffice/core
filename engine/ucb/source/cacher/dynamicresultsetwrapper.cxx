@@ -32,6 +32,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace comphelper;
 
 
@@ -104,10 +105,10 @@ void DynamicResultSetWrapper::impl_InitResultSetTwo( std::unique_lock<std::mutex
 }
 
 // XInterface methods.
-css::uno::Any SAL_CALL DynamicResultSetWrapper::queryInterface( const css::uno::Type & rType )
+cpo::uno::Any SAL_CALL DynamicResultSetWrapper::queryInterface( const css::uno::Type & rType )
 {
     //list all interfaces inclusive baseclasses of interfaces
-    css::uno::Any aRet = cppu::queryInterface( rType,
+    cpo::uno::Any aRet = cppu::queryInterface( rType,
                                                static_cast< XComponent* >(this), //base of XDynamicResultSet
                                                static_cast< XDynamicResultSet* >(this),
                                                static_cast< XSourceInitialization* >(this)
@@ -428,9 +429,9 @@ void SAL_CALL DynamicResultSetWrapperListener::release()
     OWeakObject::release();
 }
 
-css::uno::Any SAL_CALL DynamicResultSetWrapperListener::queryInterface( const css::uno::Type & rType )
+cpo::uno::Any SAL_CALL DynamicResultSetWrapperListener::queryInterface( const css::uno::Type & rType )
 {
-    css::uno::Any aRet = cppu::queryInterface( rType,
+    cpo::uno::Any aRet = cppu::queryInterface( rType,
                                                static_cast< XDynamicResultSetListener* >(this),
                                                static_cast< XEventListener* >(this)
                                                );

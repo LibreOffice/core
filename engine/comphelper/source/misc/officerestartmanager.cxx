@@ -64,7 +64,7 @@ void SAL_CALL OOfficeRestartManager::requestRestart( const uno::Reference< task:
                  m_xContext ),
              uno::UNO_QUERY_THROW );
 
-        xRequestCallback->addCallback( this, uno::Any() );
+        xRequestCallback->addCallback( this, cpo::uno::Any() );
     }
     catch ( uno::Exception& )
     {
@@ -86,7 +86,7 @@ bool SAL_CALL OOfficeRestartManager::isRestartRequested( bool bOfficeInitialized
 
 // XCallback
 
-void SAL_CALL OOfficeRestartManager::notify( const uno::Any& /* aData */ )
+void SAL_CALL OOfficeRestartManager::notify( const cpo::uno::Any& /* aData */ )
 {
     try
     {
@@ -99,7 +99,7 @@ void SAL_CALL OOfficeRestartManager::notify( const uno::Any& /* aData */ )
             // Turn Quickstarter veto off
             uno::Reference< beans::XPropertySet > xPropertySet( xDesktop, uno::UNO_QUERY_THROW );
             OUString aVetoPropName( u"SuspendQuickstartVeto"_ustr );
-            uno::Any aValue;
+            cpo::uno::Any aValue;
             aValue <<= true;
             xPropertySet->setPropertyValue( aVetoPropName, aValue );
 
@@ -149,7 +149,7 @@ uno::Sequence< OUString > SAL_CALL OOfficeRestartManager::getSupportedServiceNam
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_task_OfficeRestartManager(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new comphelper::OOfficeRestartManager(context));
 }

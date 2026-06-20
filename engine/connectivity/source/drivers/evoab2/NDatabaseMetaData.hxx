@@ -195,9 +195,9 @@ namespace connectivity::evoab
         virtual bool SAL_CALL supportsDataManipulationTransactionsOnly(  ) override;
         virtual bool SAL_CALL dataDefinitionCausesTransactionCommit(  ) override;
         virtual bool SAL_CALL dataDefinitionIgnoredInTransactions(  ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getTables( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const css::uno::Sequence< OUString >& types ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getTables( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const css::uno::Sequence< OUString >& types ) override;
         virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getTableTypes(  ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getColumns( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const OUString& columnNamePattern ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getColumns( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const OUString& columnNamePattern ) override;
         virtual bool SAL_CALL supportsResultSetType( sal_Int32 setType ) override;
         virtual bool SAL_CALL supportsResultSetConcurrency( sal_Int32 setType, sal_Int32 concurrency ) override;
         virtual bool SAL_CALL ownUpdatesAreVisible( sal_Int32 setType ) override;
@@ -210,7 +210,7 @@ namespace connectivity::evoab
         virtual bool SAL_CALL deletesAreDetected( sal_Int32 setType ) override;
         virtual bool SAL_CALL insertsAreDetected( sal_Int32 setType ) override;
         virtual bool SAL_CALL supportsBatchUpdates(  ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getUDTs( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& typeNamePattern, const css::uno::Sequence< sal_Int32 >& types ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getUDTs( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& typeNamePattern, const css::uno::Sequence< sal_Int32 >& types ) override;
     };
 }
 

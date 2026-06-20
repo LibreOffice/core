@@ -74,8 +74,8 @@ public:
     // Attributes
     virtual OUString SAL_CALL getText() override;
     virtual void SAL_CALL setText( const OUString& _text ) override;
-    virtual css::uno::Any SAL_CALL getReplacement() override;
-    virtual void SAL_CALL setReplacement( const css::uno::Any& _replacement ) override;
+    virtual cpo::uno::Any SAL_CALL getReplacement() override;
+    virtual void SAL_CALL setReplacement( const cpo::uno::Any& _replacement ) override;
     virtual bool SAL_CALL getForward() override;
     virtual void SAL_CALL setForward( bool _forward ) override;
     virtual ::sal_Int32 SAL_CALL getWrap() override;
@@ -92,11 +92,11 @@ public:
     virtual void SAL_CALL setMatchSoundsLike( bool _matchsoundslike ) override;
     virtual bool SAL_CALL getMatchAllWordForms() override;
     virtual void SAL_CALL setMatchAllWordForms( bool _matchallwordforms ) override;
-    virtual css::uno::Any SAL_CALL getStyle() override;
-    virtual void SAL_CALL setStyle( const css::uno::Any& _style ) override;
+    virtual cpo::uno::Any SAL_CALL getStyle() override;
+    virtual void SAL_CALL setStyle( const cpo::uno::Any& _style ) override;
 
     // Methods
-    virtual bool SAL_CALL Execute( const css::uno::Any& FindText, const css::uno::Any& MatchCase, const css::uno::Any& MatchWholeWord, const css::uno::Any& MatchWildcards, const css::uno::Any& MatchSoundsLike, const css::uno::Any& MatchAllWordForms, const css::uno::Any& Forward, const css::uno::Any& Wrap, const css::uno::Any& Format, const css::uno::Any& ReplaceWith, const css::uno::Any& Replace, const css::uno::Any& MatchKashida, const css::uno::Any& MatchDiacritics, const css::uno::Any& MatchAlefHamza, const css::uno::Any& MatchControl, const css::uno::Any& MatchPrefix, const css::uno::Any& MatchSuffix, const css::uno::Any& MatchPhrase, const css::uno::Any& IgnoreSpace, const css::uno::Any& IgnorePunct ) override;
+    virtual bool SAL_CALL Execute( const cpo::uno::Any& FindText, const cpo::uno::Any& MatchCase, const cpo::uno::Any& MatchWholeWord, const cpo::uno::Any& MatchWildcards, const cpo::uno::Any& MatchSoundsLike, const cpo::uno::Any& MatchAllWordForms, const cpo::uno::Any& Forward, const cpo::uno::Any& Wrap, const cpo::uno::Any& Format, const cpo::uno::Any& ReplaceWith, const cpo::uno::Any& Replace, const cpo::uno::Any& MatchKashida, const cpo::uno::Any& MatchDiacritics, const cpo::uno::Any& MatchAlefHamza, const cpo::uno::Any& MatchControl, const cpo::uno::Any& MatchPrefix, const cpo::uno::Any& MatchSuffix, const cpo::uno::Any& MatchPhrase, const cpo::uno::Any& IgnoreSpace, const cpo::uno::Any& IgnorePunct ) override;
     virtual void SAL_CALL ClearFormatting(  ) override;
 
     // XHelperInterface

@@ -632,9 +632,9 @@ uno::Sequence<beans::PropertyValue> SettingsTable::GetCompatSettings()
     {
         // the default value for an undefined compatibilityMode is 12 (Word 2007)
         uno::Sequence<beans::PropertyValue> aCompatSetting( comphelper::InitPropertySequence({
-            { "name", uno::Any(u"compatibilityMode"_ustr) },
-            { "uri", uno::Any(u"http://schemas.microsoft.com/office/word"_ustr) },
-            { "val", uno::Any(u"12"_ustr) } //12: Use word processing features specified in ECMA-376. This is the default.
+            { "name", cpo::uno::Any(u"compatibilityMode"_ustr) },
+            { "uri", cpo::uno::Any(u"http://schemas.microsoft.com/office/word"_ustr) },
+            { "val", cpo::uno::Any(u"12"_ustr) } //12: Use word processing features specified in ECMA-376. This is the default.
         }));
 
         beans::PropertyValue aValue;
@@ -674,28 +674,28 @@ void SettingsTable::ApplyProperties(rtl::Reference<SwXTextDocument> const& xDoc)
     rtl::Reference<SwXDocumentSettings> xDocumentSettings(xDoc->createDocumentSettings());
 
     // Shared between DOCX and RTF, unconditional flags.
-    xDocumentSettings->setPropertyValue(u"TableRowKeep"_ustr, uno::Any(true));
-    xDocumentSettings->setPropertyValue(u"AddVerticalFrameOffsets"_ustr, uno::Any(true));
+    xDocumentSettings->setPropertyValue(u"TableRowKeep"_ustr, cpo::uno::Any(true));
+    xDocumentSettings->setPropertyValue(u"AddVerticalFrameOffsets"_ustr, cpo::uno::Any(true));
     xDocumentSettings->setPropertyValue(u"ApplyParagraphMarkFormatToEmptyLineAtEndOfParagraph"_ustr,
-                                uno::Any(true));
+                                cpo::uno::Any(true));
     // rely on default for HyphenateURLs=false
     // rely on default for IgnoreHiddenCharsForLineCalculation=true
 
     if (GetWordCompatibilityMode() <= 14)
     {
-        xDocumentSettings->setPropertyValue(u"MsWordCompMinLineHeightByFly"_ustr, uno::Any(true));
-        xDocumentSettings->setPropertyValue(u"TabOverMargin"_ustr, uno::Any(true));
-        xDocumentSettings->setPropertyValue(u"AddFrameOffsets"_ustr, uno::Any(true)); // tdf#138782
+        xDocumentSettings->setPropertyValue(u"MsWordCompMinLineHeightByFly"_ustr, cpo::uno::Any(true));
+        xDocumentSettings->setPropertyValue(u"TabOverMargin"_ustr, cpo::uno::Any(true));
+        xDocumentSettings->setPropertyValue(u"AddFrameOffsets"_ustr, cpo::uno::Any(true)); // tdf#138782
         xDocumentSettings->setPropertyValue(u"HiddenParagraphMarkPerLineProperties"_ustr,
-                                uno::Any(true));
+                                cpo::uno::Any(true));
     }
 
     // Show changes value
     bool bHideChanges = !m_bShowInsDelChanges || !m_bShowMarkupChanges;
-    xDoc->setPropertyValue(u"ShowChanges"_ustr, uno::Any( !bHideChanges || m_bShowFormattingChanges ) );
+    xDoc->setPropertyValue(u"ShowChanges"_ustr, cpo::uno::Any( !bHideChanges || m_bShowFormattingChanges ) );
 
     // Record changes value
-    xDoc->setPropertyValue(u"RecordChanges"_ustr, uno::Any( m_bRecordChanges ) );
+    xDoc->setPropertyValue(u"RecordChanges"_ustr, cpo::uno::Any( m_bRecordChanges ) );
     // Password protected Record changes
     if (m_bRecordChanges && m_pDocumentProtection->getRedlineProtection()
         && m_pDocumentProtection->getEnforcement())
@@ -703,7 +703,7 @@ void SettingsTable::ApplyProperties(rtl::Reference<SwXTextDocument> const& xDoc)
         // use dummy protection key to forbid disabling of Record changes without a notice
         // (extending the recent GrabBag support)    TODO support password verification...
         css::uno::Sequence<sal_Int8> aDummyKey { 1 };
-        xDoc->setPropertyValue(u"RedlineProtectionKey"_ustr, uno::Any( aDummyKey ));
+        xDoc->setPropertyValue(u"RedlineProtectionKey"_ustr, cpo::uno::Any( aDummyKey ));
     }
 
     // Create or overwrite DocVars based on found in settings
@@ -723,26 +723,26 @@ void SettingsTable::ApplyProperties(rtl::Reference<SwXTextDocument> const& xDoc)
             else
             {
                 xMaster = xDoc->createFieldMaster(u"com.sun.star.text.FieldMaster.User");
-                xMaster->setPropertyValue(getPropertyName(PROP_NAME), uno::Any(docVar.first));
+                xMaster->setPropertyValue(getPropertyName(PROP_NAME), cpo::uno::Any(docVar.first));
                 uno::Reference<text::XDependentTextField> xField(
                     xDoc->createInstance(u"com.sun.star.text.TextField.User"_ustr),
                     uno::UNO_QUERY);
                 xField->attachTextFieldMaster(xMaster);
             }
 
-            xMaster->setPropertyValue(getPropertyName(PROP_CONTENT), uno::Any(docVar.second));
+            xMaster->setPropertyValue(getPropertyName(PROP_CONTENT), cpo::uno::Any(docVar.second));
         }
     }
 
     if (m_bDoNotBreakWrappedTables)
     {
         // Map <w:doNotBreakWrappedTables> to the DoNotBreakWrappedTables compat flag.
-        xDocumentSettings->setPropertyValue(u"DoNotBreakWrappedTables"_ustr, uno::Any(true));
+        xDocumentSettings->setPropertyValue(u"DoNotBreakWrappedTables"_ustr, cpo::uno::Any(true));
     }
 
     if (m_bAllowTextAfterFloatingTableBreak)
     {
-        xDocumentSettings->setPropertyValue(u"AllowTextAfterFloatingTableBreak"_ustr, uno::Any(true));
+        xDocumentSettings->setPropertyValue(u"AllowTextAfterFloatingTableBreak"_ustr, cpo::uno::Any(true));
     }
 
     // Auto hyphenation: turns on hyphenation by default, <w:suppressAutoHyphens/> may still disable it at a paragraph level.
@@ -756,31 +756,31 @@ void SettingsTable::ApplyProperties(rtl::Reference<SwXTextDocument> const& xDoc)
     uno::Reference<beans::XPropertyState> xPropertyState(static_cast<cppu::OWeakObject*>(xDefault.get()), uno::UNO_QUERY);
     if (m_bAutoHyphenation && lcl_isDefault(xPropertyState, u"ParaIsHyphenation"_ustr))
     {
-        xDefault->setPropertyValue(u"ParaIsHyphenation"_ustr, uno::Any(true));
+        xDefault->setPropertyValue(u"ParaIsHyphenation"_ustr, cpo::uno::Any(true));
     }
     if (m_bNoHyphenateCaps)
     {
-        xDefault->setPropertyValue(u"ParaHyphenationNoCaps"_ustr, uno::Any(true));
+        xDefault->setPropertyValue(u"ParaHyphenationNoCaps"_ustr, cpo::uno::Any(true));
     }
     if (m_nHyphenationZone)
     {
-        xDefault->setPropertyValue(u"ParaHyphenationZone"_ustr, uno::Any(GetHyphenationZone()));
+        xDefault->setPropertyValue(u"ParaHyphenationZone"_ustr, cpo::uno::Any(GetHyphenationZone()));
     }
     if (m_nConsecutiveHyphenLimit)
     {
-        xDefault->setPropertyValue(u"ParaHyphenationMaxHyphens"_ustr, uno::Any(GetConsecutiveHyphenLimit()));
+        xDefault->setPropertyValue(u"ParaHyphenationMaxHyphens"_ustr, cpo::uno::Any(GetConsecutiveHyphenLimit()));
     }
     if (m_bWidowControl && lcl_isDefault(xPropertyState, u"ParaWidows"_ustr) && lcl_isDefault(xPropertyState, u"ParaOrphans"_ustr))
     {
-        uno::Any aAny(static_cast<sal_Int8>(2));
+        cpo::uno::Any aAny(static_cast<sal_Int8>(2));
         xDefault->setPropertyValue(u"ParaWidows"_ustr, aAny);
         xDefault->setPropertyValue(u"ParaOrphans"_ustr, aAny);
     }
     if ( GetHyphenationKeep() )
     {
-        xDefault->setPropertyValue(u"ParaHyphenationKeep"_ustr, uno::Any(true));
-        xDefault->setPropertyValue(u"ParaHyphenationKeepType"_ustr, uno::Any(text::ParagraphHyphenationKeepType::COLUMN));
-        xDefault->setPropertyValue(u"ParaHyphenationKeepLine"_ustr, uno::Any(GetHyphenationKeepLine()));
+        xDefault->setPropertyValue(u"ParaHyphenationKeep"_ustr, cpo::uno::Any(true));
+        xDefault->setPropertyValue(u"ParaHyphenationKeepType"_ustr, cpo::uno::Any(text::ParagraphHyphenationKeepType::COLUMN));
+        xDefault->setPropertyValue(u"ParaHyphenationKeepLine"_ustr, cpo::uno::Any(GetHyphenationKeepLine()));
     }
 }
 

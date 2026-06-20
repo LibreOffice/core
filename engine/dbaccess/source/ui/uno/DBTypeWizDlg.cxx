@@ -25,7 +25,7 @@ using namespace dbaui;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_openoffice_comp_dbu_ODBTypeWizDialog_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new ODBTypeWizDialog(context));
 }
@@ -34,6 +34,7 @@ namespace dbaui
 {
 
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::beans;
 
 ODBTypeWizDialog::ODBTypeWizDialog(const Reference< XComponentContext >& _rxORB)

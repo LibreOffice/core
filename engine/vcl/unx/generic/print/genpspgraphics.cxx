@@ -185,9 +185,9 @@ cairo::SurfaceSharedPtr GenPspGraphics::CreateBitmapSurface(const OutputDevice& 
     return cairo::SurfaceSharedPtr();
 }
 
-css::uno::Any GenPspGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& /*rSurface*/, const basegfx::B2ISize& /*rSize*/) const
+cpo::uno::Any GenPspGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& /*rSurface*/, const basegfx::B2ISize& /*rSize*/) const
 {
-    return css::uno::Any();
+    return cpo::uno::Any();
 }
 
 #endif // ENABLE_CAIRO_CANVAS

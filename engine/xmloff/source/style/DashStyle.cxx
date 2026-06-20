@@ -54,7 +54,7 @@ XMLDashStyleImport::XMLDashStyleImport( SvXMLImport& rImp )
 
 void XMLDashStyleImport::importXML(
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
-    uno::Any& rValue,
+    cpo::uno::Any& rValue,
     OUString& rStrName )
 {
     drawing::LineDash aLineDash;
@@ -176,7 +176,7 @@ XMLDashStyleExport::XMLDashStyleExport( SvXMLExport& rExp )
 
 void XMLDashStyleExport::exportXML(
     const OUString& rStrName,
-    const uno::Any& rValue )
+    const cpo::uno::Any& rValue )
 {
     SvXMLUnitConverter & rUnitConverter = m_rExport.GetMM100UnitConverter();
 

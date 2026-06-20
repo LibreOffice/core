@@ -57,6 +57,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::io;
 
 namespace com::sun::star::uno { class XComponentContext; }
@@ -513,7 +514,7 @@ SvxGraphicHelperStream_Impl SvXMLGraphicHelper::ImplGetGraphicStream( const OUSt
     if (aRet.xStream.is() && (SvXMLGraphicHelperMode::Write == meCreateMode))
     {
         uno::Reference<beans::XPropertySet> xProps(aRet.xStream, uno::UNO_QUERY);
-        xProps->setPropertyValue(u"UseCommonStoragePasswordEncryption"_ustr, uno::Any(true));
+        xProps->setPropertyValue(u"UseCommonStoragePasswordEncryption"_ustr, cpo::uno::Any(true));
     }
 
     return aRet;
@@ -808,7 +809,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
             // set stream properties (MediaType/Compression)
             if (!aMimeType.isEmpty())
             {
-                xProps->setPropertyValue(u"MediaType"_ustr, uno::Any(aMimeType));
+                xProps->setPropertyValue(u"MediaType"_ustr, cpo::uno::Any(aMimeType));
             }
 
             // picture formats that actually _do_ benefit from zip
@@ -1175,7 +1176,7 @@ Sequence< OUString > SAL_CALL SvXMLGraphicImportExportHelper::getSupportedServic
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_Svx_GraphicImportHelper_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SvXMLGraphicImportExportHelper(SvXMLGraphicHelperMode::Read));
 }
@@ -1195,7 +1196,7 @@ com_sun_star_comp_Svx_GraphicImportHelper_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_Svx_GraphicExportHelper_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SvXMLGraphicImportExportHelper(SvXMLGraphicHelperMode::Write));
 }

@@ -113,7 +113,7 @@ bool SdPageObjsTLV::SdPageObjsTransferable::GetData( const css::datatransfer::Da
 
         case SotClipboardFormatId::TREELISTBOX:
         {
-            css::uno::Any aTreeListBoxData; // empty for now
+            cpo::uno::Any aTreeListBoxData; // empty for now
             SetAny(aTreeListBoxData);
             return true;
         }
@@ -957,7 +957,7 @@ OUString SdPageObjsTLV::GetObjectName(
                 OUString sShapeType;
                 const SdrCustomShapeGeometryItem& rGeometryItem
                     = pObject->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
-                const uno::Any* pAny = rGeometryItem.GetPropertyValueByName(u"Type"_ustr);
+                const cpo::uno::Any* pAny = rGeometryItem.GetPropertyValueByName(u"Type"_ustr);
                 if (pAny && (*pAny >>= sShapeType))
                     sObjName = SdResId(STR_NAVIGATOR_CUSTOMSHAPE) + u": " + sShapeType;
             }

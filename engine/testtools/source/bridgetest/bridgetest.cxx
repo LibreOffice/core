@@ -61,6 +61,7 @@
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::bridge;
@@ -196,7 +197,7 @@ static void assign( TestElement & rData,
                     TestEnum eEnum, const OUString& rStr,
                     sal_Int8 nByte2, sal_Int16 nShort2,
                     const css::uno::Reference< css::uno::XInterface >& xTest,
-                    const css::uno::Any& rAny )
+                    const cpo::uno::Any& rAny )
 {
     rData.Bool = bBool;
     rData.Char = cChar;

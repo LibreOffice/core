@@ -412,7 +412,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXTextSearch::getPropertySetInfo()
     return aRef;
 }
 
-void SwXTextSearch::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
+void SwXTextSearch::setPropertyValue(const OUString& rPropertyName, const cpo::uno::Any& aValue)
 {
     SolarMutexGuard aGuard;
     const SfxItemPropertyMapEntry*  pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
@@ -442,10 +442,10 @@ void SwXTextSearch::setPropertyValue(const OUString& rPropertyName, const uno::A
 
 }
 
-uno::Any SwXTextSearch::getPropertyValue(const OUString& rPropertyName)
+cpo::uno::Any SwXTextSearch::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
+    cpo::uno::Any aRet;
 
     const SfxItemPropertyMapEntry*  pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
     bool bSet = false;

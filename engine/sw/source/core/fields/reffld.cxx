@@ -898,7 +898,7 @@ OUString SwGetRefField::GetPar2() const
     return ExpandImpl(nullptr);
 }
 
-bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwGetRefField::QueryValue( cpo::uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -993,7 +993,7 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     return true;
 }
 
-bool SwGetRefField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwGetRefField::PutValue( const cpo::uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {

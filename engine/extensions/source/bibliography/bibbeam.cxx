@@ -31,6 +31,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 
 #define ID_TOOLBAR                          1
@@ -134,7 +135,7 @@ namespace bib
 
         if ( xPropSet.is() && m_xGridModel.is() )
         {
-            uno::Any aAny = xPropSet->getPropertyValue( u"DefaultControl"_ustr );
+            cpo::uno::Any aAny = xPropSet->getPropertyValue( u"DefaultControl"_ustr );
             OUString aControlName;
             aAny >>= aControlName;
 

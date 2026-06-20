@@ -73,7 +73,7 @@ struct COMPHELPER_DLLPUBLIC PropertyDescription
 */
 class COMPHELPER_DLLPUBLIC OPropertyContainerHelper
 {
-    typedef ::std::vector< css::uno::Any >              PropertyContainer;
+    typedef ::std::vector< cpo::uno::Any >              PropertyContainer;
     PropertyContainer   m_aHoldProperties;
         // the properties which are hold by this class' instance, not the derived one's
 
@@ -101,18 +101,18 @@ protected:
         void* _pPointerToMember, const css::uno::Type& _rMemberType);
 
 
-    /** register a property. The property is represented through a css::uno::Any member of the
+    /** register a property. The property is represented through a cpo::uno::Any member of the
         derived class which calls this method.
         @param      _rName              the name of the property
         @param      _nHandle            the handle of the property
         @param      _nAttributes        the attributes of the property
         @param      _pPointerToMember   the pointer to the member representing the property
-                                        within the derived class, which has to be a css::uno::Any.
+                                        within the derived class, which has to be a cpo::uno::Any.
         @param      _rExpectedType      the expected type of the property. NOT the type of the object to which
                                         _pPointerToMember points (this is always an Any).
     */
     void    registerMayBeVoidProperty(const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
-        css::uno::Any* _pPointerToMember, const css::uno::Type& _rExpectedType);
+        cpo::uno::Any* _pPointerToMember, const css::uno::Type& _rExpectedType);
 
     /** register a property. The repository will create an own object holding this property, so there is no
         need to declare an extra member in your derived class
@@ -125,7 +125,7 @@ protected:
                                         Else it must contain a value compatible with the type described by _rType.
     */
     void    registerPropertyNoMember(const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
-        const css::uno::Type& _rType, css::uno::Any const & _pInitialValue);
+        const css::uno::Type& _rType, cpo::uno::Any const & _pInitialValue);
 
     /** revokes a previously registered property
         @throw  css::beans::UnknownPropertyException
@@ -143,19 +143,19 @@ protected:
 
     // helper for implementing OPropertySetHelper overridables
     bool    convertFastPropertyValue(
-                    css::uno::Any & rConvertedValue,
-                    css::uno::Any & rOldValue,
+                    cpo::uno::Any & rConvertedValue,
+                    cpo::uno::Any & rOldValue,
                     sal_Int32 nHandle,
-                    const css::uno::Any& rValue
+                    const cpo::uno::Any& rValue
                 );
 
     void        setFastPropertyValue(
                         sal_Int32 nHandle,
-                        const css::uno::Any& rValue
+                        const cpo::uno::Any& rValue
                     );
 
     void        getFastPropertyValue(
-                        css::uno::Any& rValue,
+                        cpo::uno::Any& rValue,
                         sal_Int32 nHandle
                     ) const;
 

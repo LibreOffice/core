@@ -29,6 +29,7 @@
 using namespace css::lang;
 using namespace css::reflection;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace stoc_corefl
 {

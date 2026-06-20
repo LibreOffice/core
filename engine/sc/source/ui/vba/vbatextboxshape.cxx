@@ -44,7 +44,7 @@ ScVbaTextBoxShape::setText( const OUString& _text )
 }
 
 uno::Reference< excel::XCharacters > SAL_CALL
-ScVbaTextBoxShape::characters( const uno::Any& Start, const uno::Any& Length )
+ScVbaTextBoxShape::characters( const cpo::uno::Any& Start, const cpo::uno::Any& Length )
 {
     ScDocShell* pDocShell = excel::getDocShell( m_xModel );
     ScDocument* pDoc = pDocShell ? &pDocShell->GetDocument() : nullptr;

@@ -277,10 +277,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testImageHyperlinkStyle)
     xText->insertTextContent(xCursor, xImage, /*bAbsorb=*/false);
     uno::Reference<beans::XPropertySet> xImageProps(xImage, uno::UNO_QUERY);
     OUString aExpected = u"http://www.example.com"_ustr;
-    xImageProps->setPropertyValue(u"HyperLinkURL"_ustr, uno::Any(aExpected));
+    xImageProps->setPropertyValue(u"HyperLinkURL"_ustr, cpo::uno::Any(aExpected));
 
     // When applying a frame style on it:
-    xImageProps->setPropertyValue(u"FrameStyleName"_ustr, uno::Any(u"Frame"_ustr));
+    xImageProps->setPropertyValue(u"FrameStyleName"_ustr, cpo::uno::Any(u"Frame"_ustr));
 
     // Then make sure that the hyperlink is not lost:
     auto aActual = getProperty<OUString>(xImageProps, u"HyperLinkURL"_ustr);
@@ -375,12 +375,12 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testLinkedStyleDelete)
         xFactory->createInstance(u"com.sun.star.style.CharacterStyle"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XNameContainer> xParaStyles(getStyles(u"ParagraphStyles"_ustr),
                                                           uno::UNO_QUERY);
-    xParaStyles->insertByName(u"myparastyle"_ustr, uno::Any(xParaStyle));
+    xParaStyles->insertByName(u"myparastyle"_ustr, cpo::uno::Any(xParaStyle));
     uno::Reference<container::XNameContainer> xCharStyles(getStyles(u"CharacterStyles"_ustr),
                                                           uno::UNO_QUERY);
-    xCharStyles->insertByName(u"mycharstyle"_ustr, uno::Any(xCharStyle));
-    xParaStyle->setPropertyValue(u"LinkStyle"_ustr, uno::Any(u"mycharstyle"_ustr));
-    xCharStyle->setPropertyValue(u"LinkStyle"_ustr, uno::Any(u"myparastyle"_ustr));
+    xCharStyles->insertByName(u"mycharstyle"_ustr, cpo::uno::Any(xCharStyle));
+    xParaStyle->setPropertyValue(u"LinkStyle"_ustr, cpo::uno::Any(u"mycharstyle"_ustr));
+    xCharStyle->setPropertyValue(u"LinkStyle"_ustr, cpo::uno::Any(u"myparastyle"_ustr));
 
     // When deleting the paragraph style (and only that):
     xParaStyles->removeByName(u"myparastyle"_ustr);

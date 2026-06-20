@@ -84,7 +84,7 @@ protected:
     virtual void SAL_CALL command( const css::awt::Point& aPos,
                                     ::sal_Int32 nCommand,
                                     bool bMouseEvent,
-                                    const css::uno::Any& aData ) override;
+                                    const cpo::uno::Any& aData ) override;
     virtual void SAL_CALL paint( const css::uno::Reference< css::awt::XGraphics >& xGraphics,
                                  const css::awt::Rectangle& rOutputRectangle,
                                  ::sal_Int32 nStyle ) override;

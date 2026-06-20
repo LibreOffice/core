@@ -27,6 +27,7 @@
 using namespace comphelper;
 using namespace frm;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::util;
 
@@ -132,7 +133,7 @@ css::uno::Reference<css::uno::XInterface>  OFormsCollection::getParent()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OFormsCollection_get_implementation(css::uno::XComponentContext* context,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OFormsCollection(context));
 }

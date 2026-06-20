@@ -915,7 +915,7 @@ void RustProducer::generateInterfaceMethodWrappers(
                         .endLine();
                     file.beginLine().append("}").endLine();
                 }
-                else if (rustType == "any" || rustType == "com.sun.star.uno.Any")
+                else if (rustType == "any" || rustType == "cpo.uno.Any")
                 {
                     file.beginLine().append("if ptr.is_null() {").endLine();
                     file.extraIndent().beginLine().append("None").endLine();
@@ -1365,7 +1365,7 @@ OString RustProducer::getRustWrapperTypeName(std::u16string_view unoType) const
     // Handle special UNO types
     if (rustType == "string")
         return "Option<crate::core::OUString>"_ostr;
-    if (rustType == "any" || rustType == "com.sun.star.uno.Any")
+    if (rustType == "any" || rustType == "cpo.uno.Any")
         return "Option<crate::core::Any>"_ostr;
 
     // Handle sequence types (arrays) - return raw pointer for now

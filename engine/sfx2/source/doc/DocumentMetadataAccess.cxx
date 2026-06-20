@@ -332,7 +332,7 @@ addFile(struct DocumentMetadataAccess_Impl const & i_rImpl,
     } catch (const uno::RuntimeException &) {
         throw;
     } catch (const uno::Exception &) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
             u"addFile: exception"_ustr, /*this*/nullptr, anyEx);
     }
@@ -381,7 +381,7 @@ removeFile(struct DocumentMetadataAccess_Impl const & i_rImpl,
     } catch (const uno::RuntimeException &) {
         throw;
     } catch (const uno::Exception &) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
             u"removeFile: exception"_ustr,
             nullptr, anyEx);
@@ -411,7 +411,7 @@ getAllParts(struct DocumentMetadataAccess_Impl const & i_rImpl)
     } catch (const uno::RuntimeException &) {
         throw;
     } catch (const uno::Exception &) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
             u"getAllParts: exception"_ustr,
             nullptr, anyEx);
@@ -434,7 +434,7 @@ isPartOfType(struct DocumentMetadataAccess_Impl const & i_rImpl,
     } catch (const uno::RuntimeException &) {
         throw;
     } catch (const uno::Exception &) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
             u"isPartOfType: exception"_ustr,
             nullptr, anyEx);
@@ -480,7 +480,7 @@ getAllParts(struct DocumentMetadataAccess_Impl const& i_rImpl,
     catch (const uno::Exception& e)
     {
         throw lang::WrappedTargetRuntimeException(u"getAllParts: exception"_ustr, nullptr,
-                                                  uno::Any(e));
+                                                  cpo::uno::Any(e));
     }
 }
 
@@ -490,13 +490,13 @@ mkException( OUString const & i_rMessage,
     OUString const & i_rUri, OUString const & i_rResource)
 {
     const beans::PropertyValue uriProp(u"Uri"_ustr,
-        -1, uno::Any(i_rUri), static_cast<beans::PropertyState>(0));
+        -1, cpo::uno::Any(i_rUri), static_cast<beans::PropertyState>(0));
     const beans::PropertyValue rnProp(
         u"ResourceName"_ustr,
-        -1, uno::Any(i_rResource), static_cast<beans::PropertyState>(0));
+        -1, cpo::uno::Any(i_rResource), static_cast<beans::PropertyState>(0));
     return ucb::InteractiveAugmentedIOException(i_rMessage, {},
                                                 task::InteractionClassification_ERROR, i_ErrorCode,
-                                                { uno::Any(uriProp), uno::Any(rnProp) });
+                                                { cpo::uno::Any(uriProp), cpo::uno::Any(rnProp) });
 }
 
 /** error handling policy.
@@ -514,11 +514,11 @@ handleError( ucb::InteractiveAugmentedIOException const & i_rException,
     if (!i_xHandler.is()) {
         throw lang::WrappedTargetException(
             u"DocumentMetadataAccess::loadMetadataFromStorage: exception"_ustr,
-            /* *this*/ nullptr, uno::Any(i_rException));
+            /* *this*/ nullptr, cpo::uno::Any(i_rException));
     }
 
     ::rtl::Reference< ::comphelper::OInteractionRequest > pRequest(
-        new ::comphelper::OInteractionRequest(uno::Any(i_rException)) );
+        new ::comphelper::OInteractionRequest(cpo::uno::Any(i_rException)) );
     ::rtl::Reference< ::comphelper::OInteractionRetry > pRetry(
         new ::comphelper::OInteractionRetry );
     ::rtl::Reference< ::comphelper::OInteractionApprove > pApprove(
@@ -538,7 +538,7 @@ handleError( ucb::InteractiveAugmentedIOException const & i_rException,
         OSL_ENSURE(pAbort->wasSelected(), "no continuation selected?");
         throw lang::WrappedTargetException(
             u"DocumentMetadataAccess::loadMetadataFromStorage: exception"_ustr,
-            /* *this*/ nullptr, uno::Any(i_rException));
+            /* *this*/ nullptr, cpo::uno::Any(i_rException));
     }
 }
 
@@ -644,7 +644,7 @@ retry:
     } catch (const uno::RuntimeException &) {
         throw;
     } catch (const uno::Exception &) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
             u"importFile: exception"_ustr,
             nullptr, anyEx);
@@ -668,7 +668,7 @@ exportStream(struct DocumentMetadataAccess_Impl const & i_rImpl,
     if (xStreamProps.is()) { // this is NOT supported in FileSystemStorage
         xStreamProps->setPropertyValue(
             u"MediaType"_ustr,
-            uno::Any(u"application/rdf+xml"_ustr));
+            cpo::uno::Any(u"application/rdf+xml"_ustr));
     }
     const uno::Reference<io::XOutputStream> xOutStream(
         xStream->getOutputStream(), uno::UNO_SET_THROW );
@@ -741,7 +741,7 @@ retry:
             uno::UNO_SET_THROW);
 
     // try to delay raising errors until after initialization is done
-    uno::Any rterr;
+    cpo::uno::Any rterr;
     ucb::InteractiveAugmentedIOException iaioe;
     bool err(false);
 
@@ -798,7 +798,7 @@ static void init(struct DocumentMetadataAccess_Impl & i_rImpl)
             getURI<rdf::URIs::RDF_TYPE>(i_rImpl.m_xContext),
             getURI<rdf::URIs::PKG_DOCUMENT>(i_rImpl.m_xContext));
     } catch (const uno::Exception &) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
             u"init: unexpected exception"_ustr, nullptr,
             anyEx);
@@ -952,7 +952,7 @@ DocumentMetadataAccess::addMetadataFile(const OUString & i_rFileName,
     try {
         m_pImpl->m_xRepository->createGraph(xGraphName);
     } catch (const rdf::RepositoryException &) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
             u"DocumentMetadataAccess::addMetadataFile: exception"_ustr,
             *this, anyEx);
@@ -994,7 +994,7 @@ DocumentMetadataAccess::importMetadataFile(::sal_Int16 i_Format,
         m_pImpl->m_xRepository->importGraph(
             i_Format, i_xInStream, xGraphName, i_xBaseURI);
     } catch (const rdf::RepositoryException &) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
                 u"DocumentMetadataAccess::importMetadataFile: "
                 "RepositoryException"_ustr, *this, anyEx);
@@ -1013,7 +1013,7 @@ DocumentMetadataAccess::removeMetadataFile(
     try {
         m_pImpl->m_xRepository->destroyGraph(i_xGraphName);
     } catch (const rdf::RepositoryException &) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
                 u"DocumentMetadataAccess::removeMetadataFile: "
                 "RepositoryException"_ustr, *this, anyEx);
@@ -1073,7 +1073,7 @@ DocumentMetadataAccess::removeContentOrStylesFile(
     } catch (const uno::RuntimeException &) {
         throw;
     } catch (const uno::Exception &) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
             u"DocumentMetadataAccess::removeContentOrStylesFile: exception"_ustr,
             *this, anyEx);
@@ -1168,7 +1168,7 @@ void SAL_CALL DocumentMetadataAccess::loadMetadataFromStorage(
     } catch (const uno::RuntimeException &) {
         throw;
     } catch (const uno::Exception &) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
                 u"DocumentMetadataAccess::loadMetadataFromStorage: "
                 "exception"_ustr, *this, anyEx);
@@ -1199,11 +1199,11 @@ void SAL_CALL DocumentMetadataAccess::storeMetadataToStorage(
     } catch (const uno::RuntimeException &) {
         throw;
     } catch (const io::IOException &) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetException(
             u"storeMetadataToStorage: IO exception"_ustr, *this, anyEx);
     } catch (const uno::Exception &) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
                 u"storeMetadataToStorage: exception"_ustr, *this, anyEx);
     }
@@ -1232,19 +1232,19 @@ void SAL_CALL DocumentMetadataAccess::storeMetadataToStorage(
             } catch (const uno::RuntimeException &) {
                 throw;
             } catch (const io::IOException &) {
-                css::uno::Any anyEx = cppu::getCaughtException();
+                cpo::uno::Any anyEx = cppu::getCaughtException();
                 throw lang::WrappedTargetException(
                     u"storeMetadataToStorage: IO exception"_ustr,
                     *this, anyEx);
             } catch (const uno::Exception &) {
-                css::uno::Any anyEx = cppu::getCaughtException();
+                cpo::uno::Any anyEx = cppu::getCaughtException();
                 throw lang::WrappedTargetRuntimeException(
                     u"storeMetadataToStorage: exception"_ustr,
                     *this, anyEx);
             }
         }
     } catch (const rdf::RepositoryException &) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
                 u"storeMetadataToStorage: exception"_ustr, *this, anyEx);
     }
@@ -1282,7 +1282,7 @@ DocumentMetadataAccess::loadMetadataFromMedium(
     } catch (const io::IOException &) {
         throw;
     } catch (const uno::Exception &) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetException(
                     u"DocumentMetadataAccess::loadMetadataFromMedium: "
                     "exception"_ustr, *this, anyEx);
@@ -1365,7 +1365,7 @@ DocumentMetadataAccess::storeMetadataToMedium(
             "DocumentMetadataAccess::storeMetadataToMedium Commit failed: " + nError.toString(),
             uno::Reference< uno::XInterface >(), sal_uInt32(nError.GetCode()));
         throw lang::WrappedTargetException(OUString(), *this,
-                uno::Any(ex));
+                cpo::uno::Any(ex));
     }
 }
 

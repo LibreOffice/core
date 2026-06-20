@@ -43,7 +43,7 @@ void SAL_CALL PDFInteractionHandler::handle( const Reference< task::XInteraction
     handleInteractionRequest( i_xRequest );
 }
 
-void SAL_CALL PDFInteractionHandler::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
+void SAL_CALL PDFInteractionHandler::initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     comphelper::NamedValueCollection aProperties(rArguments);
     if (aProperties.has(u"Parent"_ustr))
@@ -54,7 +54,7 @@ bool SAL_CALL PDFInteractionHandler::handleInteractionRequest( const Reference< 
 {
     bool bHandled = false;
 
-    Any aRequest( i_xRequest->getRequest() );
+    cpo::uno::Any aRequest( i_xRequest->getRequest() );
     task::PDFExportException aExc;
     if( aRequest >>= aExc )
     {
@@ -89,7 +89,7 @@ css::uno::Sequence< OUString > SAL_CALL PDFInteractionHandler::getSupportedServi
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_PDFExportInteractionHandler_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new PDFInteractionHandler());
 }

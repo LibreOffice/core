@@ -102,7 +102,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testODFCustomMetadata)
     xProps->loadFromMedium(url, uno::Sequence<beans::PropertyValue>());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, xProps->getAuthor());
     uno::Sequence<beans::PropertyValue> mimeArgs({
-        beans::PropertyValue(u"MediaType"_ustr, -1, uno::Any(u"application/vnd.oasis.opendocument.text"_ustr), beans::PropertyState_DIRECT_VALUE)
+        beans::PropertyValue(u"MediaType"_ustr, -1, cpo::uno::Any(u"application/vnd.oasis.opendocument.text"_ustr), beans::PropertyState_DIRECT_VALUE)
         });
     xProps->storeToMedium(maTempFile.GetURL(), mimeArgs);
 
@@ -171,7 +171,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testDocumentProperties)
 
     uno::Reference<beans::XPropertyContainer> xUDP = xProps->getUserDefinedProperties();
     uno::Reference<beans::XPropertySet> xPropertySet(xUDP, uno::UNO_QUERY);
-    uno::Any aAny = xPropertySet->getPropertyValue(u"Hinweis"_ustr);
+    cpo::uno::Any aAny = xPropertySet->getPropertyValue(u"Hinweis"_ustr);
     CPPUNIT_ASSERT_EQUAL(u"Dies ist ein wichtiger Hinweis"_ustr, aAny.get<OUString>());
 
     aAny = xPropertySet->getPropertyValue(u"Warnung"_ustr);
@@ -255,10 +255,10 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testDocumentProperties)
     CPPUNIT_ASSERT_EQUAL(u"keywordlike"_ustr, aKeywords[1]);
     CPPUNIT_ASSERT_EQUAL(u"keywordalicious"_ustr, aKeywords[2]);
 
-    uno::Sequence<beans::NamedValue> aDocStats2{ { u"SyllableCount"_ustr, uno::Any(sal_Int16(9)) },
-                                                 { u"FrameCount"_ustr, uno::Any(sal_Int16(2)) },
+    uno::Sequence<beans::NamedValue> aDocStats2{ { u"SyllableCount"_ustr, cpo::uno::Any(sal_Int16(9)) },
+                                                 { u"FrameCount"_ustr, cpo::uno::Any(sal_Int16(2)) },
                                                  { u"SentenceCount"_ustr,
-                                                   uno::Any(sal_Int16(7)) } };
+                                                   cpo::uno::Any(sal_Int16(7)) } };
 
     xProps->setDocumentStatistics(aDocStats2);
     aDocStats = xProps->getDocumentStatistics();
@@ -307,16 +307,16 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testDocumentProperties)
     aDur.Seconds = 555;
     aDur.NanoSeconds = 444444444;
 
-    xUDP->addProperty(u"Frobnicate"_ustr, beans::PropertyAttribute::REMOVABLE, uno::Any(true));
-    xUDP->addProperty(u"FrobDuration"_ustr, beans::PropertyAttribute::REMOVABLE, uno::Any(aDur));
-    xUDP->addProperty(u"FrobDuration2"_ustr, beans::PropertyAttribute::REMOVABLE, uno::Any(aTime));
-    xUDP->addProperty(u"FrobEndDate"_ustr, beans::PropertyAttribute::REMOVABLE, uno::Any(aDate));
-    xUDP->addProperty(u"FrobStartTime"_ustr, beans::PropertyAttribute::REMOVABLE, uno::Any(aDateTime));
-    xUDP->addProperty(u"Pi"_ustr, beans::PropertyAttribute::REMOVABLE, uno::Any(3.1415));
-    xUDP->addProperty(u"Foo"_ustr, beans::PropertyAttribute::REMOVABLE, uno::Any(u"bar"_ustr));
-    xUDP->addProperty(u"Removed"_ustr, beans::PropertyAttribute::REMOVABLE, uno::Any(u"bar"_ustr));
+    xUDP->addProperty(u"Frobnicate"_ustr, beans::PropertyAttribute::REMOVABLE, cpo::uno::Any(true));
+    xUDP->addProperty(u"FrobDuration"_ustr, beans::PropertyAttribute::REMOVABLE, cpo::uno::Any(aDur));
+    xUDP->addProperty(u"FrobDuration2"_ustr, beans::PropertyAttribute::REMOVABLE, cpo::uno::Any(aTime));
+    xUDP->addProperty(u"FrobEndDate"_ustr, beans::PropertyAttribute::REMOVABLE, cpo::uno::Any(aDate));
+    xUDP->addProperty(u"FrobStartTime"_ustr, beans::PropertyAttribute::REMOVABLE, cpo::uno::Any(aDateTime));
+    xUDP->addProperty(u"Pi"_ustr, beans::PropertyAttribute::REMOVABLE, cpo::uno::Any(3.1415));
+    xUDP->addProperty(u"Foo"_ustr, beans::PropertyAttribute::REMOVABLE, cpo::uno::Any(u"bar"_ustr));
+    xUDP->addProperty(u"Removed"_ustr, beans::PropertyAttribute::REMOVABLE, cpo::uno::Any(u"bar"_ustr));
     // #i94175#: empty property name is valid ODF 1.1
-    xUDP->addProperty(u""_ustr, beans::PropertyAttribute::REMOVABLE, uno::Any(u"eeeeek"_ustr));
+    xUDP->addProperty(u""_ustr, beans::PropertyAttribute::REMOVABLE, cpo::uno::Any(u"eeeeek"_ustr));
 
     try
     {
@@ -331,7 +331,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testDocumentProperties)
     try
     {
         xUDP->addProperty(u"Forbidden"_ustr, beans::PropertyAttribute::REMOVABLE,
-                          uno::Any(uno::Sequence<OUString>{ u"foo"_ustr, u"bar"_ustr }));
+                          cpo::uno::Any(uno::Sequence<OUString>{ u"foo"_ustr, u"bar"_ustr }));
         CPPUNIT_FAIL("inserting value of non-supported type did not fail");
     }
     catch (beans::IllegalTypeException&)
@@ -397,7 +397,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testDocumentProperties)
     }
 
     uno::Sequence<beans::PropertyValue> mimeArgs({ beans::PropertyValue(
-        u"MediaType"_ustr, -1, uno::Any(u"application/vnd.oasis.opendocument.text"_ustr),
+        u"MediaType"_ustr, -1, cpo::uno::Any(u"application/vnd.oasis.opendocument.text"_ustr),
         beans::PropertyState_DIRECT_VALUE) });
     xProps->storeToMedium(maTempFile.GetURL(), mimeArgs);
 
@@ -476,16 +476,16 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testDocumentProperties)
     xBroadcaster->addModifyListener(xListener);
     xProps->setAuthor(u"not me"_ustr);
     CPPUNIT_ASSERT(xListener->reset());
-    xUDP->addProperty(u"Listener"_ustr, beans::PropertyAttribute::REMOVABLE, uno::Any(u"foo"_ustr));
+    xUDP->addProperty(u"Listener"_ustr, beans::PropertyAttribute::REMOVABLE, cpo::uno::Any(u"foo"_ustr));
     CPPUNIT_ASSERT(xListener->reset());
-    xPropertySet->setPropertyValue(u"Listener"_ustr, uno::Any(u"bar"_ustr));
+    xPropertySet->setPropertyValue(u"Listener"_ustr, cpo::uno::Any(u"bar"_ustr));
     CPPUNIT_ASSERT(xListener->reset());
     xUDP->removeProperty(u"Listener"_ustr);
     CPPUNIT_ASSERT(xListener->reset());
 
     xBroadcaster->removeModifyListener(xListener);
     xUDP->addProperty(u"Listener2"_ustr, beans::PropertyAttribute::REMOVABLE,
-                      uno::Any(u"foo"_ustr));
+                      cpo::uno::Any(u"foo"_ustr));
     CPPUNIT_ASSERT(!xListener->reset());
 }
 
@@ -501,7 +501,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testNoThumbnail)
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xStorable.is());
     uno::Sequence<beans::PropertyValue> aProperties(
-        comphelper::InitPropertySequence({ { "NoThumbnail", uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { "NoThumbnail", cpo::uno::Any(true) } }));
     osl::File::remove(maTempFile.GetURL());
     xStorable->storeToURL(maTempFile.GetURL(), aProperties);
     uno::Reference<packages::zip::XZipFileAccess2> xZipFile
@@ -616,13 +616,13 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testOverwrite)
     // explicitly overwrite the file using the Overwrite option
     CPPUNIT_ASSERT_NO_THROW(xStorable->storeToURL(
         maTempFile.GetURL(),
-        comphelper::InitPropertySequence({ { "Overwrite", uno::Any(true) } })));
+        comphelper::InitPropertySequence({ { "Overwrite", cpo::uno::Any(true) } })));
 
     try
     {
         // overwrite an existing file with the Overwrite flag set to false
         xStorable->storeToURL(maTempFile.GetURL(), comphelper::InitPropertySequence(
-                                                      { { "Overwrite", uno::Any(false) } }));
+                                                      { { "Overwrite", cpo::uno::Any(false) } }));
         CPPUNIT_ASSERT_MESSAGE("We expect an exception on overwriting an existing file", false);
     }
     catch (const css::uno::Exception&)

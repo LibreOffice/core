@@ -25,7 +25,7 @@
 
 namespace com::sun::star::util { class XNumberFormats; }
 namespace com::sun::star::util { class XNumberFormatter; }
-namespace com::sun::star::uno { class Any; }
+namespace cpo::uno { class Any; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 namespace comphelper
@@ -38,11 +38,11 @@ namespace comphelper
     COMPHELPER_DLLPUBLIC sal_Int16 getNumberFormatType(const css::uno::Reference<css::util::XNumberFormatter>& xFormatter, sal_Int32 nKey);
 
     /// returns the decimals of the given numeric number formatunder the given formats
-    COMPHELPER_DLLPUBLIC css::uno::Any getNumberFormatDecimals(const css::uno::Reference<css::util::XNumberFormats>& xFormats, sal_Int32 nKey);
+    COMPHELPER_DLLPUBLIC cpo::uno::Any getNumberFormatDecimals(const css::uno::Reference<css::util::XNumberFormats>& xFormats, sal_Int32 nKey);
 
     /** retrieves the value of a given property for a given format key, relating to a given formatter
     */
-    COMPHELPER_DLLPUBLIC css::uno::Any getNumberFormatProperty(
+    COMPHELPER_DLLPUBLIC cpo::uno::Any getNumberFormatProperty(
         const css::uno::Reference< css::util::XNumberFormatter >& _rxFormatter,
         sal_Int32 _nKey,
         const OUString& _rPropertyName

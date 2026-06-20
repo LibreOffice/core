@@ -64,7 +64,7 @@ public:
                  u"com.sun.star.uui.InteractionHandler"_ustr };
     }
 
-    virtual void SAL_CALL initialize(css::uno::Sequence<css::uno::Any> const & /*rArguments*/) override
+    virtual void SAL_CALL initialize(css::uno::Sequence<cpo::uno::Any> const & /*rArguments*/) override
     {}
 
     virtual void SAL_CALL handle(css::uno::Reference<css::task::XInteractionRequest> const & rRequest) override
@@ -77,7 +77,7 @@ public:
         mbPasswordRequested = false;
 
         css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> const aContinuations = rRequest->getContinuations();
-        css::uno::Any const aRequest(rRequest->getRequest());
+        cpo::uno::Any const aRequest(rRequest->getRequest());
 
         if (handlePasswordRequest(aContinuations, aRequest))
             return true;
@@ -93,7 +93,7 @@ public:
     }
 
     bool handlePasswordRequest(const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations,
-                               const css::uno::Any& rRequest)
+                               const cpo::uno::Any& rRequest)
     {
         bool bPasswordRequestFound = false;
         bool bIsRequestPasswordToModify = false;

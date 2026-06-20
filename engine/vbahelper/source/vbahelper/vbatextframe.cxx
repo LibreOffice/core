@@ -37,14 +37,14 @@ VbaTextFrame::setAsMSObehavior()
     //set property TextWordWrap default as False.
     // TextFitToSize control the text content. It seems we should set the default as False.
     // com.sun.star.drawing.TextFitToSizeType.NONE
-    m_xPropertySet->setPropertyValue( u"TextWordWrap"_ustr, uno::Any( false ) );
-    m_xPropertySet->setPropertyValue( u"TextFitToSize"_ustr, uno::Any( drawing::TextFitToSizeType_NONE ) );
+    m_xPropertySet->setPropertyValue( u"TextWordWrap"_ustr, cpo::uno::Any( false ) );
+    m_xPropertySet->setPropertyValue( u"TextFitToSize"_ustr, cpo::uno::Any( drawing::TextFitToSizeType_NONE ) );
 }
 
 sal_Int32 VbaTextFrame::getMargin( const OUString& sMarginType )
 {
     sal_Int32 nMargin = 0;
-    uno::Any aMargin = m_xPropertySet->getPropertyValue( sMarginType );
+    cpo::uno::Any aMargin = m_xPropertySet->getPropertyValue( sMarginType );
     aMargin >>= nMargin;
     return nMargin;
 }
@@ -52,7 +52,7 @@ sal_Int32 VbaTextFrame::getMargin( const OUString& sMarginType )
 void VbaTextFrame::setMargin( const OUString& sMarginType, float fMargin )
 {
     sal_Int32 nMargin = Millimeter::getInHundredthsOfOneMillimeter( fMargin );
-    m_xPropertySet->setPropertyValue( sMarginType, uno::Any( nMargin ) );
+    m_xPropertySet->setPropertyValue( sMarginType, cpo::uno::Any( nMargin ) );
 }
 
 // Attributes
@@ -63,7 +63,7 @@ VbaTextFrame::getAutoSize()
     // TextFitToSize control the text content.
     // and in mso, there isnot option TextWordWrap which means auto wrap. the default is False.
     bool bAutosize = false;
-    uno::Any aTextAutoGrowHeight = m_xPropertySet->getPropertyValue( u"TextAutoGrowHeight"_ustr );
+    cpo::uno::Any aTextAutoGrowHeight = m_xPropertySet->getPropertyValue( u"TextAutoGrowHeight"_ustr );
     aTextAutoGrowHeight >>= bAutosize;
     return bAutosize;
 }
@@ -72,7 +72,7 @@ void SAL_CALL
 VbaTextFrame::setAutoSize( bool _autosize )
 {
     setAsMSObehavior();
-    m_xPropertySet->setPropertyValue( u"TextAutoGrowHeight"_ustr, uno::Any( _autosize ) );
+    m_xPropertySet->setPropertyValue( u"TextAutoGrowHeight"_ustr, cpo::uno::Any( _autosize ) );
 }
 
 float SAL_CALL
@@ -133,7 +133,7 @@ VbaTextFrame::setMarginRight( float _marginright )
 
 
 // Methods
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 VbaTextFrame::Characters()
 {
     throw uno::RuntimeException( u"Not implemented"_ustr );

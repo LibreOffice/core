@@ -50,7 +50,7 @@ namespace sdbtools
     using ::com::sun::star::sdbcx::XTablesSupplier;
     using ::com::sun::star::sdb::XQueriesSupplier;
     using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::uno::XComponentContext;
 
     namespace CommandType = ::com::sun::star::sdb::CommandType;

@@ -39,7 +39,7 @@ OUString SvxCTLTextTbxCtrl::getImplementationName()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_svx_CTLToolBoxControl_get_implementation(css::uno::XComponentContext* rContext,
-                                                           css::uno::Sequence<css::uno::Any> const&)
+                                                           css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SvxCTLTextTbxCtrl(rContext));
 }
@@ -58,7 +58,7 @@ OUString SvxVertTextTbxCtrl::getImplementationName()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_svx_VertTextToolBoxControl_get_implementation(
-    css::uno::XComponentContext* rContext, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* rContext, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SvxVertTextTbxCtrl(rContext));
 }
@@ -72,13 +72,13 @@ SvxVertCTLTextTbxCtrl::SvxVertCTLTextTbxCtrl(
 
 SvxVertCTLTextTbxCtrl::~SvxVertCTLTextTbxCtrl() {}
 
-void SAL_CALL SvxVertCTLTextTbxCtrl::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
+void SAL_CALL SvxVertCTLTextTbxCtrl::initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     SvxVertCTLTextTbxCtrl_Base::initialize(rArguments);
     // fdo#83320 Hide vertical text commands early
     {
         std::unique_lock aGuard(m_aMutex);
-        setFastPropertyValue_NoBroadcast(aGuard, 1, css::uno::Any(true));
+        setFastPropertyValue_NoBroadcast(aGuard, 1, cpo::uno::Any(true));
     }
 
     if (m_pToolbar)

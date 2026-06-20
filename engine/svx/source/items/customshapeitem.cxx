@@ -38,30 +38,30 @@ SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem( const uno::Sequence< bea
     SetPropSeq( rVal );
 }
 
-css::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( const OUString& rPropName )
+cpo::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( const OUString& rPropName )
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
-    css::uno::Any* pRet = nullptr;
+    cpo::uno::Any* pRet = nullptr;
     PropertyHashMap::iterator aHashIter( m_aPropHashMap.find( rPropName ) );
     if ( aHashIter != m_aPropHashMap.end() )
         pRet = &m_aPropSeq.getArray()[ (*aHashIter).second ].Value;
     return pRet;
 }
 
-const css::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( const OUString& rPropName ) const
+const cpo::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( const OUString& rPropName ) const
 {
-    const css::uno::Any* pRet = nullptr;
+    const cpo::uno::Any* pRet = nullptr;
     PropertyHashMap::const_iterator aHashIter( m_aPropHashMap.find( rPropName ) );
     if ( aHashIter != m_aPropHashMap.end() )
         pRet = &m_aPropSeq[ (*aHashIter).second ].Value;
     return pRet;
 }
 
-css::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( const OUString& rSequenceName, const OUString& rPropName )
+cpo::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( const OUString& rSequenceName, const OUString& rPropName )
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
-    css::uno::Any* pRet = nullptr;
-    css::uno::Any* pSeqAny = GetPropertyValueByName( rSequenceName );
+    cpo::uno::Any* pRet = nullptr;
+    cpo::uno::Any* pSeqAny = GetPropertyValueByName( rSequenceName );
     if ( pSeqAny )
     {
         if ( auto rSecSequence = o3tl::tryAccess<css::uno::Sequence<beans::PropertyValue>>(*pSeqAny) )
@@ -76,10 +76,10 @@ css::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( const OUStrin
     return pRet;
 }
 
-const css::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( const OUString& rSequenceName, const OUString& rPropName ) const
+const cpo::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( const OUString& rSequenceName, const OUString& rPropName ) const
 {
-    const css::uno::Any* pRet = nullptr;
-    const css::uno::Any* pSeqAny = GetPropertyValueByName( rSequenceName );
+    const cpo::uno::Any* pRet = nullptr;
+    const cpo::uno::Any* pSeqAny = GetPropertyValueByName( rSequenceName );
     if ( pSeqAny )
     {
         if ( auto rSecSequence = o3tl::tryAccess<css::uno::Sequence<beans::PropertyValue>>(*pSeqAny) )
@@ -97,7 +97,7 @@ const css::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( const O
 void SdrCustomShapeGeometryItem::SetPropertyValue( const css::beans::PropertyValue& rPropVal )
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
-    css::uno::Any* pAny = GetPropertyValueByName( rPropVal.Name );
+    cpo::uno::Any* pAny = GetPropertyValueByName( rPropVal.Name );
     if ( pAny )
     {   // property is already available
         if ( auto rSecSequence = o3tl::tryAccess<css::uno::Sequence<beans::PropertyValue>>(*pAny) )
@@ -136,12 +136,12 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const css::beans::PropertyVal
 void SdrCustomShapeGeometryItem::SetPropertyValue( const OUString& rSequenceName, const css::beans::PropertyValue& rPropVal )
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
-    css::uno::Any* pAny = GetPropertyValueByName( rSequenceName, rPropVal.Name );
+    cpo::uno::Any* pAny = GetPropertyValueByName( rSequenceName, rPropVal.Name );
     if ( pAny ) // just replacing
         *pAny = rPropVal.Value;
     else
     {
-        css::uno::Any* pSeqAny = GetPropertyValueByName( rSequenceName );
+        cpo::uno::Any* pSeqAny = GetPropertyValueByName( rSequenceName );
         if( pSeqAny == nullptr )
         {
             css::uno::Sequence < beans::PropertyValue > aSeq;
@@ -194,7 +194,7 @@ void SdrCustomShapeGeometryItem::ClearPropertyValue( const OUString& rPropName )
         return;
 
     auto pPropSeq = m_aPropSeq.getArray();
-    css::uno::Any& rSeqAny = pPropSeq[(*aHashIter).second].Value;
+    cpo::uno::Any& rSeqAny = pPropSeq[(*aHashIter).second].Value;
     if (auto pSecSequence
         = o3tl::tryAccess<css::uno::Sequence<beans::PropertyValue>>(rSeqAny))
     {
@@ -248,7 +248,7 @@ void SdrCustomShapeGeometryItem::UpdateHash() const
 {
     if( m_aHashState != HashState::Unknown )
         return;
-    std::optional< size_t > hash = comphelper::anyToHash( css::uno::Any( m_aPropSeq ));
+    std::optional< size_t > hash = comphelper::anyToHash( cpo::uno::Any( m_aPropSeq ));
     if( hash.has_value())
     {
         m_aHash = *hash;
@@ -283,13 +283,13 @@ SdrCustomShapeGeometryItem* SdrCustomShapeGeometryItem::Clone( SfxItemPool * /*p
     return new SdrCustomShapeGeometryItem( m_aPropSeq );
 }
 
-bool SdrCustomShapeGeometryItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SdrCustomShapeGeometryItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= m_aPropSeq;
     return true;
 }
 
-bool SdrCustomShapeGeometryItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SdrCustomShapeGeometryItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
     css::uno::Sequence< css::beans::PropertyValue > propSeq;

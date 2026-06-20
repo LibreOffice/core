@@ -59,6 +59,7 @@ namespace frm
 {
     using namespace comphelper;
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::sdbcx;
@@ -696,7 +697,7 @@ namespace frm
             )
         {
             setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, Any( css::uno::Sequence<OUString>() ) );
-            setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, Any( css::uno::Sequence<css::uno::Any>() ) );
+            setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, Any( css::uno::Sequence<cpo::uno::Any>() ) );
         }
 
         if (nVersion > 3)
@@ -1017,7 +1018,7 @@ namespace frm
         setBoundValues(std::move(aValueList));
 
         setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, Any( lcl_convertToStringSequence( aDisplayList ) ) );
-        setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, Any( css::uno::Sequence<css::uno::Any>() ) );
+        setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, Any( css::uno::Sequence<cpo::uno::Any>() ) );
     }
 
 
@@ -1027,7 +1028,7 @@ namespace frm
         // - this would be unable to reflect in the db column
         if ( hasField() )
         {
-            setFastPropertyValue( PROPERTY_ID_MULTISELECTION, css::uno::Any(false) );
+            setFastPropertyValue( PROPERTY_ID_MULTISELECTION, cpo::uno::Any(false) );
         }
 
         if ( !hasExternalListSource() )
@@ -2175,14 +2176,14 @@ namespace frm
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OListBoxModel_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OListBoxModel(component));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OListBoxControl_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OListBoxControl(component));
 }

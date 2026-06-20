@@ -70,7 +70,7 @@ private:
     virtual void SAL_CALL started() noexcept override {}
     virtual void SAL_CALL closed() noexcept override { notifyDone(); }
     virtual void SAL_CALL terminated() noexcept override { notifyDone(); }
-    virtual void SAL_CALL error(const uno::Any& e) override
+    virtual void SAL_CALL error(const cpo::uno::Any& e) override
     {
         notifyDone(); // set on error too, otherwise main thread waits forever
         SAL_WARN("filter.xslt", e);
@@ -96,16 +96,16 @@ void XsltFilterTest::testXsltCopyNew()
 
     OUString source(
             m_directories.getURLFromSrc(u"/filter/source/xsltfilter/xsltfilter.component"));
-    uno::Sequence<uno::Any> args{
-        uno::Any(beans::NamedValue(u"StylesheetURL"_ustr,
-            uno::Any(m_directories.getURLFromSrc(u"/filter/qa/cppunit/data/xslt/copy.xslt")))),
-        uno::Any(beans::NamedValue(u"SourceURL"_ustr, uno::Any(source))),
-        uno::Any(beans::NamedValue(u"TargetURL"_ustr, uno::Any(tempURL))),
-        uno::Any(beans::NamedValue(u"SourceBaseURL"_ustr,
-            uno::Any(m_directories.getURLFromSrc(u"/filter/source/xsltfilter/")))),
-        uno::Any(beans::NamedValue(u"TargetBaseURL"_ustr, uno::Any(tempDirURL))),
-        uno::Any(beans::NamedValue(u"SystemType"_ustr, uno::Any(OUString()))),
-        uno::Any(beans::NamedValue(u"PublicType"_ustr, uno::Any(OUString())))
+    uno::Sequence<cpo::uno::Any> args{
+        cpo::uno::Any(beans::NamedValue(u"StylesheetURL"_ustr,
+            cpo::uno::Any(m_directories.getURLFromSrc(u"/filter/qa/cppunit/data/xslt/copy.xslt")))),
+        cpo::uno::Any(beans::NamedValue(u"SourceURL"_ustr, cpo::uno::Any(source))),
+        cpo::uno::Any(beans::NamedValue(u"TargetURL"_ustr, cpo::uno::Any(tempURL))),
+        cpo::uno::Any(beans::NamedValue(u"SourceBaseURL"_ustr,
+            cpo::uno::Any(m_directories.getURLFromSrc(u"/filter/source/xsltfilter/")))),
+        cpo::uno::Any(beans::NamedValue(u"TargetBaseURL"_ustr, cpo::uno::Any(tempDirURL))),
+        cpo::uno::Any(beans::NamedValue(u"SystemType"_ustr, cpo::uno::Any(OUString()))),
+        cpo::uno::Any(beans::NamedValue(u"PublicType"_ustr, cpo::uno::Any(OUString())))
     };
 
     uno::Reference<ucb::XSimpleFileAccess3> xSFA =
@@ -152,16 +152,16 @@ void XsltFilterTest::testXsltCopyOld()
 
     OUString source(
             m_directories.getURLFromSrc(u"/filter/source/xsltfilter/xsltfilter.component"));
-    uno::Sequence<uno::Any> args{
-        uno::Any(beans::NamedValue(u"StylesheetURL"_ustr,
-            uno::Any(m_directories.getURLFromSrc(u"/filter/qa/cppunit/data/xslt/copy.xslt")))),
-        uno::Any(beans::NamedValue(u"SourceURL"_ustr, uno::Any(source))),
-        uno::Any(beans::NamedValue(u"TargetURL"_ustr, uno::Any(tempURL))),
-        uno::Any(beans::NamedValue(u"SourceBaseURL"_ustr,
-            uno::Any(m_directories.getURLFromSrc(u"/filter/source/xsltfilter/")))),
-        uno::Any(beans::NamedValue(u"TargetBaseURL"_ustr, uno::Any(tempDirURL))),
-        uno::Any(beans::NamedValue(u"SystemType"_ustr, uno::Any(OUString()))),
-        uno::Any(beans::NamedValue(u"PublicType"_ustr, uno::Any(OUString())))
+    uno::Sequence<cpo::uno::Any> args{
+        cpo::uno::Any(beans::NamedValue(u"StylesheetURL"_ustr,
+            cpo::uno::Any(m_directories.getURLFromSrc(u"/filter/qa/cppunit/data/xslt/copy.xslt")))),
+        cpo::uno::Any(beans::NamedValue(u"SourceURL"_ustr, cpo::uno::Any(source))),
+        cpo::uno::Any(beans::NamedValue(u"TargetURL"_ustr, cpo::uno::Any(tempURL))),
+        cpo::uno::Any(beans::NamedValue(u"SourceBaseURL"_ustr,
+            cpo::uno::Any(m_directories.getURLFromSrc(u"/filter/source/xsltfilter/")))),
+        cpo::uno::Any(beans::NamedValue(u"TargetBaseURL"_ustr, cpo::uno::Any(tempDirURL))),
+        cpo::uno::Any(beans::NamedValue(u"SystemType"_ustr, cpo::uno::Any(OUString()))),
+        cpo::uno::Any(beans::NamedValue(u"PublicType"_ustr, cpo::uno::Any(OUString())))
     };
 
     uno::Reference<ucb::XSimpleFileAccess3> xSFA =

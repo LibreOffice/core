@@ -1199,7 +1199,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testFdo72998)
         CPPUNIT_ASSERT(pObj);
         const SdrCustomShapeGeometryItem& rGeometryItem
             = pObj->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
-        const css::uno::Any* pViewBox = rGeometryItem.GetPropertyValueByName(u"ViewBox"_ustr);
+        const cpo::uno::Any* pViewBox = rGeometryItem.GetPropertyValueByName(u"ViewBox"_ustr);
         CPPUNIT_ASSERT_MESSAGE("Missing ViewBox", pViewBox);
         css::awt::Rectangle aViewBox;
         CPPUNIT_ASSERT((*pViewBox >>= aViewBox));
@@ -1306,7 +1306,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testFdo64512)
 CPPUNIT_TEST_FIXTURE(SdImportTest, testFdo71075)
 {
     double values[] = { 12.0, 13.0, 14.0 };
-    css::uno::Any aAny;
+    cpo::uno::Any aAny;
 
     createSdImpressDoc("fdo71075.odp");
 
@@ -1389,7 +1389,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf150789)
         OUString sShapeType;
         const SdrCustomShapeGeometryItem& rGeometryItem(
             pObj->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY));
-        const css::uno::Any aAny = *rGeometryItem.GetPropertyValueByName(u"Type"_ustr);
+        const cpo::uno::Any aAny = *rGeometryItem.GetPropertyValueByName(u"Type"_ustr);
         if (aAny.hasValue())
             aAny >>= sShapeType;
         CPPUNIT_ASSERT_EQUAL(u"ooxml-upArrowCallout"_ustr, sShapeType);
@@ -2051,7 +2051,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf62255)
     pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
     CPPUNIT_ASSERT(pTableObj);
 
-    css::uno::Any aAny;
+    cpo::uno::Any aAny;
     uno::Reference<table::XCellRange> xTable;
     uno::Reference<beans::XPropertySet> xCell;
     xTable.set(pTableObj->getTable(), uno::UNO_QUERY_THROW);

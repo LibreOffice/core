@@ -74,7 +74,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstance()
 }
 
 uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithArguments(
-            const uno::Sequence< uno::Any >& aArguments )
+            const uno::Sequence< cpo::uno::Any >& aArguments )
 {
     // The request for storage can be done with up to three arguments
 
@@ -278,7 +278,7 @@ uno::Sequence< OUString > SAL_CALL OStorageFactory::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 package_OStorageFactory_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new OStorageFactory(context));
 }

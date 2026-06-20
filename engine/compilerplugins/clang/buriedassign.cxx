@@ -235,7 +235,7 @@ private:
 static bool isAssignmentOp(clang::BinaryOperatorKind op)
 {
     // We ignore BO_ShrAssign i.e. >>= because we use that everywhere for
-    // extracting data from css::uno::Any
+    // extracting data from cpo::uno::Any
     return op == BO_Assign || op == BO_MulAssign || op == BO_DivAssign || op == BO_RemAssign
            || op == BO_AddAssign || op == BO_SubAssign || op == BO_ShlAssign || op == BO_AndAssign
            || op == BO_XorAssign || op == BO_OrAssign;
@@ -246,7 +246,7 @@ static bool isAssignmentOp(clang::OverloadedOperatorKind Opc)
     // Same logic as CXXOperatorCallExpr::isAssignmentOp(), which our supported clang
     // doesn't have yet.
     // Except that we ignore OO_GreaterGreaterEqual i.e. >>= because we use that everywhere for
-    // extracting data from css::uno::Any
+    // extracting data from cpo::uno::Any
     return Opc == OO_Equal || Opc == OO_StarEqual || Opc == OO_SlashEqual || Opc == OO_PercentEqual
            || Opc == OO_PlusEqual || Opc == OO_MinusEqual || Opc == OO_LessLessEqual
            || Opc == OO_AmpEqual || Opc == OO_CaretEqual || Opc == OO_PipeEqual;

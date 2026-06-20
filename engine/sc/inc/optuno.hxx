@@ -41,8 +41,8 @@ public:
     static bool setPropertyValue( ScDocOptions& rOptions,
                                     const SfxItemPropertyMap& rPropMap,
                                     std::u16string_view aPropertyName,
-                                    const css::uno::Any& aValue );
-    static css::uno::Any getPropertyValue(
+                                    const cpo::uno::Any& aValue );
+    static cpo::uno::Any getPropertyValue(
                                     const ScDocOptions& rOptions,
                                     const SfxItemPropertyMap& rPropMap,
                                     std::u16string_view PropertyName );
@@ -62,8 +62,8 @@ public:
     // get/setPropertyValue override to used stored options instead of document
 
     virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
-                                    const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue(
+                                    const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(
                                     const OUString& PropertyName ) override;
 };
 

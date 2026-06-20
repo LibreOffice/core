@@ -198,8 +198,8 @@ public:
     bool IsHidden() const               { return m_bHidden; }
     void SetHidden( bool bValue )       { m_bHidden = bValue; }
 
-    void GetGrabBagItem(css::uno::Any& rVal) const;
-    void SetGrabBagItem(const css::uno::Any& rVal);
+    void GetGrabBagItem(cpo::uno::Any& rVal) const;
+    void SetGrabBagItem(const cpo::uno::Any& rVal);
 
     /// Query / set m_bAutoUpdateOnDirectFormat-flag.
     bool IsAutoUpdateOnDirectFormat() const                { return m_bAutoUpdateOnDirectFormat; }

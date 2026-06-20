@@ -55,7 +55,7 @@ IMPL_LINK_NOARG(FmShowColsDialog, OnClickedOk, weld::Button&, void)
             {
                 try
                 {
-                    xCol->setPropertyValue(CUIFM_PROP_HIDDEN, css::uno::Any(false));
+                    xCol->setPropertyValue(CUIFM_PROP_HIDDEN, cpo::uno::Any(false));
                 }
                 catch (...)
                 {
@@ -87,7 +87,7 @@ void FmShowColsDialog::SetColumns(const css::uno::Reference<css::container::XInd
         bool bIsHidden = false;
         try
         {
-            css::uno::Any aHidden = xCurCol->getPropertyValue(CUIFM_PROP_HIDDEN);
+            cpo::uno::Any aHidden = xCurCol->getPropertyValue(CUIFM_PROP_HIDDEN);
             bIsHidden = ::comphelper::getBOOL(aHidden);
 
             OUString sName;

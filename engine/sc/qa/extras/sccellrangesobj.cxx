@@ -22,11 +22,12 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace sc_apitest
 {
@@ -96,7 +97,7 @@ uno::Reference<uno::XInterface> ScCellRangesObj::init()
     uno::Reference<container::XNameContainer> xRanges(
         xMSF->createInstance(u"com.sun.star.sheet.SheetCellRanges"_ustr), uno::UNO_QUERY_THROW);
 
-    uno::Any xCellRange;
+    cpo::uno::Any xCellRange;
     xCellRange <<= xSheet->getCellRangeByName(u"C1:D4"_ustr);
     xRanges->insertByName(u"Range1"_ustr, xCellRange);
     xCellRange <<= xSheet->getCellRangeByName(u"E2:F5"_ustr);

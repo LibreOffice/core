@@ -36,6 +36,7 @@
 using namespace utl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 
 /** An autocorrection file dropped into such directory may create a language
@@ -321,41 +322,41 @@ void SvxBaseAutoCorrCfg::ImplCommit()
     const ACFlags nFlags = rParent.pAutoCorrect->GetFlags();
     PutProperties(
         GetPropertyNames(),
-        {css::uno::Any(bool(nFlags & ACFlags::SaveWordCplSttLst)),
+        {cpo::uno::Any(bool(nFlags & ACFlags::SaveWordCplSttLst)),
             // "Exceptions/TwoCapitalsAtStart"
-         css::uno::Any(bool(nFlags & ACFlags::SaveWordWordStartLst)),
+         cpo::uno::Any(bool(nFlags & ACFlags::SaveWordWordStartLst)),
             // "Exceptions/CapitalAtStartSentence"
-         css::uno::Any(bool(nFlags & ACFlags::Autocorrect)), // "UseReplacementTable"
-         css::uno::Any(bool(nFlags & ACFlags::CapitalStartWord)),
+         cpo::uno::Any(bool(nFlags & ACFlags::Autocorrect)), // "UseReplacementTable"
+         cpo::uno::Any(bool(nFlags & ACFlags::CapitalStartWord)),
             // "TwoCapitalsAtStart"
-         css::uno::Any(bool(nFlags & ACFlags::CapitalStartSentence)),
+         cpo::uno::Any(bool(nFlags & ACFlags::CapitalStartSentence)),
             // "CapitalAtStartSentence"
-         css::uno::Any(bool(nFlags & ACFlags::ChgWeightUnderl)),
+         cpo::uno::Any(bool(nFlags & ACFlags::ChgWeightUnderl)),
             // "ChangeUnderlineWeight"
-         css::uno::Any(bool(nFlags & ACFlags::SetINetAttr)), // "SetInetAttribute"
-         css::uno::Any(bool(nFlags & ACFlags::ChgOrdinalNumber)),
+         cpo::uno::Any(bool(nFlags & ACFlags::SetINetAttr)), // "SetInetAttribute"
+         cpo::uno::Any(bool(nFlags & ACFlags::ChgOrdinalNumber)),
             // "ChangeOrdinalNumber"
-         css::uno::Any(bool(nFlags & ACFlags::AddNonBrkSpace)), // "AddNonBreakingSpace"
-         css::uno::Any(bool(nFlags & ACFlags::ChgToEnEmDash)), // "ChangeDash"
-         css::uno::Any(bool(nFlags & ACFlags::IgnoreDoubleSpace)),
+         cpo::uno::Any(bool(nFlags & ACFlags::AddNonBrkSpace)), // "AddNonBreakingSpace"
+         cpo::uno::Any(bool(nFlags & ACFlags::ChgToEnEmDash)), // "ChangeDash"
+         cpo::uno::Any(bool(nFlags & ACFlags::IgnoreDoubleSpace)),
             // "RemoveDoubleSpaces"
-         css::uno::Any(bool(nFlags & ACFlags::ChgSglQuotes)), // "ReplaceSingleQuote"
-         css::uno::Any(sal_Int32(rParent.pAutoCorrect->GetStartSingleQuote())),
+         cpo::uno::Any(bool(nFlags & ACFlags::ChgSglQuotes)), // "ReplaceSingleQuote"
+         cpo::uno::Any(sal_Int32(rParent.pAutoCorrect->GetStartSingleQuote())),
             // "SingleQuoteAtStart"
-         css::uno::Any(sal_Int32(rParent.pAutoCorrect->GetEndSingleQuote())),
+         cpo::uno::Any(sal_Int32(rParent.pAutoCorrect->GetEndSingleQuote())),
             // "SingleQuoteAtEnd"
-         css::uno::Any(bool(nFlags & ACFlags::ChgQuotes)), // "ReplaceDoubleQuote"
-         css::uno::Any(sal_Int32(rParent.pAutoCorrect->GetStartDoubleQuote())),
+         cpo::uno::Any(bool(nFlags & ACFlags::ChgQuotes)), // "ReplaceDoubleQuote"
+         cpo::uno::Any(sal_Int32(rParent.pAutoCorrect->GetStartDoubleQuote())),
             // "DoubleQuoteAtStart"
-         css::uno::Any(sal_Int32(rParent.pAutoCorrect->GetEndDoubleQuote())),
+         cpo::uno::Any(sal_Int32(rParent.pAutoCorrect->GetEndDoubleQuote())),
             // "DoubleQuoteAtEnd"
-         css::uno::Any(bool(nFlags & ACFlags::CorrectCapsLock)),
+         cpo::uno::Any(bool(nFlags & ACFlags::CorrectCapsLock)),
             // "CorrectAccidentalCapsLock"
-         css::uno::Any(bool(nFlags & ACFlags::TransliterateRTL)),
+         cpo::uno::Any(bool(nFlags & ACFlags::TransliterateRTL)),
             // "TransliterateRTL"
-         css::uno::Any(bool(nFlags & ACFlags::ChgAngleQuotes)),
+         cpo::uno::Any(bool(nFlags & ACFlags::ChgAngleQuotes)),
             // "ChangeAngleQuotes"
-         css::uno::Any(bool(nFlags & ACFlags::SetDOIAttr)), // "SetDOIAttribute"
+         cpo::uno::Any(bool(nFlags & ACFlags::SetDOIAttr)), // "SetDOIAttribute"
         });
 }
 
@@ -588,92 +589,92 @@ void SvxSwAutoCorrCfg::ImplCommit()
     SvxSwAutoFormatFlags& rSwFlags = rParent.pAutoCorrect->GetSwFlags();
     PutProperties(
         GetPropertyNames(),
-        {css::uno::Any(rParent.bFileRel), // "Text/FileLinks"
-         css::uno::Any(rParent.bNetRel), // "Text/InternetLinks"
-         css::uno::Any(rParent.bAutoTextPreview), // "Text/ShowPreview"
-         css::uno::Any(rParent.bAutoTextTip), // "Text/ShowToolTip"
-         css::uno::Any(rParent.bSearchInAllCategories),
+        {cpo::uno::Any(rParent.bFileRel), // "Text/FileLinks"
+         cpo::uno::Any(rParent.bNetRel), // "Text/InternetLinks"
+         cpo::uno::Any(rParent.bAutoTextPreview), // "Text/ShowPreview"
+         cpo::uno::Any(rParent.bAutoTextTip), // "Text/ShowToolTip"
+         cpo::uno::Any(rParent.bSearchInAllCategories),
             // "Text/SearchInAllCategories"
-         css::uno::Any(rSwFlags.bAutoCorrect),
+         cpo::uno::Any(rSwFlags.bAutoCorrect),
             // "Format/Option/UseReplacementTable"
-         css::uno::Any(rSwFlags.bCapitalStartSentence),
+         cpo::uno::Any(rSwFlags.bCapitalStartSentence),
             // "Format/Option/TwoCapitalsAtStart"
-         css::uno::Any(rSwFlags.bCapitalStartWord),
+         cpo::uno::Any(rSwFlags.bCapitalStartWord),
             // "Format/Option/CapitalAtStartSentence"
-         css::uno::Any(rSwFlags.bChgWeightUnderl),
+         cpo::uno::Any(rSwFlags.bChgWeightUnderl),
             // "Format/Option/ChangeUnderlineWeight"
-         css::uno::Any(rSwFlags.bSetINetAttr),
+         cpo::uno::Any(rSwFlags.bSetINetAttr),
             // "Format/Option/SetInetAttribute"
-         css::uno::Any(rSwFlags.bChgOrdinalNumber),
+         cpo::uno::Any(rSwFlags.bChgOrdinalNumber),
             // "Format/Option/ChangeOrdinalNumber"
-         css::uno::Any(rSwFlags.bAddNonBrkSpace),
+         cpo::uno::Any(rSwFlags.bAddNonBrkSpace),
             // "Format/Option/AddNonBreakingSpace"
-         css::uno::Any(true),
+         cpo::uno::Any(true),
             // "Format/Option/ChangeDash"; it doesn't exist here - the common
             // flags are used for that -> LM
-         css::uno::Any(rSwFlags.bDelEmptyNode),
+         cpo::uno::Any(rSwFlags.bDelEmptyNode),
             // "Format/Option/DelEmptyParagraphs"
-         css::uno::Any(rSwFlags.bChgUserColl),
+         cpo::uno::Any(rSwFlags.bChgUserColl),
             // "Format/Option/ReplaceUserStyle"
-         css::uno::Any(rSwFlags.bChgEnumNum),
+         cpo::uno::Any(rSwFlags.bChgEnumNum),
             // "Format/Option/ChangeToBullets/Enable"
-         css::uno::Any(sal_Int32(rSwFlags.cBullet)),
+         cpo::uno::Any(sal_Int32(rSwFlags.cBullet)),
             // "Format/Option/ChangeToBullets/SpecialCharacter/Char"
-         css::uno::Any(rSwFlags.aBulletFont.GetFamilyName()),
+         cpo::uno::Any(rSwFlags.aBulletFont.GetFamilyName()),
             // "Format/Option/ChangeToBullets/SpecialCharacter/Font"
-         css::uno::Any(sal_Int32(rSwFlags.aBulletFont.GetFamilyTypeMaybeAskConfig())),
+         cpo::uno::Any(sal_Int32(rSwFlags.aBulletFont.GetFamilyTypeMaybeAskConfig())),
             // "Format/Option/ChangeToBullets/SpecialCharacter/FontFamily"
-         css::uno::Any(sal_Int32(rSwFlags.aBulletFont.GetCharSet())),
+         cpo::uno::Any(sal_Int32(rSwFlags.aBulletFont.GetCharSet())),
             // "Format/Option/ChangeToBullets/SpecialCharacter/FontCharset"
-         css::uno::Any(sal_Int32(rSwFlags.aBulletFont.GetPitchMaybeAskConfig())),
+         cpo::uno::Any(sal_Int32(rSwFlags.aBulletFont.GetPitchMaybeAskConfig())),
             // "Format/Option/ChangeToBullets/SpecialCharacter/FontPitch"
-         css::uno::Any(rSwFlags.bRightMargin),
+         cpo::uno::Any(rSwFlags.bRightMargin),
             // "Format/Option/CombineParagraphs"
-         css::uno::Any(sal_Int32(rSwFlags.nRightMargin)),
+         cpo::uno::Any(sal_Int32(rSwFlags.nRightMargin)),
             // "Format/Option/CombineValue"
-         css::uno::Any(rSwFlags.bAFormatDelSpacesAtSttEnd),
+         cpo::uno::Any(rSwFlags.bAFormatDelSpacesAtSttEnd),
             // "Format/Option/DelSpacesAtStartEnd"
-         css::uno::Any(rSwFlags.bAFormatDelSpacesBetweenLines),
+         cpo::uno::Any(rSwFlags.bAFormatDelSpacesBetweenLines),
             // "Format/Option/DelSpacesBetween"
-         css::uno::Any(rParent.bAutoFmtByInput), // "Format/ByInput/Enable"
-         css::uno::Any(rSwFlags.bChgToEnEmDash), // "Format/ByInput/ChangeDash"
-         css::uno::Any(rSwFlags.bSetNumRule),
+         cpo::uno::Any(rParent.bAutoFmtByInput), // "Format/ByInput/Enable"
+         cpo::uno::Any(rSwFlags.bChgToEnEmDash), // "Format/ByInput/ChangeDash"
+         cpo::uno::Any(rSwFlags.bSetNumRule),
             // "Format/ByInput/ApplyNumbering/Enable"
-         css::uno::Any(rSwFlags.bSetBorder), // "Format/ByInput/ChangeToBorders"
-         css::uno::Any(rSwFlags.bCreateTable), // "Format/ByInput/ChangeToTable"
-         css::uno::Any(rSwFlags.bReplaceStylesByInput),
+         cpo::uno::Any(rSwFlags.bSetBorder), // "Format/ByInput/ChangeToBorders"
+         cpo::uno::Any(rSwFlags.bCreateTable), // "Format/ByInput/ChangeToTable"
+         cpo::uno::Any(rSwFlags.bReplaceStylesByInput),
             // "Format/ByInput/ReplaceStyle"
-         css::uno::Any(rSwFlags.bAFormatByInpDelSpacesAtSttEnd),
+         cpo::uno::Any(rSwFlags.bAFormatByInpDelSpacesAtSttEnd),
             // "Format/ByInput/DelSpacesAtStartEnd"
-         css::uno::Any(rSwFlags.bAFormatByInpDelSpacesBetweenLines),
+         cpo::uno::Any(rSwFlags.bAFormatByInpDelSpacesBetweenLines),
             // "Format/ByInput/DelSpacesBetween"
-         css::uno::Any(rSwFlags.bAutoCompleteWords), // "Completion/Enable"
-         css::uno::Any(sal_Int32(rSwFlags.nAutoCmpltWordLen)),
+         cpo::uno::Any(rSwFlags.bAutoCompleteWords), // "Completion/Enable"
+         cpo::uno::Any(sal_Int32(rSwFlags.nAutoCmpltWordLen)),
             // "Completion/MinWordLen"
-         css::uno::Any(sal_Int32(rSwFlags.nAutoCmpltListLen)),
+         cpo::uno::Any(sal_Int32(rSwFlags.nAutoCmpltListLen)),
             // "Completion/MaxListLen"
-         css::uno::Any(rSwFlags.bAutoCmpltCollectWords),
+         cpo::uno::Any(rSwFlags.bAutoCmpltCollectWords),
             // "Completion/CollectWords"
-         css::uno::Any(rSwFlags.bAutoCmpltEndless), // "Completion/EndlessList"
-         css::uno::Any(rSwFlags.bAutoCmpltAppendBlank),
+         cpo::uno::Any(rSwFlags.bAutoCmpltEndless), // "Completion/EndlessList"
+         cpo::uno::Any(rSwFlags.bAutoCmpltAppendBlank),
             // "Completion/AppendBlank"
-         css::uno::Any(rSwFlags.bAutoCmpltShowAsTip), // "Completion/ShowAsTip"
-         css::uno::Any(sal_Int32(rSwFlags.nAutoCmpltExpandKey)),
+         cpo::uno::Any(rSwFlags.bAutoCmpltShowAsTip), // "Completion/ShowAsTip"
+         cpo::uno::Any(sal_Int32(rSwFlags.nAutoCmpltExpandKey)),
             // "Completion/AcceptKey"
-         css::uno::Any(rSwFlags.bAutoCmpltKeepList), // "Completion/KeepList"
-         css::uno::Any(sal_Int32(rSwFlags.cByInputBullet)),
+         cpo::uno::Any(rSwFlags.bAutoCmpltKeepList), // "Completion/KeepList"
+         cpo::uno::Any(sal_Int32(rSwFlags.cByInputBullet)),
             // "Format/ByInput/ApplyNumbering/SpecialCharacter/Char"
-         css::uno::Any(rSwFlags.aByInputBulletFont.GetFamilyName()),
+         cpo::uno::Any(rSwFlags.aByInputBulletFont.GetFamilyName()),
             // "Format/ByInput/ApplyNumbering/SpecialCharacter/Font"
-         css::uno::Any(sal_Int32(rSwFlags.aByInputBulletFont.GetFamilyTypeMaybeAskConfig())),
+         cpo::uno::Any(sal_Int32(rSwFlags.aByInputBulletFont.GetFamilyTypeMaybeAskConfig())),
             // "Format/ByInput/ApplyNumbering/SpecialCharacter/FontFamily"
-         css::uno::Any(sal_Int32(rSwFlags.aByInputBulletFont.GetCharSet())),
+         cpo::uno::Any(sal_Int32(rSwFlags.aByInputBulletFont.GetCharSet())),
             // "Format/ByInput/ApplyNumbering/SpecialCharacter/FontCharset"
-         css::uno::Any(sal_Int32(rSwFlags.aByInputBulletFont.GetPitchMaybeAskConfig())),
+         cpo::uno::Any(sal_Int32(rSwFlags.aByInputBulletFont.GetPitchMaybeAskConfig())),
             // "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch"
-         css::uno::Any(rSwFlags.bSetDOIAttr),
-         css::uno::Any(rSwFlags.bSetNumRuleAfterSpace), // "Format/ByInput/ApplyNumberingAfterSpace"
-         css::uno::Any(rSwFlags.bReplaceStyles), // "Format/Option/ReplaceStyle"
+         cpo::uno::Any(rSwFlags.bSetDOIAttr),
+         cpo::uno::Any(rSwFlags.bSetNumRuleAfterSpace), // "Format/ByInput/ApplyNumberingAfterSpace"
+         cpo::uno::Any(rSwFlags.bReplaceStyles), // "Format/Option/ReplaceStyle"
         });
             // "Format/Option/SetDOIAttribute"
 }

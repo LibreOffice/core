@@ -115,7 +115,7 @@ StringMap ChartWindowUIObject::get_state()
     chart::ChartController* pController = mxChartWindow->GetController();
     if (pController)
     {
-        css::uno::Any aAny = pController->getSelection();
+        cpo::uno::Any aAny = pController->getSelection();
         OUString aSelectedObject;
         aAny >>= aSelectedObject;
         aMap[u"SelectedObject"_ustr] = aSelectedObject;
@@ -135,7 +135,7 @@ void ChartWindowUIObject::execute(const OUString& rAction,
 
 
         const OUString& rName = itr->second;
-        css::uno::Any aAny;
+        cpo::uno::Any aAny;
         aAny <<= rName;
 
         chart::ChartController* pController = mxChartWindow->GetController();

@@ -549,14 +549,14 @@ XclChObjectTable::XclChObjectTable(uno::Reference<lang::XMultiServiceFactory> xF
 {
 }
 
-uno::Any XclChObjectTable::GetObject( const OUString& rObjName )
+cpo::uno::Any XclChObjectTable::GetObject( const OUString& rObjName )
 {
     // get object table
     if( !mxContainer.is() )
         mxContainer.set(ScfApiHelper::CreateInstance( mxFactory, maServiceName ), uno::UNO_QUERY);
     OSL_ENSURE( mxContainer.is(), "XclChObjectTable::GetObject - container not found" );
 
-    uno::Any aObj;
+    cpo::uno::Any aObj;
     if( mxContainer.is() )
     {
         // get object from container
@@ -572,7 +572,7 @@ uno::Any XclChObjectTable::GetObject( const OUString& rObjName )
     return aObj;
 }
 
-OUString XclChObjectTable::InsertObject(const uno::Any& rObj)
+OUString XclChObjectTable::InsertObject(const cpo::uno::Any& rObj)
 {
 
     // create object table
@@ -659,7 +659,7 @@ void XclChPropSetHelper::ReadLineProperties(
     drawing::LineStyle eApiStyle = drawing::LineStyle_NONE;
     sal_Int32 nApiWidth = 0;
     sal_Int16 nApiTrans = 0;
-    uno::Any aDashNameAny;
+    cpo::uno::Any aDashNameAny;
 
     ScfPropSetHelper& rLineHlp = GetLineHelper( ePropMode );
     rLineHlp.ReadFromPropertySet( rPropSet );
@@ -954,10 +954,10 @@ void XclChPropSetHelper::WriteLineProperties(
     sal_Int32 nApiColor = sal_Int32( rLineFmt.maColor );
 
     // try to insert the dash style and receive its name
-    uno::Any aDashNameAny;
+    cpo::uno::Any aDashNameAny;
     if( eApiStyle == drawing::LineStyle_DASH )
     {
-        OUString aDashName = rDashTable.InsertObject( uno::Any( aApiDash ) );
+        OUString aDashName = rDashTable.InsertObject( cpo::uno::Any( aApiDash ) );
         if( !aDashName.isEmpty() )
             aDashNameAny <<= aDashName;
     }
@@ -1019,7 +1019,7 @@ void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
         case drawing::FillStyle_GRADIENT:
             if( const XFillGradientItem* pGradItem = rEscherFmt.mxItemSet->GetItem<XFillGradientItem>( XATTR_FILLGRADIENT, false ) )
             {
-                uno::Any aGradientAny;
+                cpo::uno::Any aGradientAny;
                 if( pGradItem->QueryValue( aGradientAny, MID_FILLGRADIENT ) )
                 {
                     OUString aGradName = rGradientTable.InsertObject( aGradientAny );
@@ -1036,7 +1036,7 @@ void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
         case drawing::FillStyle_BITMAP:
             if( const XFillBitmapItem* pBmpItem = rEscherFmt.mxItemSet->GetItem<XFillBitmapItem>( XATTR_FILLBITMAP, false ) )
             {
-                uno::Any aBitmapAny;
+                cpo::uno::Any aBitmapAny;
                 if (pBmpItem->QueryValue(aBitmapAny, MID_BITMAP))
                 {
                     OUString aBmpName = rBitmapTable.InsertObject( aBitmapAny );

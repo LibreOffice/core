@@ -12,7 +12,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/util/XChangesBatch.hpp>
 
@@ -22,6 +22,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace apitest
 {
@@ -35,10 +36,10 @@ void GlobalSheetSettings::testGlobalSheetSettingsProperties()
                        const OUString& propName, const auto& origValue, const auto& newValue,
                        const OUString& regNodeName, const OUString& regValueName) {
         OString sMessage = "PropertyValue " + propName.toUtf8();
-        css::uno::Any aOrigValue(origValue), aNewValue(newValue);
+        cpo::uno::Any aOrigValue(origValue), aNewValue(newValue);
 
-        css::uno::Sequence<css::uno::Any> args{ css::uno::Any(
-            css::beans::NamedValue(u"nodepath"_ustr, css::uno::Any(regNodeName))) };
+        css::uno::Sequence<cpo::uno::Any> args{ cpo::uno::Any(
+            css::beans::NamedValue(u"nodepath"_ustr, cpo::uno::Any(regNodeName))) };
         css::uno::Reference<beans::XPropertySet> xRegNodeRO(
             configProvider->createInstanceWithArguments(
                 u"com.sun.star.configuration.ConfigurationAccess"_ustr, args),
@@ -98,7 +99,7 @@ void GlobalSheetSettings::testGlobalSheetSettingsProperties()
     DoCheck(u"PrintEmptyPages"_ustr, false, true, node + "Page", u"EmptyPages"_ustr);
 
     OUString propName;
-    uno::Any aNewValue;
+    cpo::uno::Any aNewValue;
 
     propName = u"Scale"_ustr;
     sal_Int16 aScale = 42;

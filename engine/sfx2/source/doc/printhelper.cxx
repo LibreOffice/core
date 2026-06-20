@@ -54,6 +54,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 namespace {
 class SfxPrintJob_Impl;
 }
@@ -149,7 +150,7 @@ SfxPrintHelper::SfxPrintHelper()
     m_pData.reset(new IMPL_PrintListener_DataContainer());
 }
 
-void SAL_CALL SfxPrintHelper::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+void SAL_CALL SfxPrintHelper::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     if ( !aArguments.hasElements() )
         return;

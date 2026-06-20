@@ -136,7 +136,7 @@ public:
     // XInterface
 
     /** Queries for a new interface. */
-    css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override;
+    cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override;
 
     /** Acquires the object (calls acquire() on base class). */
     virtual void SAL_CALL acquire() noexcept override;

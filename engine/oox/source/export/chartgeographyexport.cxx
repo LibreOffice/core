@@ -270,11 +270,11 @@ void exportGeography(const uno::Reference<beans::XPropertySet>& xSeriesProp,
 
     sal_Int32 nProjType = 0, nViewedRegion = 0;
     OUString sCultureLanguage, sCultureRegion, sAttribution;
-    uno::Any aPT = xSeriesProp->getPropertyValue(u"GeographyProjectionType"_ustr);
-    uno::Any aVR = xSeriesProp->getPropertyValue(u"GeographyViewedRegionType"_ustr);
-    uno::Any aCL = xSeriesProp->getPropertyValue(u"GeographyCultureLanguage"_ustr);
-    uno::Any aCR = xSeriesProp->getPropertyValue(u"GeographyCultureRegion"_ustr);
-    uno::Any aAT = xSeriesProp->getPropertyValue(u"GeographyAttribution"_ustr);
+    cpo::uno::Any aPT = xSeriesProp->getPropertyValue(u"GeographyProjectionType"_ustr);
+    cpo::uno::Any aVR = xSeriesProp->getPropertyValue(u"GeographyViewedRegionType"_ustr);
+    cpo::uno::Any aCL = xSeriesProp->getPropertyValue(u"GeographyCultureLanguage"_ustr);
+    cpo::uno::Any aCR = xSeriesProp->getPropertyValue(u"GeographyCultureRegion"_ustr);
+    cpo::uno::Any aAT = xSeriesProp->getPropertyValue(u"GeographyAttribution"_ustr);
 
     bool bHasPT = (aPT >>= nProjType);
     bool bHasVR = (aVR >>= nViewedRegion);
@@ -300,15 +300,15 @@ void exportGeography(const uno::Reference<beans::XPropertySet>& xSeriesProp,
 
     // Handle the geoCache child element
     OUString sProvider;
-    uno::Any aProvider = xSeriesProp->getPropertyValue(u"GeoCacheProvider"_ustr);
+    cpo::uno::Any aProvider = xSeriesProp->getPropertyValue(u"GeoCacheProvider"_ustr);
     bool bHasProvider = (aProvider >>= sProvider);
 
     OUString sBinary;
-    uno::Any aBinary = xSeriesProp->getPropertyValue(u"GeoCacheBinary"_ustr);
+    cpo::uno::Any aBinary = xSeriesProp->getPropertyValue(u"GeoCacheBinary"_ustr);
     bool bHasBinary = (aBinary >>= sBinary);
 
     uno::Sequence<beans::PropertyValue> aClearData;
-    uno::Any aClear = xSeriesProp->getPropertyValue(u"GeoCacheClearData"_ustr);
+    cpo::uno::Any aClear = xSeriesProp->getPropertyValue(u"GeoCacheClearData"_ustr);
     bool bHasClear = (aClear >>= aClearData) && aClearData.hasElements();
 
     if (bHasProvider || bHasBinary || bHasClear)

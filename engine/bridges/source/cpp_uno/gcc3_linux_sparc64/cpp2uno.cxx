@@ -37,6 +37,7 @@
                      : : "m"(p) );
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace CPPU_CURRENT_NAMESPACE
 {

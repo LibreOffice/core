@@ -34,7 +34,7 @@
 #include <com/sun/star/registry/RegistryValueType.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -128,7 +128,7 @@ class RegistryKey:
     public cppu::WeakImplHelper< css::registry::XRegistryKey >
 {
 public:
-    RegistryKey(Service & service, css::uno::Any value):
+    RegistryKey(Service & service, cpo::uno::Any value):
         service_(service), value_(std::move(value)) {}
 
 private:
@@ -206,7 +206,7 @@ private:
         OUString const & aKeyName) override;
 
     Service & service_;
-    css::uno::Any value_;
+    cpo::uno::Any value_;
 };
 
 Service::Service(
@@ -243,8 +243,8 @@ void Service::open(OUString const & rURL, bool bReadOnly, bool)
     if (access_.is()) {
         doClose();
     }
-    css::uno::Sequence< css::uno::Any > args{ css::uno::Any(
-        css::beans::NamedValue(u"nodepath"_ustr, css::uno::Any(rURL))) };
+    css::uno::Sequence< cpo::uno::Any > args{ cpo::uno::Any(
+        css::beans::NamedValue(u"nodepath"_ustr, cpo::uno::Any(rURL))) };
     try {
         access_ = provider_->createInstanceWithArguments(
             (bReadOnly
@@ -254,7 +254,7 @@ void Service::open(OUString const & rURL, bool bReadOnly, bool)
     } catch (css::uno::RuntimeException &) {
         throw;
     } catch (css::uno::Exception & e) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
             "com.sun.star.configuration.ConfigurationRegistry: open failed: " +
             e.Message,
@@ -287,7 +287,7 @@ css::uno::Reference< css::registry::XRegistryKey > Service::getRootKey()
 {
     std::unique_lock g(mutex_);
     checkValid();
-    return new RegistryKey(*this, css::uno::Any(access_));
+    return new RegistryKey(*this, cpo::uno::Any(access_));
 }
 
 bool Service::isReadOnly() {
@@ -630,7 +630,7 @@ OUString RegistryKey::getResolvedName(OUString const & aKeyName)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_configuration_ConfigurationRegistry_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new Service(context));
 }

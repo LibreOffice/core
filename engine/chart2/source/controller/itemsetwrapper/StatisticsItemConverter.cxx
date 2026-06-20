@@ -167,7 +167,7 @@ bool lclConvertToPropertySet(const SfxItemSet& rItemSet, sal_uInt16 nWhichId, co
         bool aSuccess = xProperties->getPropertyValue( aPropertyID ) >>= aOldValue;
         if (!aSuccess || aOldValue != aValue)
         {
-            xProperties->setPropertyValue( aPropertyID , uno::Any( aValue ));
+            xProperties->setPropertyValue( aPropertyID , cpo::uno::Any( aValue ));
             return true;
         }
     }
@@ -306,10 +306,10 @@ bool StatisticsItemConverter::ApplySpecialItem(
                 {
                     xErrorBarProp = lcl_GetDefaultErrorBar();
                     GetPropertySet()->setPropertyValue( bYError ? CHART_UNONAME_ERRORBAR_Y : CHART_UNONAME_ERRORBAR_X,
-                                                        uno::Any( xErrorBarProp ));
+                                                        cpo::uno::Any( xErrorBarProp ));
                 }
 
-                xErrorBarProp->setPropertyValue( u"ErrorBarStyle"_ustr , uno::Any( nStyle ));
+                xErrorBarProp->setPropertyValue( u"ErrorBarStyle"_ustr , cpo::uno::Any( nStyle ));
                 bChanged = true;
             }
         }
@@ -336,8 +336,8 @@ bool StatisticsItemConverter::ApplySpecialItem(
                 ! ( ::rtl::math::approxEqual( fPos, fValue ) &&
                     ::rtl::math::approxEqual( fNeg, fValue )))
             {
-                xErrorBarProp->setPropertyValue( u"PositiveError"_ustr , uno::Any( fValue ));
-                xErrorBarProp->setPropertyValue( u"NegativeError"_ustr , uno::Any( fValue ));
+                xErrorBarProp->setPropertyValue( u"PositiveError"_ustr , cpo::uno::Any( fValue ));
+                xErrorBarProp->setPropertyValue( u"NegativeError"_ustr , cpo::uno::Any( fValue ));
                 bChanged = true;
             }
         }
@@ -361,7 +361,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
             if( bOldHasErrorBar &&
                 ! ::rtl::math::approxEqual( fPos, fValue ))
             {
-                xErrorBarProp->setPropertyValue( u"PositiveError"_ustr , uno::Any( fValue ));
+                xErrorBarProp->setPropertyValue( u"PositiveError"_ustr , cpo::uno::Any( fValue ));
                 bChanged = true;
             }
         }
@@ -384,7 +384,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
             if( bOldHasErrorBar &&
                 ! ::rtl::math::approxEqual( fNeg, fValue ))
             {
-                xErrorBarProp->setPropertyValue( u"NegativeError"_ustr , uno::Any( fValue ));
+                xErrorBarProp->setPropertyValue( u"NegativeError"_ustr , cpo::uno::Any( fValue ));
                 bChanged = true;
             }
         }
@@ -535,8 +535,8 @@ bool StatisticsItemConverter::ApplySpecialItem(
                 ( bShowPos != bNewIndPos ||
                   bShowNeg != bNewIndNeg ))
             {
-                xErrorBarProp->setPropertyValue( u"ShowPositiveError"_ustr , uno::Any( bNewIndPos ));
-                xErrorBarProp->setPropertyValue( u"ShowNegativeError"_ustr , uno::Any( bNewIndNeg ));
+                xErrorBarProp->setPropertyValue( u"ShowPositiveError"_ustr , cpo::uno::Any( bNewIndPos ));
+                xErrorBarProp->setPropertyValue( u"ShowNegativeError"_ustr , cpo::uno::Any( bNewIndNeg ));
                 bChanged = true;
             }
         }

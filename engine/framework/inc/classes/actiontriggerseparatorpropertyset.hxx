@@ -44,7 +44,7 @@ class ActionTriggerSeparatorPropertySet final : private cppu::BaseMutex,
         virtual ~ActionTriggerSeparatorPropertySet() override;
 
         // XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
         virtual void SAL_CALL acquire() noexcept override;
         virtual void SAL_CALL release() noexcept override;
 
@@ -61,15 +61,15 @@ class ActionTriggerSeparatorPropertySet final : private cppu::BaseMutex,
 
         //  OPropertySetHelper
 
-        virtual bool SAL_CALL convertFastPropertyValue( css::uno::Any&       aConvertedValue,
-                                                            css::uno::Any&       aOldValue,
+        virtual bool SAL_CALL convertFastPropertyValue( cpo::uno::Any&       aConvertedValue,
+                                                            cpo::uno::Any&       aOldValue,
                                                             sal_Int32                       nHandle,
-                                                            const css::uno::Any& aValue          ) override;
+                                                            const cpo::uno::Any& aValue          ) override;
 
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& aValue ) override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& aValue ) override;
 
         using cppu::OPropertySetHelper::getFastPropertyValue;
-        virtual void SAL_CALL getFastPropertyValue( css::uno::Any& aValue, sal_Int32 nHandle ) const override;
+        virtual void SAL_CALL getFastPropertyValue( cpo::uno::Any& aValue, sal_Int32 nHandle ) const override;
 
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
@@ -82,9 +82,9 @@ class ActionTriggerSeparatorPropertySet final : private cppu::BaseMutex,
         /// @throws css::lang::IllegalArgumentException
         /// @throws css::uno::RuntimeException
         static bool impl_tryToChangeProperty(  sal_Int16                           aCurrentValue   ,
-                                            const   css::uno::Any&   aNewValue       ,
-                                            css::uno::Any&           aOldValue       ,
-                                            css::uno::Any&           aConvertedValue );
+                                            const   cpo::uno::Any&   aNewValue       ,
+                                            cpo::uno::Any&           aOldValue       ,
+                                            cpo::uno::Any&           aConvertedValue );
 
         //  members
 

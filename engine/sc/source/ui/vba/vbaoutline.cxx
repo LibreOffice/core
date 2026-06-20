@@ -23,7 +23,7 @@ using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
 void
-ScVbaOutline::ShowLevels( const uno::Any& RowLevels, const uno::Any& ColumnLevels )
+ScVbaOutline::ShowLevels( const cpo::uno::Any& RowLevels, const cpo::uno::Any& ColumnLevels )
 {
     if (mxOutline.is())
     {

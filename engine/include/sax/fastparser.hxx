@@ -47,7 +47,7 @@ public:
     virtual ~FastSaxParser() override;
 
     // css::lang::XInitialization:
-    virtual void SAL_CALL initialize(css::uno::Sequence<css::uno::Any> const& rArguments) override;
+    virtual void SAL_CALL initialize(css::uno::Sequence<cpo::uno::Any> const& rArguments) override;
 
     // XFastParser
     virtual void SAL_CALL parseStream( const css::xml::sax::InputSource& aInputSource ) override;

@@ -57,6 +57,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
@@ -104,7 +105,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLDrawingPageProper
         {
             if( aIter.getToken() == XML_ELEMENT(XLINK, XML_HREF) )
             {
-                uno::Any aAny( GetImport().GetAbsoluteReference( aIter.toString() ) );
+                cpo::uno::Any aAny( GetImport().GetAbsoluteReference( aIter.toString() ) );
                 XMLPropertyState aPropState( rProp.mnIndex, aAny );
                 rProperties.push_back( aPropState );
             }
@@ -1133,7 +1134,7 @@ void SdXMLStylesContext::endFastElement(sal_Int32 )
             uno::Reference< beans::XPropertySetInfo > xInfoSetInfo( xInfoSet->getPropertySetInfo() );
 
             if( xInfoSetInfo->hasPropertyByName(u"PageLayouts"_ustr) )
-                xInfoSet->setPropertyValue(u"PageLayouts"_ustr, uno::Any( getPageLayouts() ) );
+                xInfoSet->setPropertyValue(u"PageLayouts"_ustr, cpo::uno::Any( getPageLayouts() ) );
         }
 
     }
@@ -1313,7 +1314,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
                             // add new style to graphics style pool
                             uno::Reference< container::XNameContainer > xInsertContainer(xPageStyles, uno::UNO_QUERY);
                             if(xInsertContainer.is())
-                                xInsertContainer->insertByName(aStyleName, uno::Any( xStyle ) );
+                                xInsertContainer->insertByName(aStyleName, cpo::uno::Any( xStyle ) );
                         }
                     }
                 }
@@ -1385,7 +1386,7 @@ uno::Reference< container::XNameAccess > SdXMLStylesContext::getPageLayouts() co
         const SvXMLStyleContext* pStyle = GetStyle(a);
         if (const SdXMLPresentationPageLayoutContext* pContext = dynamic_cast<const SdXMLPresentationPageLayoutContext*>(pStyle))
         {
-            xLayouts->insertByName(pStyle->GetName(), uno::Any(static_cast<sal_Int32>(pContext->GetTypeId())));
+            xLayouts->insertByName(pStyle->GetName(), cpo::uno::Any(static_cast<sal_Int32>(pContext->GetTypeId())));
         }
     }
 

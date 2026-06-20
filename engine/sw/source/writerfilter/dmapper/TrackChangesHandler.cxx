@@ -74,10 +74,10 @@ uno::Sequence<beans::PropertyValue> TrackChangesHandler::getRedlineProperties() 
             break;
     }
     return {
-               comphelper::makePropertyValue(getPropertyName(PROP_REDLINE_TYPE ), uno::Any(sType)),
-               comphelper::makePropertyValue(getPropertyName(PROP_REDLINE_AUTHOR), uno::Any(m_pRedlineParams->m_sAuthor)),
-               comphelper::makePropertyValue(getPropertyName(PROP_REDLINE_DATE_TIME), uno::Any(ConversionHelper::ConvertDateStringToDateTime( m_pRedlineParams->m_sDate )))
-               //comphelper::makePropertyValue(getPropertyName(PROP_REDLINE_REVERT_PROPERTIES), uno::Any(pRedline->m_aRevertProperties))
+               comphelper::makePropertyValue(getPropertyName(PROP_REDLINE_TYPE ), cpo::uno::Any(sType)),
+               comphelper::makePropertyValue(getPropertyName(PROP_REDLINE_AUTHOR), cpo::uno::Any(m_pRedlineParams->m_sAuthor)),
+               comphelper::makePropertyValue(getPropertyName(PROP_REDLINE_DATE_TIME), cpo::uno::Any(ConversionHelper::ConvertDateStringToDateTime( m_pRedlineParams->m_sDate )))
+               //comphelper::makePropertyValue(getPropertyName(PROP_REDLINE_REVERT_PROPERTIES), cpo::uno::Any(pRedline->m_aRevertProperties))
            };
 }
 

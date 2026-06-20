@@ -37,9 +37,9 @@ public:
     // XSelectionSupplier
 
     virtual bool SAL_CALL select (
-        const css::uno::Any& aSelection) override;
+        const cpo::uno::Any& aSelection) override;
 
-    virtual css::uno::Any SAL_CALL getSelection() override;
+    virtual cpo::uno::Any SAL_CALL getSelection() override;
 
     virtual void SAL_CALL addSelectionChangeListener (
         const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener) override;
@@ -58,9 +58,9 @@ public:
 
     virtual void SAL_CALL setFastPropertyValue (
         sal_Int32 nHandle,
-        const css::uno::Any& rValue) override;
+        const cpo::uno::Any& rValue) override;
 
-    virtual css::uno::Any SAL_CALL getFastPropertyValue (
+    virtual cpo::uno::Any SAL_CALL getFastPropertyValue (
         sal_Int32 nHandle) override;
 
     // XServiceInfo

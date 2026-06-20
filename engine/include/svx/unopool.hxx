@@ -51,15 +51,15 @@ public:
     virtual SfxItemPool* getModelPool( bool bReadOnly ) noexcept;
 
     // overridden helpers from comphelper::PropertySetHelper
-    virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const css::uno::Any* pValues ) override;
-    virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, css::uno::Any* pValue ) override;
+    virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const cpo::uno::Any* pValues ) override;
+    virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, cpo::uno::Any* pValue ) override;
 
     virtual void _getPropertyStates( const comphelper::PropertyMapEntry** ppEntries, css::beans::PropertyState* pStates ) override;
     virtual void _setPropertyToDefault( const comphelper::PropertyMapEntry* pEntry ) override;
-    virtual css::uno::Any _getPropertyDefault( const comphelper::PropertyMapEntry* pEntry ) override;
+    virtual cpo::uno::Any _getPropertyDefault( const comphelper::PropertyMapEntry* pEntry ) override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override
     { OWeakObject::acquire(); }
     virtual void SAL_CALL release() noexcept override
@@ -78,11 +78,11 @@ protected:
     void init();
 
     /// @throws css::beans::UnknownPropertyException
-    static void getAny( SfxItemPool const * pPool, const comphelper::PropertyMapEntry* pEntry, css::uno::Any& rValue );
+    static void getAny( SfxItemPool const * pPool, const comphelper::PropertyMapEntry* pEntry, cpo::uno::Any& rValue );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    virtual void putAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, const css::uno::Any& rValue );
+    virtual void putAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, const cpo::uno::Any& rValue );
 
 private:
     SdrModel* mpModel;

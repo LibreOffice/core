@@ -38,7 +38,7 @@ namespace connectivity::dbase
             const ::std::vector< OUString> &_rVector) : ODbaseTables_BASE(_rMetaData,_rParent,_rMutex,_rVector)
         {}
 
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     };
 
 }

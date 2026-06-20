@@ -77,7 +77,7 @@ public:
     }
 
     virtual UpdateResult DataChanged(const OUString& rMimeType,
-                                     const css::uno::Any& rValue) override
+                                     const cpo::uno::Any& rValue) override
     {
         tools::SvRef<SvBaseLink> xSelf(this);
 
@@ -138,7 +138,7 @@ public:
     }
 
     virtual UpdateResult DataChanged(const OUString& rMimeType,
-                                     const css::uno::Any& rValue) override
+                                     const cpo::uno::Any& rValue) override
     {
         tools::SvRef<SvBaseLink> xSelf(this);
 
@@ -193,7 +193,7 @@ public:
     }
 
     virtual UpdateResult DataChanged(const OUString& rMimeType,
-                                     const css::uno::Any& rValue) override
+                                     const cpo::uno::Any& rValue) override
     {
         tools::SvRef<SvBaseLink> xSelf(this);
 
@@ -309,7 +309,7 @@ public:
     }
 
     virtual UpdateResult DataChanged(const OUString& /*rMimeType*/,
-                                     const css::uno::Any& /*rValue*/) override
+                                     const cpo::uno::Any& /*rValue*/) override
     {
         if (!m_xControl.is())
             return ERROR_GENERAL;
@@ -317,7 +317,7 @@ public:
         OUString aURL;
         sfx2::LinkManager::GetDisplayNames(this, nullptr, &aURL);
 
-        m_xControl->setPropertyValue(u"ImageURL"_ustr, css::uno::Any(aURL));
+        m_xControl->setPropertyValue(u"ImageURL"_ustr, cpo::uno::Any(aURL));
 
         return SUCCESS;
     }

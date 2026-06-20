@@ -327,7 +327,7 @@ OUString cppName(OUString const& name)
     }
     else if (n == "any")
     {
-        buf.append("::com::sun::star::uno::Any");
+        buf.append("::cpo::uno::Any");
     }
     else
     {
@@ -483,7 +483,7 @@ void dumpType(std::ostream& out, rtl::Reference<TypeManager> const& manager,
             out << "::com::sun::star::uno::Type";
             break;
         case codemaker::UnoType::Sort::Any:
-            out << "::com::sun::star::uno::Any";
+            out << "::cpo::uno::Any";
             break;
         case codemaker::UnoType::Sort::Enum:
         case codemaker::UnoType::Sort::PlainStruct:
@@ -1053,7 +1053,7 @@ SAL_IMPLEMENT_MAIN()
         cppOut << "#include <sal/config.h>\n"
                   "#include <memory>\n"
                   "#include <emscripten/bind.h>\n"
-                  "#include <com/sun/star/uno/Any.hxx>\n"
+                  "#include <cpo/uno/Any.hxx>\n"
                   "#include <com/sun/star/uno/Reference.hxx>\n"
                   "#include <o3tl/unreachable.hxx>\n"
                   "#include <static/unoembindhelpers/PrimaryBindings.hxx>\n";

@@ -343,7 +343,7 @@ void SfxRequest_Impl::Record
         if ( nCount )
         {
             frame::DispatchStatement aStatement;
-            uno::Any aElement = xReplace->getByIndex(nCount-1);
+            cpo::uno::Any aElement = xReplace->getByIndex(nCount-1);
             if ( (aElement >>= aStatement) && aStatement.aCommand == aCmd )
             {
                 OUString aStr;
@@ -690,7 +690,7 @@ css::uno::Reference< css::frame::XDispatchRecorder > SfxRequest::GetMacroRecorde
 
     if(xSet.is())
     {
-        css::uno::Any aProp = xSet->getPropertyValue(u"DispatchRecorderSupplier"_ustr);
+        cpo::uno::Any aProp = xSet->getPropertyValue(u"DispatchRecorderSupplier"_ustr);
         css::uno::Reference< css::frame::XDispatchRecorderSupplier > xSupplier;
         aProp >>= xSupplier;
         if(xSupplier.is())

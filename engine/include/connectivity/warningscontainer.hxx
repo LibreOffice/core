@@ -42,7 +42,7 @@ namespace dbtools
     {
     private:
         css::uno::Reference< css::sdbc::XWarningsSupplier >   m_xExternalWarnings;
-        css::uno::Any                                         m_aOwnWarnings;
+        cpo::uno::Any                                         m_aOwnWarnings;
 
     public:
         WarningsContainer() {}
@@ -73,7 +73,7 @@ namespace dbtools
         void appendWarning(const css::sdb::SQLContext& _rContext);
 
         // XWarningsSupplier equivalents
-        css::uno::Any getWarnings(  ) const;
+        cpo::uno::Any getWarnings(  ) const;
         void clearWarnings(  );
     };
 

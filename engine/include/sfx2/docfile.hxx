@@ -325,7 +325,7 @@ public:
     static css::uno::Sequence < css::util::RevisionTag > GetVersionList(
                     const css::uno::Reference< css::embed::XStorage >& xStorage );
     static OUString CreateTempCopyWithExt( std::u16string_view aURL );
-    static bool CallApproveHandler(const css::uno::Reference< css::task::XInteractionHandler >& xHandler, const css::uno::Any& rRequest, bool bAllowAbort);
+    static bool CallApproveHandler(const css::uno::Reference< css::task::XInteractionHandler >& xHandler, const cpo::uno::Any& rRequest, bool bAllowAbort);
 
     static bool         SetWritableForUserOnly( const OUString& aURL );
     static sal_uInt32   CreatePasswordToModifyHash( std::u16string_view aPasswd, bool bWriter );

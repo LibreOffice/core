@@ -166,7 +166,7 @@ public:
     std::vector< std::unique_ptr<CustomProperty> > GetCustomProperties() const;
     void        ClearCustomProperties();
     void        AddCustomProperty(  const OUString& sName,
-                                    const css::uno::Any& rValue );
+                                    const cpo::uno::Any& rValue );
 
     const css::uno::Sequence< css::document::CmisProperty >&
                         GetCmisProperties() const { return m_aCmisProperties;}
@@ -177,8 +177,8 @@ public:
     // Marked as false since the SfxStringItem superclass supports hashing, but
     // this class has not been checked for safety under hashing yet.
     virtual bool        supportsHashCode() const override { return false; }
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };
 
 // class SfxDocumentPage -------------------------------------------------
@@ -443,7 +443,7 @@ public:
     void                SetHeight(int nHeight) { m_nHeight = nHeight; }
     sal_Int32           GetLineHeight() const { return m_nLineHeight; }
     void                SetLineHeight(sal_Int32 nLineHeight) { m_nLineHeight = nLineHeight; }
-    void                AddLine( const OUString& sName, css::uno::Any const & rAny );
+    void                AddLine( const OUString& sName, cpo::uno::Any const & rAny );
     bool                AreAllLinesValid() const;
     void                ClearAllLines();
     void                DoScroll( sal_Int32 nNewPos );
@@ -482,7 +482,7 @@ public:
     CustomPropertiesControl();
     ~CustomPropertiesControl();
 
-    void         AddLine(css::uno::Any const & rAny);
+    void         AddLine(cpo::uno::Any const & rAny);
 
     bool         AreAllLinesValid() const { return m_xPropertiesWin->AreAllLinesValid(); }
     void         ClearAllLines() { m_xPropertiesWin->ClearAllLines(); }
@@ -583,8 +583,8 @@ public:
                   const OUString& sType, const bool bUpdatable,
                   const bool bRequired, const bool bMultiValued,
                   const bool bOpenChoice,
-                  css::uno::Any& aChoices,
-                  css::uno::Any const & rAny );
+                  cpo::uno::Any& aChoices,
+                  cpo::uno::Any const & rAny );
     void ClearAllLines();
 
     css::uno::Sequence< css::document::CmisProperty >
@@ -606,8 +606,8 @@ public:
                   const OUString& sType, const bool bUpdatable,
                   const bool bRequired, const bool bMultiValude,
                   const bool bOpenChoice,
-                  css::uno::Any& aChoices,
-                  css::uno::Any const & rAny );
+                  cpo::uno::Any& aChoices,
+                  cpo::uno::Any const & rAny );
 
     void ClearAllLines();
     css::uno::Sequence< css::document::CmisProperty >

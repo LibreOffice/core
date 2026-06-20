@@ -76,7 +76,7 @@ public:
 
     bool handleRestrictedFontRequest(
         const uno::Sequence<uno::Reference<task::XInteractionContinuation>>& rContinuations,
-        const uno::Any& rRequest)
+        const cpo::uno::Any& rRequest)
     {
         document::FontsDisallowEditingRequest aRequest;
         if (!(rRequest >>= aRequest))
@@ -496,8 +496,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFontEmbedding)
     // CASE 2 - font embedding enabled, but embed used fonts disabled
 
     // Enable font embedding, disable embedding used font only
-    xProps->setPropertyValue(u"EmbedFonts"_ustr, uno::Any(true));
-    xProps->setPropertyValue(u"EmbedOnlyUsedFonts"_ustr, uno::Any(false));
+    xProps->setPropertyValue(u"EmbedFonts"_ustr, cpo::uno::Any(true));
+    xProps->setPropertyValue(u"EmbedOnlyUsedFonts"_ustr, cpo::uno::Any(false));
 
     // Save the document again
     save(TestFilter::ODT);
@@ -550,11 +550,11 @@ CPPUNIT_TEST_FIXTURE(Test, testFontEmbedding)
     // CASE 3 - font embedding enabled, embed only used fonts enabled
 
     // Enable font embedding and setting to embed used fonts only
-    xProps->setPropertyValue(u"EmbedFonts"_ustr, uno::Any(true));
-    xProps->setPropertyValue(u"EmbedOnlyUsedFonts"_ustr, uno::Any(true));
-    xProps->setPropertyValue(u"EmbedLatinScriptFonts"_ustr, uno::Any(true));
-    xProps->setPropertyValue(u"EmbedAsianScriptFonts"_ustr, uno::Any(true));
-    xProps->setPropertyValue(u"EmbedComplexScriptFonts"_ustr, uno::Any(true));
+    xProps->setPropertyValue(u"EmbedFonts"_ustr, cpo::uno::Any(true));
+    xProps->setPropertyValue(u"EmbedOnlyUsedFonts"_ustr, cpo::uno::Any(true));
+    xProps->setPropertyValue(u"EmbedLatinScriptFonts"_ustr, cpo::uno::Any(true));
+    xProps->setPropertyValue(u"EmbedAsianScriptFonts"_ustr, cpo::uno::Any(true));
+    xProps->setPropertyValue(u"EmbedComplexScriptFonts"_ustr, cpo::uno::Any(true));
 
     // Save the document again
     save(TestFilter::ODT);
@@ -624,7 +624,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEmbeddedFontProps)
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xProps(
         xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
-    xProps->setPropertyValue(u"EmbedFonts"_ustr, uno::Any(true));
+    xProps->setPropertyValue(u"EmbedFonts"_ustr, cpo::uno::Any(true));
 
     saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -675,7 +675,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontEmbeddingDOCX)
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xProps(
         xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(true), xProps->getPropertyValue(u"EmbedFonts"_ustr));
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(true), xProps->getPropertyValue(u"EmbedFonts"_ustr));
 
     save(TestFilter::DOCX);
 

@@ -51,7 +51,7 @@ void ChartSidebarSelectionListener::selectionChanged(const css::lang::EventObjec
         css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, css::uno::UNO_QUERY);
         if (xSelectionSupplier.is())
         {
-            css::uno::Any aAny = xSelectionSupplier->getSelection();
+            cpo::uno::Any aAny = xSelectionSupplier->getSelection();
             if (aAny.hasValue())
             {
                 OUString aCID;

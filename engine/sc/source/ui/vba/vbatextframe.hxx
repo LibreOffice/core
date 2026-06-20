@@ -28,10 +28,10 @@ class ScVbaTextFrame : public ScVbaTextFrame_BASE
 {
 public:
     /// @throws css::lang::IllegalArgumentException
-    ScVbaTextFrame(css::uno::Sequence<css::uno::Any> const& aArgs,
+    ScVbaTextFrame(css::uno::Sequence<cpo::uno::Any> const& aArgs,
                    css::uno::Reference<css::uno::XComponentContext> const& xContext);
     // Methods
-    virtual css::uno::Any SAL_CALL Characters() override;
+    virtual cpo::uno::Any SAL_CALL Characters() override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

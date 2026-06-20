@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_SOURCE_PPT_ANIMVARIANTCONTEXT_HXX
 #define INCLUDED_OOX_SOURCE_PPT_ANIMVARIANTCONTEXT_HXX
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 #include <oox/core/fragmenthandler2.hxx>
 #include <oox/drawingml/color.hxx>
@@ -32,14 +32,14 @@ namespace oox::ppt {
         : public ::oox::core::FragmentHandler2
     {
     public:
-        AnimVariantContext( ::oox::core::FragmentHandler2 const & rParent, ::sal_Int32 aElement, css::uno::Any & aValue );
+        AnimVariantContext( ::oox::core::FragmentHandler2 const & rParent, ::sal_Int32 aElement, cpo::uno::Any & aValue );
         virtual ~AnimVariantContext( ) noexcept override;
         virtual void onEndElement() override;
         virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 
     private:
         ::sal_Int32                 mnElement;
-        css::uno::Any&              maValue;
+        cpo::uno::Any&              maValue;
         ::oox::drawingml::Color     maColor;
     };
 

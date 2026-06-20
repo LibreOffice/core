@@ -29,7 +29,7 @@
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::beans::Property;
 
@@ -78,7 +78,7 @@ void WrappedScaleTextProperty::setPropertyValue( const Any& rOuterValue, const R
         if( bNewValue )
         {
             awt::Size aRefSize( m_spChart2ModelContact->GetPageSize() );
-            xInnerPropertySet->setPropertyValue( aRefSizeName, uno::Any( aRefSize ) );
+            xInnerPropertySet->setPropertyValue( aRefSizeName, cpo::uno::Any( aRefSize ) );
         }
         else
             xInnerPropertySet->setPropertyValue( aRefSizeName, Any() );

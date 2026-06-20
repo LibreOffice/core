@@ -37,7 +37,7 @@ public:
 
     bool SAL_CALL hasMoreElements() override { return (mnIndex < mxIndexAccess->getCount()); }
 
-    uno::Any SAL_CALL nextElement() override
+    cpo::uno::Any SAL_CALL nextElement() override
     {
         if (mnIndex < mxIndexAccess->getCount())
         {
@@ -68,12 +68,12 @@ public:
 
     sal_Int32 SAL_CALL getCount() override { return lcl_getListEntries(m_rDropDown).getLength(); }
 
-    uno::Any SAL_CALL getByIndex(sal_Int32 Index) override
+    cpo::uno::Any SAL_CALL getByIndex(sal_Int32 Index) override
     {
         if (Index < 0 || Index >= getCount())
             throw lang::IndexOutOfBoundsException();
 
-        return uno::Any(uno::Reference<word::XListEntry>(
+        return cpo::uno::Any(uno::Reference<word::XListEntry>(
             new SwVbaFormFieldDropDownListEntry(mxParent, mxContext, m_rDropDown, Index)));
     }
 
@@ -102,7 +102,7 @@ SwVbaFormFieldDropDownListEntries::SwVbaFormFieldDropDownListEntries(
 
 // XListEntries
 uno::Reference<word::XListEntry> SwVbaFormFieldDropDownListEntries::Add(const OUString& rName,
-                                                                        const uno::Any& rIndex)
+                                                                        const cpo::uno::Any& rIndex)
 {
     sal_Int32 nZIndex = 0;
     rIndex >>= nZIndex;
@@ -142,7 +142,8 @@ uno::Reference<container::XEnumeration> SwVbaFormFieldDropDownListEntries::creat
 }
 
 // SwVbadropDownListEntries_BASE
-uno::Any SwVbaFormFieldDropDownListEntries::createCollectionObject(const uno::Any& aSource)
+cpo::uno::Any
+SwVbaFormFieldDropDownListEntries::createCollectionObject(const cpo::uno::Any& aSource)
 {
     return aSource;
 }

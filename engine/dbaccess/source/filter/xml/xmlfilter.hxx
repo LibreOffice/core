@@ -57,7 +57,7 @@ private:
         @param  _rMap
             The map to fill.
     */
-    static void fillPropertyMap(const css::uno::Any& _rValue,TPropertyNameMap& _rMap);
+    static void fillPropertyMap(const cpo::uno::Any& _rValue,TPropertyNameMap& _rMap);
 
 public:
     SvXMLImportContext* CreateStylesContext( bool bIsAutoStyle );

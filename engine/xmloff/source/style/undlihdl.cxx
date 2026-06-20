@@ -24,7 +24,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/awt/FontUnderline.hpp>
 
 using namespace ::com::sun::star;
@@ -110,7 +110,7 @@ XMLUnderlineTypePropHdl::~XMLUnderlineTypePropHdl()
     // nothing to do
 }
 
-bool XMLUnderlineTypePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLUnderlineTypePropHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_uInt16 eNewUnderline(0);
     bool bRet = SvXMLUnitConverter::convertEnum(
@@ -164,7 +164,7 @@ bool XMLUnderlineTypePropHdl::importXML( const OUString& rStrImpValue, uno::Any&
     return bRet;
 }
 
-bool XMLUnderlineTypePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLUnderlineTypePropHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
     sal_uInt16 nValue = sal_uInt16();
@@ -191,7 +191,7 @@ XMLUnderlineStylePropHdl::~XMLUnderlineStylePropHdl()
     // nothing to do
 }
 
-bool XMLUnderlineStylePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLUnderlineStylePropHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_uInt16 eNewUnderline(0);
     bool bRet = SvXMLUnitConverter::convertEnum(
@@ -255,7 +255,7 @@ bool XMLUnderlineStylePropHdl::importXML( const OUString& rStrImpValue, uno::Any
     return bRet;
 }
 
-bool XMLUnderlineStylePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLUnderlineStylePropHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
     sal_uInt16 nValue = sal_uInt16();
@@ -280,7 +280,7 @@ XMLUnderlineWidthPropHdl::~XMLUnderlineWidthPropHdl()
     // nothing to do
 }
 
-bool XMLUnderlineWidthPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLUnderlineWidthPropHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_uInt16 eNewUnderline(0);
     bool bRet = SvXMLUnitConverter::convertEnum(
@@ -345,7 +345,7 @@ bool XMLUnderlineWidthPropHdl::importXML( const OUString& rStrImpValue, uno::Any
     return bRet;
 }
 
-bool XMLUnderlineWidthPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLUnderlineWidthPropHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
     sal_uInt16 nValue = sal_uInt16();

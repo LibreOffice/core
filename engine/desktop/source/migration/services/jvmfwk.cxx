@@ -46,6 +46,7 @@ constexpr OUString SERVICE_NAME = u"com.sun.star.migration.Java"_ustr;
 #define USER_CLASS_PATH 2
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::configuration::backend;
@@ -68,10 +69,10 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     //XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     //XJob
-    virtual css::uno::Any SAL_CALL execute(
+    virtual cpo::uno::Any SAL_CALL execute(
         const css::uno::Sequence<css::beans::NamedValue >& Arguments ) override;
 
         // XLayerHandler
@@ -105,10 +106,10 @@ public:
             bool bClear ) override;
 
     virtual void SAL_CALL  setPropertyValue(
-            const css::uno::Any& aValue ) override;
+            const cpo::uno::Any& aValue ) override;
 
     virtual void SAL_CALL setPropertyValueForLocale(
-            const css::uno::Any& aValue,
+            const cpo::uno::Any& aValue,
             const OUString& aLocale ) override;
 
     virtual void SAL_CALL  endProperty() override;
@@ -121,7 +122,7 @@ public:
     virtual void SAL_CALL  addPropertyWithValue(
             const OUString& aName,
             sal_Int16 aAttributes,
-            const css::uno::Any& aValue ) override;
+            const cpo::uno::Any& aValue ) override;
 
 
     virtual ~JavaMigration() override;
@@ -171,10 +172,10 @@ css::uno::Sequence< OUString > SAL_CALL JavaMigration::getSupportedServiceNames(
 }
 
 //XInitialization ----------------------------------------------------------------------
-void SAL_CALL JavaMigration::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+void SAL_CALL JavaMigration::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     css::uno::Sequence<css::beans::NamedValue> aOldConfigValues;
-    for (const css::uno::Any& rArg : aArguments)
+    for (const cpo::uno::Any& rArg : aArguments)
     {
         css::beans::NamedValue aValue;
         rArg >>= aValue;
@@ -209,14 +210,14 @@ void SAL_CALL JavaMigration::initialize( const css::uno::Sequence< css::uno::Any
 }
 
 //XJob
-css::uno::Any SAL_CALL JavaMigration::execute(
+cpo::uno::Any SAL_CALL JavaMigration::execute(
         const css::uno::Sequence<css::beans::NamedValue >& )
 {
     migrateJavarc();
     if (m_xLayer.is())
         m_xLayer->readData(this);
 
-    return css::uno::Any();
+    return cpo::uno::Any();
 }
 
 void JavaMigration::migrateJavarc()

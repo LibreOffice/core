@@ -40,7 +40,7 @@ ScVbaFillFormat::setFillStyle( drawing::FillStyle nFillStyle )
     m_nFillStyle = nFillStyle;
     if( m_nFillStyle == drawing::FillStyle_GRADIENT )
     {
-        m_xPropertySet->setPropertyValue( u"FillStyle"_ustr , uno::Any( drawing::FillStyle_GRADIENT ) );
+        m_xPropertySet->setPropertyValue( u"FillStyle"_ustr , cpo::uno::Any( drawing::FillStyle_GRADIENT ) );
         awt::Gradient aGradient;
         // AXIAL
         // RADIAL
@@ -57,11 +57,11 @@ ScVbaFillFormat::setFillStyle( drawing::FillStyle nFillStyle )
         aGradient.StartIntensity = 100;
         aGradient.EndIntensity = 100;
         aGradient.StepCount = 1;
-        m_xPropertySet->setPropertyValue( u"FillGradient"_ustr , uno::Any( aGradient ) );
+        m_xPropertySet->setPropertyValue( u"FillGradient"_ustr , cpo::uno::Any( aGradient ) );
     }
     else if( m_nFillStyle == drawing::FillStyle_SOLID )
     {
-        m_xPropertySet->setPropertyValue( u"FillStyle"_ustr , uno::Any(drawing::FillStyle_SOLID) );
+        m_xPropertySet->setPropertyValue( u"FillStyle"_ustr , cpo::uno::Any(drawing::FillStyle_SOLID) );
     }
 }
 
@@ -90,7 +90,7 @@ ScVbaFillFormat::setVisible( bool _visible )
     m_xPropertySet->getPropertyValue( u"FillStyle"_ustr ) >>= aFillStyle;
     if( !_visible )
     {
-        m_xPropertySet->setPropertyValue( u"FillStyle"_ustr , uno::Any( drawing::FillStyle_NONE ) );
+        m_xPropertySet->setPropertyValue( u"FillStyle"_ustr , cpo::uno::Any( drawing::FillStyle_NONE ) );
     }
     else
     {
@@ -116,7 +116,7 @@ void SAL_CALL
 ScVbaFillFormat::setTransparency( double _transparency )
 {
     sal_Int16 nTransparence = static_cast< sal_Int16 >( _transparency * 100 );
-    m_xPropertySet->setPropertyValue( u"FillTransparence"_ustr , uno::Any( nTransparence ) );
+    m_xPropertySet->setPropertyValue( u"FillTransparence"_ustr , cpo::uno::Any( nTransparence ) );
 }
 
 

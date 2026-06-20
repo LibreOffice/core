@@ -35,6 +35,7 @@
 using namespace fileaccess;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::ucb;
@@ -431,7 +432,7 @@ OUString SAL_CALL FileProvider::getSystemPathFromFileURL( const OUString& URL )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_file_FileProvider_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new FileProvider(context));
 }

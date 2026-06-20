@@ -27,6 +27,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > const & xModel, const SwLabItem& rItem)
 {
@@ -81,10 +82,10 @@ void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > const & xM
                 + OUString::createFromAscii(p->pName));
             if( xFieldMasters->hasByName( uFieldName ))
             {
-                uno::Any aFirstName = xFieldMasters->getByName( uFieldName );
+                cpo::uno::Any aFirstName = xFieldMasters->getByName( uFieldName );
                 uno::Reference< beans::XPropertySet >  xField;
                 aFirstName >>= xField;
-                uno::Any aContent;
+                cpo::uno::Any aContent;
                 aContent <<= rItem.*p->pValue;
                 xField->setPropertyValue( UNO_NAME_CONTENT, aContent );
             }

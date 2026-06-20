@@ -38,6 +38,7 @@
 //  Defines
 
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::frame;
 using namespace css::util;
@@ -209,7 +210,7 @@ void SAL_CALL FontMenuController::updatePopupMenu()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_FontMenuController_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::FontMenuController(context));
 }

@@ -38,7 +38,7 @@
 #include <utility>
 #include <unordered_map>
 
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::awt::XDevice;
@@ -158,7 +158,7 @@ static const ImpPropertyInfoMap & ImplGetPropertyInfos()
         DECL_PROP_3     ( "HighlightTextColor",     HIGHLIGHT_TEXT_COLOR, sal_Int32,        BOUND, MAYBEDEFAULT, MAYBEVOID),
         DECL_PROP_2     ( "ImageAlign",             IMAGEALIGN,         sal_Int16,          BOUND, MAYBEDEFAULT),
         DECL_PROP_2     ( "ImagePosition",          IMAGEPOSITION,      sal_Int16,          BOUND, MAYBEDEFAULT),
-        DECL_PROP_2     ( "ImageURL",               IMAGEURL,           css::uno::Any,      BOUND, MAYBEDEFAULT ),
+        DECL_PROP_2     ( "ImageURL",               IMAGEURL,           cpo::uno::Any,      BOUND, MAYBEDEFAULT ),
         DECL_PROP_3     ( "ItemSeparatorPos",       ITEM_SEPARATOR_POS, sal_Int16,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
         DECL_PROP_2     ( "Label",                  LABEL,              OUString,           BOUND, MAYBEDEFAULT ),
         DECL_PROP_3     ( "LineColor",              LINECOLOR,          sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
@@ -328,7 +328,7 @@ bool DoesDependOnOthers( sal_uInt16 nPropertyId )
     return pImplPropertyInfo && pImplPropertyInfo->bDependsOnOthers;
 }
 
-bool CompareProperties( const css::uno::Any& r1, const css::uno::Any& r2 )
+bool CompareProperties( const cpo::uno::Any& r1, const cpo::uno::Any& r2 )
 {
     return r1 == r2;
 }

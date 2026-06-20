@@ -662,7 +662,7 @@ bool SwContentControlListItem::operator==(const SwContentControlListItem& rOther
 }
 
 void SwContentControlListItem::ItemsToAny(const std::vector<SwContentControlListItem>& rItems,
-                                          uno::Any& rVal)
+                                          cpo::uno::Any& rVal)
 {
     uno::Sequence<uno::Sequence<beans::PropertyValue>> aRet(rItems.size());
 
@@ -680,7 +680,7 @@ void SwContentControlListItem::ItemsToAny(const std::vector<SwContentControlList
 }
 
 std::vector<SwContentControlListItem>
-SwContentControlListItem::ItemsFromAny(const css::uno::Any& rVal)
+SwContentControlListItem::ItemsFromAny(const cpo::uno::Any& rVal)
 {
     std::vector<SwContentControlListItem> aRet;
 

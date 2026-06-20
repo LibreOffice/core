@@ -45,7 +45,7 @@ class PDFPasswordRequest:
 {
 private:
     mutable std::mutex            m_aMutex;
-    uno::Any                      m_aRequest;
+    cpo::uno::Any                      m_aRequest;
     OUString                 m_aPassword;
     bool                          m_bSelected;
 
@@ -55,7 +55,7 @@ public:
     PDFPasswordRequest& operator=(const PDFPasswordRequest&) = delete;
 
     // XInteractionRequest
-    virtual uno::Any SAL_CALL getRequest(  ) override;
+    virtual cpo::uno::Any SAL_CALL getRequest(  ) override;
     virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations(  ) override;
 
     // XInteractionPassword
@@ -73,7 +73,7 @@ private:
 
 PDFPasswordRequest::PDFPasswordRequest( bool bFirstTry, const OUString& rName ) :
     m_aRequest(
-        uno::Any(
+        cpo::uno::Any(
             task::DocumentPasswordRequest2(
                 OUString(), uno::Reference< uno::XInterface >(),
                 task::InteractionClassification_QUERY,
@@ -84,7 +84,7 @@ PDFPasswordRequest::PDFPasswordRequest( bool bFirstTry, const OUString& rName ) 
     m_bSelected(false)
 {}
 
-uno::Any PDFPasswordRequest::getRequest()
+cpo::uno::Any PDFPasswordRequest::getRequest()
 {
     return m_aRequest;
 }

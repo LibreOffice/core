@@ -70,6 +70,7 @@ using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 QtFilePicker::QtFilePicker(css::uno::Reference<css::uno::XComponentContext> context,
                            QFileDialog::FileMode eMode, bool bUseNative)
@@ -370,9 +371,9 @@ void SAL_CALL QtFilePicker::appendFilterGroup(const OUString& rGroupTitle,
     }
 }
 
-uno::Any QtFilePicker::handleGetListValue(const QComboBox* pWidget, sal_Int16 nControlAction)
+cpo::uno::Any QtFilePicker::handleGetListValue(const QComboBox* pWidget, sal_Int16 nControlAction)
 {
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     switch (nControlAction)
     {
         case ControlActions::GET_ITEMS:
@@ -405,7 +406,7 @@ uno::Any QtFilePicker::handleGetListValue(const QComboBox* pWidget, sal_Int16 nC
 }
 
 void QtFilePicker::handleSetListValue(QComboBox* pWidget, sal_Int16 nControlAction,
-                                      const uno::Any& rValue)
+                                      const cpo::uno::Any& rValue)
 {
     switch (nControlAction)
     {
@@ -453,7 +454,7 @@ void QtFilePicker::handleSetListValue(QComboBox* pWidget, sal_Int16 nControlActi
 }
 
 void SAL_CALL QtFilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAction,
-                                     const uno::Any& value)
+                                     const cpo::uno::Any& value)
 {
     SolarMutexGuard g;
     QtInstance& rQtInstance = GetQtInstance();
@@ -482,20 +483,20 @@ void SAL_CALL QtFilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlActi
         SAL_WARN("vcl.qt", "set value on unknown control " << controlId);
 }
 
-uno::Any SAL_CALL QtFilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction)
+cpo::uno::Any SAL_CALL QtFilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction)
 {
     SolarMutexGuard g;
     QtInstance& rQtInstance = GetQtInstance();
     if (!rQtInstance.IsMainThread())
     {
-        uno::Any ret;
+        cpo::uno::Any ret;
         rQtInstance.RunInMainThread([&ret, this, controlId, nControlAction]() {
             ret = getValue(controlId, nControlAction);
         });
         return ret;
     }
 
-    uno::Any res(false);
+    cpo::uno::Any res(false);
     if (m_aCustomWidgetsMap.contains(controlId))
     {
         QWidget* widget = m_aCustomWidgetsMap.value(controlId);
@@ -805,7 +806,7 @@ void QtFilePicker::addCustomControl(sal_Int16 controlId)
     }
 }
 
-void SAL_CALL QtFilePicker::initialize(const uno::Sequence<uno::Any>& args)
+void SAL_CALL QtFilePicker::initialize(const uno::Sequence<cpo::uno::Any>& args)
 {
     // parameter checking
     if (args.getLength() == 0)
@@ -826,7 +827,7 @@ void SAL_CALL QtFilePicker::initialize(const uno::Sequence<uno::Any>& args)
     m_aCurrentFilter.clear();
 
     // handle template which is set in XFilePicker3, but not XFolderPicker2 initialization
-    uno::Any arg;
+    cpo::uno::Any arg;
     arg = args[0];
 
     if ((arg.getValueType() == cppu::UnoType<sal_Int16>::get())

@@ -55,11 +55,11 @@ public:
         // first page, even pages and primary page
         return 3;
     }
-    virtual uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override
     {
         if( Index < 1 || Index > 3 )
             throw lang::IndexOutOfBoundsException();
-        return uno::Any( uno::Reference< word::XHeaderFooter >( new SwVbaHeaderFooter( mxParent,  mxContext, mxModel, mxPageStyleProps, mbHeader, Index ) ) );
+        return cpo::uno::Any( uno::Reference< word::XHeaderFooter >( new SwVbaHeaderFooter( mxParent,  mxContext, mxModel, mxPageStyleProps, mbHeader, Index ) ) );
     }
     virtual uno::Type SAL_CALL getElementType(  ) override
     {
@@ -82,10 +82,10 @@ public:
         return ( m_nIndex < m_pHeadersFooters->getCount() );
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         if ( m_nIndex < m_pHeadersFooters->getCount() )
-            return m_pHeadersFooters->Item( uno::Any( ++m_nIndex ), uno::Any() );
+            return m_pHeadersFooters->Item( cpo::uno::Any( ++m_nIndex ), cpo::uno::Any() );
         throw container::NoSuchElementException();
     }
 };
@@ -108,7 +108,7 @@ SwVbaHeadersFooters::SwVbaHeadersFooters( const uno::Reference< XHelperInterface
     return 3;
 }
 
-uno::Any SAL_CALL SwVbaHeadersFooters::Item( const uno::Any& Index1, const uno::Any& )
+cpo::uno::Any SAL_CALL SwVbaHeadersFooters::Item( const cpo::uno::Any& Index1, const cpo::uno::Any& )
 {
     sal_Int32 nIndex = 0;
     Index1 >>= nIndex;
@@ -116,7 +116,7 @@ uno::Any SAL_CALL SwVbaHeadersFooters::Item( const uno::Any& Index1, const uno::
     {
         throw lang::IndexOutOfBoundsException();
     }
-    return uno::Any( uno::Reference< word::XHeaderFooter >( new SwVbaHeaderFooter( this,  mxContext, mxModel, mxPageStyleProps, mbHeader, nIndex ) ) );
+    return cpo::uno::Any( uno::Reference< word::XHeaderFooter >( new SwVbaHeaderFooter( this,  mxContext, mxModel, mxPageStyleProps, mbHeader, nIndex ) ) );
 }
 
 // XEnumerationAccess
@@ -132,8 +132,8 @@ SwVbaHeadersFooters::createEnumeration()
     return new HeadersFootersEnumWrapper( this );
 }
 
-uno::Any
-SwVbaHeadersFooters::createCollectionObject( const uno::Any& aSource )
+cpo::uno::Any
+SwVbaHeadersFooters::createCollectionObject( const cpo::uno::Any& aSource )
 {
     return aSource;
 }

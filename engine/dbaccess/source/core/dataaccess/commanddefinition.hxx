@@ -82,9 +82,9 @@ public:
     virtual void SAL_CALL rename( const OUString& newName ) override;
 
     // overrides to resolve ambiguity
-    virtual void SAL_CALL setPropertyValue(const OUString& p1, const css::uno::Any& p2) override
+    virtual void SAL_CALL setPropertyValue(const OUString& p1, const cpo::uno::Any& p2) override
         { OComponentDefinition::setPropertyValue(p1, p2); }
-    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& p1) override
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(const OUString& p1) override
         { return OComponentDefinition::getPropertyValue(p1); }
     virtual void SAL_CALL addPropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
         { OComponentDefinition::addPropertyChangeListener(p1, p2); }

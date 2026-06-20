@@ -109,8 +109,8 @@ public:
 
     //XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-    SW_DLLPUBLIC virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+    SW_DLLPUBLIC virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
     virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
     virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
     virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
@@ -120,7 +120,7 @@ public:
     virtual css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) override;
     virtual css::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName ) override;
     virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) override;
-    virtual css::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
 
     //XShape
     virtual css::awt::Point SAL_CALL getPosition(  ) override;
@@ -193,7 +193,7 @@ public:
     // FIXME: EVIL HACK:  make available for SwXFrame::attachToRange
     using SwXText::SetDoc;
 
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
     virtual SW_DLLPUBLIC void SAL_CALL acquire(  ) noexcept override;
     virtual SW_DLLPUBLIC void SAL_CALL release(  ) noexcept override;
 
@@ -234,7 +234,7 @@ public:
     virtual css::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents(  ) override;
 
     //XPropertySet
-    virtual SW_DLLPUBLIC css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+    virtual SW_DLLPUBLIC cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
     using SwXFrame::setPropertyValue;
 
     SW_DLLPUBLIC rtl::Reference< SwXParagraphEnumeration > createSwEnumeration();

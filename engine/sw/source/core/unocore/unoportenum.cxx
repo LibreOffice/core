@@ -69,6 +69,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::text;
 
 typedef std::pair< TextRangeList_t * const, SwTextAttr const * const > PortionList_t;
@@ -354,7 +355,7 @@ bool SwXTextPortionEnumeration::hasMoreElements()
     return !m_Portions.empty();
 }
 
-uno::Any SwXTextPortionEnumeration::nextElement()
+cpo::uno::Any SwXTextPortionEnumeration::nextElement()
 {
     SolarMutexGuard aGuard;
 

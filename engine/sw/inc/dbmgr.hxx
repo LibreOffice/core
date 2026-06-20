@@ -105,7 +105,7 @@ struct SwDSParam : public SwDBData
     css::uno::Reference< css::sdbc::XConnection>       xConnection;
     css::uno::Reference< css::sdbc::XStatement>        xStatement;
     css::uno::Reference< css::sdbc::XResultSet>        xResultSet;
-    css::uno::Sequence<  css::uno::Any >               aSelection;
+    css::uno::Sequence<  cpo::uno::Any >               aSelection;
     bool bScrollable;
     bool bEndOfDB;
     tools::Long nSelectionIndex;
@@ -119,7 +119,7 @@ struct SwDSParam : public SwDBData
 
     SwDSParam(const SwDBData& rData,
         css::uno::Reference< css::sdbc::XResultSet> xResSet,
-        const css::uno::Sequence<  css::uno::Any >&   rSelection) :
+        const css::uno::Sequence<  cpo::uno::Any >&   rSelection) :
         SwDBData(rData),
         xResultSet(std::move(xResSet)),
         aSelection(rSelection),

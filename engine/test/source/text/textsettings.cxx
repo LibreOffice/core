@@ -55,7 +55,7 @@ void testPrinterName(css::uno::Reference<css::beans::XPropertySet> const& rxSett
                            rxSettings->getPropertyValue(rPropertyName) >>= aPrinterName_Get);
 
     OUString aPrinterName_Set;
-    css::uno::Any aNewValue;
+    cpo::uno::Any aNewValue;
     aNewValue <<= aPrinterName_Get;
     rxSettings->setPropertyValue(rPropertyName, aNewValue);
 
@@ -79,7 +79,7 @@ void testPrinterIndependentLayout(css::uno::Reference<css::beans::XPropertySet> 
 
     sal_Int16 aValue_New;
     aValue_New = (aValue_Get == 1 ? 3 : 1);
-    rxSettings->setPropertyValue(rPropertyName, css::uno::Any(aValue_New));
+    rxSettings->setPropertyValue(rPropertyName, cpo::uno::Any(aValue_New));
 
     sal_Int16 aValue_Set;
 

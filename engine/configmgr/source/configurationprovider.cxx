@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/XLocalizable.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -131,7 +131,7 @@ private:
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithArguments(
         OUString const & ServiceSpecifier,
-        css::uno::Sequence< css::uno::Any > const & Arguments) override;
+        css::uno::Sequence< cpo::uno::Any > const & Arguments) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
     getAvailableServiceNames() override;
@@ -170,13 +170,13 @@ css::uno::Reference< css::uno::XInterface > Service::createInstance(
     OUString const & aServiceSpecifier)
 {
     return createInstanceWithArguments(
-        aServiceSpecifier, css::uno::Sequence< css::uno::Any >());
+        aServiceSpecifier, css::uno::Sequence< cpo::uno::Any >());
 }
 
 css::uno::Reference< css::uno::XInterface >
 Service::createInstanceWithArguments(
     OUString const & ServiceSpecifier,
-    css::uno::Sequence< css::uno::Any > const & Arguments)
+    css::uno::Sequence< cpo::uno::Any > const & Arguments)
 {
     OUString nodepath;
     OUString locale;
@@ -184,7 +184,7 @@ Service::createInstanceWithArguments(
         css::beans::NamedValue v1;
         css::beans::PropertyValue v2;
         OUString name;
-        css::uno::Any value;
+        cpo::uno::Any value;
         if (Arguments[i] >>= v1) {
             name = v1.Name;
             value = v1.Value;
@@ -346,7 +346,7 @@ void Service::flushModifications() const {
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_configuration_ConfigurationProvider_get_implementation(
-    css::uno::XComponentContext* Context, css::uno::Sequence<css::uno::Any> const& Arguments)
+    css::uno::XComponentContext* Context, css::uno::Sequence<cpo::uno::Any> const& Arguments)
 {
     if (!Arguments.hasElements()) {
         auto p = css::configuration::theDefaultProvider::get(Context);
@@ -358,7 +358,7 @@ com_sun_star_comp_configuration_ConfigurationProvider_get_implementation(
             css::beans::NamedValue v1;
             css::beans::PropertyValue v2;
             OUString name;
-            css::uno::Any value;
+            cpo::uno::Any value;
             if (Arguments[i] >>= v1) {
                 name = v1.Name;
                 value = v1.Value;

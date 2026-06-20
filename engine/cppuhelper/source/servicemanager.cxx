@@ -449,7 +449,7 @@ class ContentEnumeration:
     public cppu::WeakImplHelper< css::container::XEnumeration >
 {
 public:
-    explicit ContentEnumeration(std::vector< css::uno::Any >&& factories):
+    explicit ContentEnumeration(std::vector< cpo::uno::Any >&& factories):
         factories_(std::move(factories)), iterator_(factories_.begin()) {}
 
     ContentEnumeration(const ContentEnumeration&) = delete;
@@ -460,11 +460,11 @@ private:
 
     virtual bool SAL_CALL hasMoreElements() override;
 
-    virtual css::uno::Any SAL_CALL nextElement() override;
+    virtual cpo::uno::Any SAL_CALL nextElement() override;
 
     std::mutex mutex_;
-    std::vector< css::uno::Any > factories_;
-    std::vector< css::uno::Any >::const_iterator iterator_;
+    std::vector< cpo::uno::Any > factories_;
+    std::vector< cpo::uno::Any >::const_iterator iterator_;
 };
 
 bool ContentEnumeration::hasMoreElements()
@@ -473,7 +473,7 @@ bool ContentEnumeration::hasMoreElements()
     return iterator_ != factories_.end();
 }
 
-css::uno::Any ContentEnumeration::nextElement()
+cpo::uno::Any ContentEnumeration::nextElement()
 {
     std::scoped_lock g(mutex_);
     if (iterator_ == factories_.end()) {
@@ -515,7 +515,7 @@ private:
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithArgumentsAndContext(
-        css::uno::Sequence< css::uno::Any > const & Arguments,
+        css::uno::Sequence< cpo::uno::Any > const & Arguments,
         css::uno::Reference< css::uno::XComponentContext > const & Context) override;
 
     rtl::Reference< cppuhelper::ServiceManager > manager_;
@@ -533,7 +533,7 @@ SingletonFactory::createInstanceWithContext(
 
 css::uno::Reference< css::uno::XInterface >
 SingletonFactory::createInstanceWithArgumentsAndContext(
-    css::uno::Sequence< css::uno::Any > const & Arguments,
+    css::uno::Sequence< cpo::uno::Any > const & Arguments,
     css::uno::Reference< css::uno::XComponentContext > const & Context)
 {
     manager_->loadImplementation(Context, implementation_);
@@ -567,7 +567,7 @@ private:
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithArgumentsAndContext(
-        css::uno::Sequence< css::uno::Any > const & Arguments,
+        css::uno::Sequence< cpo::uno::Any > const & Arguments,
         css::uno::Reference< css::uno::XComponentContext > const & Context) override;
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
@@ -575,7 +575,7 @@ private:
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithArguments(
-        css::uno::Sequence< css::uno::Any > const & Arguments) override;
+        css::uno::Sequence< cpo::uno::Any > const & Arguments) override;
 
     virtual OUString SAL_CALL getImplementationName() override;
 
@@ -601,7 +601,7 @@ ImplementationWrapper::createInstanceWithContext(
 
 css::uno::Reference< css::uno::XInterface >
 ImplementationWrapper::createInstanceWithArgumentsAndContext(
-    css::uno::Sequence< css::uno::Any > const & Arguments,
+    css::uno::Sequence< cpo::uno::Any > const & Arguments,
     css::uno::Reference< css::uno::XComponentContext > const & Context)
 {
     std::shared_ptr< cppuhelper::ServiceManager::Data::Implementation > impl = implementation_.lock();
@@ -619,7 +619,7 @@ ImplementationWrapper::createInstance()
 
 css::uno::Reference< css::uno::XInterface >
 ImplementationWrapper::createInstanceWithArguments(
-    css::uno::Sequence< css::uno::Any > const & Arguments)
+    css::uno::Sequence< cpo::uno::Any > const & Arguments)
 {
     return createInstanceWithArgumentsAndContext(
         Arguments, manager_->getContext());
@@ -677,7 +677,7 @@ cppuhelper::ServiceManager::Data::Implementation::createInstance(
 css::uno::Reference<css::uno::XInterface>
 cppuhelper::ServiceManager::Data::Implementation::createInstanceWithArguments(
     css::uno::Reference<css::uno::XComponentContext> const & context,
-    bool singletonRequest, css::uno::Sequence<css::uno::Any> const & arguments)
+    bool singletonRequest, css::uno::Sequence<cpo::uno::Any> const & arguments)
 {
     css::uno::Reference<css::uno::XInterface> inst;
     if (isSingleInstance) {
@@ -699,7 +699,7 @@ cppuhelper::ServiceManager::Data::Implementation::doCreateInstance(
 {
     if (constructorFn) {
         return css::uno::Reference<css::uno::XInterface>(
-            constructorFn(context.get(), css::uno::Sequence<css::uno::Any>()),
+            constructorFn(context.get(), css::uno::Sequence<cpo::uno::Any>()),
             SAL_NO_ACQUIRE);
     } else if (factory1.is()) {
         return factory1->createInstanceWithContext(context);
@@ -712,7 +712,7 @@ cppuhelper::ServiceManager::Data::Implementation::doCreateInstance(
 css::uno::Reference<css::uno::XInterface>
 cppuhelper::ServiceManager::Data::Implementation::doCreateInstanceWithArguments(
     css::uno::Reference<css::uno::XComponentContext> const & context,
-    css::uno::Sequence<css::uno::Any> const & arguments)
+    css::uno::Sequence<cpo::uno::Any> const & arguments)
 {
     if (constructorFn) {
         css::uno::Reference<css::uno::XInterface> inst(
@@ -778,7 +778,7 @@ void cppuhelper::ServiceManager::addSingletonContextEntries(
         entries->push_back(
             cppu::ContextEntry_Init(
                 "/singletons/" + rName,
-                css::uno::Any(
+                cpo::uno::Any(
                     css::uno::Reference<css::lang::XSingleComponentFactory>(
                         new SingletonFactory(this, rImpls[0]))),
                 true));
@@ -928,7 +928,7 @@ void cppuhelper::ServiceManager::disposing(std::unique_lock<std::mutex>& rGuard)
 }
 
 void cppuhelper::ServiceManager::initialize(
-    css::uno::Sequence<css::uno::Any> const & aArguments)
+    css::uno::Sequence<cpo::uno::Any> const & aArguments)
 {
     OUString arg;
     if (aArguments.getLength() != 1 || !(aArguments[0] >>= arg)
@@ -970,7 +970,7 @@ cppuhelper::ServiceManager::createInstance(
 css::uno::Reference< css::uno::XInterface >
 cppuhelper::ServiceManager::createInstanceWithArguments(
     OUString const & ServiceSpecifier,
-    css::uno::Sequence< css::uno::Any > const & Arguments)
+    css::uno::Sequence< cpo::uno::Any > const & Arguments)
 {
     assert(context_.is());
     return createInstanceWithArgumentsAndContext(
@@ -1006,7 +1006,7 @@ cppuhelper::ServiceManager::createInstanceWithContext(
 css::uno::Reference< css::uno::XInterface >
 cppuhelper::ServiceManager::createInstanceWithArgumentsAndContext(
     OUString const & ServiceSpecifier,
-    css::uno::Sequence< css::uno::Any > const & Arguments,
+    css::uno::Sequence< cpo::uno::Any > const & Arguments,
     css::uno::Reference< css::uno::XComponentContext > const & Context)
 {
     std::shared_ptr< Data::Implementation > impl(
@@ -1036,14 +1036,14 @@ cppuhelper::ServiceManager::createEnumeration()
         static_cast< cppu::OWeakObject * >(this));
 }
 
-bool cppuhelper::ServiceManager::has(css::uno::Any const &)
+bool cppuhelper::ServiceManager::has(cpo::uno::Any const &)
 {
     throw css::uno::RuntimeException(
         u"ServiceManager has: method not supported"_ustr,
         static_cast< cppu::OWeakObject * >(this));
 }
 
-void cppuhelper::ServiceManager::insert(css::uno::Any const & aElement)
+void cppuhelper::ServiceManager::insert(cpo::uno::Any const & aElement)
 {
     css::uno::Sequence< css::beans::NamedValue > args;
     if (aElement >>= args) {
@@ -1088,7 +1088,7 @@ void cppuhelper::ServiceManager::insert(css::uno::Any const & aElement)
         u"Bad insert element"_ustr, static_cast< cppu::OWeakObject * >(this), 0);
 }
 
-void cppuhelper::ServiceManager::remove(css::uno::Any const & aElement)
+void cppuhelper::ServiceManager::remove(cpo::uno::Any const & aElement)
 {
     css::uno::Sequence< css::beans::NamedValue > args;
     if (aElement >>= args) {
@@ -1142,7 +1142,7 @@ cppuhelper::ServiceManager::createContentEnumeration(
             impls = i->second;
         }
     }
-    std::vector< css::uno::Any > factories;
+    std::vector< cpo::uno::Any > factories;
     for (const auto& rxImpl : impls)
     {
         Data::Implementation * impl = rxImpl.get();
@@ -1168,10 +1168,10 @@ cppuhelper::ServiceManager::createContentEnumeration(
             }
         }
         if (impl->factory1.is()) {
-            factories.push_back(css::uno::Any(impl->factory1));
+            factories.push_back(cpo::uno::Any(impl->factory1));
         } else {
             assert(impl->factory2.is());
-            factories.push_back(css::uno::Any(impl->factory2));
+            factories.push_back(cpo::uno::Any(impl->factory2));
         }
     }
     return new ContentEnumeration(std::move(factories));
@@ -1184,7 +1184,7 @@ cppuhelper::ServiceManager::getPropertySetInfo()
 }
 
 void cppuhelper::ServiceManager::setPropertyValue(
-    OUString const & aPropertyName, css::uno::Any const &)
+    OUString const & aPropertyName, cpo::uno::Any const &)
 {
     if (aPropertyName == "DefaultContext") {
         throw css::beans::PropertyVetoException(
@@ -1195,7 +1195,7 @@ void cppuhelper::ServiceManager::setPropertyValue(
     }
 }
 
-css::uno::Any cppuhelper::ServiceManager::getPropertyValue(
+cpo::uno::Any cppuhelper::ServiceManager::getPropertyValue(
     OUString const & PropertyName)
 {
     if (PropertyName != "DefaultContext") {
@@ -1203,7 +1203,7 @@ css::uno::Any cppuhelper::ServiceManager::getPropertyValue(
             PropertyName, static_cast< cppu::OWeakObject * >(this));
     }
     assert(context_.is());
-    return css::uno::Any(context_);
+    return cpo::uno::Any(context_);
 }
 
 void cppuhelper::ServiceManager::addPropertyChangeListener(
@@ -1631,16 +1631,16 @@ bool cppuhelper::ServiceManager::insertExtraData(Data const & extra) {
                 << rName);
         try {
             cont->insertByName(
-                name + "/service", css::uno::Any(rImpls[0]->name));
+                name + "/service", cpo::uno::Any(rImpls[0]->name));
         } catch (css::container::ElementExistException &) {
             cont->replaceByName(
-                name + "/service", css::uno::Any(rImpls[0]->name));
+                name + "/service", cpo::uno::Any(rImpls[0]->name));
         }
         try {
-            cont->insertByName(name, css::uno::Any());
+            cont->insertByName(name, cpo::uno::Any());
         } catch (css::container::ElementExistException &) {
             SAL_INFO("cppuhelper", "Overwriting singleton " << rName);
-            cont->replaceByName(name, css::uno::Any());
+            cont->replaceByName(name, cpo::uno::Any());
         }
     }
     return true;

@@ -133,8 +133,8 @@ public:
     inline AccessibleTableControlObjType getType() const;
 
     /** Commits an event to all listeners. */
-    virtual void commitEvent(sal_Int16 nEventId, const css::uno::Any& rNewValue,
-                             const css::uno::Any& rOldValue);
+    virtual void commitEvent(sal_Int16 nEventId, const cpo::uno::Any& rNewValue,
+                             const cpo::uno::Any& rOldValue);
 
 protected:
     virtual css::awt::Rectangle implGetBounds() override;

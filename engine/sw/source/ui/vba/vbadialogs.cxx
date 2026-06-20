@@ -29,13 +29,13 @@ SwVbaDialogs::SwVbaDialogs( const css::uno::Reference< ov::XHelperInterface >& x
                   const rtl::Reference< SwXTextDocument >& xModel )
         : SwVbaDialogs_BASE( xParent, xContext ), m_xModel(xModel) {}
 
-uno::Any
-SwVbaDialogs::Item( const uno::Any &aItem )
+cpo::uno::Any
+SwVbaDialogs::Item( const cpo::uno::Any &aItem )
 {
     sal_Int32 nIndex = 0;
     aItem >>= nIndex;
     uno::Reference< word::XDialog > aDialog( new SwVbaDialog( uno::Reference< XHelperInterface >( Application(),uno::UNO_QUERY_THROW ), mxContext, m_xModel, nIndex ) );
-    return uno::Any( aDialog );
+    return cpo::uno::Any( aDialog );
 }
 
 OUString

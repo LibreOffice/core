@@ -53,7 +53,7 @@ public:
     virtual void Init() override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
     virtual void SAL_CALL acquire(  ) noexcept override;
     virtual void SAL_CALL release(  ) noexcept override;
 

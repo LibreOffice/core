@@ -35,7 +35,7 @@ namespace comphelper
 {
 
 
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::uno::TypeClass_VOID;
     using ::com::sun::star::beans::IllegalTypeException;
@@ -114,7 +114,7 @@ namespace comphelper
 
         // register the property
         OSL_ENSURE( _nAttributes & PropertyAttribute::MAYBEVOID, "PropertyBag::addVoidProperty: this is for default-void properties only!" );
-        registerPropertyNoMember( _rName, _nHandle, _nAttributes | PropertyAttribute::MAYBEVOID, _rType, css::uno::Any() );
+        registerPropertyNoMember( _rName, _nHandle, _nAttributes | PropertyAttribute::MAYBEVOID, _rType, cpo::uno::Any() );
 
         // remember the default
         aDefaults.emplace( _nHandle, Any() );

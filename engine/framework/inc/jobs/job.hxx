@@ -172,7 +172,7 @@ class Job final : public  ::cppu::WeakImplHelper<
     private:
 
         css::uno::Sequence< css::beans::NamedValue > impl_generateJobArgs  ( const css::uno::Sequence< css::beans::NamedValue >& lDynamicArgs );
-        void                                         impl_reactForJobResult( const css::uno::Any&                                aResult      );
+        void                                         impl_reactForJobResult( const cpo::uno::Any&                                aResult      );
         void                                         impl_startListening   (                                                                  );
         void                                         impl_stopListening    (                                                                  );
 
@@ -182,7 +182,7 @@ class Job final : public  ::cppu::WeakImplHelper<
 
         // XJobListener
         virtual void SAL_CALL jobFinished( const css::uno::Reference< css::task::XAsyncJob >& xJob,
-                                           const css::uno::Any&                               aResult ) override;
+                                           const cpo::uno::Any&                               aResult ) override;
 
         // XTerminateListener
         virtual void SAL_CALL queryTermination ( const css::lang::EventObject& aEvent ) override;

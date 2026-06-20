@@ -28,7 +28,7 @@
 namespace chart { class ChartModel; }
 namespace com::sun::star::chart2::data { class XDataSequence; }
 namespace com::sun::star::chart2::data { class XLabeledDataSequence; }
-namespace com::sun::star::uno { class Any; }
+namespace cpo::uno { class Any; }
 
 namespace chart
 {
@@ -76,7 +76,7 @@ public:
             const SplitCategoriesProvider& rSplitCategoriesProvider );
 
     static void convertCategoryAnysToText( css::uno::Sequence< OUString >& rOutTexts
-        , const css::uno::Sequence< css::uno::Any >& rInAnys
+        , const css::uno::Sequence< cpo::uno::Any >& rInAnys
         , ChartModel& rModel );
 
     bool hasComplexCategories() const;

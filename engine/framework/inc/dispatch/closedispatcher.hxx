@@ -230,7 +230,7 @@ class CloseDispatcher final : public  ::cppu::WeakImplHelper<
          */
         void implts_notifyResultListener(const css::uno::Reference< css::frame::XDispatchResultListener >& xListener,
                                                sal_Int16                                                   nState   ,
-                                         const css::uno::Any&                                              aResult  );
+                                         const cpo::uno::Any&                                              aResult  );
 
         /** @short  try to find the right target frame where this close request
                     must be really done.

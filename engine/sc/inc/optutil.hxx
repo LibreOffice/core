@@ -49,11 +49,11 @@ public:
     virtual void    ImplCommit() override;
 
     using ConfigItem::SetModified;
-    css::uno::Sequence< css::uno::Any>
+    css::uno::Sequence< cpo::uno::Any>
             GetProperties(const css::uno::Sequence< OUString >& rNames)
                             { return ConfigItem::GetProperties( rNames ); }
     void    PutProperties( const css::uno::Sequence< OUString >& rNames,
-                            const css::uno::Sequence< css::uno::Any>& rValues)
+                            const css::uno::Sequence< cpo::uno::Any>& rValues)
                             { ConfigItem::PutProperties( rNames, rValues ); }
 
     using ConfigItem::EnableNotification;

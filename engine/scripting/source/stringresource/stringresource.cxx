@@ -46,6 +46,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::embed;
@@ -59,7 +60,7 @@ namespace stringresource
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 scripting_StringResourcePersistenceImpl_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new StringResourcePersistenceImpl(context));
 }
@@ -869,10 +870,10 @@ void StringResourcePersistenceImpl::implStoreAtStorage
             if ( xProps.is() )
             {
                 OUString aPropName(u"MediaType"_ustr);
-                xProps->setPropertyValue( aPropName, uno::Any( u"text/plain"_ustr ) );
+                xProps->setPropertyValue( aPropName, cpo::uno::Any( u"text/plain"_ustr ) );
 
                 aPropName = u"UseCommonStoragePasswordEncryption"_ustr;
-                xProps->setPropertyValue( aPropName, uno::Any( true ) );
+                xProps->setPropertyValue( aPropName, cpo::uno::Any( true ) );
             }
 
             Reference< io::XOutputStream > xOutputStream = xElementStream->getOutputStream();
@@ -1988,7 +1989,7 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem const * 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 scripting_StringResourceWithStorageImpl_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new StringResourceWithStorageImpl(context));
 }
@@ -2262,7 +2263,7 @@ bool StringResourceWithStorageImpl::implLoadLocale(std::unique_lock<std::mutex>&
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 scripting_StringResourceWithLocationImpl_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new StringResourceWithLocationImpl(context));
 }

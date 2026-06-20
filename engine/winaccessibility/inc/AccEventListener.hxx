@@ -52,11 +52,11 @@ public:
 
     virtual void HandleNameChangedEvent();
 
-    virtual void HandleChildChangedEvent(css::uno::Any oldValue, css::uno::Any newValue);
+    virtual void HandleChildChangedEvent(cpo::uno::Any oldValue, cpo::uno::Any newValue);
     virtual void HandleDescriptionChangedEvent();
 
     //for state changed event
-    virtual void HandleStateChangedEvent(css::uno::Any oldValue, css::uno::Any newValue);
+    virtual void HandleStateChangedEvent(cpo::uno::Any oldValue, cpo::uno::Any newValue);
     virtual void SetComponentState(sal_Int64 state, bool enable);
     virtual void FireStatePropertyChange(sal_Int64 state, bool set);
     virtual void FireStateFocusedChange(bool enable);

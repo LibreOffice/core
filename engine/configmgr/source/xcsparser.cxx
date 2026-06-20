@@ -21,7 +21,7 @@
 
 #include <cassert>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
@@ -522,7 +522,7 @@ void XcsParser::handleProp(xmlreader::XmlReader & reader) {
              : rtl::Reference< Node >(
                  new PropertyNode(
                      valueParser_.getLayer(), valueParser_.type_, nillable,
-                     css::uno::Any(), false))),
+                     cpo::uno::Any(), false))),
             name));
 }
 

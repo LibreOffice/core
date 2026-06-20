@@ -59,6 +59,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 
@@ -789,7 +790,7 @@ uno::Reference< awt::XWindow > SAL_CALL NavElementToolBoxControl::createItemWind
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 lo_writer_NavElementToolBoxController_get_implementation(
     css::uno::XComponentContext *rxContext,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire( new NavElementToolBoxControl( rxContext ) );
 }
@@ -877,7 +878,7 @@ void SAL_CALL PrevNextScrollToolboxController::statusChanged( const css::frame::
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 lo_writer_PreviousScrollToolboxController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire( new PrevNextScrollToolboxController( context, PrevNextScrollToolboxController::PREVIOUS ) );
 }
@@ -885,7 +886,7 @@ lo_writer_PreviousScrollToolboxController_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 lo_writer_NextScrollToolboxController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire( new PrevNextScrollToolboxController( context, PrevNextScrollToolboxController::NEXT ) );
 }

@@ -62,13 +62,13 @@ public:
     virtual void SAL_CALL setVisible( bool bVisible ) override;
     virtual OUString SAL_CALL getCaption() override;
     virtual void SAL_CALL setCaption( const OUString& sCaption ) override;
-    virtual void SAL_CALL OnKey( const OUString& Key, const css::uno::Any& Procedure ) override;
-    virtual css::uno::Any SAL_CALL CommandBars( const css::uno::Any& aIndex ) override;
+    virtual void SAL_CALL OnKey( const OUString& Key, const cpo::uno::Any& Procedure ) override;
+    virtual cpo::uno::Any SAL_CALL CommandBars( const cpo::uno::Any& aIndex ) override;
     virtual OUString SAL_CALL getVersion() override;
-    virtual css::uno::Any SAL_CALL getVBE() override;
+    virtual cpo::uno::Any SAL_CALL getVBE() override;
 
-    virtual css::uno::Any SAL_CALL Run( const OUString& MacroName, const css::uno::Any& varg1, const css::uno::Any& varg2, const css::uno::Any& varg3, const css::uno::Any& varg4, const css::uno::Any& varg5, const css::uno::Any& varg6, const css::uno::Any& varg7, const css::uno::Any& varg8, const css::uno::Any& varg9, const css::uno::Any& varg10, const css::uno::Any& varg11, const css::uno::Any& varg12, const css::uno::Any& varg13, const css::uno::Any& varg14, const css::uno::Any& varg15, const css::uno::Any& varg16, const css::uno::Any& varg17, const css::uno::Any& varg18, const css::uno::Any& varg19, const css::uno::Any& varg20, const css::uno::Any& varg21, const css::uno::Any& varg22, const css::uno::Any& varg23, const css::uno::Any& varg24, const css::uno::Any& varg25, const css::uno::Any& varg26, const css::uno::Any& varg27, const css::uno::Any& varg28, const css::uno::Any& varg29, const css::uno::Any& varg30 ) override;
-    virtual void SAL_CALL OnTime( const css::uno::Any& aEarliestTime, const OUString& aFunction, const css::uno::Any& aLatestTime, const css::uno::Any& aSchedule ) override;
+    virtual cpo::uno::Any SAL_CALL Run( const OUString& MacroName, const cpo::uno::Any& varg1, const cpo::uno::Any& varg2, const cpo::uno::Any& varg3, const cpo::uno::Any& varg4, const cpo::uno::Any& varg5, const cpo::uno::Any& varg6, const cpo::uno::Any& varg7, const cpo::uno::Any& varg8, const cpo::uno::Any& varg9, const cpo::uno::Any& varg10, const cpo::uno::Any& varg11, const cpo::uno::Any& varg12, const cpo::uno::Any& varg13, const cpo::uno::Any& varg14, const cpo::uno::Any& varg15, const cpo::uno::Any& varg16, const cpo::uno::Any& varg17, const cpo::uno::Any& varg18, const cpo::uno::Any& varg19, const cpo::uno::Any& varg20, const cpo::uno::Any& varg21, const cpo::uno::Any& varg22, const cpo::uno::Any& varg23, const cpo::uno::Any& varg24, const cpo::uno::Any& varg25, const cpo::uno::Any& varg26, const cpo::uno::Any& varg27, const cpo::uno::Any& varg28, const cpo::uno::Any& varg29, const cpo::uno::Any& varg30 ) override;
+    virtual void SAL_CALL OnTime( const cpo::uno::Any& aEarliestTime, const OUString& aFunction, const cpo::uno::Any& aLatestTime, const cpo::uno::Any& aSchedule ) override;
     virtual void SAL_CALL Undo() override;
     virtual void SAL_CALL Quit() override;
 

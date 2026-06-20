@@ -43,7 +43,7 @@ SwVbaTableOfContents::~SwVbaTableOfContents()
 
 void SAL_CALL SwVbaTableOfContents::setLowerHeadingLevel( ::sal_Int32 _lowerheadinglevel )
 {
-    mxTocProps->setPropertyValue(u"Level"_ustr, uno::Any( sal_Int8( _lowerheadinglevel ) ) );
+    mxTocProps->setPropertyValue(u"Level"_ustr, cpo::uno::Any( sal_Int8( _lowerheadinglevel ) ) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaTableOfContents::getTabLeader()
@@ -66,7 +66,7 @@ bool SAL_CALL SwVbaTableOfContents::getUseFields()
 
 void SAL_CALL SwVbaTableOfContents::setUseFields( bool _useFields )
 {
-    mxTocProps->setPropertyValue(u"CreateFromMarks"_ustr, uno::Any( _useFields ) );
+    mxTocProps->setPropertyValue(u"CreateFromMarks"_ustr, cpo::uno::Any( _useFields ) );
 }
 
 bool SAL_CALL SwVbaTableOfContents::getUseOutlineLevels()
@@ -78,7 +78,7 @@ bool SAL_CALL SwVbaTableOfContents::getUseOutlineLevels()
 
 void SAL_CALL SwVbaTableOfContents::setUseOutlineLevels( bool _useOutlineLevels )
 {
-    mxTocProps->setPropertyValue(u"CreateFromOutline"_ustr, uno::Any( _useOutlineLevels ) );
+    mxTocProps->setPropertyValue(u"CreateFromOutline"_ustr, cpo::uno::Any( _useOutlineLevels ) );
 }
 
 void SAL_CALL SwVbaTableOfContents::Delete(  )

@@ -167,6 +167,7 @@
 using namespace ::com::sun::star    ;
 using namespace ::com::sun::star::drawing;
 using namespace uno                 ;
+using namespace ::cpo::uno;
 using namespace beans               ;
 using namespace drawing             ;
 using namespace container           ;
@@ -607,7 +608,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                 SdrCustomShapeGeometryItem aGeometryItem( rInitialGeometryItem );
                                 static constexpr OUString sPath( u"Path"_ustr );
                                 sal_Int16 nGluePointType = EnhancedCustomShapeGluePointType::SEGMENTS;
-                                css::uno::Any* pAny = aGeometryItem.GetPropertyValueByName( sPath, u"GluePointType"_ustr );
+                                cpo::uno::Any* pAny = aGeometryItem.GetPropertyValueByName( sPath, u"GluePointType"_ustr );
                                 if ( pAny )
                                     *pAny >>= nGluePointType;
                                 else
@@ -2814,7 +2815,7 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
     if ( bRotateTextWithShape )
         return;
 
-    const css::uno::Any* pAny;
+    const cpo::uno::Any* pAny;
     SdrCustomShapeGeometryItem aGeometryItem(rSet.Get( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
     static constexpr OUString sTextRotateAngle( u"TextRotateAngle"_ustr );
     pAny = aGeometryItem.GetPropertyValueByName( sTextRotateAngle );
@@ -4586,7 +4587,7 @@ rtl::Reference<SdrObject> SvxMSDffManager::ImportShape( const DffRecordHeader& r
                         double fStartAngle(-90.0);
                         double fEndAngle(0.0);
                         css::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > seqAdjustmentValues;
-                        const uno::Any* pAny = aGeometryItem.GetPropertyValueByName(sAdjustmentValues);
+                        const cpo::uno::Any* pAny = aGeometryItem.GetPropertyValueByName(sAdjustmentValues);
                         if (pAny && (*pAny >>= seqAdjustmentValues) && seqAdjustmentValues.getLength() > 1)
                         {
                             auto pseqAdjustmentValues = seqAdjustmentValues.getArray();
@@ -7473,7 +7474,7 @@ rtl::Reference<SdrOle2Obj> SvxMSDffManager::CreateSdrOLEFromStorage(
     return pRet;
 }
 
-bool SvxMSDffManager::SetPropValue( const uno::Any& rAny, const uno::Reference< css::beans::XPropertySet > & rXPropSet,
+bool SvxMSDffManager::SetPropValue( const cpo::uno::Any& rAny, const uno::Reference< css::beans::XPropertySet > & rXPropSet,
             const OUString& rPropName )
 {
     bool bRetValue = false;

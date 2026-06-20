@@ -56,6 +56,7 @@
 constexpr OUString SERVICE_NAME = u"com.sun.star.ucb.SimpleFileAccess"_ustr;
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::ucb;
@@ -235,7 +236,7 @@ void OFileAccess::transferImpl( const OUString& rSource,
             }
             catch ( Exception const & )
             {
-                css::uno::Any anyEx = cppu::getCaughtException();
+                cpo::uno::Any anyEx = cppu::getCaughtException();
                 throw css::lang::WrappedTargetRuntimeException(
                     u"OFileAccess::transferrImpl - Unable to obtain destination folder URL!"_ustr,
                     getXWeak(), anyEx );
@@ -681,7 +682,7 @@ void OFileAccess::setHidden( const OUString& FileURL, bool bHidden )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_OFileAccess_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new OFileAccess(context));
 }

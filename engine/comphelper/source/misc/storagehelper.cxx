@@ -99,7 +99,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL(
             sal_Int32 nStorageMode,
             const uno::Reference< uno::XComponentContext >& rxContext )
 {
-    uno::Sequence< uno::Any > aArgs{ uno::Any(aURL), uno::Any(nStorageMode) };
+    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(aURL), cpo::uno::Any(nStorageMode) };
     uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY_THROW );
     return xTempStorage;
@@ -111,10 +111,10 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL2(
             sal_Int32 nStorageMode,
             const uno::Reference< uno::XComponentContext >& rxContext )
 {
-    uno::Sequence< uno::Any > aArgs{ uno::Any(aURL), uno::Any(nStorageMode) };
+    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(aURL), cpo::uno::Any(nStorageMode) };
 
     uno::Reference< lang::XSingleServiceFactory > xFact;
-    css::uno::Any anyEx;
+    cpo::uno::Any anyEx;
     try {
         ::ucbhelper::Content aCntnt( aURL,
             uno::Reference< css::ucb::XCommandEnvironment > (),
@@ -147,7 +147,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromInputStream(
             const uno::Reference < io::XInputStream >& xStream,
             const uno::Reference< uno::XComponentContext >& rxContext )
 {
-    uno::Sequence< uno::Any > aArgs{ uno::Any(xStream), uno::Any(embed::ElementModes::READ) };
+    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xStream), cpo::uno::Any(embed::ElementModes::READ) };
     uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY_THROW );
     return xTempStorage;
@@ -159,7 +159,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromStream(
             sal_Int32 nStorageMode,
             const uno::Reference< uno::XComponentContext >& rxContext )
 {
-    uno::Sequence< uno::Any > aArgs{ uno::Any(xStream), uno::Any(nStorageMode) };
+    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xStream), cpo::uno::Any(nStorageMode) };
     uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY_THROW );
     return xTempStorage;
@@ -301,7 +301,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromURL(
     uno::Sequence< beans::PropertyValue > aProps{ comphelper::makePropertyValue(u"StorageFormat"_ustr,
                                                                                 aFormat) };
 
-    uno::Sequence< uno::Any > aArgs{ uno::Any(aURL), uno::Any(nStorageMode), uno::Any(aProps) };
+    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(aURL), cpo::uno::Any(nStorageMode), cpo::uno::Any(aProps) };
     uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY_THROW );
     return xTempStorage;
@@ -324,7 +324,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromInputStr
         pProps[1].Value <<= bRepairStorage;
     }
 
-    uno::Sequence< uno::Any > aArgs{ uno::Any(xStream), uno::Any(embed::ElementModes::READ), uno::Any(aProps) };
+    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xStream), cpo::uno::Any(embed::ElementModes::READ), cpo::uno::Any(aProps) };
     uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY_THROW );
     return xTempStorage;
@@ -348,7 +348,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromStream(
         pProps[1].Value <<= bRepairStorage;
     }
 
-    uno::Sequence< uno::Any > aArgs{ uno::Any(xStream), uno::Any(nStorageMode), uno::Any(aProps) };
+    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xStream), cpo::uno::Any(nStorageMode), cpo::uno::Any(aProps) };
     uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY_THROW );
     return xTempStorage;
@@ -372,7 +372,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
             uno::Sequence<sal_Int8> aDigest(reinterpret_cast<const sal_Int8*>(hash.data()), hash.size());
 
             ++nSha1Ind;
-            aEncryptionData = { { PACKAGE_ENCRYPTIONDATA_SHA256UTF8, uno::Any(aDigest) } };
+            aEncryptionData = { { PACKAGE_ENCRYPTIONDATA_SHA256UTF8, cpo::uno::Any(aDigest) } };
         }
         catch ( uno::Exception& )
         {
@@ -540,20 +540,20 @@ OStorageHelper::CreateGpgPackageEncryptionData(const css::uno::Reference<css::aw
         uno::Sequence<sal_Int8> aKeyIdSequence
             = comphelper::arrayToSequence<sal_Int8>(aKeyID.getStr(), aKeyID.getLength() + 1);
         uno::Sequence<beans::NamedValue> aGpgEncryptionEntry{
-            { u"KeyId"_ustr, uno::Any(aKeyIdSequence) },
-            { u"KeyPacket"_ustr, uno::Any(aKeyIdSequence) },
-            { u"CipherValue"_ustr, uno::Any(aCipherValue) }
+            { u"KeyId"_ustr, cpo::uno::Any(aKeyIdSequence) },
+            { u"KeyPacket"_ustr, cpo::uno::Any(aKeyIdSequence) },
+            { u"CipherValue"_ustr, cpo::uno::Any(aCipherValue) }
         };
 
         aGpgEncryptions.push_back(aGpgEncryptionEntry);
     }
 
     uno::Sequence<beans::NamedValue> aEncryptionData
-        = { { PACKAGE_ENCRYPTIONDATA_SHA256UTF8, uno::Any(aVector) } };
+        = { { PACKAGE_ENCRYPTIONDATA_SHA256UTF8, cpo::uno::Any(aVector) } };
 
     uno::Sequence<beans::NamedValue> aContainer
-        = { { u"GpgInfos"_ustr, uno::Any(comphelper::containerToSequence(aGpgEncryptions)) },
-            { u"EncryptionKey"_ustr, uno::Any(aEncryptionData) } };
+        = { { u"GpgInfos"_ustr, cpo::uno::Any(comphelper::containerToSequence(aGpgEncryptions)) },
+            { u"EncryptionKey"_ustr, cpo::uno::Any(aEncryptionData) } };
 
     return aContainer;
 #else

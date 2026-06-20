@@ -32,7 +32,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -77,7 +77,7 @@ public:
     virtual void SAL_CALL release() noexcept override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const uno::Sequence< uno::Any > & aArguments ) override;
+    virtual void SAL_CALL initialize( const uno::Sequence< cpo::uno::Any > & aArguments ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -117,9 +117,9 @@ void SAL_CALL SvFilterOptionsDialog::release() noexcept
 }
 
 // XInitialization
-void SAL_CALL SvFilterOptionsDialog::initialize(const uno::Sequence<uno::Any>& rArguments)
+void SAL_CALL SvFilterOptionsDialog::initialize(const uno::Sequence<cpo::uno::Any>& rArguments)
 {
-    for(const uno::Any& rArgument : rArguments)
+    for(const cpo::uno::Any& rArgument : rArguments)
     {
         beans::PropertyValue aProperty;
         if (rArgument >>= aProperty)
@@ -283,7 +283,7 @@ void SvFilterOptionsDialog::setSourceDocument( const uno::Reference< lang::XComp
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svtools_SvFilterOptionsDialog_get_implementation(
     css::uno::XComponentContext * context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SvFilterOptionsDialog(context));
 }

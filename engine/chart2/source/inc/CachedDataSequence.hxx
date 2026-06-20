@@ -78,7 +78,7 @@ private:
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
 
     // ____ XDataSequence ____
-    virtual css::uno::Sequence< css::uno::Any > SAL_CALL getData() override;
+    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL getData() override;
     virtual OUString SAL_CALL getSourceRangeRepresentation() override;
     virtual css::uno::Sequence< OUString > SAL_CALL generateLabel(
         css::chart2::data::LabelOrigin nLabelOrigin ) override;
@@ -102,7 +102,7 @@ private:
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     // css::lang::XInitialization:
-    virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any > & aArguments) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence< cpo::uno::Any > & aArguments) override;
 
     // <properties>
     sal_Int32                                       m_nNumberFormatKey;
@@ -129,13 +129,13 @@ private:
     css::uno::Sequence< OUString > Impl_getTextualData() const;
     /** is used by interface method getData().
      */
-    css::uno::Sequence< css::uno::Any > Impl_getMixedData() const;
+    css::uno::Sequence< cpo::uno::Any > Impl_getMixedData() const;
 
     enum DataType                                          m_eCurrentDataType;
 
     css::uno::Sequence< double >                           m_aNumericalSequence;
     css::uno::Sequence< OUString >                         m_aTextualSequence;
-    css::uno::Sequence< css::uno::Any >                    m_aMixedSequence;
+    css::uno::Sequence< cpo::uno::Any >                    m_aMixedSequence;
     rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
 };
 

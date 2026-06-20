@@ -199,7 +199,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
         try
         {
             OUString name = rProp.Name;
-            uno::Any aStr = xConverter->convertToSimpleType(
+            cpo::uno::Any aStr = xConverter->convertToSimpleType(
                     xUserDefinedProps->getPropertyValue(name),
                     uno::TypeClass_STRING);
             OUString str;
@@ -223,7 +223,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
     {
         OStringBuffer sOut;
         OUString aStr;
-        uno::Any aAny = xSet->getPropertyValue(u"FrameURL"_ustr);
+        cpo::uno::Any aAny = xSet->getPropertyValue(u"FrameURL"_ustr);
         if ( (aAny >>= aStr) && !aStr.isEmpty() )
         {
             OUString aURL = INetURLObject( aStr ).GetMainURL( INetURLObject::DecodeMechanism::ToIUri );

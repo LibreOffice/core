@@ -41,9 +41,10 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 
-SfxMacroLoader::SfxMacroLoader(const css::uno::Sequence< css::uno::Any >& aArguments)
+SfxMacroLoader::SfxMacroLoader(const css::uno::Sequence< cpo::uno::Any >& aArguments)
 {
     Reference < XFrame > xFrame;
     if ( aArguments.hasElements() )
@@ -124,7 +125,7 @@ void SAL_CALL SfxMacroLoader::dispatchWithNotification(
 {
     SolarMutexGuard aGuard;
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     ErrCode nErr = loadMacro( aURL.Complete, aAny, GetObjectShell_Impl() );
     if( !xListener.is() )
         return;
@@ -142,10 +143,10 @@ void SAL_CALL SfxMacroLoader::dispatchWithNotification(
     xListener->dispatchFinished( aEvent ) ;
 }
 
-uno::Any SAL_CALL SfxMacroLoader::dispatchWithReturnValue(
+cpo::uno::Any SAL_CALL SfxMacroLoader::dispatchWithReturnValue(
     const util::URL& aURL, const uno::Sequence<beans::PropertyValue>& )
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     ErrCode nErr = loadMacro( aURL.Complete, aRet, GetObjectShell_Impl() );
 
     // aRet gets set to a different value only if nErr == ERRCODE_NONE
@@ -171,7 +172,7 @@ void SAL_CALL SfxMacroLoader::dispatch(
 {
     SolarMutexGuard aGuard;
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     loadMacro( aURL.Complete, aAny, GetObjectShell_Impl() );
 }
 
@@ -192,7 +193,7 @@ void SAL_CALL SfxMacroLoader::removeStatusListener(
 {
 }
 
-ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, css::uno::Any& rRetval, SfxObjectShell* pSh )
+ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, cpo::uno::Any& rRetval, SfxObjectShell* pSh )
 {
 #if !HAVE_FEATURE_SCRIPTING
     (void) rURL;
@@ -336,7 +337,7 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, css::uno::Any& rRetval,
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_sfx2_SfxMacroLoader_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &arguments)
+    css::uno::Sequence<cpo::uno::Any> const &arguments)
 {
     return cppu::acquire(new SfxMacroLoader(arguments));
 }

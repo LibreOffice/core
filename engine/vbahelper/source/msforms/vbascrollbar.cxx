@@ -28,14 +28,14 @@ ScVbaScrollBar::ScVbaScrollBar(  const css::uno::Reference< ov::XHelperInterface
 }
 
 // Attributes
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaScrollBar::getValue()
 {
     return  m_xProps->getPropertyValue( u"ScrollValue"_ustr );
 }
 
 void SAL_CALL
-ScVbaScrollBar::setValue( const uno::Any& _value )
+ScVbaScrollBar::setValue( const cpo::uno::Any& _value )
 {
     m_xProps->setPropertyValue( u"ScrollValue"_ustr, _value );
 }
@@ -51,7 +51,7 @@ ScVbaScrollBar::getMax()
 void SAL_CALL
 ScVbaScrollBar::setMax( sal_Int32 nVal )
 {
-    m_xProps->setPropertyValue( u"ScrollValueMax"_ustr, uno::Any( nVal ) );
+    m_xProps->setPropertyValue( u"ScrollValueMax"_ustr, cpo::uno::Any( nVal ) );
 }
 
 ::sal_Int32 SAL_CALL
@@ -65,13 +65,13 @@ ScVbaScrollBar::getMin()
 void SAL_CALL
 ScVbaScrollBar::setMin( sal_Int32 nVal )
 {
-    m_xProps->setPropertyValue( u"ScrollValueMin"_ustr, uno::Any( nVal ) );
+    m_xProps->setPropertyValue( u"ScrollValueMin"_ustr, cpo::uno::Any( nVal ) );
 }
 
 void SAL_CALL
 ScVbaScrollBar::setLargeChange( ::sal_Int32 _largechange )
 {
-    m_xProps->setPropertyValue( u"BlockIncrement"_ustr, uno::Any( _largechange ) );
+    m_xProps->setPropertyValue( u"BlockIncrement"_ustr, cpo::uno::Any( _largechange ) );
 }
 
 ::sal_Int32 SAL_CALL
@@ -93,7 +93,7 @@ ScVbaScrollBar::getSmallChange()
 void SAL_CALL
 ScVbaScrollBar::setSmallChange( ::sal_Int32 _smallchange )
 {
-    m_xProps->setPropertyValue( u"LineIncrement"_ustr, uno::Any( _smallchange ) );
+    m_xProps->setPropertyValue( u"LineIncrement"_ustr, cpo::uno::Any( _smallchange ) );
 }
 
 OUString

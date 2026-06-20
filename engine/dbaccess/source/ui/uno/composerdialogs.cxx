@@ -32,13 +32,13 @@
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_uno_comp_sdb_RowsetOrderDialog_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new ::dbaui::RowsetOrderDialog(context));
 }
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_uno_comp_sdb_RowsetFilterDialog_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new ::dbaui::RowsetFilterDialog(context));
 }
@@ -50,6 +50,7 @@ namespace dbaui
 #define PROPERTY_ID_ROWSET              101
 
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::sdbcx;

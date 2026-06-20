@@ -101,7 +101,7 @@ SwVbaDocument::SwVbaDocument( const uno::Reference< XHelperInterface >& xParent,
     Initialize();
 }
 
-SwVbaDocument::SwVbaDocument( uno::Sequence< uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& xContext )
+SwVbaDocument::SwVbaDocument( uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& xContext )
     : SwVbaDocument_BASE( aArgs, xContext ),
     mxTextDocument(dynamic_cast<SwXTextDocument*>(getXSomethingFromArgs< frame::XModel >( aArgs, 1 ).get()))
 {
@@ -145,7 +145,7 @@ SwVbaDocument::getContent()
 }
 
 uno::Reference< word::XRange > SAL_CALL
-SwVbaDocument::Range( const uno::Any& rStart, const uno::Any& rEnd )
+SwVbaDocument::Range( const cpo::uno::Any& rStart, const cpo::uno::Any& rEnd )
 {
     if( !rStart.hasValue() && !rEnd.hasValue() )
         return getContent();
@@ -200,39 +200,39 @@ SwVbaDocument::Range( const uno::Any& rStart, const uno::Any& rEnd )
     return uno::Reference< word::XRange >( new SwVbaRange( this, mxContext, mxTextDocument, xStart, xEnd ) );
 }
 
-uno::Any SAL_CALL
-SwVbaDocument::BuiltInDocumentProperties( const uno::Any& index )
+cpo::uno::Any SAL_CALL
+SwVbaDocument::BuiltInDocumentProperties( const cpo::uno::Any& index )
 {
     uno::Reference< XCollection > xCol( new SwVbaBuiltinDocumentProperties( mxParent, mxContext, mxTextDocument ) );
     if ( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-    return uno::Any( xCol );
+        return xCol->Item( index, cpo::uno::Any() );
+    return cpo::uno::Any( xCol );
 }
 
-uno::Any SAL_CALL
-SwVbaDocument::CustomDocumentProperties( const uno::Any& index )
+cpo::uno::Any SAL_CALL
+SwVbaDocument::CustomDocumentProperties( const cpo::uno::Any& index )
 {
     uno::Reference< XCollection > xCol( new SwVbaCustomDocumentProperties( mxParent, mxContext, mxTextDocument ) );
     if ( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-    return uno::Any( xCol );
+        return xCol->Item( index, cpo::uno::Any() );
+    return cpo::uno::Any( xCol );
 }
 
-uno::Any SAL_CALL
-SwVbaDocument::Bookmarks( const uno::Any& rIndex )
+cpo::uno::Any SAL_CALL
+SwVbaDocument::Bookmarks( const cpo::uno::Any& rIndex )
 {
     uno::Reference<container::XIndexAccess > xBookmarks( mxTextDocument->getBookmarks(), uno::UNO_QUERY_THROW );
     uno::Reference< XCollection > xBookmarksVba( new SwVbaBookmarks( this, mxContext, xBookmarks, mxTextDocument ) );
     if (  rIndex.getValueTypeClass() == uno::TypeClass_VOID )
-        return uno::Any( xBookmarksVba );
+        return cpo::uno::Any( xBookmarksVba );
 
-    return xBookmarksVba->Item( rIndex, uno::Any() );
+    return xBookmarksVba->Item( rIndex, cpo::uno::Any() );
 }
 
 SfxBaseModel* SwVbaDocument::getModel() const
 { return static_cast<SfxBaseModel*>(mxTextDocument.get()); }
 
-uno::Any SwVbaDocument::ContentControls(const uno::Any& index)
+cpo::uno::Any SwVbaDocument::ContentControls(const cpo::uno::Any& index)
 {
     uno::Reference<XCollection> xContentControls(
         new SwVbaContentControls(this, mxContext, mxTextDocument, u""_ustr, u""_ustr));
@@ -240,7 +240,7 @@ uno::Any SwVbaDocument::ContentControls(const uno::Any& index)
     {
         try
         {
-            return xContentControls->Item(index, uno::Any());
+            return xContentControls->Item(index, cpo::uno::Any());
         }
         catch (lang::IndexOutOfBoundsException&)
         {
@@ -251,27 +251,27 @@ uno::Any SwVbaDocument::ContentControls(const uno::Any& index)
             {
                 sal_Int32 nLong(0);
                 index >>= nLong;
-                return xContentControls->Item(uno::Any(static_cast<double>(nLong)), uno::Any());
+                return xContentControls->Item(cpo::uno::Any(static_cast<double>(nLong)), cpo::uno::Any());
             }
         }
     }
 
-    return uno::Any(xContentControls);
+    return cpo::uno::Any(xContentControls);
 }
 
-uno::Any SwVbaDocument::SelectContentControlsByTag(const uno::Any& index)
+cpo::uno::Any SwVbaDocument::SelectContentControlsByTag(const cpo::uno::Any& index)
 {
     OUString sTag;
     index >>= sTag;
-    return uno::Any(uno::Reference<XCollection>(
+    return cpo::uno::Any(uno::Reference<XCollection>(
                         new SwVbaContentControls(this, mxContext, mxTextDocument, sTag, u""_ustr)));
 }
 
-uno::Any SwVbaDocument::SelectContentControlsByTitle(const uno::Any& index)
+cpo::uno::Any SwVbaDocument::SelectContentControlsByTitle(const cpo::uno::Any& index)
 {
     OUString sTitle;
     index >>= sTitle;
-    return uno::Any(uno::Reference<XCollection>(
+    return cpo::uno::Any(uno::Reference<XCollection>(
                         new SwVbaContentControls(this, mxContext, mxTextDocument, u""_ustr, sTitle)));
 }
 
@@ -282,55 +282,55 @@ uno::Reference<word::XWindow> SwVbaDocument::getActiveWindow()
                            mxTextDocument->getCurrentController());
 }
 
-uno::Any SAL_CALL
-SwVbaDocument::Variables( const uno::Any& rIndex )
+cpo::uno::Any SAL_CALL
+SwVbaDocument::Variables( const cpo::uno::Any& rIndex )
 {
     uno::Reference< css::document::XDocumentProperties > xDocumentProperties =  mxTextDocument->getDocumentProperties();
     uno::Reference< beans::XPropertyAccess > xUserDefined( xDocumentProperties->getUserDefinedProperties(), uno::UNO_QUERY_THROW );
 
     uno::Reference< XCollection > xVariables( new SwVbaVariables( this, mxContext, xUserDefined ) );
     if (  rIndex.getValueTypeClass() == uno::TypeClass_VOID )
-        return uno::Any( xVariables );
+        return cpo::uno::Any( xVariables );
 
-    return xVariables->Item( rIndex, uno::Any() );
+    return xVariables->Item( rIndex, cpo::uno::Any() );
 }
 
-uno::Any SAL_CALL
-SwVbaDocument::Paragraphs( const uno::Any& index )
+cpo::uno::Any SAL_CALL
+SwVbaDocument::Paragraphs( const cpo::uno::Any& index )
 {
     uno::Reference< XCollection > xCol( new SwVbaParagraphs( mxParent, mxContext, mxTextDocument ) );
     if ( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-    return uno::Any( xCol );
+        return xCol->Item( index, cpo::uno::Any() );
+    return cpo::uno::Any( xCol );
 }
 
-uno::Any SAL_CALL
-SwVbaDocument::Styles( const uno::Any& index )
+cpo::uno::Any SAL_CALL
+SwVbaDocument::Styles( const cpo::uno::Any& index )
 {
     uno::Reference< XCollection > xCol( new SwVbaStyles( mxParent, mxContext, mxTextDocument ) );
     if ( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-    return uno::Any( xCol );
+        return xCol->Item( index, cpo::uno::Any() );
+    return cpo::uno::Any( xCol );
 }
 
-uno::Any SAL_CALL
-SwVbaDocument::Fields( const uno::Any& index )
+cpo::uno::Any SAL_CALL
+SwVbaDocument::Fields( const cpo::uno::Any& index )
 {
     uno::Reference< XCollection > xCol( new SwVbaFields( mxParent, mxContext, mxTextDocument ) );
     if ( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-    return uno::Any( xCol );
+        return xCol->Item( index, cpo::uno::Any() );
+    return cpo::uno::Any( xCol );
 }
 
-uno::Any SAL_CALL
-SwVbaDocument::Shapes( const uno::Any& index )
+cpo::uno::Any SAL_CALL
+SwVbaDocument::Shapes( const cpo::uno::Any& index )
 {
     rtl::Reference< SwFmDrawPage > xIndexAccess( mxTextDocument->getSwDrawPage() );
     uno::Reference< XCollection > xCol( new ScVbaShapes( this, mxContext, xIndexAccess, static_cast<SfxBaseModel*>(mxTextDocument.get()) ) );
 
     if ( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-    return uno::Any( xCol );
+        return xCol->Item( index, cpo::uno::Any() );
+    return cpo::uno::Any( xCol );
 }
 
 void SAL_CALL
@@ -341,37 +341,37 @@ SwVbaDocument::Select()
         xRange->Select();
 }
 
-uno::Any SAL_CALL
-SwVbaDocument::Sections( const uno::Any& index )
+cpo::uno::Any SAL_CALL
+SwVbaDocument::Sections( const cpo::uno::Any& index )
 {
     uno::Reference< XCollection > xCol( new SwVbaSections( mxParent, mxContext, mxTextDocument ) );
     if ( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-    return uno::Any( xCol );
+        return xCol->Item( index, cpo::uno::Any() );
+    return cpo::uno::Any( xCol );
 }
 
-uno::Any SAL_CALL
-SwVbaDocument::TablesOfContents( const uno::Any& index )
+cpo::uno::Any SAL_CALL
+SwVbaDocument::TablesOfContents( const cpo::uno::Any& index )
 {
     uno::Reference< XCollection > xCol( new SwVbaTablesOfContents( this, mxContext, mxTextDocument ) );
     if ( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-    return uno::Any( xCol );
+        return xCol->Item( index, cpo::uno::Any() );
+    return cpo::uno::Any( xCol );
 }
 
-uno::Any SAL_CALL SwVbaDocument::FormFields(const uno::Any& index)
+cpo::uno::Any SAL_CALL SwVbaDocument::FormFields(const cpo::uno::Any& index)
 {
     uno::Reference<XCollection> xCol(new SwVbaFormFields(this, mxContext, mxTextDocument));
     if (index.hasValue())
-        return xCol->Item(index, uno::Any());
-    return uno::Any(xCol);
+        return xCol->Item(index, cpo::uno::Any());
+    return cpo::uno::Any(xCol);
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwVbaDocument::PageSetup( )
 {
     rtl::Reference< SwXBaseStyle > xPageProps( word::getCurrentPageStyle( mxTextDocument ) );
-    return uno::Any( uno::Reference< word::XPageSetup >( new SwVbaPageSetup( this, mxContext, mxTextDocument, xPageProps ) ) );
+    return cpo::uno::Any( uno::Reference< word::XPageSetup >( new SwVbaPageSetup( this, mxContext, mxTextDocument, xPageProps ) ) );
 }
 
 OUString
@@ -380,18 +380,18 @@ SwVbaDocument::getServiceImplName()
     return u"SwVbaDocument"_ustr;
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwVbaDocument::getAttachedTemplate()
 {
     uno::Reference< word::XTemplate > xTemplate;
     uno::Reference< css::document::XDocumentProperties > xDocProps( mxTextDocument->getDocumentProperties(), uno::UNO_SET_THROW );
 
     xTemplate = new SwVbaTemplate( this, mxContext, xDocProps->getTemplateURL() );
-    return uno::Any( xTemplate );
+    return cpo::uno::Any( xTemplate );
 }
 
 void SAL_CALL
-SwVbaDocument::setAttachedTemplate( const css::uno::Any& _attachedtemplate )
+SwVbaDocument::setAttachedTemplate( const cpo::uno::Any& _attachedtemplate )
 {
     OUString sTemplate;
     if( !( _attachedtemplate >>= sTemplate ) )
@@ -411,14 +411,14 @@ SwVbaDocument::setAttachedTemplate( const css::uno::Any& _attachedtemplate )
     xDocProps->setTemplateURL( aURL );
 }
 
-uno::Any SAL_CALL
-SwVbaDocument::Tables( const css::uno::Any& aIndex )
+cpo::uno::Any SAL_CALL
+SwVbaDocument::Tables( const cpo::uno::Any& aIndex )
 {
     uno::Reference< XCollection > xColl( new SwVbaTables( mxParent, mxContext, mxTextDocument ) );
 
     if ( aIndex.hasValue() )
-        return xColl->Item( aIndex, uno::Any() );
-    return uno::Any( xColl );
+        return xColl->Item( aIndex, cpo::uno::Any() );
+    return cpo::uno::Any( xColl );
 }
 
 void SAL_CALL SwVbaDocument::Activate()
@@ -461,7 +461,7 @@ void SAL_CALL SwVbaDocument::setAutoHyphenation( bool _autohyphenation )
 {
     //TODO
     rtl::Reference< SwXBaseStyle > xParaProps( word::getDefaultParagraphStyle( mxTextDocument ) );
-    xParaProps->setPropertyValue(u"ParaIsHyphenation"_ustr, uno::Any( _autohyphenation ) );
+    xParaProps->setPropertyValue(u"ParaIsHyphenation"_ustr, cpo::uno::Any( _autohyphenation ) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaDocument::getHyphenationZone()
@@ -488,7 +488,7 @@ void SAL_CALL SwVbaDocument::setConsecutiveHyphensLimit( ::sal_Int32 _consecutiv
 {
     sal_Int16 nHyphensLimit = static_cast< sal_Int16 >( _consecutivehyphenslimit );
     rtl::Reference< SwXBaseStyle > xParaProps( word::getDefaultParagraphStyle( mxTextDocument ) );
-    xParaProps->setPropertyValue(u"ParaHyphenationMaxHyphens"_ustr, uno::Any( nHyphensLimit ) );
+    xParaProps->setPropertyValue(u"ParaHyphenationMaxHyphens"_ustr, cpo::uno::Any( nHyphensLimit ) );
 }
 
 uno::Reference< ooo::vba::word::XMailMerge > SAL_CALL SwVbaDocument::getMailMerge()
@@ -496,13 +496,13 @@ uno::Reference< ooo::vba::word::XMailMerge > SAL_CALL SwVbaDocument::getMailMerg
     return SwVbaMailMerge::get(mxParent, mxContext);
 }
 
-void SAL_CALL SwVbaDocument::Protect( ::sal_Int32 /*Type*/, const uno::Any& /*NOReset*/, const uno::Any& /*Password*/, const uno::Any& /*UseIRM*/, const uno::Any& /*EnforceStyleLock*/ )
+void SAL_CALL SwVbaDocument::Protect( ::sal_Int32 /*Type*/, const cpo::uno::Any& /*NOReset*/, const cpo::uno::Any& /*Password*/, const cpo::uno::Any& /*UseIRM*/, const cpo::uno::Any& /*EnforceStyleLock*/ )
 {
     // Seems not support in Writer
     // VbaDocumentBase::Protect( Password );
 }
 
-void SAL_CALL SwVbaDocument::PrintOut( const uno::Any& /*Background*/, const uno::Any& /*Append*/, const uno::Any& /*Range*/, const uno::Any& /*OutputFileName*/, const uno::Any& /*From*/, const uno::Any& /*To*/, const uno::Any& /*Item*/, const uno::Any& /*Copies*/, const uno::Any& /*Pages*/, const uno::Any& /*PageType*/, const uno::Any& /*PrintToFile*/, const uno::Any& /*Collate*/, const uno::Any& /*FileName*/, const uno::Any& /*ActivePrinterMacGX*/, const uno::Any& /*ManualDuplexPrint*/, const uno::Any& /*PrintZoomColumn*/, const uno::Any& /*PrintZoomRow*/, const uno::Any& /*PrintZoomPaperWidth*/, const uno::Any& /*PrintZoomPaperHeight*/ )
+void SAL_CALL SwVbaDocument::PrintOut( const cpo::uno::Any& /*Background*/, const cpo::uno::Any& /*Append*/, const cpo::uno::Any& /*Range*/, const cpo::uno::Any& /*OutputFileName*/, const cpo::uno::Any& /*From*/, const cpo::uno::Any& /*To*/, const cpo::uno::Any& /*Item*/, const cpo::uno::Any& /*Copies*/, const cpo::uno::Any& /*Pages*/, const cpo::uno::Any& /*PageType*/, const cpo::uno::Any& /*PrintToFile*/, const cpo::uno::Any& /*Collate*/, const cpo::uno::Any& /*FileName*/, const cpo::uno::Any& /*ActivePrinterMacGX*/, const cpo::uno::Any& /*ManualDuplexPrint*/, const cpo::uno::Any& /*PrintZoomColumn*/, const cpo::uno::Any& /*PrintZoomRow*/, const cpo::uno::Any& /*PrintZoomPaperWidth*/, const cpo::uno::Any& /*PrintZoomPaperHeight*/ )
 {
     //TODO
 }
@@ -517,28 +517,28 @@ void SAL_CALL SwVbaDocument::ClosePrintPreview(  )
     dispatchRequests( static_cast<SfxBaseModel*>(mxTextDocument.get()), u".uno:ClosePreview"_ustr );
 }
 
-uno::Any SAL_CALL
-SwVbaDocument::Revisions( const uno::Any& index )
+cpo::uno::Any SAL_CALL
+SwVbaDocument::Revisions( const cpo::uno::Any& index )
 {
     rtl::Reference< SwXRedlines > xRedlines( mxTextDocument->getSwRedlines() );
     uno::Reference< XCollection > xCol( new SwVbaRevisions( this, mxContext, mxTextDocument, xRedlines ) );
     if ( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-    return uno::Any( xCol );
+        return xCol->Item( index, cpo::uno::Any() );
+    return cpo::uno::Any( xCol );
 }
 
-uno::Any SAL_CALL
-SwVbaDocument::Frames( const uno::Any& index )
+cpo::uno::Any SAL_CALL
+SwVbaDocument::Frames( const cpo::uno::Any& index )
 {
     rtl::Reference< SwXTextFrames > xFrames( mxTextDocument->getSwTextFrames() );
     uno::Reference< XCollection > xCol( new SwVbaFrames( this, mxContext, xFrames, mxTextDocument ) );
     if ( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-    return uno::Any( xCol );
+        return xCol->Item( index, cpo::uno::Any() );
+    return cpo::uno::Any( xCol );
 }
 
 void SAL_CALL
-SwVbaDocument::SaveAs2000( const uno::Any& FileName, const uno::Any& FileFormat, const uno::Any& /*LockComments*/, const uno::Any& /*Password*/, const uno::Any& /*AddToRecentFiles*/, const uno::Any& /*WritePassword*/, const uno::Any& /*ReadOnlyRecommended*/, const uno::Any& /*EmbedTrueTypeFonts*/, const uno::Any& /*SaveNativePictureFormat*/, const uno::Any& /*SaveFormsData*/, const uno::Any& /*SaveAsAOCELetter*/ )
+SwVbaDocument::SaveAs2000( const cpo::uno::Any& FileName, const cpo::uno::Any& FileFormat, const cpo::uno::Any& /*LockComments*/, const cpo::uno::Any& /*Password*/, const cpo::uno::Any& /*AddToRecentFiles*/, const cpo::uno::Any& /*WritePassword*/, const cpo::uno::Any& /*ReadOnlyRecommended*/, const cpo::uno::Any& /*EmbedTrueTypeFonts*/, const cpo::uno::Any& /*SaveNativePictureFormat*/, const cpo::uno::Any& /*SaveFormsData*/, const cpo::uno::Any& /*SaveAsAOCELetter*/ )
 {
     SAL_INFO("sw.vba", "Document.SaveAs2000(FileName:=" << FileName << ",FileFormat:=" << FileFormat << ")");
 
@@ -585,7 +585,7 @@ SwVbaDocument::SaveAs2000( const uno::Any& FileName, const uno::Any& FileFormat,
     sal_Int32 nFileFormat = word::WdSaveFormat::wdFormatDocument;
     FileFormat >>= nFileFormat;
 
-    uno::Sequence storeProps{ comphelper::makePropertyValue(u"FilterName"_ustr, uno::Any()) };
+    uno::Sequence storeProps{ comphelper::makePropertyValue(u"FilterName"_ustr, cpo::uno::Any()) };
 
     setFilterPropsFromFormat( nFileFormat, storeProps );
 
@@ -593,19 +593,19 @@ SwVbaDocument::SaveAs2000( const uno::Any& FileName, const uno::Any& FileFormat,
 }
 
 void SAL_CALL
-SwVbaDocument::SaveAs( const uno::Any& FileName, const uno::Any& FileFormat, const uno::Any& LockComments, const uno::Any& Password, const uno::Any& AddToRecentFiles, const uno::Any& WritePassword, const uno::Any& ReadOnlyRecommended, const uno::Any& EmbedTrueTypeFonts, const uno::Any& SaveNativePictureFormat, const uno::Any& SaveFormsData, const uno::Any& SaveAsAOCELetter, const uno::Any& /*Encoding*/, const uno::Any& /*InsertLineBreaks*/, const uno::Any& /*AllowSubstitutions*/, const uno::Any& /*LineEnding*/, const uno::Any& /*AddBiDiMarks*/ )
+SwVbaDocument::SaveAs( const cpo::uno::Any& FileName, const cpo::uno::Any& FileFormat, const cpo::uno::Any& LockComments, const cpo::uno::Any& Password, const cpo::uno::Any& AddToRecentFiles, const cpo::uno::Any& WritePassword, const cpo::uno::Any& ReadOnlyRecommended, const cpo::uno::Any& EmbedTrueTypeFonts, const cpo::uno::Any& SaveNativePictureFormat, const cpo::uno::Any& SaveFormsData, const cpo::uno::Any& SaveAsAOCELetter, const cpo::uno::Any& /*Encoding*/, const cpo::uno::Any& /*InsertLineBreaks*/, const cpo::uno::Any& /*AllowSubstitutions*/, const cpo::uno::Any& /*LineEnding*/, const cpo::uno::Any& /*AddBiDiMarks*/ )
 {
     return SaveAs2000( FileName, FileFormat, LockComments, Password, AddToRecentFiles, WritePassword, ReadOnlyRecommended, EmbedTrueTypeFonts, SaveNativePictureFormat, SaveFormsData, SaveAsAOCELetter );
 }
 
 void SAL_CALL
-SwVbaDocument::Close( const uno::Any& SaveChanges, const uno::Any& /*OriginalFormat*/, const uno::Any& /*RouteDocument*/ )
+SwVbaDocument::Close( const cpo::uno::Any& SaveChanges, const cpo::uno::Any& /*OriginalFormat*/, const cpo::uno::Any& /*RouteDocument*/ )
 {
-    VbaDocumentBase::Close( SaveChanges, uno::Any(), uno::Any() );
+    VbaDocumentBase::Close( SaveChanges, cpo::uno::Any(), cpo::uno::Any() );
 }
 
 void SAL_CALL
-SwVbaDocument::SavePreviewPngAs( const uno::Any& FileName )
+SwVbaDocument::SavePreviewPngAs( const cpo::uno::Any& FileName )
 {
     OUString sFileName;
     FileName >>= sFileName;
@@ -618,7 +618,7 @@ SwVbaDocument::SavePreviewPngAs( const uno::Any& FileName )
     mxTextDocument->storeToURL( sURL, storeProps );
 }
 
-uno::Any
+cpo::uno::Any
 SwVbaDocument::getControlShape( std::u16string_view sName )
 {
     rtl::Reference< SwFmDrawPage > xIndexAccess( mxTextDocument->getSwDrawPage() );
@@ -626,7 +626,7 @@ SwVbaDocument::getControlShape( std::u16string_view sName )
     sal_Int32 nCount = xIndexAccess->getCount();
     for( int index = 0; index < nCount; index++ )
     {
-        uno::Any aUnoObj =  xIndexAccess->getByIndex( index );
+        cpo::uno::Any aUnoObj =  xIndexAccess->getByIndex( index );
         // It seems there are some drawing objects that can not query into Control shapes?
         uno::Reference< drawing::XControlShape > xControlShape( aUnoObj, uno::UNO_QUERY );
         if( xControlShape.is() )
@@ -638,7 +638,7 @@ SwVbaDocument::getControlShape( std::u16string_view sName )
             }
         }
     }
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 uno::Reference< beans::XIntrospectionAccess > SAL_CALL
@@ -647,19 +647,19 @@ SwVbaDocument::getIntrospection(  )
     return uno::Reference< beans::XIntrospectionAccess >();
 }
 
-uno::Any SAL_CALL
-SwVbaDocument::invoke( const OUString& aFunctionName, const uno::Sequence< uno::Any >& /*aParams*/, uno::Sequence< ::sal_Int16 >& /*aOutParamIndex*/, uno::Sequence< uno::Any >& /*aOutParam*/ )
+cpo::uno::Any SAL_CALL
+SwVbaDocument::invoke( const OUString& aFunctionName, const uno::Sequence< cpo::uno::Any >& /*aParams*/, uno::Sequence< ::sal_Int16 >& /*aOutParamIndex*/, uno::Sequence< cpo::uno::Any >& /*aOutParam*/ )
 {
     SAL_INFO("sw.vba", "** will barf " << aFunctionName );
     throw uno::RuntimeException(); // unsupported operation
 }
 
 void SAL_CALL
-SwVbaDocument::setValue( const OUString& /*aPropertyName*/, const uno::Any& /*aValue*/ )
+SwVbaDocument::setValue( const OUString& /*aPropertyName*/, const cpo::uno::Any& /*aValue*/ )
 {
     throw uno::RuntimeException(); // unsupported operation
 }
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwVbaDocument::getValue( const OUString& aPropertyName )
 {
     uno::Reference< drawing::XControlShape > xControlShape( getControlShape( aPropertyName ), uno::UNO_QUERY_THROW );
@@ -667,7 +667,7 @@ SwVbaDocument::getValue( const OUString& aPropertyName )
     uno::Reference<lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
     uno::Reference< XControlProvider > xControlProvider( xServiceManager->createInstanceWithContext(u"ooo.vba.ControlProvider"_ustr, mxContext ), uno::UNO_QUERY_THROW );
     uno::Reference< msforms::XControl > xControl( xControlProvider->createControl(  xControlShape, getModel() ) );
-    return uno::Any( xControl );
+    return cpo::uno::Any( xControl );
 }
 
 bool SAL_CALL
@@ -738,7 +738,7 @@ SwVbaDocument::GetConnectionPoint()
 // XSinkCaller
 
 void SAL_CALL
-SwVbaDocument::CallSinks( const OUString& Method, uno::Sequence< uno::Any >& Arguments )
+SwVbaDocument::CallSinks( const OUString& Method, uno::Sequence< cpo::uno::Any >& Arguments )
 {
     for (auto& i : mvSinks)
     {
@@ -787,7 +787,7 @@ SwVbaDocument::getServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Writer_SwVbaDocument_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new SwVbaDocument(args, context));
 }

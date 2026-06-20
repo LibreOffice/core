@@ -31,7 +31,7 @@ public:
 
     virtual void    Notify( const css::uno::Sequence<OUString>& aPropertyNames ) override;
 
-    css::uno::Sequence< css::uno::Any>
+    css::uno::Sequence< cpo::uno::Any>
             GetProperties(const css::uno::Sequence< OUString >& rNames)
                             { return ConfigItem::GetProperties( rNames ); }
 

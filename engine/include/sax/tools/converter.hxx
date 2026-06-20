@@ -35,15 +35,13 @@
 #include <unotools/saveopt.hxx>
 
 namespace com::sun::star {
-    namespace uno {
-        class Any;
-    }
     namespace util {
         struct Date;
         struct DateTime;
         struct Duration;
     }
 }
+namespace cpo::uno { class Any; }
 
 namespace sax {
 
@@ -316,7 +314,7 @@ public:
     /** convert an Any to string (typesafe) */
     static bool convertAny(OUStringBuffer&          rsValue,
                            OUStringBuffer&          rsType ,
-                           const css::uno::Any& rValue);
+                           const cpo::uno::Any& rValue);
 
     /** convert specified byte sequence to xsd:hexBinary string **/
     static void convertBytesToHexBinary(OUStringBuffer& rBuffer, const void* pBytes,

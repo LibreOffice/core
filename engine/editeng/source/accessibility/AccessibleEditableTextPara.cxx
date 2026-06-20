@@ -28,7 +28,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
 #include <editeng/flditem.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
@@ -226,8 +226,8 @@ void AccessibleEditableTextPara::SetParagraphIndex( sal_Int32 nIndex )
     {
         if( nOldIndex != nIndex )
         {
-            uno::Any aOldDesc;
-            uno::Any aOldName;
+            cpo::uno::Any aOldDesc;
+            cpo::uno::Any aOldName;
 
             try
             {
@@ -238,8 +238,8 @@ void AccessibleEditableTextPara::SetParagraphIndex( sal_Int32 nIndex )
             {
             }
             // index and therefore description changed
-            FireEvent( AccessibleEventId::DESCRIPTION_CHANGED, uno::Any( getAccessibleDescription() ), aOldDesc );
-            FireEvent( AccessibleEventId::NAME_CHANGED, uno::Any( getAccessibleName() ), aOldName );
+            FireEvent( AccessibleEventId::DESCRIPTION_CHANGED, cpo::uno::Any( getAccessibleDescription() ), aOldDesc );
+            FireEvent( AccessibleEventId::NAME_CHANGED, cpo::uno::Any( getAccessibleName() ), aOldName );
         }
     }
     catch (const uno::Exception&) // optional behaviour
@@ -479,7 +479,7 @@ void AccessibleEditableTextPara::SetEEOffset( const Point& rOffset )
     maEEOffset = rOffset;
 }
 
-void AccessibleEditableTextPara::FireEvent(const sal_Int16 nEventId, const uno::Any& rNewValue, const uno::Any& rOldValue)
+void AccessibleEditableTextPara::FireEvent(const sal_Int16 nEventId, const cpo::uno::Any& rNewValue, const cpo::uno::Any& rOldValue)
 {
     NotifyAccessibleEvent(nEventId, rOldValue, rNewValue);
 }
@@ -489,7 +489,7 @@ void AccessibleEditableTextPara::SetState( const sal_Int64 nStateId )
     if( !(mnStateSet & nStateId) )
     {
         mnStateSet |= nStateId;
-        FireEvent( AccessibleEventId::STATE_CHANGED, uno::Any( nStateId ) );
+        FireEvent( AccessibleEventId::STATE_CHANGED, cpo::uno::Any( nStateId ) );
     }
 }
 
@@ -498,15 +498,15 @@ void AccessibleEditableTextPara::UnSetState( const sal_Int64 nStateId )
     if( mnStateSet & nStateId )
     {
         mnStateSet &= ~nStateId;
-        FireEvent( AccessibleEventId::STATE_CHANGED, uno::Any(), uno::Any( nStateId ) );
+        FireEvent( AccessibleEventId::STATE_CHANGED, cpo::uno::Any(), cpo::uno::Any( nStateId ) );
     }
 }
 
 void AccessibleEditableTextPara::TextChanged()
 {
     OUString aCurrentString( implGetText() );
-    uno::Any aDeleted;
-    uno::Any aInserted;
+    cpo::uno::Any aDeleted;
+    cpo::uno::Any aInserted;
     if( OCommonAccessibleText::implInitTextChangedEvent( maLastTextString, aCurrentString,
                                                          aDeleted, aInserted) )
     {
@@ -1191,7 +1191,7 @@ void AccessibleEditableTextPara::_correctValues( uno::Sequence< PropertyValue >&
         // Char color
         if (rRes.Name == "CharColor")
         {
-            uno::Any &anyChar = rRes.Value;
+            cpo::uno::Any &anyChar = rRes.Value;
             Color crChar;
             anyChar >>= crChar;
             if (COL_AUTO == crChar )
@@ -1223,7 +1223,7 @@ void AccessibleEditableTextPara::_correctValues( uno::Sequence< PropertyValue >&
         // Underline color && Mis-spell
         if (rRes.Name == "CharUnderlineColor")
         {
-            uno::Any &anyCharUnderLine = rRes.Value;
+            cpo::uno::Any &anyCharUnderLine = rRes.Value;
             Color crCharUnderLine;
             anyCharUnderLine >>= crCharUnderLine;
             if (COL_AUTO == crCharUnderLine )

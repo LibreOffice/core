@@ -155,9 +155,9 @@ void GraphicDescriptor::implCreate( SvStream& rIStm, const OUString& rURL )
 }
 
 
-uno::Any SAL_CALL GraphicDescriptor::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL GraphicDescriptor::queryInterface( const uno::Type & rType )
 {
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     if( rType == cppu::UnoType<lang::XServiceInfo>::get())
         aAny <<= uno::Reference< lang::XServiceInfo >(this);
@@ -245,13 +245,13 @@ rtl::Reference<::comphelper::PropertySetInfo> GraphicDescriptor::createPropertyS
 }
 
 
-void GraphicDescriptor::_setPropertyValues( const comphelper::PropertyMapEntry** /*ppEntries*/, const uno::Any* /*pValues*/ )
+void GraphicDescriptor::_setPropertyValues( const comphelper::PropertyMapEntry** /*ppEntries*/, const cpo::uno::Any* /*pValues*/ )
 {
     // we only have readonly attributes
 }
 
 
-void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, uno::Any* pValues )
+void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, cpo::uno::Any* pValues )
 {
     SolarMutexGuard aGuard;
 

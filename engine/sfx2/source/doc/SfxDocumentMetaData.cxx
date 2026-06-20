@@ -230,7 +230,7 @@ public:
 
     // css::lang::XInitialization:
     virtual void SAL_CALL initialize(
-        const css::uno::Sequence< css::uno::Any > & aArguments) override;
+        const css::uno::Sequence< cpo::uno::Any > & aArguments) override;
 
     // css::util::XCloneable:
     virtual css::uno::Reference<css::util::XCloneable> SAL_CALL createClone() override;
@@ -613,7 +613,7 @@ SfxDocumentMetaData::getURLProperties(
 {
     css::uno::Reference< css::beans::XPropertyBag> xPropArg = css::beans::PropertyBag::createDefault( m_xContext );
     try {
-        css::uno::Any baseUri;
+        cpo::uno::Any baseUri;
         for (const auto& rProp : i_rMedium) {
             if (rProp.Name == "DocumentBaseURL") {
                 baseUri = rProp.Value;
@@ -635,7 +635,7 @@ SfxDocumentMetaData::getURLProperties(
         }
         xPropArg->addProperty(u"StreamName"_ustr,
                 css::beans::PropertyAttribute::MAYBEVOID,
-                css::uno::Any(s_meta));
+                cpo::uno::Any(s_meta));
     } catch (const css::uno::Exception &) {
         // ignore
     }
@@ -724,7 +724,7 @@ SfxDocumentMetaData::setMetaText(std::unique_lock<std::mutex>& rGuard, const OUS
             return true;
         }
     } catch (const css::xml::dom::DOMException &) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
                 u"SfxDocumentMetaData::setMetaText: DOM exception"_ustr,
                 css::uno::Reference<css::uno::XInterface>(*this), anyEx);
@@ -851,7 +851,7 @@ SfxDocumentMetaData::setMetaList(std::unique_lock<std::mutex>& rGuard, const OUS
 
         return true;
     } catch (const css::xml::dom::DOMException &) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
                 u"SfxDocumentMetaData::setMetaList: DOM exception"_ustr,
                 css::uno::Reference<css::uno::XInterface>(*this), anyEx);
@@ -874,7 +874,7 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
             continue;
         }
         const OUString name = props[i].Name;
-        css::uno::Any any;
+        cpo::uno::Any any;
         try {
             any = i_xPropSet->getPropertyValue(name);
         } catch (const css::uno::Exception &) {
@@ -989,7 +989,7 @@ SfxDocumentMetaData::updateElement(std::unique_lock<std::mutex>& /*rGuard*/, con
         }
         m_meta[name] = std::move(xNode);
     } catch (const css::xml::dom::DOMException &) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
                 u"SfxDocumentMetaData::updateElement: DOM exception"_ustr,
                 css::uno::Reference<css::uno::XInterface>(*this), anyEx);
@@ -1200,7 +1200,7 @@ void SfxDocumentMetaData::init(
             xRElem->appendChild(xParent);
             m_xParent = std::move(xParent);
         } catch (const css::xml::dom::DOMException &) {
-            css::uno::Any anyEx = cppu::getCaughtException();
+            cpo::uno::Any anyEx = cppu::getCaughtException();
             throw css::lang::WrappedTargetRuntimeException(
                     u"SfxDocumentMetaData::init: DOM exception"_ustr,
                     css::uno::Reference<css::uno::XInterface>(*this), anyEx);
@@ -1255,7 +1255,7 @@ void SfxDocumentMetaData::init(
     {
         css::uno::Reference<css::xml::dom::XElement> xElem(elem,
             css::uno::UNO_QUERY_THROW);
-        css::uno::Any any;
+        cpo::uno::Any any;
         OUString name = xElem->getAttributeNS(s_nsODFMeta, u"name"_ustr);
         OUString type = xElem->getAttributeNS(s_nsODFMeta, u"value-type"_ustr);
         OUString text = getNodeText(elem);
@@ -1803,7 +1803,7 @@ SfxDocumentMetaData::setDocumentStatistics(
             // inefficiently search for matching attribute
             for (size_t j = 0; s_stdStats[j] != nullptr; ++j) {
                 if (name.equalsAscii(s_stdStats[j])) {
-                    const css::uno::Any any = rValue.Value;
+                    const cpo::uno::Any any = rValue.Value;
                     sal_Int32 val = 0;
                     if (any >>= val) {
                         attributes.emplace_back(s_stdStatAttrs[j],
@@ -1940,7 +1940,7 @@ SfxDocumentMetaData::loadFromStorage(
     } catch (const css::uno::Exception &) {
         input.sSystemId = s_meta;
     }
-    css::uno::Sequence< css::uno::Any > args{ css::uno::Any(xPropArg) };
+    css::uno::Sequence< cpo::uno::Any > args{ cpo::uno::Any(xPropArg) };
 
     // the underlying SvXMLImport implements XFastParser, XImporter, XFastDocumentHandler
     css::uno::Reference<XInterface> xFilter =
@@ -1995,13 +1995,13 @@ SfxDocumentMetaData::storeToStorage(
         css::uno::UNO_QUERY_THROW);
     xStreamProps->setPropertyValue(
         u"MediaType"_ustr,
-        css::uno::Any(u"text/xml"_ustr));
+        cpo::uno::Any(u"text/xml"_ustr));
     xStreamProps->setPropertyValue(
         u"Compressed"_ustr,
-        css::uno::Any(false));
+        cpo::uno::Any(false));
     xStreamProps->setPropertyValue(
         u"UseCommonStoragePasswordEncryption"_ustr,
-        css::uno::Any(false));
+        cpo::uno::Any(false));
     css::uno::Reference<css::io::XOutputStream> xOutStream =
         xStream->getOutputStream();
     if (!xOutStream.is()) throw css::uno::RuntimeException();
@@ -2021,7 +2021,7 @@ SfxDocumentMetaData::storeToStorage(
     // set base URL
     css::uno::Reference<css::beans::XPropertySet> xPropArg =
         getURLProperties(g, Medium);
-    css::uno::Sequence< css::uno::Any > args{ css::uno::Any(xSaxWriter), css::uno::Any(xPropArg) };
+    css::uno::Sequence< cpo::uno::Any > args{ cpo::uno::Any(xSaxWriter), cpo::uno::Any(xPropArg) };
 
     css::uno::Reference<css::document::XExporter> xExp(
         xMsf->createInstanceWithArgumentsAndContext(
@@ -2070,7 +2070,7 @@ SfxDocumentMetaData::loadFromMedium(const OUString & URL,
     } catch (const css::io::IOException &) {
         throw;
     } catch (const css::uno::Exception &) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetException(
                 u"SfxDocumentMetaData::loadFromMedium: exception"_ustr,
                 css::uno::Reference<css::uno::XInterface>(*this),
@@ -2130,7 +2130,7 @@ SfxDocumentMetaData::storeToMedium(const OUString & URL,
 }
 
 // css::lang::XInitialization:
-void SAL_CALL SfxDocumentMetaData::initialize( const css::uno::Sequence< css::uno::Any > & aArguments)
+void SAL_CALL SfxDocumentMetaData::initialize( const css::uno::Sequence< cpo::uno::Any > & aArguments)
 {
     // possible arguments:
     // - no argument: default initialization (empty DOM)
@@ -2141,7 +2141,7 @@ void SAL_CALL SfxDocumentMetaData::initialize( const css::uno::Sequence< css::un
     css::uno::Reference<css::xml::dom::XDocument> xDoc;
 
     for (sal_Int32 i = 0; i < aArguments.getLength(); ++i) {
-        const css::uno::Any& any = aArguments[i];
+        const cpo::uno::Any& any = aArguments[i];
         if (!(any >>= xDoc)) {
             throw css::lang::IllegalArgumentException(
                 u"SfxDocumentMetaData::initialize: argument must be XDocument"_ustr,
@@ -2187,7 +2187,7 @@ SfxDocumentMetaData::createClone()
     } catch (const css::uno::RuntimeException &) {
         throw;
     } catch (const css::uno::Exception &) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
                 u"SfxDocumentMetaData::createClone: exception"_ustr,
                 css::uno::Reference<css::uno::XInterface>(*this), anyEx);
@@ -2324,7 +2324,7 @@ void SfxDocumentMetaData::createUserDefined(std::unique_lock<std::mutex>& g)
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 CompatWriterDocPropsImpl_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new CompatWriterDocPropsImpl(context));
 }
@@ -2332,7 +2332,7 @@ CompatWriterDocPropsImpl_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 SfxDocumentMetaData_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SfxDocumentMetaData(context));
 }

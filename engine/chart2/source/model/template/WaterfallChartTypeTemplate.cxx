@@ -89,7 +89,7 @@ bool WaterfallChartTypeTemplate::matchesTemplate2(const rtl::Reference<::chart::
         if (!bGeomAmbiguous)
         {
             setFastPropertyValue_NoBroadcast(PROP_WATERFALL_TEMPLATE_GEOMETRY3D,
-                                             uno::Any(aCommonGeom));
+                                             cpo::uno::Any(aCommonGeom));
         }
     }
 
@@ -111,7 +111,7 @@ rtl::Reference<ChartType> WaterfallChartTypeTemplate::getChartTypeForNewSeries2(
 }
 
 // ____ OPropertySet ____
-void WaterfallChartTypeTemplate::GetDefaultValue(sal_Int32 nHandle, uno::Any& rAny) const
+void WaterfallChartTypeTemplate::GetDefaultValue(sal_Int32 nHandle, cpo::uno::Any& rAny) const
 {
     static ::chart::tPropertyValueMap aStaticDefaults = []() {
         ::chart::tPropertyValueMap aTmp;
@@ -148,14 +148,14 @@ void WaterfallChartTypeTemplate::applyStyle2(const rtl::Reference<DataSeries>& x
 {
     ChartTypeTemplate::applyStyle2(xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount);
     xSeries->setPropertyAlsoToAllAttributedDataPoints(u"BorderStyle"_ustr,
-                                                      uno::Any(drawing::LineStyle_NONE));
+                                                      cpo::uno::Any(drawing::LineStyle_NONE));
     if (getDimension() != 3)
         return;
 
     try
     {
         //apply Geometry3D
-        uno::Any aAGeometry3D;
+        cpo::uno::Any aAGeometry3D;
         getFastPropertyValue(aAGeometry3D, PROP_WATERFALL_TEMPLATE_GEOMETRY3D);
         xSeries->setPropertyAlsoToAllAttributedDataPoints(u"Geometry3D"_ustr, aAGeometry3D);
     }
@@ -169,7 +169,7 @@ void WaterfallChartTypeTemplate::resetStyles2(const rtl::Reference<::chart::Diag
 {
     ChartTypeTemplate::resetStyles2(xDiagram);
     std::vector<rtl::Reference<DataSeries>> aSeriesVec(xDiagram->getDataSeries());
-    uno::Any aLineStyleAny(drawing::LineStyle_NONE);
+    cpo::uno::Any aLineStyleAny(drawing::LineStyle_NONE);
     for (auto const& series : aSeriesVec)
     {
         if (getDimension() == 3)

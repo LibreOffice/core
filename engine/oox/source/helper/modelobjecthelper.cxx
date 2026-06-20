@@ -37,6 +37,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 ObjectContainer::ObjectContainer( const Reference< XMultiServiceFactory >& rxModelFactory, OUString aServiceName ) :
     mxModelFactory( rxModelFactory ),
@@ -156,7 +157,7 @@ OUString ModelObjectHelper::insertFillHatch(const drawing::Hatch& rHatch)
 uno::Reference<awt::XBitmap> ModelObjectHelper::getFillBitmap(OUString const & rGraphicName)
 {
     uno::Reference<awt::XBitmap> xBitmap;
-    uno::Any aAny = maBitmapUrlContainer.getObject(rGraphicName);
+    cpo::uno::Any aAny = maBitmapUrlContainer.getObject(rGraphicName);
     if (aAny.has<uno::Reference<awt::XBitmap>>())
         xBitmap = aAny.get<uno::Reference<awt::XBitmap>>();
     return xBitmap;

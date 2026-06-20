@@ -156,7 +156,7 @@ public:
     void ReleaseViewShellBase();
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
     SD_DLLPUBLIC virtual void SAL_CALL acquire() noexcept override;
     SD_DLLPUBLIC virtual void SAL_CALL release() noexcept override;
 
@@ -176,8 +176,8 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XSelectionSupplier
-    virtual bool SAL_CALL select( const css::uno::Any& aSelection ) override;
-    virtual css::uno::Any SAL_CALL getSelection(  ) override;
+    virtual bool SAL_CALL select( const cpo::uno::Any& aSelection ) override;
+    virtual cpo::uno::Any SAL_CALL getSelection(  ) override;
     virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
     virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 
@@ -215,7 +215,7 @@ public:
     const rtl::Reference<sd::framework::ModuleController> & getModuleController();
 
     // XSlideSorterSelectionSupplier
-    virtual css::uno::Any SAL_CALL getSlideSorterSelection(  ) override;
+    virtual cpo::uno::Any SAL_CALL getSlideSorterSelection(  ) override;
 
 private:
     /** This method must return the name to index table. This table
@@ -231,7 +231,7 @@ private:
      * rValue and nHandle is always valid.
      */
     virtual void SAL_CALL getFastPropertyValue(
-        css::uno::Any& rValue,
+        cpo::uno::Any& rValue,
         sal_Int32 nHandle ) const override;
 
     /** Convert the value rValue and return the result in rConvertedValue and the
@@ -249,17 +249,17 @@ private:
         @throws IllegalArgumentException
      */
     virtual bool SAL_CALL convertFastPropertyValue(
-        css::uno::Any & rConvertedValue,
-        css::uno::Any & rOldValue,
+        cpo::uno::Any & rConvertedValue,
+        cpo::uno::Any & rOldValue,
         sal_Int32 nHandle,
-        const css::uno::Any& rValue ) override;
+        const cpo::uno::Any& rValue ) override;
 
     /** The same as setFastPropertyValue, but no exception is thrown and nHandle
         is always valid. You must not broadcast the changes in this method.
      */
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
         sal_Int32 nHandle,
-        const css::uno::Any& rValue ) override;
+        const cpo::uno::Any& rValue ) override;
 
     /** When the called object has been disposed already this method throws
         a Disposed exception and does not return.
@@ -306,8 +306,8 @@ private:
     */
     void FirePropertyChange (
         sal_Int32 nHandle,
-        const css::uno::Any& rNewValue,
-        const css::uno::Any& rOldValue);
+        const cpo::uno::Any& rNewValue,
+        const cpo::uno::Any& rOldValue);
 
     void DisposeFrameworkControllers();
 };

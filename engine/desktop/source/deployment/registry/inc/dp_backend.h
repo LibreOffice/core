@@ -115,7 +115,7 @@ public:
         virtual OUString SAL_CALL getDescription() override;
         virtual OUString SAL_CALL getShortDescription() override;
         virtual OUString SAL_CALL getFileFilter() override;
-        virtual css::uno::Any SAL_CALL getIcon( bool highContrast,
+        virtual cpo::uno::Any SAL_CALL getIcon( bool highContrast,
                                                 bool smallIcon ) override;
     };
 
@@ -231,7 +231,7 @@ protected:
 
     virtual ~PackageRegistryBackend() override;
     PackageRegistryBackend(
-        css::uno::Sequence<css::uno::Any> const & args,
+        css::uno::Sequence<cpo::uno::Any> const & args,
         css::uno::Reference<css::uno::XComponentContext> const & xContext );
 
     /* creates a folder with a unique name.

@@ -100,7 +100,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGotoContentControl)
     uno::Reference<text::XTextContent> xContentControl(
         xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue(u"ShowingPlaceHolder"_ustr, uno::Any(true));
+    xContentControlProps->setPropertyValue(u"ShowingPlaceHolder"_ustr, cpo::uno::Any(true));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When going to that content control in placeholder mode:
@@ -147,10 +147,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTickCheckboxContentControl)
     uno::Reference<text::XTextContent> xContentControl(
         xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue(u"Checkbox"_ustr, uno::Any(true));
-    xContentControlProps->setPropertyValue(u"Checked"_ustr, uno::Any(true));
-    xContentControlProps->setPropertyValue(u"CheckedState"_ustr, uno::Any(u"☒"_ustr));
-    xContentControlProps->setPropertyValue(u"UncheckedState"_ustr, uno::Any(u"☐"_ustr));
+    xContentControlProps->setPropertyValue(u"Checkbox"_ustr, cpo::uno::Any(true));
+    xContentControlProps->setPropertyValue(u"Checked"_ustr, cpo::uno::Any(true));
+    xContentControlProps->setPropertyValue(u"CheckedState"_ustr, cpo::uno::Any(u"☒"_ustr));
+    xContentControlProps->setPropertyValue(u"UncheckedState"_ustr, cpo::uno::Any(u"☐"_ustr));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When clicking on that content control:
@@ -233,19 +233,19 @@ CPPUNIT_TEST_FIXTURE(Test, testSelectDropdownContentControl)
     {
         uno::Sequence<beans::PropertyValues> aListItems = {
             {
-                comphelper::makePropertyValue(u"DisplayText"_ustr, uno::Any(u"red"_ustr)),
-                comphelper::makePropertyValue(u"Value"_ustr, uno::Any(u"R"_ustr)),
+                comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(u"red"_ustr)),
+                comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(u"R"_ustr)),
             },
             {
-                comphelper::makePropertyValue(u"DisplayText"_ustr, uno::Any(u"green"_ustr)),
-                comphelper::makePropertyValue(u"Value"_ustr, uno::Any(u"G"_ustr)),
+                comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(u"green"_ustr)),
+                comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(u"G"_ustr)),
             },
             {
-                comphelper::makePropertyValue(u"DisplayText"_ustr, uno::Any(u"blue"_ustr)),
-                comphelper::makePropertyValue(u"Value"_ustr, uno::Any(u"B"_ustr)),
+                comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(u"blue"_ustr)),
+                comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(u"B"_ustr)),
             },
         };
-        xContentControlProps->setPropertyValue(u"ListItems"_ustr, uno::Any(aListItems));
+        xContentControlProps->setPropertyValue(u"ListItems"_ustr, cpo::uno::Any(aListItems));
     }
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
@@ -301,7 +301,7 @@ CPPUNIT_TEST_FIXTURE(Test, testReplacePictureContentControl)
     uno::Reference<beans::XPropertySet> xTextGraphic(
         xMSF->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
     xTextGraphic->setPropertyValue(u"AnchorType"_ustr,
-                                   uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+                                   cpo::uno::Any(text::TextContentAnchorType_AS_CHARACTER));
     uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
     xText->insertTextContent(xCursor, xTextContent, false);
     xCursor->gotoStart(/*bExpand=*/false);
@@ -309,8 +309,8 @@ CPPUNIT_TEST_FIXTURE(Test, testReplacePictureContentControl)
     uno::Reference<text::XTextContent> xContentControl(
         xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue(u"ShowingPlaceHolder"_ustr, uno::Any(true));
-    xContentControlProps->setPropertyValue(u"Picture"_ustr, uno::Any(true));
+    xContentControlProps->setPropertyValue(u"ShowingPlaceHolder"_ustr, cpo::uno::Any(true));
+    xContentControlProps->setPropertyValue(u"Picture"_ustr, cpo::uno::Any(true));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When clicking on that content control:
@@ -371,9 +371,9 @@ CPPUNIT_TEST_FIXTURE(Test, testSelectDateContentControl)
     uno::Reference<text::XTextContent> xContentControl(
         xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue(u"Date"_ustr, uno::Any(true));
-    xContentControlProps->setPropertyValue(u"DateFormat"_ustr, uno::Any(u"YYYY-MM-DD"_ustr));
-    xContentControlProps->setPropertyValue(u"DateLanguage"_ustr, uno::Any(u"en-US"_ustr));
+    xContentControlProps->setPropertyValue(u"Date"_ustr, cpo::uno::Any(true));
+    xContentControlProps->setPropertyValue(u"DateFormat"_ustr, cpo::uno::Any(u"YYYY-MM-DD"_ustr));
+    xContentControlProps->setPropertyValue(u"DateLanguage"_ustr, cpo::uno::Any(u"en-US"_ustr));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When clicking on that content control:

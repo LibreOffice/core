@@ -63,11 +63,11 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessibleKeyBinding > SAL_CALL getAccessibleActionKeyBinding( sal_Int32 nIndex ) override;
 
     // XAccessibleValue
-    virtual css::uno::Any SAL_CALL getCurrentValue(  ) override;
-    virtual bool SAL_CALL setCurrentValue( const css::uno::Any& aNumber ) override;
-    virtual css::uno::Any SAL_CALL getMaximumValue(  ) override;
-    virtual css::uno::Any SAL_CALL getMinimumValue(  ) override;
-    virtual css::uno::Any SAL_CALL getMinimumIncrement( ) override;
+    virtual cpo::uno::Any SAL_CALL getCurrentValue(  ) override;
+    virtual bool SAL_CALL setCurrentValue( const cpo::uno::Any& aNumber ) override;
+    virtual cpo::uno::Any SAL_CALL getMaximumValue(  ) override;
+    virtual cpo::uno::Any SAL_CALL getMinimumValue(  ) override;
+    virtual cpo::uno::Any SAL_CALL getMinimumIncrement( ) override;
 };
 
 

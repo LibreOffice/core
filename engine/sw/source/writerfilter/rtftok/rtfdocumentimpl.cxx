@@ -1101,7 +1101,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
         // try..catch is for tdf#161359
         try
         {
-            xPropertySet->setPropertyValue(u"Graphic"_ustr, uno::Any(xGraphic));
+            xPropertySet->setPropertyValue(u"Graphic"_ustr, cpo::uno::Any(xGraphic));
         }
         catch (const css::uno::Exception&)
         {
@@ -1124,7 +1124,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
 
         // Replacement graphic is inline by default, see oox::vml::SimpleShape::implConvertAndInsert().
         xPropertySet->setPropertyValue(u"AnchorType"_ustr,
-                                       uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+                                       cpo::uno::Any(text::TextContentAnchorType_AS_CHARACTER));
 
         auto pShapeValue = new RTFValue(xShape);
         m_aObjectAttributes.set(NS_ooxml::LN_shape, pShapeValue);
@@ -2935,7 +2935,7 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                 break; // not for nested group
             OUString aName = rState.getDestination() == Destination::OPERATOR ? u"Operator"_ustr
                                                                               : u"Company"_ustr;
-            uno::Any aValue(m_aStates.top().getCurrentDestinationText()->makeStringAndClear());
+            cpo::uno::Any aValue(m_aStates.top().getCurrentDestinationText()->makeStringAndClear());
             if (m_xDocumentProperties.is())
             {
                 uno::Reference<beans::XPropertyContainer> xUserDefinedProperties
@@ -3093,15 +3093,15 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                     = xServiceInfo->supportsService(u"com.sun.star.text.TextFrame"_ustr);
 
                 // The default is certainly not inline, but then what Word supports is just at-character.
-                xPropertySet->setPropertyValue(u"AnchorType"_ustr,
-                                               uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+                xPropertySet->setPropertyValue(
+                    u"AnchorType"_ustr, cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
 
                 if (bTextFrame)
                 {
                     xPropertySet->setPropertyValue(u"HoriOrientPosition"_ustr,
-                                                   uno::Any(rDrawing.getLeft()));
+                                                   cpo::uno::Any(rDrawing.getLeft()));
                     xPropertySet->setPropertyValue(u"VertOrientPosition"_ustr,
-                                                   uno::Any(rDrawing.getTop()));
+                                                   cpo::uno::Any(rDrawing.getTop()));
                 }
                 else
                 {
@@ -3111,22 +3111,23 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
 
                 if (rDrawing.getHasLineColor())
                 {
-                    uno::Any aLineColor(sal_uInt32((rDrawing.getLineColorR() << 16)
-                                                   + (rDrawing.getLineColorG() << 8)
-                                                   + rDrawing.getLineColorB()));
-                    uno::Any aLineWidth;
+                    cpo::uno::Any aLineColor(sal_uInt32((rDrawing.getLineColorR() << 16)
+                                                        + (rDrawing.getLineColorG() << 8)
+                                                        + rDrawing.getLineColorB()));
+                    cpo::uno::Any aLineWidth;
                     RTFSdrImport::resolveLineColorAndWidth(bTextFrame, xPropertySet, aLineColor,
                                                            aLineWidth);
                 }
                 if (rDrawing.getHasFillColor())
                     xPropertySet->setPropertyValue(
-                        u"FillColor"_ustr, uno::Any(sal_uInt32((rDrawing.getFillColorR() << 16)
-                                                               + (rDrawing.getFillColorG() << 8)
-                                                               + rDrawing.getFillColorB())));
+                        u"FillColor"_ustr,
+                        cpo::uno::Any(sal_uInt32((rDrawing.getFillColorR() << 16)
+                                                 + (rDrawing.getFillColorG() << 8)
+                                                 + rDrawing.getFillColorB())));
                 else if (!bTextFrame)
                     // If there is no fill, the Word default is 100% transparency.
                     xPropertySet->setPropertyValue(u"FillTransparence"_ustr,
-                                                   uno::Any(sal_Int32(100)));
+                                                   cpo::uno::Any(sal_Int32(100)));
 
                 RTFSdrImport::resolveFLine(xPropertySet, rDrawing.getFLine());
 
@@ -3411,7 +3412,7 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                 const OUString& rKey = m_aStates.top().getPropName();
                 OUString aStaticVal
                     = m_aStates.top().getCurrentDestinationText()->makeStringAndClear();
-                uno::Any aAny;
+                cpo::uno::Any aAny;
                 if (m_aStates.top().getPropType() == cppu::UnoType<OUString>::get())
                     aAny <<= aStaticVal;
                 else if (m_aStates.top().getPropType() == cppu::UnoType<sal_Int32>::get())
@@ -3462,7 +3463,7 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                 for (const beans::Property& rProperty : aClipboardProperties)
                 {
                     const OUString& rKey = rProperty.Name;
-                    uno::Any aValue = xClipboardPropertySet->getPropertyValue(rKey);
+                    cpo::uno::Any aValue = xClipboardPropertySet->getPropertyValue(rKey);
 
                     try
                     {
@@ -3701,12 +3702,12 @@ void RTFDocumentImpl::afterPopState(RTFParserState& rState)
                         m_xDstDoc->createInstance(u"com.sun.star.text.FieldMaster.User"_ustr),
                         uno::UNO_QUERY_THROW);
                     xMaster->setPropertyValue(u"Name"_ustr,
-                                              uno::Any(m_aStates.top().getDocVarName()));
+                                              cpo::uno::Any(m_aStates.top().getDocVarName()));
                     rtl::Reference<SwXTextField> xField = SwXTextField::CreateXTextField(
                         nullptr, nullptr, SwServiceType::FieldTypeUser);
                     xField->attachTextFieldMaster(xMaster);
                     xField->getTextFieldMaster()->setPropertyValue(u"Content"_ustr,
-                                                                   uno::Any(docvar));
+                                                                   cpo::uno::Any(docvar));
 
                     m_aStates.top().clearDocVarName();
                 }

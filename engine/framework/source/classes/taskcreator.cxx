@@ -61,14 +61,14 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
 {
     rtl::Reference< TaskCreatorService > xCreator = new TaskCreatorService(m_xContext);
 
-    css::uno::Sequence< css::uno::Any > lArgs
+    css::uno::Sequence< cpo::uno::Any > lArgs
     {
-        css::uno::Any(css::beans::NamedValue(ARGUMENT_PARENTFRAME, css::uno::Any(css::uno::Reference< css::frame::XFrame >( css::frame::Desktop::create( m_xContext ), css::uno::UNO_QUERY_THROW)))) ,
-        css::uno::Any(css::beans::NamedValue(ARGUMENT_CREATETOPWINDOW, css::uno::Any(true))),
-        css::uno::Any(css::beans::NamedValue(ARGUMENT_MAKEVISIBLE, css::uno::Any(false))),
-        css::uno::Any(css::beans::NamedValue(ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE, css::uno::Any(true))),
-        css::uno::Any(css::beans::NamedValue(ARGUMENT_FRAMENAME, css::uno::Any(sName))),
-        css::uno::Any(css::beans::NamedValue(ARGUMENT_HIDDENFORCONVERSION, css::uno::Any(rDescriptor.getUnpackedValueOrDefault(ARGUMENT_HIDDENFORCONVERSION, false))))
+        cpo::uno::Any(css::beans::NamedValue(ARGUMENT_PARENTFRAME, cpo::uno::Any(css::uno::Reference< css::frame::XFrame >( css::frame::Desktop::create( m_xContext ), css::uno::UNO_QUERY_THROW)))) ,
+        cpo::uno::Any(css::beans::NamedValue(ARGUMENT_CREATETOPWINDOW, cpo::uno::Any(true))),
+        cpo::uno::Any(css::beans::NamedValue(ARGUMENT_MAKEVISIBLE, cpo::uno::Any(false))),
+        cpo::uno::Any(css::beans::NamedValue(ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE, cpo::uno::Any(true))),
+        cpo::uno::Any(css::beans::NamedValue(ARGUMENT_FRAMENAME, cpo::uno::Any(sName))),
+        cpo::uno::Any(css::beans::NamedValue(ARGUMENT_HIDDENFORCONVERSION, cpo::uno::Any(rDescriptor.getUnpackedValueOrDefault(ARGUMENT_HIDDENFORCONVERSION, false))))
     };
     css::uno::Reference< css::frame::XFrame > xTask(xCreator->createInstanceWithArguments(lArgs), css::uno::UNO_QUERY_THROW);
     return xTask;

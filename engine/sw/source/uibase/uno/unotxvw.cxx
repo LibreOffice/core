@@ -78,6 +78,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
@@ -126,7 +127,7 @@ void SwXTextView::Invalidate()
     m_pView = nullptr;
 }
 
-bool SwXTextView::select(const uno::Any& aInterface)
+bool SwXTextView::select(const cpo::uno::Any& aInterface)
 {
     SolarMutexGuard aGuard;
 
@@ -253,7 +254,7 @@ bool SwXTextView::select(const uno::Any& aInterface)
     return bRet;
 }
 
-uno::Any SwXTextView::getSelection()
+cpo::uno::Any SwXTextView::getSelection()
 {
     SolarMutexGuard aGuard;
     uno::Reference< uno::XInterface >  aRef;
@@ -340,7 +341,7 @@ uno::Any SwXTextView::getSelection()
             default:;//prevent warning
         }
     }
-    uno::Any aRet(&aRef, cppu::UnoType<uno::XInterface>::get());
+    cpo::uno::Any aRet(&aRef, cppu::UnoType<uno::XInterface>::get());
     return aRet;
 }
 
@@ -681,7 +682,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL SwXTextView::getPropertySetIn
 }
 
 void SAL_CALL SwXTextView::setPropertyValue(
-        const OUString& rPropertyName, const uno::Any& rValue )
+        const OUString& rPropertyName, const cpo::uno::Any& rValue )
 {
     SolarMutexGuard aGuard;
 
@@ -728,7 +729,7 @@ void SAL_CALL SwXTextView::setPropertyValue(
     }
 }
 
-uno::Any SAL_CALL SwXTextView::getPropertyValue(
+cpo::uno::Any SAL_CALL SwXTextView::getPropertyValue(
         const OUString& rPropertyName )
 {
     SolarMutexGuard aGuard;

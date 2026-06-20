@@ -63,6 +63,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::chart2::data;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace {
 
@@ -417,20 +418,20 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
                         {
                             xTypePropSet->setPropertyValue(
                                 u"BinWidth"_ustr,
-                                uno::Any(std::get<double>(*rBinning.maBinSizeOrCount)));
+                                cpo::uno::Any(std::get<double>(*rBinning.maBinSizeOrCount)));
                             xTypePropSet->setPropertyValue(
                                 u"FrequencyType"_ustr,
-                                uno::Any(sal_Int32(1)));
+                                cpo::uno::Any(sal_Int32(1)));
                         }
                         else
                         {
                             xTypePropSet->setPropertyValue(
                                 u"BinCount"_ustr,
-                                uno::Any(static_cast<sal_Int32>(
+                                cpo::uno::Any(static_cast<sal_Int32>(
                                     std::get<sal_uInt32>(*rBinning.maBinSizeOrCount))));
                             xTypePropSet->setPropertyValue(
                                 u"FrequencyType"_ustr,
-                                uno::Any(sal_Int32(2)));
+                                cpo::uno::Any(sal_Int32(2)));
                         }
                     }
 
@@ -653,14 +654,14 @@ void TypeGroupConverter::convertMarker( PropertySet& rPropSet, sal_Int32 nOoxSym
 
             model::ComplexColor aComplexColor = aLineOOXColor.getComplexColor();
             auto xComplexColor = model::color::createXComplexColor(aComplexColor);
-            rPropSet.setProperty(PROP_ComplexColor, uno::Any(xComplexColor));
+            rPropSet.setProperty(PROP_ComplexColor, cpo::uno::Any(xComplexColor));
         }
         else
         {
             rPropSet.setProperty(PROP_Color, aSymbol.FillColor);
             model::ComplexColor aComplexColor = aFillOOXColor.getComplexColor();
             auto xComplexColor = model::color::createXComplexColor(aComplexColor);
-            rPropSet.setProperty(PROP_ComplexColor, uno::Any(xComplexColor));
+            rPropSet.setProperty(PROP_ComplexColor, cpo::uno::Any(xComplexColor));
         }
     }
 

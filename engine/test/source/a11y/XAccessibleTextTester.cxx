@@ -600,7 +600,7 @@ OUString XAccessibleTextTester::getSystemClipboardText()
     {
         if (rDataFlavor.MimeType.startsWith(u"text/plain"))
         {
-            css::uno::Any aData = xTrans->getTransferData(rDataFlavor);
+            cpo::uno::Any aData = xTrans->getTransferData(rDataFlavor);
             OUString sText;
             if (aData >>= sText)
                 return sText;

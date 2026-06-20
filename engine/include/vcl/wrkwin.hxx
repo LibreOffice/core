@@ -24,7 +24,7 @@
 #include <vcl/syswin.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-namespace com::sun::star::uno { class Any; }
+namespace cpo::uno { class Any; }
 struct SystemParentData;
 
 
@@ -51,7 +51,7 @@ private:
                       mbFullScreenMode:1;
 
     SAL_DLLPRIVATE void ImplInitWorkWindowData();
-    SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle, const css::uno::Any& aSystemWorkWindowToken );
+    SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle, const cpo::uno::Any& aSystemWorkWindowToken );
 
 private:
     WorkWindow( const WorkWindow& rWin ) = delete;
@@ -64,7 +64,7 @@ protected:
 
 public:
     explicit        WorkWindow( vcl::Window* pParent, WinBits nStyle = WB_STDWORK );
-    explicit        WorkWindow( vcl::Window* pParent, const css::uno::Any& aSystemWorkWindowToken, WinBits nStyle = WB_STDWORK );
+    explicit        WorkWindow( vcl::Window* pParent, const cpo::uno::Any& aSystemWorkWindowToken, WinBits nStyle = WB_STDWORK );
     explicit        WorkWindow( SystemParentData* pParent ); // Not in the REMOTE-Version
     virtual         ~WorkWindow() override;
     virtual void    dispose() override;

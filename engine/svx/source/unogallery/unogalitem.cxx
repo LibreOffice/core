@@ -70,9 +70,9 @@ bool GalleryItem::isValid() const
 }
 
 
-uno::Any SAL_CALL GalleryItem::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL GalleryItem::queryInterface( const uno::Type & rType )
 {
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     if( rType == cppu::UnoType<lang::XServiceInfo>::get())
         aAny <<= uno::Reference< lang::XServiceInfo >(this);
@@ -193,7 +193,7 @@ rtl::Reference<::comphelper::PropertySetInfo> GalleryItem::createPropertySetInfo
     return rtl::Reference<::comphelper::PropertySetInfo>( new ::comphelper::PropertySetInfo( aEntries ) );
 }
 
-void GalleryItem::_setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const uno::Any* pValues )
+void GalleryItem::_setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const cpo::uno::Any* pValues )
 {
     const SolarMutexGuard aGuard;
 
@@ -231,7 +231,7 @@ void GalleryItem::_setPropertyValues( const comphelper::PropertyMapEntry** ppEnt
     }
 }
 
-void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, uno::Any* pValue )
+void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, cpo::uno::Any* pValue )
 {
     const SolarMutexGuard aGuard;
 

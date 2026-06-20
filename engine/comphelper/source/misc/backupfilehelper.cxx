@@ -308,7 +308,7 @@ namespace
             }
             catch (const lang::IllegalArgumentException & e)
             {
-                css::uno::Any anyEx = cppu::getCaughtException();
+                cpo::uno::Any anyEx = cppu::getCaughtException();
                 throw css::lang::WrappedTargetRuntimeException( e.Message,
                                 e.Context, anyEx );
             }

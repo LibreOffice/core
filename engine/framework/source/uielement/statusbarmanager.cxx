@@ -300,21 +300,21 @@ void StatusBarManager::CreateControllers()
         AddonStatusbarItemData *pItemData = static_cast< AddonStatusbarItemData *>( m_pStatusBar->GetItemData( nId ) );
         uno::Reference< ui::XStatusbarItem > xStatusbarItem = new StatusbarItem( m_pStatusBar, nId, aCommandURL );
 
-        std::vector< uno::Any > aPropVector
+        std::vector< cpo::uno::Any > aPropVector
         {
-            uno::Any(comphelper::makePropertyValue(u"CommandURL"_ustr, aCommandURL)),
-            uno::Any(comphelper::makePropertyValue(u"ModuleIdentifier"_ustr, u""_ustr)),
-            uno::Any(comphelper::makePropertyValue(u"Frame"_ustr, m_xFrame)),
+            cpo::uno::Any(comphelper::makePropertyValue(u"CommandURL"_ustr, aCommandURL)),
+            cpo::uno::Any(comphelper::makePropertyValue(u"ModuleIdentifier"_ustr, u""_ustr)),
+            cpo::uno::Any(comphelper::makePropertyValue(u"Frame"_ustr, m_xFrame)),
 
             // TODO remove this
-            uno::Any(comphelper::makePropertyValue(u"ServiceManager"_ustr, uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW))),
+            cpo::uno::Any(comphelper::makePropertyValue(u"ServiceManager"_ustr, uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW))),
 
-            uno::Any(comphelper::makePropertyValue(u"ParentWindow"_ustr, xStatusbarWindow)),
-            uno::Any(comphelper::makePropertyValue(u"Identifier"_ustr, nId)),
-            uno::Any(comphelper::makePropertyValue(u"StatusbarItem"_ustr, xStatusbarItem))
+            cpo::uno::Any(comphelper::makePropertyValue(u"ParentWindow"_ustr, xStatusbarWindow)),
+            cpo::uno::Any(comphelper::makePropertyValue(u"Identifier"_ustr, nId)),
+            cpo::uno::Any(comphelper::makePropertyValue(u"StatusbarItem"_ustr, xStatusbarItem))
         };
 
-        uno::Sequence< uno::Any > aArgs( comphelper::containerToSequence( aPropVector ) );
+        uno::Sequence< cpo::uno::Any > aArgs( comphelper::containerToSequence( aPropVector ) );
 
         // 1) UNO Statusbar controllers, registered in Controllers.xcu
         if ( m_xStatusbarControllerFactory.is() &&
@@ -547,7 +547,7 @@ void StatusBarManager::Command( const CommandEvent& rEvt )
             awt::Point aPos;
             aPos.X = rEvt.GetMousePosPixel().X();
             aPos.Y = rEvt.GetMousePosPixel().Y();
-            xController->command( aPos, awt::Command::CONTEXTMENU, true, uno::Any() );
+            xController->command( aPos, awt::Command::CONTEXTMENU, true, cpo::uno::Any() );
         }
     }
 }

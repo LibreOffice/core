@@ -862,7 +862,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo68291)
     paste(u"rtfimport/data/fdo68291-paste.rtf", u"com.sun.star.comp.Writer.RtfFilter"_ustr, xEnd);
 
     // This was "Standard", causing an unwanted page break on next paste.
-    CPPUNIT_ASSERT_EQUAL(uno::Any(),
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(),
                          uno::Reference<beans::XPropertySet>(getParagraph(1), uno::UNO_QUERY_THROW)
                              ->getPropertyValue(u"PageDescName"_ustr));
 }
@@ -881,7 +881,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContSectionPageBreak)
     CPPUNIT_ASSERT_EQUAL(u"SECOND"_ustr, xParaSecond->getString());
     CPPUNIT_ASSERT_EQUAL(style::BreakType_NONE,
                          getProperty<style::BreakType>(xParaSecond, u"BreakType"_ustr));
-    CPPUNIT_ASSERT_EQUAL(uno::Any(),
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(),
                          uno::Reference<beans::XPropertySet>(xParaSecond, uno::UNO_QUERY_THROW)
                              ->getPropertyValue(u"PageDescName"_ustr));
     // actually not sure how many paragraph there should be between
@@ -891,12 +891,12 @@ CPPUNIT_TEST_FIXTURE(Test, testContSectionPageBreak)
     uno::Reference<text::XTextRange> xParaNext = getParagraph(3);
     CPPUNIT_ASSERT_EQUAL(OUString(), xParaNext->getString());
     //If PageDescName is not empty, a page break / switch to page style is defined
-    CPPUNIT_ASSERT(uno::Any() != getProperty<OUString>(xParaNext, u"PageDescName"_ustr));
+    CPPUNIT_ASSERT(cpo::uno::Any() != getProperty<OUString>(xParaNext, u"PageDescName"_ustr));
     uno::Reference<text::XTextRange> xParaThird = getParagraph(4);
     CPPUNIT_ASSERT_EQUAL(u"THIRD"_ustr, xParaThird->getString());
     CPPUNIT_ASSERT_EQUAL(style::BreakType_NONE,
                          getProperty<style::BreakType>(xParaThird, u"BreakType"_ustr));
-    CPPUNIT_ASSERT_EQUAL(uno::Any(),
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(),
                          uno::Reference<beans::XPropertySet>(xParaThird, uno::UNO_QUERY_THROW)
                              ->getPropertyValue(u"PageDescName"_ustr));
     // there is an empty paragraph after THIRD
@@ -921,7 +921,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSectionPageBreak)
     CPPUNIT_ASSERT_EQUAL(u"SECOND"_ustr, xParaSecond->getString());
     CPPUNIT_ASSERT_EQUAL(style::BreakType_NONE,
                          getProperty<style::BreakType>(xParaSecond, u"BreakType"_ustr));
-    CPPUNIT_ASSERT(uno::Any() != getProperty<OUString>(xParaSecond, u"PageDescName"_ustr));
+    CPPUNIT_ASSERT(cpo::uno::Any() != getProperty<OUString>(xParaSecond, u"PageDescName"_ustr));
     // actually not sure how many paragraph there should be between
     // SECOND and THIRD - important is that the page break is on there
     // (could be either 1 or 2; in Word it's a 2-line paragraph with the 1st
@@ -935,7 +935,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSectionPageBreak)
     CPPUNIT_ASSERT_EQUAL(u"THIRD"_ustr, xParaThird->getString());
     CPPUNIT_ASSERT_EQUAL(style::BreakType_NONE,
                          getProperty<style::BreakType>(xParaThird, u"BreakType"_ustr));
-    CPPUNIT_ASSERT(uno::Any() != getProperty<OUString>(xParaThird, u"PageDescName"_ustr));
+    CPPUNIT_ASSERT(cpo::uno::Any() != getProperty<OUString>(xParaThird, u"PageDescName"_ustr));
     // there is an empty paragraph after THIRD
     uno::Reference<text::XTextRange> xParaLast = getParagraph(5);
     CPPUNIT_ASSERT_EQUAL(OUString(), xParaLast->getString());

@@ -177,7 +177,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedProviderFactory_Impl::LockServer( int /*f
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 embedserv_EmbedServer(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     auto msf = css::uno::Reference<css::lang::XMultiServiceFactory>(context->getServiceManager(), css::uno::UNO_QUERY_THROW);
     return cppu::acquire(new EmbedServer_Impl(msf));

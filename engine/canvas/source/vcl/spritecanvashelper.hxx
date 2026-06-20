@@ -116,20 +116,20 @@ namespace vclcanvas
         void genericUpdate( const ::basegfx::B2DRange&                          rTotalArea,
                             const std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites );
 
-        css::uno::Any isUnsafeScrolling() const
+        cpo::uno::Any isUnsafeScrolling() const
         {
-            return css::uno::Any(mbIsUnsafeScrolling);
+            return cpo::uno::Any(mbIsUnsafeScrolling);
         }
-        void enableUnsafeScrolling( const css::uno::Any& rAny )
+        void enableUnsafeScrolling( const cpo::uno::Any& rAny )
         {
             mbIsUnsafeScrolling = rAny.get<bool>();
         }
 
-        css::uno::Any isSpriteBounds() const
+        cpo::uno::Any isSpriteBounds() const
         {
-            return css::uno::Any(mbShowSpriteBounds);
+            return cpo::uno::Any(mbShowSpriteBounds);
         }
-        void enableSpriteBounds( const css::uno::Any& rAny )
+        void enableSpriteBounds( const cpo::uno::Any& rAny )
         {
             mbShowSpriteBounds = rAny.get<bool>();
         }

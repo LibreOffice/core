@@ -235,7 +235,7 @@ bool
 UUIInteractionHelper::handleLockedDocumentRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
 {
-    uno::Any aAnyRequest(rRequest->getRequest());
+    cpo::uno::Any aAnyRequest(rRequest->getRequest());
 
     document::LockedDocumentRequest aLockedDocumentRequest;
     if (aAnyRequest >>= aLockedDocumentRequest )
@@ -281,7 +281,7 @@ bool
 UUIInteractionHelper::handleChangedByOthersRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
 {
-    uno::Any aAnyRequest(rRequest->getRequest());
+    cpo::uno::Any aAnyRequest(rRequest->getRequest());
 
     document::ChangedByOthersRequest aChangedByOthersRequest;
     if (aAnyRequest >>= aChangedByOthersRequest )
@@ -299,7 +299,7 @@ bool
 UUIInteractionHelper::handleLockFileProblemRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
 {
-    uno::Any aAnyRequest(rRequest->getRequest());
+    cpo::uno::Any aAnyRequest(rRequest->getRequest());
 
     document::LockFileIgnoreRequest aLockFileIgnoreRequest;
     if (aAnyRequest >>= aLockFileIgnoreRequest )
@@ -325,7 +325,7 @@ UUIInteractionHelper::handleLockFileProblemRequest(
 bool UUIInteractionHelper::handleReloadEditableRequest(
     uno::Reference<task::XInteractionRequest> const& rRequest)
 {
-    uno::Any aAnyRequest(rRequest->getRequest());
+    cpo::uno::Any aAnyRequest(rRequest->getRequest());
 
     document::ReloadEditableRequest aReloadEditableRequest;
     if (aAnyRequest >>= aReloadEditableRequest)

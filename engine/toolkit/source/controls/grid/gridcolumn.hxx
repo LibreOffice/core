@@ -41,8 +41,8 @@ public:
     virtual ~GridColumn() override;
 
     // css::awt::grid::XGridColumn
-    virtual css::uno::Any SAL_CALL getIdentifier() override;
-    virtual void SAL_CALL setIdentifier(const css::uno::Any & value) override;
+    virtual cpo::uno::Any SAL_CALL getIdentifier() override;
+    virtual void SAL_CALL setIdentifier(const cpo::uno::Any & value) override;
     virtual ::sal_Int32 SAL_CALL getColumnWidth() override;
     virtual void SAL_CALL setColumnWidth(::sal_Int32 the_value) override;
     virtual ::sal_Int32 SAL_CALL getMaxWidth() override;
@@ -82,8 +82,8 @@ public:
 private:
     void broadcast_changed(
             const OUString & i_asciiAttributeName,
-            const css::uno::Any& i_oldValue,
-            const css::uno::Any& i_newValue,
+            const cpo::uno::Any& i_oldValue,
+            const cpo::uno::Any& i_newValue,
             std::unique_lock<std::mutex>& i_Guard
         );
 
@@ -98,10 +98,10 @@ private:
 
         TYPE const aOldValue( io_attribute );
         io_attribute = i_newValue;
-        broadcast_changed( i_attributeName, css::uno::Any( aOldValue ), css::uno::Any( io_attribute ), aGuard );
+        broadcast_changed( i_attributeName, cpo::uno::Any( aOldValue ), cpo::uno::Any( io_attribute ), aGuard );
     }
 
-    css::uno::Any                      m_aIdentifier;
+    cpo::uno::Any                      m_aIdentifier;
     sal_Int32                          m_nIndex;
     sal_Int32                          m_nDataColumnIndex;
     sal_Int32                          m_nColumnWidth;

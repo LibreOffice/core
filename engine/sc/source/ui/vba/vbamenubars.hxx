@@ -28,10 +28,10 @@ public:
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& aIndex, const css::uno::Any& /*aIndex2*/ ) override;
+    virtual cpo::uno::Any SAL_CALL Item( const cpo::uno::Any& aIndex, const cpo::uno::Any& /*aIndex2*/ ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

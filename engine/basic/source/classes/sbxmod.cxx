@@ -81,6 +81,7 @@ using namespace com::sun::star::reflection;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::script;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 typedef ::cppu::WeakImplHelper< XInvocation > DocObjectWrapper_BASE;
 typedef std::map< sal_Int16, Any > OutParamMap;
@@ -383,7 +384,7 @@ uno::Reference< frame::XModel > getDocumentModel( StarBASIC* pb )
     uno::Reference< frame::XModel > xModel;
     if( pb && pb->IsDocBasic() )
     {
-        uno::Any aDoc;
+        cpo::uno::Any aDoc;
         if( pb->GetUNOConstant( u"ThisComponent"_ustr, aDoc ) )
             xModel.set( aDoc, uno::UNO_QUERY );
     }
@@ -2152,7 +2153,7 @@ SbObjModule::SbObjModule( const OUString& rName, const css::script::ModuleInfo& 
     }
     else if ( mInfo.ModuleObject.is() )
     {
-        SetUnoObject( uno::Any( mInfo.ModuleObject ) );
+        SetUnoObject( cpo::uno::Any( mInfo.ModuleObject ) );
     }
 }
 
@@ -2161,7 +2162,7 @@ SbObjModule::~SbObjModule()
 }
 
 void
-SbObjModule::SetUnoObject( const uno::Any& aObj )
+SbObjModule::SetUnoObject( const cpo::uno::Any& aObj )
 {
     SbUnoObject* pUnoObj = pDocObject.get();
     if ( pUnoObj && pUnoObj->getUnoAny() == aObj ) // object is equal, nothing to do
@@ -2622,14 +2623,14 @@ void SbUserFormModule::InitObject()
             m_xDialog = xProvider->createDialog( sDialogUrl );
 
             // create vba api object
-            uno::Sequence< uno::Any > aArgs
+            uno::Sequence< cpo::uno::Any > aArgs
             {
-                uno::Any(),
+                cpo::uno::Any(),
                 Any(m_xDialog),
                 Any(m_xModel),
                 Any(GetParent()->GetName())
             };
-            pDocObject = new SbUnoObject( GetName(), uno::Any( xVBAFactory->createInstanceWithArguments( u"ooo.vba.msforms.UserForm"_ustr, aArgs  ) ) );
+            pDocObject = new SbUnoObject( GetName(), cpo::uno::Any( xVBAFactory->createInstanceWithArguments( u"ooo.vba.msforms.UserForm"_ustr, aArgs  ) ) );
 
             uno::Reference< lang::XComponent > xComponent( m_xDialog, uno::UNO_QUERY_THROW );
 

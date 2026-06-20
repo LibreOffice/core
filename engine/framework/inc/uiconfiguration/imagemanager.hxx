@@ -60,7 +60,7 @@ namespace framework
             virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
             // XInitialization
-            virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+            virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
             // XImageManager
             virtual void SAL_CALL reset() override;

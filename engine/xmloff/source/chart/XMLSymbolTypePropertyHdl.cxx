@@ -111,7 +111,7 @@ XMLSymbolTypePropertyHdl::~XMLSymbolTypePropertyHdl()
 {}
 
 bool XMLSymbolTypePropertyHdl::importXML( const OUString& rStrImpValue,
-                                                  uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
+                                                  cpo::uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     bool bResult = false;
 
@@ -132,7 +132,7 @@ bool XMLSymbolTypePropertyHdl::importXML( const OUString& rStrImpValue,
 }
 
 bool XMLSymbolTypePropertyHdl::exportXML( OUString& rStrExpValue,
-                                              const uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
+                                              const cpo::uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     bool bResult = false;
 

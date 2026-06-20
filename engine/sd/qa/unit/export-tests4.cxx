@@ -512,7 +512,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testColumnsODG)
                                                  uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCols->getColumnCount());
         uno::Reference<beans::XPropertySet> xColProps(xCols, uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(700)),
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int32(700)),
                              xColProps->getPropertyValue(u"AutomaticDistance"_ustr));
 
         auto pTextObj = DynCastSdrTextObj(SdrObject::getSdrObjectFromXShape(xShape));
@@ -536,7 +536,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testColumnsODG)
                                                  uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCols->getColumnCount());
         uno::Reference<beans::XPropertySet> xColProps(xCols, uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(700)),
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int32(700)),
                              xColProps->getPropertyValue(u"AutomaticDistance"_ustr));
 
         auto pTextObj = DynCastSdrTextObj(SdrObject::getSdrObjectFromXShape(xShape));
@@ -749,7 +749,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testOpticalSizing1)
         uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xProps));
         uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
         uno::Reference<beans::XPropertySet> xRunProps(xRun, uno::UNO_QUERY_THROW);
-        xRunProps->setPropertyValue(u"CharOpticalSizing"_ustr, uno::Any(true));
+        xRunProps->setPropertyValue(u"CharOpticalSizing"_ustr, cpo::uno::Any(true));
         save(TestFilter::ODP);
         xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
         assertXPath(pXmlDoc,
@@ -774,7 +774,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testOpticalSizing1)
         uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xProps));
         uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
         uno::Reference<beans::XPropertySet> xRunProps(xRun, uno::UNO_QUERY_THROW);
-        xRunProps->setPropertyValue(u"CharOpticalSizing"_ustr, uno::Any(false));
+        xRunProps->setPropertyValue(u"CharOpticalSizing"_ustr, cpo::uno::Any(false));
         save(TestFilter::ODP);
         xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
         assertXPath(pXmlDoc,

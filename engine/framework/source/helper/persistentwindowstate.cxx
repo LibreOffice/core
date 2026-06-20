@@ -49,7 +49,7 @@ PersistentWindowState::~PersistentWindowState()
 {
 }
 
-void SAL_CALL PersistentWindowState::initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
+void SAL_CALL PersistentWindowState::initialize(const css::uno::Sequence< cpo::uno::Any >& lArguments)
 {
     // check arguments
     css::uno::Reference< css::frame::XFrame > xFrame;
@@ -203,7 +203,7 @@ void PersistentWindowState::implst_setWindowStateOnConfig(
             u"org.openoffice.Setup/"_ustr,
             OUString::Concat("Office/Factories/*[\"") + sModuleName + "\"]",
             u"ooSetupFactoryWindowAttributes"_ustr,
-            css::uno::Any(sWindowState),
+            cpo::uno::Any(sWindowState),
             ::comphelper::EConfigurationModes::Standard);
     }
     catch(const css::uno::RuntimeException&)
@@ -330,7 +330,7 @@ OUString PersistentWindowState::implst_getWindowStateFromModel(const css::uno::R
         if (auto xInfo = xProps->getPropertySetInfo();
             xInfo && xInfo->hasPropertyByName(u"WindowState"_ustr))
         {
-            css::uno::Any any = xProps->getPropertyValue(u"WindowState"_ustr);
+            cpo::uno::Any any = xProps->getPropertyValue(u"WindowState"_ustr);
             any >>= sWindowState;
         }
     }

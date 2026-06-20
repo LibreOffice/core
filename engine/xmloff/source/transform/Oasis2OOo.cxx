@@ -47,6 +47,7 @@
 
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::beans;
 
@@ -1884,7 +1885,7 @@ Sequence< OUString > SAL_CALL Oasis2OOoTransformer::getSupportedServiceNames(  )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 xmloff_Oasis2OOoTransformer_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     SAL_INFO("xmloff.transform", "Creating Oasis2OOoTransformer");
     return cppu::acquire(new Oasis2OOoTransformer);

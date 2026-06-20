@@ -25,13 +25,14 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 #include <officecfg/Office/Compatibility.hxx>
 
 #include <unordered_map>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 
 SvtCompatibility::SvtCompatibility(const OUString& itemName)
@@ -49,7 +50,7 @@ SvtCompatibility::SvtCompatibility(const std::shared_ptr<comphelper::Configurati
 
 void SvtCompatibility::set(const OUString& option, bool value)
 {
-    item->setPropertyValue(option, css::uno::Any(value));
+    item->setPropertyValue(option, cpo::uno::Any(value));
 }
 
 bool SvtCompatibility::get(const OUString& option) const

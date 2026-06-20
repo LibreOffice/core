@@ -35,8 +35,8 @@ public:
 
     SVX_DLLPRIVATE virtual SdrTextFixedCellHeightItem* Clone( SfxItemPool* pPool = nullptr ) const override;
 
-    SVX_DLLPRIVATE virtual  bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    SVX_DLLPRIVATE virtual  bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    SVX_DLLPRIVATE virtual  bool QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    SVX_DLLPRIVATE virtual  bool PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };
 
 #endif

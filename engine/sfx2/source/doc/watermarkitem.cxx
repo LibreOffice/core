@@ -41,20 +41,20 @@ SfxWatermarkItem* SfxWatermarkItem::Clone( SfxItemPool *) const
     return new SfxWatermarkItem(*this);
 }
 
-bool SfxWatermarkItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SfxWatermarkItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= comphelper::InitPropertySequence( {
-        { "Text", css::uno::Any( m_aText ) },
-        { "Font", css::uno::Any( m_aFont ) },
-        { "Angle", css::uno::Any( m_nAngle ) },
-        { "Transparency", css::uno::Any( m_nTransparency ) },
-        { "Color", css::uno::Any( m_nColor ) },
+        { "Text", cpo::uno::Any( m_aText ) },
+        { "Font", cpo::uno::Any( m_aFont ) },
+        { "Angle", cpo::uno::Any( m_nAngle ) },
+        { "Transparency", cpo::uno::Any( m_nTransparency ) },
+        { "Color", cpo::uno::Any( m_nColor ) },
     } );
 
     return true;
 }
 
-bool SfxWatermarkItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SfxWatermarkItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     css::uno::Sequence<css::beans::PropertyValue> aSequence;
 

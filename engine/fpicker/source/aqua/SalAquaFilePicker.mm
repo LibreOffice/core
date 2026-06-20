@@ -32,7 +32,7 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
@@ -58,6 +58,7 @@ using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 namespace
 {
@@ -330,7 +331,7 @@ void SAL_CALL SalAquaFilePicker::appendFilterGroup( const OUString&, const uno::
 
 #pragma mark XFilePickerControlAccess
 
-void SAL_CALL SalAquaFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const uno::Any& rValue )
+void SAL_CALL SalAquaFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const cpo::uno::Any& rValue )
 {
     SolarMutexGuard aGuard;
 
@@ -341,9 +342,9 @@ void SAL_CALL SalAquaFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nCont
     }
 }
 
-uno::Any SAL_CALL SalAquaFilePicker::getValue( sal_Int16 nControlId, sal_Int16 nControlAction )
+cpo::uno::Any SAL_CALL SalAquaFilePicker::getValue( sal_Int16 nControlId, sal_Int16 nControlAction )
 {
-    uno::Any aValue = m_pControlHelper->getValue(nControlId, nControlAction);
+    cpo::uno::Any aValue = m_pControlHelper->getValue(nControlId, nControlAction);
 
     return aValue;
 }
@@ -368,12 +369,12 @@ OUString SAL_CALL SalAquaFilePicker::getLabel( sal_Int16 nControlId )
 
 #pragma mark XInitialization
 
-void SAL_CALL SalAquaFilePicker::initialize( const uno::Sequence<uno::Any>& aArguments )
+void SAL_CALL SalAquaFilePicker::initialize( const uno::Sequence<cpo::uno::Any>& aArguments )
 {
     SolarMutexGuard aGuard;
 
     // parameter checking
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     if( 0 == aArguments.getLength() )
         throw lang::IllegalArgumentException("no arguments",
                                              static_cast<XFilePicker*>( static_cast<XFilePicker3*>(this) ), 1 );
@@ -584,7 +585,7 @@ void SalAquaFilePicker::filterControlChanged()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 fpicker_SalAquaFilePicker_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SalAquaFilePicker());
 }

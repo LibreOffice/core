@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include "fuconstr.hxx"
 
 class SdDrawDocument;
@@ -62,7 +62,7 @@ private:
         SfxRequest& rReq);
 
     sal_uInt16    nEditMode;
-    css::uno::Any maTargets;   // used for creating a path for custom animations
+    cpo::uno::Any maTargets;   // used for creating a path for custom animations
 
     //Extra attributes coming from parameters
     sal_uInt16  mnTransparence;  // Default: 0

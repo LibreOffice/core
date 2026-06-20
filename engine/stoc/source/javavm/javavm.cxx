@@ -134,7 +134,7 @@ static void destroyAttachGuards(void * pData)
 
 }
 
-bool askForRetry(css::uno::Any const & rException)
+bool askForRetry(cpo::uno::Any const & rException)
 {
     if (comphelper::IsContextFlagActive(u"DontEnableJava"_ustr))
         return false;
@@ -336,8 +336,8 @@ void getJavaPropsFromJavaSettings(
         throw css::uno::RuntimeException(
             u"javavm.cxx: couldn't get ConfigurationProvider"_ustr, nullptr);
 
-    css::beans::NamedValue aPath(u"nodepath"_ustr, css::uno::Any(u"org.openoffice.Office.Java/VirtualMachine"_ustr));
-    css::uno::Sequence<css::uno::Any> aArguments{ css::uno::Any(aPath) };
+    css::beans::NamedValue aPath(u"nodepath"_ustr, cpo::uno::Any(u"org.openoffice.Office.Java/VirtualMachine"_ustr));
+    css::uno::Sequence<cpo::uno::Any> aArguments{ cpo::uno::Any(aPath) };
 
     css::uno::Reference<css::container::XNameAccess> xConfigAccess(xConfigProvider->createInstanceWithArguments(
             u"com.sun.star.configuration.ConfigurationAccess"_ustr,
@@ -499,7 +499,7 @@ JavaVirtualMachine::JavaVirtualMachine(
 {}
 
 void SAL_CALL
-JavaVirtualMachine::initialize(css::uno::Sequence< css::uno::Any > const &
+JavaVirtualMachine::initialize(css::uno::Sequence< cpo::uno::Any > const &
                                    rArguments)
 {
     osl::MutexGuard aGuard(m_aMutex);
@@ -535,7 +535,7 @@ JavaVirtualMachine::initialize(css::uno::Sequence< css::uno::Any > const &
             try {
                 m_xUnoVirtualMachine = new jvmaccess::UnoVirtualMachine(vm, nullptr);
             } catch (jvmaccess::UnoVirtualMachine::CreationException &) {
-                css::uno::Any anyEx = cppu::getCaughtException();
+                cpo::uno::Any anyEx = cppu::getCaughtException();
                 throw css::lang::WrappedTargetRuntimeException(
                     u"jvmaccess::UnoVirtualMachine::CreationException"_ustr,
                     getXWeak(), anyEx );
@@ -572,7 +572,7 @@ JavaVirtualMachine::getSupportedServiceNames()
     return { u"com.sun.star.java.JavaVirtualMachine"_ustr };
 }
 
-css::uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
 {
     osl::MutexGuard aGuard(m_aMutex);
@@ -593,7 +593,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
     if (returnType != RETURN_JAVAVM)
         aProcessId.realloc(16);
     if (aId != aProcessId)
-        return css::uno::Any();
+        return cpo::uno::Any();
 
     std::unique_ptr<JavaInfo> info;
     while (!m_xVirtualMachine.is()) // retry until successful
@@ -645,8 +645,8 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
                     u"JavaVirtualMachine::getJavaVM failed because"
                     " No suitable JRE found!"_ustr,
                     getXWeak());
-                askForRetry(css::uno::Any(exc));
-                return css::uno::Any();
+                askForRetry(cpo::uno::Any(exc));
+                return cpo::uno::Any();
             }
             else
             {
@@ -666,8 +666,8 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
                 u"JavaVirtualMachine::getJavaVM failed because"
                 " Java settings have changed!"_ustr,
                 getXWeak());
-            askForRetry(css::uno::Any(exc));
-            return css::uno::Any();
+            askForRetry(cpo::uno::Any(exc));
+            return cpo::uno::Any();
         }
         case JFW_E_JAVA_DISABLED:
         {
@@ -678,8 +678,8 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             css::java::JavaDisabledException exc(
                 u"JavaVirtualMachine::getJavaVM failed because Java is disabled!"_ustr,
                 getXWeak());
-            if( ! askForRetry(css::uno::Any(exc)))
-                return css::uno::Any();
+            if( ! askForRetry(cpo::uno::Any(exc)))
+                return cpo::uno::Any();
             continue;
         }
         case JFW_E_VM_CREATION_FAILED:
@@ -715,8 +715,8 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             css::java::JavaVMCreationFailureException exc(
                 u"JavaVirtualMachine::getJavaVM failed because Java is defective!"_ustr,
                 getXWeak(), 0);
-            askForRetry(css::uno::Any(exc));
-            return css::uno::Any();
+            askForRetry(cpo::uno::Any(exc));
+            return cpo::uno::Any();
         }
         case JFW_E_RUNNING_JVM:
         {
@@ -733,8 +733,8 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
                 u"JavaVirtualMachine::getJavaVM failed because "
                 "Office must be restarted before Java can be used!"_ustr,
                 getXWeak());
-            askForRetry(css::uno::Any(exc));
-            return css::uno::Any();
+            askForRetry(cpo::uno::Any(exc));
+            return cpo::uno::Any();
         }
         default:
             //RuntimeException: error is somewhere in the java framework.
@@ -767,7 +767,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             jvmaccess::VirtualMachine::AttachGuard guard(m_xVirtualMachine);
             setUpUnoVirtualMachine(guard.getEnvironment());
         } catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &) {
-            css::uno::Any anyEx = cppu::getCaughtException();
+            cpo::uno::Any anyEx = cppu::getCaughtException();
             throw css::lang::WrappedTargetRuntimeException(
                 u"jvmaccess::VirtualMachine::AttachGuard::CreationException occurred"_ustr,
                 getXWeak(), anyEx );
@@ -781,15 +781,15 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
                 " that the requested JavaVM pointer is not available"_ustr,
                 getXWeak());
         }
-        return css::uno::Any(reinterpret_cast< sal_IntPtr >(m_pJavaVm));
+        return cpo::uno::Any(reinterpret_cast< sal_IntPtr >(m_pJavaVm));
     case RETURN_VIRTUALMACHINE:
         OSL_ASSERT(sizeof (sal_Int64) >= sizeof (jvmaccess::VirtualMachine *));
-        return css::uno::Any(
+        return cpo::uno::Any(
             reinterpret_cast< sal_Int64 >(
                 m_xUnoVirtualMachine->getVirtualMachine().get()));
     case RETURN_UNOVIRTUALMACHINE:
         OSL_ASSERT(sizeof (sal_Int64) >= sizeof (jvmaccess::VirtualMachine *));
-        return css::uno::Any(
+        return cpo::uno::Any(
             reinterpret_cast< sal_Int64 >(m_xUnoVirtualMachine.get()));
     }
 }
@@ -859,7 +859,7 @@ void SAL_CALL JavaVirtualMachine::registerThread()
     }
     catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
             u"JavaVirtualMachine::registerThread: jvmaccess::"
             "VirtualMachine::AttachGuard::CreationException"_ustr,
@@ -1018,7 +1018,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
     }
     catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
             u"jvmaccess::VirtualMachine::AttachGuard::CreationException"_ustr,
             getXWeak(), anyEx );
@@ -1071,10 +1071,10 @@ void JavaVirtualMachine::registerConfigChangesListener()
         {
             // We register this instance as listener to changes in org.openoffice.Inet/Settings
             // arguments for ConfigurationAccess
-            css::uno::Sequence<css::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+            css::uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
             {
-                {"nodepath", css::uno::Any(u"org.openoffice.Inet/Settings"_ustr)},
-                {"depth", css::uno::Any(sal_Int32(-1))}
+                {"nodepath", cpo::uno::Any(u"org.openoffice.Inet/Settings"_ustr)},
+                {"depth", cpo::uno::Any(sal_Int32(-1))}
             }));
             m_xInetConfiguration.set(
                     xConfigProvider->createInstanceWithArguments(
@@ -1196,7 +1196,7 @@ void JavaVirtualMachine::setUpUnoVirtualMachine(JNIEnv * environment) {
     try {
         baseUrl = exp->expandMacros(u"$URE_INTERNAL_JAVA_DIR/"_ustr);
     } catch (css::lang::IllegalArgumentException &) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
             u"css::lang::IllegalArgumentException"_ustr,
             getXWeak(), anyEx );
@@ -1297,7 +1297,7 @@ void JavaVirtualMachine::setUpUnoVirtualMachine(JNIEnv * environment) {
         m_xUnoVirtualMachine = new jvmaccess::UnoVirtualMachine(
             m_xVirtualMachine, cl2);
     } catch (jvmaccess::UnoVirtualMachine::CreationException &) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
             u"jvmaccess::UnoVirtualMachine::CreationException"_ustr,
             getXWeak(), anyEx );
@@ -1318,7 +1318,7 @@ void JavaVirtualMachine::handleJniException(JNIEnv * environment) {
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 stoc_JavaVM_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new JavaVirtualMachine(context));
 }

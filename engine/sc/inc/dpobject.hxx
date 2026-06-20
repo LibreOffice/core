@@ -281,7 +281,7 @@ public:
                                                     css::sheet::DataPilotFieldFilter >& rFilters);
 
     void                GetDrillDownData(const ScAddress& rPos,
-                                         css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& rTableData);
+                                         css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > >& rTableData);
 
     // apply drop-down attribute, initialize mnHeaderRows, without accessing the source
     // (button attribute must be present)

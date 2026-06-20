@@ -35,7 +35,7 @@
 #include <oox/drawingml/chart/chartconverter.hxx>
 
 using ::oox::drawingml::chart::DataSequenceModel;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 namespace oox::drawingml::chart {
 
 using namespace ::com::sun::star;
@@ -43,6 +43,7 @@ using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::chart2::data;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 using ::oox::core::XmlFilterBase;
 

@@ -68,9 +68,9 @@ public:
 
     // XInvocation
     virtual css::uno::Reference< css::beans::XIntrospectionAccess >  SAL_CALL getIntrospection() override;
-    virtual css::uno::Any  SAL_CALL invoke(const OUString& FunctionName, const css::uno::Sequence< css::uno::Any >& Params, css::uno::Sequence< sal_Int16 >& OutParamIndex, css::uno::Sequence< css::uno::Any >& OutParam) override;
-    virtual void  SAL_CALL setValue(const OUString& PropertyName, const css::uno::Any& Value) override;
-    virtual css::uno::Any  SAL_CALL getValue(const OUString& PropertyName) override;
+    virtual cpo::uno::Any  SAL_CALL invoke(const OUString& FunctionName, const css::uno::Sequence< cpo::uno::Any >& Params, css::uno::Sequence< sal_Int16 >& OutParamIndex, css::uno::Sequence< cpo::uno::Any >& OutParam) override;
+    virtual void  SAL_CALL setValue(const OUString& PropertyName, const cpo::uno::Any& Value) override;
+    virtual cpo::uno::Any  SAL_CALL getValue(const OUString& PropertyName) override;
     virtual bool  SAL_CALL hasMethod(const OUString& Name) override;
     virtual bool  SAL_CALL hasProperty(const OUString& Name) override;
 
@@ -87,7 +87,7 @@ public:
     virtual void SAL_CALL setDisplayAlerts( bool displayAlerts ) override;
     virtual ::sal_Int32 SAL_CALL getCalculation() override;
     virtual void SAL_CALL setCalculation( ::sal_Int32 _calculation ) override;
-    virtual css::uno::Any SAL_CALL getSelection() override;
+    virtual cpo::uno::Any SAL_CALL getSelection() override;
     virtual css::uno::Reference< ov::excel::XWorkbook > SAL_CALL getActiveWorkbook() override;
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getActiveCell() override;
     virtual css::uno::Reference< ov::excel::XWindow > SAL_CALL getActiveWindow() override;
@@ -98,23 +98,23 @@ public:
     virtual css::uno::Reference< ov::XAssistant > SAL_CALL getAssistant() override;
     virtual css::uno::Reference< ov::excel::XWorkbook > SAL_CALL getThisWorkbook() override;
 
-    virtual css::uno::Any SAL_CALL GetOpenFilename(const css::uno::Any& FileFilter, const css::uno::Any& FilterIndex, const css::uno::Any& Title, const css::uno::Any& ButtonText, const css::uno::Any& MultiSelect) override;
-    virtual css::uno::Any SAL_CALL International( sal_Int32 Index ) override;
-    virtual css::uno::Any SAL_CALL FileDialog( const css::uno::Any& DialogType ) override;
-    virtual css::uno::Any SAL_CALL Workbooks( const css::uno::Any& aIndex ) override;
-    virtual css::uno::Any SAL_CALL Worksheets( const css::uno::Any& aIndex ) override;
-    virtual css::uno::Any SAL_CALL WorksheetFunction( ) override;
-    virtual css::uno::Any SAL_CALL Evaluate( const OUString& Name ) override;
-    virtual css::uno::Any SAL_CALL Dialogs( const css::uno::Any& DialogIndex ) override;
-    virtual css::uno::Any SAL_CALL getCutCopyMode() override;
-    virtual void SAL_CALL setCutCopyMode( const css::uno::Any& _cutcopymode ) override;
-    virtual css::uno::Any SAL_CALL getStatusBar() override;
-    virtual void SAL_CALL setStatusBar( const css::uno::Any& _statusbar ) override;
-    virtual css::uno::Any SAL_CALL getWindowState() override;
-    virtual void SAL_CALL setWindowState(const css::uno::Any& rWindowState) override;
+    virtual cpo::uno::Any SAL_CALL GetOpenFilename(const cpo::uno::Any& FileFilter, const cpo::uno::Any& FilterIndex, const cpo::uno::Any& Title, const cpo::uno::Any& ButtonText, const cpo::uno::Any& MultiSelect) override;
+    virtual cpo::uno::Any SAL_CALL International( sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL FileDialog( const cpo::uno::Any& DialogType ) override;
+    virtual cpo::uno::Any SAL_CALL Workbooks( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Worksheets( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL WorksheetFunction( ) override;
+    virtual cpo::uno::Any SAL_CALL Evaluate( const OUString& Name ) override;
+    virtual cpo::uno::Any SAL_CALL Dialogs( const cpo::uno::Any& DialogIndex ) override;
+    virtual cpo::uno::Any SAL_CALL getCutCopyMode() override;
+    virtual void SAL_CALL setCutCopyMode( const cpo::uno::Any& _cutcopymode ) override;
+    virtual cpo::uno::Any SAL_CALL getStatusBar() override;
+    virtual void SAL_CALL setStatusBar( const cpo::uno::Any& _statusbar ) override;
+    virtual cpo::uno::Any SAL_CALL getWindowState() override;
+    virtual void SAL_CALL setWindowState(const cpo::uno::Any& rWindowState) override;
     virtual ::sal_Int32 SAL_CALL getCursor() override;
     virtual void SAL_CALL setCursor( ::sal_Int32 _cursor ) override;
-    virtual void SAL_CALL OnKey( const OUString& Key, const css::uno::Any& Procedure ) override;
+    virtual void SAL_CALL OnKey( const OUString& Key, const cpo::uno::Any& Procedure ) override;
     virtual void SAL_CALL setScreenUpdating( bool bUpdate ) override;
     virtual bool SAL_CALL getEnableEvents() override;
     virtual void SAL_CALL setEnableEvents( bool bEnable ) override;
@@ -135,20 +135,20 @@ public:
     virtual bool SAL_CALL getIteration() override;
     virtual void SAL_CALL setIteration( bool bSet ) override;
 
-    virtual css::uno::Any SAL_CALL Windows( const css::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Windows( const cpo::uno::Any& aIndex ) override;
     virtual void SAL_CALL wait( double time ) override;
-    virtual css::uno::Any SAL_CALL Range( const css::uno::Any& Cell1, const css::uno::Any& Cell2 ) override;
-    virtual css::uno::Any SAL_CALL Names( const css::uno::Any& aIndex ) override;
-    virtual void SAL_CALL GoTo( const css::uno::Any& Reference, const css::uno::Any& Scroll ) override;
+    virtual cpo::uno::Any SAL_CALL Range( const cpo::uno::Any& Cell1, const cpo::uno::Any& Cell2 ) override;
+    virtual cpo::uno::Any SAL_CALL Names( const cpo::uno::Any& aIndex ) override;
+    virtual void SAL_CALL GoTo( const cpo::uno::Any& Reference, const cpo::uno::Any& Scroll ) override;
     virtual void SAL_CALL Calculate() override;
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Intersect( const css::uno::Reference< ov::excel::XRange >& Arg1, const css::uno::Reference< ov::excel::XRange >& Arg2, const css::uno::Any& Arg3, const css::uno::Any& Arg4, const css::uno::Any& Arg5, const css::uno::Any& Arg6, const css::uno::Any& Arg7, const css::uno::Any& Arg8, const css::uno::Any& Arg9, const css::uno::Any& Arg10, const css::uno::Any& Arg11, const css::uno::Any& Arg12, const css::uno::Any& Arg13, const css::uno::Any& Arg14, const css::uno::Any& Arg15, const css::uno::Any& Arg16, const css::uno::Any& Arg17, const css::uno::Any& Arg18, const css::uno::Any& Arg19, const css::uno::Any& Arg20, const css::uno::Any& Arg21, const css::uno::Any& Arg22, const css::uno::Any& Arg23, const css::uno::Any& Arg24, const css::uno::Any& Arg25, const css::uno::Any& Arg26, const css::uno::Any& Arg27, const css::uno::Any& Arg28, const css::uno::Any& Arg29, const css::uno::Any& Arg30 ) override;
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Union( const css::uno::Reference< ov::excel::XRange >& Arg1, const css::uno::Reference< ov::excel::XRange >& Arg2, const css::uno::Any& Arg3, const css::uno::Any& Arg4, const css::uno::Any& Arg5, const css::uno::Any& Arg6, const css::uno::Any& Arg7, const css::uno::Any& Arg8, const css::uno::Any& Arg9, const css::uno::Any& Arg10, const css::uno::Any& Arg11, const css::uno::Any& Arg12, const css::uno::Any& Arg13, const css::uno::Any& Arg14, const css::uno::Any& Arg15, const css::uno::Any& Arg16, const css::uno::Any& Arg17, const css::uno::Any& Arg18, const css::uno::Any& Arg19, const css::uno::Any& Arg20, const css::uno::Any& Arg21, const css::uno::Any& Arg22, const css::uno::Any& Arg23, const css::uno::Any& Arg24, const css::uno::Any& Arg25, const css::uno::Any& Arg26, const css::uno::Any& Arg27, const css::uno::Any& Arg28, const css::uno::Any& Arg29, const css::uno::Any& Arg30 ) override;
+    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Intersect( const css::uno::Reference< ov::excel::XRange >& Arg1, const css::uno::Reference< ov::excel::XRange >& Arg2, const cpo::uno::Any& Arg3, const cpo::uno::Any& Arg4, const cpo::uno::Any& Arg5, const cpo::uno::Any& Arg6, const cpo::uno::Any& Arg7, const cpo::uno::Any& Arg8, const cpo::uno::Any& Arg9, const cpo::uno::Any& Arg10, const cpo::uno::Any& Arg11, const cpo::uno::Any& Arg12, const cpo::uno::Any& Arg13, const cpo::uno::Any& Arg14, const cpo::uno::Any& Arg15, const cpo::uno::Any& Arg16, const cpo::uno::Any& Arg17, const cpo::uno::Any& Arg18, const cpo::uno::Any& Arg19, const cpo::uno::Any& Arg20, const cpo::uno::Any& Arg21, const cpo::uno::Any& Arg22, const cpo::uno::Any& Arg23, const cpo::uno::Any& Arg24, const cpo::uno::Any& Arg25, const cpo::uno::Any& Arg26, const cpo::uno::Any& Arg27, const cpo::uno::Any& Arg28, const cpo::uno::Any& Arg29, const cpo::uno::Any& Arg30 ) override;
+    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Union( const css::uno::Reference< ov::excel::XRange >& Arg1, const css::uno::Reference< ov::excel::XRange >& Arg2, const cpo::uno::Any& Arg3, const cpo::uno::Any& Arg4, const cpo::uno::Any& Arg5, const cpo::uno::Any& Arg6, const cpo::uno::Any& Arg7, const cpo::uno::Any& Arg8, const cpo::uno::Any& Arg9, const cpo::uno::Any& Arg10, const cpo::uno::Any& Arg11, const cpo::uno::Any& Arg12, const cpo::uno::Any& Arg13, const cpo::uno::Any& Arg14, const cpo::uno::Any& Arg15, const cpo::uno::Any& Arg16, const cpo::uno::Any& Arg17, const cpo::uno::Any& Arg18, const cpo::uno::Any& Arg19, const cpo::uno::Any& Arg20, const cpo::uno::Any& Arg21, const cpo::uno::Any& Arg22, const cpo::uno::Any& Arg23, const cpo::uno::Any& Arg24, const cpo::uno::Any& Arg25, const cpo::uno::Any& Arg26, const cpo::uno::Any& Arg27, const cpo::uno::Any& Arg28, const cpo::uno::Any& Arg29, const cpo::uno::Any& Arg30 ) override;
     virtual double SAL_CALL CentimetersToPoints( double Centimeters ) override;
     virtual double SAL_CALL InchesToPoints( double Inches ) override;
-    virtual void SAL_CALL Volatile( const css::uno::Any& Volatile ) override;
-    virtual css::uno::Any SAL_CALL MenuBars( const css::uno::Any& aIndex ) override;
-    virtual css::uno::Any SAL_CALL Rows( const css::uno::Any& aIndex ) override;
-    virtual css::uno::Any SAL_CALL Caller( const css::uno::Any& aIndex ) override;
+    virtual void SAL_CALL Volatile( const cpo::uno::Any& Volatile ) override;
+    virtual cpo::uno::Any SAL_CALL MenuBars( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Rows( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Caller( const cpo::uno::Any& aIndex ) override;
     virtual void SAL_CALL Undo() override;
 
     // XHelperInterface
@@ -164,7 +164,7 @@ public:
     virtual css::uno::Reference<ov::XConnectionPoint> SAL_CALL FindConnectionPoint() override;
 
     // XSinkCaller
-    virtual void SAL_CALL CallSinks( const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments ) override;
+    virtual void SAL_CALL CallSinks( const OUString& Method, css::uno::Sequence< cpo::uno::Any >& Arguments ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

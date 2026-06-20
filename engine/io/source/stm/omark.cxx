@@ -44,6 +44,7 @@
 using namespace ::cppu;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 
 #include "streamhelper.hxx"
@@ -360,7 +361,7 @@ Sequence< OUString > OMarkableOutputStream::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 io_OMarkableOutputStream_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new OMarkableOutputStream());
 }
@@ -770,7 +771,7 @@ Sequence< OUString > OMarkableInputStream::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 io_OMarkableInputStream_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new OMarkableInputStream());
 }

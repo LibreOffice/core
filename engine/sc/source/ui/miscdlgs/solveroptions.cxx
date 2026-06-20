@@ -129,7 +129,7 @@ const uno::Sequence<beans::PropertyValue>& ScSolverOptionsDialog::GetProperties(
         auto maPropertiesRange = asNonConstRange(maProperties);
         for (sal_Int32 nEntryPos=0; nEntryPos<nEntryCount; ++nEntryPos)
         {
-            uno::Any& rValue = maPropertiesRange[nEntryPos].Value;
+            cpo::uno::Any& rValue = maPropertiesRange[nEntryPos].Value;
             if (ScSolverOptionsString* pStringItem = weld::fromId<ScSolverOptionsString*>(m_xLbSettings->get_id(nEntryPos)))
             {
                 if (pStringItem->IsDouble())
@@ -186,7 +186,7 @@ void ScSolverOptionsDialog::FillListBox()
     {
         OUString aVisName = aDescriptions[nPos].aDescription;
 
-        uno::Any aValue = maProperties[nPos].Value;
+        cpo::uno::Any aValue = maProperties[nPos].Value;
         uno::TypeClass eClass = aValue.getValueTypeClass();
 
         m_xLbSettings->append();

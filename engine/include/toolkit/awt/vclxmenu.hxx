@@ -79,7 +79,7 @@ public:
     void* getUserValue(sal_uInt16 nItemId);
 
     // css::uno::XInterface
-    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    cpo::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     void SAL_CALL acquire() noexcept override  { OWeakObject::acquire(); }
     void SAL_CALL release() noexcept override  { OWeakObject::release(); }
 

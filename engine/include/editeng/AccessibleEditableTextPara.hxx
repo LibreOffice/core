@@ -200,7 +200,7 @@ public:
     void SAL_CALL dispose() override;
 
     /// Calls all Listener objects to tell them the change. Don't hold locks when calling this!
-    void FireEvent(const sal_Int16 nEventId, const css::uno::Any& rNewValue = css::uno::Any(), const css::uno::Any& rOldValue = css::uno::Any());
+    void FireEvent(const sal_Int16 nEventId, const cpo::uno::Any& rNewValue = cpo::uno::Any(), const cpo::uno::Any& rOldValue = cpo::uno::Any());
 
     /// Sets the given state on the internal state set and fires STATE_CHANGE event. Don't hold locks when calling this!
     void SetState( const sal_Int64 nStateId );

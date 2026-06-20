@@ -310,10 +310,10 @@ public:
                             const css::uno::Sequence<sal_Int8> & i_rData);
 
     /** Returns the value of the property with the passed ID in a UNO any. */
-    css::uno::Any GetAnyValue( sal_Int32 nPropId ) const;
+    cpo::uno::Any GetAnyValue( sal_Int32 nPropId ) const;
     /** Inserts a property created from the passed any.
         @return  true = Property converted and inserted; false = Property type not supported. */
-    bool                SetAnyValue( sal_Int32 nPropId, const css::uno::Any& rValue );
+    bool                SetAnyValue( sal_Int32 nPropId, const cpo::uno::Any& rValue );
 
     /** Returns the custom name for the passed property ID, or an empty string, if name not found. */
     OUString            GetPropertyName( sal_Int32 nPropId ) const;

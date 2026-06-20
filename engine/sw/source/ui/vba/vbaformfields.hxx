@@ -27,14 +27,14 @@ public:
     // XFormFields
     bool SAL_CALL getShaded() override;
     void SAL_CALL setShaded(bool bSet) override;
-    //css::uno::Reference<ooo::vba::word::XFormField> SAL_CALL Add(const css::uno::Any& Range, sal_Int32 Type) override;
+    //css::uno::Reference<ooo::vba::word::XFormField> SAL_CALL Add(const cpo::uno::Any& Range, sal_Int32 Type) override;
 
     // XEnumerationAccess
     css::uno::Type SAL_CALL getElementType() override;
     css::uno::Reference<css::container::XEnumeration> SAL_CALL createEnumeration() override;
 
     // SwVbaFormFields_BASE
-    css::uno::Any createCollectionObject(const css::uno::Any& aSource) override;
+    cpo::uno::Any createCollectionObject(const cpo::uno::Any& aSource) override;
     OUString getServiceImplName() override;
     css::uno::Sequence<OUString> getServiceNames() override;
 };

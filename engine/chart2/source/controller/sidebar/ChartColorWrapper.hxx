@@ -48,7 +48,7 @@ public:
     ChartLineStyleWrapper(rtl::Reference<::chart::ChartModel> xModel,
             SvxLineStyleToolBoxControl* pControl);
 
-    bool operator()(std::u16string_view rCommand, const css::uno::Any& rValue);
+    bool operator()(std::u16string_view rCommand, const cpo::uno::Any& rValue);
 
     void updateModel(const rtl::Reference<::chart::ChartModel>& xModel);
 

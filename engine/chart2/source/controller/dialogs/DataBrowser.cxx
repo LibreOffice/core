@@ -743,7 +743,7 @@ OUString DataBrowser::GetCellText( sal_Int32 nRow, sal_Int32 nCol ) const
         }
         else if( m_apDataBrowserModel->getCellType( nCol ) == DataBrowserModel::TEXTORDATE )
         {
-            uno::Any aAny = m_apDataBrowserModel->getCellAny( nCol, nRow );
+            cpo::uno::Any aAny = m_apDataBrowserModel->getCellAny( nCol, nRow );
             OUString aText;
             double fDouble=0.0;
             if( aAny>>=aText )
@@ -872,9 +872,9 @@ bool DataBrowser::SaveCellEdit( sal_Int32 nRow, sal_Int32 nCol, const OUString& 
             double fValue = 0.0;
             bChangeValid = false;
             if( isDateTimeString( rText, fValue ) )
-                bChangeValid = m_apDataBrowserModel->setCellAny( nCol, nRow, uno::Any( fValue ) );
+                bChangeValid = m_apDataBrowserModel->setCellAny( nCol, nRow, cpo::uno::Any( fValue ) );
             if(!bChangeValid)
-                bChangeValid = m_apDataBrowserModel->setCellAny( nCol, nRow, uno::Any( rText ) );
+                bChangeValid = m_apDataBrowserModel->setCellAny( nCol, nRow, cpo::uno::Any( rText ) );
         }
         break;
         case DataBrowserModel::TEXT:
@@ -1133,7 +1133,7 @@ IMPL_LINK( DataBrowser, SeriesHeaderChanged, impl::SeriesHeaderEdit&, rEdit, voi
             Reference< container::XIndexReplace > xIndexReplace( xLabeledSeq->getLabel(), uno::UNO_QUERY );
             if( xIndexReplace.is())
                 xIndexReplace->replaceByIndex(
-                    0, uno::Any( rEdit.GetText()));
+                    0, cpo::uno::Any( rEdit.GetText()));
         }
     }
 }
@@ -1165,7 +1165,7 @@ IMPL_LINK( DataBrowser, HeaderNameChangedHdl, const ColumnNamePair&, rData, void
             Reference< container::XIndexReplace > xIndexReplace( xLabeledSeq->getLabel(), uno::UNO_QUERY );
             if( xIndexReplace.is())
                 xIndexReplace->replaceByIndex(
-                    0, uno::Any( rData.second ));
+                    0, cpo::uno::Any( rData.second ));
         }
     }
 }

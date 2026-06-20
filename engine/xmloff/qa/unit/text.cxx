@@ -57,7 +57,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCommentProperty)
 {
     loadFromURL(u"private:factory/swriter"_ustr);
     uno::Sequence<beans::PropertyValue> aCommentProps = comphelper::InitPropertySequence({
-        { "Text", uno::Any(u"comment"_ustr) },
+        { "Text", cpo::uno::Any(u"comment"_ustr) },
     });
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aCommentProps);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -69,8 +69,8 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCommentProperty)
     uno::Reference<beans::XPropertySet> xPortion(xPortionEnum->nextElement(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(xPortion->getPropertyValue(u"TextField"_ustr),
                                                uno::UNO_QUERY);
-    xField->setPropertyValue(u"Resolved"_ustr, uno::Any(true));
-    xField->setPropertyValue(u"ParentName"_ustr, uno::Any(u"parent_comment_name"_ustr));
+    xField->setPropertyValue(u"Resolved"_ustr, cpo::uno::Any(true));
+    xField->setPropertyValue(u"ParentName"_ustr, cpo::uno::Any(u"parent_comment_name"_ustr));
 
     saveAndReload(TestFilter::ODT);
     xTextDocument.set(mxComponent, uno::UNO_QUERY);
@@ -107,7 +107,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBibliographyLocalUrl)
         comphelper::makePropertyValue(u"URL"_ustr, u"http://www.example.com/test.pdf#page=1"_ustr),
         comphelper::makePropertyValue(u"LocalURL"_ustr, u"file:///home/me/test.pdf"_ustr),
     };
-    xField->setPropertyValue(u"Fields"_ustr, uno::Any(aFields));
+    xField->setPropertyValue(u"Fields"_ustr, cpo::uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -148,7 +148,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBibliographyTargetURL1)
         comphelper::makePropertyValue(u"TargetURL"_ustr,
                                       u"https://target.url/test2.pdf#page=2"_ustr),
     };
-    xField->setPropertyValue(u"Fields"_ustr, uno::Any(aFields));
+    xField->setPropertyValue(u"Fields"_ustr, cpo::uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -340,11 +340,11 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListIdState)
     auto paraEnumAccess(xText.queryThrow<container::XEnumerationAccess>());
     auto paraEnum(paraEnumAccess->createEnumeration());
     auto xParaProps(paraEnum->nextElement().queryThrow<beans::XPropertySet>());
-    xParaProps->setPropertyValue(u"NumberingStyleName"_ustr, css::uno::Any(u"Numbering ABC"_ustr));
+    xParaProps->setPropertyValue(u"NumberingStyleName"_ustr, cpo::uno::Any(u"Numbering ABC"_ustr));
     xParaProps.set(paraEnum->nextElement().queryThrow<beans::XPropertySet>());
-    xParaProps->setPropertyValue(u"NumberingStyleName"_ustr, css::uno::Any(u"Numbering 123"_ustr));
+    xParaProps->setPropertyValue(u"NumberingStyleName"_ustr, cpo::uno::Any(u"Numbering 123"_ustr));
     xParaProps.set(paraEnum->nextElement().queryThrow<beans::XPropertySet>());
-    xParaProps->setPropertyValue(u"NumberingStyleName"_ustr, css::uno::Any(u"Numbering ABC"_ustr));
+    xParaProps->setPropertyValue(u"NumberingStyleName"_ustr, cpo::uno::Any(u"Numbering ABC"_ustr));
 
     // When storing that document as ODF:
     save(TestFilter::ODT);
@@ -431,7 +431,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testClearingBreakExport)
     uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
     // SwLineBreakClear::ALL;
     sal_Int16 eClear = 3;
-    xLineBreakProps->setPropertyValue(u"Clear"_ustr, uno::Any(eClear));
+    xLineBreakProps->setPropertyValue(u"Clear"_ustr, cpo::uno::Any(eClear));
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
     xText->insertTextContent(xCursor, xLineBreak, /*bAbsorb=*/false);
@@ -493,18 +493,19 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRelativeWidth)
     uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName(u"Standard"_ustr),
                                                uno::UNO_QUERY);
     // Body frame width is 6cm (2+2cm margin).
-    xStyle->setPropertyValue(u"Width"_ustr, uno::Any(static_cast<sal_Int32>(10000)));
+    xStyle->setPropertyValue(u"Width"_ustr, cpo::uno::Any(static_cast<sal_Int32>(10000)));
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextContent> xTextFrame(
         xMSF->createInstance(u"com.sun.star.text.TextFrame"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTextFrameProps(xTextFrame, uno::UNO_QUERY);
-    xTextFrameProps->setPropertyValue(u"RelativeWidth"_ustr, uno::Any(static_cast<sal_Int16>(50)));
+    xTextFrameProps->setPropertyValue(u"RelativeWidth"_ustr,
+                                      cpo::uno::Any(static_cast<sal_Int16>(50)));
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
     xText->insertTextContent(xCursor, xTextFrame, /*bAbsorb=*/false);
     // Body frame width is 16cm.
-    xStyle->setPropertyValue(u"Width"_ustr, uno::Any(static_cast<sal_Int32>(20000)));
+    xStyle->setPropertyValue(u"Width"_ustr, cpo::uno::Any(static_cast<sal_Int32>(20000)));
 
     save(TestFilter::ODT);
 
@@ -527,10 +528,10 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testScaleWidthAndHeight)
     uno::Reference<text::XTextContent> xTextFrame(
         xMSF->createInstance(u"com.sun.star.text.TextFrame"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTextFrameProps(xTextFrame, uno::UNO_QUERY);
-    xTextFrameProps->setPropertyValue(u"Width"_ustr, uno::Any(static_cast<sal_Int16>(2000)));
-    xTextFrameProps->setPropertyValue(u"Height"_ustr, uno::Any(static_cast<sal_Int16>(1000)));
-    xTextFrameProps->setPropertyValue(u"IsSyncHeightToWidth"_ustr, uno::Any(true));
-    xTextFrameProps->setPropertyValue(u"IsSyncWidthToHeight"_ustr, uno::Any(true));
+    xTextFrameProps->setPropertyValue(u"Width"_ustr, cpo::uno::Any(static_cast<sal_Int16>(2000)));
+    xTextFrameProps->setPropertyValue(u"Height"_ustr, cpo::uno::Any(static_cast<sal_Int16>(1000)));
+    xTextFrameProps->setPropertyValue(u"IsSyncHeightToWidth"_ustr, cpo::uno::Any(true));
+    xTextFrameProps->setPropertyValue(u"IsSyncWidthToHeight"_ustr, cpo::uno::Any(true));
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
     xText->insertTextContent(xCursor, xTextFrame, /*bAbsorb=*/false);
@@ -561,7 +562,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testContentControlExport)
     uno::Reference<text::XTextContent> xContentControl(
         xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue(u"ShowingPlaceHolder"_ustr, uno::Any(true));
+    xContentControlProps->setPropertyValue(u"ShowingPlaceHolder"_ustr, cpo::uno::Any(true));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
@@ -620,10 +621,10 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCheckboxContentControlExport)
     uno::Reference<text::XTextContent> xContentControl(
         xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue(u"Checkbox"_ustr, uno::Any(true));
-    xContentControlProps->setPropertyValue(u"Checked"_ustr, uno::Any(true));
-    xContentControlProps->setPropertyValue(u"CheckedState"_ustr, uno::Any(u"☒"_ustr));
-    xContentControlProps->setPropertyValue(u"UncheckedState"_ustr, uno::Any(u"☐"_ustr));
+    xContentControlProps->setPropertyValue(u"Checkbox"_ustr, cpo::uno::Any(true));
+    xContentControlProps->setPropertyValue(u"Checked"_ustr, cpo::uno::Any(true));
+    xContentControlProps->setPropertyValue(u"CheckedState"_ustr, cpo::uno::Any(u"☒"_ustr));
+    xContentControlProps->setPropertyValue(u"UncheckedState"_ustr, cpo::uno::Any(u"☐"_ustr));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
@@ -694,22 +695,22 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlExport)
         xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     {
-        xContentControlProps->setPropertyValue(u"DropDown"_ustr, uno::Any(true));
+        xContentControlProps->setPropertyValue(u"DropDown"_ustr, cpo::uno::Any(true));
         uno::Sequence<beans::PropertyValues> aListItems = {
             {
-                comphelper::makePropertyValue(u"DisplayText"_ustr, uno::Any(u"red"_ustr)),
-                comphelper::makePropertyValue(u"Value"_ustr, uno::Any(u"R"_ustr)),
+                comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(u"red"_ustr)),
+                comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(u"R"_ustr)),
             },
             {
-                comphelper::makePropertyValue(u"DisplayText"_ustr, uno::Any(u"green"_ustr)),
-                comphelper::makePropertyValue(u"Value"_ustr, uno::Any(u"G"_ustr)),
+                comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(u"green"_ustr)),
+                comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(u"G"_ustr)),
             },
             {
-                comphelper::makePropertyValue(u"DisplayText"_ustr, uno::Any(u"blue"_ustr)),
-                comphelper::makePropertyValue(u"Value"_ustr, uno::Any(u"B"_ustr)),
+                comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(u"blue"_ustr)),
+                comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(u"B"_ustr)),
             },
         };
-        xContentControlProps->setPropertyValue(u"ListItems"_ustr, uno::Any(aListItems));
+        xContentControlProps->setPropertyValue(u"ListItems"_ustr, cpo::uno::Any(aListItems));
     }
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
@@ -787,7 +788,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPictureContentControlExport)
     uno::Reference<beans::XPropertySet> xTextGraphic(
         xMSF->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
     xTextGraphic->setPropertyValue(u"AnchorType"_ustr,
-                                   uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+                                   cpo::uno::Any(text::TextContentAnchorType_AS_CHARACTER));
     uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
     xText->insertTextContent(xCursor, xTextContent, false);
     xCursor->gotoStart(/*bExpand=*/false);
@@ -795,7 +796,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPictureContentControlExport)
     uno::Reference<text::XTextContent> xContentControl(
         xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue(u"Picture"_ustr, uno::Any(true));
+    xContentControlProps->setPropertyValue(u"Picture"_ustr, cpo::uno::Any(true));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
@@ -849,11 +850,11 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDateContentControlExport)
     uno::Reference<text::XTextContent> xContentControl(
         xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue(u"Date"_ustr, uno::Any(true));
-    xContentControlProps->setPropertyValue(u"DateFormat"_ustr, uno::Any(u"YYYY-MM-DD"_ustr));
-    xContentControlProps->setPropertyValue(u"DateLanguage"_ustr, uno::Any(u"en-US"_ustr));
+    xContentControlProps->setPropertyValue(u"Date"_ustr, cpo::uno::Any(true));
+    xContentControlProps->setPropertyValue(u"DateFormat"_ustr, cpo::uno::Any(u"YYYY-MM-DD"_ustr));
+    xContentControlProps->setPropertyValue(u"DateLanguage"_ustr, cpo::uno::Any(u"en-US"_ustr));
     xContentControlProps->setPropertyValue(u"CurrentDate"_ustr,
-                                           uno::Any(u"2022-05-25T00:00:00Z"_ustr));
+                                           cpo::uno::Any(u"2022-05-25T00:00:00Z"_ustr));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
@@ -919,7 +920,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPlainTextContentControlExport)
     uno::Reference<text::XTextContent> xContentControl(
         xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue(u"PlainText"_ustr, uno::Any(true));
+    xContentControlProps->setPropertyValue(u"PlainText"_ustr, cpo::uno::Any(true));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
@@ -974,7 +975,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testComboBoxContentControlExport)
     uno::Reference<text::XTextContent> xContentControl(
         xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue(u"ComboBox"_ustr, uno::Any(true));
+    xContentControlProps->setPropertyValue(u"ComboBox"_ustr, cpo::uno::Any(true));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
@@ -1002,12 +1003,12 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAliasContentControlExport)
     uno::Reference<text::XTextContent> xContentControl(
         xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue(u"Alias"_ustr, uno::Any(u"my alias"_ustr));
-    xContentControlProps->setPropertyValue(u"Tag"_ustr, uno::Any(u"my tag"_ustr));
+    xContentControlProps->setPropertyValue(u"Alias"_ustr, cpo::uno::Any(u"my alias"_ustr));
+    xContentControlProps->setPropertyValue(u"Tag"_ustr, cpo::uno::Any(u"my tag"_ustr));
     xContentControlProps->setPropertyValue(u"Id"_ustr,
-                                           uno::Any(static_cast<sal_Int32>(-2147483648)));
-    xContentControlProps->setPropertyValue(u"TabIndex"_ustr, uno::Any(sal_uInt32(3)));
-    xContentControlProps->setPropertyValue(u"Lock"_ustr, uno::Any(u"unlocked"_ustr));
+                                           cpo::uno::Any(static_cast<sal_Int32>(-2147483648)));
+    xContentControlProps->setPropertyValue(u"TabIndex"_ustr, cpo::uno::Any(sal_uInt32(3)));
+    xContentControlProps->setPropertyValue(u"Lock"_ustr, cpo::uno::Any(u"unlocked"_ustr));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
@@ -1103,7 +1104,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlAutostyleExport)
     // When saving that document to ODT, then make sure no assertion failure happens:
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
-        { "FilterName", uno::Any(u"writer8"_ustr) },
+        { "FilterName", cpo::uno::Any(u"writer8"_ustr) },
     });
     // Without the accompanying fix in place, this test would have failed, we had duplicated XML
     // attributes.
@@ -1156,7 +1157,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testThemeExport)
     pTheme->setColorSet(pColorSet);
 
     uno::Reference<util::XTheme> xTheme = model::theme::createXTheme(pTheme);
-    xPageProps->setPropertyValue(u"Theme"_ustr, uno::Any(xTheme));
+    xPageProps->setPropertyValue(u"Theme"_ustr, cpo::uno::Any(xTheme));
 
     // Export to ODT:
     save(TestFilter::ODT);
@@ -1194,7 +1195,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFloatingTableExport)
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFrame(
         xTextFramesSupplier->getTextFrames()->getByName(u"Frame1"_ustr), uno::UNO_QUERY);
-    xFrame->setPropertyValue(u"IsSplitAllowed"_ustr, uno::Any(true));
+    xFrame->setPropertyValue(u"IsSplitAllowed"_ustr, cpo::uno::Any(true));
 
     // When saving to ODT:
     save(TestFilter::ODT);

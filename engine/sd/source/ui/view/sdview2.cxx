@@ -734,7 +734,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt,
                     {
                         if(pIAOHandle->getOverlayObjectList().isHitPixel(rEvt.maPosPixel))
                         {
-                            uno::Any const data(aDataHelper.GetAny(SotClipboardFormatId::XFA, u""_ustr));
+                            cpo::uno::Any const data(aDataHelper.GetAny(SotClipboardFormatId::XFA, u""_ustr));
                             uno::Sequence<beans::NamedValue> props;
                             if (data >>= props)
                             {

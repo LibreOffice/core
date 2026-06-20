@@ -245,7 +245,7 @@ public:
           - FIELD_PROP_PAR3 Get the help text of the field.
           - FIELD_PROP_PAR4 Get the tool tip of the field.
     */
-    virtual bool QueryValue(css::uno::Any& rVal, sal_uInt16 nWhichId) const override;
+    virtual bool QueryValue(cpo::uno::Any& rVal, sal_uInt16 nWhichId) const override;
 
     /**
        API: Sets a property value on the dropdown field.
@@ -257,7 +257,7 @@ public:
           - FIELD_PROP_PAR3  Set the help text of the field.
           - FIELD_PROP_PAR4  Set the tool tip of the field.
     */
-    virtual bool PutValue(const css::uno::Any& rVal, sal_uInt16 nWhichId) override;
+    virtual bool PutValue(const cpo::uno::Any& rVal, sal_uInt16 nWhichId) override;
 };
 
 #endif

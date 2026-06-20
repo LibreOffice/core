@@ -738,7 +738,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
             uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = m_pDocument->GetVbaEventProcessor();
             if ( xVbaEvents.is() ) try
             {
-                uno::Sequence< uno::Any > aArgs{ uno::Any(pScHint->GetTab1()) };
+                uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(pScHint->GetTab1()) };
                 xVbaEvents->processVbaEvent( script::vba::VBAEventId::WORKBOOK_NEWSHEET, aArgs );
             }
             catch( uno::Exception& )
@@ -853,7 +853,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                         {
                             while ( xEnum->hasMoreElements() )
                             {
-                                uno::Any aAny = xEnum->nextElement();
+                                cpo::uno::Any aAny = xEnum->nextElement();
                                 uno::Reference< lang::XSingleComponentFactory > xFactory;
                                 aAny >>= xFactory;
                                 if ( xFactory.is() )
@@ -861,7 +861,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                     uno::Reference< task::XJob > xJob( xFactory->createInstanceWithContext( xContext ), uno::UNO_QUERY_THROW );
                                     uno::Reference< frame::XController > xController = pFrame->GetController();
                                     uno::Reference< sheet::XSpreadsheetView > xSpreadsheetView( xController, uno::UNO_QUERY_THROW );
-                                    uno::Sequence< beans::NamedValue > aArgsForJob { { u"SpreadsheetView"_ustr, uno::Any( xSpreadsheetView ) } };
+                                    uno::Sequence< beans::NamedValue > aArgsForJob { { u"SpreadsheetView"_ustr, cpo::uno::Any( xSpreadsheetView ) } };
                                     xJob->execute( aArgsForJob );
                                 }
                             }
@@ -1160,17 +1160,17 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
        case SfxEventHintId::CreateDoc:
             {
-                uno::Any aWorkbook;
+                cpo::uno::Any aWorkbook;
                 aWorkbook <<= mxAutomationWorkbookObject;
-                uno::Sequence< uno::Any > aArgs{ aWorkbook };
+                uno::Sequence< cpo::uno::Any > aArgs{ aWorkbook };
                 ScModule::get()->CallAutomationApplicationEventSinks(u"NewWorkbook"_ustr, aArgs);
             }
             break;
         case SfxEventHintId::OpenDoc:
             {
-                uno::Any aWorkbook;
+                cpo::uno::Any aWorkbook;
                 aWorkbook <<= mxAutomationWorkbookObject;
-                uno::Sequence< uno::Any > aArgs{ aWorkbook };
+                uno::Sequence< cpo::uno::Any > aArgs{ aWorkbook };
                 ScModule::get()->CallAutomationApplicationEventSinks(u"WorkbookOpen"_ustr, aArgs);
             }
             break;
@@ -3036,13 +3036,13 @@ bool ScDocShell::QuerySlotExecutable( sal_uInt16 nSlotId )
     using namespace ::com::sun::star::script::vba;
 
     sal_Int32 nVbaEventId = VBAEventId::NO_EVENT;
-    uno::Sequence< uno::Any > aArgs;
+    uno::Sequence< cpo::uno::Any > aArgs;
     switch( nSlotId )
     {
         case SID_SAVEDOC:
         case SID_SAVEASDOC:
             nVbaEventId = VBAEventId::WORKBOOK_BEFORESAVE;
-            aArgs = { uno::Any(nSlotId == SID_SAVEASDOC) };
+            aArgs = { cpo::uno::Any(nSlotId == SID_SAVEASDOC) };
         break;
         case SID_PRINTDOC:
         case SID_PRINTDOCDIRECT:
@@ -3098,7 +3098,7 @@ bool ScDocShell::PrepareClose( bool bUI )
         try
         {
             uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( m_pDocument->GetVbaEventProcessor(), uno::UNO_SET_THROW );
-            uno::Sequence< uno::Any > aArgs;
+            uno::Sequence< cpo::uno::Any > aArgs;
             xVbaEvents->processVbaEvent( script::vba::VBAEventId::WORKBOOK_BEFORECLOSE, aArgs );
         }
         catch( util::VetoException& )

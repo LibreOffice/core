@@ -146,6 +146,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::container;
 
 namespace {
@@ -3111,7 +3112,7 @@ IMPL_LINK(SwContentTree, EditedEntryHdl, const IterString&, rIterString, bool)
             return false;
         }
 
-        uno::Any aObj = xNameAccess->getByName(pCnt->GetName());
+        cpo::uno::Any aObj = xNameAccess->getByName(pCnt->GetName());
         uno::Reference<uno::XInterface>  xTmp;
         aObj >>= xTmp;
         uno::Reference<container::XNamed>  xNamed(xTmp, uno::UNO_QUERY);

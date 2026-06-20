@@ -376,7 +376,7 @@ namespace com { namespace sun { namespace star { } } }
 namespace css = ::com::sun::star;
 /** initial definition for cool#15927, so we can incrementally do some of the work
 */
-namespace cpo = ::com::sun::star;
+namespace cpo {}
 
 /** C++11 "= delete" feature.
 */

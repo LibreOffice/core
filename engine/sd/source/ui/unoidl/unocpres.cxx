@@ -74,7 +74,7 @@ uno::Sequence< OUString > SAL_CALL SdXCustomPresentation::getSupportedServiceNam
 }
 
 // XIndexContainer
-void SAL_CALL SdXCustomPresentation::insertByIndex( sal_Int32 Index, const uno::Any& Element )
+void SAL_CALL SdXCustomPresentation::insertByIndex( sal_Int32 Index, const cpo::uno::Any& Element )
 {
     SolarMutexGuard aGuard;
 
@@ -140,7 +140,7 @@ void SAL_CALL SdXCustomPresentation::removeByIndex( sal_Int32 Index )
 }
 
 // XIndexReplace
-void SAL_CALL SdXCustomPresentation::replaceByIndex( sal_Int32 Index, const uno::Any& Element )
+void SAL_CALL SdXCustomPresentation::replaceByIndex( sal_Int32 Index, const cpo::uno::Any& Element )
 {
     removeByIndex( Index );
     insertByIndex( Index, Element );
@@ -172,7 +172,7 @@ sal_Int32 SAL_CALL SdXCustomPresentation::getCount()
     return mpSdCustomShow ? mpSdCustomShow->PagesVector().size() : 0;
 }
 
-uno::Any SAL_CALL SdXCustomPresentation::getByIndex( sal_Int32 Index )
+cpo::uno::Any SAL_CALL SdXCustomPresentation::getByIndex( sal_Int32 Index )
 {
     SolarMutexGuard aGuard;
 
@@ -182,7 +182,7 @@ uno::Any SAL_CALL SdXCustomPresentation::getByIndex( sal_Int32 Index )
     if (Index < 0 || !mpSdCustomShow || o3tl::make_unsigned(Index) >= mpSdCustomShow->PagesVector().size())
         throw lang::IndexOutOfBoundsException();
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     SdrPage * pPage = const_cast<SdPage *>(mpSdCustomShow->PagesVector()[Index]);
 
     if( pPage )
@@ -294,13 +294,13 @@ uno::Reference< uno::XInterface > SAL_CALL SdXCustomPresentationAccess::createIn
     return xRef;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SdXCustomPresentationAccess::createInstanceWithArguments( const uno::Sequence< uno::Any >& )
+uno::Reference< uno::XInterface > SAL_CALL SdXCustomPresentationAccess::createInstanceWithArguments( const uno::Sequence< cpo::uno::Any >& )
 {
     return createInstance();
 }
 
 // XNameContainer
-void SAL_CALL SdXCustomPresentationAccess::insertByName( const OUString& aName, const uno::Any& aElement )
+void SAL_CALL SdXCustomPresentationAccess::insertByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
     SolarMutexGuard aGuard;
 
@@ -369,14 +369,14 @@ void SAL_CALL SdXCustomPresentationAccess::removeByName( const OUString& Name )
 }
 
 // XNameReplace
-void SAL_CALL SdXCustomPresentationAccess::replaceByName( const OUString& aName, const uno::Any& aElement )
+void SAL_CALL SdXCustomPresentationAccess::replaceByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
     removeByName( aName );
     insertByName( aName, aElement );
 }
 
 // XNameAccess
-uno::Any SAL_CALL SdXCustomPresentationAccess::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL SdXCustomPresentationAccess::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 
@@ -387,7 +387,7 @@ uno::Any SAL_CALL SdXCustomPresentationAccess::getByName( const OUString& aName 
     }
 
     uno::Reference< container::XIndexContainer >  xRef( pShow->getUnoCustomShow(), uno::UNO_QUERY );
-    return uno::Any(xRef);
+    return cpo::uno::Any(xRef);
 }
 
 uno::Sequence< OUString > SAL_CALL SdXCustomPresentationAccess::getElementNames()

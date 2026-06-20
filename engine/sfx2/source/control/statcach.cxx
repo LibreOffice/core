@@ -47,6 +47,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 
 BindDispatch_Impl::BindDispatch_Impl( css::uno::Reference< css::frame::XDispatch > _xDisp, css::util::URL _aURL, SfxStateCache *pStateCache, const SfxSlot* pS )
@@ -90,7 +91,7 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const css::frame::FeatureStateE
         else if (aStatus.State.hasValue())
         {
             eState = SfxItemState::DEFAULT;
-            css::uno::Any aAny = aStatus.State;
+            cpo::uno::Any aAny = aStatus.State;
 
             const css::uno::Type& aType = aAny.getValueType();
             if ( aType == cppu::UnoType< bool >::get() )
@@ -172,7 +173,7 @@ sal_Int16 BindDispatch_Impl::Dispatch( const css::uno::Sequence < css::beans::Pr
     if ( xDisp.is() && aStatus.IsEnabled )
     {
         ::rtl::Reference< ::framework::DispatchHelper > xHelper( new ::framework::DispatchHelper(nullptr));
-        css::uno::Any aResult = xHelper->executeDispatch(xDisp, aURL, bForceSynchron, aProps);
+        cpo::uno::Any aResult = xHelper->executeDispatch(xDisp, aURL, bForceSynchron, aProps);
 
         css::frame::DispatchResultEvent aEvent;
         aResult >>= aEvent;

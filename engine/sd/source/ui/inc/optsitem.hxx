@@ -56,9 +56,9 @@ public:
 
     virtual void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
 
-    css::uno::Sequence< css::uno::Any > GetProperties( const css::uno::Sequence< OUString >& rNames );
+    css::uno::Sequence< cpo::uno::Any > GetProperties( const css::uno::Sequence< OUString >& rNames );
     bool                    PutProperties( const css::uno::Sequence< OUString >& rNames,
-                                           const css::uno::Sequence< css::uno::Any>& rValues );
+                                           const css::uno::Sequence< cpo::uno::Any>& rValues );
     using ConfigItem::SetModified;
 };
 
@@ -86,8 +86,8 @@ protected:
 protected:
 
     virtual void            GetPropNameArray( const char* const*& ppNames, sal_uLong& rCount ) const = 0;
-    virtual bool            ReadData( const css::uno::Any* pValues ) = 0;
-    virtual bool            WriteData( css::uno::Any* pValues ) const = 0;
+    virtual bool            ReadData( const cpo::uno::Any* pValues ) = 0;
+    virtual bool            WriteData( cpo::uno::Any* pValues ) const = 0;
 
 public:
 
@@ -154,8 +154,8 @@ private:
 protected:
 
     virtual void GetPropNameArray( const char* const*& ppNames, sal_uLong& rCount ) const override;
-    virtual bool ReadData( const css::uno::Any* pValues ) override;
-    virtual bool WriteData( css::uno::Any* pValues ) const override;
+    virtual bool ReadData( const cpo::uno::Any* pValues ) override;
+    virtual bool WriteData( cpo::uno::Any* pValues ) const override;
 
 public:
 
@@ -261,8 +261,8 @@ class SdOptionsGrid : public SdOptionsGeneric, public SvxOptionsGrid
 protected:
 
     virtual void GetPropNameArray( const char* const*& ppNames, sal_uLong& rCount ) const override;
-    virtual bool ReadData( const css::uno::Any* pValues ) override;
-    virtual bool WriteData( css::uno::Any* pValues ) const override;
+    virtual bool ReadData( const cpo::uno::Any* pValues ) override;
+    virtual bool WriteData( cpo::uno::Any* pValues ) const override;
 
 public:
 
@@ -327,8 +327,8 @@ private:
 protected:
 
     virtual void GetPropNameArray( const char* const*& ppNames, sal_uLong& rCount ) const override;
-    virtual bool ReadData( const css::uno::Any* pValues ) override;
-    virtual bool WriteData( css::uno::Any* pValues ) const override;
+    virtual bool ReadData( const cpo::uno::Any* pValues ) override;
+    virtual bool WriteData( cpo::uno::Any* pValues ) const override;
 
 public:
 

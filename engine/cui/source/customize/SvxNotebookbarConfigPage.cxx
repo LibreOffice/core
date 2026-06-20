@@ -208,7 +208,7 @@ void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(std::u16string_view sClassId
 
     try
     {
-        uno::Any aModuleVal = m_xCommandToLabelMap->getByName(sUIItemCommand);
+        cpo::uno::Any aModuleVal = m_xCommandToLabelMap->getByName(sUIItemCommand);
 
         aModuleVal >>= aPropSeq;
     }

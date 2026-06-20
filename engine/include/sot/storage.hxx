@@ -29,7 +29,7 @@
 #include <sot/sotdllapi.h>
 
 namespace com::sun::star::embed { class XStorage; }
-namespace com::sun::star::uno { class Any; }
+namespace cpo::uno { class Any; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 
 enum class SotClipboardFormatId : sal_uInt32;
@@ -60,7 +60,7 @@ public:
     virtual void SetSize(sal_uInt64 nNewSize) override;
     sal_uInt32 GetSize() const;
     void Commit();
-    bool SetProperty(OUString const & rName, css::uno::Any const & rValue);
+    bool SetProperty(OUString const & rName, cpo::uno::Any const & rValue);
     virtual sal_uInt64 TellEnd() override;
 };
 

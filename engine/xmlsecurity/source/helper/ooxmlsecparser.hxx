@@ -104,7 +104,7 @@ public:
     virtual void SAL_CALL setDocumentLocator(const css::uno::Reference<css::xml::sax::XLocator>& xLocator) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

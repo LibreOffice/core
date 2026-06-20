@@ -111,8 +111,8 @@ public:
                                   OUString &rText,
                                   const IntlWrapper& rIntl ) const override;
 
-    virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     const SwColumns &GetColumns() const { return m_aColumns; }
           SwColumns &GetColumns()       { return m_aColumns; }

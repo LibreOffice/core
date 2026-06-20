@@ -48,6 +48,7 @@ using namespace ::osl;
 using namespace ::accessibility;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
@@ -509,18 +510,18 @@ void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& /*rBC*/, const SfxHi
                         rtl::Reference<AccessibleShape> pShape((*iter).second);
 
                         if( pShape.is() )
-                            pShape->CommitChange( AccessibleEventId::VISIBLE_DATA_CHANGED, uno::Any(), uno::Any(), -1 );
+                            pShape->CommitChange( AccessibleEventId::VISIBLE_DATA_CHANGED, cpo::uno::Any(), cpo::uno::Any(), -1 );
                     }
                 }
                 break;
 
             case SdrHintKind::ObjectInserted:
-                NotifyAccessibleEvent(AccessibleEventId::CHILD, uno::Any(),
+                NotifyAccessibleEvent(AccessibleEventId::CHILD, cpo::uno::Any(),
                                       Any(getAccessible(pSdrHint->GetObject())));
                 break;
             case SdrHintKind::ObjectRemoved:
                 NotifyAccessibleEvent(AccessibleEventId::CHILD,
-                                      Any(getAccessible(pSdrHint->GetObject())), uno::Any());
+                                      Any(getAccessible(pSdrHint->GetObject())), cpo::uno::Any());
                 break;
             case SdrHintKind::ModelCleared:
                 dispose();

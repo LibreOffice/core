@@ -48,9 +48,9 @@ class ProviderCache
 
 public:
      /// @throws css::uno::RuntimeException
-     ProviderCache( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Sequence< css::uno::Any >& scriptContext );
+     ProviderCache( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Sequence< cpo::uno::Any >& scriptContext );
      /// @throws css::uno::RuntimeException
-     ProviderCache( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Sequence< css::uno::Any >& scriptContext,
+     ProviderCache( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Sequence< cpo::uno::Any >& scriptContext,
         const css::uno::Sequence< OUString >& denyList );
     ~ProviderCache();
      css::uno::Reference< css::script::provider::XScriptProvider >
@@ -69,7 +69,7 @@ private:
     css::uno::Sequence< OUString >  m_sDenyList;
     ProviderDetails_hash  m_hProviderDetailsCache;
     std::mutex m_mutex;
-    css::uno::Sequence< css::uno::Any >  m_Sctx;
+    css::uno::Sequence< cpo::uno::Any >  m_Sctx;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::lang::XMultiComponentFactory > m_xMgr;
 

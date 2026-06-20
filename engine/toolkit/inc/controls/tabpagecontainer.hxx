@@ -40,7 +40,7 @@ private:
     std::vector< css::uno::Reference< css::awt::tab::XTabPageModel > > m_aTabPageVector;
     ContainerListenerMultiplexer        maContainerListeners;
 
-    css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    cpo::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
     // css::beans::XMultiPropertySet
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
@@ -62,16 +62,16 @@ public:
     virtual css::uno::Reference< css::awt::tab::XTabPageModel > SAL_CALL loadTabPage( ::sal_Int16 TabPageID, const OUString& ResourceURL ) override;
 
     // XIndexContainer
-    virtual void SAL_CALL insertByIndex( sal_Int32 Index, const css::uno::Any& Element ) override;
+    virtual void SAL_CALL insertByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
     virtual void SAL_CALL removeByIndex( sal_Int32 Index ) override;
 
     // XIndexReplace
-     virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const css::uno::Any& Element ) override;
+     virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
 
      // XIndexAccess
      virtual sal_Int32 SAL_CALL getCount() override;
 
-     virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+     virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
      // XElementAccess
      virtual css::uno::Type SAL_CALL getElementType() override;

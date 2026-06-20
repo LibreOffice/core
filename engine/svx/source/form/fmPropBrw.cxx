@@ -74,6 +74,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::inspection;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::svxform;
 using ::com::sun::star::awt::XWindow;

@@ -66,7 +66,7 @@ public:
 
     //  XInterface
 
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override;
 
     virtual void SAL_CALL acquire() noexcept override;
 
@@ -122,7 +122,7 @@ public:
 
     //  XNameAccess
 
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
 
@@ -146,9 +146,9 @@ public:
 
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
 
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
 
-    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
 
     virtual void SAL_CALL addPropertyChangeListener(
             const OUString& aPropertyName,

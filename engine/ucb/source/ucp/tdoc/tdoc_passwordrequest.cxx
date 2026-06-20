@@ -108,7 +108,7 @@ DocumentPasswordRequest::DocumentPasswordRequest(
     aRequest.Mode           = eMode;
     aRequest.Name           = rDocumentName;
 
-    setRequest( uno::Any( aRequest ) );
+    setRequest( cpo::uno::Any( aRequest ) );
 
     // Fill continuations...
     uno::Sequence<

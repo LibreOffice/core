@@ -92,21 +92,21 @@ namespace comphelper
     */
     class COMPHELPER_DLLPUBLIC OInteractionRequest final : public OInteractionRequest_Base
     {
-        css::uno::Any const
+        cpo::uno::Any const
                     m_aRequest;         /// the request we represent
         std::vector< css::uno::Reference< css::task::XInteractionContinuation > >
                     m_aContinuations;   /// all registered continuations
 
     public:
-        OInteractionRequest(css::uno::Any aRequestDescription);
-        OInteractionRequest(css::uno::Any aRequestDescription,
+        OInteractionRequest(cpo::uno::Any aRequestDescription);
+        OInteractionRequest(cpo::uno::Any aRequestDescription,
             std::vector<css::uno::Reference<css::task::XInteractionContinuation>>&& rContinuations);
 
         /// add a new continuation
         void addContinuation(const css::uno::Reference< css::task::XInteractionContinuation >& _rxContinuation);
 
     // XInteractionRequest
-        virtual css::uno::Any SAL_CALL getRequest(  ) override;
+        virtual cpo::uno::Any SAL_CALL getRequest(  ) override;
         virtual css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL getContinuations(  ) override;
     };
 

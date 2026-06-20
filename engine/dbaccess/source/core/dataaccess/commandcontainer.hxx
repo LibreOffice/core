@@ -54,7 +54,7 @@ public:
 
     // XSingleServiceFactory
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
 protected:
     virtual ~OCommandContainer() override;

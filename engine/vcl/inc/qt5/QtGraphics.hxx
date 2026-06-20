@@ -195,7 +195,7 @@ public:
     virtual cairo::SurfaceSharedPtr CreateBitmapSurface(const OutputDevice& rRefDevice,
                                                         const BitmapSystemData& rData,
                                                         const Size& rSize) const override;
-    virtual css::uno::Any GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface,
+    virtual cpo::uno::Any GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface,
                                                  const basegfx::B2ISize& rSize) const override;
 #endif // ENABLE_CAIRO_CANVAS
 

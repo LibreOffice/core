@@ -304,7 +304,7 @@ void appendValue( OUStringBuffer & buf,
 } // anon namespace
 
 
-OUString anyToString( uno::Any const & value )
+OUString anyToString( cpo::uno::Any const & value )
 {
     OUStringBuffer buf;
     appendValue( buf, value.getValue(), value.getValueTypeRef(), true );

@@ -166,13 +166,13 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XMLBasedAcceleratorConfigurati
     return comphelper::containerToSequence(lKeys);
 }
 
-css::uno::Sequence< css::uno::Any > SAL_CALL XMLBasedAcceleratorConfiguration::getPreferredKeyEventsForCommandList(const css::uno::Sequence< OUString >& lCommandList)
+css::uno::Sequence< cpo::uno::Any > SAL_CALL XMLBasedAcceleratorConfiguration::getPreferredKeyEventsForCommandList(const css::uno::Sequence< OUString >& lCommandList)
 {
     SolarMutexGuard g;
 
     sal_Int32                           i              = 0;
     sal_Int32                           c              = lCommandList.getLength();
-    css::uno::Sequence< css::uno::Any > lPreferredOnes (c); // don't pack list!
+    css::uno::Sequence< cpo::uno::Any > lPreferredOnes (c); // don't pack list!
     AcceleratorCache&                   rCache         = impl_getCFG();
 
     auto lPreferredOnesRange = asNonConstRange(lPreferredOnes);
@@ -192,7 +192,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XMLBasedAcceleratorConfiguration::g
         if ( lKeys.empty() )
             continue;
 
-        css::uno::Any& rAny = lPreferredOnesRange[i];
+        cpo::uno::Any& rAny = lPreferredOnesRange[i];
         rAny <<= *(lKeys.begin());
     }
 
@@ -661,13 +661,13 @@ static AcceleratorCache::TKeyList::const_iterator lcl_getPreferredKey(const Acce
         return !::svt::AcceleratorExecute::st_AWTKey2VCLKey(rAWTKey).GetName().isEmpty(); });
 }
 
-css::uno::Sequence< css::uno::Any > SAL_CALL XCUBasedAcceleratorConfiguration::getPreferredKeyEventsForCommandList(const css::uno::Sequence< OUString >& lCommandList)
+css::uno::Sequence< cpo::uno::Any > SAL_CALL XCUBasedAcceleratorConfiguration::getPreferredKeyEventsForCommandList(const css::uno::Sequence< OUString >& lCommandList)
 {
     SolarMutexGuard g;
 
     sal_Int32                           i              = 0;
     sal_Int32                           c              = lCommandList.getLength();
-    css::uno::Sequence< css::uno::Any > lPreferredOnes (c); // don't pack list!
+    css::uno::Sequence< cpo::uno::Any > lPreferredOnes (c); // don't pack list!
     AcceleratorCache&                   rCache         = impl_getCFG(true);
 
     auto lPreferredOnesRange = asNonConstRange(lPreferredOnes);
@@ -690,7 +690,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XCUBasedAcceleratorConfiguration::g
         AcceleratorCache::TKeyList::const_iterator pPreferredKey = lcl_getPreferredKey(lKeys);
         if (pPreferredKey != lKeys.end ())
         {
-            css::uno::Any& rAny = lPreferredOnesRange[i];
+            cpo::uno::Any& rAny = lPreferredOnesRange[i];
             rAny <<= *pPreferredKey;
         }
     }
@@ -1140,7 +1140,7 @@ void XCUBasedAcceleratorConfiguration::insertKeyToConfiguration( const css::awt:
         {
             xFac.set(xModules, css::uno::UNO_QUERY);
             xInst = xFac->createInstance();
-            xModules->insertByName(m_sModuleCFG, css::uno::Any(xInst));
+            xModules->insertByName(m_sModuleCFG, cpo::uno::Any(xInst));
         }
         xModules->getByName(m_sModuleCFG) >>= xContainer;
     }
@@ -1152,16 +1152,16 @@ void XCUBasedAcceleratorConfiguration::insertKeyToConfiguration( const css::awt:
     {
         xFac.set(xContainer, css::uno::UNO_QUERY);
         xInst = xFac->createInstance();
-        xContainer->insertByName(sKey, css::uno::Any(xInst));
+        xContainer->insertByName(sKey, cpo::uno::Any(xInst));
     }
     xContainer->getByName(sKey) >>= xKey;
 
     xKey->getByName(CFG_PROP_COMMAND) >>= xCommand;
     OUString sLocale = impl_ts_getLocale();
     if ( !xCommand->hasByName(sLocale) )
-        xCommand->insertByName(sLocale, css::uno::Any(sCommand));
+        xCommand->insertByName(sLocale, cpo::uno::Any(sCommand));
     else
-        xCommand->replaceByName(sLocale, css::uno::Any(sCommand));
+        xCommand->replaceByName(sLocale, cpo::uno::Any(sCommand));
 }
 
 void XCUBasedAcceleratorConfiguration::removeKeyFromConfiguration( const css::awt::KeyEvent& aKeyEvent, const bool bPreferred )

@@ -53,14 +53,14 @@ class SmModel final : public SfxBaseModel,
 
     SmFace maFonts[FNT_END + 1];
 
-    virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const css::uno::Any* pValues ) override;
-    virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, css::uno::Any* pValue ) override;
+    virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const cpo::uno::Any* pValues ) override;
+    virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, cpo::uno::Any* pValue ) override;
 public:
     explicit SmModel(SmDocShell* pObjSh);
     virtual ~SmModel() noexcept override;
 
     //XInterface
-    virtual     css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+    virtual     cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
     virtual void SAL_CALL acquire(  ) noexcept override;
     virtual void SAL_CALL release(  ) noexcept override;
 
@@ -73,9 +73,9 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     //XRenderable
-    virtual sal_Int32 SAL_CALL getRendererCount( const css::uno::Any& rSelection, const css::uno::Sequence< css::beans::PropertyValue >& rxOptions ) override;
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getRenderer( sal_Int32 nRenderer, const css::uno::Any& rSelection, const css::uno::Sequence< css::beans::PropertyValue >& rxOptions ) override;
-    virtual void SAL_CALL render( sal_Int32 nRenderer, const css::uno::Any& rSelection, const css::uno::Sequence< css::beans::PropertyValue >& rxOptions ) override;
+    virtual sal_Int32 SAL_CALL getRendererCount( const cpo::uno::Any& rSelection, const css::uno::Sequence< css::beans::PropertyValue >& rxOptions ) override;
+    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getRenderer( sal_Int32 nRenderer, const cpo::uno::Any& rSelection, const css::uno::Sequence< css::beans::PropertyValue >& rxOptions ) override;
+    virtual void SAL_CALL render( sal_Int32 nRenderer, const cpo::uno::Any& rSelection, const css::uno::Sequence< css::beans::PropertyValue >& rxOptions ) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

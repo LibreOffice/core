@@ -18,7 +18,7 @@
  */
 
 #include <unotools/viewoptions.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -176,7 +176,7 @@ void SvtViewOptions::SetWindowState( const OUString& sState )
         css::uno::Reference< css::beans::XPropertySet > xNode(
             impl_getSetNode(m_sViewName, true),
             css::uno::UNO_QUERY_THROW);
-        xNode->setPropertyValue(PROPERTY_WINDOWSTATE, css::uno::Any(sState));
+        xNode->setPropertyValue(PROPERTY_WINDOWSTATE, cpo::uno::Any(sState));
         ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
     catch(const css::uno::Exception&)
@@ -224,7 +224,7 @@ void SvtViewOptions::SetPageID(const OUString& rID)
         css::uno::Reference< css::beans::XPropertySet > xNode(
             impl_getSetNode(m_sViewName, true),
             css::uno::UNO_QUERY_THROW);
-        xNode->setPropertyValue(PROPERTY_PAGEID, css::uno::Any(rID));
+        xNode->setPropertyValue(PROPERTY_PAGEID, cpo::uno::Any(rID));
         ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
     catch(const css::uno::Exception&)
@@ -282,7 +282,7 @@ void SvtViewOptions::SetVisible( bool bVisible )
         css::uno::Reference< css::beans::XPropertySet > xNode(
             impl_getSetNode(m_sViewName, true),
             css::uno::UNO_QUERY_THROW);
-        xNode->setPropertyValue(PROPERTY_VISIBLE, css::uno::Any(bVisible));
+        xNode->setPropertyValue(PROPERTY_VISIBLE, cpo::uno::Any(bVisible));
         ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
     catch(const css::uno::Exception&)
@@ -360,9 +360,9 @@ void SvtViewOptions::SetUserData( const css::uno::Sequence< css::beans::NamedVal
         }
 }
 
-css::uno::Any SvtViewOptions::GetUserItem( const OUString& sItemName ) const
+cpo::uno::Any SvtViewOptions::GetUserItem( const OUString& sItemName ) const
 {
-    css::uno::Any aItem;
+    cpo::uno::Any aItem;
     try
     {
         css::uno::Reference< css::container::XNameAccess > xNode(
@@ -386,7 +386,7 @@ css::uno::Any SvtViewOptions::GetUserItem( const OUString& sItemName ) const
 }
 
 void SvtViewOptions::SetUserItem( const OUString& sItemName  ,
-                                  const css::uno::Any&   aValue )
+                                  const cpo::uno::Any&   aValue )
 {
     try
     {

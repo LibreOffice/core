@@ -61,6 +61,7 @@ class SfxObjectShell;
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::presentation;
 
 using ::com::sun::star::beans::XPropertySet;
@@ -554,7 +555,7 @@ void PPTWriter::ImplCreateHeaderFooterStrings( SvStream& rStrm, css::uno::Refere
         return;
 
     OUString aString;
-    css::uno::Any aAny;
+    cpo::uno::Any aAny;
     if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, u"HeaderText"_ustr, true ) )
     {
         if ( aAny >>= aString )
@@ -579,7 +580,7 @@ void PPTWriter::ImplCreateHeaderFooters( css::uno::Reference< css::beans::XPrope
 
     bool bVal = false;
     sal_uInt32 nVal = 0;
-    css::uno::Any aAny;
+    cpo::uno::Any aAny;
     if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, u"IsHeaderVisible"_ustr, true ) )
     {
         if ( ( aAny >>= bVal ) && bVal )

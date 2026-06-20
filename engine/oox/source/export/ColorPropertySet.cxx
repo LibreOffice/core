@@ -101,7 +101,7 @@ Reference< XPropertySetInfo > SAL_CALL ColorPropertySet::getPropertySetInfo()
     return m_xInfo;
 }
 
-void SAL_CALL ColorPropertySet::setPropertyValue( const OUString& rPropertyName, const uno::Any& aValue )
+void SAL_CALL ColorPropertySet::setPropertyValue( const OUString& rPropertyName, const cpo::uno::Any& aValue )
 {
     if (rPropertyName != m_aColorPropName)
     {
@@ -113,14 +113,14 @@ void SAL_CALL ColorPropertySet::setPropertyValue( const OUString& rPropertyName,
     aValue >>= m_nColor;
 }
 
-uno::Any SAL_CALL ColorPropertySet::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ColorPropertySet::getPropertyValue( const OUString& aPropertyName )
 {
     if( aPropertyName == "FillStyle" && m_bIsFillColor )
     {
-        return uno::Any(css::drawing::FillStyle_SOLID);
+        return cpo::uno::Any(css::drawing::FillStyle_SOLID);
     }
     else if (aPropertyName == m_aColorPropName)
-        return uno::Any( m_nColor );
+        return cpo::uno::Any( m_nColor );
 
     throw UnknownPropertyException(aPropertyName);
 }
@@ -164,12 +164,12 @@ void SAL_CALL ColorPropertySet::setPropertyToDefault( const OUString& PropertyNa
         m_nColor = m_nDefaultColor;
 }
 
-uno::Any SAL_CALL ColorPropertySet::getPropertyDefault( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ColorPropertySet::getPropertyDefault( const OUString& aPropertyName )
 {
     if( aPropertyName == m_aColorPropName )
-        return uno::Any( m_nDefaultColor );
+        return cpo::uno::Any( m_nDefaultColor );
 
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 } // namespace oox::drawingml

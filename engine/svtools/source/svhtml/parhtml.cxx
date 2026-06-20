@@ -2115,7 +2115,7 @@ bool HTMLParser::ParseMetaOptionsImpl(
                     try {
                         xUDProps->addProperty(aName,
                             beans::PropertyAttribute::REMOVABLE,
-                            uno::Any(aContent));
+                            cpo::uno::Any(aContent));
                         AddMetaUserDefined(aName);
                         bChanged = true;
                     } catch (uno::Exception &) {

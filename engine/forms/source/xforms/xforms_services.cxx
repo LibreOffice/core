@@ -51,7 +51,7 @@ class Implementation:
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_form_XForms_get_implementation(uno::XComponentContext*,
-        uno::Sequence<uno::Any> const &)
+        uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new Implementation);
 }

@@ -46,6 +46,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 class ScExportTest5 : public ScModelTestBase
 {
@@ -247,7 +248,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf143929MultiColumnToODS)
             xProps->getPropertyValue(u"TextColumns"_ustr), css::uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCols->getColumnCount());
         css::uno::Reference<css::beans::XPropertySet> xColProps(xCols, css::uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(css::uno::Any(sal_Int32(1000)),
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int32(1000)),
                              xColProps->getPropertyValue(u"AutomaticDistance"_ustr));
     }
 
@@ -270,7 +271,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf143929MultiColumnToODS)
             xProps->getPropertyValue(u"TextColumns"_ustr), css::uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCols->getColumnCount());
         css::uno::Reference<css::beans::XPropertySet> xColProps(xCols, css::uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(css::uno::Any(sal_Int32(1000)),
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int32(1000)),
                              xColProps->getPropertyValue(u"AutomaticDistance"_ustr));
     }
 
@@ -1356,8 +1357,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf150229)
         auto xFactory = mxComponent.queryThrow<lang::XMultiServiceFactory>();
         auto xField = xFactory->createInstance(u"com.sun.star.text.TextField.URL"_ustr)
                           .queryThrow<beans::XPropertySet>();
-        xField->setPropertyValue(u"URL"_ustr, uno::Any(longUrl));
-        xField->setPropertyValue(u"Representation"_ustr, uno::Any(u"hyperlink"_ustr));
+        xField->setPropertyValue(u"URL"_ustr, cpo::uno::Any(longUrl));
+        xField->setPropertyValue(u"Representation"_ustr, cpo::uno::Any(u"hyperlink"_ustr));
 
         xCell->insertTextContent(xCell->getEnd(), xField.queryThrow<text::XTextContent>(), false);
     }

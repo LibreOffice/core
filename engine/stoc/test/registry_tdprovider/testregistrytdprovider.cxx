@@ -34,7 +34,7 @@
 #include <com/sun/star/reflection/XTypeDescription.hpp>
 #include <com/sun/star/registry/InvalidRegistryException.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -121,7 +121,7 @@ sal_Int32 Service::run(css::uno::Sequence< OUString > const &)
     css::uno::Reference< css::lang::XMultiComponentFactory > factory(
         m_context->getServiceManager());
     assertTrue(factory.is());
-    css::uno::Sequence< css::uno::Any > args(1);
+    css::uno::Sequence< cpo::uno::Any > args(1);
     args[0] = css::uno::Reference< css::beans::XPropertySet >(
         factory, css::uno::UNO_QUERY_THROW)->getPropertyValue(
             OUString("Registry"));

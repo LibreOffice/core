@@ -43,8 +43,8 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
         const css::uno::Reference< css::beans::XPropertySet >& rxPropSet,
         const ScVbaPalette& rPalette,
-        const css::uno::Any& rStart,
-        const css::uno::Any& rLength );
+        const cpo::uno::Any& rStart,
+        const cpo::uno::Any& rLength );
     virtual ~ScVbaButtonCharacters() override;
 
     // XCharacters attributes
@@ -189,14 +189,14 @@ public:
     virtual void SAL_CALL setVerticalAlignment( sal_Int32 nAlign ) override;
     virtual sal_Int32 SAL_CALL getOrientation() override;
     virtual void SAL_CALL setOrientation( sal_Int32 nOrientation ) override;
-    virtual css::uno::Any SAL_CALL getValue() override;
-    virtual void SAL_CALL setValue( const css::uno::Any &nValue ) override;
+    virtual cpo::uno::Any SAL_CALL getValue() override;
+    virtual void SAL_CALL setValue( const cpo::uno::Any &nValue ) override;
     virtual OUString SAL_CALL getText() override;
     virtual void SAL_CALL setText( const OUString &aText ) override;
 
     // XButton methods
     css::uno::Reference< ov::excel::XCharacters > SAL_CALL Characters(
-        const css::uno::Any& rStart, const css::uno::Any& rLength ) override;
+        const cpo::uno::Any& rStart, const cpo::uno::Any& rLength ) override;
 
     // XHelperInterface
     VBAHELPER_DECL_XHELPERINTERFACE

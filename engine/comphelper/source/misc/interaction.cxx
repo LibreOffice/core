@@ -29,6 +29,7 @@ namespace comphelper
 
 
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::task;
 
     OInteractionRequest::OInteractionRequest(Any _aRequestDescription)

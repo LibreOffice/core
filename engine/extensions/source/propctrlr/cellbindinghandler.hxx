@@ -53,12 +53,12 @@ namespace pcr
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
 
         // XPropertyHandler overriables
-        virtual css::uno::Any                   SAL_CALL getPropertyValue( const OUString& _rPropertyName ) override;
-        virtual void                            SAL_CALL setPropertyValue( const OUString& _rPropertyName, const css::uno::Any& _rValue ) override;
-        virtual css::uno::Any                   SAL_CALL convertToPropertyValue( const OUString& _rPropertyName, const css::uno::Any& _rControlValue ) override;
-        virtual css::uno::Any                   SAL_CALL convertToControlValue( const OUString& _rPropertyName, const css::uno::Any& _rPropertyValue, const css::uno::Type& _rControlValueType ) override;
+        virtual cpo::uno::Any                   SAL_CALL getPropertyValue( const OUString& _rPropertyName ) override;
+        virtual void                            SAL_CALL setPropertyValue( const OUString& _rPropertyName, const cpo::uno::Any& _rValue ) override;
+        virtual cpo::uno::Any                   SAL_CALL convertToPropertyValue( const OUString& _rPropertyName, const cpo::uno::Any& _rControlValue ) override;
+        virtual cpo::uno::Any                   SAL_CALL convertToControlValue( const OUString& _rPropertyName, const cpo::uno::Any& _rPropertyValue, const css::uno::Type& _rControlValueType ) override;
         virtual css::uno::Sequence< OUString >  SAL_CALL getActuatingProperties( ) override;
-        virtual void                            SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const css::uno::Any& _rNewValue, const css::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit ) override;
+        virtual void                            SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const cpo::uno::Any& _rNewValue, const cpo::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit ) override;
 
         // PropertyHandler overridables
         virtual css::uno::Sequence< css::beans::Property >

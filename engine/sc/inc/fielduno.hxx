@@ -75,7 +75,7 @@ public:
 
                             // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
                             // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
@@ -125,7 +125,7 @@ public:
 
                             // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
                             // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
@@ -180,16 +180,16 @@ class ScEditFieldObj final : public ScEditFieldObj_Base
 private:
     SvxFieldData& getData();
 
-    void setPropertyValueURL(const OUString& rName, const css::uno::Any& rVal);
-    css::uno::Any getPropertyValueURL(const OUString& rName);
+    void setPropertyValueURL(const OUString& rName, const cpo::uno::Any& rVal);
+    cpo::uno::Any getPropertyValueURL(const OUString& rName);
 
-    void setPropertyValueFile(const OUString& rName, const css::uno::Any& rVal);
-    css::uno::Any getPropertyValueFile(const OUString& rName);
+    void setPropertyValueFile(const OUString& rName, const cpo::uno::Any& rVal);
+    cpo::uno::Any getPropertyValueFile(const OUString& rName);
 
-    void setPropertyValueDateTime(const OUString& rName, const css::uno::Any& rVal);
-    css::uno::Any getPropertyValueDateTime(const OUString& rName);
+    void setPropertyValueDateTime(const OUString& rName, const cpo::uno::Any& rVal);
+    cpo::uno::Any getPropertyValueDateTime(const OUString& rName);
 
-    void setPropertyValueSheet(const OUString& rName, const css::uno::Any& rVal);
+    void setPropertyValueSheet(const OUString& rName, const cpo::uno::Any& rVal);
 
 public:
     ScEditFieldObj(
@@ -217,8 +217,8 @@ public:
     virtual css::uno::Reference< css::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo() override;
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName,
-                                    const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+                                    const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
     virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName,
                                     const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
     virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName,

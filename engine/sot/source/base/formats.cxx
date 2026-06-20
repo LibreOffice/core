@@ -35,6 +35,7 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::datatransfer;
 
 // define a context check Id for every formatid

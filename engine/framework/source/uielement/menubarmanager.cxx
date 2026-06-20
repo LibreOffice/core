@@ -66,6 +66,7 @@
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
@@ -532,12 +533,12 @@ public:
 private:
     virtual ~QuietInteractionContext() override {}
 
-    virtual css::uno::Any SAL_CALL getValueByName(
+    virtual cpo::uno::Any SAL_CALL getValueByName(
         OUString const & Name) override
     {
         return Name != JAVA_INTERACTION_HANDLER_NAME && context_.is()
             ? context_->getValueByName(Name)
-            : css::uno::Any();
+            : cpo::uno::Any();
     }
 
     css::uno::Reference< css::uno::XCurrentContext >

@@ -44,7 +44,7 @@ namespace sfx2
 namespace com::sun::star::embed { class XEmbeddedObject; }
 namespace com::sun::star::embed { class XStorage; }
 namespace com::sun::star::io { class XInputStream; }
-namespace com::sun::star::uno { class Any; }
+namespace cpo::uno { class Any; }
 
 class SfxAbstractDialog : virtual public VclAbstractDialog
 {
@@ -165,7 +165,7 @@ public:
                              const css::uno::Reference<css::frame::XFrame>& rxFrame)
         = 0;
 
-    virtual void ShowAsyncScriptErrorDialog( weld::Window* pParent, const css::uno::Any& rException ) = 0;
+    virtual void ShowAsyncScriptErrorDialog( weld::Window* pParent, const cpo::uno::Any& rException ) = 0;
 
     virtual VclPtr<VclAbstractDialog> CreateUIPickerDialog(weld::Window* _pParent) = 0;
 

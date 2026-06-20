@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/uno/Type.h>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 namespace cppu
 {
@@ -37,10 +37,10 @@ namespace cppu
  * @param rType         enum type
  * @return enum or empty any.
  */
-inline css::uno::Any int2enum(sal_Int32 nEnum, const css::uno::Type& rType)
+inline cpo::uno::Any int2enum(sal_Int32 nEnum, const css::uno::Type& rType)
 {
     assert(rType.getTypeClass() == css::uno::TypeClass_ENUM);
-    return css::uno::Any(&nEnum, rType);
+    return cpo::uno::Any(&nEnum, rType);
 }
 
 /**
@@ -51,7 +51,7 @@ inline css::uno::Any int2enum(sal_Int32 nEnum, const css::uno::Type& rType)
  * @retval true if enum or int value was set
  * @retval false otherwise
  */
-inline bool enum2int(sal_Int32& rnEnum, const css::uno::Any& rAny)
+inline bool enum2int(sal_Int32& rnEnum, const cpo::uno::Any& rAny)
 {
     if (rAny.getValueTypeClass() == css::uno::TypeClass_ENUM)
     {
@@ -70,7 +70,7 @@ inline bool enum2int(sal_Int32& rnEnum, const css::uno::Any& rAny)
  * @param rAny          enum or int
  * @throws css::lang::IllegalArgumentException
  */
-template <typename E> inline void any2enum(E& eRet, const css::uno::Any& rAny)
+template <typename E> inline void any2enum(E& eRet, const cpo::uno::Any& rAny)
 {
     // check for typesafe enum
     if (!(rAny >>= eRet))
@@ -91,7 +91,7 @@ template <typename E> inline void any2enum(E& eRet, const css::uno::Any& rAny)
  *
  * @throws css::lang::IllegalArgumentException
  */
-inline bool any2bool(const css::uno::Any& rAny)
+inline bool any2bool(const cpo::uno::Any& rAny)
 {
     bool b;
     if (rAny >>= b)

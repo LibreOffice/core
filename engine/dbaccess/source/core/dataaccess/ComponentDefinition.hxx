@@ -121,7 +121,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( css::uno::Sequence< css::uno::Any > const & rArguments) override;
+    virtual void SAL_CALL initialize( css::uno::Sequence< cpo::uno::Any > const & rArguments) override;
 
     // css::beans::XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
@@ -145,7 +145,7 @@ protected:
 
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                     sal_Int32 nHandle,
-                                    const css::uno::Any& rValue) override;
+                                    const cpo::uno::Any& rValue) override;
 
     // OContentHelper overridables
     virtual OUString determineContentType() const override;

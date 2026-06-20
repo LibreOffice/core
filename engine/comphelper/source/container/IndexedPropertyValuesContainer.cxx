@@ -36,7 +36,7 @@ IndexedPropertyValuesContainer::IndexedPropertyValuesContainer() noexcept
 }
 
 // XIndexContainer
-void SAL_CALL IndexedPropertyValuesContainer::insertByIndex( sal_Int32 nIndex, const css::uno::Any& aElement )
+void SAL_CALL IndexedPropertyValuesContainer::insertByIndex( sal_Int32 nIndex, const cpo::uno::Any& aElement )
 {
     sal_Int32 nSize(maProperties.size());
     if ((nSize < nIndex) || (nIndex < 0))
@@ -60,7 +60,7 @@ void SAL_CALL IndexedPropertyValuesContainer::removeByIndex( sal_Int32 nIndex )
 }
 
 // XIndexReplace
-void SAL_CALL IndexedPropertyValuesContainer::replaceByIndex( sal_Int32 nIndex, const css::uno::Any& aElement )
+void SAL_CALL IndexedPropertyValuesContainer::replaceByIndex( sal_Int32 nIndex, const cpo::uno::Any& aElement )
 {
     sal_Int32 nSize(maProperties.size());
     if ((nIndex >= nSize) || (nIndex < 0))
@@ -78,13 +78,13 @@ sal_Int32 SAL_CALL IndexedPropertyValuesContainer::getCount(  )
     return maProperties.size();
 }
 
-css::uno::Any SAL_CALL IndexedPropertyValuesContainer::getByIndex( sal_Int32 nIndex )
+cpo::uno::Any SAL_CALL IndexedPropertyValuesContainer::getByIndex( sal_Int32 nIndex )
 {
     sal_Int32 nSize(maProperties.size());
     if ((nIndex >= nSize) || (nIndex < 0))
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any( maProperties[nIndex] );
+    return cpo::uno::Any( maProperties[nIndex] );
 }
 
 // XElementAccess
@@ -119,7 +119,7 @@ css::uno::Sequence< OUString > SAL_CALL IndexedPropertyValuesContainer::getSuppo
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 IndexedPropertyValuesContainer_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new comphelper::IndexedPropertyValuesContainer());
 }

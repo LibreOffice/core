@@ -76,7 +76,7 @@ inline constexpr OUString UNODIALOG_PROPERTY_PARENT = u"ParentWindow"_ustr;
     public:
         // UNO
         DECLARE_UNO3_DEFAULTS(OGenericUnoDialog, OGenericUnoDialogBase)
-        virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface(const css::uno::Type& _rType) override;
 
         // XTypeProvider
         virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes(  ) override;
@@ -88,15 +88,15 @@ inline constexpr OUString UNODIALOG_PROPERTY_PARENT = u"ParentWindow"_ustr;
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override = 0;
 
         // OPropertySetHelper
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
-        virtual bool SAL_CALL convertFastPropertyValue( css::uno::Any& rConvertedValue, css::uno::Any& rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue) override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+        virtual bool SAL_CALL convertFastPropertyValue( cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
 
         // XExecutableDialog
         virtual void SAL_CALL setTitle( const OUString& aTitle ) override;
         virtual sal_Int16 SAL_CALL execute(  ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     protected:
         /** create the concrete dialog instance. Note that m_aMutex is not locked when this method get called,
@@ -119,7 +119,7 @@ inline constexpr OUString UNODIALOG_PROPERTY_PARENT = u"ParentWindow"_ustr;
             tries to extract a com.sun.star.beans::PropertyValue from the value a pass it to the
             com.sun.star.beans::XPropertySet interface of the object.
         */
-        virtual void implInitialize(const css::uno::Any& _rValue);
+        virtual void implInitialize(const cpo::uno::Any& _rValue);
 
     private:
 

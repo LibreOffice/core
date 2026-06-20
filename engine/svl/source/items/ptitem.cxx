@@ -19,7 +19,7 @@
 
 
 #include <svl/ptitem.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <osl/diagnose.h>
 #include <tools/mapunit.hxx>
@@ -72,7 +72,7 @@ SfxPointItem* SfxPointItem::Clone(SfxItemPool *) const
     return new SfxPointItem( *this );
 }
 
-bool SfxPointItem::QueryValue( uno::Any& rVal,
+bool SfxPointItem::QueryValue( cpo::uno::Any& rVal,
                                sal_uInt8 nMemberId ) const
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
@@ -95,7 +95,7 @@ bool SfxPointItem::QueryValue( uno::Any& rVal,
 }
 
 
-bool SfxPointItem::PutValue( const uno::Any& rVal,
+bool SfxPointItem::PutValue( const cpo::uno::Any& rVal,
                              sal_uInt8 nMemberId )
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);

@@ -307,7 +307,7 @@ namespace basic
 
         // StarDesktop
         const Reference< XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
-        pBasicManager->SetGlobalUNOConstant( u"StarDesktop"_ustr, css::uno::Any( Desktop::create(xContext)));
+        pBasicManager->SetGlobalUNOConstant( u"StarDesktop"_ustr, cpo::uno::Any( Desktop::create(xContext)));
 
         // (BasicLibraries and DialogLibraries have automatically been added in SetLibraryContainerInfo)
 
@@ -473,7 +473,7 @@ namespace basic
         _out_rpBasicManager->GetLib(0)->SetParent( pAppBasic );
 
         // global properties in the document's Basic
-        _out_rpBasicManager->SetGlobalUNOConstant( u"ThisComponent"_ustr, css::uno::Any( _rxDocumentModel ) );
+        _out_rpBasicManager->SetGlobalUNOConstant( u"ThisComponent"_ustr, cpo::uno::Any( _rxDocumentModel ) );
 
         // notify
         impl_notifyCreationListeners( _rxDocumentModel, *_out_rpBasicManager );

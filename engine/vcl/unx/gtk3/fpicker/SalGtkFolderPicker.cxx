@@ -31,6 +31,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 // constructor
 
@@ -177,7 +178,7 @@ sal_Int16 SAL_CALL SalGtkFolderPicker::execute()
 
 // XInitialization
 
-void SAL_CALL SalGtkFolderPicker::initialize(const uno::Sequence<uno::Any>& aArguments)
+void SAL_CALL SalGtkFolderPicker::initialize(const uno::Sequence<cpo::uno::Any>& aArguments)
 {
     m_pParentWidget = GetParentWidget(aArguments);
 }

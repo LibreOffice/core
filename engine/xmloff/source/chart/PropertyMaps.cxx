@@ -591,7 +591,7 @@ void XMLChartExportPropertyMapper::ContextFilter(
                 try
                 {
                     bool bAuto = false;
-                    uno::Any aAny = rPropSet->getPropertyValue( aAutoPropName );
+                    cpo::uno::Any aAny = rPropSet->getPropertyValue( aAutoPropName );
                     aAny >>= bAuto;
                     if( bAuto )
                         rProperty.mnIndex = -1;

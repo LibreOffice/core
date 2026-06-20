@@ -60,8 +60,8 @@ public:
     sal_Int32 getAPIEndIndexofRange( const uno::Reference< excel::XRange >& xRange, sal_Int32 nUsedStart )
     {
         if( m_bColumn )
-            return nUsedStart + xRange->Columns( uno::Any() )->getCount() - 1;
-        return nUsedStart + xRange->Rows( uno::Any() )->getCount();
+            return nUsedStart + xRange->Columns( cpo::uno::Any() )->getCount() - 1;
+        return nUsedStart + xRange->Rows( cpo::uno::Any() )->getCount();
     }
 
     /// @throws uno::RuntimeException
@@ -88,11 +88,11 @@ public:
     sheet::TablePageBreakData getTablePageBreakData( sal_Int32 nAPIItemIndex );
     /// @throws css::script::BasicErrorException
     /// @throws css::uno::RuntimeException
-    uno::Any Add( const css::uno::Any& Before );
+    cpo::uno::Any Add( const cpo::uno::Any& Before );
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) override;
-    virtual uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
     virtual uno::Type SAL_CALL getElementType(  ) override
     {
         if( m_bColumn )
@@ -126,7 +126,7 @@ sal_Int32 SAL_CALL RangePageBreaks::getCount(  )
     return static_cast<sal_Int32>(std::distance(aTablePageBreakData.begin(), pPageBreak));
 }
 
-uno::Any SAL_CALL RangePageBreaks::getByIndex( sal_Int32 Index )
+cpo::uno::Any SAL_CALL RangePageBreaks::getByIndex( sal_Int32 Index )
 {
     if( (Index < getCount()) && ( Index >= 0 ))
     {
@@ -137,8 +137,8 @@ uno::Any SAL_CALL RangePageBreaks::getByIndex( sal_Int32 Index )
         {
             uno::Reference< beans::XPropertySet > xRowColPropertySet( xIndexAccess->getByIndex(nPos), uno::UNO_QUERY_THROW );
             if( m_bColumn )
-                return uno::Any( uno::Reference< excel::XVPageBreak >( new ScVbaVPageBreak( mxParent, mxContext, xRowColPropertySet, aTablePageBreakData) ));
-            return uno::Any( uno::Reference< excel::XHPageBreak >( new ScVbaHPageBreak( mxParent, mxContext, xRowColPropertySet, aTablePageBreakData) ));
+                return cpo::uno::Any( uno::Reference< excel::XVPageBreak >( new ScVbaVPageBreak( mxParent, mxContext, xRowColPropertySet, aTablePageBreakData) ));
+            return cpo::uno::Any( uno::Reference< excel::XHPageBreak >( new ScVbaHPageBreak( mxParent, mxContext, xRowColPropertySet, aTablePageBreakData) ));
         }
     }
     throw lang::IndexOutOfBoundsException();
@@ -168,7 +168,7 @@ sheet::TablePageBreakData RangePageBreaks::getTablePageBreakData( sal_Int32 nAPI
     return aTablePageBreakData;
 }
 
-uno::Any RangePageBreaks::Add( const css::uno::Any& Before )
+cpo::uno::Any RangePageBreaks::Add( const cpo::uno::Any& Before )
 {
     uno::Reference< excel::XRange > xRange;
     Before >>= xRange;
@@ -180,13 +180,13 @@ uno::Any RangePageBreaks::Add( const css::uno::Any& Before )
     sal_Int32 nAPIRowColIndex = getAPIStartofRange( xRange );
     uno::Reference< container::XIndexAccess > xIndexAccess = getRowColContainer();
     uno::Reference< beans::XPropertySet > xRowColPropertySet( xIndexAccess->getByIndex(nAPIRowColIndex), uno::UNO_QUERY_THROW );
-    xRowColPropertySet->setPropertyValue(u"IsStartOfNewPage"_ustr, uno::Any(true));
+    xRowColPropertySet->setPropertyValue(u"IsStartOfNewPage"_ustr, cpo::uno::Any(true));
     sheet::TablePageBreakData aTablePageBreakData;
     aTablePageBreakData.ManualBreak = true;
     aTablePageBreakData.Position = nAPIRowColIndex;
     if( m_bColumn )
-        return uno::Any( uno::Reference< excel::XVPageBreak >( new ScVbaVPageBreak( mxParent, mxContext, xRowColPropertySet, aTablePageBreakData) ));
-    return uno::Any( uno::Reference< excel::XHPageBreak >( new ScVbaHPageBreak( mxParent, mxContext, xRowColPropertySet, aTablePageBreakData) ));
+        return cpo::uno::Any( uno::Reference< excel::XVPageBreak >( new ScVbaVPageBreak( mxParent, mxContext, xRowColPropertySet, aTablePageBreakData) ));
+    return cpo::uno::Any( uno::Reference< excel::XHPageBreak >( new ScVbaHPageBreak( mxParent, mxContext, xRowColPropertySet, aTablePageBreakData) ));
 }
 
 namespace {
@@ -202,7 +202,7 @@ public:
         return ( nIndex < m_xIndexAccess->getCount() );
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         if ( nIndex < m_xIndexAccess->getCount() )
             return m_xIndexAccess->getByIndex( nIndex++ );
@@ -219,14 +219,14 @@ ScVbaHPageBreaks::ScVbaHPageBreaks( const uno::Reference< XHelperInterface >& xP
 {
 }
 
-uno::Any SAL_CALL ScVbaHPageBreaks::Add( const uno::Any& Before)
+cpo::uno::Any SAL_CALL ScVbaHPageBreaks::Add( const cpo::uno::Any& Before)
 {
     RangePageBreaks* pPageBreaks = dynamic_cast< RangePageBreaks* >( m_xIndexAccess.get() );
     if( pPageBreaks )
     {
         return pPageBreaks->Add( Before );
     }
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 uno::Reference< container::XEnumeration >
@@ -235,8 +235,8 @@ ScVbaHPageBreaks::createEnumeration()
     return new RangePageBreaksEnumWrapper( m_xIndexAccess );
 }
 
-uno::Any
-ScVbaHPageBreaks::createCollectionObject( const css::uno::Any& aSource )
+cpo::uno::Any
+ScVbaHPageBreaks::createCollectionObject( const cpo::uno::Any& aSource )
 {
     return aSource; // it's already a pagebreak object
 }
@@ -275,15 +275,15 @@ ScVbaVPageBreaks::~ScVbaVPageBreaks()
 {
 }
 
-uno::Any SAL_CALL
-ScVbaVPageBreaks::Add( const uno::Any& Before )
+cpo::uno::Any SAL_CALL
+ScVbaVPageBreaks::Add( const cpo::uno::Any& Before )
 {
     RangePageBreaks* pPageBreaks = dynamic_cast< RangePageBreaks* >( m_xIndexAccess.get() );
     if( pPageBreaks )
     {
         return pPageBreaks->Add( Before );
     }
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 uno::Reference< container::XEnumeration >
@@ -292,8 +292,8 @@ ScVbaVPageBreaks::createEnumeration()
     return new RangePageBreaksEnumWrapper( m_xIndexAccess );
 }
 
-uno::Any
-ScVbaVPageBreaks::createCollectionObject( const css::uno::Any& aSource )
+cpo::uno::Any
+ScVbaVPageBreaks::createCollectionObject( const cpo::uno::Any& aSource )
 {
     return aSource; // it's already a pagebreak object
 }

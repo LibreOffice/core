@@ -40,7 +40,7 @@ public:
     virtual ~SwVbaPane() override;
 
     // Methods
-    virtual css::uno::Any SAL_CALL View() override;
+    virtual cpo::uno::Any SAL_CALL View() override;
     virtual void SAL_CALL Close() override;
 
     // XHelperInterface

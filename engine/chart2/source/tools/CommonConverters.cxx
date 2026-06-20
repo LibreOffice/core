@@ -509,7 +509,7 @@ uno::Sequence< double > DataSequenceToDoubleSequence(
     }
     else
     {
-        uno::Sequence< uno::Any > aValues = xDataSequence->getData();
+        uno::Sequence< cpo::uno::Any > aValues = xDataSequence->getData();
         aResult.realloc(aValues.getLength());
         auto pResult = aResult.getArray();
         for(sal_Int32 nN=aValues.getLength();nN--;)
@@ -536,7 +536,7 @@ uno::Sequence< OUString > DataSequenceToStringSequence(
     }
     else
     {
-        uno::Sequence< uno::Any > aValues = xDataSequence->getData();
+        uno::Sequence< cpo::uno::Any > aValues = xDataSequence->getData();
         aResult.realloc(aValues.getLength());
         auto pResult = aResult.getArray();
 
@@ -547,7 +547,7 @@ uno::Sequence< OUString > DataSequenceToStringSequence(
     return aResult;
 }
 
-bool hasDoubleValue( const uno::Any& rAny )
+bool hasDoubleValue( const cpo::uno::Any& rAny )
 {
     bool bRet = false;
     double fValue = 0.0;
@@ -556,7 +556,7 @@ bool hasDoubleValue( const uno::Any& rAny )
     return bRet;
 }
 
-bool hasLongOrShortValue( const uno::Any& rAny )
+bool hasLongOrShortValue( const cpo::uno::Any& rAny )
 {
     bool bRet = false;
     sal_Int32 n32 = 0;
@@ -570,7 +570,7 @@ bool hasLongOrShortValue( const uno::Any& rAny )
     }
     return bRet;
 }
-sal_Int16 getShortForLongAlso( const uno::Any& rAny )
+sal_Int16 getShortForLongAlso( const cpo::uno::Any& rAny )
 {
     sal_Int16 nRet = 0;
 

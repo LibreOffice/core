@@ -2716,7 +2716,7 @@ void AccessibilityCheck::checkObject(SwNode* pCurrent, SwFrameFormat const& rFra
         const SdrCustomShapeGeometryItem& rGeometryItem
             = pCustomShape->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
 
-        if (const uno::Any* pAny = rGeometryItem.GetPropertyValueByName(u"Type"_ustr))
+        if (const cpo::uno::Any* pAny = rGeometryItem.GetPropertyValueByName(u"Type"_ustr))
             if (pAny->get<OUString>().startsWith("fontwork-"))
                 lclAddIssue(m_aIssueCollection, SwResId(STR_FONTWORKS),
                             sfx::AccessibilityIssueID::FONTWORKS,

@@ -92,6 +92,7 @@
 using namespace ::com::sun::star;
 using namespace view;
 using namespace uno;
+using namespace ::cpo::uno;
 using namespace util;
 using namespace ucb;
 using namespace beans;
@@ -1321,11 +1322,11 @@ void ODocumentDefinition::saveAs()
                         rename(pDocuSave->getName());
                         updateDocumentTitle();
 
-                        uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+                        uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
                         {
-                            {PROPERTY_NAME, uno::Any(sOldName)}, // set as folder
-                            {PROPERTY_PERSISTENT_NAME, uno::Any(sPersistentName)},
-                            {PROPERTY_AS_TEMPLATE, uno::Any(m_pImpl->m_aProps.bAsTemplate)},
+                            {PROPERTY_NAME, cpo::uno::Any(sOldName)}, // set as folder
+                            {PROPERTY_PERSISTENT_NAME, cpo::uno::Any(sPersistentName)},
+                            {PROPERTY_AS_TEMPLATE, cpo::uno::Any(m_pImpl->m_aProps.bAsTemplate)},
                         }));
                         Reference< XMultiServiceFactory > xORB( m_xParentContainer, UNO_QUERY_THROW );
                         Reference< XInterface > xComponent( xORB->createInstanceWithArguments( SERVICE_SDB_DOCUMENTDEFINITION, aArguments ) );

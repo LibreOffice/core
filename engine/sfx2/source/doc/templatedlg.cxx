@@ -79,6 +79,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::document;
 
@@ -462,9 +463,9 @@ void SfxTemplateManagerDlg::writeSettings ()
     // last folder
     Sequence< NamedValue > aSettings
     {
-        { TM_SETTING_LASTFOLDER, css::uno::Any(aLastFolder) },
-        { TM_SETTING_LASTAPPLICATION,     css::uno::Any(sal_uInt16(mxCBApp->get_active())) },
-        { TM_SETTING_VIEWMODE, css::uno::Any(static_cast<sal_Int16>(getTemplateViewMode()))}
+        { TM_SETTING_LASTFOLDER, cpo::uno::Any(aLastFolder) },
+        { TM_SETTING_LASTAPPLICATION,     cpo::uno::Any(sal_uInt16(mxCBApp->get_active())) },
+        { TM_SETTING_VIEWMODE, cpo::uno::Any(static_cast<sal_Int16>(getTemplateViewMode()))}
     };
 
     // write

@@ -31,7 +31,7 @@ public:
     explicit ColorPicker();
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -59,7 +59,7 @@ ColorPicker::ColorPicker()
 {
 }
 
-void SAL_CALL ColorPicker::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
+void SAL_CALL ColorPicker::initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     if (rArguments.getLength() == 1)
     {
@@ -112,7 +112,7 @@ sal_Int16 SAL_CALL ColorPicker::execute()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_cui_ColorPicker_get_implementation(css::uno::XComponentContext*,
-                                                const css::uno::Sequence<css::uno::Any>&)
+                                                const css::uno::Sequence<cpo::uno::Any>&)
 {
     return cppu::acquire(new ColorPicker);
 }

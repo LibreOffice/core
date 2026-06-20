@@ -65,7 +65,7 @@ namespace {
 namespace editeng
 {
 
-bool SvxBorderLine::setComplexColorFromAny(css::uno::Any const& rValue)
+bool SvxBorderLine::setComplexColorFromAny(cpo::uno::Any const& rValue)
 {
     css::uno::Reference<css::util::XComplexColor> xComplexColor;
     if (!(rValue >>= xComplexColor))

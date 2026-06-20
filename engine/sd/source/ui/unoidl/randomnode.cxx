@@ -40,7 +40,7 @@
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::WeakReference;
@@ -554,7 +554,7 @@ Sequence< OUString > RandomAnimationNode::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 RandomAnimationNode_get_implementation(css::uno::XComponentContext*,
-                                                                    css::uno::Sequence<css::uno::Any> const &)
+                                                                    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new sd::RandomAnimationNode());
 }

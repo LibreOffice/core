@@ -20,7 +20,7 @@
 #include <svl/lckbitem.hxx>
 #include <tools/stream.hxx>
 #include <osl/diagnose.h>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 
@@ -49,7 +49,7 @@ SfxLockBytesItem* SfxLockBytesItem::Clone(SfxItemPool *) const
 }
 
 // virtual
-bool SfxLockBytesItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
+bool SfxLockBytesItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 )
 {
     if ( rVal >>= mxVal )
     {
@@ -61,7 +61,7 @@ bool SfxLockBytesItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
 }
 
 // virtual
-bool SfxLockBytesItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
+bool SfxLockBytesItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 ) const
 {
     rVal <<= mxVal;
     return true;

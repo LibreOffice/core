@@ -33,27 +33,27 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-static uno::Any
-getDocument( uno::Reference< uno::XComponentContext > const & xContext, const rtl::Reference< SwXTextDocument > &xDoc, const uno::Any& aApplication )
+static cpo::uno::Any
+getDocument( uno::Reference< uno::XComponentContext > const & xContext, const rtl::Reference< SwXTextDocument > &xDoc, const cpo::uno::Any& aApplication )
 {
     // FIXME: fine as long as SwVbaDocument is stateless ...
     if( !xDoc.is() )
-        return uno::Any();
+        return cpo::uno::Any();
 
     rtl::Reference<SwVbaDocument> pWb = new SwVbaDocument(  uno::Reference< XHelperInterface >( aApplication, uno::UNO_QUERY_THROW ), xContext, xDoc );
-    return uno::Any( uno::Reference< word::XDocument > (pWb) );
+    return cpo::uno::Any( uno::Reference< word::XDocument > (pWb) );
 }
 
 namespace {
 
 class DocumentEnumImpl : public EnumerationHelperImpl
 {
-    uno::Any m_aApplication;
+    cpo::uno::Any m_aApplication;
 public:
     /// @throws uno::RuntimeException
-    DocumentEnumImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration, uno::Any  aApplication ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), m_aApplication(std::move( aApplication )) {}
+    DocumentEnumImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration, cpo::uno::Any  aApplication ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), m_aApplication(std::move( aApplication )) {}
 
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         uno::Reference< text::XTextDocument > xDoc( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
         return getDocument( m_xContext, dynamic_cast<SwXTextDocument*>(xDoc.get()), m_aApplication );
@@ -82,20 +82,20 @@ SwVbaDocuments::createEnumeration()
     return new DocumentEnumImpl( mxParent, mxContext, xEnumerationAccess->createEnumeration(), Application() );
 }
 
-uno::Any
-SwVbaDocuments::createCollectionObject( const uno::Any& aSource )
+cpo::uno::Any
+SwVbaDocuments::createCollectionObject( const cpo::uno::Any& aSource )
 {
     uno::Reference< text::XTextDocument > xDoc( aSource, uno::UNO_QUERY_THROW );
     return getDocument( mxContext, dynamic_cast<SwXTextDocument*>(xDoc.get()), Application() );
 }
 
-uno::Any SAL_CALL
-SwVbaDocuments::Add( const uno::Any& Template, const uno::Any& /*NewTemplate*/, const uno::Any& /*DocumentType*/, const uno::Any& /*Visible*/ )
+cpo::uno::Any SAL_CALL
+SwVbaDocuments::Add( const cpo::uno::Any& Template, const cpo::uno::Any& /*NewTemplate*/, const cpo::uno::Any& /*DocumentType*/, const cpo::uno::Any& /*Visible*/ )
 {
     OUString sFileName;
     if( Template.hasValue() && ( Template >>= sFileName ) )
     {
-        return  Open( sFileName, uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any());
+        return  Open( sFileName, cpo::uno::Any(), cpo::uno::Any(), cpo::uno::Any(), cpo::uno::Any(), cpo::uno::Any(), cpo::uno::Any(), cpo::uno::Any(), cpo::uno::Any(), cpo::uno::Any(), cpo::uno::Any(), cpo::uno::Any(), cpo::uno::Any(), cpo::uno::Any(), cpo::uno::Any(), cpo::uno::Any());
     }
     uno::Reference <text::XTextDocument> xTextDoc( createDocument() , uno::UNO_QUERY_THROW );
     return getDocument( mxContext, dynamic_cast<SwXTextDocument*>(xTextDoc.get()), Application() );
@@ -104,13 +104,13 @@ SwVbaDocuments::Add( const uno::Any& Template, const uno::Any& /*NewTemplate*/, 
 // #TODO# #FIXME# can any of the unused params below be used?
 // #TODO# #FIXME# surely we should actually close the document here
 void SAL_CALL
-SwVbaDocuments::Close( const uno::Any& /*SaveChanges*/, const uno::Any& /*OriginalFormat*/, const uno::Any& /*RouteDocument*/ )
+SwVbaDocuments::Close( const cpo::uno::Any& /*SaveChanges*/, const cpo::uno::Any& /*OriginalFormat*/, const cpo::uno::Any& /*RouteDocument*/ )
 {
 }
 
 // #TODO# #FIXME# can any of the unused params below be used?
-uno::Any SAL_CALL
-SwVbaDocuments::Open( const OUString& Filename, const uno::Any& /*ConfirmConversions*/, const uno::Any& ReadOnly, const uno::Any& /*AddToRecentFiles*/, const uno::Any& /*PasswordDocument*/, const uno::Any& /*PasswordTemplate*/, const uno::Any& /*Revert*/, const uno::Any& /*WritePasswordDocument*/, const uno::Any& /*WritePasswordTemplate*/, const uno::Any& /*Format*/, const uno::Any& /*Encoding*/, const uno::Any& /*Visible*/, const uno::Any& /*OpenAndRepair*/, const uno::Any& /*DocumentDirection*/, const uno::Any& /*NoEncodingDialog*/, const uno::Any& /*XMLTransform*/ )
+cpo::uno::Any SAL_CALL
+SwVbaDocuments::Open( const OUString& Filename, const cpo::uno::Any& /*ConfirmConversions*/, const cpo::uno::Any& ReadOnly, const cpo::uno::Any& /*AddToRecentFiles*/, const cpo::uno::Any& /*PasswordDocument*/, const cpo::uno::Any& /*PasswordTemplate*/, const cpo::uno::Any& /*Revert*/, const cpo::uno::Any& /*WritePasswordDocument*/, const cpo::uno::Any& /*WritePasswordTemplate*/, const cpo::uno::Any& /*Format*/, const cpo::uno::Any& /*Encoding*/, const cpo::uno::Any& /*Visible*/, const cpo::uno::Any& /*OpenAndRepair*/, const cpo::uno::Any& /*DocumentDirection*/, const cpo::uno::Any& /*NoEncodingDialog*/, const cpo::uno::Any& /*XMLTransform*/ )
 {
     SAL_INFO("sw.vba", "Documents.Open(Filename:=" << Filename << ",ReadOnly:=" << ReadOnly << ")");
 
@@ -125,23 +125,23 @@ SwVbaDocuments::Open( const OUString& Filename, const uno::Any& /*ConfirmConvers
         osl::FileBase::getFileURLFromSystemPath( Filename, aURL );
 
     uno::Reference <text::XTextDocument> xSpreadDoc( openDocument( Filename, ReadOnly, {}), uno::UNO_QUERY_THROW );
-    uno::Any aRet = getDocument( mxContext, dynamic_cast<SwXTextDocument*>(xSpreadDoc.get()), Application() );
+    cpo::uno::Any aRet = getDocument( mxContext, dynamic_cast<SwXTextDocument*>(xSpreadDoc.get()), Application() );
     uno::Reference< word::XDocument > xDocument( aRet, uno::UNO_QUERY );
     if ( xDocument.is() )
         xDocument->Activate();
     return aRet;
 }
 
-uno::Any SAL_CALL
-SwVbaDocuments::OpenNoRepairDialog( const OUString& Filename, const uno::Any& ConfirmConversions, const uno::Any& ReadOnly, const uno::Any& AddToRecentFiles, const uno::Any& PasswordDocument, const uno::Any& PasswordTemplate, const uno::Any& Revert, const uno::Any& WritePasswordDocument, const uno::Any& WritePasswordTemplate, const uno::Any& Format, const uno::Any& Encoding, const uno::Any& Visible, const uno::Any& OpenAndRepair, const uno::Any& DocumentDirection, const uno::Any& NoEncodingDialog, const uno::Any& XMLTransform )
+cpo::uno::Any SAL_CALL
+SwVbaDocuments::OpenNoRepairDialog( const OUString& Filename, const cpo::uno::Any& ConfirmConversions, const cpo::uno::Any& ReadOnly, const cpo::uno::Any& AddToRecentFiles, const cpo::uno::Any& PasswordDocument, const cpo::uno::Any& PasswordTemplate, const cpo::uno::Any& Revert, const cpo::uno::Any& WritePasswordDocument, const cpo::uno::Any& WritePasswordTemplate, const cpo::uno::Any& Format, const cpo::uno::Any& Encoding, const cpo::uno::Any& Visible, const cpo::uno::Any& OpenAndRepair, const cpo::uno::Any& DocumentDirection, const cpo::uno::Any& NoEncodingDialog, const cpo::uno::Any& XMLTransform )
 {
     return Open( Filename, ConfirmConversions, ReadOnly, AddToRecentFiles, PasswordDocument, PasswordTemplate, Revert, WritePasswordDocument, WritePasswordTemplate, Format, Encoding, Visible, OpenAndRepair, DocumentDirection, NoEncodingDialog, XMLTransform );
 }
 
-uno::Any SAL_CALL
-SwVbaDocuments::OpenOld( const OUString& FileName, const uno::Any& ConfirmConversions, const uno::Any& ReadOnly, const uno::Any& AddToRecentFiles, const uno::Any& PasswordDocument, const uno::Any& PasswordTemplate, const uno::Any& Revert, const uno::Any& WritePasswordDocument, const uno::Any& WritePasswordTemplate, const uno::Any& Format )
+cpo::uno::Any SAL_CALL
+SwVbaDocuments::OpenOld( const OUString& FileName, const cpo::uno::Any& ConfirmConversions, const cpo::uno::Any& ReadOnly, const cpo::uno::Any& AddToRecentFiles, const cpo::uno::Any& PasswordDocument, const cpo::uno::Any& PasswordTemplate, const cpo::uno::Any& Revert, const cpo::uno::Any& WritePasswordDocument, const cpo::uno::Any& WritePasswordTemplate, const cpo::uno::Any& Format )
 {
-    return Open( FileName, ConfirmConversions, ReadOnly, AddToRecentFiles, PasswordDocument, PasswordTemplate, Revert, WritePasswordDocument, WritePasswordTemplate, Format, uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any() );
+    return Open( FileName, ConfirmConversions, ReadOnly, AddToRecentFiles, PasswordDocument, PasswordTemplate, Revert, WritePasswordDocument, WritePasswordTemplate, Format, cpo::uno::Any(), cpo::uno::Any(), cpo::uno::Any(), cpo::uno::Any(), cpo::uno::Any(), cpo::uno::Any() );
 }
 
 OUString

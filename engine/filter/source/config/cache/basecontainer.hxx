@@ -207,7 +207,7 @@ class BaseContainer : public ::cppu::WeakImplHelper< css::lang::XServiceInfo    
         // XNameContainer
 
         virtual void SAL_CALL insertByName(const OUString& sItem ,
-                                           const css::uno::Any&   aValue) override;
+                                           const cpo::uno::Any&   aValue) override;
 
         virtual void SAL_CALL removeByName(const OUString& sItem) override;
 
@@ -215,12 +215,12 @@ class BaseContainer : public ::cppu::WeakImplHelper< css::lang::XServiceInfo    
         // XNameReplace
 
         virtual void SAL_CALL replaceByName(const OUString& sItem ,
-                                            const css::uno::Any&   aValue) override;
+                                            const cpo::uno::Any&   aValue) override;
 
 
         // XElementAccess
 
-        virtual css::uno::Any SAL_CALL getByName(const OUString& sItem) override;
+        virtual cpo::uno::Any SAL_CALL getByName(const OUString& sItem) override;
 
         virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
 

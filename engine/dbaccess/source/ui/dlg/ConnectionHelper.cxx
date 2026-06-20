@@ -62,6 +62,7 @@ namespace dbaui
 {
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::ucb;
     using namespace ::com::sun::star::ui::dialogs;
     using namespace ::com::sun::star::sdbc;
@@ -251,7 +252,7 @@ namespace dbaui
                 {
                     css::uno::Sequence<sal_Int8> aProcessIdent(16);
                     rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8*>(aProcessIdent.getArray()));
-                    css::uno::Any aAny = xSysDepWin->getWindowHandle(aProcessIdent, css::lang::SystemDependent::SYSTEM_WIN32);
+                    cpo::uno::Any aAny = xSysDepWin->getWindowHandle(aProcessIdent, css::lang::SystemDependent::SYSTEM_WIN32);
                     sal_Int64 tmp(0);
                     aAny >>= tmp;
                     hWnd = reinterpret_cast<HWND>(tmp);

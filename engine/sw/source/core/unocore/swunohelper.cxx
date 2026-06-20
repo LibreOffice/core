@@ -47,7 +47,7 @@ using namespace com::sun::star;
 namespace SWUnoHelper
 {
 
-sal_Int32 GetEnumAsInt32( const css::uno::Any& rVal )
+sal_Int32 GetEnumAsInt32( const cpo::uno::Any& rVal )
 {
     sal_Int32 nReturn = 0;
     if (! ::cppu::enum2int(nReturn,rVal) )
@@ -64,7 +64,7 @@ bool UCB_DeleteFile( const OUString& rURL )
         ucbhelper::Content aTempContent( rURL,
                                 css::uno::Reference< css::ucb::XCommandEnvironment >(),
                                 comphelper::getProcessComponentContext() );
-        aTempContent.executeCommand(u"delete"_ustr, css::uno::Any( true ) );
+        aTempContent.executeCommand(u"delete"_ustr, cpo::uno::Any( true ) );
         bRemoved = true;
     }
     catch( css::uno::Exception& )
@@ -94,7 +94,7 @@ bool UCB_MoveFile( const OUString& rURL, std::u16string_view rNewURL )
         aInfo.NewTitle = sName;
         aInfo.SourceURL = rURL;
         aInfo.MoveData = true;
-        aTempContent.executeCommand( u"transfer"_ustr, uno::Any(aInfo) );
+        aTempContent.executeCommand( u"transfer"_ustr, cpo::uno::Any(aInfo) );
     }
     catch( css::uno::Exception& )
     {
@@ -138,7 +138,7 @@ bool UCB_IsReadOnlyFileName( const OUString& rURL )
     try
     {
         ucbhelper::Content aCnt( rURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-        css::uno::Any aAny = aCnt.getPropertyValue(u"IsReadOnly"_ustr);
+        cpo::uno::Any aAny = aCnt.getPropertyValue(u"IsReadOnly"_ustr);
         if(aAny.hasValue())
             bIsReadOnly = *o3tl::doAccess<bool>(aAny);
     }

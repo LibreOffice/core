@@ -92,15 +92,15 @@ public:
     explicit SdPropertySubControl(weld::Container* pParent);
     virtual ~SdPropertySubControl();
 
-    virtual             css::uno::Any getValue() = 0;
-    virtual             void setValue( const css::uno::Any& rValue, const OUString& rPresetId ) = 0;
+    virtual             cpo::uno::Any getValue() = 0;
+    virtual             void setValue( const cpo::uno::Any& rValue, const OUString& rPresetId ) = 0;
 
     static std::unique_ptr<SdPropertySubControl>
                         create( sal_Int32 nType,
                                 weld::Label* pLabel,
                                 weld::Container* pParent,
                                 weld::Window* pTopLevel,
-                                const css::uno::Any& rValue,
+                                const cpo::uno::Any& rValue,
                                 const OUString& rPresetId,
                                 const Link<LinkParamNone*,void>& rModifyHdl );
 

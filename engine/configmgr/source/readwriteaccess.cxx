@@ -14,7 +14,7 @@
 #include <com/sun/star/lang/NotInitializedException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -63,9 +63,9 @@ private:
     { return { u"com.sun.star.configuration.ReadWriteAccess"_ustr }; }
 
     virtual void SAL_CALL initialize(
-        css::uno::Sequence< css::uno::Any > const & aArguments) override;
+        css::uno::Sequence< cpo::uno::Any > const & aArguments) override;
 
-    virtual css::uno::Any SAL_CALL getByHierarchicalName(
+    virtual cpo::uno::Any SAL_CALL getByHierarchicalName(
         OUString const & aName) override
     { return getRoot()->getByHierarchicalName(aName); }
 
@@ -73,7 +73,7 @@ private:
     { return getRoot()->hasByHierarchicalName(aName); }
 
     virtual void SAL_CALL replaceByHierarchicalName(
-        OUString const & aName, css::uno::Any const & aElement) override
+        OUString const & aName, cpo::uno::Any const & aElement) override
     { getRoot()->replaceByHierarchicalName(aName, aElement); }
 
     virtual void SAL_CALL commitChanges() override
@@ -102,7 +102,7 @@ private:
     rtl::Reference< RootAccess > root_;
 };
 
-void Service::initialize(css::uno::Sequence< css::uno::Any > const & aArguments)
+void Service::initialize(css::uno::Sequence< cpo::uno::Any > const & aArguments)
 {
     OUString locale;
     if (aArguments.getLength() != 1 || !(aArguments[0] >>= locale)) {
@@ -135,7 +135,7 @@ rtl::Reference< RootAccess > Service::getRoot() {
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_configuration_ReadWriteAccess_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new configmgr::read_write_access::Service(context));
 }

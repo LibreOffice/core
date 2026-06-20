@@ -71,7 +71,7 @@
 using namespace com::sun::star;
 using namespace com::sun::star::sheet;
 
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;
@@ -1000,7 +1000,7 @@ Any SAL_CALL ScDataPilotTableObj::queryInterface( const uno::Type& rType )
 {
     // since we manually do resolve the query for XDataPilotTable2
     // we also need to do the same for XDataPilotTable
-    uno::Any aReturn = ::cppu::queryInterface(rType,
+    cpo::uno::Any aReturn = ::cppu::queryInterface(rType,
                     static_cast<XDataPilotTable*>(this),
                     static_cast<XDataPilotTable2*>(this),
                     static_cast<XModifyBroadcaster*>(this));
@@ -2579,7 +2579,7 @@ rtl::Reference< ScDataPilotFieldObj > ScDataPilotFieldObj::createNameGroup( cons
         }
         catch (const container::NoSuchElementException&)
         {
-            css::uno::Any anyEx = cppu::getCaughtException();
+            cpo::uno::Any anyEx = cppu::getCaughtException();
             SAL_WARN("sc.ui", "Cannot find field with that name: " + sNewDim + ".");
             // Avoid throwing exception that's not specified in the method signature.
             throw css::lang::WrappedTargetRuntimeException(

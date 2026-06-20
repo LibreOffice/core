@@ -62,7 +62,7 @@ uno::Reference<uno::XInterface> CheckXCellRangesQuery::init()
     // Getting spreadsheet
     uno::Reference<sheet::XSpreadsheets> oSheets = xSheetDoc->getSheets();
     uno::Reference<container::XIndexAccess> oIndexSheets(oSheets, uno::UNO_QUERY_THROW);
-    uno::Any aAny = oIndexSheets->getByIndex(0);
+    cpo::uno::Any aAny = oIndexSheets->getByIndex(0);
     uno::Reference<container::XNamed> xNamed;
     CPPUNIT_ASSERT(aAny >>= xNamed);
     sSheetName = xNamed->getName();

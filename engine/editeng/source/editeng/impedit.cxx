@@ -2073,7 +2073,7 @@ void ImpEditView::Paste(uno::Reference<datatransfer::clipboard::XClipboard> cons
         {
             try
             {
-                uno::Any aData = xDataObj->getTransferData( aFlavor );
+                cpo::uno::Any aData = xDataObj->getTransferData( aFlavor );
                 OUString aTmpText;
                 aData >>= aTmpText;
                 OUString aText(convertLineEnd(aTmpText, LINEEND_LF));

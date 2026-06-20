@@ -214,7 +214,7 @@ ScProtectionAttr::~ScProtectionAttr()
 {
 }
 
-bool ScProtectionAttr::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool ScProtectionAttr::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId  )
@@ -245,7 +245,7 @@ bool ScProtectionAttr::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-bool ScProtectionAttr::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool ScProtectionAttr::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bRet = false;
     bool bVal = false;
@@ -411,7 +411,7 @@ ScPageHFItem::~ScPageHFItem()
 {
 }
 
-bool ScPageHFItem::QueryValue( uno::Any& rVal, sal_uInt8 /* nMemberId */ ) const
+bool ScPageHFItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /* nMemberId */ ) const
 {
     rtl::Reference<ScHeaderFooterContentObj> xContent =
         new ScHeaderFooterContentObj();
@@ -421,7 +421,7 @@ bool ScPageHFItem::QueryValue( uno::Any& rVal, sal_uInt8 /* nMemberId */ ) const
     return true;
 }
 
-bool ScPageHFItem::PutValue( const uno::Any& rVal, sal_uInt8 /* nMemberId */ )
+bool ScPageHFItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /* nMemberId */ )
 {
     bool bRet = false;
     uno::Reference<sheet::XHeaderFooterContent> xContent;
@@ -653,7 +653,7 @@ bool ScPageScaleToItem::GetPresentation(
     return false;
 }
 
-bool ScPageScaleToItem::QueryValue( uno::Any& rAny, sal_uInt8 nMemberId ) const
+bool ScPageScaleToItem::QueryValue( cpo::uno::Any& rAny, sal_uInt8 nMemberId ) const
 {
     bool bRet = true;
     switch( nMemberId )
@@ -667,7 +667,7 @@ bool ScPageScaleToItem::QueryValue( uno::Any& rAny, sal_uInt8 nMemberId ) const
     return bRet;
 }
 
-bool ScPageScaleToItem::PutValue( const uno::Any& rAny, sal_uInt8 nMemberId )
+bool ScPageScaleToItem::PutValue( const cpo::uno::Any& rAny, sal_uInt8 nMemberId )
 {
     bool bRet = false;
     switch( nMemberId )

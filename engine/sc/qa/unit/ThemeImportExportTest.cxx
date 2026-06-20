@@ -54,7 +54,8 @@ CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testThemeExportAndImport)
         pColorSet->add(model::ThemeColorType::FollowedHyperlink, 0xcccccc);
         pTheme->setColorSet(pColorSet);
 
-        xPropertySet->setPropertyValue(u"Theme"_ustr, uno::Any(model::theme::createXTheme(pTheme)));
+        xPropertySet->setPropertyValue(u"Theme"_ustr,
+                                       cpo::uno::Any(model::theme::createXTheme(pTheme)));
     }
 
     // Check the "Theme" property

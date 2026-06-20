@@ -145,7 +145,7 @@ bool AxisItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWit
     return true;
 }
 
-static bool lcl_hasTimeIntervalValue( const uno::Any& rAny )
+static bool lcl_hasTimeIntervalValue( const cpo::uno::Any& rAny )
 {
     bool bRet = false;
     TimeInterval aValue;
@@ -470,7 +470,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
     bool bSetScale    = false;
     bool bChangedOtherwise = false;
 
-    uno::Any aValue;
+    cpo::uno::Any aValue;
 
     switch( nWhichId )
     {
@@ -726,11 +726,11 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                                 double fValue = 0.0;
                                 if( aValue >>= fValue )
                                 {
-                                    xCrossingMainAxis->setPropertyValue( u"CrossoverPosition"_ustr , uno::Any( css::chart::ChartAxisPosition_VALUE ));
-                                    xCrossingMainAxis->setPropertyValue( u"CrossoverValue"_ustr , uno::Any( fValue ));
+                                    xCrossingMainAxis->setPropertyValue( u"CrossoverPosition"_ustr , cpo::uno::Any( css::chart::ChartAxisPosition_VALUE ));
+                                    xCrossingMainAxis->setPropertyValue( u"CrossoverValue"_ustr , cpo::uno::Any( fValue ));
                                 }
                                 else
-                                    xCrossingMainAxis->setPropertyValue( u"CrossoverPosition"_ustr , uno::Any( css::chart::ChartAxisPosition_START ));
+                                    xCrossingMainAxis->setPropertyValue( u"CrossoverPosition"_ustr , cpo::uno::Any( css::chart::ChartAxisPosition_START ));
                             }
                         }
                     }
@@ -749,7 +749,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
             if( !bPropExisted || ( eOldAxisPos != eAxisPos ))
             {
-                GetPropertySet()->setPropertyValue( u"CrossoverPosition"_ustr , uno::Any( eAxisPos ));
+                GetPropertySet()->setPropertyValue( u"CrossoverPosition"_ustr , cpo::uno::Any( eAxisPos ));
                 bChangedOtherwise = true;
 
                 //move the parallel axes to the other side if necessary
@@ -768,7 +768,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                                     (eAxisPos==css::chart::ChartAxisPosition_START)
                                     ? css::chart::ChartAxisPosition_END
                                     : css::chart::ChartAxisPosition_START;
-                                xParallelAxis->setPropertyValue( u"CrossoverPosition"_ustr , uno::Any( eOppositePos ));
+                                xParallelAxis->setPropertyValue( u"CrossoverPosition"_ustr , cpo::uno::Any( eOppositePos ));
                             }
                         }
                     }
@@ -786,7 +786,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
             if( !bPropExisted || ( fOldValue != fValue ))
             {
-                GetPropertySet()->setPropertyValue( u"CrossoverValue"_ustr , uno::Any( fValue ));
+                GetPropertySet()->setPropertyValue( u"CrossoverValue"_ustr , cpo::uno::Any( fValue ));
                 bChangedOtherwise = true;
 
                 //keep old and new settings for axis positioning in sync somehow
@@ -833,7 +833,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
             if( !bPropExisted || ( eOldPos != ePos ))
             {
-                GetPropertySet()->setPropertyValue( u"LabelPosition"_ustr , uno::Any( ePos ));
+                GetPropertySet()->setPropertyValue( u"LabelPosition"_ustr , cpo::uno::Any( ePos ));
                 bChangedOtherwise = true;
 
                 //move the parallel axes to the other side if necessary
@@ -852,7 +852,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                                     (ePos==css::chart::ChartAxisLabelPosition_OUTSIDE_START)
                                     ? css::chart::ChartAxisLabelPosition_OUTSIDE_END
                                     : css::chart::ChartAxisLabelPosition_OUTSIDE_START;
-                                xParallelAxis->setPropertyValue( u"LabelPosition"_ustr , uno::Any( eOppositePos ));
+                                xParallelAxis->setPropertyValue( u"LabelPosition"_ustr , cpo::uno::Any( eOppositePos ));
                             }
                         }
                     }
@@ -871,7 +871,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
             if( !bPropExisted || ( eOldPos != ePos ))
             {
-                GetPropertySet()->setPropertyValue( u"MarkPosition"_ustr , uno::Any( ePos ));
+                GetPropertySet()->setPropertyValue( u"MarkPosition"_ustr , cpo::uno::Any( ePos ));
                 bChangedOtherwise = true;
             }
         }
@@ -886,7 +886,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
             if( ! bPropExisted || fOldVal != fVal )
             {
-                GetPropertySet()->setPropertyValue( u"TextRotation"_ustr , uno::Any( fVal ));
+                GetPropertySet()->setPropertyValue( u"TextRotation"_ustr , cpo::uno::Any( fVal ));
                 bChangedOtherwise = true;
             }
         }
@@ -921,7 +921,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
             bool bUseSourceFormat =
                 static_cast< const SfxBoolItem & >(
                     rItemSet.Get( nWhichId )).GetValue();
-            GetPropertySet()->setPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT, uno::Any(bUseSourceFormat));
+            GetPropertySet()->setPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT, cpo::uno::Any(bUseSourceFormat));
 
             bool bNumberFormatIsSet = GetPropertySet()->getPropertyValue(CHART_UNONAME_NUMFMT).hasValue();
 

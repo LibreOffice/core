@@ -41,7 +41,7 @@ using namespace ::com::sun::star;
 //     the models in ControlModels can be accessed by name
 // also the XDialog is a XControl ( to access the model above
 
-ScVbaUserForm::ScVbaUserForm( uno::Sequence< uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& xContext )
+ScVbaUserForm::ScVbaUserForm( uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& xContext )
     :  ScVbaUserForm_BASE( getXSomethingFromArgs< XHelperInterface >( aArgs, 0 ), xContext, getXSomethingFromArgs< uno::XInterface >( aArgs, 1 ), getXSomethingFromArgs< frame::XModel >( aArgs, 2 ), nullptr ),
        mbDispose( true )
 {
@@ -113,7 +113,7 @@ ScVbaUserForm::getCaption()
 void
 ScVbaUserForm::setCaption( const OUString& _caption )
 {
-    m_xProps->setPropertyValue( u"Title"_ustr, uno::Any( _caption ) );
+    m_xProps->setPropertyValue( u"Title"_ustr, cpo::uno::Any( _caption ) );
 }
 
 bool SAL_CALL
@@ -194,16 +194,16 @@ ScVbaUserForm::getIntrospection(  )
     return uno::Reference< beans::XIntrospectionAccess >();
 }
 
-uno::Any SAL_CALL
-ScVbaUserForm::invoke( const OUString& /*aFunctionName*/, const uno::Sequence< uno::Any >& /*aParams*/, uno::Sequence< ::sal_Int16 >& /*aOutParamIndex*/, uno::Sequence< uno::Any >& /*aOutParam*/ )
+cpo::uno::Any SAL_CALL
+ScVbaUserForm::invoke( const OUString& /*aFunctionName*/, const uno::Sequence< cpo::uno::Any >& /*aParams*/, uno::Sequence< ::sal_Int16 >& /*aOutParamIndex*/, uno::Sequence< cpo::uno::Any >& /*aOutParam*/ )
 {
     throw uno::RuntimeException(); // unsupported operation
 }
 
 void SAL_CALL
-ScVbaUserForm::setValue( const OUString& aPropertyName, const uno::Any& aValue )
+ScVbaUserForm::setValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
-    uno::Any aObject = getValue( aPropertyName );
+    cpo::uno::Any aObject = getValue( aPropertyName );
 
     // in case the dialog is already closed the VBA implementation should not throw exceptions
     if ( aObject.hasValue() )
@@ -242,10 +242,10 @@ ScVbaUserForm::nestedSearch( const OUString& aPropertyName, uno::Reference< awt:
     return xControl;
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaUserForm::getValue( const OUString& aPropertyName )
 {
-    uno::Any aResult;
+    cpo::uno::Any aResult;
 
     // in case the dialog is already closed the VBA implementation should not throw exceptions
     if ( m_xDialog.is() )
@@ -272,16 +272,16 @@ ScVbaUserForm::hasMethod( const OUString& /*aName*/ )
 {
     return false;
 }
-uno::Any SAL_CALL
-ScVbaUserForm::Controls( const uno::Any& index )
+cpo::uno::Any SAL_CALL
+ScVbaUserForm::Controls( const cpo::uno::Any& index )
 {
     // if the dialog already closed we should do nothing, but the VBA will call methods of the Controls objects
     // thus we have to provide a dummy object in this case
     uno::Reference< awt::XControl > xDialogControl( m_xDialog, uno::UNO_QUERY );
     uno::Reference< XCollection > xControls( new ScVbaControls( this, mxContext, xDialogControl, m_xModel, mpGeometryHelper->getOffsetX(), mpGeometryHelper->getOffsetY() ) );
     if ( index.hasValue() )
-        return xControls->Item( index, uno::Any() );
-    return uno::Any( xControls );
+        return xControls->Item( index, cpo::uno::Any() );
+    return cpo::uno::Any( xControls );
 }
 
 bool SAL_CALL
@@ -306,7 +306,7 @@ ScVbaUserForm::hasProperty( const OUString& aName )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ScVbaUserForm_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const& args)
+    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new ScVbaUserForm(args, context));
 }

@@ -27,6 +27,7 @@
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 
 namespace cppu
@@ -176,7 +177,7 @@ void OComponentHelper::dispose()
         }
         catch (Exception & exc)
         {
-            css::uno::Any anyEx = cppu::getCaughtException();
+            cpo::uno::Any anyEx = cppu::getCaughtException();
             throw lang::WrappedTargetRuntimeException(
                 "unexpected UNO exception caught: " + exc.Message,
                 nullptr, anyEx );

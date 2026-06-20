@@ -34,6 +34,7 @@
 #include <bitmaps.hlst>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::graphic;
@@ -270,7 +271,7 @@ VclPtr<vcl::Window> ExtrusionDirectionControl::createVclPopupWindow( vcl::Window
 }
 
 // XInitialization
-void SAL_CALL ExtrusionDirectionControl::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+void SAL_CALL ExtrusionDirectionControl::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     svt::PopupWindowController::initialize( aArguments );
 
@@ -298,7 +299,7 @@ Sequence< OUString > ExtrusionDirectionControl::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_svx_ExtrusionDirectionControl_get_implementation(
     css::uno::XComponentContext* xContext,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ExtrusionDirectionControl(xContext));
 }
@@ -550,7 +551,7 @@ VclPtr<vcl::Window> ExtrusionDepthController::createVclPopupWindow( vcl::Window*
 }
 
 // XInitialization
-void SAL_CALL ExtrusionDepthController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+void SAL_CALL ExtrusionDepthController::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     svt::PopupWindowController::initialize( aArguments );
 
@@ -578,7 +579,7 @@ Sequence< OUString > ExtrusionDepthController::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_svx_ExtrusionDepthController_get_implementation(
     css::uno::XComponentContext* xContext,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ExtrusionDepthController(xContext));
 }
@@ -783,7 +784,7 @@ VclPtr<vcl::Window> ExtrusionLightingControl::createVclPopupWindow( vcl::Window*
 }
 
 // XInitialization
-void SAL_CALL ExtrusionLightingControl::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+void SAL_CALL ExtrusionLightingControl::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     svt::PopupWindowController::initialize( aArguments );
 
@@ -811,7 +812,7 @@ Sequence< OUString > ExtrusionLightingControl::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_svx_ExtrusionLightingControl_get_implementation(
     css::uno::XComponentContext* xContext,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ExtrusionLightingControl(xContext));
 }
@@ -929,7 +930,7 @@ VclPtr<vcl::Window> ExtrusionSurfaceControl::createVclPopupWindow( vcl::Window* 
 }
 
 // XInitialization
-void SAL_CALL ExtrusionSurfaceControl::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+void SAL_CALL ExtrusionSurfaceControl::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     svt::PopupWindowController::initialize( aArguments );
 
@@ -957,7 +958,7 @@ Sequence< OUString > ExtrusionSurfaceControl::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_svx_ExtrusionSurfaceControl_get_implementation(
     css::uno::XComponentContext* xContext,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ExtrusionSurfaceControl(xContext));
 }

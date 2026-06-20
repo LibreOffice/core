@@ -22,7 +22,6 @@
 
 namespace basctl
 {
-
 BasicColorConfig::BasicColorConfig()
     : ConfigItem(u"Office.BasicIDE/IDEColorSchemes"_ustr)
 {
@@ -64,7 +63,7 @@ ColorScheme BasicColorConfig::GetColorScheme(const OUString& rScheme)
     {
         pPropNames[i] = aVecPropNames[i];
     }
-    css::uno::Sequence<css::uno::Any> aColors = GetProperties(aPropNames);
+    css::uno::Sequence<cpo::uno::Any> aColors = GetProperties(aPropNames);
 
     ColorScheme aColorScheme;
     aColorScheme.m_sSchemeName = rScheme;

@@ -18,7 +18,7 @@
 #include <com/sun/star/reflection/XConstantTypeDescription.hpp>
 #include <com/sun/star/reflection/XConstantsTypeDescription.hpp>
 #include <com/sun/star/reflection/XDump.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -116,7 +116,7 @@ public:
         manager_.clear();
     }
 
-    OUString SAL_CALL dumpValue(css::uno::Any const& value) override
+    OUString SAL_CALL dumpValue(cpo::uno::Any const& value) override
     {
         switch (value.getValueTypeClass())
         {
@@ -186,8 +186,8 @@ public:
                     {
                         buf.append(", ");
                     }
-                    css::uno::Any const e(s->elements + i * n, t);
-                    buf.append(t == cppu::UnoType<css::uno::Any>::get() ? dumpAny(e)
+                    cpo::uno::Any const e(s->elements + i * n, t);
+                    buf.append(t == cppu::UnoType<cpo::uno::Any>::get() ? dumpAny(e)
                                                                         : dumpValue(e));
                 }
                 return "[" + buf + "]";
@@ -228,13 +228,13 @@ public:
         }
     }
 
-    OUString SAL_CALL dumpAny(css::uno::Any const& value) override
+    OUString SAL_CALL dumpAny(cpo::uno::Any const& value) override
     {
         return "[" + value.getValueTypeName() + ": " + dumpValue(value) + "]";
     }
 
     OUString SAL_CALL dumpConstant(OUString const& constantsGroup,
-                                   css::uno::Any const& value) override
+                                   cpo::uno::Any const& value) override
     {
         css::uno::Reference<css::container::XHierarchicalNameAccess> manager;
         {
@@ -339,9 +339,9 @@ private:
             }
             buffer->append(OUString::unacquired(description->ppMemberNames + i) + ": ");
             css::uno::Type t(description->ppTypeRefs[i]);
-            css::uno::Any const m(static_cast<char const*>(data) + description->pMemberOffsets[i],
+            cpo::uno::Any const m(static_cast<char const*>(data) + description->pMemberOffsets[i],
                                   t);
-            buffer->append(t == cppu::UnoType<css::uno::Any>::get() ? dumpAny(m) : dumpValue(m));
+            buffer->append(t == cppu::UnoType<cpo::uno::Any>::get() ? dumpAny(m) : dumpValue(m));
         }
     }
 };
@@ -349,7 +349,7 @@ private:
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_stoc_Dump_get_implementation(css::uno::XComponentContext* context,
-                                               css::uno::Sequence<css::uno::Any> const& arguments)
+                                               css::uno::Sequence<cpo::uno::Any> const& arguments)
 {
     SAL_WARN_IF(arguments.hasElements(), "stoc", "unexpected singleton arguments");
     return cppu::acquire(new Dump(context));

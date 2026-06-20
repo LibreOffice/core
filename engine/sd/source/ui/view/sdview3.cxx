@@ -79,6 +79,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::datatransfer;
 
@@ -1072,8 +1073,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                              ( xProps->getPropertyValue( u"DisableDataTableDialog"_ustr ) >>= bDisableDataTableDialog ) &&
                              bDisableDataTableDialog )
                         {
-                            xProps->setPropertyValue( u"DisableDataTableDialog"_ustr , uno::Any( false ) );
-                            xProps->setPropertyValue( u"DisableComplexChartTypes"_ustr , uno::Any( false ) );
+                            xProps->setPropertyValue( u"DisableDataTableDialog"_ustr , cpo::uno::Any( false ) );
+                            xProps->setPropertyValue( u"DisableComplexChartTypes"_ustr , cpo::uno::Any( false ) );
                             uno::Reference< util::XModifiable > xModifiable( xProps, uno::UNO_QUERY );
                             if ( xModifiable.is() )
                             {
@@ -1371,7 +1372,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
     if (pPickObj && ShouldTry(SotClipboardFormatId::XFA))
     {
-        uno::Any const data(rDataHelper.GetAny(SotClipboardFormatId::XFA, u""_ustr));
+        cpo::uno::Any const data(rDataHelper.GetAny(SotClipboardFormatId::XFA, u""_ustr));
         uno::Sequence<beans::NamedValue> props;
         if (data >>= props)
         {

@@ -41,16 +41,16 @@ class ScVbaInterior final :  public ScVbaInterior_BASE
 
     css::uno::Reference< css::container::XIndexAccess > getPalette() const;
     css::uno::Reference< css::container::XNameContainer > GetAttributeContainer();
-    static css::uno::Any SetAttributeData( sal_Int32 nValue );
-    static sal_Int32 GetAttributeData( css::uno::Any const & aValue );
+    static cpo::uno::Any SetAttributeData( sal_Int32 nValue );
+    static sal_Int32 GetAttributeData( cpo::uno::Any const & aValue );
     Color GetBackColor();
     static Color GetPatternColor( const Color& rPattColor, const Color& rBackColor, sal_uInt32 nXclPattern );
     static Color GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt8 nTrans );
     static sal_uInt8 GetMixedColorComp( sal_uInt8 nFore, sal_uInt8 nBack, sal_uInt8 nTrans );
-    css::uno::Any GetIndexColor( sal_Int32 nColorIndex );
+    cpo::uno::Any GetIndexColor( sal_Int32 nColorIndex );
     sal_Int32 GetColorIndex( const sal_Int32 nColor );
-    css::uno::Any GetUserDefinedAttributes( const OUString& sName );
-    void SetUserDefinedAttributes( const OUString& sName, const css::uno::Any& aValue );
+    cpo::uno::Any GetUserDefinedAttributes( const OUString& sName );
+    void SetUserDefinedAttributes( const OUString& sName, const cpo::uno::Any& aValue );
     void SetMixedColor();
 
 public:
@@ -58,23 +58,23 @@ public:
         ScVbaInterior( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext,
                  css::uno::Reference< css::beans::XPropertySet > xProps, ScDocument* pScDoc = nullptr);
 
-    virtual css::uno::Any SAL_CALL getColor() override ;
-    virtual void SAL_CALL setColor( const css::uno::Any& _color ) override ;
+    virtual cpo::uno::Any SAL_CALL getColor() override ;
+    virtual void SAL_CALL setColor( const cpo::uno::Any& _color ) override ;
 
-    virtual css::uno::Any SAL_CALL getColorIndex() override;
-    virtual void SAL_CALL setColorIndex( const css::uno::Any& _colorindex ) override;
-    virtual css::uno::Any SAL_CALL getPattern() override;
-    virtual void SAL_CALL setPattern( const css::uno::Any& _pattern ) override;
-    virtual css::uno::Any SAL_CALL getPatternColor() override;
-    virtual void SAL_CALL setPatternColor( const css::uno::Any& _patterncolor ) override;
-    virtual css::uno::Any SAL_CALL getPatternColorIndex() override;
-    virtual void SAL_CALL setPatternColorIndex( const css::uno::Any& _patterncolorindex ) override;
-    css::uno::Any SAL_CALL getThemeColor() override;
-    void SAL_CALL setThemeColor(const css::uno::Any& rAny) override;
-    css::uno::Any SAL_CALL getTintAndShade() override;
-    void SAL_CALL setTintAndShade(const css::uno::Any& rAny) override;
-    css::uno::Any SAL_CALL getPatternTintAndShade() override;
-    void SAL_CALL setPatternTintAndShade(const css::uno::Any& rAny) override;
+    virtual cpo::uno::Any SAL_CALL getColorIndex() override;
+    virtual void SAL_CALL setColorIndex( const cpo::uno::Any& _colorindex ) override;
+    virtual cpo::uno::Any SAL_CALL getPattern() override;
+    virtual void SAL_CALL setPattern( const cpo::uno::Any& _pattern ) override;
+    virtual cpo::uno::Any SAL_CALL getPatternColor() override;
+    virtual void SAL_CALL setPatternColor( const cpo::uno::Any& _patterncolor ) override;
+    virtual cpo::uno::Any SAL_CALL getPatternColorIndex() override;
+    virtual void SAL_CALL setPatternColorIndex( const cpo::uno::Any& _patterncolorindex ) override;
+    cpo::uno::Any SAL_CALL getThemeColor() override;
+    void SAL_CALL setThemeColor(const cpo::uno::Any& rAny) override;
+    cpo::uno::Any SAL_CALL getTintAndShade() override;
+    void SAL_CALL setTintAndShade(const cpo::uno::Any& rAny) override;
+    cpo::uno::Any SAL_CALL getPatternTintAndShade() override;
+    void SAL_CALL setPatternTintAndShade(const cpo::uno::Any& rAny) override;
     //XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

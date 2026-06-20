@@ -60,6 +60,7 @@
 using namespace ::svx;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 
@@ -124,7 +125,7 @@ public:
 
     void Start( SwEditShell *pSh, SwDocPositions eStart, SwDocPositions eEnd );
 
-    uno::Any    Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt );
+    cpo::uno::Any    Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt );
 
     bool                                SpellSentence(svx::SpellPortions& rPortions, bool bIsGrammarCheck);
     void                                ToSentenceStart();
@@ -145,7 +146,7 @@ public:
 
     void Start( SwEditShell *pSh, SwDocPositions eStart, SwDocPositions eEnd );
 
-    uno::Any    Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt );
+    cpo::uno::Any    Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt );
 };
 
 class SwHyphIter : public SwLinguIter
@@ -171,7 +172,7 @@ public:
 
     void Ignore();
 
-    uno::Any    Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt );
+    cpo::uno::Any    Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt );
 
     static bool IsAuto();
     void InsertSoftHyph( const sal_Int32 nHyphPos );
@@ -282,13 +283,13 @@ void SwSpellIter::Start( SwEditShell *pShell, SwDocPositions eStart,
 }
 
 // This method is the origin of SwEditShell::SpellContinue()
-uno::Any SwSpellIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
+cpo::uno::Any SwSpellIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
 {
     //!!
     //!! Please check SwConvIter also when modifying this
     //!!
 
-    uno::Any    aSpellRet;
+    cpo::uno::Any    aSpellRet;
     SwEditShell *pMySh = GetSh();
     if( !pMySh )
         return aSpellRet;
@@ -339,13 +340,13 @@ void SwConvIter::Start( SwEditShell *pShell, SwDocPositions eStart,
     Start_( pShell, eStart, eEnd );
 }
 
-uno::Any SwConvIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
+cpo::uno::Any SwConvIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
 {
     //!!
     //!! Please check SwSpellIter also when modifying this
     //!!
 
-    uno::Any    aConvRet{ OUString() };
+    cpo::uno::Any    aConvRet{ OUString() };
     SwEditShell *pMySh = GetSh();
     if( !pMySh )
         return aConvRet;
@@ -435,9 +436,9 @@ void SwHyphIter::End()
     End_();
 }
 
-uno::Any SwHyphIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
+cpo::uno::Any SwHyphIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
 {
-    uno::Any    aHyphRet;
+    cpo::uno::Any    aHyphRet;
     SwEditShell *pMySh = GetSh();
     if( !pMySh )
         return aHyphRet;
@@ -651,11 +652,11 @@ void SwEditShell::SpellEnd( SwConversionArgs const *pConvArgs, bool bRestoreSele
 }
 
 /// @returns SPL_ return values as in splchk.hxx
-uno::Any SwEditShell::SpellContinue(
+cpo::uno::Any SwEditShell::SpellContinue(
         sal_uInt16* pPageCnt, sal_uInt16* pPageSt,
         SwConversionArgs const *pConvArgs )
 {
-    uno::Any aRes;
+    cpo::uno::Any aRes;
 
     if ((!pConvArgs && g_pSpellIter->GetSh() != this) ||
         ( pConvArgs && g_pConvIter->GetSh() != this))
@@ -1314,7 +1315,7 @@ bool SwSpellIter::SpellSentence(svx::SpellPortions& rPortions, bool bIsGrammarCh
             pMySh->GoStartSentence();
             m_bBackToStartOfSentence = false;
         }
-        uno::Any aSpellRet = pMySh->GetDoc()->Spell(*pCursor, m_xSpeller, nullptr, nullptr,
+        cpo::uno::Any aSpellRet = pMySh->GetDoc()->Spell(*pCursor, m_xSpeller, nullptr, nullptr,
                                                     bIsGrammarCheck, pMySh->GetLayout());
         aSpellRet >>= xSpellRet;
         aSpellRet >>= aGrammarResult;

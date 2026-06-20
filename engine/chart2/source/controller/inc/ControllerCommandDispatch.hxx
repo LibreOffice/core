@@ -111,7 +111,7 @@ private:
     std::unique_ptr< impl::ControllerState > m_apControllerState;
 
     mutable std::map< OUString, bool > m_aCommandAvailability;
-    mutable std::map< OUString, css::uno::Any > m_aCommandArguments;
+    mutable std::map< OUString, cpo::uno::Any > m_aCommandArguments;
 
     CommandDispatchContainer* m_pDispatchContainer;
 };

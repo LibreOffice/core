@@ -51,13 +51,13 @@ struct IMPL_TextlistItem
 };
 
 using ProgressMonitor_BASE = cppu::ImplInheritanceHelper<BaseContainerControl,
-                                                         cpo::awt::XLayoutConstrains,
-                                                         cpo::awt::XButton,
-                                                         cpo::awt::XProgressMonitor>;
+                                                         css::awt::XLayoutConstrains,
+                                                         css::awt::XButton,
+                                                         css::awt::XProgressMonitor>;
 class ProgressMonitor final : public ProgressMonitor_BASE
 {
 public:
-    ProgressMonitor( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    ProgressMonitor( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     virtual ~ProgressMonitor() override;
 
@@ -113,11 +113,11 @@ public:
     //  XButton
 
     virtual void SAL_CALL addActionListener(
-        const cpo::uno::Reference< cpo::awt::XActionListener >& xListener
+        const css::uno::Reference< css::awt::XActionListener >& xListener
     ) override;
 
     virtual void SAL_CALL removeActionListener(
-        const cpo::uno::Reference< cpo::awt::XActionListener >& xListener
+        const css::uno::Reference< css::awt::XActionListener >& xListener
     ) override;
 
     virtual void SAL_CALL setLabel( const OUString& sLabel ) override;
@@ -126,22 +126,22 @@ public:
 
     //  XLayoutConstrains
 
-    virtual cpo::awt::Size SAL_CALL getMinimumSize() override;
+    virtual css::awt::Size SAL_CALL getMinimumSize() override;
 
-    virtual cpo::awt::Size SAL_CALL getPreferredSize() override;
+    virtual css::awt::Size SAL_CALL getPreferredSize() override;
 
-    virtual cpo::awt::Size SAL_CALL calcAdjustedSize( const cpo::awt::Size& aNewSize ) override;
+    virtual css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& aNewSize ) override;
 
     //  XControl
 
     virtual void SAL_CALL createPeer(
-        const cpo::uno::Reference< cpo::awt::XToolkit     >& xToolkit ,
-        const cpo::uno::Reference< cpo::awt::XWindowPeer  >& xParent
+        const css::uno::Reference< css::awt::XToolkit     >& xToolkit ,
+        const css::uno::Reference< css::awt::XWindowPeer  >& xParent
     ) override;
 
-    virtual bool SAL_CALL setModel( const cpo::uno::Reference< cpo::awt::XControlModel >& xModel ) override;
+    virtual bool SAL_CALL setModel( const css::uno::Reference< css::awt::XControlModel >& xModel ) override;
 
-    virtual cpo::uno::Reference< cpo::awt::XControlModel > SAL_CALL getModel() override;
+    virtual css::uno::Reference< css::awt::XControlModel > SAL_CALL getModel() override;
 
     //  XComponent
 
@@ -158,7 +158,7 @@ public:
 private:
     virtual void impl_paint( sal_Int32 nX ,
                              sal_Int32 nY ,
-                             const cpo::uno::Reference< cpo::awt::XGraphics >& xGraphics ) override;
+                             const css::uno::Reference< css::awt::XGraphics >& xGraphics ) override;
 
     using BaseControl::impl_recalcLayout;
 
@@ -188,7 +188,7 @@ private:
 
     rtl::Reference<ProgressBar>                   m_xProgressBar;
     rtl::Reference< UnoButtonControl >            m_xButton;
-    cpo::awt::Rectangle                           m_a3DLine;
+    css::awt::Rectangle                           m_a3DLine;
 };
 
 }

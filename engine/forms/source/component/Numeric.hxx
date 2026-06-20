@@ -29,7 +29,7 @@ class ONumericModel
                 :public OEditBaseModel
 {
 private:
-    css::uno::Any          m_aSaveValue;
+    cpo::uno::Any          m_aSaveValue;
 
 public:
     ONumericModel(
@@ -57,11 +57,11 @@ public:
 
 protected:
     // OBoundControlModel overridables
-    virtual css::uno::Any
+    virtual cpo::uno::Any
                             translateDbColumnToControlValue( ) override;
     virtual bool            commitControlValueToDbColumn( bool _bPostReset ) override;
 
-    virtual css::uno::Any
+    virtual cpo::uno::Any
                             getDefaultForReset() const override;
     virtual void            resetNoBroadcast() override;
 

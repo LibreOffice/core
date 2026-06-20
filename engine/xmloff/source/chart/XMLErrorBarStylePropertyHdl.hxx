@@ -26,7 +26,7 @@ public:
     XMLErrorBarStylePropertyHdl(const SvXMLEnumMapEntry<sal_Int32>* pEnumMap);
     virtual ~XMLErrorBarStylePropertyHdl() override;
 
-    virtual bool exportXML(OUString& rStrExpValue, const css::uno::Any& rValue,
+    virtual bool exportXML(OUString& rStrExpValue, const cpo::uno::Any& rValue,
                            const SvXMLUnitConverter& rUnitConverter) const override;
 };
 

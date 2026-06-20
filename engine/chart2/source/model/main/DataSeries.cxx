@@ -150,7 +150,7 @@ DataSeries::DataSeries( const DataSeries & rOther ) :
 
     // add as listener to XPropertySet properties
     Reference< beans::XPropertySet > xPropertySet;
-    uno::Any aValue;
+    cpo::uno::Any aValue;
 
     getFastPropertyValue( aValue, DataPointProperties::PROP_DATAPOINT_ERROR_BAR_X );
     if( ( aValue >>= xPropertySet )
@@ -189,7 +189,7 @@ void DataSeries::Init( const DataSeries & rOther )
 
     // add as parent to error bars
     Reference< beans::XPropertySet > xPropertySet;
-    uno::Any aValue;
+    cpo::uno::Any aValue;
 
     getFastPropertyValue( aValue, DataPointProperties::PROP_DATAPOINT_ERROR_BAR_X );
     if( ( aValue >>= xPropertySet )
@@ -212,7 +212,7 @@ DataSeries::~DataSeries()
 
         // remove listener from XPropertySet properties
         Reference< beans::XPropertySet > xPropertySet;
-        uno::Any aValue;
+        cpo::uno::Any aValue;
 
         getFastPropertyValue( aValue, DataPointProperties::PROP_DATAPOINT_ERROR_BAR_X );
         if( ( aValue >>= xPropertySet )
@@ -241,7 +241,7 @@ uno::Reference< util::XCloneable > SAL_CALL DataSeries::createClone()
 }
 
 // ____ OPropertySet ____
-void DataSeries::GetDefaultValue( sal_Int32 nHandle, uno::Any& rDest ) const
+void DataSeries::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rDest ) const
 {
     const tPropertyValueMap& rStaticDefaults = StaticDataSeriesDefaults();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
@@ -266,7 +266,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL DataSeries::getPropertySetInf
 }
 
 void SAL_CALL DataSeries::getFastPropertyValue
-    ( uno::Any& rValue,
+    ( cpo::uno::Any& rValue,
       sal_Int32 nHandle ) const
 {
     // special handling for get.  set is not possible for this property
@@ -281,12 +281,12 @@ void SAL_CALL DataSeries::getFastPropertyValue
 }
 
 void SAL_CALL DataSeries::setFastPropertyValue_NoBroadcast(
-    sal_Int32 nHandle, const uno::Any& rValue )
+    sal_Int32 nHandle, const cpo::uno::Any& rValue )
 {
     if(    nHandle == DataPointProperties::PROP_DATAPOINT_ERROR_BAR_Y
         || nHandle == DataPointProperties::PROP_DATAPOINT_ERROR_BAR_X )
     {
-        uno::Any aOldValue;
+        cpo::uno::Any aOldValue;
         Reference< util::XModifyBroadcaster > xBroadcaster;
         getFastPropertyValue( aOldValue, nHandle );
         if( aOldValue.hasValue() &&
@@ -614,7 +614,7 @@ static OUString lcl_getDataSequenceLabel( const Reference< chart2::data::XDataSe
     }
     else if( xSequence.is())
     {
-        Sequence< uno::Any > aSeq( xSequence->getData());
+        Sequence< cpo::uno::Any > aSeq( xSequence->getData());
 
         const sal_Int32 nMax = aSeq.getLength() - 1;
         OUString aVal;
@@ -790,7 +790,7 @@ void DataSeries::switchSymbolsOnOrOff( bool bSymbolsOn, sal_Int32 nSeriesIndex )
             aSymbProp.Style = chart2::SymbolStyle_STANDARD;
             aSymbProp.StandardSymbol = nSeriesIndex;
         }
-        setPropertyValue( u"Symbol"_ustr, uno::Any( aSymbProp ));
+        setPropertyValue( u"Symbol"_ustr, cpo::uno::Any( aSymbProp ));
     }
     //todo: check attributed data points
 }
@@ -804,11 +804,11 @@ void DataSeries::switchLinesOnOrOff( bool bLinesOn )
         if( (getPropertyValue( u"LineStyle"_ustr) >>= eLineStyle ) &&
             eLineStyle == drawing::LineStyle_NONE )
         {
-            setPropertyValue( u"LineStyle"_ustr, uno::Any( drawing::LineStyle_SOLID ) );
+            setPropertyValue( u"LineStyle"_ustr, cpo::uno::Any( drawing::LineStyle_SOLID ) );
         }
     }
     else
-        setPropertyValue( u"LineStyle"_ustr, uno::Any( drawing::LineStyle_NONE ) );
+        setPropertyValue( u"LineStyle"_ustr, cpo::uno::Any( drawing::LineStyle_NONE ) );
 }
 
 void DataSeries::makeLinesThickOrThin( bool bThick )
@@ -819,11 +819,11 @@ void DataSeries::makeLinesThickOrThin( bool bThick )
         nOldValue != nNewValue )
     {
         if( !(bThick && nOldValue>0))
-            setPropertyValue( u"LineWidth"_ustr, uno::Any( nNewValue ) );
+            setPropertyValue( u"LineWidth"_ustr, cpo::uno::Any( nNewValue ) );
     }
 }
 
-void DataSeries::setPropertyAlsoToAllAttributedDataPoints( const OUString& rPropertyName, const uno::Any& rPropertyValue )
+void DataSeries::setPropertyAlsoToAllAttributedDataPoints( const OUString& rPropertyName, const cpo::uno::Any& rPropertyValue )
 {
     setPropertyValue( rPropertyName, rPropertyValue );
 
@@ -843,14 +843,14 @@ void DataSeries::setPropertyAlsoToAllAttributedDataPoints( const OUString& rProp
         xPointProp->setPropertyValue( rPropertyName, rPropertyValue );
         if( rPropertyName == "LabelPlacement" )
         {
-            xPointProp->setPropertyValue(u"CustomLabelPosition"_ustr, uno::Any());
-            xPointProp->setPropertyValue(u"CustomLabelSize"_ustr, uno::Any());
+            xPointProp->setPropertyValue(u"CustomLabelPosition"_ustr, cpo::uno::Any());
+            xPointProp->setPropertyValue(u"CustomLabelSize"_ustr, cpo::uno::Any());
         }
     }
 }
 
 bool DataSeries::hasAttributedDataPointDifferentValue(
-                                              const OUString& rPropertyName, const uno::Any& rPropertyValue )
+                                              const OUString& rPropertyName, const cpo::uno::Any& rPropertyValue )
 {
     std::vector<sal_Int32> aAttributedDataPointIndexList;
     {
@@ -865,7 +865,7 @@ bool DataSeries::hasAttributedDataPointDifferentValue(
         Reference< beans::XPropertySet > xPointProp( getDataPointByIndex(nIdx) );
         if(!xPointProp.is())
             continue;
-        uno::Any aPointValue( xPointProp->getPropertyValue( rPropertyName ) );
+        cpo::uno::Any aPointValue( xPointProp->getPropertyValue( rPropertyName ) );
         if( rPropertyValue != aPointValue )
             return true;
     }
@@ -977,7 +977,7 @@ void DataSeries::impl_insertOrDeleteDataLabelsToSeriesAndAllPoints( bool bInsert
             aLabelAtSeries.ShowNumberInPercent = false;
             aLabelAtSeries.ShowCategoryName = false;
         }
-        setPropertyValue(CHART_UNONAME_LABEL, uno::Any(aLabelAtSeries));
+        setPropertyValue(CHART_UNONAME_LABEL, cpo::uno::Any(aLabelAtSeries));
         std::vector<sal_Int32> aAttributedDataPointIndexList;
         {
             MutexGuard aGuard( m_aMutex );
@@ -1000,8 +1000,8 @@ void DataSeries::impl_insertOrDeleteDataLabelsToSeriesAndAllPoints( bool bInsert
                     aLabel.ShowCustomLabel = false;
                     aLabel.ShowSeriesName = false;
                 }
-                xPointProp->setPropertyValue(CHART_UNONAME_LABEL, uno::Any(aLabel));
-                xPointProp->setPropertyValue(CHART_UNONAME_CUSTOM_LABEL_FIELDS, uno::Any());
+                xPointProp->setPropertyValue(CHART_UNONAME_LABEL, cpo::uno::Any(aLabel));
+                xPointProp->setPropertyValue(CHART_UNONAME_CUSTOM_LABEL_FIELDS, cpo::uno::Any());
             }
         }
     }
@@ -1067,7 +1067,7 @@ void DataSeries::clearCalculatedYSequence()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart_DataSeries_get_implementation(css::uno::XComponentContext *,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::DataSeries );
 }

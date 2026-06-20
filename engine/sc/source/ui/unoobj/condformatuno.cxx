@@ -532,7 +532,7 @@ sal_Int32 ScCondFormatObj::getCount()
     return pFormat->size();
 }
 
-uno::Any ScCondFormatObj::getByIndex(sal_Int32 nIndex)
+cpo::uno::Any ScCondFormatObj::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
     if (getCoreObject()->size() <= o3tl::make_unsigned(nIndex))
@@ -541,7 +541,7 @@ uno::Any ScCondFormatObj::getByIndex(sal_Int32 nIndex)
     const ScFormatEntry* pEntry = getCoreObject()->GetEntry(nIndex);
     uno::Reference<beans::XPropertySet> xCondEntry =
         createConditionEntry(pEntry, this);
-    return uno::Any(xCondEntry);
+    return cpo::uno::Any(xCondEntry);
 }
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCondFormatObj::getPropertySetInfo()
@@ -553,7 +553,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCondFormatObj::getPropertySet
 }
 
 void SAL_CALL ScCondFormatObj::setPropertyValue(
-                        const OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
 
@@ -591,7 +591,7 @@ void SAL_CALL ScCondFormatObj::setPropertyValue(
     }
 }
 
-uno::Any SAL_CALL ScCondFormatObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ScCondFormatObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
 
@@ -600,7 +600,7 @@ uno::Any SAL_CALL ScCondFormatObj::getPropertyValue( const OUString& aPropertyNa
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     switch(pEntry->nWID)
     {
         case ID:
@@ -693,7 +693,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScConditionEntryObj::getPropert
 }
 
 void SAL_CALL ScConditionEntryObj::setPropertyValue(
-                        const OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
 
@@ -756,7 +756,7 @@ void SAL_CALL ScConditionEntryObj::setPropertyValue(
     }
 }
 
-uno::Any SAL_CALL ScConditionEntryObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ScConditionEntryObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
 
@@ -765,7 +765,7 @@ uno::Any SAL_CALL ScConditionEntryObj::getPropertyValue( const OUString& aProper
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     switch(pEntry->nWID)
     {
         case StyleName:
@@ -900,7 +900,7 @@ void setColorScaleEntry(ScColorScaleEntry* pEntry, uno::Reference<sheet::XColorS
 }
 
 void SAL_CALL ScColorScaleFormatObj::setPropertyValue(
-                        const OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
 
@@ -934,7 +934,7 @@ void SAL_CALL ScColorScaleFormatObj::setPropertyValue(
     }
 }
 
-uno::Any SAL_CALL ScColorScaleFormatObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ScColorScaleFormatObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
 
@@ -943,7 +943,7 @@ uno::Any SAL_CALL ScColorScaleFormatObj::getPropertyValue( const OUString& aProp
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     switch(pEntry->nWID)
     {
@@ -1151,7 +1151,7 @@ void setDataBarEntry(ScColorScaleEntry* pEntry, uno::Reference<sheet::XDataBarEn
 }
 
 void SAL_CALL ScDataBarFormatObj::setPropertyValue(
-                        const OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
 
@@ -1275,7 +1275,7 @@ void SAL_CALL ScDataBarFormatObj::setPropertyValue(
     }
 }
 
-uno::Any SAL_CALL ScDataBarFormatObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ScDataBarFormatObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
 
@@ -1284,7 +1284,7 @@ uno::Any SAL_CALL ScDataBarFormatObj::getPropertyValue( const OUString& aPropert
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     switch(pEntry->nWID)
     {
         case AxisPosition:
@@ -1528,7 +1528,7 @@ void setIconSetEntry(ScIconSetFormat* pFormat, uno::Reference<sheet::XIconSetEnt
 }
 
 void SAL_CALL ScIconSetFormatObj::setPropertyValue(
-                        const OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
 
@@ -1599,7 +1599,7 @@ void SAL_CALL ScIconSetFormatObj::setPropertyValue(
     }
 }
 
-uno::Any SAL_CALL ScIconSetFormatObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ScIconSetFormatObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
 
@@ -1608,7 +1608,7 @@ uno::Any SAL_CALL ScIconSetFormatObj::getPropertyValue( const OUString& aPropert
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     switch(pEntry->nWID)
     {
@@ -1794,7 +1794,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCondDateFormatObj::getPropert
 }
 
 void SAL_CALL ScCondDateFormatObj::setPropertyValue(
-                        const OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
 
@@ -1836,7 +1836,7 @@ void SAL_CALL ScCondDateFormatObj::setPropertyValue(
     }
 }
 
-uno::Any SAL_CALL ScCondDateFormatObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ScCondDateFormatObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
 
@@ -1845,7 +1845,7 @@ uno::Any SAL_CALL ScCondDateFormatObj::getPropertyValue( const OUString& aProper
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     switch(pEntry->nWID)
     {

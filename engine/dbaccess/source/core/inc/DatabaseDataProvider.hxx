@@ -53,7 +53,7 @@ public:
 
 private:
     // css::uno::XInterface:
-    virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const & type) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface(css::uno::Type const & type) override;
     virtual void SAL_CALL acquire() noexcept override
         { TDatabaseDataProvider::acquire(); }
     virtual void SAL_CALL release() noexcept override
@@ -82,12 +82,12 @@ private:
     virtual OUString SAL_CALL convertRangeFromXML(const OUString & aXMLRange) override;
 
     // css::lang::XInitialization:
-    virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any > & aArguments) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence< cpo::uno::Any > & aArguments) override;
 
     // css::beans::XPropertySet:
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL setPropertyValue(const OUString & aPropertyName, const css::uno::Any & aValue) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString & PropertyName) override;
+    virtual void SAL_CALL setPropertyValue(const OUString & aPropertyName, const cpo::uno::Any & aValue) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(const OUString & PropertyName) override;
     virtual void SAL_CALL addPropertyChangeListener(const OUString & aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener > & xListener) override;
     virtual void SAL_CALL removePropertyChangeListener(const OUString & aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener > & aListener) override;
     virtual void SAL_CALL addVetoableChangeListener(const OUString & PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener > & aListener) override;
@@ -138,8 +138,8 @@ private:
     virtual void SAL_CALL setTimestamp(sal_Int32 parameterIndex, const css::util::DateTime& x) override;
     virtual void SAL_CALL setBinaryStream(sal_Int32 parameterIndex, const css::uno::Reference< css::io::XInputStream>& x, sal_Int32 length) override;
     virtual void SAL_CALL setCharacterStream(sal_Int32 parameterIndex, const css::uno::Reference< css::io::XInputStream>& x, sal_Int32 length) override;
-    virtual void SAL_CALL setObject(sal_Int32 parameterIndex, const css::uno::Any& x) override;
-    virtual void SAL_CALL setObjectWithInfo(sal_Int32 parameterIndex, const css::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale) override;
+    virtual void SAL_CALL setObject(sal_Int32 parameterIndex, const cpo::uno::Any& x) override;
+    virtual void SAL_CALL setObjectWithInfo(sal_Int32 parameterIndex, const cpo::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale) override;
     virtual void SAL_CALL setRef(sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XRef>& x) override;
     virtual void SAL_CALL setBlob(sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XBlob>& x) override;
     virtual void SAL_CALL setClob(sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XClob>& x) override;
@@ -209,7 +209,7 @@ private:
     bool impl_fillParameters_nothrow( ::osl::ResettableMutexGuard& _rClearForNotifies);
     void impl_fillInternalDataProvider_throw(bool _bHasCategories,const css::uno::Sequence< OUString >& i_aColumnNames);
     void impl_invalidateParameter_nothrow();
-    css::uno::Any impl_getNumberFormatKey_nothrow(const OUString & _sRangeRepresentation) const;
+    cpo::uno::Any impl_getNumberFormatKey_nothrow(const OUString & _sRangeRepresentation) const;
 
     template <typename T> void set(  const OUString& _sProperty
                                         ,const T& Value
@@ -220,7 +220,7 @@ private:
             ::osl::MutexGuard aGuard(m_aMutex);
             if ( _member != Value )
             {
-                prepareSet(_sProperty, css::uno::Any(_member), css::uno::Any(Value), &l);
+                prepareSet(_sProperty, cpo::uno::Any(_member), cpo::uno::Any(Value), &l);
                 _member = Value;
             }
         }
@@ -229,7 +229,7 @@ private:
 
     ::dbtools::ParameterManager m_aParameterManager;
     ::dbtools::FilterManager    m_aFilterManager;
-    std::map< OUString, css::uno::Any>                          m_aNumberFormats;
+    std::map< OUString, cpo::uno::Any>                          m_aNumberFormats;
 
     css::uno::Reference< css::uno::XComponentContext >            m_xContext;
     css::uno::Reference< css::sdbc::XConnection >                 m_xActiveConnection;

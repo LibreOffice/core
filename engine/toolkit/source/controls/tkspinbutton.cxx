@@ -31,6 +31,7 @@
 #include <helper/unopropertyarrayhelper.hxx>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
@@ -40,7 +41,7 @@ namespace {
 class UnoSpinButtonModel : public UnoControlModel
 {
 protected:
-    css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    cpo::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
@@ -79,7 +80,7 @@ public:
     OUString             GetComponentServiceName() const override;
 
     DECLARE_UNO3_AGG_DEFAULTS( UnoSpinButtonControl, UnoControlBase )
-    css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+    cpo::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
 
     void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
     void SAL_CALL disposing( const css::lang::EventObject& Source ) override { UnoControlBase::disposing( Source ); }
@@ -406,7 +407,7 @@ public:
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoSpinButtonModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoSpinButtonModel(context));
 }
@@ -414,7 +415,7 @@ stardiv_Toolkit_UnoSpinButtonModel_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoSpinButtonControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoSpinButtonControl());
 }

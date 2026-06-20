@@ -39,6 +39,7 @@
 #include <unordered_map>
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::configuration;
 using namespace com::sun::star::container;
@@ -54,7 +55,7 @@ class ConfigurationAccess_UICategory : public ::cppu::WeakImplHelper<XNameAccess
         virtual                   ~ConfigurationAccess_UICategory() override;
 
         // XNameAccess
-        virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+        virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
 
         virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
 
@@ -381,7 +382,7 @@ UICategoryDescription::UICategoryDescription( const Reference< XComponentContext
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_UICategoryDescription_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UICategoryDescription(context));
 }

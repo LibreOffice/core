@@ -400,7 +400,7 @@ public:
     SAL_DLLPRIVATE sal_Int32            getIntProperty( const OUString& i_rPropertyName, sal_Int32 i_nFallback ) const;
 
     /// Set a property value - can also be used to add another UI property
-    void                                setValue( const OUString& i_rPropertyName, const css::uno::Any& i_rValue );
+    void                                setValue( const OUString& i_rPropertyName, const cpo::uno::Any& i_rValue );
     SAL_DLLPRIVATE void                 setValue( const css::beans::PropertyValue& i_rValue );
 
     /** @return The currently active UI options. These are the same that were passed to setUIOptions. */
@@ -505,7 +505,7 @@ public:
 class VCL_DLLPUBLIC PrinterOptionsHelper
 {
 protected:
-    std::unordered_map< OUString, css::uno::Any >
+    std::unordered_map< OUString, cpo::uno::Any >
                          m_aPropertyMap;
     std::vector< css::beans::PropertyValue >
                          m_aUIProperties;
@@ -529,7 +529,7 @@ public:
     void                 appendPrintUIOptions( css::uno::Sequence< css::beans::PropertyValue >& io_rProps ) const;
 
     /** @return An empty Any for not existing properties */
-    css::uno::Any        getValue( const OUString& i_rPropertyName ) const;
+    cpo::uno::Any        getValue( const OUString& i_rPropertyName ) const;
 
     bool                 getBoolValue( const OUString& i_rPropertyName, bool i_bDefault ) const;
     // convenience for fixed strings
@@ -574,33 +574,33 @@ public:
     // transported via UTF16 strings.
 
     /// Show general control
-    static css::uno::Any setUIControlOpt( const css::uno::Sequence< OUString >& i_rIDs, const OUString& i_rTitle,
+    static cpo::uno::Any setUIControlOpt( const css::uno::Sequence< OUString >& i_rIDs, const OUString& i_rTitle,
                              const css::uno::Sequence< OUString >& i_rHelpId, const OUString& i_rType,
                              const css::beans::PropertyValue* i_pValue = nullptr,
                              const UIControlOptions& i_rControlOptions = UIControlOptions());
 
     /// Show and set the title of a TagPage of id i_rID
-    static css::uno::Any setGroupControlOpt( const OUString& i_rID, const OUString& i_rTitle,
+    static cpo::uno::Any setGroupControlOpt( const OUString& i_rID, const OUString& i_rTitle,
                              const OUString& i_rHelpId);
 
     /// Show and set the label of a VclFrame of id i_rID
-    static css::uno::Any setSubgroupControlOpt( const OUString& i_rID, const OUString& i_rTitle, const OUString& i_rHelpId,
+    static cpo::uno::Any setSubgroupControlOpt( const OUString& i_rID, const OUString& i_rTitle, const OUString& i_rHelpId,
                              const UIControlOptions& i_rControlOptions = UIControlOptions());
 
     /// Show a bool option as a checkbox
-    static css::uno::Any setBoolControlOpt( const OUString& i_rID, const OUString& i_rTitle, const OUString& i_rHelpId,
+    static cpo::uno::Any setBoolControlOpt( const OUString& i_rID, const OUString& i_rTitle, const OUString& i_rHelpId,
                              const OUString& i_rProperty, bool i_bValue,
                              const UIControlOptions& i_rControlOptions = UIControlOptions());
 
     /// Show a set of choices in a list box
-    static css::uno::Any setChoiceListControlOpt( const OUString&  i_rID, const OUString& i_rTitle,
+    static cpo::uno::Any setChoiceListControlOpt( const OUString&  i_rID, const OUString& i_rTitle,
                              const css::uno::Sequence< OUString >& i_rHelpId, const OUString& i_rProperty,
                              const css::uno::Sequence< OUString >& i_rChoices, sal_Int32 i_nValue,
                              const css::uno::Sequence< bool >& i_rDisabledChoices = css::uno::Sequence< bool >(),
                              const UIControlOptions& i_rControlOptions = UIControlOptions());
 
     /// Show a set of choices as radio buttons
-    static css::uno::Any setChoiceRadiosControlOpt( const css::uno::Sequence< OUString >& i_rIDs,
+    static cpo::uno::Any setChoiceRadiosControlOpt( const css::uno::Sequence< OUString >& i_rIDs,
                              const OUString& i_rTitle,  const css::uno::Sequence< OUString >& i_rHelpId,
                              const OUString& i_rProperty, const css::uno::Sequence< OUString >& i_rChoices,
                              sal_Int32 i_nValue,
@@ -611,7 +611,7 @@ public:
 
         note: max value < min value means do not apply min/max values
     */
-    static css::uno::Any setRangeControlOpt( const OUString& i_rID, const OUString& i_rTitle, const OUString& i_rHelpId,
+    static cpo::uno::Any setRangeControlOpt( const OUString& i_rID, const OUString& i_rTitle, const OUString& i_rHelpId,
                              const OUString& i_rProperty, sal_Int32 i_nValue, sal_Int32 i_nMinValue,
                              sal_Int32 i_nMaxValue, const UIControlOptions& i_rControlOptions);
 
@@ -619,7 +619,7 @@ public:
 
         note: max value < min value means do not apply min/max values
     */
-    static css::uno::Any setEditControlOpt( const OUString& i_rID, const OUString& i_rTitle, const OUString& i_rHelpId,
+    static cpo::uno::Any setEditControlOpt( const OUString& i_rID, const OUString& i_rTitle, const OUString& i_rHelpId,
                              const OUString&  i_rProperty, const OUString& i_rValue,
                              const UIControlOptions& i_rControlOptions);
 }; // class PrinterOptionsHelper

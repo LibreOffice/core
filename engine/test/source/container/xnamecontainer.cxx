@@ -14,7 +14,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <cppunit/TestAssert.h>
@@ -36,7 +36,7 @@ void XNameContainer::testInsertByNameEmptyName()
 {
     uno::Reference<container::XNameContainer> xNameContainer(init(), uno::UNO_QUERY_THROW);
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     CPPUNIT_ASSERT_THROW(xNameContainer->insertByName(u""_ustr, aAny),
                          lang::IllegalArgumentException);
 }

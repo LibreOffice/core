@@ -495,7 +495,7 @@ public:
     css::uno::Reference< css::awt::XRegion >      SAL_CALL createRegion(  ) override;
 
     // css::awt::XSystemChildFactory
-    css::uno::Reference< css::awt::XWindowPeer > SAL_CALL createSystemChild( const css::uno::Any& Parent, const css::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) override;
+    css::uno::Reference< css::awt::XWindowPeer > SAL_CALL createSystemChild( const cpo::uno::Any& Parent, const css::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) override;
 
     // css::awt::XMessageBoxFactory
     virtual css::uno::Reference< css::awt::XMessageBox > SAL_CALL createMessageBox( const css::uno::Reference< css::awt::XWindowPeer >& aParent, css::awt::MessageBoxType eType, ::sal_Int32 aButtons, const OUString& aTitle, const OUString& aMessage ) override;
@@ -1052,9 +1052,9 @@ public:
     void SAL_CALL disposing(const css::lang::EventObject&) override { }
 
     // css::awt::XVclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
+    void SAL_CALL setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
 
-    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
+    cpo::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
 
     // XContainerListener
     void SAL_CALL elementInserted( const css::container::ContainerEvent& rEvent ) override;
@@ -1131,7 +1131,7 @@ void SVTXRoadmap::propertyChange( const css::beans::PropertyChangeEvent& evt )
     css::uno::Reference< css::uno::XInterface > xRoadmapItem = evt.Source;
     sal_Int32 nID = 0;
     css::uno::Reference< css::beans::XPropertySet > xPropertySet( xRoadmapItem, css::uno::UNO_QUERY );
-    css::uno::Any aValue = xPropertySet->getPropertyValue(u"ID"_ustr);
+    cpo::uno::Any aValue = xPropertySet->getPropertyValue(u"ID"_ustr);
     aValue >>= nID;
 
     OUString sPropertyName = evt.PropertyName;
@@ -1176,7 +1176,7 @@ RMItemData SVTXRoadmap::GetRMItemData( const css::container::ContainerEvent& _rE
     css::uno::Reference< css::beans::XPropertySet > xPropertySet( xRoadmapItem, css::uno::UNO_QUERY );
     if ( xPropertySet.is() )
     {
-        css::uno::Any aValue = xPropertySet->getPropertyValue(u"Label"_ustr);
+        cpo::uno::Any aValue = xPropertySet->getPropertyValue(u"Label"_ustr);
         aValue >>= aCurRMItemData.Label;
         aValue = xPropertySet->getPropertyValue(u"ID"_ustr);
         aValue >>= aCurRMItemData.n_ID;
@@ -1229,7 +1229,7 @@ void SVTXRoadmap::elementReplaced( const css::container::ContainerEvent& _rEvent
     }
 }
 
-void SVTXRoadmap::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
+void SVTXRoadmap::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -1283,11 +1283,11 @@ void SVTXRoadmap::setProperty( const OUString& PropertyName, const css::uno::Any
 }
 
 
-css::uno::Any SVTXRoadmap::getProperty( const OUString& PropertyName )
+cpo::uno::Any SVTXRoadmap::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Any aReturn;
+    cpo::uno::Any aReturn;
 
     VclPtr<::vcl::ORoadmap> pField = GetAs< vcl::ORoadmap >();
     if ( pField )
@@ -1635,10 +1635,10 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
 
                                 css::uno::Sequence<sal_Int8> processIdSeq(processID, 16);
 
-                                css::uno::Any anyHandle = xSystemDepParent->getWindowHandle(processIdSeq, SYSTEM_DEPENDENT_TYPE);
+                                cpo::uno::Any anyHandle = xSystemDepParent->getWindowHandle(processIdSeq, SYSTEM_DEPENDENT_TYPE);
 
                                 // use sal_Int64 here to accommodate all int types
-                                // uno::Any shift operator will upcast if necessary
+                                // cpo::uno::Any shift operator will upcast if necessary
                                 sal_Int64 nWindowHandle = 0;
                                 bool bXEmbed = false;
 
@@ -1877,13 +1877,13 @@ css::uno::Sequence< css::uno::Reference< css::awt::XWindowPeer > > VCLXToolkit::
 }
 
 // css::awt::XSystemChildFactory
-css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createSystemChild( const css::uno::Any& Parent, const css::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 nSystemType )
+css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createSystemChild( const cpo::uno::Any& Parent, const css::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 nSystemType )
 {
     VclPtr<vcl::Window> pChildWindow;
     if ( nSystemType == SYSTEM_DEPENDENT_TYPE )
     {
         // use sal_Int64 here to accommodate all int types
-        // uno::Any shift operator will upcast if necessary
+        // cpo::uno::Any shift operator will upcast if necessary
         sal_Int64 nWindowHandle = 0;
         bool bXEmbed = false;
 
@@ -2552,7 +2552,7 @@ void SAL_CALL VCLXToolkit::mouseMove( const css::awt::MouseEvent & aMouseEvent )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_VCLXToolkit_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new VCLXToolkit());
 }

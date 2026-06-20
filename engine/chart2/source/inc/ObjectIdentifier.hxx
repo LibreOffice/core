@@ -96,7 +96,7 @@ public:
     ObjectIdentifier();
     ObjectIdentifier( OUString aObjectCID );
     ObjectIdentifier( const css::uno::Reference< css::drawing::XShape >& rxShape );
-    ObjectIdentifier( const css::uno::Any& rAny );
+    ObjectIdentifier( const cpo::uno::Any& rAny );
 
     bool operator==( const ObjectIdentifier& rOID ) const;
     bool operator<( const ObjectIdentifier& rOID ) const;
@@ -238,7 +238,7 @@ public:
     bool isAdditionalShape() const;
     const OUString& getObjectCID() const { return m_aObjectCID;}
     const css::uno::Reference< css::drawing::XShape >& getAdditionalShape() const { return m_xAdditionalShape;}
-    css::uno::Any getAny() const;
+    cpo::uno::Any getAny() const;
 
 private:
     // #i12587# support for shapes in chart

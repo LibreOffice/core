@@ -60,9 +60,9 @@ namespace svt::table
         virtual ScrollbarVisibility             getHorizontalScrollbarVisibility() const override;
         virtual void                            addTableModelListener( const PTableModelListener& i_listener ) override;
         virtual void                            removeTableModelListener( const PTableModelListener& i_listener ) override;
-        virtual void                            getCellContent( ColPos const i_col, RowPos const i_row, css::uno::Any& o_cellContent ) override;
-        virtual void                            getCellToolTip( ColPos const i_col, RowPos const i_row, css::uno::Any & o_cellToolTip ) override;
-        virtual css::uno::Any      getRowHeading( RowPos const i_rowPos ) const override;
+        virtual void                            getCellContent( ColPos const i_col, RowPos const i_row, cpo::uno::Any& o_cellContent ) override;
+        virtual void                            getCellToolTip( ColPos const i_col, RowPos const i_row, cpo::uno::Any & o_cellToolTip ) override;
+        virtual cpo::uno::Any      getRowHeading( RowPos const i_rowPos ) const override;
         virtual ::std::optional< ::Color >    getLineColor() const override;
         virtual ::std::optional< ::Color >    getHeaderBackgroundColor() const override;
         virtual ::std::optional< ::Color >    getHeaderTextColor() const override;
@@ -109,16 +109,16 @@ namespace svt::table
         void    setRowHeaderWidth( TableMetrics _nWidth );
         void    setColumnHeaderHeight( TableMetrics _nHeight );
 
-        void    setLineColor( css::uno::Any const & i_color );
-        void    setHeaderBackgroundColor( css::uno::Any const & i_color );
-        void    setHeaderTextColor( css::uno::Any const & i_color );
-        void    setActiveSelectionBackColor( css::uno::Any const & i_color );
-        void    setInactiveSelectionBackColor( css::uno::Any const & i_color );
-        void    setActiveSelectionTextColor( css::uno::Any const & i_color );
-        void    setInactiveSelectionTextColor( css::uno::Any const & i_color );
-        void    setTextColor( css::uno::Any const & i_color );
-        void    setTextLineColor( css::uno::Any const & i_color );
-        void    setRowBackgroundColors( css::uno::Any const & i_APIValue );
+        void    setLineColor( cpo::uno::Any const & i_color );
+        void    setHeaderBackgroundColor( cpo::uno::Any const & i_color );
+        void    setHeaderTextColor( cpo::uno::Any const & i_color );
+        void    setActiveSelectionBackColor( cpo::uno::Any const & i_color );
+        void    setInactiveSelectionBackColor( cpo::uno::Any const & i_color );
+        void    setActiveSelectionTextColor( cpo::uno::Any const & i_color );
+        void    setInactiveSelectionTextColor( cpo::uno::Any const & i_color );
+        void    setTextColor( cpo::uno::Any const & i_color );
+        void    setTextLineColor( cpo::uno::Any const & i_color );
+        void    setRowBackgroundColors( cpo::uno::Any const & i_APIValue );
 
         void    setVerticalAlign(css::style::VerticalAlignment _rAlign);
         void    setEnabled( bool _bEnabled );

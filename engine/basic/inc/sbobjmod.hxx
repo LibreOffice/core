@@ -41,7 +41,7 @@ public:
     using SbxValue::GetObject;
     SbxVariable* GetObject();
     /// @throws css::uno::RuntimeException
-    void SetUnoObject( const css::uno::Any& aObj ) ;
+    void SetUnoObject( const cpo::uno::Any& aObj ) ;
 };
 
 class FormObjEventListenerImpl;
@@ -64,7 +64,7 @@ public:
     void Unload();
     void Load();
     void triggerMethod( const OUString& );
-    void triggerMethod( const OUString&, css::uno::Sequence< css::uno::Any >&  );
+    void triggerMethod( const OUString&, css::uno::Sequence< cpo::uno::Any >&  );
     void triggerActivateEvent();
     void triggerDeactivateEvent();
     void triggerInitializeEvent();

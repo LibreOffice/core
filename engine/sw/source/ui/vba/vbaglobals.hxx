@@ -39,7 +39,7 @@ private:
     css::uno::Reference<ooo::vba::word::XApplication> const& getApplication();
 
 public:
-    SwVbaGlobals(css::uno::Sequence<css::uno::Any> const& aArgs,
+    SwVbaGlobals(css::uno::Sequence<cpo::uno::Any> const& aArgs,
                  css::uno::Reference<css::uno::XComponentContext> const& rxContext);
     virtual ~SwVbaGlobals() override;
 
@@ -52,11 +52,11 @@ public:
     virtual css::uno::Reference<ooo::vba::word::XSelection> SAL_CALL getSelection() override;
     virtual css::uno::Reference<ooo::vba::word::XGlobals> SAL_CALL getWord() override;
     virtual css::uno::Reference<ooo::vba::word::XWordBasic> SAL_CALL getWordBasic() override;
-    virtual css::uno::Any SAL_CALL CommandBars(const css::uno::Any& aIndex) override;
-    virtual css::uno::Any SAL_CALL Documents(const css::uno::Any& aIndex) override;
-    virtual css::uno::Any SAL_CALL Addins(const css::uno::Any& aIndex) override;
-    virtual css::uno::Any SAL_CALL Dialogs(const css::uno::Any& aIndex) override;
-    virtual css::uno::Any SAL_CALL ListGalleries(const css::uno::Any& aIndex) override;
+    virtual cpo::uno::Any SAL_CALL CommandBars(const cpo::uno::Any& aIndex) override;
+    virtual cpo::uno::Any SAL_CALL Documents(const cpo::uno::Any& aIndex) override;
+    virtual cpo::uno::Any SAL_CALL Addins(const cpo::uno::Any& aIndex) override;
+    virtual cpo::uno::Any SAL_CALL Dialogs(const cpo::uno::Any& aIndex) override;
+    virtual cpo::uno::Any SAL_CALL ListGalleries(const cpo::uno::Any& aIndex) override;
     virtual float SAL_CALL CentimetersToPoints(float Centimeters) override;
     virtual float SAL_CALL PointsToCentimeters(float Points) override;
     virtual float SAL_CALL PixelsToPoints(float Pixels, bool fVertical) override;

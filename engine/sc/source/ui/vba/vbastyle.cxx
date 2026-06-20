@@ -115,7 +115,7 @@ ScVbaStyle::setNameLocal( const OUString& NameLocal )
 {
     try
     {
-        mxPropertySet->setPropertyValue(DISPLAYNAME, uno::Any( NameLocal ) );
+        mxPropertySet->setPropertyValue(DISPLAYNAME, cpo::uno::Any( NameLocal ) );
     }
     catch (const uno::Exception& e)
     {
@@ -152,16 +152,16 @@ ScVbaStyle::Delete()
 }
 
 void SAL_CALL
-ScVbaStyle::setMergeCells( const uno::Any& /*MergeCells*/ )
+ScVbaStyle::setMergeCells( const cpo::uno::Any& /*MergeCells*/ )
 {
     DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, {});
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaStyle::getMergeCells(  )
 {
     DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, {});
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 OUString

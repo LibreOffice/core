@@ -88,7 +88,7 @@ ErrCode XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
                 ::comphelper::GenericPropertySet_CreateInstance(
                         new ::comphelper::PropertySetInfo( aInfoMap ) ) );
 
-            xConvPropSet->setPropertyValue(u"Class"_ustr, uno::Any(GetXMLToken( XML_TEXT )) );
+            xConvPropSet->setPropertyValue(u"Class"_ustr, cpo::uno::Any(GetXMLToken( XML_TEXT )) );
 
             uno::Reference< beans::XPropertySet > xPropSet =
                 getExportInfo().is()
@@ -96,8 +96,8 @@ ErrCode XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
                                                       xConvPropSet )
                     : getExportInfo();
 
-            uno::Sequence< uno::Any > aArgs{ uno::Any(xDocHandler), uno::Any(xPropSet),
-                                             uno::Any(GetModel()) };
+            uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xDocHandler), cpo::uno::Any(xPropSet),
+                                             cpo::uno::Any(GetModel()) };
 
             // get filter component
             xDocHandler.set(
@@ -165,14 +165,14 @@ void XMLMetaExportComponent::ExportContent_() {}
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 XMLMetaExportComponent_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new XMLMetaExportComponent(context, u"XMLMetaExportComponent"_ustr, SvXMLExportFlags::META|SvXMLExportFlags::OASIS));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 XMLMetaExportOOo_get_implementation(css::uno::XComponentContext* context,
-                                    css::uno::Sequence<css::uno::Any> const&)
+                                    css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(
         new XMLMetaExportComponent(context, u"XMLMetaExportOOo"_ustr, SvXMLExportFlags::META));

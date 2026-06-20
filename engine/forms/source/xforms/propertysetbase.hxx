@@ -38,9 +38,9 @@ protected:
 
 public:
 
-    virtual bool    approveValue( const css::uno::Any& rValue ) const = 0;
-    virtual void    setValue( const css::uno::Any& rValue ) = 0;
-    virtual void    getValue( css::uno::Any& rValue ) const = 0;
+    virtual bool    approveValue( const cpo::uno::Any& rValue ) const = 0;
+    virtual void    setValue( const cpo::uno::Any& rValue ) = 0;
+    virtual void    getValue( cpo::uno::Any& rValue ) const = 0;
     virtual bool    isWriteable() const = 0;
 };
 
@@ -67,22 +67,22 @@ public:
     {
     }
 
-    virtual bool    approveValue( const css::uno::Any& rValue ) const override
+    virtual bool    approveValue( const cpo::uno::Any& rValue ) const override
     {
         VALUE aVal;
         return ( rValue >>= aVal );
     }
 
-    virtual void    setValue( const css::uno::Any& rValue ) override
+    virtual void    setValue( const cpo::uno::Any& rValue ) override
     {
         VALUE aTypedVal = VALUE();
         OSL_VERIFY( rValue >>= aTypedVal );
         (m_pInstance->*m_pWriter)( aTypedVal );
     }
 
-    virtual void getValue( css::uno::Any& rValue ) const override
+    virtual void getValue( cpo::uno::Any& rValue ) const override
     {
-        rValue = css::uno::Any( (m_pInstance->*m_pReader)() );
+        rValue = cpo::uno::Any( (m_pInstance->*m_pReader)() );
     }
 
     virtual bool isWriteable() const override
@@ -168,7 +168,7 @@ class PropertySetBase : public ::comphelper::OStatefulPropertySet
 private:
     typedef ::std::map< const sal_Int32, ::rtl::Reference< PropertyAccessorBase > >     PropertyAccessors;
     typedef ::std::vector< css::beans::Property >                                       PropertyArray;
-    typedef ::std::map< const sal_Int32, css::uno::Any >                                PropertyValueCache;
+    typedef ::std::map< const sal_Int32, cpo::uno::Any >                                PropertyValueCache;
 
     PropertyArray                   m_aProperties;
     std::unique_ptr<cppu::IPropertyArrayHelper> m_pProperties;
@@ -242,9 +242,9 @@ protected:
     void initializePropertyValueCache( sal_Int32 nHandle );
 
     /// OPropertysetHelper methods
-    virtual bool SAL_CALL convertFastPropertyValue( css::uno::Any& rConvertedValue, css::uno::Any& rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
-    virtual void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const override;
+    virtual bool SAL_CALL convertFastPropertyValue( cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+    virtual void SAL_CALL getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
     virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
@@ -258,14 +258,14 @@ public:
             one previously registered via <member>registerProperty</member>.
         @see registerProperty
     */
-    void getCurrentPropertyValueByHandle( sal_Int32 nHandle, css::uno::Any& /* [out] */ rValue, const NotifierAccess& ) const
+    void getCurrentPropertyValueByHandle( sal_Int32 nHandle, cpo::uno::Any& /* [out] */ rValue, const NotifierAccess& ) const
     {
         getFastPropertyValue( rValue, nHandle );
     }
 
     /** notifies a change in a given property to all interested listeners
     */
-    void notifyPropertyChange( sal_Int32 nHandle, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue, const NotifierAccess& ) const
+    void notifyPropertyChange( sal_Int32 nHandle, const cpo::uno::Any& rOldValue, const cpo::uno::Any& rNewValue, const NotifierAccess& ) const
     {
         const_cast< PropertySetBase* >( this )->firePropertyChange( nHandle, rNewValue, rOldValue );
     }
@@ -302,7 +302,7 @@ struct PropertyChangeNotifier
 private:
     const PropertySetBase&      m_rPropertySet;
     sal_Int32                   m_nHandle;
-    css::uno::Any               m_aOldValue;
+    cpo::uno::Any               m_aOldValue;
 
 public:
     /** constructs a PropertyChangeNotifier
@@ -322,7 +322,7 @@ public:
     }
     ~PropertyChangeNotifier()
     {
-        css::uno::Any aNewValue;
+        cpo::uno::Any aNewValue;
         m_rPropertySet.getCurrentPropertyValueByHandle( m_nHandle, aNewValue, PropertySetBase::NotifierAccess() );
         if ( aNewValue != m_aOldValue )
         {

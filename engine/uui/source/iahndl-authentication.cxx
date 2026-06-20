@@ -627,7 +627,7 @@ bool
 UUIInteractionHelper::handleAuthenticationRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
 {
-    uno::Any aAnyRequest(rRequest->getRequest());
+    cpo::uno::Any aAnyRequest(rRequest->getRequest());
     uno::Reference<awt::XWindow> xParent = getParentXWindow();
 
     ucb::URLAuthenticationRequest aURLAuthenticationRequest;
@@ -660,7 +660,7 @@ bool
 UUIInteractionHelper::handleMasterPasswordRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
 {
-    uno::Any aAnyRequest(rRequest->getRequest());
+    cpo::uno::Any aAnyRequest(rRequest->getRequest());
 
     task::MasterPasswordRequest aMasterPasswordRequest;
     if (aAnyRequest >>= aMasterPasswordRequest)
@@ -689,7 +689,7 @@ UUIInteractionHelper::handlePasswordRequest(
 
     bool bDoHandleRequest = false;
 
-    uno::Any aAnyRequest(rRequest->getRequest());
+    cpo::uno::Any aAnyRequest(rRequest->getRequest());
 
     do
     {

@@ -33,6 +33,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::awt::tree;
 using namespace ::com::sun::star::lang;
@@ -97,7 +98,7 @@ Any UnoTreeModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     case BASEPROPERTY_TREE_SHOWSHANDLES:
         return Any( true );
     case BASEPROPERTY_DEFAULTCONTROL:
-        return uno::Any( u"com.sun.star.awt.tree.TreeControl"_ustr );
+        return cpo::uno::Any( u"com.sun.star.awt.tree.TreeControl"_ustr );
     default:
         return UnoControlModel::ImplGetDefaultValue( nPropId );
     }
@@ -134,14 +135,14 @@ public:
     void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
 
     // css::view::XSelectionSupplier
-    virtual bool SAL_CALL select( const css::uno::Any& xSelection ) override;
-    virtual css::uno::Any SAL_CALL getSelection(  ) override;
+    virtual bool SAL_CALL select( const cpo::uno::Any& xSelection ) override;
+    virtual cpo::uno::Any SAL_CALL getSelection(  ) override;
     virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
     virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 
     // css::view::XMultiSelectionSupplier
-    virtual bool SAL_CALL addSelection( const css::uno::Any& Selection ) override;
-    virtual void SAL_CALL removeSelection( const css::uno::Any& Selection ) override;
+    virtual bool SAL_CALL addSelection( const cpo::uno::Any& Selection ) override;
+    virtual void SAL_CALL removeSelection( const cpo::uno::Any& Selection ) override;
     virtual void SAL_CALL clearSelection(  ) override;
     virtual ::sal_Int32 SAL_CALL getSelectionCount(  ) override;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSelectionEnumeration(  ) override;
@@ -508,7 +509,7 @@ void SAL_CALL TreeEditListenerMultiplexer::nodeEdited( const Reference< XTreeNod
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_TreeControlModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new toolkit::UnoTreeModel(context));
 }
@@ -516,7 +517,7 @@ stardiv_Toolkit_TreeControlModel_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_TreeControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoTreeControl());
 }

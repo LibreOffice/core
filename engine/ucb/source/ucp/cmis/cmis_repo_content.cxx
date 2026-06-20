@@ -66,9 +66,9 @@ namespace cmis
     {
     }
 
-    uno::Any RepoContent::getBadArgExcept()
+    cpo::uno::Any RepoContent::getBadArgExcept()
     {
-        return uno::Any( lang::IllegalArgumentException(
+        return cpo::uno::Any( lang::IllegalArgumentException(
             u"Wrong argument type!"_ustr,
             getXWeak(), -1) );
     }
@@ -229,14 +229,14 @@ namespace cmis
         return CMIS_REPO_TYPE;
     }
 
-    uno::Any SAL_CALL RepoContent::execute(
+    cpo::uno::Any SAL_CALL RepoContent::execute(
         const ucb::Command& aCommand,
         sal_Int32 /*CommandId*/,
         const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {
         SAL_INFO( "ucb.ucp.cmis", "RepoContent::execute( ) - " << aCommand.Name );
 
-        uno::Any aRet;
+        cpo::uno::Any aRet;
 
         if ( aCommand.Name == "getPropertyValues" )
         {

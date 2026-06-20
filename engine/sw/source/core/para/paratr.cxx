@@ -108,7 +108,7 @@ SwFormatDrop* SwFormatDrop::Clone( SfxItemPool* ) const
     return new SwFormatDrop( *this );
 }
 
-bool SwFormatDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFormatDrop::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     switch(nMemberId&~CONVERT_TWIPS)
     {
@@ -140,7 +140,7 @@ bool SwFormatDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-bool SwFormatDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwFormatDrop::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
     switch(nMemberId&~CONVERT_TWIPS)
@@ -201,14 +201,14 @@ SwNumRuleItem* SwNumRuleItem::Clone( SfxItemPool * ) const
     return new SwNumRuleItem( *this );
 }
 
-bool    SwNumRuleItem::QueryValue( uno::Any& rVal, sal_uInt8 ) const
+bool    SwNumRuleItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 ) const
 {
     ProgName sRet = SwStyleNameMapper::GetProgName(GetValue(), SwGetPoolIdFromName::NumRule );
     rVal <<= sRet.toString();
     return true;
 }
 
-bool    SwNumRuleItem::PutValue( const uno::Any& rVal, sal_uInt8 )
+bool    SwNumRuleItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 )
 {
     OUString uName;
     rVal >>= uName;

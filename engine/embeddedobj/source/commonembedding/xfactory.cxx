@@ -75,7 +75,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
 
     OUString aMediaType;
     try {
-        uno::Any aAny = xPropSet->getPropertyValue(u"MediaType"_ustr);
+        cpo::uno::Any aAny = xPropSet->getPropertyValue(u"MediaType"_ustr);
         aAny >>= aMediaType;
     }
     catch ( const uno::Exception& )
@@ -323,7 +323,7 @@ uno::Sequence< OUString > SAL_CALL OOoEmbeddedObjectFactory::getSupportedService
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 embeddedobj_OOoEmbeddedObjectFactory_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new OOoEmbeddedObjectFactory(context));
 }
@@ -369,7 +369,7 @@ uno::Sequence< OUString > SAL_CALL OOoSpecialEmbeddedObjectFactory::getSupported
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 embeddedobj_OOoSpecialEmbeddedObjectFactory_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new OOoSpecialEmbeddedObjectFactory(context));
 }

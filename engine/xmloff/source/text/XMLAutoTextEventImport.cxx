@@ -29,7 +29,7 @@
 
 using namespace ::com::sun::star;
 
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Type;
@@ -80,7 +80,7 @@ SvXMLImportContext* XMLAutoTextEventImport::CreateFastContext(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Writer_XMLOasisAutotextEventsImporter_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new XMLAutoTextEventImport(context));
 }

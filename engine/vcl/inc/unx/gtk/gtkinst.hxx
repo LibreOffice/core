@@ -117,7 +117,7 @@ protected:
 #endif
 
 public:
-    virtual css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override = 0;
+    virtual cpo::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override = 0;
     virtual std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector() = 0;
     virtual css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
     virtual bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
@@ -272,7 +272,7 @@ public:
         createFolderPicker( const css::uno::Reference< css::uno::XComponentContext >& ) override;
 
     virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard>
-    CreateClipboard(const css::uno::Sequence<css::uno::Any>& i_rArguments) override;
+    CreateClipboard(const css::uno::Sequence<cpo::uno::Any>& i_rArguments) override;
     virtual css::uno::Reference<css::datatransfer::dnd::XDragSource>
     ImplCreateDragSource(const SystemEnvData& rSysEnv) override;
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget>

@@ -28,7 +28,7 @@ using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 
 namespace
 {
@@ -233,7 +233,7 @@ void SAL_CALL CachedDataSequence::removeModifyListener( const Reference< util::X
 }
 
 // lang::XInitialization:
-void SAL_CALL CachedDataSequence::initialize(const uno::Sequence< uno::Any > & _aArguments)
+void SAL_CALL CachedDataSequence::initialize(const uno::Sequence< cpo::uno::Any > & _aArguments)
 {
     ::comphelper::SequenceAsHashMap aMap(_aArguments);
     m_aNumericalSequence = aMap.getUnpackedValueOrDefault( u"DataSequence"_ustr ,m_aNumericalSequence);
@@ -256,7 +256,7 @@ void SAL_CALL CachedDataSequence::initialize(const uno::Sequence< uno::Any > & _
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart_CachedDataSequence_get_implementation(css::uno::XComponentContext *context,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::CachedDataSequence(context));
 }

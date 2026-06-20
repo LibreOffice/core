@@ -34,7 +34,7 @@ namespace dbaxml
         OUString      m_sStyleName;
         OUString      m_sCellStyleName;
         OUString      m_sHelpMessage;
-        css::uno::Any m_aDefaultValue;
+        cpo::uno::Any m_aDefaultValue;
         bool          m_bHidden;
 
         ODBFilter& GetOwnImport();

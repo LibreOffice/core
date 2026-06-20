@@ -51,7 +51,7 @@ namespace sfx2
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::task::XInteractionHandler;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::task::DocumentMacroConfirmationRequest;
     using ::com::sun::star::uno::Exception;

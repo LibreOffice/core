@@ -41,6 +41,7 @@
 
 using namespace css;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
@@ -62,7 +63,7 @@ class RecentFilesMenuController :  public svt::PopupMenuControllerBase
 
 public:
     RecentFilesMenuController( const uno::Reference< uno::XComponentContext >& xContext,
-                               const uno::Sequence< uno::Any >& args );
+                               const uno::Sequence< cpo::uno::Any >& args );
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override
@@ -108,13 +109,13 @@ private:
 };
 
 RecentFilesMenuController::RecentFilesMenuController( const uno::Reference< uno::XComponentContext >& xContext,
-                                                      const uno::Sequence< uno::Any >& args ) :
+                                                      const uno::Sequence< cpo::uno::Any >& args ) :
     svt::PopupMenuControllerBase( xContext ),
     m_bDisabled( false ),
     m_bShowToolbarEntries( false )
 {
     css::beans::PropertyValue aPropValue;
-    for ( uno::Any const & arg : args )
+    for ( cpo::uno::Any const & arg : args )
     {
         arg >>= aPropValue;
         if ( aPropValue.Name == "InToolbar" )
@@ -525,7 +526,7 @@ void SAL_CALL RecentFilesMenuController::dispatch(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_RecentFilesMenuController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &args)
+    css::uno::Sequence<cpo::uno::Any> const &args)
 {
     return cppu::acquire(new RecentFilesMenuController(context, args));
 }

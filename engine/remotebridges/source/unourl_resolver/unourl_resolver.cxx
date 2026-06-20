@@ -31,6 +31,7 @@
 
 using namespace cppu;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::connection;
 using namespace com::sun::star::bridge;
@@ -119,7 +120,7 @@ Reference< XInterface > ResolverImpl::resolve( const OUString & rUnoUrl )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 remotebridges_ResolverImpl_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ResolverImpl(context));
 }

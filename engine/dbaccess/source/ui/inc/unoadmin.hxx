@@ -40,7 +40,7 @@ protected:
     std::unique_ptr<::dbaccess::ODsnTypeCollection>
                             m_pCollection;          // datasource type collection
 
-    css::uno::Any           m_aInitialSelection;
+    cpo::uno::Any           m_aInitialSelection;
     css::uno::Reference< css::sdbc::XConnection > m_xActiveConnection;
 
 protected:
@@ -48,7 +48,7 @@ protected:
     virtual ~ODatabaseAdministrationDialog() override;
 protected:
 // OGenericUnoDialog overridables
-    virtual void implInitialize(const css::uno::Any& _rValue) override;
+    virtual void implInitialize(const cpo::uno::Any& _rValue) override;
 };
 
 }   // namespace dbaui

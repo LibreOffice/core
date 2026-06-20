@@ -64,7 +64,7 @@ namespace dxcanvas
 
     }
 
-    Canvas::Canvas( const uno::Sequence< uno::Any >&                aArguments,
+    Canvas::Canvas( const uno::Sequence< cpo::uno::Any >&                aArguments,
                     const uno::Reference< uno::XComponentContext >& rxContext ) :
         maArguments(aArguments),
         mxComponentContext( rxContext )
@@ -139,7 +139,7 @@ namespace dxcanvas
         return cppu::supportsService(this, sServiceName);
     }
 
-    BitmapCanvas::BitmapCanvas( const uno::Sequence< uno::Any >&                aArguments,
+    BitmapCanvas::BitmapCanvas( const uno::Sequence< cpo::uno::Any >&                aArguments,
                                 const uno::Reference< uno::XComponentContext >& rxContext ) :
         maArguments(aArguments),
         mxComponentContext( rxContext ),
@@ -236,7 +236,7 @@ namespace dxcanvas
 
     extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
     canvas_gdiplus_Canvas_get_implementation(
-        css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+        css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& args)
     {
         rtl::Reference<Canvas> xCanvas(new Canvas(args, context));
         xCanvas->initialize();
@@ -245,7 +245,7 @@ namespace dxcanvas
 
     extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
     canvas_gdiplus_BitmapCanvas_get_implementation(
-        css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+        css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& args)
     {
         rtl::Reference<BitmapCanvas> xCanvas(new BitmapCanvas(args, context));
         xCanvas->initialize();

@@ -22,6 +22,7 @@
 #include <editeng/eerdll.hxx>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::text;
 
 
@@ -49,7 +50,7 @@ bool SvxWritingModeItem::GetPresentation( SfxItemPresentation /*ePres*/,
     return true;
 }
 
-bool SvxWritingModeItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
+bool SvxWritingModeItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 )
 {
     sal_Int32 nVal = 0;
     bool bRet = ( rVal >>= nVal );
@@ -84,7 +85,7 @@ bool SvxWritingModeItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
     return bRet;
 }
 
-bool SvxWritingModeItem::QueryValue( css::uno::Any& rVal,
+bool SvxWritingModeItem::QueryValue( cpo::uno::Any& rVal,
                                             sal_uInt8 ) const
 {
     rVal <<= GetValue();

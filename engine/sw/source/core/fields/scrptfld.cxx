@@ -79,7 +79,7 @@ OUString SwScriptField::GetPar2() const
     return m_sCode;
 }
 
-bool SwScriptField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwScriptField::QueryValue( cpo::uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -98,7 +98,7 @@ bool SwScriptField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     return true;
 }
 
-bool SwScriptField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwScriptField::PutValue( const cpo::uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {

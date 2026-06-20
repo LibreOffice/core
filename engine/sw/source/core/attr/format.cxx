@@ -732,7 +732,7 @@ IDocumentTimerAccess& SwFormat::getIDocumentTimerAccess() { return GetDoc().getI
 IDocumentFieldsAccess& SwFormat::getIDocumentFieldsAccess() { return GetDoc().getIDocumentFieldsAccess(); }
 IDocumentChartDataProviderAccess& SwFormat::getIDocumentChartDataProviderAccess() { return GetDoc().getIDocumentChartDataProviderAccess(); }
 
-void SwFormat::GetGrabBagItem(uno::Any& rVal) const
+void SwFormat::GetGrabBagItem(cpo::uno::Any& rVal) const
 {
     if (m_pGrabBagItem)
         m_pGrabBagItem->QueryValue(rVal);
@@ -740,7 +740,7 @@ void SwFormat::GetGrabBagItem(uno::Any& rVal) const
         rVal <<= uno::Sequence<beans::PropertyValue>();
 }
 
-void SwFormat::SetGrabBagItem(const uno::Any& rVal)
+void SwFormat::SetGrabBagItem(const cpo::uno::Any& rVal)
 {
     if (!m_pGrabBagItem)
         m_pGrabBagItem = std::make_shared<SfxGrabBagItem>();

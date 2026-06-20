@@ -87,7 +87,7 @@ void ScAccessiblePageHeaderArea::Notify( SfxBroadcaster& rBC, const SfxHint& rHi
         if (mpTextHelper)
             mpTextHelper->UpdateChildren();
 
-        CommitChange(AccessibleEventId::VISIBLE_DATA_CHANGED, uno::Any(), uno::Any());
+        CommitChange(AccessibleEventId::VISIBLE_DATA_CHANGED, cpo::uno::Any(), cpo::uno::Any());
     }
     ScAccessibleContextBase::Notify(rBC, rHint);
 }

@@ -60,6 +60,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 bool SfxRedactionHelper::isRedactMode(const SfxRequest& rReq)
 {
@@ -119,10 +120,10 @@ void setPageMargins(const uno::Reference<beans::XPropertySet>& xPageProperySet,
         || aPageMargins.nRight < 0)
         return;
 
-    xPageProperySet->setPropertyValue(u"BorderTop"_ustr, css::uno::Any(aPageMargins.nTop));
-    xPageProperySet->setPropertyValue(u"BorderBottom"_ustr, css::uno::Any(aPageMargins.nBottom));
-    xPageProperySet->setPropertyValue(u"BorderLeft"_ustr, css::uno::Any(aPageMargins.nLeft));
-    xPageProperySet->setPropertyValue(u"BorderRight"_ustr, css::uno::Any(aPageMargins.nRight));
+    xPageProperySet->setPropertyValue(u"BorderTop"_ustr, cpo::uno::Any(aPageMargins.nTop));
+    xPageProperySet->setPropertyValue(u"BorderBottom"_ustr, cpo::uno::Any(aPageMargins.nBottom));
+    xPageProperySet->setPropertyValue(u"BorderLeft"_ustr, cpo::uno::Any(aPageMargins.nLeft));
+    xPageProperySet->setPropertyValue(u"BorderRight"_ustr, cpo::uno::Any(aPageMargins.nRight));
 }
 
 // #i10613# Extracted from ImplCheckRect::ImplCreate
@@ -235,8 +236,8 @@ void SfxRedactionHelper::addPagesToDraw(
 
         // Set page size & margins
         uno::Reference<beans::XPropertySet> xPageProperySet(xPage, uno::UNO_QUERY);
-        xPageProperySet->setPropertyValue(u"Height"_ustr, css::uno::Any(nPageHeight));
-        xPageProperySet->setPropertyValue(u"Width"_ustr, css::uno::Any(nPageWidth));
+        xPageProperySet->setPropertyValue(u"Height"_ustr, cpo::uno::Any(nPageHeight));
+        xPageProperySet->setPropertyValue(u"Width"_ustr, cpo::uno::Any(nPageWidth));
 
         setPageMargins(xPageProperySet, aPageMargins);
 
@@ -245,9 +246,9 @@ void SfxRedactionHelper::addPagesToDraw(
             xFactory->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr),
             uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xShapeProperySet(xShape, uno::UNO_QUERY);
-        xShapeProperySet->setPropertyValue(u"Graphic"_ustr, uno::Any(xGraph));
-        xShapeProperySet->setPropertyValue(u"MoveProtect"_ustr, uno::Any(true));
-        xShapeProperySet->setPropertyValue(u"SizeProtect"_ustr, uno::Any(true));
+        xShapeProperySet->setPropertyValue(u"Graphic"_ustr, cpo::uno::Any(xGraph));
+        xShapeProperySet->setPropertyValue(u"MoveProtect"_ustr, cpo::uno::Any(true));
+        xShapeProperySet->setPropertyValue(u"SizeProtect"_ustr, cpo::uno::Any(true));
 
         // Set size
         xShape->setSize(
@@ -578,21 +579,21 @@ void SfxRedactionHelper::addRedactionRectToPage(
         if (isImage)
         {
             xRectShapeProperySet->setPropertyValue(u"Name"_ustr,
-                                                   uno::Any(u"ImageRedactionShape"_ustr));
+                                                   cpo::uno::Any(u"ImageRedactionShape"_ustr));
             xRectShapeProperySet->setPropertyValue(u"FillTransparence"_ustr,
-                                                   css::uno::Any(static_cast<sal_Int16>(0)));
-            xRectShapeProperySet->setPropertyValue(u"FillColor"_ustr, css::uno::Any(COL_BLACK));
+                                                   cpo::uno::Any(static_cast<sal_Int16>(0)));
+            xRectShapeProperySet->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(COL_BLACK));
         }
         else
         {
             xRectShapeProperySet->setPropertyValue(u"Name"_ustr,
-                                                   uno::Any(u"RectangleRedactionShape"_ustr));
+                                                   cpo::uno::Any(u"RectangleRedactionShape"_ustr));
             xRectShapeProperySet->setPropertyValue(u"FillTransparence"_ustr,
-                                                   css::uno::Any(static_cast<sal_Int16>(50)));
-            xRectShapeProperySet->setPropertyValue(u"FillColor"_ustr, css::uno::Any(COL_GRAY7));
+                                                   cpo::uno::Any(static_cast<sal_Int16>(50)));
+            xRectShapeProperySet->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(COL_GRAY7));
         }
         xRectShapeProperySet->setPropertyValue(
-            u"LineStyle"_ustr, css::uno::Any(css::drawing::LineStyle::LineStyle_NONE));
+            u"LineStyle"_ustr, cpo::uno::Any(css::drawing::LineStyle::LineStyle_NONE));
 
         xRectShape->setSize(awt::Size(aNewRectangle.GetWidth(), aNewRectangle.GetHeight()));
         xRectShape->setPosition(awt::Point(aNewRectangle.Left(), aNewRectangle.Top()));

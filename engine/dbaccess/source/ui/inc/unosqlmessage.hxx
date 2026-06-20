@@ -31,7 +31,7 @@ class OSQLMessageDialog final
         ,public ::comphelper::OPropertyArrayUsageHelper< OSQLMessageDialog >
 {
     // <properties>
-    css::uno::Any        m_aException;
+    cpo::uno::Any        m_aException;
     OUString             m_sHelpURL;
     // </properties>
 
@@ -53,11 +53,11 @@ public:
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
 private:
-    virtual void SAL_CALL initialize(css::uno::Sequence< css::uno::Any > const & args) override;
+    virtual void SAL_CALL initialize(css::uno::Sequence< cpo::uno::Any > const & args) override;
 
 // OPropertySetHelper overridables
     // (overwriting these three, because we have some special handling for our property)
-    virtual bool SAL_CALL convertFastPropertyValue( css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue) override;
+    virtual bool SAL_CALL convertFastPropertyValue( cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, sal_Int32 _nHandle, const cpo::uno::Any& _rValue) override;
 
     // OGenericUnoDialog overridables
     virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;

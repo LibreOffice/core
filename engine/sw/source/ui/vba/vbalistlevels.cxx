@@ -37,10 +37,10 @@ public:
         return ( m_nIndex <= m_pListLevels->getCount() );
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         if ( m_nIndex <= m_pListLevels->getCount() )
-            return m_pListLevels->Item( uno::Any( m_nIndex++ ), uno::Any() );
+            return m_pListLevels->Item( cpo::uno::Any( m_nIndex++ ), cpo::uno::Any() );
         throw container::NoSuchElementException();
     }
 };
@@ -62,7 +62,7 @@ SwVbaListLevels::SwVbaListLevels( const uno::Reference< XHelperInterface >& xPar
     return 0;
 }
 
-uno::Any SAL_CALL SwVbaListLevels::Item( const uno::Any& Index1, const uno::Any& /*not processed in this base class*/ )
+cpo::uno::Any SAL_CALL SwVbaListLevels::Item( const cpo::uno::Any& Index1, const cpo::uno::Any& /*not processed in this base class*/ )
 {
     sal_Int32 nIndex = 0;
     if( !( Index1 >>= nIndex ) )
@@ -70,7 +70,7 @@ uno::Any SAL_CALL SwVbaListLevels::Item( const uno::Any& Index1, const uno::Any&
     if( nIndex <=0 || nIndex > getCount() )
         throw  uno::RuntimeException(u"Index out of bounds"_ustr );
 
-    return uno::Any( uno::Reference< word::XListLevel >( new SwVbaListLevel( this, mxContext, m_pListHelper, nIndex - 1 ) ) );
+    return cpo::uno::Any( uno::Reference< word::XListLevel >( new SwVbaListLevel( this, mxContext, m_pListHelper, nIndex - 1 ) ) );
 }
 
 // XEnumerationAccess
@@ -86,8 +86,8 @@ SwVbaListLevels::createEnumeration()
     return new ListLevelsEnumWrapper( this );
 }
 
-uno::Any
-SwVbaListLevels::createCollectionObject( const css::uno::Any& aSource )
+cpo::uno::Any
+SwVbaListLevels::createCollectionObject( const cpo::uno::Any& aSource )
 {
     return aSource;
 }

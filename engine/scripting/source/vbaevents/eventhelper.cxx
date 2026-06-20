@@ -71,6 +71,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::ooo::vba;
 
 // Some constants
@@ -539,7 +540,7 @@ public:
     virtual void SAL_CALL notifyClosing( const lang::EventObject& Source ) override;
     // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
-    virtual void setFastPropertyValueImpl( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const css::uno::Any& rValue ) override
+    virtual void setFastPropertyValueImpl( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override
     {
         if ( nHandle == EVENTLSTNR_PROPERTY_ID_MODEL )
         {
@@ -854,14 +855,14 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet )
                 OUString url = aMacroResolvedInfo.msResolvedMacro;
                 try
                 {
-                    uno::Any aDummyCaller( u"Error"_ustr );
+                    cpo::uno::Any aDummyCaller( u"Error"_ustr );
                     if ( pRet )
                     {
                         ooo::vba::executeMacro( mpShell, url, aArguments, *pRet, aDummyCaller );
                     }
                     else
                     {
-                        uno::Any aRet;
+                        cpo::uno::Any aRet;
                         ooo::vba::executeMacro( mpShell, url, aArguments, aRet, aDummyCaller );
                     }
                 }
@@ -925,7 +926,7 @@ VBAToOOEventDescGen::getEventSupplier( const Reference< XInterface >& xControl, 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ooo_vba_EventListener_get_implementation(css::uno::XComponentContext*,
-                                         css::uno::Sequence<css::uno::Any> const &)
+                                         css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new EventListener);
 }
@@ -933,7 +934,7 @@ ooo_vba_EventListener_get_implementation(css::uno::XComponentContext*,
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ooo_vba_VBAToOOEventDesc_get_implementation(css::uno::XComponentContext*,
-                                            css::uno::Sequence<css::uno::Any> const &)
+                                            css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new VBAToOOEventDescGen);
 }

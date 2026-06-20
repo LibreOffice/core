@@ -42,7 +42,7 @@ class CursorWrapper;
 class GridFieldValueListener;
 class RowSetEventListener;
 
-bool CompareBookmark(const css::uno::Any& aLeft, const css::uno::Any& aRight);
+bool CompareBookmark(const cpo::uno::Any& aLeft, const cpo::uno::Any& aRight);
 
 namespace svxform
 {
@@ -63,7 +63,7 @@ enum class GridRowStatus
 
 class SAL_DLLPUBLIC_RTTI DbGridRow final : public SvRefBase
 {
-    css::uno::Any  m_aBookmark;        // Bookmark of the row, can be set
+    cpo::uno::Any  m_aBookmark;        // Bookmark of the row, can be set
     ::std::vector< std::unique_ptr<::svxform::DataColumn> >
                                 m_aVariants;
     GridRowStatus               m_eStatus;
@@ -85,7 +85,7 @@ public:
     void            SetNew(bool _bNew)              { m_bIsNew = _bNew; }
     bool            IsNew() const                   { return m_bIsNew; }
 
-    const css::uno::Any& GetBookmark() const { return m_aBookmark; }
+    const cpo::uno::Any& GetBookmark() const { return m_aBookmark; }
 
     bool    IsValid() const { return m_eStatus == GridRowStatus::Clean || m_eStatus == GridRowStatus::Modified; }
     bool    IsModified() const { return m_eStatus == GridRowStatus::Modified; }

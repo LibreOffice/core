@@ -102,7 +102,7 @@ namespace frm
         virtual ~FormOperations() override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;

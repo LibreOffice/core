@@ -77,7 +77,7 @@ public:
 
 class UnoControlEditModel final : public UnoControlModel
 {
-    css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    cpo::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
@@ -128,7 +128,7 @@ public:
     OUString             GetComponentServiceName() const override;
     TextListenerMultiplexer&    GetTextListeners()  { return maTextListeners; }
 
-    void                        ImplSetPeerProperty( const OUString& rPropName, const css::uno::Any& rVal ) override;
+    void                        ImplSetPeerProperty( const OUString& rPropName, const cpo::uno::Any& rVal ) override;
 
     void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
     void SAL_CALL disposing( const css::lang::EventObject& Source ) override { UnoControlBase::disposing( Source ); }
@@ -138,7 +138,7 @@ public:
     DECLARE_XINTERFACE()
 
     // XAggregation
-    css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+    cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
 
     // XTypeProvider
     DECLARE_XTYPEPROVIDER()
@@ -180,7 +180,7 @@ public:
 
 class UnoControlFileControlModel final : public UnoControlModel
 {
-    css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    cpo::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
@@ -233,10 +233,10 @@ protected:
     GraphicControlModel( const GraphicControlModel& _rSource ) : UnoControlModel( _rSource ), mbAdjustingImagePosition( false ), mbAdjustingGraphic( false ) { }
 
     // ::comphelper::OPropertySetHelper
-    void setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+    void setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
 
     // UnoControlModel
-    css::uno::Any ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    cpo::uno::Any ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
 
 private:
         GraphicControlModel& operator=( const GraphicControlModel& ) = delete;
@@ -246,7 +246,7 @@ private:
 
 class TOOLKIT_DLLPUBLIC UnoControlButtonModel final : public GraphicControlModel
 {
-    css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    cpo::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
@@ -325,7 +325,7 @@ class UnoControlImageControlModel final : public GraphicControlModel
 private:
     bool    mbAdjustingImageScaleMode;
 
-    css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    cpo::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
@@ -346,7 +346,7 @@ public:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // ::cppu::OPropertySetHelper
-    void setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+    void setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
 };
 
 
@@ -384,7 +384,7 @@ public:
 
 class UnoControlRadioButtonModel final : public GraphicControlModel
 {
-    css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    cpo::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
@@ -462,7 +462,7 @@ public:
 
 class UnoControlCheckBoxModel final : public GraphicControlModel
 {
-    css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    cpo::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
@@ -542,7 +542,7 @@ public:
 
 class UnoControlFixedHyperlinkModel final : public UnoControlModel
 {
-    css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    cpo::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
@@ -575,8 +575,8 @@ public:
 
     OUString     GetComponentServiceName() const override;
 
-    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoControlBase::queryInterface(rType); }
-    css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+    cpo::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoControlBase::queryInterface(rType); }
+    cpo::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
     void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
@@ -613,7 +613,7 @@ public:
 
 class TOOLKIT_DLLPUBLIC UnoControlFixedTextModel final : public UnoControlModel
 {
-    css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    cpo::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
@@ -644,8 +644,8 @@ public:
                         UnoFixedTextControl();
     OUString     GetComponentServiceName() const override;
 
-    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoControlBase::queryInterface(rType); }
-    css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+    cpo::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoControlBase::queryInterface(rType); }
+    cpo::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
     void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
@@ -677,7 +677,7 @@ public:
 
 class UnoControlGroupBoxModel final : public UnoControlModel
 {
-    css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    cpo::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
@@ -742,7 +742,7 @@ public:
     virtual void        ImplNormalizePropertySequence(
                             const sal_Int32                 _nCount,        /// the number of entries in the arrays
                             sal_Int32*                      _pHandles,      /// the handles of the properties to set
-                            css::uno::Any*     _pValues,       /// the values of the properties to set
+                            cpo::uno::Any*     _pValues,       /// the values of the properties to set
                             sal_Int32*                      _pValidHandles  /// pointer to the valid handles, allowed to be adjusted
                         )   const override;
 
@@ -766,20 +766,20 @@ public:
     virtual void SAL_CALL setItemText( ::sal_Int32 Position, const OUString& ItemText ) override;
     virtual void SAL_CALL setItemImage( ::sal_Int32 Position, const OUString& ItemImageURL ) override;
     virtual void SAL_CALL setItemTextAndImage( ::sal_Int32 Position, const OUString& ItemText, const OUString& ItemImageURL ) override;
-    virtual void SAL_CALL setItemData( ::sal_Int32 Position, const css::uno::Any& DataValue ) override;
+    virtual void SAL_CALL setItemData( ::sal_Int32 Position, const cpo::uno::Any& DataValue ) override;
     virtual OUString SAL_CALL getItemText( ::sal_Int32 Position ) override;
     virtual OUString SAL_CALL getItemImage( ::sal_Int32 Position ) override;
     virtual css::beans::Pair< OUString, OUString > SAL_CALL getItemTextAndImage( ::sal_Int32 Position ) override;
-    virtual css::uno::Any SAL_CALL getItemData( ::sal_Int32 Position ) override;
+    virtual cpo::uno::Any SAL_CALL getItemData( ::sal_Int32 Position ) override;
     virtual css::uno::Sequence< css::beans::Pair< OUString, OUString > > SAL_CALL getAllItems(  ) override;
     virtual void SAL_CALL addItemListListener( const css::uno::Reference< css::awt::XItemListListener >& Listener ) override;
     virtual void SAL_CALL removeItemListListener( const css::uno::Reference< css::awt::XItemListListener >& Listener ) override;
 
     // OPropertySetHelper
-    void setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+    void setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
 
 protected:
-    css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    cpo::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 private:
@@ -889,7 +889,7 @@ public:
 
 private:
     void                ImplUpdateSelectedItemsProperty();
-    virtual void        ImplSetPeerProperty( const OUString& rPropName, const css::uno::Any& rVal ) override;
+    virtual void        ImplSetPeerProperty( const OUString& rPropName, const cpo::uno::Any& rVal ) override;
     virtual void        updateFromModel() override;
 
     ActionListenerMultiplexer   maActionListeners;
@@ -900,7 +900,7 @@ private:
 
 class UnoControlComboBoxModel final : public UnoControlListBoxModel
 {
-    css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    cpo::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
@@ -915,7 +915,7 @@ public:
     // css::beans::XMultiPropertySet
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
     // OPropertySetHelper
-    void setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+    void setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
 
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName(  ) override;
@@ -943,8 +943,8 @@ public:
     void SAL_CALL disposing( const css::lang::EventObject& Source ) override { UnoEditControl::disposing( Source ); }
     void SAL_CALL dispose(  ) override;
 
-    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoEditControl::queryInterface(rType); }
-    css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+    cpo::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoEditControl::queryInterface(rType); }
+    cpo::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
     void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
@@ -984,7 +984,7 @@ public:
     OUString SAL_CALL getImplementationName(  ) override;
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 private:
-    virtual void        ImplSetPeerProperty( const OUString& rPropName, const css::uno::Any& rVal ) override;
+    virtual void        ImplSetPeerProperty( const OUString& rPropName, const cpo::uno::Any& rVal ) override;
     virtual void        updateFromModel() override;
 
 };
@@ -1001,8 +1001,8 @@ private:
 public:
                                 UnoSpinFieldControl();
 
-    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoEditControl::queryInterface(rType); }
-    css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+    cpo::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoEditControl::queryInterface(rType); }
+    cpo::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
     void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
@@ -1030,7 +1030,7 @@ public:
 
 class UnoControlDateFieldModel final : public UnoControlModel
 {
-    css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    cpo::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
@@ -1064,8 +1064,8 @@ public:
                             UnoDateFieldControl();
     OUString         GetComponentServiceName() const override;
 
-    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoSpinFieldControl::queryInterface(rType); }
-    css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+    cpo::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoSpinFieldControl::queryInterface(rType); }
+    cpo::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
     void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
@@ -1106,7 +1106,7 @@ public:
 
 class UnoControlTimeFieldModel final : public UnoControlModel
 {
-    css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    cpo::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
@@ -1140,8 +1140,8 @@ public:
                         UnoTimeFieldControl();
     OUString     GetComponentServiceName() const override;
 
-    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoSpinFieldControl::queryInterface(rType); }
-    css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+    cpo::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoSpinFieldControl::queryInterface(rType); }
+    cpo::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
     void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
@@ -1180,7 +1180,7 @@ public:
 
 class UnoControlNumericFieldModel final : public UnoControlModel
 {
-    css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    cpo::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
@@ -1214,8 +1214,8 @@ public:
                         UnoNumericFieldControl();
     OUString     GetComponentServiceName() const override;
 
-    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoSpinFieldControl::queryInterface(rType); }
-    css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+    cpo::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoSpinFieldControl::queryInterface(rType); }
+    cpo::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
     void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
@@ -1256,7 +1256,7 @@ public:
 
 class UnoControlCurrencyFieldModel final : public UnoControlModel
 {
-    css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    cpo::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
@@ -1290,8 +1290,8 @@ public:
                         UnoCurrencyFieldControl();
     OUString     GetComponentServiceName() const override;
 
-    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoSpinFieldControl::queryInterface(rType); }
-    css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+    cpo::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoSpinFieldControl::queryInterface(rType); }
+    cpo::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
     void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
@@ -1332,7 +1332,7 @@ public:
 
 class UnoControlPatternFieldModel final : public UnoControlModel
 {
-    css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    cpo::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
@@ -1358,14 +1358,14 @@ public:
 class UnoPatternFieldControl final : public UnoSpinFieldControl,
                                 public css::awt::XPatternField
 {
-    void            ImplSetPeerProperty( const OUString& rPropName, const css::uno::Any& rVal ) override;
+    void            ImplSetPeerProperty( const OUString& rPropName, const cpo::uno::Any& rVal ) override;
 
 public:
                         UnoPatternFieldControl();
     OUString     GetComponentServiceName() const override;
 
-    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoSpinFieldControl::queryInterface(rType); }
-    css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+    cpo::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoSpinFieldControl::queryInterface(rType); }
+    cpo::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
     void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
@@ -1391,7 +1391,7 @@ public:
 
 class UnoControlProgressBarModel final : public UnoControlModel
 {
-    css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    cpo::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
@@ -1421,8 +1421,8 @@ public:
                                 UnoProgressBarControl();
     OUString             GetComponentServiceName() const override;
 
-    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoControlBase::queryInterface(rType); }
-    css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+    cpo::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoControlBase::queryInterface(rType); }
+    cpo::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
     void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
@@ -1447,7 +1447,7 @@ public:
 
 class UnoControlFixedLineModel final : public UnoControlModel
 {
-    css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    cpo::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:

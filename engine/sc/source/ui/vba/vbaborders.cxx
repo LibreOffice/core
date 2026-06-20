@@ -99,7 +99,7 @@ private:
             default:
                     return;
         }
-        m_xProps->setPropertyValue( sTableBorder, uno::Any(aTableBorder) );
+        m_xProps->setPropertyValue( sTableBorder, cpo::uno::Any(aTableBorder) );
     }
 
     bool getBorderLine( table::BorderLine& rBorderLine )
@@ -162,14 +162,14 @@ public:
     ScVbaBorder( const uno::Reference< beans::XPropertySet > & xProps, const uno::Reference< uno::XComponentContext >& xContext, sal_Int32 lineType, const ScVbaPalette& rPalette) : ScVbaBorder_Base( uno::Reference< XHelperInterface >( xProps, uno::UNO_QUERY ), xContext ), m_xProps( xProps ), m_LineType( lineType ), m_Palette( rPalette ) {}
 
     // XBorder
-    uno::Any SAL_CALL getColor() override
+    cpo::uno::Any SAL_CALL getColor() override
     {
         table::BorderLine aBorderLine;
         if ( getBorderLine( aBorderLine ) )
-            return uno::Any( OORGBToXLRGB( Color(ColorTransparency, aBorderLine.Color) ) );
+            return cpo::uno::Any( OORGBToXLRGB( Color(ColorTransparency, aBorderLine.Color) ) );
         throw uno::RuntimeException(u"No Implementation available"_ustr );
     }
-    void SAL_CALL setColor( const uno::Any& _color ) override
+    void SAL_CALL setColor( const cpo::uno::Any& _color ) override
     {
         sal_Int32 nColor = 0;
         _color >>= nColor;
@@ -182,7 +182,7 @@ public:
 
     }
 
-    uno::Any SAL_CALL getColorIndex() override
+    cpo::uno::Any SAL_CALL getColorIndex() override
     {
         sal_Int32 nColor = 0;
         XLRGBToOORGB( getColor() ) >>= nColor;
@@ -199,10 +199,10 @@ public:
                 break;
             }
         }
-        return uno::Any(nIndex);
+        return cpo::uno::Any(nIndex);
     }
 
-    void SAL_CALL setColorIndex( const uno::Any& _colorindex ) override
+    void SAL_CALL setColorIndex( const cpo::uno::Any& _colorindex ) override
     {
         sal_Int32 nColor = 0;
         _colorindex >>= nColor;
@@ -210,7 +210,7 @@ public:
             nColor = 1;
         setColor( OORGBToXLRGB( m_Palette.getPalette()->getByIndex( --nColor )  ) );
     }
-    uno::Any SAL_CALL getWeight() override
+    cpo::uno::Any SAL_CALL getWeight() override
     {
         table::BorderLine aBorderLine;
         if ( getBorderLine( aBorderLine ) )
@@ -219,20 +219,20 @@ public:
             {
                 case 0: // Thin = default OO thickness
                 case OOLineThin:
-                    return uno::Any( XlBorderWeight::xlThin );
+                    return cpo::uno::Any( XlBorderWeight::xlThin );
                 case OOLineMedium:
-                    return uno::Any( XlBorderWeight::xlMedium );
+                    return cpo::uno::Any( XlBorderWeight::xlMedium );
                 case OOLineThick:
-                    return uno::Any( XlBorderWeight::xlThick );
+                    return cpo::uno::Any( XlBorderWeight::xlThick );
                 case OOLineHairline:
-                    return uno::Any( XlBorderWeight::xlHairline );
+                    return cpo::uno::Any( XlBorderWeight::xlHairline );
                 default:
                     break;
             }
         }
         throw uno::RuntimeException(u"Method failed"_ustr );
     }
-    void SAL_CALL setWeight( const uno::Any& _weight ) override
+    void SAL_CALL setWeight( const cpo::uno::Any& _weight ) override
     {
         sal_Int32 nWeight = 0;
         _weight >>= nWeight;
@@ -261,22 +261,22 @@ public:
 
     }
 
-    void SAL_CALL setTintAndShade( const uno::Any& /*rAny*/ ) override
+    void SAL_CALL setTintAndShade( const cpo::uno::Any& /*rAny*/ ) override
     {
         // TODO implement
     }
-    uno::Any SAL_CALL getTintAndShade() override
+    cpo::uno::Any SAL_CALL getTintAndShade() override
     {
         // TODO implement
-        return uno::Any(static_cast<double>(0));
+        return cpo::uno::Any(static_cast<double>(0));
     }
 
-    uno::Any SAL_CALL getLineStyle() override
+    cpo::uno::Any SAL_CALL getLineStyle() override
     {
         // always return xlContinuous;
-        return uno::Any( XlLineStyle::xlContinuous );
+        return cpo::uno::Any( XlLineStyle::xlContinuous );
     }
-    void SAL_CALL setLineStyle( const uno::Any& _linestyle ) override
+    void SAL_CALL setLineStyle( const cpo::uno::Any& _linestyle ) override
     {
         // Urk no choice but to silently ignore we don't support this attribute
         // #TODO would be nice to support the excel line styles
@@ -333,14 +333,14 @@ public:
     {
         return SAL_N_ELEMENTS( supportedIndexTable );
     }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
+    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
 
         sal_Int32 nIndex = getTableIndex( Index );
         if ( nIndex >= 0 && nIndex < getCount() )
         {
             uno::Reference< beans::XPropertySet > xProps( m_xRange, uno::UNO_QUERY_THROW );
-            return uno::Any( uno::Reference< excel::XBorder >( new ScVbaBorder( xProps, m_xContext, supportedIndexTable[ nIndex ], m_Palette )) );
+            return cpo::uno::Any( uno::Reference< excel::XBorder >( new ScVbaBorder( xProps, m_xContext, supportedIndexTable[ nIndex ], m_Palette )) );
         }
         throw lang::IndexOutOfBoundsException();
     }
@@ -375,7 +375,7 @@ public:
         return ( m_nIndex < m_xIndexAccess->getCount() );
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         if ( m_nIndex < m_xIndexAccess->getCount() )
             return m_xIndexAccess->getByIndex( m_nIndex++ );
@@ -403,8 +403,8 @@ ScVbaBorders::createEnumeration()
     return new RangeBorderEnumWrapper( m_xIndexAccess );
 }
 
-uno::Any
-ScVbaBorders::createCollectionObject( const css::uno::Any& aSource )
+cpo::uno::Any
+ScVbaBorders::createCollectionObject( const cpo::uno::Any& aSource )
 {
     return aSource; // it's already a Border object
 }
@@ -415,16 +415,16 @@ ScVbaBorders::getElementType()
     return cppu::UnoType<excel::XBorders>::get();
 }
 
-uno::Any
+cpo::uno::Any
 ScVbaBorders::getItemByIntIndex( const sal_Int32 nIndex )
 {
     return createCollectionObject( m_xIndexAccess->getByIndex( nIndex ) );
 }
 
-uno::Any SAL_CALL ScVbaBorders::getColor()
+cpo::uno::Any SAL_CALL ScVbaBorders::getColor()
 {
     sal_Int32 count = getCount();
-    uno::Any color;
+    cpo::uno::Any color;
     for( sal_Int32 i = 0; i < count ; i++ )
     {
         if( XlBordersIndex::xlDiagonalDown != supportedIndexTable[i] && XlBordersIndex::xlDiagonalUp != supportedIndexTable[i] )
@@ -433,7 +433,7 @@ uno::Any SAL_CALL ScVbaBorders::getColor()
             if( color.hasValue() )
             {
                 if( color != xBorder->getColor() )
-                    return uno::Any( uno::Reference< uno::XInterface >() );
+                    return cpo::uno::Any( uno::Reference< uno::XInterface >() );
             }
             else
                 color = xBorder->getColor();
@@ -441,7 +441,7 @@ uno::Any SAL_CALL ScVbaBorders::getColor()
     }
     return  color;
 }
-void SAL_CALL ScVbaBorders::setColor( const uno::Any& _color )
+void SAL_CALL ScVbaBorders::setColor( const cpo::uno::Any& _color )
 {
     sal_Int32 count = getCount();
     for( sal_Int32 i = 0; i < count ; i++ )
@@ -450,10 +450,10 @@ void SAL_CALL ScVbaBorders::setColor( const uno::Any& _color )
         xBorder->setColor( _color );
     }
 }
-uno::Any SAL_CALL ScVbaBorders::getColorIndex()
+cpo::uno::Any SAL_CALL ScVbaBorders::getColorIndex()
 {
     sal_Int32 count = getCount();
-    uno::Any nColorIndex;
+    cpo::uno::Any nColorIndex;
     for( sal_Int32 i = 0; i < count ; i++ )
     {
         if( XlBordersIndex::xlDiagonalDown != supportedIndexTable[i] && XlBordersIndex::xlDiagonalUp != supportedIndexTable[i] )
@@ -462,7 +462,7 @@ uno::Any SAL_CALL ScVbaBorders::getColorIndex()
             if( nColorIndex.hasValue() )
             {
                 if( nColorIndex != xBorder->getColorIndex() )
-                    return uno::Any( uno::Reference< uno::XInterface >() );
+                    return cpo::uno::Any( uno::Reference< uno::XInterface >() );
             }
             else
                 nColorIndex = xBorder->getColorIndex();
@@ -470,7 +470,7 @@ uno::Any SAL_CALL ScVbaBorders::getColorIndex()
     }
     return  nColorIndex;
 }
-void SAL_CALL ScVbaBorders::setColorIndex( const uno::Any& _colorindex )
+void SAL_CALL ScVbaBorders::setColorIndex( const cpo::uno::Any& _colorindex )
 {
     sal_Int32 count = getCount();
     for( sal_Int32 i = 0; i < count ; i++ )
@@ -502,7 +502,7 @@ lcl_areAllLineWidthsSame( const table::TableBorder& maTableBorder, bool bIsCell 
     return bRes;
 }
 
-uno::Any SAL_CALL ScVbaBorders::getLineStyle()
+cpo::uno::Any SAL_CALL ScVbaBorders::getLineStyle()
 {
     table::TableBorder aTableBorder;
     m_xProps->getPropertyValue( sTableBorder ) >>= aTableBorder;
@@ -520,9 +520,9 @@ uno::Any SAL_CALL ScVbaBorders::getLineStyle()
             aLinestyle = XlLineStyle::xlContinuous;
         }
     }
-    return uno::Any( aLinestyle );
+    return cpo::uno::Any( aLinestyle );
 }
-void SAL_CALL ScVbaBorders::setLineStyle( const uno::Any& _linestyle )
+void SAL_CALL ScVbaBorders::setLineStyle( const cpo::uno::Any& _linestyle )
 {
     sal_Int32 count = getCount();
     for( sal_Int32 i = 0; i < count ; i++ )
@@ -531,10 +531,10 @@ void SAL_CALL ScVbaBorders::setLineStyle( const uno::Any& _linestyle )
         xBorder->setLineStyle( _linestyle );
     }
 }
-uno::Any SAL_CALL ScVbaBorders::getWeight()
+cpo::uno::Any SAL_CALL ScVbaBorders::getWeight()
 {
     sal_Int32 count = getCount();
-    uno::Any weight;
+    cpo::uno::Any weight;
     for( sal_Int32 i = 0; i < count ; i++ )
     {
         if( XlBordersIndex::xlDiagonalDown != supportedIndexTable[i] && XlBordersIndex::xlDiagonalUp != supportedIndexTable[i] )
@@ -543,7 +543,7 @@ uno::Any SAL_CALL ScVbaBorders::getWeight()
             if( weight.hasValue() )
             {
                 if( weight != xBorder->getWeight() )
-                    return uno::Any( uno::Reference< uno::XInterface >() );
+                    return cpo::uno::Any( uno::Reference< uno::XInterface >() );
             }
             else
                 weight = xBorder->getWeight();
@@ -552,18 +552,18 @@ uno::Any SAL_CALL ScVbaBorders::getWeight()
     return  weight;
 }
 
-uno::Any SAL_CALL ScVbaBorders::getTintAndShade()
+cpo::uno::Any SAL_CALL ScVbaBorders::getTintAndShade()
 {
     // TODO implement
-    return uno::Any(static_cast<double>(0));
+    return cpo::uno::Any(static_cast<double>(0));
 }
 
-void SAL_CALL ScVbaBorders::setTintAndShade(const uno::Any& /*rAny*/)
+void SAL_CALL ScVbaBorders::setTintAndShade(const cpo::uno::Any& /*rAny*/)
 {
     // TODO implement
 }
 
-void SAL_CALL ScVbaBorders::setWeight( const uno::Any& _weight )
+void SAL_CALL ScVbaBorders::setWeight( const cpo::uno::Any& _weight )
 {
     sal_Int32 count = getCount();
     for( sal_Int32 i = 0; i < count ; i++ )

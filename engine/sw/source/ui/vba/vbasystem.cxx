@@ -81,7 +81,7 @@ static void lcl_getRegKeyInfo( std::string_view sKeyInfo, HKEY& hBaseKey, OStrin
 }
 #endif
 
-uno::Any PrivateProfileStringListener::getValueEvent()
+cpo::uno::Any PrivateProfileStringListener::getValueEvent()
 {
     // get the private profile string
     OUString sValue;
@@ -123,10 +123,10 @@ uno::Any PrivateProfileStringListener::getValueEvent()
     sValue = OStringToOUString(aCfg.ReadKey(maKey), RTL_TEXTENCODING_DONTKNOW);
 
 
-    return uno::Any( sValue );
+    return cpo::uno::Any( sValue );
 }
 
-void PrivateProfileStringListener::setValueEvent( const css::uno::Any& value )
+void PrivateProfileStringListener::setValueEvent( const cpo::uno::Any& value )
 {
     // set the private profile string
     OUString aValue;
@@ -235,7 +235,7 @@ SwVbaSystem::setCursor( sal_Int32 _cursor )
     }
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwVbaSystem::PrivateProfileString( const OUString& rFilename, const OUString& rSection, const OUString& rKey )
 {
     // FIXME: need to detect whether it is a relative file path
@@ -256,7 +256,7 @@ SwVbaSystem::PrivateProfileString( const OUString& rFilename, const OUString& rS
     OString aKey(OUStringToOString(rKey, RTL_TEXTENCODING_DONTKNOW));
     maPrivateProfileStringListener.Initialize( sFileUrl, aGroupName, aKey );
 
-    return uno::Any( uno::Reference< XPropValue > ( new ScVbaPropValue( &maPrivateProfileStringListener ) ) );
+    return cpo::uno::Any( uno::Reference< XPropValue > ( new ScVbaPropValue( &maPrivateProfileStringListener ) ) );
 }
 
 OUString

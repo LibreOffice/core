@@ -169,7 +169,7 @@ bool SwViewLayoutControl::MouseButtonDown( const MouseEvent & rEvt )
         // commit state change
         SvxViewLayoutItem aViewLayout( nColumns, bBookMode );
 
-        css::uno::Any a;
+        cpo::uno::Any a;
         aViewLayout.QueryValue( a );
 
         css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(u"ViewLayout"_ustr,

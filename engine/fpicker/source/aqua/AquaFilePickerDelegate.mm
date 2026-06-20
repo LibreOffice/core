@@ -17,13 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 #include "SalAquaFilePicker.hxx"
 #include "FilterHelper.hxx"
 #include "AquaFilePickerDelegate.hxx"
 
 using namespace css;
+using namespace cpo::uno;
 
 @implementation AquaFilePickerDelegate
 
@@ -106,7 +107,7 @@ using namespace css;
     if ([sender class] != [NSButton class]) {
         return;
     }
-    uno::Any aValue;
+    Any aValue;
     aValue <<= ([static_cast<NSButton*>(sender) state] == NSControlStateValueOn);
     
     filePicker->setValue(css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue);

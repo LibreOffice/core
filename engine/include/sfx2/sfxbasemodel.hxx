@@ -54,7 +54,7 @@
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/script/XStarBasicAccess.hpp>
 
@@ -173,7 +173,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override ;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override ;
 
     /**___________________________________________________________________________________________________
         @short      increment refcount
@@ -457,7 +457,7 @@ public:
     //  XTransferable
 
 
-    virtual css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor ) override;
+    virtual cpo::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor ) override;
 
     virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors() override;
 
@@ -520,7 +520,7 @@ public:
 
     virtual void SAL_CALL addDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& Listener ) override;
     virtual void SAL_CALL removeDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& Listener ) override;
-    virtual void SAL_CALL notifyDocumentEvent( const OUString& EventName, const css::uno::Reference< css::frame::XController2 >& ViewController, const css::uno::Any& Supplement ) override;
+    virtual void SAL_CALL notifyDocumentEvent( const OUString& EventName, const css::uno::Reference< css::frame::XController2 >& ViewController, const cpo::uno::Any& Supplement ) override;
 
 
     //  XUnoTunnel
@@ -700,9 +700,9 @@ protected:
     bool hasValidSignatures() const;
 
     /* GrabBagItem for interim interop purposes */
-    void getGrabBagItem(css::uno::Any& rVal) const;
+    void getGrabBagItem(cpo::uno::Any& rVal) const;
 
-    void setGrabBagItem(const css::uno::Any& rVal);
+    void setGrabBagItem(const cpo::uno::Any& rVal);
 
 
 //  private methods
@@ -715,7 +715,7 @@ private:
     SAL_DLLPRIVATE void ListenForStorage_Impl( const css::uno::Reference< css::embed::XStorage >& xStorage );
     SAL_DLLPRIVATE OUString GetMediumFilterName_Impl() const;
 
-    SAL_DLLPRIVATE void postEvent_Impl( const OUString& aName, const css::uno::Reference< css::frame::XController2 >& xController = css::uno::Reference< css::frame::XController2 >(), const css::uno::Any& aSupplement = css::uno::Any());
+    SAL_DLLPRIVATE void postEvent_Impl( const OUString& aName, const css::uno::Reference< css::frame::XController2 >& xController = css::uno::Reference< css::frame::XController2 >(), const cpo::uno::Any& aSupplement = cpo::uno::Any());
 
     SAL_DLLPRIVATE css::uno::Reference< css::frame::XTitle > impl_getTitleHelper ();
     SAL_DLLPRIVATE css::uno::Reference< css::frame::XUntitledNumbers > impl_getUntitledHelper ();

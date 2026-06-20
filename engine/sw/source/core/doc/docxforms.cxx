@@ -33,7 +33,7 @@ using namespace ::com::sun::star;
 
 using uno::Reference;
 using uno::UNO_QUERY;
-using uno::Any;
+using cpo::uno::Any;
 using uno::Exception;
 using xforms::XModel2;
 using frame::XModule;

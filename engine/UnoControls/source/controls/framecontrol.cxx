@@ -37,6 +37,7 @@
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::awt;
@@ -113,7 +114,7 @@ OUString FrameControl::getImplementationName()
     return u"stardiv.UnoControls.FrameControl"_ustr;
 }
 
-cpo::uno::Sequence<OUString> FrameControl::getSupportedServiceNames()
+css::uno::Sequence<OUString> FrameControl::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.FrameControl"_ustr };
 }
@@ -400,9 +401,9 @@ void FrameControl::impl_createFrame(    const   Reference< XWindowPeer >&   xPee
 
 }   // namespace unocontrols
 
-extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 stardiv_UnoControls_FrameControl_get_implementation(
-    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new unocontrols::FrameControl(context));
 }

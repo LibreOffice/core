@@ -608,7 +608,7 @@ void TextEffectsHandler::lcl_attribute(Id aName, const Value& aValue)
         case NS_ooxml::LN_CT_Shadow_algn:
         case NS_ooxml::LN_CT_Reflection_algn:
             {
-                uno::Any aAny(getRectAlignmentString(sal_Int32(aValue.getInt())));
+                cpo::uno::Any aAny(getRectAlignmentString(sal_Int32(aValue.getInt())));
                 mpGrabBagStack->appendElement(u"algn"_ustr, aAny);
             }
             break;
@@ -617,19 +617,19 @@ void TextEffectsHandler::lcl_attribute(Id aName, const Value& aValue)
             break;
         case NS_ooxml::LN_CT_TextOutlineEffect_cap:
             {
-                uno::Any aAny(getLineCapString(sal_Int32(aValue.getInt())));
+                cpo::uno::Any aAny(getLineCapString(sal_Int32(aValue.getInt())));
                 mpGrabBagStack->appendElement(u"cap"_ustr, aAny);
             }
             break;
         case NS_ooxml::LN_CT_TextOutlineEffect_cmpd:
             {
-                uno::Any aAny(getCompoundLineString(sal_Int32(aValue.getInt())));
+                cpo::uno::Any aAny(getCompoundLineString(sal_Int32(aValue.getInt())));
                 mpGrabBagStack->appendElement(u"cmpd"_ustr, aAny);
             }
             break;
         case NS_ooxml::LN_CT_TextOutlineEffect_algn:
             {
-                uno::Any aAny(getPenAlignmentString(sal_Int32(aValue.getInt())));
+                cpo::uno::Any aAny(getPenAlignmentString(sal_Int32(aValue.getInt())));
                 mpGrabBagStack->appendElement(u"algn"_ustr, aAny);
             }
             break;
@@ -641,13 +641,13 @@ void TextEffectsHandler::lcl_attribute(Id aName, const Value& aValue)
             break;
         case NS_ooxml::LN_CT_LinearShadeProperties_scaled:
             {
-                uno::Any aAny(getOnOffString(sal_Int32(aValue.getInt())));
+                cpo::uno::Any aAny(getOnOffString(sal_Int32(aValue.getInt())));
                 mpGrabBagStack->appendElement(u"scaled"_ustr, aAny);
             }
             break;
         case NS_ooxml::LN_CT_PathShadeProperties_path:
             {
-                uno::Any aAny(getPathShadeTypeString(sal_Int32(aValue.getInt())));
+                cpo::uno::Any aAny(getPathShadeTypeString(sal_Int32(aValue.getInt())));
                 mpGrabBagStack->appendElement(u"path"_ustr, aAny);
             }
             break;
@@ -665,7 +665,7 @@ void TextEffectsHandler::lcl_attribute(Id aName, const Value& aValue)
             break;
         case NS_ooxml::LN_CT_PresetLineDashProperties_val:
             {
-                uno::Any aAny(getPresetLineDashValString(sal_Int32(aValue.getInt())));
+                cpo::uno::Any aAny(getPresetLineDashValString(sal_Int32(aValue.getInt())));
                 mpGrabBagStack->appendElement(u"val"_ustr, aAny);
             }
             break;
@@ -674,19 +674,19 @@ void TextEffectsHandler::lcl_attribute(Id aName, const Value& aValue)
             break;
         case NS_ooxml::LN_CT_Camera_prst:
             {
-                uno::Any aAny(getPresetCameraTypeString(sal_Int32(aValue.getInt())));
+                cpo::uno::Any aAny(getPresetCameraTypeString(sal_Int32(aValue.getInt())));
                 mpGrabBagStack->appendElement(u"prst"_ustr, aAny);
             }
             break;
         case NS_ooxml::LN_CT_LightRig_rig:
             {
-                uno::Any aAny(getLightRigTypeString(sal_Int32(aValue.getInt())));
+                cpo::uno::Any aAny(getLightRigTypeString(sal_Int32(aValue.getInt())));
                 mpGrabBagStack->appendElement(u"rig"_ustr, aAny);
             }
             break;
         case NS_ooxml::LN_CT_LightRig_dir:
             {
-                uno::Any aAny(getLightRigDirectionString(sal_Int32(aValue.getInt())));
+                cpo::uno::Any aAny(getLightRigDirectionString(sal_Int32(aValue.getInt())));
                 mpGrabBagStack->appendElement(u"dir"_ustr, aAny);
             }
             break;
@@ -707,7 +707,7 @@ void TextEffectsHandler::lcl_attribute(Id aName, const Value& aValue)
             break;
         case NS_ooxml::LN_CT_Props3D_prstMaterial:
             {
-                uno::Any aAny(getPresetMaterialTypeString(sal_Int32(aValue.getInt())));
+                cpo::uno::Any aAny(getPresetMaterialTypeString(sal_Int32(aValue.getInt())));
                 mpGrabBagStack->appendElement(u"prstMaterial"_ustr, aAny);
             }
             break;
@@ -719,25 +719,25 @@ void TextEffectsHandler::lcl_attribute(Id aName, const Value& aValue)
             break;
         case NS_ooxml::LN_CT_Bevel_prst:
             {
-                uno::Any aAny(getBevelPresetTypeString(sal_Int32(aValue.getInt())));
+                cpo::uno::Any aAny(getBevelPresetTypeString(sal_Int32(aValue.getInt())));
                 mpGrabBagStack->appendElement(u"prst"_ustr, aAny);
             }
             break;
         case NS_ooxml::LN_CT_Ligatures_val:
             {
-                uno::Any aAny(getLigaturesString(sal_Int32(aValue.getInt())));
+                cpo::uno::Any aAny(getLigaturesString(sal_Int32(aValue.getInt())));
                 mpGrabBagStack->appendElement(u"val"_ustr, aAny);
             }
             break;
         case NS_ooxml::LN_CT_NumForm_val:
             {
-                uno::Any aAny(getNumFormString(sal_Int32(aValue.getInt())));
+                cpo::uno::Any aAny(getNumFormString(sal_Int32(aValue.getInt())));
                 mpGrabBagStack->appendElement(u"val"_ustr, aAny);
             }
             break;
         case NS_ooxml::LN_CT_NumSpacing_val:
             {
-                uno::Any aAny(getNumSpacingString(sal_Int32(aValue.getInt())));
+                cpo::uno::Any aAny(getNumSpacingString(sal_Int32(aValue.getInt())));
                 mpGrabBagStack->appendElement(u"val"_ustr, aAny);
             }
             break;
@@ -747,7 +747,7 @@ void TextEffectsHandler::lcl_attribute(Id aName, const Value& aValue)
         case NS_ooxml::LN_CT_StyleSet_val:
         case NS_ooxml::LN_CT_OnOff_val:
             {
-                uno::Any aAny(getOnOffString(sal_Int32(aValue.getInt())));
+                cpo::uno::Any aAny(getOnOffString(sal_Int32(aValue.getInt())));
                 mpGrabBagStack->appendElement(u"val"_ustr, aAny);
             }
             break;

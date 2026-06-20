@@ -52,8 +52,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150197_predefinedNumbering)
 
     // The exact numbering style doesn't matter - just any non-bullet pre-defined numbering style.
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "Style", uno::Any(u"Numbering 123"_ustr) },
-        { "FamilyName", uno::Any(u"NumberingStyles"_ustr) },
+        { "Style", cpo::uno::Any(u"Numbering 123"_ustr) },
+        { "FamilyName", cpo::uno::Any(u"NumberingStyles"_ustr) },
     });
     dispatchCommand(mxComponent, u".uno:StyleApply"_ustr, aPropertyValues);
 
@@ -301,8 +301,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154703_framePr2)
         {
             // Fill the frame with a red background. It should be transferred on export to the paragraph
             uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
-            xFrame->setPropertyValue(u"FillColor"_ustr, uno::Any(COL_RED));
-            xFrame->setPropertyValue(u"FillTransparence"_ustr, uno::Any(static_cast<sal_Int32>(0)));
+            xFrame->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(COL_RED));
+            xFrame->setPropertyValue(u"FillTransparence"_ustr, cpo::uno::Any(static_cast<sal_Int32>(0)));
         }
     };
 

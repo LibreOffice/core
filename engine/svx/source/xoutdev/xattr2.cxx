@@ -19,7 +19,7 @@
 
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 #include <osl/diagnose.h>
 #include <o3tl/hash_combine.hxx>
@@ -141,14 +141,14 @@ bool XLineJointItem::GetPresentation( SfxItemPresentation /*ePres*/, MapUnit /*e
     return true;
 }
 
-bool XLineJointItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XLineJointItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     const css::drawing::LineJoint eJoint = GetValue();
     rVal <<= eJoint;
     return true;
 }
 
-bool XLineJointItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XLineJointItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     css::drawing::LineJoint eUnoJoint;
 
@@ -222,13 +222,13 @@ AffineMatrixItem* AffineMatrixItem::Clone( SfxItemPool* /*pPool*/ ) const
     return new AffineMatrixItem(*this);
 }
 
-bool AffineMatrixItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool AffineMatrixItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= maMatrix;
     return true;
 }
 
-bool AffineMatrixItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool AffineMatrixItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     if (rVal >>= maMatrix)
     {
@@ -277,14 +277,14 @@ bool XLineCapItem::GetPresentation( SfxItemPresentation /*ePres*/, MapUnit /*eCo
     return true;
 }
 
-bool XLineCapItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XLineCapItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     const css::drawing::LineCap eCap(GetValue());
     rVal <<= eCap;
     return true;
 }
 
-bool XLineCapItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XLineCapItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     css::drawing::LineCap eUnoCap;
 
@@ -385,14 +385,14 @@ bool XFillTransparenceItem::supportsHashCode() const
 }
 
 // virtual
-bool XFillTransparenceItem::QueryValue(css::uno::Any& rVal, sal_uInt8) const
+bool XFillTransparenceItem::QueryValue(cpo::uno::Any& rVal, sal_uInt8) const
 {
     rVal <<= m_nValue;
     return true;
 }
 
 // virtual
-bool XFillTransparenceItem::PutValue(const css::uno::Any& rVal, sal_uInt8)
+bool XFillTransparenceItem::PutValue(const cpo::uno::Any& rVal, sal_uInt8)
 {
     if (rVal >>= m_nValue)
     {

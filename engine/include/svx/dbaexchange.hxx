@@ -220,7 +220,7 @@ namespace svx
                 ODataAccessDescriptor&  getDescriptor()         { return m_aDescriptor; }
     protected:
         void    addCompatibleSelectionDescription(
-            const css::uno::Sequence< css::uno::Any >& _rSelRows
+            const css::uno::Sequence< cpo::uno::Any >& _rSelRows
         );
             // normally, a derived class could simply access getDescriptor[DataAccessDescriptorProperty::Selection] and place the sequence therein
             // but unfortunately, we have this damned compatible format, and this can't be accessed in

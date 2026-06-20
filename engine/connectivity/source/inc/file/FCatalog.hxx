@@ -49,7 +49,7 @@ namespace connectivity::file
         OFileCatalog(OConnection* _pCon);
         OConnection*    getConnection() { return m_pConnection; }
 
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
         // ::cppu::OComponentHelper
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
         virtual void SAL_CALL disposing() override;

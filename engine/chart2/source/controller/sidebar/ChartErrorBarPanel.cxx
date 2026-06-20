@@ -29,6 +29,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace chart::sidebar {
 
@@ -55,7 +56,7 @@ bool showPositiveError(const rtl::Reference<::chart::ChartModel>& xModel,
     if (!xPropSet.is())
         return false;
 
-    css::uno::Any aAny = xPropSet->getPropertyValue(u"ShowPositiveError"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"ShowPositiveError"_ustr);
 
     if (!aAny.hasValue())
         return false;
@@ -74,7 +75,7 @@ bool showNegativeError(const rtl::Reference<::chart::ChartModel>& xModel,
     if (!xPropSet.is())
         return false;
 
-    css::uno::Any aAny = xPropSet->getPropertyValue(u"ShowNegativeError"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"ShowNegativeError"_ustr);
 
     if (!aAny.hasValue())
         return false;
@@ -93,7 +94,7 @@ void setShowPositiveError(const rtl::Reference<::chart::ChartModel>& xModel,
     if (!xPropSet.is())
         return;
 
-    xPropSet->setPropertyValue(u"ShowPositiveError"_ustr, css::uno::Any(bShow));
+    xPropSet->setPropertyValue(u"ShowPositiveError"_ustr, cpo::uno::Any(bShow));
 }
 
 void setShowNegativeError(const rtl::Reference<::chart::ChartModel>& xModel,
@@ -105,7 +106,7 @@ void setShowNegativeError(const rtl::Reference<::chart::ChartModel>& xModel,
     if (!xPropSet.is())
         return;
 
-    xPropSet->setPropertyValue(u"ShowNegativeError"_ustr, css::uno::Any(bShow));
+    xPropSet->setPropertyValue(u"ShowNegativeError"_ustr, cpo::uno::Any(bShow));
 }
 
 struct ErrorBarTypeMap
@@ -133,7 +134,7 @@ sal_Int32 getTypePos(const rtl::Reference<::chart::ChartModel>& xModel,
     if (!xPropSet.is())
         return 0;
 
-    css::uno::Any aAny = xPropSet->getPropertyValue(u"ErrorBarStyle"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"ErrorBarStyle"_ustr);
 
     if (!aAny.hasValue())
         return 0;
@@ -166,7 +167,7 @@ void setTypePos(const rtl::Reference<::chart::ChartModel>& xModel,
             nApi = i.nApi;
     }
 
-    xPropSet->setPropertyValue(u"ErrorBarStyle"_ustr, css::uno::Any(nApi));
+    xPropSet->setPropertyValue(u"ErrorBarStyle"_ustr, cpo::uno::Any(nApi));
 }
 
 double getValue(const rtl::Reference<::chart::ChartModel>& xModel,
@@ -182,7 +183,7 @@ double getValue(const rtl::Reference<::chart::ChartModel>& xModel,
     if (eDir == ErrorBarDirection::NEGATIVE)
         aName = u"NegativeError"_ustr;
 
-    css::uno::Any aAny = xPropSet->getPropertyValue(aName);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(aName);
 
     if (!aAny.hasValue())
         return 0;
@@ -206,7 +207,7 @@ void setValue(const rtl::Reference<::chart::ChartModel>& xModel,
     if (eDir == ErrorBarDirection::NEGATIVE)
         aName = u"NegativeError"_ustr;
 
-    xPropSet->setPropertyValue(aName, css::uno::Any(nVal));
+    xPropSet->setPropertyValue(aName, cpo::uno::Any(nVal));
 }
 
 OUString getCID(const rtl::Reference<::chart::ChartModel>& xModel)
@@ -216,7 +217,7 @@ OUString getCID(const rtl::Reference<::chart::ChartModel>& xModel)
     if (!xSelectionSupplier.is())
         return OUString();
 
-    uno::Any aAny = xSelectionSupplier->getSelection();
+    cpo::uno::Any aAny = xSelectionSupplier->getSelection();
     assert(aAny.hasValue());
     OUString aCID;
     aAny >>= aCID;

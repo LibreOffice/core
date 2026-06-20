@@ -58,7 +58,7 @@ public:
     /** @descr  Abstract interface of a method for setting a variables
             value to that of the property.
     */
-    virtual void    SetValue    (const css::uno::Any & rValue) = 0;
+    virtual void    SetValue    (const cpo::uno::Any & rValue) = 0;
 
     const OUString msName;
 };
@@ -79,7 +79,7 @@ public:
     /** descr   Set the given value inside an Any to the variable referenced
         by the data member.
     */
-    virtual void    SetValue    (const css::uno::Any & rValue) override
+    virtual void    SetValue    (const cpo::uno::Any & rValue) override
     {
         rValue >>= mrValue;
     }
@@ -205,7 +205,7 @@ bool    MultiPropertySetHandler::MultiGet   (const css::uno::Sequence<
         try
         {
             int i = 0;
-            css::uno::Sequence< css::uno::Any> aValueList =
+            css::uno::Sequence< cpo::uno::Any> aValueList =
                 xMultiSet->getPropertyValues (rNameList);
             for (auto& rProperty : aPropertyList)
                 rProperty.second->SetValue (aValueList[i++]);

@@ -46,17 +46,17 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // css::awt::XRequestCallback:
-    virtual void SAL_CALL addCallback(const css::uno::Reference< css::awt::XCallback > & xCallback, const css::uno::Any & aData) override;
+    virtual void SAL_CALL addCallback(const css::uno::Reference< css::awt::XCallback > & xCallback, const cpo::uno::Any & aData) override;
 
 private:
 
     struct CallbackData
     {
-        CallbackData( css::uno::Reference< css::awt::XCallback > _xCallback, css::uno::Any aAny ) :
+        CallbackData( css::uno::Reference< css::awt::XCallback > _xCallback, cpo::uno::Any aAny ) :
             xCallback(std::move( _xCallback )), aData(std::move( aAny )) {}
 
         css::uno::Reference< css::awt::XCallback > xCallback;
-        css::uno::Any                              aData;
+        cpo::uno::Any                              aData;
     };
 
     DECL_STATIC_LINK( AsyncCallback, Notify_Impl, void*, void );
@@ -81,7 +81,7 @@ css::uno::Sequence< OUString > SAL_CALL AsyncCallback::getSupportedServiceNames(
 }
 
 // css::awt::XRequestCallback:
-void SAL_CALL AsyncCallback::addCallback(const css::uno::Reference< css::awt::XCallback > & xCallback, const css::uno::Any & aData)
+void SAL_CALL AsyncCallback::addCallback(const css::uno::Reference< css::awt::XCallback > & xCallback, const cpo::uno::Any & aData)
 {
     if ( Application::IsInMain() )
     {
@@ -114,7 +114,7 @@ IMPL_STATIC_LINK( AsyncCallback, Notify_Impl, void*, p, void )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_awt_comp_AsyncCallback_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new AsyncCallback());
 }

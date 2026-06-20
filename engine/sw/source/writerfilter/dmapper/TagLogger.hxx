@@ -59,7 +59,7 @@ namespace writerfilter
         attribute(const std::string & name, T value)
         { return attribute(name, static_cast<sal_uInt32>(value)); }
         void attribute(const std::string & name, float value);
-        void attribute(const std::string & name, const css::uno::Any& aAny);
+        void attribute(const std::string & name, const cpo::uno::Any& aAny);
         void chars(const std::string & chars);
         void chars(std::u16string_view chars);
         void endElement();

@@ -34,6 +34,7 @@
 
 using namespace sfx2;
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::ui;
 using namespace css;
 

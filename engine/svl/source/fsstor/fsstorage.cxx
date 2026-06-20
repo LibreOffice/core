@@ -195,9 +195,9 @@ void FSStorage::CopyContentToStorage_Impl(ucbhelper::Content& rContent,
 
 //  XInterface
 
-uno::Any SAL_CALL FSStorage::queryInterface( const uno::Type& rType )
+cpo::uno::Any SAL_CALL FSStorage::queryInterface( const uno::Type& rType )
 {
-    uno::Any aReturn = ::cppu::queryInterface
+    cpo::uno::Any aReturn = ::cppu::queryInterface
                 (   rType
                 ,   static_cast<lang::XTypeProvider*> ( this )
                 ,   static_cast<embed::XStorage*> ( this )
@@ -275,7 +275,7 @@ void SAL_CALL FSStorage::copyToStorage( const uno::Reference< embed::XStorage >&
     }
     catch( uno::Exception& )
     {
-        uno::Any aCaught( ::cppu::getCaughtException() );
+        cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException(u"Can't copy raw stream"_ustr,
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
@@ -371,7 +371,7 @@ uno::Reference< io::XStream > FSStorage::openStreamElementImpl(
     }
     catch( uno::Exception& )
     {
-        uno::Any aCaught( ::cppu::getCaughtException() );
+        cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException(u"Can't copy raw stream"_ustr,
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
@@ -461,7 +461,7 @@ uno::Reference< embed::XStorage > FSStorage::openStorageElementImpl(
     }
     catch( uno::Exception& )
     {
-        uno::Any aCaught( ::cppu::getCaughtException() );
+        cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException(u"Can't copy raw stream"_ustr,
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
@@ -518,7 +518,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::cloneStreamElement( const OUSt
     }
     catch( uno::Exception& )
     {
-        uno::Any aCaught( ::cppu::getCaughtException() );
+        cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException(u"Can't copy raw stream"_ustr,
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
@@ -641,7 +641,7 @@ void SAL_CALL FSStorage::renameElement( const OUString& aElementName, const OUSt
     }
     catch( uno::Exception& )
     {
-        uno::Any aCaught( ::cppu::getCaughtException() );
+        cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException(u"Can't copy raw stream"_ustr,
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
@@ -711,7 +711,7 @@ void FSStorage::copyElementToImpl(std::unique_lock<std::mutex>& /*rGuard*/,
     }
     catch( uno::Exception& )
     {
-        uno::Any aCaught( ::cppu::getCaughtException() );
+        cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException(u"Can't copy raw stream"_ustr,
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
@@ -741,14 +741,14 @@ void SAL_CALL FSStorage::moveElementTo( const OUString& aElementName,
 
 //  XNameAccess
 
-uno::Any SAL_CALL FSStorage::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL FSStorage::getByName( const OUString& aName )
 {
     std::unique_lock aGuard( m_aMutex );
 
     if ( aName.isEmpty() )
         throw lang::IllegalArgumentException();
 
-    uno::Any aResult;
+    cpo::uno::Any aResult;
     try
     {
         INetURLObject aURL( m_aURL );
@@ -780,7 +780,7 @@ uno::Any SAL_CALL FSStorage::getByName( const OUString& aName )
     }
     catch (const uno::Exception&)
     {
-        uno::Any aCaught( ::cppu::getCaughtException() );
+        cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         throw lang::WrappedTargetException( u"Can not open element!"_ustr,
                                             getXWeak(),
                                             aCaught );
@@ -820,7 +820,7 @@ uno::Sequence< OUString > SAL_CALL FSStorage::getElementNames()
             OSL_FAIL( "The folder does not exist!" );
         else
         {
-            uno::Any aCaught( ::cppu::getCaughtException() );
+            cpo::uno::Any aCaught( ::cppu::getCaughtException() );
             throw lang::WrappedTargetRuntimeException( u"Can not open storage!"_ustr,
                                             getXWeak(),
                                             aCaught );
@@ -832,7 +832,7 @@ uno::Sequence< OUString > SAL_CALL FSStorage::getElementNames()
     }
     catch (const uno::Exception&)
     {
-        uno::Any aCaught( ::cppu::getCaughtException() );
+        cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException( u"Can not open storage!"_ustr,
                                             getXWeak(),
                                             aCaught );
@@ -879,7 +879,7 @@ bool SAL_CALL FSStorage::hasElements()
     }
     catch (const uno::Exception& ex)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException( ex.Message,
                         nullptr, anyEx );
     }
@@ -926,7 +926,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL FSStorage::getPropertySetInfo
 }
 
 
-void SAL_CALL FSStorage::setPropertyValue( const OUString& aPropertyName, const uno::Any& )
+void SAL_CALL FSStorage::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& )
 {
     if ( aPropertyName == "URL" || aPropertyName == "OpenMode" )
         throw beans::PropertyVetoException(); // TODO
@@ -935,14 +935,14 @@ void SAL_CALL FSStorage::setPropertyValue( const OUString& aPropertyName, const 
 }
 
 
-uno::Any SAL_CALL FSStorage::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL FSStorage::getPropertyValue( const OUString& aPropertyName )
 {
     std::unique_lock aGuard( m_aMutex );
 
     if ( aPropertyName == "URL" )
-        return uno::Any( m_aURL );
+        return cpo::uno::Any( m_aURL );
     else if ( aPropertyName == "OpenMode" )
-        return uno::Any( m_nMode );
+        return cpo::uno::Any( m_nMode );
 
     throw beans::UnknownPropertyException(aPropertyName); // TODO
 }
@@ -1075,7 +1075,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
     }
     catch( uno::Exception& )
     {
-        uno::Any aCaught( ::cppu::getCaughtException() );
+        cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException(u"Can't copy raw stream"_ustr,
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );

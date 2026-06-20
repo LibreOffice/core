@@ -42,7 +42,7 @@ public:
    // Attributes
     virtual sal_Int32 SAL_CALL getValue() override;
     virtual void SAL_CALL setValue( sal_Int32 _value ) override;
-    virtual css::uno::Any SAL_CALL Pages( const css::uno::Any& index ) override;
+    virtual cpo::uno::Any SAL_CALL Pages( const cpo::uno::Any& index ) override;
 
     //XHelperInterface
     virtual OUString getServiceImplName() override;

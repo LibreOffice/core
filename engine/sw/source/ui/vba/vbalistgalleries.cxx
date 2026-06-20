@@ -37,10 +37,10 @@ public:
         return ( m_nIndex <= m_pListGalleries->getCount() );
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         if ( m_nIndex <= m_pListGalleries->getCount() )
-            return m_pListGalleries->Item( uno::Any( m_nIndex++ ), uno::Any() );
+            return m_pListGalleries->Item( cpo::uno::Any( m_nIndex++ ), cpo::uno::Any() );
         throw container::NoSuchElementException();
     }
 };
@@ -57,7 +57,7 @@ SwVbaListGalleries::SwVbaListGalleries( const uno::Reference< XHelperInterface >
     return 3;
 }
 
-uno::Any SAL_CALL SwVbaListGalleries::Item( const uno::Any& Index1, const uno::Any& /*not processed in this base class*/ )
+cpo::uno::Any SAL_CALL SwVbaListGalleries::Item( const cpo::uno::Any& Index1, const cpo::uno::Any& /*not processed in this base class*/ )
 {
     sal_Int32 nIndex = 0;
     if( Index1 >>= nIndex )
@@ -65,7 +65,7 @@ uno::Any SAL_CALL SwVbaListGalleries::Item( const uno::Any& Index1, const uno::A
         if( nIndex == word::WdListGalleryType::wdBulletGallery
             || nIndex == word::WdListGalleryType::wdNumberGallery
             || nIndex == word::WdListGalleryType::wdOutlineNumberGallery )
-            return uno::Any( uno::Reference< word::XListGallery >( new SwVbaListGallery( this, mxContext, mxTextDocument, nIndex ) ) );
+            return cpo::uno::Any( uno::Reference< word::XListGallery >( new SwVbaListGallery( this, mxContext, mxTextDocument, nIndex ) ) );
     }
     throw  uno::RuntimeException(u"Index out of bounds"_ustr );
 }
@@ -83,8 +83,8 @@ SwVbaListGalleries::createEnumeration()
     return new ListGalleriesEnumWrapper( this );
 }
 
-uno::Any
-SwVbaListGalleries::createCollectionObject( const css::uno::Any& aSource )
+cpo::uno::Any
+SwVbaListGalleries::createCollectionObject( const cpo::uno::Any& aSource )
 {
     return aSource;
 }

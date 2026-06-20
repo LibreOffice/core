@@ -31,7 +31,7 @@ public:
     rtl::Reference<ConfigurationListener> mxListener;
 
     virtual ~ConfigurationListenerPropertyBase() {}
-    virtual void setProperty(const css::uno::Any &aProperty) = 0;
+    virtual void setProperty(const cpo::uno::Any &aProperty) = 0;
     void dispose() { mxListener.clear(); }
 };
 
@@ -40,7 +40,7 @@ template< typename uno_type > class ConfigurationListenerProperty : public Confi
 {
     uno_type maValue;
 protected:
-    virtual void setProperty(const css::uno::Any &aProperty) override
+    virtual void setProperty(const cpo::uno::Any &aProperty) override
     {
         aProperty >>= maValue;
     }

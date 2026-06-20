@@ -34,7 +34,7 @@
 #include <unotools/datetime.hxx>
 
 using xforms::Convert;
-using com::sun::star::uno::Any;
+using cpo::uno::Any;
 using namespace utl;
 
 Convert::Convert()
@@ -288,17 +288,17 @@ css::uno::Sequence<css::uno::Type> Convert::getTypes() const
     return comphelper::mapKeysToSequence( maMap );
 }
 
-OUString Convert::toXSD( const css::uno::Any& rAny )
+OUString Convert::toXSD( const cpo::uno::Any& rAny )
 {
     Map_t::iterator aIter = maMap.find( rAny.getValueType() );
     return aIter != maMap.end() ? aIter->second.first( rAny ) : OUString();
 }
 
-css::uno::Any Convert::toAny( const OUString& rValue,
+cpo::uno::Any Convert::toAny( const OUString& rValue,
                               const css::uno::Type& rType )
 {
     Map_t::iterator aIter = maMap.find( rType );
-    return aIter != maMap.end() ? aIter->second.second( rValue ) : css::uno::Any();
+    return aIter != maMap.end() ? aIter->second.second( rValue ) : cpo::uno::Any();
 }
 
 

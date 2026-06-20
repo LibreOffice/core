@@ -110,9 +110,9 @@ sal_Int64 SAL_CALL Seekable::getLength()
     return nSize;
 }
 
-css::uno::Any Seekable::queryInterface( const css::uno::Type &type )
+cpo::uno::Any Seekable::queryInterface( const css::uno::Type &type )
 {
-    css::uno::Any aRet = ::cppu::queryInterface ( type,
+    cpo::uno::Any aRet = ::cppu::queryInterface ( type,
         static_cast< XSeekable * >( this ) );
 
     if (!aRet.hasValue() && g_seekable_can_truncate(mpStream))

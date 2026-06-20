@@ -36,7 +36,7 @@ using namespace ::com::sun::star;
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 
 namespace
 {
@@ -111,7 +111,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL UpDownBarWrapper::getProperty
     return xPropertySetInfo;
 }
 
-void SAL_CALL UpDownBarWrapper::setPropertyValue( const OUString& rPropertyName, const uno::Any& rValue )
+void SAL_CALL UpDownBarWrapper::setPropertyValue( const OUString& rPropertyName, const cpo::uno::Any& rValue )
 {
     Reference< beans::XPropertySet > xPropSet;
 
@@ -127,7 +127,7 @@ void SAL_CALL UpDownBarWrapper::setPropertyValue( const OUString& rPropertyName,
     if(xPropSet.is())
         xPropSet->setPropertyValue( rPropertyName, rValue );
 }
-uno::Any SAL_CALL UpDownBarWrapper::getPropertyValue( const OUString& rPropertyName )
+cpo::uno::Any SAL_CALL UpDownBarWrapper::getPropertyValue( const OUString& rPropertyName )
 {
     Any aRet;
 
@@ -166,7 +166,7 @@ void SAL_CALL UpDownBarWrapper::removeVetoableChangeListener( const OUString& /*
 
 //XMultiPropertySet
 //getPropertySetInfo() already declared in XPropertySet
-void SAL_CALL UpDownBarWrapper::setPropertyValues( const uno::Sequence< OUString >& rNameSeq, const uno::Sequence< uno::Any >& rValueSeq )
+void SAL_CALL UpDownBarWrapper::setPropertyValues( const uno::Sequence< OUString >& rNameSeq, const uno::Sequence< cpo::uno::Any >& rValueSeq )
 {
     sal_Int32 nMinCount = std::min( rValueSeq.getLength(), rNameSeq.getLength() );
     for(sal_Int32 nN=0; nN<nMinCount; nN++)
@@ -183,7 +183,7 @@ void SAL_CALL UpDownBarWrapper::setPropertyValues( const uno::Sequence< OUString
     }
     //todo: store unknown properties elsewhere
 }
-uno::Sequence< uno::Any > SAL_CALL UpDownBarWrapper::getPropertyValues( const uno::Sequence< OUString >& rNameSeq )
+uno::Sequence< cpo::uno::Any > SAL_CALL UpDownBarWrapper::getPropertyValues( const uno::Sequence< OUString >& rNameSeq )
 {
     Sequence< Any > aRetSeq;
     if( rNameSeq.hasElements() )
@@ -214,8 +214,8 @@ void SAL_CALL UpDownBarWrapper::firePropertiesChangeEvent( const uno::Sequence< 
 //XPropertyState
 beans::PropertyState SAL_CALL UpDownBarWrapper::getPropertyState( const OUString& rPropertyName )
 {
-    uno::Any aDefault( getPropertyDefault( rPropertyName ) );
-    uno::Any aValue( getPropertyValue( rPropertyName ) );
+    cpo::uno::Any aDefault( getPropertyDefault( rPropertyName ) );
+    cpo::uno::Any aValue( getPropertyValue( rPropertyName ) );
 
     if( aDefault == aValue )
         return beans::PropertyState_DEFAULT_VALUE;
@@ -242,7 +242,7 @@ void SAL_CALL UpDownBarWrapper::setPropertyToDefault( const OUString& rPropertyN
     setPropertyValue( rPropertyName, getPropertyDefault(rPropertyName) );
 }
 
-uno::Any SAL_CALL UpDownBarWrapper::getPropertyDefault( const OUString& rPropertyName )
+cpo::uno::Any SAL_CALL UpDownBarWrapper::getPropertyDefault( const OUString& rPropertyName )
 {
     static const ::chart::tPropertyValueMap aStaticDefaults = []()
         {
@@ -253,7 +253,7 @@ uno::Any SAL_CALL UpDownBarWrapper::getPropertyDefault( const OUString& rPropert
         }();
     tPropertyValueMap::const_iterator aFound( aStaticDefaults.find( StaticUpDownBarWrapperInfoHelper().getHandleByName( rPropertyName ) ) );
     if( aFound == aStaticDefaults.end() )
-        return uno::Any();
+        return cpo::uno::Any();
     return (*aFound).second;
 }
 
@@ -274,7 +274,7 @@ void SAL_CALL UpDownBarWrapper::setPropertiesToDefault( const uno::Sequence< OUS
         setPropertyToDefault( s );
     }
 }
-uno::Sequence< uno::Any > SAL_CALL UpDownBarWrapper::getPropertyDefaults( const uno::Sequence< OUString >& rNameSeq )
+uno::Sequence< cpo::uno::Any > SAL_CALL UpDownBarWrapper::getPropertyDefaults( const uno::Sequence< OUString >& rNameSeq )
 {
     Sequence< Any > aRetSeq;
     if( rNameSeq.hasElements() )

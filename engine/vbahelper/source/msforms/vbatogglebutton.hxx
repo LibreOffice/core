@@ -33,8 +33,8 @@ public:
     ScVbaToggleButton( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper );
     virtual ~ScVbaToggleButton() override;
    // Attributes
-    virtual css::uno::Any SAL_CALL getValue() override;
-    virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+    virtual cpo::uno::Any SAL_CALL getValue() override;
+    virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
     virtual OUString SAL_CALL getCaption() override;
     virtual void SAL_CALL setCaption( const OUString& _caption ) override;
     virtual bool SAL_CALL getAutoSize() override;

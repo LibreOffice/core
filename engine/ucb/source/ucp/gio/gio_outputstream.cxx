@@ -65,9 +65,9 @@ void SAL_CALL OutputStream::closeOutput()
         g_output_stream_close(G_OUTPUT_STREAM(mpStream), nullptr, nullptr);
 }
 
-css::uno::Any OutputStream::queryInterface( const css::uno::Type &type )
+cpo::uno::Any OutputStream::queryInterface( const css::uno::Type &type )
 {
-    css::uno::Any aRet = ::cppu::queryInterface ( type,
+    cpo::uno::Any aRet = ::cppu::queryInterface ( type,
         static_cast< XOutputStream * >( this ) );
 
     return aRet.hasValue() ? aRet : Seekable::queryInterface( type );

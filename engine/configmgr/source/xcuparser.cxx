@@ -22,7 +22,7 @@
 #include <algorithm>
 #include <cassert>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
@@ -429,7 +429,7 @@ void XcuParser::handlePropValue(
                 "xsi:nil and oor:external attributes for prop in " +
                 reader.getUrl());
         }
-        prop->setValue(valueParser_.getLayer(), css::uno::Any(), valueParser_.getLayer() == Data::NO_LAYER);
+        prop->setValue(valueParser_.getLayer(), cpo::uno::Any(), valueParser_.getLayer() == Data::NO_LAYER);
         state_.push(State::Ignore(false));
     } else if (external.isEmpty()) {
         valueParser_.separator_ = separator;
@@ -512,11 +512,11 @@ void XcuParser::handleLocpropValue(
             if (nil) {
                 if (i == members.end()) {
                     members[name] = new LocalizedValueNode(
-                        valueParser_.getLayer(), css::uno::Any());
+                        valueParser_.getLayer(), cpo::uno::Any());
                 } else {
                     static_cast< LocalizedValueNode * >(
                         i->second.get())->setValue(
-                            valueParser_.getLayer(), css::uno::Any(), valueParser_.getLayer() == Data::NO_LAYER);
+                            valueParser_.getLayer(), cpo::uno::Any(), valueParser_.getLayer() == Data::NO_LAYER);
                 }
                 state_.push(State::Ignore(true));
             } else {
@@ -631,7 +631,7 @@ void XcuParser::handleUnknownGroupProp(
             valueParser_.type_ = type;
             rtl::Reference< Node > prop(
                 new PropertyNode(
-                    valueParser_.getLayer(), TYPE_ANY, true, css::uno::Any(),
+                    valueParser_.getLayer(), TYPE_ANY, true, cpo::uno::Any(),
                     true));
             if (finalized) {
                 prop->setFinalized(valueParser_.getLayer());

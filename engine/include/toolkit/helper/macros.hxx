@@ -35,7 +35,7 @@ class ClassName final : public ListenerMultiplexerBase<InterfaceName>, public In
 { \
 public: \
     ClassName( ::cppu::OWeakObject& rSource ); \
-    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override; \
+    cpo::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override; \
     void                        SAL_CALL acquire() noexcept override; \
     void                        SAL_CALL release() noexcept override; \
     void                        SAL_CALL disposing( const css::lang::EventObject& Source ) override;
@@ -46,7 +46,7 @@ class TOOLKIT_DLLPUBLIC ClassName final : public ListenerMultiplexerBase<Interfa
 { \
 public: \
     ClassName( ::cppu::OWeakObject& rSource ); \
-    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override; \
+    cpo::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override; \
     void                        SAL_CALL acquire() noexcept override; \
     void                        SAL_CALL release() noexcept override; \
     void                        SAL_CALL disposing( const css::lang::EventObject& Source ) override;
@@ -63,9 +63,9 @@ ClassName::ClassName( ::cppu::OWeakObject& rSource ) \
 } \
 void SAL_CALL ClassName::acquire() noexcept { ListenerMultiplexerBase::acquire(); } \
 void SAL_CALL ClassName::release() noexcept { ListenerMultiplexerBase::release(); } \
-css::uno::Any ClassName::queryInterface( const css::uno::Type & rType ) \
+cpo::uno::Any ClassName::queryInterface( const css::uno::Type & rType ) \
 { \
-    css::uno::Any aRet = ::cppu::queryInterface( rType, \
+    cpo::uno::Any aRet = ::cppu::queryInterface( rType, \
                                         (static_cast< css::lang::XEventListener* >(this)), \
                                         (static_cast< InterfaceName* >(this)) ); \
     return (aRet.hasValue() ? aRet : ListenerMultiplexerBase::queryInterface( rType )); \
@@ -77,7 +77,7 @@ void ClassName::disposing( const css::lang::EventObject& ) \
 
 #if OSL_DEBUG_LEVEL > 0
     #define DISPLAY_EXCEPTION( ClassName, MethodName )    \
-        css::uno::Any ex( cppu::getCaughtException() ); \
+        cpo::uno::Any ex( cppu::getCaughtException() ); \
         SAL_WARN( "toolkit", #ClassName "::" #MethodName ": caught an exception! " << exceptionToString(ex));
 #else
     #define DISPLAY_EXCEPTION( ClassName, MethodName )

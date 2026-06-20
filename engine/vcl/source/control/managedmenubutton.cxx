@@ -71,10 +71,10 @@ void ManagedMenuButton::PrepareExecute()
     catch( const css::uno::Exception& )
     {}
 
-    css::uno::Sequence<css::uno::Any> aArgs {
-        css::uno::Any(comphelper::makePropertyValue(u"ModuleIdentifier"_ustr, aModuleName)),
-        css::uno::Any(comphelper::makePropertyValue(u"Frame"_ustr, css::uno::Any(xFrame))),
-        css::uno::Any(comphelper::makePropertyValue(u"InToolbar"_ustr, css::uno::Any(true)))
+    css::uno::Sequence<cpo::uno::Any> aArgs {
+        cpo::uno::Any(comphelper::makePropertyValue(u"ModuleIdentifier"_ustr, aModuleName)),
+        cpo::uno::Any(comphelper::makePropertyValue(u"Frame"_ustr, cpo::uno::Any(xFrame))),
+        cpo::uno::Any(comphelper::makePropertyValue(u"InToolbar"_ustr, cpo::uno::Any(true)))
     };
 
     const OUString aCommand(GetCommand());

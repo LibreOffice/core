@@ -53,6 +53,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
@@ -65,7 +66,7 @@ namespace scripting_protocolhandler
 {
 
 void SAL_CALL ScriptProtocolHandler::initialize(
-    const css::uno::Sequence < css::uno::Any >& aArguments )
+    const css::uno::Sequence < cpo::uno::Any >& aArguments )
 {
     if ( m_bInitialised )
     {
@@ -381,7 +382,7 @@ void ScriptProtocolHandler::createScriptProvider()
     }
     catch ( const Exception & e )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
             "ScriptProtocolHandler::createScriptProvider: " + e.Message,
             nullptr, anyEx );
@@ -417,7 +418,7 @@ Sequence< OUString > SAL_CALL ScriptProtocolHandler::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 scripting_ScriptProtocolHandler_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ScriptProtocolHandler(context));
 }

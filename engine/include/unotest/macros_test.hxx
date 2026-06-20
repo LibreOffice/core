@@ -20,7 +20,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 #include <utility>
 
 struct TestMacroInfo
@@ -59,12 +59,12 @@ public:
                     const css::uno::Sequence<css::beans::PropertyValue>& rExtra_args
                     = css::uno::Sequence<css::beans::PropertyValue>());
 
-    static css::uno::Any
+    static cpo::uno::Any
     dispatchCommand(const css::uno::Reference<css::lang::XComponent>& xComponent,
                     const OUString& rCommand,
                     const css::uno::Sequence<css::beans::PropertyValue>& rPropertyValues);
 
-    static css::uno::Any
+    static cpo::uno::Any
     queryDispatchStatus(css::uno::Reference<css::lang::XComponent> const& xComponent,
                         css::uno::Reference<css::uno::XComponentContext> const& xContext,
                         OUString const& rURL);

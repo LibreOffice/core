@@ -1061,7 +1061,7 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
                 css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier( xChartController, uno::UNO_QUERY);
                 if (xSelectionSupplier.is())
                 {
-                    uno::Any aSel = xSelectionSupplier->getSelection();
+                    cpo::uno::Any aSel = xSelectionSupplier->getSelection();
                     OUString aValue;
                     if (aSel >>= aValue)
                     {

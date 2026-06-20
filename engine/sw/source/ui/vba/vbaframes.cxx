@@ -54,12 +54,12 @@ public:
         return ( mnCurrentPos < mxIndexAccess->getCount() );
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         if ( !hasMoreElements() )
             throw container::NoSuchElementException();
         uno::Reference< text::XTextFrame > xTextFrame( mxIndexAccess->getByIndex( mnCurrentPos++ ), uno::UNO_QUERY_THROW );
-        return uno::Any( uno::Reference< word::XFrame > ( new SwVbaFrame( mxParent, mxContext, mxModel, xTextFrame ) ) );
+        return cpo::uno::Any( uno::Reference< word::XFrame > ( new SwVbaFrame( mxParent, mxContext, mxModel, xTextFrame ) ) );
     }
 
 };
@@ -87,11 +87,11 @@ SwVbaFrames::createEnumeration()
     return new FramesEnumeration( this, mxContext,m_xIndexAccess, mxModel );
 }
 
-uno::Any
-SwVbaFrames::createCollectionObject( const css::uno::Any& aSource )
+cpo::uno::Any
+SwVbaFrames::createCollectionObject( const cpo::uno::Any& aSource )
 {
     uno::Reference< text::XTextFrame > xTextFrame( aSource, uno::UNO_QUERY_THROW );
-    return uno::Any( uno::Reference< word::XFrame > ( new SwVbaFrame( this, mxContext, mxModel, xTextFrame ) ) );
+    return cpo::uno::Any( uno::Reference< word::XFrame > ( new SwVbaFrame( this, mxContext, mxModel, xTextFrame ) ) );
 }
 
 OUString

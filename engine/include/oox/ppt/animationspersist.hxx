@@ -25,7 +25,7 @@
 #include <vector>
 #include <memory>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/ppt/slidepersist.hxx>
 #include <rtl/ustring.hxx>
@@ -48,7 +48,7 @@ namespace oox::ppt {
         NP_SIZE_
     };
 
-    typedef std::array< css::uno::Any, NP_SIZE_ > NodePropertyMap;
+    typedef std::array< cpo::uno::Any, NP_SIZE_ > NodePropertyMap;
 
 
     /** data for CT_TLShapeTargetElement */
@@ -60,7 +60,7 @@ namespace oox::ppt {
         {
             maRange.start = maRange.end = 0;
         }
-        void convert( css::uno::Any & aAny, sal_Int16 & rSubType ) const;
+        void convert( cpo::uno::Any & aAny, sal_Int16 & rSubType ) const;
 
         sal_Int32               mnType;
         sal_Int32               mnRangeType;
@@ -76,7 +76,7 @@ namespace oox::ppt {
             : mnType( 0 )
             {}
         /** convert to a set of properties */
-        css::uno::Any convert(const SlidePersistPtr & pSlide, sal_Int16 & nSubType) const;
+        cpo::uno::Any convert(const SlidePersistPtr & pSlide, sal_Int16 & nSubType) const;
 
         sal_Int32                  mnType;
         OUString                   msValue;
@@ -96,12 +96,12 @@ namespace oox::ppt {
             : mnType( 0 )
             {}
 
-        css::uno::Any convert(const SlidePersistPtr & pSlide) const;
-        static css::uno::Any convertList(const SlidePersistPtr & pSlide, const AnimationConditionList & l);
+        cpo::uno::Any convert(const SlidePersistPtr & pSlide) const;
+        static cpo::uno::Any convertList(const SlidePersistPtr & pSlide, const AnimationConditionList & l);
 
         AnimTargetElementPtr &     getTarget()
             { if(!mpTarget) mpTarget = std::make_shared<AnimTargetElement>(); return mpTarget; }
-        css::uno::Any              maValue;
+        cpo::uno::Any              maValue;
         sal_Int32                  mnType;
     private:
         AnimTargetElementPtr       mpTarget;
@@ -112,7 +112,7 @@ namespace oox::ppt {
     {
         OUString            msFormula;
         OUString            msTime;
-        css::uno::Any       maValue;
+        cpo::uno::Any       maValue;
     };
 
     typedef ::std::vector< TimeAnimationValue > TimeAnimationValueList;

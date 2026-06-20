@@ -77,7 +77,7 @@ public:
 
     /* XInitialization */
     virtual void SAL_CALL initialize(
-        const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+        const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     /* XServiceInfo */
     virtual OUString SAL_CALL getImplementationName(  ) override;

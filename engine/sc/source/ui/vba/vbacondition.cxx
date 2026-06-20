@@ -41,7 +41,8 @@ ScVbaCondition<Ifc...>::ScVbaCondition(const uno::Reference<XHelperInterface>& x
 }
 
 template <typename... Ifc>
-sheet::ConditionOperator ScVbaCondition<Ifc...>::retrieveAPIOperator(const uno::Any& _aOperator)
+sheet::ConditionOperator
+ScVbaCondition<Ifc...>::retrieveAPIOperator(const cpo::uno::Any& _aOperator)
 {
     sheet::ConditionOperator aRetAPIOperator = sheet::ConditionOperator_NONE;
     sal_Int32 nOperator = 0;

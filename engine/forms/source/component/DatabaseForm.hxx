@@ -157,8 +157,8 @@ class ODatabaseForm :public OFormComponents
     ::comphelper::OInterfaceContainerHelper3<css::sdb::XSQLErrorListener>   m_aErrorListeners;
     ::comphelper::OInterfaceContainerHelper3<css::form::XResetListener> m_aResetListeners;
     ::osl::Mutex                        m_aResetSafety;
-    css::uno::Any                       m_aCycle;
-    css::uno::Any                       m_aIgnoreResult; // set when we are a subform and our master form positioned on a new row
+    cpo::uno::Any                       m_aCycle;
+    cpo::uno::Any                       m_aIgnoreResult; // set when we are a subform and our master form positioned on a new row
     css::uno::Sequence< OUString >      m_aMasterFields;
     css::uno::Sequence< OUString >      m_aDetailFields;
 
@@ -188,10 +188,10 @@ class ODatabaseForm :public OFormComponents
 //  </overwritten_properties>
 
 //  <properties>
-    css::uno::Any        m_aControlBorderColorFocus;
-    css::uno::Any        m_aControlBorderColorMouse;
-    css::uno::Any        m_aControlBorderColorInvalid;
-    css::uno::Any        m_aDynamicControlBorder;
+    cpo::uno::Any        m_aControlBorderColorFocus;
+    cpo::uno::Any        m_aControlBorderColorMouse;
+    cpo::uno::Any        m_aControlBorderColorInvalid;
+    cpo::uno::Any        m_aDynamicControlBorder;
     OUString             m_sName;
     OUString             m_aTargetURL;
     OUString             m_aTargetFrame;
@@ -214,7 +214,7 @@ public:
 
     // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(ODatabaseForm, OFormComponents)
-    virtual css::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type> SAL_CALL getTypes(  ) override;
@@ -226,12 +226,12 @@ public:
     // property handling
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
-    virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle ) const override;
-    virtual bool SAL_CALL convertFastPropertyValue(css::uno::Any& rConvertedValue, css::uno::Any& rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const css::uno::Any& rValue) override;
+    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
+    virtual bool SAL_CALL convertFastPropertyValue(cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
 
-    css::uno::Any  SAL_CALL getFastPropertyValue( sal_Int32 nHandle ) override;
-    void fire( sal_Int32 * pnHandles, const css::uno::Any * pNewValues, const css::uno::Any * pOldValues, sal_Int32 nCount );
+    cpo::uno::Any  SAL_CALL getFastPropertyValue( sal_Int32 nHandle ) override;
+    void fire( sal_Int32 * pnHandles, const cpo::uno::Any * pNewValues, const cpo::uno::Any * pOldValues, sal_Int32 nCount );
 
     // IPropertyBagHelperContext
     virtual ::osl::Mutex&   getMutex() override;
@@ -245,7 +245,7 @@ public:
     // css::beans::XPropertyState
     virtual css::beans::PropertyState getPropertyStateByHandle(sal_Int32 nHandle) override;
     virtual void setPropertyToDefaultByHandle(sal_Int32 nHandle) override;
-    virtual css::uno::Any getPropertyDefaultByHandle(sal_Int32 nHandle) const override;
+    virtual cpo::uno::Any getPropertyDefaultByHandle(sal_Int32 nHandle) const override;
 
     // css::sdbc::XSQLErrorBroadcaster
     virtual void SAL_CALL addSQLErrorListener(const css::uno::Reference< css::sdb::XSQLErrorListener>& _rxListener) override;
@@ -362,7 +362,7 @@ public:
     virtual void SAL_CALL moveToCurrentRow() override;
 
     // css::sdbcx::XDeleteRows
-    virtual css::uno::Sequence< sal_Int32 > SAL_CALL deleteRows(const css::uno::Sequence< css::uno::Any>& rows) override;
+    virtual css::uno::Sequence< sal_Int32 > SAL_CALL deleteRows(const css::uno::Sequence< cpo::uno::Any>& rows) override;
 
     // css::lang::XServiceInfo
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
@@ -394,8 +394,8 @@ public:
     virtual void SAL_CALL setTimestamp(sal_Int32 parameterIndex, const css::util::DateTime& x) override;
     virtual void SAL_CALL setBinaryStream(sal_Int32 parameterIndex, const css::uno::Reference< css::io::XInputStream>& x, sal_Int32 length) override;
     virtual void SAL_CALL setCharacterStream(sal_Int32 parameterIndex, const css::uno::Reference< css::io::XInputStream>& x, sal_Int32 length) override;
-    virtual void SAL_CALL setObject(sal_Int32 parameterIndex, const css::uno::Any& x) override;
-    virtual void SAL_CALL setObjectWithInfo(sal_Int32 parameterIndex, const css::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale) override;
+    virtual void SAL_CALL setObject(sal_Int32 parameterIndex, const cpo::uno::Any& x) override;
+    virtual void SAL_CALL setObjectWithInfo(sal_Int32 parameterIndex, const cpo::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale) override;
     virtual void SAL_CALL setRef(sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XRef>& x) override;
     virtual void SAL_CALL setBlob(sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XBlob>& x) override;
     virtual void SAL_CALL setClob(sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XClob>& x) override;
@@ -406,7 +406,7 @@ public:
     virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
 
     // XPropertyContainer
-    virtual void SAL_CALL addProperty( const OUString& Name, ::sal_Int16 Attributes, const css::uno::Any& DefaultValue ) override;
+    virtual void SAL_CALL addProperty( const OUString& Name, ::sal_Int16 Attributes, const cpo::uno::Any& DefaultValue ) override;
     virtual void SAL_CALL removeProperty( const OUString& Name ) override;
 
     // XPropertyAccess
@@ -415,7 +415,7 @@ public:
     using OPropertySetAggregationHelper::setPropertyValues;
 
     // XWarningsSupplier
-    virtual css::uno::Any SAL_CALL getWarnings(  ) override;
+    virtual cpo::uno::Any SAL_CALL getWarnings(  ) override;
     virtual void SAL_CALL clearWarnings(  ) override;
 
     // XCloneable

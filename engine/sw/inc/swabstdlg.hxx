@@ -148,7 +148,7 @@ protected:
 public:
     virtual DBManagerOptions GetMergeType() = 0;
     virtual const OUString& GetSaveFilter() const = 0;
-    virtual css::uno::Sequence< css::uno::Any > GetSelection() const = 0;
+    virtual css::uno::Sequence< cpo::uno::Any > GetSelection() const = 0;
     virtual css::uno::Reference< css::sdbc::XResultSet> GetResultSet() const = 0;
     virtual bool IsSaveSingleDoc() const = 0;
     virtual bool IsGenerateFromDataBase() const = 0;
@@ -286,7 +286,7 @@ class AbstractSwInsertDBColAutoPilot :  public VclAbstractDialog
 protected:
     virtual ~AbstractSwInsertDBColAutoPilot() override = default;
 public:
-    virtual void DataToDoc( const css::uno::Sequence< css::uno::Any >& rSelection,
+    virtual void DataToDoc( const css::uno::Sequence< cpo::uno::Any >& rSelection,
         css::uno::Reference< css::sdbc::XDataSource> rxSource,
         css::uno::Reference< css::sdbc::XConnection> xConnection,
         css::uno::Reference< css::sdbc::XResultSet > xResultSet) = 0;

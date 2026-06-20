@@ -94,8 +94,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
 
     // Select the 5th row with no modifier
     uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
-            { "Row", uno::Any(sal_Int32(5 - 1)) },
-            { "Modifier", uno::Any(sal_uInt16(0)) }
+            { "Row", cpo::uno::Any(sal_Int32(5 - 1)) },
+            { "Modifier", cpo::uno::Any(sal_uInt16(0)) }
         }));
     dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs);
 
@@ -105,8 +105,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
     CPPUNIT_ASSERT_EQUAL(aExpected, aResult);
 
     // Select the 10th row with shift modifier
-    aArgs = comphelper::InitPropertySequence({ { "Row", uno::Any(static_cast<sal_Int32>(10 - 1)) },
-                                               { "Modifier", uno::Any(KEY_SHIFT) } });
+    aArgs = comphelper::InitPropertySequence({ { "Row", cpo::uno::Any(static_cast<sal_Int32>(10 - 1)) },
+                                               { "Modifier", cpo::uno::Any(KEY_SHIFT) } });
     dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs);
 
     // Check if all the rows from 5th to 10th get selected
@@ -115,8 +115,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
     CPPUNIT_ASSERT_EQUAL(aExpected, aResult);
 
     // Select the 10th row with ctrl modifier
-    aArgs = comphelper::InitPropertySequence({ { "Row", uno::Any(static_cast<sal_Int32>(13 - 1)) },
-                                               { "Modifier", uno::Any(KEY_MOD1) } });
+    aArgs = comphelper::InitPropertySequence({ { "Row", cpo::uno::Any(static_cast<sal_Int32>(13 - 1)) },
+                                               { "Modifier", cpo::uno::Any(KEY_MOD1) } });
     dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs);
 
     // Copying the non-contiguous selection (rows 5-10 plus row 13) now
@@ -135,8 +135,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
     CPPUNIT_ASSERT_EQUAL(aExpected, aResult);
 
     // Select Column 5 with ctrl modifier
-    aArgs = comphelper::InitPropertySequence({ { "Col", uno::Any(static_cast<sal_Int32>(5 - 1)) },
-                                               { "Modifier", uno::Any(KEY_MOD1) } });
+    aArgs = comphelper::InitPropertySequence({ { "Col", cpo::uno::Any(static_cast<sal_Int32>(5 - 1)) },
+                                               { "Modifier", cpo::uno::Any(KEY_MOD1) } });
     dispatchCommand(mxComponent, u".uno:SelectColumn"_ustr, aArgs);
 
     // Adding column 5 to the row selection yields a non-empty serialization
@@ -152,18 +152,18 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
 
     // Test for deselection of already selected rows
     // First Deselect Row 13 because copy doesn't work for multiple selections
-    aArgs = comphelper::InitPropertySequence({ { "Row", uno::Any(static_cast<sal_Int32>(13 - 1)) },
-                                               { "Modifier", uno::Any(KEY_MOD1) } });
+    aArgs = comphelper::InitPropertySequence({ { "Row", cpo::uno::Any(static_cast<sal_Int32>(13 - 1)) },
+                                               { "Modifier", cpo::uno::Any(KEY_MOD1) } });
     dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs);
 
     // Deselect row 10
-    aArgs = comphelper::InitPropertySequence({ { "Row", uno::Any(static_cast<sal_Int32>(10 - 1)) },
-                                               { "Modifier", uno::Any(KEY_MOD1) } });
+    aArgs = comphelper::InitPropertySequence({ { "Row", cpo::uno::Any(static_cast<sal_Int32>(10 - 1)) },
+                                               { "Modifier", cpo::uno::Any(KEY_MOD1) } });
     dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs);
 
     // Click at row 6 holding shift
-    aArgs = comphelper::InitPropertySequence({ { "Row", uno::Any(static_cast<sal_Int32>(6 - 1)) },
-                                               { "Modifier", uno::Any(KEY_SHIFT) } });
+    aArgs = comphelper::InitPropertySequence({ { "Row", cpo::uno::Any(static_cast<sal_Int32>(6 - 1)) },
+                                               { "Modifier", cpo::uno::Any(KEY_SHIFT) } });
     dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs);
 
     //  only row 5 should remain selected
@@ -221,8 +221,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testEmptyColumnSelection)
 
     // Select empty column, 1000
     uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
-                { "Col", uno::Any(sal_Int32(1000 - 1)) },
-                { "Modifier", uno::Any(sal_uInt16(0)) }
+                { "Col", cpo::uno::Any(sal_Int32(1000 - 1)) },
+                { "Modifier", cpo::uno::Any(sal_uInt16(0)) }
         }));
     dispatchCommand(mxComponent, u".uno:SelectColumn"_ustr, aArgs);
 
@@ -258,7 +258,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSpellOnlineRenderParameter)
 
     uno::Sequence<beans::PropertyValue> aPropertyValues =
     {
-        comphelper::makePropertyValue(u".uno:SpellOnline"_ustr, uno::Any(!bSet)),
+        comphelper::makePropertyValue(u".uno:SpellOnline"_ustr, cpo::uno::Any(!bSet)),
     };
     pModelObj->initializeForTiledRendering(aPropertyValues);
 
@@ -387,9 +387,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testMoveShapeHandle)
         sal_uInt32 oldY = y;
         uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
-            {"HandleNum", uno::Any(id)},
-            {"NewPosX", uno::Any(x+1)},
-            {"NewPosY", uno::Any(y+1)}
+            {"HandleNum", cpo::uno::Any(id)},
+            {"NewPosX", cpo::uno::Any(x+1)},
+            {"NewPosY", cpo::uno::Any(y+1)}
         }));
         dispatchCommand(mxComponent, u".uno:MoveShapeHandle"_ustr, aPropertyValues);
         CPPUNIT_ASSERT(!aView1.m_ShapeSelection.isEmpty());
@@ -415,9 +415,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testMoveShapeHandleTextBox)
         sal_uInt32 oldY = y;
         uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
-            {"HandleNum", uno::Any(id)},
-            {"NewPosX", uno::Any(x+1)},
-            {"NewPosY", uno::Any(y+1)}
+            {"HandleNum", cpo::uno::Any(id)},
+            {"NewPosX", cpo::uno::Any(x+1)},
+            {"NewPosY", cpo::uno::Any(y+1)}
         }));
         dispatchCommand(mxComponent, u".uno:MoveShapeHandle"_ustr, aPropertyValues);
         CPPUNIT_ASSERT(!aView1.m_ShapeSelection.isEmpty());
@@ -442,8 +442,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testColRowResize)
 
     // Col 3, Tab 0
     uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
-            { "ColumnWidth", uno::Any(sal_uInt16(4000)) }, // 4cm
-            { "Column", uno::Any(sal_Int16(3)) }
+            { "ColumnWidth", cpo::uno::Any(sal_uInt16(4000)) }, // 4cm
+            { "Column", cpo::uno::Any(sal_Int16(3)) }
         }));
     dispatchCommand(mxComponent, u".uno:ColumnWidth"_ustr, aArgs);
 
@@ -452,8 +452,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testColRowResize)
 
     // Row 5, Tab 0
     uno::Sequence<beans::PropertyValue> aArgs2( comphelper::InitPropertySequence({
-            { "RowHeight", uno::Any(sal_uInt16(2000)) },
-            { "Row", uno::Any(sal_Int16(5)) },
+            { "RowHeight", cpo::uno::Any(sal_uInt16(2000)) },
+            { "Row", cpo::uno::Any(sal_Int16(5)) },
         }));
     dispatchCommand(mxComponent, u".uno:RowHeight"_ustr, aArgs2);
 
@@ -588,7 +588,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNoRedundantSpellInvalidations)
 
     // Turn online spell-checking on for the document and current view #1.
     uno::Sequence<beans::PropertyValue> aSpellOnArgs = {
-        comphelper::makePropertyValue(u".uno:SpellOnline"_ustr, uno::Any(true)),
+        comphelper::makePropertyValue(u".uno:SpellOnline"_ustr, cpo::uno::Any(true)),
     };
     ScModelObj* pModelObj = createDoc("small.ods");
     CPPUNIT_ASSERT(pModelObj);
@@ -734,14 +734,14 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testHideColRow)
     createDoc("small.ods");
     {
         uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
-                { "Col", uno::Any(sal_Int32(2 - 1)) },
-                { "Modifier", uno::Any(KEY_SHIFT) }
+                { "Col", cpo::uno::Any(sal_Int32(2 - 1)) },
+                { "Modifier", cpo::uno::Any(KEY_SHIFT) }
             }));
         dispatchCommand(mxComponent, u".uno:SelectColumn"_ustr, aArgs);
 
         uno::Sequence<beans::PropertyValue> aArgs2( comphelper::InitPropertySequence({
-                { "Col", uno::Any(sal_Int32(3 - 1)) },
-                { "Modifier", uno::Any(sal_uInt16(0)) }
+                { "Col", cpo::uno::Any(sal_Int32(3 - 1)) },
+                { "Modifier", cpo::uno::Any(sal_uInt16(0)) }
             }));
 
         dispatchCommand(mxComponent, u".uno:SelectColumn"_ustr, aArgs2);
@@ -762,14 +762,14 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testHideColRow)
     CPPUNIT_ASSERT_EQUAL(nOldCurY, nNewCurY);
     {
         uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
-                { "Row", uno::Any(sal_Int32(6 - 1)) },
-                { "Modifier", uno::Any(KEY_SHIFT) }
+                { "Row", cpo::uno::Any(sal_Int32(6 - 1)) },
+                { "Modifier", cpo::uno::Any(KEY_SHIFT) }
             }));
         dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs);
 
         uno::Sequence<beans::PropertyValue> aArgs2( comphelper::InitPropertySequence({
-                { "Row", uno::Any(sal_Int32(7 - 1)) },
-                { "Modifier", uno::Any(sal_uInt16(0)) }
+                { "Row", cpo::uno::Any(sal_Int32(7 - 1)) },
+                { "Modifier", cpo::uno::Any(sal_uInt16(0)) }
             }));
         dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs2);
     }
@@ -889,8 +889,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
         // Add a new comment
         uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         {
-            {"Text", uno::Any(u"Comment"_ustr)},
-            {"Author", uno::Any(u"Kit User1"_ustr)},
+            {"Text", cpo::uno::Any(u"Comment"_ustr)},
+            {"Author", cpo::uno::Any(u"Kit User1"_ustr)},
         }));
         dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
@@ -935,9 +935,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
             pTabViewShell->SetCursor(3, 100);
         aArgs = comphelper::InitPropertySequence(
         {
-            {"Id", uno::Any(OUString::createFromAscii(aCommentId))},
-            {"Text", uno::Any(u"Edited comment"_ustr)},
-            {"Author", uno::Any(u"Kit User2"_ustr)},
+            {"Id", cpo::uno::Any(OUString::createFromAscii(aCommentId))},
+            {"Text", cpo::uno::Any(u"Edited comment"_ustr)},
+            {"Author", cpo::uno::Any(u"Kit User2"_ustr)},
         });
         dispatchCommand(mxComponent, u".uno:EditAnnotation"_ustr, aArgs);
 
@@ -958,7 +958,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
             pTabViewShell->SetCursor(4, 43);
         aArgs = comphelper::InitPropertySequence(
         {
-            {"Id", uno::Any(OUString::createFromAscii(aCommentId))}
+            {"Id", cpo::uno::Any(OUString::createFromAscii(aCommentId))}
         });
         dispatchCommand(mxComponent, u".uno:DeleteNote"_ustr, aArgs);
 
@@ -1069,7 +1069,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoRepairDispatch)
     KitHelper::setView(nView2);
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"Repair", uno::Any(true)}
+        {"Repair", cpo::uno::Any(true)}
     }));
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, aPropertyValues);
     // check that undo has been executed on view #2 in repair mode
@@ -1098,7 +1098,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertGraphicInvalidations)
     // insert an image in view and see if both views are invalidated
     aView.m_bInvalidateTiles = false;
     uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
-            { "FileName", uno::Any(createFileURL(u"smile.png")) }
+            { "FileName", cpo::uno::Any(createFileURL(u"smile.png")) }
         }));
     dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
@@ -1485,7 +1485,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSpellOnlineParameter)
 
     uno::Sequence<beans::PropertyValue> params =
     {
-        comphelper::makePropertyValue(u"Enable"_ustr, uno::Any(!bSet)),
+        comphelper::makePropertyValue(u"Enable"_ustr, cpo::uno::Any(!bSet)),
     };
     dispatchCommand(mxComponent, u".uno:SpellOnline"_ustr, params);
     CPPUNIT_ASSERT_EQUAL(!bSet, pView->IsAutoSpell());
@@ -1493,7 +1493,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSpellOnlineParameter)
     // set the same state as now and we don't expect any change (no-toggle)
     params =
     {
-        comphelper::makePropertyValue(u"Enable"_ustr, uno::Any(!bSet)),
+        comphelper::makePropertyValue(u"Enable"_ustr, cpo::uno::Any(!bSet)),
     };
     dispatchCommand(mxComponent, u".uno:SpellOnline"_ustr, params);
     CPPUNIT_ASSERT_EQUAL(!bSet, pView->IsAutoSpell());
@@ -1505,9 +1505,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVbaRangeCopyPaste)
     ScDocShell* pDocShell = dynamic_cast< ScDocShell* >( pModelObj->GetEmbeddedObject() );
     CPPUNIT_ASSERT(pDocShell);
 
-    uno::Any aRet;
-    uno::Sequence< uno::Any > aOutParam;
-    uno::Sequence< uno::Any > aParams;
+    cpo::uno::Any aRet;
+    uno::Sequence< cpo::uno::Any > aOutParam;
+    uno::Sequence< cpo::uno::Any > aParams;
     uno::Sequence< sal_Int16 > aOutParamIndex;
 
     SfxObjectShell::CallXScript(
@@ -1656,8 +1656,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertDeletePageInvalidation)
     aView1.m_aInvalidations.clear();
 
     uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
-            { "Name", uno::Any(u""_ustr) },
-            { "Index", uno::Any(sal_Int32(1)) }
+            { "Name", cpo::uno::Any(u""_ustr) },
+            { "Index", cpo::uno::Any(sal_Int32(1)) }
         }));
     dispatchCommand(mxComponent, u".uno:Insert"_ustr, aArgs);
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
@@ -1669,7 +1669,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertDeletePageInvalidation)
     aView1.m_bInvalidateTiles = false;
     aView1.m_aInvalidations.clear();
     uno::Sequence<beans::PropertyValue> aArgs2( comphelper::InitPropertySequence({
-            { "Index", uno::Any(sal_Int32(1)) }
+            { "Index", cpo::uno::Any(sal_Int32(1)) }
         }));
     dispatchCommand(mxComponent, u".uno:Remove"_ustr, aArgs2);
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
@@ -2231,7 +2231,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPasteIntoWrapTextCell)
         xClipboard1->getContents();
     datatransfer::DataFlavor aFlavor;
     SotExchange::GetFormatDataFlavor(SotClipboardFormatId::STRING, aFlavor);
-    uno::Any aData = xDataObj->getTransferData(aFlavor);
+    cpo::uno::Any aData = xDataObj->getTransferData(aFlavor);
     OUString aTmpText;
     aData >>= aTmpText;
     CPPUNIT_ASSERT_EQUAL(sCopyContent, aTmpText.trim());
@@ -2509,8 +2509,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetViewDataCrash)
     // Imitate online while creating a new sheet on empty.ods.
     uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({
-            { "Name",  uno::Any(u"NewSheet"_ustr) },
-            { "Index", uno::Any(sal_Int32(2)) }
+            { "Name",  cpo::uno::Any(u"NewSheet"_ustr) },
+            { "Index", cpo::uno::Any(sal_Int32(2)) }
         }));
     dispatchCommand(mxComponent, u".uno:Insert"_ustr, aArgs);
     pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD1);
@@ -2544,7 +2544,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextBoxInsert)
     // insert textbox
     uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({
-            { "CreateDirectly",  uno::Any(true) }
+            { "CreateDirectly",  cpo::uno::Any(true) }
         }));
     dispatchCommand(mxComponent, u".uno:DrawText"_ustr, aArgs);
 
@@ -2580,8 +2580,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCellCopyPaste)
         // Add a new comment
         uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         {
-            {"Text", uno::Any(u"COKit Comment Cell B2"_ustr)},
-            {"Author", uno::Any(u"COKit Client"_ustr)},
+            {"Text", cpo::uno::Any(u"COKit Comment Cell B2"_ustr)},
+            {"Author", cpo::uno::Any(u"COKit Client"_ustr)},
         }));
         dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
@@ -2925,7 +2925,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGetViewRenderState)
     {
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", uno::Any(u"Dark"_ustr) },
+                { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
             }
         );
         dispatchCommand(mxComponent, u".uno:ChangeTheme"_ustr, aPropertyValues);
@@ -3715,7 +3715,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFreezeRowOrColumn)
     // Freeze panes on a column and receive the proper state back
     aView.m_aStateChanges.clear();
     uno::Sequence<beans::PropertyValue> aPropertyValues = {
-        comphelper::makePropertyValue(u"Index"_ustr,  uno::Any(static_cast<sal_Int32>(8))),
+        comphelper::makePropertyValue(u"Index"_ustr,  cpo::uno::Any(static_cast<sal_Int32>(8))),
     };
     comphelper::dispatchCommand(u".uno:FreezePanesColumn"_ustr, aPropertyValues);
     Scheduler::ProcessEventsToIdle();
@@ -3869,7 +3869,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testKitLanguageStatus)
 
     {
         uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
-                { "Language", uno::Any(u"Default_Spanish (Spain)"_ustr) },
+                { "Language", cpo::uno::Any(u"Default_Spanish (Spain)"_ustr) },
             }));
         dispatchCommand(mxComponent, u".uno:LanguageStatus"_ustr, aArgs);
 
@@ -3883,7 +3883,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testKitLanguageStatus)
 
     {
         uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
-                { "Language", uno::Any(u"Default_English (USA)"_ustr) },
+                { "Language", cpo::uno::Any(u"Default_English (USA)"_ustr) },
             }));
         dispatchCommand(mxComponent, u".uno:LanguageStatus"_ustr, aArgs);
 
@@ -3938,8 +3938,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentInsertAndResolve)
         // 1) Insert a threaded comment via .uno:InsertThreadedComment
         uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         {
-            {"Text", uno::Any(u"Threaded comment text"_ustr)},
-            {"Author", uno::Any(u"Kit Author"_ustr)},
+            {"Text", cpo::uno::Any(u"Threaded comment text"_ustr)},
+            {"Author", cpo::uno::Any(u"Kit Author"_ustr)},
         }));
         dispatchCommand(mxComponent, u".uno:InsertThreadedComment"_ustr, aArgs);
 
@@ -3977,7 +3977,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentInsertAndResolve)
         // 3) Resolve the threaded comment via .uno:ResolveComment
         aArgs = comphelper::InitPropertySequence(
         {
-            {"Id", uno::Any(OUString::createFromAscii(aCommentId))},
+            {"Id", cpo::uno::Any(OUString::createFromAscii(aCommentId))},
         });
         dispatchCommand(mxComponent, u".uno:ResolveComment"_ustr, aArgs);
 
@@ -4038,8 +4038,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentDocModifiedAndUndo
         // 1) Insert a threaded comment via .uno:InsertThreadedComment.
         uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         {
-            {"Text", uno::Any(u"Kit thread"_ustr)},
-            {"Author", uno::Any(u"Kit Author"_ustr)},
+            {"Text", cpo::uno::Any(u"Kit thread"_ustr)},
+            {"Author", cpo::uno::Any(u"Kit Author"_ustr)},
         }));
         aView.m_aStateChanges.clear();
         dispatchCommand(mxComponent, u".uno:InsertThreadedComment"_ustr, aArgs);
@@ -4104,7 +4104,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentDocModifiedAndUndo
         // 1) No Author arg at all: pAuthorItem == nullptr in the slot.
         uno::Sequence<beans::PropertyValue> aArgsNoAuthor(comphelper::InitPropertySequence(
         {
-            {"Text", uno::Any(u"no author arg"_ustr)},
+            {"Text", cpo::uno::Any(u"no author arg"_ustr)},
         }));
         dispatchCommand(mxComponent, u".uno:InsertThreadedComment"_ustr, aArgsNoAuthor);
         const ScPostIt* pNote = pDoc->GetNote(aPos);
@@ -4118,8 +4118,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentDocModifiedAndUndo
         // 2) Author arg present but empty: the regression case.
         uno::Sequence<beans::PropertyValue> aArgsEmptyAuthor(comphelper::InitPropertySequence(
         {
-            {"Text", uno::Any(u"empty author arg"_ustr)},
-            {"Author", uno::Any(u""_ustr)},
+            {"Text", cpo::uno::Any(u"empty author arg"_ustr)},
+            {"Author", cpo::uno::Any(u""_ustr)},
         }));
         dispatchCommand(mxComponent, u".uno:InsertThreadedComment"_ustr, aArgsEmptyAuthor);
         pNote = pDoc->GetNote(aPos);

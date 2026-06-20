@@ -52,7 +52,7 @@ public:
     rtl::Reference<SwXTextCursor> CreateTextCursor(const bool bIgnoreTables = false);
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface(
+    virtual cpo::uno::Any SAL_CALL queryInterface(
             const css::uno::Type& rType) override;
     virtual void SAL_CALL acquire() noexcept override { OWeakObject::acquire(); }
     virtual void SAL_CALL release() noexcept override { OWeakObject::release(); }
@@ -114,7 +114,7 @@ public:
     rtl::Reference< SwXTextCursor > CreateTextCursor(const bool bIgnoreTables = false);
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface(
+    virtual cpo::uno::Any SAL_CALL queryInterface(
             const css::uno::Type& rType) override;
     virtual void SAL_CALL acquire() noexcept override { OWeakObject::acquire(); }
     virtual void SAL_CALL release() noexcept override { OWeakObject::release(); }

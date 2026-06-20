@@ -49,22 +49,22 @@ public:
 protected:
     cppu::IPropertyArrayHelper& getInfoHelper() override { return *this->getArrayHelper(); }
 
-    bool convertFastPropertyValue(std::unique_lock<std::mutex>&, css::uno::Any& rConvertedValue,
-                                  css::uno::Any& rOldValue, sal_Int32 nHandle,
-                                  const css::uno::Any& rValue) override
+    bool convertFastPropertyValue(std::unique_lock<std::mutex>&, cpo::uno::Any& rConvertedValue,
+                                  cpo::uno::Any& rOldValue, sal_Int32 nHandle,
+                                  const cpo::uno::Any& rValue) override
     {
         return OPropertyContainerHelper::convertFastPropertyValue(rConvertedValue, rOldValue,
                                                                   nHandle, rValue);
     }
 
     void setFastPropertyValue_NoBroadcast(std::unique_lock<std::mutex>&, sal_Int32 nHandle,
-                                          const css::uno::Any& rValue) override
+                                          const cpo::uno::Any& rValue) override
     {
         OPropertyContainerHelper::setFastPropertyValue(nHandle, rValue);
     }
 
     using OPropertyImplHelper<BaseClass, Ifc...>::getFastPropertyValue;
-    void getFastPropertyValue(std::unique_lock<std::mutex>&, css::uno::Any& rValue,
+    void getFastPropertyValue(std::unique_lock<std::mutex>&, cpo::uno::Any& rValue,
                               sal_Int32 nHandle) const override
     {
         OPropertyContainerHelper::getFastPropertyValue(rValue, nHandle);

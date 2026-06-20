@@ -29,6 +29,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 
 namespace migration
@@ -191,7 +192,7 @@ namespace migration
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 desktop_BasicMigration_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new migration::BasicMigration());
 }

@@ -33,7 +33,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
 
 namespace
@@ -275,7 +275,7 @@ OUString addBitmapUniqueNameToTable(
     return OUString();
 }
 
-void setPropertyValueAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const uno::Any & rAny )
+void setPropertyValueAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const cpo::uno::Any & rAny )
 {
     tPropertyValueMap::iterator aIt( rOutMap.find( key ));
     if( aIt == rOutMap.end())
@@ -285,26 +285,26 @@ void setPropertyValueAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key,
 }
 
 template<>
-    void setPropertyValue< css::uno::Any >( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const css::uno::Any & rAny )
+    void setPropertyValue< cpo::uno::Any >( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const cpo::uno::Any & rAny )
 {
     setPropertyValueAny( rOutMap, key, rAny );
 }
 
-void setPropertyValueDefaultAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const uno::Any & rAny )
+void setPropertyValueDefaultAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const cpo::uno::Any & rAny )
 {
     OSL_ENSURE( rOutMap.end() == rOutMap.find( key ), "Default already exists for property" );
     setPropertyValue( rOutMap, key, rAny );
 }
 
 template<>
-    void setPropertyValueDefault< css::uno::Any >( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const css::uno::Any & rAny )
+    void setPropertyValueDefault< cpo::uno::Any >( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const cpo::uno::Any & rAny )
 {
     setPropertyValueDefaultAny( rOutMap, key, rAny );
 }
 
 void setEmptyPropertyValueDefault( tPropertyValueMap & rOutMap, tPropertyValueMapKey key )
 {
-    setPropertyValueDefault( rOutMap, key, uno::Any());
+    setPropertyValueDefault( rOutMap, key, cpo::uno::Any());
 }
 
 } //  namespace chart::PropertyHelper

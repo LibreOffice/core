@@ -137,7 +137,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ErrorBar::getPropertySetInfo(
     return aRef;
 }
 
-void ErrorBar::setPropertyValue( const OUString& rPropName, const uno::Any& rAny )
+void ErrorBar::setPropertyValue( const OUString& rPropName, const cpo::uno::Any& rAny )
 {
     SolarMutexGuard aGuard;
 
@@ -225,11 +225,11 @@ OUString getSourceRangeStrFromLabeledSequences( const uno::Sequence< uno::Refere
 
 }
 
-uno::Any ErrorBar::getPropertyValue(const OUString& rPropName)
+cpo::uno::Any ErrorBar::getPropertyValue(const OUString& rPropName)
 {
     SolarMutexGuard aGuard;
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if(rPropName == "ErrorBarStyle")
         aRet <<= meStyle;
     else if(rPropName == "PositiveError")
@@ -375,10 +375,10 @@ void ErrorBar::setPropertyToDefault( const OUString& )
     //keep them unimplemented for now
 }
 
-uno::Any ErrorBar::getPropertyDefault( const OUString& )
+cpo::uno::Any ErrorBar::getPropertyDefault( const OUString& )
 {
     //keep them unimplemented for now
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 void ErrorBar::addPropertyChangeListener( const OUString&, const css::uno::Reference< css::beans::XPropertyChangeListener >& )
@@ -461,7 +461,7 @@ using impl::ErrorBar_Base;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_ErrorBar_get_implementation(css::uno::XComponentContext *,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::ErrorBar);
 }

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_XMLOFF_MAPTYPE_HXX
 #define INCLUDED_XMLOFF_MAPTYPE_HXX
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <utility>
 #include <xmloff/xmltoken.hxx>
 #include <unotools/saveopt.hxx>
@@ -136,11 +136,11 @@ struct XMLPropertyMapEntry
 struct XMLPropertyState
 {
     sal_Int32                  mnIndex;
-    css::uno::Any              maValue;
+    cpo::uno::Any              maValue;
 
     XMLPropertyState( sal_Int32 nIndex )
         : mnIndex( nIndex ) {}
-    XMLPropertyState( sal_Int32 nIndex, css::uno::Any aValue )
+    XMLPropertyState( sal_Int32 nIndex, cpo::uno::Any aValue )
         : mnIndex( nIndex ), maValue(std::move( aValue )) {}
 };
 

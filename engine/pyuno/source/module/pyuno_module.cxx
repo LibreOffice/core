@@ -57,7 +57,7 @@ using osl::Module;
 
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
-using com::sun::star::uno::Any;
+using cpo::uno::Any;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::TypeDescription;
 using com::sun::star::uno::XComponentContext;

@@ -32,13 +32,13 @@ SwVbaListGallery::~SwVbaListGallery()
 {
 }
 
-uno::Any SAL_CALL
-SwVbaListGallery::ListTemplates( const uno::Any& index )
+cpo::uno::Any SAL_CALL
+SwVbaListGallery::ListTemplates( const cpo::uno::Any& index )
 {
     uno::Reference< XCollection > xCol( new SwVbaListTemplates( mxParent, mxContext, mxTextDocument, mnType ) );
     if ( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-    return uno::Any( xCol );
+        return xCol->Item( index, cpo::uno::Any() );
+    return cpo::uno::Any( xCol );
 }
 
 OUString

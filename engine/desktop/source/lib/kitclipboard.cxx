@@ -26,6 +26,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 /* static */ osl::Mutex KitClipboardFactory::gMutex;
 static tools::DeleteOnDeinit<std::unordered_map<int, rtl::Reference<KitClipboard>>>& getClipboards()
@@ -249,7 +250,7 @@ KitTransferable::KitTransferable(const OUString& sMimeType,
     m_aFlavors = css::uno::Sequence<css::datatransfer::DataFlavor>(1);
     initFlavourFromMime(m_aFlavors.getArray()[0], sMimeType);
 
-    uno::Any aContent;
+    cpo::uno::Any aContent;
     if (m_aFlavors[0].DataType == cppu::UnoType<OUString>::get())
     {
         auto pText = reinterpret_cast<const char*>(aSequence.getConstArray());
@@ -266,7 +267,7 @@ KitTransferable::KitTransferable()
     m_aContent.reserve(1);
     m_aFlavors = css::uno::Sequence<css::datatransfer::DataFlavor>(1);
     initFlavourFromMime(m_aFlavors.getArray()[0], u"text/plain"_ustr);
-    uno::Any aContent;
+    cpo::uno::Any aContent;
     aContent <<= OUString();
     m_aContent.push_back(aContent);
 }
@@ -305,7 +306,7 @@ KitTransferable::KitTransferable(const size_t nInCount, const char** pInMimeType
     {
         initFlavourFromMime(p_aFlavors[i], OUString::fromUtf8(pInMimeTypes[i]));
 
-        uno::Any aContent;
+        cpo::uno::Any aContent;
         if (m_aFlavors[i].DataType == cppu::UnoType<OUString>::get())
             aContent <<= OUString(pInStreams[i], pInSizes[i], RTL_TEXTENCODING_UTF8);
         else
@@ -315,7 +316,7 @@ KitTransferable::KitTransferable(const size_t nInCount, const char** pInMimeType
     }
 }
 
-uno::Any SAL_CALL KitTransferable::getTransferData(const datatransfer::DataFlavor& rFlavor)
+cpo::uno::Any SAL_CALL KitTransferable::getTransferData(const datatransfer::DataFlavor& rFlavor)
 {
     assert(m_aContent.size() == static_cast<size_t>(m_aFlavors.getLength()));
     for (size_t i = 0; i < m_aContent.size(); ++i)
@@ -430,7 +431,7 @@ KitProviderTransferable::isDataFlavorSupported(const datatransfer::DataFlavor& r
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 desktop_KitClipboard_get_implementation(css::uno::XComponentContext*,
-                                        css::uno::Sequence<css::uno::Any> const& /*args*/)
+                                        css::uno::Sequence<cpo::uno::Any> const& /*args*/)
 {
     SolarMutexGuard aGuard;
 

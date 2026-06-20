@@ -52,7 +52,7 @@ namespace framework
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::document::XUndoManagerListener;
     using ::com::sun::star::document::UndoManagerEvent;

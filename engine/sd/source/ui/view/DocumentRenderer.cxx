@@ -78,6 +78,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace sd {
 
@@ -2681,7 +2682,7 @@ DocumentRenderer::~DocumentRenderer()
 //----- XRenderable -----------------------------------------------------------
 
 sal_Int32 SAL_CALL DocumentRenderer::getRendererCount (
-    const css::uno::Any&,
+    const cpo::uno::Any&,
     const css::uno::Sequence<css::beans::PropertyValue >& rOptions)
 {
     mpImpl->ProcessProperties(rOptions);
@@ -2690,7 +2691,7 @@ sal_Int32 SAL_CALL DocumentRenderer::getRendererCount (
 
 Sequence<beans::PropertyValue> SAL_CALL DocumentRenderer::getRenderer (
     sal_Int32,
-    const css::uno::Any&,
+    const cpo::uno::Any&,
     const css::uno::Sequence<css::beans::PropertyValue>& rOptions)
 {
     mpImpl->ProcessProperties(rOptions);
@@ -2699,7 +2700,7 @@ Sequence<beans::PropertyValue> SAL_CALL DocumentRenderer::getRenderer (
 
 void SAL_CALL DocumentRenderer::render (
     sal_Int32 nRenderer,
-    const css::uno::Any&,
+    const cpo::uno::Any&,
     const css::uno::Sequence<css::beans::PropertyValue>& rOptions)
 {
     mpImpl->ProcessProperties(rOptions);

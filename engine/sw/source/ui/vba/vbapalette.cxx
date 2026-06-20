@@ -63,11 +63,11 @@ public:
         return std::ssize(ColorTable);
     }
 
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
+    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         if ( Index < 0 || Index >= getCount() )
             throw lang::IndexOutOfBoundsException();
-        return uno::Any( sal_Int32( ColorTable[ Index ] ) );
+        return cpo::uno::Any( sal_Int32( ColorTable[ Index ] ) );
     }
 
     // Methods XElementAccess

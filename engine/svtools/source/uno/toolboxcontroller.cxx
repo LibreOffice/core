@@ -42,6 +42,7 @@ constexpr OUString TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE = u"SupportsVisibl
 
 using namespace css::awt;
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::util;
 using namespace css::beans;
 using namespace css::lang;

@@ -23,7 +23,7 @@
 #include <unotools/pathoptions.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/mutex.hxx>
 #include <osl/file.hxx>
@@ -48,6 +48,7 @@
 using namespace osl;
 using namespace utl;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 

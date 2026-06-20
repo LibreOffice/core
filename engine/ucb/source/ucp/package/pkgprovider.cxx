@@ -63,7 +63,7 @@ public:
     virtual ~Package() override { m_pOwner->removePackage( m_aName ); }
 
     // XInterface
-    virtual uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
     queryInterface( const uno::Type& aType ) override
     { return m_xNA->queryInterface( aType ); }
     virtual void SAL_CALL
@@ -74,7 +74,7 @@ public:
     { OWeakObject::release(); }
 
     // XHierarchicalNameAccess
-    virtual uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
     getByHierarchicalName( const OUString& aName ) override
     { return m_xNA->getByHierarchicalName( aName ); }
     virtual bool SAL_CALL
@@ -113,9 +113,9 @@ void SAL_CALL ContentProvider::release()
     OWeakObject::release();
 }
 
-css::uno::Any SAL_CALL ContentProvider::queryInterface( const css::uno::Type & rType )
+cpo::uno::Any SAL_CALL ContentProvider::queryInterface( const css::uno::Type & rType )
 {
-    css::uno::Any aRet = cppu::queryInterface( rType,
+    cpo::uno::Any aRet = cppu::queryInterface( rType,
                                                static_cast< lang::XTypeProvider* >(this),
                                                static_cast< lang::XServiceInfo* >(this),
                                                static_cast< ucb::XContentProvider* >(this)
@@ -209,7 +209,7 @@ ContentProvider::createPackage( const PackageUri & rURI )
     }
 
     // Create new package...
-    uno::Sequence< uno::Any > aArguments{ uno::Any(rURL) };
+    uno::Sequence< cpo::uno::Any > aArguments{ cpo::uno::Any(rURL) };
     uno::Reference< container::XHierarchicalNameAccess > xNameAccess;
     try
     {
@@ -225,7 +225,7 @@ ContentProvider::createPackage( const PackageUri & rURI )
     }
     catch ( uno::Exception const & e )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
             e.Message, e.Context, anyEx);
     }
@@ -245,7 +245,7 @@ void ContentProvider::removePackage( const OUString & rName )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_package_ContentProvider_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ContentProvider(context));
 }

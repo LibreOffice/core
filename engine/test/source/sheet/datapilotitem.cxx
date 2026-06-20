@@ -17,6 +17,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace apitest
 {
@@ -30,7 +31,7 @@ void DataPilotItem::testProperties()
     CPPUNIT_ASSERT(xItem->getPropertyValue(propNameIS) >>= bIsHidden);
     CPPUNIT_ASSERT_MESSAGE("Default IsHidden already changed", !bIsHidden);
 
-    uno::Any aNewIsHidden;
+    cpo::uno::Any aNewIsHidden;
     aNewIsHidden <<= false;
     xItem->setPropertyValue(propNameIS, aNewIsHidden);
     CPPUNIT_ASSERT(xItem->getPropertyValue(propNameIS) >>= bIsHidden);
@@ -42,7 +43,7 @@ void DataPilotItem::testProperties()
     CPPUNIT_ASSERT(xItem->getPropertyValue(propNameSD) >>= bShowDetail);
     CPPUNIT_ASSERT_MESSAGE("Default ShowDetail already changed", bShowDetail);
 
-    uno::Any aNewShowDetail;
+    cpo::uno::Any aNewShowDetail;
     aNewShowDetail <<= true;
     xItem->setPropertyValue(propNameSD, aNewShowDetail);
     CPPUNIT_ASSERT(xItem->getPropertyValue(propNameSD) >>= bShowDetail);
@@ -53,7 +54,7 @@ void DataPilotItem::testProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Default Position already changed", sal_Int32(0), nPosition);
 
     // FIXME: This throws somehow a com.sun.star.lang.IllegalArgumentException
-    //uno::Any aNewPosition;
+    //cpo::uno::Any aNewPosition;
     //aNewPosition <<= static_cast<sal_Int32>(42);
     //xItem->setPropertyValue(propNameP, aNewPosition);
     //CPPUNIT_ASSERT(xItem->getPropertyValue(propNameP) >>= nPosition);

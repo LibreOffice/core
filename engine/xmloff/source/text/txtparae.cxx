@@ -115,6 +115,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -374,8 +375,8 @@ namespace
             return false;
         for (const auto& rName : aNames)
         {
-            const css::uno::Any aAny = events->getByName(rName);
-            const css::uno::Any aOtherAny = rOther.events->getByName(rName);
+            const cpo::uno::Any aAny = events->getByName(rName);
+            const cpo::uno::Any aOtherAny = rOther.events->getByName(rName);
             if (aAny != aOtherAny)
                 return false;
         }
@@ -1355,7 +1356,7 @@ struct XMLTextParagraphExport::DocumentListNodes
     {
         // Sequence of nodes, each of them represented by three-element sequence,
         // corresponding to NodeData members
-        css::uno::Sequence<css::uno::Sequence<css::uno::Any>> nodes;
+        css::uno::Sequence<css::uno::Sequence<cpo::uno::Any>> nodes;
         if (auto xPropSet = xModel.query<css::beans::XPropertySet>())
         {
             try
@@ -1522,7 +1523,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sal_Int32 nIndex = m_xTextPropMapper->getPropertySetMapper()->FindEntryIndex(
                                 "", XML_NAMESPACE_STYLE,
                                 GetXMLToken(XML_TEXT_COMBINE));
-    m_pFieldExport.reset( new XMLTextFieldExport( rExp, std::make_unique<XMLPropertyState>( nIndex, uno::Any(true) ) ) );
+    m_pFieldExport.reset( new XMLTextFieldExport( rExp, std::make_unique<XMLPropertyState>( nIndex, cpo::uno::Any(true) ) ) );
     PushNewTextListsHelper();
 }
 
@@ -1798,7 +1799,7 @@ static bool isInShapesTextFrame(const css::uno::Reference<css::text::XTextConten
     try
     {
         // see SwXTextFrame::getEvents
-        css::uno::Any ret = xParentTextProps->getPropertyValue(u"DbgIsShapesTextFrame"_ustr);
+        cpo::uno::Any ret = xParentTextProps->getPropertyValue(u"DbgIsShapesTextFrame"_ustr);
         if (bool result; ret >>= result)
             return result;
         return false;
@@ -2235,7 +2236,7 @@ void XMLTextParagraphExport::exportParagraph(
             {
                 // ParaMarkerAutoStyleSpan is a hidden property, just to pass the autostyle here
                 // See SwXParagraph::Impl::GetPropertyValues_Impl
-                css::uno::Any aVal = xPropSet->getPropertyValue(u"ParaMarkerAutoStyleSpan"_ustr);
+                cpo::uno::Any aVal = xPropSet->getPropertyValue(u"ParaMarkerAutoStyleSpan"_ustr);
                 if (auto xFakeSpan = aVal.query<css::beans::XPropertySet>())
                 {
                     if (bAutoStyles)
@@ -2871,7 +2872,7 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
     {
         XMLAnchorTypePropHdl aAnchorTypeHdl;
         OUString sTmp;
-        aAnchorTypeHdl.exportXML( sTmp, uno::Any(eAnchor),
+        aAnchorTypeHdl.exportXML( sTmp, cpo::uno::Any(eAnchor),
                                   GetExport().GetMM100UnitConverter() );
         GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_ANCHOR_TYPE, sTmp );
     }

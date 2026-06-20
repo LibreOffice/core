@@ -39,7 +39,7 @@ protected:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // XInteractionHandler
     virtual void SAL_CALL handle( const css::uno::Reference< css::task::XInteractionRequest >& ) override;

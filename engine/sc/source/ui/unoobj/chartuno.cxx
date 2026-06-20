@@ -229,16 +229,16 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
         uno::Sequence< beans::PropertyValue > aArgs{
             beans::PropertyValue(
                     u"CellRangeRepresentation"_ustr, -1,
-                    uno::Any( sRangeStr ), beans::PropertyState_DIRECT_VALUE ),
+                    cpo::uno::Any( sRangeStr ), beans::PropertyState_DIRECT_VALUE ),
             beans::PropertyValue(
                     u"HasCategories"_ustr, -1,
-                    uno::Any( bRowHeaders ), beans::PropertyState_DIRECT_VALUE ),
+                    cpo::uno::Any( bRowHeaders ), beans::PropertyState_DIRECT_VALUE ),
             beans::PropertyValue(
                     u"FirstCellAsLabel"_ustr, -1,
-                    uno::Any( bColumnHeaders ), beans::PropertyState_DIRECT_VALUE ),
+                    cpo::uno::Any( bColumnHeaders ), beans::PropertyState_DIRECT_VALUE ),
             beans::PropertyValue(
                     u"DataRowSource"_ustr, -1,
-                    uno::Any( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE )
+                    cpo::uno::Any( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE )
         };
         xReceiver->setArguments( aArgs );
     }
@@ -322,14 +322,14 @@ sal_Int32 SAL_CALL ScChartsObj::getCount()
     return nCount;
 }
 
-uno::Any SAL_CALL ScChartsObj::getByIndex( sal_Int32 nIndex )
+cpo::uno::Any SAL_CALL ScChartsObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     rtl::Reference<ScChartObj> xChart(GetObjectByIndex_Impl(nIndex));
     if (!xChart.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(uno::Reference<table::XTableChart>(xChart));
+    return cpo::uno::Any(uno::Reference<table::XTableChart>(xChart));
 }
 
 uno::Type SAL_CALL ScChartsObj::getElementType()
@@ -343,14 +343,14 @@ bool SAL_CALL ScChartsObj::hasElements()
     return getCount() != 0;
 }
 
-uno::Any SAL_CALL ScChartsObj::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL ScChartsObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     rtl::Reference<ScChartObj> xChart(GetObjectByName_Impl(aName));
     if (!xChart.is())
         throw container::NoSuchElementException();
 
-    return uno::Any(uno::Reference<table::XTableChart>(xChart));
+    return cpo::uno::Any(uno::Reference<table::XTableChart>(xChart));
 }
 
 uno::Sequence<OUString> SAL_CALL ScChartsObj::getElementNames()
@@ -415,7 +415,7 @@ ScChartObj::ScChartObj(ScDocShell* pDocSh, SCTAB nT, OUString aN)
     registerPropertyNoMember( u"RelatedCellRanges"_ustr,
         PROP_HANDLE_RELATED_CELLRANGES, beans::PropertyAttribute::MAYBEVOID,
         cppu::UnoType<uno::Sequence<table::CellRangeAddress>>::get(),
-        css::uno::Any(uno::Sequence<table::CellRangeAddress>()) );
+        cpo::uno::Any(uno::Sequence<table::CellRangeAddress>()) );
 }
 
 ScChartObj::~ScChartObj()
@@ -510,7 +510,7 @@ void ScChartObj::Update_Impl( const ScRangeListRef& rRanges, bool bColHeaders, b
     }
 }
 
-void ScChartObj::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& /*rGuard*/, sal_Int32 nHandle, const uno::Any& rValue )
+void ScChartObj::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& /*rGuard*/, sal_Int32 nHandle, const cpo::uno::Any& rValue )
 {
     switch ( nHandle )
     {
@@ -542,7 +542,7 @@ void ScChartObj::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>&
     }
 }
 
-void ScChartObj::getFastPropertyValue( std::unique_lock<std::mutex>& /*rGuard*/, uno::Any& rValue, sal_Int32 nHandle ) const
+void ScChartObj::getFastPropertyValue( std::unique_lock<std::mutex>& /*rGuard*/, cpo::uno::Any& rValue, sal_Int32 nHandle ) const
 {
     switch ( nHandle )
     {

@@ -50,7 +50,7 @@ OUString SAL_CALL ScVbaFrame::getCaption()
 
 void SAL_CALL ScVbaFrame::setCaption( const OUString& _caption )
 {
-    m_xProps->setPropertyValue( u"Label"_ustr, uno::Any( _caption ) );
+    m_xProps->setPropertyValue( u"Label"_ustr, cpo::uno::Any( _caption ) );
 }
 
 sal_Int32 SAL_CALL ScVbaFrame::getSpecialEffect()
@@ -81,7 +81,7 @@ uno::Reference< msforms::XNewFont > SAL_CALL ScVbaFrame::getFont()
 
 // XFrame methods
 
-uno::Any SAL_CALL ScVbaFrame::Controls( const uno::Any& rIndex )
+cpo::uno::Any SAL_CALL ScVbaFrame::Controls( const cpo::uno::Any& rIndex )
 {
     // horizontal anchor of frame children is inside border line (add one unit to compensate border line width)
     double fOffsetX = mpGeometryHelper->getOffsetX() + getLeft() + 1.0;
@@ -90,8 +90,8 @@ uno::Any SAL_CALL ScVbaFrame::Controls( const uno::Any& rIndex )
 
     uno::Reference< XCollection > xControls( new ScVbaControls( this, mxContext, mxDialog, m_xModel, fOffsetX, fOffsetY ) );
     if( rIndex.hasValue() )
-        return xControls->Item( rIndex, uno::Any() );
-    return uno::Any( xControls );
+        return xControls->Item( rIndex, cpo::uno::Any() );
+    return cpo::uno::Any( xControls );
 }
 
 // XHelperInterface

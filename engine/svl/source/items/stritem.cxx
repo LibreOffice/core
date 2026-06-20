@@ -20,7 +20,7 @@
 #include <svl/stritem.hxx>
 #include <libxml/xmlwriter.h>
 #include <tools/XmlWriter.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <osl/diagnose.h>
 #include <unotools/intlwrapper.hxx>
 
@@ -34,14 +34,14 @@ bool SfxStringItem::GetPresentation(SfxItemPresentation, MapUnit,
 }
 
 // virtual
-bool SfxStringItem::QueryValue(css::uno::Any& rVal, sal_uInt8) const
+bool SfxStringItem::QueryValue(cpo::uno::Any& rVal, sal_uInt8) const
 {
     rVal <<= m_aValue;
     return true;
 }
 
 // virtual
-bool SfxStringItem::PutValue(const css::uno::Any& rVal,
+bool SfxStringItem::PutValue(const cpo::uno::Any& rVal,
                                          sal_uInt8)
 {
     OUString aTheValue;

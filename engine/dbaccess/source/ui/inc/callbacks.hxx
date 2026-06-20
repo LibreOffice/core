@@ -94,7 +94,7 @@ namespace dbaui
             This selection is used for filling a ContextMenuExecuteEvent event for the given
             control.
         */
-        virtual css::uno::Any  getCurrentSelection(weld::TreeView& rControl) const = 0;
+        virtual cpo::uno::Any  getCurrentSelection(weld::TreeView& rControl) const = 0;
 
         virtual vcl::Window* getMenuParent() const = 0;
 

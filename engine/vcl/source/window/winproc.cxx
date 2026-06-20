@@ -542,7 +542,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, NotifyEventType n
                                 if( xDragSource.is() )
                                 {
                                     xDragGestureRecognizer->fireDragGestureEvent( 0,
-                                        relLoc.X(), relLoc.Y(), xDragSource, css::uno::Any( aMouseEvent ) );
+                                        relLoc.X(), relLoc.Y(), xDragSource, cpo::uno::Any( aMouseEvent ) );
                                 }
                             }
                         }
@@ -976,7 +976,7 @@ bool ImplKitHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, NotifyEventType
                                         aWinPos.X(),
                                         aWinPos.Y(),
                                         xDragSource,
-                                        css::uno::Any(aEvent));
+                                        cpo::uno::Any(aEvent));
                             }
                         }
                     }

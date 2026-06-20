@@ -49,11 +49,11 @@ class SW_DLLPUBLIC SwXDocumentSettings final :
     bool mbPreferPrinterPapersize;
 
     virtual void _preSetValues () override;
-    virtual void _setSingleValue( const comphelper::PropertyInfo & rInfo, const css::uno::Any &rValue ) override;
+    virtual void _setSingleValue( const comphelper::PropertyInfo & rInfo, const cpo::uno::Any &rValue ) override;
     virtual void _postSetValues () override;
 
     virtual void _preGetValues () override;
-    virtual void _getSingleValue( const comphelper::PropertyInfo & rInfo, css::uno::Any & rValue ) override;
+    virtual void _getSingleValue( const comphelper::PropertyInfo & rInfo, cpo::uno::Any & rValue ) override;
     virtual void _postGetValues () override;
     virtual ~SwXDocumentSettings()
         noexcept override;
@@ -61,7 +61,7 @@ public:
     SwXDocumentSettings( SwXTextDocument* pModel );
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
     virtual void SAL_CALL acquire(  )
         noexcept override;
     virtual void SAL_CALL release(  )

@@ -4403,8 +4403,8 @@ void SwTextNode::SetAttrOutlineContentVisible(bool bVisible)
 {
     SfxGrabBagItem aGrabBagItem(
         RES_PARATR_GRABBAG,
-        std::map<OUString, css::uno::Any>{
-            { u"OutlineContentVisibleAttr"_ustr, css::uno::Any(bVisible) } });
+        std::map<OUString, cpo::uno::Any>{
+            { u"OutlineContentVisibleAttr"_ustr, cpo::uno::Any(bVisible) } });
     SetAttr(aGrabBagItem);
 }
 

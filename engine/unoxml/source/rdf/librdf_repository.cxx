@@ -339,7 +339,7 @@ public:
 
     // css::lang::XInitialization:
     virtual void SAL_CALL initialize(
-            const uno::Sequence< css::uno::Any > & i_rArguments) override;
+            const uno::Sequence< cpo::uno::Any > & i_rArguments) override;
 
     // XNamedGraph forwards ---------------------------------------------
     NamedGraphMap_t::iterator clearGraph_NoLock(
@@ -451,7 +451,7 @@ public:
 
     // css::container::XEnumeration:
     virtual bool SAL_CALL hasMoreElements() override;
-    virtual uno::Any SAL_CALL nextElement() override;
+    virtual cpo::uno::Any SAL_CALL nextElement() override;
 
 private:
 
@@ -498,7 +498,7 @@ librdf_node* librdf_GraphResult::getContext_Lock() const
     return m_pContext.get();
 }
 
-css::uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 librdf_GraphResult::nextElement()
 {
     std::scoped_lock g(m_rMutex);
@@ -515,7 +515,7 @@ librdf_GraphResult::nextElement()
         throw lang::WrappedTargetException(
             u"librdf_GraphResult::nextElement: "
             "librdf_stream_get_object failed"_ustr, *this,
-                uno::Any(e));
+                cpo::uno::Any(e));
     }
     // NB: pCtxt may be null here if this is result of a graph query
     if (pCtxt && isInternalContext(pCtxt)) {
@@ -525,7 +525,7 @@ librdf_GraphResult::nextElement()
         m_xRep->getTypeConverter().convertToStatement(pStmt, pCtxt) );
     // NB: this will invalidate current item.
     librdf_stream_next(m_pStream.get());
-    return uno::Any(Stmt);
+    return cpo::uno::Any(Stmt);
 }
 
 
@@ -544,7 +544,7 @@ public:
 
     // css::container::XEnumeration:
     virtual bool SAL_CALL hasMoreElements() override;
-    virtual uno::Any SAL_CALL nextElement() override;
+    virtual cpo::uno::Any SAL_CALL nextElement() override;
 
 private:
 
@@ -560,7 +560,7 @@ librdf_GraphResult2::hasMoreElements()
     return m_nIndex < m_vStatements.size();
 }
 
-css::uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 librdf_GraphResult2::nextElement()
 {
     std::size_t const n = m_nIndex++;
@@ -569,7 +569,7 @@ librdf_GraphResult2::nextElement()
         m_nIndex = m_vStatements.size(); // avoid overflow
         throw container::NoSuchElementException();
     }
-    return uno::Any(m_vStatements[n]);
+    return cpo::uno::Any(m_vStatements[n]);
 }
 
 /** result of tuple queries ("SELECT").
@@ -602,7 +602,7 @@ public:
 
     // css::container::XEnumeration:
     virtual bool SAL_CALL hasMoreElements() override;
-    virtual uno::Any SAL_CALL nextElement() override;
+    virtual cpo::uno::Any SAL_CALL nextElement() override;
 
     // css::rdf::XQuerySelectResult:
     virtual uno::Sequence< OUString > SAL_CALL getBindingNames() override;
@@ -648,7 +648,7 @@ public:
     using std::vector<librdf_node*>::operator[];
 };
 
-css::uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 librdf_QuerySelectResult::nextElement()
 {
     std::scoped_lock g(m_rMutex);
@@ -667,7 +667,7 @@ librdf_QuerySelectResult::nextElement()
         throw lang::WrappedTargetException(
             u"librdf_QuerySelectResult::nextElement: "
             "librdf_query_results_get_bindings failed"_ustr, *this,
-            uno::Any(e));
+            cpo::uno::Any(e));
     }
     uno::Sequence< uno::Reference< rdf::XNode > > ret(count);
     auto retRange = asNonConstRange(ret);
@@ -676,7 +676,7 @@ librdf_QuerySelectResult::nextElement()
     }
     // NB: this will invalidate current item.
     librdf_query_results_next(m_pQueryResult.get());
-    return uno::Any(ret);
+    return cpo::uno::Any(ret);
 }
 
 // css::rdf::XQuerySelectResult:
@@ -778,7 +778,7 @@ void SAL_CALL librdf_NamedGraph::clear()
     try {
         xRep->clearGraph_NoLock(contextU);
     } catch (lang::IllegalArgumentException & ex) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException( ex.Message,
                         *this, anyEx );
     }
@@ -947,7 +947,7 @@ uno::Reference< rdf::XBlankNode > SAL_CALL librdf_Repository::createBlankNode()
     try {
         return rdf::BlankNode::create(m_xContext, nodeID);
     } catch (const lang::IllegalArgumentException &) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
                 u"librdf_Repository::createBlankNode: "
                 "illegal blank node label"_ustr, *this, anyEx);
@@ -1558,7 +1558,7 @@ void SAL_CALL librdf_Repository::setStatementRDFa(
                 uno::UNO_QUERY_THROW);
         }
     } catch (const lang::IllegalArgumentException &) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
                 u"librdf_Repository::setStatementRDFa: "
                 "cannot create literal"_ustr, *this, anyEx);
@@ -1597,7 +1597,7 @@ void SAL_CALL librdf_Repository::setStatementRDFa(
     }
     catch (const container::NoSuchElementException&)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
                 u"librdf_Repository::setStatementRDFa: "
                 "cannot addStatementGraph"_ustr, *this, anyEx);
@@ -1641,7 +1641,7 @@ librdf_Repository::getStatementRDFa(
         xXmlId.set( rdf::URI::create(m_xContext, s_nsOOo + sXmlId),
             uno::UNO_SET_THROW);
     } catch (const lang::IllegalArgumentException &) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
                 u"librdf_Repository::getStatementRDFa: "
                 "cannot create URI for XML ID"_ustr, *this, anyEx);
@@ -1654,7 +1654,7 @@ librdf_Repository::getStatementRDFa(
     }
     catch (const container::NoSuchElementException&)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
                 u"librdf_Repository::getStatementRDFa: "
                 "cannot getStatementsGraph"_ustr, *this, anyEx);
@@ -1734,7 +1734,7 @@ librdf_Repository::getStatementsRDFa(
 
 // css::lang::XInitialization:
 void SAL_CALL librdf_Repository::initialize(
-    const uno::Sequence< css::uno::Any > &)
+    const uno::Sequence< cpo::uno::Any > &)
 {
     std::scoped_lock g(m_aMutex);
 
@@ -2020,7 +2020,7 @@ librdf_Repository::getStatementsGraph_NoLock(
             throw lang::WrappedTargetException(
                 u"librdf_GraphResult::nextElement: "
                 "librdf_stream_get_object failed"_ustr, *this,
-                    uno::Any(e));
+                    cpo::uno::Any(e));
         }
         // NB: pCtxt may be null here if this is result of a graph query
         if (pCtxt && isInternalContext(pCtxt)) {
@@ -2357,7 +2357,7 @@ librdf_TypeConverter::convertToXURI(librdf_uri* i_pURI) const
     try {
         return rdf::URI::create(m_xContext, uriU);
     } catch (const lang::IllegalArgumentException &) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
                 u"librdf_TypeConverter::convertToXURI: "
                 "illegal uri"_ustr, m_rRep, anyEx);
@@ -2399,7 +2399,7 @@ librdf_TypeConverter::convertToXResource(librdf_node* i_pNode) const
         try {
             return rdf::BlankNode::create(m_xContext, labelU);
         } catch (const lang::IllegalArgumentException &) {
-            css::uno::Any anyEx = cppu::getCaughtException();
+            cpo::uno::Any anyEx = cppu::getCaughtException();
             throw lang::WrappedTargetRuntimeException(
                     u"librdf_TypeConverter::convertToXResource: "
                     "illegal blank node label"_ustr, m_rRep, anyEx);
@@ -2462,7 +2462,7 @@ librdf_TypeConverter::convertToStatement(librdf_statement* i_pStmt,
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 unoxml_rdfRepository_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new librdf_Repository(context));
 }

@@ -29,6 +29,7 @@
 #include <unomsaaevent.hxx>
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::accessibility;
 
 AccContainerEventListener::AccContainerEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager& rManager)

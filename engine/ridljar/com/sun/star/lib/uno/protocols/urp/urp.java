@@ -28,7 +28,7 @@ import com.sun.star.lib.uno.environments.remote.Message;
 import com.sun.star.lib.uno.environments.remote.ThreadId;
 import com.sun.star.lib.uno.typedesc.MethodDescription;
 import com.sun.star.lib.uno.typedesc.TypeDescription;
-import com.sun.star.uno.Any;
+import cpo.uno.Any;
 import com.sun.star.uno.IBridge;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;

@@ -54,7 +54,7 @@ void SAL_CALL LoadDispatcher::dispatch(const css::util::URL&                    
     impl_dispatch( aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >() );
 }
 
-css::uno::Any SAL_CALL LoadDispatcher::dispatchWithReturnValue( const css::util::URL& rURL,
+cpo::uno::Any SAL_CALL LoadDispatcher::dispatchWithReturnValue( const css::util::URL& rURL,
                                                                 const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
 {
     return impl_dispatch( rURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
@@ -70,7 +70,7 @@ void SAL_CALL LoadDispatcher::removeStatusListener(const css::uno::Reference< cs
 {
 }
 
-css::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
+cpo::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
                                              const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
                                              const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
@@ -90,13 +90,13 @@ css::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
     {
         if (xListener.is())
             xListener->dispatchFinished(
-                css::frame::DispatchResultEvent(xThis, css::frame::DispatchResultState::DONTKNOW, css::uno::Any())); // DONTKNOW? ... not really started ... not really failed :-)
+                css::frame::DispatchResultEvent(xThis, css::frame::DispatchResultState::DONTKNOW, cpo::uno::Any())); // DONTKNOW? ... not really started ... not really failed :-)
     }
 
     css::uno::Reference< css::frame::XFrame > xBaseFrame(m_xOwnerFrame.get(), css::uno::UNO_QUERY);
     if (!xBaseFrame.is() && xListener.is())
         xListener->dispatchFinished(
-            css::frame::DispatchResultEvent(xThis, css::frame::DispatchResultState::FAILURE, css::uno::Any()));
+            css::frame::DispatchResultEvent(xThis, css::frame::DispatchResultState::FAILURE, cpo::uno::Any()));
 
     // OK ... now the internal loader seems to be usable for new requests
     // and our owner frame seems to be valid for such operations.
@@ -129,14 +129,14 @@ css::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
     {
         if (xComponent.is())
             xListener->dispatchFinished(
-                css::frame::DispatchResultEvent(xThis, css::frame::DispatchResultState::SUCCESS, css::uno::Any()));
+                css::frame::DispatchResultEvent(xThis, css::frame::DispatchResultState::SUCCESS, cpo::uno::Any()));
         else
             xListener->dispatchFinished(
-                css::frame::DispatchResultEvent(xThis, css::frame::DispatchResultState::FAILURE, css::uno::Any()));
+                css::frame::DispatchResultEvent(xThis, css::frame::DispatchResultState::FAILURE, cpo::uno::Any()));
     }
 
     // return the model - like loadComponentFromURL()
-    css::uno::Any aRet;
+    cpo::uno::Any aRet;
     if ( xComponent.is () )
         aRet <<= xComponent;
 

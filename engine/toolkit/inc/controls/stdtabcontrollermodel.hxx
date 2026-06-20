@@ -86,11 +86,11 @@ public:
                             virtual ~StdTabControllerModel() override;
 
     // css::uno::XInterface
-    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return OWeakAggObject::queryInterface(rType); }
+    cpo::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return OWeakAggObject::queryInterface(rType); }
     void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
     void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
-    css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+    cpo::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
 
     // css::lang::XTypeProvider
     css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;

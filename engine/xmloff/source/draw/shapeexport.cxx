@@ -264,9 +264,9 @@ uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement
                 {
                     const uno::Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
 
-                    uno::Sequence< uno::Any > aArguments {
-                        uno::Any(comphelper::makePropertyValue(u"CustomShape"_ustr, xShape)),
-                        uno::Any(comphelper::makePropertyValue(u"ForceGroupWithText"_ustr, true)) };
+                    uno::Sequence< cpo::uno::Any > aArguments {
+                        cpo::uno::Any(comphelper::makePropertyValue(u"CustomShape"_ustr, xShape)),
+                        cpo::uno::Any(comphelper::makePropertyValue(u"ForceGroupWithText"_ustr, true)) };
                     uno::Reference< uno::XInterface > xInterface(
                         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(u"com.sun.star.drawing.EnhancedCustomShapeEngine"_ustr, aArguments, xContext) );
                     assert( xInterface && "should never fail" );
@@ -347,7 +347,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
 
             if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(u"IsEmptyPresentationObject"_ustr) )
             {
-                uno::Any aAny = xPropSet->getPropertyValue(u"IsEmptyPresentationObject"_ustr);
+                cpo::uno::Any aAny = xPropSet->getPropertyValue(u"IsEmptyPresentationObject"_ustr);
                 aAny >>= bIsEmptyPresObj;
             }
 
@@ -436,7 +436,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                             //          as member, thus saving time.
                         DBG_ASSERT(-1 != nIndex, "XMLShapeExport::collectShapeAutoStyles: could not obtain the index for our context id!");
 
-                        XMLPropertyState aNewState(nIndex, uno::Any(sNumberStyle));
+                        XMLPropertyState aNewState(nIndex, cpo::uno::Any(sNumberStyle));
                         aPropStates.push_back(aNewState);
                     }
                 }
@@ -1395,7 +1395,7 @@ void XMLShapeExport::ImpExportQRCode(const uno::Reference<drawing::XShape>& xSha
 {
     uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
 
-    uno::Any aAny = xPropSet->getPropertyValue(u"BarCodeProperties"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"BarCodeProperties"_ustr);
 
     css::drawing::BarCode aBarCode;
     if(!(aAny >>= aBarCode))
@@ -1512,7 +1512,7 @@ void XMLShapeExport::ImpExportNewTrans_GetB2DHomMatrix(::basegfx::B2DHomMatrix& 
        direction the shape is in. Thus, this code provides the conversion from
        the OASIS Open Office file format to the OpenOffice.org file format. (#i28749#)
     */
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     if ( !( GetExport().getExportFlags() & SvXMLExportFlags::OASIS ) &&
          xPropSet->getPropertySetInfo()->hasPropertyByName(u"TransformationInHoriL2R"_ustr) )
     {
@@ -2190,7 +2190,7 @@ void XMLShapeExport::ImpExportLineShape(
     if (xPropSet->getPropertySetInfo()->hasPropertyByName(u"Geometry"_ustr))
     {
         // get the two points
-        uno::Any aAny(xPropSet->getPropertyValue(u"Geometry"_ustr));
+        cpo::uno::Any aAny(xPropSet->getPropertyValue(u"Geometry"_ustr));
         if (auto pSourcePolyPolygon
                 = o3tl::tryAccess<drawing::PointSequenceSequence>(aAny))
         {
@@ -2353,7 +2353,7 @@ void XMLShapeExport::ImpExportPolygonShape(
     // prepare name (with most used)
     enum ::xmloff::token::XMLTokenEnum eName(XML_PATH);
 
-    uno::Any aAny( xPropSet->getPropertyValue(u"Geometry"_ustr) );
+    cpo::uno::Any aAny( xPropSet->getPropertyValue(u"Geometry"_ustr) );
     basegfx::B2DPolyPolygon aPolyPolygon;
 
     // tdf#145240 the Any can contain PolyPolygonBezierCoords or PointSequenceSequence
@@ -2506,7 +2506,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
 
                     if (newStreamURL != aStreamURL)
                     {
-                        xPropSet->setPropertyValue(u"GraphicStreamURL"_ustr, uno::Any(newStreamURL));
+                        xPropSet->setPropertyValue(u"GraphicStreamURL"_ustr, cpo::uno::Any(newStreamURL));
                     }
                 }
 
@@ -2669,7 +2669,7 @@ void XMLShapeExport::ImpExportConnectorShape(
 
     // export connection kind
     drawing::ConnectorType eType = drawing::ConnectorType_STANDARD;
-    uno::Any aAny = xProps->getPropertyValue(u"EdgeKind"_ustr);
+    cpo::uno::Any aAny = xProps->getPropertyValue(u"EdgeKind"_ustr);
     aAny >>= eType;
 
     if( eType != drawing::ConnectorType_STANDARD )
@@ -3343,10 +3343,10 @@ static void lcl_CopyStream(
         uno::UNO_QUERY);
     if (xStreamProps.is()) { // this is NOT supported in FileSystemStorage
         xStreamProps->setPropertyValue(u"MediaType"_ustr,
-            uno::Any(rMimeType));
+            cpo::uno::Any(rMimeType));
         xStreamProps->setPropertyValue( // turn off compression
             u"Compressed"_ustr,
-            uno::Any(false));
+            cpo::uno::Any(false));
     }
     ::comphelper::OStorageHelper::CopyInputToOutput(xInStream, xOutStream);
     xOutStream->closeOutput();
@@ -3627,7 +3627,7 @@ void XMLShapeExport::ImpExport3DShape(
     OUStringBuffer sStringBuffer;
 
     // transformation (UNO_NAME_3D_TRANSFORM_MATRIX == "D3DTransformMatrix")
-    uno::Any aAny = xPropSet->getPropertyValue(u"D3DTransformMatrix"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"D3DTransformMatrix"_ustr);
     drawing::HomogenMatrix aHomMat;
     aAny >>= aHomMat;
     SdXMLImExTransform3D aTransform;
@@ -3781,7 +3781,7 @@ void XMLShapeExport::export3DSceneAttributes( const css::uno::Reference< css::be
     OUStringBuffer sStringBuffer;
 
     // world transformation (UNO_NAME_3D_TRANSFORM_MATRIX == "D3DTransformMatrix")
-    uno::Any aAny = xPropSet->getPropertyValue(u"D3DTransformMatrix"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"D3DTransformMatrix"_ustr);
     drawing::HomogenMatrix aHomMat;
     aAny >>= aHomMat;
     SdXMLImExTransform3D aTransform;
@@ -4394,7 +4394,7 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
     static constexpr OUString sCustomShapeGeometry( u"CustomShapeGeometry"_ustr );
     if ( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName( sCustomShapeGeometry ) )
     {
-        uno::Any aGeoPropSet( xPropSet->getPropertyValue( sCustomShapeGeometry ) );
+        cpo::uno::Any aGeoPropSet( xPropSet->getPropertyValue( sCustomShapeGeometry ) );
         uno::Sequence< beans::PropertyValue > aGeoPropSeq;
 
         if ( aGeoPropSet >>= aGeoPropSeq )
@@ -5125,13 +5125,13 @@ void XMLShapeExport::ImpExportCustomShape(
         OUString aStr;
         if ( xPropSetInfo->hasPropertyByName( u"CustomShapeEngine"_ustr ) )
         {
-            uno::Any aEngine( xPropSet->getPropertyValue( u"CustomShapeEngine"_ustr ) );
+            cpo::uno::Any aEngine( xPropSet->getPropertyValue( u"CustomShapeEngine"_ustr ) );
             if ( ( aEngine >>= aStr ) && !aStr.isEmpty() )
                 mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_ENGINE, aStr );
         }
         if ( xPropSetInfo->hasPropertyByName( u"CustomShapeData"_ustr ) )
         {
-            uno::Any aData( xPropSet->getPropertyValue( u"CustomShapeData"_ustr ) );
+            cpo::uno::Any aData( xPropSet->getPropertyValue( u"CustomShapeData"_ustr ) );
             if ( ( aData >>= aStr ) && !aStr.isEmpty() )
                 mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DATA, aStr );
         }

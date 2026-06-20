@@ -87,7 +87,7 @@ codemaker/source/javamaker/classfile.cxx:86
     unsigned int data
     3405691582
 comphelper/qa/unit/variadictemplates.cxx:63
-    void extract(const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,int,optional<type-parameter-?-?> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &)
+    void extract(const class com::sun::star::uno::Sequence<class cpo::uno::Any> &,int,optional<type-parameter-?-?> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &)
     int nArg
     4
 connectivity/source/inc/java/sql/ConnectionLog.hxx:105
@@ -335,11 +335,11 @@ cui/source/tabpages/align.cxx:58
     type-parameter-?-? eBlock
     4
 dbaccess/source/core/dataaccess/documentdefinition.hxx:183
-    void dbaccess::ODocumentDefinition::firePropertyChange(int,const class com::sun::star::uno::Any &,const class com::sun::star::uno::Any &,_Bool,const struct dbaccess::ODocumentDefinition::NotifierAccess &)
+    void dbaccess::ODocumentDefinition::firePropertyChange(int,const class cpo::uno::Any &,const class cpo::uno::Any &,_Bool,const struct dbaccess::ODocumentDefinition::NotifierAccess &)
     int i_nHandle
     7
 dbaccess/source/core/inc/columnsettings.hxx:39
-    void dbaccess::IPropertyContainer::registerMayBeVoidProperty(const class rtl::OUString &,int,int,class com::sun::star::uno::Any *,const class com::sun::star::uno::Type &)
+    void dbaccess::IPropertyContainer::registerMayBeVoidProperty(const class rtl::OUString &,int,int,class cpo::uno::Any *,const class com::sun::star::uno::Type &)
     int _nAttributes
     3
 dbaccess/source/ui/dlg/dsnItem.hxx:39
@@ -351,7 +351,7 @@ dbaccess/source/ui/inc/FieldDescControl.hxx:140
     int nRow
     -1
 dbaccess/source/ui/inc/JAccess.hxx:51
-    void dbaui::OJoinDesignViewAccess::notifyAccessibleEvent(const short,const class com::sun::star::uno::Any &,const class com::sun::star::uno::Any &)
+    void dbaui::OJoinDesignViewAccess::notifyAccessibleEvent(const short,const class cpo::uno::Any &,const class cpo::uno::Any &)
     const short _nEventId
     7
 dbaccess/source/ui/querydesign/SelectionBrowseBox.hxx:88
@@ -499,7 +499,7 @@ include/basic/sbxcore.hxx:68
     enum SbxFlagBits n
     256
 include/comphelper/OAccessible.hxx:107
-    void comphelper::OCommonAccessibleComponent::NotifyAccessibleEvent(const short,const class com::sun::star::uno::Any &,const class com::sun::star::uno::Any &,int)
+    void comphelper::OCommonAccessibleComponent::NotifyAccessibleEvent(const short,const class cpo::uno::Any &,const class cpo::uno::Any &,int)
     int nIndexHint
     -1
 include/comphelper/docpasswordhelper.hxx:286
@@ -875,7 +875,7 @@ include/oox/helper/binarystreambase.hxx:103
     int nBlockSize
     4
 include/oox/helper/containerhelper.hxx:193
-    class rtl::OUString oox::ContainerHelper::insertByUnusedName(const class com::sun::star::uno::Reference<class com::sun::star::container::XNameContainer> &,const class rtl::OUString &,char16_t,const class com::sun::star::uno::Any &)
+    class rtl::OUString oox::ContainerHelper::insertByUnusedName(const class com::sun::star::uno::Reference<class com::sun::star::container::XNameContainer> &,const class rtl::OUString &,char16_t,const class cpo::uno::Any &)
     char16_t cSeparator
     32
 include/oox/helper/containerhelper.hxx:258
@@ -1091,7 +1091,7 @@ include/svl/zformat.hxx:423
     char16_t cQuote
     34
 include/svtools/brwbox.hxx:655
-    void BrowseBox::commitBrowseBoxEvent(short,const class com::sun::star::uno::Any &,const class com::sun::star::uno::Any &)
+    void BrowseBox::commitBrowseBoxEvent(short,const class cpo::uno::Any &,const class cpo::uno::Any &)
     short nEventId
     7
 include/svtools/ctrlbox.hxx:378
@@ -1511,7 +1511,7 @@ include/tools/urlobj.hxx:1049
     unsigned short eCharset
     76
 include/ucbhelper/simpleinteractionrequest.hxx:79
-    void ucbhelper::SimpleInteractionRequest::SimpleInteractionRequest(const class com::sun::star::uno::Any &,const enum ContinuationFlags)
+    void ucbhelper::SimpleInteractionRequest::SimpleInteractionRequest(const class cpo::uno::Any &,const enum ContinuationFlags)
     const enum ContinuationFlags nContinuations
     12
 include/unotools/confignode.hxx:239
@@ -1591,11 +1591,11 @@ include/vcl/outdev.hxx:1081
     char16_t nExtraChar
     45
 include/vcl/print.hxx:615
-    class com::sun::star::uno::Any vcl::PrinterOptionsHelper::setRangeControlOpt(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,int,int,int,const struct vcl::PrinterOptionsHelper::UIControlOptions &)
+    class cpo::uno::Any vcl::PrinterOptionsHelper::setRangeControlOpt(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,int,int,int,const struct vcl::PrinterOptionsHelper::UIControlOptions &)
     int i_nMinValue
     10
 include/vcl/print.hxx:615
-    class com::sun::star::uno::Any vcl::PrinterOptionsHelper::setRangeControlOpt(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,int,int,int,const struct vcl::PrinterOptionsHelper::UIControlOptions &)
+    class cpo::uno::Any vcl::PrinterOptionsHelper::setRangeControlOpt(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,int,int,int,const struct vcl::PrinterOptionsHelper::UIControlOptions &)
     int i_nMaxValue
     1000
 include/vcl/svapp.hxx:760
@@ -1695,7 +1695,7 @@ include/vcl/wrkwin.hxx:61
     enum WindowType eType
     369
 include/vcl/wrkwin.hxx:67
-    void WorkWindow::WorkWindow(class vcl::Window *,const class com::sun::star::uno::Any &,long)
+    void WorkWindow::WorkWindow(class vcl::Window *,const class cpo::uno::Any &,long)
     long nStyle
     1312
 include/xmloff/txtparae.hxx:356
@@ -2183,7 +2183,7 @@ sc/source/filter/excel/xepage.cxx:402
     const int nElement
     2638
 sc/source/filter/excel/xepivotxml.cxx:715
-    void WriteGrabBagItemToStream(class XclExpXmlStream &,int,const class com::sun::star::uno::Any &)
+    void WriteGrabBagItemToStream(class XclExpXmlStream &,int,const class cpo::uno::Any &)
     int tokenId
     4045
 sc/source/filter/inc/addressconverter.hxx:431
@@ -2727,11 +2727,11 @@ svx/source/dialog/fntctrl.cxx:465
     unsigned char nProp
     100
 svx/source/inc/AccessibleFrameSelector.hxx:106
-    void svx::a11y::AccFrameSelectorChild::NotifyAccessibleEvent(const short,const class com::sun::star::uno::Any &,const class com::sun::star::uno::Any &)
+    void svx::a11y::AccFrameSelectorChild::NotifyAccessibleEvent(const short,const class cpo::uno::Any &,const class cpo::uno::Any &)
     const short _nEventId
     4
 svx/source/inc/charmapacc.hxx:195
-    void svx::SvxShowCharSetItemAcc::fireEvent(const short,const class com::sun::star::uno::Any &,const class com::sun::star::uno::Any &)
+    void svx::SvxShowCharSetItemAcc::fireEvent(const short,const class cpo::uno::Any &,const class cpo::uno::Any &)
     const short _nEventId
     4
 svx/source/inc/fmcontrolbordermanager.hxx:71
@@ -2743,7 +2743,7 @@ svx/source/inc/fmshimp.hxx:468
     short nId
     10636
 svx/source/inc/GraphCtlAccessibleContext.hxx:144
-    void SvxGraphCtrlAccessibleContext::CommitChange(short,const class com::sun::star::uno::Any &,const class com::sun::star::uno::Any &)
+    void SvxGraphCtrlAccessibleContext::CommitChange(short,const class cpo::uno::Any &,const class cpo::uno::Any &)
     short aEventId
     7
 svx/source/sidebar/textcolumns/TextColumnsPropertyPanel.cxx:28
@@ -3063,7 +3063,7 @@ sw/source/uibase/uiview/view2.cxx:192
     const long max
     10
 sw/source/writerfilter/dmapper/DomainMapper_Impl.hxx:920
-    class com::sun::star::uno::Any writerfilter::dmapper::DomainMapper_Impl::GetInheritedParaProperty(enum writerfilter::dmapper::PropertyIds)
+    class cpo::uno::Any writerfilter::dmapper::DomainMapper_Impl::GetInheritedParaProperty(enum writerfilter::dmapper::PropertyIds)
     enum writerfilter::dmapper::PropertyIds eId
     230
 sw/source/writerfilter/dmapper/NumberingManager.hxx:79
@@ -3087,7 +3087,7 @@ sw/source/writerfilter/rtftok/rtfsprm.hxx:58
     unsigned int nKeyword
     92728
 toolkit/inc/controls/table/tablecontrol.hxx:133
-    void svt::table::TableControl::commitCellEvent(const short,const class com::sun::star::uno::Any &,const class com::sun::star::uno::Any &)
+    void svt::table::TableControl::commitCellEvent(const short,const class cpo::uno::Any &,const class cpo::uno::Any &)
     const short i_eventID
     4
 toolkit/inc/controls/table/tablecontrolinterface.hxx:203
@@ -3455,7 +3455,7 @@ xmloff/source/script/xmlbasicscript.hxx:33
     int nToken
     1968759
 xmloff/source/text/XMLIndexMarkExport.cxx:178
-    void lcl_ExportPropertyBool(class SvXMLExport &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,enum xmloff::token::XMLTokenEnum,class com::sun::star::uno::Any &)
+    void lcl_ExportPropertyBool(class SvXMLExport &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,enum xmloff::token::XMLTokenEnum,class cpo::uno::Any &)
     enum xmloff::token::XMLTokenEnum eToken
     2270
 xmloff/source/transform/TransformerContext.hxx:57

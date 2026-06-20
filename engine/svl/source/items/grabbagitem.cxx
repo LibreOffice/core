@@ -27,7 +27,7 @@ SfxGrabBagItem::SfxGrabBagItem(sal_uInt16 nWhich)
 {
 }
 
-SfxGrabBagItem::SfxGrabBagItem(sal_uInt16 nWhich, std::map<OUString, css::uno::Any> aMap)
+SfxGrabBagItem::SfxGrabBagItem(sal_uInt16 nWhich, std::map<OUString, cpo::uno::Any> aMap)
     : SfxPoolItem(nWhich)
     , m_aMap(std::move(aMap))
 {
@@ -54,7 +54,7 @@ SfxGrabBagItem* SfxGrabBagItem::Clone(SfxItemPool* /*pPool*/) const
     return new SfxGrabBagItem(*this);
 }
 
-bool SfxGrabBagItem::PutValue(const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool SfxGrabBagItem::PutValue(const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
     uno::Sequence<beans::PropertyValue> aValue;
@@ -72,7 +72,7 @@ bool SfxGrabBagItem::PutValue(const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
     return false;
 }
 
-bool SfxGrabBagItem::QueryValue(uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool SfxGrabBagItem::QueryValue(cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     uno::Sequence<beans::PropertyValue> aValue(m_aMap.size());
     beans::PropertyValue* pValue = aValue.getArray();

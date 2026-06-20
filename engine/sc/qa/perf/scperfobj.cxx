@@ -49,6 +49,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace sc_apitest {
 
@@ -236,7 +237,7 @@ void ScPerfObj::testSum()
     // get getSheets
     uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
 
-    uno::Any rSheet = xSheets->getByName("SumSheet");
+    cpo::uno::Any rSheet = xSheets->getByName("SumSheet");
 
     // query for the XSpreadsheet interface
     uno::Reference< sheet::XSpreadsheet > xSheet (rSheet, UNO_QUERY);
@@ -275,7 +276,7 @@ void ScPerfObj::testFTest()
     // get getSheets
     uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
 
-    uno::Any rSheet = xSheets->getByName("FTestSheet");
+    cpo::uno::Any rSheet = xSheets->getByName("FTestSheet");
 
     // query for the XSpreadsheet interface
     uno::Reference< sheet::XSpreadsheet > xSheet (rSheet, UNO_QUERY);
@@ -299,7 +300,7 @@ void ScPerfObj::testChiTest()
     // get getSheets
     uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
 
-    uno::Any rSheet = xSheets->getByName("ChiTestSheet");
+    cpo::uno::Any rSheet = xSheets->getByName("ChiTestSheet");
 
     // query for the XSpreadsheet interface
     uno::Reference< sheet::XSpreadsheet > xSheet (rSheet, UNO_QUERY);
@@ -323,7 +324,7 @@ void ScPerfObj::testSumX2PY2Test()
     // get getSheets
     uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
 
-    uno::Any rSheet = xSheets->getByName("SumX2PY2Sheet");
+    cpo::uno::Any rSheet = xSheets->getByName("SumX2PY2Sheet");
 
     // query for the XSpreadsheet interface
     uno::Reference< sheet::XSpreadsheet > xSheet (rSheet, UNO_QUERY);
@@ -347,7 +348,7 @@ void ScPerfObj::testTTest()
     // get getSheets
     uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
 
-    uno::Any rSheet = xSheets->getByName("TTestSheet");
+    cpo::uno::Any rSheet = xSheets->getByName("TTestSheet");
 
     // query for the XSpreadsheet interface
     uno::Reference< sheet::XSpreadsheet > xSheet (rSheet, UNO_QUERY);
@@ -371,7 +372,7 @@ void ScPerfObj::testLcm()
     // get getSheets
     uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
 
-    uno::Any rSheet = xSheets->getByName("LCMSheet");
+    cpo::uno::Any rSheet = xSheets->getByName("LCMSheet");
 
     // query for the XSpreadsheet interface
     uno::Reference< sheet::XSpreadsheet > xSheet (rSheet, UNO_QUERY);
@@ -395,7 +396,7 @@ void ScPerfObj::testGcd()
     // get getSheets
     uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
 
-    uno::Any rSheet = xSheets->getByName("GCDSheet");
+    cpo::uno::Any rSheet = xSheets->getByName("GCDSheet");
 
     // query for the XSpreadsheet interface
     uno::Reference< sheet::XSpreadsheet > xSheet (rSheet, UNO_QUERY);
@@ -419,7 +420,7 @@ void ScPerfObj::testPearson()
     // get getSheets
     uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
 
-    uno::Any rSheet = xSheets->getByName("PearsonSheet");
+    cpo::uno::Any rSheet = xSheets->getByName("PearsonSheet");
 
     // query for the XSpreadsheet interface
     uno::Reference< sheet::XSpreadsheet > xSheet (rSheet, UNO_QUERY);
@@ -442,7 +443,7 @@ void ScPerfObj::testSubTotalWithFormulas()
 
     // get getSheets
     uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
-    uno::Any rSheet = xSheets->getByName("scBigSingleSheet");
+    cpo::uno::Any rSheet = xSheets->getByName("scBigSingleSheet");
 
     // query for the XCellRange interface
     uno::Reference< table::XCellRange > rCellRange(rSheet, UNO_QUERY);
@@ -474,7 +475,7 @@ void ScPerfObj::testSubTotalWithoutFormulas()
 
     // get getSheets
     uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
-    uno::Any rSheet = xSheets->getByName("scBigSingleSheet");
+    cpo::uno::Any rSheet = xSheets->getByName("scBigSingleSheet");
 
     // query for the XCellRange interface
     uno::Reference< table::XCellRange > rCellRange(rSheet, UNO_QUERY);
@@ -515,7 +516,7 @@ namespace {
     {
         uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
 
-        uno::Any aSheet = xSheets->getByName(rSheetName);
+        cpo::uno::Any aSheet = xSheets->getByName(rSheetName);
         uno::Reference< table::XCellRange > xSheetCellRange(aSheet, UNO_QUERY);
         uno::Reference< sheet::XCellRangeFormula > xCellRange(
             xSheetCellRange->getCellRangeByName(rCellRange), UNO_QUERY);
@@ -546,7 +547,7 @@ void ScPerfObj::testFixedSum()
     callgrindDump("sc:sum_with_fixed_array_formula");
 
     uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
-    uno::Any aSheet = xSheets->getByName("FixedSumSheet");
+    cpo::uno::Any aSheet = xSheets->getByName("FixedSumSheet");
     uno::Reference< sheet::XSpreadsheet > xSheet (aSheet, UNO_QUERY);
 
     for( sal_Int32 i = 0; i < 1000; ++i )
@@ -566,7 +567,7 @@ void ScPerfObj::testMatConcatSmall()
     // get getSheets
     uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
 
-    uno::Any rSheet = xSheets->getByName("Sheet1");
+    cpo::uno::Any rSheet = xSheets->getByName("Sheet1");
 
     // query for the XSpreadsheet interface
     uno::Reference< sheet::XSpreadsheet > xSheet (rSheet, UNO_QUERY);
@@ -594,7 +595,7 @@ void ScPerfObj::testMatConcatLarge()
     // get getSheets
     uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_SET_THROW);
 
-    uno::Any rSheet = xSheets->getByName("Sheet1");
+    cpo::uno::Any rSheet = xSheets->getByName("Sheet1");
 
     // query for the XSpreadsheet interface
     uno::Reference< sheet::XSpreadsheet > xSheet (rSheet, UNO_QUERY);

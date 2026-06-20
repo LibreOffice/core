@@ -24,7 +24,7 @@
 #include <strings.hrc>
 #include <commandimageprovider.hxx>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/form/runtime/FormFeature.hpp>
 
 #include <svx/labelitemwindow.hxx>
@@ -45,7 +45,7 @@ namespace frm
 {
 
 
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
 
 

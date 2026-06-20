@@ -47,6 +47,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 
 
@@ -303,7 +304,7 @@ void SfxViewFrame::GetState_Impl( SfxItemSet &rSet )
             case SID_OBJECT:
                 if ( GetViewShell() && GetViewShell()->GetVerbs().hasElements() && !GetObjectShell()->IsInPlaceActive() )
                 {
-                    uno::Any aAny(GetViewShell()->GetVerbs());
+                    cpo::uno::Any aAny(GetViewShell()->GetVerbs());
                     rSet.Put( SfxUnoAnyItem( sal_uInt16( SID_OBJECT ), aAny ) );
                 }
                 else

@@ -52,7 +52,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseFrmdlgTest, testAnchorTypeFromStyle)
     uno::Reference<beans::XPropertySet> xGraphics(
         getStyles(u"FrameStyles"_ustr)->getByName(u"Graphics"_ustr), uno::UNO_QUERY);
     xGraphics->setPropertyValue(u"AnchorType"_ustr,
-                                uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+                                cpo::uno::Any(text::TextContentAnchorType_AS_CHARACTER));
 
     // When inserting an image:
     uno::Sequence<beans::PropertyValue> aArgs = {

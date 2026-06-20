@@ -50,7 +50,7 @@ bool UnoControlBase::ImplHasProperty( const OUString& aPropertyName )
     return xInfo->hasPropertyByName( aPropertyName );
 }
 
-void UnoControlBase::ImplSetPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues, bool bUpdateThis )
+void UnoControlBase::ImplSetPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< cpo::uno::Any >& aValues, bool bUpdateThis )
 {
     css::uno::Reference< css::beans::XMultiPropertySet > xMPS( mxModel, css::uno::UNO_QUERY );
     if ( !mxModel.is() )
@@ -76,7 +76,7 @@ void UnoControlBase::ImplSetPropertyValues( const css::uno::Sequence< OUString >
         ImplLockPropertyChangeNotifications( aPropertyNames, false );
 }
 
-void UnoControlBase::ImplSetPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue, bool bUpdateThis )
+void UnoControlBase::ImplSetPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue, bool bUpdateThis )
 {
     // Model might be logged off already but an event still fires
     if ( !mxModel.is() )
@@ -100,13 +100,13 @@ void UnoControlBase::ImplSetPropertyValue( const OUString& aPropertyName, const 
         ImplLockPropertyChangeNotification( aPropertyName, false );
 }
 
-css::uno::Any UnoControlBase::ImplGetPropertyValue( const OUString& aPropertyName ) const
+cpo::uno::Any UnoControlBase::ImplGetPropertyValue( const OUString& aPropertyName ) const
 {
     css::uno::Reference< css::beans::XPropertySet >  xPSet( mxModel, css::uno::UNO_QUERY );
     if ( xPSet.is() )
         return xPSet->getPropertyValue( aPropertyName );
     else
-        return css::uno::Any();
+        return cpo::uno::Any();
 }
 
 template <typename T> T UnoControlBase::ImplGetPropertyValuePOD( sal_uInt16 nProp )
@@ -114,7 +114,7 @@ template <typename T> T UnoControlBase::ImplGetPropertyValuePOD( sal_uInt16 nPro
     T t(0);
     if ( mxModel.is() )
     {
-        css::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( nProp ) );
+        cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( nProp ) );
         aVal >>= t;
     }
     return t;
@@ -125,7 +125,7 @@ template <typename T> T UnoControlBase::ImplGetPropertyValueClass( sal_uInt16 nP
     T t;
     if ( mxModel.is() )
     {
-        css::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( nProp ) );
+        cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( nProp ) );
         aVal >>= t;
     }
     return t;

@@ -500,14 +500,14 @@ sal_Int32 SAL_CALL ScStyleFamiliesObj::getCount()
     return SC_STYLE_FAMILY_COUNT;
 }
 
-uno::Any SAL_CALL ScStyleFamiliesObj::getByIndex( sal_Int32 nIndex )
+cpo::uno::Any SAL_CALL ScStyleFamiliesObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     rtl::Reference< ScStyleFamilyObj >  xFamily(GetObjectByIndex_Impl(nIndex));
     if (!xFamily.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(uno::Reference< container::XNameContainer >(xFamily));
+    return cpo::uno::Any(uno::Reference< container::XNameContainer >(xFamily));
 }
 
 uno::Type SAL_CALL ScStyleFamiliesObj::getElementType()
@@ -523,14 +523,14 @@ bool SAL_CALL ScStyleFamiliesObj::hasElements()
 
 // container::XNameAccess
 
-uno::Any SAL_CALL ScStyleFamiliesObj::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL ScStyleFamiliesObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     rtl::Reference< ScStyleFamilyObj >  xFamily(GetObjectByName_Impl(aName));
     if (!xFamily.is())
         throw container::NoSuchElementException();
 
-    return uno::Any(uno::Reference< container::XNameContainer >(xFamily));
+    return cpo::uno::Any(uno::Reference< container::XNameContainer >(xFamily));
 }
 
 uno::Sequence<OUString> SAL_CALL ScStyleFamiliesObj::getElementNames()
@@ -584,9 +584,9 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScStyleFamiliesObj::getStyleLoaderO
 {
     //  return defaults for options (?)
     return comphelper::InitPropertySequence({
-            { SC_UNONAME_OVERWSTL, uno::Any(true) },
-            { SC_UNONAME_LOADCELL, uno::Any(true) },
-            { SC_UNONAME_LOADPAGE, uno::Any(true) }
+            { SC_UNONAME_OVERWSTL, cpo::uno::Any(true) },
+            { SC_UNONAME_LOADCELL, cpo::uno::Any(true) },
+            { SC_UNONAME_LOADPAGE, cpo::uno::Any(true) }
         });
 }
 
@@ -694,7 +694,7 @@ rtl::Reference<ScStyleObj> ScStyleFamilyObj::GetObjectByName_Impl(const OUString
     return nullptr;
 }
 
-void SAL_CALL ScStyleFamilyObj::insertByName( const OUString& aName, const uno::Any& aElement )
+void SAL_CALL ScStyleFamilyObj::insertByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
     SolarMutexGuard aGuard;
     bool bDone = false;
@@ -738,7 +738,7 @@ void SAL_CALL ScStyleFamilyObj::insertByName( const OUString& aName, const uno::
     }
 }
 
-void SAL_CALL ScStyleFamilyObj::replaceByName( const OUString& aName, const uno::Any& aElement )
+void SAL_CALL ScStyleFamilyObj::replaceByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
     SolarMutexGuard aGuard;
     //! combine?
@@ -824,14 +824,14 @@ sal_Int32 SAL_CALL ScStyleFamilyObj::getCount()
     return 0;
 }
 
-uno::Any SAL_CALL ScStyleFamilyObj::getByIndex( sal_Int32 nIndex )
+cpo::uno::Any SAL_CALL ScStyleFamilyObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     rtl::Reference< ScStyleObj >  xObj(GetObjectByIndex_Impl(nIndex));
     if (!xObj.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(uno::Reference< style::XStyle >(xObj));
+    return cpo::uno::Any(uno::Reference< style::XStyle >(xObj));
 }
 
 uno::Type SAL_CALL ScStyleFamilyObj::getElementType()
@@ -847,7 +847,7 @@ bool SAL_CALL ScStyleFamilyObj::hasElements()
 
 // container::XNameAccess
 
-uno::Any SAL_CALL ScStyleFamilyObj::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL ScStyleFamilyObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     rtl::Reference< ScStyleObj > xObj(
@@ -855,7 +855,7 @@ uno::Any SAL_CALL ScStyleFamilyObj::getByName( const OUString& aName )
     if (!xObj.is())
         throw container::NoSuchElementException();
 
-    return uno::Any(uno::Reference< style::XStyle >(xObj));
+    return cpo::uno::Any(uno::Reference< style::XStyle >(xObj));
 }
 
 uno::Sequence<OUString> SAL_CALL ScStyleFamilyObj::getElementNames()
@@ -909,14 +909,14 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ScStyleFamilyObj::getProperty
     return uno::Reference< beans::XPropertySetInfo >();
 }
 
-void SAL_CALL ScStyleFamilyObj::setPropertyValue( const OUString&, const uno::Any& )
+void SAL_CALL ScStyleFamilyObj::setPropertyValue( const OUString&, const cpo::uno::Any& )
 {
     OSL_FAIL( "###unexpected!" );
 }
 
-uno::Any SAL_CALL ScStyleFamilyObj::getPropertyValue( const OUString& sPropertyName )
+cpo::uno::Any SAL_CALL ScStyleFamilyObj::getPropertyValue( const OUString& sPropertyName )
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
 
     if ( sPropertyName != "DisplayName" )
     {
@@ -1279,9 +1279,9 @@ void SAL_CALL ScStyleObj::setPropertyToDefault( const OUString& aPropertyName )
     setPropertyValue_Impl( aPropertyName, pEntry, nullptr );
 }
 
-uno::Any ScStyleObj::getPropertyDefault_Impl( std::u16string_view aPropertyName )
+cpo::uno::Any ScStyleObj::getPropertyDefault_Impl( std::u16string_view aPropertyName )
 {
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     const SfxItemPropertyMapEntry* pResultEntry = nullptr;
     const SfxItemSet* pStyleSet = GetStyleItemSet_Impl( aPropertyName, pResultEntry );
@@ -1375,7 +1375,7 @@ uno::Any ScStyleObj::getPropertyDefault_Impl( std::u16string_view aPropertyName 
     return aAny;
 }
 
-uno::Any SAL_CALL ScStyleObj::getPropertyDefault( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ScStyleObj::getPropertyDefault( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
     GetStyle_Impl();
@@ -1383,21 +1383,21 @@ uno::Any SAL_CALL ScStyleObj::getPropertyDefault( const OUString& aPropertyName 
     return getPropertyDefault_Impl( aPropertyName );
 }
 
-uno::Sequence<uno::Any> SAL_CALL ScStyleObj::getPropertyDefaults( const uno::Sequence<OUString>& aPropertyNames )
+uno::Sequence<cpo::uno::Any> SAL_CALL ScStyleObj::getPropertyDefaults( const uno::Sequence<OUString>& aPropertyNames )
 {
     SolarMutexGuard aGuard;
     GetStyle_Impl();
 
-    uno::Sequence<uno::Any> aSequence( aPropertyNames.getLength() );
+    uno::Sequence<cpo::uno::Any> aSequence( aPropertyNames.getLength() );
     std::transform(aPropertyNames.begin(), aPropertyNames.end(), aSequence.getArray(),
-        [this](const OUString& rName) -> uno::Any { return getPropertyDefault_Impl(rName); });
+        [this](const OUString& rName) -> cpo::uno::Any { return getPropertyDefault_Impl(rName); });
     return aSequence;
 }
 
 // XMultiPropertySet
 
 void SAL_CALL ScStyleObj::setPropertyValues( const uno::Sequence< OUString >& aPropertyNames,
-                                                const uno::Sequence< uno::Any >& aValues )
+                                                const uno::Sequence< cpo::uno::Any >& aValues )
 {
     SolarMutexGuard aGuard;
     GetStyle_Impl();
@@ -1406,7 +1406,7 @@ void SAL_CALL ScStyleObj::setPropertyValues( const uno::Sequence< OUString >& aP
         throw lang::IllegalArgumentException();
 
     const OUString* pNames = aPropertyNames.getConstArray();
-    const uno::Any* pValues = aValues.getConstArray();
+    const cpo::uno::Any* pValues = aValues.getConstArray();
     const SfxItemPropertyMap& rPropertyMap = pPropSet->getPropertyMap();
     for ( sal_Int32 i = 0; i < aPropertyNames.getLength(); i++ )
     {
@@ -1415,14 +1415,14 @@ void SAL_CALL ScStyleObj::setPropertyValues( const uno::Sequence< OUString >& aP
     }
 }
 
-uno::Sequence<uno::Any> SAL_CALL ScStyleObj::getPropertyValues( const uno::Sequence< OUString >& aPropertyNames )
+uno::Sequence<cpo::uno::Any> SAL_CALL ScStyleObj::getPropertyValues( const uno::Sequence< OUString >& aPropertyNames )
 {
     SolarMutexGuard aGuard;
     GetStyle_Impl();
 
-    uno::Sequence<uno::Any> aSequence( aPropertyNames.getLength() );
+    uno::Sequence<cpo::uno::Any> aSequence( aPropertyNames.getLength() );
     std::transform(aPropertyNames.begin(), aPropertyNames.end(), aSequence.getArray(),
-        [this](const OUString& rName) -> uno::Any { return getPropertyValue_Impl(rName); });
+        [this](const OUString& rName) -> cpo::uno::Any { return getPropertyValue_Impl(rName); });
     return aSequence;
 }
 
@@ -1519,7 +1519,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScStyleObj::getPropertySetInfo(
     return pPropSet->getPropertySetInfo();
 }
 
-void SAL_CALL ScStyleObj::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
+void SAL_CALL ScStyleObj::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
     GetStyle_Impl();
@@ -1531,7 +1531,7 @@ void SAL_CALL ScStyleObj::setPropertyValue( const OUString& aPropertyName, const
     setPropertyValue_Impl( aPropertyName, pEntry, &aValue );
 }
 
-void ScStyleObj::setPropertyValue_Impl( std::u16string_view rPropertyName, const SfxItemPropertyMapEntry* pEntry, const uno::Any* pValue )
+void ScStyleObj::setPropertyValue_Impl( std::u16string_view rPropertyName, const SfxItemPropertyMapEntry* pEntry, const cpo::uno::Any* pValue )
 {
     SfxStyleSheetBase* pStyle = GetStyle_Impl( true );
     if ( !(pStyle && pEntry) )
@@ -1872,9 +1872,9 @@ void ScStyleObj::setPropertyValue_Impl( std::u16string_view rPropertyName, const
         static_cast<SfxStyleSheet*>(GetStyle_Impl())->Broadcast(SfxHint(SfxHintId::DataChanged));
 }
 
-uno::Any ScStyleObj::getPropertyValue_Impl( std::u16string_view aPropertyName )
+cpo::uno::Any ScStyleObj::getPropertyValue_Impl( std::u16string_view aPropertyName )
 {
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     SfxStyleSheetBase* pStyle = GetStyle_Impl( true );
 
     if ( aPropertyName == SC_UNONAME_DISPNAME )      // read-only
@@ -2033,7 +2033,7 @@ uno::Any ScStyleObj::getPropertyValue_Impl( std::u16string_view aPropertyName )
     return aAny;
 }
 
-uno::Any SAL_CALL ScStyleObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ScStyleObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
     GetStyle_Impl();

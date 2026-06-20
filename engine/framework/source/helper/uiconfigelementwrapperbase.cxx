@@ -47,6 +47,7 @@ constexpr OUString UIELEMENT_PROPNAME_XMENUBAR = u"XMenuBar"_ustr;
 constexpr OUString UIELEMENT_PROPNAME_NOCLOSE = u"NoClose"_ustr;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
@@ -174,7 +175,7 @@ bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&       a
     {
         case UIELEMENT_PROPHANDLE_CONFIGLISTENER:
             bReturn = PropHelper::willPropertyBeChanged(
-                        css::uno::Any(m_bConfigListener),
+                        cpo::uno::Any(m_bConfigListener),
                         aValue,
                         aOldValue,
                         aConvertedValue);
@@ -182,7 +183,7 @@ bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&       a
 
         case UIELEMENT_PROPHANDLE_CONFIGSOURCE:
             bReturn = PropHelper::willPropertyBeChanged(
-                        css::uno::Any(m_xConfigSource),
+                        cpo::uno::Any(m_xConfigSource),
                         aValue,
                         aOldValue,
                         aConvertedValue);
@@ -192,7 +193,7 @@ bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&       a
         {
             Reference< XFrame > xFrame( m_xWeakFrame );
             bReturn = PropHelper::willPropertyBeChanged(
-                        css::uno::Any(xFrame),
+                        cpo::uno::Any(xFrame),
                         aValue,
                         aOldValue,
                         aConvertedValue);
@@ -201,7 +202,7 @@ bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&       a
 
         case UIELEMENT_PROPHANDLE_PERSISTENT:
             bReturn = PropHelper::willPropertyBeChanged(
-                        css::uno::Any(m_bPersistent),
+                        cpo::uno::Any(m_bPersistent),
                         aValue,
                         aOldValue,
                         aConvertedValue);
@@ -209,7 +210,7 @@ bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&       a
 
         case UIELEMENT_PROPHANDLE_RESOURCEURL:
             bReturn = PropHelper::willPropertyBeChanged(
-                        css::uno::Any(m_aResourceURL),
+                        cpo::uno::Any(m_aResourceURL),
                         aValue,
                         aOldValue,
                         aConvertedValue);
@@ -217,7 +218,7 @@ bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&       a
 
         case UIELEMENT_PROPHANDLE_TYPE :
             bReturn = PropHelper::willPropertyBeChanged(
-                        css::uno::Any(m_nType),
+                        cpo::uno::Any(m_nType),
                         aValue,
                         aOldValue,
                         aConvertedValue);
@@ -225,7 +226,7 @@ bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&       a
 
         case UIELEMENT_PROPHANDLE_XMENUBAR :
             bReturn = PropHelper::willPropertyBeChanged(
-                        css::uno::Any(m_xMenuBar),
+                        cpo::uno::Any(m_xMenuBar),
                         aValue,
                         aOldValue,
                         aConvertedValue);
@@ -233,7 +234,7 @@ bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&       a
 
         case UIELEMENT_PROPHANDLE_NOCLOSE:
             bReturn = PropHelper::willPropertyBeChanged(
-                        css::uno::Any(m_bNoClose),
+                        cpo::uno::Any(m_bNoClose),
                         aValue,
                         aOldValue,
                         aConvertedValue);
@@ -245,7 +246,7 @@ bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&       a
 }
 
 void SAL_CALL UIConfigElementWrapperBase::setFastPropertyValue_NoBroadcast(   sal_Int32               nHandle ,
-                                                                        const css::uno::Any&    aValue  )
+                                                                        const cpo::uno::Any&    aValue  )
 {
     switch( nHandle )
     {
@@ -333,7 +334,7 @@ void SAL_CALL UIConfigElementWrapperBase::setFastPropertyValue_NoBroadcast(   sa
     }
 }
 
-void SAL_CALL UIConfigElementWrapperBase::getFastPropertyValue( css::uno::Any& aValue  ,
+void SAL_CALL UIConfigElementWrapperBase::getFastPropertyValue( cpo::uno::Any& aValue  ,
                                                                 sal_Int32                 nHandle   ) const
 {
     switch( nHandle )

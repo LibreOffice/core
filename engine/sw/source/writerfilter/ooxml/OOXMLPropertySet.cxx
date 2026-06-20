@@ -138,20 +138,20 @@ OUString OOXMLValue::getString() const
     return OUString();
 }
 
-uno::Any OOXMLValue::getAny() const
+cpo::uno::Any OOXMLValue::getAny() const
 {
     assert(maData.index() != 0 && "this OOXMLValue is empty");
     switch(maData.index())
     {
-        case  1: return uno::Any(std::get<bool>(maData));
-        case  2: return uno::Any(std::get<2>(maData)); // int
-        case  6: return uno::Any(std::get<OUString>(maData));
-        case  9: return uno::Any(std::get<uno::Reference<io::XInputStream>>(maData));
-        case 10: return uno::Any(std::get<uno::Reference<drawing::XShape>>(maData));
-        case 11: return uno::Any(std::get<uno::Reference<embed::XEmbeddedObject>>(maData));
+        case  1: return cpo::uno::Any(std::get<bool>(maData));
+        case  2: return cpo::uno::Any(std::get<2>(maData)); // int
+        case  6: return cpo::uno::Any(std::get<OUString>(maData));
+        case  9: return cpo::uno::Any(std::get<uno::Reference<io::XInputStream>>(maData));
+        case 10: return cpo::uno::Any(std::get<uno::Reference<drawing::XShape>>(maData));
+        case 11: return cpo::uno::Any(std::get<uno::Reference<embed::XEmbeddedObject>>(maData));
         default: break;
     }
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 writerfilter::Reference<Properties>::Pointer_t OOXMLValue::getProperties() const

@@ -132,8 +132,8 @@ public:
     // XComponent
     virtual void SAL_CALL dispose() override;
 
-    virtual void commitEvent(sal_Int16 nEventId, const css::uno::Any& rNewValue,
-                             const css::uno::Any& rOldValue) override;
+    virtual void commitEvent(sal_Int16 nEventId, const cpo::uno::Any& rNewValue,
+                             const cpo::uno::Any& rOldValue) override;
 
 private:
     // internal virtual methods

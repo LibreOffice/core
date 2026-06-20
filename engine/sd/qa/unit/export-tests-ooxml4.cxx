@@ -290,7 +290,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125360)
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
 
-    xShape->setPropertyValue(u"FillTransparence"_ustr, uno::Any(static_cast<sal_Int32>(23)));
+    xShape->setPropertyValue(u"FillTransparence"_ustr, cpo::uno::Any(static_cast<sal_Int32>(23)));
 
     save(TestFilter::PPTX);
 
@@ -310,7 +310,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125360_1)
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
 
-    xShape->setPropertyValue(u"FillTransparence"_ustr, uno::Any(static_cast<sal_Int32>(23)));
+    xShape->setPropertyValue(u"FillTransparence"_ustr, cpo::uno::Any(static_cast<sal_Int32>(23)));
 
     save(TestFilter::PPTX);
 
@@ -334,7 +334,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125360_2)
     xShape->getPropertyValue(u"FillTransparence"_ustr) >>= nTransparence;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(82), nTransparence);
 
-    xShape->setPropertyValue(u"FillTransparence"_ustr, uno::Any(static_cast<sal_Int32>(23)));
+    xShape->setPropertyValue(u"FillTransparence"_ustr, cpo::uno::Any(static_cast<sal_Int32>(23)));
 
     save(TestFilter::PPTX);
 
@@ -448,7 +448,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf127379)
     uno::Reference<drawing::XDrawPage> xPage(getPage(0));
     uno::Reference<beans::XPropertySet> xPropSet(xPage, uno::UNO_QUERY);
 
-    uno::Any aAny = xPropSet->getPropertyValue(u"Background"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"Background"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Slide background is missing", aAny.hasValue());
     uno::Reference<beans::XPropertySet> aXBackgroundPropSet;
     aAny >>= aXBackgroundPropSet;
@@ -1449,7 +1449,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testDeduplicateMasters)
     uno::Reference<drawing::XDrawPage> xPage(xDoc->getMasterPages()->getByIndex(0),
                                              uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropSet(xPage, uno::UNO_QUERY);
-    uno::Any aAny = xPropSet->getPropertyValue(u"Background"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"Background"_ustr);
     CPPUNIT_ASSERT(aAny.hasValue());
     uno::Reference<beans::XPropertySet> aXBackgroundPropSet;
     aAny >>= aXBackgroundPropSet;
@@ -1873,12 +1873,12 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testtdf169825_vertical_layouts_from_scr
     uno::Reference<beans::XPropertySet> xPageSet(xPage, uno::UNO_QUERY_THROW);
     xPageSet->setPropertyValue(
         u"Layout"_ustr,
-        uno::Any(static_cast<sal_Int32>(AutoLayout::AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT)));
+        cpo::uno::Any(static_cast<sal_Int32>(AutoLayout::AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT)));
 
     uno::Reference<drawing::XDrawPage> xPage2(xPages->insertNewByIndex(1), uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xPageSet2(xPage2, uno::UNO_QUERY_THROW);
     xPageSet2->setPropertyValue(
-        u"Layout"_ustr, uno::Any(static_cast<sal_Int32>(AutoLayout::AUTOLAYOUT_VTITLE_VCONTENT)));
+        u"Layout"_ustr, cpo::uno::Any(static_cast<sal_Int32>(AutoLayout::AUTOLAYOUT_VTITLE_VCONTENT)));
     save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDocRels = parseExport(u"ppt/slides/_rels/slide1.xml.rels"_ustr);

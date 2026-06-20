@@ -1630,7 +1630,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     uno::Sequence<uno::Sequence<awt::Point>> aPointSequenceSequence
                         = { comphelper::containerToSequence(rDrawingObject.getPolyLinePoints()) };
                     rDrawingObject.getPropertySet()->setPropertyValue(
-                        u"PolyPolygon"_ustr, uno::Any(aPointSequenceSequence));
+                        u"PolyPolygon"_ustr, cpo::uno::Any(aPointSequenceSequence));
                 }
             }
         }

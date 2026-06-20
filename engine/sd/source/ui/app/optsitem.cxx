@@ -34,6 +34,7 @@
 
 using namespace ::utl;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 template< class T > static T getSafeValue( const Any& rAny )
 {

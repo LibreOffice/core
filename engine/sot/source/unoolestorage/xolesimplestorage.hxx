@@ -67,19 +67,19 @@ class OLESimpleStorage : public cppu::WeakImplHelper<css::embed::XOLESimpleStora
 public:
 
     OLESimpleStorage(css::uno::Reference<css::uno::XComponentContext> xContext,
-            css::uno::Sequence<css::uno::Any> const &arguments);
+            css::uno::Sequence<cpo::uno::Any> const &arguments);
 
     virtual ~OLESimpleStorage() override;
 
     //  XNameContainer
 
-    virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement ) override;
+    virtual void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
 
     virtual void SAL_CALL removeByName( const OUString& Name ) override;
 
-    virtual void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement ) override;
+    virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
 
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
 

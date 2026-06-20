@@ -42,13 +42,13 @@ public:
                          bool isHeader );
 
     virtual ::sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index1, const css::uno::Any& ) override;
+    virtual cpo::uno::Any SAL_CALL Item( const cpo::uno::Any& Index1, const cpo::uno::Any& ) override;
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // SwVbaHeadersFooters_BASE
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 };

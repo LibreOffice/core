@@ -197,9 +197,9 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtViewOptions final
             @onerror    In the non-product version, an assertion is made. In a product version, errors are silently ignored.
         *//*-*****************************************************************************************************/
 
-        css::uno::Any GetUserItem( const OUString&            sName  ) const;
+        cpo::uno::Any GetUserItem( const OUString&            sName  ) const;
         void          SetUserItem( const OUString&            sName  ,
-                                   const css::uno::Any& aValue );
+                                   const cpo::uno::Any& aValue );
 
     private:
         enum State { STATE_NONE, STATE_FALSE, STATE_TRUE };

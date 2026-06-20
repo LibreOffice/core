@@ -55,8 +55,8 @@ namespace
         BootstrapFixtureBase::setUp();
         OUString aURL = m_directories.getURLFromSrc(u"/package/qa/cppunit/data/a2z.zip");
 
-        uno::Sequence<beans::NamedValue> aNVs{ { u"URL"_ustr, uno::Any(aURL) } };
-        uno::Sequence<uno::Any> aArgs{ uno::Any(aNVs) };
+        uno::Sequence<beans::NamedValue> aNVs{ { u"URL"_ustr, cpo::uno::Any(aURL) } };
+        uno::Sequence<cpo::uno::Any> aArgs{ cpo::uno::Any(aNVs) };
 
         uno::Reference<uno::XComponentContext> xCxt = comphelper::getProcessComponentContext();
         uno::Reference<lang::XMultiComponentFactory> xSvcMgr = xCxt->getServiceManager();
@@ -208,8 +208,8 @@ namespace
         // and have ZIP64 format "Data descriptor".
         OUString aURL2 = m_directories.getURLFromSrc(u"/package/qa/cppunit/data/export64.zip");
 
-        uno::Sequence<beans::NamedValue> aNVs2{ { u"URL"_ustr, uno::Any(aURL2) } };
-        uno::Sequence<uno::Any> aArgs2{ uno::Any(aNVs2) };
+        uno::Sequence<beans::NamedValue> aNVs2{ { u"URL"_ustr, cpo::uno::Any(aURL2) } };
+        uno::Sequence<cpo::uno::Any> aArgs2{ cpo::uno::Any(aNVs2) };
 
         uno::Reference<uno::XComponentContext> xCxt = comphelper::getProcessComponentContext();
         uno::Reference<lang::XMultiComponentFactory> xSvcMgr = xCxt->getServiceManager();

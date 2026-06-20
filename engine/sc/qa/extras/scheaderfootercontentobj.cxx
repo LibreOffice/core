@@ -16,12 +16,13 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace com::sun::star;
 
 namespace sc_apitest
@@ -58,10 +59,10 @@ uno::Reference<uno::XInterface> ScHeaderFooterContentObj::init()
                                                                UNO_SET_THROW);
     uno::Reference<container::XNameAccess> xPageStyles(
         xStyleFamiliesNames->getByName(u"PageStyles"_ustr), UNO_QUERY_THROW);
-    uno::Any aDefaultStyle = xPageStyles->getByName(u"Default"_ustr);
+    cpo::uno::Any aDefaultStyle = xPageStyles->getByName(u"Default"_ustr);
     uno::Reference<beans::XPropertySet> xProp(aDefaultStyle, UNO_QUERY_THROW);
 
-    uno::Any aHFC = xProp->getPropertyValue(u"RightPageHeaderContent"_ustr);
+    cpo::uno::Any aHFC = xProp->getPropertyValue(u"RightPageHeaderContent"_ustr);
     uno::Reference<sheet::XHeaderFooterContent> xHFC(aHFC, UNO_QUERY_THROW);
 
     uno::Reference<text::XText> xTxtCenter = xHFC->getCenterText();

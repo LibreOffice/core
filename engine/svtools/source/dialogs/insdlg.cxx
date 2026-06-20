@@ -269,7 +269,7 @@ bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rData, O
     if( !rData.HasFormat( aFlavor ) )
         return false;
 
-    uno::Any aAny = rData.GetAny(aFlavor, OUString());
+    cpo::uno::Any aAny = rData.GetAny(aFlavor, OUString());
     if (!aAny.hasValue())
         return false;
 

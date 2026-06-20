@@ -70,12 +70,12 @@ FilterFactory::~FilterFactory()
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstance(const OUString& sFilter)
 {
-    return createInstanceWithArguments(sFilter, css::uno::Sequence< css::uno::Any >());
+    return createInstanceWithArguments(sFilter, css::uno::Sequence< cpo::uno::Any >());
 }
 
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstanceWithArguments(const OUString&                     sFilter   ,
-                                                                                                const css::uno::Sequence< css::uno::Any >& lArguments)
+                                                                                                const css::uno::Sequence< cpo::uno::Any >& lArguments)
 {
     // SAFE ->
     std::unique_lock aLock(m_aMutex);
@@ -103,8 +103,8 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
         css::uno::Sequence< css::beans::PropertyValue > lConfig;
         aFilter >> lConfig;
 
-        ::std::vector< css::uno::Any > stlArguments(comphelper::sequenceToContainer< ::std::vector< css::uno::Any > >(lArguments));
-        stlArguments.insert(stlArguments.begin(), css::uno::Any(lConfig));
+        ::std::vector< cpo::uno::Any > stlArguments(comphelper::sequenceToContainer< ::std::vector< cpo::uno::Any > >(lArguments));
+        stlArguments.insert(stlArguments.begin(), cpo::uno::Any(lConfig));
 
         xInit->initialize(comphelper::containerToSequence(stlArguments));
     }
@@ -123,7 +123,7 @@ css::uno::Sequence< OUString > SAL_CALL FilterFactory::getAvailableServiceNames(
                   for empty strings only...
     */
     css::beans::NamedValue lEProps[] {
-        { PROPNAME_FILTERSERVICE, css::uno::Any(OUString()) } };
+        { PROPNAME_FILTERSERVICE, cpo::uno::Any(OUString()) } };
 
     std::vector<OUString> lUNOFilters;
     try
@@ -418,7 +418,7 @@ std::vector<OUString> FilterFactory::impl_getSortedFilterListForModule(const OUS
     std::vector<OUString> lSortedFilters = impl_readSortedFilterListFromConfig(sModule);
 
     // get all filters for the requested module
-    css::beans::NamedValue lIProps[] { { PROPNAME_DOCUMENTSERVICE, css::uno::Any(sModule) } };
+    css::beans::NamedValue lIProps[] { { PROPNAME_DOCUMENTSERVICE, cpo::uno::Any(sModule) } };
 
     // SAFE -> ----------------------
     std::unique_lock aLock(m_aMutex);
@@ -488,7 +488,7 @@ std::vector<OUString> FilterFactory::impl_readSortedFilterListFromConfig(const O
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_FilterFactory_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new filter::config::FilterFactory(context));
 }

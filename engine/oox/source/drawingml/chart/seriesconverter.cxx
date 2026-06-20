@@ -67,6 +67,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::chart2::data;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace {
 
@@ -209,16 +210,16 @@ void importBorderProperties( PropertySet& rPropSet, Shape& rShape, const Graphic
     if (rLineProperties.moLineWidth.has_value())
     {
         sal_Int32 nWidth = convertEmuToHmm(rLineProperties.moLineWidth.value());
-        rPropSet.setProperty(PROP_LabelBorderWidth, uno::Any(nWidth));
-        rPropSet.setProperty(PROP_LabelBorderStyle, uno::Any(drawing::LineStyle_SOLID));
+        rPropSet.setProperty(PROP_LabelBorderWidth, cpo::uno::Any(nWidth));
+        rPropSet.setProperty(PROP_LabelBorderStyle, cpo::uno::Any(drawing::LineStyle_SOLID));
     }
     const Color& aOOXColor = rLineProperties.maLineFill.maFillColor;
     ::Color nColor = aOOXColor.getColor(rGraphicHelper);
-    rPropSet.setProperty(PROP_LabelBorderColor, uno::Any(nColor));
+    rPropSet.setProperty(PROP_LabelBorderColor, cpo::uno::Any(nColor));
 
     model::ComplexColor aComplexColor = aOOXColor.getComplexColor();
     auto xComplexColor = model::color::createXComplexColor(aComplexColor);
-    rPropSet.setProperty(PROP_LabelBorderComplexColor, uno::Any(xComplexColor));
+    rPropSet.setProperty(PROP_LabelBorderComplexColor, cpo::uno::Any(xComplexColor));
 }
 
 void lcl_ImportLeaderLineProperties(PropertySet& rPropSet, Shape& rShape, const GraphicHelper& rGraphicHelper)
@@ -231,18 +232,18 @@ void lcl_ImportLeaderLineProperties(PropertySet& rPropSet, Shape& rShape, const 
     if (rLineProperties.moLineWidth.has_value())
     {
         sal_Int32 nWidth = convertEmuToHmm(rLineProperties.moLineWidth.value());
-        rPropSet.setProperty(PROP_LineWidth, uno::Any(nWidth));
+        rPropSet.setProperty(PROP_LineWidth, cpo::uno::Any(nWidth));
     }
 
     if (rLineProperties.maLineFill.moFillType.has_value() && rLineProperties.maLineFill.moFillType.value() == XML_solidFill)
     {
         const Color& aOOXColor = rLineProperties.maLineFill.maFillColor;
         ::Color nColor = aOOXColor.getColor(rGraphicHelper);
-        rPropSet.setProperty(PROP_LineColor, uno::Any(nColor));
+        rPropSet.setProperty(PROP_LineColor, cpo::uno::Any(nColor));
 
         model::ComplexColor aComplexColor = aOOXColor.getComplexColor();
         auto xComplexColor = model::color::createXComplexColor(aComplexColor);
-        rPropSet.setProperty(PROP_LineComplexColor, uno::Any(xComplexColor));
+        rPropSet.setProperty(PROP_LineComplexColor, cpo::uno::Any(xComplexColor));
     }
 }
 
@@ -256,11 +257,11 @@ void importFillProperties( PropertySet& rPropSet, Shape& rShape, const GraphicHe
 
         const Color& aOOXColor = rFillProperties.maFillColor;
         ::Color nColor = aOOXColor.getColor(rGraphicHelper);
-        rPropSet.setProperty(PROP_LabelFillColor, uno::Any(nColor));
+        rPropSet.setProperty(PROP_LabelFillColor, cpo::uno::Any(nColor));
 
         model::ComplexColor aComplexColor = aOOXColor.getComplexColor();
         auto xComplexColor = model::color::createXComplexColor(aComplexColor);
-        rPropSet.setProperty(PROP_LabelFillComplexColor, uno::Any(xComplexColor));
+        rPropSet.setProperty(PROP_LabelFillComplexColor, cpo::uno::Any(xComplexColor));
     }
     else if(rFillProperties.moFillType.has_value() && rFillProperties.moFillType.value() == XML_pattFill)
     {
@@ -275,11 +276,11 @@ void importFillProperties( PropertySet& rPropSet, Shape& rShape, const GraphicHe
 
         const Color& aOOXColor = rFillProperties.maPatternProps.maPattBgColor;
         ::Color nColor = aOOXColor.getColor(rGraphicHelper);
-        rPropSet.setProperty(PROP_LabelFillColor, uno::Any(nColor));
+        rPropSet.setProperty(PROP_LabelFillColor, cpo::uno::Any(nColor));
 
         model::ComplexColor aComplexColor = aOOXColor.getComplexColor();
         auto xComplexColor = model::color::createXComplexColor(aComplexColor);
-        rPropSet.setProperty(PROP_LabelFillComplexColor, uno::Any(xComplexColor));
+        rPropSet.setProperty(PROP_LabelFillComplexColor, cpo::uno::Any(xComplexColor));
     }
 }
 

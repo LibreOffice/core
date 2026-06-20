@@ -120,7 +120,7 @@ class OFrames final : public ::cppu::WeakImplHelper< css::frame::XFrames >
             @onerror    If a lock is set, we return an empty Any!
             @onerror    If index out of range, an IndexOutOfBoundsException is thrown.
         */
-        virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) override;
+        virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) override;
 
         //  XElementAccess
 

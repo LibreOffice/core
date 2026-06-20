@@ -635,7 +635,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInputListExport)
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
     CPPUNIT_ASSERT(xFields->hasMoreElements());
-    uno::Any aField = xFields->nextElement();
+    cpo::uno::Any aField = xFields->nextElement();
     uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.text.textfield.DropDown"_ustr));
 
@@ -824,7 +824,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTextInput)
 
     do
     {
-        uno::Any aField = xFields->nextElement();
+        cpo::uno::Any aField = xFields->nextElement();
         uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
         CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.text.textfield.Input"_ustr));
         uno::Reference<beans::XPropertySet> xPropertySet(aField, uno::UNO_QUERY);
@@ -846,9 +846,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTextInput)
             sContent = u"content without hint"_ustr;
             break;
         }
-        CPPUNIT_ASSERT_EQUAL(uno::Any(sContent), xPropertySet->getPropertyValue(u"Content"_ustr));
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sContent), xPropertySet->getPropertyValue(u"Content"_ustr));
         CPPUNIT_ASSERT_EQUAL(sContent, xText->getAnchor()->getString());
-        CPPUNIT_ASSERT_EQUAL(uno::Any(sHint), xPropertySet->getPropertyValue(u"Hint"_ustr));
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sHint), xPropertySet->getPropertyValue(u"Hint"_ustr));
         nElements++;
     }
     while (xFields->hasMoreElements());

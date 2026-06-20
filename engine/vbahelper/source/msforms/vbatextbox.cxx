@@ -32,14 +32,14 @@ ScVbaTextBox::ScVbaTextBox( const uno::Reference< ov::XHelperInterface >& xParen
 }
 
 // Attributes
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaTextBox::getValue()
 {
-    return uno::Any( getText() );
+    return cpo::uno::Any( getText() );
 }
 
 void SAL_CALL
-ScVbaTextBox::setValue( const uno::Any& _value )
+ScVbaTextBox::setValue( const cpo::uno::Any& _value )
 {
     // booleans are converted to uppercase strings
     OUString sVal = extractStringFromAny( _value, true );
@@ -50,7 +50,7 @@ ScVbaTextBox::setValue( const uno::Any& _value )
 OUString SAL_CALL
 ScVbaTextBox::getText()
 {
-    uno::Any aValue = m_xProps->getPropertyValue( u"Text"_ustr );
+    cpo::uno::Any aValue = m_xProps->getPropertyValue( u"Text"_ustr );
     OUString sString;
     aValue >>= sString;
     return sString;
@@ -66,7 +66,7 @@ ScVbaTextBox::setText( const OUString& _text )
         xTextRange->setString( _text );
     }
     else
-        m_xProps->setPropertyValue( u"Text"_ustr , uno::Any( _text ) );
+        m_xProps->setPropertyValue( u"Text"_ustr , cpo::uno::Any( _text ) );
     if ( oldText != _text )
         fireChangeEvent();
 }
@@ -74,7 +74,7 @@ ScVbaTextBox::setText( const OUString& _text )
 sal_Int32 SAL_CALL
 ScVbaTextBox::getMaxLength()
 {
-    uno::Any aValue = m_xProps->getPropertyValue( u"MaxTextLen"_ustr );
+    cpo::uno::Any aValue = m_xProps->getPropertyValue( u"MaxTextLen"_ustr );
     sal_Int16 nMaxLength = 0;
     aValue >>= nMaxLength;
     return static_cast<sal_Int32>(nMaxLength);
@@ -84,14 +84,14 @@ void SAL_CALL
 ScVbaTextBox::setMaxLength( sal_Int32 _maxlength )
 {
     sal_Int16 nTmp( _maxlength );
-    uno::Any aValue( nTmp );
+    cpo::uno::Any aValue( nTmp );
     m_xProps->setPropertyValue( u"MaxTextLen"_ustr , aValue);
 }
 
 bool SAL_CALL
 ScVbaTextBox::getMultiline()
 {
-    uno::Any aValue = m_xProps->getPropertyValue( u"MultiLine"_ustr );
+    cpo::uno::Any aValue = m_xProps->getPropertyValue( u"MultiLine"_ustr );
     bool bRet = false;
     aValue >>= bRet;
     return bRet;
@@ -100,7 +100,7 @@ ScVbaTextBox::getMultiline()
 void SAL_CALL
 ScVbaTextBox::setMultiline( bool _multiline )
 {
-    uno::Any aValue( _multiline );
+    cpo::uno::Any aValue( _multiline );
     m_xProps->setPropertyValue( u"MultiLine"_ustr , aValue);
 }
 

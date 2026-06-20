@@ -31,6 +31,7 @@ namespace toolkit
 
 
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
@@ -128,7 +129,7 @@ namespace toolkit
  IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoControlRoadmapModel, UnoControlRoadmapModel_Base, UnoControlRoadmapModel_IBase )
 
 
-    css::uno::Any  SAL_CALL UnoControlRoadmapModel::queryAggregation( const css::uno::Type & rType )
+    cpo::uno::Any  SAL_CALL UnoControlRoadmapModel::queryAggregation( const css::uno::Type & rType )
     {
         Any aRet = UnoControlRoadmapModel_Base::queryAggregation( rType );
         if ( !aRet.hasValue() )
@@ -345,7 +346,7 @@ namespace toolkit
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoRoadmapControl, UnoControlRoadmap_Base, UnoControlRoadmap_IBase )
 
-css::uno::Any UnoRoadmapControl::queryAggregation(css::uno::Type const & aType) {
+cpo::uno::Any UnoRoadmapControl::queryAggregation(css::uno::Type const & aType) {
     auto ret = UnoControlRoadmap_Base::queryAggregation(aType);
     if (!ret.hasValue()) {
         ret = UnoControlRoadmap_IBase::queryInterface(aType);
@@ -486,7 +487,7 @@ css::uno::Sequence<OUString> UnoRoadmapControl::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlRoadmapModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new toolkit::UnoControlRoadmapModel(context));
 }
@@ -494,7 +495,7 @@ stardiv_Toolkit_UnoControlRoadmapModel_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoRoadmapControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new toolkit::UnoRoadmapControl());
 }

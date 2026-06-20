@@ -98,7 +98,7 @@ private:
     css::uno::Reference<css::accessibility::XAccessibleEditableText> m_xEditableText;
 
     static void get_AnyFromOLECHAR(std::u16string_view ouName, const OUString& ouValue,
-                                   css::uno::Any& rAny);
+                                   cpo::uno::Any& rAny);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

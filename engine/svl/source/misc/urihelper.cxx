@@ -33,7 +33,7 @@
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -148,7 +148,7 @@ Result normalizePrefix( css::uno::Reference< css::ucb::XUniversalContentBroker >
             (css::uno::Reference< css::ucb::XCommandProcessor >(
                    content, css::uno::UNO_QUERY_THROW)->execute(
                        css::ucb::Command(u"getCasePreservingURL"_ustr,
-                           -1, css::uno::Any()),
+                           -1, cpo::uno::Any()),
                        0,
                        css::uno::Reference< css::ucb::XCommandEnvironment >())
                >>= *normalized);

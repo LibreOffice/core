@@ -79,7 +79,7 @@ ScMyValidationsContainer::~ScMyValidationsContainer()
 {
 }
 
-void ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
+void ScMyValidationsContainer::AddValidation(const cpo::uno::Any& aTempAny,
     sal_Int32& nValidationIndex)
 {
     uno::Reference<beans::XPropertySet> xPropertySet(aTempAny, uno::UNO_QUERY);
@@ -393,9 +393,9 @@ void ScMyValidationsContainer::WriteValidations(const ScDocument& rDoc, ScXMLExp
 
                         static constexpr OUString sScript(u"Script"_ustr);
                         uno::Sequence<beans::PropertyValue> aSeq( comphelper::InitPropertySequence({
-                                { "EventType", uno::Any(bScriptURL ? sScript : u"StarBasic"_ustr) },
-                                { "Library", uno::Any(OUString()) },
-                                { bScriptURL ? sScript : u"MacroName"_ustr, uno::Any(rValidation.sErrorTitle) }
+                                { "EventType", cpo::uno::Any(bScriptURL ? sScript : u"StarBasic"_ustr) },
+                                { "Library", cpo::uno::Any(OUString()) },
+                                { bScriptURL ? sScript : u"MacroName"_ustr, cpo::uno::Any(rValidation.sErrorTitle) }
                             }));
                         // 2) export the sequence
                         rExport.GetEventExport().ExportSingleEvent( aSeq, u"OnError"_ustr);

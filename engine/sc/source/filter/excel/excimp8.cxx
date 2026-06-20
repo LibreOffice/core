@@ -84,13 +84,13 @@ public:
         return ( !IdToOleNameHash.empty() );
     }
     // XNameAccess
-    virtual uno::Any SAL_CALL getByName( const OUString& aName ) override
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override
     {
         std::unique_lock aGuard( m_aMutex );
         auto it = IdToOleNameHash.find( aName );
         if ( it == IdToOleNameHash.end() )
             throw container::NoSuchElementException();
-        return uno::Any( it->second );
+        return cpo::uno::Any( it->second );
     }
     virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
@@ -104,7 +104,7 @@ public:
     }
 
     // XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const uno::Any& aElement ) override
+    virtual void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override
     {
         std::unique_lock aGuard( m_aMutex );
         auto it = IdToOleNameHash.find( aName );
@@ -121,7 +121,7 @@ public:
         if ( IdToOleNameHash.erase( aName ) == 0 )
             throw container::NoSuchElementException();
     }
-    virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement ) override
+    virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override
     {
         std::unique_lock aGuard( m_aMutex );
         auto it = IdToOleNameHash.find( aName );

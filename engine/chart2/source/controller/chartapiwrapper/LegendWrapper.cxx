@@ -42,7 +42,7 @@
 
 using namespace ::com::sun::star;
 using ::com::sun::star::beans::Property;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
@@ -105,7 +105,7 @@ void WrappedLegendAlignmentProperty::setPropertyValue( const Any& rOuterValue, c
     }
     if(bNewShowLegend!=bOldShowLegend)
     {
-        xInnerPropertySet->setPropertyValue( u"Show"_ustr, uno::Any(bNewShowLegend) );
+        xInnerPropertySet->setPropertyValue( u"Show"_ustr, cpo::uno::Any(bNewShowLegend) );
     }
     if(!bNewShowLegend)
         return;
@@ -129,7 +129,7 @@ void WrappedLegendAlignmentProperty::setPropertyValue( const Any& rOuterValue, c
             xInnerPropertySet->getPropertyValue( u"Expansion"_ustr ) >>= eOldExpansion );
 
         if( !bExpansionWasSet || (eOldExpansion != eNewExpansion))
-            xInnerPropertySet->setPropertyValue( u"Expansion"_ustr, uno::Any( eNewExpansion ));
+            xInnerPropertySet->setPropertyValue( u"Expansion"_ustr, cpo::uno::Any( eNewExpansion ));
     }
 
     //correct RelativePosition
@@ -167,7 +167,7 @@ Any WrappedLegendAlignmentProperty::convertInnerToOuterValue( const Any& rInnerV
                 break;
         }
     }
-    return uno::Any( ePos );
+    return cpo::uno::Any( ePos );
 }
 Any WrappedLegendAlignmentProperty::convertOuterToInnerValue( const Any& rOuterValue ) const
 {
@@ -195,7 +195,7 @@ Any WrappedLegendAlignmentProperty::convertOuterToInnerValue( const Any& rOuterV
         }
     }
 
-    return uno::Any( eNewPos );
+    return cpo::uno::Any( eNewPos );
 }
 }
 
@@ -276,7 +276,7 @@ void SAL_CALL LegendWrapper::setPosition( const awt::Point& aPosition )
         aRelativePosition.Anchor = drawing::Alignment_TOP_LEFT;
         aRelativePosition.Primary = aPageSize.Width == 0 ? 0 : double(aPosition.X)/double(aPageSize.Width);
         aRelativePosition.Secondary = aPageSize.Height == 0 ? 0 : double(aPosition.Y)/double(aPageSize.Height);
-        xProp->setPropertyValue( u"RelativePosition"_ustr, uno::Any(aRelativePosition) );
+        xProp->setPropertyValue( u"RelativePosition"_ustr, cpo::uno::Any(aRelativePosition) );
     }
 }
 
@@ -338,7 +338,7 @@ void LegendWrapper::updateReferenceSize()
     if( xProp.is() )
     {
         if( xProp->getPropertyValue( u"ReferencePageSize"_ustr ).hasValue() )
-            xProp->setPropertyValue( u"ReferencePageSize"_ustr, uno::Any(
+            xProp->setPropertyValue( u"ReferencePageSize"_ustr, cpo::uno::Any(
                 m_spChart2ModelContact->GetPageSize() ));
     }
 }

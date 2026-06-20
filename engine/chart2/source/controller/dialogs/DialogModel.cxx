@@ -198,7 +198,7 @@ void lcl_SetSequenceRole(
 {
     Reference< beans::XPropertySet > xProp( xSeq, uno::UNO_QUERY );
     if( xProp.is())
-        xProp->setPropertyValue( u"Role"_ustr , uno::Any( rRole ));
+        xProp->setPropertyValue( u"Role"_ustr , cpo::uno::Any( rRole ));
 }
 
 Sequence< OUString > lcl_CopyExcludingValuesFirst(
@@ -239,7 +239,7 @@ rtl::Reference< ::chart::DataSeries > lcl_CreateNewSeries(
         // without setting it as hard attribute
         Reference< XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme());
         if( xColorScheme.is())
-            xResult->setPropertyValue( u"Color"_ustr , uno::Any( xColorScheme->getColorByIndex( nNewSeriesIndex )));
+            xResult->setPropertyValue( u"Color"_ustr , cpo::uno::Any( xColorScheme->getColorByIndex( nNewSeriesIndex )));
         std::size_t nGroupIndex=0;
         if( xChartType.is())
         {
@@ -800,7 +800,7 @@ void DialogModel::applyInterpretedData(
                         Reference< XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme());
                         if( xColorScheme.is())
                             aSeries[nSeries]->setPropertyValue( u"Color"_ustr ,
-                                uno::Any( xColorScheme->getColorByIndex( nSeriesCounter )));
+                                cpo::uno::Any( xColorScheme->getColorByIndex( nSeriesCounter )));
                     }
                     m_xTemplate->applyStyle2( aSeries[nSeries], nGroup, nNewSeriesIndex++, nSeriesInGroup );
                 }

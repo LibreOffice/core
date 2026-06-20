@@ -175,7 +175,7 @@ public:
                 {
                     css::uno::Reference<css::table::XCell> xCell = xTextTable->getCellByName(rCell);
                     css::uno::Reference< css::beans::XPropertySet > xPropSet(xCell, css::uno::UNO_QUERY_THROW);
-                    css::uno::Any aAny = xPropSet->getPropertyValue(u"TopBorder"_ustr);
+                    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"TopBorder"_ustr);
                     css::table::BorderLine aBorderLine;
                     it = tempMap->find(rCell);
                     if ((aAny >>= aBorderLine) && (it!=tempMap->end()))

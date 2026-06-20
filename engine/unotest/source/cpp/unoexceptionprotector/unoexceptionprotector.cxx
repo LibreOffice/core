@@ -27,7 +27,7 @@
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/reflection/XIdlClass.hpp>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Type.hxx>
@@ -51,7 +51,7 @@ css::uno::Type translateType(css::uno::Reference<css::reflection::XIdlClass> con
 
 void printUnoValue(
     std::ostream & out, css::uno::Reference<css::reflection::XIdlReflection> const & reflections,
-    css::uno::Type const & type, css::uno::Any const & value)
+    css::uno::Type const & type, cpo::uno::Any const & value)
 {
     switch (type.getTypeClass()) {
     case css::uno::TypeClass_VOID:
@@ -180,13 +180,13 @@ bool Prot::protect(
     try {
         return functor();
     } catch (const css::uno::Exception &e) {
-        css::uno::Any a(cppu::getCaughtException());
+        cpo::uno::Any a(cppu::getCaughtException());
         std::ostringstream s;
         try {
             printUnoValue(
                 s,
                 css::reflection::theCoreReflection::get(comphelper::getProcessComponentContext()),
-                cppu::UnoType<css::uno::Any>::get(), a);
+                cppu::UnoType<cpo::uno::Any>::get(), a);
         } catch (css::uno::Exception &) {
             // Best effort to print full details above; if that fails for whatever reason, print as
             // much detailed information as possible, followed by at least the exception type and

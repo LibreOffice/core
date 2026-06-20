@@ -32,7 +32,7 @@ using com::sun::star::uno::TypeDescription;
 namespace pyuno
 {
 
-void raisePyExceptionWithAny( const css::uno::Any &anyExc )
+void raisePyExceptionWithAny( const cpo::uno::Any &anyExc )
 {
     try
     {
@@ -250,7 +250,7 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
 
     // If there’s no type description from the typelib then check if it’s a service or a singleton
     // using the type description manager.
-    css::uno::Any xType;
+    cpo::uno::Any xType;
 
     try
     {

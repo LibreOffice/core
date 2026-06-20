@@ -112,7 +112,7 @@ void SwDrawFormShell::Execute(SfxRequest const &rReq)
                             beans::Property aProp = xPropInfoSet->getPropertyByName( sTargetURL );
                             if( !aProp.Name.isEmpty() )
                             {
-                                uno::Any aTmp;
+                                cpo::uno::Any aTmp;
                                 // Yes!
                                 OUString sLabel(u"Label"_ustr);
                                 if( xPropInfoSet->hasPropertyByName(sLabel) )
@@ -179,7 +179,7 @@ void SwDrawFormShell::GetState(SfxItemSet& rSet)
 
                         uno::Reference< beans::XPropertySet >  xPropSet(xControlModel, uno::UNO_QUERY);
 
-                        uno::Any aTmp;
+                        cpo::uno::Any aTmp;
                         uno::Reference< beans::XPropertySetInfo >  xInfo = xPropSet->getPropertySetInfo();
                         if(xInfo->hasPropertyByName( u"ButtonType"_ustr ))
                         {

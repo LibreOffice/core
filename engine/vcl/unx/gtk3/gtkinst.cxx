@@ -105,6 +105,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 
 extern "C"
@@ -837,9 +838,9 @@ public:
      * XTransferable
      */
 
-    virtual css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override
+    virtual cpo::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override
     {
-        css::uno::Any aRet;
+        cpo::uno::Any aRet;
 
         css::datatransfer::DataFlavor aFlavor(rFlavor);
         if (aFlavor.MimeType == "text/plain;charset=utf-16" || aFlavor.MimeType == "text/markdown")
@@ -860,14 +861,14 @@ public:
 
         auto it = m_aMimeTypeToGtkType.find(aFlavor.MimeType);
         if (it == m_aMimeTypeToGtkType.end())
-            return css::uno::Any();
+            return cpo::uno::Any();
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
         GtkSelectionData* data = gtk_clipboard_wait_for_contents(clipboard,
                                                                  it->second);
         if (!data)
         {
-            return css::uno::Any();
+            return cpo::uno::Any();
         }
         gint length;
         const guchar *rawdata = gtk_selection_data_get_data_with_length(data,

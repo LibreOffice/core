@@ -51,7 +51,7 @@ namespace cppu
         WeakComponentImplHelper2( ::osl::Mutex & rMutex ) SAL_NOEXCEPT
             : WeakComponentImplHelperBase( rMutex )
             {}
-        virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE
+        virtual cpo::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE
             { return WeakComponentImplHelper_query( rType, cd::get(), this, static_cast<WeakComponentImplHelperBase *>(this) ); }
         virtual void SAL_CALL acquire() SAL_NOEXCEPT SAL_OVERRIDE
             { WeakComponentImplHelperBase::acquire(); }
@@ -89,7 +89,7 @@ namespace cppu
         PartialWeakComponentImplHelper2( ::osl::Mutex & rMutex ) SAL_NOEXCEPT
             : WeakComponentImplHelperBase( rMutex )
             {}
-        virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE
+        virtual cpo::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE
             { return WeakComponentImplHelper_query( rType, cd::get(), this, static_cast<WeakComponentImplHelperBase *>(this) ); }
         virtual void SAL_CALL acquire() SAL_NOEXCEPT SAL_OVERRIDE
             { WeakComponentImplHelperBase::acquire(); }
@@ -130,9 +130,9 @@ namespace cppu
         WeakAggComponentImplHelper2( ::osl::Mutex & rMutex ) SAL_NOEXCEPT
             : WeakAggComponentImplHelperBase( rMutex )
             {}
-        virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE
+        virtual cpo::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE
             { return WeakAggComponentImplHelperBase::queryInterface( rType ); }
-        virtual css::uno::Any SAL_CALL queryAggregation( css::uno::Type const & rType ) SAL_OVERRIDE
+        virtual cpo::uno::Any SAL_CALL queryAggregation( css::uno::Type const & rType ) SAL_OVERRIDE
             { return WeakAggComponentImplHelper_queryAgg( rType, cd::get(), this, static_cast<WeakAggComponentImplHelperBase *>(this) ); }
         virtual void SAL_CALL acquire() SAL_NOEXCEPT SAL_OVERRIDE
             { WeakAggComponentImplHelperBase::acquire(); }

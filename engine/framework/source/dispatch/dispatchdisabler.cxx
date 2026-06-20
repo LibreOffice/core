@@ -23,7 +23,7 @@ DispatchDisabler::DispatchDisabler(const uno::Reference< uno::XComponentContext 
 }
 
 // XInitialization
-void SAL_CALL DispatchDisabler::initialize( const uno::Sequence< uno::Any >& aArguments )
+void SAL_CALL DispatchDisabler::initialize( const uno::Sequence< cpo::uno::Any >& aArguments )
 {
     uno::Sequence< OUString > aDisabledURLs;
     if( aArguments.hasElements() &&
@@ -108,9 +108,9 @@ bool SAL_CALL DispatchDisabler::hasElements()
 }
 
 // XNameAccess
-uno::Any SAL_CALL DispatchDisabler::getByName( const OUString& )
+cpo::uno::Any SAL_CALL DispatchDisabler::getByName( const OUString& )
 {
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 uno::Sequence< OUString > SAL_CALL DispatchDisabler::getElementNames()
@@ -124,14 +124,14 @@ bool SAL_CALL DispatchDisabler::hasByName( const OUString& rName )
 }
 
 // XNameReplace
-void SAL_CALL DispatchDisabler::replaceByName( const OUString& rName, const uno::Any& aElement )
+void SAL_CALL DispatchDisabler::replaceByName( const OUString& rName, const cpo::uno::Any& aElement )
 {
     removeByName( rName );
     insertByName( rName, aElement );
 }
 
 // XNameContainer
-void DispatchDisabler::insertByName( const OUString& rName, const uno::Any& )
+void DispatchDisabler::insertByName( const OUString& rName, const cpo::uno::Any& )
 {
     maDisabledURLs.insert(rName);
 }
@@ -162,7 +162,7 @@ css::uno::Sequence< OUString > SAL_CALL DispatchDisabler::getSupportedServiceNam
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_DispatchDisabler_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::DispatchDisabler(context));
 }

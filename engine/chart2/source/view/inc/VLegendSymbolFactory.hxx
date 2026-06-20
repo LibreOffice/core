@@ -25,7 +25,7 @@
 
 namespace com::sun::star::awt { struct Size; }
 namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::uno { class Any; }
+namespace cpo::uno { class Any; }
 
 namespace chart::VLegendSymbolFactory
 {
@@ -43,7 +43,7 @@ namespace chart::VLegendSymbolFactory
             LegendSymbolStyle eStyle,
             const css::uno::Reference< css::beans::XPropertySet > & xLegendEntryProperties,
             PropertyType ePropertyType,
-            const css::uno::Any& rExplicitSymbol /*should contain a css::chart2::Symbol without automatic symbol if the charttype does support symbols else empty*/);
+            const cpo::uno::Any& rExplicitSymbol /*should contain a css::chart2::Symbol without automatic symbol if the charttype does support symbols else empty*/);
 
 } //  namespace chart
 

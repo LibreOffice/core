@@ -61,11 +61,12 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star;
+using namespace cpo::uno;
 using namespace xmloff::token;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_sdb_DBExportFilter_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ::dbaxml::ODBExport(context,
         u"com.sun.star.comp.sdb.DBExportFilter"_ustr));
@@ -73,7 +74,7 @@ com_sun_star_comp_sdb_DBExportFilter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_sdb_XMLSettingsExporter_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ::dbaxml::ODBExport(context,
         u"com.sun.star.comp.sdb.XMLSettingsExporter"_ustr,
@@ -82,7 +83,7 @@ com_sun_star_comp_sdb_XMLSettingsExporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_sdb_XMLFullExporter_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ::dbaxml::ODBExport(context,
         u"com.sun.star.comp.sdb.XMLFullExporter"_ustr,
@@ -601,7 +602,7 @@ template< typename T > void ODBExport::exportDataSourceSettingsSequence(
     {
         SvXMLElementExport aDataValue(*this,XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_VALUE, true, false);
         // (no whitespace inside the tag)
-        Characters(implConvertAny(css::uno::Any(i)));
+        Characters(implConvertAny(cpo::uno::Any(i)));
     }
 }
 

@@ -30,7 +30,7 @@ class VbaPalette;
 class SwVbaBorders : public SwVbaBorders_BASE
 {
     // XEnumerationAccess
-    virtual css::uno::Any getItemByIntIndex( const sal_Int32 nIndex ) override;
+    virtual cpo::uno::Any getItemByIntIndex( const sal_Int32 nIndex ) override;
     css::uno::Reference< css::beans::XPropertySet > m_xProps;
 public:
     SwVbaBorders( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::table::XCellRange >& xRange, VbaPalette const & rPalette );
@@ -40,7 +40,7 @@ public:
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // SwVbaCollectionBaseImpl
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 
     virtual bool SAL_CALL getShadow() override;
     virtual void SAL_CALL setShadow( bool _shadow ) override;

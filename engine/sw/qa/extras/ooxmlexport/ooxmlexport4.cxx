@@ -836,7 +836,7 @@ void Test::verifyComboBoxExport(bool aComboBoxAsDropDown)
         uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
         uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
         CPPUNIT_ASSERT(xFields->hasMoreElements());
-        uno::Any aField = xFields->nextElement();
+        cpo::uno::Any aField = xFields->nextElement();
         uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
         CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.text.textfield.DropDown"_ustr));
 

@@ -89,6 +89,7 @@ using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 
 using ::sax_fastparser::FSHelperPtr;
@@ -285,7 +286,7 @@ void XmlFilterBase::putPropertiesToDocumentGrabBag(const css::uno::Reference<css
                 aGrabBag.update(rProperties);
 
                 // put it back to the document
-                xDocProps->setPropertyValue(aGrabBagPropName, uno::Any(aGrabBag.getAsConstPropertyValueList()));
+                xDocProps->setPropertyValue(aGrabBagPropName, cpo::uno::Any(aGrabBag.getAsConstPropertyValueList()));
             }
         }
     }
@@ -1310,7 +1311,7 @@ void XmlFilterBase::exportCustomFragments(const sax_fastparser::FSHelperPtr& pFS
             {
                 const OUString aType = comphelper::OFOPXMLHelper::GetContentTypeByName(aContentTypes, aFilename);
                 const OUString aContentType = (aType.getLength() ? aType : u"application/octet-stream"_ustr);
-                xProps->setPropertyValue(u"MediaType"_ustr, uno::Any(aContentType));
+                xProps->setPropertyValue(u"MediaType"_ustr, cpo::uno::Any(aContentType));
             }
         }
     }

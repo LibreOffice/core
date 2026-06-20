@@ -41,7 +41,7 @@ static uno::Sequence< style::TabStop > lcl_getTabStops( const uno::Reference< be
 /// @throws uno::RuntimeException
 static void lcl_setTabStops( const uno::Reference< beans::XPropertySet >& xParaProps, const uno::Sequence< style::TabStop >& aSeq )
 {
-    xParaProps->setPropertyValue(u"ParaTabStops"_ustr, uno::Any( aSeq ) );
+    xParaProps->setPropertyValue(u"ParaTabStops"_ustr, cpo::uno::Any( aSeq ) );
 }
 
 namespace {
@@ -60,7 +60,7 @@ public:
         return ( m_nIndex < mxIndexAccess->getCount() );
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         if( m_nIndex < mxIndexAccess->getCount() )
         {
@@ -88,12 +88,12 @@ public:
     {
         return mnTabStops;
     }
-    virtual uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override
     {
         if ( Index < 0 || Index >= getCount() )
             throw css::lang::IndexOutOfBoundsException();
 
-        return uno::Any( uno::Reference< word::XTabStop >( new SwVbaTabStop( mxParent, mxContext ) ) );
+        return cpo::uno::Any( uno::Reference< word::XTabStop >( new SwVbaTabStop( mxParent, mxContext ) ) );
     }
     virtual uno::Type SAL_CALL getElementType(  ) override
     {
@@ -116,7 +116,7 @@ SwVbaTabStops::SwVbaTabStops( const uno::Reference< XHelperInterface >& xParent,
 {
 }
 
-uno::Reference< word::XTabStop > SAL_CALL SwVbaTabStops::Add( float Position, const uno::Any& Alignment, const uno::Any& Leader )
+uno::Reference< word::XTabStop > SAL_CALL SwVbaTabStops::Add( float Position, const cpo::uno::Any& Alignment, const cpo::uno::Any& Leader )
 {
     sal_Int32 nPosition = Millimeter::getInHundredthsOfOneMillimeter( Position );
 
@@ -245,8 +245,8 @@ SwVbaTabStops::createEnumeration()
     return new TabStopsEnumWrapper( m_xIndexAccess );
 }
 
-uno::Any
-SwVbaTabStops::createCollectionObject( const css::uno::Any& aSource )
+cpo::uno::Any
+SwVbaTabStops::createCollectionObject( const cpo::uno::Any& aSource )
 {
     return aSource;
 }

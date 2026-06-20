@@ -262,8 +262,8 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testSwitchBetweenImages)
         uno::Reference<beans::XPropertySet> xTextGraphic(
             xMSF->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
         xTextGraphic->setPropertyValue(u"AnchorType"_ustr,
-                                       uno::Any(text::TextContentAnchorType_AS_CHARACTER));
-        xTextGraphic->setPropertyValue(u"Size"_ustr, uno::Any(awt::Size(5000, 5000)));
+                                       cpo::uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+        xTextGraphic->setPropertyValue(u"Size"_ustr, cpo::uno::Any(awt::Size(5000, 5000)));
         uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
         xText->insertTextContent(xCursor, xTextContent, false);
     }
@@ -333,8 +333,8 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testParentContextNames)
         uno::Reference<beans::XPropertySet> xTextGraphic(
             xMSF->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
         xTextGraphic->setPropertyValue(u"AnchorType"_ustr,
-                                       uno::Any(text::TextContentAnchorType_AS_CHARACTER));
-        xTextGraphic->setPropertyValue(u"Size"_ustr, uno::Any(awt::Size(5000, 5000)));
+                                       cpo::uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+        xTextGraphic->setPropertyValue(u"Size"_ustr, cpo::uno::Any(awt::Size(5000, 5000)));
         uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
         xTarget->insertTextContent(xTarget->createTextCursor(), xTextContent, false);
     };
@@ -348,7 +348,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testParentContextNames)
     uno::Reference<view::XSelectionSupplier> xSelectionSupplier(
         getSwTextDoc()->getCurrentController(), uno::UNO_QUERY);
     auto selectImage = [&](std::u16string_view rName) {
-        xSelectionSupplier->select(uno::Any(getShapeByName(rName)));
+        xSelectionSupplier->select(cpo::uno::Any(getShapeByName(rName)));
         pView->StopShellTimer();
     };
 
@@ -449,7 +449,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testEditInReadonly)
     uno::Reference<view::XSelectionSupplier> xSelSupplier(xModel->getCurrentController(),
                                                           uno::UNO_QUERY_THROW);
 
-    xSelSupplier->select(css::uno::Any(xParaCursor));
+    xSelSupplier->select(cpo::uno::Any(xParaCursor));
     std::unique_ptr<SfxPoolItem> pItem;
     SfxItemState eState = pView->GetViewFrame().GetBindings().QueryState(FN_INSERT_TABLE, pItem);
     //status disabled in read only content
@@ -457,7 +457,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testEditInReadonly)
 
     //move cursor to section
     xParaCursor->gotoNextParagraph(false);
-    xSelSupplier->select(css::uno::Any(xParaCursor));
+    xSelSupplier->select(cpo::uno::Any(xParaCursor));
     eState = pView->GetViewFrame().GetBindings().QueryState(FN_INSERT_TABLE, pItem);
     //status default in editable section
     CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, eState);
@@ -490,7 +490,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testShowTextobjectbarInReadonly)
     xLayoutManager.set(xPropSet->getPropertyValue(u"LayoutManager"_ustr), uno::UNO_QUERY);
 
     // move the cursor to the non-editable section
-    xSelSupplier->select(css::uno::Any(xParaCursor));
+    xSelSupplier->select(cpo::uno::Any(xParaCursor));
 
     bool bShow;
     bShow = xLayoutManager->isElementVisible(u"private:resource/toolbar/drawtextobjectbar"_ustr);
@@ -498,14 +498,14 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testShowTextobjectbarInReadonly)
 
     // move the cursor to the editable section
     xParaCursor->gotoNextParagraph(false);
-    xSelSupplier->select(css::uno::Any(xParaCursor));
+    xSelSupplier->select(cpo::uno::Any(xParaCursor));
 
     bShow = xLayoutManager->isElementVisible(u"private:resource/toolbar/drawtextobjectbar"_ustr);
     CPPUNIT_ASSERT_EQUAL(true, bShow); // the formatting toolbar should be shown
 
     // move the cursor to the non-editable section
     xParaCursor->gotoPreviousParagraph(false);
-    xSelSupplier->select(css::uno::Any(xParaCursor));
+    xSelSupplier->select(cpo::uno::Any(xParaCursor));
 
     bShow = xLayoutManager->isElementVisible(u"private:resource/toolbar/drawtextobjectbar"_ustr);
     CPPUNIT_ASSERT_EQUAL(false, bShow); // the formatting toolbar should be hidden

@@ -69,6 +69,7 @@ namespace svx
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::form::runtime;
     using namespace ::com::sun::star::lang;

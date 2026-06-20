@@ -89,7 +89,7 @@ HelpOnStartup::~HelpOnStartup()
 }
 
 // css.task.XJob
-css::uno::Any SAL_CALL HelpOnStartup::execute(const css::uno::Sequence< css::beans::NamedValue >& lArguments)
+cpo::uno::Any SAL_CALL HelpOnStartup::execute(const css::uno::Sequence< css::beans::NamedValue >& lArguments)
 {
     // Analyze the given arguments; try to locate a model there and
     // classify it's used application module.
@@ -98,7 +98,7 @@ css::uno::Any SAL_CALL HelpOnStartup::execute(const css::uno::Sequence< css::bea
     // Attention: we are bound to events for opening any document inside the office.
     // That includes e.g. the help module itself. But we have to do nothing then!
     if (sModule.isEmpty())
-        return css::uno::Any();
+        return cpo::uno::Any();
 
     // check current state of the help module
     // a) help isn't open                       => show default page for the detected module
@@ -129,7 +129,7 @@ css::uno::Any SAL_CALL HelpOnStartup::execute(const css::uno::Sequence< css::bea
         }
     }
 
-    return css::uno::Any();
+    return cpo::uno::Any();
 }
 
 void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
@@ -322,7 +322,7 @@ OUString HelpOnStartup::ist_createHelpURL(std::u16string_view sBaseURL,
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_HelpOnStartup_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::HelpOnStartup(context));
 }

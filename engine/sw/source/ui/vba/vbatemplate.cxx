@@ -80,8 +80,8 @@ SwVbaTemplate::getPath()
     return sPath;
 }
 
-uno::Any SAL_CALL
-SwVbaTemplate::AutoTextEntries( const uno::Any& index )
+cpo::uno::Any SAL_CALL
+SwVbaTemplate::AutoTextEntries( const cpo::uno::Any& index )
 {
     const uno::Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
     uno::Reference< text::XAutoTextContainer2 > xAutoTextContainer = text::AutoTextContainer::create( xContext );
@@ -106,8 +106,8 @@ SwVbaTemplate::AutoTextEntries( const uno::Any& index )
 
     uno::Reference< XCollection > xCol( new SwVbaAutoTextEntries( this, mxContext, xGroup ) );
     if( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-    return uno::Any( xCol );
+        return xCol->Item( index, cpo::uno::Any() );
+    return cpo::uno::Any( xCol );
 }
 
 OUString

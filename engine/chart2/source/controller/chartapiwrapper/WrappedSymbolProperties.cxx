@@ -34,7 +34,7 @@
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::beans::Property;
 
@@ -214,7 +214,7 @@ WrappedSymbolTypeProperty::WrappedSymbolTypeProperty(
     const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedSeriesOrDiagramProperty< sal_Int32 >( u"SymbolType"_ustr
-            , uno::Any( css::chart::ChartSymbolType::NONE )
+            , cpo::uno::Any( css::chart::ChartSymbolType::NONE )
             , spChart2ModelContact
             , ePropertyType )
 {
@@ -239,7 +239,7 @@ void WrappedSymbolTypeProperty::setValueToSeries( const Reference< beans::XPrope
     xSeriesPropertySet->getPropertyValue(u"Symbol"_ustr) >>= aSymbol;
 
     lcl_setSymbolTypeToSymbol( nSymbolType, aSymbol );
-    xSeriesPropertySet->setPropertyValue( u"Symbol"_ustr, uno::Any( aSymbol ) );
+    xSeriesPropertySet->setPropertyValue( u"Symbol"_ustr, cpo::uno::Any( aSymbol ) );
 }
 
 Any WrappedSymbolTypeProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
@@ -267,7 +267,7 @@ Any WrappedSymbolTypeProperty::getPropertyValue( const Reference< beans::XProper
     }
     else
     {
-        css::uno::Any aRet( m_aDefaultValue );
+        cpo::uno::Any aRet( m_aDefaultValue );
         aRet <<= getValueFromSeries( xInnerPropertySet );
         return aRet;
     }
@@ -295,7 +295,7 @@ WrappedSymbolBitmapURLProperty::WrappedSymbolBitmapURLProperty(
     const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedSeriesOrDiagramProperty<OUString>(u"SymbolBitmapURL"_ustr,
-            uno::Any(OUString()), spChart2ModelContact, ePropertyType)
+            cpo::uno::Any(OUString()), spChart2ModelContact, ePropertyType)
 {
 }
 
@@ -318,7 +318,7 @@ void WrappedSymbolBitmapURLProperty::setValueToSeries(
         {
             Graphic aGraphic = vcl::graphic::loadFromURL(xNewGraphicURL);
             aSymbol.Graphic.set(aGraphic.GetXGraphic());
-            xSeriesPropertySet->setPropertyValue(u"Symbol"_ustr, uno::Any(aSymbol));
+            xSeriesPropertySet->setPropertyValue(u"Symbol"_ustr, cpo::uno::Any(aSymbol));
         }
     }
 }
@@ -327,7 +327,7 @@ WrappedSymbolBitmapProperty::WrappedSymbolBitmapProperty(
     const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedSeriesOrDiagramProperty<uno::Reference<graphic::XGraphic>>(u"SymbolBitmap"_ustr,
-            uno::Any(uno::Reference<graphic::XGraphic>()), spChart2ModelContact, ePropertyType)
+            cpo::uno::Any(uno::Reference<graphic::XGraphic>()), spChart2ModelContact, ePropertyType)
 {
 }
 
@@ -358,7 +358,7 @@ void WrappedSymbolBitmapProperty::setValueToSeries(
         if (xNewGraphic.is())
         {
             aSymbol.Graphic.set(xNewGraphic);
-            xSeriesPropertySet->setPropertyValue(u"Symbol"_ustr, uno::Any(aSymbol));
+            xSeriesPropertySet->setPropertyValue(u"Symbol"_ustr, cpo::uno::Any(aSymbol));
         }
     }
 }
@@ -428,7 +428,7 @@ WrappedSymbolSizeProperty::WrappedSymbolSizeProperty(
     const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedSeriesOrDiagramProperty< awt::Size >( u"SymbolSize"_ustr
-            , uno::Any( awt::Size(250,250) ), spChart2ModelContact, ePropertyType  )
+            , cpo::uno::Any( awt::Size(250,250) ), spChart2ModelContact, ePropertyType  )
 {
 }
 
@@ -454,7 +454,7 @@ void WrappedSymbolSizeProperty::setValueToSeries(
     {
         aSymbol.Size = aNewSize;
         lcl_correctSymbolSizeForBitmaps(aSymbol);
-        xSeriesPropertySet->setPropertyValue( u"Symbol"_ustr, uno::Any( aSymbol ) );
+        xSeriesPropertySet->setPropertyValue( u"Symbol"_ustr, cpo::uno::Any( aSymbol ) );
     }
 }
 
@@ -485,7 +485,7 @@ WrappedSymbolAndLinesProperty::WrappedSymbolAndLinesProperty(
     const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedSeriesOrDiagramProperty< bool >( u"Lines"_ustr
-            , uno::Any( true ), spChart2ModelContact, ePropertyType  )
+            , cpo::uno::Any( true ), spChart2ModelContact, ePropertyType  )
 {
 }
 
@@ -508,12 +508,12 @@ void WrappedSymbolAndLinesProperty::setValueToSeries(
     {
         //#i114298# don't overwrite dashed lines with solid lines here
         if( eOldLineStyle == drawing::LineStyle_NONE )
-            xSeriesPropertySet->setPropertyValue( u"LineStyle"_ustr, uno::Any( drawing::LineStyle_SOLID ) );
+            xSeriesPropertySet->setPropertyValue( u"LineStyle"_ustr, cpo::uno::Any( drawing::LineStyle_SOLID ) );
     }
     else
     {
         if( eOldLineStyle != drawing::LineStyle_NONE )
-            xSeriesPropertySet->setPropertyValue( u"LineStyle"_ustr, uno::Any( drawing::LineStyle_NONE ) );
+            xSeriesPropertySet->setPropertyValue( u"LineStyle"_ustr, cpo::uno::Any( drawing::LineStyle_NONE ) );
     }
 }
 

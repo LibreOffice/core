@@ -150,7 +150,7 @@ namespace XSLT
         virtual void SAL_CALL
         terminate() override;
         virtual void SAL_CALL
-        initialize(const css::uno::Sequence<css::uno::Any>& params) override;
+        initialize(const css::uno::Sequence<cpo::uno::Any>& params) override;
 
         void
         done();

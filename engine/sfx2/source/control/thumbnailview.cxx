@@ -70,8 +70,8 @@ getStorageAccess(const OUString& URL, sal_Int32 format)
 {
     auto xFactory = css::embed::StorageFactory::create(comphelper::getProcessComponentContext());
     css::uno::Sequence descriptor{ comphelper::makePropertyValue(u"StorageFormat"_ustr, format) };
-    css::uno::Sequence args{ css::uno::Any(URL), css::uno::Any(css::embed::ElementModes::READ),
-                             css::uno::Any(descriptor) };
+    css::uno::Sequence args{ cpo::uno::Any(URL), cpo::uno::Any(css::embed::ElementModes::READ),
+                             cpo::uno::Any(descriptor) };
     return xFactory->createInstanceWithArguments(args)
         .queryThrow<css::embed::XHierarchicalStorageAccess>();
 }
@@ -136,6 +136,7 @@ Bitmap ThumbnailView::readThumbnail(const OUString &msURL)
 {
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
+    using namespace cpo::uno;
 
     // Load the thumbnail from a template document.
     uno::Reference<io::XInputStream> xIStream;
@@ -334,7 +335,7 @@ void ThumbnailView::ImplDeleteItems()
         rtl::Reference<ThumbnailViewItemAcc> xItemAcc = pItem->GetAccessible(false);
         if (xItemAcc.is())
         {
-            css::uno::Any aOldAny, aNewAny;
+            cpo::uno::Any aOldAny, aNewAny;
             aOldAny <<= css::uno::Reference<css::accessibility::XAccessible>(pItem->GetAccessible());
             ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
 
@@ -475,7 +476,7 @@ void ThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
     {
         if (ImplHasAccessibleListeners())
         {
-            css::uno::Any aOldAny, aNewAny;
+            cpo::uno::Any aOldAny, aNewAny;
             if (bIsVisible)
                 aNewAny <<= css::uno::Reference<css::accessibility::XAccessible>(rItem.GetAccessible());
             else
@@ -606,7 +607,7 @@ ThumbnailViewItem* ThumbnailView::ImplGetVisibleItem( sal_uInt16 nVisiblePos )
     return nullptr;
 }
 
-void ThumbnailView::ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue )
+void ThumbnailView::ImplFireAccessibleEvent( short nEventId, const cpo::uno::Any& rOldValue, const cpo::uno::Any& rNewValue )
 {
     if( mxAccessible )
         mxAccessible->FireAccessibleEvent( nEventId, rOldValue, rNewValue );
@@ -1189,13 +1190,13 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
 
     if( pItemAcc )
     {
-        css::uno::Any aOldAny, aNewAny;
+        cpo::uno::Any aOldAny, aNewAny;
         aNewAny <<= css::uno::Reference<css::accessibility::XAccessible>( pItemAcc );
         ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny );
     }
 
     // selection event
-    css::uno::Any aOldAny, aNewAny;
+    cpo::uno::Any aOldAny, aNewAny;
     ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::SELECTION_CHANGED, aOldAny, aNewAny );
 }
 
@@ -1261,7 +1262,7 @@ void ThumbnailView::filterItems(const std::function<bool (const ThumbnailViewIte
             {
                 if ( ImplHasAccessibleListeners() )
                 {
-                    css::uno::Any aOldAny, aNewAny;
+                    cpo::uno::Any aOldAny, aNewAny;
 
                     aOldAny <<= css::uno::Reference<css::accessibility::XAccessible>(pItem->GetAccessible());
                     ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );

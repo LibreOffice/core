@@ -58,9 +58,9 @@ OFSStreamContainer::~OFSStreamContainer()
 }
 
 // XInterface
-uno::Any SAL_CALL OFSStreamContainer::queryInterface( const uno::Type& rType )
+cpo::uno::Any SAL_CALL OFSStreamContainer::queryInterface( const uno::Type& rType )
 {
-    uno::Any aReturn = ::cppu::queryInterface
+    cpo::uno::Any aReturn = ::cppu::queryInterface
                 (   rType
                     ,   static_cast<lang::XTypeProvider*> ( this )
                     ,   static_cast<io::XStream*> ( this )

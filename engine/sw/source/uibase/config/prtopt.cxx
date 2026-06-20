@@ -25,6 +25,7 @@
 
 using namespace utl;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 // Ctor
 Sequence<OUString> SwPrintOptions::GetPropertyNames() const

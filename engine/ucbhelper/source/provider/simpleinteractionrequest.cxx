@@ -28,7 +28,7 @@ using namespace ucbhelper;
 
 
 SimpleInteractionRequest::SimpleInteractionRequest(
-                                    const uno::Any & rRequest,
+                                    const cpo::uno::Any & rRequest,
                                     const ContinuationFlags nContinuations )
 : InteractionRequest( rRequest )
 {

@@ -662,7 +662,7 @@ public:
     /** Operations on the content of the document e.g.
         spell-checking/hyphenating/word-counting
     */
-    css::uno::Any
+    cpo::uno::Any
             Spell( SwPaM&, css::uno::Reference< css::linguistic2::XSpellChecker > const &,
                    sal_uInt16* pPageCnt, sal_uInt16* pPageSt, bool bGrammarCheck,
                    SwRootFrame const* pLayout, // for grammar-check

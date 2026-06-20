@@ -55,7 +55,7 @@ public:
         getMSPFromStringContext( const OUString& context );
 
     css::uno::Reference< css::script::provider::XScriptProvider >
-        getMSPFromAnyContext( const css::uno::Any& context );
+        getMSPFromAnyContext( const cpo::uno::Any& context );
 
     css::uno::Reference< css::script::provider::XScriptProvider >
         getMSPFromInvocationContext( const css::uno::Reference< css::document::XScriptInvocationContext >& context );
@@ -69,11 +69,11 @@ private:
     void addActiveMSP( const css::uno::Reference< css::uno::XInterface >& xComponent,
                        const css::uno::Reference< css::script::provider::XScriptProvider >& msp );
     css::uno::Reference< css::script::provider::XScriptProvider >
-        createNewMSP( const css::uno::Any& context );
+        createNewMSP( const cpo::uno::Any& context );
     css::uno::Reference< css::script::provider::XScriptProvider >
         createNewMSP( const OUString& context )
     {
-        return createNewMSP( css::uno::Any( context ) );
+        return createNewMSP( cpo::uno::Any( context ) );
     }
 
     friend class NonDocMSPCreator;

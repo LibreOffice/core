@@ -24,7 +24,7 @@
 #include <limits>
 #include <string_view>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <o3tl/safeint.hxx>
@@ -188,7 +188,7 @@ void writeValueContent_(
 }
 
 template< typename T > void writeSingleValue(
-    TempFile &handle, css::uno::Any const & value)
+    TempFile &handle, cpo::uno::Any const & value)
 {
     handle.writeString(">");
     T val = T();
@@ -198,7 +198,7 @@ template< typename T > void writeSingleValue(
 }
 
 template< typename T > void writeListValue(
-    TempFile &handle, css::uno::Any const & value)
+    TempFile &handle, cpo::uno::Any const & value)
 {
     handle.writeString(">");
     css::uno::Sequence< T > val;
@@ -213,7 +213,7 @@ template< typename T > void writeListValue(
 }
 
 template< typename T > void writeItemListValue(
-    TempFile &handle, css::uno::Any const & value)
+    TempFile &handle, cpo::uno::Any const & value)
 {
     handle.writeString(">");
     css::uno::Sequence< T > val;
@@ -226,7 +226,7 @@ template< typename T > void writeItemListValue(
     handle.writeString("</value>");
 }
 
-void writeValue(TempFile &handle, Type type, css::uno::Any const & value) {
+void writeValue(TempFile &handle, Type type, cpo::uno::Any const & value) {
     switch (type) {
     case TYPE_BOOLEAN:
         writeSingleValue< bool >(handle, value);
@@ -346,7 +346,7 @@ void writeNode(
             }
             Type type = static_cast< LocalizedPropertyNode * >(parent.get())->
                 getStaticType();
-            css::uno::Any value(
+            cpo::uno::Any value(
                 static_cast< LocalizedValueNode * >(node.get())->getValue());
             Type dynType = getDynamicType(value);
             assert(dynType != TYPE_ERROR);

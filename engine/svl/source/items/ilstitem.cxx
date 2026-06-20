@@ -62,11 +62,11 @@ SfxIntegerListItem* SfxIntegerListItem::Clone( SfxItemPool * ) const
     return new SfxIntegerListItem( *this );
 }
 
-bool SfxIntegerListItem::PutValue  ( const css::uno::Any& rVal, sal_uInt8 )
+bool SfxIntegerListItem::PutValue  ( const cpo::uno::Any& rVal, sal_uInt8 )
 {
     css::uno::Reference < css::script::XTypeConverter > xConverter
             ( css::script::Converter::create(::comphelper::getProcessComponentContext()) );
-    css::uno::Any aNew;
+    cpo::uno::Any aNew;
     try { aNew = xConverter->convertTo( rVal, cppu::UnoType<css::uno::Sequence < sal_Int32 >>::get() ); }
     catch (css::uno::Exception&)
     {
@@ -80,7 +80,7 @@ bool SfxIntegerListItem::PutValue  ( const css::uno::Any& rVal, sal_uInt8 )
     return bRet;
 }
 
-bool SfxIntegerListItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
+bool SfxIntegerListItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 ) const
 {
     rVal <<= comphelper::containerToSequence(m_aList);
     return true;

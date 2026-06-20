@@ -20,7 +20,7 @@
 
 #include <memory>
 #include <com/sun/star/beans/StringPair.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
@@ -187,7 +187,7 @@ public:
 
     sal_Int32                   getAvailableWidth() override;
     sal_Int32                   getAvailableHeight() override;
-    void                        setImage( const css::uno::Any& rImage ) override;
+    void                        setImage( const cpo::uno::Any& rImage ) override;
     bool                        getShowState() override;
     bool                        isAutoExtensionEnabled() const;
 

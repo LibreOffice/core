@@ -39,8 +39,8 @@ public:
     // Attributes
     virtual ::sal_Int32 SAL_CALL getWidth() override;
     virtual void SAL_CALL setWidth( ::sal_Int32 _width ) override;
-    virtual css::uno::Any SAL_CALL getHeight() override;
-    virtual void SAL_CALL setHeight( const css::uno::Any& _height ) override;
+    virtual cpo::uno::Any SAL_CALL getHeight() override;
+    virtual void SAL_CALL setHeight( const cpo::uno::Any& _height ) override;
     virtual ::sal_Int32 SAL_CALL getHeightRule() override;
     virtual void SAL_CALL setHeightRule( ::sal_Int32 _heightrule ) override;
 
@@ -53,7 +53,7 @@ public:
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // SwVbaCells_BASE
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 };

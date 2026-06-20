@@ -128,7 +128,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCellSearchObj::getPropertySet
 }
 
 void SAL_CALL ScCellSearchObj::setPropertyValue(
-                        const OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
 
@@ -150,10 +150,10 @@ void SAL_CALL ScCellSearchObj::setPropertyValue(
     else if (aPropertyName == SC_UNO_SRCHWCESCCHAR) pSearchItem->SetWildcardEscapeCharacter( ScUnoHelpFunctions::GetInt32FromAny(aValue) );
 }
 
-uno::Any SAL_CALL ScCellSearchObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ScCellSearchObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
+    cpo::uno::Any aRet;
 
     if (aPropertyName == SC_UNO_SRCHBACK)        aRet <<= pSearchItem->GetBackward();
     else if (aPropertyName == SC_UNO_SRCHBYROW)  aRet <<= pSearchItem->GetRowDirection();

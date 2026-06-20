@@ -362,7 +362,7 @@ void OCommonEmbeddedObject::Deactivate()
         }
         catch( const uno::Exception& )
         {
-            css::uno::Any anyEx = cppu::getCaughtException();
+            cpo::uno::Any anyEx = cppu::getCaughtException();
             throw embed::StorageWrappedTargetException(
                 u"The client could not store the object!"_ustr,
                 static_cast< ::cppu::OWeakObject* >( this ),
@@ -474,7 +474,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
                 else
                 {
                     // objects without persistence will be initialized internally
-                    uno::Sequence < uno::Any > aArgs{ uno::Any(
+                    uno::Sequence < cpo::uno::Any > aArgs{ cpo::uno::Any(
                         uno::Reference < embed::XEmbeddedObject >( this )) };
                     uno::Reference< util::XCloseable > xDocument(
                             m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( GetDocumentServiceName(), aArgs, m_xContext),

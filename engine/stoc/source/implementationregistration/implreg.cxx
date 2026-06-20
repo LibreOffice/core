@@ -48,6 +48,7 @@
 
 using namespace com::sun::star;
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::loader;
 using namespace css::beans;
 using namespace css::lang;
@@ -843,7 +844,7 @@ void insert_singletons(
                     }
                     catch (const container::NoSuchElementException & exc)
                     {
-                        css::uno::Any anyEx = cppu::getCaughtException();
+                        cpo::uno::Any anyEx = cppu::getCaughtException();
                         throw css::lang::WrappedTargetRuntimeException(
                                 "cannot get service type description: " + exc.Message,
                                 nullptr, anyEx );
@@ -1068,7 +1069,7 @@ public:
 
     // XInitialization
     virtual void SAL_CALL initialize(
-        const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+        const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
 private: // helper methods
     void prepareRegister(
@@ -1156,7 +1157,7 @@ Reference< XSimpleRegistry > ImplementationRegistration::getRegistryFromServiceM
 // XInitialization
 
 void ImplementationRegistration::initialize(
-    const css::uno::Sequence< css::uno::Any >& aArgs )
+    const css::uno::Sequence< cpo::uno::Any >& aArgs )
 {
 
     if( aArgs.getLength() != 4 ) {
@@ -1567,7 +1568,7 @@ Reference< XSimpleRegistry > ImplementationRegistration::createTemporarySimpleRe
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_stoc_ImplementationRegistration_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ImplementationRegistration(context));
 }

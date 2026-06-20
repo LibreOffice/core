@@ -50,14 +50,14 @@ public:
     // XInterface
     virtual void SAL_CALL acquire() noexcept override { SvNumberFormatsSupplierObj::acquire(); }
     virtual void SAL_CALL release() noexcept override { SvNumberFormatsSupplierObj::release(); }
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) override
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) override
         { return SvNumberFormatsSupplierObj::queryInterface(_rType); }
 
     // XAggregation
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;

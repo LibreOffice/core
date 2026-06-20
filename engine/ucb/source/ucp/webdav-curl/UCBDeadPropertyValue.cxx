@@ -67,7 +67,7 @@ bool UCBDeadPropertyValue::supportsType( const uno::Type & rType )
 // static
 bool UCBDeadPropertyValue::createFromXML(std::u16string_view rType,
                                          OUString const& rValue,
-                                         uno::Any & rOutData)
+                                         cpo::uno::Any & rOutData)
 {
     bool success = true;
 
@@ -126,7 +126,7 @@ bool UCBDeadPropertyValue::createFromXML(std::u16string_view rType,
 
 // static
 ::std::optional<::std::pair<OUString, OUString>>
-UCBDeadPropertyValue::toXML(const uno::Any & rInData)
+UCBDeadPropertyValue::toXML(const cpo::uno::Any & rInData)
 {
     // <ucbprop><type>the_type</type><value>the_value</value></ucbprop>
 

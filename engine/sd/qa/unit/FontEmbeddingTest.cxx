@@ -117,11 +117,11 @@ CPPUNIT_TEST_FIXTURE(FontEmbeddingTest, testExportEmbeddedFontsPPTX)
                          xProps->getPropertyValue(u"EmbedComplexScriptFonts"_ustr).get<bool>());
 
     // Enable font embedding, only used and latin script fonts
-    xProps->setPropertyValue(u"EmbedFonts"_ustr, uno::Any(true));
-    xProps->setPropertyValue(u"EmbedOnlyUsedFonts"_ustr, uno::Any(true));
-    xProps->setPropertyValue(u"EmbedLatinScriptFonts"_ustr, uno::Any(true));
-    xProps->setPropertyValue(u"EmbedAsianScriptFonts"_ustr, uno::Any(false));
-    xProps->setPropertyValue(u"EmbedComplexScriptFonts"_ustr, uno::Any(false));
+    xProps->setPropertyValue(u"EmbedFonts"_ustr, cpo::uno::Any(true));
+    xProps->setPropertyValue(u"EmbedOnlyUsedFonts"_ustr, cpo::uno::Any(true));
+    xProps->setPropertyValue(u"EmbedLatinScriptFonts"_ustr, cpo::uno::Any(true));
+    xProps->setPropertyValue(u"EmbedAsianScriptFonts"_ustr, cpo::uno::Any(false));
+    xProps->setPropertyValue(u"EmbedComplexScriptFonts"_ustr, cpo::uno::Any(false));
 
     save(TestFilter::PPTX);
 

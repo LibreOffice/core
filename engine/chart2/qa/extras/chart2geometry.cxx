@@ -357,7 +357,7 @@ void Chart2GeometryTest::testTdf135366LabelOnSeries()
     Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xDataSeries.is());
     Reference<beans::XPropertySet> xPropSet(xDataSeries, UNO_QUERY_THROW);
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     aAny = xPropSet->getPropertyValue(u"LabelBorderStyle"_ustr);
     drawing::LineStyle eLineStyle;
@@ -396,7 +396,7 @@ void Chart2GeometryTest::testTdf135366LabelOnPoint()
     CPPUNIT_ASSERT(xDataSeries.is());
     Reference<beans::XPropertySet> xPropSet(xDataSeries->getDataPointByIndex(2),
                                             uno::UNO_SET_THROW);
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     aAny = xPropSet->getPropertyValue(u"LabelBorderStyle"_ustr);
     drawing::LineStyle eLineStyle;

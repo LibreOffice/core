@@ -42,6 +42,7 @@ using namespace ::sax;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml;
 using namespace ::com::sun::star::xml::sax;
@@ -250,7 +251,7 @@ OdfFlatXml::exporter(const Sequence< PropertyValue >& sourceData,
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_OdfFlatXml_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new OdfFlatXml(context));
 }

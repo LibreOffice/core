@@ -20,10 +20,10 @@
 #ifndef INCLUDED_TOOLKIT_SOURCE_CONTROLS_CONTROLMODELCONTAINERBASE_INTERNAL_HXX
 #define INCLUDED_TOOLKIT_SOURCE_CONTROLS_CONTROLMODELCONTAINERBASE_INTERNAL_HXX
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 ////HELPER
-OUString getPhysicalLocation(const css::uno::Any& rbase, const css::uno::Any& rUrl);
+OUString getPhysicalLocation(const cpo::uno::Any& rbase, const cpo::uno::Any& rUrl);
 
 #endif // INCLUDED_TOOLKIT_SOURCE_CONTROLS_CONTROLMODELCONTAINERBASE_INTERNAL_HXX
 

@@ -850,13 +850,13 @@ namespace slideshow::internal
             }
 
 
-            uno::Any getShapeDefault( const AnimatableShapeSharedPtr&   rShape,
+            cpo::uno::Any getShapeDefault( const AnimatableShapeSharedPtr&   rShape,
                                       const OUString&            rPropertyName )
             {
                 uno::Reference< drawing::XShape > xShape( rShape->getXShape() );
 
                 if( !xShape.is() )
-                    return uno::Any(); // no regular shape, no defaults available
+                    return cpo::uno::Any(); // no regular shape, no defaults available
 
 
                 // extract relevant value from XShape's PropertySet
@@ -872,7 +872,7 @@ namespace slideshow::internal
             template< typename ValueType > ValueType getDefault( const AnimatableShapeSharedPtr&    rShape,
                                                                  const OUString&             rPropertyName )
             {
-                const uno::Any aAny( getShapeDefault( rShape,
+                const cpo::uno::Any aAny( getShapeDefault( rShape,
                                                        rPropertyName ) );
 
                 if( !aAny.hasValue() )
@@ -897,7 +897,7 @@ namespace slideshow::internal
             template<> RGBColor getDefault< RGBColor >( const AnimatableShapeSharedPtr& rShape,
                                                         const OUString&          rPropertyName )
             {
-                const uno::Any aAny( getShapeDefault( rShape,
+                const cpo::uno::Any aAny( getShapeDefault( rShape,
                                                        rPropertyName ) );
 
                 if( !aAny.hasValue() )

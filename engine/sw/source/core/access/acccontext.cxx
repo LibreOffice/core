@@ -276,7 +276,7 @@ void SwAccessibleContext::ScrolledIn()
     SetParent( xParentImpl.get() );
 
     uno::Reference<XAccessibleContext> xThis(this);
-    xParentImpl->FireAccessibleEvent(AccessibleEventId::CHILD, uno::Any(), uno::Any(xThis));
+    xParentImpl->FireAccessibleEvent(AccessibleEventId::CHILD, cpo::uno::Any(), cpo::uno::Any(xThis));
 
     if( HasCursor() )
     {
@@ -401,8 +401,8 @@ void SwAccessibleContext::InvalidateFocus_()
 }
 
 void SwAccessibleContext::FireAccessibleEvent(const sal_Int16 nEventId,
-                                              const css::uno::Any& rOldValue,
-                                              const css::uno::Any& rNewValue, sal_Int32 nIndexHint)
+                                              const cpo::uno::Any& rOldValue,
+                                              const cpo::uno::Any& rNewValue, sal_Int32 nIndexHint)
 {
     if( !GetFrame() )
     {
@@ -415,14 +415,14 @@ void SwAccessibleContext::FireAccessibleEvent(const sal_Int16 nEventId,
 
 void SwAccessibleContext::FireVisibleDataEvent()
 {
-    FireAccessibleEvent(AccessibleEventId::VISIBLE_DATA_CHANGED, uno::Any(), uno::Any());
+    FireAccessibleEvent(AccessibleEventId::VISIBLE_DATA_CHANGED, cpo::uno::Any(), cpo::uno::Any());
 }
 
 void SwAccessibleContext::FireStateChangedEvent( sal_Int64 nState,
                                                  bool bNewState )
 {
-    uno::Any aOldValue;
-    uno::Any aNewValue;
+    cpo::uno::Any aOldValue;
+    cpo::uno::Any aNewValue;
 
     if( bNewState )
         aNewValue <<= nState;
@@ -895,8 +895,8 @@ void SwAccessibleContext::DisposeShape( const SdrObject *pObj,
     if( !xAccImpl.is() )
         xAccImpl = GetMap()->GetContextImpl( pObj, this );
 
-    FireAccessibleEvent(AccessibleEventId::CHILD, uno::Any(uno::Reference<XAccessible>(xAccImpl)),
-                        uno::Any());
+    FireAccessibleEvent(AccessibleEventId::CHILD, cpo::uno::Any(uno::Reference<XAccessible>(xAccImpl)),
+                        cpo::uno::Any());
 
     GetMap()->RemoveContext( pObj );
     xAccImpl->dispose();
@@ -909,7 +909,7 @@ void SwAccessibleContext::ScrolledInShape( ::accessibility::AccessibleShape *pAc
         return ;
     }
     uno::Reference< XAccessible > xAcc( pAccImpl );
-    FireAccessibleEvent(AccessibleEventId::CHILD, uno::Any(), uno::Any(xAcc));
+    FireAccessibleEvent(AccessibleEventId::CHILD, cpo::uno::Any(), cpo::uno::Any(xAcc));
 
     if( !pAccImpl->GetState( AccessibleStateType::FOCUSED ) )
         return;
@@ -918,7 +918,7 @@ void SwAccessibleContext::ScrolledInShape( ::accessibility::AccessibleShape *pAc
     if( pWin && pWin->HasFocus() )
     {
         pAccImpl->CommitChange(AccessibleEventId::STATE_CHANGED,
-                               uno::Any(AccessibleStateType::FOCUSED), uno::Any(), -1);
+                               cpo::uno::Any(AccessibleStateType::FOCUSED), cpo::uno::Any(), -1);
     }
 }
 
@@ -943,7 +943,7 @@ void SwAccessibleContext::Dispose(bool bRecursive, bool bCanSkipInvisible)
     // send child event at parent
     if( xParent.is() )
     {
-        xParent->FireAccessibleEvent(AccessibleEventId::CHILD, uno::Any(xThis), uno::Any());
+        xParent->FireAccessibleEvent(AccessibleEventId::CHILD, cpo::uno::Any(xThis), cpo::uno::Any());
     }
 
     // set defunc state (it's not required to broadcast a state changed
@@ -996,7 +996,7 @@ void SwAccessibleContext::DisposeChild( const SwAccessibleChild& rChildFrameOrOb
         {
             uno::Reference< XAccessible > xAcc =
                                     rChildFrameOrObj.GetWindow()->GetAccessible();
-            FireAccessibleEvent(AccessibleEventId::CHILD, uno::Any(xAcc), uno::Any());
+            FireAccessibleEvent(AccessibleEventId::CHILD, cpo::uno::Any(xAcc), cpo::uno::Any());
         }
     }
     else if( bRecursive && rChildFrameOrObj.GetSwFrame() )
@@ -1097,8 +1097,8 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
             }
             else if ( rChildFrameOrObj.GetWindow() )
             {
-                FireAccessibleEvent(AccessibleEventId::CHILD, uno::Any(),
-                                    uno::Any(uno::Reference<XAccessible>(
+                FireAccessibleEvent(AccessibleEventId::CHILD, cpo::uno::Any(),
+                                    cpo::uno::Any(uno::Reference<XAccessible>(
                                         rChildFrameOrObj.GetWindow()->GetAccessible())));
             }
         }
@@ -1197,19 +1197,19 @@ void SwAccessibleContext::InvalidateStates( AccessibleStates _nStates )
 
 void SwAccessibleContext::InvalidateRelation( sal_uInt16 nType )
 {
-    FireAccessibleEvent(nType, uno::Any(), uno::Any());
+    FireAccessibleEvent(nType, cpo::uno::Any(), cpo::uno::Any());
 }
 
 /** #i27301# - text selection has changed */
 void SwAccessibleContext::InvalidateTextSelection()
 {
-    FireAccessibleEvent(AccessibleEventId::TEXT_SELECTION_CHANGED, uno::Any(), uno::Any());
+    FireAccessibleEvent(AccessibleEventId::TEXT_SELECTION_CHANGED, cpo::uno::Any(), cpo::uno::Any());
 }
 
 /** #i88069# - attributes has changed */
 void SwAccessibleContext::InvalidateAttr()
 {
-    FireAccessibleEvent(AccessibleEventId::TEXT_ATTRIBUTE_CHANGED, uno::Any(), uno::Any());
+    FireAccessibleEvent(AccessibleEventId::TEXT_ATTRIBUTE_CHANGED, cpo::uno::Any(), cpo::uno::Any());
 }
 
 bool SwAccessibleContext::HasCursor()

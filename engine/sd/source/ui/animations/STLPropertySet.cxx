@@ -20,7 +20,7 @@
 #include "STLPropertySet.hxx"
 #include <sal/log.hxx>
 
-using com::sun::star::uno::Any;
+using cpo::uno::Any;
 
 namespace sd
 {

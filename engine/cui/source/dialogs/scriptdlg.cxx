@@ -57,6 +57,7 @@
 
 using namespace ::com::sun::star;
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::script;
 using namespace css::frame;
 using namespace css::document;
@@ -618,19 +619,19 @@ IMPL_LINK(SvxScriptOrgDialog, ButtonHdl, weld::Button&, rButton, void)
             }
             catch ( reflection::InvocationTargetException& ite )
             {
-                SvxScriptErrorDialog::ShowAsyncErrorDialog(m_pParent, css::uno::Any(ite));
+                SvxScriptErrorDialog::ShowAsyncErrorDialog(m_pParent, cpo::uno::Any(ite));
             }
             catch ( provider::ScriptFrameworkErrorException& ite )
             {
-                SvxScriptErrorDialog::ShowAsyncErrorDialog(m_pParent, css::uno::Any(ite));
+                SvxScriptErrorDialog::ShowAsyncErrorDialog(m_pParent, cpo::uno::Any(ite));
             }
             catch ( RuntimeException& re )
             {
-                SvxScriptErrorDialog::ShowAsyncErrorDialog(m_pParent, css::uno::Any(re));
+                SvxScriptErrorDialog::ShowAsyncErrorDialog(m_pParent, cpo::uno::Any(re));
             }
             catch ( Exception& e )
             {
-                SvxScriptErrorDialog::ShowAsyncErrorDialog(m_pParent, css::uno::Any(e));
+                SvxScriptErrorDialog::ShowAsyncErrorDialog(m_pParent, cpo::uno::Any(e));
             }
         }
         StoreCurrentSelection();
@@ -1241,7 +1242,7 @@ OUString GetErrorMessage(
         unformatted, language, script, u"", std::u16string_view(), message );
 }
 
-OUString GetErrorMessage( const css::uno::Any& aException )
+OUString GetErrorMessage( const cpo::uno::Any& aException )
 {
     if ( aException.getValueType() ==
          cppu::UnoType<reflection::InvocationTargetException>::get())
@@ -1290,7 +1291,7 @@ OUString GetErrorMessage( const css::uno::Any& aException )
 }
 
 // Show Error dialog asynchronously
-void SvxScriptErrorDialog::ShowAsyncErrorDialog( weld::Window* pParent, css::uno::Any const & aException )
+void SvxScriptErrorDialog::ShowAsyncErrorDialog( weld::Window* pParent, cpo::uno::Any const & aException )
 {
     SolarMutexGuard aGuard;
 

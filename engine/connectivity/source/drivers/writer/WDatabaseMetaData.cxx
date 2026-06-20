@@ -42,7 +42,7 @@ OUString SAL_CALL OWriterDatabaseMetaData::getURL()
 }
 
 uno::Reference<sdbc::XResultSet> SAL_CALL OWriterDatabaseMetaData::getTables(
-    const uno::Any& /*catalog*/, const OUString& /*schemaPattern*/,
+    const cpo::uno::Any& /*catalog*/, const OUString& /*schemaPattern*/,
     const OUString& tableNamePattern, const uno::Sequence<OUString>& types)
 {
     ::osl::MutexGuard aGuard(m_aMutex);

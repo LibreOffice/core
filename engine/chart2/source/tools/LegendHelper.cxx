@@ -39,14 +39,14 @@ rtl::Reference< Legend > LegendHelper::showLegend( ChartModel& rModel
     rtl::Reference< Legend > xLegend = LegendHelper::getLegend( rModel, xContext, true );
     if( xLegend.is())
     {
-        xLegend->setPropertyValue( u"Show"_ustr, uno::Any(true) );
+        xLegend->setPropertyValue( u"Show"_ustr, cpo::uno::Any(true) );
 
         chart2::RelativePosition aRelativePosition;
         if( !(xLegend->getPropertyValue( u"RelativePosition"_ustr) >>=  aRelativePosition) )
         {
             chart2::LegendPosition ePos = chart2::LegendPosition_LINE_END;
             if( !(xLegend->getPropertyValue( u"AnchorPosition"_ustr) >>= ePos ) )
-                xLegend->setPropertyValue( u"AnchorPosition"_ustr, uno::Any( ePos ));
+                xLegend->setPropertyValue( u"AnchorPosition"_ustr, cpo::uno::Any( ePos ));
 
             css::chart::ChartLegendExpansion eExpansion =
                     ( ePos == chart2::LegendPosition_LINE_END ||
@@ -54,9 +54,9 @@ rtl::Reference< Legend > LegendHelper::showLegend( ChartModel& rModel
                     ? css::chart::ChartLegendExpansion_HIGH
                     : css::chart::ChartLegendExpansion_WIDE;
             if( !(xLegend->getPropertyValue( u"Expansion"_ustr) >>= eExpansion ) )
-                xLegend->setPropertyValue( u"Expansion"_ustr, uno::Any( eExpansion ));
+                xLegend->setPropertyValue( u"Expansion"_ustr, cpo::uno::Any( eExpansion ));
 
-            xLegend->setPropertyValue( u"RelativePosition"_ustr, uno::Any());
+            xLegend->setPropertyValue( u"RelativePosition"_ustr, cpo::uno::Any());
         }
 
     }
@@ -68,7 +68,7 @@ void LegendHelper::hideLegend( ChartModel& rModel )
     rtl::Reference< Legend > xLegend = LegendHelper::getLegend( rModel, nullptr );
     if( xLegend.is())
     {
-        xLegend->setPropertyValue( u"Show"_ustr, uno::Any(false) );
+        xLegend->setPropertyValue( u"Show"_ustr, cpo::uno::Any(false) );
     }
 }
 

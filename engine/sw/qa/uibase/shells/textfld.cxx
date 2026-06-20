@@ -39,10 +39,10 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertRefmarkFootnote)
 
     // When inserting a refmark inside a footnote:
     uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue(u"TypeName"_ustr, uno::Any(u"SetRef"_ustr)),
-        comphelper::makePropertyValue(u"Name"_ustr, uno::Any(u"myref"_ustr)),
-        comphelper::makePropertyValue(u"Content"_ustr, uno::Any(u"content"_ustr)),
-        comphelper::makePropertyValue(u"Wrapper"_ustr, uno::Any(u"Footnote"_ustr)),
+        comphelper::makePropertyValue(u"TypeName"_ustr, cpo::uno::Any(u"SetRef"_ustr)),
+        comphelper::makePropertyValue(u"Name"_ustr, cpo::uno::Any(u"myref"_ustr)),
+        comphelper::makePropertyValue(u"Content"_ustr, cpo::uno::Any(u"content"_ustr)),
+        comphelper::makePropertyValue(u"Wrapper"_ustr, cpo::uno::Any(u"Footnote"_ustr)),
     };
     dispatchCommand(mxComponent, u".uno:InsertField"_ustr, aArgs);
 
@@ -71,10 +71,10 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertHyperlinkKeepSelection)
 
     // When inserting a hyperlink whose Hyperlink.Text differs from the selection:
     uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue(u"Hyperlink.Text"_ustr, uno::Any(u"mytext"_ustr)),
-        comphelper::makePropertyValue(u"Hyperlink.TextIsHint"_ustr, uno::Any(true)),
+        comphelper::makePropertyValue(u"Hyperlink.Text"_ustr, cpo::uno::Any(u"mytext"_ustr)),
+        comphelper::makePropertyValue(u"Hyperlink.TextIsHint"_ustr, cpo::uno::Any(true)),
         comphelper::makePropertyValue(u"Hyperlink.URL"_ustr,
-                                      uno::Any(u"http://www.example.com"_ustr)),
+                                      cpo::uno::Any(u"http://www.example.com"_ustr)),
     };
     dispatchCommand(mxComponent, u".uno:SetHyperlink"_ustr, aArgs);
 
@@ -93,10 +93,10 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertRefmarkEndnote)
 
     // When inserting a refmark inside an endnote:
     uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue(u"TypeName"_ustr, uno::Any(u"SetRef"_ustr)),
-        comphelper::makePropertyValue(u"Name"_ustr, uno::Any(u"myref"_ustr)),
-        comphelper::makePropertyValue(u"Content"_ustr, uno::Any(u"content"_ustr)),
-        comphelper::makePropertyValue(u"Wrapper"_ustr, uno::Any(u"Endnote"_ustr)),
+        comphelper::makePropertyValue(u"TypeName"_ustr, cpo::uno::Any(u"SetRef"_ustr)),
+        comphelper::makePropertyValue(u"Name"_ustr, cpo::uno::Any(u"myref"_ustr)),
+        comphelper::makePropertyValue(u"Content"_ustr, cpo::uno::Any(u"content"_ustr)),
+        comphelper::makePropertyValue(u"Wrapper"_ustr, cpo::uno::Any(u"Endnote"_ustr)),
     };
     dispatchCommand(mxComponent, u".uno:InsertField"_ustr, aArgs);
 

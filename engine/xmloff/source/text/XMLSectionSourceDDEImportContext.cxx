@@ -34,6 +34,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XFastAttributeList;
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::xmloff::token;
 
 XMLSectionSourceDDEImportContext::XMLSectionSourceDDEImportContext(

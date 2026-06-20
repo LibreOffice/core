@@ -50,7 +50,7 @@ protected:
 
 public:
     /// @throws css::uno::RuntimeException
-    void Scroll( const css::uno::Any& Down, const css::uno::Any& Up, const css::uno::Any& ToRight, const css::uno::Any& ToLeft, bool bLargeScroll );
+    void Scroll( const cpo::uno::Any& Down, const cpo::uno::Any& Up, const cpo::uno::Any& ToRight, const cpo::uno::Any& ToLeft, bool bLargeScroll );
 
 public:
     /// @throws css::uno::RuntimeException
@@ -61,15 +61,15 @@ public:
         const css::uno::Reference< css::frame::XController >& xController );
     /// @throws css::uno::RuntimeException
     ScVbaWindow(
-        const css::uno::Sequence< css::uno::Any >& aArgs,
+        const css::uno::Sequence< cpo::uno::Any >& aArgs,
         const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
     // XWindow
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL ActiveCell(  ) override;
      virtual css::uno::Reference< ov::excel::XPane > SAL_CALL ActivePane() override;
     virtual css::uno::Reference< ov::excel::XWorksheet > SAL_CALL ActiveSheet(  ) override;
-    virtual void SAL_CALL setCaption( const css::uno::Any& _caption ) override;
-    virtual css::uno::Any SAL_CALL getCaption() override;
+    virtual void SAL_CALL setCaption( const cpo::uno::Any& _caption ) override;
+    virtual cpo::uno::Any SAL_CALL getCaption() override;
     virtual bool SAL_CALL getDisplayGridlines() override;
     virtual void SAL_CALL setDisplayGridlines( bool _displaygridlines ) override;
     virtual bool SAL_CALL getDisplayHeadings() override;
@@ -94,33 +94,33 @@ public:
     virtual void SAL_CALL setSplitRow( sal_Int32 _splitrow ) override ;
     virtual double SAL_CALL getSplitVertical() override ;
     virtual void SAL_CALL setSplitVertical( double _splitvertical ) override ;
-    virtual css::uno::Any SAL_CALL getScrollRow() override ;
-    virtual void SAL_CALL setScrollRow( const css::uno::Any& _scrollrow ) override ;
-    virtual css::uno::Any SAL_CALL getScrollColumn() override ;
-    virtual void SAL_CALL setScrollColumn( const css::uno::Any& _scrollcolumn ) override ;
-    virtual css::uno::Any SAL_CALL getView() override;
-    virtual void SAL_CALL setView( const css::uno::Any& _view ) override;
+    virtual cpo::uno::Any SAL_CALL getScrollRow() override ;
+    virtual void SAL_CALL setScrollRow( const cpo::uno::Any& _scrollrow ) override ;
+    virtual cpo::uno::Any SAL_CALL getScrollColumn() override ;
+    virtual void SAL_CALL setScrollColumn( const cpo::uno::Any& _scrollcolumn ) override ;
+    virtual cpo::uno::Any SAL_CALL getView() override;
+    virtual void SAL_CALL setView( const cpo::uno::Any& _view ) override;
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getVisibleRange() override;
-    virtual css::uno::Any SAL_CALL getWindowState() override;
-    virtual void SAL_CALL setWindowState( const css::uno::Any& _windowstate ) override;
-    virtual css::uno::Any SAL_CALL getZoom() override;
-    virtual void SAL_CALL setZoom(const css::uno::Any& _zoom) override;
+    virtual cpo::uno::Any SAL_CALL getWindowState() override;
+    virtual void SAL_CALL setWindowState( const cpo::uno::Any& _windowstate ) override;
+    virtual cpo::uno::Any SAL_CALL getZoom() override;
+    virtual void SAL_CALL setZoom(const cpo::uno::Any& _zoom) override;
     virtual double SAL_CALL getTabRatio() override ;
     virtual void SAL_CALL setTabRatio( double _tabratio ) override ;
 
     // Methods
-    virtual void SAL_CALL SmallScroll( const css::uno::Any& Down, const css::uno::Any& Up, const css::uno::Any& ToRight, const css::uno::Any& ToLeft ) override;
-    virtual void SAL_CALL LargeScroll( const css::uno::Any& Down, const css::uno::Any& Up, const css::uno::Any& ToRight, const css::uno::Any& ToLeft ) override;
-    virtual css::uno::Any SAL_CALL SelectedSheets( const css::uno::Any& aIndex ) override;
-    virtual void SAL_CALL ScrollWorkbookTabs( const css::uno::Any& Sheets, const css::uno::Any& Position ) override;
+    virtual void SAL_CALL SmallScroll( const cpo::uno::Any& Down, const cpo::uno::Any& Up, const cpo::uno::Any& ToRight, const cpo::uno::Any& ToLeft ) override;
+    virtual void SAL_CALL LargeScroll( const cpo::uno::Any& Down, const cpo::uno::Any& Up, const cpo::uno::Any& ToRight, const cpo::uno::Any& ToLeft ) override;
+    virtual cpo::uno::Any SAL_CALL SelectedSheets( const cpo::uno::Any& aIndex ) override;
+    virtual void SAL_CALL ScrollWorkbookTabs( const cpo::uno::Any& Sheets, const cpo::uno::Any& Position ) override;
     virtual void SAL_CALL Activate(  ) override;
-    virtual void SAL_CALL Close( const css::uno::Any& SaveChanges, const css::uno::Any& FileName, const css::uno::Any& RouteWorkBook ) override;
-    virtual css::uno::Any SAL_CALL Selection(  ) override;
+    virtual void SAL_CALL Close( const cpo::uno::Any& SaveChanges, const cpo::uno::Any& FileName, const cpo::uno::Any& RouteWorkBook ) override;
+    virtual cpo::uno::Any SAL_CALL Selection(  ) override;
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL RangeSelection() override;
     virtual sal_Int32 SAL_CALL PointsToScreenPixelsX(sal_Int32 _points) override;
     virtual sal_Int32 SAL_CALL PointsToScreenPixelsY(sal_Int32 _points) override;
-    virtual void SAL_CALL PrintOut( const css::uno::Any& From, const css::uno::Any&To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName ) override;
-    virtual void SAL_CALL PrintPreview( const css::uno::Any& EnableChanges ) override;
+    virtual void SAL_CALL PrintOut( const cpo::uno::Any& From, const cpo::uno::Any&To, const cpo::uno::Any& Copies, const cpo::uno::Any& Preview, const cpo::uno::Any& ActivePrinter, const cpo::uno::Any& PrintToFile, const cpo::uno::Any& Collate, const cpo::uno::Any& PrToFileName ) override;
+    virtual void SAL_CALL PrintPreview( const cpo::uno::Any& EnableChanges ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

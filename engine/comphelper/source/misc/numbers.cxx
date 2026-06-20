@@ -58,7 +58,7 @@ sal_Int16 getNumberFormatType(const css::uno::Reference<css::util::XNumberFormat
 }
 
 
-css::uno::Any getNumberFormatDecimals(const css::uno::Reference<css::util::XNumberFormats>& xFormats, sal_Int32 nKey)
+cpo::uno::Any getNumberFormatDecimals(const css::uno::Reference<css::util::XNumberFormats>& xFormats, sal_Int32 nKey)
 {
     if (xFormats.is())
     {
@@ -75,11 +75,12 @@ css::uno::Any getNumberFormatDecimals(const css::uno::Reference<css::util::XNumb
             SAL_WARN("comphelper", "getNumberFormatDecimals : invalid key! (may be created with another formatter ?)");
         }
     }
-    return css::uno::Any(sal_Int16(0));
+    return cpo::uno::Any(sal_Int16(0));
 }
 
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 

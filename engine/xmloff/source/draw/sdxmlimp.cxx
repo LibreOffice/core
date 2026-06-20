@@ -210,7 +210,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SdXMLFlatDocContext_Imp
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Impress_XMLOasisImporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(
         new SdXMLImport(pCtx, u"XMLImpressImportOasis"_ustr, false, SvXMLImportFlags::ALL));
@@ -218,14 +218,14 @@ com_sun_star_comp_Impress_XMLOasisImporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Draw_XMLOasisImporter_get_implementation(uno::XComponentContext* pCtx,
-                                                           uno::Sequence<uno::Any> const& /*rSeq*/)
+                                                           uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SdXMLImport(pCtx, u"XMLDrawImportOasis"_ustr, true, SvXMLImportFlags::ALL));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Draw_XMLOasisStylesImporter_get_implementation(uno::XComponentContext* pCtx,
-                                                           uno::Sequence<uno::Any> const& /*rSeq*/)
+                                                           uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SdXMLImport(pCtx, u"XMLDrawStylesImportOasis"_ustr, true,
                                          SvXMLImportFlags::STYLES | SvXMLImportFlags::AUTOSTYLES
@@ -234,7 +234,7 @@ com_sun_star_comp_Draw_XMLOasisStylesImporter_get_implementation(uno::XComponent
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Draw_XMLOasisContentImporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SdXMLImport(pCtx, u"XMLDrawContentImportOasis"_ustr, true,
                                          SvXMLImportFlags::AUTOSTYLES | SvXMLImportFlags::CONTENT
@@ -244,7 +244,7 @@ com_sun_star_comp_Draw_XMLOasisContentImporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Draw_XMLOasisMetaImporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(
         new SdXMLImport(pCtx, u"XMLDrawMetaImportOasis"_ustr, true, SvXMLImportFlags::META));
@@ -252,7 +252,7 @@ com_sun_star_comp_Draw_XMLOasisMetaImporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Draw_XMLOasisSettingsImporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(
         new SdXMLImport(pCtx, u"XMLDrawSettingsImportOasis"_ustr, true, SvXMLImportFlags::SETTINGS));
@@ -260,7 +260,7 @@ com_sun_star_comp_Draw_XMLOasisSettingsImporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Impress_XMLOasisStylesImporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SdXMLImport(pCtx, u"XMLImpressStylesImportOasis"_ustr, false,
                                          SvXMLImportFlags::STYLES | SvXMLImportFlags::AUTOSTYLES
@@ -269,7 +269,7 @@ com_sun_star_comp_Impress_XMLOasisStylesImporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Impress_XMLOasisContentImporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SdXMLImport(pCtx, u"XMLImpressContentImportOasis"_ustr, false,
                                          SvXMLImportFlags::AUTOSTYLES | SvXMLImportFlags::CONTENT
@@ -279,7 +279,7 @@ com_sun_star_comp_Impress_XMLOasisContentImporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Impress_XMLOasisMetaImporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(
         new SdXMLImport(pCtx, u"XMLImpressMetaImportOasis"_ustr, false, SvXMLImportFlags::META));
@@ -287,7 +287,7 @@ com_sun_star_comp_Impress_XMLOasisMetaImporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Impress_XMLOasisSettingsImporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(
         new SdXMLImport(pCtx, u"XMLImpressSettingsImportOasis"_ustr, false, SvXMLImportFlags::SETTINGS));
@@ -370,7 +370,7 @@ void SAL_CALL SdXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
 }
 
 // XInitialization
-void SAL_CALL SdXMLImport::initialize( const uno::Sequence< uno::Any >& aArguments )
+void SAL_CALL SdXMLImport::initialize( const uno::Sequence< cpo::uno::Any >& aArguments )
 {
     SvXMLImport::initialize( aArguments );
 
@@ -425,7 +425,7 @@ void SAL_CALL SdXMLImport::endDocument()
             sal_Int32 nPageNum = 0;
             if ((xPropSet->getPropertyValue(u"PageNumber"_ustr) >>= nPageNum) && nPageNum == 0)
             {
-                xPropSet->setPropertyValue(u"PageNumber"_ustr, uno::Any(rRef.mnPageNumber));
+                xPropSet->setPropertyValue(u"PageNumber"_ustr, cpo::uno::Any(rRef.mnPageNumber));
             }
         }
     }
@@ -530,7 +530,7 @@ void SdXMLImport::SetViewSettings(const css::uno::Sequence<css::beans::PropertyV
     for( const auto& rViewProp : aViewProps )
     {
         const OUString& rName = rViewProp.Name;
-        const uno::Any rValue = rViewProp.Value;
+        const cpo::uno::Any rValue = rViewProp.Value;
 
         if ( rName == "VisibleAreaTop" )
         {
@@ -552,7 +552,7 @@ void SdXMLImport::SetViewSettings(const css::uno::Sequence<css::beans::PropertyV
 
     try
     {
-        xPropSet->setPropertyValue(u"VisibleArea"_ustr, uno::Any( aVisArea )  );
+        xPropSet->setPropertyValue(u"VisibleArea"_ustr, cpo::uno::Any( aVisArea )  );
     }
     catch(const css::uno::Exception&)
     {
@@ -703,7 +703,7 @@ void SdXMLImport::NotifyContainsEmbeddedFont()
     {
         uno::Reference< beans::XPropertySet > xProps( xFac->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY );
         if( xProps.is() )
-            xProps->setPropertyValue(u"EmbedFonts"_ustr, uno::Any( true ) );
+            xProps->setPropertyValue(u"EmbedFonts"_ustr, cpo::uno::Any( true ) );
     }
 }
 

@@ -180,7 +180,7 @@ IMPL_LINK(FixedHyperlink, HandleClick, FixedHyperlink&, rHyperlink, void)
     }
     catch ( const uno::Exception& )
     {
-        uno::Any exc(cppu::getCaughtException());
+        cpo::uno::Any exc(cppu::getCaughtException());
         OUString msg(comphelper::anyToString(exc));
         SolarMutexGuard g;
         std::shared_ptr<weld::MessageDialog> xErrorBox(

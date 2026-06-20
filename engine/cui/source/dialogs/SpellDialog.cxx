@@ -59,6 +59,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 using namespace linguistic;
@@ -1114,7 +1115,7 @@ bool SpellDialog::GetNextSentence_Impl(std::unique_ptr<UndoChangeGroupGuard>* pG
                     SpellErrorDescription aDesc( false, elem.xAlternatives->getWord(),
                                     elem.xAlternatives->getLocale(), elem.xAlternatives->getAlternatives(), nullptr);
                     SfxGrabBagItem aSpellErrorDescription(EE_CHAR_GRABBAG,
-                        std::map<OUString, css::uno::Any>{{ u"SpellErrorDescription"_ustr, uno::Any(aDesc.toSequence()) }});
+                        std::map<OUString, cpo::uno::Any>{{ u"SpellErrorDescription"_ustr, cpo::uno::Any(aDesc.toSequence()) }});
                     m_xSentenceED->SetAttrib(aSpellErrorDescription, nStartPosition, nEndPosition);
                 }
                 else if(elem.bIsGrammarError )
@@ -1126,7 +1127,7 @@ bool SpellDialog::GetNextSentence_Impl(std::unique_ptr<UndoChangeGroupGuard>* pG
                     {
                         if ( aProperties[i].Name == "FullCommentURL" )
                         {
-                            uno::Any aValue = aProperties[i].Value;
+                            cpo::uno::Any aValue = aProperties[i].Value;
                             aValue >>= sFullCommentURL;
                         }
                         ++i;
@@ -1143,7 +1144,7 @@ bool SpellDialog::GetNextSentence_Impl(std::unique_ptr<UndoChangeGroupGuard>* pG
                         &sFullCommentURL );
 
                     SfxGrabBagItem aSpellErrorDescriptionItem(EE_CHAR_GRABBAG,
-                        std::map<OUString, css::uno::Any>{{u"SpellErrorDescription"_ustr, uno::Any(aDesc.toSequence())}});
+                        std::map<OUString, cpo::uno::Any>{{u"SpellErrorDescription"_ustr, cpo::uno::Any(aDesc.toSequence())}});
                     m_xSentenceED->SetAttrib(aSpellErrorDescriptionItem, nStartPosition, nEndPosition);
                 }
 
@@ -1331,7 +1332,7 @@ namespace
 
     void ExtractErrorDescription(const EECharAttrib& rEECharAttrib, SpellErrorDescription& rSpellErrorDescription)
     {
-        css::uno::Sequence<css::uno::Any> aSequence;
+        css::uno::Sequence<cpo::uno::Any> aSequence;
         const auto& rGrabBag = static_cast<const SfxGrabBagItem*>(rEECharAttrib.pAttr)->GetGrabBag();
         const auto iter = rGrabBag.find(u"SpellErrorDescription"_ustr);
         assert(iter != rGrabBag.end());
@@ -1964,7 +1965,7 @@ int SentenceEditWindow_Impl::ChangeMarkedWord(const OUString& rNewWord, Language
     if (bSpellErrorDescription)
     {
         SfxGrabBagItem aSpellErrorDescriptionItem(EE_CHAR_GRABBAG,
-            std::map<OUString, css::uno::Any>{{u"SpellErrorDescription"_ustr, uno::Any(aSpellErrorDescription.toSequence())}});
+            std::map<OUString, cpo::uno::Any>{{u"SpellErrorDescription"_ustr, cpo::uno::Any(aSpellErrorDescription.toSequence())}});
         SetAttrib(aSpellErrorDescriptionItem, m_nErrorStart, m_nErrorEnd);
     }
     SetAttrib(SvxLanguageItem(eLanguage, EE_CHAR_LANGUAGE), m_nErrorStart, m_nErrorEnd);
@@ -2022,7 +2023,7 @@ void SentenceEditWindow_Impl::SetAlternatives( const Reference< XSpellAlternativ
     }
     SpellErrorDescription aDesc( false, aWord, std::move(aLocale), aAlts, nullptr);
     SfxGrabBagItem aSpellErrorDescription(EE_CHAR_GRABBAG,
-        std::map<OUString, css::uno::Any>{{u"SpellErrorDescription"_ustr, uno::Any(aDesc.toSequence())}});
+        std::map<OUString, cpo::uno::Any>{{u"SpellErrorDescription"_ustr, cpo::uno::Any(aDesc.toSequence())}});
     SetAttrib(aSpellErrorDescription, m_nErrorStart, m_nErrorEnd);
 }
 

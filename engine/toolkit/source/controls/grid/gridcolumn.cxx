@@ -28,6 +28,7 @@ namespace toolkit
 {
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::awt::grid;
     using namespace ::com::sun::star::lang;
@@ -85,14 +86,14 @@ namespace toolkit
     }
 
 
-    css::uno::Any SAL_CALL GridColumn::getIdentifier()
+    cpo::uno::Any SAL_CALL GridColumn::getIdentifier()
     {
         std::unique_lock aGuard( m_aMutex );
         return m_aIdentifier;
     }
 
 
-    void SAL_CALL GridColumn::setIdentifier(const css::uno::Any & value)
+    void SAL_CALL GridColumn::setIdentifier(const cpo::uno::Any & value)
     {
         std::unique_lock aGuard( m_aMutex );
         m_aIdentifier = value;
@@ -279,7 +280,7 @@ namespace toolkit
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 org_openoffice_comp_toolkit_GridColumn_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new toolkit::GridColumn());
 }

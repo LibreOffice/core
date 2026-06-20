@@ -117,7 +117,7 @@ ShapeOfGroup::ShapeOfGroup( ShapeSharedPtr const&                      pGroupSha
     mnPrio(nPrio)
 {
     // read bound rect
-    uno::Any const aTmpRect_( xPropSet->getPropertyValue( u"BoundRect"_ustr ));
+    cpo::uno::Any const aTmpRect_( xPropSet->getPropertyValue( u"BoundRect"_ustr ));
     awt::Rectangle const aTmpRect( aTmpRect_.get<awt::Rectangle>() );
     basegfx::B2DRectangle const groupPosSize( pGroupShape->getBounds() );
     maPosOffset = basegfx::B2DPoint( aTmpRect.X - groupPosSize.getMinX(),
@@ -358,7 +358,7 @@ bool ShapeImporter::isSkip(
     if(xLayer.is())
     {
         OUString layerName;
-        const uno::Any a(xLayer->getPropertyValue(u"Name"_ustr) );
+        const cpo::uno::Any a(xLayer->getPropertyValue(u"Name"_ustr) );
         bool const bRet = (a >>= layerName);
         if(bRet)
         {

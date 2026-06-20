@@ -43,7 +43,7 @@ class NodeContext
     OUString msEffectPresetId;
     OUString msEffectPresetSubType;
 
-    bool isValidTarget(const css::uno::Any& rTarget);
+    bool isValidTarget(const cpo::uno::Any& rTarget);
 
     /// constructor helper for initializing user data.
     void initUserData();

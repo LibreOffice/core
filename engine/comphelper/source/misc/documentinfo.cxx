@@ -145,7 +145,7 @@ namespace comphelper {
         catch ( const Exception& )
         {
             // Cannot use tools::exceptionToString here, because the tools module depends on the comphelper module
-            css::uno::Any caught( ::cppu::getCaughtException() );
+            cpo::uno::Any caught( ::cppu::getCaughtException() );
             css::uno::Exception exception;
             caught >>= exception;
             SAL_WARN( "comphelper", "caught an exception!\ntype   : " << caught.getValueTypeName()

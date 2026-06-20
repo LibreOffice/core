@@ -20,7 +20,7 @@
 #pragma once
 
 #include <memory>
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <formula/errorcodes.hxx>
@@ -92,7 +92,7 @@ private:
     OUString            aUpperEnglish;      ///< for Function Wizard and tooltips
     OUString            aDescription;
     css::uno::Reference< css::reflection::XIdlMethod> xFunction;
-    css::uno::Any       aObject;
+    cpo::uno::Any       aObject;
     sal_Int32           nArgCount;
     std::unique_ptr<ScAddInArgDesc[]>
                         pArgDescs;
@@ -107,7 +107,7 @@ public:
                                     OUString aDesc,
                                     sal_uInt16 nCat, OUString ,
                                     css::uno::Reference< css::reflection::XIdlMethod> aFunc,
-                                    css::uno::Any aO,
+                                    cpo::uno::Any aO,
                                     sal_Int32 nAC, const ScAddInArgDesc* pAD,
                                     sal_Int32 nCP );
                 ~ScUnoAddInFuncData();
@@ -119,7 +119,7 @@ public:
     const OUString&  GetUpperEnglish() const     { return aUpperEnglish; }
     const css::uno::Reference< css::reflection::XIdlMethod>&   GetFunction() const
                                                         { return xFunction; }
-    const css::uno::Any& GetObject() const   { return aObject; }
+    const cpo::uno::Any& GetObject() const   { return aObject; }
     sal_Int32               GetArgumentCount() const    { return nArgCount; }
     const ScAddInArgDesc*   GetArguments() const        { return pArgDescs.get(); }
     sal_Int32               GetCallerPos() const        { return nCallerPos; }
@@ -132,7 +132,7 @@ public:
                                           bool bFallbackToAny = true ) const;
 
     void    SetFunction( const css::uno::Reference< css::reflection::XIdlMethod>& rNewFunc,
-                         const css::uno::Any& rNewObj );
+                         const cpo::uno::Any& rNewObj );
     void    SetArguments( sal_Int32 nNewCount, const ScAddInArgDesc* pNewDescs );
     void    SetCallerPos( sal_Int32 nNewPos );
     void    SetCompNames( ::std::vector< LocalizedName >&& rNew );
@@ -196,8 +196,8 @@ class ScUnoAddInCall
 {
 private:
     const ScUnoAddInFuncData*   pFuncData;
-    css::uno::Sequence<css::uno::Any>         aArgs;
-    css::uno::Sequence<css::uno::Any>         aVarArg;
+    css::uno::Sequence<cpo::uno::Any>         aArgs;
+    css::uno::Sequence<cpo::uno::Any>         aVarArg;
     css::uno::Reference<css::uno::XInterface> xCaller;
     ScDocument&                 mrDoc;
     bool                        bValidCount;
@@ -209,7 +209,7 @@ private:
     ScMatrixRef                 xMatrix;
     css::uno::Reference<css::sheet::XVolatileResult> xVarRes;
 
-    void            ExecuteCallWithArgs(css::uno::Sequence<css::uno::Any>& rCallArgs);
+    void            ExecuteCallWithArgs(css::uno::Sequence<cpo::uno::Any>& rCallArgs);
 
 public:
                     // exact name
@@ -223,11 +223,11 @@ public:
 
     bool                ValidParamCount() { return bValidCount;}
     ScAddInArgumentType GetArgType( sal_Int32 nPos );
-    void                SetParam( sal_Int32 nPos, const css::uno::Any& rValue );
+    void                SetParam( sal_Int32 nPos, const cpo::uno::Any& rValue );
 
     void                ExecuteCall();
 
-    void                SetResult( const css::uno::Any& rNewRes );
+    void                SetResult( const cpo::uno::Any& rNewRes );
 
     FormulaError        GetErrCode() const      { return nErrCode; }
     bool                HasString() const       { return bHasString; }

@@ -528,9 +528,9 @@ std::unique_ptr<SvxFieldData> SvxUnoTextField::CreateFieldData() const noexcept
 }
 
 // uno::XInterface
-uno::Any SAL_CALL SvxUnoTextField::queryAggregation( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxUnoTextField::queryAggregation( const uno::Type & rType )
 {
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     QUERYINT( beans::XPropertySet );
     else QUERYINT( text::XTextContent );
@@ -564,7 +564,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextField::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-uno::Any SAL_CALL SvxUnoTextField::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxUnoTextField::queryInterface( const uno::Type & rType )
 {
     return OComponentHelper::queryInterface(rType);
 }
@@ -671,7 +671,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL SvxUnoTextField::getPropertyS
     return mpPropSet->getPropertySetInfo();
 }
 
-void SAL_CALL SvxUnoTextField::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
+void SAL_CALL SvxUnoTextField::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
 
@@ -727,17 +727,17 @@ void SAL_CALL SvxUnoTextField::setPropertyValue( const OUString& aPropertyName, 
     throw lang::IllegalArgumentException();
 }
 
-uno::Any SAL_CALL SvxUnoTextField::getPropertyValue( const OUString& PropertyName )
+cpo::uno::Any SAL_CALL SvxUnoTextField::getPropertyValue( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
     if (PropertyName == UNO_TC_PROP_ANCHOR)
-        return uno::Any(mxAnchor);
+        return cpo::uno::Any(mxAnchor);
 
     if (PropertyName == UNO_TC_PROP_TEXTFIELD_TYPE)
-        return uno::Any(mnServiceId);
+        return cpo::uno::Any(mnServiceId);
 
-    uno::Any aValue;
+    cpo::uno::Any aValue;
 
     const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMap().getByName( PropertyName );
     if ( !pMap )

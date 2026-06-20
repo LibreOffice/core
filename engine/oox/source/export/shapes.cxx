@@ -99,6 +99,7 @@
 using namespace ::css;
 using namespace ::css::beans;
 using namespace ::css::uno;
+using namespace ::cpo::uno;
 using namespace ::css::drawing;
 using namespace ::css::table;
 using namespace ::css::container;
@@ -1391,7 +1392,7 @@ ShapeExport& ShapeExport::WriteEllipseShape( const Reference< XShape >& xShape )
             // "none" is set. OOXML arc can be filled, so set fill explicit to
             // NONE, otherwise some hidden or inherited filling is shown.
             FillStyle eFillStyle(FillStyle_NONE);
-            uno::Any aNewValue;
+            cpo::uno::Any aNewValue;
             aNewValue <<= eFillStyle;
             xProps->setPropertyValue(u"FillStyle"_ustr, aNewValue);
         }
@@ -2326,7 +2327,7 @@ static bool lcl_isTextBox(const Reference<XInterface>& xIface)
     uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
     if (!xPropertySetInfo->hasPropertyByName(u"TextBox"_ustr))
        return false;
-    css::uno::Any aTextBox(xPropertySet->getPropertyValue(u"TextBox"_ustr));
+    cpo::uno::Any aTextBox(xPropertySet->getPropertyValue(u"TextBox"_ustr));
     if (!aTextBox.hasValue())
        return false;
     return aTextBox.get<bool>();

@@ -179,7 +179,7 @@ extern "C" void getInstance(va_list * args) {
     assert(instance);
     assert(*instance == nullptr);
     *instance = (*fn)(static_cast<css::uno::XComponentContext*>(ctxt),
-            *static_cast<css::uno::Sequence<css::uno::Any> const*>(argseq));
+            *static_cast<css::uno::Sequence<cpo::uno::Any> const*>(argseq));
 }
 
 cppuhelper::WrapperConstructorFn mapConstructorFn(
@@ -205,7 +205,7 @@ cppuhelper::WrapperConstructorFn mapConstructorFn(
             css::uno::Reference<css::uno::XInterface>());
     }
     return [mapFrom=std::move(mapFrom), mapTo=std::move(mapTo), target, constructorFunction]
-        (css::uno::XComponentContext *const context, css::uno::Sequence<css::uno::Any> const& args)
+        (css::uno::XComponentContext *const context, css::uno::Sequence<cpo::uno::Any> const& args)
         {
             void *const ctxt = mapTo.mapInterface(
                 context,

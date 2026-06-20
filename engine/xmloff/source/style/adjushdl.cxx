@@ -23,7 +23,7 @@
 #include <xmloff/xmlement.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 using namespace ::com::sun::star;
 
@@ -58,7 +58,7 @@ XMLParaAdjustPropHdl::~XMLParaAdjustPropHdl()
     // nothing to do
 }
 
-bool XMLParaAdjustPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLParaAdjustPropHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     style::ParagraphAdjust eAdjust;
     bool bRet = SvXMLUnitConverter::convertEnum( eAdjust, rStrImpValue, pXML_Para_Adjust_Enum );
@@ -68,7 +68,7 @@ bool XMLParaAdjustPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
     return bRet;
 }
 
-bool XMLParaAdjustPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLParaAdjustPropHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     if(!rValue.hasValue())
         return false;
@@ -92,7 +92,7 @@ XMLLastLineAdjustPropHdl::~XMLLastLineAdjustPropHdl()
     // nothing to do
 }
 
-bool XMLLastLineAdjustPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLLastLineAdjustPropHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     style::ParagraphAdjust eAdjust;
     bool bRet = SvXMLUnitConverter::convertEnum( eAdjust, rStrImpValue, pXML_Para_Align_Last_Enum );
@@ -102,7 +102,7 @@ bool XMLLastLineAdjustPropHdl::importXML( const OUString& rStrImpValue, uno::Any
     return bRet;
 }
 
-bool XMLLastLineAdjustPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLLastLineAdjustPropHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     OUStringBuffer aOut;
     sal_Int16 nVal = 0;

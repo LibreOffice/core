@@ -160,11 +160,11 @@ public:
     /// @throws uno::RuntimeException
     void SetPropertyValues_Impl(
             const uno::Sequence< OUString >& rPropertyNames,
-            const uno::Sequence< uno::Any >& aValues);
+            const uno::Sequence< cpo::uno::Any >& aValues);
     /// @throws beans::UnknownPropertyException
     /// @throws lang::WrappedTargetException,
     /// @throws uno::RuntimeException
-    uno::Sequence< uno::Any >
+    uno::Sequence< cpo::uno::Any >
         GetPropertyValues_Impl(
             const uno::Sequence< OUString >& rPropertyNames);
     virtual void Notify(const SfxHint& rHint) override;
@@ -555,7 +555,7 @@ lcl_UpdateSection(SwSectionFormat *const pFormat,
 
 void SwXTextSection::Impl::SetPropertyValues_Impl(
     const uno::Sequence< OUString >& rPropertyNames,
-    const uno::Sequence< uno::Any >& rValues)
+    const uno::Sequence< cpo::uno::Any >& rValues)
 {
     if(rPropertyNames.getLength() != rValues.getLength())
     {
@@ -571,7 +571,7 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
         pFormat ? new SwSectionData(*pFormat->GetSection()) : nullptr);
 
     OUString const*const pPropertyNames = rPropertyNames.getConstArray();
-    uno::Any const*const pValues = rValues.getConstArray();
+    cpo::uno::Any const*const pValues = rValues.getConstArray();
     std::optional<SfxItemSet> oItemSet;
     bool bLinkModeChanged = false;
     bool bLinkMode = false;
@@ -917,7 +917,7 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
 void SAL_CALL
 SwXTextSection::setPropertyValues(
     const uno::Sequence< OUString >& rPropertyNames,
-    const uno::Sequence< uno::Any >& rValues)
+    const uno::Sequence< cpo::uno::Any >& rValues)
 {
     SolarMutexGuard aGuard;
 
@@ -937,14 +937,14 @@ SwXTextSection::setPropertyValues(
 }
 
 void SwXTextSection::setPropertyValue(
-    const OUString& rPropertyName, const uno::Any& rValue)
+    const OUString& rPropertyName, const cpo::uno::Any& rValue)
 {
     SolarMutexGuard aGuard;
 
     m_pImpl->SetPropertyValues_Impl( { rPropertyName } , { rValue } );
 }
 
-uno::Sequence< uno::Any >
+uno::Sequence< cpo::uno::Any >
 SwXTextSection::Impl::GetPropertyValues_Impl(
         const uno::Sequence< OUString > & rPropertyNames )
 {
@@ -954,8 +954,8 @@ SwXTextSection::Impl::GetPropertyValues_Impl(
         throw uno::RuntimeException( u"non-descriptor section without format"_ustr);
     }
 
-    uno::Sequence< uno::Any > aRet(rPropertyNames.getLength());
-    uno::Any* pRet = aRet.getArray();
+    uno::Sequence< cpo::uno::Any > aRet(rPropertyNames.getLength());
+    cpo::uno::Any* pRet = aRet.getArray();
     SwSection *const pSect = pFormat ? pFormat->GetSection() : nullptr;
     const OUString* pPropertyNames = rPropertyNames.getConstArray();
 
@@ -1248,12 +1248,12 @@ SwXTextSection::Impl::GetPropertyValues_Impl(
     return aRet;
 }
 
-uno::Sequence< uno::Any > SAL_CALL
+uno::Sequence< cpo::uno::Any > SAL_CALL
 SwXTextSection::getPropertyValues(
     const uno::Sequence< OUString >& rPropertyNames)
 {
     SolarMutexGuard aGuard;
-    uno::Sequence< uno::Any > aValues;
+    uno::Sequence< cpo::uno::Any > aValues;
 
     // workaround for bad designed API
     try
@@ -1262,13 +1262,13 @@ SwXTextSection::getPropertyValues(
     }
     catch (beans::UnknownPropertyException &)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(u"Unknown property exception caught"_ustr,
                 getXWeak(), anyEx );
     }
     catch (lang::WrappedTargetException &)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(u"WrappedTargetException caught"_ustr,
                 getXWeak(), anyEx );
     }
@@ -1276,7 +1276,7 @@ SwXTextSection::getPropertyValues(
     return aValues;
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwXTextSection::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
@@ -1571,12 +1571,12 @@ SwXTextSection::setPropertyToDefault(const OUString& rPropertyName)
     lcl_UpdateSection(pFormat, pSectionData, oNewAttrSet, bLinkModeChanged);
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwXTextSection::getPropertyDefault(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     SwSectionFormat *const pFormat = m_pImpl->GetSectionFormat();
     SfxItemPropertyMapEntry const*const pEntry =
         m_pImpl->m_rPropSet.getPropertyMap().getByName(rPropertyName);

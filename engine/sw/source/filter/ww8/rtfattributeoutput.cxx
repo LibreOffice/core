@@ -4466,7 +4466,7 @@ void RtfAttributeOutput::FormatFrameDirection(const SvxFrameDirectionItem& rDire
 
 void RtfAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
 {
-    const std::map<OUString, css::uno::Any>& rMap = rItem.GetGrabBag();
+    const std::map<OUString, cpo::uno::Any>& rMap = rItem.GetGrabBag();
     for (const auto& rValue : rMap)
     {
         if (rValue.first == "ParaTopMarginBeforeAutoSpacing")

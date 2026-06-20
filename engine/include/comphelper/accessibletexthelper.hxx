@@ -104,8 +104,8 @@ namespace comphelper
         static bool implInitTextChangedEvent(
             std::u16string_view rOldString,
             std::u16string_view rNewString,
-            /*out*/ css::uno::Any& rDeleted,
-            /*out*/ css::uno::Any& rInserted); // throw()
+            /*out*/ cpo::uno::Any& rDeleted,
+            /*out*/ cpo::uno::Any& rInserted); // throw()
     };
 
 

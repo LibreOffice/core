@@ -35,6 +35,7 @@
 #include <rtl/ref.hxx>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
@@ -231,7 +232,7 @@ void SAL_CALL ODefinitionContainer::replaceByName( const OUString& _rName, const
     }
     catch (const Exception& e)
     {
-        css::uno::Any a(cppu::getCaughtException());
+        cpo::uno::Any a(cppu::getCaughtException());
         throw css::lang::WrappedTargetException(
           "wrapped Exception " + e.Message,
           css::uno::Reference<css::uno::XInterface>(), a);
@@ -625,7 +626,7 @@ void SAL_CALL ODefinitionContainer::propertyChange( const PropertyChangeEvent& e
     }
     catch(const Exception& ex)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException( ex.Message,
                         nullptr, anyEx );
     }

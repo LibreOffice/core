@@ -106,11 +106,11 @@ class LoadDispatcher final : public  ::cppu::WeakImplHelper< css::frame::XNotify
                                                    const css::util::URL&                                     aURL     ) override;
 
         // XSynchronousDispatch
-        virtual css::uno::Any SAL_CALL dispatchWithReturnValue( const css::util::URL&                                  aURL      ,
+        virtual cpo::uno::Any SAL_CALL dispatchWithReturnValue( const css::util::URL&                                  aURL      ,
                                                                 const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
 
     private:
-        css::uno::Any impl_dispatch( const css::util::URL& rURL,
+        cpo::uno::Any impl_dispatch( const css::util::URL& rURL,
                                      const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
                                      const css::uno::Reference< css::frame::XDispatchResultListener >& xListener );
 }; // class LoadDispatcher

@@ -39,14 +39,15 @@ HtmlTransferable::HtmlTransferable(OString sData)
 HtmlTransferable::~HtmlTransferable() {}
 
 // css::uno::XInterface
-uno::Any HtmlTransferable::queryInterface(const uno::Type& rType)
+cpo::uno::Any HtmlTransferable::queryInterface(const uno::Type& rType)
 {
-    uno::Any aRet = ::cppu::queryInterface(rType, static_cast<datatransfer::XTransferable*>(this));
+    cpo::uno::Any aRet
+        = ::cppu::queryInterface(rType, static_cast<datatransfer::XTransferable*>(this));
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface(rType));
 }
 
 // css::datatransfer::XTransferable
-uno::Any HtmlTransferable::getTransferData(const datatransfer::DataFlavor& rFlavor)
+cpo::uno::Any HtmlTransferable::getTransferData(const datatransfer::DataFlavor& rFlavor)
 {
     SotClipboardFormatId nT = SotExchange::GetFormat(rFlavor);
     if (nT != SotClipboardFormatId::HTML)
@@ -56,7 +57,7 @@ uno::Any HtmlTransferable::getTransferData(const datatransfer::DataFlavor& rFlav
     size_t size = data.getLength();
     uno::Sequence<sal_Int8> sData(size);
     std::memcpy(sData.getArray(), data.getStr(), size);
-    return uno::Any(sData);
+    return cpo::uno::Any(sData);
 }
 
 uno::Sequence<datatransfer::DataFlavor> HtmlTransferable::getTransferDataFlavors()

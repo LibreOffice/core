@@ -33,7 +33,7 @@ namespace com::sun::star::beans { class XPropertySetInfo; }
 namespace com::sun::star::beans { class XTolerantMultiPropertySet; }
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::container { class XNameContainer; }
-namespace com::sun::star::uno { class Any; }
+namespace cpo::uno { class Any; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 namespace com::sun::star::uno { template <typename > class Sequence; }
 namespace com::sun::star::xml::sax { class XFastAttributeList; }
@@ -178,7 +178,7 @@ public:
         const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
         ContextID_Index_Pair* pSpecialContextIds,
         css::uno::Sequence< OUString >& rNames,
-        css::uno::Sequence< css::uno::Any >& rValues);
+        css::uno::Sequence< cpo::uno::Any >& rValues);
 
 private:
     void importXMLAttribute(

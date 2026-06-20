@@ -72,16 +72,16 @@ class DispatchRecorder final
 
         virtual sal_Int32 SAL_CALL getCount() override;
 
-        virtual css::uno::Any SAL_CALL getByIndex(sal_Int32) override;
+        virtual cpo::uno::Any SAL_CALL getByIndex(sal_Int32) override;
 
-        virtual void SAL_CALL replaceByIndex(sal_Int32, const css::uno::Any&) override;
+        virtual void SAL_CALL replaceByIndex(sal_Int32, const cpo::uno::Any&) override;
 
     // private functions
     private:
         void implts_recordMacro( std::u16string_view aURL,
                                           const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
                                                 bool bAsComment, OUStringBuffer& );
-        void AppendToBuffer( const css::uno::Any& aValue, OUStringBuffer& aArgumentBuffer );
+        void AppendToBuffer( const cpo::uno::Any& aValue, OUStringBuffer& aArgumentBuffer );
 
 }; // class DispatcRecorder
 

@@ -63,7 +63,7 @@ bool SvxZoomItem::operator==( const SfxPoolItem& rAttr ) const
              eType      == rItem.GetType()          );
 }
 
-bool SvxZoomItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxZoomItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
@@ -91,7 +91,7 @@ bool SvxZoomItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-bool SvxZoomItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxZoomItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )

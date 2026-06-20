@@ -29,14 +29,14 @@ namespace comphelper
 template <typename T, std::enable_if_t<!std::is_arithmetic_v<std::remove_reference_t<T>>, int> = 0>
 css::beans::PropertyValue makePropertyValue(const OUString& rName, T&& rValue)
 {
-    return { rName, 0, css::uno::toAny(std::forward<T>(rValue)),
+    return { rName, 0, cpo::uno::toAny(std::forward<T>(rValue)),
              css::beans::PropertyState_DIRECT_VALUE };
 }
 // Allows to pass e.g. bit fields
 template <typename T, std::enable_if_t<std::is_arithmetic_v<T>, int> = 0>
 css::beans::PropertyValue makePropertyValue(const OUString& rName, T aValue)
 {
-    return makePropertyValue(rName, css::uno::toAny(aValue));
+    return makePropertyValue(rName, cpo::uno::toAny(aValue));
 }
 }
 

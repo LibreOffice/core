@@ -69,7 +69,7 @@ namespace framework
     @param      aResult
                     the job result
 */
-JobResult::JobResult(/*IN*/ const css::uno::Any& aResult)
+JobResult::JobResult(/*IN*/ const cpo::uno::Any& aResult)
 {
     // reset the flag mask!
     // It will reset the accessible state of this object.

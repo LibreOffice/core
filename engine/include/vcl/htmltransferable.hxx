@@ -37,12 +37,12 @@ public:
     SAL_DLLPRIVATE virtual ~HtmlTransferable() override;
 
     // css::uno::XInterface
-    SAL_DLLPRIVATE css::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
+    SAL_DLLPRIVATE cpo::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
     void SAL_CALL acquire() noexcept override { OWeakObject::acquire(); }
     void SAL_CALL release() noexcept override { OWeakObject::release(); }
 
     // css::datatransfer::XTransferable
-    SAL_DLLPRIVATE css::uno::Any SAL_CALL
+    SAL_DLLPRIVATE cpo::uno::Any SAL_CALL
     getTransferData(const css::datatransfer::DataFlavor& aFlavor) override;
     SAL_DLLPRIVATE css::uno::Sequence<css::datatransfer::DataFlavor>
         SAL_CALL getTransferDataFlavors() override;

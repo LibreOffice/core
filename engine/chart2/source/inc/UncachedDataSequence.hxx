@@ -86,7 +86,7 @@ private:
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
 
     // ____ XDataSequence ____
-    virtual css::uno::Sequence< css::uno::Any > SAL_CALL getData() override;
+    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL getData() override;
     virtual OUString SAL_CALL getSourceRangeRepresentation() override;
     virtual css::uno::Sequence< OUString > SAL_CALL generateLabel(
         css::chart2::data::LabelOrigin nLabelOrigin ) override;
@@ -101,11 +101,11 @@ private:
     virtual css::uno::Sequence< OUString > SAL_CALL getTextualData() override;
 
     // ____ XIndexReplace ____
-    virtual void SAL_CALL replaceByIndex( ::sal_Int32 Index, const css::uno::Any& Element ) override;
+    virtual void SAL_CALL replaceByIndex( ::sal_Int32 Index, const cpo::uno::Any& Element ) override;
 
     // ____ XIndexAccess (base of XIndexReplace) ____
     virtual ::sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override;
 
     // ____ XElementAccess (base of XIndexAccess) ____
     virtual css::uno::Type SAL_CALL getElementType() override;

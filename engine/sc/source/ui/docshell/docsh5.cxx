@@ -1119,7 +1119,7 @@ bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRec
                     Reference< XNameContainer > xLib;
                     if( xLibContainer.is() )
                     {
-                        css::uno::Any aLibAny = xLibContainer->getByName( aLibName );
+                        cpo::uno::Any aLibAny = xLibContainer->getByName( aLibName );
                         aLibAny >>= xLib;
                     }
                     if( xLib.is() )

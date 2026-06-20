@@ -32,8 +32,8 @@ public:
         const css::uno::Reference<css::beans::XPropertyState>& xInnerPropertyState) const override;
 
 private:
-    virtual css::uno::Any convertInnerToOuterValue(const css::uno::Any& rInnerValue) const override;
-    virtual css::uno::Any convertOuterToInnerValue(const css::uno::Any& rOuterValue) const override;
+    virtual cpo::uno::Any convertInnerToOuterValue(const cpo::uno::Any& rInnerValue) const override;
+    virtual cpo::uno::Any convertOuterToInnerValue(const cpo::uno::Any& rOuterValue) const override;
 
     bool m_bDirectState;
 };

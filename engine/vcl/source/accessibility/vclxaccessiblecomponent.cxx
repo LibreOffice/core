@@ -134,7 +134,7 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::GetChildAc
 
 void VCLXAccessibleComponent::ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    uno::Any aOldValue, aNewValue;
+    cpo::uno::Any aOldValue, aNewValue;
     uno::Reference< accessibility::XAccessible > xAcc;
 
     switch ( rVclWindowEvent.GetId() )
@@ -155,9 +155,9 @@ void VCLXAccessibleComponent::ProcessWindowChildEvent( const VclWindowEvent& rVc
                     VCLXAccessibleComponent* pChildComponent = dynamic_cast<VCLXAccessibleComponent*>(xChildContext.get());
                     if (pChildComponent)
                     {
-                        css::uno::Any aNewStateValue;
+                        cpo::uno::Any aNewStateValue;
                         aNewStateValue <<= accessibility::AccessibleStateType::SHOWING;
-                        pChildComponent->NotifyAccessibleEvent(accessibility::AccessibleEventId::STATE_CHANGED, css::uno::Any(), aNewStateValue);
+                        pChildComponent->NotifyAccessibleEvent(accessibility::AccessibleEventId::STATE_CHANGED, cpo::uno::Any(), aNewStateValue);
                     }
                 }
             }
@@ -176,9 +176,9 @@ void VCLXAccessibleComponent::ProcessWindowChildEvent( const VclWindowEvent& rVc
                     VCLXAccessibleComponent* pChildComponent = dynamic_cast<VCLXAccessibleComponent*>(xChildContext.get());
                     if (pChildComponent)
                     {
-                        css::uno::Any aOldStateValue;
+                        cpo::uno::Any aOldStateValue;
                         aOldStateValue <<= accessibility::AccessibleStateType::SHOWING;
-                        pChildComponent->NotifyAccessibleEvent(accessibility::AccessibleEventId::STATE_CHANGED, aOldStateValue, css::uno::Any());
+                        pChildComponent->NotifyAccessibleEvent(accessibility::AccessibleEventId::STATE_CHANGED, aOldStateValue, cpo::uno::Any());
                     }
                 }
 
@@ -193,7 +193,7 @@ void VCLXAccessibleComponent::ProcessWindowChildEvent( const VclWindowEvent& rVc
 
 void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    uno::Any aOldValue, aNewValue;
+    cpo::uno::Any aOldValue, aNewValue;
 
     vcl::Window* pAccWindow = rVclWindowEvent.GetWindow();
     assert(pAccWindow && "VCLXAccessibleComponent::ProcessWindowEvent - Window?");

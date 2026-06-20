@@ -220,6 +220,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 #define MIN_ACTIONS_FOR_DIALOG  5000    ///< if there are more meta objects, we show a dialog during the break up
 
@@ -2842,9 +2843,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         {
                             //  initialize dialog
                             weld::Window* pWindow = rReq.GetFrameWeld();
-                            uno::Sequence<uno::Any> aSeq(comphelper::InitAnyPropertySequence(
+                            uno::Sequence<cpo::uno::Any> aSeq(comphelper::InitAnyPropertySequence(
                             {
-                                {"ParentWindow", pWindow ? uno::Any(pWindow->GetXWindow()) : uno::Any(Reference<awt::XWindow>())}
+                                {"ParentWindow", pWindow ? cpo::uno::Any(pWindow->GetXWindow()) : cpo::uno::Any(Reference<awt::XWindow>())}
                             }));
                             xInit->initialize( aSeq );
                         }

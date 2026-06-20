@@ -102,7 +102,7 @@ include/basic/sbxvar.hxx:258
     StarBASIC
 include/comphelper/propertycontainerhelper.hxx:48
     comphelper::PropertyDescription::LocationAccess pDerivedClassMember void *
-    com::sun::star::uno::Any
+    cpo::uno::Any
 include/connectivity/sdbcx/VTable.hxx:77
     connectivity::sdbcx::OTable m_xColumns std::unique_ptr<OCollection>
     dbaccess::OColumns

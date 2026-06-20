@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/beans/Property.hpp>
 #include <rtl/ustring.hxx>
 
@@ -31,7 +31,7 @@ namespace pcr
 {
 
 
-    OUString GetUIHeadlineName(sal_Int16 _nClassId, const css::uno::Any& _rUnoObject);
+    OUString GetUIHeadlineName(sal_Int16 _nClassId, const cpo::uno::Any& _rUnoObject);
     sal_Int16 classifyComponent( const css::uno::Reference< css::uno::XInterface >& _rxComponent );
 
 

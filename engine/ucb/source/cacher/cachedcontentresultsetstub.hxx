@@ -51,7 +51,7 @@ private:
     void
     impl_getCurrentRowContent(
         std::unique_lock<std::mutex>& rGuard,
-        css::uno::Any& rRowContent,
+        cpo::uno::Any& rRowContent,
         const css::uno::Reference< css::sdbc::XRow >& xRow );
 
     sal_Int32
@@ -61,21 +61,21 @@ private:
     static void
     impl_getCurrentContentIdentifierString(
             std::unique_lock<std::mutex>& rGuard,
-            css::uno::Any& rAny
+            cpo::uno::Any& rAny
             , const css::uno::Reference< css::ucb::XContentAccess >& xContentAccess );
 
     /// @throws css::uno::RuntimeException
     static void
     impl_getCurrentContentIdentifier(
             std::unique_lock<std::mutex>& rGuard,
-            css::uno::Any& rAny
+            cpo::uno::Any& rAny
             , const css::uno::Reference< css::ucb::XContentAccess >& xContentAccess );
 
     /// @throws css::uno::RuntimeException
     static void
     impl_getCurrentContent(
             std::unique_lock<std::mutex>& rGuard,
-            css::uno::Any& rAny
+            cpo::uno::Any& rAny
             , const css::uno::Reference< css::ucb::XContentAccess >& xContentAccess );
 
     /// @throws css::uno::RuntimeException
@@ -85,7 +85,7 @@ private:
     css::ucb::FetchResult impl_fetchHelper(
         std::unique_lock<std::mutex>& rGuard,
         sal_Int32 nRowStartPosition, sal_Int32 nRowCount, bool bDirection,
-        std::function<void(std::unique_lock<std::mutex>&, css::uno::Any& rRowContent)> impl_loadRow);
+        std::function<void(std::unique_lock<std::mutex>&, cpo::uno::Any& rRowContent)> impl_loadRow);
 
 public:
     CachedContentResultSetStub( css::uno::Reference< css::sdbc::XResultSet > const & xOrigin );
@@ -94,7 +94,7 @@ public:
 
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         noexcept override;
     virtual void SAL_CALL release()

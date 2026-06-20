@@ -83,16 +83,16 @@ static void lcl_SetChartParameters( const uno::Reference< chart2::data::XDataRec
     uno::Sequence< beans::PropertyValue > aArgs{
         beans::PropertyValue(
             u"CellRangeRepresentation"_ustr, -1,
-            uno::Any( rRanges ), beans::PropertyState_DIRECT_VALUE ),
+            cpo::uno::Any( rRanges ), beans::PropertyState_DIRECT_VALUE ),
         beans::PropertyValue(
             u"HasCategories"_ustr, -1,
-            uno::Any( bHasCategories ), beans::PropertyState_DIRECT_VALUE ),
+            cpo::uno::Any( bHasCategories ), beans::PropertyState_DIRECT_VALUE ),
         beans::PropertyValue(
             u"FirstCellAsLabel"_ustr, -1,
-            uno::Any( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE ),
+            cpo::uno::Any( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE ),
         beans::PropertyValue(
             u"DataRowSource"_ustr, -1,
-            uno::Any( eDataRowSource ), beans::PropertyState_DIRECT_VALUE )
+            cpo::uno::Any( eDataRowSource ), beans::PropertyState_DIRECT_VALUE )
     };
     xReceiver->setArguments( aArgs );
 }

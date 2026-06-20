@@ -129,8 +129,8 @@ $(eval $(call gb_Jar_add_sourcefiles,libreoffice,\
     ridljar/com/sun/star/lib/util/StringHelper \
     ridljar/com/sun/star/lib/util/UrlToFileMapper \
     ridljar/com/sun/star/lib/util/WeakMap \
-    ridljar/com/sun/star/uno/Any \
-    ridljar/com/sun/star/uno/AnyConverter \
+    ridljar/cpo/uno/Any \
+    ridljar/cpo/uno/AnyConverter \
     ridljar/com/sun/star/uno/Ascii \
     ridljar/com/sun/star/uno/AsciiString \
     ridljar/com/sun/star/uno/Enum \

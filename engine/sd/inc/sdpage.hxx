@@ -285,8 +285,8 @@ public:
 
     virtual SfxStyleSheet* GetTextStyleSheetForObject( SdrObject* pObj ) const override;
 
-    bool setAlienAttributes( const css::uno::Any& rAttributes );
-    void getAlienAttributes( css::uno::Any& rAttributes );
+    bool setAlienAttributes( const cpo::uno::Any& rAttributes );
+    void getAlienAttributes( cpo::uno::Any& rAttributes );
 
     /** @return the main animation node
 

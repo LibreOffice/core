@@ -52,7 +52,7 @@ public:
     virtual void SAL_CALL setName(const OUString&) override;
     virtual void SAL_CALL Delete() override;
     virtual void SAL_CALL Select() override;
-    virtual css::uno::Any SAL_CALL Range() override;
+    virtual cpo::uno::Any SAL_CALL Range() override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

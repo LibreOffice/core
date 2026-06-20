@@ -78,9 +78,9 @@ namespace dbaccess
 
         css::uno::Reference< css::sdbc::XConnection >         m_xOldConnection;
         css::uno::Reference< css::sdbc::XConnection >         m_xActiveConnection;
-        css::uno::Any                                         m_aActiveConnection;
+        cpo::uno::Any                                         m_aActiveConnection;
         css::uno::Reference< css::container::XNameAccess >    m_xTypeMap;
-        css::uno::Any                                         m_aTypeMap;
+        cpo::uno::Any                                         m_aTypeMap;
         css::uno::Reference< css::sdbc::XPreparedStatement >  m_xStatement;
         css::uno::Reference< css::sdb::XSingleSelectQueryComposer >   m_xComposer;
         css::uno::Reference< css::container::XNameAccess >    m_xColumns; // the columns from a table or query
@@ -207,10 +207,10 @@ namespace dbaccess
         void freeResources( bool _bComplete );
 
         /// informs the clones (and ourself) that we are going to delete a record with a given bookmark
-        void notifyRowSetAndClonesRowDelete( const css::uno::Any& _rBookmark );
+        void notifyRowSetAndClonesRowDelete( const cpo::uno::Any& _rBookmark );
 
         /// inform the clones (and ourself) that we have deleted a record with a given bookmark
-        void notifyRowSetAndClonesRowDeleted( const css::uno::Any& _rBookmark, sal_Int32 _nPos );
+        void notifyRowSetAndClonesRowDeleted( const cpo::uno::Any& _rBookmark, sal_Int32 _nPos );
 
         void checkUpdateIterator();
         const connectivity::ORowSetValue& getInsertValue(sal_Int32 columnIndex);
@@ -226,9 +226,9 @@ namespace dbaccess
         // restore the old state of the data column read-only state
         void impl_restoreDataColumnsWriteable_throw();
 
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue) override;
-        virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue,sal_Int32 nHandle) const override;
-        virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, css::uno::Any& _rDefault ) const override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const cpo::uno::Any& rValue) override;
+        virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue,sal_Int32 nHandle) const override;
+        virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, cpo::uno::Any& _rDefault ) const override;
 
         virtual void fireRowcount() override;
                 void notifyAllListenersRowBeforeChange(::osl::ResettableMutexGuard& _rGuard,const css::sdb::RowChangeEvent &rEvt);
@@ -254,12 +254,12 @@ namespace dbaccess
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // css::uno::XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
         virtual void SAL_CALL acquire() noexcept override;
         virtual void SAL_CALL release() noexcept override;
 
     // css::uno::XAggregation
-        virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& aType ) override;
+        virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& aType ) override;
 
     // css::lang::XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
@@ -306,7 +306,7 @@ namespace dbaccess
         virtual css::util::DateTime SAL_CALL getTimestamp( sal_Int32 columnIndex ) override;
         virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getBinaryStream( sal_Int32 columnIndex ) override;
         virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getCharacterStream( sal_Int32 columnIndex ) override;
-        virtual css::uno::Any SAL_CALL getObject( sal_Int32 columnIndex, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual cpo::uno::Any SAL_CALL getObject( sal_Int32 columnIndex, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
         virtual css::uno::Reference< css::sdbc::XRef > SAL_CALL getRef( sal_Int32 columnIndex ) override;
         virtual css::uno::Reference< css::sdbc::XBlob > SAL_CALL getBlob( sal_Int32 columnIndex ) override;
         virtual css::uno::Reference< css::sdbc::XClob > SAL_CALL getClob( sal_Int32 columnIndex ) override;
@@ -328,8 +328,8 @@ namespace dbaccess
         virtual void SAL_CALL updateTimestamp( sal_Int32 columnIndex, const css::util::DateTime& x ) override;
         virtual void SAL_CALL updateBinaryStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
         virtual void SAL_CALL updateCharacterStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
-        virtual void SAL_CALL updateObject( sal_Int32 columnIndex, const css::uno::Any& x ) override;
-        virtual void SAL_CALL updateNumericObject( sal_Int32 columnIndex, const css::uno::Any& x, sal_Int32 scale ) override;
+        virtual void SAL_CALL updateObject( sal_Int32 columnIndex, const cpo::uno::Any& x ) override;
+        virtual void SAL_CALL updateNumericObject( sal_Int32 columnIndex, const cpo::uno::Any& x, sal_Int32 scale ) override;
 
     // css::sdbc::XResultSetUpdate
         virtual void SAL_CALL insertRow(  ) override;
@@ -359,7 +359,7 @@ namespace dbaccess
         virtual void SAL_CALL cancel(  ) override;
 
     // css::sdbcx::XDeleteRows
-        virtual css::uno::Sequence< sal_Int32 > SAL_CALL deleteRows( const css::uno::Sequence< css::uno::Any >& rows ) override;
+        virtual css::uno::Sequence< sal_Int32 > SAL_CALL deleteRows( const css::uno::Sequence< cpo::uno::Any >& rows ) override;
 
     // XParameters
         virtual void SAL_CALL setNull( sal_Int32 parameterIndex, sal_Int32 sqlType ) override;
@@ -378,8 +378,8 @@ namespace dbaccess
         virtual void SAL_CALL setTimestamp( sal_Int32 parameterIndex, const css::util::DateTime& x ) override;
         virtual void SAL_CALL setBinaryStream( sal_Int32 parameterIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
         virtual void SAL_CALL setCharacterStream( sal_Int32 parameterIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
-        virtual void SAL_CALL setObject( sal_Int32 parameterIndex, const css::uno::Any& x ) override;
-        virtual void SAL_CALL setObjectWithInfo( sal_Int32 parameterIndex, const css::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale ) override;
+        virtual void SAL_CALL setObject( sal_Int32 parameterIndex, const cpo::uno::Any& x ) override;
+        virtual void SAL_CALL setObjectWithInfo( sal_Int32 parameterIndex, const cpo::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale ) override;
         virtual void SAL_CALL setRef( sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XRef >& x ) override;
         virtual void SAL_CALL setBlob( sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XBlob >& x ) override;
         virtual void SAL_CALL setClob( sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XClob >& x ) override;
@@ -387,7 +387,7 @@ namespace dbaccess
         virtual void SAL_CALL clearParameters(  ) override;
 
         // XWarningsSupplier
-        virtual css::uno::Any SAL_CALL getWarnings(  ) override;
+        virtual cpo::uno::Any SAL_CALL getWarnings(  ) override;
         virtual void SAL_CALL clearWarnings(  ) override;
 
         /** implement the <method>execute</method>, without calling the approve listeners and without building a new
@@ -464,7 +464,7 @@ namespace dbaccess
         virtual bool        isModified( ) override;
         virtual bool        isNew( ) override;
 
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue) override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const cpo::uno::Any& rValue) override;
     public:
         ORowSetClone( const css::uno::Reference<css::uno::XComponentContext>& _rContext, ORowSet& rParent, ::osl::Mutex* _pMutex );
         virtual ~ORowSetClone() override;
@@ -477,7 +477,7 @@ namespace dbaccess
         }
 
     // css::uno::XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
         virtual void SAL_CALL acquire() noexcept override;
         virtual void SAL_CALL release() noexcept override;
 

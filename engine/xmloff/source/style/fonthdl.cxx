@@ -29,7 +29,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlement.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <tools/fontenum.hxx>
 
 using namespace ::com::sun::star;
@@ -64,7 +64,7 @@ XMLFontFamilyNamePropHdl::~XMLFontFamilyNamePropHdl()
     // Nothing to do
 }
 
-bool XMLFontFamilyNamePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLFontFamilyNamePropHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
     OUStringBuffer sValue;
@@ -114,7 +114,7 @@ bool XMLFontFamilyNamePropHdl::importXML( const OUString& rStrImpValue, uno::Any
     return bRet;
 }
 
-bool XMLFontFamilyNamePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLFontFamilyNamePropHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
     OUString aStrFamilyName;
@@ -191,7 +191,7 @@ XMLFontFamilyPropHdl::~XMLFontFamilyPropHdl()
     // Nothing to do
 }
 
-bool XMLFontFamilyPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLFontFamilyPropHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     FontFamily eNewFamily;
     bool bRet = SvXMLUnitConverter::convertEnum( eNewFamily, rStrImpValue, lcl_getFontFamilyGenericMapping() );
@@ -201,7 +201,7 @@ bool XMLFontFamilyPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
     return bRet;
 }
 
-bool XMLFontFamilyPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLFontFamilyPropHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
     OUStringBuffer aOut;
@@ -225,7 +225,7 @@ XMLFontEncodingPropHdl::~XMLFontEncodingPropHdl()
     // Nothing to do
 }
 
-bool XMLFontEncodingPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLFontEncodingPropHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     if( IsXMLToken( rStrImpValue, XML_X_SYMBOL ) )
         rValue <<= sal_Int16(RTL_TEXTENCODING_SYMBOL);
@@ -233,7 +233,7 @@ bool XMLFontEncodingPropHdl::importXML( const OUString& rStrImpValue, uno::Any& 
     return true;
 }
 
-bool XMLFontEncodingPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLFontEncodingPropHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
     sal_Int16 nSet = sal_Int16();
@@ -256,7 +256,7 @@ XMLFontPitchPropHdl::~XMLFontPitchPropHdl()
     // Nothing to do
 }
 
-bool XMLFontPitchPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLFontPitchPropHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     FontPitch eNewPitch;
     bool bRet = SvXMLUnitConverter::convertEnum( eNewPitch, rStrImpValue, aFontPitchMapping );
@@ -266,7 +266,7 @@ bool XMLFontPitchPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rVa
     return bRet;
 }
 
-bool XMLFontPitchPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLFontPitchPropHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
     sal_Int16 nPitch = sal_Int16();

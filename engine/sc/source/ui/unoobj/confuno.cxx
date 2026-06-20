@@ -133,7 +133,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDocumentConfiguration::getPro
 }
 
 void SAL_CALL ScDocumentConfiguration::setPropertyValue(
-                        const OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
 
@@ -444,10 +444,10 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
 
 }
 
-uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
+    cpo::uno::Any aRet;
 
     if(!pDocShell)
         throw uno::RuntimeException();

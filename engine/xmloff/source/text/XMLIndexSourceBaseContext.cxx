@@ -34,7 +34,7 @@ using namespace ::xmloff::token;
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 
 
 XMLIndexSourceBaseContext::XMLIndexSourceBaseContext(
@@ -92,8 +92,8 @@ void XMLIndexSourceBaseContext::ProcessAttribute(const sax_fastparser::FastAttri
 
 void XMLIndexSourceBaseContext::endFastElement(sal_Int32 )
 {
-    rIndexPropertySet->setPropertyValue(u"IsRelativeTabstops"_ustr, css::uno::Any(bRelativeTabs));
-    rIndexPropertySet->setPropertyValue(u"CreateFromChapter"_ustr, css::uno::Any(bChapterIndex));
+    rIndexPropertySet->setPropertyValue(u"IsRelativeTabstops"_ustr, cpo::uno::Any(bRelativeTabs));
+    rIndexPropertySet->setPropertyValue(u"CreateFromChapter"_ustr, cpo::uno::Any(bChapterIndex));
 }
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexSourceBaseContext::createFastChildContext(
@@ -122,7 +122,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexSourceBaseCont
         {
             OUString const convertedStyleName(GetImport().GetStyleDisplayName(
                         XmlStyleFamily::TEXT_PARAGRAPH, styleName));
-            rIndexPropertySet->setPropertyValue(u"CreateFromParagraphStyle"_ustr, css::uno::Any(convertedStyleName));
+            rIndexPropertySet->setPropertyValue(u"CreateFromParagraphStyle"_ustr, cpo::uno::Any(convertedStyleName));
         }
     }
 

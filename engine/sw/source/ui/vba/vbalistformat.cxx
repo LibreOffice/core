@@ -53,7 +53,7 @@ SwVbaListFormat::~SwVbaListFormat()
 {
 }
 
-void SAL_CALL SwVbaListFormat::ApplyListTemplate( const css::uno::Reference< word::XListTemplate >& ListTemplate, const css::uno::Any& ContinuePreviousList, const css::uno::Any& ApplyTo, const css::uno::Any& DefaultListBehavior )
+void SAL_CALL SwVbaListFormat::ApplyListTemplate( const css::uno::Reference< word::XListTemplate >& ListTemplate, const cpo::uno::Any& ContinuePreviousList, const cpo::uno::Any& ApplyTo, const cpo::uno::Any& DefaultListBehavior )
 {
     bool bContinuePreviousList = true;
     if( ContinuePreviousList.hasValue() )
@@ -87,16 +87,16 @@ void SAL_CALL SwVbaListFormat::ApplyListTemplate( const css::uno::Reference< wor
         if( isFirstElement )
         {
             bool isNumberingRestart = !bContinuePreviousList;
-            xProps->setPropertyValue(u"ParaIsNumberingRestart"_ustr, uno::Any( isNumberingRestart ) );
+            xProps->setPropertyValue(u"ParaIsNumberingRestart"_ustr, cpo::uno::Any( isNumberingRestart ) );
             if( isNumberingRestart )
             {
-                xProps->setPropertyValue(u"NumberingStartValue"_ustr, uno::Any( sal_Int16(1) ) );
+                xProps->setPropertyValue(u"NumberingStartValue"_ustr, cpo::uno::Any( sal_Int16(1) ) );
             }
             isFirstElement = false;
         }
         else
         {
-            xProps->setPropertyValue(u"ParaIsNumberingRestart"_ustr, uno::Any( false ) );
+            xProps->setPropertyValue(u"ParaIsNumberingRestart"_ustr, cpo::uno::Any( false ) );
         }
         rListTemplate.applyListTemplate( xProps );
     }
@@ -229,28 +229,28 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
                 css::uno::Reference<css::beans::XPropertySet> xNumberProps(
                     xNumberText, css::uno::UNO_QUERY_THROW);
                 if (!sCharStyleName.isEmpty())
-                    xNumberProps->setPropertyValue(u"CharStyleName"_ustr, css::uno::Any(sCharStyleName));
+                    xNumberProps->setPropertyValue(u"CharStyleName"_ustr, cpo::uno::Any(sCharStyleName));
 
                 if (nNumberingType == css::style::NumberingType::CHAR_SPECIAL)
                 {
                     css::uno::Reference<css::text::XTextRange> xBulletText(xNumberText->getStart());
                     xBulletText->setString(sBulletChar);
 
-                    std::unordered_map<OUString, css::uno::Any> aNameValues;
+                    std::unordered_map<OUString, cpo::uno::Any> aNameValues;
                     if (bHasFont)
                     {
                         aNameValues.insert({
-                            { "CharFontName", css::uno::Any(aBulletFont.Name) },
-                            { "CharFontStyleName", css::uno::Any(aBulletFont.StyleName) },
-                            { "CharFontFamily", css::uno::Any(aBulletFont.Family) },
-                            { "CharFontCharSet", css::uno::Any(aBulletFont.CharSet) },
-                            { "CharWeight", css::uno::Any(aBulletFont.Weight) },
-                            { "CharUnderline", css::uno::Any(aBulletFont.Underline) },
-                            { "CharStrikeout", css::uno::Any(aBulletFont.Strikeout) },
-                            { "CharAutoKerning", css::uno::Any(aBulletFont.Kerning) },
-                            { "CharFontPitch", css::uno::Any(aBulletFont.Pitch) },
-                            { "CharWordMode", css::uno::Any(aBulletFont.WordLineMode) },
-                            { "CharRotation", css::uno::Any(static_cast<sal_Int16>(
+                            { "CharFontName", cpo::uno::Any(aBulletFont.Name) },
+                            { "CharFontStyleName", cpo::uno::Any(aBulletFont.StyleName) },
+                            { "CharFontFamily", cpo::uno::Any(aBulletFont.Family) },
+                            { "CharFontCharSet", cpo::uno::Any(aBulletFont.CharSet) },
+                            { "CharWeight", cpo::uno::Any(aBulletFont.Weight) },
+                            { "CharUnderline", cpo::uno::Any(aBulletFont.Underline) },
+                            { "CharStrikeout", cpo::uno::Any(aBulletFont.Strikeout) },
+                            { "CharAutoKerning", cpo::uno::Any(aBulletFont.Kerning) },
+                            { "CharFontPitch", cpo::uno::Any(aBulletFont.Pitch) },
+                            { "CharWordMode", cpo::uno::Any(aBulletFont.WordLineMode) },
+                            { "CharRotation", cpo::uno::Any(static_cast<sal_Int16>(
                                                   std::round(aBulletFont.Orientation * 10))) },
                             });
                         if (aBulletFont.Height)
@@ -281,8 +281,8 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
                     // TODO: css::style::NumberingType::BITMAP
                 }
 
-                rPropertySet->setPropertyValue(u"ParaLeftMargin"_ustr, css::uno::Any(nIndentAt));
-                rPropertySet->setPropertyValue(u"ParaFirstLineIndent"_ustr, css::uno::Any(nFirstLineIndent));
+                rPropertySet->setPropertyValue(u"ParaLeftMargin"_ustr, cpo::uno::Any(nIndentAt));
+                rPropertySet->setPropertyValue(u"ParaFirstLineIndent"_ustr, cpo::uno::Any(nFirstLineIndent));
                 if (nLabelFollowedBy == SvxNumberFormat::LabelFollowedBy::LISTTAB)
                 {
                     css::uno::Sequence<css::style::TabStop> stops;
@@ -292,7 +292,7 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
                     tabStop.Alignment = css::style::TabAlign::TabAlign_LEFT;
                     tabStop.FillChar = ' ';
                     rPropertySet->setPropertyValue(u"ParaTabStops"_ustr,
-                                    css::uno::Any(comphelper::combineSequences({ tabStop }, stops)));
+                                    cpo::uno::Any(comphelper::combineSequences({ tabStop }, stops)));
                     // FIXME: What if added tap stop is greater than already defined ones?
                 }
             }
@@ -302,9 +302,9 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
             }
 
             // In case of higher outline levels, each assignment of empty value just sets level 1
-            while (rPropertySet->getPropertyValue(u"NumberingRules"_ustr) != css::uno::Any())
+            while (rPropertySet->getPropertyValue(u"NumberingRules"_ustr) != cpo::uno::Any())
             {
-                rPropertySet->setPropertyValue(u"NumberingRules"_ustr, css::uno::Any());
+                rPropertySet->setPropertyValue(u"NumberingRules"_ustr, cpo::uno::Any());
             }
         }
     }

@@ -103,8 +103,8 @@ namespace vclcanvas
         //     1st a bool value: true - free the pixmap after used by XFreePixmap, false do nothing, the pixmap is used internally in the canvas
         //     2nd the pixmap handle (sal_Int64)
         //     3rd the pixmap depth
-        virtual css::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle) override;
-        virtual void SAL_CALL setFastPropertyValue(sal_Int32, const css::uno::Any&) override {}
+        virtual cpo::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle) override;
+        virtual void SAL_CALL setFastPropertyValue(sal_Int32, const cpo::uno::Any&) override {}
 
     private:
         /** MUST hold here, too, since CanvasHelper only contains a

@@ -25,7 +25,7 @@
 #include <utility>
 #include <algorithm>
 #include <sal/log.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
@@ -124,7 +124,7 @@ public:
     void Dispose();
 
     // do NOT hold object mutex when calling this! Danger of deadlock
-    void FireEvent( const sal_Int16 nEventId, const uno::Any& rNewValue = uno::Any(), const uno::Any& rOldValue = uno::Any() ) const;
+    void FireEvent( const sal_Int16 nEventId, const cpo::uno::Any& rNewValue = cpo::uno::Any(), const cpo::uno::Any& rOldValue = cpo::uno::Any() ) const;
 
     void SetFocus( bool bHaveFocus );
     bool HaveFocus() const
@@ -398,7 +398,7 @@ void AccessibleTextHelper_Impl::SetShapeFocus( bool bHaveFocus )
         {
             AccessibleCell* pAccessibleCell = dynamic_cast<AccessibleCell*>(mpFrontEnd.get());
             if ( !pAccessibleCell )
-                FireEvent(AccessibleEventId::STATE_CHANGED, uno::Any(AccessibleStateType::FOCUSED));
+                FireEvent(AccessibleEventId::STATE_CHANGED, cpo::uno::Any(AccessibleStateType::FOCUSED));
             else    // the focus event on cell should be fired on table directly
             {
                 AccessibleTableShape* pAccTable = pAccessibleCell->GetParentTable();
@@ -416,7 +416,7 @@ void AccessibleTextHelper_Impl::SetShapeFocus( bool bHaveFocus )
         {
             AccessibleCell* pAccessibleCell = dynamic_cast<AccessibleCell*>(mpFrontEnd.get());
             if ( !pAccessibleCell )
-                FireEvent( AccessibleEventId::STATE_CHANGED, uno::Any(), uno::Any(AccessibleStateType::FOCUSED) );
+                FireEvent( AccessibleEventId::STATE_CHANGED, cpo::uno::Any(), cpo::uno::Any(AccessibleStateType::FOCUSED) );
             else
             {
                 AccessibleTableShape* pAccTable = pAccessibleCell->GetParentTable();
@@ -521,8 +521,8 @@ void AccessibleTextHelper_Impl::UpdateSelection()
                     maParaManager.FireEvent( ::std::min( maLastSelection.end.nPara, nMaxValidParaIndex ),
                                              ::std::min( maLastSelection.end.nPara, nMaxValidParaIndex )+1,
                                              AccessibleEventId::CARET_CHANGED,
-                                             uno::Any(static_cast<sal_Int32>(-1)),
-                                             uno::Any(maLastSelection.end.nIndex) );
+                                             cpo::uno::Any(static_cast<sal_Int32>(-1)),
+                                             cpo::uno::Any(maLastSelection.end.nIndex) );
                 }
 
                 ChangeChildFocus(aSelection.end.nPara);
@@ -539,7 +539,7 @@ void AccessibleTextHelper_Impl::UpdateSelection()
         // #100530# no caret events if not focused.
         if( mbGroupHasFocus )
         {
-            uno::Any aOldCursor;
+            cpo::uno::Any aOldCursor;
 
             // #i13705# The old cursor can only contain valid
             // values if it's the same paragraph!
@@ -556,7 +556,7 @@ void AccessibleTextHelper_Impl::UpdateSelection()
             maParaManager.FireEvent( aSelection.end.nPara,
                                      aSelection.end.nPara+1,
                                      AccessibleEventId::CARET_CHANGED,
-                                     uno::Any(aSelection.end.nIndex),
+                                     cpo::uno::Any(aSelection.end.nIndex),
                                      aOldCursor );
         }
 
@@ -767,7 +767,7 @@ void AccessibleTextHelper_Impl::UpdateVisibleChildren( bool bBroadcastEvents )
                 {
                     FireEvent(
                         AccessibleEventId::CHILD,
-                        uno::Any(css::uno::Reference<css::accessibility::XAccessible>(
+                        cpo::uno::Any(css::uno::Reference<css::accessibility::XAccessible>(
                             maParaManager.CreateChild(nCurrPara - mnFirstVisibleChild, mpFrontEnd,
                                                       GetEditSource(), nCurrPara))));
                 }
@@ -838,7 +838,7 @@ public:
         auto aHardRef( rPara.first.get() );
 
         if( aHardRef.is() )
-            mrImpl.FireEvent(AccessibleEventId::CHILD, uno::Any(), uno::Any(css::uno::Reference<css::accessibility::XAccessible>(aHardRef)) );
+            mrImpl.FireEvent(AccessibleEventId::CHILD, cpo::uno::Any(), cpo::uno::Any(css::uno::Reference<css::accessibility::XAccessible>(aHardRef)) );
     }
 
 private:
@@ -1050,7 +1050,7 @@ void AccessibleTextHelper_Impl::ProcessQueue()
             try
             {
                 FireEvent(AccessibleEventId::CHILD,
-                          uno::Any(uno::Reference<XAccessible>(getAccessibleChild(
+                          cpo::uno::Any(uno::Reference<XAccessible>(getAccessibleChild(
                               aFunctor.GetParaIndex() - mnFirstVisibleChild + GetStartIndex()))));
             }
             catch( const uno::Exception& )
@@ -1083,7 +1083,7 @@ void AccessibleTextHelper_Impl::ProcessQueue()
 
             // #i61812# notification for removed para
             if (xPara.is())
-                FireEvent(AccessibleEventId::CHILD, uno::Any(), uno::Any( ::uno::Reference< XAccessible >(xPara) ) );
+                FireEvent(AccessibleEventId::CHILD, cpo::uno::Any(), cpo::uno::Any( ::uno::Reference< XAccessible >(xPara) ) );
         }
 #ifdef DBG_UTIL
         else
@@ -1386,7 +1386,7 @@ void AccessibleTextHelper_Impl::Dispose()
     mpFrontEnd = nullptr;
 }
 
-void AccessibleTextHelper_Impl::FireEvent( const sal_Int16 nEventId, const uno::Any& rNewValue, const uno::Any& rOldValue ) const
+void AccessibleTextHelper_Impl::FireEvent( const sal_Int16 nEventId, const cpo::uno::Any& rNewValue, const cpo::uno::Any& rOldValue ) const
 {
     // -- object locked --
     AccessibleEventObject aEvent;

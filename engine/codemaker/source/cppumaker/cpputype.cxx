@@ -767,7 +767,7 @@ void CppuType::dumpType(
         out << "::css::uno::Type";
         break;
     case codemaker::UnoType::Sort::Any:
-        out << "::css::uno::Any";
+        out << "::cpo::uno::Any";
         break;
     case codemaker::UnoType::Sort::Enum:
     case codemaker::UnoType::Sort::PlainStruct:
@@ -3499,7 +3499,7 @@ void ServiceType::dumpHppFile(
           << "\nextern \"C\" ::css::uno::XInterface * SAL_CALL LO_URE_CTOR_FUN_"
           << name_.replaceAll(".", "_dot_")
           << "(::css::uno::XComponentContext *, ::css::uno::Sequence< "
-          "::css::uno::Any > const &);\n#endif\n";
+          "::cpo::uno::Any > const &);\n#endif\n";
     }
     o << "\n";
     if (codemaker::cppumaker::dumpNamespaceOpen(o, name_, false)) {
@@ -3539,7 +3539,7 @@ void ServiceType::dumpHppFile(
                       "LO_URE_CTOR_FUN_")
                   << name_.replaceAll(".", "_dot_")
                   << (")(the_context.get(), ::css::uno::Sequence<"
-                      " ::css::uno::Any >())), ::SAL_NO_ACQUIRE),"
+                      " ::cpo::uno::Any >())), ::SAL_NO_ACQUIRE),"
                       " ::css::uno::UNO_QUERY);\n#else\n")
                   << indent() << "the_instance = ::css::uno::Reference< "
                   << scopedBaseName
@@ -3600,10 +3600,10 @@ void ServiceType::dumpHppFile(
                 o << indent() << "assert(the_context.is());\n";
                 if (!rest && !cons.parameters.empty()) {
                     o << indent()
-                      << "::css::uno::Sequence< ::css::uno::Any > the_arguments("
+                      << "::css::uno::Sequence< ::cpo::uno::Any > the_arguments("
                       << cons.parameters.size() << ");\n";
                     o << indent()
-                      << "::css::uno::Any* the_arguments_array = the_arguments.getArray();\n";
+                      << "::cpo::uno::Any* the_arguments_array = the_arguments.getArray();\n";
 
                     std::vector<
                     unoidl::SingleInterfaceBasedServiceEntity::Constructor::
@@ -3622,7 +3622,7 @@ void ServiceType::dumpHppFile(
                                        b2u(codemaker::UnoType::decompose(
                                                u2b(j.type), &rank)))
                                    == codemaker::UnoType::Sort::Char) {
-                            o << "= ::css::uno::Any(&" << param
+                            o << "= ::cpo::uno::Any(&" << param
                               << ", ::cppu::UnoType< ";
                             for (sal_Int32 k = 0; k < rank; ++k) {
                                 o << "::cppu::UnoSequenceType< ";
@@ -3666,7 +3666,7 @@ void ServiceType::dumpHppFile(
                           u2b(cons.parameters.back().name), "param",
                           codemaker::cpp::IdentifierTranslationMode::NonGlobal);
                 } else if (cons.parameters.empty()) {
-                    o << "::css::uno::Sequence< ::css::uno::Any >()";
+                    o << "::css::uno::Sequence< ::cpo::uno::Any >()";
                 } else {
                     o << "the_arguments";
                 }
@@ -3676,7 +3676,7 @@ void ServiceType::dumpHppFile(
                   << indent() << "if (init.is()) {\n"
                   << indent() << "    init->initialize(";
                 if (cons.parameters.empty()) {
-                    o << "::css::uno::Sequence< ::css::uno::Any >()";
+                    o << "::css::uno::Sequence< ::cpo::uno::Any >()";
                 } else {
                     o << "the_arguments";
                 }
@@ -3693,7 +3693,7 @@ void ServiceType::dumpHppFile(
                           u2b(cons.parameters.back().name), "param",
                           codemaker::cpp::IdentifierTranslationMode::NonGlobal);
                 } else if (cons.parameters.empty()) {
-                    o << "::css::uno::Sequence< ::css::uno::Any >()";
+                    o << "::css::uno::Sequence< ::cpo::uno::Any >()";
                 } else {
                     o << "the_arguments";
                 }
@@ -3805,7 +3805,7 @@ void SingletonType::dumpHppFile(
       << "\nextern \"C\" ::css::uno::XInterface * SAL_CALL LO_URE_CTOR_FUN_"
       << name_.replaceAll(".", "_dot_")
       << "(::css::uno::XComponentContext *, ::css::uno::Sequence< "
-      "::css::uno::Any > const &);\n#endif\n";
+      "::cpo::uno::Any > const &);\n#endif\n";
     o << "\n";
     if (codemaker::cppumaker::dumpNamespaceOpen(o, name_, false)) {
         o << "\n";
@@ -3835,7 +3835,7 @@ void SingletonType::dumpHppFile(
           "LO_URE_CTOR_FUN_")
       << name_.replaceAll(".", "_dot_")
       << (")(the_context.get(), ::css::uno::Sequence<"
-          " ::css::uno::Any >())), ::SAL_NO_ACQUIRE),"
+          " ::cpo::uno::Any >())), ::SAL_NO_ACQUIRE),"
           " ::css::uno::UNO_QUERY);\n#else\n")
       << indent() << ("the_context->getValueByName("
                       "::rtl::OUString( \"/singletons/")

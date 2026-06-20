@@ -20,7 +20,7 @@
 
 #include "undobj.hxx"
 
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 
 class SwDoc;
 class SwField;
@@ -61,15 +61,15 @@ public:
 
 class SwUndoFieldFromAPI final : public SwUndoField
 {
-    css::uno::Any m_aOldVal, m_aNewVal;
+    cpo::uno::Any m_aOldVal, m_aNewVal;
     sal_uInt16 m_nWhich;
 
     void DoImpl();
 
 public:
     SwUndoFieldFromAPI(const SwPosition & rPos,
-                       css::uno::Any aOldVal,
-                       css::uno::Any aNewVal,
+                       cpo::uno::Any aOldVal,
+                       cpo::uno::Any aNewVal,
                        sal_uInt16 nWhich);
     virtual ~SwUndoFieldFromAPI() override;
 

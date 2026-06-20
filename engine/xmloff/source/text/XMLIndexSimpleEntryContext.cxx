@@ -33,7 +33,7 @@
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::xmloff::token::XML_STYLE_NAME;
 
 

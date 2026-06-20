@@ -31,6 +31,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace com::sun::star;
 
 namespace sc_apitest
@@ -106,7 +107,7 @@ uno::Reference<uno::XInterface> ScDDELinksObj::init()
                                                 + "\";\"Sheet1.A1\")");
 
     uno::Reference<beans::XPropertySet> xPropSet(xDoc, uno::UNO_QUERY_THROW);
-    uno::Any aDDELinks = xPropSet->getPropertyValue(u"DDELinks"_ustr);
+    cpo::uno::Any aDDELinks = xPropSet->getPropertyValue(u"DDELinks"_ustr);
     uno::Reference<sheet::XDDELinks> xDDELinks(aDDELinks, uno::UNO_QUERY_THROW);
 
     return xDDELinks;

@@ -158,7 +158,7 @@ bool SvxSelectionModeControl::MouseButtonDown( const MouseEvent& rEvt )
         {
             mnState = nNewState;
 
-            css::uno::Any a;
+            cpo::uno::Any a;
             SfxUInt16Item aState( GetSlotId(), mnState );
             aState.QueryValue( a );
             INetURLObject aObj( m_aCommandURL );

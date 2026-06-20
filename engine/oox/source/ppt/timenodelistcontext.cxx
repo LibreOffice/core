@@ -54,6 +54,7 @@ using namespace ::oox::core;
 using namespace ::oox::drawingml;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::xml::sax;
@@ -77,9 +78,9 @@ namespace {
         return eResult;
     }
 
-    bool convertAnimationValueWithTimeNode(const oox::ppt::TimeNodePtr& pNode, css::uno::Any &rAny)
+    bool convertAnimationValueWithTimeNode(const oox::ppt::TimeNodePtr& pNode, cpo::uno::Any &rAny)
     {
-        css::uno::Any aAny = pNode->getNodeProperties()[oox::ppt::NP_ATTRIBUTENAME];
+        cpo::uno::Any aAny = pNode->getNodeProperties()[oox::ppt::NP_ATTRIBUTENAME];
         OUString aNameList;
         aAny >>= aNameList;
 
@@ -87,7 +88,7 @@ namespace {
         return oox::ppt::convertAnimationValue(getAttributeEnumByAPIName(o3tl::getToken(aNameList, 0, ';')), rAny);
     }
 
-    css::uno::Any convertPointPercent(const css::awt::Point& rPoint)
+    cpo::uno::Any convertPointPercent(const css::awt::Point& rPoint)
     {
         css::animations::ValuePair aPair;
         // rPoint.X and rPoint.Y are in 1000th of a percent, but we only need ratio.
@@ -565,7 +566,7 @@ namespace oox::ppt {
             {
                 if (!msFrom.isEmpty())
                 {
-                    css::uno::Any aAny;
+                    cpo::uno::Any aAny;
                     aAny <<= msFrom;
                     convertAnimationValueWithTimeNode(mpNode, aAny);
                     mpNode->setFrom(aAny);
@@ -573,7 +574,7 @@ namespace oox::ppt {
 
                 if (!msTo.isEmpty())
                 {
-                    css::uno::Any aAny;
+                    cpo::uno::Any aAny;
                     aAny <<= msTo;
                     convertAnimationValueWithTimeNode(mpNode, aAny);
                     mpNode->setTo(aAny);
@@ -581,7 +582,7 @@ namespace oox::ppt {
 
                 if (!msBy.isEmpty())
                 {
-                    css::uno::Any aAny;
+                    cpo::uno::Any aAny;
                     aAny <<= msBy;
                     convertAnimationValueWithTimeNode(mpNode, aAny);
                     mpNode->setBy(aAny);

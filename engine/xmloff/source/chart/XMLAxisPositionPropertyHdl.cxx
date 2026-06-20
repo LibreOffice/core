@@ -22,7 +22,7 @@
 
 #include <rtl/ustrbuf.hxx>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
 
 #include <sax/tools/converter.hxx>
@@ -42,7 +42,7 @@ XMLAxisPositionPropertyHdl::~XMLAxisPositionPropertyHdl()
 {}
 
 bool XMLAxisPositionPropertyHdl::importXML( const OUString& rStrImpValue,
-                                                  uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
+                                                  cpo::uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     bool bResult = false;
 
@@ -89,7 +89,7 @@ bool XMLAxisPositionPropertyHdl::importXML( const OUString& rStrImpValue,
 }
 
 bool XMLAxisPositionPropertyHdl::exportXML( OUString& rStrExpValue,
-                                              const uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
+                                              const cpo::uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     bool bResult = false;
 

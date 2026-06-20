@@ -131,8 +131,8 @@ static uno::Reference< io::XInputStream > createTempInpStreamFromStor(
 
     uno::Reference < lang::XSingleServiceFactory > xStorageFactory( embed::StorageFactory::create(xContext) );
 
-    uno::Sequence< uno::Any > aArgs{ uno::Any(xTempStream),
-                                     uno::Any(embed::ElementModes::READWRITE) };
+    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xTempStream),
+                                     cpo::uno::Any(embed::ElementModes::READWRITE) };
     uno::Reference< embed::XStorage > xTempStorage( xStorageFactory->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY_THROW );
 
@@ -141,7 +141,7 @@ static uno::Reference< io::XInputStream > createTempInpStreamFromStor(
         xStorage->copyToStorage( xTempStorage );
     } catch( const uno::Exception& )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw embed::StorageWrappedTargetException(
                     u"Can't copy storage!"_ustr,
                     uno::Reference< uno::XInterface >(),
@@ -378,7 +378,7 @@ bool OCommonEmbeddedObject::getAllowLinkUpdate() const
         uno::Reference<beans::XPropertySet> xPropSet(xParent, uno::UNO_QUERY);
         if (xPropSet.is())
         {
-            uno::Any aAny = xPropSet->getPropertyValue(u"AllowLinkUpdate"_ustr);
+            cpo::uno::Any aAny = xPropSet->getPropertyValue(u"AllowLinkUpdate"_ustr);
             aAny >>= bAllowLinkUpdate;
         }
     }
@@ -847,7 +847,7 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl(
         // open storage based on document temporary file for reading
         uno::Reference < lang::XSingleServiceFactory > xStorageFactory = embed::StorageFactory::create(m_xContext);
 
-        uno::Sequence< uno::Any > aArgs{ uno::Any(xTempIn) };
+        uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xTempIn) };
         uno::Reference< embed::XStorage > xTempStorage( xStorageFactory->createInstanceWithArguments( aArgs ),
                                                             uno::UNO_QUERY_THROW );
 
@@ -1073,7 +1073,7 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
         }
         else if ( prop.Name == "OutplaceFrameProperties" )
         {
-            uno::Sequence< uno::Any > aOutFrameProps;
+            uno::Sequence< cpo::uno::Any > aOutFrameProps;
             uno::Sequence< beans::NamedValue > aOutFramePropsTyped;
             if ( prop.Value >>= aOutFrameProps )
             {
@@ -1084,7 +1084,7 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
                 aOutFrameProps.realloc( aOutFramePropsTyped.getLength() );
                 std::transform(aOutFramePropsTyped.begin(), aOutFramePropsTyped.end(),
                                aOutFrameProps.getArray(), [](const beans::NamedValue& rTypedProp)
-                               { return uno::Any(rTypedProp); });
+                               { return cpo::uno::Any(rTypedProp); });
                 m_xDocHolder->SetOutplaceFrameProperties( aOutFrameProps );
             }
             else

@@ -68,7 +68,7 @@ private:
 public:
     explicit CuiAboutConfigTabPage(weld::Window* pParent);
     virtual ~CuiAboutConfigTabPage() override;
-    void InsertEntry(const OUString& rPropertyPath, css::uno::Any aPropertyValue,
+    void InsertEntry(const OUString& rPropertyPath, cpo::uno::Any aPropertyValue,
                      const OUString& rProp, const OUString& rStatus, const OUString& rType,
                      const OUString& rValue, const OUString& rTooltip,
                      const weld::TreeIter* pParentEntry, bool bInsertToPrefBox, bool bIsReadOnly,

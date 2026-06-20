@@ -18,7 +18,7 @@
  */
 
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/accessiblekeybindinghelper.hxx>
 
@@ -94,14 +94,14 @@ uno::Reference< css::accessibility::XAccessibleKeyBinding > SAL_CALL AccessibleH
 }
 
 // XAccessibleHyperlink
-uno::Any SAL_CALL AccessibleHyperlink::getAccessibleActionAnchor( sal_Int32 /*nIndex*/ )
+cpo::uno::Any SAL_CALL AccessibleHyperlink::getAccessibleActionAnchor( sal_Int32 /*nIndex*/ )
 {
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
-uno::Any SAL_CALL AccessibleHyperlink::getAccessibleActionObject( sal_Int32 /*nIndex*/ )
+cpo::uno::Any SAL_CALL AccessibleHyperlink::getAccessibleActionObject( sal_Int32 /*nIndex*/ )
 {
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 sal_Int32 SAL_CALL AccessibleHyperlink::getStartIndex()

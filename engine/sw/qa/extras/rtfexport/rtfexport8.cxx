@@ -661,13 +661,16 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf161864)
         uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
         uno::Reference<beans::XPropertySet> xPropSet(xCursor, uno::UNO_QUERY);
         xCursor->goRight(1, true);
-        CPPUNIT_ASSERT_EQUAL(uno::Any(float(4)), xPropSet->getPropertyValue(u"CharHeight"_ustr));
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(float(4)),
+                             xPropSet->getPropertyValue(u"CharHeight"_ustr));
         xCursor->goRight(21, false);
         xCursor->goRight(1, true);
-        CPPUNIT_ASSERT_EQUAL(uno::Any(float(11)), xPropSet->getPropertyValue(u"CharHeight"_ustr));
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(float(11)),
+                             xPropSet->getPropertyValue(u"CharHeight"_ustr));
         xCursor->goRight(22, false);
         xCursor->goRight(1, true);
-        CPPUNIT_ASSERT_EQUAL(uno::Any(float(16)), xPropSet->getPropertyValue(u"CharHeight"_ustr));
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(float(16)),
+                             xPropSet->getPropertyValue(u"CharHeight"_ustr));
     };
     createSwDoc("tdf161864.rtf");
     verify();
@@ -684,7 +687,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf161878)
         uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
         uno::Reference<beans::XPropertySet> xPropSet(xCursor, uno::UNO_QUERY);
         xCursor->goRight(2, false);
-        uno::Any xField = xPropSet->getPropertyValue(u"TextField"_ustr);
+        cpo::uno::Any xField = xPropSet->getPropertyValue(u"TextField"_ustr);
         CPPUNIT_ASSERT(xField.hasValue());
     };
     createSwDoc("tdf161878.rtf");
@@ -1289,7 +1292,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf168181)
     // to test round-trip, deliberately duplicate one backslash:
     getRun(getParagraph(1), 1)
         .queryThrow<beans::XPropertySet>()
-        ->setPropertyValue(u"HyperLinkURL"_ustr, uno::Any(u"c:\\\\temp\\doc1.doc"_ustr));
+        ->setPropertyValue(u"HyperLinkURL"_ustr, cpo::uno::Any(u"c:\\\\temp\\doc1.doc"_ustr));
 
     saveAndReload(TestFilter::RTF);
 

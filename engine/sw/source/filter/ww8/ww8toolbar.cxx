@@ -304,7 +304,7 @@ bool Customization::ImportMenu( SwCTBWrapper& rWrapper, CustomToolBarImportHelpe
                     if ( pCust->m_customizationDataCTB && !pCust->m_customizationDataCTB->ImportMenuTB( rWrapper, xMenuContainer, helper ) )
                         return false;
                     SAL_INFO("sw.ww8","** there are " << xIndexContainer->getCount() << " menu items on the bar, inserting after that");
-                    xIndexContainer->insertByIndex( xIndexContainer->getCount(), uno::Any( aPopupMenu ) );
+                    xIndexContainer->insertByIndex( xIndexContainer->getCount(), cpo::uno::Any( aPopupMenu ) );
 
                     if ( bHasSettings )
                         helper.getCfgManager()->replaceSettings( sMenuBar, uno::Reference< container::XIndexAccess >( xIndexContainer, uno::UNO_QUERY_THROW ) );
@@ -439,7 +439,7 @@ bool SwCTB::ImportCustomToolBar( SwCTBWrapper& rWrapper, CustomToolBarImportHelp
         uno::Reference< beans::XPropertySet > xProps( xIndexContainer, uno::UNO_QUERY_THROW );
 
         // set UI name for toolbar
-        xProps->setPropertyValue( u"UIName"_ustr, uno::Any( m_name.getString() ) );
+        xProps->setPropertyValue( u"UIName"_ustr, cpo::uno::Any( m_name.getString() ) );
 
         const OUString sToolBarName = "private:resource/toolbar/custom_" + m_name.getString();
         for ( auto& rItem : m_rTBC )
@@ -596,10 +596,10 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
             // insert spacer
             uno::Sequence< beans::PropertyValue > sProps{ comphelper::makePropertyValue(
                 u"Type"_ustr, ui::ItemType::SEPARATOR_LINE) };
-            toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), uno::Any( sProps ) );
+            toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), cpo::uno::Any( sProps ) );
         }
 
-        toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), uno::Any( comphelper::containerToSequence(props) ) );
+        toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), cpo::uno::Any( comphelper::containerToSequence(props) ) );
     }
     return true;
 }

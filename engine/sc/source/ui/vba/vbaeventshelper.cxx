@@ -59,7 +59,7 @@ namespace {
     @throws lang::IllegalArgumentException
     @throws uno::RuntimeException
 */
-SCTAB lclGetTabFromArgs( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex )
+SCTAB lclGetTabFromArgs( const uno::Sequence< cpo::uno::Any >& rArgs, sal_Int32 nIndex )
 {
     VbaEventsHelperBase::checkArgument( rArgs, nIndex );
 
@@ -368,7 +368,7 @@ void SAL_CALL ScVbaEventListener::changesOccurred( const util::ChangesEvent& rEv
         aChange.ReplacedElement >>= xRangeObj;
         if( xRangeObj.is() )
         {
-            uno::Sequence< uno::Any > aArgs{ uno::Any(xRangeObj) };
+            uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xRangeObj) };
             mrVbaEvents.processVbaEventNoThrow( WORKSHEET_CHANGE, aArgs );
         }
         return;
@@ -395,7 +395,7 @@ void SAL_CALL ScVbaEventListener::changesOccurred( const util::ChangesEvent& rEv
     if (!aRangeList.empty())
     {
         uno::Reference< sheet::XSheetCellRangeContainer > xRanges( new ScCellRangesObj( mpDocShell, aRangeList ) );
-        uno::Sequence< uno::Any > aArgs{ uno::Any(xRanges) };
+        uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xRanges) };
         mrVbaEvents.processVbaEventNoThrow( WORKSHEET_CHANGE, aArgs );
     }
 }
@@ -458,7 +458,7 @@ void ScVbaEventListener::processWindowActivateEvent( vcl::Window* pWindow, bool 
     uno::Reference< frame::XController > xController = getControllerForWindow( pWindow );
     if( xController.is() )
     {
-        uno::Sequence< uno::Any > aArgs{ uno::Any(xController) };
+        uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xController) };
         mrVbaEvents.processVbaEventNoThrow( bActivate ? WORKBOOK_WINDOWACTIVATE : WORKBOOK_WINDOWDEACTIVATE, aArgs );
     }
 }
@@ -498,7 +498,7 @@ IMPL_LINK( ScVbaEventListener, processWindowResizeEvent, void*, p, void )
                 uno::Reference< frame::XController > xController = getControllerForWindow( pWindow );
                 if( xController.is() )
                 {
-                    uno::Sequence< uno::Any > aArgs{ uno::Any(xController) };
+                    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xController) };
                     // #163419# do not throw exceptions into application core
                     mrVbaEvents.processVbaEventNoThrow( WORKBOOK_WINDOWRESIZE, aArgs );
                 }
@@ -516,7 +516,7 @@ IMPL_LINK( ScVbaEventListener, processWindowResizeEvent, void*, p, void )
     release();
 }
 
-ScVbaEventsHelper::ScVbaEventsHelper( const uno::Sequence< uno::Any >& rArgs ) :
+ScVbaEventsHelper::ScVbaEventsHelper( const uno::Sequence< cpo::uno::Any >& rArgs ) :
     VbaEventsHelperBase( rArgs ),
     mbOpened( false )
 {
@@ -528,13 +528,13 @@ ScVbaEventsHelper::ScVbaEventsHelper( const uno::Sequence< uno::Any >& rArgs ) :
 
     // global
     auto registerAutoEvent = [this](sal_Int32 nID, const char* sName)
-    { registerEventHandler(nID, script::ModuleType::NORMAL, OString(OString::Concat("Auto_") + sName).getStr(), -1, uno::Any(false)); };
+    { registerEventHandler(nID, script::ModuleType::NORMAL, OString(OString::Concat("Auto_") + sName).getStr(), -1, cpo::uno::Any(false)); };
     registerAutoEvent(AUTO_OPEN,  "Open");
     registerAutoEvent(AUTO_CLOSE, "Close");
 
     // Workbook
     auto registerWorkbookEvent = [this](sal_Int32 nID, const char* sName, sal_Int32 nCancelIndex)
-    { registerEventHandler(nID, script::ModuleType::DOCUMENT, OString(OString::Concat("Workbook_") + sName).getStr(), nCancelIndex, uno::Any(false)); };
+    { registerEventHandler(nID, script::ModuleType::DOCUMENT, OString(OString::Concat("Workbook_") + sName).getStr(), nCancelIndex, cpo::uno::Any(false)); };
     registerWorkbookEvent( WORKBOOK_ACTIVATE,            "Activate",           -1 );
     registerWorkbookEvent( WORKBOOK_DEACTIVATE,          "Deactivate",         -1 );
     registerWorkbookEvent( WORKBOOK_OPEN,                "Open",               -1 );
@@ -551,10 +551,10 @@ ScVbaEventsHelper::ScVbaEventsHelper( const uno::Sequence< uno::Any >& rArgs ) :
     auto registerWorksheetEvent = [this](sal_Int32 nID, const char* sName, sal_Int32 nCancelIndex)
     {
         registerEventHandler(nID, script::ModuleType::DOCUMENT, OString(OString::Concat("Worksheet_") + sName).getStr(),
-                             nCancelIndex, uno::Any(true));
+                             nCancelIndex, cpo::uno::Any(true));
         registerEventHandler(USERDEFINED_START + nID, script::ModuleType::DOCUMENT,
                              OString(OString::Concat("Workbook_Worksheet") + sName).getStr(),
-                             ((nCancelIndex >= 0) ? (nCancelIndex + 1) : -1), uno::Any(false));
+                             ((nCancelIndex >= 0) ? (nCancelIndex + 1) : -1), cpo::uno::Any(false));
     };
     registerWorksheetEvent( WORKSHEET_ACTIVATE,           "Activate",           -1 );
     registerWorksheetEvent( WORKSHEET_DEACTIVATE,         "Deactivate",         -1 );
@@ -572,7 +572,7 @@ ScVbaEventsHelper::~ScVbaEventsHelper()
 
 void SAL_CALL ScVbaEventsHelper::notifyEvent( const css::document::EventObject& rEvent )
 {
-    static const uno::Sequence< uno::Any > saEmptyArgs;
+    static const uno::Sequence< cpo::uno::Any > saEmptyArgs;
     if( (rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::OPENDOC )) ||
         (rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::CREATEDOC )) )  // CREATEDOC triggered e.g. during VBA Workbooks.Add
     {
@@ -590,14 +590,14 @@ void SAL_CALL ScVbaEventsHelper::notifyEvent( const css::document::EventObject& 
              (rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::SAVEASDOCDONE )) ||
              (rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::SAVETODOCDONE )) )
     {
-        uno::Sequence< uno::Any > aArgs{ uno::Any(true) };
+        uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(true) };
         processVbaEventNoThrow( WORKBOOK_AFTERSAVE, aArgs );
     }
     else if( (rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::SAVEDOCFAILED )) ||
              (rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::SAVEASDOCFAILED )) ||
              (rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::SAVETODOCFAILED )) )
     {
-        uno::Sequence< uno::Any > aArgs{ uno::Any(false) };
+        uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(false) };
         processVbaEventNoThrow( WORKBOOK_AFTERSAVE, aArgs );
     }
     else if( rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::CLOSEDOC ) )
@@ -607,7 +607,7 @@ void SAL_CALL ScVbaEventsHelper::notifyEvent( const css::document::EventObject& 
         uno::Reference< frame::XController > xController( mxModel->getCurrentController() );
         if( xController.is() )
         {
-            uno::Sequence< uno::Any > aArgs{ uno::Any(xController) };
+            uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xController) };
             processVbaEventNoThrow( WORKBOOK_WINDOWDEACTIVATE, aArgs );
         }
         processVbaEventNoThrow( WORKBOOK_DEACTIVATE, saEmptyArgs );
@@ -634,7 +634,7 @@ css::uno::Sequence<OUString> ScVbaEventsHelper::getSupportedServiceNames()
 // protected ------------------------------------------------------------------
 
 bool ScVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,
-        const EventHandlerInfo& rInfo, const uno::Sequence< uno::Any >& rArgs )
+        const EventHandlerInfo& rInfo, const uno::Sequence< cpo::uno::Any >& rArgs )
 {
     // document and document shell are needed during event processing
     if( !mpShell || !mpDoc )
@@ -658,7 +658,7 @@ bool ScVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,
         {
             // execute delayed Activate event too (see above)
             rEventQueue.emplace_back(WORKBOOK_ACTIVATE );
-            uno::Sequence< uno::Any > aArgs{ uno::Any(mxModel->getCurrentController()) };
+            uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(mxModel->getCurrentController()) };
             rEventQueue.emplace_back( WORKBOOK_WINDOWACTIVATE, aArgs );
             if (!hasModule(u"Auto_Open"_ustr))
                 rEventQueue.emplace_back(AUTO_OPEN );
@@ -683,14 +683,14 @@ bool ScVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,
     return bExecuteEvent;
 }
 
-uno::Sequence< uno::Any > ScVbaEventsHelper::implBuildArgumentList( const EventHandlerInfo& rInfo,
-        const uno::Sequence< uno::Any >& rArgs )
+uno::Sequence< cpo::uno::Any > ScVbaEventsHelper::implBuildArgumentList( const EventHandlerInfo& rInfo,
+        const uno::Sequence< cpo::uno::Any >& rArgs )
 {
     // fill arguments for workbook events associated to sheet events according to sheet events, sheet will be added below
     bool bSheetEventAsBookEvent = rInfo.mnEventId > USERDEFINED_START;
     sal_Int32 nEventId = bSheetEventAsBookEvent ? (rInfo.mnEventId - USERDEFINED_START) : rInfo.mnEventId;
 
-    uno::Sequence< uno::Any > aVbaArgs;
+    uno::Sequence< cpo::uno::Any > aVbaArgs;
     switch( nEventId )
     {
         // *** Workbook ***
@@ -757,7 +757,7 @@ uno::Sequence< uno::Any > ScVbaEventsHelper::implBuildArgumentList( const EventH
     if( bSheetEventAsBookEvent )
     {
         sal_Int32 nLength = aVbaArgs.getLength();
-        uno::Sequence< uno::Any > aVbaArgs2( nLength + 1 );
+        uno::Sequence< cpo::uno::Any > aVbaArgs2( nLength + 1 );
         auto pVbaArgs2 = aVbaArgs2.getArray();
         *pVbaArgs2 = createWorksheet( rArgs, 0 );
         std::copy_n(std::cbegin(aVbaArgs), nLength, std::next(pVbaArgs2));
@@ -788,7 +788,7 @@ void ScVbaEventsHelper::implPostProcessEvent( EventQueue& rEventQueue,
 }
 
 OUString ScVbaEventsHelper::implGetDocumentModuleName( const EventHandlerInfo& rInfo,
-        const uno::Sequence< uno::Any >& rArgs ) const
+        const uno::Sequence< cpo::uno::Any >& rArgs ) const
 {
     bool bSheetEvent = false;
     rInfo.maUserData >>= bSheetEvent;
@@ -828,7 +828,7 @@ bool lclSelectionChanged( const ScRangeList& rLeft, const ScRangeList& rRight )
 
 } // namespace
 
-bool ScVbaEventsHelper::isSelectionChanged( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex )
+bool ScVbaEventsHelper::isSelectionChanged( const uno::Sequence< cpo::uno::Any >& rArgs, sal_Int32 nIndex )
 {
     uno::Reference< uno::XInterface > xOldSelection( maOldSelection, uno::UNO_QUERY );
     uno::Reference< uno::XInterface > xNewSelection = getXSomethingFromArgs< uno::XInterface >( rArgs, nIndex, false );
@@ -839,14 +839,14 @@ bool ScVbaEventsHelper::isSelectionChanged( const uno::Sequence< uno::Any >& rAr
     return bChanged;
 }
 
-uno::Any ScVbaEventsHelper::createWorksheet( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) const
+cpo::uno::Any ScVbaEventsHelper::createWorksheet( const uno::Sequence< cpo::uno::Any >& rArgs, sal_Int32 nIndex ) const
 {
     // extract sheet index, will throw, if parameter is invalid
     SCTAB nTab = lclGetTabFromArgs( rArgs, nIndex );
-    return uno::Any( excel::getUnoSheetModuleObj( mxModel, nTab ) );
+    return cpo::uno::Any( excel::getUnoSheetModuleObj( mxModel, nTab ) );
 }
 
-uno::Any ScVbaEventsHelper::createRange( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) const
+cpo::uno::Any ScVbaEventsHelper::createRange( const uno::Sequence< cpo::uno::Any >& rArgs, sal_Int32 nIndex ) const
 {
     // it is possible to pass an existing VBA Range object
     uno::Reference< excel::XRange > xVbaRange = getXSomethingFromArgs< excel::XRange >( rArgs, nIndex );
@@ -857,42 +857,42 @@ uno::Any ScVbaEventsHelper::createRange( const uno::Sequence< uno::Any >& rArgs,
         if ( !xRanges.is() && !xRange.is() )
             throw lang::IllegalArgumentException();
 
-        uno::Sequence< uno::Any > aArgs;
+        uno::Sequence< cpo::uno::Any > aArgs;
         if ( xRanges.is() )
         {
-            aArgs = { uno::Any(excel::getUnoSheetModuleObj( xRanges )), uno::Any(xRanges) };
+            aArgs = { cpo::uno::Any(excel::getUnoSheetModuleObj( xRanges )), cpo::uno::Any(xRanges) };
         }
         else
         {
-            aArgs = { uno::Any(excel::getUnoSheetModuleObj( xRange )), uno::Any(xRange) };
+            aArgs = { cpo::uno::Any(excel::getUnoSheetModuleObj( xRange )), cpo::uno::Any(xRange) };
         }
         xVbaRange.set( createVBAUnoAPIServiceWithArgs( mpShell, "ooo.vba.excel.Range", aArgs ), uno::UNO_QUERY_THROW );
     }
-    return uno::Any( xVbaRange );
+    return cpo::uno::Any( xVbaRange );
 }
 
-uno::Any ScVbaEventsHelper::createHyperlink( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) const
+cpo::uno::Any ScVbaEventsHelper::createHyperlink( const uno::Sequence< cpo::uno::Any >& rArgs, sal_Int32 nIndex ) const
 {
     uno::Reference< table::XCell > xCell = getXSomethingFromArgs< table::XCell >( rArgs, nIndex, false );
-    uno::Sequence< uno::Any > aArgs{ uno::Any(excel::getUnoSheetModuleObj( xCell )),
-                                     uno::Any(xCell) };
+    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(excel::getUnoSheetModuleObj( xCell )),
+                                     cpo::uno::Any(xCell) };
     uno::Reference< uno::XInterface > xHyperlink( createVBAUnoAPIServiceWithArgs( mpShell, "ooo.vba.excel.Hyperlink", aArgs ), uno::UNO_SET_THROW );
-    return uno::Any( xHyperlink );
+    return cpo::uno::Any( xHyperlink );
 }
 
-uno::Any ScVbaEventsHelper::createWindow( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) const
+cpo::uno::Any ScVbaEventsHelper::createWindow( const uno::Sequence< cpo::uno::Any >& rArgs, sal_Int32 nIndex ) const
 {
-    uno::Sequence< uno::Any > aArgs{ uno::Any(getVBADocument( mxModel )),
-                                     uno::Any(mxModel),
-                                     uno::Any(getXSomethingFromArgs< frame::XController >( rArgs, nIndex, false )) };
+    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(getVBADocument( mxModel )),
+                                     cpo::uno::Any(mxModel),
+                                     cpo::uno::Any(getXSomethingFromArgs< frame::XController >( rArgs, nIndex, false )) };
     uno::Reference< uno::XInterface > xWindow( createVBAUnoAPIServiceWithArgs( mpShell, "ooo.vba.excel.Window", aArgs ), uno::UNO_SET_THROW );
-    return uno::Any( xWindow );
+    return cpo::uno::Any( xWindow );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 ScVbaEventsHelper_get_implementation(
     css::uno::XComponentContext * /*context*/,
-    css::uno::Sequence<css::uno::Any> const &arguments)
+    css::uno::Sequence<cpo::uno::Any> const &arguments)
 {
     return cppu::acquire(new ScVbaEventsHelper(arguments));
 }

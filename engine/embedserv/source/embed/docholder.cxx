@@ -119,19 +119,19 @@ void DocumentHolder::LoadDocInFrame( bool bPluginMode )
         pSeq[0] = beans::PropertyValue(
             "Model",
             -1,
-            uno::Any(uno::Reference<uno::XInterface>(m_xDocument, uno::UNO_QUERY)),
+            cpo::uno::Any(uno::Reference<uno::XInterface>(m_xDocument, uno::UNO_QUERY)),
             beans::PropertyState_DIRECT_VALUE);
 
         pSeq[1] = beans::PropertyValue(
             "ReadOnly",
             -1,
-            uno::Any(false),
+            cpo::uno::Any(false),
             beans::PropertyState_DIRECT_VALUE);
 
         pSeq[2] = beans::PropertyValue(
             "NoAutoSave",
             -1,
-            uno::Any(true),
+            cpo::uno::Any(true),
             beans::PropertyState_DIRECT_VALUE);
 
         if ( bPluginMode )
@@ -139,20 +139,20 @@ void DocumentHolder::LoadDocInFrame( bool bPluginMode )
             pSeq[3] = beans::PropertyValue(
                 "PluginMode",
                 -1,
-                uno::Any(sal_Int16(3)),
+                cpo::uno::Any(sal_Int16(3)),
                 beans::PropertyState_DIRECT_VALUE);
         }
 
         pSeq[nLen-2] = beans::PropertyValue(
             "InteractionHandler",
             -1,
-            uno::Any(xHandler),
+            cpo::uno::Any(xHandler),
             beans::PropertyState_DIRECT_VALUE);
 
         pSeq[nLen-1] = beans::PropertyValue(
             "MacroExecutionMode",
             -1,
-            uno::Any(m_nMacroExecMode),
+            cpo::uno::Any(m_nMacroExecMode),
             beans::PropertyState_DIRECT_VALUE);
 
         xComponentLoader->loadComponentFromURL(
@@ -251,7 +251,7 @@ HRESULT DocumentHolder::InPlaceActivate(
         &m_pIOleIPFrame,&m_pIOleIPUIWindow,&rcPos,&rcClip,&frameInfo);
 
     // initialize the office as, with hwnd as parentwindow
-    uno::Any                      aAny;
+    cpo::uno::Any                      aAny;
     uno::Sequence<sal_Int8> aProcessIdent(16);
     rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8*>(aProcessIdent.getArray()));
 
@@ -284,7 +284,7 @@ HRESULT DocumentHolder::InPlaceActivate(
 
             xWin.set(
                 xToolkit->createSystemChild(
-                    uno::Any(reinterpret_cast<sal_Int64>(hWndxWinParent)),
+                    cpo::uno::Any(reinterpret_cast<sal_Int64>(hWndxWinParent)),
                     aProcessIdent,
                     lang::SystemDependent::SYSTEM_WIN32),
                 uno::UNO_QUERY);
@@ -557,7 +557,7 @@ BOOL DocumentHolder::InPlaceMenuCreate()
     if(xSysDepWin.is()) {
         uno::Sequence<sal_Int8> aProcessIdent(16);
         rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8*>(aProcessIdent.getArray()));
-        uno::Any aAny = xSysDepWin->getWindowHandle(aProcessIdent,lang::SystemDependent::SYSTEM_WIN32);
+        cpo::uno::Any aAny = xSysDepWin->getWindowHandle(aProcessIdent,lang::SystemDependent::SYSTEM_WIN32);
         sal_Int64 tmp;
         aAny >>= tmp;
         HWND aHwnd = reinterpret_cast<HWND>(tmp);
@@ -829,7 +829,7 @@ void DocumentHolder::show()
             if ( xLMProps.is() )
             {
                 xLMProps->setPropertyValue("MenuBarCloser",
-                                            uno::Any( uno::Reference< frame::XStatusListener >() ) );
+                                            cpo::uno::Any( uno::Reference< frame::XStatusListener >() ) );
             }
 
             if ( !m_bLink )
@@ -1007,8 +1007,8 @@ IDispatch* DocumentHolder::GetIDispatch()
             rtl_getGlobalProcessId( reinterpret_cast<sal_uInt8*>(aProcId.getArray()) );
 
             try {
-                uno::Any anyResult = xSupplier->createBridge(
-                    uno::Any( m_xDocument ),
+                cpo::uno::Any anyResult = xSupplier->createBridge(
+                    cpo::uno::Any( m_xDocument ),
                     aProcId,
                     bridge::ModelDependent::UNO,
                     bridge::ModelDependent::OLE );
@@ -1199,7 +1199,7 @@ css::uno::Reference< css::awt::XWindow> SAL_CALL DocumentHolder::getContainerWin
 
         xWin.set(
             xToolkit->createSystemChild(
-                uno::Any(reinterpret_cast<sal_Int64>(hWnd)),
+                cpo::uno::Any(reinterpret_cast<sal_Int64>(hWnd)),
                 aProcessIdent,
                 lang::SystemDependent::SYSTEM_WIN32),
             uno::UNO_QUERY);
@@ -1216,7 +1216,7 @@ css::uno::Reference< css::awt::XWindow> SAL_CALL DocumentHolder::getContainerWin
             uno::Reference<awt::XSystemDependentWindowPeer> xSysWin(
                 xWin,uno::UNO_QUERY);
             if(xSysWin.is()) {
-                uno::Any aAny = xSysWin->getWindowHandle(
+                cpo::uno::Any aAny = xSysWin->getWindowHandle(
                     aProcessIdent,lang::SystemDependent::SYSTEM_WIN32);
                 sal_Int64 tmp;
                 if( aAny >>= tmp )

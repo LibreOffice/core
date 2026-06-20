@@ -98,10 +98,10 @@ public:
          return  maColor.size();
     }
 
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
+    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         //--Index;  // apparently the palette is already 1 based
-        return uno::Any( sal_Int32( maColor[ Index ] ) );
+        return cpo::uno::Any( sal_Int32( maColor[ Index ] ) );
     }
 
     // Methods XElementAccess
@@ -138,7 +138,7 @@ XclImpPalette::ExportPalette()
     if ( pModel )
     {
         uno::Reference< container::XIndexAccess > xIndex( new PaletteIndex( std::move(aColors) ) );
-        pModel->setPropertyValue( u"ColorPalette"_ustr, uno::Any( xIndex ) );
+        pModel->setPropertyValue( u"ColorPalette"_ustr, cpo::uno::Any( xIndex ) );
     }
 
 }

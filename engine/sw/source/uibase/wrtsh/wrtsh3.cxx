@@ -356,7 +356,7 @@ bool SwWrtShell::GetURLFromButton( OUString& rURL, OUString& rDescr ) const
 
                 uno::Reference< beans::XPropertySet >  xPropSet(xControlModel, uno::UNO_QUERY);
 
-                uno::Any aTmp;
+                cpo::uno::Any aTmp;
 
                 uno::Reference< beans::XPropertySetInfo >   xInfo = xPropSet->getPropertySetInfo();
                 if(xInfo->hasPropertyByName( u"ButtonType"_ustr ))

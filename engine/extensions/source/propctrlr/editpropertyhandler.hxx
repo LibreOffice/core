@@ -45,11 +45,11 @@ namespace pcr
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
 
         // XPropertyHandler overriables
-        virtual css::uno::Any                   SAL_CALL getPropertyValue( const OUString& _rPropertyName ) override;
-        virtual void                            SAL_CALL setPropertyValue( const OUString& _rPropertyName, const css::uno::Any& _rValue ) override;
+        virtual cpo::uno::Any                   SAL_CALL getPropertyValue( const OUString& _rPropertyName ) override;
+        virtual void                            SAL_CALL setPropertyValue( const OUString& _rPropertyName, const cpo::uno::Any& _rValue ) override;
         virtual css::uno::Sequence< OUString >  SAL_CALL getSupersededProperties( ) override;
         virtual css::uno::Sequence< OUString >  SAL_CALL getActuatingProperties( ) override;
-        virtual void                            SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const css::uno::Any& _rNewValue, const css::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool ) override;
+        virtual void                            SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const cpo::uno::Any& _rNewValue, const cpo::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool ) override;
 
         // PropertyHandler overridables
         virtual css::uno::Sequence< css::beans::Property >

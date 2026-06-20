@@ -105,7 +105,7 @@ namespace utl
             Unfortunately, this implies that if a void value is returned, you won't have a clue if this means
             "the path does not exist" (besides the assertion made :), or if the value is really void.
         */
-        css::uno::Any       getNodeValue(const OUString& _rPath) const noexcept;
+        cpo::uno::Any       getNodeValue(const OUString& _rPath) const noexcept;
 
         /** write a node value<p/>
             The value given is written into the node specified by the given relative path.<br/>
@@ -113,7 +113,7 @@ namespace utl
             node.
             @return     true if and only if the write was successful.
         */
-        bool            setNodeValue(const OUString& _rPath, const css::uno::Any& _rValue) const noexcept;
+        bool            setNodeValue(const OUString& _rPath, const cpo::uno::Any& _rValue) const noexcept;
 
         /// return the names of the existing children
         css::uno::Sequence< OUString >

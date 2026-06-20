@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_HELPER_PROPERTYSET_HXX
 #define INCLUDED_OOX_HELPER_PROPERTYSET_HXX
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <oox/dllapi.h>
@@ -86,7 +86,7 @@ public:
 
     /** Gets the specified property from the property set.
         @return  the property value, or an empty Any, if the property is missing. */
-    css::uno::Any getAnyProperty( sal_Int32 nPropId ) const;
+    cpo::uno::Any getAnyProperty( sal_Int32 nPropId ) const;
 
     /** Gets the specified property from the property set.
         @return  true, if the passed variable could be filled with the property value. */
@@ -101,21 +101,21 @@ public:
     // Set properties ---------------------------------------------------------
 
     /** Puts the passed any into the property set. */
-    bool                setAnyProperty( sal_Int32 nPropId, const css::uno::Any& rValue );
+    bool                setAnyProperty( sal_Int32 nPropId, const cpo::uno::Any& rValue );
 
     /** Puts the passed value into the property set. */
     template< typename Type >
     bool         setProperty( sal_Int32 nPropId, const Type& rValue )
-                            { return setAnyProperty( nPropId, css::uno::Any( rValue ) ); }
+                            { return setAnyProperty( nPropId, cpo::uno::Any( rValue ) ); }
     bool         setProperty( sal_Int32 nPropId, ::Color rValue )
-                            { return setAnyProperty( nPropId, css::uno::Any( rValue ) ); }
+                            { return setAnyProperty( nPropId, cpo::uno::Any( rValue ) ); }
 
     /** Puts the passed properties into the property set. Tries to use the XMultiPropertySet interface.
         @param rPropNames  The property names. MUST be ordered alphabetically.
         @param rValues  The related property values. */
     void                setProperties(
                             const css::uno::Sequence< OUString >& rPropNames,
-                            const css::uno::Sequence< css::uno::Any >& rValues );
+                            const css::uno::Sequence< cpo::uno::Any >& rValues );
 
     /** Puts the passed property map into the property set. Tries to use the XMultiPropertySet interface.
         @param rPropertyMap  The property map. */
@@ -129,10 +129,10 @@ public:
 private:
     /** Gets the specified property from the property set.
         @return  true, if the any could be filled with the property value. */
-    bool                implGetPropertyValue( css::uno::Any& orValue, const OUString& rPropName ) const;
+    bool                implGetPropertyValue( cpo::uno::Any& orValue, const OUString& rPropName ) const;
 
     /** Puts the passed any into the property set. */
-    bool                implSetPropertyValue( const OUString& rPropName, const css::uno::Any& rValue );
+    bool                implSetPropertyValue( const OUString& rPropName, const cpo::uno::Any& rValue );
 
 private:
     css::uno::Reference< css::beans::XPropertySet >

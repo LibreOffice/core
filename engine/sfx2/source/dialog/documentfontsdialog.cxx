@@ -124,11 +124,11 @@ bool SfxDocumentFontsPage::FillItemSet( SfxItemSet* )
                 uno::Reference< beans::XPropertySet > xProps( xFac->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY );
                 if (xProps)
                 {
-                    xProps->setPropertyValue(u"EmbedFonts"_ustr, uno::Any(bEmbedFonts));
-                    xProps->setPropertyValue(u"EmbedOnlyUsedFonts"_ustr, uno::Any(bEmbedUsedFonts));
-                    xProps->setPropertyValue(u"EmbedLatinScriptFonts"_ustr, uno::Any(bEmbedLatinScriptFonts));
-                    xProps->setPropertyValue(u"EmbedAsianScriptFonts"_ustr, uno::Any(bEmbedAsianScriptFonts));
-                    xProps->setPropertyValue(u"EmbedComplexScriptFonts"_ustr, uno::Any(bEmbedComplexScriptFonts));
+                    xProps->setPropertyValue(u"EmbedFonts"_ustr, cpo::uno::Any(bEmbedFonts));
+                    xProps->setPropertyValue(u"EmbedOnlyUsedFonts"_ustr, cpo::uno::Any(bEmbedUsedFonts));
+                    xProps->setPropertyValue(u"EmbedLatinScriptFonts"_ustr, cpo::uno::Any(bEmbedLatinScriptFonts));
+                    xProps->setPropertyValue(u"EmbedAsianScriptFonts"_ustr, cpo::uno::Any(bEmbedAsianScriptFonts));
+                    xProps->setPropertyValue(u"EmbedComplexScriptFonts"_ustr, cpo::uno::Any(bEmbedComplexScriptFonts));
                 }
             }
         }

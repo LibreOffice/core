@@ -28,6 +28,7 @@ using namespace ::com::sun::star;
 namespace oox::core {
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 // XServiceInfo
 OUString SAL_CALL FastTokenHandler::getImplementationName()
@@ -66,7 +67,7 @@ sal_Int32 FastTokenHandler::getTokenDirect(std::string_view token) const
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_oox_core_FastTokenHandler_get_implementation(
-    uno::XComponentContext* /*pCtx*/, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* /*pCtx*/, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new oox::core::FastTokenHandler);
 }

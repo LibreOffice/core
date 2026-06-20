@@ -23,7 +23,7 @@
 #include <unotools/saveopt.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <sal/log.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 
 using namespace ::com::sun::star;
@@ -45,7 +45,7 @@ XMLCharLanguageHdl::~XMLCharLanguageHdl()
     // nothing to do
 }
 
-bool XMLCharLanguageHdl::equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const
+bool XMLCharLanguageHdl::equals( const cpo::uno::Any& r1, const cpo::uno::Any& r2 ) const
 {
     bool bRet = false;
     lang::Locale aLocale1, aLocale2;
@@ -74,7 +74,7 @@ bool XMLCharLanguageHdl::equals( const css::uno::Any& r1, const css::uno::Any& r
     return bRet;
 }
 
-bool XMLCharLanguageHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharLanguageHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     lang::Locale aLocale;
     rValue >>= aLocale;
@@ -104,7 +104,7 @@ bool XMLCharLanguageHdl::importXML( const OUString& rStrImpValue, uno::Any& rVal
     return true;
 }
 
-bool XMLCharLanguageHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharLanguageHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     lang::Locale aLocale;
     if(!(rValue >>= aLocale))
@@ -135,7 +135,7 @@ XMLCharScriptHdl::~XMLCharScriptHdl()
     // nothing to do
 }
 
-bool XMLCharScriptHdl::equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const
+bool XMLCharScriptHdl::equals( const cpo::uno::Any& r1, const cpo::uno::Any& r2 ) const
 {
     bool bRet = false;
     lang::Locale aLocale1, aLocale2;
@@ -166,7 +166,7 @@ bool XMLCharScriptHdl::equals( const css::uno::Any& r1, const css::uno::Any& r2 
     return bRet;
 }
 
-bool XMLCharScriptHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharScriptHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     lang::Locale aLocale;
     rValue >>= aLocale;
@@ -219,7 +219,7 @@ bool XMLCharScriptHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
 }
 
 bool XMLCharScriptHdl::exportXML(OUString& rStrExpValue,
-        const uno::Any& rValue, const SvXMLUnitConverter& rUnitConv) const
+        const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConv) const
 {
     lang::Locale aLocale;
     if(!(rValue >>= aLocale))
@@ -250,7 +250,7 @@ XMLCharCountryHdl::~XMLCharCountryHdl()
     // nothing to do
 }
 
-bool XMLCharCountryHdl::equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const
+bool XMLCharCountryHdl::equals( const cpo::uno::Any& r1, const cpo::uno::Any& r2 ) const
 {
     bool bRet = false;
     lang::Locale aLocale1, aLocale2;
@@ -261,7 +261,7 @@ bool XMLCharCountryHdl::equals( const css::uno::Any& r1, const css::uno::Any& r2
     return bRet;
 }
 
-bool XMLCharCountryHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharCountryHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     lang::Locale aLocale;
     rValue >>= aLocale;
@@ -290,7 +290,7 @@ bool XMLCharCountryHdl::importXML( const OUString& rStrImpValue, uno::Any& rValu
     return true;
 }
 
-bool XMLCharCountryHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharCountryHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     lang::Locale aLocale;
     if(!(rValue >>= aLocale))
@@ -321,7 +321,7 @@ XMLCharRfcLanguageTagHdl::~XMLCharRfcLanguageTagHdl()
     // nothing to do
 }
 
-bool XMLCharRfcLanguageTagHdl::equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const
+bool XMLCharRfcLanguageTagHdl::equals( const cpo::uno::Any& r1, const cpo::uno::Any& r2 ) const
 {
     bool bRet = false;
     lang::Locale aLocale1, aLocale2;
@@ -332,7 +332,7 @@ bool XMLCharRfcLanguageTagHdl::equals( const css::uno::Any& r1, const css::uno::
     return bRet;
 }
 
-bool XMLCharRfcLanguageTagHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharRfcLanguageTagHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     lang::Locale aLocale;
     rValue >>= aLocale;
@@ -402,7 +402,7 @@ bool XMLCharRfcLanguageTagHdl::importXML( const OUString& rStrImpValue, uno::Any
 }
 
 bool XMLCharRfcLanguageTagHdl::exportXML(OUString& rStrExpValue,
-        const uno::Any& rValue, const SvXMLUnitConverter& rUnitConv) const
+        const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConv) const
 {
     lang::Locale aLocale;
     if(!(rValue >>= aLocale))

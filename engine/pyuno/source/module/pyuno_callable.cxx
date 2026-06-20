@@ -25,7 +25,7 @@
 
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
-using com::sun::star::uno::Any;
+using cpo::uno::Any;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::script::XInvocation2;
 
@@ -151,7 +151,7 @@ static PyObject* PyUNO_callable_call(
             logException( cargo, "error  py->uno[0x", me->members->xInvocation.get() ,
                           me->members->methodName, &e, cppu::UnoType<decltype(e)>::get().getTypeLibType());
         }
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
     catch( const css::lang::IllegalArgumentException &e )
     {
@@ -160,7 +160,7 @@ static PyObject* PyUNO_callable_call(
             logException( cargo, "error  py->uno[0x", me->members->xInvocation.get() ,
                           me->members->methodName, &e, cppu::UnoType<decltype(e)>::get().getTypeLibType());
         }
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
     catch (const css::uno::RuntimeException &e)
     {
@@ -169,7 +169,7 @@ static PyObject* PyUNO_callable_call(
             logException( cargo, "error  py->uno[0x", me->members->xInvocation.get() ,
                           me->members->methodName, &e, cppu::UnoType<decltype(e)>::get().getTypeLibType());
         }
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
 
     return ret.getAcquired();

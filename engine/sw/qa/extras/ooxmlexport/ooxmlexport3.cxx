@@ -457,7 +457,7 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
     const std::shared_ptr< svx::diagram::DiagramHelper_svx >& rIDiagramHelper(pObj->getDiagramHelper());
     CPPUNIT_ASSERT(rIDiagramHelper);
 
-    uno::Any aPropVal;
+    cpo::uno::Any aPropVal;
     uno::Reference<xml::dom::XDocument> aDomTree;
 
     aPropVal = rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXData);

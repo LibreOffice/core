@@ -78,9 +78,9 @@ void setUpDocumentModules( const css::uno::Reference< css::sheet::XSpreadsheetDo
 
 void ExportAsFixedFormatHelper(
     const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< ooo::vba::excel::XApplication >& xApplication,
-    const css::uno::Any& Type, const css::uno::Any& FileName, const css::uno::Any& Quality,
-    const css::uno::Any& IncludeDocProperties, const css::uno::Any& From,
-    const css::uno::Any& To, const css::uno::Any& OpenAfterPublish);
+    const cpo::uno::Any& Type, const cpo::uno::Any& FileName, const cpo::uno::Any& Quality,
+    const cpo::uno::Any& IncludeDocProperties, const cpo::uno::Any& From,
+    const cpo::uno::Any& To, const cpo::uno::Any& OpenAfterPublish);
 
 void SetDocInfoState(
     const css::uno::Reference< css::frame::XModel >& xModel,

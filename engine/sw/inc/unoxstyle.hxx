@@ -80,18 +80,18 @@ protected:
 
     template <sal_uInt16>
     void SetPropertyValue(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&,
-                          const css::uno::Any&, SwStyleBase_Impl&);
+                          const cpo::uno::Any&, SwStyleBase_Impl&);
     void SetPropertyValues_Impl(std::span<const OUString> aPropertyNames,
-                                std::span<const css::uno::Any> aValues, bool bIgnoreUnknown);
+                                std::span<const cpo::uno::Any> aValues, bool bIgnoreUnknown);
     SfxStyleSheetBase* GetStyleSheetBase();
     void PrepareStyleBase(SwStyleBase_Impl& rBase);
     template <sal_uInt16>
-    css::uno::Any GetStyleProperty(const SfxItemPropertyMapEntry& rEntry,
+    cpo::uno::Any GetStyleProperty(const SfxItemPropertyMapEntry& rEntry,
                                    const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase);
-    css::uno::Any GetStyleProperty_Impl(const SfxItemPropertyMapEntry& rEntry,
+    cpo::uno::Any GetStyleProperty_Impl(const SfxItemPropertyMapEntry& rEntry,
                                         const SfxItemPropertySet& rPropSet,
                                         SwStyleBase_Impl& rBase);
-    css::uno::Any GetPropertyValue_Impl(const SfxItemPropertySet* pPropSet, SwStyleBase_Impl& rBase,
+    cpo::uno::Any GetPropertyValue_Impl(const SfxItemPropertySet* pPropSet, SwStyleBase_Impl& rBase,
                                         const OUString& rPropertyName);
 
 public:
@@ -120,8 +120,8 @@ public:
     SW_DLLPUBLIC virtual css::uno::Reference<css::beans::XPropertySetInfo>
         SAL_CALL getPropertySetInfo() override;
     virtual void SAL_CALL setPropertyValue(const OUString& aPropertyName,
-                                           const css::uno::Any& aValue) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName) override;
+                                           const cpo::uno::Any& aValue) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName) override;
     virtual void SAL_CALL addPropertyChangeListener(
         const OUString&, const css::uno::Reference<css::beans::XPropertyChangeListener>&) override
     {
@@ -146,8 +146,8 @@ public:
     //XMultiPropertySet
     virtual void SAL_CALL
     setPropertyValues(const css::uno::Sequence<OUString>& aPropertyNames,
-                      const css::uno::Sequence<css::uno::Any>& aValues) override;
-    virtual css::uno::Sequence<css::uno::Any>
+                      const css::uno::Sequence<cpo::uno::Any>& aValues) override;
+    virtual css::uno::Sequence<cpo::uno::Any>
         SAL_CALL getPropertyValues(const css::uno::Sequence<OUString>& aPropertyNames) override;
     virtual void SAL_CALL addPropertiesChangeListener(
         const css::uno::Sequence<OUString>&,
@@ -164,13 +164,13 @@ public:
     virtual css::uno::Sequence<css::beans::PropertyState>
         SAL_CALL getPropertyStates(const css::uno::Sequence<OUString>& aPropertyName) override;
     virtual void SAL_CALL setPropertyToDefault(const OUString& PropertyName) override;
-    virtual css::uno::Any SAL_CALL getPropertyDefault(const OUString& aPropertyName) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyDefault(const OUString& aPropertyName) override;
 
     //XMultiPropertyStates
     virtual void SAL_CALL setAllPropertiesToDefault() override;
     virtual void SAL_CALL
     setPropertiesToDefault(const css::uno::Sequence<OUString>& aPropertyNames) override;
-    virtual css::uno::Sequence<css::uno::Any>
+    virtual css::uno::Sequence<cpo::uno::Any>
         SAL_CALL getPropertyDefaults(const css::uno::Sequence<OUString>& aPropertyNames) override;
 
     //XServiceInfo
@@ -210,9 +210,9 @@ public:
     /// @throws lang::WrappedTargetException
     /// @throws uno::RuntimeException
     void SetStyleProperty(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet,
-                          const css::uno::Any& rValue, SwStyleBase_Impl& rBase);
+                          const cpo::uno::Any& rValue, SwStyleBase_Impl& rBase);
     void PutItemToSet(const SvxSetItem* pSetItem, const SfxItemPropertySet& rPropSet,
-                      const SfxItemPropertyMapEntry& rEntry, const css::uno::Any& rVal,
+                      const SfxItemPropertyMapEntry& rEntry, const cpo::uno::Any& rVal,
                       SwStyleBase_Impl& rBaseImpl);
     SW_DLLPUBLIC void getToggleAttributes(
         float& rfCharStyleBold, float& rfCharStyleBoldComplex,
@@ -222,9 +222,9 @@ public:
     // Set without throwing exceptions for unknown props, which is faster than throwing and then
     // ignoring.
     SW_DLLPUBLIC void setPropertyValueIgnoreUnknown(const OUString& aPropertyName,
-                                                    const css::uno::Any& aValue);
+                                                    const cpo::uno::Any& aValue);
     void SetPropertyValues(std::span<const OUString> aPropertyNames,
-                           std::span<const css::uno::Any> aValues);
+                           std::span<const cpo::uno::Any> aValues);
 };
 
 typedef cppu::ImplInheritanceHelper<SwXStyle, css::document::XEventsSupplier> SwXFrameStyle_Base;
@@ -249,8 +249,8 @@ class SW_DLLPUBLIC SwXPageStyle final : public SwXStyle
 {
 protected:
     void SetPropertyValues_Impl(const css::uno::Sequence<OUString>& aPropertyNames,
-                                const css::uno::Sequence<css::uno::Any>& aValues);
-    css::uno::Sequence<css::uno::Any>
+                                const css::uno::Sequence<cpo::uno::Any>& aValues);
+    css::uno::Sequence<cpo::uno::Any>
     GetPropertyValues_Impl(const css::uno::Sequence<OUString>& aPropertyNames);
 
 public:
@@ -258,13 +258,13 @@ public:
     explicit SwXPageStyle(SwDocShell* pDocSh);
 
     virtual void SAL_CALL setPropertyValue(const OUString& aPropertyName,
-                                           const css::uno::Any& aValue) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName) override;
+                                           const cpo::uno::Any& aValue) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName) override;
 
     virtual void SAL_CALL
     setPropertyValues(const css::uno::Sequence<OUString>& aPropertyNames,
-                      const css::uno::Sequence<css::uno::Any>& aValues) override;
-    virtual css::uno::Sequence<css::uno::Any>
+                      const css::uno::Sequence<cpo::uno::Any>& aValues) override;
+    virtual css::uno::Sequence<cpo::uno::Any>
         SAL_CALL getPropertyValues(const css::uno::Sequence<OUString>& aPropertyNames) override;
 };
 

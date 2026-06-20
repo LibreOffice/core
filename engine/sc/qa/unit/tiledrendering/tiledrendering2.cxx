@@ -110,10 +110,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCursorJumpOnFailedSearch)
 
     // Search for a non-existing string using the start point parameters
     aPropertyValues = comphelper::InitPropertySequence(
-        { { "SearchItem.SearchString", uno::Any(u"No-existing"_ustr) },
-          { "SearchItem.Backward", uno::Any(false) },
-          { "SearchItem.SearchStartPointX", uno::Any(static_cast<sal_Int32>(100)) },
-          { "SearchItem.SearchStartPointY", uno::Any(static_cast<sal_Int32>(100)) } });
+        { { "SearchItem.SearchString", cpo::uno::Any(u"No-existing"_ustr) },
+          { "SearchItem.Backward", cpo::uno::Any(false) },
+          { "SearchItem.SearchStartPointX", cpo::uno::Any(static_cast<sal_Int32>(100)) },
+          { "SearchItem.SearchStartPointY", cpo::uno::Any(static_cast<sal_Int32>(100)) } });
     dispatchCommand(mxComponent, u".uno:ExecuteSearch"_ustr, aPropertyValues);
 
     tools::Rectangle aFinalCursor = aView.m_aCellCursorBounds;

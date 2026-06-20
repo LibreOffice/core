@@ -49,7 +49,7 @@ public:
     virtual void SAL_CALL setBorderStyle( sal_Int32 nBorderStyle ) override;
     virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() override;
     // XFrame methods
-    css::uno::Any SAL_CALL Controls( const css::uno::Any& rIndex ) override;
+    cpo::uno::Any SAL_CALL Controls( const cpo::uno::Any& rIndex ) override;
     //XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

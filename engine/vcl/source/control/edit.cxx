@@ -1240,7 +1240,7 @@ void Edit::ImplPaste(css::uno::Reference<css::datatransfer::clipboard::XClipboar
     SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
     try
     {
-        css::uno::Any aData = xDataObj->getTransferData(aFlavor);
+        cpo::uno::Any aData = xDataObj->getTransferData(aFlavor);
         OUString aText;
         aData >>= aText;
 
@@ -2789,7 +2789,7 @@ void Edit::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE )
             SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
             if ( xDataObj->isDataFlavorSupported( aFlavor ) )
             {
-                css::uno::Any aData = xDataObj->getTransferData(aFlavor);
+                cpo::uno::Any aData = xDataObj->getTransferData(aFlavor);
                 OUString aText;
                 aData >>= aText;
                 ImplInsertText( aText );

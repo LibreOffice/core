@@ -34,7 +34,7 @@
 #include <sal/log.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
 
@@ -60,6 +60,7 @@ using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 struct FilterEntry
 {
@@ -1213,7 +1214,7 @@ static void ComboBoxAppendText(GtkComboBox *pCombo, std::u16string_view rStr)
   gtk_list_store_set(pStore, &aIter, 0, aStr.getStr(), -1);
 }
 
-void SalGtkFilePicker::HandleSetListValue(GtkComboBox *pWidget, sal_Int16 nControlAction, const uno::Any& rValue)
+void SalGtkFilePicker::HandleSetListValue(GtkComboBox *pWidget, sal_Int16 nControlAction, const cpo::uno::Any& rValue)
 {
     switch (nControlAction)
     {
@@ -1283,9 +1284,9 @@ void SalGtkFilePicker::HandleSetListValue(GtkComboBox *pWidget, sal_Int16 nContr
     gtk_widget_set_sensitive(GTK_WIDGET(pWidget), nItems > 1);
 }
 
-uno::Any SalGtkFilePicker::HandleGetListValue(GtkComboBox *pWidget, sal_Int16 nControlAction)
+cpo::uno::Any SalGtkFilePicker::HandleGetListValue(GtkComboBox *pWidget, sal_Int16 nControlAction)
 {
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     switch (nControlAction)
     {
         case ControlActions::GET_ITEMS:
@@ -1341,7 +1342,7 @@ uno::Any SalGtkFilePicker::HandleGetListValue(GtkComboBox *pWidget, sal_Int16 nC
     return aAny;
 }
 
-void SAL_CALL SalGtkFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const uno::Any& rValue )
+void SAL_CALL SalGtkFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const cpo::uno::Any& rValue )
 {
     SolarMutexGuard g;
 
@@ -1370,13 +1371,13 @@ void SAL_CALL SalGtkFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nContr
     }
 }
 
-uno::Any SAL_CALL SalGtkFilePicker::getValue( sal_Int16 nControlId, sal_Int16 nControlAction )
+cpo::uno::Any SAL_CALL SalGtkFilePicker::getValue( sal_Int16 nControlId, sal_Int16 nControlAction )
 {
     SolarMutexGuard g;
 
     OSL_ASSERT( m_pDialog != nullptr );
 
-    uno::Any aRetval;
+    cpo::uno::Any aRetval;
 
     GType tType;
     GtkWidget *pWidget;
@@ -1510,7 +1511,7 @@ sal_Int32 SAL_CALL SalGtkFilePicker::getAvailableHeight()
     return g_PreviewImageHeight;
 }
 
-void SAL_CALL SalGtkFilePicker::setImage( sal_Int16 /*aImageFormat*/, const uno::Any& /*aImage*/ )
+void SAL_CALL SalGtkFilePicker::setImage( sal_Int16 /*aImageFormat*/, const cpo::uno::Any& /*aImage*/ )
 {
     SolarMutexGuard g;
 
@@ -1660,7 +1661,7 @@ bool SAL_CALL SalGtkFilePicker::getShowState()
     return mbPreviewState;
 }
 
-GtkWidget* SalGtkPicker::GetParentWidget(const uno::Sequence<uno::Any>& rArguments)
+GtkWidget* SalGtkPicker::GetParentWidget(const uno::Sequence<cpo::uno::Any>& rArguments)
 {
     GtkWidget* pParentWidget = nullptr;
 
@@ -1681,7 +1682,7 @@ GtkWidget* SalGtkPicker::GetParentWidget(const uno::Sequence<uno::Any>& rArgumen
             {
                 css::uno::Sequence<sal_Int8> aProcessIdent(16);
                 rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8*>(aProcessIdent.getArray()));
-                uno::Any aAny = xSysDepWin->getWindowHandle(aProcessIdent, css::lang::SystemDependent::SYSTEM_XWINDOW);
+                cpo::uno::Any aAny = xSysDepWin->getWindowHandle(aProcessIdent, css::lang::SystemDependent::SYSTEM_XWINDOW);
                 css::awt::SystemDependentXWindow tmp;
                 aAny >>= tmp;
                 pParentWidget = GetGtkSalData()->GetGtkDisplay()->findGtkWidgetForNativeHandle(tmp.WindowHandle);
@@ -1694,10 +1695,10 @@ GtkWidget* SalGtkPicker::GetParentWidget(const uno::Sequence<uno::Any>& rArgumen
 
 // XInitialization
 
-void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArguments )
+void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<cpo::uno::Any>& aArguments )
 {
     // parameter checking
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     if( !aArguments.hasElements() )
         throw lang::IllegalArgumentException(
             u"no arguments"_ustr,

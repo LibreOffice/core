@@ -21,7 +21,7 @@
 #define INCLUDED_COMPHELPER_SEQUENCEASHASHMAP_HXX
 
 #include <unordered_map>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 #include <comphelper/comphelperdllapi.h>
 
@@ -62,7 +62,7 @@ struct OUStringAndHashCodeHash
         return i.mnHashCode;
     }
 };
-using SequenceAsHashMapBase = std::unordered_map<OUStringAndHashCode, css::uno::Any, OUStringAndHashCodeHash, OUStringAndHashCodeEqual>;
+using SequenceAsHashMapBase = std::unordered_map<OUStringAndHashCode, cpo::uno::Any, OUStringAndHashCodeHash, OUStringAndHashCodeEqual>;
 
 class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap
 {
@@ -75,14 +75,14 @@ class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap
         SequenceAsHashMap();
 
 
-        /** @see    operator<<(const css::uno::Any&)
+        /** @see    operator<<(const cpo::uno::Any&)
          */
-        SequenceAsHashMap(const css::uno::Any& aSource);
+        SequenceAsHashMap(const cpo::uno::Any& aSource);
 
 
-        /** @see    operator<<(const css::uno::Sequence< css::uno::Any >&)
+        /** @see    operator<<(const css::uno::Sequence< cpo::uno::Any >&)
          */
-        SequenceAsHashMap(const css::uno::Sequence< css::uno::Any >& lSource);
+        SequenceAsHashMap(const css::uno::Sequence< cpo::uno::Any >& lSource);
 
 
         /** @see    operator<<(const css::uno::Sequence< css::beans::PropertyValue >&)
@@ -112,7 +112,7 @@ class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap
                     is thrown, if the given Any does not contain a suitable sequence ...
                     but not if it's a VOID Any!
          */
-        void operator<<(const css::uno::Any& aSource);
+        void operator<<(const cpo::uno::Any& aSource);
 
 
         /** @short  fill this map from the given
@@ -127,7 +127,7 @@ class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap
                     is thrown, if the given Any sequence
                     uses wrong types for its items. VOID Any will be ignored!
          */
-        void operator<<(const css::uno::Sequence< css::uno::Any >& lSource);
+        void operator<<(const css::uno::Sequence< cpo::uno::Any >& lSource);
 
 
         /** @short  fill this map from the given
@@ -181,7 +181,7 @@ class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap
             @return A const Any, which
                     contains all items of this map.
          */
-        css::uno::Any getAsConstAny(bool bAsPropertyValue) const;
+        cpo::uno::Any getAsConstAny(bool bAsPropertyValue) const;
 
 
         /** @short  return this map instance to as a
@@ -251,7 +251,7 @@ class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap
 
         /** @short  check if the specified item exists
                     and return its value or it returns
-                    an empty css::uno::Any.
+                    an empty cpo::uno::Any.
 
             @descr  If a value should be extracted only in case
                     the requested property exists really (without creating
@@ -262,13 +262,13 @@ class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap
                     key name of the item.
 
             @return The value of the specified property or
-                    an empty css::uno::Any.
+                    an empty cpo::uno::Any.
          */
-        css::uno::Any getValue(const OUString& sKey) const
+        cpo::uno::Any getValue(const OUString& sKey) const
         {
             auto pIt = m_aMap.find(sKey);
             if (pIt == m_aMap.end())
-                return css::uno::Any();
+                return cpo::uno::Any();
 
             return pIt->second;
         }
@@ -300,7 +300,7 @@ class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap
         {
             if (!m_aMap.contains(sKey))
             {
-                (*this)[sKey] = css::uno::toAny(aValue);
+                (*this)[sKey] = cpo::uno::toAny(aValue);
                 return true;
             }
 
@@ -338,12 +338,12 @@ class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap
          */
         void update(const SequenceAsHashMap& rSource);
 
-        css::uno::Any& operator[](const OUString& rKey)
+        cpo::uno::Any& operator[](const OUString& rKey)
         {
             return m_aMap[rKey];
         }
 
-        css::uno::Any& operator[](const OUStringAndHashCode& rKey)
+        cpo::uno::Any& operator[](const OUStringAndHashCode& rKey)
         {
             return m_aMap[rKey];
         }

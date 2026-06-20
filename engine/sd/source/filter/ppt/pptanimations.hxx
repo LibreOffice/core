@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 
 #include <map>
 #include <sal/types.h>
@@ -158,7 +158,7 @@ const sal_Int32 mso_Anim_Fill_HOLD      = 3;
 const sal_Int32 mso_Anim_Behaviour_FILTER   = 24;
 const sal_Int32 mso_Anim_Behaviour_ANIMATION= 25;
 
-typedef ::std::map< sal_Int32, css::uno::Any > PropertySetMap_t;
+typedef ::std::map< sal_Int32, cpo::uno::Any > PropertySetMap_t;
 
 class PropertySet
 {
@@ -166,7 +166,7 @@ public:
     PropertySetMap_t maProperties;
 
     bool hasProperty( sal_Int32 nProperty ) const;
-    css::uno::Any getProperty( sal_Int32 nProperty ) const;
+    cpo::uno::Any getProperty( sal_Int32 nProperty ) const;
 };
 
 /** this atom is the first entry in each animation group */

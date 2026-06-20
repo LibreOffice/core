@@ -377,7 +377,7 @@ Reference< chart2::data::XDataSequence > CreateDataSequence(
         try
         {
             bool bVal = false;
-            uno::Any any = xPropSet->getPropertyValue(u"UseInternalDataProvider"_ustr);
+            cpo::uno::Any any = xPropSet->getPropertyValue(u"UseInternalDataProvider"_ustr);
             if (any >>= bVal)
                 bUseInternal = bVal;
         }
@@ -541,9 +541,9 @@ void CreateCategories(
     }
 }
 
-uno::Any getPropertyFromContext( std::u16string_view rPropertyName, const XMLPropStyleContext* pPropStyleContext, const SvXMLStylesContext* pStylesCtxt )
+cpo::uno::Any getPropertyFromContext( std::u16string_view rPropertyName, const XMLPropStyleContext* pPropStyleContext, const SvXMLStylesContext* pStylesCtxt )
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if( !pPropStyleContext || !pStylesCtxt )
         return aRet;
     const ::std::vector< XMLPropertyState >& rProperties = pPropStyleContext->GetProperties();
@@ -680,7 +680,7 @@ void importFormattedText( SvXMLImport& rImport, const std::vector<std::pair<OUSt
                 {
                     if (xInfo.is() && xInfo->hasPropertyByName(rProp.Name))
                     {
-                        const uno::Any aValue = xFullTextTitleProps->getPropertyValue(rProp.Name);
+                        const cpo::uno::Any aValue = xFullTextTitleProps->getPropertyValue(rProp.Name);
                         xNewFmtStr->setPropertyValue(rProp.Name, aValue);
                     }
                 }
@@ -697,7 +697,7 @@ void importFormattedText( SvXMLImport& rImport, const std::vector<std::pair<OUSt
 
         uno::Sequence< Reference< chart2::XFormattedString > > aStringSeq =
             comphelper::containerToSequence(aStringVec);
-        xTitleProp->setPropertyValue(u"FormattedStrings"_ustr, uno::Any(aStringSeq));
+        xTitleProp->setPropertyValue(u"FormattedStrings"_ustr, cpo::uno::Any(aStringSeq));
     }
     catch (const beans::UnknownPropertyException&)
     {
@@ -741,7 +741,7 @@ void setXMLRangePropertyAtDataSequence(
         Reference< beans::XPropertySet > xProp( xDataSequence, uno::UNO_QUERY_THROW );
         Reference< beans::XPropertySetInfo > xInfo( xProp->getPropertySetInfo());
         if( xInfo.is() && xInfo->hasPropertyByName( aXMLRangePropName ))
-            xProp->setPropertyValue( aXMLRangePropName, uno::Any( rXMLRange ));
+            xProp->setPropertyValue( aXMLRangePropName, cpo::uno::Any( rXMLRange ));
     }
     catch( const uno::Exception & )
     {
@@ -768,7 +768,7 @@ bool getXMLRangePropertyFromDataSequence(
                   !rOutXMLRange.isEmpty());
             // clear the property after usage
             if( bClearProp && bResult )
-                xProp->setPropertyValue( aXMLRangePropName, uno::Any( OUString()));
+                xProp->setPropertyValue( aXMLRangePropName, cpo::uno::Any( OUString()));
         }
         catch( const uno::Exception & )
         {

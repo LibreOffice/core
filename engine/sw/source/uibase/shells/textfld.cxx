@@ -944,7 +944,7 @@ FIELD_INSERT:
                     if (pFieldmark && !aFieldCode.isEmpty())
                     {
                         pFieldmark->GetParameters()->insert(
-                            std::pair<OUString, uno::Any>(ODF_CODE_PARAM, uno::Any(aFieldCode)));
+                            std::pair<OUString, cpo::uno::Any>(ODF_CODE_PARAM, cpo::uno::Any(aFieldCode)));
                     }
                 }
                 rSh.EndAction();

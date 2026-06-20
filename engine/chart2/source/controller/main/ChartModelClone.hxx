@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <rtl/ref.hxx>
 
@@ -66,7 +66,7 @@ class ChartModel;
     private:
         rtl::Reference<::chart::ChartModel>                       m_xModelClone;
         css::uno::Reference< css::chart2::XInternalDataProvider > m_xDataClone;
-        css::uno::Any                                             m_aSelection;
+        cpo::uno::Any                                             m_aSelection;
     };
 
 } // namespace chart

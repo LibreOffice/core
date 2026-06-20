@@ -97,7 +97,7 @@ static void lcl_html_outEvents( SvStream& rStrm,
     sal_Int32 nCount = xIndexAcc->getCount(), nPos;
     for( nPos = 0 ; nPos < nCount; nPos++ )
     {
-        uno::Any aTmp = xIndexAcc->getByIndex(nPos);
+        cpo::uno::Any aTmp = xIndexAcc->getByIndex(nPos);
         if( auto x1 = o3tl::tryAccess<uno::Reference<form::XFormComponent>>(aTmp) )
 
         {
@@ -367,7 +367,7 @@ void SwHTMLWriter::OutHiddenForms()
     sal_Int32 nCount = xForms->getCount();
     for( sal_Int32 i=0; i<nCount; i++)
     {
-        uno::Any aTmp = xForms->getByIndex( i );
+        cpo::uno::Any aTmp = xForms->getByIndex( i );
         if( auto x = o3tl::tryAccess<uno::Reference<form::XForm>>(aTmp) )
             OutHiddenForm( *x );
         else
@@ -387,7 +387,7 @@ void SwHTMLWriter::OutHiddenForm( const uno::Reference< form::XForm > & rForm )
     bool bHiddenOnly = nCount > 0, bHidden = false;
     for( sal_Int32 i=0; i<nCount; i++ )
     {
-        uno::Any aTmp = xFormComps->getByIndex( i );
+        cpo::uno::Any aTmp = xFormComps->getByIndex( i );
         auto xFormComp = o3tl::tryAccess<uno::Reference<form::XFormComponent>>(
             aTmp);
         OSL_ENSURE( xFormComp, "OutHiddenForm: wrong reflection" );
@@ -404,7 +404,7 @@ void SwHTMLWriter::OutHiddenForm( const uno::Reference< form::XForm > & rForm )
             OUString sPropName(u"ClassId"_ustr);
             if( xPropSet->getPropertySetInfo()->hasPropertyByName( sPropName ) )
             {
-                uno::Any aAny2 = xPropSet->getPropertyValue( sPropName );
+                cpo::uno::Any aAny2 = xPropSet->getPropertyValue( sPropName );
                 if( auto n = o3tl::tryAccess<sal_Int16>(aAny2) )
                 {
                     if( form::FormComponentType::HIDDENCONTROL == *n )
@@ -448,7 +448,7 @@ void SwHTMLWriter::OutForm( bool bOn,
 
     uno::Reference< beans::XPropertySet > xFormPropSet( rFormComps, uno::UNO_QUERY );
 
-    uno::Any aTmp = xFormPropSet->getPropertyValue( u"Name"_ustr );
+    cpo::uno::Any aTmp = xFormPropSet->getPropertyValue( u"Name"_ustr );
     if( auto s = o3tl::tryAccess<OUString>(aTmp) )
     {
         if( !s->isEmpty() )
@@ -539,7 +539,7 @@ void SwHTMLWriter::OutHiddenControls(
         uno::Reference< form::XFormComponent > xFC( rPropSet, uno::UNO_QUERY );
         for( nPos=0; !bDone && nPos < nCount; nPos++ )
         {
-            uno::Any aTmp = rFormComps->getByIndex( nPos );
+            cpo::uno::Any aTmp = rFormComps->getByIndex( nPos );
             auto x = o3tl::tryAccess<uno::Reference<form::XFormComponent>>(aTmp);
             OSL_ENSURE( x,
                     "OutHiddenControls: wrong reflection" );
@@ -549,7 +549,7 @@ void SwHTMLWriter::OutHiddenControls(
 
     for( ; nPos < nCount; nPos++ )
     {
-        uno::Any aTmp = rFormComps->getByIndex( nPos );
+        cpo::uno::Any aTmp = rFormComps->getByIndex( nPos );
         auto xFC = o3tl::tryAccess<uno::Reference<form::XFormComponent>>(aTmp);
         OSL_ENSURE( xFC,
                 "OutHiddenControls: wrong reflection" );
@@ -635,7 +635,7 @@ const SdrObject *SwHTMLWriter::GetHTMLControl( const SwDrawFrameFormat& rFormat 
     if( !xPropSet->getPropertySetInfo()->hasPropertyByName( sPropName ) )
         return nullptr;
 
-    uno::Any aTmp = xPropSet->getPropertyValue( sPropName );
+    cpo::uno::Any aTmp = xPropSet->getPropertyValue( sPropName );
     if( auto n = o3tl::tryAccess<sal_Int16>(aTmp) )
     {
         if( lcl_html_isHTMLControl( *n ) )
@@ -705,7 +705,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
     OUString sValue;
     OString sOptions;
     bool bEmptyValue = false;
-    uno::Any aTmp = xPropSet->getPropertyValue( u"ClassId"_ustr );
+    cpo::uno::Any aTmp = xPropSet->getPropertyValue( u"ClassId"_ustr );
     sal_Int16 nClassId = *o3tl::doAccess<sal_Int16>(aTmp);
     HtmlFrmOpts nFrameOpts = HTML_FRMOPTS_CONTROL;
     switch( nClassId )
@@ -1148,7 +1148,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
                 pValues = aValList.getConstArray();
             }
 
-            uno::Any aSelTmp = xPropSet->getPropertyValue( u"DefaultSelection"_ustr );
+            cpo::uno::Any aSelTmp = xPropSet->getPropertyValue( u"DefaultSelection"_ustr );
             const sal_Int16 *pSels = nullptr;
             sal_Int32 nSel = 0;
             sal_Int32 nSelCnt = 0;

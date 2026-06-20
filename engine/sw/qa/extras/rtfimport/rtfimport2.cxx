@@ -216,7 +216,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteFirstParaDirectFormat)
         // Set some direct formatting on the first paragraph, but leave paragraph adjust at its
         // default (left).
         uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
-        xParagraph->setPropertyValue(u"PageNumberOffset"_ustr, uno::Any(static_cast<sal_Int16>(0)));
+        xParagraph->setPropertyValue(u"PageNumberOffset"_ustr,
+                                     cpo::uno::Any(static_cast<sal_Int16>(0)));
     }
 
     // Paste from RTF.

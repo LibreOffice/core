@@ -53,7 +53,7 @@ EPUBPackage::EPUBPackage(uno::Reference<uno::XComponentContext> xContext,
 
     // MIME type must be uncompressed.
     uno::Reference<beans::XPropertySet> xPropertySet(mxOutputStream, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue(u"Compressed"_ustr, uno::Any(false));
+    xPropertySet->setPropertyValue(u"Compressed"_ustr, cpo::uno::Any(false));
     mxOutputStream.clear();
 }
 

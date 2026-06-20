@@ -127,7 +127,7 @@ getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
     {
         try
         {
-            uno::Any aValue = xPropSet->getPropertyValue(u"RuntimeUID"_ustr);
+            cpo::uno::Any aValue = xPropSet->getPropertyValue(u"RuntimeUID"_ustr);
             aValue >>= aId;
         }
         catch ( beans::UnknownPropertyException const & )
@@ -410,7 +410,7 @@ void OfficeDocumentsManager::buildDocumentsList()
 
     while ( xEnum->hasMoreElements() )
     {
-        uno::Any aValue = xEnum->nextElement();
+        cpo::uno::Any aValue = xEnum->nextElement();
         // container::NoSuchElementException
         // lang::WrappedTargetException
 

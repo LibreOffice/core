@@ -75,7 +75,7 @@ public:
        Only returns a reference to XMultiPropertySet, XFastPropertySet, XPropertySet and
        XEventListener.
      */
-    virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
 
     /** eases implementing XTypeProvider::getTypes, returns the types of XMultiPropertySet, XFastPropertySet, XPropertySet
 
@@ -96,12 +96,12 @@ public:
        value and setFastPropertyValue is called.
      */
     virtual void SAL_CALL setPropertyValue(const ::rtl::OUString& rPropertyName,
-                                           const css::uno::Any& aValue) override;
+                                           const cpo::uno::Any& aValue) override;
     /**
        Throw UnknownPropertyException if the property with the name
        rPropertyName does not exist.
      */
-    virtual css::uno::Any SAL_CALL getPropertyValue(const ::rtl::OUString& aPropertyName) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(const ::rtl::OUString& aPropertyName) override;
 
     /** Ignored if the property is not bound. */
     virtual void SAL_CALL addPropertyChangeListener(
@@ -131,20 +131,20 @@ public:
        notified.
       */
     virtual void SAL_CALL setFastPropertyValue(sal_Int32 nHandle,
-                                               const css::uno::Any& rValue) override final;
+                                               const cpo::uno::Any& rValue) override final;
 
     /**
        @exception css::beans::UnknownPropertyException
          if the property with the handle nHandle does not exist.
      */
-    virtual css::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle) override final;
+    virtual cpo::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle) override final;
 
     // XMultiPropertySet
     virtual void SAL_CALL
     setPropertyValues(const css::uno::Sequence<::rtl::OUString>& PropertyNames,
-                      const css::uno::Sequence<css::uno::Any>& Values) override;
+                      const css::uno::Sequence<cpo::uno::Any>& Values) override;
 
-    virtual css::uno::Sequence<css::uno::Any> SAL_CALL
+    virtual css::uno::Sequence<cpo::uno::Any> SAL_CALL
     getPropertyValues(const css::uno::Sequence<::rtl::OUString>& PropertyNames) override final;
 
     virtual void SAL_CALL addPropertiesChangeListener(
@@ -172,9 +172,9 @@ protected:
 
     /** Override this if you need to do something special during setFastPropertyValue */
     virtual void setFastPropertyValueImpl(std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle,
-                                          const css::uno::Any& rValue);
+                                          const cpo::uno::Any& rValue);
 
-    virtual css::uno::Any getPropertyValueImpl(std::unique_lock<std::mutex>& rGuard,
+    virtual cpo::uno::Any getPropertyValueImpl(std::unique_lock<std::mutex>& rGuard,
                                                const ::rtl::OUString& aPropertyName) final;
 
     /**
@@ -187,7 +187,7 @@ protected:
                   XPropertyChangedListener and XMultiPropertyChangedListener.
      */
     void fire(std::unique_lock<std::mutex>& rGuard, const sal_Int32* pnHandles,
-              const css::uno::Any* pNewValues, const css::uno::Any* pOldValues, sal_Int32 nCount,
+              const cpo::uno::Any* pNewValues, const cpo::uno::Any* pOldValues, sal_Int32 nCount,
               bool bVetoable);
 
     /**
@@ -200,7 +200,7 @@ protected:
        @param nHitCount the number of valid entries in the handle array.
      */
     void setFastPropertyValues(std::unique_lock<std::mutex>& rGuard, sal_Int32 nSeqLen,
-                               sal_Int32* pHandles, const css::uno::Any* pValues,
+                               sal_Int32* pHandles, const cpo::uno::Any* pValues,
                                sal_Int32 nHitCount);
 
     /**
@@ -225,8 +225,8 @@ protected:
        @throws css::uno::RuntimeException
      */
     virtual bool convertFastPropertyValue(std::unique_lock<std::mutex>& rGuard,
-                                          css::uno::Any& rConvertedValue, css::uno::Any& rOldValue,
-                                          sal_Int32 nHandle, const css::uno::Any& rValue)
+                                          cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue,
+                                          sal_Int32 nHandle, const cpo::uno::Any& rValue)
         = 0;
 
     /** The same as setFastPropertyValue; nHandle is always valid.
@@ -249,14 +249,14 @@ protected:
         @throws css::uno::Exception
     */
     virtual void setFastPropertyValue_NoBroadcast(std::unique_lock<std::mutex>& rGuard,
-                                                  sal_Int32 nHandle, const css::uno::Any& rValue)
+                                                  sal_Int32 nHandle, const cpo::uno::Any& rValue)
         = 0;
     /**
        The same as getFastPropertyValue, but return the value through rValue and nHandle
        is always valid.
        The method is not implemented in this class.
      */
-    virtual void getFastPropertyValue(std::unique_lock<std::mutex>& rGuard, css::uno::Any& rValue,
+    virtual void getFastPropertyValue(std::unique_lock<std::mutex>& rGuard, cpo::uno::Any& rValue,
                                       sal_Int32 nHandle) const = 0;
 
     /** sets an dependent property's value
@@ -278,7 +278,7 @@ protected:
         contexts, you might need to take own measures.</p>
     */
     void setDependentFastPropertyValue(std::unique_lock<std::mutex>& rGuard, sal_Int32 i_handle,
-                                       const css::uno::Any& i_value);
+                                       const cpo::uno::Any& i_value);
 
 private:
     /**
@@ -303,15 +303,15 @@ private:
     comphelper::OInterfaceContainerHelper4<css::beans::XVetoableChangeListener>
         maVetoableChangeListeners;
     std::vector<sal_Int32> m_handles;
-    std::vector<css::uno::Any> m_newValues;
-    std::vector<css::uno::Any> m_oldValues;
+    std::vector<cpo::uno::Any> m_newValues;
+    std::vector<cpo::uno::Any> m_oldValues;
     bool m_bIgnoreRuntimeExceptionsWhileFiring = false;
 
     /** notifies the given changes in property's values, <em>plus</em> all property changes collected during recent
         |setDependentFastPropertyValue| calls.
     */
     void impl_fireAll(std::unique_lock<std::mutex>& rGuard, sal_Int32* i_handles,
-                      const css::uno::Any* i_newValues, const css::uno::Any* i_oldValues,
+                      const cpo::uno::Any* i_newValues, const cpo::uno::Any* i_oldValues,
                       sal_Int32 i_count);
 
     void fireVetoableChangeListeners(

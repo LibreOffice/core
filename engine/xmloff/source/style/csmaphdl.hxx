@@ -29,8 +29,8 @@ class XMLCaseMapPropHdl : public XMLPropertyHandler
 public:
     virtual ~XMLCaseMapPropHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 class XMLCaseMapVariantHdl : public XMLPropertyHandler
@@ -38,8 +38,8 @@ class XMLCaseMapVariantHdl : public XMLPropertyHandler
 public:
     virtual ~XMLCaseMapVariantHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

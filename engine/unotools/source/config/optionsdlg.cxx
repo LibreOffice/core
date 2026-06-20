@@ -20,13 +20,14 @@
 #include <unotools/optionsdlg.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/configmgr.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <cassert>
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 constexpr OUString ROOT_NODE = u"OptionsDialogGroups"_ustr;
 constexpr OUString PAGES_NODE = u"Pages"_ustr;

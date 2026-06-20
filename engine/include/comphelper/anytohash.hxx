@@ -24,7 +24,7 @@
 
 #include <optional>
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 class Any;
 }
@@ -40,7 +40,7 @@ namespace comphelper
     @return
            hash of given ANY value, or not available
 */
-COMPHELPER_DLLPUBLIC std::optional<size_t> anyToHash(css::uno::Any const& value);
+COMPHELPER_DLLPUBLIC std::optional<size_t> anyToHash(cpo::uno::Any const& value);
 }
 
 #endif

@@ -99,7 +99,7 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet )
         {
             for( const auto pProp : mpPropSet->getPropertyMap().getPropertyEntries() )
             {
-                uno::Any* pAny = maUsrAnys.GetUsrAnyForID( *pProp );
+                cpo::uno::Any* pAny = maUsrAnys.GetUsrAnyForID( *pProp );
                 if( pAny )
                 {
                     const OUString & aPropertyName = pProp->aName;
@@ -181,7 +181,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL SdUnoPageBackground::getPrope
     return mpPropSet->getPropertySetInfo();
 }
 
-void SAL_CALL SdUnoPageBackground::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
+void SAL_CALL SdUnoPageBackground::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
 
@@ -235,11 +235,11 @@ void SAL_CALL SdUnoPageBackground::setPropertyValue( const OUString& aPropertyNa
     }
 }
 
-uno::Any SAL_CALL SdUnoPageBackground::getPropertyValue( const OUString& PropertyName )
+cpo::uno::Any SAL_CALL SdUnoPageBackground::getPropertyValue( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     const SfxItemPropertyMapEntry* pEntry = getPropertyMapEntry(PropertyName);
 
     if( pEntry == nullptr )
@@ -373,7 +373,7 @@ void SAL_CALL SdUnoPageBackground::setPropertyToDefault( const OUString& Propert
     }
 }
 
-uno::Any SAL_CALL SdUnoPageBackground::getPropertyDefault( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL SdUnoPageBackground::getPropertyDefault( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
 
@@ -381,7 +381,7 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyDefault( const OUString& aProp
     if( pEntry == nullptr || mpSet == nullptr )
         throw beans::UnknownPropertyException( aPropertyName, static_cast<cppu::OWeakObject*>(this));
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     if (pEntry->nWID == OWN_ATTR_FILLBMP_MODE)
     {
         aAny <<= drawing::BitmapMode_REPEAT;

@@ -53,7 +53,7 @@ namespace ucb::ucp::ext
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::ucb::XContentIdentifier;

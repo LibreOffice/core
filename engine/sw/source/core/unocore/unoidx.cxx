@@ -69,7 +69,7 @@ using namespace ::com::sun::star;
 /// @throws lang::IllegalArgumentException
 template<typename T>
 static T
-lcl_AnyToType(uno::Any const& rVal)
+lcl_AnyToType(cpo::uno::Any const& rVal)
 {
     T aRet{};
     if(!(rVal >>= aRet))
@@ -81,7 +81,7 @@ lcl_AnyToType(uno::Any const& rVal)
 
 /// @throws lang::IllegalArgumentException
 template<typename T>
-static void lcl_AnyToBitMask(uno::Any const& rValue,
+static void lcl_AnyToBitMask(cpo::uno::Any const& rValue,
         T & rBitMask, const T nBit)
 {
     rBitMask = lcl_AnyToType<bool>(rValue)
@@ -90,7 +90,7 @@ static void lcl_AnyToBitMask(uno::Any const& rValue,
 }
 
 template<typename T>
-static void lcl_BitMaskToAny(uno::Any & o_rValue,
+static void lcl_BitMaskToAny(cpo::uno::Any & o_rValue,
         const T nBitMask, const T nBit)
 {
     const bool bRet(nBitMask & nBit);
@@ -192,11 +192,11 @@ public:
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
 
     // XIndexReplace
     virtual void SAL_CALL
-        replaceByIndex(sal_Int32 Index, const uno::Any& rElement) override;
+        replaceByIndex(sal_Int32 Index, const cpo::uno::Any& rElement) override;
 
 };
 
@@ -232,11 +232,11 @@ public:
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
 
     // XIndexReplace
     virtual void SAL_CALL
-        replaceByIndex(sal_Int32 Index, const uno::Any& rElement) override;
+        replaceByIndex(sal_Int32 Index, const cpo::uno::Any& rElement) override;
 
 };
 
@@ -512,7 +512,7 @@ SwXDocumentIndex::getPropertySetInfo()
 
 void SAL_CALL
 SwXDocumentIndex::setPropertyValue(
-        const OUString& rPropertyName, const uno::Any& rValue)
+        const OUString& rPropertyName, const cpo::uno::Any& rValue)
 {
     SolarMutexGuard aGuard;
 
@@ -788,14 +788,14 @@ SwXDocumentIndex::setPropertyValue(
                 {
                     throw lang::IllegalArgumentException();
                 }
-                lcl_AnyToBitMask(uno::Any(true), nCreate, SwTOXElement::Template);
+                lcl_AnyToBitMask(cpo::uno::Any(true), nCreate, SwTOXElement::Template);
                 UIName uiStyle;
                 SwStyleNameMapper::FillUIName(ProgName(style), uiStyle, SwGetPoolIdFromName::TxtColl);
                 rTOXBase.SetStyleNames(uiStyle, 0);
             }
             else if (!rValue.hasValue())
             {
-                lcl_AnyToBitMask(uno::Any(false), nCreate, SwTOXElement::Template);
+                lcl_AnyToBitMask(cpo::uno::Any(false), nCreate, SwTOXElement::Template);
             }
             else
             {
@@ -860,12 +860,12 @@ SwXDocumentIndex::setPropertyValue(
     }
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     SfxItemPropertyMapEntry const*const pEntry =
         m_pImpl->m_rPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
@@ -2040,7 +2040,7 @@ SwXDocumentIndexMark::getPropertySetInfo()
 
 void SAL_CALL
 SwXDocumentIndexMark::setPropertyValue(
-        const OUString& rPropertyName, const uno::Any& rValue)
+        const OUString& rPropertyName, const cpo::uno::Any& rValue)
 {
     SolarMutexGuard aGuard;
 
@@ -2167,12 +2167,12 @@ SwXDocumentIndexMark::setPropertyValue(
     }
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwXDocumentIndexMark::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     SfxItemPropertyMapEntry const*const pEntry =
         m_pImpl->m_rPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
@@ -2351,11 +2351,11 @@ SwXDocumentIndexes::getCount()
     return nRet;
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwXDocumentIndexes::getByIndex(sal_Int32 nIndex)
 {
     rtl::Reference< SwXDocumentIndex > xTmp = getDocumentIndexByIndex(nIndex);
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     aRet <<= uno::Reference< text::XDocumentIndex >(xTmp);
     return aRet;
 }
@@ -2384,7 +2384,7 @@ SwXDocumentIndexes::getDocumentIndexByIndex(sal_Int32 nIndex)
     throw lang::IndexOutOfBoundsException();
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwXDocumentIndexes::getByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
@@ -2402,7 +2402,7 @@ SwXDocumentIndexes::getByName(const OUString& rName)
            const rtl::Reference< SwXDocumentIndex > xTmp =
                SwXDocumentIndex::CreateXDocumentIndex(
                    rDoc, static_cast<SwTOXBaseSection *>(pSect));
-           return uno::Any(uno::Reference< text::XDocumentIndex >(xTmp));
+           return cpo::uno::Any(uno::Reference< text::XDocumentIndex >(xTmp));
         }
     }
     throw container::NoSuchElementException();
@@ -2504,7 +2504,7 @@ SwXDocumentIndex::StyleAccess_Impl::getSupportedServiceNames()
 
 void SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::replaceByIndex(
-        sal_Int32 nIndex, const uno::Any& rElement)
+        sal_Int32 nIndex, const cpo::uno::Any& rElement)
 {
     SolarMutexGuard aGuard;
 
@@ -2544,7 +2544,7 @@ SwXDocumentIndex::StyleAccess_Impl::getCount()
     return MAXLEVEL;
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
@@ -2571,7 +2571,7 @@ SwXDocumentIndex::StyleAccess_Impl::getByIndex(sal_Int32 nIndex)
             SwGetPoolIdFromName::TxtColl);
         pStyles[i] = aString.toString();
     }
-    uno::Any aRet(&aStyles, cppu::UnoType<uno::Sequence<OUString>>::get());
+    cpo::uno::Any aRet(&aStyles, cppu::UnoType<uno::Sequence<OUString>>::get());
     return aRet;
 }
 
@@ -2640,7 +2640,7 @@ const struct TokenType_ g_TokenTypes[] =
 
 void SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
-        sal_Int32 nIndex, const uno::Any& rElement)
+        sal_Int32 nIndex, const cpo::uno::Any& rElement)
 {
     SolarMutexGuard aGuard;
 
@@ -2829,7 +2829,7 @@ SwXDocumentIndex::TokenAccess_Impl::getCount()
     return nRet;
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
@@ -3068,7 +3068,7 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
         }
     }
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     aRet <<= aRetSeq;
     return aRet;
 }

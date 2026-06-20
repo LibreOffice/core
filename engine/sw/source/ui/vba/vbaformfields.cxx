@@ -90,7 +90,7 @@ public:
     }
     bool SAL_CALL hasMoreElements() override { return (mnIndex < mxIndexAccess->getCount()); }
 
-    uno::Any SAL_CALL nextElement() override
+    cpo::uno::Any SAL_CALL nextElement() override
     {
         if (mnIndex < mxIndexAccess->getCount())
         {
@@ -130,13 +130,13 @@ public:
         return nCount == SAL_MAX_INT32 ? 0 : nCount;
     }
 
-    uno::Any SAL_CALL getByIndex(sal_Int32 Index) override
+    cpo::uno::Any SAL_CALL getByIndex(sal_Int32 Index) override
     {
         m_pCache = lcl_getFieldmark("", Index, mxTextDocument);
         if (!m_pCache)
             throw lang::IndexOutOfBoundsException();
 
-        return uno::Any(uno::Reference<word::XFormField>(
+        return cpo::uno::Any(uno::Reference<word::XFormField>(
             new SwVbaFormField(mxParent, mxContext, mxTextDocument, *m_pCache)));
     }
 
@@ -149,12 +149,12 @@ public:
         return aSeq;
     }
 
-    uno::Any SAL_CALL getByName(const OUString& aName) override
+    cpo::uno::Any SAL_CALL getByName(const OUString& aName) override
     {
         if (!hasByName(aName))
             throw container::NoSuchElementException();
 
-        return uno::Any(uno::Reference<word::XFormField>(
+        return cpo::uno::Any(uno::Reference<word::XFormField>(
             new SwVbaFormField(mxParent, mxContext, mxTextDocument, *m_pCache)));
     }
 
@@ -198,7 +198,7 @@ void SwVbaFormFields::setShaded(bool /*bSet*/)
     SAL_INFO("sw.vba", "SwVbaFormFields::setShaded stub");
 }
 
-// uno::Reference<ooo::vba::word::XFormField> SwVbaFormFields::Add(const uno::Any& Range,
+// uno::Reference<ooo::vba::word::XFormField> SwVbaFormFields::Add(const cpo::uno::Any& Range,
 //                                                                 sal_Int32 Type)
 // {
 //     sw::mark::Fieldmark* pFieldmark = nullptr;
@@ -224,7 +224,10 @@ uno::Reference<container::XEnumeration> SwVbaFormFields::createEnumeration()
     return new FormFieldsEnumWrapper(m_xIndexAccess);
 }
 
-uno::Any SwVbaFormFields::createCollectionObject(const uno::Any& aSource) { return aSource; }
+cpo::uno::Any SwVbaFormFields::createCollectionObject(const cpo::uno::Any& aSource)
+{
+    return aSource;
+}
 
 OUString SwVbaFormFields::getServiceImplName() { return u"SwVbaFormFields"_ustr; }
 

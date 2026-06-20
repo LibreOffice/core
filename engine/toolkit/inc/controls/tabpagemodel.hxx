@@ -25,7 +25,7 @@
 
 class UnoControlTabPageModel final : public ControlModelContainerBase
 {
-    css::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    cpo::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 public:
     UnoControlTabPageModel( css::uno::Reference< css::uno::XComponentContext > const & i_factory);
@@ -36,7 +36,7 @@ public:
     // css::beans::XMultiPropertySet
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
     // XInitialization
-    virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments) override;
+    virtual void SAL_CALL initialize (const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;

@@ -91,6 +91,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 
 #define CHAR_LEFT_ARROW u'\x25C0'
@@ -1369,7 +1370,7 @@ void SwTextPaintInfo::DrawBorder( const SwLinePortion &rPor ) const
 
 namespace {
 
-bool HasValidPropertyValue(const uno::Any& rAny)
+bool HasValidPropertyValue(const cpo::uno::Any& rAny)
 {
     if (bool bValue; rAny >>= bValue)
     {
@@ -1501,7 +1502,7 @@ void SwTextPaintInfo::DrawCSDFHighlighting(const SwLinePortion &rPor) const
 
             if (xRange->getPropertyState(rPropName) == beans::PropertyState_DIRECT_VALUE)
             {
-                const uno::Any aAny = xRange->getPropertyValue(rPropName);
+                const cpo::uno::Any aAny = xRange->getPropertyValue(rPropName);
                 if (HasValidPropertyValue(aAny))
                 {
                     sCSNumberOrDF = SwResId(STR_CHARACTER_DIRECT_FORMATTING_TAG);

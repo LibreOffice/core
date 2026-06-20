@@ -29,7 +29,7 @@ namespace pcr
         OUString                    sName;              // the name of the property
         css::uno::Reference< css::inspection::XPropertyHandler >
                                     xPropertyHandler;   // the handler for this property
-        css::uno::Any               aValue;             // the current value of the property
+        cpo::uno::Any               aValue;             // the current value of the property
 
         bool                        bUnknownValue    : 1;   // is the property value currently "unknown"? (PropertyState_AMBIGUOUS)
         bool                        bReadOnly        : 1;

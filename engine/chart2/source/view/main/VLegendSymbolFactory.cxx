@@ -70,7 +70,7 @@ void getPropNamesAndValues( const Reference< beans::XPropertySet >& xProp,
 
     ::chart::PropertyMapper::getMultiPropertyListsFromValueMap( rNames, rValues, aValueMap );
 
-    uno::Any* pLineWidthAny = ::chart::PropertyMapper::getValuePointer(rValues,rNames,u"LineWidth");
+    cpo::uno::Any* pLineWidthAny = ::chart::PropertyMapper::getValuePointer(rValues,rNames,u"LineWidth");
     sal_Int32 nLineWidth = 0;
     if( pLineWidthAny && (*pLineWidthAny>>=nLineWidth) )
     {
@@ -105,7 +105,7 @@ rtl::Reference< SvxShapeGroup > VLegendSymbolFactory::createSymbol(
     const rtl::Reference<SvxShapeGroupAnyD>& rSymbolContainer,
     LegendSymbolStyle eStyle,
     const Reference< beans::XPropertySet > & xLegendEntryProperties,
-    PropertyType ePropertyType, const uno::Any& rExplicitSymbol )
+    PropertyType ePropertyType, const cpo::uno::Any& rExplicitSymbol )
 {
     rtl::Reference< SvxShapeGroup > xResult;
 

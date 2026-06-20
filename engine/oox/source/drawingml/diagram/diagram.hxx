@@ -123,7 +123,7 @@ struct DiagramColor
 };
 
 typedef std::map<OUString,DiagramColor> DiagramColorMap;
-typedef std::map<svx::diagram::DomMapFlag,css::uno::Any> DiagramPRDomMap;
+typedef std::map<svx::diagram::DomMapFlag,cpo::uno::Any> DiagramPRDomMap;
 
 class SmartArtDiagram
 {
@@ -144,8 +144,8 @@ public:
     oox::core::NamedShapePairs& getDiagramFontHeights() { return maDiagramFontHeights; }
     void syncDiagramFontHeights();
 
-    void setOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag, const css::uno::Any& rValue);
-    css::uno::Any getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const;
+    void setOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag, const cpo::uno::Any& rValue);
+    cpo::uno::Any getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const;
     void resetOOXDomValues(svx::diagram::DomMapFlags aDomMapFlags);
 
     // check if mandatory DiagramDomS exist (or can be created)

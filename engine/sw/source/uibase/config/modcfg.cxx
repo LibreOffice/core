@@ -35,6 +35,7 @@
 #include <caption.hxx>
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 #define GLOB_NAME_CALC      0
 #define GLOB_NAME_IMPRESS   1

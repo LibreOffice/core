@@ -49,26 +49,26 @@ void SAL_CALL SwVbaSection::setProtectedForForms( bool /*_protectedforforms*/ )
 {
 }
 
-uno::Any SAL_CALL SwVbaSection::Headers( const uno::Any& index )
+cpo::uno::Any SAL_CALL SwVbaSection::Headers( const cpo::uno::Any& index )
 {
     uno::Reference< XCollection > xCol( new SwVbaHeadersFooters( this, mxContext, mxModel, mxPageProps, true ) );
     if ( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-    return uno::Any( xCol );
+        return xCol->Item( index, cpo::uno::Any() );
+    return cpo::uno::Any( xCol );
 }
 
-uno::Any SAL_CALL SwVbaSection::Footers( const uno::Any& index )
+cpo::uno::Any SAL_CALL SwVbaSection::Footers( const cpo::uno::Any& index )
 {
     uno::Reference< XCollection > xCol( new SwVbaHeadersFooters( this, mxContext, mxModel, mxPageProps, false ) );
     if ( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-    return uno::Any( xCol );
+        return xCol->Item( index, cpo::uno::Any() );
+    return cpo::uno::Any( xCol );
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwVbaSection::PageSetup( )
 {
-    return uno::Any( uno::Reference< word::XPageSetup >( new SwVbaPageSetup( this, mxContext, mxModel, mxPageProps ) ) );
+    return cpo::uno::Any( uno::Reference< word::XPageSetup >( new SwVbaPageSetup( this, mxContext, mxModel, mxPageProps ) ) );
 }
 
 OUString

@@ -22,7 +22,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 using namespace css;
 
@@ -36,8 +36,8 @@ public:
     virtual void setUp() override;
     void testXSolverSettings();
 #ifdef ENABLE_COINMP
-    void testCellAddress(const table::CellAddress& rExpected, const uno::Any& rActual);
-    void testCellRangeAddress(const uno::Any& rExpected, const uno::Any& rActual);
+    void testCellAddress(const table::CellAddress& rExpected, const cpo::uno::Any& rActual);
+    void testCellRangeAddress(const cpo::uno::Any& rExpected, const cpo::uno::Any& rActual);
 #endif
 
     CPPUNIT_TEST_SUITE(ScSolverSettingsObj);
@@ -52,7 +52,7 @@ ScSolverSettingsObj::ScSolverSettingsObj()
 
 #ifdef ENABLE_COINMP
 void ScSolverSettingsObj::testCellAddress(const table::CellAddress& rExpected,
-                                          const uno::Any& rActual)
+                                          const cpo::uno::Any& rActual)
 {
     table::CellAddress aActualAddress;
     rActual >>= aActualAddress;
@@ -61,7 +61,8 @@ void ScSolverSettingsObj::testCellAddress(const table::CellAddress& rExpected,
     CPPUNIT_ASSERT_EQUAL(rExpected.Sheet, aActualAddress.Sheet);
 }
 
-void ScSolverSettingsObj::testCellRangeAddress(const uno::Any& rExpected, const uno::Any& rActual)
+void ScSolverSettingsObj::testCellRangeAddress(const cpo::uno::Any& rExpected,
+                                               const cpo::uno::Any& rActual)
 {
     table::CellRangeAddress aActualAddress;
     table::CellRangeAddress aExpectedAddress;
@@ -88,11 +89,11 @@ void ScSolverSettingsObj::testXSolverSettings()
 
     // Objective cell is in G7
     table::CellAddress aObjCell(0, 6, 6);
-    xSolverModel->setObjectiveCell(uno::Any(aObjCell));
+    xSolverModel->setObjectiveCell(cpo::uno::Any(aObjCell));
     xSolverModel->setObjectiveType(sheet::SolverObjectiveType::MAXIMIZE);
 
     // Variable cells (E3:E17)
-    uno::Sequence<uno::Any> aVarCells(1);
+    uno::Sequence<cpo::uno::Any> aVarCells(1);
     auto pVarCells = aVarCells.getArray();
     pVarCells[0] <<= table::CellRangeAddress(0, 4, 2, 4, 16);
     xSolverModel->setVariableCells(aVarCells);
@@ -110,7 +111,7 @@ void ScSolverSettingsObj::testXSolverSettings()
     // Set solver engine options
     xSolverModel->setEngine(u"com.sun.star.comp.Calc.CoinMPSolver"_ustr);
     uno::Sequence<beans::PropertyValue> aEngineOptions{
-        comphelper::makePropertyValue(u"Timeout"_ustr, uno::Any(static_cast<sal_Int32>(10))),
+        comphelper::makePropertyValue(u"Timeout"_ustr, cpo::uno::Any(static_cast<sal_Int32>(10))),
         comphelper::makePropertyValue(u"NonNegative"_ustr, true),
     };
     xSolverModel->setEngineOptions(aEngineOptions);
@@ -127,7 +128,7 @@ void ScSolverSettingsObj::testXSolverSettings()
     // Check objective function and variable cells
     testCellAddress(aObjCell, xSolverModel->getObjectiveCell());
     CPPUNIT_ASSERT_EQUAL(sheet::SolverObjectiveType::MAXIMIZE, xSolverModel->getObjectiveType());
-    uno::Sequence<uno::Any> aSeq = xSolverModel->getVariableCells();
+    uno::Sequence<cpo::uno::Any> aSeq = xSolverModel->getVariableCells();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aSeq.getLength());
     testCellRangeAddress(aVarCells[0], aSeq[0]);
 
@@ -138,14 +139,14 @@ void ScSolverSettingsObj::testXSolverSettings()
                          aSeqConstr[0].Operator);
     table::CellRangeAddress aLeft1(0, 4, 2, 4, 16);
     table::CellRangeAddress aRight1(0, 0, 0, 0, 0);
-    testCellRangeAddress(uno::Any(aLeft1), aSeqConstr[0].Left);
-    testCellRangeAddress(uno::Any(aRight1), aSeqConstr[0].Right);
+    testCellRangeAddress(cpo::uno::Any(aLeft1), aSeqConstr[0].Left);
+    testCellRangeAddress(cpo::uno::Any(aRight1), aSeqConstr[0].Right);
     CPPUNIT_ASSERT_EQUAL(sheet::SolverConstraintOperator::SolverConstraintOperator_LESS_EQUAL,
                          aSeqConstr[1].Operator);
     table::CellRangeAddress aLeft2(0, 6, 4, 6, 4);
     table::CellRangeAddress aRight2(0, 6, 2, 6, 2);
-    testCellRangeAddress(uno::Any(aLeft2), aSeqConstr[1].Left);
-    testCellRangeAddress(uno::Any(aRight2), aSeqConstr[1].Right);
+    testCellRangeAddress(cpo::uno::Any(aLeft2), aSeqConstr[1].Left);
+    testCellRangeAddress(cpo::uno::Any(aRight2), aSeqConstr[1].Right);
 
     // Check solver engine options
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.comp.Calc.CoinMPSolver"_ustr, xSolverModel->getEngine());
@@ -153,17 +154,17 @@ void ScSolverSettingsObj::testXSolverSettings()
     // Check solver engine options
     uno::Sequence<beans::PropertyValue> aEngProps = xSolverModel->getEngineOptions();
     CPPUNIT_ASSERT_EQUAL(u"EpsilonLevel"_ustr, aEngProps[0].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(static_cast<sal_Int32>(0)), aEngProps[0].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(static_cast<sal_Int32>(0)), aEngProps[0].Value);
     CPPUNIT_ASSERT_EQUAL(u"GenSensitivityReport"_ustr, aEngProps[1].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(false), aEngProps[1].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(false), aEngProps[1].Value);
     CPPUNIT_ASSERT_EQUAL(u"Integer"_ustr, aEngProps[2].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(false), aEngProps[2].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(false), aEngProps[2].Value);
     CPPUNIT_ASSERT_EQUAL(u"LimitBBDepth"_ustr, aEngProps[3].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(true), aEngProps[3].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(true), aEngProps[3].Value);
     CPPUNIT_ASSERT_EQUAL(u"NonNegative"_ustr, aEngProps[4].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(true), aEngProps[4].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(true), aEngProps[4].Value);
     CPPUNIT_ASSERT_EQUAL(u"Timeout"_ustr, aEngProps[5].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(static_cast<sal_Int32>(10)), aEngProps[5].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(static_cast<sal_Int32>(10)), aEngProps[5].Value);
 
     // Save file and reload to check if solver settings are still there
     saveAndReload(TestFilter::ODS);
@@ -179,7 +180,7 @@ void ScSolverSettingsObj::testXSolverSettings()
     CPPUNIT_ASSERT_EQUAL(sheet::SolverObjectiveType::MAXIMIZE, xSolverModel2->getObjectiveType());
 
     // Check variable cells
-    uno::Sequence<uno::Any> aVarCells2 = xSolverModel2->getVariableCells();
+    uno::Sequence<cpo::uno::Any> aVarCells2 = xSolverModel2->getVariableCells();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aVarCells2.getLength());
     testCellRangeAddress(aVarCells[0], aVarCells2[0]);
 
@@ -188,27 +189,27 @@ void ScSolverSettingsObj::testXSolverSettings()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aSeqConstr2.getLength());
     CPPUNIT_ASSERT_EQUAL(sheet::SolverConstraintOperator::SolverConstraintOperator_BINARY,
                          aSeqConstr2[0].Operator);
-    testCellRangeAddress(uno::Any(aLeft1), aSeqConstr2[0].Left);
-    testCellRangeAddress(uno::Any(aRight1), aSeqConstr2[0].Right);
+    testCellRangeAddress(cpo::uno::Any(aLeft1), aSeqConstr2[0].Left);
+    testCellRangeAddress(cpo::uno::Any(aRight1), aSeqConstr2[0].Right);
     CPPUNIT_ASSERT_EQUAL(sheet::SolverConstraintOperator::SolverConstraintOperator_LESS_EQUAL,
                          aSeqConstr2[1].Operator);
-    testCellRangeAddress(uno::Any(aLeft2), aSeqConstr2[1].Left);
-    testCellRangeAddress(uno::Any(aRight2), aSeqConstr2[1].Right);
+    testCellRangeAddress(cpo::uno::Any(aLeft2), aSeqConstr2[1].Left);
+    testCellRangeAddress(cpo::uno::Any(aRight2), aSeqConstr2[1].Right);
 
     // Check solver engine options
     uno::Sequence<beans::PropertyValue> aEngProps2 = xSolverModel2->getEngineOptions();
     CPPUNIT_ASSERT_EQUAL(u"EpsilonLevel"_ustr, aEngProps2[0].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(static_cast<sal_Int32>(0)), aEngProps2[0].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(static_cast<sal_Int32>(0)), aEngProps2[0].Value);
     CPPUNIT_ASSERT_EQUAL(u"GenSensitivityReport"_ustr, aEngProps2[1].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(false), aEngProps2[1].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(false), aEngProps2[1].Value);
     CPPUNIT_ASSERT_EQUAL(u"Integer"_ustr, aEngProps2[2].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(false), aEngProps2[2].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(false), aEngProps2[2].Value);
     CPPUNIT_ASSERT_EQUAL(u"LimitBBDepth"_ustr, aEngProps2[3].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(true), aEngProps2[3].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(true), aEngProps2[3].Value);
     CPPUNIT_ASSERT_EQUAL(u"NonNegative"_ustr, aEngProps2[4].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(true), aEngProps2[4].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(true), aEngProps2[4].Value);
     CPPUNIT_ASSERT_EQUAL(u"Timeout"_ustr, aEngProps2[5].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(static_cast<sal_Int32>(10)), aEngProps2[5].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(static_cast<sal_Int32>(10)), aEngProps2[5].Value);
 #endif
 }
 

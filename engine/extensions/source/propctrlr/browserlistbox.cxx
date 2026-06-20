@@ -38,7 +38,7 @@
 
 namespace pcr
 {
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::inspection::XPropertyControlContext;
     using ::com::sun::star::uno::Reference;

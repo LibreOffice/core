@@ -74,7 +74,7 @@ using namespace ::chart::SceneProperties;
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::osl::MutexGuard;
 
 namespace
@@ -277,7 +277,7 @@ Diagram::Diagram( uno::Reference< uno::XComponentContext > xContext ) :
     // straight ono the scene).  These defaults have been acquired from the old
     // chart implementation.
     setFastPropertyValue_NoBroadcast(
-        PROP_SCENE_CAMERA_GEOMETRY, uno::Any(
+        PROP_SCENE_CAMERA_GEOMETRY, cpo::uno::Any(
             ThreeDHelper::getDefaultCameraGeometry()));
 }
 
@@ -509,7 +509,7 @@ static void lcl_RotateLightSource( Diagram& rDiagram
             aLightVector = rRotationMatrix*aLightVector;
 
             rDiagram.setFastPropertyValue( nLightSourceDirectionProp
-                , uno::Any( BaseGFXHelper::B3DVectorToDirection3D( aLightVector ) ) );
+                , cpo::uno::Any( BaseGFXHelper::B3DVectorToDirection3D( aLightVector ) ) );
         }
     }
 }
@@ -520,10 +520,10 @@ static void lcl_setLightsForScheme( Diagram& rDiagram, const ThreeDLookScheme& r
         return;
 
     // "D3DSceneLightOn2" / UNO_NAME_3D_SCENE_LIGHTON_2
-    rDiagram.setFastPropertyValue( PROP_SCENE_LIGHT_ON_2, uno::Any( true ) );
+    rDiagram.setFastPropertyValue( PROP_SCENE_LIGHT_ON_2, cpo::uno::Any( true ) );
 
     rtl::Reference< ChartType > xChartType( rDiagram.getChartTypeByIndex( 0 ) );
-    uno::Any aADirection( rScheme == ThreeDLookScheme::ThreeDLookScheme_Simple
+    cpo::uno::Any aADirection( rScheme == ThreeDLookScheme::ThreeDLookScheme_Simple
         ? ChartTypeHelper::getDefaultSimpleLightDirection(xChartType)
         : ChartTypeHelper::getDefaultRealisticLightDirection(xChartType) );
 
@@ -548,12 +548,12 @@ static void lcl_setLightsForScheme( Diagram& rDiagram, const ThreeDLookScheme& r
     sal_Int32 nColor = ::chart::ChartTypeHelper::getDefaultDirectLightColor(
         rScheme == ThreeDLookScheme::ThreeDLookScheme_Simple, xChartType);
     // "D3DSceneLightColor2" / UNO_NAME_3D_SCENE_LIGHTCOLOR_2
-    rDiagram.setFastPropertyValue( PROP_SCENE_LIGHT_COLOR_2, uno::Any( nColor ) );
+    rDiagram.setFastPropertyValue( PROP_SCENE_LIGHT_COLOR_2, cpo::uno::Any( nColor ) );
 
     sal_Int32 nAmbientColor = ::chart::ChartTypeHelper::getDefaultAmbientLightColor(
         rScheme == ThreeDLookScheme::ThreeDLookScheme_Simple, xChartType);
     // "D3DSceneAmbientColor" / UNO_NAME_3D_SCENE_AMBIENTCOLOR
-    rDiagram.setFastPropertyValue( PROP_SCENE_AMBIENT_COLOR, uno::Any( nAmbientColor ) );
+    rDiagram.setFastPropertyValue( PROP_SCENE_AMBIENT_COLOR, cpo::uno::Any( nAmbientColor ) );
 }
 
 void SAL_CALL Diagram::setDefaultIllumination()
@@ -564,13 +564,13 @@ void SAL_CALL Diagram::setDefaultIllumination()
         // "D3DSceneShadeMode"
         getFastPropertyValue( PROP_SCENE_SHADE_MODE )>>= aShadeMode;
         // "D3DSceneLightOn1" / UNO_NAME_3D_SCENE_LIGHTON_1
-        setFastPropertyValue( PROP_SCENE_LIGHT_ON_1, uno::Any( false ) );
-        setFastPropertyValue( PROP_SCENE_LIGHT_ON_3, uno::Any( false ) );
-        setFastPropertyValue( PROP_SCENE_LIGHT_ON_4, uno::Any( false ) );
-        setFastPropertyValue( PROP_SCENE_LIGHT_ON_5, uno::Any( false ) );
-        setFastPropertyValue( PROP_SCENE_LIGHT_ON_6, uno::Any( false ) );
-        setFastPropertyValue( PROP_SCENE_LIGHT_ON_7, uno::Any( false ) );
-        setFastPropertyValue( PROP_SCENE_LIGHT_ON_8, uno::Any( false ) );
+        setFastPropertyValue( PROP_SCENE_LIGHT_ON_1, cpo::uno::Any( false ) );
+        setFastPropertyValue( PROP_SCENE_LIGHT_ON_3, cpo::uno::Any( false ) );
+        setFastPropertyValue( PROP_SCENE_LIGHT_ON_4, cpo::uno::Any( false ) );
+        setFastPropertyValue( PROP_SCENE_LIGHT_ON_5, cpo::uno::Any( false ) );
+        setFastPropertyValue( PROP_SCENE_LIGHT_ON_6, cpo::uno::Any( false ) );
+        setFastPropertyValue( PROP_SCENE_LIGHT_ON_7, cpo::uno::Any( false ) );
+        setFastPropertyValue( PROP_SCENE_LIGHT_ON_8, cpo::uno::Any( false ) );
     }
     catch( const uno::Exception & )
     {
@@ -724,7 +724,7 @@ void Diagram::fireModifyEvent()
 }
 
 // ____ OPropertySet ____
-void Diagram::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
+void Diagram::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = StaticDiagramDefaults();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
@@ -912,7 +912,7 @@ void Diagram::setGeometry3D( sal_Int32 nNewGeometry )
     for (auto const& series : aSeriesVec)
     {
         series->setPropertyAlsoToAllAttributedDataPoints(
-            u"Geometry3D"_ustr, uno::Any( nNewGeometry ));
+            u"Geometry3D"_ustr, cpo::uno::Any( nNewGeometry ));
     }
 }
 
@@ -1285,7 +1285,7 @@ uno::Reference< chart2::data::XLabeledDataSequence > Diagram::getCategories()
         {
             try
             {
-                xProp->setPropertyValue( u"Role"_ustr, uno::Any( u"categories"_ustr ) );
+                xProp->setPropertyValue( u"Role"_ustr, cpo::uno::Any( u"categories"_ustr ) );
             }
             catch( const uno::Exception & )
             {
@@ -1449,7 +1449,7 @@ bool Diagram::attachSeriesToAxis( bool bAttachToMainAxis
     {
         try
         {
-            xDataSeries->setPropertyValue( u"AttachedAxisIndex"_ustr, uno::Any( nNewAxisIndex ) );
+            xDataSeries->setPropertyValue( u"AttachedAxisIndex"_ustr, cpo::uno::Any( nNewAxisIndex ) );
             bChanged = true;
         }
         catch( const uno::Exception & )
@@ -1587,7 +1587,7 @@ void Diagram::setStackMode( StackMode eStackMode )
         else if( eStackMode == StackMode::ZStacked )
             eNewDirection = chart2::StackingDirection_Z_STACKING;
 
-        uno::Any aNewDirection( eNewDirection );
+        cpo::uno::Any aNewDirection( eNewDirection );
 
         bool bPercent = false;
         if( eStackMode == StackMode::YStackedPercent )
@@ -1670,7 +1670,7 @@ void Diagram::setVertical( bool bVertical /* = true */ )
 {
     try
     {
-        uno::Any aValue;
+        cpo::uno::Any aValue;
         aValue <<= bVertical;
         for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : getBaseCoordinateSystems() )
         {
@@ -1714,7 +1714,7 @@ void Diagram::setVertical( bool bVertical /* = true */ )
                     else if( bVertical && nDimIndex == 0 )
                         fNewAngleDegree = 90.0;
 
-                    xTitleProps->setPropertyValue(u"TextRotation"_ustr, uno::Any(fNewAngleDegree));
+                    xTitleProps->setPropertyValue(u"TextRotation"_ustr, cpo::uno::Any(fNewAngleDegree));
                 }
             }
         }
@@ -1840,7 +1840,7 @@ void Diagram::setCameraDistance(double fCameraDistance )
         aVRP.setLength(fCameraDistance);
         aCG.vrp = BaseGFXHelper::B3DVectorToPosition3D( aVRP );
 
-        setFastPropertyValue( PROP_SCENE_CAMERA_GEOMETRY, uno::Any( aCG ));
+        setFastPropertyValue( PROP_SCENE_CAMERA_GEOMETRY, cpo::uno::Any( aCG ));
     }
     catch( const uno::Exception & )
     {
@@ -2051,7 +2051,7 @@ void Diagram::setRotationAngle(
 
         //set new rotation to transformation matrix ("D3DTransformMatrix")
         setFastPropertyValue(
-            PROP_SCENE_TRANSF_MATRIX, uno::Any( BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aSceneRotation )));
+            PROP_SCENE_TRANSF_MATRIX, cpo::uno::Any( BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aSceneRotation )));
 
         //rotate lights if RightAngledAxes are not set or not supported
         bool bRightAngledAxes = false;
@@ -2239,7 +2239,7 @@ void Diagram::setScheme( ThreeDLookScheme aScheme )
         if( ! (getFastPropertyValue( PROP_SCENE_SHADE_MODE)>>=aOldShadeMode) ||
             aOldShadeMode != aShadeMode  )
         {
-            setFastPropertyValue( PROP_SCENE_SHADE_MODE, uno::Any( aShadeMode )); // "D3DSceneShadeMode"
+            setFastPropertyValue( PROP_SCENE_SHADE_MODE, cpo::uno::Any( aShadeMode )); // "D3DSceneShadeMode"
         }
 
         lcl_setLightsForScheme( *this, aScheme );
@@ -2255,14 +2255,14 @@ void Diagram::setDefaultRotation( bool bPieOrDonut )
 {
     drawing::CameraGeometry aCameraGeo( ThreeDHelper::getDefaultCameraGeometry( bPieOrDonut ) );
     // "D3DCameraGeometry"
-    setFastPropertyValue( PROP_SCENE_CAMERA_GEOMETRY, uno::Any( aCameraGeo ));
+    setFastPropertyValue( PROP_SCENE_CAMERA_GEOMETRY, cpo::uno::Any( aCameraGeo ));
 
     ::basegfx::B3DHomMatrix aSceneRotation;
     if( bPieOrDonut )
         aSceneRotation.rotate( -M_PI/3.0, 0, 0 );
     // "D3DTransformMatrix"
     setFastPropertyValue( PROP_SCENE_TRANSF_MATRIX,
-        uno::Any( BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aSceneRotation )));
+        cpo::uno::Any( BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aSceneRotation )));
 }
 
 void Diagram::switchRightAngledAxes( bool bRightAngledAxes )
@@ -2273,7 +2273,7 @@ void Diagram::switchRightAngledAxes( bool bRightAngledAxes )
         getFastPropertyValue( PROP_DIAGRAM_RIGHT_ANGLED_AXES ) >>= bOldRightAngledAxes; // "RightAngledAxes"
         if( bOldRightAngledAxes!=bRightAngledAxes)
         {
-            setFastPropertyValue( PROP_DIAGRAM_RIGHT_ANGLED_AXES, uno::Any( bRightAngledAxes ));
+            setFastPropertyValue( PROP_DIAGRAM_RIGHT_ANGLED_AXES, cpo::uno::Any( bRightAngledAxes ));
             if(bRightAngledAxes)
             {
                 ::basegfx::B3DHomMatrix aInverseRotation( lcl_getInverseRotationMatrix( *this ) );
@@ -2296,7 +2296,7 @@ void Diagram::switchRightAngledAxes( bool bRightAngledAxes )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_Diagram_get_implementation(css::uno::XComponentContext *context,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::Diagram(context));
 }

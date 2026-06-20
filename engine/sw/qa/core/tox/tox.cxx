@@ -46,7 +46,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityLinkClick)
         comphelper::makePropertyValue(u"Year"_ustr, u"2020"_ustr),
         comphelper::makePropertyValue(u"URL"_ustr, u"http://www.example.com/test.pdf"_ustr),
     };
-    xField->setPropertyValue(u"Fields"_ustr, uno::Any(aFields));
+    xField->setPropertyValue(u"Fields"_ustr, cpo::uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -87,7 +87,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableEntryURL)
         comphelper::makePropertyValue(u"Title"_ustr, u"Title"_ustr),
         comphelper::makePropertyValue(u"URL"_ustr, u"http://www.example.com/test.pdf#page=1"_ustr),
     };
-    xField->setPropertyValue(u"Fields"_ustr, uno::Any(aFields));
+    xField->setPropertyValue(u"Fields"_ustr, cpo::uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -133,7 +133,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableEntryClick)
         comphelper::makePropertyValue(u"Title"_ustr, u"Title"_ustr),
         comphelper::makePropertyValue(u"URL"_ustr, u"http://www.example.com/test.pdf#page=1"_ustr),
     };
-    xField->setPropertyValue(u"Fields"_ustr, uno::Any(aFields));
+    xField->setPropertyValue(u"Fields"_ustr, cpo::uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -182,7 +182,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableEntryRelClick)
         comphelper::makePropertyValue(u"Title"_ustr, u"Title"_ustr),
         comphelper::makePropertyValue(u"URL"_ustr, u"test.pdf#page=1"_ustr),
     };
-    xField->setPropertyValue(u"Fields"_ustr, uno::Any(aFields));
+    xField->setPropertyValue(u"Fields"_ustr, cpo::uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -230,7 +230,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableURLDeduplication)
             comphelper::makePropertyValue(u"Title"_ustr, u"Title"_ustr),
             comphelper::makePropertyValue(u"URL"_ustr, OUString(rURL)),
         };
-        xField->setPropertyValue(u"Fields"_ustr, uno::Any(aFields));
+        xField->setPropertyValue(u"Fields"_ustr, cpo::uno::Any(aFields));
         uno::Reference<text::XTextContent> xContent(xField, uno::UNO_QUERY);
         xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
     }

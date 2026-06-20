@@ -88,14 +88,14 @@ namespace dbaccess
 
         // OPropertySetHelper
         virtual bool SAL_CALL convertFastPropertyValue(
-                            css::uno::Any & rConvertedValue,
-                            css::uno::Any & rOldValue,
+                            cpo::uno::Any & rConvertedValue,
+                            cpo::uno::Any & rOldValue,
                             sal_Int32 nHandle,
-                            const css::uno::Any& rValue ) override;
-        virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle) const override;
+                            const cpo::uno::Any& rValue ) override;
+        virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
-                                const css::uno::Any& rValue
+                                const cpo::uno::Any& rValue
                                                  ) override;
 
         virtual ~ODBTableDecorator() override;
@@ -119,7 +119,7 @@ namespace dbaccess
         void construct();
 
         //XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
         virtual void SAL_CALL acquire() noexcept override;
         virtual void SAL_CALL release() noexcept override;
         //XTypeProvider

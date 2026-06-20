@@ -38,6 +38,7 @@
 #endif
 
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::loader;
 using namespace css::lang;
 using namespace osl;

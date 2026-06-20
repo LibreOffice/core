@@ -60,7 +60,7 @@ public:
     {
     }
 
-    UpdateResult DataChanged(const OUString& rMimeType, const css::uno::Any& rValue) override
+    UpdateResult DataChanged(const OUString& rMimeType, const cpo::uno::Any& rValue) override
     {
         tools::SvRef<SvBaseLink> xSelf(this);
 

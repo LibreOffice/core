@@ -58,7 +58,7 @@ namespace dlgprov
                 const css::uno::Reference< css::io::XInputStream >& xInput,
                 const css::uno::Reference< css::frame::XModel >& xModel,
                 const css::uno::Reference< css::resource::XStringResourceManager >& xStringResourceManager,
-                const css::uno::Any &aDialogSourceURL);
+                const cpo::uno::Any &aDialogSourceURL);
 
     typedef ::cppu::WeakImplHelper<
         css::lang::XServiceInfo,
@@ -97,7 +97,7 @@ namespace dlgprov
             css::uno::Reference< css::container::XNameContainer > createDialogModel(
                 const css::uno::Reference< css::io::XInputStream >& xInput,
                 const css::uno::Reference< css::resource::XStringResourceManager >& xStringResourceManager,
-                const css::uno::Any &aDialogSourceURL);
+                const cpo::uno::Any &aDialogSourceURL);
             /// @throws css::uno::Exception
             css::uno::Reference< css::awt::XControlModel > createDialogModelForBasic();
 
@@ -121,7 +121,7 @@ namespace dlgprov
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XDialogProvider
         virtual css::uno::Reference < css::awt::XDialog > SAL_CALL createDialog(

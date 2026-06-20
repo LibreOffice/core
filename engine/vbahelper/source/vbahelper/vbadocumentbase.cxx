@@ -49,7 +49,7 @@ VbaDocumentBase::VbaDocumentBase( const uno::Reference< ov::XHelperInterface >& 
 {
 }
 
-VbaDocumentBase::VbaDocumentBase( uno::Sequence< uno::Any> const & args,
+VbaDocumentBase::VbaDocumentBase( uno::Sequence< cpo::uno::Any> const & args,
                                   uno::Reference< uno::XComponentContext> const & xContext )
 : VbaDocumentBase_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ), xContext )
 {
@@ -116,8 +116,8 @@ VbaDocumentBase::getFullName()
 }
 
 void
-VbaDocumentBase::Close( const uno::Any &rSaveArg, const uno::Any &rFileArg,
-                      const uno::Any &rRouteArg )
+VbaDocumentBase::Close( const cpo::uno::Any &rSaveArg, const cpo::uno::Any &rFileArg,
+                      const cpo::uno::Any &rRouteArg )
 {
     bool bSaveChanges = false;
     OUString aFileName;
@@ -211,7 +211,7 @@ VbaDocumentBase::Close( const uno::Any &rSaveArg, const uno::Any &rFileArg,
 }
 
 void
-VbaDocumentBase::Protect( const uno::Any &aPassword )
+VbaDocumentBase::Protect( const cpo::uno::Any &aPassword )
 {
     OUString rPassword;
     uno::Reference< util::XProtectable > xProt( getModel(), uno::UNO_QUERY_THROW );
@@ -223,7 +223,7 @@ VbaDocumentBase::Protect( const uno::Any &aPassword )
 }
 
 void
-VbaDocumentBase::Unprotect( const uno::Any &aPassword )
+VbaDocumentBase::Unprotect( const cpo::uno::Any &aPassword )
 {
     OUString rPassword;
     uno::Reference< util::XProtectable > xProt( getModel(), uno::UNO_QUERY_THROW );
@@ -249,7 +249,7 @@ VbaDocumentBase::setSaved( bool bSave )
     }
     catch (const beans::PropertyVetoException&)
     {
-        uno::Any aCaught( ::cppu::getCaughtException() );
+        cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException(
                 u"Can't change modified state of model!"_ustr,
                 uno::Reference< uno::XInterface >(),
@@ -278,7 +278,7 @@ VbaDocumentBase::Activate()
     xFrame->activate();
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 VbaDocumentBase::getVBProject()
 {
     if( !mxVBProject.is() ) try
@@ -289,8 +289,8 @@ VbaDocumentBase::getVBProject()
             uno::Reference< XInterface > xVBE( xApp->getVBE(), uno::UNO_QUERY );
             if (xVBE)
             {
-                uno::Sequence< uno::Any > aArgs{ uno::Any(xVBE), // the VBE
-                                                 uno::Any(uno::Reference(getModel())) }; // document model for script container access
+                uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xVBE), // the VBE
+                                                 cpo::uno::Any(uno::Reference(getModel())) }; // document model for script container access
                 uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager() );
                 if (xServiceManager)
                     mxVBProject = xServiceManager->createInstanceWithArgumentsAndContext(
@@ -301,7 +301,7 @@ VbaDocumentBase::getVBProject()
     catch(const uno::Exception&)
     {
     }
-    return uno::Any( mxVBProject );
+    return cpo::uno::Any( mxVBProject );
 }
 
 OUString

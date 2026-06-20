@@ -33,6 +33,7 @@ namespace frm
 
 
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::form::binding;
@@ -293,7 +294,7 @@ namespace frm
     }
 
 
-    void OEntryListHelper::setNewStringItemList( const css::uno::Any& _rValue, ControlModelLock& _rInstanceLock )
+    void OEntryListHelper::setNewStringItemList( const cpo::uno::Any& _rValue, ControlModelLock& _rInstanceLock )
     {
         OSL_PRECOND( !hasExternalListSource(), "OEntryListHelper::setNewStringItemList: this should never have survived convertNewListSourceProperty!" );
         css::uno::Sequence<OUString> aTmp;
@@ -305,7 +306,7 @@ namespace frm
     }
 
 
-    void OEntryListHelper::setNewTypedItemList( const css::uno::Any& _rValue, ControlModelLock& _rInstanceLock )
+    void OEntryListHelper::setNewTypedItemList( const cpo::uno::Any& _rValue, ControlModelLock& _rInstanceLock )
     {
         OSL_PRECOND( !hasExternalListSource(), "OEntryListHelper::setNewTypedItemList: this should never have survived convertNewListSourceProperty!" );
         if (!(_rValue >>= m_aTypedItems ))

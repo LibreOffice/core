@@ -163,7 +163,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf148897)
     auto xModel = mxComponent.queryThrow<frame::XModel>();
     uno::Reference<drawing::XShape> xShape(getShapeByName(u"Image3"));
     uno::Reference<view::XSelectionSupplier> xCtrl(xModel->getCurrentController(), uno::UNO_QUERY);
-    xCtrl->select(uno::Any(xShape));
+    xCtrl->select(cpo::uno::Any(xShape));
 
     dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
 
@@ -1429,7 +1429,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTableCellInvalidate)
     // does *not* forward initial VCL Window Resize and thereby triggers a
     // layout which does not happen on soffice --convert-to pdf.
     std::vector<beans::PropertyValue> aFilterOptions = {
-        { beans::PropertyValue(u"Hidden"_ustr, -1, uno::Any(true),
+        { beans::PropertyValue(u"Hidden"_ustr, -1, cpo::uno::Any(true),
                                beans::PropertyState_DIRECT_VALUE) },
     };
 

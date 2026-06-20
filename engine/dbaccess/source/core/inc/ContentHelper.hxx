@@ -86,7 +86,7 @@ namespace dbaccess
     class OContentHelper :   public ::cppu::BaseMutex
                             ,public OContentHelper_COMPBASE
     {
-        css::uno::Sequence< css::uno::Any >
+        css::uno::Sequence< cpo::uno::Any >
             setPropertyValues( const css::uno::Sequence< css::beans::PropertyValue >& rValues );
 
         void impl_rename_throw(const OUString& _sNewName,bool _bNotify = true);
@@ -139,7 +139,7 @@ namespace dbaccess
 
         // XCommandProcessor
         virtual sal_Int32 SAL_CALL createCommandIdentifier(  ) override ;
-        virtual css::uno::Any SAL_CALL execute( const css::ucb::Command& aCommand, sal_Int32 CommandId, const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override ;
+        virtual cpo::uno::Any SAL_CALL execute( const css::ucb::Command& aCommand, sal_Int32 CommandId, const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override ;
         virtual void SAL_CALL abort( sal_Int32 CommandId ) override ;
 
         // XPropertiesChangeNotifier
@@ -147,11 +147,11 @@ namespace dbaccess
         virtual void SAL_CALL removePropertiesChangeListener( const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) override ;
 
         // XPropertyContainer
-        virtual void SAL_CALL addProperty( const OUString& Name, sal_Int16 Attributes, const css::uno::Any& DefaultValue ) override ;
+        virtual void SAL_CALL addProperty( const OUString& Name, sal_Int16 Attributes, const cpo::uno::Any& DefaultValue ) override ;
         virtual void SAL_CALL removeProperty( const OUString& Name ) override ;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // css::container::XChild
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) override;

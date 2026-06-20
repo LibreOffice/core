@@ -138,9 +138,9 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testSemiTransparentText)
     xShapeText->getText()->setString(u"hello"_ustr);
 
     uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
-    xShapeProperties->setPropertyValue(u"CharColor"_ustr, uno::Any(COL_RED));
+    xShapeProperties->setPropertyValue(u"CharColor"_ustr, cpo::uno::Any(COL_RED));
     sal_Int16 nTransparence = 75;
-    xShapeProperties->setPropertyValue(u"CharTransparence"_ustr, uno::Any(nTransparence));
+    xShapeProperties->setPropertyValue(u"CharTransparence"_ustr, cpo::uno::Any(nTransparence));
 
     // Generates drawinglayer primitives for the page.
     auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
@@ -172,9 +172,9 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testHandlePathObjScale)
     xShape->setPosition(awt::Point(2512, 6062));
     xShape->setSize(awt::Size(112, 112));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    xShapeProps->setPropertyValue(u"FillStyle"_ustr, uno::Any(drawing::FillStyle_SOLID));
-    xShapeProps->setPropertyValue(u"LineStyle"_ustr, uno::Any(drawing::LineStyle_SOLID));
-    xShapeProps->setPropertyValue(u"FillColor"_ustr, uno::Any(static_cast<sal_Int32>(0)));
+    xShapeProps->setPropertyValue(u"FillStyle"_ustr, cpo::uno::Any(drawing::FillStyle_SOLID));
+    xShapeProps->setPropertyValue(u"LineStyle"_ustr, cpo::uno::Any(drawing::LineStyle_SOLID));
+    xShapeProps->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(static_cast<sal_Int32>(0)));
     // Add it to the draw page.
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -216,7 +216,8 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testHandlePathObjScale)
             drawing::PolygonFlags_NORMAL,
         },
     };
-    xShapeProps->setPropertyValue(u"PolyPolygonBezier"_ustr, uno::Any(aPolyPolygonBezierCoords));
+    xShapeProps->setPropertyValue(u"PolyPolygonBezier"_ustr,
+                                  cpo::uno::Any(aPolyPolygonBezierCoords));
     drawing::HomogenMatrix3 aMatrix;
     aMatrix.Line1.Column1 = 56;
     aMatrix.Line2.Column1 = -97;
@@ -227,7 +228,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testHandlePathObjScale)
     aMatrix.Line1.Column3 = 3317;
     aMatrix.Line2.Column3 = 5583;
     aMatrix.Line3.Column3 = 1;
-    xShapeProps->setPropertyValue(u"Transformation"_ustr, uno::Any(aMatrix));
+    xShapeProps->setPropertyValue(u"Transformation"_ustr, cpo::uno::Any(aMatrix));
 
     // Then make sure the scaling is only applied once:
     // Without the accompanying fix in place, this test would have failed with:
@@ -895,7 +896,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testVisualSignResize)
     // Select it and assign a certificate.
     uno::Reference<view::XSelectionSupplier> xSelectionSupplier(pBaseModel->getCurrentController(),
                                                                 uno::UNO_QUERY);
-    xSelectionSupplier->select(uno::Any(xShape));
+    xSelectionSupplier->select(cpo::uno::Any(xShape));
     auto xEnv = getSecurityContext()->getSecurityEnvironment();
     auto xCert = GetValidCertificate(xEnv->getPersonalCertificates(), xEnv);
     if (!xCert)

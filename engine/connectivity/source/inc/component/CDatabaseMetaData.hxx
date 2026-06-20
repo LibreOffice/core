@@ -30,7 +30,7 @@ namespace connectivity::component
     class OOO_DLLPUBLIC_FILE OComponentDatabaseMetaData :   public file::ODatabaseMetaData
     {
         virtual css::uno::Reference< css::sdbc::XResultSet > impl_getTypeInfo_throw() override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getColumns( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const OUString& columnNamePattern ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getColumns( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const OUString& columnNamePattern ) override;
         virtual sal_Int32 SAL_CALL getMaxBinaryLiteralLength(  ) override;
         virtual sal_Int32 SAL_CALL getMaxCharLiteralLength(  ) override;
         virtual sal_Int32 SAL_CALL getMaxColumnNameLength(  ) override;

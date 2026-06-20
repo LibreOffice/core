@@ -146,10 +146,10 @@ ScSortItem* ScSortItem::Clone( SfxItemPool * ) const
     return new ScSortItem( *this );
 }
 
-bool ScSortItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /* nMemberUd */ ) const
+bool ScSortItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /* nMemberUd */ ) const
 {
     // Return empty value as there is no useful conversion
-    rVal = css::uno::Any();
+    rVal = cpo::uno::Any();
     return true;
 }
 
@@ -244,10 +244,10 @@ ScSubTotalItem* ScSubTotalItem::Clone( SfxItemPool * ) const
     return new ScSubTotalItem( *this );
 }
 
-bool ScSubTotalItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /* nMemberUd */ ) const
+bool ScSubTotalItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /* nMemberUd */ ) const
 {
     // Return empty value as there is no useful conversion
-    rVal = css::uno::Any();
+    rVal = cpo::uno::Any();
     return true;
 }
 

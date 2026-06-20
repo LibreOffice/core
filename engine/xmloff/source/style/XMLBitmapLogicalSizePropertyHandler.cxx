@@ -18,11 +18,12 @@
  */
 
 #include <xmloff/xmluconv.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <XMLBitmapLogicalSizePropertyHandler.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 
 XMLBitmapLogicalSizePropertyHandler::XMLBitmapLogicalSizePropertyHandler()

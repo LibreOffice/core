@@ -222,7 +222,7 @@ namespace connectivity::hsqldb
         catch( const RuntimeException& ) { throw; }
         catch( const Exception& )
         {
-            css::uno::Any anyEx = cppu::getCaughtException();
+            cpo::uno::Any anyEx = cppu::getCaughtException();
             ::connectivity::SharedResources aResources;
             const OUString sError( aResources.getResourceString(STR_NO_TABLE_CONTAINER));
             throw WrappedTargetException( sError ,*this, anyEx );

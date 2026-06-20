@@ -34,7 +34,7 @@
 
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::task { class XStatusIndicator; }
-namespace com::sun::star::uno { class Any; }
+namespace cpo::uno { class Any; }
 namespace com::sun::star::uno { class XInterface; }
 
 class VCL_DLLPUBLIC FilterConfigItem
@@ -45,7 +45,7 @@ class VCL_DLLPUBLIC FilterConfigItem
 
     bool    bModified;
 
-    static bool ImplGetPropertyValue( css::uno::Any& rAny,
+    static bool ImplGetPropertyValue( cpo::uno::Any& rAny,
                             const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
                             const OUString& rPropName );
 

@@ -84,7 +84,7 @@ public:
 class KitTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransferable>
 {
     css::uno::Sequence<css::datatransfer::DataFlavor> m_aFlavors;
-    std::vector<css::uno::Any> m_aContent;
+    std::vector<cpo::uno::Any> m_aContent;
 
 public:
     /**
@@ -98,7 +98,7 @@ public:
                     const char** pInStreams);
     KitTransferable(const OUString& sMimeType, const css::uno::Sequence<sal_Int8>& aSequence);
 
-    css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override;
+    cpo::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override;
 
     css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
 
@@ -139,10 +139,10 @@ public:
 
     css::uno::Reference<css::uno::XInterface> SAL_CALL createInstance() override
     {
-        return createInstanceWithArguments(css::uno::Sequence<css::uno::Any>());
+        return createInstanceWithArguments(css::uno::Sequence<cpo::uno::Any>());
     }
     css::uno::Reference<css::uno::XInterface> SAL_CALL
-    createInstanceWithArguments(const css::uno::Sequence<css::uno::Any>& /* rArgs */) override;
+    createInstanceWithArguments(const css::uno::Sequence<cpo::uno::Any>& /* rArgs */) override;
 
     /// Fetch clipboard from the global pool.
     static rtl::Reference<KitClipboard> getClipboardForCurView();

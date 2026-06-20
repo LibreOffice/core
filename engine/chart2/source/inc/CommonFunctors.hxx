@@ -20,7 +20,7 @@
 
 #include <o3tl/any.hxx>
 #include <rtl/math.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 
@@ -30,7 +30,7 @@
 namespace chart::CommonFunctors
 {
 
-/** unary function to convert any type T into a css::uno::Any.
+/** unary function to convert any type T into a cpo::uno::Any.
 
     <p>uno::makeAny is an inline function.  Thus is cannot be taken directly
     (via mem_fun_ptr)</p>
@@ -38,20 +38,20 @@ namespace chart::CommonFunctors
 struct makeAny
 {
     template< typename T >
-    css::uno::Any operator() ( const T & aVal )
+    cpo::uno::Any operator() ( const T & aVal )
     {
-        return css::uno::Any( aVal );
+        return cpo::uno::Any( aVal );
     }
 };
 
-/** unary function to convert an OUString or css::uno::Any into a double number.
+/** unary function to convert an OUString or cpo::uno::Any into a double number.
 
     <p>For conversion of OUString, rtl::math::StringToDouble is used.</p>
     <p>In case no number can be generated from the Any, NaN is returned.</p>
  */
 struct ToDouble
 {
-    double operator() ( const css::uno::Any & rAny )
+    double operator() ( const cpo::uno::Any & rAny )
     {
         double fResult = std::numeric_limits<double>::quiet_NaN();
         rAny >>= fResult;
@@ -70,13 +70,13 @@ struct ToDouble
     }
 };
 
-/** unary function to convert a double number or css::uno::Any into an OUString.
+/** unary function to convert a double number or cpo::uno::Any into an OUString.
 
     <p>For conversion of doubles, rtl::math::DoubleToOUString is used.</p>
  */
 struct ToString
 {
-    OUString operator() ( const css::uno::Any & rAny )
+    OUString operator() ( const cpo::uno::Any & rAny )
     {
         if( auto pDouble = o3tl::tryAccess<double>(rAny) )
         {

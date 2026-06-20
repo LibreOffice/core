@@ -255,8 +255,8 @@ CPPUNIT_TEST_FIXTURE(Test, testAutoColorOnDarkBackground)
     // Cell 1: explicit white fill
     uno::Reference<beans::XPropertySet> xCell1(pTableObject->getTable()->getCellByPosition(0, 1),
                                                uno::UNO_QUERY_THROW);
-    xCell1->setPropertyValue(u"FillStyle"_ustr, uno::Any(css::drawing::FillStyle_SOLID));
-    xCell1->setPropertyValue(u"FillColor"_ustr, uno::Any(sal_Int32(COL_WHITE)));
+    xCell1->setPropertyValue(u"FillStyle"_ustr, cpo::uno::Any(css::drawing::FillStyle_SOLID));
+    xCell1->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(sal_Int32(COL_WHITE)));
     rOutliner.Clear();
     rOutliner.Insert(u"Test"_ustr);
     pTableObject->getText(1)->SetOutlinerParaObject(rOutliner.CreateParaObject());
@@ -264,8 +264,8 @@ CPPUNIT_TEST_FIXTURE(Test, testAutoColorOnDarkBackground)
     // Cell 2: explicit black fill
     uno::Reference<beans::XPropertySet> xCell2(pTableObject->getTable()->getCellByPosition(0, 2),
                                                uno::UNO_QUERY_THROW);
-    xCell2->setPropertyValue(u"FillStyle"_ustr, uno::Any(css::drawing::FillStyle_SOLID));
-    xCell2->setPropertyValue(u"FillColor"_ustr, uno::Any(sal_Int32(COL_BLACK)));
+    xCell2->setPropertyValue(u"FillStyle"_ustr, cpo::uno::Any(css::drawing::FillStyle_SOLID));
+    xCell2->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(sal_Int32(COL_BLACK)));
     rOutliner.Clear();
     rOutliner.Insert(u"Test"_ustr);
     pTableObject->getText(2)->SetOutlinerParaObject(rOutliner.CreateParaObject());

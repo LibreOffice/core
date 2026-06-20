@@ -65,6 +65,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::system;
 
@@ -130,7 +131,7 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
         if ( !xFilterCFG.is() )
             return eRet;
 
-        uno::Any aAny = xFilterCFG->getByName( rFilterName );
+        cpo::uno::Any aAny = xFilterCFG->getByName( rFilterName );
 
         if ( aAny >>= aProps )
         {

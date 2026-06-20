@@ -52,7 +52,7 @@ namespace pcr
 
         // OGenericUnoDialog overridables
         virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
-        virtual void implInitialize(const css::uno::Any& _rValue) override;
+        virtual void implInitialize(const cpo::uno::Any& _rValue) override;
 
         css::uno::Reference< css::beans::XPropertySet> m_xDetail;
         css::uno::Reference< css::beans::XPropertySet> m_xMaster;

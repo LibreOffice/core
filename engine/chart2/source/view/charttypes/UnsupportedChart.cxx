@@ -109,7 +109,7 @@ void UnsupportedChart::createShapes()
 
     rtl::Reference<SvxShapeText> xTextShape
         = ShapeFactory::createText(xSeriesTarget, SchResId(STR_UNSUPPORTED_CHART_TYPE), aPropNames,
-                                   aPropValues, uno::Any(B2DHomMatrixToHomogenMatrix3(aM)));
+                                   aPropValues, cpo::uno::Any(B2DHomMatrixToHomogenMatrix3(aM)));
 }
 
 } //namespace chart

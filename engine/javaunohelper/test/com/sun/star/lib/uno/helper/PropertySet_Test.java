@@ -23,7 +23,7 @@ import com.sun.star.lang.DisposedException;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.XInterface;
-import com.sun.star.uno.Any;
+import cpo.uno.Any;
 import com.sun.star.uno.XWeak;
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.Property;

@@ -25,7 +25,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XLocalizable.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <comphelper/configuration.hxx>
@@ -81,7 +81,7 @@ comphelper::ConfigurationChanges::ConfigurationChanges(
 {}
 
 void comphelper::ConfigurationChanges::setPropertyValue(
-    OUString const & path, css::uno::Any const & value) const
+    OUString const & path, cpo::uno::Any const & value) const
 {
     access_->replaceByHierarchicalName(path, value);
 }
@@ -125,7 +125,7 @@ bool comphelper::detail::ConfigurationWrapper::isReadOnly(OUString const & path)
         != 0;
 }
 
-css::uno::Any comphelper::detail::ConfigurationWrapper::getPropertyValue(std::u16string_view path) const
+cpo::uno::Any comphelper::detail::ConfigurationWrapper::getPropertyValue(std::u16string_view path) const
 {
     // should be short-circuited in ConfigurationProperty::get()
     assert(!comphelper::IsFuzzing());
@@ -157,13 +157,13 @@ css::uno::Any comphelper::detail::ConfigurationWrapper::getPropertyValue(std::u1
 
 void comphelper::detail::ConfigurationWrapper::setPropertyValue(
     std::shared_ptr< ConfigurationChanges > const & batch,
-    OUString const & path, css::uno::Any const & value)
+    OUString const & path, cpo::uno::Any const & value)
 {
     assert(batch);
     batch->setPropertyValue(path, value);
 }
 
-css::uno::Any
+cpo::uno::Any
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(
     std::u16string_view path) const
 {
@@ -173,7 +173,7 @@ comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(
 
 void comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(
     std::shared_ptr< ConfigurationChanges > const & batch,
-    OUString const & path, css::uno::Any const & value)
+    OUString const & path, cpo::uno::Any const & value)
 {
     assert(batch);
     batch->setPropertyValue(path, value);
@@ -277,7 +277,7 @@ void SAL_CALL comphelper::ConfigurationListener::propertyChange(
         if ( listener->maName == rEvt.PropertyName )
         {
             // ignore rEvt.NewValue - in theory it could be stale => not set.
-            css::uno::Any aValue = mxConfig->getPropertyValue( listener->maName );
+            cpo::uno::Any aValue = mxConfig->getPropertyValue( listener->maName );
             listener->setProperty( aValue );
         }
     }

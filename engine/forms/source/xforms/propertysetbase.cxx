@@ -23,7 +23,7 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-using com::sun::star::uno::Any;
+using cpo::uno::Any;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Exception;
 using com::sun::star::lang::IllegalArgumentException;

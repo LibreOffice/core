@@ -467,7 +467,7 @@ void Clipboard::CreateSlideTransferable (
     // Makes it possible at paste site to determine that the origin is the slide sorter
     uno::Reference<document::XDocumentProperties> xDestination = pTransferable->GetWorkDocument()->GetDocSh()->getDocProperties();
     uno::Reference<beans::XPropertyContainer> xDestinationPropertyContainer = xDestination->getUserDefinedProperties();
-    xDestinationPropertyContainer->addProperty(u"slidesorter"_ustr, beans::PropertyAttribute::REMOVABLE, uno::Any(true));
+    xDestinationPropertyContainer->addProperty(u"slidesorter"_ustr, beans::PropertyAttribute::REMOVABLE, cpo::uno::Any(true));
 
     if (pDataDocSh != nullptr)
         pObjDesc->maDisplayName = pDataDocSh->GetMedium()->GetURLObject().GetURLNoPass();

@@ -47,7 +47,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::animations;
 
 using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;

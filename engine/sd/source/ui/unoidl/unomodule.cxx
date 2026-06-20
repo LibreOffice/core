@@ -60,7 +60,7 @@ void SAL_CALL SdUnoModule::dispatchWithNotification( const util::URL& aURL, cons
     {
         xListener->dispatchFinished(
             frame::DispatchResultEvent(
-                    xThis, aState, uno::Any()));
+                    xThis, aState, cpo::uno::Any()));
     }
 }
     // XDispatch
@@ -122,7 +122,7 @@ uno::Sequence< OUString > SAL_CALL SdUnoModule::getSupportedServiceNames(  )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Draw_DrawingModule_get_implementation(css::uno::XComponentContext* ,
-                                                        css::uno::Sequence<css::uno::Any> const &)
+                                                        css::uno::Sequence<cpo::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
 

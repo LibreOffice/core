@@ -64,7 +64,7 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules, noexclude):
 
     # Avoid .hxx to .h proposals in basic css/uno/* and basic URE API
     unoapi = {
-        "com/sun/star/uno/Any.hxx": "com/sun/star/uno/Any.h",
+        "cpo/uno/Any.hxx": "cpo/uno/Any.h",
         "com/sun/star/uno/Reference.hxx": "com/sun/star/uno/Reference.h",
         "com/sun/star/uno/Sequence.hxx": "com/sun/star/uno/Sequence.h",
         "com/sun/star/uno/Type.hxx": "com/sun/star/uno/Type.h",

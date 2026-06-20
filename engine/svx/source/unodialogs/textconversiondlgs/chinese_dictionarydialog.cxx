@@ -38,6 +38,7 @@ namespace textconversiondlgs
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 DictionaryList::DictionaryList(std::unique_ptr<weld::TreeView> xControl)
     : m_xControl(std::move(xControl))
@@ -626,7 +627,7 @@ short ChineseDictionaryDialog::run()
     {
         //save settings to configuration
         SvtLinguConfig  aLngCfg;
-        aLngCfg.SetProperty( UPN_IS_REVERSE_MAPPING, uno::Any(m_xCB_Reverse->get_active()) );
+        aLngCfg.SetProperty( UPN_IS_REVERSE_MAPPING, cpo::uno::Any(m_xCB_Reverse->get_active()) );
 
         m_xCT_DictionaryToSimplified->save();
         m_xCT_DictionaryToTraditional->save();

@@ -449,7 +449,7 @@ void XMLShapeImportHelper::addShape( uno::Reference< drawing::XShape >& rShape,
         uno::Reference<beans::XPropertySet> xPropertySet(rShape, uno::UNO_QUERY);
         if (xPropertySet.is())
         {
-            xPropertySet->setPropertyValue(u"HandlePathObjScale"_ustr, uno::Any(true));
+            xPropertySet->setPropertyValue(u"HandlePathObjScale"_ustr, cpo::uno::Any(true));
         }
     }
 }
@@ -483,7 +483,7 @@ void XMLShapeImportHelper::finishShape(
              xPropSet->getPropertySetInfo()->hasPropertyByName(
                 u"PositionLayoutDir"_ustr) )
         {
-            uno::Any aPosLayoutDir;
+            cpo::uno::Any aPosLayoutDir;
             aPosLayoutDir <<= text::PositionLayoutDir::PositionInHoriL2R;
             xPropSet->setPropertyValue( u"PositionLayoutDir"_ustr, aPosLayoutDir );
         }
@@ -533,14 +533,14 @@ ShapeGroupContext::ShapeGroupContext( uno::Reference< drawing::XShapes > xShapes
 
 void ShapeGroupContext::moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos )
 {
-    uno::Any aAny( mxShapes->getByIndex( nSourcePos ) );
+    cpo::uno::Any aAny( mxShapes->getByIndex( nSourcePos ) );
     uno::Reference< beans::XPropertySet > xPropSet;
     aAny >>= xPropSet;
 
     if( !(xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName( u"ZOrder"_ustr )) )
         return;
 
-    xPropSet->setPropertyValue( u"ZOrder"_ustr, uno::Any(nDestPos) );
+    xPropSet->setPropertyValue( u"ZOrder"_ustr, cpo::uno::Any(nDestPos) );
 
     for( ZOrderHint& rHint : maZOrderList )
     {
@@ -799,9 +799,9 @@ void XMLShapeImportHelper::restoreConnections()
         if( xConnector.is() )
         {
             // #86637# remember line deltas
-            uno::Any aLine1Delta;
-            uno::Any aLine2Delta;
-            uno::Any aLine3Delta;
+            cpo::uno::Any aLine1Delta;
+            cpo::uno::Any aLine2Delta;
+            cpo::uno::Any aLine3Delta;
             OUString aStr1(u"EdgeLine1Delta"_ustr);
             OUString aStr2(u"EdgeLine2Delta"_ustr);
             OUString aStr3(u"EdgeLine3Delta"_ustr);
@@ -817,15 +817,15 @@ void XMLShapeImportHelper::restoreConnections()
             if( xShape.is() )
             {
                 if (rHint.bStart)
-                    xConnector->setPropertyValue( u"StartShape"_ustr, uno::Any(xShape) );
+                    xConnector->setPropertyValue( u"StartShape"_ustr, cpo::uno::Any(xShape) );
                 else
-                    xConnector->setPropertyValue( u"EndShape"_ustr, uno::Any(xShape) );
+                    xConnector->setPropertyValue( u"EndShape"_ustr, cpo::uno::Any(xShape) );
 
                 sal_Int32 nGlueId = rHint.nDestGlueId < 4 ? rHint.nDestGlueId : getGluePointId( xShape, rHint.nDestGlueId );
                 if(rHint.bStart)
-                    xConnector->setPropertyValue( u"StartGluePointIndex"_ustr, uno::Any(nGlueId) );
+                    xConnector->setPropertyValue( u"StartGluePointIndex"_ustr, cpo::uno::Any(nGlueId) );
                 else
-                    xConnector->setPropertyValue( u"EndGluePointIndex"_ustr, uno::Any(nGlueId) );
+                    xConnector->setPropertyValue( u"EndGluePointIndex"_ustr, cpo::uno::Any(nGlueId) );
             }
 
             // #86637# restore line deltas

@@ -143,7 +143,7 @@ OUString SwMacroField::GetPar2() const
     return m_aText;
 }
 
-bool SwMacroField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwMacroField::QueryValue( cpo::uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -165,7 +165,7 @@ bool SwMacroField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     return true;
 }
 
-bool SwMacroField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwMacroField::PutValue( const cpo::uno::Any& rAny, sal_uInt16 nWhichId )
 {
     OUString sTmp;
     switch( nWhichId )

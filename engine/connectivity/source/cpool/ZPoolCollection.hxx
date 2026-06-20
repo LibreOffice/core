@@ -102,7 +102,7 @@ namespace connectivity
         virtual ~OPoolCollection() override;
     public:
 
-        static css::uno::Any getNodeValue( const OUString& _rPath,
+        static cpo::uno::Any getNodeValue( const OUString& _rPath,
                                                         const css::uno::Reference< css::uno::XInterface>& _xTreeNode)noexcept;
 
     // XDriverManager

@@ -217,7 +217,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDropdownInCell)
             uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
             uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
             CPPUNIT_ASSERT(xFields->hasMoreElements());
-            uno::Any aField = xFields->nextElement();
+            cpo::uno::Any aField = xFields->nextElement();
             uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
             CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.text.textfield.DropDown"_ustr));
         }
@@ -336,7 +336,7 @@ DECLARE_OOXMLEXPORT_TEST(testNumberingFont, "numbering-font.docx")
 
     uno::Reference<text::XTextRange> xPara = getParagraph(2);
     uno::Reference<beans::XPropertySet> properties(xPara, uno::UNO_QUERY);
-    uno::Any aValue = properties->getPropertyValue(u"ListAutoFormat"_ustr);
+    cpo::uno::Any aValue = properties->getPropertyValue(u"ListAutoFormat"_ustr);
     CPPUNIT_ASSERT(aValue.hasValue());
     uno::Sequence<beans::NamedValue> aListAutoFormat;
     CPPUNIT_ASSERT(aValue >>= aListAutoFormat);
@@ -903,7 +903,7 @@ DECLARE_OOXMLEXPORT_TEST(testTDF99434, "protectedform.docx")
 {
     css::uno::Reference<css::lang::XMultiServiceFactory> m_xTextFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference< beans::XPropertySet > xSettings(m_xTextFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
-    uno::Any aProtect = xSettings->getPropertyValue(u"ProtectForm"_ustr);
+    cpo::uno::Any aProtect = xSettings->getPropertyValue(u"ProtectForm"_ustr);
     bool bProt = false;
     aProtect >>= bProt;
     CPPUNIT_ASSERT(bProt);

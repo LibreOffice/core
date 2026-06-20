@@ -197,7 +197,7 @@ void setStackModeAtSeries(
     const rtl::Reference< BaseCoordinateSystem > & xCorrespondingCoordinateSystem,
     StackMode eStackMode )
 {
-    const uno::Any aPropValue(
+    const cpo::uno::Any aPropValue(
         ( (eStackMode == StackMode::YStacked) ||
           (eStackMode == StackMode::YStackedPercent) )
         ? chart2::StackingDirection_Y_STACKING
@@ -344,7 +344,7 @@ void insertDataLabelToPoint( const Reference< beans::XPropertySet >& xPointProp 
             DataPointLabel aLabel;
             xPointProp->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabel;
             aLabel.ShowNumber = true;
-            xPointProp->setPropertyValue(CHART_UNONAME_LABEL, uno::Any(aLabel));
+            xPointProp->setPropertyValue(CHART_UNONAME_LABEL, cpo::uno::Any(aLabel));
         }
     }
     catch(const uno::Exception &)
@@ -366,8 +366,8 @@ void deleteDataLabelsFromPoint( const Reference< beans::XPropertySet >& xPointPr
             aLabel.ShowCategoryName = false;
             aLabel.ShowCustomLabel = false;
             aLabel.ShowSeriesName = false;
-            xPointProp->setPropertyValue(CHART_UNONAME_LABEL, uno::Any(aLabel));
-            xPointProp->setPropertyValue(CHART_UNONAME_CUSTOM_LABEL_FIELDS, uno::Any());
+            xPointProp->setPropertyValue(CHART_UNONAME_LABEL, cpo::uno::Any(aLabel));
+            xPointProp->setPropertyValue(CHART_UNONAME_CUSTOM_LABEL_FIELDS, cpo::uno::Any());
         }
     }
     catch(const uno::Exception &)

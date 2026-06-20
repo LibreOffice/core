@@ -469,7 +469,7 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateActualizeProgressDia
    return VclPtr<CuiAbstractController_Impl<ActualizeProgress>>::Create(pParent, pThm);
 }
 
-void AbstractDialogFactory_Impl::ShowAsyncScriptErrorDialog(weld::Window* pParent, const css::uno::Any& rException)
+void AbstractDialogFactory_Impl::ShowAsyncScriptErrorDialog(weld::Window* pParent, const cpo::uno::Any& rException)
 {
     return SvxScriptErrorDialog::ShowAsyncErrorDialog(pParent, rException);
 }

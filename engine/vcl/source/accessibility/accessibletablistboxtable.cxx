@@ -29,6 +29,7 @@
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
 
@@ -73,7 +74,7 @@ void AccessibleTabListBoxTable::ProcessWindowEvent( const VclWindowEvent& rVclWi
         case VclEventId::ControlGetFocus :
         case VclEventId::ControlLoseFocus :
         {
-            uno::Any aOldValue, aNewValue;
+            cpo::uno::Any aOldValue, aNewValue;
             if ( nEventId == VclEventId::ControlGetFocus )
                 aNewValue <<= AccessibleStateType::FOCUSED;
             else
@@ -98,7 +99,7 @@ void AccessibleTabListBoxTable::ProcessWindowEvent( const VclWindowEvent& rVclWi
                     sal_uInt16 nCol = m_pTabListBox->GetCurrColumn();
                     Reference< XAccessible > xChild =
                         m_pTabListBox->CreateAccessibleCell( nRow, nCol );
-                    uno::Any aOldValue, aNewValue;
+                    cpo::uno::Any aOldValue, aNewValue;
                     aNewValue <<= xChild;
                     commitEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aNewValue, aOldValue );
                 }
@@ -107,7 +108,7 @@ void AccessibleTabListBoxTable::ProcessWindowEvent( const VclWindowEvent& rVclWi
         }
         case VclEventId::WindowGetFocus :
         {
-            uno::Any aOldValue, aNewValue;
+            cpo::uno::Any aOldValue, aNewValue;
             aNewValue <<= AccessibleStateType::FOCUSED;
             commitEvent( AccessibleEventId::STATE_CHANGED, aNewValue, aOldValue );
             break;
@@ -115,7 +116,7 @@ void AccessibleTabListBoxTable::ProcessWindowEvent( const VclWindowEvent& rVclWi
         }
         case VclEventId::WindowLoseFocus :
         {
-            uno::Any aOldValue, aNewValue;
+            cpo::uno::Any aOldValue, aNewValue;
             aOldValue <<= AccessibleStateType::FOCUSED;
             commitEvent( AccessibleEventId::STATE_CHANGED, aNewValue, aOldValue );
             break;
@@ -145,7 +146,7 @@ void AccessibleTabListBoxTable::ProcessWindowEvent( const VclWindowEvent& rVclWi
             {
                 if ( m_pTabListBox && m_pTabListBox->HasFocus() )
                 {
-                    uno::Any aOldValue, aNewValue;
+                    cpo::uno::Any aOldValue, aNewValue;
                     SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
                     if ( pEntry )
                     {

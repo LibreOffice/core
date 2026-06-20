@@ -38,10 +38,10 @@ using namespace com::sun::star;
 
 namespace
 {
-uno::Any jsonToUnoAny(const boost::property_tree::ptree& aTree)
+cpo::uno::Any jsonToUnoAny(const boost::property_tree::ptree& aTree)
 {
-    uno::Any aAny;
-    uno::Any aValue;
+    cpo::uno::Any aAny;
+    cpo::uno::Any aValue;
     sal_Int32 nFields;
     uno::Reference<reflection::XIdlField> aField;
     boost::property_tree::ptree aNodeNull, aNodeValue, aNodeField;
@@ -105,13 +105,13 @@ SequenceAsHashMap::SequenceAsHashMap()
 {
 }
 
-SequenceAsHashMap::SequenceAsHashMap(const css::uno::Any& aSource)
+SequenceAsHashMap::SequenceAsHashMap(const cpo::uno::Any& aSource)
 {
     (*this) << aSource;
 }
 
 
-SequenceAsHashMap::SequenceAsHashMap(const css::uno::Sequence< css::uno::Any >& lSource)
+SequenceAsHashMap::SequenceAsHashMap(const css::uno::Sequence< cpo::uno::Any >& lSource)
 {
     (*this) << lSource;
 }
@@ -126,7 +126,7 @@ SequenceAsHashMap::SequenceAsHashMap(const css::uno::Sequence< css::beans::Named
     (*this) << lSource;
 }
 
-void SequenceAsHashMap::operator<<(const css::uno::Any& aSource)
+void SequenceAsHashMap::operator<<(const cpo::uno::Any& aSource)
 {
     // An empty Any reset this instance!
     if (!aSource.hasValue())
@@ -155,7 +155,7 @@ void SequenceAsHashMap::operator<<(const css::uno::Any& aSource)
 }
 
 
-void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::uno::Any >& lSource)
+void SequenceAsHashMap::operator<<(const css::uno::Sequence< cpo::uno::Any >& lSource)
 {
     sal_Int32 c = lSource.getLength();
     sal_Int32 i = 0;
@@ -251,9 +251,9 @@ void SequenceAsHashMap::operator>>(css::uno::Sequence< css::beans::NamedValue >&
     }
 }
 
-css::uno::Any SequenceAsHashMap::getAsConstAny(bool bAsPropertyValueList) const
+cpo::uno::Any SequenceAsHashMap::getAsConstAny(bool bAsPropertyValueList) const
 {
-    css::uno::Any aDestination;
+    cpo::uno::Any aDestination;
     if (bAsPropertyValueList)
         aDestination <<= getAsConstPropertyValueList();
     else
@@ -280,13 +280,13 @@ bool SequenceAsHashMap::match(const SequenceAsHashMap& rCheck) const
     for (auto const& elem : rCheck)
     {
         const OUString& sCheckName  = elem.first.maString;
-        const css::uno::Any&   aCheckValue = elem.second;
+        const cpo::uno::Any&   aCheckValue = elem.second;
         const_iterator         pFound      = find(sCheckName);
 
         if (pFound == end())
             return false;
 
-        const css::uno::Any& aFoundValue = pFound->second;
+        const cpo::uno::Any& aFoundValue = pFound->second;
         if (aFoundValue != aCheckValue)
             return false;
     }
@@ -361,7 +361,7 @@ std::vector<css::beans::PropertyValue> JsonToPropertyValues(const boost::propert
             aNodeValue = rPair.second.get_child("value", aNodeNull);
             if (aNodeValue != aNodeNull && !aNodeValue.empty())
             {
-                uno::Sequence<uno::Any> aSeq(aNodeValue.size());
+                uno::Sequence<cpo::uno::Any> aSeq(aNodeValue.size());
                 std::transform(aNodeValue.begin(), aNodeValue.end(), aSeq.getArray(),
                                [](const auto& rSeqPair) { return jsonToUnoAny(rSeqPair.second); });
                 aValue.Value <<= aSeq;

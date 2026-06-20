@@ -23,6 +23,7 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace connectivity::commontools {
 

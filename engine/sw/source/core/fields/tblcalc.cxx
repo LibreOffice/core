@@ -141,7 +141,7 @@ void SwTableField::SetPar2(const OUString& rStr)
     SetFormula( rStr );
 }
 
-bool SwTableField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwTableField::QueryValue( cpo::uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     bool bRet = true;
     switch ( nWhichId )
@@ -170,7 +170,7 @@ bool SwTableField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     return bRet;
 }
 
-bool SwTableField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwTableField::PutValue( const cpo::uno::Any& rAny, sal_uInt16 nWhichId )
 {
     bool bRet = true;
     switch ( nWhichId )

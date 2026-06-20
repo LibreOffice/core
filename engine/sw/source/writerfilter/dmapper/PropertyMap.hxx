@@ -27,7 +27,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 #include <com/sun/star/drawing/XShape.hpp>
 #include "PropertyIds.hxx"
 #include <unofootnote.hxx>
@@ -103,19 +103,19 @@ typedef tools::SvRef< RedlineParams > RedlineParamsPtr;
 class PropValue
 {
 private:
-    css::uno::Any m_aValue;
+    cpo::uno::Any m_aValue;
     GrabBagType   m_GrabBagType;
     bool          m_bIsDocDefault;
 
 public:
-    PropValue( css::uno::Any aValue, GrabBagType i_GrabBagType, bool bDocDefault )
+    PropValue( cpo::uno::Any aValue, GrabBagType i_GrabBagType, bool bDocDefault )
         : m_aValue(std::move( aValue ))
         , m_GrabBagType( i_GrabBagType )
         , m_bIsDocDefault( bDocDefault )
     {
     }
 
-    PropValue( css::uno::Any aValue, GrabBagType i_GrabBagType )
+    PropValue( cpo::uno::Any aValue, GrabBagType i_GrabBagType )
         : m_aValue(std::move( aValue ))
         , m_GrabBagType( i_GrabBagType )
         , m_bIsDocDefault( false )
@@ -129,7 +129,7 @@ public:
     {
     }
 
-    const css::uno::Any& getValue() const { return m_aValue; }
+    const cpo::uno::Any& getValue() const { return m_aValue; }
 
     GrabBagType getGrabBagType() const { return m_GrabBagType; }
 
@@ -153,7 +153,7 @@ private:
     std::vector< RedlineParamsPtr >             m_aRedlines;
 
 public:
-    typedef std::pair< PropertyIds, css::uno::Any > Property;
+    typedef std::pair< PropertyIds, cpo::uno::Any > Property;
 
     PropertyMap() {}
 
@@ -164,7 +164,7 @@ public:
     std::vector< PropertyIds > GetPropertyIds();
 
     // Add property, optionally overwriting existing attributes
-    void Insert( PropertyIds eId, const css::uno::Any& rAny, bool bOverwrite = true, GrabBagType i_GrabBagType = NO_GRAB_BAG, bool bDocDefault = false );
+    void Insert( PropertyIds eId, const cpo::uno::Any& rAny, bool bOverwrite = true, GrabBagType i_GrabBagType = NO_GRAB_BAG, bool bDocDefault = false );
 
     // Remove a named property from *this, does nothing if the property id has not been set
     void Erase( PropertyIds eId);
@@ -172,7 +172,7 @@ public:
     // Imports properties from pMap (bOverwrite==false means m_bIsDocDefault=true setting)
     void InsertProps( const PropertyMapPtr& rMap, const bool bOverwrite = true );
 
-    // Returns a copy of the property if it exists, .first is its PropertyIds and .second is its Value (type css::uno::Any)
+    // Returns a copy of the property if it exists, .first is its PropertyIds and .second is its Value (type cpo::uno::Any)
     std::optional< Property > getProperty( PropertyIds eId ) const;
 
     // Has the property named been set (via Insert)?

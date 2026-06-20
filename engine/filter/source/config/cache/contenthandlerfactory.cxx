@@ -42,12 +42,12 @@ ContentHandlerFactory::~ContentHandlerFactory()
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::createInstance(const OUString& sHandler)
 {
-    return createInstanceWithArguments(sHandler, css::uno::Sequence< css::uno::Any >());
+    return createInstanceWithArguments(sHandler, css::uno::Sequence< cpo::uno::Any >());
 }
 
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::createInstanceWithArguments(const OUString&                     sHandler  ,
-                                                                                                        const css::uno::Sequence< css::uno::Any >& lArguments)
+                                                                                                        const css::uno::Sequence< cpo::uno::Any >& lArguments)
 {
     css::uno::Reference< css::uno::XInterface > xHandler;
 
@@ -73,8 +73,8 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
         css::uno::Sequence< css::beans::PropertyValue > lConfig;
         aHandler >> lConfig;
 
-        ::std::vector< css::uno::Any > stlArguments(comphelper::sequenceToContainer< ::std::vector< css::uno::Any > >(lArguments));
-        stlArguments.insert(stlArguments.begin(), css::uno::Any(lConfig));
+        ::std::vector< cpo::uno::Any > stlArguments(comphelper::sequenceToContainer< ::std::vector< cpo::uno::Any > >(lArguments));
+        stlArguments.insert(stlArguments.begin(), cpo::uno::Any(lConfig));
 
         xInit->initialize(comphelper::containerToSequence(stlArguments));
     }
@@ -94,7 +94,7 @@ css::uno::Sequence< OUString > SAL_CALL ContentHandlerFactory::getAvailableServi
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_ContentHandlerFactory_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new filter::config::ContentHandlerFactory(context));
 }

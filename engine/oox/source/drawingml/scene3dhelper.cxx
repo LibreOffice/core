@@ -281,7 +281,7 @@ void Scene3DHelper::addRotateAngleToMap(oox::PropertyMap& rPropertyMap, const do
     aAnglePair.First.Type = css::drawing::EnhancedCustomShapeParameterType::NORMAL;
     aAnglePair.Second.Value <<= basegfx::rad2deg(fY);
     aAnglePair.Second.Type = css::drawing::EnhancedCustomShapeParameterType::NORMAL;
-    rPropertyMap.setAnyProperty(oox::PROP_RotateAngle, css::uno::Any(aAnglePair));
+    rPropertyMap.setAnyProperty(oox::PROP_RotateAngle, cpo::uno::Any(aAnglePair));
 }
 
 void Scene3DHelper::addExtrusionDepthToMap(const oox::drawingml::Shape3DPropertiesPtr p3DProperties,
@@ -724,7 +724,7 @@ void lcl_getXYAnglesFromMap(const oox::PropertyMap& rPropertyMap, double& rfX, d
     if (!rPropertyMap.hasProperty(oox::PROP_RotateAngle))
         return;
     css::drawing::EnhancedCustomShapeParameterPair aAnglePair;
-    css::uno::Any aAny = rPropertyMap.getProperty(oox::PROP_RotateAngle);
+    cpo::uno::Any aAny = rPropertyMap.getProperty(oox::PROP_RotateAngle);
     if (aAny >>= aAnglePair)
     {
         rfX = basegfx::deg2rad(aAnglePair.First.Value.get<double>());

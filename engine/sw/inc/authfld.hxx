@@ -82,8 +82,8 @@ public:
 
     virtual std::unique_ptr<SwFieldType> Copy() const override;
 
-    virtual void        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
-    virtual void        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhichId ) override;
+    virtual void        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
+    virtual void        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhichId ) override;
 
     void                SetDoc(SwDoc* pNewDoc)              { m_pDoc = pNewDoc; }
     SwDoc*              GetDoc(){ return m_pDoc; }
@@ -190,8 +190,8 @@ public:
     virtual void        SetPar1(const OUString& rStr) override;
     virtual SwFieldType* ChgTyp( SwFieldType* ) override;
 
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhichId ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhichId ) override;
 
     SwAuthEntry*        GetAuthEntry() const       { return m_xAuthEntry.get(); }
 

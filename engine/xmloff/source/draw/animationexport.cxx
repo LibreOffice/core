@@ -78,7 +78,7 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
 
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::Reference;
@@ -1417,7 +1417,7 @@ void AnimationsExporterImpl::exportCommand( const Reference< XCommand >& xComman
         SvXMLUnitConverter::convertEnum( sTmp, nCommand, aAnimations_EnumMap_Command );
         mxExport->AddAttribute( XML_NAMESPACE_ANIMATION, XML_COMMAND, sTmp.makeStringAndClear() );
 
-    // todo virtual css::uno::Any SAL_CALL getParameter() throw (css::uno::RuntimeException) = 0;
+    // todo virtual cpo::uno::Any SAL_CALL getParameter() throw (css::uno::RuntimeException) = 0;
 
         SvXMLElementExport aElement( *mxExport, XML_NAMESPACE_ANIMATION, XML_COMMAND, true, true );
 

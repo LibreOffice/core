@@ -55,6 +55,7 @@ namespace basctl
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::script;
@@ -1018,7 +1019,7 @@ void DlgEdObj::SetDefaults()
         {
             // set tabindex
             Sequence< OUString > aNames = xCont->getElementNames();
-            uno::Any aTabIndex;
+            cpo::uno::Any aTabIndex;
             aTabIndex <<= static_cast<sal_Int16>(aNames.getLength());
             xPSet->setPropertyValue( DLGED_PROP_TABINDEX, aTabIndex );
 
@@ -1161,7 +1162,7 @@ void DlgEdObj::_propertyChange( const  css::beans::PropertyChangeEvent& evt )
             }
             catch (container::NoSuchElementException const&)
             {
-                css::uno::Any anyEx = cppu::getCaughtException();
+                cpo::uno::Any anyEx = cppu::getCaughtException();
                 throw lang::WrappedTargetRuntimeException(u""_ustr, nullptr,
                         anyEx);
             }

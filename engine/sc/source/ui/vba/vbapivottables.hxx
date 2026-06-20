@@ -40,7 +40,7 @@ public:
     // XPivotTables
 
     // ScVbaPivotTables_BASE
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 
     virtual OUString getServiceImplName() override;
 

@@ -28,13 +28,14 @@
 
 #include "rtl/alloc.h"
 
+namespace cpo::uno { class Any; }
+
 namespace com::sun::star::uno
 {
 
 class RuntimeException;
 class XInterface;
 class Type;
-class Any;
 
 /** Enum defining UNO_REF_NO_ACQUIRE for setting reference without acquiring a given interface.
     Deprecated, please use SAL_NO_ACQUIRE.
@@ -284,7 +285,7 @@ public:
         @param rAny an any
         @param dummy UNO_QUERY to force obvious distinction to other constructors
     */
-    inline Reference( const Any & rAny, UnoReference_Query dummy);
+    inline Reference( const cpo::uno::Any & rAny, UnoReference_Query dummy);
     /** Constructor: Queries given interface for reference interface type (interface_type).
         Throws a RuntimeException if the demanded interface cannot be queried.
 
@@ -312,7 +313,7 @@ public:
         @param dummy UNO_QUERY_THROW to force obvious distinction
                      to other constructors
     */
-    inline Reference( const Any & rAny, UnoReference_QueryThrow dummy );
+    inline Reference( const cpo::uno::Any & rAny, UnoReference_QueryThrow dummy );
     /** Constructor: assigns from the given interface of the same type. Throws a RuntimeException
         if the source interface is NULL.
 
@@ -413,7 +414,7 @@ public:
         @return
                 true, if non-null interface was set
     */
-    inline bool set( Any const & rAny, UnoReference_Query dummy );
+    inline bool set( cpo::uno::Any const & rAny, UnoReference_Query dummy );
 
     /** Queries given interface for reference interface type (interface_type) and sets it.
         An interface already set will be released.
@@ -447,7 +448,7 @@ public:
         @param dummy
                UNO_QUERY_THROW to force obvious distinction to set methods
     */
-    inline void set( Any const & rAny, UnoReference_QueryThrow dummy);
+    inline void set( cpo::uno::Any const & rAny, UnoReference_QueryThrow dummy);
     /** sets the given interface
         An interface already set will be released.
         Throws a RuntimeException if the source interface is @b NULL.

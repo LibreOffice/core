@@ -57,7 +57,7 @@ class CachedContentResultSet
     private:
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
-        css::uno::Any&
+        cpo::uno::Any&
         getRowAny( sal_Int32 nRow );
 
         void clear();
@@ -89,7 +89,7 @@ class CachedContentResultSet
 
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
-        const css::uno::Any&
+        const cpo::uno::Any&
         getAny( sal_Int32 nRow, sal_Int32 nColumnIndex );
 
         /// @throws css::uno::RuntimeException
@@ -184,7 +184,7 @@ public:
 
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         noexcept override;
     virtual void SAL_CALL release()
@@ -205,9 +205,9 @@ public:
 
     virtual void
     setPropertyValueImpl( std::unique_lock<std::mutex>& rGuard, const OUString& aPropertyName,
-                      const css::uno::Any& aValue ) override;
+                      const cpo::uno::Any& aValue ) override;
 
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
     getPropertyValue( const OUString& PropertyName ) override;
 
 
@@ -323,7 +323,7 @@ public:
     virtual css::uno::Reference< css::io::XInputStream > SAL_CALL
     getCharacterStream( sal_Int32 columnIndex ) override;
 
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
     getObject( sal_Int32 columnIndex,
                const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
 

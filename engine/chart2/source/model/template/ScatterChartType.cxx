@@ -169,7 +169,7 @@ uno::Sequence< OUString > SAL_CALL ScatterChartType::getSupportedMandatoryRoles(
 }
 
 // ____ OPropertySet ____
-void ScatterChartType::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
+void ScatterChartType::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = StaticScatterChartTypeDefaults();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
@@ -213,7 +213,7 @@ css::uno::Sequence< OUString > SAL_CALL ScatterChartType::getSupportedServiceNam
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart_ScatterChartType_get_implementation(css::uno::XComponentContext * /*context*/,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::ScatterChartType);
 }

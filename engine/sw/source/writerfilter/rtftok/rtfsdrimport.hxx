@@ -63,7 +63,7 @@ public:
     static void
     resolveLineColorAndWidth(bool bTextFrame,
                              const css::uno::Reference<css::beans::XPropertySet>& xPropertySet,
-                             css::uno::Any const& rLineColor, css::uno::Any const& rLineWidth);
+                             cpo::uno::Any const& rLineColor, cpo::uno::Any const& rLineWidth);
     static void resolveFLine(css::uno::Reference<css::beans::XPropertySet> const& xPropertySet,
                              sal_Int32 nFLine);
     /**

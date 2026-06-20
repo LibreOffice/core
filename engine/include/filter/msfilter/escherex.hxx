@@ -27,7 +27,7 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <filter/msfilter/msfilterdllapi.h>
 #include <rtl/string.hxx>
@@ -498,7 +498,7 @@ public:
 struct EscherPropertyValueHelper
 {
     static bool GetPropertyValue(
-        css::uno::Any& rAny,
+        cpo::uno::Any& rAny,
         const css::uno::Reference< css::beans::XPropertySet > &,
         const OUString& rPropertyName,
         bool bTestPropertyAvailability = false
@@ -832,7 +832,7 @@ public:
     static tools::PolyPolygon  GetPolyPolygon(
                             const css::uno::Reference< css::drawing::XShape > & rXShape
                         );
-    static tools::PolyPolygon  GetPolyPolygon( const css::uno::Any& rSource );
+    static tools::PolyPolygon  GetPolyPolygon( const cpo::uno::Any& rSource );
     static MSO_SPT      GetCustomShapeType(
                             const css::uno::Reference< css::drawing::XShape > & rXShape,
                             ShapeFlag& nMirrorFlags,

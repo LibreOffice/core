@@ -22,7 +22,7 @@
 #include <cassert>
 
 #include <com/sun/star/beans/Optional.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -36,7 +36,7 @@
 namespace configmgr {
 
 PropertyNode::PropertyNode(
-    int layer, Type staticType, bool nillable, css::uno::Any value,
+    int layer, Type staticType, bool nillable, cpo::uno::Any value,
     bool extension):
     Node(layer), staticType_(staticType), nillable_(nillable),
     extension_(extension), modified_(false), value_(std::move(value))
@@ -47,9 +47,9 @@ rtl::Reference< Node > PropertyNode::clone(bool) const {
 }
 
 
-css::uno::Any const & PropertyNode::getValue(Components & components) {
+cpo::uno::Any const & PropertyNode::getValue(Components & components) {
     if (!externalDescriptor_.isEmpty()) {
-        css::beans::Optional< css::uno::Any > val(
+        css::beans::Optional< cpo::uno::Any > val(
             components.getExternalValue(externalDescriptor_));
         if (val.IsPresent) {
             value_ = val.Value; //TODO: check value type
@@ -62,7 +62,7 @@ css::uno::Any const & PropertyNode::getValue(Components & components) {
     return value_;
 }
 
-void PropertyNode::setValue(int layer, css::uno::Any const & value, bool bIsUserModification) {
+void PropertyNode::setValue(int layer, cpo::uno::Any const & value, bool bIsUserModification) {
     setLayer(layer);
     value_ = value;
     // Consider as modified when modified during runtime or by user registry modifications
@@ -70,7 +70,7 @@ void PropertyNode::setValue(int layer, css::uno::Any const & value, bool bIsUser
     externalDescriptor_.clear();
 }
 
-css::uno::Any *PropertyNode::getValuePtr(int layer, bool bIsUserModification)
+cpo::uno::Any *PropertyNode::getValuePtr(int layer, bool bIsUserModification)
 {
     setLayer(layer);
     modified_ = bIsUserModification;

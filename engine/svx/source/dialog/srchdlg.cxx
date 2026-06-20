@@ -78,6 +78,7 @@
 #include <officecfg/Office/Common.hxx>
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star;
 using namespace comphelper;
 
@@ -493,7 +494,7 @@ void SvxSearchDialog::Construct_Impl()
     {
         uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider =
                 configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
-        uno::Sequence< uno::Any > aArgs {
+        uno::Sequence< cpo::uno::Any > aArgs {
                     Any(u"/org.openoffice.Office.Common/SearchOptions/"_ustr) };
 
         uno::Reference< uno::XInterface > xIFace = xConfigurationProvider->createInstanceWithArguments(
@@ -503,7 +504,7 @@ void SvxSearchDialog::Construct_Impl()
         if(xDirectAccess.is())
         {
             OUString sTemp;
-            uno::Any aRet = xDirectAccess->getByName(u"ComponentSearchGroupLabel"_ustr);
+            cpo::uno::Any aRet = xDirectAccess->getByName(u"ComponentSearchGroupLabel"_ustr);
             aRet >>= sTemp;
             m_xComponentFrame->set_label(sTemp);
             aRet = xDirectAccess->getByName(u"ComponentSearchCommandLabel1"_ustr);

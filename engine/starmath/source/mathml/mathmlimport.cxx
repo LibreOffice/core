@@ -30,7 +30,7 @@ one go*/
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
 #include <comphelper/fileformat.h>
@@ -77,6 +77,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
@@ -397,7 +398,7 @@ SmXMLImport::SmXMLImport(const css::uno::Reference<css::uno::XComponentContext>&
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 Math_XMLImporter_get_implementation(uno::XComponentContext* pCtx,
-                                    uno::Sequence<uno::Any> const& /*rSeq*/)
+                                    uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(
         new SmXMLImport(pCtx, u"com.sun.star.comp.Math.XMLImporter"_ustr, SvXMLImportFlags::ALL));
@@ -405,7 +406,7 @@ Math_XMLImporter_get_implementation(uno::XComponentContext* pCtx,
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 Math_XMLOasisMetaImporter_get_implementation(uno::XComponentContext* pCtx,
-                                             uno::Sequence<uno::Any> const& /*rSeq*/)
+                                             uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SmXMLImport(pCtx, u"com.sun.star.comp.Math.XMLOasisMetaImporter"_ustr,
                                          SvXMLImportFlags::META));
@@ -413,7 +414,7 @@ Math_XMLOasisMetaImporter_get_implementation(uno::XComponentContext* pCtx,
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 Math_XMLOasisSettingsImporter_get_implementation(uno::XComponentContext* pCtx,
-                                                 uno::Sequence<uno::Any> const& /*rSeq*/)
+                                                 uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SmXMLImport(
         pCtx, u"com.sun.star.comp.Math.XMLOasisSettingsImporter"_ustr, SvXMLImportFlags::SETTINGS));

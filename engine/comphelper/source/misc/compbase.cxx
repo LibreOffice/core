@@ -64,9 +64,9 @@ void SAL_CALL WeakComponentImplHelperBase::removeEventListener(
     maEventListeners.removeInterface(aGuard, rxListener);
 }
 
-css::uno::Any SAL_CALL WeakComponentImplHelperBase::queryInterface(css::uno::Type const& rType)
+cpo::uno::Any SAL_CALL WeakComponentImplHelperBase::queryInterface(css::uno::Type const& rType)
 {
-    css::uno::Any aReturn = ::cppu::queryInterface(rType, static_cast<css::uno::XWeak*>(this),
+    cpo::uno::Any aReturn = ::cppu::queryInterface(rType, static_cast<css::uno::XWeak*>(this),
                                                    static_cast<css::lang::XComponent*>(this));
     if (aReturn.hasValue())
         return aReturn;
@@ -228,7 +228,7 @@ static void* queryDeepNoXInterface(typelib_TypeDescriptionReference const* pDema
     return nullptr;
 }
 
-css::uno::Any WeakComponentImplHelper_query(css::uno::Type const& rType, cppu::class_data* cd,
+cpo::uno::Any WeakComponentImplHelper_query(css::uno::Type const& rType, cppu::class_data* cd,
                                             WeakComponentImplHelperBase* pBase)
 {
     checkInterface(rType);
@@ -236,13 +236,13 @@ css::uno::Any WeakComponentImplHelper_query(css::uno::Type const& rType, cppu::c
 
     // shortcut XInterface to WeakComponentImplHelperBase
     if (void* p = queryDeepNoXInterface(pTDR, cd, pBase))
-        return css::uno::Any(&p, pTDR);
+        return cpo::uno::Any(&p, pTDR);
     return pBase->comphelper::WeakComponentImplHelperBase::queryInterface(rType);
 }
 
 WeakImplHelperBase::~WeakImplHelperBase() {}
 
-css::uno::Any WeakImplHelper_query(css::uno::Type const& rType, cppu::class_data* cd,
+cpo::uno::Any WeakImplHelper_query(css::uno::Type const& rType, cppu::class_data* cd,
                                    WeakImplHelperBase* pBase)
 {
     checkInterface(rType);
@@ -250,7 +250,7 @@ css::uno::Any WeakImplHelper_query(css::uno::Type const& rType, cppu::class_data
 
     // shortcut XInterface to WeakImplHelperBase
     if (void* p = queryDeepNoXInterface(pTDR, cd, pBase))
-        return css::uno::Any(&p, pTDR);
+        return cpo::uno::Any(&p, pTDR);
     return pBase->comphelper::WeakImplHelperBase::queryInterface(rType);
 }
 

@@ -47,6 +47,7 @@ namespace com::sun::star::graphic { class XGraphic; }
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::beans;
 
 /* protected: for signature verify */
@@ -68,7 +69,7 @@ css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecCon
      */
     rtl::Reference< SignatureVerifierImpl > xReferenceResolvedListener = new SignatureVerifierImpl;
 
-    css::uno::Sequence<css::uno::Any> args
+    css::uno::Sequence<cpo::uno::Any> args
     {
         Any(OUString::number(nSecurityId)),
         Any(uno::Reference<xml::crypto::sax::XSecuritySAXEventKeeper>(m_xSAXEventKeeper)),

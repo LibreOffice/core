@@ -76,7 +76,7 @@ public:
     virtual void SAL_CALL
     notifyContextChangeEvent(const css::ui::ContextChangeEventObject& rEvent) override;
 
-    virtual ::css::uno::Any SAL_CALL queryInterface(const ::css::uno::Type& aType) override;
+    virtual ::cpo::uno::Any SAL_CALL queryInterface(const ::css::uno::Type& aType) override;
 
     virtual void SAL_CALL acquire() noexcept override;
 

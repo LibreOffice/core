@@ -109,8 +109,8 @@ namespace frm
         */
         void    addPropertyNotification(
                     const sal_Int32 _nHandle,
-                    const css::uno::Any& _rOldValue,
-                    const css::uno::Any& _rNewValue
+                    const cpo::uno::Any& _rOldValue,
+                    const cpo::uno::Any& _rNewValue
                 );
 
     private:
@@ -119,8 +119,8 @@ namespace frm
         OControlModel&                              m_rModel;
         bool                                        m_bLocked;
         std::vector< sal_Int32 >                    m_aHandles;
-        std::vector< css::uno::Any >                m_aOldValues;
-        std::vector< css::uno::Any >                m_aNewValues;
+        std::vector< cpo::uno::Any >                m_aOldValues;
+        std::vector< cpo::uno::Any >                m_aNewValues;
 
         ControlModelLock( const ControlModelLock& ) = delete;
         ControlModelLock& operator=( const ControlModelLock& ) = delete;
@@ -191,7 +191,7 @@ protected:
 
 // UNO
     DECLARE_UNO3_AGG_DEFAULTS(OControl, OComponentHelper)
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
 
 // XTypeProvider
     virtual css::uno::Sequence<sal_Int8>           SAL_CALL getImplementationId() override;
@@ -256,7 +256,7 @@ public:
     virtual ~OBoundControl() override;
 
     DECLARE_UNO3_AGG_DEFAULTS(OBoundControl, OControl)
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
 
     // XBoundControl
     virtual bool SAL_CALL   getLock() override;
@@ -364,7 +364,7 @@ protected:
 
 public:
     DECLARE_UNO3_AGG_DEFAULTS(OControl, OComponentHelper)
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
 
 // XTypeProvider
     virtual css::uno::Sequence<sal_Int8>           SAL_CALL getImplementationId() override;
@@ -401,22 +401,22 @@ public:
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 
 // XPropertySet
-    virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle) const override;
+    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
     virtual bool SAL_CALL convertFastPropertyValue(
-                css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+                cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
 // css::beans::XPropertyState
     virtual css::beans::PropertyState getPropertyStateByHandle(sal_Int32 nHandle) override;
     virtual void setPropertyToDefaultByHandle(sal_Int32 nHandle) override;
-    virtual css::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const override;
+    virtual cpo::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const override;
 
 // XCloneable
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override = 0;
 
 // XPropertyContainer
-    virtual void SAL_CALL addProperty( const OUString& Name, ::sal_Int16 Attributes, const css::uno::Any& DefaultValue ) override;
+    virtual void SAL_CALL addProperty( const OUString& Name, ::sal_Int16 Attributes, const cpo::uno::Any& DefaultValue ) override;
     virtual void SAL_CALL removeProperty( const OUString& Name ) override;
 
 // XPropertyAccess
@@ -474,8 +474,8 @@ public:
 
     void                firePropertyChanges(
                             const std::vector< sal_Int32 >& _rHandles,
-                            const std::vector< css::uno::Any >& _rOldValues,
-                            const std::vector< css::uno::Any >& _rNewValues,
+                            const std::vector< cpo::uno::Any >& _rOldValues,
+                            const std::vector< cpo::uno::Any >& _rNewValues,
                             LockAccess
                         );
 
@@ -711,7 +711,7 @@ protected:
 
         @see resetNoBroadcast
     */
-    virtual css::uno::Any
+    virtual cpo::uno::Any
                             getDefaultForReset() const;
 
     /** translates a db column value into a control value.
@@ -723,7 +723,7 @@ protected:
         @see setControlValue
         @pure
     */
-    virtual css::uno::Any
+    virtual cpo::uno::Any
                             translateDbColumnToControlValue( ) = 0;
 
     /** returns the data types which the control could use to exchange data with
@@ -751,8 +751,8 @@ protected:
         @see hasExternalValueBinding
         @see getExternalValueType
     */
-    virtual css::uno::Any
-                            translateExternalValueToControlValue( const css::uno::Any& _rExternalValue ) const;
+    virtual cpo::uno::Any
+                            translateExternalValueToControlValue( const cpo::uno::Any& _rExternalValue ) const;
 
     /** commits the current control value to our external value binding
 
@@ -761,7 +761,7 @@ protected:
         @see hasExternalValueBinding
         @see initValueProperty
     */
-    virtual css::uno::Any
+    virtual cpo::uno::Any
                             translateControlValueToExternalValue( ) const;
 
     /** commits the current control value to the database column we're bound to
@@ -791,7 +791,7 @@ protected:
             the instigator of the value change
     */
             void            setControlValue(
-                                const css::uno::Any& _rValue,
+                                const cpo::uno::Any& _rValue,
                                 ValueChangeInstigator _eInstigator
                             );
     /**
@@ -806,7 +806,7 @@ protected:
             <member>translateExternalValueToControlValue</member>
     */
     virtual void            doSetControlValue(
-                                const css::uno::Any& _rValue
+                                const cpo::uno::Any& _rValue
                             );
 
     /** retrieves the current value of the control
@@ -817,7 +817,7 @@ protected:
         @precond
             Our own mutex is locked.
     */
-    virtual css::uno::Any
+    virtual cpo::uno::Any
                             getControlValue( ) const;
 
     /** called whenever a connection to a database column has been established
@@ -854,7 +854,7 @@ protected:
         @precond
             Our own mutex is locked.
     */
-    virtual css::uno::Any
+    virtual cpo::uno::Any
                             translateControlValueToValidatableValue( ) const;
 
     /** retrieves the current value of the form component
@@ -865,7 +865,7 @@ protected:
         @precond
             our mutex is locked when this method is called
     */
-    virtual css::uno::Any
+    virtual cpo::uno::Any
                             getCurrentFormComponentValue() const;
 
     /** We can't write (new) common properties in this base class, as the file format doesn't allow this
@@ -919,7 +919,7 @@ public:
 public:
     // UNO link
     DECLARE_UNO3_AGG_DEFAULTS(OBoundControlModel, OControlModel)
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
 
     // OComponentHelper
     virtual void SAL_CALL disposing() override;
@@ -951,14 +951,14 @@ public:
     virtual void SAL_CALL removeUpdateListener( const css::uno::Reference< css::form::XUpdateListener >& aListener ) override;
 
     // XPropertySet
-    virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle) const override;
+    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
     virtual bool SAL_CALL convertFastPropertyValue(
-                css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+                cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
 // css::beans::XPropertyState
-    virtual css::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const override;
+    virtual cpo::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const override;
 
 // XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
@@ -993,7 +993,7 @@ protected:
 
     // XValidatableFormComponent
     virtual bool SAL_CALL isValid(  ) override;
-    virtual css::uno::Any SAL_CALL getCurrentValue(  ) override;
+    virtual cpo::uno::Any SAL_CALL getCurrentValue(  ) override;
     virtual void SAL_CALL addFormComponentValidityListener( const css::uno::Reference< css::form::validation::XFormComponentValidityListener >& Listener ) override;
     virtual void SAL_CALL removeFormComponentValidityListener( const css::uno::Reference< css::form::validation::XFormComponentValidityListener >& Listener ) override;
 

@@ -28,6 +28,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::script;
 using namespace ::sf_misc;
 
@@ -46,7 +47,7 @@ ActiveMSPList::~ActiveMSPList()
 }
 
 Reference< provider::XScriptProvider >
-ActiveMSPList::createNewMSP( const uno::Any& context )
+ActiveMSPList::createNewMSP( const cpo::uno::Any& context )
 {
     Sequence< Any > args( &context, 1 );
 
@@ -140,7 +141,7 @@ Reference< provider::XScriptProvider >
     if ( pos == m_mScriptComponents.end() )
     {
         // TODO
-        msp = createNewMSP( uno::Any( xContext ) );
+        msp = createNewMSP( cpo::uno::Any( xContext ) );
         addActiveMSP( xNormalized, msp );
     }
     else
@@ -211,7 +212,7 @@ Reference< provider::XScriptProvider >
     }
     catch( const Exception& )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
             "Failed to create MasterScriptProvider for context '"
             + context + "'.",

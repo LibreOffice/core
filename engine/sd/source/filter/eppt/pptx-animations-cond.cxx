@@ -16,6 +16,7 @@
 
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace
 {

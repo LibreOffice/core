@@ -61,7 +61,7 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString & aServiceSpecifier ) override;
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString & ServiceSpecifier,
                                  const css::uno::Sequence<
-                                    css::uno::Any > & Arguments ) override;
+                                    cpo::uno::Any > & Arguments ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
 
     // Non-Interface methods
@@ -70,7 +70,7 @@ private:
     /// @throws css::uno::Exception
     css::uno::Reference< css::uno::XInterface > createInstanceWithArguments( std::u16string_view ServiceSpecifier,
                                  const css::uno::Sequence<
-                                    css::uno::Any > & Arguments,
+                                    cpo::uno::Any > & Arguments,
                                  bool bCheckArgs );
 
     css::uno::Reference< css::lang::XMultiServiceFactory > getConfigProvider();

@@ -71,7 +71,7 @@ class ScXMLImportWrapper
         const css::uno::Reference<css::frame::XModel>& xModel,
         css::xml::sax::InputSource& aParserInput,
         const OUString& sComponentName, const OUString& sDocName,
-        const css::uno::Sequence<css::uno::Any>& aArgs,
+        const css::uno::Sequence<cpo::uno::Any>& aArgs,
         bool bMustBeSuccessful);
 
     bool ExportToComponent(const css::uno::Reference<css::uno::XComponentContext>& xContext,
@@ -79,7 +79,7 @@ class ScXMLImportWrapper
         const css::uno::Reference<css::xml::sax::XWriter>& xWriter,
         const css::uno::Sequence<css::beans::PropertyValue>& aDescriptor,
         const OUString& sName, const OUString& sMediaType, const OUString& sComponentName,
-        const css::uno::Sequence<css::uno::Any>& aArgs,
+        const css::uno::Sequence<cpo::uno::Any>& aArgs,
         std::unique_ptr<ScMySharedData>& pSharedData);
 
 public:

@@ -88,6 +88,7 @@ using namespace sw::mark;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::linguistic2;
 
 // Lingu-Dispatcher
@@ -777,9 +778,9 @@ void SwView::ExecSmartTagPopup( const Point& rPt )
     m_pWrtShell->LockView( true );
     m_pWrtShell->Push();
 
-    css::uno::Sequence< css::uno::Any > aArgs{
-        css::uno::Any(comphelper::makePropertyValue( u"Frame"_ustr, GetDispatcher().GetFrame()->GetFrame().GetFrameInterface() )),
-        css::uno::Any(comphelper::makePropertyValue( u"CommandURL"_ustr, u".uno:OpenSmartTagMenuOnCursor"_ustr ))
+    css::uno::Sequence< cpo::uno::Any > aArgs{
+        cpo::uno::Any(comphelper::makePropertyValue( u"Frame"_ustr, GetDispatcher().GetFrame()->GetFrame().GetFrameInterface() )),
+        cpo::uno::Any(comphelper::makePropertyValue( u"CommandURL"_ustr, u".uno:OpenSmartTagMenuOnCursor"_ustr ))
     };
 
     const css::uno::Reference< css::uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();

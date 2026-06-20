@@ -428,9 +428,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestFODGExportPDF(SvStream& rStream)
                                                 u""_ustr,
                                                 u"true"_ustr };
         uno::Sequence<beans::PropertyValue> aAdaptorArgs(comphelper::InitPropertySequence({
-            { "UserData", uno::Any(aUserData) },
+            { "UserData", cpo::uno::Any(aUserData) },
         }));
-        css::uno::Sequence<uno::Any> aOuterArgs{ uno::Any(aAdaptorArgs) };
+        css::uno::Sequence<cpo::uno::Any> aOuterArgs{ cpo::uno::Any(aAdaptorArgs) };
 
         uno::Reference<lang::XInitialization> xInit(xInterface, uno::UNO_QUERY_THROW);
         xInit->initialize(aOuterArgs);
@@ -443,10 +443,10 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestFODGExportPDF(SvStream& rStream)
             new utl::OStreamWrapper(*aTempFile.GetStream(StreamMode::READWRITE)));
 
         uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
-            { { "FilterName", uno::Any(u"OpenDocument Drawing Flat XML"_ustr) },
-              { "OutputStream", uno::Any(xOutputStream) },
+            { { "FilterName", cpo::uno::Any(u"OpenDocument Drawing Flat XML"_ustr) },
+              { "OutputStream", cpo::uno::Any(xOutputStream) },
               { "FilterOptions",
-                uno::Any(
+                cpo::uno::Any(
                     u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr) } }));
         xFODGFilter->filter(aDescriptor);
     }

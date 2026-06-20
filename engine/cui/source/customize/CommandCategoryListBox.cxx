@@ -569,7 +569,7 @@ void CommandCategoryListBox::addChildren(
                 continue;
             }
 
-            css::uno::Any value = xPropSet->getPropertyValue(u"URI"_ustr);
+            cpo::uno::Any value = xPropSet->getPropertyValue(u"URI"_ustr);
             value >>= uri;
 
             try

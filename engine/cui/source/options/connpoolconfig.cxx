@@ -35,6 +35,7 @@ namespace offapp
 
     using namespace ::utl;
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
     constexpr OUString CONNECTIONPOOL_NODENAME = u"org.openoffice.Office.DataAccess/ConnectionPool"_ustr;
     constexpr OUString ENABLE_POOLING = u"EnablePooling"_ustr;

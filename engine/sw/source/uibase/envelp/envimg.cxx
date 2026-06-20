@@ -38,6 +38,7 @@
 
 using namespace utl;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 
 SfxPoolItem* SwEnvItem::CreateDefault() { return new SwEnvItem; }

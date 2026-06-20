@@ -41,7 +41,7 @@ class ScDuplicateRecordsDlg : public weld::GenericDialogController
 public:
     ScDuplicateRecordsDlg() = delete;
     explicit ScDuplicateRecordsDlg(weld::Window* pParent,
-                                   css::uno::Sequence<css::uno::Sequence<css::uno::Any>>& rData,
+                                   css::uno::Sequence<css::uno::Sequence<cpo::uno::Any>>& rData,
                                    ScViewData& rViewData, ScRange& aRange);
     virtual ~ScDuplicateRecordsDlg() override;
 
@@ -61,7 +61,7 @@ private:
 
     std::unique_ptr<weld::Button> m_xOkBtn;
 
-    css::uno::Sequence<css::uno::Sequence<css::uno::Any>>& mrCellData;
+    css::uno::Sequence<css::uno::Sequence<cpo::uno::Any>>& mrCellData;
     ScRange& mrRange;
     ScViewData& mrViewData;
     DuplicatesResponse maResponse;

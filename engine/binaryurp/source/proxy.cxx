@@ -104,10 +104,10 @@ void Proxy::do_dispatch(
                 "caught C++ exception: " + o3tl::runtimeToOUString(e.what()));
         }
     } catch (const css::uno::RuntimeException &) {
-        css::uno::Any exc(cppu::getCaughtException());
+        cpo::uno::Any exc(cppu::getCaughtException());
         uno_copyAndConvertData(
             *exception, &exc,
-            (css::uno::TypeDescription(cppu::UnoType< css::uno::Any >::get()).
+            (css::uno::TypeDescription(cppu::UnoType< cpo::uno::Any >::get()).
              get()),
             bridge_->getCppToBinaryMapping().get());
     }

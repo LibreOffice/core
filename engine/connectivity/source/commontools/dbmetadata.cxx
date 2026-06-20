@@ -52,7 +52,7 @@ namespace dbtools
     using ::com::sun::star::sdbc::XDatabaseMetaData2;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::container::XChild;
     using ::com::sun::star::uno::UNO_QUERY_THROW;

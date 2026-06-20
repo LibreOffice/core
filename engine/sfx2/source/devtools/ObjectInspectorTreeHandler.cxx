@@ -52,7 +52,7 @@ using namespace css;
 
 namespace
 {
-OUString enumValueToEnumName(uno::Any const& aValue,
+OUString enumValueToEnumName(cpo::uno::Any const& aValue,
                              uno::Reference<uno::XComponentContext> const& xContext)
 {
     sal_Int32 nIntValue = 0;
@@ -83,7 +83,7 @@ OUString getInterfaceImplementationClass(uno::Reference<uno::XInterface> const& 
 }
 
 /** converts basic any value to a string */
-OUString convertBasicValueToString(const uno::Any& aValue,
+OUString convertBasicValueToString(const cpo::uno::Any& aValue,
                                    const uno::Reference<uno::XComponentContext>& xContext)
 {
     OUString aRetStr;
@@ -194,14 +194,14 @@ OUString getInterfaceName(uno::Reference<uno::XInterface> const& xInterface,
         return xNamed->getName();
 
     auto xInvocationFactory = css::script::Invocation::create(xContext);
-    uno::Sequence<uno::Any> aParameters = { uno::Any(xInterface) };
+    uno::Sequence<cpo::uno::Any> aParameters = { cpo::uno::Any(xInterface) };
     auto xInvocationInterface = xInvocationFactory->createInstanceWithArguments(aParameters);
     if (xInvocationInterface.is())
     {
         uno::Reference<script::XInvocation2> xInvocation(xInvocationInterface, uno::UNO_QUERY);
         if (xInvocation.is() && xInvocation->hasProperty(u"Name"_ustr))
         {
-            uno::Any aAny = xInvocation->getValue(u"Name"_ustr);
+            cpo::uno::Any aAny = xInvocation->getValue(u"Name"_ustr);
             if (aAny.hasValue() && aAny.getValueTypeClass() == uno::TypeClass_STRING)
                 return aAny.get<OUString>();
         }
@@ -209,7 +209,7 @@ OUString getInterfaceName(uno::Reference<uno::XInterface> const& xInterface,
     return OUString();
 }
 
-OUString convertAnyToString(const uno::Any& aValue,
+OUString convertAnyToString(const cpo::uno::Any& aValue,
                             const uno::Reference<uno::XComponentContext>& xContext)
 {
     // return early if we don't have any value
@@ -255,7 +255,7 @@ OUString convertAnyToString(const uno::Any& aValue,
     return aRetStr;
 }
 
-OUString convertAnyToShortenedString(const uno::Any& aValue,
+OUString convertAnyToShortenedString(const cpo::uno::Any& aValue,
                                      const uno::Reference<uno::XComponentContext>& xContext)
 {
     // return early if we don't have any value
@@ -296,7 +296,7 @@ OUString convertAnyToShortenedString(const uno::Any& aValue,
 }
 
 /** converts an any's type to a string (in a short form) */
-OUString getAnyType(const uno::Any& aValue)
+OUString getAnyType(const cpo::uno::Any& aValue)
 {
     OUString aTypeName = aValue.getValueTypeName();
     return aTypeName.replaceAll("com.sun.star", "css");
@@ -529,15 +529,16 @@ public:
 class BasicValueNode : public SimpleStringNode
 {
 protected:
-    uno::Any maAny;
+    cpo::uno::Any maAny;
     OUString mrInfo;
     uno::Reference<uno::XComponentContext> mxContext;
 
-    ObjectInspectorNodeInterface*
-    createNodeObjectForAny(OUString const& rName, const uno::Any& rAny, OUString const& mrInfo);
+    ObjectInspectorNodeInterface* createNodeObjectForAny(OUString const& rName,
+                                                         const cpo::uno::Any& rAny,
+                                                         OUString const& mrInfo);
 
 public:
-    BasicValueNode(OUString const& rName, uno::Any aAny, OUString aInfo,
+    BasicValueNode(OUString const& rName, cpo::uno::Any aAny, OUString aInfo,
                    uno::Reference<uno::XComponentContext> xContext)
         : SimpleStringNode(rName)
         , maAny(std::move(aAny))
@@ -546,7 +547,7 @@ public:
     {
     }
 
-    const uno::Any& getAny() const { return maAny; }
+    const cpo::uno::Any& getAny() const { return maAny; }
 
     bool shouldShowExpander() override
     {
@@ -581,7 +582,7 @@ public:
 class GenericPropertiesNode : public BasicValueNode
 {
 public:
-    GenericPropertiesNode(OUString const& rName, uno::Any const& rAny, OUString const& rInfo,
+    GenericPropertiesNode(OUString const& rName, cpo::uno::Any const& rAny, OUString const& rInfo,
                           uno::Reference<uno::XComponentContext> const& xContext)
         : BasicValueNode(rName, rAny, rInfo, xContext)
     {
@@ -595,7 +596,7 @@ public:
 class StructNode : public BasicValueNode
 {
 public:
-    StructNode(OUString const& rName, uno::Any const& rAny, OUString const& rInfo,
+    StructNode(OUString const& rName, cpo::uno::Any const& rAny, OUString const& rInfo,
                uno::Reference<uno::XComponentContext> const& xContext)
         : BasicValueNode(rName, rAny, rInfo, xContext)
     {
@@ -613,7 +614,7 @@ class SequenceNode : public BasicValueNode
     uno::Reference<reflection::XIdlArray> mxIdlArray;
 
 public:
-    SequenceNode(OUString const& rName, uno::Any const& rAny, OUString const& rInfo,
+    SequenceNode(OUString const& rName, cpo::uno::Any const& rAny, OUString const& rInfo,
                  uno::Reference<uno::XComponentContext> const& xContext)
         : BasicValueNode(rName, rAny, rInfo, xContext)
     {
@@ -635,7 +636,7 @@ public:
 
         for (int i = 0; i < nLength; i++)
         {
-            uno::Any aArrayValue = mxIdlArray->get(maAny, i);
+            cpo::uno::Any aArrayValue = mxIdlArray->get(maAny, i);
 
             auto* pObjectInspectorNode
                 = createNodeObjectForAny(OUString::number(i), aArrayValue, u""_ustr);
@@ -675,7 +676,7 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
             const uno::Sequence<OUString> aNames = xNameAccess->getElementNames();
             for (OUString const& rName : aNames)
             {
-                uno::Any aAny = xNameAccess->getByName(rName);
+                cpo::uno::Any aAny = xNameAccess->getByName(rName);
                 auto* pObjectInspectorNode = createNodeObjectForAny(
                     u"@" + rName, aAny, SfxResId(STR_PROPERTY_TYPE_IS_NAMED_CONTAINER));
                 lclAppendNodeToParent(pTree, pParent, pObjectInspectorNode);
@@ -693,7 +694,7 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
         {
             for (sal_Int32 nIndex = 0; nIndex < xIndexAccess->getCount(); ++nIndex)
             {
-                uno::Any aAny = xIndexAccess->getByIndex(nIndex);
+                cpo::uno::Any aAny = xIndexAccess->getByIndex(nIndex);
                 auto* pObjectInspectorNode
                     = createNodeObjectForAny(u"@" + OUString::number(nIndex), aAny,
                                              SfxResId(STR_PROPERTY_TYPE_IS_INDEX_CONTAINER));
@@ -716,7 +717,7 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
             {
                 for (sal_Int32 nIndex = 0; xEnumeration->hasMoreElements(); nIndex++)
                 {
-                    uno::Any aAny = xEnumeration->nextElement();
+                    cpo::uno::Any aAny = xEnumeration->nextElement();
                     auto* pObjectInspectorNode
                         = createNodeObjectForAny(u"@" + OUString::number(nIndex), aAny,
                                                  SfxResId(STR_PROPERTY_TYPE_IS_ENUMERATION));
@@ -730,7 +731,7 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
     }
 
     auto xInvocationFactory = css::script::Invocation::create(mxContext);
-    uno::Sequence<uno::Any> aParameters = { maAny };
+    uno::Sequence<cpo::uno::Any> aParameters = { maAny };
     auto xInvocationInterface = xInvocationFactory->createInstanceWithArguments(aParameters);
     if (!xInvocationInterface.is())
         return;
@@ -756,7 +757,7 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
     {
         if (aInvocationInfo.eMemberType == script::MemberType_PROPERTY)
         {
-            uno::Any aCurrentAny;
+            cpo::uno::Any aCurrentAny;
             auto const& aPropertyName = aInvocationInfo.aName;
 
             bool bIsAttribute = false;
@@ -854,7 +855,7 @@ void StructNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree, const weld
     for (auto const& xField : xFields)
     {
         OUString aFieldName = xField->getName();
-        uno::Any aFieldValue = xField->get(maAny);
+        cpo::uno::Any aFieldValue = xField->get(maAny);
 
         auto* pObjectInspectorNode = createNodeObjectForAny(aFieldName, aFieldValue, u""_ustr);
         if (pObjectInspectorNode)
@@ -865,7 +866,7 @@ void StructNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree, const weld
 }
 
 ObjectInspectorNodeInterface* BasicValueNode::createNodeObjectForAny(OUString const& rName,
-                                                                     const uno::Any& rAny,
+                                                                     const cpo::uno::Any& rAny,
                                                                      OUString const& rInfo)
 {
     switch (rAny.getValueTypeClass())
@@ -911,7 +912,7 @@ uno::Reference<uno::XInterface> getSelectedXInterface(weld::TreeView const& rTre
     {
         if (auto* pBasicValueNode = dynamic_cast<BasicValueNode*>(pNode))
         {
-            uno::Any aAny = pBasicValueNode->getAny();
+            cpo::uno::Any aAny = pBasicValueNode->getAny();
             xInterface.set(aAny, uno::UNO_QUERY);
         }
     }
@@ -1061,7 +1062,7 @@ IMPL_LINK(ObjectInspectorTreeHandler, SelectionChanged, weld::TreeView&, rTreeVi
         auto* pNode = getSelectedNode(rTreeView);
         if (auto* pBasicValueNode = dynamic_cast<BasicValueNode*>(pNode))
         {
-            uno::Any aAny = pBasicValueNode->getAny();
+            cpo::uno::Any aAny = pBasicValueNode->getAny();
             uno::Reference<uno::XInterface> xInterface(aAny, uno::UNO_QUERY);
             bHaveNodeWithObject = xInterface.is();
             mpObjectInspectorWidgets->mpTextView->set_text(convertAnyToString(aAny, mxContext));
@@ -1112,7 +1113,7 @@ IMPL_LINK(ObjectInspectorTreeHandler, PopupMenuHandler, const CommandEvent&, rCo
 
         if (sCommand == "inspect")
         {
-            addToStack(uno::Any(xInterface));
+            addToStack(cpo::uno::Any(xInterface));
             inspectObject(xInterface);
         }
     }
@@ -1126,13 +1127,13 @@ IMPL_LINK(ObjectInspectorTreeHandler, ToolbarButtonClicked, const OUString&, rSe
         auto xInterface = getSelectedXInterface(*mpObjectInspectorWidgets->mpPropertiesTreeView);
         if (xInterface.is())
         {
-            addToStack(uno::Any(xInterface));
+            addToStack(cpo::uno::Any(xInterface));
             inspectObject(xInterface);
         }
     }
     else if (rSelectionId == "back")
     {
-        uno::Any aAny = popFromStack();
+        cpo::uno::Any aAny = popFromStack();
         if (aAny.hasValue())
         {
             uno::Reference<uno::XInterface> xInterface(aAny, uno::UNO_QUERY);
@@ -1148,7 +1149,7 @@ IMPL_LINK(ObjectInspectorTreeHandler, ToolbarButtonClicked, const OUString&, rSe
 
 IMPL_LINK(ObjectInspectorTreeHandler, NotebookEnterPage, const OUString&, rPageId, void)
 {
-    uno::Any aAny = maInspectionStack.back();
+    cpo::uno::Any aAny = maInspectionStack.back();
     if (!aAny.hasValue())
         return;
 
@@ -1289,7 +1290,7 @@ void ObjectInspectorTreeHandler::appendProperties(uno::Reference<uno::XInterface
 {
     if (!xInterface.is())
         return;
-    GenericPropertiesNode aNode(u""_ustr, uno::Any(xInterface), u""_ustr, mxContext);
+    GenericPropertiesNode aNode(u""_ustr, cpo::uno::Any(xInterface), u""_ustr, mxContext);
     aNode.fillChildren(mpObjectInspectorWidgets->mpPropertiesTreeView, nullptr);
 }
 
@@ -1300,7 +1301,7 @@ void ObjectInspectorTreeHandler::appendMethods(uno::Reference<uno::XInterface> c
         return;
 
     uno::Reference<beans::XIntrospection> xIntrospection = beans::theIntrospection::get(mxContext);
-    auto xIntrospectionAccess = xIntrospection->inspect(uno::Any(xInterface));
+    auto xIntrospectionAccess = xIntrospection->inspect(cpo::uno::Any(xInterface));
 
     const auto xMethods = xIntrospectionAccess->getMethods(beans::MethodConcept::ALL);
     for (auto const& xMethod : xMethods)
@@ -1324,17 +1325,17 @@ void ObjectInspectorTreeHandler::clearStack()
 }
 
 // Adds an object to the stack
-void ObjectInspectorTreeHandler::addToStack(css::uno::Any const& rAny)
+void ObjectInspectorTreeHandler::addToStack(cpo::uno::Any const& rAny)
 {
     maInspectionStack.push_back(rAny);
     updateBackButtonState();
 }
 
 // Removes an object from the back of the stack and return it
-css::uno::Any ObjectInspectorTreeHandler::popFromStack()
+cpo::uno::Any ObjectInspectorTreeHandler::popFromStack()
 {
     maInspectionStack.pop_back();
-    uno::Any aAny = maInspectionStack.back();
+    cpo::uno::Any aAny = maInspectionStack.back();
     updateBackButtonState();
     return aAny;
 }
@@ -1366,7 +1367,7 @@ void ObjectInspectorTreeHandler::inspectObject(uno::Reference<uno::XInterface> c
 void ObjectInspectorTreeHandler::introspect(uno::Reference<uno::XInterface> const& xInterface)
 {
     clearStack();
-    addToStack(uno::Any(xInterface));
+    addToStack(cpo::uno::Any(xInterface));
     inspectObject(xInterface);
 }
 

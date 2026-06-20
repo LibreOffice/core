@@ -19,7 +19,7 @@
 
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <XMLRectangleMembersHandler.hxx>
@@ -27,6 +27,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 
 XMLRectangleMembersHdl::XMLRectangleMembersHdl( sal_Int32 nType )

@@ -50,7 +50,7 @@ SwXFilterOptions::~SwXFilterOptions()
 uno::Sequence< beans::PropertyValue > SwXFilterOptions::getPropertyValues()
 {
     return comphelper::InitPropertySequence({
-            { FILTER_OPTIONS_NAME, uno::Any(m_sFilterOptions) }
+            { FILTER_OPTIONS_NAME, cpo::uno::Any(m_sFilterOptions) }
         });
 }
 
@@ -110,7 +110,7 @@ void   SwXFilterOptions::setSourceDocument( const uno::Reference<XComponent >& x
     m_xModel = xDoc;
 }
 
-void SAL_CALL SwXFilterOptions::initialize(const uno::Sequence<uno::Any>& rArguments)
+void SAL_CALL SwXFilterOptions::initialize(const uno::Sequence<cpo::uno::Any>& rArguments)
 {
     ::comphelper::NamedValueCollection aProperties(rArguments);
     if (aProperties.has(u"ParentWindow"_ustr))
@@ -134,7 +134,7 @@ uno::Sequence< OUString > SwXFilterOptions::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Writer_FilterOptionsDialog_get_implementation(css::uno::XComponentContext*,
-                                css::uno::Sequence<css::uno::Any> const &)
+                                css::uno::Sequence<cpo::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
 

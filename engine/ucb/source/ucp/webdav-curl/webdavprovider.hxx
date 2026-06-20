@@ -65,7 +65,7 @@ public:
     virtual ~ContentProvider() override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         noexcept override;
     virtual void SAL_CALL release()

@@ -20,11 +20,12 @@
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace sc_apitest
 {
@@ -65,7 +66,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_SheetCellRangesEnumeration::i
         xMSF->createInstance(u"com.sun.star.sheet.SheetCellRanges"_ustr), uno::UNO_QUERY_THROW);
     uno::Reference<container::XNameContainer> xNC(xSCR, uno::UNO_QUERY_THROW);
 
-    uno::Any aRange;
+    cpo::uno::Any aRange;
 
     aRange <<= xSheet0->getCellRangeByName(u"C1:D4"_ustr);
     xNC->insertByName(u"Range1"_ustr, aRange);

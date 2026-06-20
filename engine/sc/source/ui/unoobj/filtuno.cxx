@@ -39,7 +39,7 @@
 #include <i18nlangtag/lang.h>
 
 #include <optutil.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -47,6 +47,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace connectivity::dbase;
 
 constexpr OUString SCFILTEROPTIONSOBJ_SERVICE = u"com.sun.star.ui.dialogs.FilterOptionsDialog"_ustr;
@@ -125,7 +126,7 @@ ScFilterOptionsObj::~ScFilterOptionsObj()
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Calc_FilterOptionsDialog_get_implementation(css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const &)
+Calc_FilterOptionsDialog_get_implementation(css::uno::XComponentContext*, css::uno::Sequence<cpo::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
     ScDLL::Init();
@@ -366,7 +367,7 @@ void SAL_CALL ScFilterOptionsObj::setSourceDocument( const uno::Reference<lang::
 
 // XInitialization
 
-void SAL_CALL ScFilterOptionsObj::initialize(const uno::Sequence<uno::Any>& rArguments)
+void SAL_CALL ScFilterOptionsObj::initialize(const uno::Sequence<cpo::uno::Any>& rArguments)
 {
     ::comphelper::NamedValueCollection aProperties(rArguments);
     if (aProperties.has(u"ParentWindow"_ustr))

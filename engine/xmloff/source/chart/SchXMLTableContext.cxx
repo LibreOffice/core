@@ -657,11 +657,11 @@ void SchXMLTableCellContext::endFastElement(sal_Int32 )
         mrTable.aData[ mrTable.nRowIndex ][ mrTable.nColumnIndex ].aRangeId = maRangeId;
 }
 
-static void lcl_ApplyCellToComplexLabel( const SchXMLCell& rCell, Sequence< uno::Any >& rComplexLabel )
+static void lcl_ApplyCellToComplexLabel( const SchXMLCell& rCell, Sequence< cpo::uno::Any >& rComplexLabel )
 {
     if( rCell.eType == SCH_CELL_TYPE_STRING )
     {
-        rComplexLabel = { uno::Any(rCell.aString) };
+        rComplexLabel = { cpo::uno::Any(rCell.aString) };
     }
     else if( rCell.aComplexString.hasElements() && rCell.eType == SCH_CELL_TYPE_COMPLEX_STRING )
     {
@@ -673,7 +673,7 @@ static void lcl_ApplyCellToComplexLabel( const SchXMLCell& rCell, Sequence< uno:
     }
     else if( rCell.eType == SCH_CELL_TYPE_FLOAT )
     {
-        rComplexLabel = { uno::Any(rCell.fValue) };
+        rComplexLabel = { cpo::uno::Any(rCell.fValue) };
     }
 }
 
@@ -706,9 +706,9 @@ void SchXMLTableHelper::applyTableToInternalDataProvider(
 
     Sequence< Sequence< double > > aDataInRows( nNumRows );
     auto aDataInRowsRange = asNonConstRange(aDataInRows);
-    Sequence< Sequence< uno::Any > > aComplexRowDescriptions( nNumRows );
+    Sequence< Sequence< cpo::uno::Any > > aComplexRowDescriptions( nNumRows );
     auto aComplexRowDescriptionsRange = asNonConstRange(aComplexRowDescriptions);
-    Sequence< Sequence< uno::Any > > aComplexColumnDescriptions( nNumColumns );
+    Sequence< Sequence< cpo::uno::Any > > aComplexColumnDescriptions( nNumColumns );
     auto aComplexColumnDescriptionsRange = asNonConstRange(aComplexColumnDescriptions);
     for( sal_Int32 i=0; i<nNumRows; ++i )
         aDataInRowsRange[i].realloc( nNumColumns );
@@ -765,8 +765,8 @@ void SchXMLTableHelper::applyTableToInternalDataProvider(
             Reference< beans::XPropertySet > xProps( xChartDoc, uno::UNO_QUERY );
             if (xProps)
             {
-                xProps->setPropertyValue( u"DisableDataTableDialog"_ustr, uno::Any( true ) );
-                xProps->setPropertyValue( u"DisableComplexChartTypes"_ustr, uno::Any( true ) );
+                xProps->setPropertyValue( u"DisableDataTableDialog"_ustr, cpo::uno::Any( true ) );
+                xProps->setPropertyValue( u"DisableComplexChartTypes"_ustr, cpo::uno::Any( true ) );
             }
         }
         catch ( uno::Exception& )

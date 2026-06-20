@@ -571,7 +571,7 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrame
                 {
                     try
                     {
-                        xSet->setPropertyValue(u"Formula"_ustr, uno::Any( aMathData ) );
+                        xSet->setPropertyValue(u"Formula"_ustr, cpo::uno::Any( aMathData ) );
                         bActivate = false;
                     }
                     catch (const uno::Exception&)
@@ -635,9 +635,9 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrame
                  bDisableDataTableDialog )
             {
                 xProps->setPropertyValue(u"DisableDataTableDialog"_ustr,
-                    uno::Any( false ) );
+                    cpo::uno::Any( false ) );
                 xProps->setPropertyValue(u"DisableComplexChartTypes"_ustr,
-                    uno::Any( false ) );
+                    cpo::uno::Any( false ) );
                 uno::Reference< util::XModifiable > xModifiable( xProps, uno::UNO_QUERY );
                 if ( xModifiable.is() )
                 {
@@ -706,7 +706,7 @@ void SwWrtShell::LaunchOLEObj(sal_Int32 nVerb)
     {
         uno::Sequence<beans::PropertyValue> aArguments
             = { comphelper::makePropertyValue(u"ReadOnly"_ustr, pCli->IsProtected()) };
-        xOLEInit->initialize({ uno::Any(aArguments) });
+        xOLEInit->initialize({ cpo::uno::Any(aArguments) });
     }
 
     static_cast<SwOleClient*>(pCli)->SetInDoVerb( true );

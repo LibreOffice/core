@@ -48,7 +48,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNoGrabBagShape)
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xModel, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDrawPage(
         xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
-    uno::Any aShape = xDrawPage->getByIndex(0);
+    cpo::uno::Any aShape = xDrawPage->getByIndex(0);
     uno::Reference<view::XSelectionSupplier> xController(xModel->getCurrentController(),
                                                          uno::UNO_QUERY);
     xController->select(aShape);
@@ -100,10 +100,11 @@ CPPUNIT_TEST_FIXTURE(Test, testSetDocumentPropertiesUpdate)
     uno::Reference<document::XDocumentProperties> xDP = pBaseModel->getDocumentProperties();
     uno::Reference<beans::XPropertyContainer> xUDP = xDP->getUserDefinedProperties();
     xUDP->addProperty(u"ZOTERO_PREF_1"_ustr, beans::PropertyAttribute::REMOVABLE,
-                      uno::Any(u"foo"_ustr));
+                      cpo::uno::Any(u"foo"_ustr));
     xUDP->addProperty(u"ZOTERO_PREF_2"_ustr, beans::PropertyAttribute::REMOVABLE,
-                      uno::Any(u"bar"_ustr));
-    xUDP->addProperty(u"OTHER"_ustr, beans::PropertyAttribute::REMOVABLE, uno::Any(u"baz"_ustr));
+                      cpo::uno::Any(u"bar"_ustr));
+    xUDP->addProperty(u"OTHER"_ustr, beans::PropertyAttribute::REMOVABLE,
+                      cpo::uno::Any(u"baz"_ustr));
 
     // When updating the Zotero ones (1 update, 1 removal):
     std::vector<beans::PropertyValue> aArgsVec = comphelper::JsonToPropertyValues(R"json(

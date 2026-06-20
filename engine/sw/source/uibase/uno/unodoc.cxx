@@ -35,7 +35,7 @@ using namespace ::com::sun::star;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Writer_SwTextDocument_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const& args)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const& args)
 {
     SolarMutexGuard aGuard;
     SwGlobals::ensure();
@@ -51,7 +51,7 @@ Writer_SwTextDocument_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Writer_WebDocument_get_implementation(css::uno::XComponentContext*,
-                                                        css::uno::Sequence<css::uno::Any> const &)
+                                                        css::uno::Sequence<cpo::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
     SwGlobals::ensure();
@@ -64,7 +64,7 @@ com_sun_star_comp_Writer_WebDocument_get_implementation(css::uno::XComponentCont
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Writer_GlobalDocument_get_implementation(css::uno::XComponentContext*,
-                                                           css::uno::Sequence<css::uno::Any> const &)
+                                                           css::uno::Sequence<cpo::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
     SwGlobals::ensure();
@@ -77,7 +77,7 @@ com_sun_star_comp_Writer_GlobalDocument_get_implementation(css::uno::XComponentC
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 SwXMailMerge_get_implementation(css::uno::XComponentContext*,
-                                css::uno::Sequence<css::uno::Any> const &)
+                                css::uno::Sequence<cpo::uno::Any> const &)
 {
 #if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     SolarMutexGuard aGuard;

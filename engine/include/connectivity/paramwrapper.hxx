@@ -99,9 +99,9 @@ namespace dbtools::param
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
         // OPropertySetHelper
-        virtual bool SAL_CALL convertFastPropertyValue( css::uno::Any& rConvertedValue, css::uno::Any& rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue) override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
-        virtual void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const override;
+        virtual bool SAL_CALL convertFastPropertyValue( cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+        virtual void SAL_CALL getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
         // pseudo-XComponent
         void dispose();
@@ -157,7 +157,7 @@ namespace dbtools::param
 
         // css::container::XIndexAccess
         virtual sal_Int32 SAL_CALL getCount() override;
-        virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 _rIndex) override;
+        virtual cpo::uno::Any SAL_CALL getByIndex(sal_Int32 _rIndex) override;
 
     public:
         const Parameters& getParameters() const { return m_aParameters; }

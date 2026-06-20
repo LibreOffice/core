@@ -414,7 +414,7 @@ bool GDIMetaFile::ImplPlayWithRenderer(OutputDevice& rOut, const Point& rPos, Si
                     // set this metafile to the renderer to
                     // speedup things (instead of copying data to
                     // sequence of bytes passed to renderer)
-                    xMtfFastPropertySet->setFastPropertyValue( 0, uno::Any( reinterpret_cast<sal_Int64>( this ) ) );
+                    xMtfFastPropertySet->setFastPropertyValue( 0, cpo::uno::Any( reinterpret_cast<sal_Int64>( this ) ) );
 
                 xMtfRenderer->draw( rDestSize.Width(), rDestSize.Height() );
 

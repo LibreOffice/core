@@ -254,7 +254,7 @@ void XclExpRoot::InitializeGlobals()
             // Compiler mocks about non-matching ctor or conversion from
             // Sequence<...> to Sequence<const ...> if directly created or passed,
             // conversion through Any works around.
-            uno::Any aAny( aOpCodeProvider.getOoxParserMap());
+            cpo::uno::Any aAny( aOpCodeProvider.getOoxParserMap());
             uno::Sequence< const sheet::FormulaOpCodeMapEntry > aOpCodeMapping;
             if (!(aAny >>= aOpCodeMapping))
             {

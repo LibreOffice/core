@@ -543,7 +543,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148791)
     //CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xTextTable, "TableTemplateName"));
     uno::Reference<beans::XPropertySet> xTableProps(xTextTable, uno::UNO_QUERY_THROW);
 
-    xTableProps->setPropertyValue(u"HoriOrient"_ustr, uno::Any(text::HoriOrientation::CENTER));
+    xTableProps->setPropertyValue(u"HoriOrient"_ustr, cpo::uno::Any(text::HoriOrientation::CENTER));
 
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER,
                          getProperty<sal_Int16>(xTextTable, u"HoriOrient"_ustr));
@@ -591,10 +591,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148791)
 
     // tdf#64902 add a test case for repeated table headings
 
-    xTableProps->setPropertyValue(u"RepeatHeadline"_ustr, uno::Any(true));
+    xTableProps->setPropertyValue(u"RepeatHeadline"_ustr, cpo::uno::Any(true));
     CPPUNIT_ASSERT(getProperty<bool>(xTextTable, u"RepeatHeadline"_ustr));
 
-    xTableProps->setPropertyValue(u"HeaderRowCount"_ustr, uno::Any(sal_Int32(3)));
+    xTableProps->setPropertyValue(u"HeaderRowCount"_ustr, cpo::uno::Any(sal_Int32(3)));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getProperty<sal_Int32>(xTextTable, u"HeaderRowCount"_ustr));
 
     dispatchCommand(mxComponent, u".uno:SelectTable"_ustr, {});
@@ -618,14 +618,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf135014)
     createSwDoc();
 
     uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "KeyModifier", uno::Any(sal_Int32(0)) } }));
+        comphelper::InitPropertySequence({ { "KeyModifier", cpo::uno::Any(sal_Int32(0)) } }));
 
     // Toggle Numbering List
     dispatchCommand(mxComponent, u".uno:DefaultBullet"_ustr, aArgs);
 
     uno::Sequence<beans::PropertyValue> aArgs2(comphelper::InitPropertySequence(
-        { { "Param", uno::Any(u"NewNumberingStyle"_ustr) },
-          { "Family", uno::Any(static_cast<sal_Int16>(SfxStyleFamily::Pseudo)) } }));
+        { { "Param", cpo::uno::Any(u"NewNumberingStyle"_ustr) },
+          { "Family", cpo::uno::Any(static_cast<sal_Int16>(SfxStyleFamily::Pseudo)) } }));
 
     // New Style from selection
     dispatchCommand(mxComponent, u".uno:StyleNewByExample"_ustr, aArgs2);
@@ -642,7 +642,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf130629)
     createSwDoc();
 
     uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "KeyModifier", uno::Any(KEY_MOD1) } }));
+        comphelper::InitPropertySequence({ { "KeyModifier", cpo::uno::Any(KEY_MOD1) } }));
 
     dispatchCommand(mxComponent, u".uno:BasicShapes.diamond"_ustr, aArgs);
 
@@ -683,12 +683,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf145584)
 
     // Save as PDF.
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "Selection", uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { "Selection", cpo::uno::Any(true) } }));
 
-    uno::Sequence<beans::PropertyValue> aDescriptor(
-        comphelper::InitPropertySequence({ { "FilterName", uno::Any(u"writer_pdf_Export"_ustr) },
-                                           { "FilterData", uno::Any(aFilterData) },
-                                           { "URL", uno::Any(maTempFile.GetURL()) } }));
+    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
+        { { "FilterName", cpo::uno::Any(u"writer_pdf_Export"_ustr) },
+          { "FilterData", cpo::uno::Any(aFilterData) },
+          { "URL", cpo::uno::Any(maTempFile.GetURL()) } }));
 
     // Without the fix in place, this test would have crashed here
     dispatchCommand(mxComponent, u".uno:ExportToPDF"_ustr, aDescriptor);
@@ -720,12 +720,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf131728)
 
     // Save as PDF.
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
-        { { "ExportBookmarksToPDFDestination", uno::Any(true) } }));
+        { { "ExportBookmarksToPDFDestination", cpo::uno::Any(true) } }));
 
-    uno::Sequence<beans::PropertyValue> aDescriptor(
-        comphelper::InitPropertySequence({ { "FilterName", uno::Any(u"writer_pdf_Export"_ustr) },
-                                           { "FilterData", uno::Any(aFilterData) },
-                                           { "URL", uno::Any(maTempFile.GetURL()) } }));
+    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
+        { { "FilterName", cpo::uno::Any(u"writer_pdf_Export"_ustr) },
+          { "FilterData", cpo::uno::Any(aFilterData) },
+          { "URL", cpo::uno::Any(maTempFile.GetURL()) } }));
 
     dispatchCommand(mxComponent, u".uno:ExportToPDF"_ustr, aDescriptor);
 
@@ -762,12 +762,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf95239)
 
     // Save as PDF.
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
-        { { "ExportBookmarksToPDFDestination", uno::Any(true) } }));
+        { { "ExportBookmarksToPDFDestination", cpo::uno::Any(true) } }));
 
-    uno::Sequence<beans::PropertyValue> aDescriptor(
-        comphelper::InitPropertySequence({ { "FilterName", uno::Any(u"writer_pdf_Export"_ustr) },
-                                           { "FilterData", uno::Any(aFilterData) },
-                                           { "URL", uno::Any(maTempFile.GetURL()) } }));
+    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
+        { { "FilterName", cpo::uno::Any(u"writer_pdf_Export"_ustr) },
+          { "FilterData", cpo::uno::Any(aFilterData) },
+          { "URL", cpo::uno::Any(maTempFile.GetURL()) } }));
 
     dispatchCommand(mxComponent, u".uno:ExportToPDF"_ustr, aDescriptor);
 
@@ -817,12 +817,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf152575)
 
     // Save as PDF.
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "ExportNotesInMargin", uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { "ExportNotesInMargin", cpo::uno::Any(true) } }));
 
-    uno::Sequence<beans::PropertyValue> aDescriptor(
-        comphelper::InitPropertySequence({ { "FilterName", uno::Any(u"writer_pdf_Export"_ustr) },
-                                           { "FilterData", uno::Any(aFilterData) },
-                                           { "URL", uno::Any(maTempFile.GetURL()) } }));
+    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
+        { { "FilterName", cpo::uno::Any(u"writer_pdf_Export"_ustr) },
+          { "FilterData", cpo::uno::Any(aFilterData) },
+          { "URL", cpo::uno::Any(maTempFile.GetURL()) } }));
 
     // Without the fix in place, this test would have crashed here
     dispatchCommand(mxComponent, u".uno:ExportToPDF"_ustr, aDescriptor);
@@ -1149,7 +1149,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf161741)
 
     // undo all the changes in one pass
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
-        { "Undo", uno::Any(sal_Int32(4)) },
+        { "Undo", cpo::uno::Any(sal_Int32(4)) },
     }));
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, aPropertyValues); // undo all 4 actions
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr));
@@ -1170,7 +1170,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf152964)
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Rows", uno::Any(sal_Int32(2)) }, { "Columns", uno::Any(sal_Int32(2)) } }));
+        { { "Rows", cpo::uno::Any(sal_Int32(2)) }, { "Columns", cpo::uno::Any(sal_Int32(2)) } }));
 
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
 
@@ -1217,7 +1217,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf107427)
         mxComponent,
         u".uno:InsertPageHeader?PageStyle:string=Default%20Page%20Style&On:bool=true"_ustr, {});
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Rows", uno::Any(sal_Int32(2)) }, { "Columns", uno::Any(sal_Int32(2)) } }));
+        { { "Rows", cpo::uno::Any(sal_Int32(2)) }, { "Columns", cpo::uno::Any(sal_Int32(2)) } }));
 
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
 
@@ -1278,7 +1278,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf107494)
     uno::Reference<beans::XPropertySet> xPageStyle(
         getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
 
-    xPageStyle->setPropertyValue(u"HeaderIsOn"_ustr, uno::Any(true));
+    xPageStyle->setPropertyValue(u"HeaderIsOn"_ustr, cpo::uno::Any(true));
 
     uno::Reference<text::XText> xHeader(
         getProperty<uno::Reference<text::XText>>(xPageStyle, u"HeaderText"_ustr));
@@ -1289,11 +1289,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf107494)
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
-    xPageStyle->setPropertyValue(u"HeaderIsOn"_ustr, uno::Any(false));
+    xPageStyle->setPropertyValue(u"HeaderIsOn"_ustr, cpo::uno::Any(false));
 
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    xPageStyle->setPropertyValue(u"FooterIsOn"_ustr, uno::Any(true));
+    xPageStyle->setPropertyValue(u"FooterIsOn"_ustr, cpo::uno::Any(true));
 
     uno::Reference<text::XText> xFooter(
         getProperty<uno::Reference<text::XText>>(xPageStyle, u"FooterText"_ustr));
@@ -1309,7 +1309,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf107494)
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
-    xPageStyle->setPropertyValue(u"FooterIsOn"_ustr, uno::Any(false));
+    xPageStyle->setPropertyValue(u"FooterIsOn"_ustr, cpo::uno::Any(false));
 
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 }
@@ -1349,7 +1349,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf131771)
     createSwDoc();
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Rows", uno::Any(sal_Int32(2)) }, { "Columns", uno::Any(sal_Int32(2)) } }));
+        { { "Rows", cpo::uno::Any(sal_Int32(2)) }, { "Columns", cpo::uno::Any(sal_Int32(2)) } }));
 
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
 
@@ -1362,7 +1362,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf131771)
 
     CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xTextTable, u"TableTemplateName"_ustr));
     uno::Reference<beans::XPropertySet> xTableProps(xTextTable, uno::UNO_QUERY_THROW);
-    xTableProps->setPropertyValue(u"TableTemplateName"_ustr, uno::Any(u"Default Style"_ustr));
+    xTableProps->setPropertyValue(u"TableTemplateName"_ustr, cpo::uno::Any(u"Default Style"_ustr));
 
     CPPUNIT_ASSERT_EQUAL(u"Default Style"_ustr,
                          getProperty<OUString>(xTextTable, u"TableTemplateName"_ustr));
@@ -1391,7 +1391,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf156546)
     createSwDoc();
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Rows", uno::Any(sal_Int32(2)) }, { "Columns", uno::Any(sal_Int32(2)) } }));
+        { { "Rows", cpo::uno::Any(sal_Int32(2)) }, { "Columns", cpo::uno::Any(sal_Int32(2)) } }));
 
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
 
@@ -1428,7 +1428,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf80663)
     createSwDoc();
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Rows", uno::Any(sal_Int32(2)) }, { "Columns", uno::Any(sal_Int32(2)) } }));
+        { { "Rows", cpo::uno::Any(sal_Int32(2)) }, { "Columns", cpo::uno::Any(sal_Int32(2)) } }));
 
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
 
@@ -1509,7 +1509,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf121031)
     createSwDoc();
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Rows", uno::Any(sal_Int32(3)) }, { "Columns", uno::Any(sal_Int32(3)) } }));
+        { { "Rows", cpo::uno::Any(sal_Int32(3)) }, { "Columns", cpo::uno::Any(sal_Int32(3)) } }));
 
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
 
@@ -1677,7 +1677,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf139566)
     SwWrtShell* pWrtSh = getSwDocShell()->GetWrtShell();
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Rows", uno::Any(sal_Int32(1)) }, { "Columns", uno::Any(sal_Int32(1)) } }));
+        { { "Rows", cpo::uno::Any(sal_Int32(1)) }, { "Columns", cpo::uno::Any(sal_Int32(1)) } }));
 
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
 
@@ -1715,7 +1715,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf96067)
     createSwDoc();
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Rows", uno::Any(sal_Int32(3)) }, { "Columns", uno::Any(sal_Int32(3)) } }));
+        { { "Rows", cpo::uno::Any(sal_Int32(3)) }, { "Columns", cpo::uno::Any(sal_Int32(3)) } }));
 
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
 
@@ -1746,7 +1746,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf87199)
     createSwDoc();
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Rows", uno::Any(sal_Int32(2)) }, { "Columns", uno::Any(sal_Int32(1)) } }));
+        { { "Rows", cpo::uno::Any(sal_Int32(2)) }, { "Columns", cpo::uno::Any(sal_Int32(1)) } }));
 
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
 
@@ -2133,7 +2133,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf132603)
     createSwDoc();
 
     uno::Sequence<beans::PropertyValue> aPropertyValues
-        = comphelper::InitPropertySequence({ { "Text", uno::Any(u"Comment"_ustr) } });
+        = comphelper::InitPropertySequence({ { "Text", cpo::uno::Any(u"Comment"_ustr) } });
 
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aPropertyValues);
 
@@ -2163,7 +2163,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf117601)
     createSwDoc();
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Rows", uno::Any(sal_Int32(5)) }, { "Columns", uno::Any(sal_Int32(3)) } }));
+        { { "Rows", cpo::uno::Any(sal_Int32(5)) }, { "Columns", cpo::uno::Any(sal_Int32(3)) } }));
 
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
 
@@ -2499,7 +2499,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, AtPageTextBoxCrash)
     // Change its anchor to page
     uno::Reference<beans::XPropertySet> xShpProps(getShape(1), uno::UNO_QUERY_THROW);
     xShpProps->setPropertyValue(
-        u"AnchorType"_ustr, uno::Any(text::TextContentAnchorType::TextContentAnchorType_AT_PAGE));
+        u"AnchorType"_ustr,
+        cpo::uno::Any(text::TextContentAnchorType::TextContentAnchorType_AT_PAGE));
 
     // The page anchored objects must not have content anchor
     // unless this will lead to crash later, for example on
@@ -2552,8 +2553,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf133477)
 
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
-    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
-        { { "OutputStream", uno::Any(xOutputStream) }, { "FilterName", uno::Any(u"BMP"_ustr) } }));
+    uno::Sequence<beans::PropertyValue> aDescriptor(
+        comphelper::InitPropertySequence({ { "OutputStream", cpo::uno::Any(xOutputStream) },
+                                           { "FilterName", cpo::uno::Any(u"BMP"_ustr) } }));
     xGraphicExporter->filter(aDescriptor);
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
 
@@ -2807,7 +2809,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf136740)
                                                                css::uno::UNO_QUERY_THROW);
     css::uno::Reference<css::beans::XPropertySet> xTextDefaults(
         xFact->createInstance(u"com.sun.star.text.Defaults"_ustr), css::uno::UNO_QUERY_THROW);
-    const css::uno::Any aOrig = xTextDefaults->getPropertyValue(u"TabStopDistance"_ustr);
+    const cpo::uno::Any aOrig = xTextDefaults->getPropertyValue(u"TabStopDistance"_ustr);
     sal_Int32 nDefTab = aOrig.get<sal_Int32>();
     CPPUNIT_ASSERT(nDefTab != 0);
 
@@ -2822,16 +2824,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf136740)
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
     dispatchCommand(mxComponent, u".uno:GoToEndOfDoc"_ustr, {});
 
-    const css::uno::Any aNew(nDefTab * 2);
+    const cpo::uno::Any aNew(nDefTab * 2);
     xTextDefaults->setPropertyValue(u"TabStopDistance"_ustr, aNew);
     // it may become slightly different because of conversions, so get the actual value
-    const css::uno::Any aNewCorrected = xTextDefaults->getPropertyValue(u"TabStopDistance"_ustr);
+    const cpo::uno::Any aNewCorrected = xTextDefaults->getPropertyValue(u"TabStopDistance"_ustr);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(nDefTab * 2, aNewCorrected.get<sal_Int32>(), 1);
 
     // Paste special as RTF
     const auto aPropertyValues = comphelper::InitPropertySequence(
         { { "SelectedFormat",
-            css::uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
+            cpo::uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
     dispatchCommand(mxComponent, u".uno:ClipboardFormatItems"_ustr, aPropertyValues);
 
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
@@ -2850,7 +2852,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf128106)
     createSwDoc("cross_reference_demo_bmk.odt");
 
     const auto aPropertyValues
-        = comphelper::InitPropertySequence({ { "FileName", css::uno::Any(maTempFile.GetURL()) } });
+        = comphelper::InitPropertySequence({ { "FileName", cpo::uno::Any(maTempFile.GetURL()) } });
     dispatchCommand(mxComponent, u".uno:NewGlobalDoc"_ustr, aPropertyValues);
 
     // Use loadFromDesktop instead of loadFromURL to avoid calling mxComponent->dispose()
@@ -3265,8 +3267,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf62032ApplyStyle)
     pWrtSh->Down(/*bSelect=*/false);
 
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "Style", uno::Any(u"A 2"_ustr) },
-        { "FamilyName", uno::Any(u"ParagraphStyles"_ustr) },
+        { "Style", cpo::uno::Any(u"A 2"_ustr) },
+        { "FamilyName", cpo::uno::Any(u"ParagraphStyles"_ustr) },
     });
     dispatchCommand(mxComponent, u".uno:StyleApply"_ustr, aPropertyValues);
 

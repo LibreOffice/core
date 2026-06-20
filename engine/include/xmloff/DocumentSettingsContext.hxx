@@ -31,10 +31,10 @@ class XMLOFF_DLLPUBLIC XMLDocumentSettingsContext final : public SvXMLImportCont
     struct SettingsGroup
     {
         OUString        sGroupName;
-        css::uno::Any   aSettings;
+        cpo::uno::Any   aSettings;
     };
-    css::uno::Any                   maViewProps;
-    css::uno::Any                   maConfigProps;
+    cpo::uno::Any                   maViewProps;
+    cpo::uno::Any                   maConfigProps;
     ::std::vector< SettingsGroup >  maDocSpecificSettings;
 
 public:

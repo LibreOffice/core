@@ -39,6 +39,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
@@ -304,7 +305,7 @@ void XMLTextMasterPageContext::Finish( bool bOverwrite )
 
     if ( xPropSetInfo->hasPropertyByName( u"Hidden"_ustr ) )
     {
-        xPropSet->setPropertyValue( u"Hidden"_ustr, uno::Any( IsHidden( ) ) );
+        xPropSet->setPropertyValue( u"Hidden"_ustr, cpo::uno::Any( IsHidden( ) ) );
     }
     if (xPropSetInfo->hasPropertyByName(gsHeaderNoFirst))
     {

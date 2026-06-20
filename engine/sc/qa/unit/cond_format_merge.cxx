@@ -49,7 +49,7 @@ void ScCondFormatMergeTest::testCondFormatMerge()
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
 
     uno::Reference<beans::XPropertySet> xProps(xSheet, uno::UNO_QUERY_THROW);
-    uno::Any aAny = xProps->getPropertyValue(u"ConditionalFormats"_ustr);
+    cpo::uno::Any aAny = xProps->getPropertyValue(u"ConditionalFormats"_ustr);
     uno::Reference<sheet::XConditionalFormats> xCondFormats;
 
     CPPUNIT_ASSERT(aAny >>= xCondFormats);

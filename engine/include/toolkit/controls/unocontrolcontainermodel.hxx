@@ -24,7 +24,7 @@
 
 class TOOLKIT_DLLPUBLIC UnoControlContainerModel final : public UnoControlModel
 {
-    css::uno::Any                                                      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    cpo::uno::Any                                                      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper&                                      getInfoHelper() override;
 
 public:

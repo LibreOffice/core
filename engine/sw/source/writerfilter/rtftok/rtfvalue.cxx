@@ -104,9 +104,9 @@ OUString RTFValue::getString() const
 
 void RTFValue::setString(const OUString& sValue) { m_sValue = sValue; }
 
-uno::Any RTFValue::getAny() const
+cpo::uno::Any RTFValue::getAny() const
 {
-    uno::Any ret;
+    cpo::uno::Any ret;
     if (!m_sValue.isEmpty() || m_bForceString)
         ret <<= m_sValue;
     else if (m_xShape.is())

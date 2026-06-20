@@ -166,7 +166,7 @@ public:
     SwConnectionContext(OUString aMailServer, sal_Int16 nPort, OUString aConnectionType);
     virtual ~SwConnectionContext() override;
 
-    virtual css::uno::Any SAL_CALL getValueByName(const OUString& Name) override;
+    virtual cpo::uno::Any SAL_CALL getValueByName(const OUString& Name) override;
 };
 
 class SW_DLLPUBLIC SwConnectionListener final :
@@ -197,16 +197,16 @@ class SW_DLLPUBLIC SwMailTransferable final :
     SwMailTransferable(OUString aURL, OUString aName, OUString aMimeType);
     SwMailTransferable(OUString aBody, OUString aMimeType);
     virtual ~SwMailTransferable() override;
-    virtual css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& aFlavor) override;
+    virtual cpo::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& aFlavor) override;
 
     virtual css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
     virtual bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& aFlavor) override;
 
     //XPropertySet
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL setPropertyValue(const OUString& aPropertyName, const css::uno::Any& aValue) override;
+    virtual void SAL_CALL setPropertyValue(const OUString& aPropertyName, const cpo::uno::Any& aValue) override;
 
-    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName) override;
     virtual void SAL_CALL addPropertyChangeListener(const OUString& aPropertyName,
                                                     const css::uno::Reference<css::beans::XPropertyChangeListener>& xListener) override;
     virtual void SAL_CALL removePropertyChangeListener(const OUString& aPropertyName,

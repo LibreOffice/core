@@ -188,6 +188,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
@@ -585,7 +586,7 @@ void SwXTextDocument::close( bool bDeliverOwnership )
 {
     if(m_pDocShell)
     {
-        uno::Sequence< uno::Any > aArgs;
+        uno::Sequence< cpo::uno::Any > aArgs;
         m_pDocShell->CallAutomationDocumentEventSinks( u"Close"_ustr, aArgs );
     }
     SolarMutexGuard aGuard;
@@ -1398,11 +1399,11 @@ public:
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override { return 1; }
 
-    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 Index) override
+    virtual cpo::uno::Any SAL_CALL getByIndex(sal_Int32 Index) override
     {
         if (Index != 0)
             throw css::lang::IndexOutOfBoundsException(u"Writer documents have only one DrawPage!"_ustr);
-        return css::uno::Any(m_xDoc->getDrawPage());
+        return cpo::uno::Any(m_xDoc->getDrawPage());
     }
 
     // XElementAccess
@@ -1614,7 +1615,7 @@ void    SwXTextDocument::InitNewDoc()
 
 css::uno::Reference<css::uno::XInterface> SwXTextDocument::create(
     OUString const & rServiceName,
-    css::uno::Sequence<css::uno::Any> const * arguments)
+    css::uno::Sequence<cpo::uno::Any> const * arguments)
 {
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
@@ -2192,24 +2193,24 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
 
         // Sequence of nodes, each of them represented by three-element sequence:
         // [ index, styleIntPtr, list_id ]
-        std::vector<css::uno::Sequence<css::uno::Any>> nodes;
+        std::vector<css::uno::Sequence<cpo::uno::Any>> nodes;
 
         const SwDoc& rDoc = GetDocOrThrow();
         for (const SwNumRule* pNumRule : rDoc.GetNumRuleTable())
         {
             SwNumRule::tTextNodeList textNodes;
             pNumRule->GetTextNodeList(textNodes);
-            css::uno::Any styleIntPtr(reinterpret_cast<sal_uInt64>(pNumRule));
+            cpo::uno::Any styleIntPtr(reinterpret_cast<sal_uInt64>(pNumRule));
 
             for (const SwTextNode* pTextNode : textNodes)
             {
-                css::uno::Any index(pTextNode->GetIndex().get());
-                css::uno::Any list_id(pTextNode->GetListId());
+                cpo::uno::Any index(pTextNode->GetIndex().get());
+                cpo::uno::Any list_id(pTextNode->GetListId());
 
                 nodes.push_back({ index, styleIntPtr, list_id });
             }
         }
-        return css::uno::Any(comphelper::containerToSequence(nodes));
+        return cpo::uno::Any(comphelper::containerToSequence(nodes));
     }
 
     const SfxItemPropertyMapEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName);
@@ -2518,7 +2519,7 @@ static VclPtr< OutputDevice > lcl_GetOutputDevice( const SwPrintUIOptions &rPrin
 {
     VclPtr< OutputDevice > pOut;
 
-    uno::Any aAny( rPrintUIOptions.getValue( u"RenderDevice"_ustr ));
+    cpo::uno::Any aAny( rPrintUIOptions.getValue( u"RenderDevice"_ustr ));
     uno::Reference< awt::XDevice >  xRenderDevice;
     aAny >>= xRenderDevice;
     if (xRenderDevice.is())
@@ -2563,7 +2564,7 @@ SfxViewShell * SwXTextDocument::GetRenderView(
         pView = GuessViewShell( rbIsSwSrcView );
     else
     {
-        uno::Any aTmp;
+        cpo::uno::Any aTmp;
         auto pOption = std::find_if(rOptions.begin(), rOptions.end(),
             [](const beans::PropertyValue& rProp) { return rProp.Name == "View"; });
         if (pOption != rOptions.end())
@@ -2589,7 +2590,7 @@ SfxViewShell * SwXTextDocument::GetRenderView(
 */
 SwDoc * SwXTextDocument::GetRenderDoc(
     SfxViewShell *&rpView,
-    const uno::Any& rSelection,
+    const cpo::uno::Any& rSelection,
     bool bIsPDFExport )
 {
     SwDoc *pDoc = nullptr;
@@ -2673,7 +2674,7 @@ static void lcl_SavePrintUIOptionsToDocumentPrintData(
 }
 
 sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
-        const uno::Any& rSelection,
+        const cpo::uno::Any& rSelection,
         const uno::Sequence< beans::PropertyValue >& rxOptions )
 {
     SolarMutexGuard aGuard;
@@ -2849,7 +2850,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
 
 uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
         sal_Int32 nRenderer,
-        const uno::Any& rSelection,
+        const cpo::uno::Any& rSelection,
         const uno::Sequence< beans::PropertyValue >& rxOptions )
 {
     SolarMutexGuard aGuard;
@@ -3159,7 +3160,7 @@ SfxViewShell * SwXTextDocument::GuessViewShell(
 
 void SAL_CALL SwXTextDocument::render(
         sal_Int32 nRenderer,
-        const uno::Any& rSelection,
+        const cpo::uno::Any& rSelection,
         const uno::Sequence< beans::PropertyValue >& rxOptions )
 {
     SolarMutexGuard aGuard;
@@ -4029,7 +4030,7 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
     {
         css::uno::Sequence<css::beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
-            { "NewTheme", uno::Any(sThemeName) }
+            { "NewTheme", cpo::uno::Any(sThemeName) }
         }));
         comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, aPropertyValues);
     }
@@ -4037,7 +4038,7 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
     {
         css::uno::Sequence<css::beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
-            { "NewTheme", uno::Any(sBackgroundThemeName) }
+            { "NewTheme", cpo::uno::Any(sBackgroundThemeName) }
         }));
         comphelper::dispatchCommand(u".uno:InvertBackground"_ustr, aPropertyValues);
     }

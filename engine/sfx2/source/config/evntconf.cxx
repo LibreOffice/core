@@ -21,7 +21,7 @@
 #include <memory>
 
 #include <sal/log.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/evntconf.hxx>
 #include <svl/macitem.hxx>
@@ -91,7 +91,7 @@ void SfxEventNamesItem::AddEvent( const OUString& rName, const OUString& rUIName
 }
 
 
-static uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
+static cpo::uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
 {
 /*
     This function converts a SvxMacro into an Any containing three
@@ -103,7 +103,7 @@ static uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
     If pMacro is NULL, we return an empty property sequence, so PropagateEvent_Impl
     can delete an event binding.
 */
-    uno::Any aEventData;
+    cpo::uno::Any aEventData;
 
     if ( pMacro )
     {
@@ -182,7 +182,7 @@ static void PropagateEvent_Impl( SfxObjectShell const *pDoc, const OUString& aEv
     uno::Reference < container::XNameReplace > xEvents = xSupplier->getEvents();
     if ( !aEventName.isEmpty() )
     {
-        uno::Any aEventData = CreateEventData_Impl( pMacro );
+        cpo::uno::Any aEventData = CreateEventData_Impl( pMacro );
 
         try
         {
@@ -212,7 +212,7 @@ void SfxEventConfiguration::ConfigureEvent( const OUString& aName, const SvxMacr
 }
 
 
-std::unique_ptr<SvxMacro> SfxEventConfiguration::ConvertToMacro( const css::uno::Any& rElement, SfxObjectShell* pDoc )
+std::unique_ptr<SvxMacro> SfxEventConfiguration::ConvertToMacro( const cpo::uno::Any& rElement, SfxObjectShell* pDoc )
 {
     return SfxEvents_Impl::ConvertToMacro( rElement, pDoc );
 }

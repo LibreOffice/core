@@ -207,14 +207,14 @@ protected:
 public:
     OPropertySetAggregationHelper( ::cppu::OBroadcastHelper& rBHelper );
 
-    virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& aType) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface(const css::uno::Type& aType) override;
 
 // XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 
 // XFastPropertySet
-    virtual void SAL_CALL setFastPropertyValue(sal_Int32 nHandle, const css::uno::Any& aValue) override;
-    virtual css::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle) override;
+    virtual void SAL_CALL setFastPropertyValue(sal_Int32 nHandle, const cpo::uno::Any& aValue) override;
+    virtual cpo::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle) override;
 
 // XPropertySet
     virtual void SAL_CALL           addPropertyChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener) override;
@@ -227,13 +227,13 @@ public:
     virtual void SAL_CALL vetoableChange(const css::beans::PropertyChangeEvent& aEvent) override;
 
 // XMultiPropertySet
-    virtual void SAL_CALL   setPropertyValues(const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Sequence< css::uno::Any >& Values) override;
+    virtual void SAL_CALL   setPropertyValues(const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Sequence< cpo::uno::Any >& Values) override;
     virtual void SAL_CALL   addPropertiesChangeListener(const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener) override;
 
 // XPropertyState
     virtual css::beans::PropertyState SAL_CALL getPropertyState(const OUString& PropertyName) override;
     virtual void SAL_CALL                                   setPropertyToDefault(const OUString& PropertyName) override;
-    virtual css::uno::Any SAL_CALL             getPropertyDefault(const OUString& aPropertyName) override;
+    virtual cpo::uno::Any SAL_CALL             getPropertyDefault(const OUString& aPropertyName) override;
 
 // OPropertySetHelper
     /** still waiting to be overwritten ...
@@ -244,17 +244,17 @@ public:
     /** only implemented for "forwarded" properties, every other property must be handled
         in the derivee, and will assert if passed herein
     */
-    virtual bool SAL_CALL convertFastPropertyValue( css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
+    virtual bool SAL_CALL convertFastPropertyValue( cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
 
     /** only implemented for "forwarded" properties, every other property must be handled
         in the derivee, and will assert if passed herein
     */
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
 
 protected:
     virtual ~OPropertySetAggregationHelper() override;
 
-    virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle) const override;
+    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
     void disposing();
 
     sal_Int32       getOriginalHandle( sal_Int32 _nHandle ) const;

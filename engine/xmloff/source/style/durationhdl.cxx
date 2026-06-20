@@ -18,12 +18,13 @@
  */
 
 #include "durationhdl.hxx"
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/util/Duration.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <sax/tools/converter.hxx>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 
 bool XMLDurationMS16PropHdl_Impl::importXML(

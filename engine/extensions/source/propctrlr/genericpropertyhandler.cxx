@@ -49,6 +49,7 @@ namespace pcr
 {
 
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::script;
     using namespace ::com::sun::star::frame;
@@ -76,8 +77,8 @@ namespace pcr
         // IPropertyEnumRepresentation implementation
         virtual std::vector< OUString >
                                     getDescriptions() const override;
-        virtual void                getValueFromDescription( const OUString& _rDescription, css::uno::Any& _out_rValue ) const override;
-        virtual OUString            getDescriptionForValue( const css::uno::Any& _rEnumValue ) const override;
+        virtual void                getValueFromDescription( const OUString& _rDescription, cpo::uno::Any& _out_rValue ) const override;
+        virtual OUString            getDescriptionForValue( const cpo::uno::Any& _rEnumValue ) const override;
 
     private:
         void            impl_getValues( Sequence< sal_Int32 >& _out_rValues ) const;
@@ -626,7 +627,7 @@ namespace pcr
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 extensions_propctrlr_GenericPropertyHandler_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new pcr::GenericPropertyHandler(context));
 }

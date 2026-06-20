@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CPPUHELPER_COMPONENT_CONTEXT_HXX
 #define INCLUDED_CPPUHELPER_COMPONENT_CONTEXT_HXX
 
-#include "com/sun/star/uno/Any.hxx"
+#include "cpo/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "cppuhelper/cppuhelperdllapi.h"
 #include "rtl/ustring.hxx"
@@ -47,7 +47,7 @@ struct SAL_WARN_UNUSED ContextEntry_Init
     ::rtl::OUString m_sName;
     /** context value
     */
-    css::uno::Any m_aValue;
+    cpo::uno::Any m_aValue;
 
     /** Default ctor.
     */
@@ -66,7 +66,7 @@ struct SAL_WARN_UNUSED ContextEntry_Init
     */
     ContextEntry_Init(
         ::rtl::OUString const & name_,
-        css::uno::Any const & value_,
+        cpo::uno::Any const & value_,
         bool bLateInitService_ = false )
             : m_bLateInitService( bLateInitService_ ),
               m_sName( name_ ),

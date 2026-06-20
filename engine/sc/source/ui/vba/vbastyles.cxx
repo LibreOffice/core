@@ -29,12 +29,12 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-static css::uno::Any
-lcl_createAPIStyleToVBAObject( const css::uno::Any& aObject, const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const rtl::Reference<ScModelObj>& xModel )
+static cpo::uno::Any
+lcl_createAPIStyleToVBAObject( const cpo::uno::Any& aObject, const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const rtl::Reference<ScModelObj>& xModel )
 {
     uno::Reference< beans::XPropertySet > xStyleProps( aObject, uno::UNO_QUERY_THROW );
     uno::Reference< excel::XStyle > xStyle( new ScVbaStyle( xParent, xContext, xStyleProps, xModel ) );
-    return uno::Any( xStyle );
+    return cpo::uno::Any( xStyle );
 }
 
 ScVbaStyles::ScVbaStyles( const uno::Reference< XHelperInterface >& xParent,
@@ -62,8 +62,8 @@ ScVbaStyles::getStyleNames()
     return mxNameContainerCellStyles->getElementNames();
 }
 
-uno::Any
-ScVbaStyles::createCollectionObject(const uno::Any& aObject)
+cpo::uno::Any
+ScVbaStyles::createCollectionObject(const cpo::uno::Any& aObject)
 {
     return lcl_createAPIStyleToVBAObject( aObject, mxParent, mxContext, mxModel );
 }
@@ -90,7 +90,7 @@ public:
         {
                 return ( nIndex < m_xIndexAccess->getCount() );
         }
-        virtual uno::Any SAL_CALL nextElement(  ) override
+        virtual cpo::uno::Any SAL_CALL nextElement(  ) override
         {
             try
             {
@@ -111,7 +111,7 @@ public:
             }
             catch (const uno::Exception& e)
             {
-                css::uno::Any a(cppu::getCaughtException());
+                cpo::uno::Any a(cppu::getCaughtException());
                 throw css::lang::WrappedTargetException(
                     "wrapped Exception " + e.Message,
                     css::uno::Reference<css::uno::XInterface>(), a);
@@ -129,7 +129,7 @@ ScVbaStyles::createEnumeration()
 }
 
 uno::Reference< excel::XStyle > SAL_CALL
-ScVbaStyles::Add( const OUString& _sName, const uno::Any& _aBasedOn )
+ScVbaStyles::Add( const OUString& _sName, const cpo::uno::Any& _aBasedOn )
 {
     uno::Reference< excel::XStyle > aRet;
     try
@@ -153,13 +153,13 @@ ScVbaStyles::Add( const OUString& _sName, const uno::Any& _aBasedOn )
 
         if (!mxNameContainerCellStyles->hasByName(_sName))
         {
-            mxNameContainerCellStyles->insertByName(_sName, uno::Any( xStyle) );
+            mxNameContainerCellStyles->insertByName(_sName, cpo::uno::Any( xStyle) );
         }
         if (sParentCellStyleName != "Default")
         {
             xStyle->setParentStyle( sParentCellStyleName );
         }
-        aRet.set( Item( uno::Any( _sName ), uno::Any() ), uno::UNO_QUERY_THROW );
+        aRet.set( Item( cpo::uno::Any( _sName ), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
     }
     catch (const uno::Exception&)
     {

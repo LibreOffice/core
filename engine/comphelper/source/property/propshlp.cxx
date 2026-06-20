@@ -30,6 +30,7 @@
 #include <sal/log.hxx>
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace cppu;
@@ -322,7 +323,7 @@ void OPropertySetHelper::removeVetoableChangeListener(
 
 void OPropertySetHelper::setDependentFastPropertyValue(std::unique_lock<std::mutex>& rGuard,
                                                        sal_Int32 i_handle,
-                                                       const css::uno::Any& i_value)
+                                                       const cpo::uno::Any& i_value)
 {
     sal_Int16 nAttributes(0);
     IPropertyArrayHelper& rInfo = getInfoHelper();

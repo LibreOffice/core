@@ -99,7 +99,7 @@ public:
 
     virtual void SetDefaults() override;
 
-      void AddProperty(sal_Int16 nContextID, const css::uno::Any& aValue);
+      void AddProperty(sal_Int16 nContextID, const cpo::uno::Any& aValue);
     XMLPropertyState* FindProperty(const sal_Int16 nContextID);
 
     sal_Int32 GetNumberFormat();// { return nNumberFormat; }

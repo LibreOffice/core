@@ -70,7 +70,7 @@ public:
                                  css::awt::Point& aOutPosition );
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
         throw( css::uno::Exception,
                css::uno::RuntimeException );
 

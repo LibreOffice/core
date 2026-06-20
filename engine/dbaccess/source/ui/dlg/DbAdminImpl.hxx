@@ -59,7 +59,7 @@ namespace dbaui
         css::uno::Reference< css::beans::XPropertySet >   m_xDatasource;
         css::uno::Reference< css::frame::XModel >         m_xModel;
 
-        css::uno::Any              m_aDataSourceOrName;
+        cpo::uno::Any              m_aDataSourceOrName;
 
         MapInt2String           m_aDirectPropTranslator;    /// translating property id's into names (direct properties of a data source)
         MapInt2String           m_aIndirectPropTranslator;  /// translating property id's into names (indirect properties of a data source)
@@ -99,7 +99,7 @@ namespace dbaui
         */
         css::uno::Reference< css::beans::XPropertySet > const &  getCurrentDataSource();
 
-        void setDataSourceOrName( const css::uno::Any& _rDataSourceOrName );
+        void setDataSourceOrName( const cpo::uno::Any& _rDataSourceOrName );
 
         /** extracts the connection type from the given set<p/>
             The connection type is determined by the value of the DSN item, analyzed by the TypeCollection item.
@@ -144,10 +144,10 @@ namespace dbaui
         void fillDatasourceInfo(const SfxItemSet& _rSource, css::uno::Sequence< css::beans::PropertyValue >& _rInfo);
 
         /// translate the given value into an SfxPoolItem, put this into the given set under the given id
-        void        implTranslateProperty(SfxItemSet& _rSet, sal_Int32  _nId, const css::uno::Any& _rValue);
+        void        implTranslateProperty(SfxItemSet& _rSet, sal_Int32  _nId, const cpo::uno::Any& _rValue);
 
         /// translate the given SfxPoolItem into an <type scope="com.sun.star.Any">uno</type>
-        static css::uno::Any implTranslateProperty(const SfxPoolItem* _pItem);
+        static cpo::uno::Any implTranslateProperty(const SfxPoolItem* _pItem);
 
         /// translate the given SfxPoolItem into an <type scope="com.sun.star.Any">uno</type>, set it (under the given name) on the given property set
         static void implTranslateProperty(const css::uno::Reference< css::beans::XPropertySet >& _rxSet, const OUString& _rName, const SfxPoolItem* _pItem);

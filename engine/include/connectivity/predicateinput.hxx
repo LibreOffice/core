@@ -23,7 +23,7 @@
 #include <connectivity/sqlparse.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 
-namespace com::sun::star::uno { class Any; }
+namespace cpo::uno { class Any; }
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::i18n { class XLocaleData4; }
 namespace com::sun::star::sdbc { class XConnection; }
@@ -99,7 +99,7 @@ namespace dbtools
             is the field for which a predicate is to be entered
         @see normalizePredicateString
         */
-        css::uno::Any getPredicateValue(
+        cpo::uno::Any getPredicateValue(
             const OUString& _rPredicateValue,
             const css::uno::Reference< css::beans::XPropertySet > & _rxField
         ) const;
@@ -117,7 +117,7 @@ namespace dbtools
             sal_Unicode& _rThdSep
         ) const;
 
-        css::uno::Any implParseNode(std::unique_ptr<::connectivity::OSQLParseNode> pParseNode, bool _bForStatementUse) const;
+        cpo::uno::Any implParseNode(std::unique_ptr<::connectivity::OSQLParseNode> pParseNode, bool _bForStatementUse) const;
     };
 
 

@@ -32,6 +32,7 @@
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
 
@@ -72,16 +73,16 @@ void AccessibleListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEven
             {
                 return ;
             }
-            uno::Any aValue;
+            cpo::uno::Any aValue;
             aValue <<= AccessibleStateType::CHECKED;
 
             if ( getListBox()->GetCheckButtonState( pCurOpEntry->GetSvLBoxEntry() ) == SvButtonState::Checked )
             {
-                pCurOpEntry->NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, uno::Any(), aValue );
+                pCurOpEntry->NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, cpo::uno::Any(), aValue );
             }
             else
             {
-                pCurOpEntry->NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aValue,uno::Any() );
+                pCurOpEntry->NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aValue,cpo::uno::Any() );
             }
             break;
         }
@@ -108,17 +109,17 @@ void AccessibleListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEven
             VclPtr<SvTreeListBox> pBox = getListBox();
             if( pBox && pBox->HasFocus() )
             {
-                uno::Any aNewValue;
+                cpo::uno::Any aNewValue;
                 SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
                 if ( pEntry )
                 {
                     if (m_xFocusedEntry.is() && m_xFocusedEntry->GetSvLBoxEntry() == pEntry)
                     {
                         aNewValue <<= uno::Reference<XAccessible>(m_xFocusedEntry);;
-                        NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, uno::Any(), aNewValue );
+                        NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, cpo::uno::Any(), aNewValue );
                         return ;
                     }
-                    uno::Any aOldValue;
+                    cpo::uno::Any aOldValue;
                     aOldValue <<= uno::Reference<XAccessible>(m_xFocusedEntry);;
 
                     m_xFocusedEntry = implGetAccessible(*pEntry);
@@ -129,7 +130,7 @@ void AccessibleListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEven
                 else
                 {
                     aNewValue <<= AccessibleStateType::FOCUSED;
-                    NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, uno::Any(), aNewValue );
+                    NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, cpo::uno::Any(), aNewValue );
                 }
             }
         }
@@ -146,8 +147,8 @@ void AccessibleListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEven
                 // NULL means Clear()
                 for (auto const& entry : m_mapEntry)
                 {
-                    uno::Any aNewValue;
-                    uno::Any aOldValue;
+                    cpo::uno::Any aNewValue;
+                    cpo::uno::Any aOldValue;
                     aOldValue <<= uno::Reference<XAccessible>(entry.second);
                     NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
                 }
@@ -172,7 +173,7 @@ void AccessibleListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEven
                         ( rVclWindowEvent.GetId() == VclEventId::ItemExpanded )
                         ? AccessibleEventId::LISTBOX_ENTRY_EXPANDED
                         : AccessibleEventId::LISTBOX_ENTRY_COLLAPSED;
-                uno::Any aListBoxEntry;
+                cpo::uno::Any aListBoxEntry;
                 aListBoxEntry <<= Reference<XAccessible>(xChild);
                 NotifyAccessibleEvent( nAccEvent, Any(), aListBoxEntry );
                 if ( getListBox() && getListBox()->HasFocus() )
@@ -196,9 +197,9 @@ AccessibleListBoxEntry* AccessibleListBox::GetCurEventEntry( const VclWindowEven
     if (m_xFocusedEntry.is() && pEntry && pEntry != m_xFocusedEntry->GetSvLBoxEntry())
     {
         AccessibleListBoxEntry *const pAccCurOptionEntry = implGetAccessible(*pEntry).get();
-        uno::Any aNewValue;
+        cpo::uno::Any aNewValue;
         aNewValue <<= uno::Reference<XAccessible>(pAccCurOptionEntry);
-        NotifyAccessibleEvent( AccessibleEventId::CHILD, uno::Any(), aNewValue );//Add
+        NotifyAccessibleEvent( AccessibleEventId::CHILD, cpo::uno::Any(), aNewValue );//Add
 
         return pAccCurOptionEntry;
     }
@@ -213,8 +214,8 @@ void AccessibleListBox::RemoveChildEntries(SvTreeListEntry* pEntry)
     MAP_ENTRY::iterator mi = m_mapEntry.find(pEntry);
     if ( mi != m_mapEntry.end() )
     {
-        uno::Any aNewValue;
-        uno::Any aOldValue;
+        cpo::uno::Any aNewValue;
+        cpo::uno::Any aOldValue;
         aOldValue <<= uno::Reference<XAccessible>(mi->second);
         NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
 

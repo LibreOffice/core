@@ -81,7 +81,7 @@ CopyDlg::~CopyDlg()
         OUString::number(m_xMtrFldHeight->get_value(FieldUnit::NONE)) + OUStringChar(TOKEN) +
         OUString::number(static_cast<sal_uInt32>(m_xLbStartColor->GetSelectEntryColor())) + OUStringChar(TOKEN) +
         OUString::number(static_cast<sal_uInt32>(m_xLbEndColor->GetSelectEntryColor()));
-    aDlgOpt.SetUserItem(u"UserItem"_ustr, css::uno::Any(sStr));
+    aDlgOpt.SetUserItem(u"UserItem"_ustr, cpo::uno::Any(sStr));
 }
 
 /**
@@ -110,7 +110,7 @@ void CopyDlg::Reset()
     SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
     if (aDlgOpt.Exists())
     {
-        css::uno::Any aUserItem = aDlgOpt.GetUserItem(u"UserItem"_ustr);
+        cpo::uno::Any aUserItem = aDlgOpt.GetUserItem(u"UserItem"_ustr);
         aUserItem >>= aStr;
     }
 

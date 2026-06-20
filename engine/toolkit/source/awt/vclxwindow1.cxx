@@ -33,7 +33,7 @@
 #include <vcl/sysdata.hxx>
 
 /// helper method to set a window handle into a SystemParentData struct
-void VCLXWindow::SetSystemParent_Impl(const css::uno::Any& rHandle)
+void VCLXWindow::SetSystemParent_Impl(const cpo::uno::Any& rHandle)
 {
     // does only work for WorkWindows
     VclPtr<vcl::Window> pWindow = GetWindow();
@@ -43,7 +43,7 @@ void VCLXWindow::SetSystemParent_Impl(const css::uno::Any& rHandle)
     }
 
     // use sal_Int64 here to accommodate all int types
-    // uno::Any shift operator will upcast if necessary
+    // cpo::uno::Any shift operator will upcast if necessary
     sal_Int64 nHandle = 0;
     bool bXEmbed = false;
     bool bThrow = false;

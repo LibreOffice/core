@@ -47,6 +47,7 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::util;
@@ -412,7 +413,7 @@ void SdXMLGenericPageContext::SetStyle( OUString const & rStyleName )
                         const_cast<XMLPropStyleContext*>(pPropStyle)->FillPropertySet(xPropSet);
 
                         if( xBackgroundSet.is() )
-                            xPropSet1->setPropertyValue( aBackground, uno::Any( xBackgroundSet ) );
+                            xPropSet1->setPropertyValue( aBackground, cpo::uno::Any( xBackgroundSet ) );
                     }
                 }
             }
@@ -463,7 +464,7 @@ void SdXMLGenericPageContext::SetLayout()
             OUString aPropName(u"Layout"_ustr);
             Reference< beans::XPropertySetInfo > xInfo( xPropSet->getPropertySetInfo() );
             if( xInfo.is() && xInfo->hasPropertyByName( aPropName ) )
-                xPropSet->setPropertyValue(aPropName, uno::Any( static_cast<sal_Int16>(nType) ) );
+                xPropSet->setPropertyValue(aPropName, cpo::uno::Any( static_cast<sal_Int16>(nType) ) );
         }
     }
 }
@@ -475,7 +476,7 @@ void SdXMLGenericPageContext::DeleteAllShapes()
     while(mxShapes->getCount())
     {
         Reference< drawing::XShape > xShape;
-        uno::Any aAny(mxShapes->getByIndex(0));
+        cpo::uno::Any aAny(mxShapes->getByIndex(0));
 
         aAny >>= xShape;
 

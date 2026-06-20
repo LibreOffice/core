@@ -36,7 +36,7 @@ public:
    // XTemplate
     virtual OUString SAL_CALL getName() override;
     virtual OUString SAL_CALL getPath() override;
-    virtual css::uno::Any SAL_CALL AutoTextEntries( const css::uno::Any& index ) override;
+    virtual cpo::uno::Any SAL_CALL AutoTextEntries( const cpo::uno::Any& index ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

@@ -66,9 +66,9 @@ namespace pcr
         /// determines whether a given facet exists at the type
         bool                hasFacet( const OUString& _rFacetName ) const;
         /// retrieves a facet value
-        css::uno::Any       getFacet( const OUString& _rFacetName );
+        cpo::uno::Any       getFacet( const OUString& _rFacetName );
         /// sets a facet value
-        void                setFacet( const OUString& _rFacetName, const css::uno::Any& _rFacetValue );
+        void                setFacet( const OUString& _rFacetName, const cpo::uno::Any& _rFacetValue );
 
         /** copies as much facets (values, respectively) from a give data type instance
         */

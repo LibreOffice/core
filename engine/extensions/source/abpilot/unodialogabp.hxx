@@ -53,10 +53,10 @@ namespace abp
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
         // XJob
-        virtual css::uno::Any SAL_CALL execute( const css::uno::Sequence< css::beans::NamedValue >& lArgs ) override;
+        virtual cpo::uno::Any SAL_CALL execute( const css::uno::Sequence< css::beans::NamedValue >& lArgs ) override;
 
         // XInitialisation
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         using svt::OGenericUnoDialog::execute;
         // OGenericUnoDialog overridables

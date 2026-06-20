@@ -39,7 +39,7 @@ import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.lib.uno.helper.PropertySetMixin;
 import com.sun.star.registry.XRegistryKey;
-import com.sun.star.uno.Any;
+import cpo.uno.Any;
 import com.sun.star.uno.IQueryInterface;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.XComponentContext;

@@ -22,7 +22,7 @@
 #include <string>
 #include <sal/types.h>
 #include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <tools/ref.hxx>
 
 /**
@@ -346,7 +346,7 @@ public:
     /**
        Returns representation of the value as uno::Any.
      */
-    virtual css::uno::Any getAny() const = 0;
+    virtual cpo::uno::Any getAny() const = 0;
 
     /**
        Returns properties of this value.

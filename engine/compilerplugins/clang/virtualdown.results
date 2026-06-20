@@ -55,7 +55,7 @@ forms/source/xforms/namedcollection.hxx:80
 forms/source/xforms/namedcollection.hxx:85
     unsigned char NamedCollection::hasElements()
 forms/source/xforms/namedcollection.hxx:91
-    class com::sun::star::uno::Any NamedCollection::getByName(const class rtl::OUString &,)
+    class cpo::uno::Any NamedCollection::getByName(const class rtl::OUString &,)
 forms/source/xforms/namedcollection.hxx:99
     class com::sun::star::uno::Sequence<class rtl::OUString> NamedCollection::getElementNames()
 forms/source/xforms/namedcollection.hxx:104
@@ -203,7 +203,7 @@ include/canvas/base/graphicdevicebase.hxx:234
 include/canvas/base/graphicdevicebase.hxx:240
     class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> canvas::GraphicDeviceBase::createInstance(const class rtl::OUString &,)
 include/canvas/base/graphicdevicebase.hxx:248
-    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> canvas::GraphicDeviceBase::createInstanceWithArguments(const class rtl::OUString &,const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,)
+    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> canvas::GraphicDeviceBase::createInstanceWithArguments(const class rtl::OUString &,const class com::sun::star::uno::Sequence<class cpo::uno::Any> &,)
 include/canvas/base/graphicdevicebase.hxx:256
     class com::sun::star::uno::Sequence<class rtl::OUString> canvas::GraphicDeviceBase::getAvailableServiceNames()
 include/canvas/base/graphicdevicebase.hxx:263
@@ -211,9 +211,9 @@ include/canvas/base/graphicdevicebase.hxx:263
 include/canvas/base/graphicdevicebase.hxx:273
     class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySetInfo> canvas::GraphicDeviceBase::getPropertySetInfo()
 include/canvas/base/graphicdevicebase.hxx:279
-    void canvas::GraphicDeviceBase::setPropertyValue(const class rtl::OUString &,const class com::sun::star::uno::Any &,)
+    void canvas::GraphicDeviceBase::setPropertyValue(const class rtl::OUString &,const class cpo::uno::Any &,)
 include/canvas/base/graphicdevicebase.hxx:286
-    class com::sun::star::uno::Any canvas::GraphicDeviceBase::getPropertyValue(const class rtl::OUString &,)
+    class cpo::uno::Any canvas::GraphicDeviceBase::getPropertyValue(const class rtl::OUString &,)
 include/canvas/base/graphicdevicebase.hxx:292
     void canvas::GraphicDeviceBase::addPropertyChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertyChangeListener> &,)
 include/canvas/base/graphicdevicebase.hxx:300
@@ -305,7 +305,7 @@ include/svx/svdpage.hxx:472
 include/svx/svdtext.hxx:73
     void SdrText::SetObjectItem(const class SfxPoolItem &,)
 include/test/container/xnamecontainer.hxx:38
-    void apitest::XNameContainer::setElement(const class com::sun::star::uno::Any &,)
+    void apitest::XNameContainer::setElement(const class cpo::uno::Any &,)
 include/test/drawing/xdrawpages.hxx:26
     void apitest::XDrawPages::testInsertNewByIndex()
 include/test/drawing/xdrawpages.hxx:27
@@ -317,201 +317,201 @@ include/test/table/xtablerows.hxx:28
 include/toolkit/controls/geometrycontrolmodel.hxx:184
     void OGeometryControlModel::fillProperties(class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,)const
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XColumns> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XColumns> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XCollection> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XCollection> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XAddins> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XAddins> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XHeadersFooters> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XHeadersFooters> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::msforms::XPages> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::msforms::XPages> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XAxes> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XAxes> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XListLevels> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XListLevels> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XListTemplates> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XListTemplates> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XSections> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XSections> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XFrames> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XFrames> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XPivotTables> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XPivotTables> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XListGalleries> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XListGalleries> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XDocumentsBase> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XDocumentsBase> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XStyles> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XStyles> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XHyperlinks> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XHyperlinks> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XOLEObjects> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XOLEObjects> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XTablesOfContents> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XTablesOfContents> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XFileDialogSelectedItems> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XFileDialogSelectedItems> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XMenuBars> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XMenuBars> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XRows> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XRows> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XChartObjects> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XChartObjects> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XDocumentProperties> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XDocumentProperties> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::msforms::XControls> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::msforms::XControls> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::msforms::XShapes> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::msforms::XShapes> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XFields> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XFields> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XBookmarks> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XBookmarks> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XWindows> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XWindows> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XCommandBars> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XCommandBars> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XMenus> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XMenus> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XHPageBreaks> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XHPageBreaks> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XVariables> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XVariables> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::msforms::XShapeRange> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::msforms::XShapeRange> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XAutoTextEntries> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XAutoTextEntries> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XNames> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XNames> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XTabStops> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XTabStops> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XCommandBarControls> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XCommandBarControls> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XParagraphs> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XParagraphs> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XBorders> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XBorders> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XVPageBreaks> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XVPageBreaks> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XBorders> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XBorders> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XTables> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XTables> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XComments> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XComments> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XMenuItems> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XMenuItems> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XPanes> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XPanes> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XWorksheets> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XWorksheets> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XCells> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XCells> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XRevisions> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XRevisions> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XStyles> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XStyles> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XFormatConditions> >::getItemByStringIndex(const class rtl::OUString &,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XFormatConditions> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::msforms::XShapeRange> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::msforms::XShapeRange> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XNames> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XNames> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XSections> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XSections> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XListLevels> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XListLevels> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::msforms::XShapes> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::msforms::XShapes> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XFrames> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XFrames> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XStyles> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XStyles> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XBorders> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XBorders> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::msforms::XControls> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::msforms::XControls> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XDocumentProperties> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XDocumentProperties> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XCollection> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XCollection> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XMenuBars> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XMenuBars> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::msforms::XPages> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::msforms::XPages> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XComments> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XComments> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XAutoTextEntries> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XAutoTextEntries> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XBorders> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XBorders> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XTabStops> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XTabStops> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XPivotTables> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XPivotTables> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XFormatConditions> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XFormatConditions> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XFileDialogSelectedItems> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XFileDialogSelectedItems> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XBookmarks> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XBookmarks> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XCommandBarControls> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XCommandBarControls> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XCommandBars> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XCommandBars> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XTablesOfContents> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XTablesOfContents> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XParagraphs> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XParagraphs> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XWorksheets> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XWorksheets> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XCells> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XCells> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XHyperlinks> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XHyperlinks> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XDocumentsBase> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::XDocumentsBase> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XAxes> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XAxes> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XListGalleries> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XListGalleries> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XMenuItems> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XMenuItems> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XHPageBreaks> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XHPageBreaks> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XAddins> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XAddins> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XWindows> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XWindows> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XTables> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XTables> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XColumns> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XColumns> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XPanes> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XPanes> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XVariables> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XVariables> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XStyles> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XStyles> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XHeadersFooters> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XHeadersFooters> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XMenus> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XMenus> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XFields> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XFields> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XVPageBreaks> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XVPageBreaks> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XRevisions> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XRevisions> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XOLEObjects> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XOLEObjects> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XListTemplates> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XListTemplates> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XChartObjects> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::excel::XChartObjects> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:266
-    class com::sun::star::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XRows> >::getItemByIntIndex(const int,)
+    class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XRows> >::getItemByIntIndex(const int,)
 include/vbahelper/vbacollectionimpl.hxx:324
     unsigned char ScVbaCollectionBase::hasElements()
 include/vbahelper/vbahelperinterface.hxx:77
@@ -551,55 +551,55 @@ sc/source/ui/vba/vbaformat.hxx:62
 sc/source/ui/vba/vbaformat.hxx:62
     class ScCellRangesBase * ScVbaFormat<ooo::vba::excel::XStyle>::getCellRangesBase()
 sc/source/ui/vba/vbaformat.hxx:74
-    class com::sun::star::uno::Any ScVbaFormat::Borders(const class com::sun::star::uno::Any &,)
+    class cpo::uno::Any ScVbaFormat::Borders(const class cpo::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:77
     class com::sun::star::uno::Reference<class ooo::vba::excel::XFont> ScVbaFormat::Font()
 sc/source/ui/vba/vbaformat.hxx:80
     class com::sun::star::uno::Reference<class ooo::vba::excel::XInterior> ScVbaFormat::Interior()
 sc/source/ui/vba/vbaformat.hxx:83
-    void ScVbaFormat::setNumberFormat(const class com::sun::star::uno::Any &,)
+    void ScVbaFormat::setNumberFormat(const class cpo::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:86
-    class com::sun::star::uno::Any ScVbaFormat::getNumberFormat()
+    class cpo::uno::Any ScVbaFormat::getNumberFormat()
 sc/source/ui/vba/vbaformat.hxx:89
-    void ScVbaFormat::setNumberFormatLocal(const class com::sun::star::uno::Any &,)
+    void ScVbaFormat::setNumberFormatLocal(const class cpo::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:92
-    class com::sun::star::uno::Any ScVbaFormat::getNumberFormatLocal()
+    class cpo::uno::Any ScVbaFormat::getNumberFormatLocal()
 sc/source/ui/vba/vbaformat.hxx:95
-    void ScVbaFormat::setIndentLevel(const class com::sun::star::uno::Any &,)
+    void ScVbaFormat::setIndentLevel(const class cpo::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:98
-    class com::sun::star::uno::Any ScVbaFormat::getIndentLevel()
+    class cpo::uno::Any ScVbaFormat::getIndentLevel()
 sc/source/ui/vba/vbaformat.hxx:101
-    void ScVbaFormat::setHorizontalAlignment(const class com::sun::star::uno::Any &,)
+    void ScVbaFormat::setHorizontalAlignment(const class cpo::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:104
-    class com::sun::star::uno::Any ScVbaFormat::getHorizontalAlignment()
+    class cpo::uno::Any ScVbaFormat::getHorizontalAlignment()
 sc/source/ui/vba/vbaformat.hxx:107
-    void ScVbaFormat::setVerticalAlignment(const class com::sun::star::uno::Any &,)
+    void ScVbaFormat::setVerticalAlignment(const class cpo::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:110
-    class com::sun::star::uno::Any ScVbaFormat::getVerticalAlignment()
+    class cpo::uno::Any ScVbaFormat::getVerticalAlignment()
 sc/source/ui/vba/vbaformat.hxx:113
-    void ScVbaFormat::setOrientation(const class com::sun::star::uno::Any &,)
+    void ScVbaFormat::setOrientation(const class cpo::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:116
-    class com::sun::star::uno::Any ScVbaFormat::getOrientation()
+    class cpo::uno::Any ScVbaFormat::getOrientation()
 sc/source/ui/vba/vbaformat.hxx:119
-    void ScVbaFormat::setShrinkToFit(const class com::sun::star::uno::Any &,)
+    void ScVbaFormat::setShrinkToFit(const class cpo::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:122
-    class com::sun::star::uno::Any ScVbaFormat::getShrinkToFit()
+    class cpo::uno::Any ScVbaFormat::getShrinkToFit()
 sc/source/ui/vba/vbaformat.hxx:125
-    void ScVbaFormat::setWrapText(const class com::sun::star::uno::Any &,)
+    void ScVbaFormat::setWrapText(const class cpo::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:128
-    class com::sun::star::uno::Any ScVbaFormat::getWrapText()
+    class cpo::uno::Any ScVbaFormat::getWrapText()
 sc/source/ui/vba/vbaformat.hxx:131
-    void ScVbaFormat::setLocked(const class com::sun::star::uno::Any &,)
+    void ScVbaFormat::setLocked(const class cpo::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:134
-    class com::sun::star::uno::Any ScVbaFormat::getLocked()
+    class cpo::uno::Any ScVbaFormat::getLocked()
 sc/source/ui/vba/vbaformat.hxx:137
-    void ScVbaFormat::setFormulaHidden(const class com::sun::star::uno::Any &,)
+    void ScVbaFormat::setFormulaHidden(const class cpo::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:140
-    class com::sun::star::uno::Any ScVbaFormat::getFormulaHidden()
+    class cpo::uno::Any ScVbaFormat::getFormulaHidden()
 sc/source/ui/vba/vbaformat.hxx:149
-    void ScVbaFormat::setReadingOrder(const class com::sun::star::uno::Any &,)
+    void ScVbaFormat::setReadingOrder(const class cpo::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:152
-    class com::sun::star::uno::Any ScVbaFormat::getReadingOrder()
+    class cpo::uno::Any ScVbaFormat::getReadingOrder()
 sc/source/ui/vba/vbapagebreak.hxx:45
     int ScVbaPageBreak::getType()
 sc/source/ui/vba/vbapagebreak.hxx:46

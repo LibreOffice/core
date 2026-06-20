@@ -384,7 +384,7 @@ CPPUNIT_TEST_FIXTURE(Test, testArabicZeroNumberingFootnote)
     uno::Reference<beans::XPropertySet> xFootnoteSettings
         = xFootnotesSupplier->getFootnoteSettings();
     sal_uInt16 nNumberingType = style::NumberingType::ARABIC_ZERO;
-    xFootnoteSettings->setPropertyValue(u"NumberingType"_ustr, uno::Any(nNumberingType));
+    xFootnoteSettings->setPropertyValue(u"NumberingType"_ustr, cpo::uno::Any(nNumberingType));
 
     // Insert a footnote.
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
@@ -412,7 +412,7 @@ CPPUNIT_TEST_FIXTURE(Test, testChicagoNumberingFootnote)
     uno::Reference<beans::XPropertySet> xFootnoteSettings
         = xFootnotesSupplier->getFootnoteSettings();
     sal_uInt16 nNumberingType = style::NumberingType::SYMBOL_CHICAGO;
-    xFootnoteSettings->setPropertyValue(u"NumberingType"_ustr, uno::Any(nNumberingType));
+    xFootnoteSettings->setPropertyValue(u"NumberingType"_ustr, cpo::uno::Any(nNumberingType));
 
     // Insert a footnote.
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
@@ -749,7 +749,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149421)
             CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(851), getProperty<sal_Int16>(xStyle, u"ParaHyphenationZone"_ustr));
             // modify hyphenation zone (note: only hyphenation zone set in Standard paragraph style
             // is exported, according to the document-level hyphenation settings of OOXML)
-            xStyle->setPropertyValue(u"ParaHyphenationZone"_ustr, uno::Any(static_cast<sal_Int16>(2000)));
+            xStyle->setPropertyValue(u"ParaHyphenationZone"_ustr, cpo::uno::Any(static_cast<sal_Int16>(2000)));
         }
         else
         {
@@ -847,7 +847,7 @@ CPPUNIT_TEST_FIXTURE(Test, testZeroLineSpacing)
     style::LineSpacing aSpacing;
     aSpacing.Mode = style::LineSpacingMode::MINIMUM;
     aSpacing.Height = 0;
-    xParagraph->setPropertyValue(u"ParaLineSpacing"_ustr, uno::Any(aSpacing));
+    xParagraph->setPropertyValue(u"ParaLineSpacing"_ustr, cpo::uno::Any(aSpacing));
 
     // Export to docx.
     save(TestFilter::DOCX);
@@ -871,7 +871,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSemiTransparentText)
     uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xParagraph.is());
     sal_Int16 nTransparence = 75;
-    xParagraph->setPropertyValue(u"CharTransparence"_ustr, uno::Any(nTransparence));
+    xParagraph->setPropertyValue(u"CharTransparence"_ustr, cpo::uno::Any(nTransparence));
     uno::Reference<text::XTextRange> xTextRange(xParagraph, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xTextRange.is());
     xTextRange->setString(u"x"_ustr);
@@ -913,9 +913,9 @@ CPPUNIT_TEST_FIXTURE(Test, testUserField)
         xFactory->createInstance(u"com.sun.star.text.TextField.User"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xMaster(
         xFactory->createInstance(u"com.sun.star.text.FieldMaster.User"_ustr), uno::UNO_QUERY);
-    xMaster->setPropertyValue(u"Name"_ustr, uno::Any(u"foo"_ustr));
+    xMaster->setPropertyValue(u"Name"_ustr, cpo::uno::Any(u"foo"_ustr));
     xField->attachTextFieldMaster(xMaster);
-    xField->getTextFieldMaster()->setPropertyValue(u"Content"_ustr, uno::Any(u"bar"_ustr));
+    xField->getTextFieldMaster()->setPropertyValue(u"Content"_ustr, cpo::uno::Any(u"bar"_ustr));
     uno::Reference<text::XTextDocument> xDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -926,9 +926,9 @@ CPPUNIT_TEST_FIXTURE(Test, testUserField)
         xFactory->createInstance(u"com.sun.star.text.TextField.User"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xUnnamedMaster(
         xFactory->createInstance(u"com.sun.star.text.FieldMaster.User"_ustr), uno::UNO_QUERY);
-    xUnnamedMaster->setPropertyValue(u"Name"_ustr, uno::Any(u""_ustr));
+    xUnnamedMaster->setPropertyValue(u"Name"_ustr, cpo::uno::Any(u""_ustr));
     xUnnamedField->attachTextFieldMaster(xUnnamedMaster);
-    xUnnamedField->getTextFieldMaster()->setPropertyValue(u"Content"_ustr, uno::Any(u""_ustr));
+    xUnnamedField->getTextFieldMaster()->setPropertyValue(u"Content"_ustr, cpo::uno::Any(u""_ustr));
     xText->insertTextContent(xCursor, xUnnamedField, /*bAbsorb=*/false);
 
     // Export to docx.

@@ -52,13 +52,13 @@ class SubToolBarController : public ToolBarBase
     void disposeUIElement();
 public:
     explicit SubToolBarController( const rtl::Reference< css::uno::XComponentContext >& rxContext,
-                                   const css::uno::Sequence< css::uno::Any >& rxArgs );
+                                   const css::uno::Sequence< cpo::uno::Any >& rxArgs );
     virtual ~SubToolBarController() override;
 
     void PopoverDestroyed();
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rxArgs ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& rxArgs ) override;
 
     // XStatusListener
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
@@ -101,14 +101,14 @@ public:
 
 SubToolBarController::SubToolBarController(
     const rtl::Reference< css::uno::XComponentContext >& rxContext,
-    const css::uno::Sequence< css::uno::Any >& rxArgs
+    const css::uno::Sequence< cpo::uno::Any >& rxArgs
 )   : ToolBarBase(
         rxContext,
         rtl::Reference< css::frame::XFrame >(),
         ""
     )
 {
-    for ( css::uno::Any const & arg : rxArgs )
+    for ( cpo::uno::Any const & arg : rxArgs )
     {
         css::beans::PropertyValue aPropValue;
         arg >>= aPropValue;
@@ -200,7 +200,7 @@ void SubToolBarController::execute( sal_Int16 nKeyModifier )
     if ( !m_aLastCommand.isEmpty() )
     {
         auto aArgs( comphelper::InitPropertySequence( {
-            { "KeyModifier", css::uno::Any( nKeyModifier ) }
+            { "KeyModifier", cpo::uno::Any( nKeyModifier ) }
         } ) );
         dispatchCommand( m_aLastCommand, aArgs );
     }
@@ -261,10 +261,10 @@ std::unique_ptr<WeldToolbarPopup> SubToolBarController::weldPopupWindow()
     css::uno::Reference< css::awt::XWindow > xParent = new weld::TransportAsXWindow(pPopup->GetContainer());
 
     auto aPropSeq( comphelper::InitPropertySequence( {
-        { "Frame", css::uno::Any( xFrame ) },
-        { "ParentWindow", css::uno::Any( xParent ) },
-        { "Persistent", css::uno::Any( false ) },
-        { "PopupMode", css::uno::Any( true ) }
+        { "Frame", cpo::uno::Any( xFrame ) },
+        { "ParentWindow", cpo::uno::Any( xParent ) },
+        { "Persistent", cpo::uno::Any( false ) },
+        { "PopupMode", cpo::uno::Any( true ) }
     } ) );
 
     try
@@ -300,10 +300,10 @@ VclPtr<vcl::Window> SubToolBarController::createVclPopupWindow(vcl::Window* /*pP
         }
 
         auto aPropSeq( comphelper::InitPropertySequence( {
-            { "Frame", css::uno::Any( xFrame ) },
-            { "ParentWindow", css::uno::Any( m_xParentWindow ) },
-            { "Persistent", css::uno::Any( false ) },
-            { "PopupMode", css::uno::Any( true ) }
+            { "Frame", cpo::uno::Any( xFrame ) },
+            { "ParentWindow", cpo::uno::Any( m_xParentWindow ) },
+            { "Persistent", cpo::uno::Any( false ) },
+            { "PopupMode", cpo::uno::Any( true ) }
         } ) );
 
         try
@@ -457,8 +457,8 @@ void SubToolBarController::endPopupMode( const css::awt::EndPopupModeEvent& e )
         if ( pTbxWindow && pTbxWindow->GetType() == WindowType::TOOLBOX )
         {
             OUString aPersistentString( u"Persistent"_ustr );
-            css::uno::Any a = xProp->getPropertyValue( aPersistentString );
-            xProp->setPropertyValue( aPersistentString, css::uno::Any( false ) );
+            cpo::uno::Any a = xProp->getPropertyValue( aPersistentString );
+            xProp->setPropertyValue( aPersistentString, cpo::uno::Any( false ) );
 
             xLayoutManager->hideElement( aSubToolBarResName );
             xLayoutManager->floatWindow( aSubToolBarResName );
@@ -482,7 +482,7 @@ void SubToolBarController::disposing( const css::lang::EventObject& e )
     svt::ToolboxController::disposing( e );
 }
 
-void SubToolBarController::initialize( const css::uno::Sequence< css::uno::Any >& rxArgs )
+void SubToolBarController::initialize( const css::uno::Sequence< cpo::uno::Any >& rxArgs )
 {
     svt::PopupWindowController::initialize( rxArgs );
 
@@ -536,7 +536,7 @@ css::uno::Sequence< OUString > SubToolBarController::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_SubToolBarController_get_implementation(
     css::uno::XComponentContext* rxContext,
-    css::uno::Sequence<css::uno::Any> const & rxArgs )
+    css::uno::Sequence<cpo::uno::Any> const & rxArgs )
 {
     return cppu::acquire( new SubToolBarController( rxContext, rxArgs ) );
 }

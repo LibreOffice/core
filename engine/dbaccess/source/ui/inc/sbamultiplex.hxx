@@ -60,7 +60,7 @@ namespace dbaui
     public:
         SbaXStatusMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex);
         DECLARE_UNO3_DEFAULTS(SbaXStatusMultiplexer, OSbaWeakSubObject)
-        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+        virtual cpo::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
 
         /* css::lang::XEventListener */
         virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;

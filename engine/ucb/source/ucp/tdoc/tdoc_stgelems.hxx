@@ -84,7 +84,7 @@ public:
     virtual ~Storage() override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface(
+    virtual cpo::uno::Any SAL_CALL queryInterface(
             const css::uno::Type& aType ) override;
     virtual void SAL_CALL acquire()
         noexcept override;
@@ -107,7 +107,7 @@ public:
     removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XNameAccess ( one of XStorage bases )
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
     getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
     getElementNames() override;
@@ -199,7 +199,7 @@ public:
     virtual ~OutputStream() override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
     queryInterface( const css::uno::Type& aType ) override;
 
     // XTypeProvider (implemented by base, but needs to be overridden for
@@ -259,7 +259,7 @@ public:
     virtual ~Stream() override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
     queryInterface( const css::uno::Type& aType ) override;
 
     // XTypeProvider (implemented by base, but needs to be overridden for

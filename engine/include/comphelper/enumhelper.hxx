@@ -55,7 +55,7 @@ public:
     virtual ~OEnumerationByName() override;
 
     virtual bool SAL_CALL hasMoreElements(  ) override;
-    virtual css::uno::Any SAL_CALL nextElement(  ) override;
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override;
 
     virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
 
@@ -83,7 +83,7 @@ public:
     virtual ~OEnumerationByIndex() override;
 
     virtual bool SAL_CALL hasMoreElements(  ) override;
-    virtual css::uno::Any SAL_CALL nextElement(  ) override;
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override;
 
     virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
 
@@ -104,15 +104,15 @@ class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OAnyEnumeration final :
                                            public OAnyEnumeration_BASE
 {
     sal_Int32                         m_nPos;
-    css::uno::Sequence< css::uno::Any > m_lItems;
+    css::uno::Sequence< cpo::uno::Any > m_lItems;
     std::mutex m_aLock;
 
 public:
-    OAnyEnumeration(const css::uno::Sequence< css::uno::Any >& lItems);
+    OAnyEnumeration(const css::uno::Sequence< cpo::uno::Any >& lItems);
     virtual ~OAnyEnumeration() override;
 
     virtual bool SAL_CALL hasMoreElements(  ) override;
-    virtual css::uno::Any SAL_CALL nextElement(  ) override;
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override;
 
 };
 

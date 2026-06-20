@@ -84,7 +84,7 @@ bool SAL_CALL MediaTypeDetectionHelper::mapStrings(uno::Sequence< OUString >& rS
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_MediaTypeDetectionHelper_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::MediaTypeDetectionHelper());
 }

@@ -28,14 +28,14 @@ ScVbaSpinButton::ScVbaSpinButton(  const css::uno::Reference< ov::XHelperInterfa
 }
 
 // Attributes
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaSpinButton::getValue()
 {
     return  m_xProps->getPropertyValue( u"SpinValue"_ustr );
 }
 
 void SAL_CALL
-ScVbaSpinButton::setValue( const uno::Any& _value )
+ScVbaSpinButton::setValue( const cpo::uno::Any& _value )
 {
     m_xProps->setPropertyValue( u"SpinValue"_ustr, _value );
 }
@@ -51,7 +51,7 @@ ScVbaSpinButton::getMax()
 void SAL_CALL
 ScVbaSpinButton::setMax( sal_Int32 nVal )
 {
-    m_xProps->setPropertyValue( u"SpinValueMax"_ustr, uno::Any( nVal ) );
+    m_xProps->setPropertyValue( u"SpinValueMax"_ustr, cpo::uno::Any( nVal ) );
 }
 
 ::sal_Int32 SAL_CALL
@@ -65,7 +65,7 @@ ScVbaSpinButton::getMin()
 void SAL_CALL
 ScVbaSpinButton::setMin( sal_Int32 nVal )
 {
-    m_xProps->setPropertyValue( u"SpinValueMin"_ustr, uno::Any( nVal ) );
+    m_xProps->setPropertyValue( u"SpinValueMin"_ustr, cpo::uno::Any( nVal ) );
 }
 
 OUString

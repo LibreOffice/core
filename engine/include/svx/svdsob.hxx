@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 #include <svx/svxdllapi.h>
 #include <svx/svdtypes.hxx>
@@ -87,7 +87,7 @@ public:
     void operator&=(const SdrLayerIDSet& r2ndSet);
 
     // initialize this set with a UNO sequence of sal_Int8 (e.g. as stored in settings.xml)
-    void PutValue(const css::uno::Any & rAny);
+    void PutValue(const cpo::uno::Any & rAny);
 
 };
 

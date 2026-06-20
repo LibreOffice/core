@@ -58,6 +58,7 @@ using com::sun::star::ucb::SimpleFileAccess;
 using com::sun::star::io::XInputStream;
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::xml::dom;
 using namespace xforms;
 
@@ -597,7 +598,7 @@ css::uno::Sequence<OUString> Model::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_Model_get_implementation(css::uno::XComponentContext*,
-                                            css::uno::Sequence<css::uno::Any> const &)
+                                            css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new xforms::Model());
 }

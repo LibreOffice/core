@@ -23,7 +23,7 @@
 #include <optional>
 #include <utility>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 namespace http_dav_ucp
 {
@@ -35,9 +35,9 @@ public:
 
     static bool createFromXML(std::u16string_view rType,
                               OUString const& rValue,
-                              css::uno::Any & rOutData);
+                              cpo::uno::Any & rOutData);
     static ::std::optional<::std::pair<OUString, OUString>>
-                toXML(const css::uno::Any & rInData);
+                toXML(const cpo::uno::Any & rInData);
 };
 
 }

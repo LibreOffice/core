@@ -516,7 +516,7 @@ static void lcl_syncGrammarError( SwTextNode &rTextNode, linguistic2::Proofreadi
         rResult.aErrors.realloc( j );
 }
 
-uno::Any SwDoc::Spell( SwPaM& rPaM,
+cpo::uno::Any SwDoc::Spell( SwPaM& rPaM,
                     uno::Reference< XSpellChecker > const &xSpeller,
                     sal_uInt16* pPageCnt, sal_uInt16* pPageSt,
                     bool bGrammarCheck,
@@ -543,7 +543,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
     if (pObjShell && pObjShell->IsReadOnly())
         bIsReadOnly = true;
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if( nCurrNd <= nEndNd )
     {
         SwContentFrame* pContentFrame;

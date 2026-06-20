@@ -190,7 +190,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                        if ( pObjSh && SfxApplication::IsXScriptURL( pInfo->GetMacro() ) )
                        {
                            uno::Reference< beans::XPropertySet > xProps( pObj->getUnoShape(), uno::UNO_QUERY );
-                           uno::Any aCaller;
+                           cpo::uno::Any aCaller;
                            if ( xProps.is() )
                            {
                                try
@@ -199,10 +199,10 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                                }
                                catch( uno::Exception& ) {}
                            }
-                           uno::Any aRet;
+                           cpo::uno::Any aRet;
                            uno::Sequence< sal_Int16 > aOutArgsIndex;
-                           uno::Sequence< uno::Any > aOutArgs;
-                           uno::Sequence< uno::Any > aInArgs;
+                           uno::Sequence< cpo::uno::Any > aOutArgs;
+                           uno::Sequence< cpo::uno::Any > aInArgs;
                            pObjSh->CallXScript( pInfo->GetMacro(),
                                aInArgs, aRet, aOutArgsIndex, aOutArgs, true, &aCaller );
                            rViewShell.FakeButtonUp( rViewShell.GetViewData().GetActivePart() );

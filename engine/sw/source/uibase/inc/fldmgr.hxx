@@ -24,7 +24,7 @@
 #include <swdllapi.h>
 #include <names.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 #include <memory>
 #include <optional>
 #include <utility>
@@ -73,9 +73,9 @@ struct SwInsertField_Data
     SwWrtShell* m_pSh;
     sal_Unicode m_cSeparator;
     bool m_bIsAutomaticLanguage;
-    css::uno::Any m_aDBDataSource;
-    css::uno::Any m_aDBConnection;
-    css::uno::Any m_aDBColumn;
+    cpo::uno::Any m_aDBDataSource;
+    cpo::uno::Any m_aDBConnection;
+    cpo::uno::Any m_aDBColumn;
     weld::Widget* m_pParent; // parent widget used for SwWrtShell::StartInputFieldDlg()
     /// Marks the PostIt field's annotation start/end if it differs from the cursor selection.
     std::optional<SwPaM> m_oAnnotationRange;

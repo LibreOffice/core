@@ -42,8 +42,8 @@ public:
      virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getVisibleRange() override;
 
     // XPane methods
-    virtual void SAL_CALL SmallScroll( const css::uno::Any& Down, const css::uno::Any& Up, const css::uno::Any& ToRight, const css::uno::Any& ToLeft ) override;
-    virtual void SAL_CALL LargeScroll( const css::uno::Any& Down, const css::uno::Any& Up, const css::uno::Any& ToRight, const css::uno::Any& ToLeft ) override;
+    virtual void SAL_CALL SmallScroll( const cpo::uno::Any& Down, const cpo::uno::Any& Up, const cpo::uno::Any& ToRight, const cpo::uno::Any& ToLeft ) override;
+    virtual void SAL_CALL LargeScroll( const cpo::uno::Any& Down, const cpo::uno::Any& Up, const cpo::uno::Any& ToRight, const cpo::uno::Any& ToLeft ) override;
 
 private:
     css::uno::Reference< css::frame::XModel > m_xModel;

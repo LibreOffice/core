@@ -147,7 +147,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeExport)
     pTheme->setColorSet(pColorSet);
 
     uno::Reference<util::XTheme> xTheme = model::theme::createXTheme(pTheme);
-    xMasterPage->setPropertyValue(u"Theme"_ustr, uno::Any(xTheme));
+    xMasterPage->setPropertyValue(u"Theme"_ustr, cpo::uno::Any(xTheme));
 
     // Export to ODP:
     save(TestFilter::ODP);
@@ -789,7 +789,7 @@ bool lcl_getShapeSegments(uno::Sequence<drawing::EnhancedCustomShapeSegment>& rS
                           const uno::Reference<drawing::XShape>& xShape)
 {
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY_THROW);
-    uno::Any anotherAny = xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr);
+    cpo::uno::Any anotherAny = xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr);
     uno::Sequence<beans::PropertyValue> aCustomShapeGeometry;
     if (!(anotherAny >>= aCustomShapeGeometry))
         return false;
@@ -871,7 +871,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextRotationPlusPre)
     auto aGeomVec(comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(aGeomSeq));
     aGeomVec.push_back(comphelper::makePropertyValue(u"TextRotateAngle"_ustr, sal_Int32(45)));
     aGeomSeq = comphelper::containerToSequence(aGeomVec);
-    xShapeProps->setPropertyValue(u"CustomShapeGeometry"_ustr, uno::Any(aGeomSeq));
+    xShapeProps->setPropertyValue(u"CustomShapeGeometry"_ustr, cpo::uno::Any(aGeomSeq));
 
     // Save to ODF. Without the fix, a file format error was produced, because attribute
     // draw:text-rotate-angle was written twice, one from TextPreRotateAngle and the other from
@@ -912,7 +912,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf156975_ThemeExport)
     pTheme->setColorSet(pColorSet);
 
     uno::Reference<util::XTheme> xTheme = model::theme::createXTheme(pTheme);
-    xMasterPageProps->setPropertyValue(u"Theme"_ustr, uno::Any(xTheme));
+    xMasterPageProps->setPropertyValue(u"Theme"_ustr, cpo::uno::Any(xTheme));
 
     // save as odg
     save(TestFilter::ODG);

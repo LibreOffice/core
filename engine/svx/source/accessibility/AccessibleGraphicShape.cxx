@@ -66,10 +66,10 @@ sal_Int32 SAL_CALL AccessibleGraphicShape::getAccessibleImageWidth()
 }
 
 // XInterface
-css::uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
     AccessibleGraphicShape::queryInterface (const css::uno::Type & rType)
 {
-    css::uno::Any aReturn = AccessibleShape::queryInterface (rType);
+    cpo::uno::Any aReturn = AccessibleShape::queryInterface (rType);
     if ( ! aReturn.hasValue())
         aReturn = ::cppu::queryInterface (rType,
             static_cast<XAccessibleImage*>(this));

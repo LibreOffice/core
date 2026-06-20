@@ -30,6 +30,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace chart::sidebar {
 
@@ -43,7 +44,7 @@ bool isLabelShown(const rtl::Reference<::chart::ChartModel>& xModel,
     if (!xAxis.is())
         return false;
 
-    uno::Any aAny = xAxis->getPropertyValue(u"DisplayLabels"_ustr);
+    cpo::uno::Any aAny = xAxis->getPropertyValue(u"DisplayLabels"_ustr);
     if (!aAny.hasValue())
         return false;
 
@@ -60,7 +61,7 @@ void setLabelShown(const rtl::Reference<::chart::ChartModel>& xModel,
     if (!xAxis.is())
         return;
 
-    xAxis->setPropertyValue(u"DisplayLabels"_ustr, css::uno::Any(bVisible));
+    xAxis->setPropertyValue(u"DisplayLabels"_ustr, cpo::uno::Any(bVisible));
 }
 
 struct AxisLabelPosMap
@@ -84,7 +85,7 @@ sal_Int32 getLabelPosition(const rtl::Reference<::chart::ChartModel>& xModel,
     if (!xAxis.is())
         return 0;
 
-    uno::Any aAny = xAxis->getPropertyValue(u"LabelPosition"_ustr);
+    cpo::uno::Any aAny = xAxis->getPropertyValue(u"LabelPosition"_ustr);
     if (!aAny.hasValue())
         return 0;
 
@@ -114,7 +115,7 @@ void setLabelPosition(const rtl::Reference<::chart::ChartModel>& xModel,
             ePos = i.ePos;
     }
 
-    xAxis->setPropertyValue(u"LabelPosition"_ustr, css::uno::Any(ePos));
+    xAxis->setPropertyValue(u"LabelPosition"_ustr, cpo::uno::Any(ePos));
 }
 
 bool isReverse(const rtl::Reference<::chart::ChartModel>& xModel,
@@ -156,7 +157,7 @@ OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
     if (!xSelectionSupplier.is())
         return OUString();
 
-    uno::Any aAny = xSelectionSupplier->getSelection();
+    cpo::uno::Any aAny = xSelectionSupplier->getSelection();
     OUString aCID;
     aAny >>= aCID;
 #if defined DBG_UTIL && !defined NDEBUG
@@ -177,7 +178,7 @@ void setAxisRotation(const rtl::Reference<::chart::ChartModel>& xModel,
     if (!xAxis.is())
         return;
 
-    xAxis->setPropertyValue(u"TextRotation"_ustr, css::uno::Any(nVal));
+    xAxis->setPropertyValue(u"TextRotation"_ustr, cpo::uno::Any(nVal));
 }
 
 double getAxisRotation(const rtl::Reference<::chart::ChartModel>& xModel,
@@ -189,7 +190,7 @@ double getAxisRotation(const rtl::Reference<::chart::ChartModel>& xModel,
     if (!xAxis.is())
         return 0;
 
-    css::uno::Any aAny = xAxis->getPropertyValue(u"TextRotation"_ustr);
+    cpo::uno::Any aAny = xAxis->getPropertyValue(u"TextRotation"_ustr);
     double nVal = 0;
     aAny >>= nVal;
     return nVal;

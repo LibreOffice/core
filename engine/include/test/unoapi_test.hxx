@@ -143,8 +143,8 @@ public:
                         const css::uno::Sequence<css::beans::PropertyValue>& rParams);
     OUString loadFromFile(std::u16string_view aFileBase, const char* pPassword = nullptr);
 
-    css::uno::Any executeMacro(const OUString& rScriptURL,
-                               const css::uno::Sequence<css::uno::Any>& rParams = {});
+    cpo::uno::Any executeMacro(const OUString& rScriptURL,
+                               const css::uno::Sequence<cpo::uno::Any>& rParams = {});
 
     void save(TestFilter eFilter, const css::uno::Sequence<css::beans::PropertyValue>& rParams = {},
               const char* pPassword = nullptr);

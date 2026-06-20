@@ -147,7 +147,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82173_footnoteStyle, "tdf82173_footnoteStyle.doc
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, getProperty<Color>(xPageStyle, u"CharColor"_ustr));
 
     //tdf#118361 - in RTL locales, the footnote separator should still be left aligned.
-    uno::Any aPageStyle = getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr);
+    cpo::uno::Any aPageStyle = getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Footnote separator LTR", sal_Int16(0),
                                  getProperty<sal_Int16>(aPageStyle, u"FootnoteLineAdjust"_ustr));
 }
@@ -834,7 +834,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf90789, "tdf90789.docx")
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<view::XSelectionSupplier> xCtrl(xModel->getCurrentController(),
                                                    uno::UNO_QUERY_THROW);
-    xCtrl->select(uno::Any(xShape->getAnchor()));
+    xCtrl->select(cpo::uno::Any(xShape->getAnchor()));
 
     uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xCtrl,
                                                                           uno::UNO_QUERY_THROW);

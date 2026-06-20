@@ -43,11 +43,11 @@ public:
     ScVbaListBox( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper );
 
     // Attributes
-    virtual css::uno::Any SAL_CALL getListIndex() override;
-    virtual void SAL_CALL setListIndex( const css::uno::Any& _value ) override;
+    virtual cpo::uno::Any SAL_CALL getListIndex() override;
+    virtual void SAL_CALL setListIndex( const cpo::uno::Any& _value ) override;
     virtual ::sal_Int32 SAL_CALL getListCount() override;
-    virtual css::uno::Any SAL_CALL getValue() override;
-    virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+    virtual cpo::uno::Any SAL_CALL getValue() override;
+    virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
     virtual OUString SAL_CALL getText() override;
     virtual void SAL_CALL setText( const OUString& _text ) override;
     virtual sal_Int32 SAL_CALL getMultiSelect() override;
@@ -55,11 +55,11 @@ public:
     virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() override;
 
     // Methods
-    virtual css::uno::Any SAL_CALL Selected( ::sal_Int32 index ) override;
-    virtual void SAL_CALL AddItem( const css::uno::Any& pvargItem, const css::uno::Any& pvargIndex ) override;
-    virtual void SAL_CALL removeItem( const css::uno::Any& index ) override;
+    virtual cpo::uno::Any SAL_CALL Selected( ::sal_Int32 index ) override;
+    virtual void SAL_CALL AddItem( const cpo::uno::Any& pvargItem, const cpo::uno::Any& pvargIndex ) override;
+    virtual void SAL_CALL removeItem( const cpo::uno::Any& index ) override;
     virtual void SAL_CALL Clear(  ) override;
-    virtual css::uno::Any SAL_CALL List( const css::uno::Any& pvargIndex, const css::uno::Any& pvarColumn ) override;
+    virtual cpo::uno::Any SAL_CALL List( const cpo::uno::Any& pvargIndex, const cpo::uno::Any& pvarColumn ) override;
     // XControl
     virtual void SAL_CALL setRowSource( const OUString& _rowsource ) override;
 
@@ -71,8 +71,8 @@ public:
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 
     //PropListener
-    virtual void setValueEvent( const css::uno::Any& value ) override;
-    virtual css::uno::Any getValueEvent() override;
+    virtual void setValueEvent( const cpo::uno::Any& value ) override;
+    virtual cpo::uno::Any getValueEvent() override;
 
 
 };

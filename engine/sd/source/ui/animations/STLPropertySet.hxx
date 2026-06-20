@@ -20,7 +20,7 @@
 #pragma once
 
 #include <map>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <utility>
 
 namespace sd
@@ -34,12 +34,12 @@ enum class STLPropertyState {
 
 struct STLPropertyMapEntry
 {
-    css::uno::Any maValue;
+    cpo::uno::Any maValue;
     STLPropertyState mnState;
 
     STLPropertyMapEntry()
         : mnState( STLPropertyState::Ambiguous ) {}
-    explicit STLPropertyMapEntry(css::uno::Any aValue)
+    explicit STLPropertyMapEntry(cpo::uno::Any aValue)
         : maValue(std::move( aValue )), mnState( STLPropertyState::Default ) {}
 
 };
@@ -54,9 +54,9 @@ public:
     STLPropertySet();
     ~STLPropertySet();
 
-    void setPropertyDefaultValue( sal_Int32 nHandle, const css::uno::Any& rValue );
-    void setPropertyValue( sal_Int32 nHandle, const css::uno::Any& rValue );
-    css::uno::Any getPropertyValue( sal_Int32 nHandle ) const;
+    void setPropertyDefaultValue( sal_Int32 nHandle, const cpo::uno::Any& rValue );
+    void setPropertyValue( sal_Int32 nHandle, const cpo::uno::Any& rValue );
+    cpo::uno::Any getPropertyValue( sal_Int32 nHandle ) const;
 
     STLPropertyState getPropertyState( sal_Int32 nHandle ) const;
     void setPropertyState( sal_Int32 nHandle, STLPropertyState nState );

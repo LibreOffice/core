@@ -63,7 +63,7 @@ public:
 
     virtual void SAL_CALL
     initialize(
-        css::uno::Sequence< css::uno::Any > const & rArguments) override;
+        css::uno::Sequence< cpo::uno::Any > const & rArguments) override;
 
     virtual void SAL_CALL
     handle(css::uno::Reference< css::task::XInteractionRequest > const & rRequest) override;
@@ -107,7 +107,7 @@ public:
         return nullptr;
     }
 
-    virtual void SAL_CALL setPropertyValue(const OUString& rPropertyName, const css::uno::Any& rValue) override
+    virtual void SAL_CALL setPropertyValue(const OUString& rPropertyName, const cpo::uno::Any& rValue) override
     {
         if (rPropertyName == "ParentWindow")
         {
@@ -119,11 +119,11 @@ public:
         throw css::beans::UnknownPropertyException(rPropertyName);
     }
 
-    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& rPropertyName) override
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(const OUString& rPropertyName) override
     {
         if (rPropertyName == "ParentWindow")
         {
-            return uno::Any(m_pImpl.GetParentWindow());
+            return cpo::uno::Any(m_pImpl.GetParentWindow());
         }
         throw css::beans::UnknownPropertyException(rPropertyName);
     }
@@ -158,7 +158,7 @@ UUIInteractionHandler::getSupportedServiceNames()
 
 void SAL_CALL
 UUIInteractionHandler::initialize(
-    uno::Sequence< uno::Any > const & rArguments)
+    uno::Sequence< cpo::uno::Any > const & rArguments)
 {
     // The old-style InteractionHandler service supported a sequence of
     // PropertyValue, while the new-style service now uses constructors to pass
@@ -195,7 +195,7 @@ UUIInteractionHandler::handle(
     }
     catch (uno::RuntimeException const & ex)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException( ex.Message,
                 *this, anyEx );
     }
@@ -210,7 +210,7 @@ bool SAL_CALL UUIInteractionHandler::handleInteractionRequest(
     }
     catch (uno::RuntimeException const & ex)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException( ex.Message,
                 *this, anyEx );
     }
@@ -221,7 +221,7 @@ bool SAL_CALL UUIInteractionHandler::handleInteractionRequest(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_uui_UUIInteractionHandler_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UUIInteractionHandler(context));
 }

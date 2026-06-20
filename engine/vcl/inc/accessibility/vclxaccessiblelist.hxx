@@ -101,7 +101,7 @@ public:
     void UpdateSelection_Acc (std::u16string_view sTextOfSelectedItem, bool b_IsDropDownList);
     void UpdateSelection_Impl_Acc (bool b_IsDropDownList);
 
-    static void NotifyListItem(css::uno::Any const & val);
+    static void NotifyListItem(cpo::uno::Any const & val);
     IComboListBoxHelper* getListBoxHelper() { return m_pListBoxHelper.get(); }
 private:
     BoxType     m_aBoxType;
@@ -156,7 +156,7 @@ private:
     void UpdateEntryRange_Impl();
     void UpdateSelection_Impl(sal_Int32 nPos = 0);
     bool checkEntrySelected(sal_Int32 _nPos,
-                            css::uno::Any& _rNewValue,
+                            cpo::uno::Any& _rNewValue,
                             rtl::Reference< VCLXAccessibleListItem >& _rxNewAcc);
     void notifyVisibleStates(bool _bSetNew );
     void UpdateVisibleLineCount();

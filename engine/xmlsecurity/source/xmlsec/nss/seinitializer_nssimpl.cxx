@@ -128,14 +128,14 @@ uno::Sequence<OUString> SAL_CALL NSSInitializer_NssImpl::getSupportedServiceName
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_xml_crypto_NSSInitializer_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new NSSInitializer_NssImpl(pCtx));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_xml_crypto_SEInitializer_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SEInitializer_NssImpl(pCtx));
 }

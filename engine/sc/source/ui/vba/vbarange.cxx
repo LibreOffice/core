@@ -190,10 +190,10 @@ static double lcl_Round2DecPlaces( double nVal )
     return nVal;
 }
 
-static uno::Any lcl_makeRange( const uno::Reference< XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Any& rAny, bool bIsRows, bool bIsColumns )
+static cpo::uno::Any lcl_makeRange( const uno::Reference< XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const cpo::uno::Any& rAny, bool bIsRows, bool bIsColumns )
 {
     uno::Reference< table::XCellRange > xCellRange(rAny, uno::UNO_QUERY_THROW);
-    return uno::Any( uno::Reference< excel::XRange >( new ScVbaRange( rParent, rContext, xCellRange, bIsRows, bIsColumns ) ) );
+    return cpo::uno::Any( uno::Reference< excel::XRange >( new ScVbaRange( rParent, rContext, xCellRange, bIsRows, bIsColumns ) ) );
 }
 
 static rtl::Reference< ScVbaRange > lcl_makeXRangeFromSheetCellRanges( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< sheet::XSheetCellRanges >& xLocSheetCellRanges, ScDocShell* pDoc )
@@ -255,7 +255,7 @@ void ScVbaRange::fireChangeEvent()
     const uno::Reference< script::vba::XVBAEventProcessor >& xVBAEvents = rDoc.GetVbaEventProcessor();
     if( xVBAEvents.is() ) try
     {
-        uno::Sequence< uno::Any > aArgs{ uno::Any(uno::Reference< excel::XRange >( this )) };
+        uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(uno::Reference< excel::XRange >( this )) };
         xVBAEvents->processVbaEvent( script::vba::VBAEventId::WORKSHEET_CHANGE, aArgs );
     }
     catch( uno::Exception& )
@@ -273,12 +273,12 @@ public:
     /// @throws uno::RuntimeException
     explicit SingleRangeEnumeration( uno::Reference< table::XCellRange > xRange ) : m_xRange(std::move( xRange )), bHasMore( true ) { }
     virtual bool SAL_CALL hasMoreElements(  ) override { return bHasMore; }
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         if ( !bHasMore )
             throw container::NoSuchElementException();
         bHasMore = false;
-        return uno::Any( m_xRange );
+        return cpo::uno::Any( m_xRange );
     }
 };
 
@@ -295,11 +295,11 @@ public:
     explicit SingleRangeIndexAccess( uno::Reference< table::XCellRange > xRange ) : m_xRange(std::move( xRange )) {}
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount() override { return 1; }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
+    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         if ( Index != 0 )
             throw lang::IndexOutOfBoundsException();
-        return uno::Any( m_xRange );
+        return cpo::uno::Any( m_xRange );
     }
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() override { return cppu::UnoType<table::XCellRange>::get(); }
@@ -316,7 +316,7 @@ class RangesEnumerationImpl : public EnumerationHelperImpl
 public:
     /// @throws uno::RuntimeException
     RangesEnumerationImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration, bool bIsRows, bool bIsColumns ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), mbIsRows( bIsRows ), mbIsColumns( bIsColumns ) {}
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         return lcl_makeRange( m_xParent, m_xContext, m_xEnumeration->nextElement(), mbIsRows, mbIsColumns );
     }
@@ -337,7 +337,7 @@ public:
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() override { return cppu::UnoType<excel::XRange>::get(); }
 
-    virtual uno::Any createCollectionObject( const uno::Any& aSource ) override;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 
     virtual OUString getServiceImplName() override { return OUString(); }
 
@@ -352,8 +352,8 @@ ScVbaRangeAreas::createEnumeration()
     return new RangesEnumerationImpl( mxParent, mxContext, xEnumAccess->createEnumeration(), mbIsRows, mbIsColumns );
 }
 
-uno::Any
-ScVbaRangeAreas::createCollectionObject( const uno::Any& aSource )
+cpo::uno::Any
+ScVbaRangeAreas::createCollectionObject( const cpo::uno::Any& aSource )
 {
     return lcl_makeRange( mxParent, mxContext, aSource, mbIsRows, mbIsColumns );
 }
@@ -487,7 +487,7 @@ public:
     uno::Reference< beans::XPropertySet > getNumberProps()
     {
         tools::Long nIndexKey = 0;
-        uno::Any aValue = mxRangeProps->getPropertyValue( u"NumberFormat"_ustr );
+        cpo::uno::Any aValue = mxRangeProps->getPropertyValue( u"NumberFormat"_ustr );
         aValue >>= nIndexKey;
 
         if ( mxFormats.is() )
@@ -524,7 +524,7 @@ public:
 
         uno::Reference< beans::XPropertySet > xNumberProps( getNumberProps(), uno::UNO_SET_THROW );
         OUString aFormatString;
-        uno::Any aString = xNumberProps->getPropertyValue( u"FormatString"_ustr );
+        cpo::uno::Any aString = xNumberProps->getPropertyValue( u"FormatString"_ustr );
         aString >>= aFormatString;
         return aFormatString;
     }
@@ -550,7 +550,7 @@ public:
             if ( nNewIndex == -1 ) // format not defined
                 nNewIndex = mxFormats->addNew( rFormat, aLocale );
         }
-        mxRangeProps->setPropertyValue( u"NumberFormat"_ustr, uno::Any( nNewIndex ) );
+        mxRangeProps->setPropertyValue( u"NumberFormat"_ustr, cpo::uno::Any( nNewIndex ) );
     }
 
     void setNumberFormat( sal_Int16 nType )
@@ -562,7 +562,7 @@ public:
         if ( xTypes.is() )
         {
             sal_Int32 nNewIndex = xTypes->getStandardFormat( nType, aLocale );
-            mxRangeProps->setPropertyValue( u"NumberFormat"_ustr, uno::Any( nNewIndex ) );
+            mxRangeProps->setPropertyValue( u"NumberFormat"_ustr, cpo::uno::Any( nNewIndex ) );
         }
     }
 
@@ -601,12 +601,12 @@ public:
 
     virtual bool SAL_CALL hasMoreElements() override { return mCurElem < mMaxElems; }
 
-    virtual uno::Any SAL_CALL nextElement() override
+    virtual cpo::uno::Any SAL_CALL nextElement() override
     {
         if ( !hasMoreElements() )
             throw container::NoSuchElementException();
         sal_Int32 vbaIndex = 1 + mCurElem++;
-        return uno::Any( mxRange->Item( uno::Any( vbaIndex ), uno::Any() ) );
+        return cpo::uno::Any( mxRange->Item( cpo::uno::Any( vbaIndex ), cpo::uno::Any() ) );
     }
 };
 
@@ -623,7 +623,7 @@ class CellsEnumeration : public CellsEnumeration_BASE
     {
         if ( nVBAIndex < 1 || nVBAIndex > m_xAreas->getCount() )
             throw uno::RuntimeException();
-        uno::Reference< excel::XRange > xRange( m_xAreas->Item( uno::Any(nVBAIndex), uno::Any() ), uno::UNO_QUERY_THROW );
+        uno::Reference< excel::XRange > xRange( m_xAreas->Item( cpo::uno::Any(nVBAIndex), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
         uno::Reference< table::XCellRange > xCellRange( ScVbaRange::getCellRange( xRange ), uno::UNO_QUERY_THROW );
         return xCellRange;
     }
@@ -652,7 +652,7 @@ public:
     }
     virtual bool SAL_CALL hasMoreElements() override { return m_it != m_CellPositions.end(); }
 
-    virtual uno::Any SAL_CALL nextElement() override
+    virtual cpo::uno::Any SAL_CALL nextElement() override
     {
         if ( !hasMoreElements() )
             throw container::NoSuchElementException();
@@ -660,7 +660,7 @@ public:
 
         uno::Reference< table::XCellRange > xRangeArea = getArea( aPos.m_nArea );
         uno::Reference< table::XCellRange > xCellRange( xRangeArea->getCellByPosition(  aPos.m_nCol, aPos.m_nRow ), uno::UNO_QUERY_THROW );
-        return uno::Any( uno::Reference< excel::XRange >( new ScVbaRange( mxParent, mxContext, xCellRange ) ) );
+        return cpo::uno::Any( uno::Reference< excel::XRange >( new ScVbaRange( mxParent, mxContext, xCellRange ) ) );
 
     }
 };
@@ -682,17 +682,17 @@ namespace {
 class CellValueSetter : public ValueSetter
 {
 protected:
-    uno::Any maValue;
+    cpo::uno::Any maValue;
 public:
-    explicit CellValueSetter( uno::Any  aValue );
-    virtual bool processValue( const uno::Any& aValue,  const uno::Reference< table::XCell >& xCell ) override;
+    explicit CellValueSetter( cpo::uno::Any  aValue );
+    virtual bool processValue( const cpo::uno::Any& aValue,  const uno::Reference< table::XCell >& xCell ) override;
     virtual void visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference< table::XCell >& xCell ) override;
 
 };
 
 }
 
-CellValueSetter::CellValueSetter( uno::Any aValue ): maValue(std::move( aValue )) {}
+CellValueSetter::CellValueSetter( cpo::uno::Any aValue ): maValue(std::move( aValue )) {}
 
 void
 CellValueSetter::visitNode( sal_Int32 /*i*/, sal_Int32 /*j*/, const uno::Reference< table::XCell >& xCell )
@@ -701,7 +701,7 @@ CellValueSetter::visitNode( sal_Int32 /*i*/, sal_Int32 /*j*/, const uno::Referen
 }
 
 bool
-CellValueSetter::processValue( const uno::Any& aValue, const uno::Reference< table::XCell >& xCell )
+CellValueSetter::processValue( const cpo::uno::Any& aValue, const uno::Reference< table::XCell >& xCell )
 {
     if (bool bState; aValue >>= bState)
     {
@@ -770,24 +770,24 @@ class CellValueGetter : public ValueGetter
 {
 protected:
     RangeValueType meValueType;
-    uno::Any maValue;
+    cpo::uno::Any maValue;
 public:
     CellValueGetter(RangeValueType eValueType) { meValueType = eValueType; }
     virtual void visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference< table::XCell >& xCell ) override;
-    virtual void processValue( const uno::Any& aValue ) override;
-    const uno::Any& getValue() const override { return maValue; }
+    virtual void processValue( const cpo::uno::Any& aValue ) override;
+    const cpo::uno::Any& getValue() const override { return maValue; }
 };
 
 }
 
 void
-CellValueGetter::processValue(  const uno::Any& aValue )
+CellValueGetter::processValue(  const cpo::uno::Any& aValue )
 {
     maValue = aValue;
 }
 void CellValueGetter::visitNode( sal_Int32 /*x*/, sal_Int32 /*y*/, const uno::Reference< table::XCell >& xCell )
 {
-    uno::Any aValue;
+    cpo::uno::Any aValue;
     table::CellContentType eCellContentType = xCell->getType();
     if( eCellContentType == table::CellContentType_VALUE || eCellContentType == table::CellContentType_FORMULA )
     {
@@ -844,9 +844,9 @@ private:
     ScDocument& m_rDoc;
     formula::FormulaGrammar::Grammar m_eGrammar;
 public:
-    CellFormulaValueSetter( const uno::Any& aValue, ScDocument& rDoc, formula::FormulaGrammar::Grammar eGram ):CellValueSetter( aValue ),  m_rDoc( rDoc ), m_eGrammar( eGram ){}
+    CellFormulaValueSetter( const cpo::uno::Any& aValue, ScDocument& rDoc, formula::FormulaGrammar::Grammar eGram ):CellValueSetter( aValue ),  m_rDoc( rDoc ), m_eGrammar( eGram ){}
 protected:
-    bool processValue( const uno::Any& aValue, const uno::Reference< table::XCell >& xCell ) override
+    bool processValue( const cpo::uno::Any& aValue, const uno::Reference< table::XCell >& xCell ) override
     {
         OUString sFormula;
         double aDblValue = 0.0;
@@ -901,7 +901,7 @@ public:
          CellValueGetter( RangeValueType::value ), m_rDoc( rDoc ), m_eGrammar( eGram ) {}
     virtual void visitNode( sal_Int32 /*x*/, sal_Int32 /*y*/, const uno::Reference< table::XCell >& xCell ) override
     {
-        uno::Any aValue;
+        cpo::uno::Any aValue;
         aValue <<= xCell->getFormula();
         // XCell::getFormula() returns the formula in API grammar, convert.
         if ((xCell->getType() == table::CellContentType_FORMULA)
@@ -938,18 +938,18 @@ public:
 class Dim2ArrayValueGetter : public ArrayVisitor
 {
 protected:
-    uno::Any maValue;
+    cpo::uno::Any maValue;
     ValueGetter& mValueGetter;
-    void processValue( sal_Int32 x, sal_Int32 y, const uno::Any& aValue )
+    void processValue( sal_Int32 x, sal_Int32 y, const cpo::uno::Any& aValue )
     {
-        uno::Sequence< uno::Sequence< uno::Any > >& aMatrix = const_cast<css::uno::Sequence<css::uno::Sequence<css::uno::Any>> &>(*o3tl::doAccess<uno::Sequence<uno::Sequence<uno::Any>>>(maValue));
+        uno::Sequence< uno::Sequence< cpo::uno::Any > >& aMatrix = const_cast<css::uno::Sequence<css::uno::Sequence<cpo::uno::Any>> &>(*o3tl::doAccess<uno::Sequence<uno::Sequence<cpo::uno::Any>>>(maValue));
         aMatrix.getArray()[x].getArray()[y] = aValue;
     }
 
 public:
     Dim2ArrayValueGetter(sal_Int32 nRowCount, sal_Int32 nColCount, ValueGetter& rValueGetter ): mValueGetter(rValueGetter)
     {
-        uno::Sequence< uno::Sequence< uno::Any > > aMatrix;
+        uno::Sequence< uno::Sequence< cpo::uno::Any > > aMatrix;
         aMatrix.realloc( nRowCount );
         auto pMatrix = aMatrix.getArray();
         for ( sal_Int32 index = 0; index < nRowCount; ++index )
@@ -962,7 +962,7 @@ public:
         mValueGetter.visitNode( x, y, xCell );
         processValue( x, y, mValueGetter.getValue() );
     }
-    const uno::Any& getValue() const { return maValue; }
+    const cpo::uno::Any& getValue() const { return maValue; }
 
 };
 
@@ -974,11 +974,11 @@ namespace {
 
 class Dim1ArrayValueSetter : public ArrayVisitor
 {
-    uno::Sequence< uno::Any > aMatrix;
+    uno::Sequence< cpo::uno::Any > aMatrix;
     sal_Int32 nColCount;
     ValueSetter& mCellValueSetter;
 public:
-    Dim1ArrayValueSetter( const uno::Any& aValue, ValueSetter& rCellValueSetter ):mCellValueSetter( rCellValueSetter )
+    Dim1ArrayValueSetter( const cpo::uno::Any& aValue, ValueSetter& rCellValueSetter ):mCellValueSetter( rCellValueSetter )
     {
         aValue >>= aMatrix;
         nColCount = aMatrix.getLength();
@@ -988,18 +988,18 @@ public:
         if ( y < nColCount )
             mCellValueSetter.processValue( aMatrix[ y ], xCell );
         else
-            mCellValueSetter.processValue( uno::Any( sNA ), xCell );
+            mCellValueSetter.processValue( cpo::uno::Any( sNA ), xCell );
     }
 };
 
 class Dim2ArrayValueSetter : public ArrayVisitor
 {
-    uno::Sequence< uno::Sequence< uno::Any > > aMatrix;
+    uno::Sequence< uno::Sequence< cpo::uno::Any > > aMatrix;
     ValueSetter& mCellValueSetter;
     sal_Int32 nRowCount;
     sal_Int32 nColCount;
 public:
-    Dim2ArrayValueSetter( const uno::Any& aValue, ValueSetter& rCellValueSetter ) : mCellValueSetter( rCellValueSetter )
+    Dim2ArrayValueSetter( const cpo::uno::Any& aValue, ValueSetter& rCellValueSetter ) : mCellValueSetter( rCellValueSetter )
     {
         aValue >>= aMatrix;
         nRowCount = aMatrix.getLength();
@@ -1011,7 +1011,7 @@ public:
         if ( x < nRowCount && y < nColCount )
             mCellValueSetter.processValue( aMatrix[ x ][ y ], xCell );
         else
-            mCellValueSetter.processValue( uno::Any( sNA ), xCell );
+            mCellValueSetter.processValue( cpo::uno::Any( sNA ), xCell );
 
     }
 };
@@ -1027,9 +1027,9 @@ protected:
 
 class RangeValueProcessor : public RangeProcessor
 {
-    const uno::Any& m_aVal;
+    const cpo::uno::Any& m_aVal;
 public:
-    explicit RangeValueProcessor( const uno::Any& rVal ):m_aVal( rVal ) {}
+    explicit RangeValueProcessor( const cpo::uno::Any& rVal ):m_aVal( rVal ) {}
     virtual ~RangeValueProcessor() {}
     virtual void process( const uno::Reference< excel::XRange >& xRange ) override
     {
@@ -1039,9 +1039,9 @@ public:
 
 class RangeFormulaProcessor : public RangeProcessor
 {
-    const uno::Any& m_aVal;
+    const cpo::uno::Any& m_aVal;
 public:
-    explicit RangeFormulaProcessor( const uno::Any& rVal ):m_aVal( rVal ) {}
+    explicit RangeFormulaProcessor( const cpo::uno::Any& rVal ):m_aVal( rVal ) {}
     virtual ~RangeFormulaProcessor() {}
     virtual void process( const uno::Reference< excel::XRange >& xRange ) override
     {
@@ -1075,7 +1075,7 @@ public:
             sal_Int32 nItems = m_Areas->getCount();
             for ( sal_Int32 index=1; index <= nItems; ++index )
             {
-                uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any(index), uno::Any() ), uno::UNO_QUERY_THROW );
+                uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any(index), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
                 processor.process( xRange );
             }
         }
@@ -1094,7 +1094,7 @@ public:
             throw uno::RuntimeException();
     }
     /// @throws uno::RuntimeException
-    explicit RangeHelper( const uno::Any& rCellRange )
+    explicit RangeHelper( const cpo::uno::Any& rCellRange )
     {
         m_xCellRange.set(rCellRange, uno::UNO_QUERY_THROW);
     }
@@ -1368,7 +1368,7 @@ ScVbaRange::getRangeObjectForName(
 }
 
 /// @throws uno::RuntimeException
-static table::CellRangeAddress getCellRangeAddressForVBARange( const uno::Any& aParam, ScDocShell* pDocSh )
+static table::CellRangeAddress getCellRangeAddressForVBARange( const cpo::uno::Any& aParam, ScDocShell* pDocSh )
 {
     uno::Reference< table::XCellRange > xRangeParam;
     switch ( aParam.getValueTypeClass() )
@@ -1417,7 +1417,7 @@ lcl_setupBorders( const uno::Reference< excel::XRange >& xParentRange, const uno
     return borders;
 }
 
-ScVbaRange::ScVbaRange( uno::Sequence< uno::Any> const & args,
+ScVbaRange::ScVbaRange( uno::Sequence< cpo::uno::Any> const & args,
     uno::Reference< uno::XComponentContext> const & xContext )
     : ScVbaRange_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ),
                        xContext,
@@ -1473,7 +1473,7 @@ uno::Reference< XCollection >& ScVbaRange::getBorders()
 {
     if ( !m_Borders.is() )
     {
-        uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any( sal_Int32(1) ), uno::Any() ), uno::UNO_QUERY_THROW );
+        uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any( sal_Int32(1) ), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
         m_Borders = lcl_setupBorders( this, mxContext, uno::Reference< table::XCellRange >( xRange->getCellRange(), uno::UNO_QUERY_THROW ) );
     }
     return m_Borders;
@@ -1503,7 +1503,7 @@ ScVbaRange::visitArray( ArrayVisitor& visitor )
         pDocSh->UnlockPaint();
 }
 
-uno::Any
+cpo::uno::Any
 ScVbaRange::getValue( ValueGetter& valueGetter)
 {
     uno::Reference< table::XColumnRowRange > xColumnRowRange(mxRange, uno::UNO_QUERY_THROW );
@@ -1518,10 +1518,10 @@ ScVbaRange::getValue( ValueGetter& valueGetter)
     // multi cell range ( return array )
     Dim2ArrayValueGetter arrayGetter( nRowCount, nColCount, valueGetter );
     visitArray( arrayGetter );
-    return uno::Any( script::ArrayWrapper( false, arrayGetter.getValue() ) );
+    return cpo::uno::Any( script::ArrayWrapper( false, arrayGetter.getValue() ) );
 }
 
-css::uno::Any ScVbaRange::DoGetValue( RangeValueType eValueType )
+cpo::uno::Any ScVbaRange::DoGetValue( RangeValueType eValueType )
 {
     // #TODO code within the test below "if ( m_Areas... " can be removed
     // Test is performed only because m_xRange is NOT set to be
@@ -1537,13 +1537,13 @@ css::uno::Any ScVbaRange::DoGetValue( RangeValueType eValueType )
     return getValue( valueGetter );
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaRange::getValue()
 {
     return DoGetValue( RangeValueType::value );
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaRange::getValue2()
 {
     return DoGetValue( RangeValueType::value2 );
@@ -1551,26 +1551,26 @@ ScVbaRange::getValue2()
 
 
 void
-ScVbaRange::setValue( const uno::Any& aValue, ValueSetter& valueSetter )
+ScVbaRange::setValue( const cpo::uno::Any& aValue, ValueSetter& valueSetter )
 {
     uno::TypeClass aClass = aValue.getValueTypeClass();
     if ( aClass == uno::TypeClass_SEQUENCE )
     {
         const uno::Reference< script::XTypeConverter >& xConverter = getTypeConverter( mxContext );
-        uno::Any aConverted;
+        cpo::uno::Any aConverted;
         try
         {
             // test for single dimension, could do
             // with a better test than this
             if ( aValue.getValueTypeName().indexOf('[') ==  aValue.getValueTypeName().lastIndexOf('[') )
             {
-                aConverted = xConverter->convertTo( aValue, cppu::UnoType<uno::Sequence< uno::Any >>::get() );
+                aConverted = xConverter->convertTo( aValue, cppu::UnoType<uno::Sequence< cpo::uno::Any >>::get() );
                 Dim1ArrayValueSetter setter( aConverted, valueSetter );
                 visitArray( setter );
             }
             else
             {
-                aConverted = xConverter->convertTo( aValue, cppu::UnoType<uno::Sequence< uno::Sequence< uno::Any > >>::get() );
+                aConverted = xConverter->convertTo( aValue, cppu::UnoType<uno::Sequence< uno::Sequence< cpo::uno::Any > >>::get() );
                 Dim2ArrayValueSetter setter( aConverted, valueSetter );
                 visitArray( setter );
             }
@@ -1588,7 +1588,7 @@ ScVbaRange::setValue( const uno::Any& aValue, ValueSetter& valueSetter )
 }
 
 void SAL_CALL
-ScVbaRange::setValue( const uno::Any  &aValue )
+ScVbaRange::setValue( const cpo::uno::Any  &aValue )
 {
     // If this is a multiple selection apply setValue over all areas
     if ( m_Areas->getCount() > 1 )
@@ -1603,7 +1603,7 @@ ScVbaRange::setValue( const uno::Any  &aValue )
 }
 
 void SAL_CALL
-ScVbaRange::setValue2( const uno::Any  &aValue )
+ScVbaRange::setValue2( const cpo::uno::Any  &aValue )
 {
     return setValue( aValue );
 }
@@ -1630,7 +1630,7 @@ ScVbaRange::ClearContents( sal_Int32 nFlags, bool bFireEvent )
         sal_Int32 nItems = m_Areas->getCount();
         for ( sal_Int32 index=1; index <= nItems; ++index )
         {
-            uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any(index), uno::Any() ), uno::UNO_QUERY_THROW );
+            uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any(index), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
             ScVbaRange* pRange = getImplementation( xRange );
             if ( pRange )
                 pRange->ClearContents( nFlags, false ); // do not fire for single ranges
@@ -1669,7 +1669,7 @@ ScVbaRange::ClearFormats()
 }
 
 void
-ScVbaRange::setFormulaValue( const uno::Any& rFormula, formula::FormulaGrammar::Grammar eGram )
+ScVbaRange::setFormulaValue( const cpo::uno::Any& rFormula, formula::FormulaGrammar::Grammar eGram )
 {
     // If this is a multiple selection apply setFormula over all areas
     if ( m_Areas->getCount() > 1 )
@@ -1683,7 +1683,7 @@ ScVbaRange::setFormulaValue( const uno::Any& rFormula, formula::FormulaGrammar::
     setValue( rFormula, formulaValueSetter );
 }
 
-uno::Any
+cpo::uno::Any
 ScVbaRange::getFormulaValue( formula::FormulaGrammar::Grammar eGram )
 {
     // #TODO code within the test below "if ( m_Areas... " can be removed
@@ -1700,50 +1700,50 @@ ScVbaRange::getFormulaValue( formula::FormulaGrammar::Grammar eGram )
 
 }
 
-uno::Any
+cpo::uno::Any
 ScVbaRange::getFormula()
 {
     return getFormulaValue( formula::FormulaGrammar::GRAM_ENGLISH_XL_A1 );
 }
 
 void
-ScVbaRange::setFormula(const uno::Any &rFormula )
+ScVbaRange::setFormula(const cpo::uno::Any &rFormula )
 {
     setFormulaValue( rFormula, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1 );
 }
 
-uno::Any
+cpo::uno::Any
 ScVbaRange::getFormulaR1C1()
 {
     return getFormulaValue( formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1 );
 }
 
 void
-ScVbaRange::setFormulaR1C1(const uno::Any& rFormula )
+ScVbaRange::setFormulaR1C1(const cpo::uno::Any& rFormula )
 {
     setFormulaValue( rFormula, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1 );
 }
 
-uno::Any
+cpo::uno::Any
 ScVbaRange::getFormulaLocal()
 {
     return getFormulaValue( formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );
 }
 
 void
-ScVbaRange::setFormulaLocal(const uno::Any &rFormula )
+ScVbaRange::setFormulaLocal(const cpo::uno::Any &rFormula )
 {
     setFormulaValue( rFormula, formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );
 }
 
-uno::Any
+cpo::uno::Any
 ScVbaRange::getFormulaR1C1Local()
 {
     return getFormulaValue( formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1 );
 }
 
 void
-ScVbaRange::setFormulaR1C1Local(const uno::Any& rFormula )
+ScVbaRange::setFormulaR1C1Local(const cpo::uno::Any& rFormula )
 {
     setFormulaValue( rFormula, formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1 );
 }
@@ -1804,16 +1804,16 @@ ScVbaRange::getColumn()
     return xCellAddressable->getCellAddress().Column + 1; // Zero value indexing
 }
 
-uno::Any
+cpo::uno::Any
 ScVbaRange::HasFormula()
 {
     if ( m_Areas->getCount() > 1 )
     {
         sal_Int32 nItems = m_Areas->getCount();
-        uno::Any aResult = aNULL();
+        cpo::uno::Any aResult = aNULL();
         for ( sal_Int32 index=1; index <= nItems; ++index )
         {
-            uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any(index), uno::Any() ), uno::UNO_QUERY_THROW );
+            uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any(index), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
             // if the HasFormula for any area is different to another
             // return null
             if ( index > 1 )
@@ -1835,7 +1835,7 @@ ScVbaRange::HasFormula()
         assert(pFormulaRanges);
         // check if there are no formula cell, return false
         if ( pFormulaRanges->GetRangeList().empty() )
-            return uno::Any(false);
+            return cpo::uno::Any(false);
 
         // check if there are holes (where some cells are not formulas)
         // or returned range is not equal to this range
@@ -1845,7 +1845,7 @@ ScVbaRange::HasFormula()
            )
             return aNULL(); // should return aNULL;
     }
-    return uno::Any( true );
+    return cpo::uno::Any( true );
 }
 void
 ScVbaRange::fillSeries( sheet::FillDirection nFillDirection, sheet::FillMode nFillMode, sheet::FillDateMode nFillDateMode, double fStep, double fEndValue )
@@ -1856,7 +1856,7 @@ ScVbaRange::fillSeries( sheet::FillDirection nFillDirection, sheet::FillMode nFi
         uno::Reference< XCollection > xCollection( m_Areas, uno::UNO_SET_THROW );
         for ( sal_Int32 index = 1; index <= xCollection->getCount(); ++index )
         {
-            uno::Reference< excel::XRange > xRange( xCollection->Item( uno::Any( index ), uno::Any() ), uno::UNO_QUERY_THROW );
+            uno::Reference< excel::XRange > xRange( xCollection->Item( cpo::uno::Any( index ), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
             ScVbaRange* pThisRange = getImplementation( xRange );
             pThisRange->fillSeries( nFillDirection, nFillMode, nFillDateMode, fStep, fEndValue );
 
@@ -1914,7 +1914,7 @@ ScVbaRange::getText()
 }
 
 uno::Reference< excel::XRange >
-ScVbaRange::Offset( const ::uno::Any &nRowOff, const uno::Any &nColOff )
+ScVbaRange::Offset( const ::cpo::uno::Any &nRowOff, const cpo::uno::Any &nColOff )
 {
     SCROW nRowOffset = 0;
     SCCOL nColOffset = 0;
@@ -1991,7 +1991,7 @@ ScVbaRange::CurrentArray()
     return RangeHelper::createRangeFromRange( mxParent, mxContext, helper.getCellRangeFromSheet(), xCellRangeAddressable );
 }
 
-uno::Any
+cpo::uno::Any
 ScVbaRange::getFormulaArray()
 {
     // #TODO code within the test below "if ( m_Areas... " can be removed
@@ -2011,11 +2011,11 @@ ScVbaRange::getFormulaArray()
     // for the moment any tests we have pass
     uno::Reference< sheet::XArrayFormulaRange> xFormulaArray( mxRange, uno::UNO_QUERY_THROW );
     if ( !xFormulaArray->getArrayFormula().isEmpty() )
-        return uno::Any( xFormulaArray->getArrayFormula() );
+        return cpo::uno::Any( xFormulaArray->getArrayFormula() );
 
     uno::Reference< sheet::XCellRangeFormula> xCellRangeFormula( mxRange, uno::UNO_QUERY_THROW );
     const uno::Reference< script::XTypeConverter >& xConverter = getTypeConverter( mxContext );
-    uno::Any aSingleValueOrMatrix;
+    cpo::uno::Any aSingleValueOrMatrix;
     // When dealing with a single element ( embedded in the sequence of sequence ) unwrap and return
     // that value
     uno::Sequence< uno::Sequence<OUString> > aTmpSeq = xCellRangeFormula->getFormulaArray();
@@ -2025,12 +2025,12 @@ ScVbaRange::getFormulaArray()
             aSingleValueOrMatrix <<= aTmpSeq[ 0 ][ 0 ];
     }
     else
-        aSingleValueOrMatrix = xConverter->convertTo( uno::Any( aTmpSeq ) , cppu::UnoType<uno::Sequence< uno::Sequence< uno::Any > >>::get()  ) ;
+        aSingleValueOrMatrix = xConverter->convertTo( cpo::uno::Any( aTmpSeq ) , cppu::UnoType<uno::Sequence< uno::Sequence< cpo::uno::Any > >>::get()  ) ;
     return aSingleValueOrMatrix;
 }
 
 void
-ScVbaRange::setFormulaArray(const uno::Any& rFormula)
+ScVbaRange::setFormulaArray(const cpo::uno::Any& rFormula)
 {
     // #TODO code within the test below "if ( m_Areas... " can be removed
     // Test is performed only because m_xRange is NOT set to be
@@ -2066,7 +2066,7 @@ ScVbaRange::setFormulaArray(const uno::Any& rFormula)
 }
 
 OUString
-ScVbaRange::Characters(const uno::Any& Start, const uno::Any& Length)
+ScVbaRange::Characters(const cpo::uno::Any& Start, const cpo::uno::Any& Length)
 {
     // #TODO code within the test below "if ( m_Areas... " can be removed
     // Test is performed only because m_xRange is NOT set to be
@@ -2092,17 +2092,17 @@ ScVbaRange::Characters(const uno::Any& Start, const uno::Any& Length)
 }
 
 OUString
-ScVbaRange::Address(  const uno::Any& RowAbsolute, const uno::Any& ColumnAbsolute, const uno::Any& ReferenceStyle, const uno::Any& External, const uno::Any& RelativeTo )
+ScVbaRange::Address(  const cpo::uno::Any& RowAbsolute, const cpo::uno::Any& ColumnAbsolute, const cpo::uno::Any& ReferenceStyle, const cpo::uno::Any& External, const cpo::uno::Any& RelativeTo )
 {
     if ( m_Areas->getCount() > 1 )
     {
         // Multi-Area Range
         OUStringBuffer sAddress;
         uno::Reference< XCollection > xCollection( m_Areas, uno::UNO_SET_THROW );
-        uno::Any aExternalCopy = External;
+        cpo::uno::Any aExternalCopy = External;
         for ( sal_Int32 index = 1; index <= xCollection->getCount(); ++index )
         {
-            uno::Reference< excel::XRange > xRange( xCollection->Item( uno::Any( index ), uno::Any() ), uno::UNO_QUERY_THROW );
+            uno::Reference< excel::XRange > xRange( xCollection->Item( cpo::uno::Any( index ), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
             if ( index > 1 )
             {
                 sAddress.append(",");
@@ -2189,7 +2189,7 @@ ScVbaRange::Font()
 }
 
 uno::Reference< excel::XRange >
-ScVbaRange::Cells( const uno::Any &nRowIndex, const uno::Any &nColumnIndex )
+ScVbaRange::Cells( const cpo::uno::Any &nRowIndex, const cpo::uno::Any &nColumnIndex )
 {
     // #TODO code within the test below "if ( m_Areas... " can be removed
     // Test is performed only because m_xRange is NOT set to be
@@ -2212,7 +2212,7 @@ ScVbaRange::CellsHelper( const ScDocument& rDoc,
                          const uno::Reference< ov::XHelperInterface >& xParent,
                          const uno::Reference< uno::XComponentContext >& xContext,
                          const uno::Reference< css::table::XCellRange >& xRange,
-                         const uno::Any &nRowIndex, const uno::Any &nColumnIndex )
+                         const cpo::uno::Any &nRowIndex, const cpo::uno::Any &nColumnIndex )
 {
     sal_Int32 nRow = 0, nColumn = 0;
 
@@ -2226,7 +2226,7 @@ ScVbaRange::CellsHelper( const ScDocument& rDoc,
     if ( nRowIndex.hasValue() && !( nRowIndex >>= nRow ) )
     {
         const uno::Reference< script::XTypeConverter >& xConverter = getTypeConverter( xContext );
-        uno::Any aConverted;
+        cpo::uno::Any aConverted;
         try
         {
             aConverted = xConverter->convertTo( nRowIndex, cppu::UnoType<sal_Int32>::get() );
@@ -2253,7 +2253,7 @@ ScVbaRange::CellsHelper( const ScDocument& rDoc,
             if ( !( nColumnIndex >>= nColumn ) )
             {
                 const uno::Reference< script::XTypeConverter >& xConverter = getTypeConverter( xContext );
-                uno::Any aConverted;
+                cpo::uno::Any aConverted;
                 try
                 {
                     aConverted = xConverter->convertTo( nColumnIndex, cppu::UnoType<sal_Int32>::get() );
@@ -2302,9 +2302,9 @@ ScVbaRange::Select()
     uno::Reference< frame::XModel > xModel( pShell->GetModel(), uno::UNO_SET_THROW );
     uno::Reference< view::XSelectionSupplier > xSelection( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
     if ( mxRanges.is() )
-        xSelection->select( uno::Any( lclExpandToMerged( mxRanges ) ) );
+        xSelection->select( cpo::uno::Any( lclExpandToMerged( mxRanges ) ) );
     else
-        xSelection->select( uno::Any( lclExpandToMerged( mxRange, true ) ) );
+        xSelection->select( cpo::uno::Any( lclExpandToMerged( mxRange, true ) ) );
     // set focus on document e.g.
     // ThisComponent.CurrentController.Frame.getContainerWindow.SetFocus
     try
@@ -2410,7 +2410,7 @@ ScRange ScVbaRange::obtainRangeEvenIfRangeListIsEmpty( const ScRangeList& rCellR
 }
 
 uno::Reference< excel::XRange >
-ScVbaRange::Rows(const uno::Any& aIndex )
+ScVbaRange::Rows(const cpo::uno::Any& aIndex )
 {
     if ( aIndex.hasValue() )
     {
@@ -2451,7 +2451,7 @@ ScVbaRange::Rows(const uno::Any& aIndex )
 }
 
 uno::Reference< excel::XRange >
-ScVbaRange::Columns(const uno::Any& aIndex )
+ScVbaRange::Columns(const cpo::uno::Any& aIndex )
 {
     ScCellRangesBase* pUnoRangesBase = getCellRangesBase();
     ScRange aRange( obtainRangeEvenIfRangeListIsEmpty( pUnoRangesBase->GetRangeList()));
@@ -2489,7 +2489,7 @@ ScVbaRange::Columns(const uno::Any& aIndex )
 }
 
 void
-ScVbaRange::setMergeCells( const uno::Any& aIsMerged )
+ScVbaRange::setMergeCells( const cpo::uno::Any& aIsMerged )
 {
     bool bMerge = extractBoolFromAny( aIsMerged );
 
@@ -2523,7 +2523,7 @@ ScVbaRange::setMergeCells( const uno::Any& aIsMerged )
     lclExpandAndMerge( mxRange, bMerge );
 }
 
-uno::Any
+cpo::uno::Any
 ScVbaRange::getMergeCells()
 {
     if( mxRanges.is() )
@@ -2540,20 +2540,20 @@ ScVbaRange::getMergeCells()
                 return aNULL();
         }
         // no range is merged anyhow, return false
-        return uno::Any( false );
+        return cpo::uno::Any( false );
     }
 
     // otherwise, check single range
     switch( lclGetMergedState( mxRange ) )
     {
-        case util::TriState_YES:    return uno::Any( true );
-        case util::TriState_NO:     return uno::Any( false );
+        case util::TriState_YES:    return cpo::uno::Any( true );
+        case util::TriState_NO:     return cpo::uno::Any( false );
         default:                    return aNULL();
     }
 }
 
 void
-ScVbaRange::Copy(const ::uno::Any& Destination)
+ScVbaRange::Copy(const ::cpo::uno::Any& Destination)
 {
     if ( Destination.hasValue() )
     {
@@ -2561,7 +2561,7 @@ ScVbaRange::Copy(const ::uno::Any& Destination)
         if ( m_Areas->getCount() > 1 )
             throw uno::RuntimeException(u"That command cannot be used on multiple selections"_ustr );
         uno::Reference< excel::XRange > xRange( Destination, uno::UNO_QUERY_THROW );
-        uno::Any aRange = xRange->getCellRange();
+        cpo::uno::Any aRange = xRange->getCellRange();
         uno::Reference< table::XCellRange > xCellRange;
         aRange >>= xCellRange;
         uno::Reference< sheet::XSheetCellRange > xSheetCellRange(xCellRange, ::uno::UNO_QUERY_THROW);
@@ -2583,7 +2583,7 @@ ScVbaRange::Copy(const ::uno::Any& Destination)
 }
 
 void
-ScVbaRange::Cut(const ::uno::Any& Destination)
+ScVbaRange::Cut(const ::cpo::uno::Any& Destination)
 {
     if ( m_Areas->getCount() > 1 )
         throw uno::RuntimeException(u"That command cannot be used on multiple selections"_ustr );
@@ -2609,7 +2609,7 @@ ScVbaRange::Cut(const ::uno::Any& Destination)
 }
 
 void
-ScVbaRange::setNumberFormat( const uno::Any& aFormat )
+ScVbaRange::setNumberFormat( const cpo::uno::Any& aFormat )
 {
     OUString sFormat;
     aFormat >>= sFormat;
@@ -2618,7 +2618,7 @@ ScVbaRange::setNumberFormat( const uno::Any& aFormat )
         sal_Int32 nItems = m_Areas->getCount();
         for ( sal_Int32 index=1; index <= nItems; ++index )
         {
-            uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any(index), uno::Any() ), uno::UNO_QUERY_THROW );
+            uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any(index), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
             xRange->setNumberFormat( aFormat );
         }
         return;
@@ -2627,17 +2627,17 @@ ScVbaRange::setNumberFormat( const uno::Any& aFormat )
     numFormat.setNumberFormat( sFormat );
 }
 
-uno::Any
+cpo::uno::Any
 ScVbaRange::getNumberFormat()
 {
 
     if ( m_Areas->getCount() > 1 )
     {
         sal_Int32 nItems = m_Areas->getCount();
-        uno::Any aResult = aNULL();
+        cpo::uno::Any aResult = aNULL();
         for ( sal_Int32 index=1; index <= nItems; ++index )
         {
-            uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any(index), uno::Any() ), uno::UNO_QUERY_THROW );
+            uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any(index), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
             // if the numberformat of one area is different to another
             // return null
             if ( index > 1 )
@@ -2652,12 +2652,12 @@ ScVbaRange::getNumberFormat()
     NumFormatHelper numFormat( mxRange );
     OUString sFormat = numFormat.getNumberFormatString();
     if ( !sFormat.isEmpty() )
-        return uno::Any( sFormat );
+        return cpo::uno::Any( sFormat );
     return aNULL();
 }
 
 uno::Reference< excel::XRange >
-ScVbaRange::Resize( const uno::Any &RowSize, const uno::Any &ColumnSize )
+ScVbaRange::Resize( const cpo::uno::Any &RowSize, const cpo::uno::Any &ColumnSize )
 {
     tools::Long nRowSize = 0, nColumnSize = 0;
     bool bIsRowChanged = ( RowSize >>= nRowSize ), bIsColumnChanged = ( ColumnSize >>= nColumnSize );
@@ -2678,14 +2678,14 @@ ScVbaRange::Resize( const uno::Any &RowSize, const uno::Any &ColumnSize )
 }
 
 void
-ScVbaRange::setWrapText( const uno::Any& aIsWrapped )
+ScVbaRange::setWrapText( const cpo::uno::Any& aIsWrapped )
 {
     if ( m_Areas->getCount() > 1 )
     {
         sal_Int32 nItems = m_Areas->getCount();
         for ( sal_Int32 index=1; index <= nItems; ++index )
         {
-            uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any(index), uno::Any() ), uno::UNO_QUERY_THROW );
+            uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any(index), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
             xRange->setWrapText( aIsWrapped );
         }
         return;
@@ -2693,19 +2693,19 @@ ScVbaRange::setWrapText( const uno::Any& aIsWrapped )
 
     uno::Reference< beans::XPropertySet > xProps(mxRange, ::uno::UNO_QUERY_THROW );
     bool bIsWrapped = extractBoolFromAny( aIsWrapped );
-    xProps->setPropertyValue( u"IsTextWrapped"_ustr, uno::Any( bIsWrapped ) );
+    xProps->setPropertyValue( u"IsTextWrapped"_ustr, cpo::uno::Any( bIsWrapped ) );
 }
 
-uno::Any
+cpo::uno::Any
 ScVbaRange::getWrapText()
 {
     if ( m_Areas->getCount() > 1 )
     {
         sal_Int32 nItems = m_Areas->getCount();
-        uno::Any aResult;
+        cpo::uno::Any aResult;
         for ( sal_Int32 index=1; index <= nItems; ++index )
         {
-            uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any(index), uno::Any() ), uno::UNO_QUERY_THROW );
+            uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any(index), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
             if ( index > 1 )
                 if ( aResult != xRange->getWrapText() )
                     return aNULL();
@@ -2721,7 +2721,7 @@ ScVbaRange::getWrapText()
         return aNULL();
 
     uno::Reference< beans::XPropertySet > xProps(mxRange, ::uno::UNO_QUERY_THROW );
-    uno::Any aValue = xProps->getPropertyValue( u"IsTextWrapped"_ustr );
+    cpo::uno::Any aValue = xProps->getPropertyValue( u"IsTextWrapped"_ustr );
     return aValue;
 }
 
@@ -2731,12 +2731,12 @@ uno::Reference< excel::XInterior > ScVbaRange::Interior( )
     return new ScVbaInterior ( this, mxContext, xProps, &getScDocument() );
 }
 uno::Reference< excel::XRange >
-ScVbaRange::Range( const uno::Any &Cell1, const uno::Any &Cell2 )
+ScVbaRange::Range( const cpo::uno::Any &Cell1, const cpo::uno::Any &Cell2 )
 {
     return Range( Cell1, Cell2, false );
 }
 uno::Reference< excel::XRange >
-ScVbaRange::Range( const uno::Any &Cell1, const uno::Any &Cell2, bool bForceUseInpuRangeTab )
+ScVbaRange::Range( const cpo::uno::Any &Cell1, const cpo::uno::Any &Cell2, bool bForceUseInpuRangeTab )
 
 {
     uno::Reference< table::XCellRange > xCellRange = mxRange;
@@ -2837,9 +2837,9 @@ ScVbaRange::Range( const uno::Any &Cell1, const uno::Any &Cell2, bool bForceUseI
 
 // Allow access to underlying openoffice uno api ( useful for debugging
 // with openoffice basic )
-uno::Any SAL_CALL ScVbaRange::getCellRange(  )
+cpo::uno::Any SAL_CALL ScVbaRange::getCellRange(  )
 {
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     if ( mxRanges.is() )
         aAny <<= mxRanges;
     else if ( mxRange.is() )
@@ -2847,7 +2847,7 @@ uno::Any SAL_CALL ScVbaRange::getCellRange(  )
     return aAny;
 }
 
-uno::Any ScVbaRange::getCellRange( const uno::Reference< excel::XRange >& rxRange )
+cpo::uno::Any ScVbaRange::getCellRange( const uno::Reference< excel::XRange >& rxRange )
 {
     if( ScVbaRange* pVbaRange = getImplementation( rxRange ) )
         return pVbaRange->getCellRange();
@@ -2903,7 +2903,7 @@ getPasteFormulaBits( sal_Int32 Operation)
     return nFormulaBits;
 }
 void SAL_CALL
-ScVbaRange::PasteSpecial( const uno::Any& Paste, const uno::Any& Operation, const uno::Any& SkipBlanks, const uno::Any& Transpose )
+ScVbaRange::PasteSpecial( const cpo::uno::Any& Paste, const cpo::uno::Any& Operation, const cpo::uno::Any& SkipBlanks, const cpo::uno::Any& Transpose )
 {
     if ( m_Areas->getCount() > 1 )
         throw uno::RuntimeException(u"That command cannot be used on multiple selections"_ustr );
@@ -2915,7 +2915,7 @@ ScVbaRange::PasteSpecial( const uno::Any& Paste, const uno::Any& Operation, cons
     uno::Reference< frame::XModel > xModel(pShell->GetModel(), uno::UNO_SET_THROW);
     uno::Reference< view::XSelectionSupplier > xSelection( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
     // select this range
-    xSelection->select( uno::Any( mxRange ) );
+    xSelection->select( cpo::uno::Any( mxRange ) );
     // set up defaults
     sal_Int32 nPaste = excel::XlPasteType::xlPasteAll;
     sal_Int32 nOperation = excel::XlPasteSpecialOperation::xlPasteSpecialOperationNone;
@@ -2983,7 +2983,7 @@ ScVbaRange::getEntireColumn()
 }
 
 uno::Reference< excel::XComment > SAL_CALL
-ScVbaRange::AddComment( const uno::Any& Text )
+ScVbaRange::AddComment( const cpo::uno::Any& Text )
 {
     // if there is already a comment in the top-left cell then throw
     if( getComment().is() )
@@ -3012,7 +3012,7 @@ ScVbaRange::getComment()
     // intentional behavior to return a null object if no
     // comment defined
     uno::Reference< excel::XComment > xComment( new ScVbaComment( this, mxContext, getUnoModel(), mxRange ) );
-    if ( xComment->Text( uno::Any(), uno::Any(), uno::Any() ).isEmpty() )
+    if ( xComment->Text( cpo::uno::Any(), cpo::uno::Any(), cpo::uno::Any() ).isEmpty() )
         return nullptr;
     return xComment;
 
@@ -3031,14 +3031,14 @@ getRowOrColumnProps( const uno::Reference< table::XCellRange >& xCellRange, bool
     return xProps;
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaRange::getHidden()
 {
     // if multi-area result is the result of the
     // first area
     if ( m_Areas->getCount() > 1 )
     {
-        uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any(sal_Int32(1)), uno::Any() ), uno::UNO_QUERY_THROW );
+        uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any(sal_Int32(1)), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
         return xRange->getHidden();
     }
     bool bIsVisible = false;
@@ -3050,22 +3050,22 @@ ScVbaRange::getHidden()
     }
     catch( const uno::Exception& e )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException( e.Message,
                         nullptr, anyEx );
     }
-    return uno::Any( !bIsVisible );
+    return cpo::uno::Any( !bIsVisible );
 }
 
 void SAL_CALL
-ScVbaRange::setHidden( const uno::Any& _hidden )
+ScVbaRange::setHidden( const cpo::uno::Any& _hidden )
 {
     if ( m_Areas->getCount() > 1 )
     {
         sal_Int32 nItems = m_Areas->getCount();
         for ( sal_Int32 index=1; index <= nItems; ++index )
         {
-            uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any(index), uno::Any() ), uno::UNO_QUERY_THROW );
+            uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any(index), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
             xRange->setHidden( _hidden );
         }
         return;
@@ -3075,24 +3075,24 @@ ScVbaRange::setHidden( const uno::Any& _hidden )
     try
     {
         uno::Reference< beans::XPropertySet > xProps = getRowOrColumnProps( mxRange, mbIsRows );
-        xProps->setPropertyValue( ISVISIBLE, uno::Any( !bHidden ) );
+        xProps->setPropertyValue( ISVISIBLE, cpo::uno::Any( !bHidden ) );
     }
     catch( const uno::Exception& e )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException( e.Message,
                         nullptr, anyEx );
     }
 }
 
 bool SAL_CALL
-ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const uno::Any& LookAt, const uno::Any& SearchOrder, const uno::Any& MatchCase, const uno::Any& MatchByte, const uno::Any& SearchFormat, const uno::Any& ReplaceFormat  )
+ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const cpo::uno::Any& LookAt, const cpo::uno::Any& SearchOrder, const cpo::uno::Any& MatchCase, const cpo::uno::Any& MatchByte, const cpo::uno::Any& SearchFormat, const cpo::uno::Any& ReplaceFormat  )
 {
     if ( m_Areas->getCount() > 1 )
     {
         for ( sal_Int32 index = 1; index <= m_Areas->getCount(); ++index )
         {
-            uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any( index ), uno::Any() ), uno::UNO_QUERY_THROW );
+            uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any( index ), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
             xRange->Replace( What, Replacement,  LookAt, SearchOrder, MatchCase, MatchByte, SearchFormat, ReplaceFormat );
         }
         return true; // seems to return true always ( or at least I haven't found the trick of
@@ -3113,8 +3113,8 @@ ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const un
             xReplace->createReplaceDescriptor();
 
         xDescriptor->setSearchString(What);
-        xDescriptor->setPropertyValue(SC_UNO_SRCHWILDCARD, uno::Any(true));
-        xDescriptor->setPropertyValue(SC_UNO_SRCHWCESCCHAR, uno::Any(sal_Int32('~')));
+        xDescriptor->setPropertyValue(SC_UNO_SRCHWILDCARD, cpo::uno::Any(true));
+        xDescriptor->setPropertyValue(SC_UNO_SRCHWCESCCHAR, cpo::uno::Any(sal_Int32('~')));
         xDescriptor->setReplaceString( Replacement);
         if ( LookAt.hasValue() )
         {
@@ -3130,7 +3130,7 @@ ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const un
             // set global search props ( affects the find dialog
             // and of course the defaults for this method
             newOptions.SetWordOnly( bSearchWords );
-            xDescriptor->setPropertyValue( SC_UNO_SRCHWORDS, uno::Any( bSearchWords ) );
+            xDescriptor->setPropertyValue( SC_UNO_SRCHWORDS, cpo::uno::Any( bSearchWords ) );
         }
         // sets SearchByRow ( true for Rows )
         if ( SearchOrder.hasValue() )
@@ -3145,7 +3145,7 @@ ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const un
                 throw uno::RuntimeException(u"Range::Replace, illegal value for SearchOrder"_ustr );
 
             newOptions.SetRowDirection( bSearchByRow );
-            xDescriptor->setPropertyValue( SC_UNO_SRCHBYROW, uno::Any( bSearchByRow ) );
+            xDescriptor->setPropertyValue( SC_UNO_SRCHBYROW, cpo::uno::Any( bSearchByRow ) );
         }
         if ( MatchCase.hasValue() )
         {
@@ -3153,7 +3153,7 @@ ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const un
 
             // SearchCaseSensitive
             MatchCase >>= bMatchCase;
-            xDescriptor->setPropertyValue( SC_UNO_SRCHCASE, uno::Any( bMatchCase ) );
+            xDescriptor->setPropertyValue( SC_UNO_SRCHCASE, cpo::uno::Any( bMatchCase ) );
         }
 
         ScGlobal::SetSearchItem( newOptions );
@@ -3187,7 +3187,7 @@ ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const un
 }
 
 uno::Reference< excel::XRange > SAL_CALL
-ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& LookIn, const uno::Any& LookAt, const uno::Any& SearchOrder, const uno::Any& SearchDirection, const uno::Any& MatchCase, const uno::Any& /*MatchByte*/, const uno::Any& /*SearchFormat*/ )
+ScVbaRange::Find( const cpo::uno::Any& What, const cpo::uno::Any& After, const cpo::uno::Any& LookIn, const cpo::uno::Any& LookAt, const cpo::uno::Any& SearchOrder, const cpo::uno::Any& SearchDirection, const cpo::uno::Any& MatchCase, const cpo::uno::Any& /*MatchByte*/, const cpo::uno::Any& /*SearchFormat*/ )
 {
     // return a Range object that represents the first cell where that information is found.
     OUString sWhat;
@@ -3216,8 +3216,8 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
     {
         uno::Reference< util::XSearchDescriptor > xDescriptor = xSearch->createSearchDescriptor();
         xDescriptor->setSearchString(sWhat);
-        xDescriptor->setPropertyValue(SC_UNO_SRCHWILDCARD, uno::Any(true));
-        xDescriptor->setPropertyValue(SC_UNO_SRCHWCESCCHAR, uno::Any(sal_Int32('~')));
+        xDescriptor->setPropertyValue(SC_UNO_SRCHWILDCARD, cpo::uno::Any(true));
+        xDescriptor->setPropertyValue(SC_UNO_SRCHWCESCCHAR, cpo::uno::Any(sal_Int32('~')));
 
         uno::Reference< excel::XRange > xAfterRange;
         uno::Reference< table::XCellRange > xStartCell;
@@ -3226,7 +3226,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
             // After must be a single cell in the range
             if( xAfterRange->getCount() > 1 )
                 throw uno::RuntimeException(u"After must be a single cell."_ustr );
-            uno::Reference< excel::XRange > xCell( Cells( uno::Any( xAfterRange->getRow() ), uno::Any( xAfterRange->getColumn() ) ), uno::UNO_SET_THROW );
+            uno::Reference< excel::XRange > xCell( Cells( cpo::uno::Any( xAfterRange->getRow() ), cpo::uno::Any( xAfterRange->getColumn() ) ), uno::UNO_SET_THROW );
             xStartCell.set( xAfterRange->getCellRange(), uno::UNO_QUERY_THROW );
         }
 
@@ -3252,7 +3252,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
                         throw uno::RuntimeException(u"Range::Find, illegal value for LookIn."_ustr );
                 }
                 newOptions.SetCellType( nSearchType );
-                xDescriptor->setPropertyValue( u"SearchType"_ustr, uno::Any( static_cast<sal_uInt16>(nSearchType) ) );
+                xDescriptor->setPropertyValue( u"SearchType"_ustr, cpo::uno::Any( static_cast<sal_uInt16>(nSearchType) ) );
             }
         }
 
@@ -3268,7 +3268,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
             else
                 throw uno::RuntimeException(u"Range::Find, illegal value for LookAt"_ustr );
             newOptions.SetWordOnly( bSearchWords );
-            xDescriptor->setPropertyValue( SC_UNO_SRCHWORDS, uno::Any( bSearchWords ) );
+            xDescriptor->setPropertyValue( SC_UNO_SRCHWORDS, cpo::uno::Any( bSearchWords ) );
         }
 
         // SearchOrder
@@ -3284,7 +3284,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
                 throw uno::RuntimeException(u"Range::Find, illegal value for SearchOrder"_ustr );
 
             newOptions.SetRowDirection( bSearchByRow );
-            xDescriptor->setPropertyValue( SC_UNO_SRCHBYROW, uno::Any( bSearchByRow ) );
+            xDescriptor->setPropertyValue( SC_UNO_SRCHBYROW, cpo::uno::Any( bSearchByRow ) );
         }
 
         // SearchDirection
@@ -3301,7 +3301,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
                 else
                     throw uno::RuntimeException(u"Range::Find, illegal value for SearchDirection"_ustr );
                 newOptions.SetBackward( bSearchBackwards );
-                xDescriptor->setPropertyValue( u"SearchBackwards"_ustr, uno::Any( bSearchBackwards ) );
+                xDescriptor->setPropertyValue( u"SearchBackwards"_ustr, cpo::uno::Any( bSearchBackwards ) );
             }
         }
 
@@ -3313,7 +3313,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
             if( !( MatchCase >>= bMatchCase ) )
                 throw uno::RuntimeException(u"Range::Find illegal value for MatchCase"_ustr );
         }
-        xDescriptor->setPropertyValue( SC_UNO_SRCHCASE, uno::Any( bMatchCase ) );
+        xDescriptor->setPropertyValue( SC_UNO_SRCHCASE, cpo::uno::Any( bMatchCase ) );
 
         // MatchByte
         // SearchFormat
@@ -3344,7 +3344,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
     return uno::Reference< excel::XRange >();
 }
 
-static uno::Reference< table::XCellRange > processKey( const uno::Any& Key, const uno::Reference<  uno::XComponentContext >& xContext, ScDocShell* pDocSh )
+static uno::Reference< table::XCellRange > processKey( const cpo::uno::Any& Key, const uno::Reference<  uno::XComponentContext >& xContext, ScDocShell* pDocSh )
 {
     uno::Reference< excel::XRange > xKeyRange;
     if (Key.getValueTypeClass() == css::uno::TypeClass_INTERFACE)
@@ -3420,7 +3420,7 @@ static void updateTableSortField( const uno::Reference< table::XCellRange >& xPa
 }
 
 void SAL_CALL
-ScVbaRange::Sort( const uno::Any& Key1, const uno::Any& Order1, const uno::Any& Key2, const uno::Any& /*Type*/, const uno::Any& Order2, const uno::Any& Key3, const uno::Any& Order3, const uno::Any& Header, const uno::Any& OrderCustom, const uno::Any& MatchCase, const uno::Any& Orientation, const uno::Any& SortMethod,  const uno::Any& DataOption1, const uno::Any& DataOption2, const uno::Any& DataOption3  )
+ScVbaRange::Sort( const cpo::uno::Any& Key1, const cpo::uno::Any& Order1, const cpo::uno::Any& Key2, const cpo::uno::Any& /*Type*/, const cpo::uno::Any& Order2, const cpo::uno::Any& Key3, const cpo::uno::Any& Order3, const cpo::uno::Any& Header, const cpo::uno::Any& OrderCustom, const cpo::uno::Any& MatchCase, const cpo::uno::Any& Orientation, const cpo::uno::Any& SortMethod,  const cpo::uno::Any& DataOption1, const cpo::uno::Any& DataOption2, const cpo::uno::Any& DataOption3  )
 {
     // #TODO# #FIXME# can we do something with Type
     if ( m_Areas->getCount() > 1 )
@@ -3628,13 +3628,13 @@ ScVbaRange::End( ::sal_Int32 Direction )
     // the ActiveCell, there should be no need to go to these extremes
 
     // Save ActiveSheet/ActiveCell pos (to restore later)
-    uno::Any aDft;
+    cpo::uno::Any aDft;
     uno::Reference< excel::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
     uno::Reference< excel::XWorksheet > sActiveSheet = xApplication->getActiveSheet();
     OUString sActiveCell = xApplication->getActiveCell()->Address(aDft, aDft, aDft, aDft, aDft );
 
     // position current cell upper left of this range
-    Cells( uno::Any( sal_Int32(1) ), uno::Any( sal_Int32(1) ) )->Select();
+    Cells( cpo::uno::Any( sal_Int32(1) ), cpo::uno::Any( sal_Int32(1) ) )->Select();
 
     uno::Reference< frame::XModel > xModel = getModelFromRange( mxRange );
 
@@ -3676,12 +3676,12 @@ ScVbaRange::End( ::sal_Int32 Direction )
     // result is the ActiveCell
     OUString sMoved =    xApplication->getActiveCell()->Address(aDft, aDft, aDft, aDft, aDft );
 
-    uno::Any aVoid;
+    cpo::uno::Any aVoid;
     uno::Reference< excel::XRange > resultCell;
-    resultCell.set( xApplication->getActiveSheet()->Range( uno::Any( sMoved ), aVoid ), uno::UNO_SET_THROW );
+    resultCell.set( xApplication->getActiveSheet()->Range( cpo::uno::Any( sMoved ), aVoid ), uno::UNO_SET_THROW );
 
     // restore old ActiveCell
-    uno::Reference< excel::XRange > xOldActiveCell( sActiveSheet->Range( uno::Any( sActiveCell ), aVoid ), uno::UNO_SET_THROW );
+    uno::Reference< excel::XRange > xOldActiveCell( sActiveSheet->Range( cpo::uno::Any( sActiveCell ), aVoid ), uno::UNO_SET_THROW );
     xOldActiveCell->Select();
 
 
@@ -3702,7 +3702,7 @@ ScVbaRange::isSingleCellRange() const
 }
 
 uno::Reference< excel::XCharacters > SAL_CALL
-ScVbaRange::characters( const uno::Any& Start, const uno::Any& Length )
+ScVbaRange::characters( const cpo::uno::Any& Start, const cpo::uno::Any& Length )
 {
     if ( !isSingleCellRange() )
         throw uno::RuntimeException(u"Can't create Characters property for multicell range "_ustr );
@@ -3714,14 +3714,14 @@ ScVbaRange::characters( const uno::Any& Start, const uno::Any& Length )
 }
 
  void SAL_CALL
-ScVbaRange::Delete( const uno::Any& Shift )
+ScVbaRange::Delete( const cpo::uno::Any& Shift )
 {
     if ( m_Areas->getCount() > 1 )
     {
         sal_Int32 nItems = m_Areas->getCount();
         for ( sal_Int32 index=1; index <= nItems; ++index )
         {
-            uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any(index), uno::Any() ), uno::UNO_QUERY_THROW );
+            uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any(index), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
             xRange->Delete( Shift );
         }
         return;
@@ -3780,7 +3780,7 @@ ScVbaRange::createEnumeration()
     if ( mbIsColumns || mbIsRows )
     {
         uno::Reference< table::XColumnRowRange > xColumnRowRange(mxRange, uno::UNO_QUERY );
-        uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any( sal_Int32(1) ), uno::Any() ), uno::UNO_QUERY_THROW );
+        uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any( sal_Int32(1) ), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
         sal_Int32 nElems = 0;
         if ( mbIsColumns )
             nElems = xColumnRowRange->getColumns()->getCount();
@@ -3831,13 +3831,13 @@ static double getDefaultCharWidth( ScDocShell* pDocShell )
     return o3tl::convert<double>(nCharWidth, o3tl::Length::mm100, o3tl::Length::pt);
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaRange::getColumnWidth()
 {
     sal_Int32 nLen = m_Areas->getCount();
     if ( nLen > 1 )
     {
-        uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any( sal_Int32(1) ), uno::Any() ), uno::UNO_QUERY_THROW );
+        uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any( sal_Int32(1) ), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
         return xRange->getColumnWidth();
     }
 
@@ -3865,18 +3865,18 @@ ScVbaRange::getColumnWidth()
             nColWidth = ( nColWidth / defaultCharWidth ) - fExtraWidth;
     }
     nColWidth = lcl_Round2DecPlaces( nColWidth );
-    return uno::Any( nColWidth );
+    return cpo::uno::Any( nColWidth );
 }
 
 void SAL_CALL
-ScVbaRange::setColumnWidth( const uno::Any& _columnwidth )
+ScVbaRange::setColumnWidth( const cpo::uno::Any& _columnwidth )
 {
     sal_Int32 nLen = m_Areas->getCount();
     if ( nLen > 1 )
     {
         for ( sal_Int32 index = 1; index != nLen; ++index )
         {
-            uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any( index ), uno::Any() ), uno::UNO_QUERY_THROW );
+            uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any( index ), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
             xRange->setColumnWidth( _columnwidth );
         }
         return;
@@ -3900,12 +3900,12 @@ ScVbaRange::setColumnWidth( const uno::Any& _columnwidth )
         true, aColArr, thisAddress.Sheet, SC_SIZE_DIRECT, nTwips, true, true);
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaRange::getWidth()
 {
     if ( m_Areas->getCount() > 1 )
     {
-        uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any( sal_Int32(1) ), uno::Any() ), uno::UNO_QUERY_THROW );
+        uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any( sal_Int32(1) ), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
         return xRange->getWidth();
     }
     uno::Reference< table::XColumnRowRange > xColRowRange( mxRange, uno::UNO_QUERY_THROW );
@@ -3918,15 +3918,15 @@ ScVbaRange::getWidth()
         double nTmpWidth = getCalcColWidth( xAddressable->getRangeAddress() );
         nWidth += nTmpWidth;
     }
-    return uno::Any( nWidth );
+    return cpo::uno::Any( nWidth );
 }
 
-uno::Any SAL_CALL
-ScVbaRange::Areas( const uno::Any& item)
+cpo::uno::Any SAL_CALL
+ScVbaRange::Areas( const cpo::uno::Any& item)
 {
     if ( !item.hasValue() )
-        return uno::Any( uno::Reference< ov::XCollection >(m_Areas) );
-    return m_Areas->Item( item, uno::Any() );
+        return cpo::uno::Any( uno::Reference< ov::XCollection >(m_Areas) );
+    return m_Areas->Item( item, cpo::uno::Any() );
 }
 
 uno::Reference< excel::XRange >
@@ -3934,21 +3934,21 @@ ScVbaRange::getArea( sal_Int32 nIndex )
 {
     if ( !m_Areas.is() )
         throw uno::RuntimeException(u"No areas available"_ustr );
-    uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any( ++nIndex ), uno::Any() ), uno::UNO_QUERY_THROW );
+    uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any( ++nIndex ), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
     return xRange;
 }
 
-uno::Any
-ScVbaRange::Borders( const uno::Any& item )
+cpo::uno::Any
+ScVbaRange::Borders( const cpo::uno::Any& item )
 {
     if ( !item.hasValue() )
-        return uno::Any( getBorders() );
-    return getBorders()->Item( item, uno::Any() );
+        return cpo::uno::Any( getBorders() );
+    return getBorders()->Item( item, cpo::uno::Any() );
 }
 
-uno::Any SAL_CALL
-ScVbaRange::BorderAround( const css::uno::Any& LineStyle, const css::uno::Any& Weight,
-                const css::uno::Any& ColorIndex, const css::uno::Any& Color )
+cpo::uno::Any SAL_CALL
+ScVbaRange::BorderAround( const cpo::uno::Any& LineStyle, const cpo::uno::Any& Weight,
+                const cpo::uno::Any& ColorIndex, const cpo::uno::Any& Color )
 {
     sal_Int32 nCount = getBorders()->getCount();
 
@@ -3962,7 +3962,7 @@ ScVbaRange::BorderAround( const css::uno::Any& LineStyle, const css::uno::Any& W
             case excel::XlBordersIndex::xlEdgeBottom:
             case excel::XlBordersIndex::xlEdgeRight:
             {
-                uno::Reference< excel::XBorder > xBorder( m_Borders->Item( uno::Any( nLineType ), uno::Any() ), uno::UNO_QUERY_THROW );
+                uno::Reference< excel::XBorder > xBorder( m_Borders->Item( cpo::uno::Any( nLineType ), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
                 if( LineStyle.hasValue() )
                 {
                     xBorder->setLineStyle( LineStyle );
@@ -3987,19 +3987,19 @@ ScVbaRange::BorderAround( const css::uno::Any& LineStyle, const css::uno::Any& W
             case excel::XlBordersIndex::xlDiagonalUp:
                 break;
             default:
-                return uno::Any( false );
+                return cpo::uno::Any( false );
         }
     }
-    return uno::Any( true );
+    return cpo::uno::Any( true );
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaRange::getRowHeight()
 {
     sal_Int32 nLen = m_Areas->getCount();
     if ( nLen > 1 )
     {
-        uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any( sal_Int32(1) ), uno::Any() ), uno::UNO_QUERY_THROW );
+        uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any( sal_Int32(1) ), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
         return xRange->getRowHeight();
     }
 
@@ -4029,18 +4029,18 @@ ScVbaRange::getRowHeight()
         }
     }
     double nHeight = lcl_Round2DecPlaces( lcl_TwipsToPoints( nRowTwips ) );
-    return uno::Any( nHeight );
+    return cpo::uno::Any( nHeight );
 }
 
 void SAL_CALL
-ScVbaRange::setRowHeight( const uno::Any& _rowheight)
+ScVbaRange::setRowHeight( const cpo::uno::Any& _rowheight)
 {
     sal_Int32 nLen = m_Areas->getCount();
     if ( nLen > 1 )
     {
         for ( sal_Int32 index = 1; index != nLen; ++index )
         {
-            uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any( index ), uno::Any() ), uno::UNO_QUERY_THROW );
+            uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any( index ), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
             xRange->setRowHeight( _rowheight );
         }
         return;
@@ -4058,7 +4058,7 @@ ScVbaRange::setRowHeight( const uno::Any& _rowheight)
         false, aRowArr, thisAddress.Sheet, SC_SIZE_ORIGINAL, nTwips, true, true);
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaRange::getPageBreak()
 {
     sal_Int32 nPageBreak = excel::XlPageBreak::xlPageBreakNone;
@@ -4091,11 +4091,11 @@ ScVbaRange::getPageBreak()
         }
     }
 
-    return uno::Any( nPageBreak );
+    return cpo::uno::Any( nPageBreak );
 }
 
 void SAL_CALL
-ScVbaRange::setPageBreak( const uno::Any& _pagebreak)
+ScVbaRange::setPageBreak( const cpo::uno::Any& _pagebreak)
 {
     sal_Int32 nPageBreak = 0;
     _pagebreak >>= nPageBreak;
@@ -4125,12 +4125,12 @@ ScVbaRange::setPageBreak( const uno::Any& _pagebreak)
     }
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaRange::getHeight()
 {
     if ( m_Areas->getCount() > 1 )
     {
-        uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any( sal_Int32(1) ), uno::Any() ), uno::UNO_QUERY_THROW );
+        uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any( sal_Int32(1) ), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
         return xRange->getHeight();
     }
 
@@ -4143,7 +4143,7 @@ ScVbaRange::getHeight()
         uno::Reference< sheet::XCellRangeAddressable > xAddressable( xIndexAccess->getByIndex( index ), uno::UNO_QUERY_THROW );
         nHeight += getCalcRowHeight(xAddressable->getRangeAddress() );
     }
-    return uno::Any( nHeight );
+    return cpo::uno::Any( nHeight );
 }
 
 awt::Point
@@ -4158,24 +4158,24 @@ ScVbaRange::getPosition() const
     xProps->getPropertyValue( u"Position"_ustr ) >>= aPoint;
     return aPoint;
 }
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaRange::getLeft()
 {
     // helperapi returns the first ranges left ( and top below )
     if ( m_Areas->getCount() > 1 )
         return getArea( 0 )->getLeft();
     awt::Point aPoint = getPosition();
-    return uno::Any(o3tl::convert<double>(aPoint.X, o3tl::Length::mm100, o3tl::Length::pt));
+    return cpo::uno::Any(o3tl::convert<double>(aPoint.X, o3tl::Length::mm100, o3tl::Length::pt));
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaRange::getTop()
 {
     // helperapi returns the first ranges top
     if ( m_Areas->getCount() > 1 )
         return getArea( 0 )->getTop();
     awt::Point aPoint= getPosition();
-    return uno::Any(o3tl::convert<double>(aPoint.Y, o3tl::Length::mm100, o3tl::Length::pt));
+    return cpo::uno::Any(o3tl::convert<double>(aPoint.Y, o3tl::Length::mm100, o3tl::Length::pt));
 }
 
 static uno::Reference< sheet::XCellRangeReferrer > getNamedRange( const uno::Reference< uno::XInterface >& xIf, const uno::Reference< table::XCellRange >& thisRange )
@@ -4254,7 +4254,7 @@ ScVbaRange::getWorksheet()
 // #TODO remove this ugly application processing
 // Process an application Range request e.g. 'Range("a1,b2,a4:b6")
 uno::Reference< excel::XRange >
-ScVbaRange::ApplicationRange( const uno::Reference< uno::XComponentContext >& xContext, const css::uno::Any &Cell1, const css::uno::Any &Cell2 )
+ScVbaRange::ApplicationRange( const uno::Reference< uno::XComponentContext >& xContext, const cpo::uno::Any &Cell1, const cpo::uno::Any &Cell2 )
 {
     // Although the documentation seems clear that Range without a
     // qualifier then it's a shortcut for ActiveSheet.Range
@@ -4390,7 +4390,7 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, const uno::Ref
             sCriteria1 = VBAToRegexp( sCriteria1 );
             // UseRegularExpressions
             if ( xDescProps.is() )
-                xDescProps->setPropertyValue( u"UseRegularExpressions"_ustr, uno::Any( true ) );
+                xDescProps->setPropertyValue( u"UseRegularExpressions"_ustr, cpo::uno::Any( true ) );
         }
 
     }
@@ -4405,7 +4405,7 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, const uno::Ref
             sCriteria1 = VBAToRegexp( sCriteria1 );
             // UseRegularExpressions
             if ( xDescProps.is() )
-                xDescProps->setPropertyValue( u"UseRegularExpressions"_ustr, uno::Any( true ) );
+                xDescProps->setPropertyValue( u"UseRegularExpressions"_ustr, cpo::uno::Any( true ) );
         }
     }
     else if ( sCriteria1.startsWith( GREATERTHAN ) )
@@ -4464,7 +4464,7 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, const uno::Ref
 }
 
 void SAL_CALL
-ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const uno::Any& Operator, const uno::Any& Criteria2, const uno::Any& /*VisibleDropDown*/ )
+ScVbaRange::AutoFilter( const cpo::uno::Any& aField, const cpo::uno::Any& Criteria1, const cpo::uno::Any& Operator, const cpo::uno::Any& Criteria2, const cpo::uno::Any& /*VisibleDropDown*/ )
 {
     // Is there an existing autofilter
     RangeHelper thisRange( mxRange );
@@ -4530,10 +4530,10 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
 
         uno::Reference< beans::XPropertySet > xDBRangeProps( xDataBaseRange, uno::UNO_QUERY_THROW );
         // set autofilter
-        xDBRangeProps->setPropertyValue( u"AutoFilter"_ustr, uno::Any(true) );
+        xDBRangeProps->setPropertyValue( u"AutoFilter"_ustr, cpo::uno::Any(true) );
         // set header (autofilter always need column headers)
         uno::Reference< beans::XPropertySet > xFiltProps( xDataBaseRange->getFilterDescriptor(), uno::UNO_QUERY_THROW );
-        xFiltProps->setPropertyValue( u"ContainsHeader"_ustr, uno::Any( true ) );
+        xFiltProps->setPropertyValue( u"ContainsHeader"_ustr, cpo::uno::Any( true ) );
     }
 
     sal_Int32 nField = 0; // *IS* 1 based
@@ -4549,7 +4549,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
 
     if (  !aField.hasValue() && ( Criteria1.hasValue() || Operator.hasValue() || Criteria2.hasValue() ) )
         throw uno::RuntimeException();
-    uno::Any Field( aField );
+    cpo::uno::Any Field( aField );
     if ( !( Field >>= nField ) )
     {
         const uno::Reference< script::XTypeConverter >& xConverter = getTypeConverter( mxContext );
@@ -4737,13 +4737,13 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
             if( xSheetFilterDescriptor.is() )
                 xSheetFilterDescriptor->setFilterFields2( uno::Sequence< sheet::TableFilterField2 >() );
         }
-        xDBRangeProps->setPropertyValue( u"AutoFilter"_ustr, uno::Any(!bHasAuto) );
+        xDBRangeProps->setPropertyValue( u"AutoFilter"_ustr, cpo::uno::Any(!bHasAuto) );
 
     }
 }
 
 void SAL_CALL
-ScVbaRange::Insert( const uno::Any& Shift, const uno::Any& /*CopyOrigin*/ )
+ScVbaRange::Insert( const cpo::uno::Any& Shift, const cpo::uno::Any& /*CopyOrigin*/ )
 {
     // It appears (from the web) that the undocumented CopyOrigin
     // param should contain member of enum XlInsertFormatOrigin
@@ -4790,7 +4790,7 @@ ScVbaRange::Insert( const uno::Any& Shift, const uno::Any& /*CopyOrigin*/ )
         ScRange aRange( static_cast< SCCOL >( thisAddress.StartColumn ), static_cast< SCROW >( thisAddress.StartRow ), static_cast< SCTAB >( thisAddress.Sheet ), static_cast< SCCOL >( thisAddress.EndColumn ), static_cast< SCROW >( thisAddress.EndRow ), static_cast< SCTAB >( thisAddress.Sheet ) );
         uno::Reference< table::XCellRange > xRange( new ScCellRangeObj( getDocShellFromRange( mxRange ) , aRange ) );
         uno::Reference< excel::XRange > xVbaRange( new ScVbaRange( mxParent, mxContext, xRange, mbIsRows, mbIsColumns ) );
-        xVbaRange->PasteSpecial( uno::Any(), uno::Any(), uno::Any(), uno::Any() );
+        xVbaRange->PasteSpecial( cpo::uno::Any(), cpo::uno::Any(), cpo::uno::Any(), cpo::uno::Any() );
     }
 }
 
@@ -4802,7 +4802,7 @@ ScVbaRange::Autofit()
     {
         for ( sal_Int32 index = 1; index != nLen; ++index )
         {
-            uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any( index ), uno::Any() ), uno::UNO_QUERY_THROW );
+            uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any( index ), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
             xRange->Autofit();
         }
         return;
@@ -4831,8 +4831,8 @@ ScVbaRange::Autofit()
         bDirection, aColArr, thisAddress.Sheet, SC_SIZE_OPTIMAL, 0, true, true);
 }
 
-uno::Any SAL_CALL
-ScVbaRange::Hyperlinks( const uno::Any& aIndex )
+cpo::uno::Any SAL_CALL
+ScVbaRange::Hyperlinks( const cpo::uno::Any& aIndex )
 {
     /*  The range object always returns a new Hyperlinks object containing a
         fixed list of existing hyperlinks in the range.
@@ -4840,7 +4840,7 @@ ScVbaRange::Hyperlinks( const uno::Any& aIndex )
 
     // get the global hyperlink object of the sheet (sheet should always be the parent of a Range object)
     uno::Reference< excel::XWorksheet > xWorksheet( getParent(), uno::UNO_QUERY_THROW );
-    uno::Reference< excel::XHyperlinks > xSheetHlinks( xWorksheet->Hyperlinks( uno::Any() ), uno::UNO_QUERY_THROW );
+    uno::Reference< excel::XHyperlinks > xSheetHlinks( xWorksheet->Hyperlinks( cpo::uno::Any() ), uno::UNO_QUERY_THROW );
     ScVbaHyperlinksRef xScSheetHlinks( dynamic_cast< ScVbaHyperlinks* >( xSheetHlinks.get() ) );
     if( !xScSheetHlinks.is() )
         throw uno::RuntimeException(u"Cannot obtain hyperlinks implementation object"_ustr );
@@ -4848,8 +4848,8 @@ ScVbaRange::Hyperlinks( const uno::Any& aIndex )
     // create a new local hyperlinks object based on the sheet hyperlinks
     ScVbaHyperlinksRef xHlinks( new ScVbaHyperlinks( getParent(), mxContext, xScSheetHlinks, getScRangeList() ) );
     if( aIndex.hasValue() )
-        return xHlinks->Item( aIndex, uno::Any() );
-    return uno::Any( uno::Reference< excel::XHyperlinks >( xHlinks ) );
+        return xHlinks->Item( aIndex, cpo::uno::Any() );
+    return cpo::uno::Any( uno::Reference< excel::XHyperlinks >( xHlinks ) );
 }
 
 css::uno::Reference< excel::XValidation > SAL_CALL
@@ -4922,14 +4922,14 @@ sal_Unicode lclGetPrefixChar( const uno::Reference< sheet::XSheetCellRangeContai
     return cCurrPrefix;
 }
 
-uno::Any lclGetPrefixVariant( sal_Unicode cPrefixChar )
+cpo::uno::Any lclGetPrefixVariant( sal_Unicode cPrefixChar )
 {
-    return uno::Any( (cPrefixChar == 0) ? OUString() : OUString( cPrefixChar ) );
+    return cpo::uno::Any( (cPrefixChar == 0) ? OUString() : OUString( cPrefixChar ) );
 }
 
 } // namespace
 
-uno::Any SAL_CALL ScVbaRange::getPrefixCharacter()
+cpo::uno::Any SAL_CALL ScVbaRange::getPrefixCharacter()
 {
     /*  (1) If Application.TransitionNavigKeys is false, this function returns
         an apostroph character if the text cell begins with an apostroph
@@ -4954,7 +4954,7 @@ uno::Any SAL_CALL ScVbaRange::getPrefixCharacter()
     throw uno::RuntimeException(u"Unexpected empty Range object"_ustr );
 }
 
-uno::Any ScVbaRange::getShowDetail()
+cpo::uno::Any ScVbaRange::getShowDetail()
 {
     // #FIXME, If the specified range is in a PivotTable report
 
@@ -4985,13 +4985,13 @@ uno::Any ScVbaRange::getShowDetail()
     if( pEntry )
     {
         const bool bShowDetail = !pEntry->IsHidden();
-        return uno::Any( bShowDetail );
+        return cpo::uno::Any( bShowDetail );
     }
 
     return aNULL();
 }
 
-void ScVbaRange::setShowDetail(const uno::Any& aShowDetail)
+void ScVbaRange::setShowDetail(const cpo::uno::Any& aShowDetail)
 {
     // #FIXME, If the specified range is in a PivotTable report
 
@@ -5052,7 +5052,7 @@ ScVbaRange::MergeArea()
 }
 
 void SAL_CALL
-ScVbaRange::PrintOut( const uno::Any& From, const uno::Any& To, const uno::Any& Copies, const uno::Any& Preview, const uno::Any& ActivePrinter, const uno::Any& PrintToFile, const uno::Any& Collate, const uno::Any& PrToFileName )
+ScVbaRange::PrintOut( const cpo::uno::Any& From, const cpo::uno::Any& To, const cpo::uno::Any& Copies, const cpo::uno::Any& Preview, const cpo::uno::Any& ActivePrinter, const cpo::uno::Any& PrintToFile, const cpo::uno::Any& Collate, const cpo::uno::Any& PrToFileName )
 {
     ScDocShell* pShell = nullptr;
 
@@ -5062,7 +5062,7 @@ ScVbaRange::PrintOut( const uno::Any& From, const uno::Any& To, const uno::Any& 
     uno::Reference< sheet::XPrintAreas > xPrintAreas;
     for ( sal_Int32 index=1; index <= nItems; ++index )
     {
-        uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any(index), uno::Any() ), uno::UNO_QUERY_THROW );
+        uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any(index), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
 
         RangeHelper thisRange( xRange->getCellRange() );
         table::CellRangeAddress rangeAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
@@ -5084,7 +5084,7 @@ ScVbaRange::PrintOut( const uno::Any& From, const uno::Any& To, const uno::Any& 
 }
 
 void SAL_CALL
-ScVbaRange::AutoFill(  const uno::Reference< excel::XRange >& Destination, const uno::Any& Type )
+ScVbaRange::AutoFill(  const uno::Reference< excel::XRange >& Destination, const cpo::uno::Any& Type )
 {
     uno::Reference< excel::XRange > xDest( Destination, uno::UNO_SET_THROW );
     ScVbaRange* pRange = getImplementation( xDest );
@@ -5198,7 +5198,7 @@ ScVbaRange::AutoFill(  const uno::Reference< excel::XRange >& Destination, const
                                    nCount, fStep, MAXDOUBLE/*fEndValue*/, true, true );
 }
 bool SAL_CALL
-ScVbaRange::GoalSeek( const uno::Any& Goal, const uno::Reference< excel::XRange >& ChangingCell )
+ScVbaRange::GoalSeek( const cpo::uno::Any& Goal, const uno::Reference< excel::XRange >& ChangingCell )
 {
     ScDocShell* pDocShell = getScDocShell();
     bool bRes = true;
@@ -5213,7 +5213,7 @@ ScVbaRange::GoalSeek( const uno::Any& Goal, const uno::Reference< excel::XRange 
         table::CellAddress thisCell( thisAddress.Sheet, thisAddress.StartColumn, thisAddress.StartRow );
         table::CellAddress changingCell( changingCellAddr.Sheet, changingCellAddr.StartColumn, changingCellAddr.StartRow );
         sheet::GoalResult res = pDocShell->GetModel()->seekGoal( thisCell, changingCell, sGoal );
-        ChangingCell->setValue( uno::Any( res.Result ) );
+        ChangingCell->setValue( cpo::uno::Any( res.Result ) );
 
         // openoffice behaves differently, result is 0 if the divergence is too great
                 // but... if it detects 0 is the value it requires then it will use that
@@ -5233,7 +5233,7 @@ ScVbaRange::Calculate(  )
 }
 
 uno::Reference< excel::XRange > SAL_CALL
-ScVbaRange::Item( const uno::Any& row, const uno::Any& column )
+ScVbaRange::Item( const cpo::uno::Any& row, const cpo::uno::Any& column )
 {
     if ( mbIsRows || mbIsColumns )
     {
@@ -5281,7 +5281,7 @@ ScVbaRange:: ClearOutline(  )
         sal_Int32 nItems = m_Areas->getCount();
         for ( sal_Int32 index=1; index <= nItems; ++index )
         {
-            uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any(index), uno::Any() ), uno::UNO_QUERY_THROW );
+            uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any(index), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
             xRange->ClearOutline();
         }
         return;
@@ -5326,14 +5326,14 @@ static void lcl_mergeCellsOfRange( const uno::Reference< table::XCellRange >& xC
         xMergeable->merge(_bMerge);
 }
 void SAL_CALL
-ScVbaRange::Merge( const uno::Any& Across )
+ScVbaRange::Merge( const cpo::uno::Any& Across )
 {
     if ( m_Areas->getCount() > 1 )
     {
         sal_Int32 nItems = m_Areas->getCount();
         for ( sal_Int32 index=1; index <= nItems; ++index )
         {
-            uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any(index), uno::Any() ), uno::UNO_QUERY_THROW );
+            uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any(index), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
             xRange->Merge(Across);
         }
         return;
@@ -5344,11 +5344,11 @@ ScVbaRange::Merge( const uno::Any& Across )
         lcl_mergeCellsOfRange( mxRange, true );
     else
     {
-        uno::Reference< excel::XRange > oRangeRowsImpl = Rows( uno::Any() );
+        uno::Reference< excel::XRange > oRangeRowsImpl = Rows( cpo::uno::Any() );
         // #TODO #FIXME this seems incredibly lame, this can't be right
         for (sal_Int32 i=1; i <= oRangeRowsImpl->getCount();i++)
         {
-            oRangeRowsImpl->Cells( uno::Any( i ), uno::Any() )->Merge( uno::Any( false ) );
+            oRangeRowsImpl->Cells( cpo::uno::Any( i ), cpo::uno::Any() )->Merge( cpo::uno::Any( false ) );
         }
     }
 }
@@ -5361,7 +5361,7 @@ ScVbaRange::UnMerge(  )
         sal_Int32 nItems = m_Areas->getCount();
         for ( sal_Int32 index=1; index <= nItems; ++index )
         {
-            uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any(index), uno::Any() ), uno::UNO_QUERY_THROW );
+            uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any(index), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
             xRange->UnMerge();
         }
         return;
@@ -5369,12 +5369,12 @@ ScVbaRange::UnMerge(  )
     lcl_mergeCellsOfRange( mxRange, false);
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaRange::getStyle()
 {
     if ( m_Areas->getCount() > 1 )
     {
-        uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any( sal_Int32( 1 ) ), uno::Any() ), uno::UNO_QUERY_THROW  );
+        uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any( sal_Int32( 1 ) ), cpo::uno::Any() ), uno::UNO_QUERY_THROW  );
         return xRange->getStyle();
     }
     uno::Reference< beans::XPropertySet > xProps( mxRange, uno::UNO_QUERY_THROW );
@@ -5383,14 +5383,14 @@ ScVbaRange::getStyle()
     ScDocShell* pShell = getScDocShell();
     ScModelObj* pModel( pShell->GetModel() );
     uno::Reference< excel::XStyle > xStyle = new ScVbaStyle( this, mxContext, sStyleName, pModel );
-    return uno::Any( xStyle );
+    return cpo::uno::Any( xStyle );
 }
 void SAL_CALL
-ScVbaRange::setStyle( const uno::Any& _style )
+ScVbaRange::setStyle( const cpo::uno::Any& _style )
 {
     if ( m_Areas->getCount() > 1 )
     {
-        uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any( sal_Int32( 1 ) ), uno::Any() ), uno::UNO_QUERY_THROW );
+        uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any( sal_Int32( 1 ) ), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
         xRange->setStyle( _style );
         return;
     }
@@ -5398,7 +5398,7 @@ ScVbaRange::setStyle( const uno::Any& _style )
     uno::Reference< excel::XStyle > xStyle;
     _style >>= xStyle;
     if ( xStyle.is() )
-        xProps->setPropertyValue( CELLSTYLE, uno::Any( xStyle->getName() ) );
+        xProps->setPropertyValue( CELLSTYLE, cpo::uno::Any( xStyle->getName() ) );
 }
 
 uno::Reference< excel::XRange >
@@ -5435,7 +5435,7 @@ ScVbaRange::Next()
 {
     if ( m_Areas->getCount() > 1 )
     {
-        uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any( sal_Int32( 1 ) ), uno::Any() ) , uno::UNO_QUERY_THROW  );
+        uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any( sal_Int32( 1 ) ), cpo::uno::Any() ) , uno::UNO_QUERY_THROW  );
         return xRange->Next();
     }
     return PreviousNext( false );
@@ -5446,14 +5446,14 @@ ScVbaRange::Previous()
 {
     if ( m_Areas->getCount() > 1 )
     {
-        uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any( sal_Int32( 1 ) ), uno::Any() ), uno::UNO_QUERY_THROW  );
+        uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any( sal_Int32( 1 ) ), cpo::uno::Any() ), uno::UNO_QUERY_THROW  );
         return xRange->Previous();
     }
     return PreviousNext( true );
 }
 
 uno::Reference< excel::XRange > SAL_CALL
-ScVbaRange::SpecialCells( const uno::Any& _oType, const uno::Any& _oValue)
+ScVbaRange::SpecialCells( const cpo::uno::Any& _oType, const cpo::uno::Any& _oValue)
 {
     bool bIsSingleCell = isSingleCellRange();
     bool bIsMultiArea = ( m_Areas->getCount() > 1 );
@@ -5484,7 +5484,7 @@ ScVbaRange::SpecialCells( const uno::Any& _oType, const uno::Any& _oValue)
                 sal_Int32 nItems = m_Areas->getCount() + 1;
                 for ( sal_Int32 index=1; index <= nItems; ++index )
                 {
-                    uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::Any(index), uno::Any() ), uno::UNO_QUERY_THROW );
+                    uno::Reference< excel::XRange > xRange( m_Areas->Item( cpo::uno::Any(index), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
                     xRange = xRange->SpecialCells( _oType,  _oValue);
                     ScVbaRange* pRange = getImplementation( xRange );
                     if ( xRange.is() && pRange )
@@ -5492,7 +5492,7 @@ ScVbaRange::SpecialCells( const uno::Any& _oType, const uno::Any& _oValue)
                         sal_Int32 nElems = pRange->m_Areas->getCount() + 1;
                         for ( sal_Int32 nArea = 1; nArea < nElems; ++nArea )
                         {
-                            uno::Reference< excel::XRange > xTmpRange( m_Areas->Item( uno::Any( nArea ), uno::Any() ), uno::UNO_QUERY_THROW );
+                            uno::Reference< excel::XRange > xTmpRange( m_Areas->Item( cpo::uno::Any( nArea ), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
                             RangeHelper rHelper( xTmpRange->getCellRange() );
                             rangeResults.push_back( rHelper.getCellRangeAddressable()->getRangeAddress() );
                         }
@@ -5531,7 +5531,7 @@ ScVbaRange::SpecialCells( const uno::Any& _oType, const uno::Any& _oValue)
     return pRangeToUse->SpecialCellsImpl( nType, _oValue );
 }
 
-static sal_Int32 getContentResultFlags(const uno::Any& aValue)
+static sal_Int32 getContentResultFlags(const cpo::uno::Any& aValue)
 {
     if (sal_Int32 aType; aValue >>= aType)
     {
@@ -5553,7 +5553,7 @@ static sal_Int32 getContentResultFlags(const uno::Any& aValue)
 }
 
 /// @throws script::BasicErrorException
-static sal_Int32 lcl_getFormulaResultFlags(const uno::Any& aType)
+static sal_Int32 lcl_getFormulaResultFlags(const cpo::uno::Any& aType)
 {
     sal_Int32 nType = excel::XlSpecialCellsValue::xlNumbers;
     aType >>= nType;
@@ -5581,7 +5581,7 @@ static sal_Int32 lcl_getFormulaResultFlags(const uno::Any& aType)
 }
 
 uno::Reference< excel::XRange >
-ScVbaRange::SpecialCellsImpl( sal_Int32 nType, const uno::Any& _oValue)
+ScVbaRange::SpecialCellsImpl( sal_Int32 nType, const cpo::uno::Any& _oValue)
 {
     uno::Reference< excel::XRange > xRange;
     try
@@ -5614,7 +5614,7 @@ ScVbaRange::SpecialCellsImpl( sal_Int32 nType, const uno::Any& _oValue)
                 break;
             }
             case excel::XlCellType::xlCellTypeLastCell:
-                xRange = Cells( uno::Any( getCount() ), uno::Any() );
+                xRange = Cells( cpo::uno::Any( getCount() ), cpo::uno::Any() );
                 [[fallthrough]]; //TODO ???
             case excel::XlCellType::xlCellTypeVisible:
                 xLocSheetCellRanges = xQuery->queryVisibleCells();
@@ -5643,7 +5643,7 @@ ScVbaRange::RemoveSubtotal(  )
 }
 
 void SAL_CALL
-ScVbaRange::Subtotal( ::sal_Int32 _nGroupBy, ::sal_Int32 _nFunction, const uno::Sequence< ::sal_Int32 >& _nTotalList, const uno::Any& aReplace, const uno::Any& PageBreaks, const uno::Any& /*SummaryBelowData*/ )
+ScVbaRange::Subtotal( ::sal_Int32 _nGroupBy, ::sal_Int32 _nFunction, const uno::Sequence< ::sal_Int32 >& _nTotalList, const cpo::uno::Any& aReplace, const cpo::uno::Any& PageBreaks, const cpo::uno::Any& /*SummaryBelowData*/ )
 {
     try
     {
@@ -5655,7 +5655,7 @@ ScVbaRange::Subtotal( ::sal_Int32 _nGroupBy, ::sal_Int32 _nFunction, const uno::
         uno::Reference< sheet::XSubTotalCalculatable> xSub(mxRange, uno::UNO_QUERY_THROW );
         uno::Reference< sheet::XSubTotalDescriptor > xSubDesc = xSub->createSubTotalDescriptor(true);
         uno::Reference< beans::XPropertySet > xSubDescPropertySet( xSubDesc, uno::UNO_QUERY_THROW );
-        xSubDescPropertySet->setPropertyValue(u"InsertPageBreaks"_ustr, uno::Any( bAddPageBreaks));
+        xSubDescPropertySet->setPropertyValue(u"InsertPageBreaks"_ustr, cpo::uno::Any( bAddPageBreaks));
         sal_Int32 nLen = _nTotalList.getLength();
         uno::Sequence< sheet::SubTotalColumn > aColumns( nLen );
         auto aColumnsRange = asNonConstRange(aColumns);
@@ -5715,9 +5715,9 @@ ScVbaRange::Subtotal( ::sal_Int32 _nGroupBy, ::sal_Int32 _nFunction, const uno::
 }
 
 void SAL_CALL
-ScVbaRange::ExportAsFixedFormat(const css::uno::Any& Type, const css::uno::Any& FileName, const css::uno::Any& Quality,
-    const css::uno::Any& IncludeDocProperties, const css::uno::Any& /*IgnorePrintAreas*/, const css::uno::Any& From,
-    const css::uno::Any& To, const css::uno::Any& OpenAfterPublish, const css::uno::Any& /*FixedFormatExtClassPtr*/)
+ScVbaRange::ExportAsFixedFormat(const cpo::uno::Any& Type, const cpo::uno::Any& FileName, const cpo::uno::Any& Quality,
+    const cpo::uno::Any& IncludeDocProperties, const cpo::uno::Any& /*IgnorePrintAreas*/, const cpo::uno::Any& From,
+    const cpo::uno::Any& To, const cpo::uno::Any& OpenAfterPublish, const cpo::uno::Any& /*FixedFormatExtClassPtr*/)
 {
     ScCellRangesBase* pUnoRangesBase = getCellRangesBase();
     if (!pUnoRangesBase)
@@ -5753,9 +5753,9 @@ ScVbaRange::hasError()
     uno::Reference< script::XInvocation > xInvoc( xApplication->WorksheetFunction(), uno::UNO_QUERY_THROW );
 
     uno::Reference< excel::XRange > aRange( this );
-    uno::Sequence< uno::Any > Params{ uno::Any(aRange) };
+    uno::Sequence< cpo::uno::Any > Params{ cpo::uno::Any(aRange) };
     uno::Sequence< sal_Int16 > OutParamIndex;
-    uno::Sequence< uno::Any > OutParam;
+    uno::Sequence< cpo::uno::Any > OutParam;
     xInvoc->invoke( u"IsError"_ustr, Params, OutParamIndex, OutParam ) >>= dResult;
     return dResult > 0.0;
 }
@@ -5763,7 +5763,7 @@ ScVbaRange::hasError()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_ScVbaRange_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new ScVbaRange(args, context));
 }

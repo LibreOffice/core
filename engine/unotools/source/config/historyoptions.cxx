@@ -18,7 +18,7 @@
  */
 
 #include <unotools/historyoptions.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -32,6 +32,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 
 namespace {
@@ -210,11 +211,11 @@ void AppendItem(EHistoryType eHistory, const OUString& sURL, const OUString& sFi
             if (sThumbnail)
             {
                 // update the thumbnail
-                xSet->setPropertyValue(s_sThumbnail, uno::Any(*sThumbnail));
+                xSet->setPropertyValue(s_sThumbnail, cpo::uno::Any(*sThumbnail));
             }
             if (oIsReadOnly)
             {
-                xSet->setPropertyValue(s_sReadOnly, uno::Any(*oIsReadOnly));
+                xSet->setPropertyValue(s_sReadOnly, cpo::uno::Any(*oIsReadOnly));
             }
 
             // tdf#38742 - check the current pinned state of the item and move it accordingly
@@ -263,7 +264,7 @@ void AppendItem(EHistoryType eHistory, const OUString& sURL, const OUString& sFi
                 xFac.set(xOrderList, uno::UNO_QUERY);
                 xInst = xFac->createInstance();
                 OUString sPush = OUString::number(nLength++);
-                xOrderList->insertByName(sPush, uno::Any(xInst));
+                xOrderList->insertByName(sPush, cpo::uno::Any(xInst));
             }
             for (sal_Int32 j=nLength-1; j>0; --j)
             {
@@ -271,23 +272,23 @@ void AppendItem(EHistoryType eHistory, const OUString& sURL, const OUString& sFi
                 xOrderList->getByName( OUString::number(j-1) ) >>= xNextSet;
                 OUString sTemp;
                 xNextSet->getPropertyValue(s_sHistoryItemRef) >>= sTemp;
-                xPrevSet->setPropertyValue(s_sHistoryItemRef, uno::Any(sTemp));
+                xPrevSet->setPropertyValue(s_sHistoryItemRef, cpo::uno::Any(sTemp));
             }
             xOrderList->getByName( OUString::number(0) ) >>= xSet;
-            xSet->setPropertyValue(s_sHistoryItemRef, uno::Any(sURL));
+            xSet->setPropertyValue(s_sHistoryItemRef, cpo::uno::Any(sURL));
 
             // Append the item to ItemList.
             xFac.set(xItemList, uno::UNO_QUERY);
             xInst = xFac->createInstance();
-            xItemList->insertByName(sURL, uno::Any(xInst));
+            xItemList->insertByName(sURL, cpo::uno::Any(xInst));
 
             xSet.set(xInst, uno::UNO_QUERY);
-            xSet->setPropertyValue(s_sFilter, uno::Any(sFilter));
-            xSet->setPropertyValue(s_sTitle, uno::Any(sTitle));
-            xSet->setPropertyValue(s_sThumbnail, uno::Any(sThumbnail.value_or(OUString())));
+            xSet->setPropertyValue(s_sFilter, cpo::uno::Any(sFilter));
+            xSet->setPropertyValue(s_sTitle, cpo::uno::Any(sTitle));
+            xSet->setPropertyValue(s_sThumbnail, cpo::uno::Any(sThumbnail.value_or(OUString())));
             if (oIsReadOnly)
             {
-                xSet->setPropertyValue(s_sReadOnly, uno::Any(*oIsReadOnly));
+                xSet->setPropertyValue(s_sReadOnly, cpo::uno::Any(*oIsReadOnly));
             }
 
             // tdf#38742 - check the current pinned state of the item and move it accordingly
@@ -362,7 +363,7 @@ void DeleteItem(EHistoryType eHistory, const OUString& sURL, const bool bClearPi
 
                 OUString sTemp;
                 xNextSet->getPropertyValue(s_sHistoryItemRef) >>= sTemp;
-                xPrevSet->setPropertyValue(s_sHistoryItemRef, uno::Any(sTemp));
+                xPrevSet->setPropertyValue(s_sHistoryItemRef, cpo::uno::Any(sTemp));
             }
             xOrderList->removeByName(OUString::number(nLength - 1));
 
@@ -397,7 +398,7 @@ void TogglePinItem(EHistoryType eHistory, const OUString& sURL)
             bool bIsItemPinned = false;
             if (xSet->getPropertySetInfo()->hasPropertyByName(s_sPinned))
                 xSet->getPropertyValue(s_sPinned) >>= bIsItemPinned;
-            xSet->setPropertyValue(s_sPinned, uno::Any(!bIsItemPinned));
+            xSet->setPropertyValue(s_sPinned, cpo::uno::Any(!bIsItemPinned));
 
             uno::Reference<container::XNameContainer> xOrderList;
             xListAccess->getByName(s_sOrderList) >>= xOrderList;
@@ -506,10 +507,10 @@ static void PrependItem(const uno::Reference<container::XNameAccess>& xCfg,
 
                 OUString sTemp;
                 xNextSet->getPropertyValue(s_sHistoryItemRef) >>= sTemp;
-                xPrevSet->setPropertyValue(s_sHistoryItemRef, uno::Any(sTemp));
+                xPrevSet->setPropertyValue(s_sHistoryItemRef, cpo::uno::Any(sTemp));
             }
             xList->getByName(OUString::number(0)) >>= xSet;
-            xSet->setPropertyValue(s_sHistoryItemRef, uno::Any(aItem));
+            xSet->setPropertyValue(s_sHistoryItemRef, cpo::uno::Any(aItem));
             ::comphelper::ConfigurationHelper::flush(xCfg);
             return;
         }
@@ -550,8 +551,8 @@ static void MoveItemToUnpinned(const uno::Reference<container::XNameAccess>& xCf
                 {
                     xOrderList->getByName(OUString::number(j - 1)) >>= xSet;
                     xSet->getPropertyValue(s_sHistoryItemRef) >>= aItem;
-                    xSet->setPropertyValue(s_sHistoryItemRef, uno::Any(aNextItem));
-                    xNextSet->setPropertyValue(s_sHistoryItemRef, uno::Any(aItem));
+                    xSet->setPropertyValue(s_sHistoryItemRef, cpo::uno::Any(aNextItem));
+                    xNextSet->setPropertyValue(s_sHistoryItemRef, cpo::uno::Any(aItem));
                 }
                 else
                     break;
@@ -575,8 +576,8 @@ static void MoveItemToUnpinned(const uno::Reference<container::XNameAccess>& xCf
                 {
                     xOrderList->getByName(OUString::number(j + 1)) >>= xSet;
                     xSet->getPropertyValue(s_sHistoryItemRef) >>= aItem;
-                    xSet->setPropertyValue(s_sHistoryItemRef, uno::Any(aPrevItem));
-                    xPrevSet->setPropertyValue(s_sHistoryItemRef, uno::Any(aItem));
+                    xSet->setPropertyValue(s_sHistoryItemRef, cpo::uno::Any(aPrevItem));
+                    xPrevSet->setPropertyValue(s_sHistoryItemRef, cpo::uno::Any(aItem));
                 }
                 else
                     break;

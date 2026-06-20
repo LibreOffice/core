@@ -774,11 +774,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFlyHiddenParagraph)
 
     // first, disable both so para gets hidden
     uno::Sequence<beans::PropertyValue> argsSH(
-        comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", uno::Any(false) } }));
+        comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", cpo::uno::Any(false) } }));
     dispatchCommand(mxComponent, u".uno:ShowHiddenParagraphs"_ustr, argsSH);
 
     uno::Sequence<beans::PropertyValue> args(
-        comphelper::InitPropertySequence({ { "Fieldnames", uno::Any(false) } }));
+        comphelper::InitPropertySequence({ { "Fieldnames", cpo::uno::Any(false) } }));
 
     dispatchCommand(mxComponent, u".uno:Fieldnames"_ustr, args);
     Scheduler::ProcessEventsToIdle();

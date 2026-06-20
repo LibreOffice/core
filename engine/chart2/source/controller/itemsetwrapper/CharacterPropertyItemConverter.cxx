@@ -142,7 +142,7 @@ void CharacterPropertyItemConverter::FillSpecialItem(
             SvxUnderlineItem aItem(LINESTYLE_NONE, EE_CHAR_UNDERLINE);
             bool bModified = false;
 
-            uno::Any aValue( GetPropertySet()->getPropertyValue( u"CharUnderline"_ustr ));
+            cpo::uno::Any aValue( GetPropertySet()->getPropertyValue( u"CharUnderline"_ustr ));
             if( aValue.hasValue())
             {
                 aItem.PutValue( aValue, MID_TL_STYLE );
@@ -173,7 +173,7 @@ void CharacterPropertyItemConverter::FillSpecialItem(
             SvxOverlineItem aItem( LINESTYLE_NONE, EE_CHAR_OVERLINE );
             bool bModified = false;
 
-            uno::Any aValue( GetPropertySet()->getPropertyValue( u"CharOverline"_ustr ) );
+            cpo::uno::Any aValue( GetPropertySet()->getPropertyValue( u"CharOverline"_ustr ) );
             if ( aValue.hasValue() )
             {
                 aItem.PutValue( aValue, MID_TL_STYLE );
@@ -213,7 +213,7 @@ void CharacterPropertyItemConverter::FillSpecialItem(
 
             SvxPostureItem aItem( ITALIC_NONE, nWhichId );
 
-            uno::Any aValue( GetPropertySet()->getPropertyValue( "CharPosture" + aPostfix));
+            cpo::uno::Any aValue( GetPropertySet()->getPropertyValue( "CharPosture" + aPostfix));
             if( aValue.hasValue())
             {
                 aItem.PutValue( aValue, MID_POSTURE );
@@ -234,7 +234,7 @@ void CharacterPropertyItemConverter::FillSpecialItem(
 
             SvxWeightItem aItem( WEIGHT_NORMAL, nWhichId );
 
-            uno::Any aValue( GetPropertySet()->getPropertyValue( "CharWeight" + aPostfix));
+            cpo::uno::Any aValue( GetPropertySet()->getPropertyValue( "CharWeight" + aPostfix));
             if( aValue.hasValue())
             {
                 aItem.PutValue( aValue, MID_WEIGHT );
@@ -257,7 +257,7 @@ void CharacterPropertyItemConverter::FillSpecialItem(
 
             try
             {
-                uno::Any aValue( GetPropertySet()->getPropertyValue( "CharHeight" + aPostfix ));
+                cpo::uno::Any aValue( GetPropertySet()->getPropertyValue( "CharHeight" + aPostfix ));
                 float fHeight;
                 if( aValue >>= fHeight )
                 {
@@ -308,7 +308,7 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
     sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
 {
     bool bChanged = false;
-    uno::Any aValue;
+    cpo::uno::Any aValue;
 
     switch( nWhichId )
     {
@@ -528,7 +528,7 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
                         if (m_pRefSize && GetRefSizePropertySet()->getPropertyValue( m_aRefSizePropertyName ).hasValue())
                         {
                             GetRefSizePropertySet()->setPropertyValue(
-                                m_aRefSizePropertyName, uno::Any(*m_pRefSize));
+                                m_aRefSizePropertyName, cpo::uno::Any(*m_pRefSize));
                         }
 
                         GetPropertySet()->setPropertyValue( "CharHeight" + aPostfix, aValue );

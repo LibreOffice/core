@@ -657,11 +657,11 @@ namespace cppcanvas::internal
                     ::basegfx::unotools::affineMatrixFromHomMatrix( aTexture.AffineTransform,
                                                                     aGradInfo.getTextureTransform() );
 
-                    uno::Sequence<uno::Any> args(comphelper::InitAnyPropertySequence(
+                    uno::Sequence<cpo::uno::Any> args(comphelper::InitAnyPropertySequence(
                     {
-                        {"Colors", uno::Any(aColors)},
-                        {"Stops", uno::Any(aStops)},
-                        {"AspectRatio", uno::Any(aGradInfo.getAspectRatio())},
+                        {"Colors", cpo::uno::Any(aColors)},
+                        {"Stops", cpo::uno::Any(aStops)},
+                        {"AspectRatio", cpo::uno::Any(aGradInfo.getAspectRatio())},
                     }));
                     aTexture.Gradient.set(
                         xFactory->createInstanceWithArguments(aGradientService,

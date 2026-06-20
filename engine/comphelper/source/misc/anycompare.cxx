@@ -60,7 +60,7 @@ namespace comphelper
     class DatePredicateLess : public IKeyPredicateLess
     {
     public:
-        virtual bool isLess( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const override
+        virtual bool isLess( cpo::uno::Any const & _lhs, cpo::uno::Any const & _rhs ) const override
         {
             Date lhs, rhs;
             if  (   !( _lhs >>= lhs )
@@ -88,7 +88,7 @@ namespace comphelper
     class TimePredicateLess : public IKeyPredicateLess
     {
     public:
-        virtual bool isLess( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const override
+        virtual bool isLess( cpo::uno::Any const & _lhs, cpo::uno::Any const & _rhs ) const override
         {
             Time lhs, rhs;
             if  (   !( _lhs >>= lhs )
@@ -121,7 +121,7 @@ namespace comphelper
     class DateTimePredicateLess : public IKeyPredicateLess
     {
     public:
-        virtual bool isLess( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const override
+        virtual bool isLess( cpo::uno::Any const & _lhs, cpo::uno::Any const & _rhs ) const override
         {
             DateTime lhs, rhs;
             if  (   !( _lhs >>= lhs )
@@ -442,7 +442,7 @@ namespace comphelper
         return pComparator;
     }
 
-    bool anyLess( css::uno::Any const & lhs, css::uno::Any const & rhs)
+    bool anyLess( cpo::uno::Any const & lhs, cpo::uno::Any const & rhs)
     {
         return anyLess( lhs.getValue(), lhs.getValueTypeRef(), rhs.getValue(), rhs.getValueTypeRef());
     }

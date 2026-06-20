@@ -93,7 +93,7 @@ Bitmap GetBitmap(const css::uno::Reference<css::awt::XBitmap>& xBitmap)
     return aBmp;
 }
 
-css::uno::Reference<css::graphic::XGraphic> GetGraphic(const css::uno::Any& any)
+css::uno::Reference<css::graphic::XGraphic> GetGraphic(const cpo::uno::Any& any)
 {
     if (auto xRet = any.query<css::graphic::XGraphic>())
         return xRet;
@@ -240,12 +240,12 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
 {
     OUString aURL;
     uno::Reference< io::XInputStream > xIStm;
-    uno::Any aBtm;
+    cpo::uno::Any aBtm;
 
     for( const auto& rMediaProperty : rMediaProperties )
     {
         const OUString   aName( rMediaProperty.Name );
-        const uno::Any          aValue( rMediaProperty.Value );
+        const cpo::uno::Any          aValue( rMediaProperty.Value );
 
         if (aName == "URL")
         {
@@ -305,7 +305,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
     OUString                                aPath;
 
     uno::Reference< io::XInputStream > xIStm;
-    uno::Any aBtm;
+    cpo::uno::Any aBtm;
 
     uno::Sequence< ::beans::PropertyValue > aFilterData;
 
@@ -315,7 +315,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
     for (const auto& rMediaProperty : rMediaProperties)
     {
         const OUString   aName( rMediaProperty.Name );
-        const uno::Any          aValue( rMediaProperty.Value );
+        const cpo::uno::Any          aValue( rMediaProperty.Value );
 
         if (aName == "URL")
         {
@@ -347,7 +347,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
     for (const auto& rProp : aFilterData)
     {
         const OUString   aName( rProp.Name );
-        const uno::Any          aValue( rProp.Value );
+        const cpo::uno::Any          aValue( rProp.Value );
 
         if (aName == "ExternalMapMode")
         {
@@ -543,7 +543,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, const uno::Sequence< beans::Prope
     for( const auto& rProp : rFilterData )
     {
         const OUString   aName(  rProp.Name );
-        const uno::Any          aValue( rProp.Value );
+        const cpo::uno::Any          aValue( rProp.Value );
 
         if (aName == "PixelWidth")
             aValue >>= nPixelWidth;
@@ -671,7 +671,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
     for( const auto& rMediaProperty : rMediaProperties )
     {
         const OUString   aName( rMediaProperty.Name );
-        const uno::Any          aValue( rMediaProperty.Value );
+        const cpo::uno::Any          aValue( rMediaProperty.Value );
 
         if (aName == "URL")
         {
@@ -704,7 +704,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
     for( const auto& rMediaProperty : rMediaProperties )
     {
         const OUString   aName( rMediaProperty.Name );
-        const uno::Any          aValue( rMediaProperty.Value );
+        const cpo::uno::Any          aValue( rMediaProperty.Value );
 
         if (aName == "FilterData")
         {
@@ -795,7 +795,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_graphic_GraphicProvider_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new GraphicProvider);
 }

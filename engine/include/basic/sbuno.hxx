@@ -22,7 +22,7 @@
 #include <basic/sbxvar.hxx>
 #include <basic/basicdllapi.h>
 
-namespace com::sun::star::uno { class Any; }
+namespace cpo::uno { class Any; }
 namespace com::sun::star::uno { class Type; }
 namespace com::sun::star::beans { struct Property; }
 
@@ -30,16 +30,16 @@ class SbxObject;
 
 // Returns a SbxObject that wraps a Uno Interface
 // Implementation in basic/source/classes/sbunoobj.cxx
-BASIC_DLLPUBLIC SbxObjectRef GetSbUnoObject( const OUString& aName, const css::uno::Any& aUnoObj_ );
+BASIC_DLLPUBLIC SbxObjectRef GetSbUnoObject( const OUString& aName, const cpo::uno::Any& aUnoObj_ );
 
 // Force creation of all properties for debugging
 BASIC_DLLPUBLIC void createAllObjectProperties( SbxObject* pObj );
 BASIC_DLLPUBLIC void SetSbUnoObjectDfltPropName( SbxObject* pObj );
 
-BASIC_DLLPUBLIC css::uno::Any sbxToUnoValue( const SbxValue* pVar );
-css::uno::Any sbxToUnoValue( const SbxValue* pVar, const css::uno::Type& rType, css::beans::Property const * pUnoProperty = nullptr );
+BASIC_DLLPUBLIC cpo::uno::Any sbxToUnoValue( const SbxValue* pVar );
+cpo::uno::Any sbxToUnoValue( const SbxValue* pVar, const css::uno::Type& rType, css::beans::Property const * pUnoProperty = nullptr );
 
-BASIC_DLLPUBLIC void unoToSbxValue( SbxVariable* pVar, const css::uno::Any& aValue );
+BASIC_DLLPUBLIC void unoToSbxValue( SbxVariable* pVar, const cpo::uno::Any& aValue );
 
 /// Used by the BASIC debugger to detect very large UNO property values that should not be displayed
 /// because they will stall the program.

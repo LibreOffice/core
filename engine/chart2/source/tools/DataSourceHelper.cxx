@@ -150,9 +150,9 @@ uno::Sequence< beans::PropertyValue > DataSourceHelper::createArguments(
 
     return
     {
-        { u"DataRowSource"_ustr, -1, uno::Any( eRowSource), beans::PropertyState_DIRECT_VALUE },
-        { u"FirstCellAsLabel"_ustr, -1, uno::Any( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE },
-        { u"HasCategories"_ustr, -1, uno::Any( bHasCategories ), beans::PropertyState_DIRECT_VALUE }
+        { u"DataRowSource"_ustr, -1, cpo::uno::Any( eRowSource), beans::PropertyState_DIRECT_VALUE },
+        { u"FirstCellAsLabel"_ustr, -1, cpo::uno::Any( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE },
+        { u"HasCategories"_ustr, -1, cpo::uno::Any( bHasCategories ), beans::PropertyState_DIRECT_VALUE }
     };
 }
 
@@ -165,14 +165,14 @@ uno::Sequence< beans::PropertyValue > DataSourceHelper::createArguments(
     aArguments.realloc( aArguments.getLength() + 1 );
     aArguments.getArray()[aArguments.getLength() - 1] =
         beans::PropertyValue( u"CellRangeRepresentation"_ustr
-                              , -1, uno::Any( rRangeRepresentation )
+                              , -1, cpo::uno::Any( rRangeRepresentation )
                               , beans::PropertyState_DIRECT_VALUE );
     if( rSequenceMapping.hasElements() )
     {
         aArguments.realloc( aArguments.getLength() + 1 );
         aArguments.getArray()[aArguments.getLength() - 1] =
             beans::PropertyValue( u"SequenceMapping"_ustr
-                                , -1, uno::Any( rSequenceMapping )
+                                , -1, cpo::uno::Any( rSequenceMapping )
                                 , beans::PropertyState_DIRECT_VALUE );
     }
     return aArguments;

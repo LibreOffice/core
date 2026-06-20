@@ -82,7 +82,7 @@ void SwBaseShell::InsertURLButton(const OUString& rURL, const OUString& rTarget,
 
             uno::Reference< beans::XPropertySet >  xPropSet(xControlModel, uno::UNO_QUERY);
 
-            uno::Any aTmp;
+            cpo::uno::Any aTmp;
 
             aTmp <<= rText;
             xPropSet->setPropertyValue( u"Label"_ustr, aTmp );

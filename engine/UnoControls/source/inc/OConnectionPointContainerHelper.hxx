@@ -25,7 +25,7 @@
 
 namespace unocontrols {
 
-class OConnectionPointContainerHelper final :   public  cpo::lang::XConnectionPointContainer
+class OConnectionPointContainerHelper final :   public  css::lang::XConnectionPointContainer
                                         ,   public  ::cppu::OWeakObject
 {
 public:
@@ -48,7 +48,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
 
     /**
         @short      increment refcount
@@ -70,20 +70,20 @@ public:
 
     //  XConnectionPointContainer
 
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getConnectionPointTypes() override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getConnectionPointTypes() override;
 
-    virtual cpo::uno::Reference< cpo::lang::XConnectionPoint > SAL_CALL queryConnectionPoint(
-        const cpo::uno::Type& aType
+    virtual css::uno::Reference< css::lang::XConnectionPoint > SAL_CALL queryConnectionPoint(
+        const css::uno::Type& aType
     ) override;
 
     virtual void SAL_CALL advise(
-        const   cpo::uno::Type&                              aType ,
-        const   cpo::uno::Reference< cpo::uno::XInterface >&  xListener
+        const   css::uno::Type&                              aType ,
+        const   css::uno::Reference< css::uno::XInterface >&  xListener
     ) override;
 
     virtual void SAL_CALL unadvise(
-        const   cpo::uno::Type&                              aType       ,
-        const   cpo::uno::Reference< cpo::uno::XInterface >&  xListener
+        const   css::uno::Type&                              aType       ,
+        const   css::uno::Reference< css::uno::XInterface >&  xListener
     ) override;
 
     //  public but impl method!

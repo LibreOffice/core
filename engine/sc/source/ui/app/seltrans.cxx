@@ -56,7 +56,7 @@ static bool lcl_IsURLButton( SdrObject* pObject )
             OUString sPropButtonType( u"ButtonType"_ustr );
             if(xInfo->hasPropertyByName( sPropButtonType ))
             {
-                uno::Any aAny = xPropSet->getPropertyValue( sPropButtonType );
+                cpo::uno::Any aAny = xPropSet->getPropertyValue( sPropButtonType );
                 form::FormButtonType eTmp;
                 if ( (aAny >>= eTmp) && eTmp == form::FormButtonType_URL )
                     bRet = true;
@@ -393,7 +393,7 @@ bool ScSelectionTransferObj::GetData(
     if ( xSource.is() )
     {
         TransferableDataHelper aHelper( xSource );
-        uno::Any aAny = aHelper.GetAny(rFlavor, rDestDoc);
+        cpo::uno::Any aAny = aHelper.GetAny(rFlavor, rDestDoc);
         bOK = SetAny( aAny );
     }
 

@@ -38,7 +38,7 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::Sequence;
 
 const sal_uInt16 SC_DP_LEAPYEAR = 1648;     // arbitrary leap year for date calculations

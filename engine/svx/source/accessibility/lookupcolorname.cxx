@@ -22,7 +22,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/ColorTable.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -84,7 +84,7 @@ ColorNameMap::ColorNameMap()
         // Get the numerical value for the i-th color name.
         try
         {
-            css::uno::Any aColor = xNA->getByName(rName);
+            cpo::uno::Any aColor = xNA->getByName(rName);
             tools::Long nColor = 0;
             aColor >>= nColor;
             map_[nColor] = rName;

@@ -259,7 +259,7 @@ void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& r
     }
     else if (pHeight)
     {
-        rProperties.emplace_back(maPropMapper->FindEntryIndex(CTF_SC_ROWOPTIMALHEIGHT), css::uno::Any(false));
+        rProperties.emplace_back(maPropMapper->FindEntryIndex(CTF_SC_ROWOPTIMALHEIGHT), cpo::uno::Any(false));
     }
     // don't access pointers to rProperties elements after push_back!
 }
@@ -532,17 +532,17 @@ void XMLTableStyleContext::FillPropertySet(
         {
             if (!bParentSet)
             {
-                AddProperty(CTF_SC_CELLSTYLE, uno::Any(GetImport().GetStyleDisplayName( XmlStyleFamily::TABLE_CELL, GetParentName() )));
+                AddProperty(CTF_SC_CELLSTYLE, cpo::uno::Any(GetImport().GetStyleDisplayName( XmlStyleFamily::TABLE_CELL, GetParentName() )));
                 bParentSet = true;
             }
             sal_Int32 nNumFmt = GetNumberFormat();
             if (nNumFmt >= 0)
-                AddProperty(CTF_SC_NUMBERFORMAT, uno::Any(nNumFmt));
+                AddProperty(CTF_SC_NUMBERFORMAT, cpo::uno::Any(nNumFmt));
         }
         else if (GetFamily() == XmlStyleFamily::TABLE_TABLE)
         {
             if (!sPageStyle.isEmpty())
-                AddProperty(CTF_SC_MASTERPAGENAME, uno::Any(GetImport().GetStyleDisplayName( XmlStyleFamily::MASTER_PAGE, sPageStyle )));
+                AddProperty(CTF_SC_MASTERPAGENAME, cpo::uno::Any(GetImport().GetStyleDisplayName( XmlStyleFamily::MASTER_PAGE, sPageStyle )));
         }
     }
     XMLPropStyleContext::FillPropertySet(rPropSet);
@@ -562,7 +562,7 @@ void XMLTableStyleContext::SetDefaults()
     }
 }
 
-void XMLTableStyleContext::AddProperty(const sal_Int16 nContextID, const uno::Any& rValue)
+void XMLTableStyleContext::AddProperty(const sal_Int16 nContextID, const cpo::uno::Any& rValue)
 {
     XMLPropertyState* property = FindProperty(nContextID);
     if (property)
@@ -996,7 +996,7 @@ void ScMasterPageContext::ClearContent(const OUString& rContent)
             xHeaderFooterContent->getLeftText()->setString(u""_ustr);
             xHeaderFooterContent->getCenterText()->setString(u""_ustr);
             xHeaderFooterContent->getRightText()->setString(u""_ustr);
-            xPropSet->setPropertyValue( rContent, uno::Any(xHeaderFooterContent) );
+            xPropSet->setPropertyValue( rContent, cpo::uno::Any(xHeaderFooterContent) );
         }
     }
 }

@@ -136,7 +136,7 @@ data2string(void *data,
     return u""_ustr;
 }
 
-static OUString any2string(const uno::Any& any)
+static OUString any2string(const cpo::uno::Any& any)
 {
     return data2string(const_cast<void*>(any.getValue()), any.pType);
 }

@@ -621,7 +621,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL SwXContentControl::getPropertyS
 }
 
 void SAL_CALL SwXContentControl::setPropertyValue(const OUString& rPropertyName,
-                                                  const css::uno::Any& rValue)
+                                                  const cpo::uno::Any& rValue)
 {
     SolarMutexGuard aGuard;
 
@@ -1030,11 +1030,11 @@ void SAL_CALL SwXContentControl::setPropertyValue(const OUString& rPropertyName,
     }
 }
 
-uno::Any SAL_CALL SwXContentControl::getPropertyValue(const OUString& rPropertyName)
+cpo::uno::Any SAL_CALL SwXContentControl::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if (rPropertyName == UNO_NAME_SHOWING_PLACE_HOLDER)
     {
         if (m_pImpl->m_bIsDescriptor)
@@ -1440,7 +1440,7 @@ sal_Int32 SwXContentControls::getCount()
     return GetDoc().GetContentControlManager().GetCount();
 }
 
-uno::Any SwXContentControls::getByIndex(sal_Int32 nIndex)
+cpo::uno::Any SwXContentControls::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
 
@@ -1454,7 +1454,7 @@ uno::Any SwXContentControls::getByIndex(sal_Int32 nIndex)
     const SwFormatContentControl& rFormatContentControl = pTextContentControl->GetContentControl();
     rtl::Reference<SwXContentControl> xContentControl
         = SwXContentControl::CreateXContentControl(*rFormatContentControl.GetContentControl());
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     aRet <<= uno::Reference<text::XTextContent>(xContentControl);
     return aRet;
 }

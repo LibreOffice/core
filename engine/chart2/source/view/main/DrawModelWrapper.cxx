@@ -157,7 +157,7 @@ const rtl::Reference<SvxDrawPage> & DrawModelWrapper::getMainDrawPage()
     if (xDrawPages->getCount() > 1)
     {
         // Take the first page in case of multiple pages.
-        uno::Any aPage = xDrawPages->getByIndex(0);
+        cpo::uno::Any aPage = xDrawPages->getByIndex(0);
         uno::Reference<drawing::XDrawPage> xTmp;
         aPage >>= xTmp;
         m_xMainDrawPage = dynamic_cast<SvxDrawPage*>(xTmp.get());
@@ -187,7 +187,7 @@ const rtl::Reference<SvxDrawPage> & DrawModelWrapper::getHiddenDrawPage()
             uno::Reference< drawing::XDrawPages > xDrawPages( xDrawPagesSuplier->getDrawPages () );
             if( xDrawPages->getCount()>1 )
             {
-                uno::Any aPage = xDrawPages->getByIndex( 1 ) ;
+                cpo::uno::Any aPage = xDrawPages->getByIndex( 1 ) ;
                 uno::Reference<drawing::XDrawPage> xTmp;
                 aPage >>= xTmp;
                 m_xHiddenDrawPage = dynamic_cast<SvxDrawPage*>(xTmp.get());

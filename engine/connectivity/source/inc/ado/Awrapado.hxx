@@ -100,35 +100,35 @@ namespace connectivity::ado
          OUString get_Version() const;
 
          // special methods
-         ADORecordset* getExportedKeys( const css::uno::Any& catalog, const OUString& schema, std::u16string_view table );
-         ADORecordset* getImportedKeys( const css::uno::Any& catalog, const OUString& schema, std::u16string_view table );
-         ADORecordset* getPrimaryKeys( const css::uno::Any& catalog, const OUString& schema, std::u16string_view table );
-         ADORecordset* getIndexInfo( const css::uno::Any& catalog, const OUString& schema, std::u16string_view table, bool unique, bool approximate );
-         ADORecordset* getTablePrivileges( const css::uno::Any& catalog,
+         ADORecordset* getExportedKeys( const cpo::uno::Any& catalog, const OUString& schema, std::u16string_view table );
+         ADORecordset* getImportedKeys( const cpo::uno::Any& catalog, const OUString& schema, std::u16string_view table );
+         ADORecordset* getPrimaryKeys( const cpo::uno::Any& catalog, const OUString& schema, std::u16string_view table );
+         ADORecordset* getIndexInfo( const cpo::uno::Any& catalog, const OUString& schema, std::u16string_view table, bool unique, bool approximate );
+         ADORecordset* getTablePrivileges( const cpo::uno::Any& catalog,
                                               const OUString& schemaPattern,
                                               std::u16string_view tableNamePattern );
-         ADORecordset* getCrossReference( const css::uno::Any& primaryCatalog,
+         ADORecordset* getCrossReference( const cpo::uno::Any& primaryCatalog,
                                               const OUString& primarySchema,
                                               std::u16string_view primaryTable,
-                                              const css::uno::Any& foreignCatalog,
+                                              const cpo::uno::Any& foreignCatalog,
                                               const OUString& foreignSchema,
                                               std::u16string_view foreignTable);
-         ADORecordset* getProcedures( const css::uno::Any& catalog,
+         ADORecordset* getProcedures( const cpo::uno::Any& catalog,
                                               const OUString& schemaPattern,
                                               std::u16string_view procedureNamePattern );
-         ADORecordset* getProcedureColumns( const css::uno::Any& catalog,
+         ADORecordset* getProcedureColumns( const cpo::uno::Any& catalog,
                                               const OUString& schemaPattern,
                                               std::u16string_view procedureNamePattern,
                                               std::u16string_view columnNamePattern );
-         ADORecordset* getTables( const css::uno::Any& catalog,
+         ADORecordset* getTables( const cpo::uno::Any& catalog,
                                               const OUString& schemaPattern,
                                               std::u16string_view tableNamePattern,
                                               const css::uno::Sequence< OUString >& types );
-         ADORecordset* getColumns( const css::uno::Any& catalog,
+         ADORecordset* getColumns( const cpo::uno::Any& catalog,
                                               const OUString& schemaPattern,
                                               std::u16string_view tableNamePattern,
                                               std::u16string_view columnNamePattern );
-         ADORecordset* getColumnPrivileges( const css::uno::Any& catalog,
+         ADORecordset* getColumnPrivileges( const cpo::uno::Any& catalog,
                                               const OUString& schemaPattern,
                                               std::u16string_view table,
                                               std::u16string_view columnNamePattern );

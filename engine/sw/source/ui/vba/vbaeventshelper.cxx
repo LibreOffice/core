@@ -27,7 +27,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::script::vba::VBAEventId;
 
-SwVbaEventsHelper::SwVbaEventsHelper( uno::Sequence< css::uno::Any > const& aArgs, uno::Reference< uno::XComponentContext > const& /*xContext*/ ) :
+SwVbaEventsHelper::SwVbaEventsHelper( uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< uno::XComponentContext > const& /*xContext*/ ) :
     VbaEventsHelperBase( aArgs )
 {
     using namespace ::com::sun::star::script::ModuleType;
@@ -44,16 +44,16 @@ SwVbaEventsHelper::~SwVbaEventsHelper()
 }
 
 bool SwVbaEventsHelper::implPrepareEvent(EventQueue& /*rEventQueue*/,
-        const EventHandlerInfo& /*rInfo*/, const uno::Sequence<uno::Any>& /*rArgs*/)
+        const EventHandlerInfo& /*rInfo*/, const uno::Sequence<cpo::uno::Any>& /*rArgs*/)
 {
     return true;
 }
 
-uno::Sequence< uno::Any > SwVbaEventsHelper::implBuildArgumentList( const EventHandlerInfo& /*rInfo*/,
-        const uno::Sequence< uno::Any >& /*rArgs*/ )
+uno::Sequence< cpo::uno::Any > SwVbaEventsHelper::implBuildArgumentList( const EventHandlerInfo& /*rInfo*/,
+        const uno::Sequence< cpo::uno::Any >& /*rArgs*/ )
 {
     // no event handler expects any arguments
-    return uno::Sequence< uno::Any >();
+    return uno::Sequence< cpo::uno::Any >();
 }
 
 void SwVbaEventsHelper::implPostProcessEvent( EventQueue& /*rEventQueue*/,
@@ -63,7 +63,7 @@ void SwVbaEventsHelper::implPostProcessEvent( EventQueue& /*rEventQueue*/,
 }
 
 OUString SwVbaEventsHelper::implGetDocumentModuleName( const EventHandlerInfo& /*rInfo*/,
-        const uno::Sequence< uno::Any >& /*rArgs*/ ) const
+        const uno::Sequence< cpo::uno::Any >& /*rArgs*/ ) const
 {
     // TODO: get actual codename from document
     return u"ThisDocument"_ustr;
@@ -86,7 +86,7 @@ css::uno::Sequence< OUString > SwVbaEventsHelper::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Writer_SwVbaEventsHelper_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new SwVbaEventsHelper(args, context));
 }

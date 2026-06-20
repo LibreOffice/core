@@ -37,6 +37,7 @@ namespace toolkit
 
 
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
@@ -460,7 +461,7 @@ namespace toolkit
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlFormattedFieldModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new toolkit::UnoControlFormattedFieldModel(context));
 }
@@ -468,7 +469,7 @@ stardiv_Toolkit_UnoControlFormattedFieldModel_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoFormattedFieldControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new toolkit::UnoFormattedFieldControl());
 }

@@ -1240,7 +1240,7 @@ void VCLXWindow::getStyles( sal_Int16 nType, css::awt::FontDescriptor& Font, sal
 
 namespace toolkit
 {
-    static void setColorSettings( vcl::Window* _pWindow, const css::uno::Any& _rValue,
+    static void setColorSettings( vcl::Window* _pWindow, const cpo::uno::Any& _rValue,
         void (StyleSettings::*pSetter)( const Color& ), const Color& (StyleSettings::*pGetter)( ) const )
     {
         sal_Int32 nColor = 0;
@@ -1358,7 +1358,7 @@ namespace
     }
 }
 
-void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any& Value )
+void VCLXWindow::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value )
 {
     SolarMutexGuard aGuard;
 
@@ -1908,11 +1908,11 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
     }
 }
 
-css::uno::Any VCLXWindow::getProperty( const OUString& PropertyName )
+cpo::uno::Any VCLXWindow::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Any aProp;
+    cpo::uno::Any aProp;
     if (!GetWindow())
         return aProp;
 
@@ -1937,7 +1937,7 @@ css::uno::Any VCLXWindow::getProperty( const OUString& PropertyName )
         // This is a special "property" needed by the Java a11y tests to get the underlying
         // vcl::Window's XAccessible, see AccessibilityTools.getAccessibleObject.
         // Once those tests have been ported to C++, this can be dropped.
-        return uno::Any(uno::Reference<accessibility::XAccessible>(GetWindow()->GetAccessible()));
+        return cpo::uno::Any(uno::Reference<accessibility::XAccessible>(GetWindow()->GetAccessible()));
     }
 
     WindowType eWinType = GetWindow()->GetType();

@@ -32,7 +32,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/document/XShapeEventListener.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
@@ -142,8 +142,8 @@ public:
     virtual sal_Int16 SAL_CALL getAccessibleRole() override;
     //=====  XAccessibleGroupPosition  =========================================
     virtual css::uno::Sequence< sal_Int32 > SAL_CALL
-        getGroupPosition( const css::uno::Any& rAny ) override;
-    virtual OUString SAL_CALL getObjectLink( const css::uno::Any& accoject ) override;
+        getGroupPosition( const cpo::uno::Any& rAny ) override;
+    virtual OUString SAL_CALL getObjectLink( const cpo::uno::Any& accoject ) override;
     /** The destructor releases its children manager and text engine if
         still existent.  These are responsible to send appropriate events.
     */
@@ -265,7 +265,7 @@ public:
 
     //=====  XInterface  ======================================================
 
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
         queryInterface (const css::uno::Type & rType) override;
 
     virtual void SAL_CALL

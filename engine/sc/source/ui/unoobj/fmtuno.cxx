@@ -372,14 +372,14 @@ sal_Int32 SAL_CALL ScTableConditionalFormat::getCount()
     return maEntries.size();
 }
 
-uno::Any SAL_CALL ScTableConditionalFormat::getByIndex( sal_Int32 nIndex )
+cpo::uno::Any SAL_CALL ScTableConditionalFormat::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     uno::Reference<sheet::XSheetConditionalEntry> xEntry(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nIndex)));
     if (!xEntry.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(xEntry);
+    return cpo::uno::Any(xEntry);
 }
 
 uno::Type SAL_CALL ScTableConditionalFormat::getElementType()
@@ -402,7 +402,7 @@ static OUString lcl_GetEntryNameFromIndex( sal_Int32 nIndex )
     return aRet;
 }
 
-uno::Any SAL_CALL ScTableConditionalFormat::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL ScTableConditionalFormat::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 
@@ -418,7 +418,7 @@ uno::Any SAL_CALL ScTableConditionalFormat::getByName( const OUString& aName )
     if (!xEntry.is())
         throw container::NoSuchElementException();
 
-    return uno::Any(xEntry);
+    return cpo::uno::Any(xEntry);
 }
 
 uno::Sequence<OUString> SAL_CALL ScTableConditionalFormat::getElementNames()
@@ -759,7 +759,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScTableValidationObj::getProper
 }
 
 void SAL_CALL ScTableValidationObj::setPropertyValue(
-                        const OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
 
@@ -869,10 +869,10 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
     }
 }
 
-uno::Any SAL_CALL ScTableValidationObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ScTableValidationObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
+    cpo::uno::Any aRet;
 
     if ( aPropertyName == SC_UNONAME_SHOWINP )       aRet <<= bShowInput;
     else if ( aPropertyName == SC_UNONAME_SHOWERR )  aRet <<= bShowError;

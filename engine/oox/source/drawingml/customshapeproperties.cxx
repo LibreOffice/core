@@ -38,6 +38,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 
@@ -163,7 +164,7 @@ void CustomShapeProperties::pushToPropSet(
         if (!maExtrusionPropertyMap.empty())
         {
             Sequence< PropertyValue > aExtrusionSequence = maExtrusionPropertyMap.makePropertyValueSequence();
-            aPropertyMap.setAnyProperty( PROP_Extrusion, css::uno::Any(aExtrusionSequence));
+            aPropertyMap.setAnyProperty( PROP_Extrusion, cpo::uno::Any(aExtrusionSequence));
         }
         Sequence< PropertyValue > aSeq = aPropertyMap.makePropertyValueSequence();
         aPropSet.setProperty( PROP_CustomShapeGeometry, aSeq );
@@ -171,7 +172,7 @@ void CustomShapeProperties::pushToPropSet(
         if ( !maAdjustmentGuideList.empty() )
         {
             static constexpr OUString sCustomShapeGeometry(u"CustomShapeGeometry"_ustr);
-            uno::Any aGeoPropSet = xPropSet->getPropertyValue( sCustomShapeGeometry );
+            cpo::uno::Any aGeoPropSet = xPropSet->getPropertyValue( sCustomShapeGeometry );
             uno::Sequence< beans::PropertyValue > aGeoPropSeq;
             if ( aGeoPropSet >>= aGeoPropSeq )
             {

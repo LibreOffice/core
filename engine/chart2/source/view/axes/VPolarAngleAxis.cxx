@@ -62,7 +62,7 @@ void VPolarAngleAxis::createTextShapes_ForAngleAxis(
     LabelPositionHelper::doDynamicFontResize( aPropValues, aPropNames, xProps
         , rAxisLabelProperties.m_aFontReferenceSize );
 
-    uno::Any* pColorAny = PropertyMapper::getValuePointer(aPropValues,aPropNames,u"CharColor");
+    cpo::uno::Any* pColorAny = PropertyMapper::getValuePointer(aPropValues,aPropNames,u"CharColor");
     Color nColor = COL_AUTO;
     if(pColorAny)
         *pColorAny >>= nColor;
@@ -119,7 +119,7 @@ void VPolarAngleAxis::createTextShapes_ForAngleAxis(
             // #i78696# use mathematically correct rotation now
             const double fRotationAnglePi(-basegfx::deg2rad(rAxisLabelProperties.m_fRotationAngleDegree));
 
-            uno::Any aATransformation = ShapeFactory::makeTransformation( aAnchorScreenPosition2D, fRotationAnglePi );
+            cpo::uno::Any aATransformation = ShapeFactory::makeTransformation( aAnchorScreenPosition2D, fRotationAnglePi );
             OUString aStackedLabel = ShapeFactory::getStackedString( aLabel, rAxisLabelProperties.m_bStackCharacters );
 
             pTickInfo->xTextShape = ShapeFactory::createText( xTarget, aStackedLabel, aPropNames, aPropValues, aATransformation );

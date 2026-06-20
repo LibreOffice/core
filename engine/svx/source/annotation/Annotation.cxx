@@ -125,7 +125,7 @@ SdrModel* Annotation::GetModel() const
     return mpPage != nullptr ? &mpPage->getSdrModelFromSdrPage() : nullptr;
 }
 
-uno::Any Annotation::queryInterface(uno::Type const& type)
+cpo::uno::Any Annotation::queryInterface(uno::Type const& type)
 {
     return comphelper::WeakComponentImplHelper<office::XAnnotation>::queryInterface(type);
 }

@@ -23,7 +23,7 @@
 #include <unotools/saveopt.hxx>
 
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 using namespace com::sun::star;
 
@@ -37,9 +37,9 @@ XMLErrorBarStylePropertyHdl::~XMLErrorBarStylePropertyHdl()
 }
 
 bool XMLErrorBarStylePropertyHdl::exportXML( OUString& rStrExpValue,
-    const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter) const
+    const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter) const
 {
-    uno::Any aValue(rValue);
+    cpo::uno::Any aValue(rValue);
     const SvtSaveOptions::ODFSaneDefaultVersion nCurrentVersion(rUnitConverter.getSaneDefaultVersion());
     if (nCurrentVersion < SvtSaveOptions::ODFSVER_012)
     {

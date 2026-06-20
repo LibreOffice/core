@@ -1796,7 +1796,7 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj )
                 static_cast<const SdrUnoObj&>(*pInvestigatedObj).GetUnoControlModel();
         if( xModel.is() )
         {
-            uno::Any aVal;
+            cpo::uno::Any aVal;
             OUString sName(u"ButtonType"_ustr);
             uno::Reference< beans::XPropertySet >  xSet(xModel, uno::UNO_QUERY);
 
@@ -2216,7 +2216,7 @@ void SwFEShell::AlignFormulaToBaseline( const uno::Reference < embed::XEmbeddedO
         return;
 
     // get baseline from Math object
-    uno::Any aBaseline;
+    cpo::uno::Any aBaseline;
     if( svt::EmbeddedObjectRef::TryRunningState( xObj ) )
     {
         uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );

@@ -47,7 +47,7 @@
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::XInterface;
-using com::sun::star::uno::Any;
+using cpo::uno::Any;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::Type;
 using com::sun::star::uno::TypeClass;
@@ -424,19 +424,19 @@ PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args )
     }
     catch (const css::lang::IllegalArgumentException &e)
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
     catch (const css::script::CannotConvertException &e)
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
     catch (const css::uno::RuntimeException &e)
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
     catch (const css::uno::Exception &e)
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
 
     return ret.getAcquired();
@@ -525,7 +525,7 @@ static int PyUNO_bool( PyObject* self )
     }
     catch( const css::uno::RuntimeException &e )
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
 
     return -1;
@@ -545,7 +545,7 @@ static Py_ssize_t PyUNO_len( PyObject* self )
     }
     catch( const css::uno::RuntimeException &e )
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
 
     return -1;
@@ -853,19 +853,19 @@ static PyObject* PyUNO_getitem( PyObject *self, PyObject *pKey )
     }
     catch( const css::script::CannotConvertException &e )
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
     catch( const css::lang::IllegalArgumentException &e )
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
     catch( const css::lang::WrappedTargetException &e )
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
     catch( const css::uno::RuntimeException &e )
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
 
     return nullptr;
@@ -1168,15 +1168,15 @@ static int PyUNO_setitem( PyObject *self, PyObject *pKey, PyObject *pValue )
     }
     catch( const css::container::ElementExistException &e )
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
     catch( const css::lang::WrappedTargetException &e )
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
     catch( const css::uno::RuntimeException &e )
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
 
     return -1;
@@ -1244,15 +1244,15 @@ static PyObject* PyUNO_iter( PyObject *self )
     }
     catch( css::script::CannotConvertException &e )
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
     catch( css::lang::IllegalArgumentException &e )
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
     catch( const css::uno::RuntimeException &e )
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
 
     return nullptr;
@@ -1325,23 +1325,23 @@ static int PyUNO_contains( PyObject *self, PyObject *pKey )
     }
     catch( const css::container::NoSuchElementException &e )
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
     catch( const css::lang::IndexOutOfBoundsException &e )
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
     catch( const css::lang::IllegalArgumentException &e )
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
     catch( const css::lang::WrappedTargetException &e )
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
     catch( const css::uno::RuntimeException &e )
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
 
     return -1;

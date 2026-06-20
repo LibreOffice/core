@@ -58,7 +58,7 @@ public:
      */
     ModuleAcceleratorConfiguration(
             const css::uno::Reference< css::uno::XComponentContext >& xContext,
-            const css::uno::Sequence< css::uno::Any >& lArguments);
+            const css::uno::Sequence< cpo::uno::Any >& lArguments);
 
     virtual OUString SAL_CALL getImplementationName() override
     {
@@ -85,7 +85,7 @@ private:
 
 ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration(
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
-        const css::uno::Sequence< css::uno::Any >& lArguments)
+        const css::uno::Sequence< cpo::uno::Any >& lArguments)
     : ModuleAcceleratorConfiguration_BASE(xContext)
 {
     SolarMutexGuard g;
@@ -144,7 +144,7 @@ void ModuleAcceleratorConfiguration::fillCache()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_ModuleAcceleratorConfiguration_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &arguments)
+    css::uno::Sequence<cpo::uno::Any> const &arguments)
 {
     rtl::Reference<ModuleAcceleratorConfiguration> inst = new ModuleAcceleratorConfiguration(context, arguments);
     css::uno::XInterface *acquired_inst = cppu::acquire(inst.get());

@@ -118,8 +118,8 @@ public:
     virtual sal_Int32 SAL_CALL getAccessibleRow(sal_Int64 nChildIndex) override;
     virtual sal_Int32 SAL_CALL getAccessibleColumn(sal_Int64 nChildIndex) override;
 
-    void fireEvent(const sal_Int16 _nEventId, const css::uno::Any& _rOldValue,
-                   const css::uno::Any& _rNewValue)
+    void fireEvent(const sal_Int16 _nEventId, const cpo::uno::Any& _rOldValue,
+                   const cpo::uno::Any& _rNewValue)
     {
         NotifyAccessibleEvent(_nEventId, _rOldValue, _rNewValue);
     }
@@ -197,8 +197,8 @@ public:
     virtual css::uno::Reference<css::accessibility::XAccessibleKeyBinding>
         SAL_CALL getAccessibleActionKeyBinding(sal_Int32 nIndex) override;
 
-    void fireEvent(const sal_Int16 _nEventId, const css::uno::Any& _rOldValue,
-                   const css::uno::Any& _rNewValue)
+    void fireEvent(const sal_Int16 _nEventId, const cpo::uno::Any& _rOldValue,
+                   const cpo::uno::Any& _rNewValue)
     {
         NotifyAccessibleEvent(_nEventId, _rOldValue, _rNewValue);
     }

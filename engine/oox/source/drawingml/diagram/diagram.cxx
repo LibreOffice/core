@@ -177,7 +177,7 @@ uno::Reference<xml::dom::XDocument> SmartArtDiagram::convertAndSet(std::u16strin
     uno::Reference<xml::dom::XDocument> aDomTree(xDomBuilder->parse(pStreamWrapper->getInputStream()));
 
     // set DomTree locally
-    setOOXDomValue(aDomMapFlag, uno::Any(aDomTree));
+    setOOXDomValue(aDomMapFlag, cpo::uno::Any(aDomTree));
     return aDomTree;
 }
 
@@ -261,17 +261,17 @@ SmartArtDiagram::~SmartArtDiagram()
 {
 }
 
-uno::Any SmartArtDiagram::getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const
+cpo::uno::Any SmartArtDiagram::getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const
 {
     const DiagramPRDomMap::const_iterator aHit = maDiagramPRDomMap.find(aDomMapFlag);
 
     if (aHit != maDiagramPRDomMap.end())
         return aHit->second;
 
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
-void SmartArtDiagram::setOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag, const uno::Any& rValue)
+void SmartArtDiagram::setOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag, const cpo::uno::Any& rValue)
 {
     maDiagramPRDomMap[aDomMapFlag] = rValue;
 }
@@ -481,8 +481,8 @@ void SmartArtDiagram::syncDiagramFontHeights()
                 uno::Reference<beans::XPropertySet> xPropertySet(rShapePair.second, uno::UNO_QUERY);
                 if (xPropertySet.is())
                 {
-                    xPropertySet->setPropertyValue(u"TextFitToSizeFontScale"_ustr, uno::Any(fMinFontScale));
-                    xPropertySet->setPropertyValue(u"TextFitToSizeSpacingScale"_ustr, uno::Any(fMinSpacingScale));
+                    xPropertySet->setPropertyValue(u"TextFitToSizeFontScale"_ustr, cpo::uno::Any(fMinFontScale));
+                    xPropertySet->setPropertyValue(u"TextFitToSizeSpacingScale"_ustr, cpo::uno::Any(fMinSpacingScale));
                 }
             }
         }
@@ -514,7 +514,7 @@ static void importFragment( core::XmlFilterBase& rFilter,
                      const DiagramPtr& pDiagram,
                      const rtl::Reference< core::FragmentHandler >& rxHandler )
 {
-    pDiagram->setOOXDomValue(aDomMapFlag, uno::Any(rXDom));
+    pDiagram->setOOXDomValue(aDomMapFlag, cpo::uno::Any(rXDom));
 
     uno::Reference<xml::sax::XFastSAXSerializable> xSerializer(
         rXDom, uno::UNO_QUERY_THROW);
@@ -594,17 +594,17 @@ void loadDiagram( ShapePtr const & pShape,
                            pDiagram,
                            xRefDataModel);
 
-            uno::Sequence<uno::Sequence<uno::Any>> aDataImageRelsMap(
+            uno::Sequence<uno::Sequence<cpo::uno::Any>> aDataImageRelsMap(
                 pShape->resolveRelationshipsOfTypeFromOfficeDoc(
                     rFilter, xRefDataModel->getFragmentPath(), u"image"));
-            uno::Sequence<uno::Sequence<uno::Any>> aDataHlinkRelsMap(
+            uno::Sequence<uno::Sequence<cpo::uno::Any>> aDataHlinkRelsMap(
                 pShape->resolveRelationshipsOfTypeFromOfficeDoc(
                     rFilter, xRefDataModel->getFragmentPath(), u"hlink"));
 
             pDiagram->setOOXDomValue(svx::diagram::DomMapFlag::OOXDataImageRels,
-                                     uno::Any(aDataImageRelsMap));
+                                     cpo::uno::Any(aDataImageRelsMap));
             pDiagram->setOOXDomValue(svx::diagram::DomMapFlag::OOXDataHlinkRels,
-                                     uno::Any(aDataHlinkRelsMap));
+                                     cpo::uno::Any(aDataHlinkRelsMap));
 
             // Pass the info to pShape
             for (auto const& extDrawing : pDiagram->getData()->getExtDrawings())

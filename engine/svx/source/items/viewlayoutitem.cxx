@@ -72,7 +72,7 @@ bool SvxViewLayoutItem::operator==( const SfxPoolItem& rAttr ) const
              mbBookMode == rItem.IsBookMode() );
 }
 
-bool SvxViewLayoutItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxViewLayoutItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -98,7 +98,7 @@ bool SvxViewLayoutItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) c
     return true;
 }
 
-bool SvxViewLayoutItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxViewLayoutItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )

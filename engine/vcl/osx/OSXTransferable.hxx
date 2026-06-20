@@ -46,7 +46,7 @@ public:
 
   // XTransferable
 
-  virtual css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& rFlavor ) override;
+  virtual cpo::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& rFlavor ) override;
 
   virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) override;
 
@@ -56,7 +56,7 @@ public:
 
   void initClipboardItemList();
 
-  //css::uno::Any getClipboardItemData(ClipboardItemPtr_t clipboardItem);
+  //cpo::uno::Any getClipboardItemData(ClipboardItemPtr_t clipboardItem);
 
   bool compareDataFlavors( const css::datatransfer::DataFlavor& lhs,
                            const css::datatransfer::DataFlavor& rhs );

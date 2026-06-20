@@ -48,7 +48,7 @@ class ScriptEventContainer final : public ::cppu::WeakImplHelper<
     // Thus a std::map or std::unordered_map can't be used.
     NameContainerNameMap mHashMap;
     css::uno::Sequence< OUString > mNames;
-    std::vector< css::uno::Any > mValues;
+    std::vector< cpo::uno::Any > mValues;
     css::uno::Type mType;
 
     ContainerListenerMultiplexer maContainerListeners;
@@ -61,15 +61,15 @@ public:
     virtual bool SAL_CALL hasElements(  ) override;
 
     // Methods XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // Methods XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement ) override;
+    virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
 
     // Methods XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement ) override;
+    virtual void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
     virtual void SAL_CALL removeByName( const OUString& Name ) override;
 
     // Methods XContainer

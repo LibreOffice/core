@@ -62,6 +62,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::view;
@@ -321,7 +322,7 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
             comphelper::SequenceAsHashMap aFilter(xList->nextElement());
             const OUString sFilter = aFilter.getUnpackedValueOrDefault(u"Name"_ustr, OUString());
 
-            uno::Any aProps = xFilterFactory->getByName(sFilter);
+            cpo::uno::Any aProps = xFilterFactory->getByName(sFilter);
             uno::Sequence< beans::PropertyValue > aFilterProperties;
             aProps >>= aFilterProperties;
             OUString sUIName2;

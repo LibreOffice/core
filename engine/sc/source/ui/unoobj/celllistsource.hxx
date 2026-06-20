@@ -69,7 +69,7 @@ namespace calc
         virtual void SAL_CALL removeListEntryListener( const css::uno::Reference< css::form::binding::XListEntryListener >& Listener ) override;
 
         // XListEntryTypedSource
-        virtual css::uno::Sequence< OUString > SAL_CALL getAllListEntriesTyped( css::uno::Sequence< css::uno::Any >& rDataValues ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getAllListEntriesTyped( css::uno::Sequence< cpo::uno::Any >& rDataValues ) override;
 
         // OComponentHelper/XComponent
         virtual void disposing( std::unique_lock<std::mutex>& ) override;
@@ -81,7 +81,7 @@ namespace calc
 
         // OPropertyImplHelper
         using OCellListSource_Base::getFastPropertyValue;
-        virtual void getFastPropertyValue( std::unique_lock<std::mutex>& rGuard, css::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
+        virtual void getFastPropertyValue( std::unique_lock<std::mutex>& rGuard, cpo::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
 
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
@@ -91,7 +91,7 @@ namespace calc
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     private:
         void    checkInitialized();
@@ -115,7 +115,7 @@ namespace calc
                 getCellTextContent_noCheck(
                     std::unique_lock<std::mutex>& rGuard,
                     sal_Int32 _nRangeRelativeRow,
-                    css::uno::Any* pAny
+                    cpo::uno::Any* pAny
                 );
 
         void    notifyModified();

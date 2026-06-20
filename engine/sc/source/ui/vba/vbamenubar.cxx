@@ -18,16 +18,16 @@ ScVbaMenuBar::ScVbaMenuBar( const uno::Reference< ov::XHelperInterface >& rParen
 {
 }
 
-uno::Any SAL_CALL
-ScVbaMenuBar::Menus( const uno::Any& aIndex )
+cpo::uno::Any SAL_CALL
+ScVbaMenuBar::Menus( const cpo::uno::Any& aIndex )
 {
-    uno::Reference< XCommandBarControls > xCommandBarControls( m_xCommandBar->Controls( uno::Any() ), uno::UNO_QUERY_THROW );
+    uno::Reference< XCommandBarControls > xCommandBarControls( m_xCommandBar->Controls( cpo::uno::Any() ), uno::UNO_QUERY_THROW );
     uno::Reference< excel::XMenus > xMenus( new ScVbaMenus( this, mxContext, xCommandBarControls ) );
     if( aIndex.hasValue() )
     {
-        return xMenus->Item( aIndex, uno::Any() );
+        return xMenus->Item( aIndex, cpo::uno::Any() );
     }
-    return uno::Any( xMenus );
+    return cpo::uno::Any( xMenus );
 }
 
 OUString

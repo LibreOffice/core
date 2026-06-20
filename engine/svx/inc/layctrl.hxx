@@ -34,7 +34,7 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     void TableDialog(const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
     void CloseAndShowTableDialog();
@@ -54,7 +54,7 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     void InsertColumns(const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
 };

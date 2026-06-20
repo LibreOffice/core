@@ -79,6 +79,7 @@
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 
 namespace dp_registry::backend::bundle {
@@ -1294,7 +1295,7 @@ Reference<deployment::XPackage> BackendImpl::PackageImpl::bindBundleItem(
                               url, mediaType, bRemoved, identifier, xCmdEnv ) );
             OSL_ASSERT( xPackage.is() );
         } catch (css::lang::IllegalArgumentException & e) {
-            css::uno::Any exc(cppu::getCaughtException());
+            cpo::uno::Any exc(cppu::getCaughtException());
             throw css::lang::WrappedTargetException(
                 "wrapped: " + e.Message, e.Context, exc);
         }

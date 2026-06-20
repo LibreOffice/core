@@ -21,7 +21,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 #include "node.hxx"
 #include "type.hxx"
@@ -35,7 +35,7 @@ class PropertyNode: public Node {
 public:
     PropertyNode(
         int layer, Type staticType, bool nillable,
-        css::uno::Any value, bool extension);
+        cpo::uno::Any value, bool extension);
 
     virtual rtl::Reference< Node > clone(bool keepTemplateName) const override;
 
@@ -43,10 +43,10 @@ public:
 
     bool isNillable() const { return nillable_;}
 
-    css::uno::Any const & getValue(Components & components);
+    cpo::uno::Any const & getValue(Components & components);
 
-    void setValue(int layer, css::uno::Any const & value, bool bIsUserModification);
-    css::uno::Any *getValuePtr(int layer, bool bIsUserModification);
+    void setValue(int layer, cpo::uno::Any const & value, bool bIsUserModification);
+    cpo::uno::Any *getValuePtr(int layer, bool bIsUserModification);
 
     void setExternal(int layer, OUString const & descriptor);
 
@@ -69,7 +69,7 @@ private:
     /// Whether the property was modified by the user:
     bool modified_;
     OUString externalDescriptor_;
-    css::uno::Any value_;
+    cpo::uno::Any value_;
 };
 
 }

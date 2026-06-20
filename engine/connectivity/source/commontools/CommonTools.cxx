@@ -38,6 +38,7 @@ static sal_Unicode rtl_ascii_toUpperCase( sal_Unicode ch )
 namespace connectivity
 {
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::java;
     using namespace dbtools;
 

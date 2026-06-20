@@ -26,7 +26,7 @@
 
 #include <com/sun/star/connection/XConnection.hpp>
 #include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -353,7 +353,7 @@ void Reader::readReplyMessage(Unmarshal & unmarshal, sal_uInt8 flags1) {
     std::vector< BinaryAny > outArgs;
     if (exc) {
         ret = unmarshal.readValue(
-            css::uno::TypeDescription(cppu::UnoType< css::uno::Any >::get()));
+            css::uno::TypeDescription(cppu::UnoType< cpo::uno::Any >::get()));
         if (!typelib_typedescription_isAssignableFrom(
                 (css::uno::TypeDescription(
                     cppu::UnoType< css::uno::RuntimeException >::get()).

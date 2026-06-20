@@ -42,12 +42,12 @@ FrameLoaderFactory::~FrameLoaderFactory()
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createInstance(const OUString& sLoader)
 {
-    return createInstanceWithArguments(sLoader, css::uno::Sequence< css::uno::Any >());
+    return createInstanceWithArguments(sLoader, css::uno::Sequence< cpo::uno::Any >());
 }
 
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createInstanceWithArguments(const OUString&                     sLoader  ,
-                                                                                                     const css::uno::Sequence< css::uno::Any >& lArguments)
+                                                                                                     const css::uno::Sequence< cpo::uno::Any >& lArguments)
 {
     // SAFE ->
     std::unique_lock aLock(m_aMutex);
@@ -71,8 +71,8 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
         css::uno::Sequence< css::beans::PropertyValue > lConfig;
         aLoader >> lConfig;
 
-        ::std::vector< css::uno::Any > stlArguments(comphelper::sequenceToContainer< ::std::vector<css::uno::Any> >(lArguments));
-        stlArguments.insert(stlArguments.begin(), css::uno::Any(lConfig));
+        ::std::vector< cpo::uno::Any > stlArguments(comphelper::sequenceToContainer< ::std::vector<cpo::uno::Any> >(lArguments));
+        stlArguments.insert(stlArguments.begin(), cpo::uno::Any(lConfig));
 
         xInit->initialize(comphelper::containerToSequence(stlArguments));
     }
@@ -93,7 +93,7 @@ css::uno::Sequence< OUString > SAL_CALL FrameLoaderFactory::getAvailableServiceN
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_FrameLoaderFactory_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new filter::config::FrameLoaderFactory(context));
 }

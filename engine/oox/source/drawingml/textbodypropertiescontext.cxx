@@ -43,6 +43,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace oox::drawingml {
 
@@ -106,8 +107,8 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper cons
         // ST_PositiveCoordinate32
         const sal_Int32 nSpacing = o3tl::convert(rAttribs.getInteger(XML_spcCol, 0),
                                                  o3tl::Length::emu, o3tl::Length::mm100);
-        xProps->setPropertyValue(u"AutomaticDistance"_ustr, css::uno::Any(nSpacing));
-        mrTextBodyProp.maPropertyMap.setAnyProperty(PROP_TextColumns, css::uno::Any(xCols));
+        xProps->setPropertyValue(u"AutomaticDistance"_ustr, cpo::uno::Any(nSpacing));
+        mrTextBodyProp.maPropertyMap.setAnyProperty(PROP_TextColumns, cpo::uno::Any(xCols));
     }
 
     // ST_Angle

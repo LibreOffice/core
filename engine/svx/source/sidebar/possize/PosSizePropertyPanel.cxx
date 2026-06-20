@@ -52,6 +52,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 constexpr OUString USERITEM_NAME = u"FitItem"_ustr;
 
@@ -449,7 +450,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ClickAutoHdl, weld::Toggleable&, void )
 
     // mxCbxScale must synchronized with that on Position and Size tabpage on Shape Properties dialog
     SvtViewOptions aPageOpt(EViewType::TabPage, u"cui/ui/possizetabpage/PositionAndSize"_ustr);
-    aPageOpt.SetUserItem( USERITEM_NAME, css::uno::Any( OUString::number( int(mxCbxScale->get_active()) ) ) );
+    aPageOpt.SetUserItem( USERITEM_NAME, cpo::uno::Any( OUString::number( int(mxCbxScale->get_active()) ) ) );
 }
 
 IMPL_LINK_NOARG( PosSizePropertyPanel, RotationHdl, DialControl&, void )
@@ -802,7 +803,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
     // mxCbxScale must synchronized with that on Position and Size tabpage on Shape Properties dialog
     SvtViewOptions aPageOpt(EViewType::TabPage, u"cui/ui/possizetabpage/PositionAndSize"_ustr);
     OUString  sUserData;
-    css::uno::Any  aUserItem = aPageOpt.GetUserItem( USERITEM_NAME );
+    cpo::uno::Any  aUserItem = aPageOpt.GetUserItem( USERITEM_NAME );
     OUString aTemp;
     if ( aUserItem >>= aTemp )
         sUserData = aTemp;

@@ -160,7 +160,7 @@ namespace fileaccess
             sal_Int32                   Handle;
             bool                        isNative;
             css::uno::Type              Typ;        // Duplicates information in Value
-            css::uno::Any               Value;
+            cpo::uno::Any               Value;
             css::beans::PropertyState   State;
             sal_Int16                   Attributes;
         public:
@@ -169,7 +169,7 @@ namespace fileaccess
                         const OUString&                   thePropertyName,
                         sal_Int32                         theHandle,
                         const css::uno::Type&             theTyp,
-                        const css::uno::Any&              theValue,
+                        const cpo::uno::Any&              theValue,
                         const css::beans::PropertyState&  theState,
                         sal_Int16                         theAttributes );
 
@@ -177,12 +177,12 @@ namespace fileaccess
             const OUString& getPropertyName() const { return PropertyName; }
             inline const sal_Int32& getHandle() const;
             inline const css::uno::Type& getType() const;
-            inline const css::uno::Any& getValue() const;
+            inline const cpo::uno::Any& getValue() const;
             inline const css::beans::PropertyState& getState() const;
             inline const sal_Int16& getAttributes() const;
 
             // The set* functions are declared const, because the key of "this" stays intact
-            inline void setValue( css::uno::Any theValue ) const;
+            inline void setValue( cpo::uno::Any theValue ) const;
             inline void setState( const css::beans::PropertyState& theState ) const;
         };
 
@@ -286,7 +286,7 @@ namespace fileaccess
 
         void associate( const OUString& UnqPath,
                                  const OUString& PropertyName,
-                                 const css::uno::Any& DefaultValue,
+                                 const cpo::uno::Any& DefaultValue,
                                  const sal_Int16 Attributes );
 
         /// @throws css::beans::UnknownPropertyException
@@ -361,7 +361,7 @@ namespace fileaccess
          *  Sets the values of the properties belonging to fileURL aUnqPath
          */
 
-        css::uno::Sequence< css::uno::Any >
+        css::uno::Sequence< cpo::uno::Any >
         setv( const OUString& aUnqPath,
               const css::uno::Sequence< css::beans::PropertyValue >& values );
 

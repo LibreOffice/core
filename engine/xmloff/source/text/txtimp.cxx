@@ -74,6 +74,7 @@ using ::com::sun::star::ucb::XAnyCompare;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::frame;
@@ -1387,7 +1388,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 auto pGrabBag = aGrabBag.getArray();
                 pGrabBag[length].Name = u"OutlineContentVisibleAttr"_ustr;
                 pGrabBag[length].Value <<= bool(bOutlineContentVisible);
-                xPropSet->setPropertyValue(u"ParaInteropGrabBag"_ustr, uno::Any(aGrabBag));
+                xPropSet->setPropertyValue(u"ParaInteropGrabBag"_ustr, cpo::uno::Any(aGrabBag));
             }
             // RFE: inserting headings into text documents (#i70748#)
             if ( bApplyOutlineLevelAsListLevel )
@@ -2449,7 +2450,7 @@ void XMLTextImportHelper::MapCrossRefHeadingFieldsHorribly()
         {
             continue;
         }
-        xField->setPropertyValue(u"SourceName"_ustr, uno::Any(iter->second));
+        xField->setPropertyValue(u"SourceName"_ustr, cpo::uno::Any(iter->second));
     }
 }
 

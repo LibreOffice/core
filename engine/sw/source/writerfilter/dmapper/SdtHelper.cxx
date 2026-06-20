@@ -323,9 +323,9 @@ void SdtHelper::createDropDownControl()
         }
 
         // set properties
-        xControlModel->setPropertyValue(u"SelectedItem"_ustr, uno::Any(aDefaultText));
+        xControlModel->setPropertyValue(u"SelectedItem"_ustr, cpo::uno::Any(aDefaultText));
         xControlModel->setPropertyValue(
-            u"Items"_ustr, uno::Any(comphelper::containerToSequence(m_aDropDownItems)));
+            u"Items"_ustr, cpo::uno::Any(comphelper::containerToSequence(m_aDropDownItems)));
 
         // add it into document
         m_rDM_Impl.appendTextContent(xControlModel, uno::Sequence<beans::PropertyValue>());
@@ -342,10 +342,11 @@ void SdtHelper::createDropDownControl()
 
         // set properties
         uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
-        xPropertySet->setPropertyValue(u"DefaultText"_ustr, uno::Any(aDefaultText));
-        xPropertySet->setPropertyValue(u"Dropdown"_ustr, uno::Any(true));
-        xPropertySet->setPropertyValue(u"StringItemList"_ustr,
-                                       uno::Any(comphelper::containerToSequence(m_aDropDownItems)));
+        xPropertySet->setPropertyValue(u"DefaultText"_ustr, cpo::uno::Any(aDefaultText));
+        xPropertySet->setPropertyValue(u"Dropdown"_ustr, cpo::uno::Any(true));
+        xPropertySet->setPropertyValue(
+            u"StringItemList"_ustr,
+            cpo::uno::Any(comphelper::containerToSequence(m_aDropDownItems)));
 
         // add it into document
         createControlShape(
@@ -447,7 +448,7 @@ void SdtHelper::createPlainTextControl()
         }
     }
 
-    xContentControl->setPropertyValue(u"PlainText"_ustr, uno::Any(true));
+    xContentControl->setPropertyValue(u"PlainText"_ustr, cpo::uno::Any(true));
 
     xText->insertTextContent(xCrsr, xContentControl, /*bAbsorb=*/true);
 
@@ -506,9 +507,9 @@ void SdtHelper::createDateContentControl()
 
         // Replace quotation mark used for marking static strings in date format
         sDateFormat = sDateFormat.replaceAll("'", "\"");
-        xNameCont->insertByName(ODF_FORMDATE_DATEFORMAT, uno::Any(sDateFormat));
+        xNameCont->insertByName(ODF_FORMDATE_DATEFORMAT, cpo::uno::Any(sDateFormat));
         xNameCont->insertByName(ODF_FORMDATE_DATEFORMAT_LANGUAGE,
-                                uno::Any(m_sLocale.makeStringAndClear()));
+                                cpo::uno::Any(m_sLocale.makeStringAndClear()));
     }
     OUString sFullDate = m_sDate.makeStringAndClear();
 
@@ -517,14 +518,14 @@ void SdtHelper::createDateContentControl()
         sFullDate = AdjustDateString(*oData, sDateFormat);
 
     if (!sFullDate.isEmpty())
-        xNameCont->insertByName(ODF_FORMDATE_CURRENTDATE, uno::Any(sFullDate));
+        xNameCont->insertByName(ODF_FORMDATE_CURRENTDATE, cpo::uno::Any(sFullDate));
 
     rtl::Reference<SwXTextFieldTypes> xRefreshable(m_rDM_Impl.GetTextDocument()->getSwTextFields());
     xRefreshable->refresh();
 
     // Store all unused sdt parameters from grabbag
     xNameCont->insertByName(UNO_NAME_MISC_OBJ_INTEROPGRABBAG,
-                            uno::Any(getInteropGrabBagAndClear()));
+                            cpo::uno::Any(getInteropGrabBagAndClear()));
 
     clear();
 }
@@ -540,10 +541,11 @@ void SdtHelper::createControlShape(awt::Size aSize,
     xControlShape->setControl(xControlModel);
 
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue(u"VertOrient"_ustr, uno::Any(text::VertOrientation::CENTER));
+    xPropertySet->setPropertyValue(u"VertOrient"_ustr,
+                                   cpo::uno::Any(text::VertOrientation::CENTER));
 
     if (rGrabBag.hasElements())
-        xPropertySet->setPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG, uno::Any(rGrabBag));
+        xPropertySet->setPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG, cpo::uno::Any(rGrabBag));
 
     uno::Reference<text::XTextContent> xTextContent(xControlShape, uno::UNO_QUERY);
     m_rDM_Impl.appendTextContent(xTextContent, uno::Sequence<beans::PropertyValue>());

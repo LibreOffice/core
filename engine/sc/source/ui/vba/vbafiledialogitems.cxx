@@ -36,12 +36,12 @@ public:
     {
         return ( mIt != m_sItems.end() );
     }
-    virtual uno::Any SAL_CALL nextElement() override
+    virtual cpo::uno::Any SAL_CALL nextElement() override
     {
         if( !hasMoreElements() )
             throw container::NoSuchElementException();
         OUString sPath = *mIt++;
-        return uno::Any( sPath );
+        return cpo::uno::Any( sPath );
     }
 };
 
@@ -68,8 +68,8 @@ ScVbaFileDialogSelectedItems::createEnumeration()
     return uno::Reference< container::XEnumeration >( new FileDialogItemEnumeration( std::vector(m_sItems) ) );
 }
 
-uno::Any
-ScVbaFileDialogSelectedItems::createCollectionObject( const uno::Any& aSource )
+cpo::uno::Any
+ScVbaFileDialogSelectedItems::createCollectionObject( const cpo::uno::Any& aSource )
 {
     sal_Int32 nPosition = -1;
     if (!(aSource >>= nPosition))
@@ -78,12 +78,12 @@ ScVbaFileDialogSelectedItems::createCollectionObject( const uno::Any& aSource )
         throw uno::RuntimeException(u"out of range"_ustr);
 
     OUString sPath = m_sItems[nPosition];
-    return uno::Any( sPath );
+    return cpo::uno::Any( sPath );
 }
 
 // Methods
-uno::Any SAL_CALL
-ScVbaFileDialogSelectedItems::Item( const uno::Any& aIndex, const uno::Any& /*aIndex*/ )
+cpo::uno::Any SAL_CALL
+ScVbaFileDialogSelectedItems::Item( const cpo::uno::Any& aIndex, const cpo::uno::Any& /*aIndex*/ )
 {
     sal_Int32 nPosition = -1;
     aIndex >>= nPosition;
@@ -95,7 +95,7 @@ ScVbaFileDialogSelectedItems::Item( const uno::Any& aIndex, const uno::Any& /*aI
         throw uno::RuntimeException();
     }
 
-    return createCollectionObject( uno::Any( nPosition ) );
+    return createCollectionObject( cpo::uno::Any( nPosition ) );
 }
 
 sal_Int32 ScVbaFileDialogSelectedItems::getCount()

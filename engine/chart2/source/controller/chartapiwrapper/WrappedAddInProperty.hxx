@@ -31,9 +31,9 @@ public:
     explicit WrappedAddInProperty( ChartDocumentWrapper& rChartDocumentWrapper );
     virtual ~WrappedAddInProperty() override;
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
 private:
     ChartDocumentWrapper& m_rChartDocumentWrapper;
@@ -45,9 +45,9 @@ public:
     explicit WrappedBaseDiagramProperty( ChartDocumentWrapper& rChartDocumentWrapper );
     virtual ~WrappedBaseDiagramProperty() override;
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
 private:
     ChartDocumentWrapper& m_rChartDocumentWrapper;
@@ -59,9 +59,9 @@ public:
     explicit WrappedAdditionalShapesProperty( ChartDocumentWrapper& rChartDocumentWrapper );
     virtual ~WrappedAdditionalShapesProperty() override;
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
 private:
     ChartDocumentWrapper& m_rChartDocumentWrapper;
@@ -73,9 +73,9 @@ public:
     explicit WrappedRefreshAddInAllowedProperty( ChartDocumentWrapper& rChartDocumentWrapper );
     virtual ~WrappedRefreshAddInAllowedProperty() override;
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
 private:
     ChartDocumentWrapper& m_rChartDocumentWrapper;

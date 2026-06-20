@@ -280,7 +280,7 @@ void ScImportExport::EndPaste(bool bAutoRowHeight)
 }
 
 bool ScImportExport::ExportData( std::u16string_view rMimeType,
-                                 css::uno::Any & rValue )
+                                 cpo::uno::Any & rValue )
 {
     SvMemoryStream aStrm;
     SotClipboardFormatId fmtId = SotExchange::GetFormatIdFromMimeType(rMimeType);

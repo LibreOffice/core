@@ -48,6 +48,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::linguistic2;
 
 SFX_IMPL_CHILDWINDOW_WITHID(SwSpellDialogChildWindow, FN_SPELL_GRAMMAR_DIALOG)
@@ -543,7 +544,7 @@ bool SwSpellDialogChildWindow::IsGrammarChecking()
 
 void SwSpellDialogChildWindow::SetGrammarChecking(bool bOn)
 {
-    uno::Any aVal;
+    cpo::uno::Any aVal;
     aVal <<= bOn;
     m_bIsGrammarCheckingOn = bOn;
     SvtLinguConfig().SetProperty( UPN_IS_GRAMMAR_INTERACTIVE, aVal );

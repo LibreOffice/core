@@ -55,6 +55,7 @@
 #define IFACECAST(c)          static_cast<const Reference< XInterface >&>(c)
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;

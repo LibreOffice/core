@@ -239,7 +239,7 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
         const css::uno::Reference< css::lang::XComponent > & xComponent,  /// the component we export
         const OUString& rStreamName,                                                                /// the stream name
         const OUString& rServiceName,                                                               /// service name of the component
-        const css::uno::Sequence< css::uno::Any> & rArguments,            /// the argument (XInitialization)
+        const css::uno::Sequence< cpo::uno::Any> & rArguments,            /// the argument (XInitialization)
         const css::uno::Sequence< css::beans::PropertyValue> & rMediaDesc,/// output descriptor
         const css::uno::Reference< css::embed::XStorage >& _xStorageToSaveTo
     ) const;
@@ -250,7 +250,7 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
         const css::uno::Reference< css::io::XOutputStream >& xOutputStream,
         const css::uno::Reference< css::lang::XComponent >& xComponent,
         const OUString& rServiceName,
-        const css::uno::Sequence< css::uno::Any >& rArguments,
+        const css::uno::Sequence< cpo::uno::Any >& rArguments,
         const css::uno::Sequence< css::beans::PropertyValue> & rMediaDesc
     ) const;
 
@@ -299,7 +299,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XInterface
-    virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+    virtual cpo::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
@@ -356,7 +356,7 @@ public:
     // XDocumentEventBroadcaster
     virtual void SAL_CALL addDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& Listener ) override;
     virtual void SAL_CALL removeDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& Listener ) override;
-    virtual void SAL_CALL notifyDocumentEvent( const OUString& EventName, const css::uno::Reference< css::frame::XController2 >& ViewController, const css::uno::Any& Supplement ) override;
+    virtual void SAL_CALL notifyDocumentEvent( const OUString& EventName, const css::uno::Reference< css::frame::XController2 >& ViewController, const cpo::uno::Any& Supplement ) override;
 
     // XPrintable
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPrinter(  ) override ;
@@ -629,7 +629,7 @@ private:
         the given caught non-IOException error
     */
     void        impl_throwIOExceptionCausedBySave_throw(
-                    const css::uno::Any& i_rError,
+                    const cpo::uno::Any& i_rError,
                     std::u16string_view i_rTargetURL
                 ) const;
 };

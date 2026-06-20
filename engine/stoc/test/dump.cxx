@@ -11,7 +11,7 @@
 
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/reflection/Dump.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <cppuhelper/bootstrap.hxx>
@@ -37,24 +37,24 @@ public:
     void testSequence()
     {
         CPPUNIT_ASSERT_EQUAL(u"[]"_ustr,
-                             dump_->dumpValue(css::uno::Any(css::uno::Sequence<sal_Int32>{})));
+                             dump_->dumpValue(cpo::uno::Any(css::uno::Sequence<sal_Int32>{})));
         CPPUNIT_ASSERT_EQUAL(u"[1]"_ustr,
-                             dump_->dumpValue(css::uno::Any(css::uno::Sequence<sal_Int32>{ 1 })));
-        CPPUNIT_ASSERT_EQUAL(u"[1, 2, 3]"_ustr, dump_->dumpValue(css::uno::Any(
+                             dump_->dumpValue(cpo::uno::Any(css::uno::Sequence<sal_Int32>{ 1 })));
+        CPPUNIT_ASSERT_EQUAL(u"[1, 2, 3]"_ustr, dump_->dumpValue(cpo::uno::Any(
                                                     css::uno::Sequence<sal_Int32>{ 1, 2, 3 })));
         CPPUNIT_ASSERT_EQUAL(u"[[long: 1], [string: \"2\"], [[]long: [1, 2]]]"_ustr,
-                             (dump_->dumpValue(css::uno::Any(css::uno::Sequence<css::uno::Any>{
-                                 css::uno::Any(sal_Int32(1)), css::uno::Any(u"2"_ustr),
-                                 css::uno::Any(css::uno::Sequence<sal_Int32>{ 1, 2 }) }))));
+                             (dump_->dumpValue(cpo::uno::Any(css::uno::Sequence<cpo::uno::Any>{
+                                 cpo::uno::Any(sal_Int32(1)), cpo::uno::Any(u"2"_ustr),
+                                 cpo::uno::Any(css::uno::Sequence<sal_Int32>{ 1, 2 }) }))));
     }
 
     void testEnum()
     {
         CPPUNIT_ASSERT_EQUAL(u"ENUM"_ustr,
-                             dump_->dumpValue(css::uno::Any(css::uno::TypeClass_ENUM)));
-        CPPUNIT_ASSERT_EQUAL(u"-1"_ustr, dump_->dumpValue(css::uno::Any(css::uno::TypeClass(-1))));
+                             dump_->dumpValue(cpo::uno::Any(css::uno::TypeClass_ENUM)));
+        CPPUNIT_ASSERT_EQUAL(u"-1"_ustr, dump_->dumpValue(cpo::uno::Any(css::uno::TypeClass(-1))));
         CPPUNIT_ASSERT_EQUAL(u"12345"_ustr,
-                             dump_->dumpValue(css::uno::Any(css::uno::TypeClass(12345))));
+                             dump_->dumpValue(cpo::uno::Any(css::uno::TypeClass(12345))));
     }
 
     void testStruct()
@@ -62,75 +62,75 @@ public:
         CPPUNIT_ASSERT_EQUAL(
             u"[Source: null, PropertyName: \"test\", Further: false, PropertyHandle: 3, "
             "OldValue: [void: void], NewValue: [long: 5]]"_ustr,
-            dump_->dumpValue(css::uno::Any(css::beans::PropertyChangeEvent(
-                {}, u"test"_ustr, false, 3, {}, css::uno::Any(sal_Int32(5))))));
+            dump_->dumpValue(cpo::uno::Any(css::beans::PropertyChangeEvent(
+                {}, u"test"_ustr, false, 3, {}, cpo::uno::Any(sal_Int32(5))))));
     }
 
     void testConstantsGroup()
     {
         CPPUNIT_ASSERT_EQUAL(u"byteMin"_ustr,
                              dump_->dumpConstant(u"test.codemaker.cppumaker.Constants"_ustr,
-                                                 css::uno::Any(sal_Int8(-128))));
+                                                 cpo::uno::Any(sal_Int8(-128))));
         CPPUNIT_ASSERT_EQUAL(u"byteMax"_ustr,
                              dump_->dumpConstant(u"test.codemaker.cppumaker.Constants"_ustr,
-                                                 css::uno::Any(sal_Int8(127))));
+                                                 cpo::uno::Any(sal_Int8(127))));
         CPPUNIT_ASSERT_EQUAL(u"longMin"_ustr,
                              dump_->dumpConstant(u"test.codemaker.cppumaker.Constants"_ustr,
-                                                 css::uno::Any(sal_Int32(-2147483648))));
+                                                 cpo::uno::Any(sal_Int32(-2147483648))));
         CPPUNIT_ASSERT_EQUAL(u"longMax"_ustr,
                              dump_->dumpConstant(u"test.codemaker.cppumaker.Constants"_ustr,
-                                                 css::uno::Any(sal_Int32(2147483647))));
+                                                 cpo::uno::Any(sal_Int32(2147483647))));
         CPPUNIT_ASSERT_EQUAL(u"hyperMin"_ustr,
                              dump_->dumpConstant(u"test.codemaker.cppumaker.Constants"_ustr,
-                                                 css::uno::Any(SAL_MIN_INT64)));
+                                                 cpo::uno::Any(SAL_MIN_INT64)));
         CPPUNIT_ASSERT_EQUAL(u"hyperMax"_ustr,
                              dump_->dumpConstant(u"test.codemaker.cppumaker.Constants"_ustr,
-                                                 css::uno::Any(SAL_MAX_INT64)));
+                                                 cpo::uno::Any(SAL_MAX_INT64)));
         CPPUNIT_ASSERT_EQUAL(u"17"_ustr,
                              dump_->dumpConstant(u"test.codemaker.cppumaker.Constants"_ustr,
-                                                 css::uno::Any(sal_Int32(17))));
+                                                 cpo::uno::Any(sal_Int32(17))));
         CPPUNIT_ASSERT_EQUAL(u"2147483646"_ustr,
                              dump_->dumpConstant(u"test.codemaker.cppumaker.Constants"_ustr,
-                                                 css::uno::Any(sal_Int32(2147483646))));
+                                                 cpo::uno::Any(sal_Int32(2147483646))));
 
         CPPUNIT_ASSERT_EQUAL(u"0"_ustr,
                              dump_->dumpConstant(u"test.codemaker.cppumaker.ByteBits"_ustr,
-                                                 css::uno::Any(sal_Int8(0))));
+                                                 cpo::uno::Any(sal_Int8(0))));
         CPPUNIT_ASSERT_EQUAL(u"BIT0+BIT2"_ustr,
                              dump_->dumpConstant(u"test.codemaker.cppumaker.ByteBits"_ustr,
-                                                 css::uno::Any(sal_Int8(5))));
+                                                 cpo::uno::Any(sal_Int8(5))));
         CPPUNIT_ASSERT_EQUAL(u"BIT4"_ustr,
                              dump_->dumpConstant(u"test.codemaker.cppumaker.ByteBits"_ustr,
-                                                 css::uno::Any(sal_Int8(16))));
+                                                 cpo::uno::Any(sal_Int8(16))));
         CPPUNIT_ASSERT_EQUAL(u"BIT0+BIT4"_ustr,
                              dump_->dumpConstant(u"test.codemaker.cppumaker.ByteBits"_ustr,
-                                                 css::uno::Any(sal_Int8(17))));
+                                                 cpo::uno::Any(sal_Int8(17))));
         CPPUNIT_ASSERT_EQUAL(u"BIT7"_ustr,
                              dump_->dumpConstant(u"test.codemaker.cppumaker.ByteBits"_ustr,
-                                                 css::uno::Any(sal_Int8(-128))));
+                                                 cpo::uno::Any(sal_Int8(-128))));
         CPPUNIT_ASSERT_EQUAL(u"ALL"_ustr,
                              dump_->dumpConstant(u"test.codemaker.cppumaker.ByteBits"_ustr,
-                                                 css::uno::Any(sal_Int8(-1))));
+                                                 cpo::uno::Any(sal_Int8(-1))));
 
         CPPUNIT_ASSERT_EQUAL(u"BIT7"_ustr,
                              dump_->dumpConstant(u"test.codemaker.cppumaker.ShortBits"_ustr,
-                                                 css::uno::Any(sal_Int16(128))));
+                                                 cpo::uno::Any(sal_Int16(128))));
         CPPUNIT_ASSERT_EQUAL(u"ALL"_ustr,
                              dump_->dumpConstant(u"test.codemaker.cppumaker.ShortBits"_ustr,
-                                                 css::uno::Any(sal_Int16(-1))));
+                                                 cpo::uno::Any(sal_Int16(-1))));
 
         CPPUNIT_ASSERT_EQUAL(u"BIT63"_ustr,
                              dump_->dumpConstant(u"test.codemaker.cppumaker.UnsignedHyperBits"_ustr,
-                                                 css::uno::Any(sal_uInt64(9223372036854775808u))));
+                                                 cpo::uno::Any(sal_uInt64(9223372036854775808u))));
         CPPUNIT_ASSERT_EQUAL(u"BIT0+BIT62"_ustr,
                              dump_->dumpConstant(u"test.codemaker.cppumaker.UnsignedHyperBits"_ustr,
-                                                 css::uno::Any(sal_uInt64(4611686018427387905))));
+                                                 cpo::uno::Any(sal_uInt64(4611686018427387905))));
         CPPUNIT_ASSERT_EQUAL(u"BIT0+BIT63"_ustr,
                              dump_->dumpConstant(u"test.codemaker.cppumaker.UnsignedHyperBits"_ustr,
-                                                 css::uno::Any(sal_uInt64(9223372036854775809u))));
+                                                 cpo::uno::Any(sal_uInt64(9223372036854775809u))));
         CPPUNIT_ASSERT_EQUAL(u"ALL"_ustr,
                              dump_->dumpConstant(u"test.codemaker.cppumaker.UnsignedHyperBits"_ustr,
-                                                 css::uno::Any(SAL_MAX_UINT64)));
+                                                 cpo::uno::Any(SAL_MAX_UINT64)));
     }
 
     CPPUNIT_TEST_SUITE(Dump);

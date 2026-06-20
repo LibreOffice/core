@@ -23,7 +23,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlement.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 
@@ -92,7 +92,7 @@ XMLBorderWidthHdl::~XMLBorderWidthHdl()
     // nothing to do
 }
 
-bool XMLBorderWidthHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLBorderWidthHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     SvXMLTokenEnumerator aTokenEnum( rStrImpValue );
 
@@ -129,7 +129,7 @@ bool XMLBorderWidthHdl::importXML( const OUString& rStrImpValue, uno::Any& rValu
     return true;
 }
 
-bool XMLBorderWidthHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLBorderWidthHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     OUStringBuffer aOut;
 
@@ -175,7 +175,7 @@ XMLBorderHdl::~XMLBorderHdl()
     // nothing to do
 }
 
-bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLBorderHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     std::u16string_view aToken;
     SvXMLTokenEnumerator aTokens( rStrImpValue );
@@ -269,7 +269,7 @@ bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, co
     return true;
 }
 
-bool XMLBorderHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& /* rUnitConverter */ ) const
+bool XMLBorderHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
     OUStringBuffer aOut;
 

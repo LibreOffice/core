@@ -44,7 +44,7 @@
 
 using namespace ::com::sun::star;
 using ::com::sun::star::beans::Property;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
@@ -102,7 +102,7 @@ Any WrappedTitleStringProperty::getPropertyValue( const Reference< beans::XPrope
 }
 Any WrappedTitleStringProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
 {
-    return uno::Any( OUString() );//default title is an empty String
+    return cpo::uno::Any( OUString() );//default title is an empty String
 }
 
 namespace {
@@ -147,7 +147,7 @@ Any WrappedTitleFormStringsProperty::getPropertyValue( const Reference< beans::X
 }
 Any WrappedTitleFormStringsProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
 {
-    return uno::Any(Sequence< Reference< chart2::XFormattedString > >()); //default title is an empty Sequence of XFormattedStrings
+    return cpo::uno::Any(Sequence< Reference< chart2::XFormattedString > >()); //default title is an empty Sequence of XFormattedStrings
 }
 
 namespace {
@@ -276,7 +276,7 @@ void SAL_CALL TitleWrapper::setPosition( const awt::Point& aPosition )
         aRelativePosition.Anchor = drawing::Alignment_TOP_LEFT;
         aRelativePosition.Primary = double(aPosition.X)/double(aPageSize.Width);
         aRelativePosition.Secondary = double(aPosition.Y)/double(aPageSize.Height);
-        xPropertySet->setPropertyValue( u"RelativePosition"_ustr, uno::Any(aRelativePosition) );
+        xPropertySet->setPropertyValue( u"RelativePosition"_ustr, cpo::uno::Any(aRelativePosition) );
     }
 }
 
@@ -496,7 +496,7 @@ void TitleWrapper::updateReferenceSize()
     if( xProp.is() )
     {
         if( xProp->getPropertyValue( u"ReferencePageSize"_ustr ).hasValue() )
-            xProp->setPropertyValue( u"ReferencePageSize"_ustr, uno::Any(
+            xProp->setPropertyValue( u"ReferencePageSize"_ustr, cpo::uno::Any(
                             m_spChart2ModelContact->GetPageSize() ));
     }
 }

@@ -58,6 +58,7 @@
 using namespace comphelper;
 using namespace dbtools;
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::sdb;
 using namespace css::sdbc;
 using namespace css::beans;
@@ -1010,7 +1011,7 @@ void OFormattedModel::resetNoBroadcast()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OFormattedControl_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OFormattedControl(component));
 }

@@ -266,7 +266,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlExport)
     uno::Reference<text::XTextContent> xContentControl(
         xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue(u"ShowingPlaceHolder"_ustr, uno::Any(true));
+    xContentControlProps->setPropertyValue(u"ShowingPlaceHolder"_ustr, cpo::uno::Any(true));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to DOCX:
@@ -297,10 +297,10 @@ CPPUNIT_TEST_FIXTURE(Test, testCheckboxContentControlExport)
     uno::Reference<text::XTextContent> xContentControl(
         xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue(u"Checkbox"_ustr, uno::Any(true));
-    xContentControlProps->setPropertyValue(u"Checked"_ustr, uno::Any(true));
-    xContentControlProps->setPropertyValue(u"CheckedState"_ustr, uno::Any(u"☒"_ustr));
-    xContentControlProps->setPropertyValue(u"UncheckedState"_ustr, uno::Any(u"☐"_ustr));
+    xContentControlProps->setPropertyValue(u"Checkbox"_ustr, cpo::uno::Any(true));
+    xContentControlProps->setPropertyValue(u"Checked"_ustr, cpo::uno::Any(true));
+    xContentControlProps->setPropertyValue(u"CheckedState"_ustr, cpo::uno::Any(u"☒"_ustr));
+    xContentControlProps->setPropertyValue(u"UncheckedState"_ustr, cpo::uno::Any(u"☐"_ustr));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to DOCX:
@@ -333,22 +333,22 @@ CPPUNIT_TEST_FIXTURE(Test, testDropdownContentControlExport)
         xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     {
-        xContentControlProps->setPropertyValue(u"DropDown"_ustr, uno::Any(true));
+        xContentControlProps->setPropertyValue(u"DropDown"_ustr, cpo::uno::Any(true));
         uno::Sequence<beans::PropertyValues> aListItems = {
             {
-                comphelper::makePropertyValue(u"DisplayText"_ustr, uno::Any(u"red"_ustr)),
-                comphelper::makePropertyValue(u"Value"_ustr, uno::Any(u"R"_ustr)),
+                comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(u"red"_ustr)),
+                comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(u"R"_ustr)),
             },
             {
-                comphelper::makePropertyValue(u"DisplayText"_ustr, uno::Any(u"green"_ustr)),
-                comphelper::makePropertyValue(u"Value"_ustr, uno::Any(u"G"_ustr)),
+                comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(u"green"_ustr)),
+                comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(u"G"_ustr)),
             },
             {
-                comphelper::makePropertyValue(u"DisplayText"_ustr, uno::Any(u"blue"_ustr)),
-                comphelper::makePropertyValue(u"Value"_ustr, uno::Any(u"B"_ustr)),
+                comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(u"blue"_ustr)),
+                comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(u"B"_ustr)),
             },
         };
-        xContentControlProps->setPropertyValue(u"ListItems"_ustr, uno::Any(aListItems));
+        xContentControlProps->setPropertyValue(u"ListItems"_ustr, cpo::uno::Any(aListItems));
     }
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
@@ -381,7 +381,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureContentControlExport)
     uno::Reference<beans::XPropertySet> xTextGraphic(
         xMSF->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
     xTextGraphic->setPropertyValue(u"AnchorType"_ustr,
-                                   uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+                                   cpo::uno::Any(text::TextContentAnchorType_AS_CHARACTER));
     uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
     xText->insertTextContent(xCursor, xTextContent, false);
     xCursor->gotoStart(/*bExpand=*/false);
@@ -389,7 +389,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureContentControlExport)
     uno::Reference<text::XTextContent> xContentControl(
         xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue(u"Picture"_ustr, uno::Any(true));
+    xContentControlProps->setPropertyValue(u"Picture"_ustr, cpo::uno::Any(true));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to DOCX:
@@ -418,21 +418,21 @@ CPPUNIT_TEST_FIXTURE(Test, testDateContentControlExport)
     uno::Reference<text::XTextContent> xContentControl(
         xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue(u"Date"_ustr, uno::Any(true));
-    xContentControlProps->setPropertyValue(u"DateFormat"_ustr, uno::Any(u"M/d/yyyy"_ustr));
-    xContentControlProps->setPropertyValue(u"DateLanguage"_ustr, uno::Any(u"en-US"_ustr));
-    xContentControlProps->setPropertyValue(u"CurrentDate"_ustr, uno::Any(u"2022-05-26T00:00:00Z"_ustr));
-    xContentControlProps->setPropertyValue(u"PlaceholderDocPart"_ustr, uno::Any(u"DefaultPlaceholder_-1854013437"_ustr));
-    xContentControlProps->setPropertyValue(u"DataBindingPrefixMappings"_ustr, uno::Any(u"xmlns:ns0='http://schemas.microsoft.com/vsto/samples' "_ustr));
-    xContentControlProps->setPropertyValue(u"DataBindingXpath"_ustr, uno::Any(u"/ns0:employees[1]/ns0:employee[1]/ns0:hireDate[1]"_ustr));
-    xContentControlProps->setPropertyValue(u"DataBindingStoreItemID"_ustr, uno::Any(u"{241A8A02-7FFD-488D-8827-63FBE74E8BC9}"_ustr));
-    xContentControlProps->setPropertyValue(u"Color"_ustr, uno::Any(u"008000"_ustr));
-    xContentControlProps->setPropertyValue(u"Appearance"_ustr, uno::Any(u"hidden"_ustr));
-    xContentControlProps->setPropertyValue(u"Alias"_ustr, uno::Any(u"myalias"_ustr));
-    xContentControlProps->setPropertyValue(u"Tag"_ustr, uno::Any(u"mytag"_ustr));
-    xContentControlProps->setPropertyValue(u"Id"_ustr, uno::Any(static_cast<sal_Int32>(123)));
-    xContentControlProps->setPropertyValue(u"TabIndex"_ustr, uno::Any(sal_uInt32(4294967295))); // -1
-    xContentControlProps->setPropertyValue(u"Lock"_ustr, uno::Any(u"sdtLocked"_ustr));
+    xContentControlProps->setPropertyValue(u"Date"_ustr, cpo::uno::Any(true));
+    xContentControlProps->setPropertyValue(u"DateFormat"_ustr, cpo::uno::Any(u"M/d/yyyy"_ustr));
+    xContentControlProps->setPropertyValue(u"DateLanguage"_ustr, cpo::uno::Any(u"en-US"_ustr));
+    xContentControlProps->setPropertyValue(u"CurrentDate"_ustr, cpo::uno::Any(u"2022-05-26T00:00:00Z"_ustr));
+    xContentControlProps->setPropertyValue(u"PlaceholderDocPart"_ustr, cpo::uno::Any(u"DefaultPlaceholder_-1854013437"_ustr));
+    xContentControlProps->setPropertyValue(u"DataBindingPrefixMappings"_ustr, cpo::uno::Any(u"xmlns:ns0='http://schemas.microsoft.com/vsto/samples' "_ustr));
+    xContentControlProps->setPropertyValue(u"DataBindingXpath"_ustr, cpo::uno::Any(u"/ns0:employees[1]/ns0:employee[1]/ns0:hireDate[1]"_ustr));
+    xContentControlProps->setPropertyValue(u"DataBindingStoreItemID"_ustr, cpo::uno::Any(u"{241A8A02-7FFD-488D-8827-63FBE74E8BC9}"_ustr));
+    xContentControlProps->setPropertyValue(u"Color"_ustr, cpo::uno::Any(u"008000"_ustr));
+    xContentControlProps->setPropertyValue(u"Appearance"_ustr, cpo::uno::Any(u"hidden"_ustr));
+    xContentControlProps->setPropertyValue(u"Alias"_ustr, cpo::uno::Any(u"myalias"_ustr));
+    xContentControlProps->setPropertyValue(u"Tag"_ustr, cpo::uno::Any(u"mytag"_ustr));
+    xContentControlProps->setPropertyValue(u"Id"_ustr, cpo::uno::Any(static_cast<sal_Int32>(123)));
+    xContentControlProps->setPropertyValue(u"TabIndex"_ustr, cpo::uno::Any(sal_uInt32(4294967295))); // -1
+    xContentControlProps->setPropertyValue(u"Lock"_ustr, cpo::uno::Any(u"sdtLocked"_ustr));
 
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
@@ -503,13 +503,13 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
     pWrtShell->Insert(u"test"_ustr);
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr),
                                                    uno::UNO_QUERY);
-    xPageStyle->setPropertyValue(u"TopMargin"_ustr, uno::Any(static_cast<sal_Int32>(501)));
+    xPageStyle->setPropertyValue(u"TopMargin"_ustr, cpo::uno::Any(static_cast<sal_Int32>(501)));
     table::BorderLine2 aBorder;
     aBorder.LineWidth = 159;
     aBorder.OuterLineWidth = 159;
-    xPageStyle->setPropertyValue(u"TopBorder"_ustr, uno::Any(aBorder));
+    xPageStyle->setPropertyValue(u"TopBorder"_ustr, cpo::uno::Any(aBorder));
     sal_Int32 nTopBorderDistance = -646;
-    xPageStyle->setPropertyValue(u"TopBorderDistance"_ustr, uno::Any(nTopBorderDistance));
+    xPageStyle->setPropertyValue(u"TopBorderDistance"_ustr, cpo::uno::Any(nTopBorderDistance));
 
     // When exporting to DOCX:
     save(TestFilter::DOCX);
@@ -1173,7 +1173,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148273_sectionBulletFormatLeak, "tdf148273_secti
     // - Expected: 0
     // - Actual  : 1
     // i.e. empty paragraph formats from the first section leaked to the bullet's formatting
-    uno::Any aValue = xProps->getPropertyValue(u"ListAutoFormat"_ustr);
+    cpo::uno::Any aValue = xProps->getPropertyValue(u"ListAutoFormat"_ustr);
     CPPUNIT_ASSERT_EQUAL(false, aValue.hasValue());
 }
 

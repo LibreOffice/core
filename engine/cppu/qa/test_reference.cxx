@@ -29,7 +29,7 @@ namespace
 {
 
 using ::com::sun::star::uno::Type;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::UNO_SET_THROW;
@@ -49,12 +49,12 @@ public:
     {
         if (_type == cppu::UnoType<XInterface>::get())
         {
-            return css::uno::Any(css::uno::Reference<css::uno::XInterface>(
+            return cpo::uno::Any(css::uno::Reference<css::uno::XInterface>(
                 this));
         }
         if (_type == cppu::UnoType<Interface1>::get())
         {
-            return css::uno::Any(css::uno::Reference<Interface1>(this));
+            return cpo::uno::Any(css::uno::Reference<Interface1>(this));
         }
 
         return Any();

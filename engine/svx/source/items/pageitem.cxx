@@ -174,7 +174,7 @@ bool SvxPageItem::GetPresentation
 }
 
 
-bool SvxPageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxPageItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
 //    bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -210,7 +210,7 @@ bool SvxPageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-bool SvxPageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxPageItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     switch( nMemberId & ~CONVERT_TWIPS )
     {

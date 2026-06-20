@@ -87,7 +87,7 @@ ScVbaPane::getVisibleRange()
 
 //Method
 void SAL_CALL
-ScVbaPane::SmallScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any& ToRight, const uno::Any& ToLeft )
+ScVbaPane::SmallScroll( const cpo::uno::Any& Down, const cpo::uno::Any& Up, const cpo::uno::Any& ToRight, const cpo::uno::Any& ToLeft )
 {
     OUString messageBuffer;
     sal_Int32 downRows = 0;
@@ -140,7 +140,7 @@ ScVbaPane::SmallScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
 }
 
 void SAL_CALL
-ScVbaPane::LargeScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any& ToRight, const uno::Any& ToLeft )
+ScVbaPane::LargeScroll( const cpo::uno::Any& Down, const cpo::uno::Any& Up, const cpo::uno::Any& ToRight, const cpo::uno::Any& ToLeft )
 {
     OUString messageBuffer;
     table::CellRangeAddress visibleRange = m_xViewPane->getVisibleRange();

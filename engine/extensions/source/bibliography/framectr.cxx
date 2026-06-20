@@ -56,6 +56,7 @@ using namespace cppu;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star;
 
 namespace {
@@ -201,12 +202,12 @@ bool BibFrameController_Impl::suspend( bool bSuspend )
     return true;
 }
 
-uno::Any BibFrameController_Impl::getViewData()
+cpo::uno::Any BibFrameController_Impl::getViewData()
 {
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
-void BibFrameController_Impl::restoreViewData( const uno::Any& /*Value*/ )
+void BibFrameController_Impl::restoreViewData( const cpo::uno::Any& /*Value*/ )
 {
 }
 
@@ -706,7 +707,7 @@ void BibFrameController_Impl::addStatusListener(
                         SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
                         try
                         {
-                            uno::Any aData = xDataObj->getTransferData( aFlavor );
+                            cpo::uno::Any aData = xDataObj->getTransferData( aFlavor );
                             OUString aText;
                             aData >>= aText;
                             aEvent.IsEnabled  = !aText.isEmpty();
@@ -803,14 +804,14 @@ void BibFrameController_Impl::RemoveFilter()
 
 void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::PropertyValue >& aArgs)
 {
-    uno::Any aValue = aArgs[0].Value;
+    cpo::uno::Any aValue = aArgs[0].Value;
     OUString aDBTableName;
     aValue >>= aDBTableName;
 
 
     if(aArgs.getLength() > 1)
     {
-        uno::Any aDB = aArgs[1].Value;
+        cpo::uno::Any aDB = aArgs[1].Value;
         OUString aURL;
         aDB >>= aURL;
         m_xDatMan->setActiveDataSource(aURL);

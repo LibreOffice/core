@@ -388,7 +388,7 @@ uno::Reference<beans::XPropertySetInfo> SwFmDrawPage::getPropertySetInfo()
     return xRet;
 }
 
-void SwFmDrawPage::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
+void SwFmDrawPage::setPropertyValue(const OUString& rPropertyName, const cpo::uno::Any& aValue)
 {
     SolarMutexGuard aGuard;
     const SfxItemPropertyMapEntry* pEntry = m_pPropertySet->getPropertyMap().getByName(rPropertyName);
@@ -429,12 +429,12 @@ void SwFmDrawPage::setPropertyValue(const OUString& rPropertyName, const uno::An
     }
 }
 
-uno::Any SwFmDrawPage::getPropertyValue(const OUString& rPropertyName)
+cpo::uno::Any SwFmDrawPage::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
     const SfxItemPropertyMapEntry* pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName);
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     switch (pEntry ? pEntry->nWID : -1)
     {
@@ -508,7 +508,7 @@ namespace
         : public SwSimpleEnumeration_Base
     {
         private:
-            std::vector< css::uno::Any > m_aShapes;
+            std::vector< cpo::uno::Any > m_aShapes;
         protected:
             virtual ~SwXShapesEnumeration() override {};
         public:
@@ -516,7 +516,7 @@ namespace
 
             //XEnumeration
             virtual bool SAL_CALL hasMoreElements() override;
-            virtual uno::Any SAL_CALL nextElement() override;
+            virtual cpo::uno::Any SAL_CALL nextElement() override;
 
             //XServiceInfo
             virtual OUString SAL_CALL getImplementationName() override;
@@ -533,7 +533,7 @@ SwXShapesEnumeration::SwXShapesEnumeration(SwFmDrawPage* const pDrawPage)
     for(sal_Int32 nIdx = 0; nIdx < nCount; nIdx++)
     {
         uno::Reference<drawing::XShape> xShape(pDrawPage->getByIndex(nIdx), uno::UNO_QUERY);
-        m_aShapes.push_back(uno::Any(xShape));
+        m_aShapes.push_back(cpo::uno::Any(xShape));
     }
 }
 
@@ -543,12 +543,12 @@ bool SwXShapesEnumeration::hasMoreElements()
     return !m_aShapes.empty();
 }
 
-uno::Any SwXShapesEnumeration::nextElement()
+cpo::uno::Any SwXShapesEnumeration::nextElement()
 {
     SolarMutexGuard aGuard;
     if(m_aShapes.empty())
         throw container::NoSuchElementException();
-    uno::Any aResult = m_aShapes.back();
+    cpo::uno::Any aResult = m_aShapes.back();
     m_aShapes.pop_back();
     return aResult;
 }
@@ -601,7 +601,7 @@ sal_Int32 SwFmDrawPage::getCount()
         return SwTextBoxHelper::getCount(GetSdrPage());
 }
 
-uno::Any SwFmDrawPage::getByIndex(sal_Int32 nIndex)
+cpo::uno::Any SwFmDrawPage::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
     if(!m_pDoc)
@@ -896,7 +896,7 @@ sal_Int64 SAL_CALL SwXShape::getSomething( const uno::Sequence< sal_Int8 >& rId 
     if( m_xShapeAgg.is() )
     {
         const uno::Type& rTunnelType = cppu::UnoType<lang::XUnoTunnel>::get();
-        uno::Any aAgg = m_xShapeAgg->queryAggregation( rTunnelType );
+        cpo::uno::Any aAgg = m_xShapeAgg->queryAggregation( rTunnelType );
         if(auto xAggTunnel = o3tl::tryAccess<uno::Reference<lang::XUnoTunnel>>(
                aAgg))
         {
@@ -922,7 +922,7 @@ SwXShape::SwXShape(
     const uno::Type& rAggType = cppu::UnoType<uno::XAggregation>::get();
     //aAgg contains a reference of the SvxShape!
     {
-        uno::Any aAgg = xShape->queryInterface(rAggType);
+        cpo::uno::Any aAgg = xShape->queryInterface(rAggType);
         aAgg >>= m_xShapeAgg;
         // #i31698#
         if ( m_xShapeAgg.is() )
@@ -983,9 +983,9 @@ SwXShape::~SwXShape()
     mxShape.clear();
 }
 
-uno::Any SwXShape::queryInterface( const uno::Type& aType )
+cpo::uno::Any SwXShape::queryInterface( const uno::Type& aType )
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     SdrObject* pObj = nullptr;
 
     if ((aType == cppu::UnoType<text::XText>::get())
@@ -1017,7 +1017,7 @@ uno::Sequence< uno::Type > SwXShape::getTypes(  )
     uno::Sequence< uno::Type > aRet = SwXShapeBaseClass::getTypes();
     if(m_xShapeAgg.is())
     {
-        uno::Any aProv = m_xShapeAgg->queryAggregation(cppu::UnoType<XTypeProvider>::get());
+        cpo::uno::Any aProv = m_xShapeAgg->queryAggregation(cppu::UnoType<XTypeProvider>::get());
         if(aProv.hasValue())
         {
             uno::Reference< XTypeProvider > xAggProv;
@@ -1041,7 +1041,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXShape::getPropertySetInfo()
         if(m_xShapeAgg.is())
         {
             const uno::Type& rPropSetType = cppu::UnoType<beans::XPropertySet>::get();
-            uno::Any aPSet = m_xShapeAgg->queryAggregation( rPropSetType );
+            cpo::uno::Any aPSet = m_xShapeAgg->queryAggregation( rPropSetType );
             if(auto xPrSet = o3tl::tryAccess<uno::Reference<beans::XPropertySet>>(
                    aPSet))
             {
@@ -1057,7 +1057,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXShape::getPropertySetInfo()
     return mxPropertySetInfo;
 }
 
-void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
+void SwXShape::setPropertyValue(const OUString& rPropertyName, const cpo::uno::Any& aValue)
 {
     SolarMutexGuard aGuard;
     SwFrameFormat*   pFormat = GetFrameFormat();
@@ -1278,7 +1278,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 && pEntry->nMemberId == MID_HORIORIENT_RELATION
                 && aSet.Get(RES_ANCHOR).GetAnchorId() == RndStdIds::FLY_AT_PAGE)
             {
-                uno::Any value(aValue);
+                cpo::uno::Any value(aValue);
                 sal_Int16 nRelOrient(text::RelOrientation::PAGE_FRAME);
                 aValue >>= nRelOrient;
                 if (sw::GetAtPageRelOrientation(nRelOrient, true))
@@ -1462,7 +1462,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
     {
         const uno::Type& rPSetType =
             cppu::UnoType<beans::XPropertySet>::get();
-        uno::Any aPSet = m_xShapeAgg->queryAggregation(rPSetType);
+        cpo::uno::Any aPSet = m_xShapeAgg->queryAggregation(rPSetType);
         auto xPrSet = o3tl::tryAccess<uno::Reference<beans::XPropertySet>>(
             aPSet);
         if(!xPrSet)
@@ -1499,10 +1499,10 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
     }
 }
 
-uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
+cpo::uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     SwFrameFormat*   pFormat = GetFrameFormat();
     if(m_xShapeAgg.is())
     {
@@ -1548,7 +1548,7 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                     {
                         // return nothing, because property <TextRange> isn't
                         // valid for to-page anchored shapes
-                        aRet = uno::Any();
+                        aRet = cpo::uno::Any();
                     }
                     else
                     {
@@ -1564,7 +1564,7 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                         else
                         {
                             // return nothing
-                            aRet = uno::Any();
+                            aRet = cpo::uno::Any();
                         }
                     }
                 }
@@ -1802,13 +1802,13 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
     return aRet;
 }
 
-uno::Any SwXShape::_getPropAtAggrObj( const OUString& _rPropertyName )
+cpo::uno::Any SwXShape::_getPropAtAggrObj( const OUString& _rPropertyName )
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
 
     const uno::Type& rPSetType =
                 cppu::UnoType<beans::XPropertySet>::get();
-    uno::Any aPSet = m_xShapeAgg->queryAggregation(rPSetType);
+    cpo::uno::Any aPSet = m_xShapeAgg->queryAggregation(rPSetType);
     auto xPrSet = o3tl::tryAccess<uno::Reference<beans::XPropertySet>>(aPSet);
     if ( !xPrSet )
     {
@@ -1929,7 +1929,7 @@ uno::Sequence< beans::PropertyState > SwXShape::getPropertyStates(
             if(!xShapePrState.is())
             {
                 const uno::Type& rPStateType = cppu::UnoType<XPropertyState>::get();
-                uno::Any aPState = m_xShapeAgg->queryAggregation(rPStateType);
+                cpo::uno::Any aPState = m_xShapeAgg->queryAggregation(rPStateType);
                 auto ps = o3tl::tryAccess<uno::Reference<XPropertyState>>(
                     aPState);
                 if(!ps)
@@ -1994,7 +1994,7 @@ void SwXShape::setPropertyToDefault( const OUString& rPropertyName )
     else
     {
         const uno::Type& rPStateType = cppu::UnoType<XPropertyState>::get();
-        uno::Any aPState = m_xShapeAgg->queryAggregation(rPStateType);
+        cpo::uno::Any aPState = m_xShapeAgg->queryAggregation(rPStateType);
         auto xShapePrState = o3tl::tryAccess<uno::Reference<XPropertyState>>(
             aPState);
         if(!xShapePrState)
@@ -2004,11 +2004,11 @@ void SwXShape::setPropertyToDefault( const OUString& rPropertyName )
 
 }
 
-uno::Any SwXShape::getPropertyDefault( const OUString& rPropertyName )
+cpo::uno::Any SwXShape::getPropertyDefault( const OUString& rPropertyName )
 {
     SolarMutexGuard aGuard;
     SwFrameFormat*   pFormat = GetFrameFormat();
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if(!m_xShapeAgg.is())
         throw uno::RuntimeException();
 
@@ -2026,7 +2026,7 @@ uno::Any SwXShape::getPropertyDefault( const OUString& rPropertyName )
     else
     {
         const uno::Type& rPStateType = cppu::UnoType<XPropertyState>::get();
-        uno::Any aPState = m_xShapeAgg->queryAggregation(rPStateType);
+        cpo::uno::Any aPState = m_xShapeAgg->queryAggregation(rPStateType);
         auto xShapePrState = o3tl::tryAccess<uno::Reference<XPropertyState>>(
             aPState);
         if(!xShapePrState)
@@ -2109,7 +2109,7 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
         uno::Reference< drawing::XDrawPage > xDP( xDPS->getDrawPage() );
         if (xDP.is())
         {
-            uno::Any aPos;
+            cpo::uno::Any aPos;
             aPos <<= xTextRange;
             setPropertyValue(u"TextRange"_ustr, aPos);
             uno::Reference< drawing::XShape > xTemp( getXWeak(), uno::UNO_QUERY );
@@ -2187,7 +2187,7 @@ void SwXShape::dispose()
     }
     if(m_xShapeAgg.is())
     {
-        uno::Any aAgg(m_xShapeAgg->queryAggregation( cppu::UnoType<XComponent>::get()));
+        cpo::uno::Any aAgg(m_xShapeAgg->queryAggregation( cppu::UnoType<XComponent>::get()));
         uno::Reference<XComponent> xComp;
         aAgg >>= xComp;
         if(xComp.is())
@@ -2383,7 +2383,7 @@ void SAL_CALL SwXShape::setSize( const awt::Size& aSize )
     {
         mxShape->setSize( aSize );
     }
-    SwTextBoxHelper::syncProperty(GetFrameFormat(), RES_FRM_SIZE, MID_FRMSIZE_SIZE, uno::Any(aSize));
+    SwTextBoxHelper::syncProperty(GetFrameFormat(), RES_FRM_SIZE, MID_FRMSIZE_SIZE, cpo::uno::Any(aSize));
 }
 // #i31698#
 // implementation of virtual methods from drawing::XShapeDescriptor
@@ -2426,9 +2426,9 @@ awt::Point SwXShape::GetAttrPosition()
 {
     awt::Point aAttrPos;
 
-    uno::Any aHoriPos( getPropertyValue(u"HoriOrientPosition"_ustr) );
+    cpo::uno::Any aHoriPos( getPropertyValue(u"HoriOrientPosition"_ustr) );
     aHoriPos >>= aAttrPos.X;
-    uno::Any aVertPos( getPropertyValue(u"VertOrientPosition"_ustr) );
+    cpo::uno::Any aVertPos( getPropertyValue(u"VertOrientPosition"_ustr) );
     aVertPos >>= aAttrPos.Y;
     // #i35798# - fallback, if attribute position is (0,0)
     // and no anchor position is applied to the drawing object
@@ -2451,7 +2451,7 @@ awt::Point SwXShape::GetAttrPosition()
     text::TextContentAnchorType eTextAnchorType =
                             text::TextContentAnchorType_AT_PARAGRAPH;
     {
-        uno::Any aAny = getPropertyValue( u"AnchorType"_ustr );
+        cpo::uno::Any aAny = getPropertyValue( u"AnchorType"_ustr );
         aAny >>= eTextAnchorType;
     }
     if ( eTextAnchorType == text::TextContentAnchorType_AS_CHARACTER )
@@ -2580,14 +2580,14 @@ void SwXShape::AdjustPositionProperties( const awt::Point& rPosition )
     text::TextContentAnchorType eTextAnchorType =
                             text::TextContentAnchorType_AT_PARAGRAPH;
     {
-        uno::Any aAny = getPropertyValue( u"AnchorType"_ustr );
+        cpo::uno::Any aAny = getPropertyValue( u"AnchorType"_ustr );
         aAny >>= eTextAnchorType;
     }
     if ( eTextAnchorType != text::TextContentAnchorType_AS_CHARACTER )
     {
         // determine current x-position
         static constexpr OUString aHoriPosPropStr(u"HoriOrientPosition"_ustr);
-        uno::Any aHoriPos( getPropertyValue( aHoriPosPropStr ) );
+        cpo::uno::Any aHoriPos( getPropertyValue( aHoriPosPropStr ) );
         sal_Int32 dCurrX = 0;
         aHoriPos >>= dCurrX;
         // change x-position attribute, if needed
@@ -2596,7 +2596,7 @@ void SwXShape::AdjustPositionProperties( const awt::Point& rPosition )
             // adjust x-position orientation to text::HoriOrientation::NONE, if needed
             // Note: has to be done before setting x-position attribute
             static constexpr OUString aHoriOrientPropStr(u"HoriOrient"_ustr);
-            uno::Any aHoriOrient( getPropertyValue( aHoriOrientPropStr ) );
+            cpo::uno::Any aHoriOrient( getPropertyValue( aHoriOrientPropStr ) );
             sal_Int16 eHoriOrient;
             if (aHoriOrient >>= eHoriOrient) // may be void
             {
@@ -2617,7 +2617,7 @@ void SwXShape::AdjustPositionProperties( const awt::Point& rPosition )
     {
         // determine current y-position
         static constexpr OUString aVertPosPropStr(u"VertOrientPosition"_ustr);
-        uno::Any aVertPos( getPropertyValue( aVertPosPropStr ) );
+        cpo::uno::Any aVertPos( getPropertyValue( aVertPosPropStr ) );
         sal_Int32 dCurrY = 0;
         aVertPos >>= dCurrY;
         // change y-position attribute, if needed
@@ -2626,7 +2626,7 @@ void SwXShape::AdjustPositionProperties( const awt::Point& rPosition )
             // adjust y-position orientation to text::VertOrientation::NONE, if needed
             // Note: has to be done before setting y-position attribute
             static constexpr OUString aVertOrientPropStr(u"VertOrient"_ustr);
-            uno::Any aVertOrient( getPropertyValue( aVertOrientPropStr ) );
+            cpo::uno::Any aVertOrient( getPropertyValue( aVertOrientPropStr ) );
             sal_Int16 eVertOrient;
             if (aVertOrient >>= eVertOrient) // may be void
             {
@@ -2745,9 +2745,9 @@ SwXGroupShape::~SwXGroupShape()
 {
 }
 
-uno::Any SwXGroupShape::queryInterface( const uno::Type& rType )
+cpo::uno::Any SwXGroupShape::queryInterface( const uno::Type& rType )
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if(rType == cppu::UnoType<XShapes>::get())
         aRet <<= uno::Reference<XShapes>(this);
     else
@@ -2777,7 +2777,7 @@ void SwXGroupShape::add( const uno::Reference< XShape >& xShape )
     if( m_xShapeAgg.is() )
     {
         const uno::Type& rType = cppu::UnoType<XShapes>::get();
-        uno::Any aAgg = m_xShapeAgg->queryAggregation( rType );
+        cpo::uno::Any aAgg = m_xShapeAgg->queryAggregation( rType );
         aAgg >>= xShapes;
     }
     if(!xShapes.is())
@@ -2822,7 +2822,7 @@ void SwXGroupShape::remove( const uno::Reference< XShape >& xShape )
     if( m_xShapeAgg.is() )
     {
         const uno::Type& rType = cppu::UnoType<XShapes>::get();
-        uno::Any aAgg = m_xShapeAgg->queryAggregation( rType );
+        cpo::uno::Any aAgg = m_xShapeAgg->queryAggregation( rType );
         aAgg >>= xShapes;
     }
     if(!xShapes.is())
@@ -2837,7 +2837,7 @@ sal_Int32 SwXGroupShape::getCount()
     if( m_xShapeAgg.is() )
     {
         const uno::Type& rType = cppu::UnoType<XIndexAccess>::get();
-        uno::Any aAgg = m_xShapeAgg->queryAggregation( rType );
+        cpo::uno::Any aAgg = m_xShapeAgg->queryAggregation( rType );
         aAgg >>= xAcc;
     }
     if(!xAcc.is())
@@ -2845,14 +2845,14 @@ sal_Int32 SwXGroupShape::getCount()
     return xAcc->getCount();
 }
 
-uno::Any SwXGroupShape::getByIndex(sal_Int32 nIndex)
+cpo::uno::Any SwXGroupShape::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
     uno::Reference<XIndexAccess> xAcc;
     if( m_xShapeAgg.is() )
     {
         const uno::Type& rType = cppu::UnoType<XIndexAccess>::get();
-        uno::Any aAgg = m_xShapeAgg->queryAggregation( rType );
+        cpo::uno::Any aAgg = m_xShapeAgg->queryAggregation( rType );
         aAgg >>= xAcc;
     }
     if(!xAcc.is())
@@ -2867,7 +2867,7 @@ uno::Type SwXGroupShape::getElementType(  )
     if( m_xShapeAgg.is() )
     {
         const uno::Type& rType = cppu::UnoType<XIndexAccess>::get();
-        uno::Any aAgg = m_xShapeAgg->queryAggregation( rType );
+        cpo::uno::Any aAgg = m_xShapeAgg->queryAggregation( rType );
         aAgg >>= xAcc;
     }
     if(!xAcc.is())
@@ -2882,7 +2882,7 @@ bool SwXGroupShape::hasElements(  )
     if( m_xShapeAgg.is() )
     {
         const uno::Type& rType = cppu::UnoType<XIndexAccess>::get();
-        uno::Any aAgg = m_xShapeAgg->queryAggregation( rType );
+        cpo::uno::Any aAgg = m_xShapeAgg->queryAggregation( rType );
         aAgg >>= xAcc;
     }
     if(!xAcc.is())

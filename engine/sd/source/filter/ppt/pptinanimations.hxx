@@ -72,15 +72,15 @@ private:
 
     void importAnimateKeyPoints( const Atom* pAtom, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
     void importPropertySetContainer( const Atom* pAtom,PropertySet& rSet );
-    bool importAttributeValue( const Atom* pAtom, css::uno::Any& rAny );
+    bool importAttributeValue( const Atom* pAtom, cpo::uno::Any& rAny );
     void importAttributeNamesContainer( const Atom* pAtom, OUString& rAttributeNames );
-    void importTargetElementContainer( const Atom* pAtom, css::uno::Any& rTarget, sal_Int16& nSubType );
+    void importTargetElementContainer( const Atom* pAtom, cpo::uno::Any& rTarget, sal_Int16& nSubType );
 
     static void fillNode( css::uno::Reference< css::animations::XAnimationNode > const & xTiming, const AnimationNode& rNode, const PropertySet& rSet );
     static css::uno::Reference< css::animations::XAnimationNode > createNode( const Atom* pAtom, const AnimationNode& rNode );
 
     bool convertAnimationNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode, const css::uno::Reference< css::animations::XAnimationNode >& xParent );
-    css::uno::Any  implGetColorAny( sal_Int32 nMode, sal_Int32  nA, sal_Int32 nB, sal_Int32 nC );
+    cpo::uno::Any  implGetColorAny( sal_Int32 nMode, sal_Int32  nA, sal_Int32 nB, sal_Int32 nC );
     static sal_Int16            implGetColorSpace( sal_Int32 nMode, sal_Int32  nA, sal_Int32 nB, sal_Int32 nC );
 
 private:
@@ -100,8 +100,8 @@ private:
 
     static void dump_atom_header( const Atom* pAtom, bool bOpen, bool bAppend );
     static void dump_atom( const Atom* pAtom, bool bNewLine = true );
-    static void dump_target( css::uno::Any& rAny );
-    static void dump( css::uno::Any& rAny );
+    static void dump_target( cpo::uno::Any& rAny );
+    static void dump( cpo::uno::Any& rAny );
     static void dump( const PropertySet& rSet );
     static void dump( const AnimationNode& rNode );
     static void dump( const char * pText );

@@ -72,6 +72,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
@@ -425,7 +426,7 @@ private:
     SwXMailMerge *m_pMailMerge;
 };
 
-uno::Any SAL_CALL SwXMailMerge::execute(
+cpo::uno::Any SAL_CALL SwXMailMerge::execute(
         const uno::Sequence< beans::NamedValue >& rArguments )
 {
     SolarMutexGuard aGuard;
@@ -435,7 +436,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     // (use values from the service as default and override them with
     // the values that are provided as arguments)
 
-    uno::Sequence< uno::Any >           aCurSelection   = m_aSelection;
+    uno::Sequence< cpo::uno::Any >           aCurSelection   = m_aSelection;
     uno::Reference< sdbc::XResultSet >  xCurResultSet   = m_xResultSet;
     uno::Reference< sdbc::XConnection > xCurConnection  = m_xConnection;
     uno::Reference< frame::XModel >     xCurModel       = m_xModel;
@@ -848,7 +849,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL SwXMailMerge::getPropertySetI
 }
 
 void SAL_CALL SwXMailMerge::setPropertyValue(
-        const OUString& rPropertyName, const uno::Any& rValue )
+        const OUString& rPropertyName, const cpo::uno::Any& rValue )
 {
     SolarMutexGuard aGuard;
 
@@ -997,7 +998,7 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
     }
 }
 
-uno::Any SAL_CALL SwXMailMerge::getPropertyValue(
+cpo::uno::Any SAL_CALL SwXMailMerge::getPropertyValue(
         const OUString& rPropertyName )
 {
     SolarMutexGuard aGuard;

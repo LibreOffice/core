@@ -49,7 +49,7 @@ SvxClipboardFormatItem::~SvxClipboardFormatItem()
 {
 }
 
-bool SvxClipboardFormatItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxClipboardFormatItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     sal_uInt16 nCount = Count();
 
@@ -69,7 +69,7 @@ bool SvxClipboardFormatItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMembe
     return true;
 }
 
-bool SvxClipboardFormatItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvxClipboardFormatItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     css::frame::status::ClipboardFormats aClipFormats;
     if ( rVal >>= aClipFormats )

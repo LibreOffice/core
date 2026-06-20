@@ -34,6 +34,7 @@
 namespace com::sun::star::ucb { class XCommandEnvironment; }
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::task;
@@ -60,7 +61,7 @@ static std::unique_ptr<SvStream> lcl_CreateStream( const OUString& rFileName, St
                 ::ucbhelper::Content aCnt(
                     rFileName, Reference < XCommandEnvironment >(),
                     comphelper::getProcessComponentContext() );
-                aCnt.executeCommand( u"delete"_ustr, css::uno::Any( true ) );
+                aCnt.executeCommand( u"delete"_ustr, cpo::uno::Any( true ) );
             }
 
             catch ( const CommandAbortedException& )

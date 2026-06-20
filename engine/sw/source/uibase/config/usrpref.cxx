@@ -26,7 +26,7 @@
 #include <unotools/syslocale.hxx>
 
 #include <usrpref.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <unotools/localedatawrapper.hxx>
 
@@ -37,6 +37,7 @@
 using namespace utl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 void SwMasterUsrPref::SetUsrPref(const SwViewOption &rCopy)
 {

@@ -152,8 +152,8 @@ protected:
     virtual void InvalidateFocus_();
 
 public:
-    void FireAccessibleEvent(const sal_Int16 nEventId, const css::uno::Any& rOldValue,
-                             const css::uno::Any& rNewValue, sal_Int32 nIndexHint = -1);
+    void FireAccessibleEvent(const sal_Int16 nEventId, const cpo::uno::Any& rOldValue,
+                             const cpo::uno::Any& rNewValue, sal_Int32 nIndexHint = -1);
 
 protected:
     // OAccessible

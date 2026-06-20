@@ -28,7 +28,7 @@ using namespace ::com::sun::star;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_FormulaDocument_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const& args)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const& args)
 {
     SolarMutexGuard aGuard;
     SmGlobals::ensure();

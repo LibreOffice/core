@@ -108,8 +108,8 @@ protected:
     */
     void NotifyAccessibleEvent(
                 const sal_Int16 _nEventId,
-                const css::uno::Any& _rOldValue,
-                const css::uno::Any& _rNewValue,
+                const cpo::uno::Any& _rOldValue,
+                const cpo::uno::Any& _rNewValue,
                 sal_Int32 nIndexHint = -1
             );
 

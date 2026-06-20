@@ -21,7 +21,7 @@
 
 #include <config_options.h>
 #include <connectivity/dbtoolsdllapi.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 namespace com::sun::star
 {
@@ -60,7 +60,7 @@ public:
     enum class TYPE { SQLException, SQLWarning, SQLContext, Undefined };
 
 private:
-    css::uno::Any  m_aContent;
+    cpo::uno::Any  m_aContent;
     TYPE            m_eType;    // redundant (could be derived from m_aContent.getValueType())
 
 public:
@@ -79,7 +79,7 @@ public:
     SQLExceptionInfo( const OUString& _rSimpleErrorMessage );
 
             // use for events got via XSQLErrorListener::errorOccured
-    SQLExceptionInfo(const css::uno::Any& _rError);
+    SQLExceptionInfo(const cpo::uno::Any& _rError);
             // use with the Reason member of an SQLErrorEvent or with NextElement of an SQLException
 
     /** prepends a plain error message to the chain of exceptions
@@ -114,7 +114,7 @@ public:
     SQLExceptionInfo& operator=(const css::sdbc::SQLWarning& _rError);
     SQLExceptionInfo& operator=(const css::sdb::SQLContext& _rError);
     SQLExceptionInfo& operator=(const css::sdb::SQLErrorEvent& _rErrorEvent);
-    SQLExceptionInfo& operator=(const css::uno::Any& _rCaughtSQLException);
+    SQLExceptionInfo& operator=(const cpo::uno::Any& _rCaughtSQLException);
 
     bool        isKindOf(TYPE _eType) const;
         // not just a simple comparison ! e.g. getType() == SQL_CONTEXT implies isKindOf(SQL_EXCEPTION) == true !
@@ -124,7 +124,7 @@ public:
     operator const css::sdbc::SQLException*    () const;
     operator const css::sdb::SQLContext*       () const;
 
-    const css::uno::Any& get() const { return m_aContent; }
+    const cpo::uno::Any& get() const { return m_aContent; }
 
     void    clear()
     {
@@ -133,7 +133,7 @@ public:
     }
 
     // create an exception
-    static css::uno::Any createException(TYPE eType, const OUString& rErrorMessage, const OUString& rSQLState, const sal_Int32 nErrorCode);
+    static cpo::uno::Any createException(TYPE eType, const OUString& rErrorMessage, const OUString& rSQLState, const sal_Int32 nErrorCode);
 
     // find the end of the exception chain
     static css::sdbc::SQLException* getLastException(css::sdbc::SQLException* pLastException);
@@ -229,7 +229,7 @@ OOO_DLLPUBLIC_DBTOOLS OUString getStandardSQLState( StandardSQLState _eState );
 */
 [[noreturn]] OOO_DLLPUBLIC_DBTOOLS void throwFunctionSequenceException(
         const css::uno::Reference< css::uno::XInterface >& Context,
-        const css::uno::Any& Next = css::uno::Any()
+        const cpo::uno::Any& Next = cpo::uno::Any()
     );
 
 
@@ -239,7 +239,7 @@ OOO_DLLPUBLIC_DBTOOLS OUString getStandardSQLState( StandardSQLState _eState );
 */
 [[noreturn]] OOO_DLLPUBLIC_DBTOOLS void throwInvalidIndexException(
         const css::uno::Reference< css::uno::XInterface >& Context,
-        const css::uno::Any& Next = css::uno::Any()
+        const cpo::uno::Any& Next = cpo::uno::Any()
     );
 
 
@@ -260,7 +260,7 @@ OOO_DLLPUBLIC_DBTOOLS OUString getStandardSQLState( StandardSQLState _eState );
 [[noreturn]] OOO_DLLPUBLIC_DBTOOLS void throwGenericSQLException(
         const OUString& _rMsg,
         const css::uno::Reference< css::uno::XInterface >& _rxSource,
-        const css::uno::Any& _rNextException
+        const cpo::uno::Any& _rNextException
     );
 
 
@@ -275,7 +275,7 @@ OOO_DLLPUBLIC_DBTOOLS OUString getStandardSQLState( StandardSQLState _eState );
 [[noreturn]] OOO_DLLPUBLIC_DBTOOLS void throwFeatureNotImplementedSQLException(
         const OUString& _rFeatureName,
         const css::uno::Reference< css::uno::XInterface >& _rxContext,
-        const css::uno::Any& _rNextException = css::uno::Any()
+        const cpo::uno::Any& _rNextException = cpo::uno::Any()
     );
 
 /** throw a RuntimeException (Optional feature not implemented)

@@ -60,8 +60,8 @@ public:
 
     void FireAccessibleEvent (
         short nEventId,
-        const css::uno::Any& rOldValue,
-        const css::uno::Any& rNewValue);
+        const cpo::uno::Any& rOldValue,
+        const cpo::uno::Any& rNewValue);
 
     //=====  XAccessibleContext  ==============================================
 

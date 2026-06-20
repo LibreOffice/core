@@ -69,7 +69,7 @@ class DNDEventDispatcher final : public ::cppu::WeakImplHelper<
 
     /// @throws css::uno::RuntimeException
     static sal_Int32 fireDragGestureEvent( vcl::Window *pWindow, const css::uno::Reference< css::datatransfer::dnd::XDragSource >& xSource,
-        const css::uno::Any& event, const Point& rOrigin, const sal_Int8 nDragAction );
+        const cpo::uno::Any& event, const Point& rOrigin, const sal_Int8 nDragAction );
 
 public:
 

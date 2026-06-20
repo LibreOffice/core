@@ -15,7 +15,7 @@
 #include <initializer_list>
 #include <vector>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -25,11 +25,11 @@ namespace comphelper
 {
     /// Init list for property sequences.
     inline css::uno::Sequence< css::beans::PropertyValue > InitPropertySequence(
-        ::std::initializer_list< ::std::pair< OUString, css::uno::Any > > vInit)
+        ::std::initializer_list< ::std::pair< OUString, cpo::uno::Any > > vInit)
     {
         css::uno::Sequence< css::beans::PropertyValue> vResult{static_cast<sal_Int32>(vInit.size())};
         std::transform(vInit.begin(), vInit.end(), vResult.getArray(),
-                       [](const std::pair<OUString, css::uno::Any>& rInit) {
+                       [](const std::pair<OUString, cpo::uno::Any>& rInit) {
                            return css::beans::PropertyValue(rInit.first, -1, rInit.second,
                                                             css::beans::PropertyState_DIRECT_VALUE);
                        });
@@ -40,13 +40,13 @@ namespace comphelper
     ///
     /// This is particularly useful for creation of sequences that are later
     /// unwrapped using comphelper::SequenceAsHashMap.
-    inline css::uno::Sequence< css::uno::Any > InitAnyPropertySequence(
-        ::std::initializer_list< ::std::pair< OUString, css::uno::Any > > vInit)
+    inline css::uno::Sequence< cpo::uno::Any > InitAnyPropertySequence(
+        ::std::initializer_list< ::std::pair< OUString, cpo::uno::Any > > vInit)
     {
-        css::uno::Sequence<css::uno::Any> vResult{static_cast<sal_Int32>(vInit.size())};
+        css::uno::Sequence<cpo::uno::Any> vResult{static_cast<sal_Int32>(vInit.size())};
         std::transform(vInit.begin(), vInit.end(), vResult.getArray(),
-                       [](const std::pair<OUString, css::uno::Any>& rInit) {
-                           return css::uno::Any(
+                       [](const std::pair<OUString, cpo::uno::Any>& rInit) {
+                           return cpo::uno::Any(
                                css::beans::PropertyValue(rInit.first, -1, rInit.second,
                                                          css::beans::PropertyState_DIRECT_VALUE));
                        });

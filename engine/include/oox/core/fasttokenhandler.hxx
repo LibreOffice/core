@@ -21,7 +21,7 @@
 #define INCLUDED_OOX_CORE_FASTTOKENHANDLER_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>

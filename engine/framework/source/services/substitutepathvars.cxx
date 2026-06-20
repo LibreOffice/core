@@ -50,6 +50,7 @@
 #include <unordered_map>
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::container;
 
 namespace {
@@ -165,7 +166,7 @@ public:
     virtual OUString SAL_CALL getSubstituteVariableValue( const OUString& variable ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& /*rArguments*/) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& /*rArguments*/) override;
 
 private:
     void            impl_initialize();
@@ -237,7 +238,7 @@ void SubstitutePathVariables::impl_initialize()
     sort(m_aReSubstFixedVarOrder.begin(),m_aReSubstFixedVarOrder.end());
 }
 
-void SAL_CALL SubstitutePathVariables::initialize(const css::uno::Sequence<css::uno::Any>& /*rArguments*/)
+void SAL_CALL SubstitutePathVariables::initialize(const css::uno::Sequence<cpo::uno::Any>& /*rArguments*/)
 {
     std::unique_lock g(m_aMutex);
     impl_initialize();
@@ -741,7 +742,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_PathSubstitution_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SubstitutePathVariables());
 }

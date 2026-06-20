@@ -47,7 +47,7 @@ public:
                 const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet );
 
     /// @throws css::uno::RuntimeException
-    static void setStyle( const css::uno::Reference< css::beans::XPropertySet >& xParaProps, const css::uno::Any& xStyle );
+    static void setStyle( const css::uno::Reference< css::beans::XPropertySet >& xParaProps, const cpo::uno::Any& xStyle );
     /// @throws css::uno::RuntimeException
     static LanguageType getLanguageID( const css::uno::Reference< css::beans::XPropertySet >& xTCProps );
     /// @throws css::uno::RuntimeException
@@ -65,10 +65,10 @@ public:
     virtual css::uno::Reference< ::ooo::vba::word::XParagraphFormat > SAL_CALL getParagraphFormat() override;
     virtual bool SAL_CALL getAutomaticallyUpdate() override;
     virtual void SAL_CALL setAutomaticallyUpdate( bool _automaticallyupdate ) override;
-    virtual css::uno::Any SAL_CALL getBaseStyle() override;
-    virtual void SAL_CALL setBaseStyle( const css::uno::Any& _basestyle ) override;
-    virtual css::uno::Any SAL_CALL getNextParagraphStyle() override;
-    virtual void SAL_CALL setNextParagraphStyle( const css::uno::Any& _nextparagraphstyle ) override;
+    virtual cpo::uno::Any SAL_CALL getBaseStyle() override;
+    virtual void SAL_CALL setBaseStyle( const cpo::uno::Any& _basestyle ) override;
+    virtual cpo::uno::Any SAL_CALL getNextParagraphStyle() override;
+    virtual void SAL_CALL setNextParagraphStyle( const cpo::uno::Any& _nextparagraphstyle ) override;
     virtual ::sal_Int32 SAL_CALL getListLevelNumber() override;
 
     //XDefaultProperty

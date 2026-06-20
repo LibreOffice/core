@@ -72,6 +72,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
@@ -1441,7 +1442,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                                 ! GetOptionalBoolProperty(
                                     gsPropertyIsFixedLanguage,
                                     rPropSet, xPropSetInfo, false ));
-        uno::Any aAny = rPropSet->getPropertyValue( gsPropertyName );
+        cpo::uno::Any aAny = rPropSet->getPropertyValue( gsPropertyName );
         OUString sName;
         aAny >>= sName;
         ProcessString(XML_NAME, sName);

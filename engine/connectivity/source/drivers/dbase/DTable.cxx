@@ -70,6 +70,7 @@ using namespace ::utl;
 using namespace ::cppu;
 using namespace ::dbtools;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
@@ -1050,7 +1051,7 @@ bool ODbaseTable::CreateImpl()
         try
         {
             Content aContent(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
-            aContent.executeCommand( u"delete"_ustr, css::uno::Any( true ) );
+            aContent.executeCommand( u"delete"_ustr, cpo::uno::Any( true ) );
         }
         catch(const Exception&) // an exception is thrown when no file exists
         {
@@ -1078,11 +1079,11 @@ bool ODbaseTable::CreateImpl()
             try
             {
                 Content aMemoContent(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
-                aMemoContent.executeCommand( u"delete"_ustr, css::uno::Any( true ) );
+                aMemoContent.executeCommand( u"delete"_ustr, cpo::uno::Any( true ) );
             }
             catch(const Exception&)
             {
-                css::uno::Any anyEx = cppu::getCaughtException();
+                cpo::uno::Any anyEx = cppu::getCaughtException();
                 const OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
                         STR_COULD_NOT_DELETE_FILE,
                         "$name$", aName
@@ -1096,11 +1097,11 @@ bool ODbaseTable::CreateImpl()
             try
             {
                 Content aMemoContent(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
-                aMemoContent.executeCommand( u"delete"_ustr, css::uno::Any( true ) );
+                aMemoContent.executeCommand( u"delete"_ustr, cpo::uno::Any( true ) );
             }
             catch(const ContentCreationException&)
             {
-                css::uno::Any anyEx = cppu::getCaughtException();
+                cpo::uno::Any anyEx = cppu::getCaughtException();
                 const OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
                         STR_COULD_NOT_DELETE_FILE,
                         "$name$", aName

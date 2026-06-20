@@ -68,6 +68,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::ui::dialogs;
@@ -1057,11 +1058,11 @@ void SwGlossaryDlg::ResumeShowAutoText()
         {
             if (!sShortName.isEmpty())
             {
-                uno::Any aGroup = m_xAutoText->getByName(sGroup);
+                cpo::uno::Any aGroup = m_xAutoText->getByName(sGroup);
                 uno::Reference< XAutoTextGroup >  xGroup;
                 if((aGroup >>= xGroup) && xGroup->hasByName(sShortName))
                 {
-                    uno::Any aEntry(xGroup->getByName(sShortName));
+                    cpo::uno::Any aEntry(xGroup->getByName(sShortName));
                     uno::Reference< XAutoTextEntry >  xEntry;
                     aEntry >>= xEntry;
                     xEntry->applyTo(static_cast<XSentenceCursor*>(xCursor.get()));

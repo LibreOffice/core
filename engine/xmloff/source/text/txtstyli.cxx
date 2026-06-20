@@ -56,6 +56,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::beans;
@@ -330,7 +331,7 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
 
             if (m_aListLevel.has_value())
             {
-                xPropSet->setPropertyValue(u"NumberingLevel"_ustr, uno::Any(*m_aListLevel));
+                xPropSet->setPropertyValue(u"NumberingLevel"_ustr, cpo::uno::Any(*m_aListLevel));
             }
         }
     }

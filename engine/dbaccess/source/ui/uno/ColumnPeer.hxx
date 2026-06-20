@@ -39,8 +39,8 @@ namespace dbaui
         void setConnection(const css::uno::Reference< css::sdbc::XConnection>& _xCon);
         void setEditWidth(sal_Int32 _nWidth);
         // VCLXWindow
-        virtual void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
-        virtual css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
+        virtual void SAL_CALL setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
+        virtual cpo::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
     };
 }   // namespace dbaui
 

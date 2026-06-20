@@ -88,7 +88,7 @@ using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::lang::XComponent;
 using ::com::sun::star::sheet::DataPilotTableHeaderData;
@@ -1426,7 +1426,7 @@ bool ScDPObject::IsDuplicated( tools::Long nDim )
             {
                 try
                 {
-                    uno::Any aOrigAny = xDimProp->getPropertyValue( SC_UNO_DP_ORIGINAL );
+                    cpo::uno::Any aOrigAny = xDimProp->getPropertyValue( SC_UNO_DP_ORIGINAL );
                     uno::Reference<uno::XInterface> xIntOrig;
                     if ( (aOrigAny >>= xIntOrig) && xIntOrig.is() )
                         bDuplicated = true;
@@ -2281,7 +2281,7 @@ static PivotFunc lcl_FirstSubTotal( const uno::Reference<beans::XPropertySet>& x
             uno::Reference<beans::XPropertySet> xLevProp( xLevel, uno::UNO_QUERY );
             if ( xLevProp.is() )
             {
-                uno::Any aSubAny;
+                cpo::uno::Any aSubAny;
                 try
                 {
                     aSubAny = xLevProp->getPropertyValue( SC_UNO_DP_SUBTOTAL2 );
@@ -2376,7 +2376,7 @@ static void lcl_FillOldFields( ScPivotFieldVector& rFields,
             tools::Long nDupSource = -1;
             try
             {
-                uno::Any aOrigAny = xDimProp->getPropertyValue(SC_UNO_DP_ORIGINAL_POS);
+                cpo::uno::Any aOrigAny = xDimProp->getPropertyValue(SC_UNO_DP_ORIGINAL_POS);
                 sal_Int32 nTmp = 0;
                 if (aOrigAny >>= nTmp)
                     nDupSource = nTmp;
@@ -2565,7 +2565,7 @@ void ScDPObject::FillLabelDataForDimension(
     try
     {
         aFieldName = xDimName->getName();
-        uno::Any aOrigAny = xDimProp->getPropertyValue(SC_UNO_DP_ORIGINAL_POS);
+        cpo::uno::Any aOrigAny = xDimProp->getPropertyValue(SC_UNO_DP_ORIGINAL_POS);
         aOrigAny >>= nOrigPos;
     }
     catch(uno::Exception&)
@@ -2970,7 +2970,7 @@ std::vector<OUString> ScDPObject::GetRegisteredSources()
         {
             while ( xEnum->hasMoreElements() )
             {
-                uno::Any aAddInAny = xEnum->nextElement();
+                cpo::uno::Any aAddInAny = xEnum->nextElement();
 //              if ( aAddInAny.getReflection()->getTypeClass() == TypeClass_INTERFACE )
                 {
                     uno::Reference<uno::XInterface> xIntFac;
@@ -3009,7 +3009,7 @@ uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPS
 
     while (xEnum->hasMoreElements() && !xRet.is())
     {
-        uno::Any aAddInAny = xEnum->nextElement();
+        cpo::uno::Any aAddInAny = xEnum->nextElement();
         uno::Reference<uno::XInterface> xIntFac;
         aAddInAny >>= xIntFac;
         if (!xIntFac.is())
@@ -3042,8 +3042,8 @@ uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPS
             if (xInit.is())
             {
                 //  initialize
-                uno::Sequence<uno::Any> aSeq(4);
-                uno::Any* pArray = aSeq.getArray();
+                uno::Sequence<cpo::uno::Any> aSeq(4);
+                cpo::uno::Any* pArray = aSeq.getArray();
                 pArray[0] <<= rDesc.aParSource;
                 pArray[1] <<= rDesc.aParName;
                 pArray[2] <<= rDesc.aParUser;

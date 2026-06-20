@@ -24,7 +24,7 @@
 #include <xmloff/dllapi.h>
 #include <rtl/ustring.hxx>
 
-namespace com::sun::star::uno { class Any; }
+namespace cpo::uno { class Any; }
 
 class SvXMLUnitConverter;
 
@@ -41,17 +41,17 @@ public:
 
     /** Compares two Any's in case of the given XML-data-type.
         By default the Any-equal-operator is called. */
-    virtual bool equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const;
+    virtual bool equals( const cpo::uno::Any& r1, const cpo::uno::Any& r2 ) const;
 
     /** Imports the given value according to the XML-data-type corresponding to
         the derived class.
         @retval true if the value was successfully converted to Any
         @retval false if the value was not recognised (warning will be printed)
      */
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const =0;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const =0;
     /// Exports the given value according to the XML-data-type corresponding to
     /// the derived class.
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const =0;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const =0;
 };
 
 #endif // INCLUDED_XMLOFF_XMLPRHDL_HXX

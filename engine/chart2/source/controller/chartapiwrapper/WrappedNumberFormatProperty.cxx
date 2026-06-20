@@ -28,7 +28,7 @@
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 
 namespace chart::wrapper
 {
@@ -80,7 +80,7 @@ Any WrappedNumberFormatProperty::getPropertyValue( const Reference< beans::XProp
 
 Any WrappedNumberFormatProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
 {
-    return uno::Any( sal_Int32( 0 ) );
+    return cpo::uno::Any( sal_Int32( 0 ) );
 }
 
 WrappedLinkNumberFormatProperty::WrappedLinkNumberFormatProperty() :
@@ -116,7 +116,7 @@ Any WrappedLinkNumberFormatProperty::getPropertyValue( const Reference< beans::X
 
 Any WrappedLinkNumberFormatProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
 {
-    return uno::Any( true ); // bLink
+    return cpo::uno::Any( true ); // bLink
 }
 
 } //namespace chart::wrapper

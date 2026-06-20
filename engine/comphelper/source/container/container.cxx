@@ -65,7 +65,7 @@ css::uno::Reference< css::uno::XInterface> const & IndexAccessIterator::Next()
             css::uno::Reference< css::container::XIndexAccess> xContainerAccess(xSearchLoop, css::uno::UNO_QUERY);
             if (xContainerAccess.is() && xContainerAccess->getCount() && ShouldStepInto(xContainerAccess))
             {
-                css::uno::Any aElement(xContainerAccess->getByIndex(0));
+                cpo::uno::Any aElement(xContainerAccess->getByIndex(0));
                 xSearchLoop = *o3tl::doAccess<css::uno::Reference<css::uno::XInterface>>(aElement);
                 bCheckingStartingPoint = false;
 
@@ -90,7 +90,7 @@ css::uno::Reference< css::uno::XInterface> const & IndexAccessIterator::Next()
                     {   // Move to the right in this row
                         ++nOldSearchChildIndex;
                         // and check the next child
-                        css::uno::Any aElement(xContainerAccess->getByIndex(nOldSearchChildIndex));
+                        cpo::uno::Any aElement(xContainerAccess->getByIndex(nOldSearchChildIndex));
                         xSearchLoop = *o3tl::doAccess<css::uno::Reference<css::uno::XInterface>>(aElement);
                         bCheckingStartingPoint = false;
                         // and update its position in the list.

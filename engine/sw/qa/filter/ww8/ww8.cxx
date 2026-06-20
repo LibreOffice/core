@@ -97,7 +97,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPlainTextContentControlExport)
     uno::Reference<text::XTextContent> xContentControl(
         xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue(u"PlainText"_ustr, uno::Any(true));
+    xContentControlProps->setPropertyValue(u"PlainText"_ustr, cpo::uno::Any(true));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to DOCX:
@@ -145,7 +145,8 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxHyperlinkShape)
     xCursor->gotoStart(/*bExpand=*/false);
     xCursor->goRight(/*nCount=*/6, /*bExpand=*/true);
     uno::Reference<beans::XPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
-    xCursorProps->setPropertyValue(u"HyperLinkURL"_ustr, uno::Any(u"http://www.example.com/"_ustr));
+    xCursorProps->setPropertyValue(u"HyperLinkURL"_ustr,
+                                   cpo::uno::Any(u"http://www.example.com/"_ustr));
     xCursor->gotoStart(/*bExpand=*/false);
     xCursor->goRight(/*nCount=*/6, /*bExpand=*/false);
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
@@ -154,10 +155,10 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxHyperlinkShape)
     xShape->setSize(awt::Size(5000, 5000));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     xShapeProps->setPropertyValue(u"AnchorType"_ustr,
-                                  uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+                                  cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
     uno::Reference<text::XTextContent> xShapeContent(xShape, uno::UNO_QUERY);
     xText->insertTextContent(xCursor, xShapeContent, /*bAbsorb=*/false);
-    xShapeProps->setPropertyValue(u"TextBox"_ustr, uno::Any(true));
+    xShapeProps->setPropertyValue(u"TextBox"_ustr, cpo::uno::Any(true));
 
     // When saving this document to DOCX, then make sure we don't crash on export (due to an
     // assertion failure for not-well-formed XML output):
@@ -195,10 +196,10 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxSymbolFontExport)
 
     uno::Reference<text::XTextRange> xRange = xCursor;
     uno::Reference<beans::XPropertySet> xTextProps(xRange, uno::UNO_QUERY);
-    xTextProps->setPropertyValue(u"CharFontName"_ustr, uno::Any(u"Wingdings"_ustr));
-    xTextProps->setPropertyValue(u"CharFontNameAsian"_ustr, uno::Any(u"Wingdings"_ustr));
-    xTextProps->setPropertyValue(u"CharFontNameComplex"_ustr, uno::Any(u"Wingdings"_ustr));
-    xTextProps->setPropertyValue(u"CharFontCharSet"_ustr, uno::Any(awt::CharSet::SYMBOL));
+    xTextProps->setPropertyValue(u"CharFontName"_ustr, cpo::uno::Any(u"Wingdings"_ustr));
+    xTextProps->setPropertyValue(u"CharFontNameAsian"_ustr, cpo::uno::Any(u"Wingdings"_ustr));
+    xTextProps->setPropertyValue(u"CharFontNameComplex"_ustr, cpo::uno::Any(u"Wingdings"_ustr));
+    xTextProps->setPropertyValue(u"CharFontCharSet"_ustr, cpo::uno::Any(awt::CharSet::SYMBOL));
 
     // When exporting to DOCX:
     save(TestFilter::DOCX);
@@ -275,10 +276,10 @@ CPPUNIT_TEST_FIXTURE(Test, testWrapThroughLayoutInCell)
     xShape->setSize(awt::Size(10000, 10000));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     xShapeProps->setPropertyValue(u"AnchorType"_ustr,
-                                  uno::Any(text::TextContentAnchorType_AT_CHARACTER));
-    xShapeProps->setPropertyValue(u"Surround"_ustr, uno::Any(text::WrapTextMode_THROUGH));
+                                  cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+    xShapeProps->setPropertyValue(u"Surround"_ustr, cpo::uno::Any(text::WrapTextMode_THROUGH));
     xShapeProps->setPropertyValue(u"HoriOrientRelation"_ustr,
-                                  uno::Any(text::RelOrientation::FRAME));
+                                  cpo::uno::Any(text::RelOrientation::FRAME));
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
@@ -618,15 +619,15 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlPDFDropDownEmptyItem)
     {
         uno::Sequence<beans::PropertyValues> aListItems = {
             {
-                comphelper::makePropertyValue(u"DisplayText"_ustr, uno::Any(u"red"_ustr)),
-                comphelper::makePropertyValue(u"Value"_ustr, uno::Any(u"R"_ustr)),
+                comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(u"red"_ustr)),
+                comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(u"R"_ustr)),
             },
             {
-                comphelper::makePropertyValue(u"DisplayText"_ustr, uno::Any(u""_ustr)),
-                comphelper::makePropertyValue(u"Value"_ustr, uno::Any(u""_ustr)),
+                comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(u""_ustr)),
+                comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(u""_ustr)),
             },
         };
-        xContentControlProps->setPropertyValue(u"ListItems"_ustr, uno::Any(aListItems));
+        xContentControlProps->setPropertyValue(u"ListItems"_ustr, cpo::uno::Any(aListItems));
     }
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 

@@ -41,6 +41,7 @@ namespace basctl
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 /*! Macro for implementation two methods for LibBoxControl Class
  *
@@ -321,7 +322,7 @@ void LibBox::NotifyIDE()
     {
         const ScriptDocument& aDocument(pEntry->GetDocument());
         SfxUnoAnyItem aDocumentItem(SID_BASICIDE_ARG_DOCUMENT_MODEL,
-                                    uno::Any(aDocument.getDocumentOrNull()));
+                                    cpo::uno::Any(aDocument.getDocumentOrNull()));
         const OUString& aLibName = pEntry->GetLibName();
         SfxStringItem aLibNameItem(SID_BASICIDE_ARG_LIBNAME, aLibName);
         if (SfxDispatcher* pDispatcher = GetDispatcher())

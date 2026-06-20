@@ -190,8 +190,8 @@ void SwAccessibleCell::InvalidateCursorPos_()
             ::rtl::Reference < SwAccessibleContext > xChildImpl( GetMap()->GetContextImpl( aChild.GetSwFrame())  );
             if (xChildImpl.is())
             {
-                xChildImpl->FireAccessibleEvent(AccessibleEventId::STATE_CHANGED, uno::Any(),
-                                                uno::Any(AccessibleStateType::FOCUSED));
+                xChildImpl->FireAccessibleEvent(AccessibleEventId::STATE_CHANGED, cpo::uno::Any(),
+                                                cpo::uno::Any(AccessibleStateType::FOCUSED));
             }
         }
     }
@@ -260,16 +260,16 @@ SwFrameFormat* SwAccessibleCell::GetTableBoxFormat() const
 }
 
 //Implement TableCell currentValue
-uno::Any SwAccessibleCell::getCurrentValue( )
+cpo::uno::Any SwAccessibleCell::getCurrentValue( )
 {
     SolarMutexGuard aGuard;
 
     ThrowIfDisposed();
 
-    return uno::Any( GetTableBoxFormat()->GetTableBoxValue().GetValue() );
+    return cpo::uno::Any( GetTableBoxFormat()->GetTableBoxValue().GetValue() );
 }
 
-bool SwAccessibleCell::setCurrentValue( const uno::Any& aNumber )
+bool SwAccessibleCell::setCurrentValue( const cpo::uno::Any& aNumber )
 {
     SolarMutexGuard aGuard;
 
@@ -285,19 +285,19 @@ bool SwAccessibleCell::setCurrentValue( const uno::Any& aNumber )
     return bValid;
 }
 
-uno::Any SwAccessibleCell::getMaximumValue( )
+cpo::uno::Any SwAccessibleCell::getMaximumValue( )
 {
-    return uno::Any(DBL_MAX);
+    return cpo::uno::Any(DBL_MAX);
 }
 
-uno::Any SwAccessibleCell::getMinimumValue(  )
+cpo::uno::Any SwAccessibleCell::getMinimumValue(  )
 {
-    return uno::Any(-DBL_MAX);
+    return cpo::uno::Any(-DBL_MAX);
 }
 
-uno::Any SwAccessibleCell::getMinimumIncrement(  )
+cpo::uno::Any SwAccessibleCell::getMinimumIncrement(  )
 {
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 OUString SAL_CALL SwAccessibleCell::getExtendedAttributes()

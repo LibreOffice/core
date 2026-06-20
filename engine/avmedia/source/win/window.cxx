@@ -214,7 +214,7 @@ void Window::ImplLayoutVideoWindow()
     }
 }
 
-bool Window::create( const uno::Sequence< uno::Any >& rArguments )
+bool Window::create( const uno::Sequence< cpo::uno::Any >& rArguments )
 {
     static WNDCLASSW* mpWndClass = lcl_getWndClass();
 

@@ -85,7 +85,7 @@ void SAL_CALL SignatureVerifierImpl::removeSignatureVerifyResultListener(
 
 /* XInitialization */
 void SAL_CALL SignatureVerifierImpl::initialize(
-    const css::uno::Sequence< css::uno::Any >& aArguments )
+    const css::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     OSL_ASSERT(aArguments.getLength() == 5);
 

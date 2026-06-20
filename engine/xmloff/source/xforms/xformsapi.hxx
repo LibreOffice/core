@@ -23,7 +23,7 @@
 // API a little easier
 
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 namespace com::sun::star {
     namespace beans { class XPropertySet; }
@@ -46,7 +46,7 @@ css::uno::Reference<css::beans::XPropertySet> xforms_findXFormsSubmission( css::
 void xforms_setValueAny(
     css::uno::Reference<css::beans::XPropertySet> const & xPropSet,
     const OUString& rName,
-    const css::uno::Any& rAny );
+    const cpo::uno::Any& rAny );
 
 template<typename T>
 inline void xforms_setValue(
@@ -54,13 +54,13 @@ inline void xforms_setValue(
     const OUString& rName,
     const T& aValue )
 {
-    xforms_setValueAny( xPropSet, rName, css::uno::Any( aValue ) );
+    xforms_setValueAny( xPropSet, rName, cpo::uno::Any( aValue ) );
 }
 template<>
 inline void xforms_setValue(
     const css::uno::Reference<css::beans::XPropertySet>& xPropSet,
     const OUString& rName,
-    const css::uno::Any& aValue )
+    const cpo::uno::Any& aValue )
 {
     xforms_setValueAny( xPropSet, rName, aValue );
 }

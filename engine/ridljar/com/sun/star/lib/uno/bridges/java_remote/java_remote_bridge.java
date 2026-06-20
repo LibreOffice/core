@@ -48,7 +48,7 @@ import com.sun.star.lib.uno.typedesc.MethodDescription;
 import com.sun.star.lib.uno.typedesc.TypeDescription;
 import com.sun.star.lib.util.DisposeListener;
 import com.sun.star.lib.util.DisposeNotifier;
-import com.sun.star.uno.Any;
+import cpo.uno.Any;
 import com.sun.star.uno.IBridge;
 import com.sun.star.uno.IEnvironment;
 import com.sun.star.uno.Type;
@@ -627,7 +627,7 @@ public class java_remote_bridge
         // On the wire (at least in URP), the result of queryInterface is
         // transported as an ANY, but in Java it shall be transported as a
         // direct reference to the UNO object (represented as a Java Object),
-        // never boxed in a com.sun.star.uno.Any:
+        // never boxed in a cpo.uno.Any:
         if (operation.equals("queryInterface") && result instanceof Any) {
             Any a = (Any) result;
             if (a.getType().getTypeClass() == TypeClass.INTERFACE) {

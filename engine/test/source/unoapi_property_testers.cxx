@@ -9,7 +9,7 @@
 
 #include <test/unoapi_property_testers.hxx>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <cppunit/TestAssert.h>
 
 using namespace css;
@@ -19,7 +19,7 @@ namespace apitest
 void testBooleanProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
                          const OUString& name)
 {
-    uno::Any aNewValue;
+    cpo::uno::Any aNewValue;
 
     bool bPropertyGet = false;
     bool bPropertySet = false;
@@ -52,7 +52,7 @@ void testBooleanOptionalProperty(uno::Reference<beans::XPropertySet> const& xPro
 void testBooleanReadonlyProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
                                  const OUString& name)
 {
-    uno::Any aNewValue;
+    cpo::uno::Any aNewValue;
 
     bool bPropertyGet = false;
     bool bPropertySet = false;
@@ -71,7 +71,7 @@ void testBooleanReadonlyProperty(uno::Reference<beans::XPropertySet> const& xPro
 void testDoubleProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
                         const OUString& name, const double& dValue)
 {
-    uno::Any aNewValue;
+    cpo::uno::Any aNewValue;
 
     double dPropertyGet;
     double dPropertySet = {};
@@ -91,7 +91,7 @@ void testDoubleProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
 void testDoubleReadonlyProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
                                 const OUString& name, const double& dValue)
 {
-    uno::Any aNewValue;
+    cpo::uno::Any aNewValue;
 
     double dPropertyGet = {};
     double dPropertySet = {};
@@ -110,7 +110,7 @@ void testDoubleReadonlyProperty(uno::Reference<beans::XPropertySet> const& xProp
 void testLongProperty(uno::Reference<beans::XPropertySet> const& xPropertySet, const OUString& name,
                       const sal_Int32& nValue)
 {
-    uno::Any aNewValue;
+    cpo::uno::Any aNewValue;
 
     sal_Int32 nPropertyGet;
     sal_Int32 nPropertySet;
@@ -143,7 +143,7 @@ void testLongOptionalProperty(uno::Reference<beans::XPropertySet> const& xProper
 void testLongReadonlyProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
                               const OUString& name, const sal_Int32& nValue)
 {
-    uno::Any aNewValue;
+    cpo::uno::Any aNewValue;
 
     sal_Int32 nPropertyGet;
     sal_Int32 nPropertySet;
@@ -162,7 +162,7 @@ void testLongReadonlyProperty(uno::Reference<beans::XPropertySet> const& xProper
 void testShortProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
                        const OUString& name, const sal_Int16& nValue)
 {
-    uno::Any aNewValue;
+    cpo::uno::Any aNewValue;
 
     sal_Int16 nPropertyGet;
     sal_Int16 nPropertySet;
@@ -195,7 +195,7 @@ void testShortOptionalProperty(uno::Reference<beans::XPropertySet> const& xPrope
 void testShortReadonlyProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
                                const OUString& name, const sal_Int16& nValue)
 {
-    uno::Any aNewValue;
+    cpo::uno::Any aNewValue;
 
     sal_Int16 nPropertyGet;
     sal_Int16 nPropertySet;
@@ -227,7 +227,7 @@ void testStringOptionalProperty(uno::Reference<beans::XPropertySet> const& xProp
 void testStringProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
                         const OUString& name, const OUString& rValue)
 {
-    uno::Any aNewValue;
+    cpo::uno::Any aNewValue;
 
     OUString sPropertyGet;
     OUString sPropertySet;
@@ -247,7 +247,7 @@ void testStringProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
 void testStringReadonlyProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
                                 const OUString& name, const OUString& rValue)
 {
-    uno::Any aNewValue;
+    cpo::uno::Any aNewValue;
 
     OUString sPropertyGet;
     OUString sPropertySet;
@@ -266,7 +266,7 @@ void testStringReadonlyProperty(uno::Reference<beans::XPropertySet> const& xProp
 void testColorProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
                        const OUString& name, const util::Color& rValue)
 {
-    uno::Any aNewValue;
+    cpo::uno::Any aNewValue;
 
     util::Color sPropertyGet;
     util::Color sPropertySet;

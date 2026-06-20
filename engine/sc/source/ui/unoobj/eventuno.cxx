@@ -64,7 +64,7 @@ static ScSheetEventId lcl_GetEventFromName( std::u16string_view aName )
 
 // XNameReplace
 
-void SAL_CALL ScSheetEventsObj::replaceByName( const OUString& aName, const uno::Any& aElement )
+void SAL_CALL ScSheetEventsObj::replaceByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
     SolarMutexGuard aGuard;
     if (!mpDocShell)
@@ -113,7 +113,7 @@ void SAL_CALL ScSheetEventsObj::replaceByName( const OUString& aName, const uno:
 
 // XNameAccess
 
-uno::Any SAL_CALL ScSheetEventsObj::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL ScSheetEventsObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     ScSheetEventId nEvent = lcl_GetEventFromName(aName);
@@ -128,12 +128,12 @@ uno::Any SAL_CALL ScSheetEventsObj::getByName( const OUString& aName )
             pScript = pEvents->GetScript(nEvent);
     }
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if (pScript)
     {
         uno::Sequence<beans::PropertyValue> aPropSeq( comphelper::InitPropertySequence({
-                { "EventType", uno::Any( u"Script"_ustr ) },
-                { "Script", uno::Any( *pScript ) }
+                { "EventType", cpo::uno::Any( u"Script"_ustr ) },
+                { "Script", cpo::uno::Any( *pScript ) }
             }));
         aRet <<= aPropSeq;
     }

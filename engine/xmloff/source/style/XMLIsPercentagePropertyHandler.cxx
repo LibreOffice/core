@@ -17,12 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <osl/diagnose.h>
 #include <XMLIsPercentagePropertyHandler.hxx>
 
 using namespace ::com::sun::star;
 using namespace css::uno;
+using namespace cpo::uno;
 
 
 XMLIsPercentagePropertyHandler::~XMLIsPercentagePropertyHandler()

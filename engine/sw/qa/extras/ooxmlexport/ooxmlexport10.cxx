@@ -236,7 +236,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf162916_nastyTOC, "tdf162916_nastyTOC.docx")
                            [&name](const css::beans::PropertyValue& p) { return p.Name == name; });
         OString msg = "Property: " + name.toUtf8() + ", level: " + OString::number(level);
         CPPUNIT_ASSERT_MESSAGE(msg.getStr(), it != entry.end());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), css::uno::Any(expected), it->Value);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), cpo::uno::Any(expected), it->Value);
     };
 
     //start with level 1, 0 is the header level

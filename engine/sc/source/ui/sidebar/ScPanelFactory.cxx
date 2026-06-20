@@ -35,6 +35,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace sc::sidebar {
 
@@ -113,7 +114,7 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
     }
     catch (const uno::Exception&)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
             u"ScPanelFactory::createUIElement exception"_ustr,
             nullptr, anyEx);
@@ -140,7 +141,7 @@ css::uno::Sequence<OUString> ScPanelFactory::getSupportedServiceNames()
 } // end of namespace sc::sidebar
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-ScPanelFactory_get_implementation(css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const &)
+ScPanelFactory_get_implementation(css::uno::XComponentContext*, css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new sc::sidebar::ScPanelFactory());
 }

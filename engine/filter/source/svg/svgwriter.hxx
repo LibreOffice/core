@@ -379,7 +379,7 @@ private:
     css::uno::Sequence< css::beans::PropertyValue >    maFilterData;
 
 public:
-    explicit SVGWriter( const css::uno::Sequence<css::uno::Any>& args,
+    explicit SVGWriter( const css::uno::Sequence<cpo::uno::Any>& args,
                         const css::uno::Reference< css::uno::XComponentContext >& rxCtx );
     virtual ~SVGWriter() override;
 

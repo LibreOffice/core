@@ -36,10 +36,10 @@ namespace connectivity::ado
 
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                         sal_Int32 nHandle,
-                        const css::uno::Any& rValue
+                        const cpo::uno::Any& rValue
                      ) override;
         virtual void SAL_CALL getFastPropertyValue(
-                                css::uno::Any& rValue,
+                                cpo::uno::Any& rValue,
                                 sal_Int32 nHandle
                                      ) const override;
     public:

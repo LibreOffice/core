@@ -81,7 +81,7 @@
         <xsl:text>#include &lt;optional&gt;&#xA;</xsl:text>
       </xsl:if>
       <xsl:if test=".//prop/@oor:type = 'oor:any'">
-        <xsl:text>#include "com/sun/star/uno/Any.hxx"&#xA;</xsl:text>
+        <xsl:text>#include "cpo/uno/Any.hxx"&#xA;</xsl:text>
       </xsl:if>
       <xsl:if test=".//prop/@oor:type = 'xs:hexBinary' or .//prop/@oor:type = 'oor:boolean-list' or .//prop/@oor:type = 'oor:short-list' or .//prop/@oor:type = 'oor:int-list' or .//prop/@oor:type = 'oor:long-list' or .//prop/@oor:type = 'oor:double-list' or .//prop/@oor:type = 'oor:string-list'">
         <xsl:text>#include "com/sun/star/uno/Sequence.hxx"&#xA;</xsl:text>
@@ -205,7 +205,7 @@
       </xsl:if>
       <xsl:choose>
         <xsl:when test="@oor:type='oor:any'">
-          <xsl:text>com::sun::star::uno::Any</xsl:text>
+          <xsl:text>cpo::uno::Any</xsl:text>
         </xsl:when>
         <xsl:when test="@oor:type='xs:boolean'">
           <xsl:text>bool</xsl:text>

@@ -15,7 +15,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <cppunit/TestAssert.h>
@@ -36,7 +36,7 @@ void TableColumn::testTableColumnProperties()
     uno::Reference<table::XCellRange> xCR(m_xSheet, uno::UNO_QUERY_THROW);
     xCR->getCellByPosition(0, 0)->setFormula(u"That's a pretty long text."_ustr);
     const sal_Int64 nWidthBefore = ::comphelper::getINT64(xPS->getPropertyValue(u"Width"_ustr));
-    xPS->setPropertyValue(aPropName, uno::Any(true));
+    xPS->setPropertyValue(aPropName, cpo::uno::Any(true));
     CPPUNIT_ASSERT(::comphelper::getBOOL(xPS->getPropertyValue(aPropName)));
     const sal_Int64 nWidthAfter = ::comphelper::getINT64(xPS->getPropertyValue(u"Width"_ustr));
     CPPUNIT_ASSERT(nWidthBefore != nWidthAfter);

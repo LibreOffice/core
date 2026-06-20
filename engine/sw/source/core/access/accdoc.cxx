@@ -100,8 +100,8 @@ void SwAccessibleDocumentBase::AddChild( vcl::Window *pWin, bool bFireEvent )
 
         if( bFireEvent )
         {
-            FireAccessibleEvent(AccessibleEventId::CHILD, uno::Any(),
-                                uno::Any(uno::Reference<XAccessible>(mpChildWin->GetAccessible())));
+            FireAccessibleEvent(AccessibleEventId::CHILD, cpo::uno::Any(),
+                                cpo::uno::Any(uno::Reference<XAccessible>(mpChildWin->GetAccessible())));
         }
     }
 }
@@ -114,8 +114,8 @@ void SwAccessibleDocumentBase::RemoveChild( vcl::Window *pWin )
     if( mpChildWin && pWin == mpChildWin )
     {
         FireAccessibleEvent(AccessibleEventId::CHILD,
-                            uno::Any(uno::Reference<XAccessible>(mpChildWin->GetAccessible())),
-                            uno::Any());
+                            cpo::uno::Any(uno::Reference<XAccessible>(mpChildWin->GetAccessible())),
+                            cpo::uno::Any());
 
         mpChildWin = nullptr;
     }

@@ -136,7 +136,7 @@ static rtl::Reference<SvxShapeText> createSingleLabel(
 
     // #i78696# use mathematically correct rotation now
     const double fRotationAnglePi(-basegfx::deg2rad(rAxisLabelProperties.m_fRotationAngleDegree));
-    uno::Any aATransformation = ShapeFactory::makeTransformation( rAnchorScreenPosition2D, fRotationAnglePi );
+    cpo::uno::Any aATransformation = ShapeFactory::makeTransformation( rAnchorScreenPosition2D, fRotationAnglePi );
     OUString aLabel = ShapeFactory::getStackedString( rLabel, rAxisLabelProperties.m_bStackCharacters );
 
     rtl::Reference<SvxShapeText> xShape2DText =
@@ -790,12 +790,12 @@ bool VCartesianAxis::createTextShapes(
     tAnySequence aPropValues;
     getAxisLabelProperties(aPropNames, aPropValues, m_aAxisProperties, rAxisLabelProperties, nLimitedSpaceForText, bLimitedHeight);
 
-    uno::Any* pColorAny = PropertyMapper::getValuePointer(aPropValues,aPropNames,u"CharColor");
+    cpo::uno::Any* pColorAny = PropertyMapper::getValuePointer(aPropValues,aPropNames,u"CharColor");
     Color nColor = COL_AUTO;
     if(pColorAny)
         *pColorAny >>= nColor;
 
-    uno::Any* pLimitedSpaceAny = PropertyMapper::getValuePointerForLimitedSpace(aPropValues,aPropNames,bLimitedHeight);
+    cpo::uno::Any* pLimitedSpaceAny = PropertyMapper::getValuePointerForLimitedSpace(aPropValues,aPropNames,bLimitedHeight);
 
     const TickInfo* pPreviousVisibleTickInfo = nullptr;
     const TickInfo* pPREPreviousVisibleTickInfo = nullptr;
@@ -985,12 +985,12 @@ bool VCartesianAxis::createTextShapesSimple(
     tAnySequence aPropValues;
     getAxisLabelProperties(aPropNames, aPropValues, m_aAxisProperties, rAxisLabelProperties, -1, bLimitedHeight);
 
-    uno::Any* pColorAny = PropertyMapper::getValuePointer(aPropValues,aPropNames,u"CharColor");
+    cpo::uno::Any* pColorAny = PropertyMapper::getValuePointer(aPropValues,aPropNames,u"CharColor");
     Color nColor = COL_AUTO;
     if(pColorAny)
         *pColorAny >>= nColor;
 
-    uno::Any* pLimitedSpaceAny = PropertyMapper::getValuePointerForLimitedSpace(aPropValues,aPropNames,bLimitedHeight);
+    cpo::uno::Any* pLimitedSpaceAny = PropertyMapper::getValuePointerForLimitedSpace(aPropValues,aPropNames,bLimitedHeight);
 
     const TickInfo* pPreviousVisibleTickInfo = nullptr;
     sal_Int32 nTick = 0;
@@ -1848,7 +1848,7 @@ void VCartesianAxis::updatePositions()
 
                 // #i78696# use mathematically correct rotation now
                 const double fRotationAnglePi(-basegfx::deg2rad(fRotationAngleDegree));
-                uno::Any aATransformation = ShapeFactory::makeTransformation(aAnchorScreenPosition2D, fRotationAnglePi);
+                cpo::uno::Any aATransformation = ShapeFactory::makeTransformation(aAnchorScreenPosition2D, fRotationAnglePi);
 
                 //set new position
                 try

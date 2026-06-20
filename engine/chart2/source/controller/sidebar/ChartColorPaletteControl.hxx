@@ -45,7 +45,7 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rContext);
 
     // XInitialization
-    void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
+    void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;

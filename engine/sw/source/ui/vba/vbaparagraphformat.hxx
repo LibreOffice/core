@@ -50,22 +50,22 @@ public:
     virtual void SAL_CALL setAlignment( ::sal_Int32 _alignment ) override;
     virtual float SAL_CALL getFirstLineIndent() override;
     virtual void SAL_CALL setFirstLineIndent( float _firstlineindent ) override;
-    virtual css::uno::Any SAL_CALL getKeepTogether() override;
-    virtual void SAL_CALL setKeepTogether( const css::uno::Any& _keeptogether ) override;
-    virtual css::uno::Any SAL_CALL getKeepWithNext() override;
-    virtual void SAL_CALL setKeepWithNext( const css::uno::Any& _keepwithnext ) override;
-    virtual css::uno::Any SAL_CALL getHyphenation() override;
-    virtual void SAL_CALL setHyphenation( const css::uno::Any& _hyphenation ) override;
+    virtual cpo::uno::Any SAL_CALL getKeepTogether() override;
+    virtual void SAL_CALL setKeepTogether( const cpo::uno::Any& _keeptogether ) override;
+    virtual cpo::uno::Any SAL_CALL getKeepWithNext() override;
+    virtual void SAL_CALL setKeepWithNext( const cpo::uno::Any& _keepwithnext ) override;
+    virtual cpo::uno::Any SAL_CALL getHyphenation() override;
+    virtual void SAL_CALL setHyphenation( const cpo::uno::Any& _hyphenation ) override;
     virtual float SAL_CALL getLineSpacing() override;
     virtual void SAL_CALL setLineSpacing( float _linespacing ) override;
     virtual ::sal_Int32 SAL_CALL getLineSpacingRule() override;
     virtual void SAL_CALL setLineSpacingRule( ::sal_Int32 _linespacingrule ) override;
-    virtual css::uno::Any SAL_CALL getNoLineNumber() override;
-    virtual void SAL_CALL setNoLineNumber( const css::uno::Any& _nolinenumber ) override;
+    virtual cpo::uno::Any SAL_CALL getNoLineNumber() override;
+    virtual void SAL_CALL setNoLineNumber( const cpo::uno::Any& _nolinenumber ) override;
     virtual ::sal_Int32 SAL_CALL getOutlineLevel() override;
     virtual void SAL_CALL setOutlineLevel( ::sal_Int32 _outlinelevel ) override;
-    virtual css::uno::Any SAL_CALL getPageBreakBefore() override;
-    virtual void SAL_CALL setPageBreakBefore( const css::uno::Any& _pagebreakbefore ) override;
+    virtual cpo::uno::Any SAL_CALL getPageBreakBefore() override;
+    virtual void SAL_CALL setPageBreakBefore( const cpo::uno::Any& _pagebreakbefore ) override;
     virtual float SAL_CALL getSpaceBefore() override;
     virtual void SAL_CALL setSpaceBefore( float _spacebefore ) override;
     virtual float SAL_CALL getSpaceAfter() override;
@@ -74,10 +74,10 @@ public:
     virtual void SAL_CALL setLeftIndent( float _leftindent ) override;
     virtual float SAL_CALL getRightIndent() override;
     virtual void SAL_CALL setRightIndent( float _rightindent ) override;
-    virtual css::uno::Any SAL_CALL getTabStops() override;
-    virtual void SAL_CALL setTabStops( const css::uno::Any& _tabstops ) override;
-    virtual css::uno::Any SAL_CALL getWidowControl() override;
-    virtual void SAL_CALL setWidowControl( const css::uno::Any& _widowcontrol ) override;
+    virtual cpo::uno::Any SAL_CALL getTabStops() override;
+    virtual void SAL_CALL setTabStops( const cpo::uno::Any& _tabstops ) override;
+    virtual cpo::uno::Any SAL_CALL getWidowControl() override;
+    virtual void SAL_CALL setWidowControl( const cpo::uno::Any& _widowcontrol ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

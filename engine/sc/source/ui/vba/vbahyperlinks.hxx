@@ -112,8 +112,8 @@ public:
 
     // XHyperlinks
     virtual css::uno::Reference< ov::excel::XHyperlink > SAL_CALL Add(
-        const css::uno::Any& rAnchor, const css::uno::Any& rAddress, const css::uno::Any& rSubAddress,
-        const css::uno::Any& rScreenTip, const css::uno::Any& rTextToDisplay ) override;
+        const cpo::uno::Any& rAnchor, const cpo::uno::Any& rAddress, const cpo::uno::Any& rSubAddress,
+        const cpo::uno::Any& rScreenTip, const cpo::uno::Any& rTextToDisplay ) override;
 
     virtual void SAL_CALL Delete() override;
 
@@ -124,7 +124,7 @@ public:
     virtual css::uno::Type SAL_CALL getElementType() override;
 
     // ScVbaCollectionBase
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& rSource ) override;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& rSource ) override;
 
     // XHelperInterface
     VBAHELPER_DECL_XHELPERINTERFACE

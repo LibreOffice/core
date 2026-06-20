@@ -95,7 +95,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/linguistic2/ProofreadingResult.hpp>
 #include <com/sun/star/linguistic2/XDictionary.hpp>
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
@@ -3474,7 +3474,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                                         RTL_TEXTENCODING_UTF8))
                                                     bChecked = true;
                                                 xContentControlProps->setPropertyValue(
-                                                    UNO_NAME_CHECKED, uno::Any(bChecked));
+                                                    UNO_NAME_CHECKED, cpo::uno::Any(bChecked));
                                             }
                                             else if (aType == SwContentControlType::PLAIN_TEXT
                                                      || aType == SwContentControlType::RICH_TEXT
@@ -3487,7 +3487,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                                 bool bPlaceHolder = aContent == "" ? true : false;
                                                 xContentControlProps->setPropertyValue(
                                                     UNO_NAME_SHOWING_PLACE_HOLDER,
-                                                    uno::Any(bPlaceHolder));
+                                                    cpo::uno::Any(bPlaceHolder));
                                                 if (bPlaceHolder)
                                                 {
                                                     OUString aPlaceHolderText;
@@ -3530,7 +3530,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                                       : false;
                                             xContentControlProps->setPropertyValue(
                                                 UNO_NAME_CHECKED,
-                                                uno::Any(bChecked));
+                                                cpo::uno::Any(bChecked));
 
                                             OUString aCheckContent;
                                             xContentControlProps->getPropertyValue(
@@ -3549,14 +3549,14 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                                 = aItem3.second.get_value<std::string>();
                                             xContentControlProps->setPropertyValue(
                                                 UNO_NAME_CURRENT_DATE,
-                                                uno::Any(OStringToOUString(aDate,
+                                                cpo::uno::Any(OStringToOUString(aDate,
                                                                            RTL_TEXTENCODING_UTF8)));
                                         }
                                         else if (aItem3.first == "alias")
                                         {
                                             xContentControlProps->setPropertyValue(
                                                 UNO_NAME_ALIAS,
-                                                uno::Any(OStringToOUString(
+                                                cpo::uno::Any(OStringToOUString(
                                                     aItem3.second.get_value<std::string>(),
                                                     RTL_TEXTENCODING_UTF8)));
                                         }

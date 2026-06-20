@@ -52,7 +52,7 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  )
     return callIntMethod_ThrowSQL("getBaseType", mID);
 }
 
-css::uno::Sequence< css::uno::Any > SAL_CALL java_sql_Array::getArray( const css::uno::Reference< css::container::XNameAccess >& typeMap )
+css::uno::Sequence< cpo::uno::Any > SAL_CALL java_sql_Array::getArray( const css::uno::Reference< css::container::XNameAccess >& typeMap )
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java environment has been deleted!");
     {
@@ -67,10 +67,10 @@ css::uno::Sequence< css::uno::Any > SAL_CALL java_sql_Array::getArray( const css
         // and clean up
         t.pEnv->DeleteLocalRef(obj);
     } //t.pEnv
-    return css::uno::Sequence< css::uno::Any >();
+    return css::uno::Sequence< cpo::uno::Any >();
 }
 
-css::uno::Sequence< css::uno::Any > SAL_CALL java_sql_Array::getArrayAtIndex( sal_Int32 index, sal_Int32 count, const css::uno::Reference< css::container::XNameAccess >& typeMap )
+css::uno::Sequence< cpo::uno::Any > SAL_CALL java_sql_Array::getArrayAtIndex( sal_Int32 index, sal_Int32 count, const css::uno::Reference< css::container::XNameAccess >& typeMap )
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java environment has been deleted!");
     {
@@ -85,7 +85,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL java_sql_Array::getArrayAtIndex( sa
         // and clean up
         t.pEnv->DeleteLocalRef(obj);
     }
-    return css::uno::Sequence< css::uno::Any >();
+    return css::uno::Sequence< cpo::uno::Any >();
 }
 
 css::uno::Reference< css::sdbc::XResultSet > SAL_CALL java_sql_Array::getResultSet( const css::uno::Reference< css::container::XNameAccess >& typeMap )

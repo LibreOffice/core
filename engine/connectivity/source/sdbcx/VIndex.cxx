@@ -32,6 +32,7 @@ using namespace ::connectivity::sdbcx;
 using namespace ::cppu;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;

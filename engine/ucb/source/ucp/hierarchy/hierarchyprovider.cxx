@@ -78,7 +78,7 @@ css::uno::Sequence< OUString > HierarchyContentProvider::getSupportedServiceName
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_HierarchyContentProvider_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new HierarchyContentProvider(context));
 }
@@ -122,7 +122,7 @@ HierarchyContentProvider::queryContent(
 
 // virtual
 void SAL_CALL HierarchyContentProvider::initialize(
-                                const uno::Sequence< uno::Any >& aArguments )
+                                const uno::Sequence< cpo::uno::Any >& aArguments )
 {
     if ( aArguments.hasElements() )
         OSL_FAIL( "HierarchyContentProvider::initialize : not supported!" );
@@ -198,7 +198,7 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
                 beans::PropertyValue      aProperty;
                 aProperty.Name = u"nodepath"_ustr ;
                 aProperty.Value <<= OUString(); // root path
-                uno::Sequence< uno::Any > aArguments{ uno::Any(aProperty) };
+                uno::Sequence< cpo::uno::Any > aArguments{ cpo::uno::Any(aProperty) };
 
                 (*it).second.bTriedToGetRootReadAccess = true;
 

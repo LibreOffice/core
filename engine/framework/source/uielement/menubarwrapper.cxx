@@ -34,6 +34,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::lang;
@@ -239,7 +240,7 @@ Any SAL_CALL MenuBarWrapper::getByName(
         throw container::NoSuchElementException();
 
     uno::Reference< frame::XDispatchProvider > xDispatchProvider = pIter->second.m_xDispatchProvider;
-    return uno::Any( xDispatchProvider );
+    return cpo::uno::Any( xDispatchProvider );
 }
 
 Sequence< OUString > SAL_CALL MenuBarWrapper::getElementNames()

@@ -92,6 +92,7 @@ using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace {
 

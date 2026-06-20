@@ -408,22 +408,22 @@ public:
 
     ErrCode     CallXScript(
         const OUString& rScriptURL,
-        const css::uno::Sequence< css::uno::Any >& aParams,
-        css::uno::Any& aRet,
+        const css::uno::Sequence< cpo::uno::Any >& aParams,
+        cpo::uno::Any& aRet,
         css::uno::Sequence< sal_Int16 >& aOutParamIndex,
-        css::uno::Sequence< css::uno::Any >& aOutParam,
+        css::uno::Sequence< cpo::uno::Any >& aOutParam,
         bool bRaiseError = true,
-        const css::uno::Any* aCaller = nullptr );
+        const cpo::uno::Any* aCaller = nullptr );
 
     static ErrCode  CallXScript(
         const css::uno::Reference< css::uno::XInterface >& _rxScriptContext,
         const OUString& rScriptURL,
-        const css::uno::Sequence< css::uno::Any >& aParams,
-        css::uno::Any& aRet,
+        const css::uno::Sequence< cpo::uno::Any >& aParams,
+        cpo::uno::Any& aRet,
         css::uno::Sequence< sal_Int16 >& aOutParamIndex,
-        css::uno::Sequence< css::uno::Any >& aOutParam,
+        css::uno::Sequence< cpo::uno::Any >& aOutParam,
         bool bRaiseError = true,
-        const css::uno::Any* aCaller = nullptr
+        const cpo::uno::Any* aCaller = nullptr
     );
 
     /** adjusts the internal macro mode, according to the current security settings
@@ -574,10 +574,10 @@ public:
     bool                        DdeExecute( const OUString& rCmd );
     virtual bool                DdeGetData( const OUString& rItem,
                                             const OUString& rMimeType,
-                                            css::uno::Any & rValue );
+                                            cpo::uno::Any & rValue );
     virtual bool                DdeSetData( const OUString& rItem,
                                             const OUString& rMimeType,
-                                            const css::uno::Any & rValue );
+                                            const cpo::uno::Any & rValue );
 #endif
     virtual ::sfx2::SvLinkSource* DdeCreateLinkSource( const OUString& rItem );
     virtual void                ReconnectDdeLink(SfxObjectShell& rServer);
@@ -972,8 +972,8 @@ public:
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxObjectShellItem* Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool            QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };
 
 #endif

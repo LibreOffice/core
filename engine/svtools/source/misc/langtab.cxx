@@ -25,7 +25,7 @@
 #include <com/sun/star/i18n/DirectionProperty.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 
 #include <comphelper/kit.hxx>
 #include <i18nlangtag/lang.h>

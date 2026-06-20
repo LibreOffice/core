@@ -29,7 +29,7 @@
 #include <sal/log.hxx>
 #include <osl/mutex.hxx>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <unordered_map>
 #include <msvc/x86.hxx>
 #include <except.hxx>

@@ -79,14 +79,14 @@ bool InteractionRequest::RetryContinuation::isSelected() const
     return m_bSelected;
 }
 
-InteractionRequest::InteractionRequest(css::uno::Any aRequest):
+InteractionRequest::InteractionRequest(cpo::uno::Any aRequest):
     m_aRequest(std::move(aRequest))
 {
     m_xRetryContinuation = new RetryContinuation;
     m_aContinuations = { new AbortContinuation, m_xRetryContinuation };
 }
 
-css::uno::Any SAL_CALL InteractionRequest::getRequest()
+cpo::uno::Any SAL_CALL InteractionRequest::getRequest()
 {
     return m_aRequest;
 }

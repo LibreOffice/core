@@ -44,16 +44,16 @@ public:
     notifyEvent(const css::accessibility::AccessibleEventObject& aEvent) override;
 
     //for value changed event
-    virtual void HandleValueChangedEvent(css::uno::Any oldValue, css::uno::Any newValue);
+    virtual void HandleValueChangedEvent(cpo::uno::Any oldValue, cpo::uno::Any newValue);
 
     //for action changed event
     virtual void HandleActionChangedEvent();
 
     //for text changed event
-    virtual void HandleTextChangedEvent(css::uno::Any oldValue, css::uno::Any newValue);
+    virtual void HandleTextChangedEvent(cpo::uno::Any oldValue, cpo::uno::Any newValue);
 
     //for caret changed event
-    virtual void HandleCaretChangedEvent(css::uno::Any oldValue, css::uno::Any newValue);
+    virtual void HandleCaretChangedEvent(cpo::uno::Any oldValue, cpo::uno::Any newValue);
 
     virtual void SetComponentState(sal_Int64 state, bool enable) override;
     virtual void FireStatePropertyChange(sal_Int64 state, bool set) override;

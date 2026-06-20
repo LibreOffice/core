@@ -25,6 +25,7 @@
 
 using namespace utl;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 const sal_Unicode cDelim = 0x01;        // delimiter between From and To
 

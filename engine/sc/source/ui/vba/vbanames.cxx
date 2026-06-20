@@ -48,10 +48,10 @@ public:
     /// @throws uno::RuntimeException
     NamesEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration,  uno::Reference< frame::XModel > xModel , uno::Reference< sheet::XNamedRanges > xNames ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), m_xModel(std::move( xModel )), m_xNames(std::move( xNames )) {}
 
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         uno::Reference< sheet::XNamedRange > xNamed( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
-        return uno::Any( uno::Reference< excel::XName > ( new ScVbaName( m_xParent, m_xContext, xNamed ,m_xNames , m_xModel ) ) );
+        return cpo::uno::Any( uno::Reference< excel::XName > ( new ScVbaName( m_xParent, m_xContext, xNamed ,m_xNames , m_xModel ) ) );
     }
 
 };
@@ -84,18 +84,18 @@ ScVbaNames::getScDocument()
     return rViewData.GetDocument();
 }
 
-css::uno::Any
-ScVbaNames::Add( const css::uno::Any& Name ,
-                                        const css::uno::Any& RefersTo,
-                                        const css::uno::Any& /*Visible*/,
-                                        const css::uno::Any& /*MacroType*/,
-                                        const css::uno::Any& /*ShoutcutKey*/,
-                                        const css::uno::Any& /*Category*/,
-                                        const css::uno::Any& NameLocal,
-                                        const css::uno::Any& /*RefersToLocal*/,
-                                        const css::uno::Any& /*CategoryLocal*/,
-                                        const css::uno::Any& RefersToR1C1,
-                                        const css::uno::Any& RefersToR1C1Local )
+cpo::uno::Any
+ScVbaNames::Add( const cpo::uno::Any& Name ,
+                                        const cpo::uno::Any& RefersTo,
+                                        const cpo::uno::Any& /*Visible*/,
+                                        const cpo::uno::Any& /*MacroType*/,
+                                        const cpo::uno::Any& /*ShoutcutKey*/,
+                                        const cpo::uno::Any& /*Category*/,
+                                        const cpo::uno::Any& NameLocal,
+                                        const cpo::uno::Any& /*RefersToLocal*/,
+                                        const cpo::uno::Any& /*CategoryLocal*/,
+                                        const cpo::uno::Any& RefersToR1C1,
+                                        const cpo::uno::Any& RefersToR1C1Local )
 {
     OUString sName;
     uno::Reference< excel::XRange > xRange;
@@ -190,24 +190,24 @@ ScVbaNames::Add( const css::uno::Any& Name ,
         if ( !xRange.is() )
             xRange = new ScVbaRange( mxParent, mxContext, xUnoRange );
 
-        uno::Reference< excel::XRange > xArea( xRange->Areas( uno::Any( sal_Int32(1) ) ), uno::UNO_QUERY );
+        uno::Reference< excel::XRange > xArea( xRange->Areas( cpo::uno::Any( sal_Int32(1) ) ), uno::UNO_QUERY );
 
-        uno::Any aAny = xArea->getCellRange() ;
+        cpo::uno::Any aAny = xArea->getCellRange() ;
 
         uno::Reference< sheet::XCellRangeAddressable > thisRangeAdd( aAny, ::uno::UNO_QUERY_THROW);
 
         table::CellRangeAddress aAddr = thisRangeAdd->getRangeAddress();
-        uno::Any aAny2;
+        cpo::uno::Any aAny2;
         if ( mxNames.is() )
         {
             table::CellAddress aCellAddr( aAddr.Sheet , aAddr.StartColumn , aAddr.StartRow );
             if ( mxNames->hasByName( sName ) )
                 mxNames->removeByName(sName);
             OUStringBuffer sTmp = "$";
-            uno::Reference< ov::XCollection > xCol( xRange->Areas( uno::Any() ), uno::UNO_QUERY );
+            uno::Reference< ov::XCollection > xCol( xRange->Areas( cpo::uno::Any() ), uno::UNO_QUERY );
             for ( sal_Int32 nArea = 1; nArea <= xCol->getCount(); ++nArea )
             {
-                xArea.set( xRange->Areas( uno::Any( nArea ) ), uno::UNO_QUERY_THROW );
+                xArea.set( xRange->Areas( cpo::uno::Any( nArea ) ), uno::UNO_QUERY_THROW );
 
                 OUString sRangeAdd = xArea->Address( aAny2, aAny2 , aAny2 , aAny2, aAny2 );
                 if ( nArea > 1 )
@@ -215,10 +215,10 @@ ScVbaNames::Add( const css::uno::Any& Name ,
                 sTmp.append("'" + xRange->getWorksheet()->getName() + "'." + sRangeAdd);
             }
             mxNames->addNewByName( sName, sTmp.makeStringAndClear(), aCellAddr, 0/*nUnoType*/);
-            return Item( uno::Any( sName ), uno::Any() );
+            return Item( cpo::uno::Any( sName ), cpo::uno::Any() );
         }
     }
-    return css::uno::Any();
+    return cpo::uno::Any();
 }
 
 // XEnumerationAccess
@@ -235,11 +235,11 @@ ScVbaNames::createEnumeration()
     return new NamesEnumeration( getParent(), mxContext, xEnumAccess->createEnumeration(), mxModel , mxNames );
 }
 
-uno::Any
-ScVbaNames::createCollectionObject( const uno::Any& aSource )
+cpo::uno::Any
+ScVbaNames::createCollectionObject( const cpo::uno::Any& aSource )
 {
     uno::Reference< sheet::XNamedRange > xName( aSource, uno::UNO_QUERY );
-    return uno::Any( uno::Reference< excel::XName > ( new ScVbaName( getParent(), mxContext, xName, mxNames , mxModel ) ) );
+    return cpo::uno::Any( uno::Reference< excel::XName > ( new ScVbaName( getParent(), mxContext, xName, mxNames , mxModel ) ) );
 }
 
 OUString

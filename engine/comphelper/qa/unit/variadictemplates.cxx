@@ -39,7 +39,7 @@ namespace detail {
 
 template <typename T>
 void extract(
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> const& seq,
+    ::com::sun::star::uno::Sequence< ::cpo::uno::Any> const& seq,
     sal_Int32 nArg, T & v,
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>
     const& xErrorContext )
@@ -61,7 +61,7 @@ void extract(
 
 template <typename T>
 void extract(
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> const& seq,
+    ::com::sun::star::uno::Sequence< ::cpo::uno::Any> const& seq,
     sal_Int32 nArg, ::std::optional<T> & v,
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>
     const& xErrorContext )
@@ -77,7 +77,7 @@ void extract(
 
 template < typename T0, typename T1, typename T2, typename T3, typename T4 >
 void unwrapArgsBaseline(
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > const& seq,
+    ::com::sun::star::uno::Sequence< ::cpo::uno::Any > const& seq,
     T0& v0, T1& v1, T2& v2, T3& v3, T4& v4,
     ::com::sun::star::uno::Reference<
     ::com::sun::star::uno::XInterface> const& xErrorContext =
@@ -96,38 +96,38 @@ void VariadicTemplatesTest::testUnwrapArgs() {
     OUString tmp1   = u"Test1"_ustr;
     sal_Int32 tmp2  = 42;
     sal_uInt32 tmp3 = 42;
-    ::com::sun::star::uno::Any tmp6(
+    ::cpo::uno::Any tmp6(
         tmp1
         );
-    ::com::sun::star::uno::Any tmp7(
+    ::cpo::uno::Any tmp7(
         tmp2
         );
-    ::com::sun::star::uno::Any tmp8(
+    ::cpo::uno::Any tmp8(
         tmp3
         );
-    ::com::sun::star::uno::Any tmp9(
+    ::cpo::uno::Any tmp9(
         u"Test2"_ustr
         );
-    ::std::optional< ::com::sun::star::uno::Any > tmp10(
+    ::std::optional< ::cpo::uno::Any > tmp10(
         u"Test3"_ustr
         );
-    ::std::optional< ::com::sun::star::uno::Any > tmp11(
+    ::std::optional< ::cpo::uno::Any > tmp11(
         tmp1
         );
 
     // test equality with the baseline and template specialization with
     // std::optional< T >
     try {
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > seq1(
+        ::com::sun::star::uno::Sequence< ::cpo::uno::Any > seq1(
             static_cast< sal_uInt32 >( 5 ) );
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > seq2(
+        ::com::sun::star::uno::Sequence< ::cpo::uno::Any > seq2(
             static_cast< sal_uInt32 >( 5 ) );
 
         // tmp11 should be ignored as it is ::std::optional< T >
         ::comphelper::unwrapArgs( seq1, tmp6, tmp7, tmp8, tmp9, tmp10, tmp11 );
         unwrapArgsBaseline( seq2, tmp6, tmp7, tmp8, tmp9, tmp10 );
-        ::com::sun::star::uno::Any* p1 = seq1.getArray();
-        ::com::sun::star::uno::Any* p2 = seq2.getArray();
+        ::cpo::uno::Any* p1 = seq1.getArray();
+        ::cpo::uno::Any* p2 = seq2.getArray();
 
         for( sal_Int32 i = 0; i < seq1.getLength() && i < seq2.getLength(); ++i ) {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "seq1 and seq2 are equal",
@@ -145,7 +145,7 @@ void VariadicTemplatesTest::testUnwrapArgs() {
 
     // test argument counting
     try {
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > seq(
+        ::com::sun::star::uno::Sequence< ::cpo::uno::Any > seq(
             static_cast< sal_uInt32 >( 4 ) );
         ::comphelper::unwrapArgs( seq, tmp6, tmp7, tmp10, tmp11, tmp10, tmp6 );
     }
@@ -160,13 +160,13 @@ void VariadicTemplatesTest::testUnwrapArgs() {
     OUString test5( u"Test5"_ustr );
 
     try {
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > seq(
+        ::com::sun::star::uno::Sequence< ::cpo::uno::Any > seq(
             static_cast< sal_uInt32 >( 4 ) );
         ::comphelper::unwrapArgs( seq, test1, test2, test3, test4, test5 );
     }
     catch( css::lang::IllegalArgumentException& err1 ) {
         try {
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > seq(
+            ::com::sun::star::uno::Sequence< ::cpo::uno::Any > seq(
                 static_cast< sal_uInt32 >( 4 ) );
             unwrapArgsBaseline( seq, test1, test2, test3, test4, test5 );
             CPPUNIT_FAIL( "unwrapArgs failed while the baseline did not throw" );

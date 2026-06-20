@@ -50,7 +50,7 @@ public:
     explicit SdUnoDrawPool(SdDrawDocument* pModel);
 
 protected:
-    virtual void putAny( SfxItemPool* pPool, const PropertyMapEntry* pEntry, const uno::Any& rValue ) override;
+    virtual void putAny( SfxItemPool* pPool, const PropertyMapEntry* pEntry, const cpo::uno::Any& rValue ) override;
 
 private:
     SdDrawDocument* mpDrawModel;
@@ -63,7 +63,7 @@ SdUnoDrawPool::SdUnoDrawPool(SdDrawDocument* pModel)
 {
 }
 
-void SdUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, const uno::Any& rValue )
+void SdUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, const cpo::uno::Any& rValue )
 {
     switch( pEntry->mnHandle )
     {

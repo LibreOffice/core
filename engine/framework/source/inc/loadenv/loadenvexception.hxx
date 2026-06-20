@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <utility>
 
 namespace framework{
@@ -73,11 +73,11 @@ class LoadEnvException
 
         sal_Int32 m_nID;
         OUString m_sMessage;
-        css::uno::Any m_exOriginal;
+        cpo::uno::Any m_exOriginal;
 
         LoadEnvException(
             sal_Int32 id, OUString message = OUString(),
-            css::uno::Any original = css::uno::Any()):
+            cpo::uno::Any original = cpo::uno::Any()):
             m_nID(id), m_sMessage(std::move(message)), m_exOriginal(std::move(original))
         {}
 };

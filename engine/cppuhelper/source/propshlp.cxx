@@ -31,6 +31,7 @@
 
 using namespace osl;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace cppu;
@@ -429,7 +430,7 @@ void OPropertySetHelper::removeVetoableChangeListener(
                                     );
 }
 
-void OPropertySetHelper::setDependentFastPropertyValue( sal_Int32 i_handle, const css::uno::Any& i_value )
+void OPropertySetHelper::setDependentFastPropertyValue( sal_Int32 i_handle, const cpo::uno::Any& i_value )
 {
     //OSL_PRECOND( rBHelper.rMutex.isAcquired(), "OPropertySetHelper::setDependentFastPropertyValue: to be called with a locked mutex only!" );
         // there is no such thing as Mutex.isAcquired, sadly ...

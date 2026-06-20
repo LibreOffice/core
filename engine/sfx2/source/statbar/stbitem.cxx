@@ -312,7 +312,7 @@ void SAL_CALL SfxStatusBarControl::command(
     const awt::Point& rPos,
     ::sal_Int32 nCommand,
     bool /*bMouseEvent*/,
-    const css::uno::Any& /*aData*/ )
+    const cpo::uno::Any& /*aData*/ )
 {
     SolarMutexGuard aGuard;
     ::Point aPos( rPos.X, rPos.Y );

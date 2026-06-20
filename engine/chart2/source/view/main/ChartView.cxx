@@ -118,7 +118,7 @@ namespace chart {
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 
 struct CreateShapeParam2D
 {
@@ -191,7 +191,7 @@ void ChartView::init()
     }
 }
 
-void SAL_CALL ChartView::initialize( const uno::Sequence< uno::Any >& )
+void SAL_CALL ChartView::initialize( const uno::Sequence< cpo::uno::Any >& )
 {
     init();
 }
@@ -268,10 +268,10 @@ void ChartView::getMetaFile( const uno::Reference< io::XOutputStream >& xOutStre
     }
 }
 
-uno::Any SAL_CALL ChartView::getTransferData( const datatransfer::DataFlavor& aFlavor )
+cpo::uno::Any SAL_CALL ChartView::getTransferData( const datatransfer::DataFlavor& aFlavor )
 {
     bool bHighContrastMetaFile( aFlavor.MimeType == lcl_aGDIMetaFileMIMETypeHighContrast);
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if( ! (bHighContrastMetaFile || aFlavor.MimeType == lcl_aGDIMetaFileMIMEType) )
         return aRet;
 
@@ -1298,7 +1298,7 @@ void formatPage(
         PropertyMapper::getValueMap( aNameValueMap, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xModelPage );
 
         OUString aCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, u"" ) );
-        aNameValueMap.emplace( "Name", uno::Any( aCID ) ); //CID OUString
+        aNameValueMap.emplace( "Name", cpo::uno::Any( aCID ) ); //CID OUString
 
         tNameSequence aNames;
         tAnySequence aValues;
@@ -1558,7 +1558,7 @@ void ChartView::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         if ( xSelectionSupplier.is() )
         {
             OUString aSelObjCID;
-            uno::Any aSelObj( xSelectionSupplier->getSelection() );
+            cpo::uno::Any aSelObj( xSelectionSupplier->getSelection() );
             aSelObj >>= aSelObjCID;
             if ( !aSelObjCID.isEmpty() )
             {
@@ -1815,7 +1815,7 @@ Reference< uno::XInterface > ChartView::createInstance( const OUString& aService
     return nullptr;
 }
 
-Reference< uno::XInterface > ChartView::createInstanceWithArguments( const OUString& ServiceSpecifier, const uno::Sequence< uno::Any >& Arguments )
+Reference< uno::XInterface > ChartView::createInstanceWithArguments( const OUString& ServiceSpecifier, const uno::Sequence< cpo::uno::Any >& Arguments )
 {
     OSL_ENSURE( Arguments.hasElements(), "ChartView::createInstanceWithArguments: arguments are ignored" );
     return createInstance( ServiceSpecifier );
@@ -2229,7 +2229,7 @@ awt::Rectangle ChartView::AddSubtractAxisTitleSizes(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_ChartView_get_implementation(css::uno::XComponentContext *context,
-                                                         css::uno::Sequence<css::uno::Any> const &)
+                                                         css::uno::Sequence<cpo::uno::Any> const &)
 {
     rtl::Reference<::chart::ChartModel> pChartModel = new ::chart::ChartModel(context);
     return cppu::acquire(new ::chart::ChartView(context, *pChartModel));

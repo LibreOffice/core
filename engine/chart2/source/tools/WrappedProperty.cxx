@@ -24,7 +24,7 @@
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
 
 namespace chart
@@ -103,12 +103,12 @@ beans::PropertyState WrappedProperty::getPropertyState( const Reference< beans::
         try
         {
             Reference< beans::XPropertySet > xInnerProp( xInnerPropertyState, uno::UNO_QUERY );
-            uno::Any aValue = getPropertyValue( xInnerProp );
+            cpo::uno::Any aValue = getPropertyValue( xInnerProp );
             if( !aValue.hasValue() )
                 aState = beans::PropertyState_DEFAULT_VALUE;
             else
             {
-                uno::Any aDefault = getPropertyDefault( xInnerPropertyState );
+                cpo::uno::Any aDefault = getPropertyDefault( xInnerPropertyState );
                 if( aValue == aDefault )
                     aState = beans::PropertyState_DEFAULT_VALUE;
             }

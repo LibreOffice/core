@@ -55,6 +55,7 @@ using namespace css;
 using namespace css::awt;
 using namespace css::lang;
 using namespace css::uno;
+using namespace cpo::uno;
 using ::com::sun::star::graphic::XGraphic;
 using ::com::sun::star::uno::Reference;
 using namespace ::toolkit;
@@ -99,9 +100,9 @@ OUString UnoControlEditModel::getServiceName( )
     return u"stardiv.vcl.controlmodel.Edit"_ustr;
 }
 
-uno::Any UnoControlEditModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+cpo::uno::Any UnoControlEditModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
-    uno::Any aReturn;
+    cpo::uno::Any aReturn;
 
     switch ( nPropId )
     {
@@ -145,7 +146,7 @@ css::uno::Sequence<OUString> UnoControlEditModel::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlEditModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlEditModel(context));
 }
@@ -163,15 +164,15 @@ UnoEditControl::UnoEditControl()
     maComponentInfos.nHeight = 12;
 }
 
-uno::Any SAL_CALL UnoEditControl::queryAggregation( const uno::Type & rType )
+cpo::uno::Any SAL_CALL UnoEditControl::queryAggregation( const uno::Type & rType )
 {
-    uno::Any aReturn = UnoControlBase::queryAggregation( rType );
+    cpo::uno::Any aReturn = UnoControlBase::queryAggregation( rType );
     if ( !aReturn.hasValue() )
         aReturn = UnoEditControl_Base::queryInterface( rType );
     return aReturn;
 }
 
-uno::Any SAL_CALL UnoEditControl::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL UnoEditControl::queryInterface( const uno::Type & rType )
 {
     return UnoControlBase::queryInterface( rType );
 }
@@ -194,7 +195,7 @@ OUString UnoEditControl::GetComponentServiceName() const
     OUString sName( u"Edit"_ustr );
 
     // but maybe we are to display multi-line text?
-    uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_MULTILINE ) );
+    cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_MULTILINE ) );
     bool b = bool();
     if ( ( aVal >>= b ) && b )
         sName = u"MultiLineEdit"_ustr;
@@ -209,7 +210,7 @@ bool SAL_CALL UnoEditControl::setModel(const uno::Reference< awt::XControlModel 
     return bReturn;
 }
 
-void UnoEditControl::ImplSetPeerProperty( const OUString& rPropName, const uno::Any& rVal )
+void UnoEditControl::ImplSetPeerProperty( const OUString& rPropName, const cpo::uno::Any& rVal )
 {
     bool bDone = false;
     if ( GetPropertyId( rPropName ) == BASEPROPERTY_TEXT )
@@ -259,7 +260,7 @@ void UnoEditControl::textChanged(const awt::TextEvent& e)
 
     if ( mbHasTextProperty )
     {
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TEXT ), uno::Any(xText->getText()), false );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TEXT ), cpo::uno::Any(xText->getText()), false );
     }
     else
     {
@@ -296,7 +297,7 @@ void UnoEditControl::setText( const OUString& aText )
 {
     if ( mbHasTextProperty )
     {
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TEXT ), uno::Any(aText), true );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TEXT ), cpo::uno::Any(aText), true );
     }
     else
     {
@@ -406,7 +407,7 @@ bool UnoEditControl::isEditable()
 
 void UnoEditControl::setEditable( bool bEditable )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_READONLY ), uno::Any(!bEditable), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_READONLY ), cpo::uno::Any(!bEditable), true );
 }
 
 sal_Int16 UnoEditControl::getMaxTextLen()
@@ -423,7 +424,7 @@ void UnoEditControl::setMaxTextLen( sal_Int16 nLen )
 {
     if ( ImplHasProperty( BASEPROPERTY_MAXTEXTLEN) )
     {
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MAXTEXTLEN ), uno::Any(nLen), true );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MAXTEXTLEN ), cpo::uno::Any(nLen), true );
     }
     else
     {
@@ -474,7 +475,7 @@ uno::Sequence< OUString > UnoEditControl::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoEditControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoEditControl());
 }
@@ -509,11 +510,11 @@ OUString UnoControlFileControlModel::getServiceName()
     return u"stardiv.vcl.controlmodel.FileControl"_ustr;
 }
 
-uno::Any UnoControlFileControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+cpo::uno::Any UnoControlFileControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( u"stardiv.vcl.control.FileControl"_ustr );
+        return cpo::uno::Any( u"stardiv.vcl.control.FileControl"_ustr );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -546,7 +547,7 @@ UnoControlFileControlModel::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlFileControlModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlFileControlModel(context));
 }
@@ -576,22 +577,22 @@ css::uno::Sequence<OUString> UnoFileControl::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoFileControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoFileControl());
 }
 
 
 
-uno::Any GraphicControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+cpo::uno::Any GraphicControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_GRAPHIC )
-        return uno::Any( uno::Reference< graphic::XGraphic >() );
+        return cpo::uno::Any( uno::Reference< graphic::XGraphic >() );
 
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
 
-void GraphicControlModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const css::uno::Any& rValue )
+void GraphicControlModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const cpo::uno::Any& rValue )
 {
     UnoControlModel::setFastPropertyValue_NoBroadcast( rGuard, nHandle, rValue );
 
@@ -607,11 +608,11 @@ void GraphicControlModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std
                 mbAdjustingGraphic = true;
                 OUString sImageURL;
                 OSL_VERIFY( rValue >>= sImageURL );
-                css::uno::Any any;
+                cpo::uno::Any any;
                 getFastPropertyValue(rGuard, any, BASEPROPERTY_REFERER);
                 OUString referer;
                 any >>= referer;
-                setDependentFastPropertyValue( rGuard, BASEPROPERTY_GRAPHIC, uno::Any( ImageHelper::getGraphicFromURL_nothrow( sImageURL, referer ) ) );
+                setDependentFastPropertyValue( rGuard, BASEPROPERTY_GRAPHIC, cpo::uno::Any( ImageHelper::getGraphicFromURL_nothrow( sImageURL, referer ) ) );
                 mbAdjustingGraphic = false;
             }
             break;
@@ -620,7 +621,7 @@ void GraphicControlModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std
             if ( !mbAdjustingGraphic && ImplHasProperty( BASEPROPERTY_IMAGEURL ) )
             {
                 mbAdjustingGraphic = true;
-                setDependentFastPropertyValue( rGuard, BASEPROPERTY_IMAGEURL, uno::Any( OUString() ) );
+                setDependentFastPropertyValue( rGuard, BASEPROPERTY_IMAGEURL, cpo::uno::Any( OUString() ) );
                 mbAdjustingGraphic = false;
             }
             break;
@@ -631,7 +632,7 @@ void GraphicControlModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std
                 mbAdjustingImagePosition = true;
                 sal_Int16 nUNOValue = 0;
                 OSL_VERIFY( rValue >>= nUNOValue );
-                setDependentFastPropertyValue( rGuard, BASEPROPERTY_IMAGEPOSITION, uno::Any( getExtendedImagePosition( nUNOValue ) ) );
+                setDependentFastPropertyValue( rGuard, BASEPROPERTY_IMAGEPOSITION, cpo::uno::Any( getExtendedImagePosition( nUNOValue ) ) );
                 mbAdjustingImagePosition = false;
             }
             break;
@@ -641,7 +642,7 @@ void GraphicControlModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std
                 mbAdjustingImagePosition = true;
                 sal_Int16 nUNOValue = 0;
                 OSL_VERIFY( rValue >>= nUNOValue );
-                setDependentFastPropertyValue( rGuard, BASEPROPERTY_IMAGEALIGN, uno::Any( getCompatibleImageAlign( translateImagePosition( nUNOValue ) ) ) );
+                setDependentFastPropertyValue( rGuard, BASEPROPERTY_IMAGEALIGN, cpo::uno::Any( getCompatibleImageAlign( translateImagePosition( nUNOValue ) ) ) );
                 mbAdjustingImagePosition = false;
             }
             break;
@@ -677,18 +678,18 @@ OUString UnoControlButtonModel::getServiceName()
     return u"stardiv.vcl.controlmodel.Button"_ustr;
 }
 
-uno::Any UnoControlButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+cpo::uno::Any UnoControlButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     switch ( nPropId )
     {
     case BASEPROPERTY_DEFAULTCONTROL:
-        return uno::Any( u"stardiv.vcl.control.Button"_ustr );
+        return cpo::uno::Any( u"stardiv.vcl.control.Button"_ustr );
     case BASEPROPERTY_TOGGLE:
-        return uno::Any( false );
+        return cpo::uno::Any( false );
     case BASEPROPERTY_ALIGN:
-        return uno::Any( sal_Int16(PROPERTY_ALIGN_CENTER) );
+        return cpo::uno::Any( sal_Int16(PROPERTY_ALIGN_CENTER) );
     case BASEPROPERTY_FOCUSONCLICK:
-        return uno::Any( true );
+        return cpo::uno::Any( true );
     }
 
     return GraphicControlModel::ImplGetDefaultValue( nPropId );
@@ -721,7 +722,7 @@ css::uno::Sequence<OUString> UnoControlButtonModel::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlButtonModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlButtonModel(context));
 }
@@ -739,7 +740,7 @@ UnoButtonControl::UnoButtonControl()
 OUString UnoButtonControl::GetComponentServiceName() const
 {
     OUString aName( u"pushbutton"_ustr );
-    uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_PUSHBUTTONTYPE ) );
+    cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_PUSHBUTTONTYPE ) );
     sal_Int16 n = sal_Int16();
     if ( ( aVal >>= n ) && n )
     {
@@ -836,7 +837,7 @@ void SAL_CALL UnoButtonControl::disposing( const lang::EventObject& Source )
 void SAL_CALL UnoButtonControl::itemStateChanged( const awt::ItemEvent& rEvent )
 {
     // forward to model
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), uno::Any(static_cast<sal_Int16>(rEvent.Selected)), false );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), cpo::uno::Any(static_cast<sal_Int16>(rEvent.Selected)), false );
 
     // multiplex
     ItemEvent aEvent( rEvent );
@@ -846,7 +847,7 @@ void SAL_CALL UnoButtonControl::itemStateChanged( const awt::ItemEvent& rEvent )
 
 void UnoButtonControl::setLabel( const OUString&  rLabel )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), uno::Any(rLabel), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), cpo::uno::Any(rLabel), true );
 }
 
 void UnoButtonControl::setActionCommand( const OUString& rCommand )
@@ -888,7 +889,7 @@ css::uno::Sequence<OUString> UnoButtonControl::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoButtonControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoButtonControl());
 }
@@ -924,10 +925,10 @@ UnoControlImageControlModel::getSupportedServiceNames()
     return comphelper::concatSequences( GraphicControlModel::getSupportedServiceNames(), vals);
 }
 
-uno::Any UnoControlImageControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+cpo::uno::Any UnoControlImageControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
-        return uno::Any( u"stardiv.vcl.control.ImageControl"_ustr );
+        return cpo::uno::Any( u"stardiv.vcl.control.ImageControl"_ustr );
 
     if ( nPropId == BASEPROPERTY_IMAGE_SCALE_MODE )
         return Any( awt::ImageScaleMode::ANISOTROPIC );
@@ -948,7 +949,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlImageControlModel::getProper
     return xInfo;
 }
 
-void UnoControlImageControlModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 _nHandle, const css::uno::Any& _rValue )
+void UnoControlImageControlModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 _nHandle, const cpo::uno::Any& _rValue )
 {
     GraphicControlModel::setFastPropertyValue_NoBroadcast( rGuard, _nHandle, _rValue );
 
@@ -963,7 +964,7 @@ void UnoControlImageControlModel::setFastPropertyValue_NoBroadcast( std::unique_
                 mbAdjustingImageScaleMode = true;
                 sal_Int16 nScaleMode( awt::ImageScaleMode::ANISOTROPIC );
                 OSL_VERIFY( _rValue >>= nScaleMode );
-                setDependentFastPropertyValue( rGuard, BASEPROPERTY_SCALEIMAGE, uno::Any( nScaleMode != awt::ImageScaleMode::NONE ) );
+                setDependentFastPropertyValue( rGuard, BASEPROPERTY_SCALEIMAGE, cpo::uno::Any( nScaleMode != awt::ImageScaleMode::NONE ) );
                 mbAdjustingImageScaleMode = false;
             }
             break;
@@ -973,7 +974,7 @@ void UnoControlImageControlModel::setFastPropertyValue_NoBroadcast( std::unique_
                 mbAdjustingImageScaleMode = true;
                 bool bScale = true;
                 OSL_VERIFY( _rValue >>= bScale );
-                setDependentFastPropertyValue( rGuard, BASEPROPERTY_IMAGE_SCALE_MODE, uno::Any( bScale ? awt::ImageScaleMode::ANISOTROPIC : awt::ImageScaleMode::NONE ) );
+                setDependentFastPropertyValue( rGuard, BASEPROPERTY_IMAGE_SCALE_MODE, cpo::uno::Any( bScale ? awt::ImageScaleMode::ANISOTROPIC : awt::ImageScaleMode::NONE ) );
                 mbAdjustingImageScaleMode = false;
             }
             break;
@@ -989,7 +990,7 @@ void UnoControlImageControlModel::setFastPropertyValue_NoBroadcast( std::unique_
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlImageControlModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlImageControlModel(context));
 }
@@ -1056,7 +1057,7 @@ css::uno::Sequence<OUString> UnoImageControlControl::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoImageControlControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoImageControlControl());
 }
@@ -1074,15 +1075,15 @@ OUString UnoControlRadioButtonModel::getServiceName()
     return u"stardiv.vcl.controlmodel.RadioButton"_ustr;
 }
 
-uno::Any UnoControlRadioButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+cpo::uno::Any UnoControlRadioButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     switch ( nPropId )
     {
     case BASEPROPERTY_DEFAULTCONTROL:
-        return uno::Any( u"stardiv.vcl.control.RadioButton"_ustr );
+        return cpo::uno::Any( u"stardiv.vcl.control.RadioButton"_ustr );
 
     case BASEPROPERTY_VISUALEFFECT:
-        return uno::Any( sal_Int16(awt::VisualEffect::LOOK3D) );
+        return cpo::uno::Any( sal_Int16(awt::VisualEffect::LOOK3D) );
     }
 
     return GraphicControlModel::ImplGetDefaultValue( nPropId );
@@ -1116,7 +1117,7 @@ UnoControlRadioButtonModel::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlRadioButtonModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlRadioButtonModel(context));
 }
@@ -1167,7 +1168,7 @@ void UnoRadioButtonControl::createPeer( const uno::Reference< awt::XToolkit > & 
     // have it enabled by default because of 85071)
     uno::Reference< awt::XVclWindowPeer >  xVclWindowPeer( getPeer(), uno::UNO_QUERY );
     if ( xVclWindowPeer.is() )
-        xVclWindowPeer->setProperty( GetPropertyName( BASEPROPERTY_AUTOTOGGLE ), css::uno::Any(true) );
+        xVclWindowPeer->setProperty( GetPropertyName( BASEPROPERTY_AUTOTOGGLE ), cpo::uno::Any(true) );
 }
 
 void UnoRadioButtonControl::addItemListener(const uno::Reference < awt::XItemListener > & l)
@@ -1202,7 +1203,7 @@ void UnoRadioButtonControl::removeActionListener(const uno::Reference< awt::XAct
 
 void UnoRadioButtonControl::setLabel( const OUString&  rLabel )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), uno::Any(rLabel), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), cpo::uno::Any(rLabel), true );
 }
 
 void UnoRadioButtonControl::setActionCommand( const OUString& rCommand )
@@ -1218,20 +1219,20 @@ void UnoRadioButtonControl::setActionCommand( const OUString& rCommand )
 void UnoRadioButtonControl::setState( bool bOn )
 {
     sal_Int16 nState = bOn ? 1 : 0;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), uno::Any(nState), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), cpo::uno::Any(nState), true );
 }
 
 bool UnoRadioButtonControl::getState()
 {
     sal_Int16 nState = 0;
-    uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ) );
+    cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ) );
     aVal >>= nState;
     return nState != 0;
 }
 
 void UnoRadioButtonControl::itemStateChanged( const awt::ItemEvent& rEvent )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), uno::Any(static_cast<sal_Int16>(rEvent.Selected)), false );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), cpo::uno::Any(static_cast<sal_Int16>(rEvent.Selected)), false );
 
     // compatibility:
     // in OOo 1.0.x, when the user clicked a radio button in a group of buttons, this resulted
@@ -1289,7 +1290,7 @@ css::uno::Sequence<OUString> UnoRadioButtonControl::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoRadioButtonControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoRadioButtonControl());
 }
@@ -1307,15 +1308,15 @@ OUString UnoControlCheckBoxModel::getServiceName()
     return u"stardiv.vcl.controlmodel.CheckBox"_ustr;
 }
 
-uno::Any UnoControlCheckBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+cpo::uno::Any UnoControlCheckBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     switch ( nPropId )
     {
     case BASEPROPERTY_DEFAULTCONTROL:
-        return uno::Any( u"stardiv.vcl.control.CheckBox"_ustr );
+        return cpo::uno::Any( u"stardiv.vcl.control.CheckBox"_ustr );
 
     case BASEPROPERTY_VISUALEFFECT:
-        return uno::Any( sal_Int16(awt::VisualEffect::LOOK3D) );
+        return cpo::uno::Any( sal_Int16(awt::VisualEffect::LOOK3D) );
     }
 
     return GraphicControlModel::ImplGetDefaultValue( nPropId );
@@ -1348,7 +1349,7 @@ css::uno::Sequence<OUString> UnoControlCheckBoxModel::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlCheckBoxModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlCheckBoxModel(context));
 }
@@ -1436,30 +1437,30 @@ void UnoCheckBoxControl::setActionCommand( const OUString& rCommand )
 
 void UnoCheckBoxControl::setLabel( const OUString&  rLabel )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), uno::Any(rLabel), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), cpo::uno::Any(rLabel), true );
 }
 
 void UnoCheckBoxControl::setState( sal_Int16 n )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), uno::Any(n), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), cpo::uno::Any(n), true );
 }
 
 sal_Int16 UnoCheckBoxControl::getState()
 {
     sal_Int16 nState = 0;
-    uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ) );
+    cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ) );
     aVal >>= nState;
     return nState;
 }
 
 void UnoCheckBoxControl::enableTriState( bool b )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TRISTATE ), uno::Any(b), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TRISTATE ), cpo::uno::Any(b), true );
 }
 
 void UnoCheckBoxControl::itemStateChanged( const awt::ItemEvent& rEvent )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), uno::Any(static_cast<sal_Int16>(rEvent.Selected)), false );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), cpo::uno::Any(static_cast<sal_Int16>(rEvent.Selected)), false );
 
     if ( maItemListeners.getLength() )
         maItemListeners.itemStateChanged( rEvent );
@@ -1494,7 +1495,7 @@ css::uno::Sequence<OUString> UnoCheckBoxControl::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoCheckBoxControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoCheckBoxControl());
 }
@@ -1512,19 +1513,19 @@ OUString UnoControlFixedHyperlinkModel::getServiceName()
     return u"com.sun.star.awt.UnoControlFixedHyperlinkModel"_ustr;
 }
 
-uno::Any UnoControlFixedHyperlinkModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+cpo::uno::Any UnoControlFixedHyperlinkModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( u"com.sun.star.awt.UnoControlFixedHyperlink"_ustr );
+        return cpo::uno::Any( u"com.sun.star.awt.UnoControlFixedHyperlink"_ustr );
     }
     else if ( nPropId == BASEPROPERTY_BORDER )
     {
-        return uno::Any(sal_Int16(0));
+        return cpo::uno::Any(sal_Int16(0));
     }
     else if ( nPropId == BASEPROPERTY_URL )
     {
-        return uno::Any( OUString() );
+        return cpo::uno::Any( OUString() );
     }
 
     return UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -1546,7 +1547,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlFixedHyperlinkModel::getProp
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlFixedHyperlinkModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlFixedHyperlinkModel(context));
 }
@@ -1566,9 +1567,9 @@ OUString UnoFixedHyperlinkControl::GetComponentServiceName() const
 }
 
 // uno::XInterface
-uno::Any UnoFixedHyperlinkControl::queryAggregation( const uno::Type & rType )
+cpo::uno::Any UnoFixedHyperlinkControl::queryAggregation( const uno::Type & rType )
 {
-    uno::Any aRet = ::cppu::queryInterface( rType,
+    cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                         static_cast< awt::XFixedHyperlink* >(this),
                                         static_cast< awt::XLayoutConstrains* >(this) );
     return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
@@ -1595,7 +1596,7 @@ bool UnoFixedHyperlinkControl::isTransparent()
 
 void UnoFixedHyperlinkControl::setText( const OUString& Text )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), uno::Any(Text), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), cpo::uno::Any(Text), true );
 }
 
 OUString UnoFixedHyperlinkControl::getText()
@@ -1605,7 +1606,7 @@ OUString UnoFixedHyperlinkControl::getText()
 
 void UnoFixedHyperlinkControl::setURL( const OUString& URL )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_URL ), uno::Any(URL), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_URL ), cpo::uno::Any(URL), true );
 }
 
 OUString UnoFixedHyperlinkControl::getURL(  )
@@ -1615,7 +1616,7 @@ OUString UnoFixedHyperlinkControl::getURL(  )
 
 void UnoFixedHyperlinkControl::setAlignment( sal_Int16 nAlign )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ), uno::Any(nAlign), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ), cpo::uno::Any(nAlign), true );
 }
 
 sal_Int16 UnoFixedHyperlinkControl::getAlignment()
@@ -1623,7 +1624,7 @@ sal_Int16 UnoFixedHyperlinkControl::getAlignment()
     sal_Int16 nAlign = 0;
     if ( mxModel.is() )
     {
-        uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ) );
+        cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ) );
         aVal >>= nAlign;
     }
     return nAlign;
@@ -1684,7 +1685,7 @@ void UnoFixedHyperlinkControl::removeActionListener(const uno::Reference< awt::X
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoFixedHyperlinkControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoFixedHyperlinkControl());
 }
@@ -1702,15 +1703,15 @@ OUString UnoControlFixedTextModel::getServiceName()
     return u"stardiv.vcl.controlmodel.FixedText"_ustr;
 }
 
-uno::Any UnoControlFixedTextModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+cpo::uno::Any UnoControlFixedTextModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( u"stardiv.vcl.control.FixedText"_ustr );
+        return cpo::uno::Any( u"stardiv.vcl.control.FixedText"_ustr );
     }
     else if ( nPropId == BASEPROPERTY_BORDER )
     {
-        return uno::Any(sal_Int16(0));
+        return cpo::uno::Any(sal_Int16(0));
     }
 
     return UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -1744,7 +1745,7 @@ UnoControlFixedTextModel::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlFixedTextModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlFixedTextModel(context));
 }
@@ -1763,9 +1764,9 @@ OUString UnoFixedTextControl::GetComponentServiceName() const
 }
 
 // uno::XInterface
-uno::Any UnoFixedTextControl::queryAggregation( const uno::Type & rType )
+cpo::uno::Any UnoFixedTextControl::queryAggregation( const uno::Type & rType )
 {
-    uno::Any aRet = ::cppu::queryInterface( rType,
+    cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                         static_cast< awt::XFixedText* >(this),
                                         static_cast< awt::XLayoutConstrains* >(this) );
     return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
@@ -1792,7 +1793,7 @@ bool UnoFixedTextControl::isTransparent()
 
 void UnoFixedTextControl::setText( const OUString& Text )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), uno::Any(Text), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), cpo::uno::Any(Text), true );
 }
 
 OUString UnoFixedTextControl::getText()
@@ -1802,7 +1803,7 @@ OUString UnoFixedTextControl::getText()
 
 void UnoFixedTextControl::setAlignment( sal_Int16 nAlign )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ), uno::Any(nAlign), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ), cpo::uno::Any(nAlign), true );
 }
 
 sal_Int16 UnoFixedTextControl::getAlignment()
@@ -1810,7 +1811,7 @@ sal_Int16 UnoFixedTextControl::getAlignment()
     sal_Int16 nAlign = 0;
     if ( mxModel.is() )
     {
-        uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ) );
+        cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ) );
         aVal >>= nAlign;
     }
     return nAlign;
@@ -1845,7 +1846,7 @@ css::uno::Sequence<OUString> UnoFixedTextControl::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoFixedTextControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoFixedTextControl());
 }
@@ -1872,11 +1873,11 @@ OUString UnoControlGroupBoxModel::getServiceName()
     return u"stardiv.vcl.controlmodel.GroupBox"_ustr;
 }
 
-uno::Any UnoControlGroupBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+cpo::uno::Any UnoControlGroupBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any(u"stardiv.vcl.control.GroupBox"_ustr );
+        return cpo::uno::Any(u"stardiv.vcl.control.GroupBox"_ustr );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -1908,7 +1909,7 @@ css::uno::Sequence<OUString> UnoControlGroupBoxModel::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlGroupBoxModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlGroupBoxModel(context));
 }
@@ -1945,7 +1946,7 @@ css::uno::Sequence<OUString> UnoGroupBoxControl::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoGroupBoxControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoGroupBoxControl());
 }
@@ -2094,11 +2095,11 @@ OUString UnoControlListBoxModel::getServiceName()
 }
 
 
-uno::Any UnoControlListBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+cpo::uno::Any UnoControlListBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( u"stardiv.vcl.control.ListBox"_ustr );
+        return cpo::uno::Any( u"stardiv.vcl.control.ListBox"_ustr );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -2131,7 +2132,7 @@ namespace
 }
 
 
-void UnoControlListBoxModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const uno::Any& rValue )
+void UnoControlListBoxModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const cpo::uno::Any& rValue )
 {
     UnoControlModel::setFastPropertyValue_NoBroadcast( rGuard, nHandle, rValue );
 
@@ -2140,7 +2141,7 @@ void UnoControlListBoxModel::setFastPropertyValue_NoBroadcast( std::unique_lock<
 
     // reset selection
     uno::Sequence<sal_Int16> aSeq;
-    setDependentFastPropertyValue( rGuard, BASEPROPERTY_SELECTEDITEMS, uno::Any(aSeq) );
+    setDependentFastPropertyValue( rGuard, BASEPROPERTY_SELECTEDITEMS, cpo::uno::Any(aSeq) );
 
     if ( m_xData->m_bSettingLegacyProperty )
         return;
@@ -2172,7 +2173,7 @@ void UnoControlListBoxModel::setFastPropertyValue_NoBroadcast( std::unique_lock<
 
 
 void UnoControlListBoxModel::ImplNormalizePropertySequence( const sal_Int32 _nCount, sal_Int32* _pHandles,
-    uno::Any* _pValues, sal_Int32* _pValidHandles ) const
+    cpo::uno::Any* _pValues, sal_Int32* _pValidHandles ) const
 {
     // dependencies we know:
     // BASEPROPERTY_STRINGITEMLIST->BASEPROPERTY_SELECTEDITEMS
@@ -2367,7 +2368,7 @@ void UnoControlListBoxModel::impl_setStringItemList( std::unique_lock<std::mutex
     m_xData->m_bSettingLegacyProperty = true;
     try
     {
-        setFastPropertyValueImpl( rGuard, BASEPROPERTY_STRINGITEMLIST, uno::Any( aStringItems ) );
+        setFastPropertyValueImpl( rGuard, BASEPROPERTY_STRINGITEMLIST, cpo::uno::Any( aStringItems ) );
     }
     catch( const Exception& )
     {
@@ -2490,7 +2491,7 @@ void UnoControlListBoxModel::impl_notifyItemListEvent(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlListBoxModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlListBoxModel(context));
 }
@@ -2538,7 +2539,7 @@ void UnoListBoxControl::ImplUpdateSelectedItemsProperty()
         DBG_ASSERT( xListBox.is(), "XListBox?" );
 
         uno::Sequence<sal_Int16> aSeq = xListBox->getSelectedItemsPos();
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SELECTEDITEMS ), uno::Any(aSeq), false );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SELECTEDITEMS ), cpo::uno::Any(aSeq), false );
     }
 }
 
@@ -2559,7 +2560,7 @@ void UnoListBoxControl::updateFromModel()
     ImplSetPeerProperty( sSelectedItemsPropName, ImplGetPropertyValue( sSelectedItemsPropName ) );
 }
 
-void UnoListBoxControl::ImplSetPeerProperty( const OUString& rPropName, const uno::Any& rVal )
+void UnoListBoxControl::ImplSetPeerProperty( const OUString& rPropName, const cpo::uno::Any& rVal )
 {
     if ( rPropName == GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) )
         // do not forward this to our peer. We are a XItemListListener at our model, and changes in the string item
@@ -2619,7 +2620,7 @@ void UnoListBoxControl::addItem( const OUString& aItem, sal_Int16 nPos )
 
 void UnoListBoxControl::addItems( const uno::Sequence< OUString>& aItems, sal_Int16 nPos )
 {
-    uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
+    cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
     uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     sal_uInt16 nNewItems = static_cast<sal_uInt16>(aItems.getLength());
@@ -2640,12 +2641,12 @@ void UnoListBoxControl::addItems( const uno::Sequence< OUString>& aItems, sal_In
     // Rest of old Items
     std::copy(std::next(std::cbegin(aSeq), nPos), std::cend(aSeq), it);
 
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), uno::Any(aNewSeq), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), cpo::uno::Any(aNewSeq), true );
 }
 
 void UnoListBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount )
 {
-    uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
+    cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
     uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     sal_uInt16 nOldLen = static_cast<sal_uInt16>(aSeq.getLength());
@@ -2665,12 +2666,12 @@ void UnoListBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount )
     // Rest of Items
     std::copy(std::next(std::cbegin(aSeq), nPos + nCount), std::cend(aSeq), it);
 
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), uno::Any(aNewSeq), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), cpo::uno::Any(aNewSeq), true );
 }
 
 sal_Int16 UnoListBoxControl::getItemCount()
 {
-    uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
+    cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
     uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     return static_cast<sal_Int16>(aSeq.getLength());
@@ -2679,7 +2680,7 @@ sal_Int16 UnoListBoxControl::getItemCount()
 OUString UnoListBoxControl::getItem( sal_Int16 nPos )
 {
     OUString aItem;
-    uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
+    cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
     uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     if ( nPos < aSeq.getLength() )
@@ -2689,7 +2690,7 @@ OUString UnoListBoxControl::getItem( sal_Int16 nPos )
 
 uno::Sequence< OUString> UnoListBoxControl::getItems()
 {
-    uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
+    cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
     uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     return aSeq;
@@ -2780,7 +2781,7 @@ void UnoListBoxControl::makeVisible( sal_Int16 nEntry )
 
 void UnoListBoxControl::setDropDownLineCount( sal_Int16 nLines )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LINECOUNT ), uno::Any(nLines), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LINECOUNT ), cpo::uno::Any(nLines), true );
 }
 
 sal_Int16 UnoListBoxControl::getDropDownLineCount()
@@ -2795,7 +2796,7 @@ bool UnoListBoxControl::isMutipleMode()
 
 void UnoListBoxControl::setMultipleMode( bool bMulti )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MULTISELECTION ), uno::Any(bMulti), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MULTISELECTION ), cpo::uno::Any(bMulti), true );
 }
 
 void UnoListBoxControl::itemStateChanged( const awt::ItemEvent& rEvent )
@@ -2902,7 +2903,7 @@ void SAL_CALL UnoListBoxControl::itemListChanged( const lang::EventObject& i_rEv
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoListBoxControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoListBoxControl());
 }
@@ -2944,7 +2945,7 @@ OUString UnoControlComboBoxModel::getServiceName()
     return u"stardiv.vcl.controlmodel.ComboBox"_ustr;
 }
 
-void UnoControlComboBoxModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const uno::Any& rValue )
+void UnoControlComboBoxModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const cpo::uno::Any& rValue )
 {
     UnoControlModel::setFastPropertyValue_NoBroadcast( rGuard, nHandle, rValue );
 
@@ -2974,11 +2975,11 @@ void UnoControlComboBoxModel::setFastPropertyValue_NoBroadcast( std::unique_lock
     m_aItemListListeners.notifyEach( rGuard, &XItemListListener::itemListChanged, aEvent );
 }
 
-uno::Any UnoControlComboBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+cpo::uno::Any UnoControlComboBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( u"stardiv.vcl.control.ComboBox"_ustr );
+        return cpo::uno::Any( u"stardiv.vcl.control.ComboBox"_ustr );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -2986,7 +2987,7 @@ uno::Any UnoControlComboBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) cons
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlComboBoxModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlComboBoxModel(context));
 }
@@ -3025,9 +3026,9 @@ void UnoComboBoxControl::dispose()
     maItemListeners.disposeAndClear( aEvt );
     UnoControl::dispose();
 }
-uno::Any UnoComboBoxControl::queryAggregation( const uno::Type & rType )
+cpo::uno::Any UnoComboBoxControl::queryAggregation( const uno::Type & rType )
 {
-    uno::Any aRet = ::cppu::queryInterface( rType,
+    cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                         static_cast< awt::XComboBox* >(this) );
     if ( !aRet.hasValue() )
     {
@@ -3066,7 +3067,7 @@ void UnoComboBoxControl::updateFromModel()
     EventObject aEvent( getModel() );
     xItemListListener->itemListChanged( aEvent );
 }
-void UnoComboBoxControl::ImplSetPeerProperty( const OUString& rPropName, const uno::Any& rVal )
+void UnoComboBoxControl::ImplSetPeerProperty( const OUString& rPropName, const cpo::uno::Any& rVal )
 {
     if ( rPropName == GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) )
         // do not forward this to our peer. We are a XItemListListener at our model, and changes in the string item
@@ -3209,7 +3210,7 @@ void UnoComboBoxControl::addItem( const OUString& aItem, sal_Int16 nPos )
 
 void UnoComboBoxControl::addItems( const uno::Sequence< OUString>& aItems, sal_Int16 nPos )
 {
-    uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
+    cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
     uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     sal_uInt16 nNewItems = static_cast<sal_uInt16>(aItems.getLength());
@@ -3235,7 +3236,7 @@ void UnoComboBoxControl::addItems( const uno::Sequence< OUString>& aItems, sal_I
 
 void UnoComboBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount )
 {
-    uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
+    cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
     uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     sal_uInt16 nOldLen = static_cast<sal_uInt16>(aSeq.getLength());
@@ -3255,12 +3256,12 @@ void UnoComboBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount )
     // remainder of old items
     std::copy(std::next(std::cbegin(aSeq), nPos + nCount), std::cend(aSeq), it);
 
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), uno::Any(aNewSeq), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), cpo::uno::Any(aNewSeq), true );
 }
 
 sal_Int16 UnoComboBoxControl::getItemCount()
 {
-    uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
+    cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
     uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     return static_cast<sal_Int16>(aSeq.getLength());
@@ -3269,7 +3270,7 @@ sal_Int16 UnoComboBoxControl::getItemCount()
 OUString UnoComboBoxControl::getItem( sal_Int16 nPos )
 {
     OUString aItem;
-    uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
+    cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
     uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     if ( nPos < aSeq.getLength() )
@@ -3279,7 +3280,7 @@ OUString UnoComboBoxControl::getItem( sal_Int16 nPos )
 
 uno::Sequence< OUString> UnoComboBoxControl::getItems()
 {
-    uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
+    cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
     uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     return aSeq;
@@ -3287,7 +3288,7 @@ uno::Sequence< OUString> UnoComboBoxControl::getItems()
 
 void UnoComboBoxControl::setDropDownLineCount( sal_Int16 nLines )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LINECOUNT ), uno::Any(nLines), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LINECOUNT ), cpo::uno::Any(nLines), true );
 }
 
 sal_Int16 UnoComboBoxControl::getDropDownLineCount()
@@ -3298,7 +3299,7 @@ sal_Int16 UnoComboBoxControl::getDropDownLineCount()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoComboBoxControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoComboBoxControl());
 }
@@ -3313,9 +3314,9 @@ UnoSpinFieldControl::UnoSpinFieldControl()
 }
 
 // uno::XInterface
-uno::Any UnoSpinFieldControl::queryAggregation( const uno::Type & rType )
+cpo::uno::Any UnoSpinFieldControl::queryAggregation( const uno::Type & rType )
 {
-    uno::Any aRet = ::cppu::queryInterface( rType,
+    cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                         static_cast< awt::XSpinField* >(this) );
     return (aRet.hasValue() ? aRet : UnoEditControl::queryAggregation( rType ));
 }
@@ -3414,11 +3415,11 @@ OUString UnoControlDateFieldModel::getServiceName()
     return u"stardiv.vcl.controlmodel.DateField"_ustr;
 }
 
-uno::Any UnoControlDateFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+cpo::uno::Any UnoControlDateFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( u"stardiv.vcl.control.DateField"_ustr );
+        return cpo::uno::Any( u"stardiv.vcl.control.DateField"_ustr );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -3452,7 +3453,7 @@ UnoControlDateFieldModel::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlDateFieldModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlDateFieldModel(context));
 }
@@ -3472,9 +3473,9 @@ OUString UnoDateFieldControl::GetComponentServiceName() const
 }
 
 // uno::XInterface
-uno::Any UnoDateFieldControl::queryAggregation( const uno::Type & rType )
+cpo::uno::Any UnoDateFieldControl::queryAggregation( const uno::Type & rType )
 {
-    uno::Any aRet = ::cppu::queryInterface( rType,
+    cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                         static_cast< awt::XDateField* >(this) );
     return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
@@ -3517,7 +3518,7 @@ void UnoDateFieldControl::textChanged( const awt::TextEvent& e )
 
     // re-calc the Date property
     uno::Reference < awt::XDateField > xField( getPeer(), uno::UNO_QUERY );
-    uno::Any aValue;
+    cpo::uno::Any aValue;
     if ( xField->isEmpty() )
     {
         // the field says it's empty
@@ -3547,7 +3548,7 @@ void UnoDateFieldControl::textChanged( const awt::TextEvent& e )
 
 void UnoDateFieldControl::setDate( const util::Date& Date )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DATE ), uno::Any(Date), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DATE ), cpo::uno::Any(Date), true );
 }
 
 util::Date UnoDateFieldControl::getDate()
@@ -3557,7 +3558,7 @@ util::Date UnoDateFieldControl::getDate()
 
 void UnoDateFieldControl::setMin( const util::Date& Date )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DATEMIN ), uno::Any(Date), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DATEMIN ), cpo::uno::Any(Date), true );
 }
 
 util::Date UnoDateFieldControl::getMin()
@@ -3567,7 +3568,7 @@ util::Date UnoDateFieldControl::getMin()
 
 void UnoDateFieldControl::setMax( const util::Date& Date )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DATEMAX ), uno::Any(Date), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DATEMAX ), cpo::uno::Any(Date), true );
 }
 
 util::Date UnoDateFieldControl::getMax()
@@ -3642,7 +3643,7 @@ bool UnoDateFieldControl::isEmpty()
 
 void UnoDateFieldControl::setStrictFormat( bool bStrict )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), uno::Any(bStrict), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), cpo::uno::Any(bStrict), true );
 }
 
 bool UnoDateFieldControl::isStrictFormat()
@@ -3664,7 +3665,7 @@ css::uno::Sequence<OUString> UnoDateFieldControl::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoDateFieldControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoDateFieldControl());
 }
@@ -3682,11 +3683,11 @@ OUString UnoControlTimeFieldModel::getServiceName()
     return u"stardiv.vcl.controlmodel.TimeField"_ustr;
 }
 
-uno::Any UnoControlTimeFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+cpo::uno::Any UnoControlTimeFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( u"stardiv.vcl.control.TimeField"_ustr );
+        return cpo::uno::Any( u"stardiv.vcl.control.TimeField"_ustr );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -3720,7 +3721,7 @@ UnoControlTimeFieldModel::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlTimeFieldModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlTimeFieldModel(context));
 }
@@ -3739,9 +3740,9 @@ OUString UnoTimeFieldControl::GetComponentServiceName() const
 }
 
 // uno::XInterface
-uno::Any UnoTimeFieldControl::queryAggregation( const uno::Type & rType )
+cpo::uno::Any UnoTimeFieldControl::queryAggregation( const uno::Type & rType )
 {
-    uno::Any aRet = ::cppu::queryInterface( rType,
+    cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                         static_cast< awt::XTimeField* >(this) );
     return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
@@ -3777,7 +3778,7 @@ void UnoTimeFieldControl::textChanged( const awt::TextEvent& e )
 
     // re-calc the Time property
     uno::Reference < awt::XTimeField >  xField( getPeer(), uno::UNO_QUERY );
-    uno::Any aValue;
+    cpo::uno::Any aValue;
     if ( !xField->isEmpty() )
         aValue <<= xField->getTime();
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TIME ), aValue, false );
@@ -3799,7 +3800,7 @@ util::Time UnoTimeFieldControl::getTime()
 
 void UnoTimeFieldControl::setMin( const util::Time& Time )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TIMEMIN ), uno::Any(Time), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TIMEMIN ), cpo::uno::Any(Time), true );
 }
 
 util::Time UnoTimeFieldControl::getMin()
@@ -3809,7 +3810,7 @@ util::Time UnoTimeFieldControl::getMin()
 
 void UnoTimeFieldControl::setMax( const util::Time& Time )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TIMEMAX ), uno::Any(Time), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TIMEMAX ), cpo::uno::Any(Time), true );
 }
 
 util::Time UnoTimeFieldControl::getMax()
@@ -3869,7 +3870,7 @@ bool UnoTimeFieldControl::isEmpty()
 
 void UnoTimeFieldControl::setStrictFormat( bool bStrict )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), uno::Any(bStrict), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), cpo::uno::Any(bStrict), true );
 }
 
 bool UnoTimeFieldControl::isStrictFormat()
@@ -3891,7 +3892,7 @@ css::uno::Sequence<OUString> UnoTimeFieldControl::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoTimeFieldControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoTimeFieldControl());
 }
@@ -3909,11 +3910,11 @@ OUString UnoControlNumericFieldModel::getServiceName()
     return u"stardiv.vcl.controlmodel.NumericField"_ustr;
 }
 
-uno::Any UnoControlNumericFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+cpo::uno::Any UnoControlNumericFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( u"stardiv.vcl.control.NumericField"_ustr );
+        return cpo::uno::Any( u"stardiv.vcl.control.NumericField"_ustr );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -3947,7 +3948,7 @@ UnoControlNumericFieldModel::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlNumericFieldModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlNumericFieldModel(context));
 }
@@ -3966,9 +3967,9 @@ OUString UnoNumericFieldControl::GetComponentServiceName() const
 }
 
 // uno::XInterface
-uno::Any UnoNumericFieldControl::queryAggregation( const uno::Type & rType )
+cpo::uno::Any UnoNumericFieldControl::queryAggregation( const uno::Type & rType )
 {
-    uno::Any aRet = ::cppu::queryInterface( rType,
+    cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                         static_cast< awt::XNumericField* >(this) );
     return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
@@ -4009,7 +4010,7 @@ void UnoNumericFieldControl::textChanged( const awt::TextEvent& e )
 
 void UnoNumericFieldControl::setValue( double Value )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUE_DOUBLE ), uno::Any(Value), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUE_DOUBLE ), cpo::uno::Any(Value), true );
 }
 
 double UnoNumericFieldControl::getValue()
@@ -4019,7 +4020,7 @@ double UnoNumericFieldControl::getValue()
 
 void UnoNumericFieldControl::setMin( double Value )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUEMIN_DOUBLE ), uno::Any(Value), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUEMIN_DOUBLE ), cpo::uno::Any(Value), true );
 }
 
 double UnoNumericFieldControl::getMin()
@@ -4029,7 +4030,7 @@ double UnoNumericFieldControl::getMin()
 
 void UnoNumericFieldControl::setMax( double Value )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUEMAX_DOUBLE ), uno::Any(Value), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUEMAX_DOUBLE ), cpo::uno::Any(Value), true );
 }
 
 double UnoNumericFieldControl::getMax()
@@ -4069,7 +4070,7 @@ double UnoNumericFieldControl::getLast()
 
 void UnoNumericFieldControl::setStrictFormat( bool bStrict )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), uno::Any(bStrict), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), cpo::uno::Any(bStrict), true );
 }
 
 bool UnoNumericFieldControl::isStrictFormat()
@@ -4090,7 +4091,7 @@ css::uno::Sequence<OUString> UnoNumericFieldControl::getSupportedServiceNames()
 
 void UnoNumericFieldControl::setSpinSize( double Digits )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUESTEP_DOUBLE ), uno::Any(Digits), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUESTEP_DOUBLE ), cpo::uno::Any(Digits), true );
 }
 
 double UnoNumericFieldControl::getSpinSize()
@@ -4100,7 +4101,7 @@ double UnoNumericFieldControl::getSpinSize()
 
 void UnoNumericFieldControl::setDecimalDigits( sal_Int16 Digits )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DECIMALACCURACY ), uno::Any(Digits), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DECIMALACCURACY ), cpo::uno::Any(Digits), true );
 }
 
 sal_Int16 UnoNumericFieldControl::getDecimalDigits()
@@ -4111,7 +4112,7 @@ sal_Int16 UnoNumericFieldControl::getDecimalDigits()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoNumericFieldControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoNumericFieldControl());
 }
@@ -4127,15 +4128,15 @@ OUString UnoControlCurrencyFieldModel::getServiceName()
     return u"stardiv.vcl.controlmodel.CurrencyField"_ustr;
 }
 
-uno::Any UnoControlCurrencyFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+cpo::uno::Any UnoControlCurrencyFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( u"stardiv.vcl.control.CurrencyField"_ustr );
+        return cpo::uno::Any( u"stardiv.vcl.control.CurrencyField"_ustr );
     }
     if ( nPropId == BASEPROPERTY_CURSYM_POSITION )
     {
-        return uno::Any(false);
+        return cpo::uno::Any(false);
     }
 
     return UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -4169,7 +4170,7 @@ UnoControlCurrencyFieldModel::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlCurrencyFieldModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlCurrencyFieldModel(context));
 }
@@ -4188,9 +4189,9 @@ OUString UnoCurrencyFieldControl::GetComponentServiceName() const
 }
 
 // uno::XInterface
-uno::Any UnoCurrencyFieldControl::queryAggregation( const uno::Type & rType )
+cpo::uno::Any UnoCurrencyFieldControl::queryAggregation( const uno::Type & rType )
 {
-    uno::Any aRet = ::cppu::queryInterface( rType,
+    cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                         static_cast< awt::XCurrencyField* >(this) );
     return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
@@ -4241,7 +4242,7 @@ double UnoCurrencyFieldControl::getValue()
 
 void UnoCurrencyFieldControl::setMin( double Value )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUEMIN_DOUBLE ), uno::Any(Value), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUEMIN_DOUBLE ), cpo::uno::Any(Value), true );
 }
 
 double UnoCurrencyFieldControl::getMin()
@@ -4251,7 +4252,7 @@ double UnoCurrencyFieldControl::getMin()
 
 void UnoCurrencyFieldControl::setMax( double Value )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUEMAX_DOUBLE ), uno::Any(Value), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUEMAX_DOUBLE ), cpo::uno::Any(Value), true );
 }
 
 double UnoCurrencyFieldControl::getMax()
@@ -4291,7 +4292,7 @@ double UnoCurrencyFieldControl::getLast()
 
 void UnoCurrencyFieldControl::setStrictFormat( bool bStrict )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), uno::Any(bStrict), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), cpo::uno::Any(bStrict), true );
 }
 
 bool UnoCurrencyFieldControl::isStrictFormat()
@@ -4313,7 +4314,7 @@ UnoCurrencyFieldControl::getSupportedServiceNames()
 
 void UnoCurrencyFieldControl::setSpinSize( double Digits )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUESTEP_DOUBLE ), uno::Any(Digits), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUESTEP_DOUBLE ), cpo::uno::Any(Digits), true );
 }
 
 double UnoCurrencyFieldControl::getSpinSize()
@@ -4323,7 +4324,7 @@ double UnoCurrencyFieldControl::getSpinSize()
 
 void UnoCurrencyFieldControl::setDecimalDigits( sal_Int16 Digits )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DECIMALACCURACY ), uno::Any(Digits), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DECIMALACCURACY ), cpo::uno::Any(Digits), true );
 }
 
 sal_Int16 UnoCurrencyFieldControl::getDecimalDigits()
@@ -4334,7 +4335,7 @@ sal_Int16 UnoCurrencyFieldControl::getDecimalDigits()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoCurrencyFieldControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoCurrencyFieldControl());
 }
@@ -4352,11 +4353,11 @@ OUString UnoControlPatternFieldModel::getServiceName()
     return u"stardiv.vcl.controlmodel.PatternField"_ustr;
 }
 
-uno::Any UnoControlPatternFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+cpo::uno::Any UnoControlPatternFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( u"stardiv.vcl.control.PatternField"_ustr );
+        return cpo::uno::Any( u"stardiv.vcl.control.PatternField"_ustr );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -4389,7 +4390,7 @@ UnoControlPatternFieldModel::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlPatternFieldModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlPatternFieldModel(context));
 }
@@ -4405,7 +4406,7 @@ OUString UnoPatternFieldControl::GetComponentServiceName() const
     return u"patternfield"_ustr;
 }
 
-void UnoPatternFieldControl::ImplSetPeerProperty( const OUString& rPropName, const uno::Any& rVal )
+void UnoPatternFieldControl::ImplSetPeerProperty( const OUString& rPropName, const cpo::uno::Any& rVal )
 {
     sal_uInt16 nType = GetPropertyId( rPropName );
     if ( ( nType == BASEPROPERTY_TEXT ) || ( nType == BASEPROPERTY_EDITMASK ) || ( nType == BASEPROPERTY_LITERALMASK ) )
@@ -4430,9 +4431,9 @@ void UnoPatternFieldControl::ImplSetPeerProperty( const OUString& rPropName, con
 
 
 // uno::XInterface
-uno::Any UnoPatternFieldControl::queryAggregation( const uno::Type & rType )
+cpo::uno::Any UnoPatternFieldControl::queryAggregation( const uno::Type & rType )
 {
-    uno::Any aRet = ::cppu::queryInterface( rType,
+    cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                         static_cast< awt::XPatternField* >(this) );
     return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
@@ -4462,8 +4463,8 @@ OUString UnoPatternFieldControl::getString()
 
 void UnoPatternFieldControl::setMasks( const OUString& EditMask, const OUString& LiteralMask )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_EDITMASK ), uno::Any(EditMask), true );
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LITERALMASK ), uno::Any(LiteralMask), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_EDITMASK ), cpo::uno::Any(EditMask), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LITERALMASK ), cpo::uno::Any(LiteralMask), true );
 }
 
 void UnoPatternFieldControl::getMasks( OUString& EditMask, OUString& LiteralMask )
@@ -4474,7 +4475,7 @@ void UnoPatternFieldControl::getMasks( OUString& EditMask, OUString& LiteralMask
 
 void UnoPatternFieldControl::setStrictFormat( bool bStrict )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), uno::Any(bStrict), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRICTFORMAT ), cpo::uno::Any(bStrict), true );
 }
 
 bool UnoPatternFieldControl::isStrictFormat()
@@ -4496,7 +4497,7 @@ css::uno::Sequence<OUString> UnoPatternFieldControl::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoPatternFieldControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoPatternFieldControl());
 }
@@ -4526,11 +4527,11 @@ OUString UnoControlProgressBarModel::getServiceName( )
     return u"stardiv.vcl.controlmodel.ProgressBar"_ustr;
 }
 
-uno::Any UnoControlProgressBarModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+cpo::uno::Any UnoControlProgressBarModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( u"stardiv.vcl.control.ProgressBar"_ustr );
+        return cpo::uno::Any( u"stardiv.vcl.control.ProgressBar"_ustr );
     }
 
     return UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -4564,7 +4565,7 @@ UnoControlProgressBarModel::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlProgressBarModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlProgressBarModel(context));
 }
@@ -4581,9 +4582,9 @@ OUString UnoProgressBarControl::GetComponentServiceName() const
 }
 
 // uno::XInterface
-uno::Any UnoProgressBarControl::queryAggregation( const uno::Type & rType )
+cpo::uno::Any UnoProgressBarControl::queryAggregation( const uno::Type & rType )
 {
-    uno::Any aRet = ::cppu::queryInterface( rType,
+    cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                         static_cast< awt::XProgressBar* >(this) );
     return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
 }
@@ -4604,23 +4605,23 @@ css::uno::Sequence< css::uno::Type > UnoProgressBarControl::getTypes()
 // css::awt::XProgressBar
 void UnoProgressBarControl::setForegroundColor( sal_Int32 nColor )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_FILLCOLOR ), uno::Any(nColor), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_FILLCOLOR ), cpo::uno::Any(nColor), true );
 }
 
 void UnoProgressBarControl::setBackgroundColor( sal_Int32 nColor )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_BACKGROUNDCOLOR ), uno::Any(nColor), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_BACKGROUNDCOLOR ), cpo::uno::Any(nColor), true );
 }
 
 void UnoProgressBarControl::setValue( sal_Int32 nValue )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_PROGRESSVALUE ), uno::Any(nValue), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_PROGRESSVALUE ), cpo::uno::Any(nValue), true );
 }
 
 void UnoProgressBarControl::setRange( sal_Int32 nMin, sal_Int32 nMax )
 {
-    uno::Any aMin;
-    uno::Any aMax;
+    cpo::uno::Any aMin;
+    cpo::uno::Any aMax;
 
     if ( nMin < nMax )
     {
@@ -4658,7 +4659,7 @@ css::uno::Sequence<OUString> UnoProgressBarControl::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoProgressBarControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoProgressBarControl());
 }
@@ -4685,11 +4686,11 @@ OUString UnoControlFixedLineModel::getServiceName( )
     return u"stardiv.vcl.controlmodel.FixedLine"_ustr;
 }
 
-uno::Any UnoControlFixedLineModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+cpo::uno::Any UnoControlFixedLineModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( u"stardiv.vcl.control.FixedLine"_ustr );
+        return cpo::uno::Any( u"stardiv.vcl.control.FixedLine"_ustr );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -4722,7 +4723,7 @@ UnoControlFixedLineModel::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlFixedLineModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlFixedLineModel(context));
 }
@@ -4759,7 +4760,7 @@ css::uno::Sequence<OUString> UnoFixedLineControl::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoFixedLineControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoFixedLineControl());
 }

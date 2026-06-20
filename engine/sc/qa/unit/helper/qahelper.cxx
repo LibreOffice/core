@@ -55,6 +55,7 @@
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 FormulaGrammarSwitch::FormulaGrammarSwitch(ScDocument* pDoc, formula::FormulaGrammar::Grammar eGrammar) :
     mpDoc(pDoc), meOldGrammar(pDoc->GetGrammar())
@@ -291,7 +292,7 @@ void ScModelTestBase::testFormats(ScDocument* pDoc,std::u16string_view sFormat)
 void ScModelTestBase::goToCell(const OUString& rCell)
 {
     uno::Sequence<beans::PropertyValue> aArgs
-        = comphelper::InitPropertySequence({ { "ToPoint", uno::Any(rCell) } });
+        = comphelper::InitPropertySequence({ { "ToPoint", cpo::uno::Any(rCell) } });
     dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aArgs);
 }
 
@@ -368,7 +369,7 @@ void ScModelTestBase::insertNewSheet(const ScDocument& rDoc)
     sal_Int16 nTabs = rDoc.GetTableCount();
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Name", uno::Any(u"NewTab"_ustr) }, { "Index", uno::Any(sal_Int16(nTabs + 1)) } }));
+        { { "Name", cpo::uno::Any(u"NewTab"_ustr) }, { "Index", cpo::uno::Any(sal_Int16(nTabs + 1)) } }));
     dispatchCommand(mxComponent, u".uno:Insert"_ustr, aArgs);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(nTabs + 1), rDoc.GetTableCount());

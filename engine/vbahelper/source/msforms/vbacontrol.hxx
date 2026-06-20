@@ -77,7 +77,7 @@ public:
     virtual double SAL_CALL getTop() override;
     virtual void SAL_CALL setTop( double _top ) override;
     virtual void SAL_CALL SetFocus(  ) override;
-    virtual void SAL_CALL Move( double Left, double Top, const css::uno::Any& Width, const css::uno::Any& Height ) override;
+    virtual void SAL_CALL Move( double Left, double Top, const cpo::uno::Any& Width, const cpo::uno::Any& Height ) override;
     virtual void SAL_CALL fireEvent( const css::script::ScriptEvent& evt ) override;
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getObject() override;

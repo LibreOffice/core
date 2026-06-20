@@ -31,7 +31,7 @@
 #include <utility>
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::beans::Property;
 
 namespace chart::wrapper
@@ -47,7 +47,7 @@ class WrappedSplineProperty : public WrappedProperty
 {
 public:
     explicit WrappedSplineProperty( const OUString& rOuterName, OUString aInnerName
-        , const css::uno::Any& rDefaulValue
+        , const cpo::uno::Any& rDefaulValue
         , std::shared_ptr<Chart2ModelContact> spChart2ModelContact )
             : WrappedProperty(rOuterName,OUString())
             , m_spChart2ModelContact(std::move(spChart2ModelContact))
@@ -95,7 +95,7 @@ public:
         }
         return bHasDetectableInnerValue;
     }
-    void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& /*xInnerPropertySet*/ ) const override
+    void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& /*xInnerPropertySet*/ ) const override
     {
         PROPERTYTYPE aNewValue;
         if( ! (rOuterValue >>= aNewValue) )
@@ -117,7 +117,7 @@ public:
         {
             try
             {
-                aChartTypes[nN]->setPropertyValue(m_aOwnInnerName,convertOuterToInnerValue(uno::Any(aNewValue)));
+                aChartTypes[nN]->setPropertyValue(m_aOwnInnerName,convertOuterToInnerValue(cpo::uno::Any(aNewValue)));
             }
             catch( uno::Exception & ex )
             {
@@ -128,7 +128,7 @@ public:
         }
     }
 
-    css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& /*xInnerPropertySet*/ ) const override
+    cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& /*xInnerPropertySet*/ ) const override
     {
         bool bHasAmbiguousValue = false;
         PROPERTYTYPE aValue;
@@ -139,15 +139,15 @@ public:
         return m_aOuterValue;
     }
 
-    css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& /*xInnerPropertyState*/ ) const override
+    cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& /*xInnerPropertyState*/ ) const override
     {
         return m_aDefaultValue;
     }
 
 protected:
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
-    mutable css::uno::Any                   m_aOuterValue;
-    css::uno::Any                           m_aDefaultValue;
+    mutable cpo::uno::Any                   m_aOuterValue;
+    cpo::uno::Any                           m_aDefaultValue;
     // this inner name is not set as inner name at the base class
     const OUString m_aOwnInnerName;
 };
@@ -157,8 +157,8 @@ class WrappedSplineTypeProperty : public WrappedSplineProperty< sal_Int32 >
 public:
     explicit WrappedSplineTypeProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
 
-    virtual css::uno::Any convertInnerToOuterValue( const css::uno::Any& rInnerValue ) const override;
-    virtual css::uno::Any convertOuterToInnerValue( const css::uno::Any& rOuterValue ) const override;
+    virtual cpo::uno::Any convertInnerToOuterValue( const cpo::uno::Any& rInnerValue ) const override;
+    virtual cpo::uno::Any convertOuterToInnerValue( const cpo::uno::Any& rOuterValue ) const override;
 };
 
 enum
@@ -200,15 +200,15 @@ void WrappedSplineProperties::addWrappedProperties( std::vector< std::unique_ptr
     rList.emplace_back(
         new WrappedSplineProperty<sal_Int32>(
             CHART_UNONAME_SPLINE_ORDER, CHART_UNONAME_SPLINE_ORDER,
-            uno::Any(sal_Int32(3)), spChart2ModelContact));
+            cpo::uno::Any(sal_Int32(3)), spChart2ModelContact));
     rList.emplace_back(
         new WrappedSplineProperty<sal_Int32>(
             CHART_UNONAME_SPLINE_RESOLUTION, CHART_UNONAME_CURVE_RESOLUTION,
-            uno::Any(sal_Int32(20)), spChart2ModelContact));
+            cpo::uno::Any(sal_Int32(20)), spChart2ModelContact));
 }
 
 WrappedSplineTypeProperty::WrappedSplineTypeProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
-    : WrappedSplineProperty<sal_Int32>(CHART_UNONAME_SPLINE_TYPE, CHART_UNONAME_CURVE_STYLE, uno::Any(sal_Int32(0)), spChart2ModelContact )
+    : WrappedSplineProperty<sal_Int32>(CHART_UNONAME_SPLINE_TYPE, CHART_UNONAME_CURVE_STYLE, cpo::uno::Any(sal_Int32(0)), spChart2ModelContact )
 {
 }
 
@@ -242,7 +242,7 @@ Any WrappedSplineTypeProperty::convertInnerToOuterValue( const Any& rInnerValue 
             nOuterValue = 0;
     }
 
-    return uno::Any(nOuterValue);
+    return cpo::uno::Any(nOuterValue);
 }
 Any WrappedSplineTypeProperty::convertOuterToInnerValue( const Any& rOuterValue ) const
 {
@@ -276,7 +276,7 @@ Any WrappedSplineTypeProperty::convertOuterToInnerValue( const Any& rOuterValue 
             aInnerValue = chart2::CurveStyle_LINES;
     }
 
-    return uno::Any(aInnerValue);
+    return cpo::uno::Any(aInnerValue);
 }
 
 } //namespace chart::wrapper

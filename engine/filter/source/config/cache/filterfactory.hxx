@@ -67,7 +67,7 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper< BaseContainer       
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(const OUString& sFilter) override;
 
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments(const OUString&                     sFilter   ,
-                                                                                                 const css::uno::Sequence< css::uno::Any >& lArguments) override;
+                                                                                                 const css::uno::Sequence< cpo::uno::Any >& lArguments) override;
 
         virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
 

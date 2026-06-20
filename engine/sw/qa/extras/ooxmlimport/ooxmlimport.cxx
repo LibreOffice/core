@@ -569,7 +569,7 @@ CPPUNIT_TEST_FIXTURE(Test, testN779627)
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTableProperties(xTables->getByIndex(0), uno::UNO_QUERY);
-    uno::Any aValue = xTableProperties->getPropertyValue(u"LeftMargin"_ustr);
+    cpo::uno::Any aValue = xTableProperties->getPropertyValue(u"LeftMargin"_ustr);
     sal_Int32 nLeftMargin;
     aValue >>= nLeftMargin;
     // only border width considered.
@@ -1052,7 +1052,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf75573)
 
     css::uno::Reference<css::lang::XMultiServiceFactory> m_xTextFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference< beans::XPropertySet > xSettings(m_xTextFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
-    uno::Any aProtect = xSettings->getPropertyValue(u"ProtectForm"_ustr);
+    cpo::uno::Any aProtect = xSettings->getPropertyValue(u"ProtectForm"_ustr);
     bool bProt = true;
     aProtect >>= bProt;
     CPPUNIT_ASSERT(!bProt);
@@ -1394,7 +1394,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo87488)
     {
         uno::Reference<beans::XPropertySet> props(group->getByIndex(1), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(props->getPropertyValue(u"RotateAngle"_ustr),
-                             uno::Any(sal_Int32(270 * 100)));
+                             cpo::uno::Any(sal_Int32(270 * 100)));
         comphelper::SequenceAsHashMap geom(props->getPropertyValue(u"CustomShapeGeometry"_ustr));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(90), geom[u"TextRotateAngle"_ustr].get<sal_Int32>());
     }
@@ -1423,7 +1423,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf95755)
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTableProperties(xTables->getByIndex(0), uno::UNO_QUERY);
-    uno::Any aValue = xTableProperties->getPropertyValue(u"Width"_ustr);
+    cpo::uno::Any aValue = xTableProperties->getPropertyValue(u"Width"_ustr);
     sal_Int32 nWidth;
     aValue >>= nWidth;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(10592), nWidth);
@@ -1666,8 +1666,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf100072)
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
     uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
-            { "OutputStream", uno::Any(xOutputStream) },
-            { "FilterName", uno::Any(u"SVM"_ustr) }
+            { "OutputStream", cpo::uno::Any(xOutputStream) },
+            { "FilterName", cpo::uno::Any(u"SVM"_ustr) }
         }));
     xGraphicExporter->filter(aDescriptor);
     aStream.Seek(STREAM_SEEK_TO_BEGIN);

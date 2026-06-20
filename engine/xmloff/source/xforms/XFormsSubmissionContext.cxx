@@ -34,6 +34,7 @@
 using com::sun::star::xforms::XModel2;
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace xmloff::token;
 
 

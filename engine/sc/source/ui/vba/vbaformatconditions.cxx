@@ -61,18 +61,18 @@ ScVbaFormatConditions::getElementType()
     return cppu::UnoType<excel::XFormatCondition>::get();
 }
 
-static uno::Any xSheetConditionToFormatCondition( const uno::Reference< XHelperInterface >& xRangeParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< excel::XStyles >& xStyles, const uno::Reference< excel::XFormatConditions >& xFormatConditions, const uno::Reference< beans::XPropertySet >& xRangeProps,  const uno::Any& aObject )
+static cpo::uno::Any xSheetConditionToFormatCondition( const uno::Reference< XHelperInterface >& xRangeParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< excel::XStyles >& xStyles, const uno::Reference< excel::XFormatConditions >& xFormatConditions, const uno::Reference< beans::XPropertySet >& xRangeProps,  const cpo::uno::Any& aObject )
 {
     uno::Reference< sheet::XSheetConditionalEntry > xSheetConditionalEntry;
     aObject >>= xSheetConditionalEntry;
 
-    uno::Reference< excel::XStyle > xStyle( xStyles->Item( uno::Any( xSheetConditionalEntry->getStyleName() ), uno::Any() ), uno::UNO_QUERY_THROW );
+    uno::Reference< excel::XStyle > xStyle( xStyles->Item( cpo::uno::Any( xSheetConditionalEntry->getStyleName() ), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
     uno::Reference< excel::XFormatCondition > xCondition = new ScVbaFormatCondition( xRangeParent, xContext,  xSheetConditionalEntry, xStyle, xFormatConditions, xRangeProps );
-    return uno::Any( xCondition );
+    return cpo::uno::Any( xCondition );
 }
 
-uno::Any
-ScVbaFormatConditions::createCollectionObject(const uno::Any& aObject )
+cpo::uno::Any
+ScVbaFormatConditions::createCollectionObject(const cpo::uno::Any& aObject )
 {
     return xSheetConditionToFormatCondition( uno::Reference< XHelperInterface >( mxRangeParent, uno::UNO_QUERY_THROW ), mxContext, mxStyles, this, mxParentRangePropertySet, aObject );
 }
@@ -96,7 +96,7 @@ public:
                 return ( nIndex < m_xIndexAccess->getCount() );
         }
 
-        virtual uno::Any SAL_CALL nextElement(  ) override
+        virtual cpo::uno::Any SAL_CALL nextElement(  ) override
         {
             try
             {
@@ -117,7 +117,7 @@ public:
             }
             catch (const uno::Exception& e)
             {
-                css::uno::Any a(cppu::getCaughtException());
+                cpo::uno::Any a(cppu::getCaughtException());
                 throw css::lang::WrappedTargetException(
                     "wrapped Exception " + e.Message,
                     css::uno::Reference<css::uno::XInterface>(), a);
@@ -129,13 +129,13 @@ public:
 }
 
 uno::Reference< excel::XFormatCondition > SAL_CALL
-ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, const uno::Any& _aFormula1, const uno::Any& _aFormula2 )
+ScVbaFormatConditions::Add( ::sal_Int32 _nType, const cpo::uno::Any& _aOperator, const cpo::uno::Any& _aFormula1, const cpo::uno::Any& _aFormula2 )
 {
     return Add( _nType, _aOperator, _aFormula1, _aFormula2, uno::Reference< excel::XStyle >() );
 }
 
 rtl::Reference< ScVbaFormatCondition >
-ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, const uno::Any& _aFormula1, const uno::Any& _aFormula2, const css::uno::Reference< excel::XStyle >& _xStyle  )
+ScVbaFormatConditions::Add( ::sal_Int32 _nType, const cpo::uno::Any& _aOperator, const cpo::uno::Any& _aFormula1, const cpo::uno::Any& _aFormula2, const css::uno::Reference< excel::XStyle >& _xStyle  )
 {
     // #TODO
     // #FIXME
@@ -152,7 +152,7 @@ ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, cons
         if ( !xStyle.is() )
         {
             sStyleName = getStyleName();
-            xStyle = mxStyles->Add(sStyleName, uno::Any() );
+            xStyle = mxStyles->Add(sStyleName, cpo::uno::Any() );
         }
         else
         {
@@ -161,7 +161,7 @@ ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, cons
 
         std::vector< beans::PropertyValue > aPropertyValueVector;
         sheet::ConditionOperator aType = ScVbaFormatCondition::retrieveAPIType(_nType, uno::Reference< sheet::XSheetCondition >() );
-        uno::Any aValue;
+        cpo::uno::Any aValue;
 
         if ( aType == sheet::ConditionOperator_FORMULA)
             aValue <<= sheet::ConditionOperator_FORMULA;
@@ -173,12 +173,12 @@ ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, cons
 
         if ( _aFormula1.hasValue() )
         {
-            beans::PropertyValue aProp( u"Formula1"_ustr, 0, uno::Any( getA1Formula( _aFormula1 ) ), beans::PropertyState_DIRECT_VALUE );
+            beans::PropertyValue aProp( u"Formula1"_ustr, 0, cpo::uno::Any( getA1Formula( _aFormula1 ) ), beans::PropertyState_DIRECT_VALUE );
             aPropertyValueVector.push_back( aProp );
         }
         if ( _aFormula2.hasValue() )
         {
-            beans::PropertyValue aProp( u"Formula2"_ustr, 0, uno::Any( getA1Formula( _aFormula2 ) ), beans::PropertyState_DIRECT_VALUE );
+            beans::PropertyValue aProp( u"Formula2"_ustr, 0, cpo::uno::Any( getA1Formula( _aFormula2 ) ), beans::PropertyState_DIRECT_VALUE );
             aPropertyValueVector.push_back( aProp );
         }
         aProperty.Name = u"StyleName"_ustr;
@@ -214,7 +214,7 @@ ScVbaFormatConditions::notifyRange()
 {
     try
     {
-        mxParentRangePropertySet->setPropertyValue(SC_UNONAME_CONDFMT, uno::Any( mxSheetConditionalEntries ));
+        mxParentRangePropertySet->setPropertyValue(SC_UNONAME_CONDFMT, cpo::uno::Any( mxSheetConditionalEntries ));
     }
     catch (uno::Exception& )
     {
@@ -223,7 +223,7 @@ ScVbaFormatConditions::notifyRange()
 }
 
 OUString
-ScVbaFormatConditions::getA1Formula(const css::uno::Any& _aFormula)
+ScVbaFormatConditions::getA1Formula(const cpo::uno::Any& _aFormula)
 {
     // #TODO, #FIXME hook-in proper formula conversion detection & logic
     OUString sFormula;

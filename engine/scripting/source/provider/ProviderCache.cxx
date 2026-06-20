@@ -28,6 +28,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::script;
 
 namespace func_provider
@@ -166,7 +167,7 @@ ProviderCache::populateCache()
     }
     catch ( const Exception &e )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
                 "ProviderCache::populateCache: couldn't obtain XSingleComponentFactory for " + serviceName
                 + " " + e.Message,
@@ -184,7 +185,7 @@ ProviderCache::createProvider( ProviderDetails& details )
     }
     catch ( const Exception& e )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
                 "ProviderCache::createProvider() Error creating provider from factory. " + e.Message,
                 nullptr, anyEx );

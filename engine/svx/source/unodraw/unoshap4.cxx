@@ -63,6 +63,7 @@
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
@@ -77,7 +78,7 @@ SvxOle2Shape::~SvxOle2Shape() noexcept
 }
 
 //XPropertySet
-bool SvxOle2Shape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue )
+bool SvxOle2Shape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const cpo::uno::Any& rValue )
 {
     switch( pProperty->nWID )
     {
@@ -197,7 +198,7 @@ bool SvxOle2Shape::setPropertyValueImpl( const OUString& rName, const SfxItemPro
     throw IllegalArgumentException();
 }
 
-bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue )
+bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, cpo::uno::Any& rValue )
 {
     switch( pProperty->nWID )
     {
@@ -475,7 +476,7 @@ void SvxOle2Shape::createLink( const OUString& aLinkURL )
     pOle2Obj->SyncObjVisualArea(xObj);
 
     // connect the object after the visual area is set
-    SvxShape::setPropertyValue( UNO_NAME_OLE2_PERSISTNAME, uno::Any( aPersistName ) );
+    SvxShape::setPropertyValue( UNO_NAME_OLE2_PERSISTNAME, cpo::uno::Any( aPersistName ) );
 
     // the object is inserted during setting of PersistName property usually
     if ( pOle2Obj->IsEmpty() )
@@ -561,19 +562,19 @@ void SvxPluginShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
     SetShapeType( u"com.sun.star.drawing.PluginShape"_ustr );
 }
 
-void SAL_CALL SvxPluginShape::setPropertyValue( const OUString& aPropertyName, const css::uno::Any& rValue )
+void SAL_CALL SvxPluginShape::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& rValue )
 {
     SvxShape::setPropertyValue( aPropertyName, rValue );
     resetModifiedState();
 }
 
-void SAL_CALL SvxPluginShape::setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& rValues )
+void SAL_CALL SvxPluginShape::setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< cpo::uno::Any >& rValues )
 {
     SvxShape::setPropertyValues( aPropertyNames, rValues );
     resetModifiedState();
 }
 
-bool SvxPluginShape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue )
+bool SvxPluginShape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const cpo::uno::Any& rValue )
 {
     if( (pProperty->nWID >= OWN_ATTR_PLUGIN_MIMETYPE) && (pProperty->nWID <= OWN_ATTR_PLUGIN_COMMANDS) )
     {
@@ -594,7 +595,7 @@ bool SvxPluginShape::setPropertyValueImpl( const OUString& rName, const SfxItemP
     }
 }
 
-bool SvxPluginShape::getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue )
+bool SvxPluginShape::getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, cpo::uno::Any& rValue )
 {
     if( (pProperty->nWID >= OWN_ATTR_PLUGIN_MIMETYPE) && (pProperty->nWID <= OWN_ATTR_PLUGIN_COMMANDS) )
     {
@@ -643,19 +644,19 @@ void SvxFrameShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
     SetShapeType( u"com.sun.star.drawing.FrameShape"_ustr );
 }
 
-void SAL_CALL SvxFrameShape::setPropertyValue( const OUString& aPropertyName, const css::uno::Any& rValue )
+void SAL_CALL SvxFrameShape::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& rValue )
 {
     SvxShape::setPropertyValue( aPropertyName, rValue );
     resetModifiedState();
 }
 
-void SAL_CALL SvxFrameShape::setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& rValues )
+void SAL_CALL SvxFrameShape::setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< cpo::uno::Any >& rValues )
 {
     SvxShape::setPropertyValues( aPropertyNames, rValues );
     resetModifiedState();
 }
 
-bool SvxFrameShape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue )
+bool SvxFrameShape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const cpo::uno::Any& rValue )
 {
     if( (pProperty->nWID >= OWN_ATTR_FRAME_URL) && (pProperty->nWID <= OWN_ATTR_FRAME_MARGIN_HEIGHT) )
     {
@@ -677,7 +678,7 @@ bool SvxFrameShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
 }
 
 bool SvxFrameShape::getPropertyValueImpl(const OUString& rName, const SfxItemPropertyMapEntry* pProperty,
-    css::uno::Any& rValue)
+    cpo::uno::Any& rValue)
 {
     if( (pProperty->nWID >= OWN_ATTR_FRAME_URL) && (pProperty->nWID <= OWN_ATTR_FRAME_MARGIN_HEIGHT) )
     {
@@ -710,7 +711,7 @@ SvxMediaShape::~SvxMediaShape() noexcept
 }
 
 
-bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue )
+bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const cpo::uno::Any& rValue )
 {
     if( ((pProperty->nWID >= OWN_ATTR_MEDIA_URL) && (pProperty->nWID <= OWN_ATTR_MEDIA_ZOOM))
         || (pProperty->nWID == OWN_ATTR_MEDIA_STREAM)
@@ -864,7 +865,7 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
             }
             catch (const css::ucb::ContentCreationException&)
             {
-                css::uno::Any exc = cppu::getCaughtException();
+                cpo::uno::Any exc = cppu::getCaughtException();
                 throw css::lang::WrappedTargetException(
                         u"ContentCreationException Setting InputStream!"_ustr,
                         getXWeak(),
@@ -872,7 +873,7 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
             }
             catch (const css::ucb::CommandFailedException&)
             {
-                css::uno::Any anyEx = cppu::getCaughtException();
+                cpo::uno::Any anyEx = cppu::getCaughtException();
                 throw css::lang::WrappedTargetException(
                         u"CommandFailedException Setting InputStream!"_ustr,
                         getXWeak(),
@@ -902,7 +903,7 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
 }
 
 
-bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue )
+bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, cpo::uno::Any& rValue )
 {
     if (   ((pProperty->nWID >= OWN_ATTR_MEDIA_URL) &&
             (pProperty->nWID <= OWN_ATTR_MEDIA_ZOOM))
@@ -957,14 +958,14 @@ bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPr
                 }
                 catch (const css::ucb::ContentCreationException&)
                 {
-                    css::uno::Any anyEx = cppu::getCaughtException();
+                    cpo::uno::Any anyEx = cppu::getCaughtException();
                     throw css::lang::WrappedTargetException(
                             u"ContentCreationException Getting InputStream!"_ustr,
                             getXWeak(), anyEx );
                 }
                 catch (const css::ucb::CommandFailedException&)
                 {
-                    css::uno::Any anyEx = cppu::getCaughtException();
+                    cpo::uno::Any anyEx = cppu::getCaughtException();
                     throw css::lang::WrappedTargetException(
                             u"CommandFailedException Getting InputStream!"_ustr,
                             getXWeak(), anyEx );

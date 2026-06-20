@@ -56,7 +56,7 @@ namespace connectivity::hsqldb
 
     protected:
         // OPropertyContainer
-        virtual void SAL_CALL getFastPropertyValue( css::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
+        virtual void SAL_CALL getFastPropertyValue( cpo::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
 
     private:
         /** retrieves the current command of the View */

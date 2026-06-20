@@ -63,7 +63,7 @@
 
 #include <algorithm>
 
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::util::XCloneable;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
@@ -925,7 +925,7 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
 
     // storing user data into pAny, to allow direct access later
     const Sequence< NamedValue > aUserData = xNode->getUserData();
-    const css::uno::Any* pAny[ DFF_ANIM_PROPERTY_ID_COUNT ];
+    const cpo::uno::Any* pAny[ DFF_ANIM_PROPERTY_ID_COUNT ];
     GetUserData( aUserData, pAny, sizeof( pAny ) );
 
     if( pAny[ DFF_ANIM_AFTEREFFECT ] )
@@ -1090,7 +1090,7 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
     return nNodeType;
 }
 
-bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt16 nPropertyId, const css::uno::Any& rAny, const TranslateMode eTranslateMode )
+bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt16 nPropertyId, const cpo::uno::Any& rAny, const TranslateMode eTranslateMode )
 {
     bool bRet = false;
     if ( rAny.hasValue() )

@@ -473,7 +473,7 @@ void ScriptContainersListBox::ScriptContainerSelected()
                         OUString sURI;
                         try
                         {
-                            css::uno::Any value = xPropSet->getPropertyValue(u"URI"_ustr);
+                            cpo::uno::Any value = xPropSet->getPropertyValue(u"URI"_ustr);
                             value >>= sURI;
                         }
                         catch (css::uno::Exception&)
@@ -484,7 +484,7 @@ void ScriptContainersListBox::ScriptContainerSelected()
                         OUString sDescription;
                         try
                         {
-                            css::uno::Any value = xPropSet->getPropertyValue(u"Description"_ustr);
+                            cpo::uno::Any value = xPropSet->getPropertyValue(u"Description"_ustr);
                             value >>= sDescription;
                         }
                         catch (css::uno::Exception&)
@@ -1397,7 +1397,7 @@ void MacroManagerDialog::BasicScriptsLibraryModuleDialogEdit(
     if (rTreeView.get_iter_depth(*xSelectedIter) == 2) // library
     {
         SfxUnoAnyItem aDocItem(SID_BASICIDE_ARG_DOCUMENT_MODEL,
-                               css::uno::Any(rDocument.getDocumentOrNull()));
+                               cpo::uno::Any(rDocument.getDocumentOrNull()));
         SfxStringItem aLibNameItem(SID_BASICIDE_ARG_LIBNAME,
                                    m_xScriptContainersListBox->GetSelectedEntryContainerName(
                                        ScriptContainerType::LIBRARY));
@@ -1606,8 +1606,8 @@ IMPL_LINK(MacroManagerDialog, ClickHdl, weld::Button&, rButton, void)
         if (xInv.is())
         {
             m_xDialog->response(RET_CANCEL);
-            css::uno::Sequence<css::uno::Any> args(0);
-            css::uno::Sequence<css::uno::Any> outArgs(0);
+            css::uno::Sequence<cpo::uno::Any> args(0);
+            css::uno::Sequence<cpo::uno::Any> outArgs(0);
             css::uno::Sequence<sal_Int16> outIndex;
             try
             {
@@ -1867,7 +1867,7 @@ void MacroManagerDialog::BasicScriptsLibraryModuleDialogDelete(
 
         // inform BasicIDE
         SfxUnoAnyItem aDocItem(SID_BASICIDE_ARG_DOCUMENT_MODEL,
-                               css::uno::Any(rDocument.getDocumentOrNull()));
+                               cpo::uno::Any(rDocument.getDocumentOrNull()));
         SfxStringItem aLibNameItem(SID_BASICIDE_ARG_LIBNAME, aLibName);
         if (SfxDispatcher* pDispatcher = basctl::GetDispatcher())
             pDispatcher->ExecuteList(SID_BASICIDE_LIBREMOVED, SfxCallMode::SYNCHRON,
@@ -2069,12 +2069,12 @@ void MacroManagerDialog::ScriptingFrameworkScriptsRenameEntry(weld::TreeView& rT
 
         aNewName = aNameDialog.GetName();
 
-        css::uno::Sequence<css::uno::Any> args{ css::uno::Any(aNewName) };
-        css::uno::Sequence<css::uno::Any> outArgs;
+        css::uno::Sequence<cpo::uno::Any> args{ cpo::uno::Any(aNewName) };
+        css::uno::Sequence<cpo::uno::Any> outArgs;
         css::uno::Sequence<sal_Int16> outIndex;
         try
         {
-            css::uno::Any aResult = xInv->invoke(u"Renamable"_ustr, args, outIndex, outArgs);
+            cpo::uno::Any aResult = xInv->invoke(u"Renamable"_ustr, args, outIndex, outArgs);
             xBrowseNode.set(aResult, css::uno::UNO_QUERY);
         }
         catch (css::uno::Exception const&)
@@ -2100,7 +2100,7 @@ void MacroManagerDialog::ScriptingFrameworkScriptsRenameEntry(weld::TreeView& rT
                     OUString sURI;
                     try
                     {
-                        css::uno::Any value = xPropSet->getPropertyValue(u"URI"_ustr);
+                        cpo::uno::Any value = xPropSet->getPropertyValue(u"URI"_ustr);
                         value >>= sURI;
                     }
                     catch (css::uno::Exception&)
@@ -2178,12 +2178,12 @@ void MacroManagerDialog::ScriptingFrameworkScriptsDeleteEntry(weld::TreeView& rT
     css::uno::Reference<css::script::XInvocation> xInv(node, css::uno::UNO_QUERY);
     if (xInv.is())
     {
-        css::uno::Sequence<css::uno::Any> args(0);
-        css::uno::Sequence<css::uno::Any> outArgs(0);
+        css::uno::Sequence<cpo::uno::Any> args(0);
+        css::uno::Sequence<cpo::uno::Any> outArgs(0);
         css::uno::Sequence<sal_Int16> outIndex;
         try
         {
-            css::uno::Any aResult = xInv->invoke(u"Deletable"_ustr, args, outIndex, outArgs);
+            cpo::uno::Any aResult = xInv->invoke(u"Deletable"_ustr, args, outIndex, outArgs);
             aResult >>= result; // or do we just assume true if no exception ?
         }
         catch (css::uno::Exception const&)
@@ -2351,12 +2351,12 @@ void MacroManagerDialog::ScriptingFrameworkScriptsCreateEntry(InputDialogMode eI
         // open up parent node (which ensures it's loaded)
         rTreeView.expand_row(*xSelectedIter);
 
-        css::uno::Sequence<css::uno::Any> args{ css::uno::Any(aNewName) };
-        css::uno::Sequence<css::uno::Any> outArgs;
+        css::uno::Sequence<cpo::uno::Any> args{ cpo::uno::Any(aNewName) };
+        css::uno::Sequence<cpo::uno::Any> outArgs;
         css::uno::Sequence<sal_Int16> outIndex;
         try
         {
-            css::uno::Any aResult = xInv->invoke(u"Creatable"_ustr, args, outIndex, outArgs);
+            cpo::uno::Any aResult = xInv->invoke(u"Creatable"_ustr, args, outIndex, outArgs);
             aChildNode.set(aResult, css::uno::UNO_QUERY);
         }
         catch (css::uno::Exception const&)
@@ -2426,7 +2426,7 @@ void MacroManagerDialog::SaveLastUsedMacro()
     } while (rScriptContainersTreeView.iter_parent(*xIter));
 
     SvtViewOptions(EViewType::Dialog, MACRO_MANAGER_CONFIGNAME)
-        .SetUserItem(LAST_RUN_MACRO_INFO, css::uno::Any(sMacroInfo));
+        .SetUserItem(LAST_RUN_MACRO_INFO, cpo::uno::Any(sMacroInfo));
 }
 
 // adapted from SvxScriptSelectorDialog::LoadLastUsedMacro()

@@ -98,7 +98,7 @@ public:
 
                             // XEnumeration
     virtual bool SAL_CALL hasMoreElements() override;
-    virtual css::uno::Any SAL_CALL nextElement() override;
+    virtual cpo::uno::Any SAL_CALL nextElement() override;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
@@ -122,7 +122,7 @@ public:
 
                             // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) override;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
                             // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
@@ -152,24 +152,24 @@ public:
         const css::uno::Reference<css::beans::XPropertySet>& xProp,
         const OUString& rName, const OUString& rDefault );
 
-    static bool        GetBoolFromAny( const css::uno::Any& aAny );
-    static sal_Int16   GetInt16FromAny( const css::uno::Any& aAny );
-    static sal_Int32        GetInt32FromAny( const css::uno::Any& aAny );
-    static sal_Int32        GetEnumFromAny( const css::uno::Any& aAny );
+    static bool        GetBoolFromAny( const cpo::uno::Any& aAny );
+    static sal_Int16   GetInt16FromAny( const cpo::uno::Any& aAny );
+    static sal_Int32        GetInt32FromAny( const cpo::uno::Any& aAny );
+    static sal_Int32        GetEnumFromAny( const cpo::uno::Any& aAny );
 
     static void             SetOptionalPropertyValue(
         const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
-        const char* pPropName, const css::uno::Any& rVal );
+        const char* pPropName, const cpo::uno::Any& rVal );
     static void             SetOptionalPropertyValue(
         const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
-        const OUString& rPropName, const css::uno::Any& rVal );
+        const OUString& rPropName, const cpo::uno::Any& rVal );
 
     template<typename ValueType>
     static void             SetOptionalPropertyValue(
         const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
         const char* pPropName, const ValueType& rVal )
     {
-        css::uno::Any any;
+        cpo::uno::Any any;
         any <<= rVal;
         SetOptionalPropertyValue(rPropSet, pPropName, any);
     }
@@ -178,7 +178,7 @@ public:
         const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
         const OUString& rPropName, const ValueType& rVal )
     {
-        css::uno::Any any;
+        cpo::uno::Any any;
         any <<= rVal;
         SetOptionalPropertyValue(rPropSet, rPropName, any);
     }

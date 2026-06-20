@@ -98,8 +98,8 @@ public:
 
     virtual SvxChartTextOrderItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
-    virtual bool         QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool         PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool         QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool         PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };
 
 class SAL_WARN_UNUSED UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxChartKindErrorItem final : public SfxEnumItem<SvxChartKindError>
@@ -132,8 +132,8 @@ public:
     SvxDoubleItem(double fValue /*= 0.0*/, TypedWhichId<SvxDoubleItem> nId );
     SvxDoubleItem(const SvxDoubleItem& rItem);
 
-    virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     virtual bool GetPresentation(SfxItemPresentation ePres,
                                  MapUnit eCoreMetric,
@@ -160,8 +160,8 @@ public:
                              TypedWhichId<SvxChartColorPaletteItem> nId);
     SvxChartColorPaletteItem(const SvxChartColorPaletteItem& rItem);
 
-    virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
-    virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
+    virtual bool QueryValue(cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
+    virtual bool PutValue(const cpo::uno::Any& rVal, sal_uInt8 nMemberId) override;
 
     virtual bool GetPresentation(SfxItemPresentation ePres, MapUnit eCoreMetric,
                                  MapUnit ePresMetric, OUString& rText,
@@ -188,8 +188,8 @@ public:
                                TypedWhichId<SvxChartGradientPresetItem> nId);
     SvxChartGradientPresetItem(const SvxChartGradientPresetItem& rItem);
 
-    virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
-    virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
+    virtual bool QueryValue(cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
+    virtual bool PutValue(const cpo::uno::Any& rVal, sal_uInt8 nMemberId) override;
 
     virtual bool GetPresentation(SfxItemPresentation ePres, MapUnit eCoreMetric,
                                  MapUnit ePresMetric, OUString& rText,

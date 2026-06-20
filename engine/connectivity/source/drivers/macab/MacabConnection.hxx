@@ -93,7 +93,7 @@ namespace connectivity::macab
         virtual void SAL_CALL close(  ) override;
 
         // XWarningsSupplier
-        virtual css::uno::Any SAL_CALL getWarnings(  ) override;
+        virtual cpo::uno::Any SAL_CALL getWarnings(  ) override;
         virtual void SAL_CALL clearWarnings(  ) override;
 
         // needed for the SQL interpreter

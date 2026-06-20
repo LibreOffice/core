@@ -53,7 +53,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMsWordUlTrailSpace)
         uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xSettings(
             xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(uno::Any(true),
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(true),
                              xSettings->getPropertyValue(u"MsWordUlTrailSpace"_ustr));
     }
 
@@ -63,7 +63,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMsWordUlTrailSpace)
         uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xSettings(
             xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(uno::Any(true),
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(true),
                              xSettings->getPropertyValue(u"MsWordUlTrailSpace"_ustr));
     }
 

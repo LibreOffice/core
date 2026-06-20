@@ -130,7 +130,7 @@ PyObject* PyUNO_service_constructor_call(PyObject* self, PyObject* args,
     try
     {
         Runtime runtime;
-        css::uno::Any contextAny = runtime.pyObject2Any(PyTuple_GetItem(args, 0));
+        cpo::uno::Any contextAny = runtime.pyObject2Any(PyTuple_GetItem(args, 0));
         css::uno::Reference<css::uno::XComponentContext> xContext;
 
         if (!(contextAny >>= xContext) || !xContext.is())
@@ -140,12 +140,12 @@ PyObject* PyUNO_service_constructor_call(PyObject* self, PyObject* args,
             return nullptr;
         }
 
-        css::uno::Sequence<css::uno::Any> aParams(nParams - 1);
-        css::uno::Any* pParams = aParams.getArray();
+        css::uno::Sequence<cpo::uno::Any> aParams(nParams - 1);
+        cpo::uno::Any* pParams = aParams.getArray();
 
         for (sal_Int32 i = 0; i < nParams - 1; ++i)
         {
-            css::uno::Any param = runtime.pyObject2Any(PyTuple_GetItem(args, i + 1));
+            cpo::uno::Any param = runtime.pyObject2Any(PyTuple_GetItem(args, i + 1));
 
             // Use the type of this parameter or the last one if we’re building the rest parameters
             std::size_t nConstructorParam
@@ -161,7 +161,7 @@ PyObject* PyUNO_service_constructor_call(PyObject* self, PyObject* args,
         css::uno::Reference<css::uno::XInterface> xInterface
             = xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                 me->members.xService->getName(), aParams, xContext);
-        return runtime.any2PyObject(css::uno::Any(std::move(xInterface))).getAcquired();
+        return runtime.any2PyObject(cpo::uno::Any(std::move(xInterface))).getAcquired();
     }
     catch (const css::reflection::InvocationTargetException& e)
     {
@@ -169,15 +169,15 @@ PyObject* PyUNO_service_constructor_call(PyObject* self, PyObject* args,
     }
     catch (const css::script::CannotConvertException& e)
     {
-        raisePyExceptionWithAny(css::uno::Any(e));
+        raisePyExceptionWithAny(cpo::uno::Any(e));
     }
     catch (const css::lang::IllegalArgumentException& e)
     {
-        raisePyExceptionWithAny(css::uno::Any(e));
+        raisePyExceptionWithAny(cpo::uno::Any(e));
     }
     catch (const css::uno::RuntimeException& e)
     {
-        raisePyExceptionWithAny(css::uno::Any(e));
+        raisePyExceptionWithAny(cpo::uno::Any(e));
     }
 
     return nullptr;

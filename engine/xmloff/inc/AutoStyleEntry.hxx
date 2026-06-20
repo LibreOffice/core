@@ -12,7 +12,7 @@
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <utility>
 #include <vector>
 
@@ -20,7 +20,7 @@ namespace xmloff
 {
 struct AutoStyleEntry
 {
-    std::vector<std::pair<OUString, css::uno::Any>> m_aXmlProperties;
+    std::vector<std::pair<OUString, cpo::uno::Any>> m_aXmlProperties;
 };
 
 } // end xmloff

@@ -343,7 +343,7 @@ bool
 UUIInteractionHelper::handleCertificateValidationRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
 {
-    uno::Any aAnyRequest(rRequest->getRequest());
+    cpo::uno::Any aAnyRequest(rRequest->getRequest());
 
     ucb::CertificateValidationRequest aCertificateValidationRequest;
     if (aAnyRequest >>= aCertificateValidationRequest)

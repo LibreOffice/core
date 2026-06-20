@@ -444,7 +444,7 @@ void EscherPropertyContainer::CreateGradientProperties(
 void EscherPropertyContainer::CreateGradientProperties(
     const uno::Reference<beans::XPropertySet> & rXPropSet , bool bTransparentGradient)
 {
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     awt::Gradient const * pGradient = nullptr;
 
     sal_uInt32 nFillType = ESCHER_FillShadeScale;
@@ -461,7 +461,7 @@ void EscherPropertyContainer::CreateGradientProperties(
     {
         pGradient = o3tl::doAccess<awt::Gradient>(aAny);
 
-        uno::Any aAnyTemp;
+        cpo::uno::Any aAnyTemp;
         if ( EscherPropertyValueHelper::GetPropertyValue(
             aAnyTemp, rXPropSet, u"FillStyle"_ustr ) )
         {
@@ -595,7 +595,7 @@ void EscherPropertyContainer::CreateFillProperties(
     bool bEdge , bool bTransparentGradient)
 
 {
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapNone );
     AddOpt( ESCHER_Prop_AnchorText, ESCHER_AnchorMiddle );
     static constexpr OUString aPropName( u"FillStyle"_ustr );
@@ -672,7 +672,7 @@ void EscherPropertyContainer::CreateTextProperties(
     const uno::Reference< beans::XPropertySet > & rXPropSet, sal_uInt32 nTextId,
         const bool bIsCustomShape, const bool bIsTextFrame )
 {
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     text::WritingMode               eWM( text::WritingMode_LR_TB );
     drawing::TextVerticalAdjust     eVA( drawing::TextVerticalAdjust_TOP );
     drawing::TextHorizontalAdjust   eHA( drawing::TextHorizontalAdjust_LEFT );
@@ -867,7 +867,7 @@ bool EscherPropertyContainer::GetLineArrow( const bool bLineStart,
 
     bool bIsArrow = false;
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, sLine ) )
     {
         tools::PolyPolygon aPolyPoly( EscherPropertyContainer::GetPolyPolygon( aAny ) );
@@ -962,7 +962,7 @@ bool EscherPropertyContainer::GetLineArrow( const bool bLineStart,
 void EscherPropertyContainer::CreateLineProperties(
     const uno::Reference<beans::XPropertySet> & rXPropSet, bool bEdge )
 {
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     sal_uInt32 nLineFlags = 0x80008;
 
     ESCHER_LineEnd eLineEnd;
@@ -1208,7 +1208,7 @@ static Size lcl_SizeToEmu(Size aPrefSize, const MapMode& aPrefMapMode)
 void EscherPropertyContainer::ImplCreateGraphicAttributes( const uno::Reference<beans::XPropertySet> & rXPropSet,
                                                             sal_uInt32 nBlibId, bool bCreateCroppingAttributes )
 {
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     sal_uInt32 nPicFlags = 0;
     drawing::ColorMode eColorMode( drawing::ColorMode_STANDARD );
@@ -1311,7 +1311,7 @@ void EscherPropertyContainer::CreateShapeProperties( const uno::Reference<drawin
 
     bool bVisible = false;
     bool bPrintable = false;
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     sal_uInt32 nShapeAttr = 0;
     if (EscherPropertyValueHelper::GetPropertyValue(aAny, aXPropSet, u"Visible"_ustr, true) && (aAny >>= bVisible))
     {
@@ -1360,7 +1360,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(const uno::Reference<drawi
 
         if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect && aXPropSet.is() )
         {
-            uno::Any aAny;
+            cpo::uno::Any aAny;
             std::unique_ptr<awt::Rectangle> pVisArea;
             if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, u"VisibleArea"_ustr ) )
             {
@@ -1484,7 +1484,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(const uno::Reference<beans
     std::unique_ptr<GraphicAttr> pGraphicAttr;
     uno::Reference<graphic::XGraphic> xGraphic;
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, rSource ) )
     {
@@ -1798,7 +1798,7 @@ tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const uno::Reference
 {
     tools::PolyPolygon aRetPolyPoly;
     uno::Reference< beans::XPropertySet > aXPropSet;
-    uno::Any aAny( rXShape->queryInterface(
+    cpo::uno::Any aAny( rXShape->queryInterface(
         cppu::UnoType<beans::XPropertySet>::get()));
 
     if ( aAny >>= aXPropSet )
@@ -1816,7 +1816,7 @@ tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const uno::Reference
 
 // adapting to basegfx::B2DPolyPolygon now, has no sense to do corrections in the
 // old tools::PolyPolygon creation code. Convert to that at return time
-tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const uno::Any& rAny )
+tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const cpo::uno::Any& rAny )
 {
     basegfx::B2DPolyPolygon aRetval;
 
@@ -1861,7 +1861,7 @@ bool EscherPropertyContainer::CreatePolygonProperties(
     }
     else
     {
-        uno::Any aAny;
+        cpo::uno::Any aAny;
 
         if(EscherPropertyValueHelper::GetPropertyValue(
             aAny,
@@ -2199,7 +2199,7 @@ bool EscherPropertyContainer::CreateConnectorProperties(
     {
         uno::Reference<beans::XPropertySet> aXPropSet;
         uno::Reference<drawing::XShape> aShapeA, aShapeB;
-        uno::Any aAny( rXShape->queryInterface( cppu::UnoType<beans::XPropertySet>::get()));
+        cpo::uno::Any aAny( rXShape->queryInterface( cppu::UnoType<beans::XPropertySet>::get()));
         if ( aAny >>= aXPropSet )
         {
             if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, u"EdgeKind"_ustr, true ) )
@@ -2301,7 +2301,7 @@ bool EscherPropertyContainer::CreateConnectorProperties(
 void EscherPropertyContainer::CreateShadowProperties(
     const uno::Reference<beans::XPropertySet> & rXPropSet )
 {
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     sal_uInt32  nLineFlags = 0;         // default : shape has no line
     sal_uInt32  nFillFlags = 0x10;      //           shape is filled
@@ -2443,7 +2443,7 @@ static void ConvertEnhancedCustomShapeEquation(
     uno::Sequence< OUString > sEquationSource;
     const SdrCustomShapeGeometryItem& rGeometryItem =
         rSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-    const uno::Any* pAny = rGeometryItem.GetPropertyValueByName( u"Equations"_ustr );
+    const cpo::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( u"Equations"_ustr );
     if ( pAny )
         *pAny >>= sEquationSource;
     sal_Int32 nEquationSourceCount = sEquationSource.getLength();
@@ -2591,7 +2591,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
     }
 
     SdrObjCustomShape& rSdrObjCustomShape = *pSdrObjCustomShape;
-    uno::Any aGeoPropSet = aXPropSet->getPropertyValue( u"CustomShapeGeometry"_ustr );
+    cpo::uno::Any aGeoPropSet = aXPropSet->getPropertyValue( u"CustomShapeGeometry"_ustr );
     uno::Sequence< beans::PropertyValue > aGeoPropSeq;
     if ( !(aGeoPropSet >>= aGeoPropSeq) )
         return;
@@ -2600,9 +2600,9 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
     static constexpr OUString sTextPath           ( u"TextPath"_ustr  );
 
     bool bAdjustmentValuesProp = false;
-    uno::Any aAdjustmentValuesProp;
+    cpo::uno::Any aAdjustmentValuesProp;
     bool bPathCoordinatesProp = false;
-    uno::Any aPathCoordinatesProp;
+    cpo::uno::Any aPathCoordinatesProp;
 
     sal_Int32 nAdjustmentsWhichNeedsToBeConverted = 0;
     uno::Sequence< beans::PropertyValues > aHandlesPropSeq;
@@ -2931,7 +2931,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             if ( bExtrusionColor )
                             {
                                 nLightFaceFlags |= 2;
-                                uno::Any aFillColor2;
+                                cpo::uno::Any aFillColor2;
                                 if ( EscherPropertyValueHelper::GetPropertyValue( aFillColor2, aXPropSet, u"FillColor2"_ustr, true ) )
                                 {
                                     sal_uInt32 nFillColor = ImplGetColor( *o3tl::doAccess<sal_uInt32>(aFillColor2) );
@@ -3353,7 +3353,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
 
                     // FontWork Font
                     OUString aFontName;
-                    uno::Any aAny = aXPropSet->getPropertyValue( u"CharFontName"_ustr );
+                    cpo::uno::Any aAny = aXPropSet->getPropertyValue( u"CharFontName"_ustr );
                     aAny >>= aFontName;
                     if ( aFontName.isEmpty() )
                         aFontName = u"Arial Black"_ustr;
@@ -3709,7 +3709,7 @@ MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawi
     {
         try
         {
-            uno::Any aGeoPropSet = aXPropSet->getPropertyValue( u"CustomShapeGeometry"_ustr );
+            cpo::uno::Any aGeoPropSet = aXPropSet->getPropertyValue( u"CustomShapeGeometry"_ustr );
             uno::Sequence< beans::PropertyValue > aGeoPropSeq;
             if ( aGeoPropSet >>= aGeoPropSeq )
             {
@@ -3844,7 +3844,7 @@ void EscherPersistTable::PtReplaceOrInsert( sal_uInt32 nID, sal_uInt32 nOfs )
 }
 
 bool EscherPropertyValueHelper::GetPropertyValue(
-    uno::Any& rAny,
+    cpo::uno::Any& rAny,
     const uno::Reference<beans::XPropertySet> & rXPropSet,
     const OUString& rString,
     bool bTestPropertyAvailability)
@@ -4419,7 +4419,7 @@ sal_Int32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
 {
     sal_Int32 nRule = 0;
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     awt::Point aRefPoint( bFirst ? maPointA : maPointB );
     uno::Reference<drawing::XShape>
         aXShape( bFirst ? mXConnectToA : mXConnectToB );
@@ -4508,12 +4508,12 @@ sal_Int32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
                     pSdrObjCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
 
                 OUString sShapeType;
-                const uno::Any* pType = rGeometryItem.GetPropertyValueByName( u"Type"_ustr );
+                const cpo::uno::Any* pType = rGeometryItem.GetPropertyValueByName( u"Type"_ustr );
                 if ( pType )
                     *pType >>= sShapeType;
                 MSO_SPT eSpType = EnhancedCustomShapeTypeNames::Get( sShapeType );
 
-                const uno::Any* pGluePointType = rGeometryItem.GetPropertyValueByName( u"Path"_ustr, u"GluePointType"_ustr );
+                const cpo::uno::Any* pGluePointType = rGeometryItem.GetPropertyValueByName( u"Path"_ustr, u"GluePointType"_ustr );
 
                 sal_Int16 nGluePointType = sal_Int16();
                 if ( !( pGluePointType &&

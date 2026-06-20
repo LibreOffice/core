@@ -68,6 +68,7 @@
 #include <utility>
 
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::reflection;
 using namespace css::container;
@@ -1514,14 +1515,14 @@ private:
     }
 
     virtual css::uno::Reference<css::beans::XIntrospectionAccess> SAL_CALL
-    inspect(css::uno::Any const & aObject) override;
+    inspect(cpo::uno::Any const & aObject) override;
 
     css::uno::Reference<css::reflection::XIdlReflection> reflection_;
     Cache<TypeKey, TypeKeyLess> typeCache_;
 };
 
 css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
-    css::uno::Any const & aObject)
+    cpo::uno::Any const & aObject)
 {
     css::uno::Reference<css::reflection::XIdlReflection> reflection;
     {
@@ -1532,7 +1533,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
         }
         reflection = reflection_;
     }
-    css::uno::Any aToInspectObj;
+    cpo::uno::Any aToInspectObj;
     css::uno::Type t;
     if (aObject >>= t) {
         css::uno::Reference<css::reflection::XIdlClass> c(
@@ -2373,7 +2374,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_stoc_Introspection_get_implementation(
     css::uno::XComponentContext * context,
-    css::uno::Sequence<css::uno::Any> const & arguments)
+    css::uno::Sequence<cpo::uno::Any> const & arguments)
 {
     SAL_WARN_IF(
         arguments.hasElements(), "stoc", "unexpected singleton arguments");

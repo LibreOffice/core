@@ -46,12 +46,12 @@ public:
     void SAL_CALL setHeaderMargin(double margin) override;
     double SAL_CALL getFooterMargin() override;
     void SAL_CALL setFooterMargin(double margin) override;
-    virtual css::uno::Any SAL_CALL getFitToPagesTall() override;
-    virtual void SAL_CALL setFitToPagesTall(const css::uno::Any& fitToPagesTall) override;
-    virtual css::uno::Any SAL_CALL getFitToPagesWide() override;
-    virtual void SAL_CALL setFitToPagesWide(const css::uno::Any& fitToPagesWide) override;
-    virtual css::uno::Any SAL_CALL getZoom() override;
-    virtual void SAL_CALL setZoom(const css::uno::Any& zoom) override;
+    virtual cpo::uno::Any SAL_CALL getFitToPagesTall() override;
+    virtual void SAL_CALL setFitToPagesTall(const cpo::uno::Any& fitToPagesTall) override;
+    virtual cpo::uno::Any SAL_CALL getFitToPagesWide() override;
+    virtual void SAL_CALL setFitToPagesWide(const cpo::uno::Any& fitToPagesWide) override;
+    virtual cpo::uno::Any SAL_CALL getZoom() override;
+    virtual void SAL_CALL setZoom(const cpo::uno::Any& zoom) override;
     virtual OUString SAL_CALL getLeftHeader() override;
     virtual void SAL_CALL setLeftHeader(const OUString& leftHeader) override;
     virtual OUString SAL_CALL getCenterHeader() override;

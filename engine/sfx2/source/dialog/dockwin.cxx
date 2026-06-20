@@ -97,7 +97,7 @@ static bool lcl_getWindowState( const uno::Reference< container::XNameAccess >& 
 
     try
     {
-        uno::Any a;
+        cpo::uno::Any a;
         uno::Sequence< beans::PropertyValue > aWindowState;
         a = xWindowStateMgr->getByName( rResourceURL );
         if ( a >>= aWindowState )
@@ -141,10 +141,10 @@ SfxDockingWrapper::SfxDockingWrapper( vcl::Window* pParentWnd ,
     uno::Reference< frame::XFrame > xFrame = pDispatcher->GetFrame()->GetFrame().GetFrameInterface();
     // create a resource URL from the nId provided by the sfx2
     OUString aResourceURL =  "private:resource/dockingwindow/" + OUString::number(nId);
-    uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+    uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
     {
-        {"Frame", uno::Any(xFrame)},
-        {"ResourceURL", uno::Any(aResourceURL)},
+        {"Frame", cpo::uno::Any(xFrame)},
+        {"ResourceURL", cpo::uno::Any(aResourceURL)},
     }));
 
     uno::Reference< awt::XWindow > xWindow;

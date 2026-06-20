@@ -147,7 +147,7 @@ void ZipPackageFolder::setChildStreamsTypeByExtension( const beans::StringPair& 
 }
 
     // XNameContainer
-void SAL_CALL ZipPackageFolder::insertByName( const OUString& aName, const uno::Any& aElement )
+void SAL_CALL ZipPackageFolder::insertByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
     if (hasByName(aName))
         throw ElementExistException();
@@ -202,13 +202,13 @@ ZipContentInfo& ZipPackageFolder::doGetByName( std::u16string_view aName )
     return aIter->second;
 }
 
-uno::Any SAL_CALL ZipPackageFolder::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL ZipPackageFolder::getByName( const OUString& aName )
 {
     return getByName(std::u16string_view(aName));
 }
-uno::Any ZipPackageFolder::getByName( std::u16string_view aName )
+cpo::uno::Any ZipPackageFolder::getByName( std::u16string_view aName )
 {
-    return uno::Any ( uno::Reference(cppu::getXWeak(doGetByName ( aName ).xPackageEntry.get())) );
+    return cpo::uno::Any ( uno::Reference(cppu::getXWeak(doGetByName ( aName ).xPackageEntry.get())) );
 }
 uno::Sequence< OUString > SAL_CALL ZipPackageFolder::getElementNames(  )
 {
@@ -223,7 +223,7 @@ bool ZipPackageFolder::hasByName( std::u16string_view aName )
     return maContents.find ( aName ) != maContents.end ();
 }
     // XNameReplace
-void SAL_CALL ZipPackageFolder::replaceByName( const OUString& aName, const uno::Any& aElement )
+void SAL_CALL ZipPackageFolder::replaceByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
     if ( !hasByName( aName ) )
         throw NoSuchElementException();
@@ -338,7 +338,7 @@ void ZipPackageFolder::saveContents(
     }
 }
 
-void SAL_CALL ZipPackageFolder::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
+void SAL_CALL ZipPackageFolder::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     if ( aPropertyName == "MediaType" )
     {
@@ -355,7 +355,7 @@ void SAL_CALL ZipPackageFolder::setPropertyValue( const OUString& aPropertyName,
     else
         throw UnknownPropertyException(aPropertyName);
 }
-uno::Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyName )
+cpo::uno::Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyName )
 {
     if ( PropertyName == "MediaType" )
     {
@@ -363,12 +363,12 @@ uno::Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyNa
         // if ( m_nFormat != embed::StorageFormats::PACKAGE )
         //  throw UnknownPropertyException();
 
-        return uno::Any ( msMediaType );
+        return cpo::uno::Any ( msMediaType );
     }
     else if ( PropertyName == "Version" )
-        return uno::Any( m_sVersion );
+        return cpo::uno::Any( m_sVersion );
     else if ( PropertyName == "Size" )
-        return uno::Any ( aEntry.nSize );
+        return cpo::uno::Any ( aEntry.nSize );
     else
         throw UnknownPropertyException(PropertyName);
 }

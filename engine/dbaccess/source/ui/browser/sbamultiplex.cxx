@@ -31,9 +31,9 @@ SbaXStatusMultiplexer::SbaXStatusMultiplexer(::cppu::OWeakObject& rSource, ::osl
 {
 }
 
-css::uno::Any  SAL_CALL SbaXStatusMultiplexer::queryInterface(const css::uno::Type& _rType)
+cpo::uno::Any  SAL_CALL SbaXStatusMultiplexer::queryInterface(const css::uno::Type& _rType)
 {
-    css::uno::Any aReturn = OSbaWeakSubObject::queryInterface(_rType);
+    cpo::uno::Any aReturn = OSbaWeakSubObject::queryInterface(_rType);
     if (!aReturn.hasValue())
         aReturn = ::cppu::queryInterface(_rType,
             static_cast< css::frame::XStatusListener* >(this),

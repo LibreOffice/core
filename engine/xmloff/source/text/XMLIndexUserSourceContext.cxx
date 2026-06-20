@@ -29,7 +29,7 @@
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using namespace ::xmloff::token;
 
 XMLIndexUserSourceContext::XMLIndexUserSourceContext(
@@ -117,17 +117,17 @@ void XMLIndexUserSourceContext::ProcessAttribute(const sax_fastparser::FastAttri
 
 void XMLIndexUserSourceContext::endFastElement(sal_Int32 nElement)
 {
-    rIndexPropertySet->setPropertyValue(u"CreateFromEmbeddedObjects"_ustr, css::uno::Any(bUseObjects));
-    rIndexPropertySet->setPropertyValue(u"CreateFromGraphicObjects"_ustr, css::uno::Any(bUseGraphic));
-    rIndexPropertySet->setPropertyValue(u"UseLevelFromSource"_ustr, css::uno::Any(bUseLevelFromSource));
-    rIndexPropertySet->setPropertyValue(u"CreateFromMarks"_ustr, css::uno::Any(bUseMarks));
-    rIndexPropertySet->setPropertyValue(u"CreateFromTables"_ustr, css::uno::Any(bUseTables));
-    rIndexPropertySet->setPropertyValue(u"CreateFromTextFrames"_ustr, css::uno::Any(bUseFrames));
-    rIndexPropertySet->setPropertyValue(u"CreateFromLevelParagraphStyles"_ustr, css::uno::Any(bUseLevelParagraphStyles));
+    rIndexPropertySet->setPropertyValue(u"CreateFromEmbeddedObjects"_ustr, cpo::uno::Any(bUseObjects));
+    rIndexPropertySet->setPropertyValue(u"CreateFromGraphicObjects"_ustr, cpo::uno::Any(bUseGraphic));
+    rIndexPropertySet->setPropertyValue(u"UseLevelFromSource"_ustr, cpo::uno::Any(bUseLevelFromSource));
+    rIndexPropertySet->setPropertyValue(u"CreateFromMarks"_ustr, cpo::uno::Any(bUseMarks));
+    rIndexPropertySet->setPropertyValue(u"CreateFromTables"_ustr, cpo::uno::Any(bUseTables));
+    rIndexPropertySet->setPropertyValue(u"CreateFromTextFrames"_ustr, cpo::uno::Any(bUseFrames));
+    rIndexPropertySet->setPropertyValue(u"CreateFromLevelParagraphStyles"_ustr, cpo::uno::Any(bUseLevelParagraphStyles));
 
     if( !sIndexName.isEmpty() )
     {
-        rIndexPropertySet->setPropertyValue(u"UserIndexName"_ustr, css::uno::Any(sIndexName));
+        rIndexPropertySet->setPropertyValue(u"UserIndexName"_ustr, cpo::uno::Any(sIndexName));
     }
 
     XMLIndexSourceBaseContext::endFastElement(nElement);

@@ -27,6 +27,7 @@
 //  Defines
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace framework
 {
@@ -60,7 +61,7 @@ FooterMenuController::~FooterMenuController()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_FooterMenuController_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::FooterMenuController(context));
 }

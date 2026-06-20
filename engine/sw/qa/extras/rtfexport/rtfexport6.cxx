@@ -734,7 +734,7 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testChicagoNumberingFootnote)
     uno::Reference<beans::XPropertySet> xFootnoteSettings
         = xFootnotesSupplier->getFootnoteSettings();
     sal_uInt16 nNumberingType = style::NumberingType::SYMBOL_CHICAGO;
-    xFootnoteSettings->setPropertyValue(u"NumberingType"_ustr, uno::Any(nNumberingType));
+    xFootnoteSettings->setPropertyValue(u"NumberingType"_ustr, cpo::uno::Any(nNumberingType));
 
     // Insert a footnote.
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);

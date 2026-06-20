@@ -42,6 +42,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace {
 
@@ -54,7 +55,7 @@ public:
     SfxAppDispatchProvider() {}
 
     virtual void SAL_CALL initialize(
-        css::uno::Sequence<css::uno::Any> const & aArguments) override;
+        css::uno::Sequence<cpo::uno::Any> const & aArguments) override;
 
     virtual OUString SAL_CALL getImplementationName() override;
 
@@ -75,7 +76,7 @@ public:
 };
 
 void SfxAppDispatchProvider::initialize(
-    css::uno::Sequence<css::uno::Any> const & aArguments)
+    css::uno::Sequence<cpo::uno::Any> const & aArguments)
 {
     css::uno::Reference<css::frame::XFrame> f;
     if (aArguments.getLength() != 1 || !(aArguments[0] >>= f)) {
@@ -221,7 +222,7 @@ Sequence< frame::DispatchInformation > SAL_CALL SfxAppDispatchProvider::getConfi
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_sfx2_AppDispatchProvider_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SfxAppDispatchProvider);
 }

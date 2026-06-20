@@ -35,7 +35,7 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -104,7 +104,7 @@ OUString getCasePreservingUrl(const INetURLObject& url) {
     return
         content(url).executeCommand(
             u"getCasePreservingURL"_ustr,
-            css::uno::Any()).
+            cpo::uno::Any()).
         get<OUString>();
 }
 
@@ -142,7 +142,7 @@ bool utl::UCBContentHelper::IsDocument(OUString const & url) {
     }
 }
 
-css::uno::Any utl::UCBContentHelper::GetProperty(
+cpo::uno::Any utl::UCBContentHelper::GetProperty(
     OUString const & url, OUString const & property)
 {
     try {
@@ -154,7 +154,7 @@ css::uno::Any utl::UCBContentHelper::GetProperty(
         throw;
     } catch (css::uno::Exception const &) {
         TOOLS_INFO_EXCEPTION("unotools.ucbhelper", "UCBContentHelper::GetProperty(" << url << ", " << property << ")");
-        return css::uno::Any();
+        return cpo::uno::Any();
     }
 }
 
@@ -193,7 +193,7 @@ bool utl::UCBContentHelper::Kill(OUString const & url) {
     try {
         content(url).executeCommand(
             u"delete"_ustr,
-            css::uno::Any(true));
+            cpo::uno::Any(true));
         return true;
     } catch (css::uno::RuntimeException const &) {
         throw;
@@ -225,7 +225,7 @@ bool utl::UCBContentHelper::MakeFolder(
                 {
                     continue;
                 }
-                if (parent.insertNewContent(rInfo.Type, { u"Title"_ustr }, { css::uno::Any(title) }, result))
+                if (parent.insertNewContent(rInfo.Type, { u"Title"_ustr }, { cpo::uno::Any(title) }, result))
                 {
                     return true;
                 }

@@ -76,7 +76,7 @@ protected:
     void            SetSynthesizingVCLEvent( bool b );
     bool            IsSynthesizingVCLEvent() const;
 
-    void        SetSystemParent_Impl( const css::uno::Any& rHandle );
+    void        SetSystemParent_Impl( const cpo::uno::Any& rHandle );
 
     // helper ...
     static void     PushPropertyIds( std::vector< sal_uInt16 > &aIds, int nFirstId, ...);
@@ -166,8 +166,8 @@ public:
     void SAL_CALL setForeground( sal_Int32 Color ) override;
     void SAL_CALL setControlFont( const css::awt::FontDescriptor& aFont ) override;
     void SAL_CALL getStyles( sal_Int16 nType, css::awt::FontDescriptor& Font, sal_Int32& ForegroundColor, sal_Int32& BackgroundColor ) override;
-    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
-    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
+    void SAL_CALL setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
+    cpo::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
 
     // css::awt::XLayoutConstrains
     css::awt::Size SAL_CALL getMinimumSize(  ) override;

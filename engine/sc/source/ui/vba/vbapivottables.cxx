@@ -24,10 +24,10 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-static uno::Any DataPilotToPivotTable( const uno::Any& aSource, const uno::Reference< uno::XComponentContext > & xContext )
+static cpo::uno::Any DataPilotToPivotTable( const cpo::uno::Any& aSource, const uno::Reference< uno::XComponentContext > & xContext )
 {
     uno::Reference< sheet::XDataPilotTable > xTable( aSource, uno::UNO_QUERY_THROW );
-    return uno::Any( uno::Reference< excel::XPivotTable > ( new ScVbaPivotTable( xContext, xTable ) ) );
+    return cpo::uno::Any( uno::Reference< excel::XPivotTable > ( new ScVbaPivotTable( xContext, xTable ) ) );
 }
 
 namespace {
@@ -38,7 +38,7 @@ public:
     /// @throws uno::RuntimeException
     PivotTableEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ) {}
 
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         return DataPilotToPivotTable( m_xEnumeration->nextElement(),  m_xContext );
     }
@@ -58,8 +58,8 @@ ScVbaPivotTables::createEnumeration()
     return new PivotTableEnumeration( mxParent, mxContext, xEnumAccess->createEnumeration() );
 }
 
-uno::Any
-ScVbaPivotTables::createCollectionObject( const css::uno::Any& aSource )
+cpo::uno::Any
+ScVbaPivotTables::createCollectionObject( const cpo::uno::Any& aSource )
 {
     return DataPilotToPivotTable( aSource,  mxContext );
 }

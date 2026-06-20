@@ -20,7 +20,7 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 
 namespace frm
@@ -50,7 +50,7 @@ namespace frm
         virtual void dispatchWithArgument(
                 sal_Int16 _nFeatureId,
                 const OUString& _pParamName,
-                const css::uno::Any& _rParamValue
+                const cpo::uno::Any& _rParamValue
              ) const = 0;
 
         /** checks whether a given feature is enabled

@@ -47,7 +47,7 @@
 #include <editeng/unoipset.hxx>
 #include <svx/svxdllapi.h>
 #include <rtl/ref.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <editeng/unotext.hxx>
 
 #include <svx/svdobj.hxx>
@@ -72,9 +72,9 @@ struct SvxShapeImpl;
 class SvxShapeMaster;
 
 void SVXCORE_DLLPUBLIC SvxItemPropertySet_setPropertyValue( const SfxItemPropertyMapEntry* pMap,
-        const css::uno::Any& rVal, SfxItemSet& rSet );
+        const cpo::uno::Any& rVal, SfxItemSet& rSet );
 
-css::uno::Any SVXCORE_DLLPUBLIC SvxItemPropertySet_getPropertyValue( const SfxItemPropertyMapEntry* pMap, const SfxItemSet& rSet );
+cpo::uno::Any SVXCORE_DLLPUBLIC SvxItemPropertySet_getPropertyValue( const SfxItemPropertyMapEntry* pMap, const SfxItemSet& rSet );
 
 
 // WARNING: if you update the supported interfaces,
@@ -118,7 +118,7 @@ protected:
     void ForceMetricToItemPoolMetric(basegfx::B2DHomMatrix& rB2DHomMatrix) const noexcept;
     void ForceMetricTo100th_mm(basegfx::B2DHomMatrix& rB2DHomMatrix) const noexcept;
 
-    css::uno::Any GetAnyForItem( SfxItemSet const & aSet, const SfxItemPropertyMapEntry* pMap ) const;
+    cpo::uno::Any GetAnyForItem( SfxItemSet const & aSet, const SfxItemPropertyMapEntry* pMap ) const;
 
     bool SetFillAttribute( sal_uInt16 nWID, const OUString& rName );
 
@@ -139,11 +139,11 @@ protected:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue );
+    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const cpo::uno::Any& rValue );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue );
+    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, cpo::uno::Any& rValue );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
     virtual bool getPropertyStateImpl( const SfxItemPropertyMapEntry* pProperty, css::beans::PropertyState& rState );
@@ -171,7 +171,7 @@ public:
 
     void SetShapeType( const OUString& ShapeType ) { maShapeType = ShapeType; }
     /// @throws css::uno::RuntimeException
-    css::uno::Any GetBitmap( bool bMetaFile = false ) const;
+    cpo::uno::Any GetBitmap( bool bMetaFile = false ) const;
 
     void notifyPropertyChange(const OUString& rPropName);
 
@@ -197,11 +197,11 @@ public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    void _setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue );
+    void _setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    css::uno::Any _getPropertyValue( const OUString& PropertyName );
+    cpo::uno::Any _getPropertyValue( const OUString& PropertyName );
 
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
@@ -212,7 +212,7 @@ public:
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    css::uno::Any _getPropertyDefault( const OUString& aPropertyName );
+    cpo::uno::Any _getPropertyDefault( const OUString& aPropertyName );
 
     /// @throws css::uno::RuntimeException
     css::uno::Sequence< OUString > _getSupportedServiceNames();
@@ -226,7 +226,7 @@ public:
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) noexcept override final;
 
     // XAggregation
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& aType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& aType ) override;
 
     // XNamed
     virtual OUString SAL_CALL getName(  ) override;
@@ -248,16 +248,16 @@ public:
 
     // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
     virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
     virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
     virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     // XMultiPropertySet
-    virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues ) override;
-    virtual css::uno::Sequence< css::uno::Any > SAL_CALL getPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< cpo::uno::Any >& aValues ) override;
+    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL getPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     virtual void SAL_CALL addPropertiesChangeListener( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
     virtual void SAL_CALL removePropertiesChangeListener( const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
     virtual void SAL_CALL firePropertiesChangeEvent( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
@@ -266,14 +266,14 @@ public:
     virtual css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) override;
     virtual css::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName ) override;
     virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) override;
-    virtual css::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
 
     // XMultiPropertyStates
     virtual void SAL_CALL setAllPropertiesToDefault() override;
     virtual void SAL_CALL setPropertiesToDefault(
         const css::uno::Sequence<
         OUString >& aPropertyNames ) override;
-    virtual css::uno::Sequence< css::uno::Any >
+    virtual css::uno::Sequence< cpo::uno::Any >
     SAL_CALL getPropertyDefaults(
         const css::uno::Sequence<
         OUString >& aPropertyNames ) override;
@@ -337,8 +337,8 @@ protected:
 
 protected:
     // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
+    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const cpo::uno::Any& rValue ) override;
+    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, cpo::uno::Any& rValue ) override;
     virtual bool getPropertyStateImpl( const SfxItemPropertyMapEntry* pProperty, css::beans::PropertyState& rState ) override;
     virtual bool setPropertyToDefaultImpl( const SfxItemPropertyMapEntry* pProperty ) override;
 
@@ -350,8 +350,8 @@ public:
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override
     { SvxShape::acquire(); }
     virtual void SAL_CALL release() noexcept override
@@ -383,8 +383,8 @@ public:
     virtual ~SvxShapeRect() noexcept override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override
     { OWeakAggObject::acquire(); }
     virtual void SAL_CALL release() noexcept override
@@ -431,8 +431,8 @@ public:
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override
     { SvxShape::acquire(); }
     virtual void SAL_CALL release() noexcept override
@@ -452,7 +452,7 @@ public:
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override ;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
     // XShapeDescriptor
     virtual OUString SAL_CALL getShapeType() override;
@@ -484,8 +484,8 @@ public:
     virtual ~SvxShapeConnector() noexcept override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override
     { SvxShapeText::acquire(); }
     virtual void SAL_CALL release() noexcept override
@@ -525,21 +525,21 @@ public:
     virtual ~SvxShapeControl() noexcept override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override
     { SvxShapeText::acquire(); }
     virtual void SAL_CALL release() noexcept override
     { SvxShapeText::release(); }
 
     // XPropertySet
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
 
     // XPropertyState
     virtual css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) override;
     virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) override;
-    virtual css::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
 
     // XShapeDescriptor
     virtual OUString SAL_CALL getShapeType() override;
@@ -590,8 +590,8 @@ private:
     OUString m_referer;
 protected:
     // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
+    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const cpo::uno::Any& rValue ) override;
+    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, cpo::uno::Any& rValue ) override;
 
     void resetModifiedState();
 
@@ -617,8 +617,8 @@ class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) SvxShapePolyPolygon final : public Sv
     using SvxUnoTextRangeBase::getPropertyValue;
 
     // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
+    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const cpo::uno::Any& rValue ) override;
+    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, cpo::uno::Any& rValue ) override;
 
     // local helper to detect PolygonKind from SdrObject::GetObjIdentifier()
     css::drawing::PolygonKind GetPolygonKind() const;
@@ -645,8 +645,8 @@ class SvxGraphicObject final : public SvxShapeText
     using SvxUnoTextRangeBase::getPropertyValue;
 
     // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
+    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const cpo::uno::Any& rValue ) override;
+    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, cpo::uno::Any& rValue ) override;
 
 public:
     UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxGraphicObject(SdrObject* pObj);
@@ -667,17 +667,17 @@ public:
 
     UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DSceneObject(SdrObject* pObj, SvxDrawPage* pDrawPage);
     // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
+    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const cpo::uno::Any& rValue ) override;
     virtual bool getPropertyValueImpl(const OUString& rName, const SfxItemPropertyMapEntry* pProperty,
-        css::uno::Any& rValue ) override;
+        cpo::uno::Any& rValue ) override;
 
     virtual ~Svx3DSceneObject() noexcept override;
 
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override
     { SvxShape::acquire(); }
     virtual void SAL_CALL release() noexcept override
@@ -693,7 +693,7 @@ public:
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) override ;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
     // XServiceInfo
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
@@ -710,8 +710,8 @@ public:
 class Svx3DCubeObject final : public SvxShape
 {
     // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
+    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const cpo::uno::Any& rValue ) override;
+    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, cpo::uno::Any& rValue ) override;
 
 public:
     Svx3DCubeObject(SdrObject* pObj);
@@ -730,8 +730,8 @@ public:
     Svx3DSphereObject(SdrObject* pObj);
 private:
     // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
+    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const cpo::uno::Any& rValue ) override;
+    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, cpo::uno::Any& rValue ) override;
 
     virtual ~Svx3DSphereObject() noexcept override;
 
@@ -745,8 +745,8 @@ private:
 class Svx3DLatheObject final : public SvxShape
 {
     // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
+    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const cpo::uno::Any& rValue ) override;
+    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, cpo::uno::Any& rValue ) override;
 
 public:
     UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DLatheObject(SdrObject* pObj);
@@ -765,8 +765,8 @@ public:
     UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DExtrudeObject(SdrObject* pObj);
 private:
     // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
+    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const cpo::uno::Any& rValue ) override;
+    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, cpo::uno::Any& rValue ) override;
 
     virtual ~Svx3DExtrudeObject() noexcept override;
 
@@ -780,8 +780,8 @@ private:
 class Svx3DPolygonObject final : public SvxShape
 {
     // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
+    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const cpo::uno::Any& rValue ) override;
+    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, cpo::uno::Any& rValue ) override;
 
 public:
     UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DPolygonObject(SdrObject* pObj);
@@ -803,14 +803,14 @@ protected:
 public:
     SvxCustomShape(SdrObject* pObj);
     // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
+    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, cpo::uno::Any& rValue ) override;
 
 
     virtual ~SvxCustomShape() noexcept override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override
     { SvxShapeText::acquire(); }
     virtual void SAL_CALL release() noexcept override
@@ -820,7 +820,7 @@ public:
     virtual css::awt::Point SAL_CALL getPosition() override;
 
     // XPropertySet
-    void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
+    void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
 
     // XTypeProvider
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
@@ -841,8 +841,8 @@ public:
 
 private:
     // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
+    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const cpo::uno::Any& rValue ) override;
+    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, cpo::uno::Any& rValue ) override;
     bool getPropertyStateImpl(const SfxItemPropertyMapEntry* pProperty,
                               css::beans::PropertyState& rState) override;
 

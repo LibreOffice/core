@@ -52,12 +52,12 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include "xmlithlp.hxx"
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
-using uno::Any;
+using cpo::uno::Any;
 
 constexpr sal_uInt16 nUnknownWhich = RES_UNKNOWNATR_CONTAINER;
 

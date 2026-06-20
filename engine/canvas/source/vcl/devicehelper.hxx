@@ -64,9 +64,9 @@ namespace vclcanvas
             const css::uno::Reference< css::rendering::XGraphicDevice >&  rDevice,
             const css::geometry::IntegerSize2D&                                        size );
 
-        css::uno::Any isAccelerated() const;
-        css::uno::Any getDeviceHandle() const;
-        css::uno::Any getSurfaceHandle() const;
+        cpo::uno::Any isAccelerated() const;
+        cpo::uno::Any getDeviceHandle() const;
+        cpo::uno::Any getSurfaceHandle() const;
         css::uno::Reference<
             css::rendering::XColorSpace > const & getColorSpace() const;
 

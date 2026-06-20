@@ -76,7 +76,7 @@ static void disableScrollBars(uno::Reference< beans::XPropertySet > const & xVie
 
     //To reproduce this problem, in edit->autotext and click through
     //the examples and see if the preview gets a horizontal scrollbar
-    uno::Any aFalseSet(uno::Any(false));
+    cpo::uno::Any aFalseSet(cpo::uno::Any(false));
     xViewProps->setPropertyValue(UNO_NAME_SHOW_ONLINE_LAYOUT, aFalseSet);
 
     xViewProps->setPropertyValue(UNO_NAME_SHOW_HORI_SCROLL_BAR, aFalseSet);
@@ -84,7 +84,7 @@ static void disableScrollBars(uno::Reference< beans::XPropertySet > const & xVie
 
     if (bEnableOnlineMode)
     {
-        xViewProps->setPropertyValue(UNO_NAME_SHOW_ONLINE_LAYOUT, uno::Any(true));
+        xViewProps->setPropertyValue(UNO_NAME_SHOW_ONLINE_LAYOUT, cpo::uno::Any(true));
     }
 }
 
@@ -148,7 +148,7 @@ void SwOneExampleFrame::Paint(vcl::RenderContext& rRenderContext, const tools::R
     {
         uno::Reference<view::XViewSettingsSupplier> xSettings(m_xController, uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet>  xViewProps = xSettings->getViewSettings();
-        uno::Any aZoom = xViewProps->getPropertyValue(UNO_NAME_ZOOM_VALUE);
+        cpo::uno::Any aZoom = xViewProps->getPropertyValue(UNO_NAME_ZOOM_VALUE);
         sal_Int16 nZoom = 100;
         aZoom >>= nZoom;
 
@@ -181,11 +181,11 @@ void SwOneExampleFrame::CreateControl()
 
     uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
     uno::Sequence<beans::PropertyValue> args( comphelper::InitPropertySequence({
-            { "DocumentService", uno::Any(u"com.sun.star.text.TextDocument"_ustr) },
-            { "OpenFlags", uno::Any(u"-RB"_ustr) },
-            { "Referer", uno::Any(u"private:user"_ustr) },
-            { "ReadOnly", uno::Any(true) },
-            { "Hidden", uno::Any(true) }
+            { "DocumentService", cpo::uno::Any(u"com.sun.star.text.TextDocument"_ustr) },
+            { "OpenFlags", cpo::uno::Any(u"-RB"_ustr) },
+            { "Referer", cpo::uno::Any(u"private:user"_ustr) },
+            { "ReadOnly", cpo::uno::Any(true) },
+            { "Hidden", cpo::uno::Any(true) }
         }));
 
     m_xModel = dynamic_cast<SwXTextDocument*>(xDesktop->loadComponentFromURL(sTempURL, u"_blank"_ustr, 0, args).get());
@@ -221,7 +221,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
             try
             {
                 uno::Reference< frame::XLayoutManager > xLayoutManager;
-                uno::Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
+                cpo::uno::Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
                 aValue >>= xLayoutManager;
                 if ( xLayoutManager.is() )
                     xLayoutManager->setVisible( false );
@@ -235,8 +235,8 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
         uno::Reference< view::XViewSettingsSupplier >  xSettings(m_xController, uno::UNO_QUERY);
         uno::Reference< beans::XPropertySet >  xViewProps = xSettings->getViewSettings();
 
-        const uno::Any aTrueSet( true );
-        const uno::Any aFalseSet( false );
+        const cpo::uno::Any aTrueSet( true );
+        const cpo::uno::Any aFalseSet( false );
 
         if( !m_bIsInitialized )
         {
@@ -258,13 +258,13 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
 
             if(0 ==(m_nStyleFlags&EX_SHOW_ONLINE_LAYOUT))
             {
-                uno::Any aZoom;
+                cpo::uno::Any aZoom;
                 aZoom <<= sal_Int16(view::DocumentZoomType::PAGE_WIDTH_EXACT);
                 xViewProps->setPropertyValue(UNO_NAME_ZOOM_TYPE, aZoom);
             }
             else
             {
-                uno::Any aZoom;
+                cpo::uno::Any aZoom;
                 aZoom <<= sal_Int16(view::DocumentZoomType::BY_VALUE);
                 xViewProps->setPropertyValue(UNO_NAME_ZOOM_TYPE, aZoom);
 
@@ -358,22 +358,22 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
             }
         }
 
-        uno::Any aPageStyle = m_xCursor->getPropertyValue(UNO_NAME_PAGE_STYLE_NAME);
+        cpo::uno::Any aPageStyle = m_xCursor->getPropertyValue(UNO_NAME_PAGE_STYLE_NAME);
         OUString sPageStyle;
         aPageStyle >>= sPageStyle;
 
         uno::Reference< container::XNameAccess >  xStyles = m_xModel->getStyleFamilies();
-        uno::Any aPFamily = xStyles->getByName( u"PageStyles"_ustr );
+        cpo::uno::Any aPFamily = xStyles->getByName( u"PageStyles"_ustr );
         uno::Reference< container::XNameContainer >  xPFamily;
 
         if( EX_SHOW_DEFAULT_PAGE != m_nStyleFlags
                 && (aPFamily >>= xPFamily) && !sPageStyle.isEmpty() )
         {
-            uno::Any aPStyle = xPFamily->getByName( sPageStyle );
+            cpo::uno::Any aPStyle = xPFamily->getByName( sPageStyle );
             uno::Reference< style::XStyle >  xPStyle;
             aPStyle >>= xPStyle;
             uno::Reference< beans::XPropertySet >  xPProp(xPStyle, uno::UNO_QUERY);
-            uno::Any aSize = xPProp->getPropertyValue(UNO_NAME_SIZE);
+            cpo::uno::Any aSize = xPProp->getPropertyValue(UNO_NAME_SIZE);
             awt::Size aPSize;
             aSize >>= aPSize;
             //TODO: set page width to card width
@@ -381,7 +381,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
             aSize <<= aPSize;
             xPProp->setPropertyValue(UNO_NAME_SIZE, aSize);
 
-            uno::Any aZero; aZero <<= sal_Int32(0);
+            cpo::uno::Any aZero; aZero <<= sal_Int32(0);
             xPProp->setPropertyValue(UNO_NAME_LEFT_MARGIN, aZero);
             xPProp->setPropertyValue(UNO_NAME_RIGHT_MARGIN, aZero);
         }
@@ -451,7 +451,7 @@ bool SwOneExampleFrame::CreatePopup(const Point& rPt)
     uno::Reference< view::XViewSettingsSupplier >  xSettings(m_xController, uno::UNO_QUERY);
     uno::Reference< beans::XPropertySet >  xViewProps = xSettings->getViewSettings();
 
-    uno::Any aZoom = xViewProps->getPropertyValue(UNO_NAME_ZOOM_VALUE);
+    cpo::uno::Any aZoom = xViewProps->getPropertyValue(UNO_NAME_ZOOM_VALUE);
     sal_Int16 nZoom = 0;
     aZoom >>= nZoom;
 
@@ -479,7 +479,7 @@ void SwOneExampleFrame::PopupHdl(std::u16string_view rId)
         uno::Reference< view::XViewSettingsSupplier >  xSettings(m_xController, uno::UNO_QUERY);
         uno::Reference< beans::XPropertySet >  xViewProps = xSettings->getViewSettings();
 
-        uno::Any aZoom;
+        cpo::uno::Any aZoom;
         aZoom <<= nZoom;
         xViewProps->setPropertyValue(UNO_NAME_ZOOM_VALUE, aZoom);
         aZoom <<= sal_Int16(view::DocumentZoomType::BY_VALUE);

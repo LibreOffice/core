@@ -19,9 +19,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com::sun::star {
-    namespace uno { class Any; }
-}
+namespace cpo::uno { class Any; }
 
 namespace oox {
 
@@ -46,7 +44,7 @@ public:
 
     css::beans::PropertyValue getRootProperty();
 
-    void appendElement(const OUString& aName, const css::uno::Any& aAny);
+    void appendElement(const OUString& aName, const cpo::uno::Any& aAny);
     void push(const OUString& aKey);
     void pop();
     void addInt32(const OUString& aElementName, sal_Int32 aIntValue);

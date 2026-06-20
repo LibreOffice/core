@@ -413,7 +413,7 @@ bool SwPrintUIOptions::processPropertiesAndCheckFormat( const uno::Sequence< bea
     bool bChanged = processProperties( i_rNewProp );
 
     uno::Reference< awt::XDevice >  xRenderDevice;
-    uno::Any aVal( getValue( u"RenderDevice"_ustr ) );
+    cpo::uno::Any aVal( getValue( u"RenderDevice"_ustr ) );
     aVal >>= xRenderDevice;
 
     VclPtr< OutputDevice > pOut;

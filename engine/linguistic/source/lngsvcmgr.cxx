@@ -55,8 +55,8 @@
 using namespace com::sun::star;
 using namespace linguistic;
 
-uno::Sequence< OUString > static GetLangSvcList( const uno::Any &rVal );
-uno::Sequence< OUString > static GetLangSvc( const uno::Any &rVal );
+uno::Sequence< OUString > static GetLangSvcList( const cpo::uno::Any &rVal );
+uno::Sequence< OUString > static GetLangSvc( const cpo::uno::Any &rVal );
 
 static bool lcl_SeqHasString( const uno::Sequence< OUString > &rSeq, const OUString &rText )
 {
@@ -76,7 +76,7 @@ static uno::Sequence< lang::Locale > GetAvailLocales(
         std::set< LanguageType > aLanguages;
 
         // All of these services only use one arg, but need two args for compat reasons
-        uno::Sequence< uno::Any > aArgs(2);
+        uno::Sequence< cpo::uno::Any > aArgs(2);
         aArgs.getArray()[0] <<= GetLinguProperties();
 
         // check all services for the supported languages and new
@@ -528,7 +528,7 @@ LngSvcMgr::~LngSvcMgr()
 namespace
 {
     using lang::Locale;
-    using uno::Any;
+    using cpo::uno::Any;
     using uno::Sequence;
 
     bool lcl_FindEntry( const OUString &rEntry, const Sequence< OUString > &rCfgSvcs )
@@ -733,7 +733,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
     const uno::Sequence< OUString > aHyphenatorListEntries( GetNodeNames( aHyphenatorList ) );
     const uno::Sequence< OUString > aThesaurusListEntries( GetNodeNames( aThesaurusList ) );
 
-    uno::Sequence< uno::Any > aValues;
+    uno::Sequence< cpo::uno::Any > aValues;
     uno::Sequence< OUString > aNames( 1 );
     OUString *pNames = aNames.getArray();
 
@@ -931,7 +931,7 @@ namespace {
 
 template<typename T> uno::Reference<T> createLinguisticInstance(
     const uno::Reference<uno::XComponentContext>& rContext,
-    const uno::Any& rCurrent)
+    const cpo::uno::Any& rCurrent)
 {
     uno::Reference<lang::XSingleComponentFactory> xCompFactory(rCurrent, css::uno::UNO_QUERY);
     if (xCompFactory.is())
@@ -963,7 +963,7 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
 
     while (xEnum->hasMoreElements())
     {
-        uno::Any aCurrent = xEnum->nextElement();
+        cpo::uno::Any aCurrent = xEnum->nextElement();
         try
         {
             auto xSvc = createLinguisticInstance<linguistic2::XSpellChecker>(xContext, aCurrent);
@@ -1007,7 +1007,7 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
 
     while (xEnum->hasMoreElements())
     {
-        uno::Any aCurrent = xEnum->nextElement();
+        cpo::uno::Any aCurrent = xEnum->nextElement();
         try
         {
             auto xSvc = createLinguisticInstance<linguistic2::XProofreader>(xContext, aCurrent);
@@ -1051,7 +1051,7 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
 
     while (xEnum->hasMoreElements())
     {
-        uno::Any aCurrent = xEnum->nextElement();
+        cpo::uno::Any aCurrent = xEnum->nextElement();
         try
         {
             auto xSvc = createLinguisticInstance<linguistic2::XHyphenator>(xContext, aCurrent);
@@ -1095,7 +1095,7 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
 
     while (xEnum->hasMoreElements())
     {
-        uno::Any aCurrent = xEnum->nextElement();
+        cpo::uno::Any aCurrent = xEnum->nextElement();
         uno::Reference< lang::XSingleComponentFactory > xCompFactory;
         uno::Reference< lang::XSingleServiceFactory > xFactory;
 
@@ -1144,12 +1144,12 @@ void LngSvcMgr::SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp )
         name = aPrefix + name;
     }
 
-    const uno::Sequence< uno::Any > aValues( /*aCfg.*/GetProperties( aNames ) );
+    const uno::Sequence< cpo::uno::Any > aValues( /*aCfg.*/GetProperties( aNames ) );
     if (!(aNames.hasElements()  &&  aNames.getLength() == aValues.getLength()))
         return;
 
     const OUString *pNames = aNames.getConstArray();
-    for (const uno::Any& rValue : aValues)
+    for (const cpo::uno::Any& rValue : aValues)
     {
         uno::Sequence< OUString > aSvcImplNames;
         if (rValue >>= aSvcImplNames)
@@ -1177,12 +1177,12 @@ void LngSvcMgr::SetCfgServiceLists( GrammarCheckingIterator &rGrammarDsp )
         name = aPrefix + name;
     }
 
-    const uno::Sequence< uno::Any > aValues( /*aCfg.*/GetProperties( aNames ) );
+    const uno::Sequence< cpo::uno::Any > aValues( /*aCfg.*/GetProperties( aNames ) );
     if (!(aNames.hasElements()  &&  aNames.getLength() == aValues.getLength()))
         return;
 
     const OUString *pNames = aNames.getConstArray();
-    for (const uno::Any& rValue : aValues)
+    for (const cpo::uno::Any& rValue : aValues)
     {
         uno::Sequence< OUString > aSvcImplNames;
         if (rValue >>= aSvcImplNames)
@@ -1214,12 +1214,12 @@ void LngSvcMgr::SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp )
         name = aPrefix + name;
     }
 
-    const uno::Sequence< uno::Any > aValues( /*aCfg.*/GetProperties( aNames ) );
+    const uno::Sequence< cpo::uno::Any > aValues( /*aCfg.*/GetProperties( aNames ) );
     if (!(aNames.hasElements()  &&  aNames.getLength() == aValues.getLength()))
         return;
 
     const OUString *pNames = aNames.getConstArray();
-    for (const uno::Any& rValue : aValues)
+    for (const cpo::uno::Any& rValue : aValues)
     {
         uno::Sequence< OUString > aSvcImplNames;
         if (rValue >>= aSvcImplNames)
@@ -1251,12 +1251,12 @@ void LngSvcMgr::SetCfgServiceLists( ThesaurusDispatcher &rThesDsp )
         name = aPrefix + name;
     }
 
-    const uno::Sequence< uno::Any > aValues( /*aCfg.*/GetProperties( aNames ) );
+    const uno::Sequence< cpo::uno::Any > aValues( /*aCfg.*/GetProperties( aNames ) );
     if (!(aNames.hasElements()  &&  aNames.getLength() == aValues.getLength()))
         return;
 
     const OUString *pNames = aNames.getConstArray();
-    for (const uno::Any& rValue : aValues)
+    for (const cpo::uno::Any& rValue : aValues)
     {
         uno::Sequence< OUString > aSvcImplNames;
         if (rValue >>= aSvcImplNames)
@@ -1594,7 +1594,7 @@ bool LngSvcMgr::SaveCfgSvcs( std::u16string_view rServiceName )
             uno::Sequence< OUString > aSvcImplNames = pDsp->GetServiceList( rLocale );
 
             // build value to be written back to configuration
-            uno::Any aCfgAny;
+            cpo::uno::Any aCfgAny;
             if ((pDsp == mxHyphDsp.get() || pDsp == mxGrammarDsp.get()) && aSvcImplNames.getLength() > 1)
                 aSvcImplNames.realloc(1);   // there should be only one entry for hyphenators or grammar checkers (because they are not chained)
             aCfgAny <<= aSvcImplNames;
@@ -1616,7 +1616,7 @@ bool LngSvcMgr::SaveCfgSvcs( std::u16string_view rServiceName )
 }
 
 
-static uno::Sequence< OUString > GetLangSvcList( const uno::Any &rVal )
+static uno::Sequence< OUString > GetLangSvcList( const cpo::uno::Any &rVal )
 {
     uno::Sequence< OUString > aRes;
 
@@ -1635,7 +1635,7 @@ static uno::Sequence< OUString > GetLangSvcList( const uno::Any &rVal )
 }
 
 
-static uno::Sequence< OUString > GetLangSvc( const uno::Any &rVal )
+static uno::Sequence< OUString > GetLangSvc( const cpo::uno::Any &rVal )
 {
     uno::Sequence< OUString > aRes;
     if (!rVal.hasValue())
@@ -1680,7 +1680,7 @@ uno::Sequence< OUString > SAL_CALL
 
     OUString aCfgLocale( LanguageTag::convertToBcp47( rLocale) );
 
-    uno::Sequence< uno::Any > aValues;
+    uno::Sequence< cpo::uno::Any > aValues;
     uno::Sequence< OUString > aNames( 1 );
     OUString *pNames = aNames.getArray();
     if ( rServiceName == SN_SPELLCHECKER )
@@ -1815,7 +1815,7 @@ uno::Sequence< OUString > SAL_CALL
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 linguistic_LngSvcMgr_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new LngSvcMgr());
 }

@@ -32,6 +32,7 @@
 namespace writerperfect
 {
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::io;
 
 namespace container = css::container;

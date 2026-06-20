@@ -82,7 +82,7 @@ void SAL_CALL ConfigFlush::removeRefreshListener(const css::uno::Reference< css:
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_ConfigFlush_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new filter::config::ConfigFlush());
 }

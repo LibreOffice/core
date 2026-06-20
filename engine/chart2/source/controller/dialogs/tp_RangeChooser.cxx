@@ -207,7 +207,7 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
     {
         aArguments.realloc( aArguments.getLength() + 1 );
         aArguments.getArray()[aArguments.getLength() - 1] =
-            beans::PropertyValue( u"TimeBased"_ustr, -1, uno::Any(bTimeBased),
+            beans::PropertyValue( u"TimeBased"_ustr, -1, cpo::uno::Any(bTimeBased),
                     beans::PropertyState_DIRECT_VALUE );
     }
 
@@ -219,7 +219,7 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
     aArguments.realloc( aArguments.getLength() + 1 );
     aArguments.getArray()[aArguments.getLength() - 1] =
         beans::PropertyValue( u"CellRangeRepresentation"_ustr , -1,
-                              uno::Any( m_aLastValidRangeString ),
+                              cpo::uno::Any( m_aLastValidRangeString ),
                               beans::PropertyState_DIRECT_VALUE );
     m_rDialogModel.setData( aArguments );
     m_bIsDirty = false;

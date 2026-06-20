@@ -69,6 +69,7 @@ using xforms::Model;
 using xforms::MIP;
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::dom;
 
@@ -475,7 +476,7 @@ void SAL_CALL Submission::submitWithInteraction(
     }
     catch( const Exception& )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         // exception caught: re-throw as wrapped target exception
         throw WrappedTargetException(
             lcl_message( sID, u" due to exception being thrown" ),

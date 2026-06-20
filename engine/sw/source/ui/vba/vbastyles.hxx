@@ -37,11 +37,11 @@ public:
                  const css::uno::Reference< css::uno::XComponentContext > & xContext,
                  const rtl::Reference< SwXTextDocument >& xModel );
 
-    virtual css::uno::Any SAL_CALL Item(const css::uno::Any& Index1, const css::uno::Any& Index2) override;
+    virtual cpo::uno::Any SAL_CALL Item(const cpo::uno::Any& Index1, const cpo::uno::Any& Index2) override;
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
-    virtual css::uno::Any createCollectionObject(const css::uno::Any&) override;
+    virtual cpo::uno::Any createCollectionObject(const cpo::uno::Any&) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

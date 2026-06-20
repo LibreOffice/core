@@ -36,14 +36,14 @@ public:
     virtual void SAL_CALL setMainDocumentType(sal_Int32 _maindocumenttype) override;
 
     virtual void SAL_CALL
-    OpenDataSource(const OUString& Name, const css::uno::Any& Format,
-                   const css::uno::Any& ConfirmConversions, const css::uno::Any& ReadOnly,
-                   const css::uno::Any& LinkToSource, const css::uno::Any& AddToRecentFiles,
-                   const css::uno::Any& PasswordDocument, const css::uno::Any& PasswordTemplate,
-                   const css::uno::Any& Revert, const css::uno::Any& WritePasswordDocument,
-                   const css::uno::Any& WritePasswordTemplate, const css::uno::Any& Connection,
-                   const css::uno::Any& SQLStatement, const css::uno::Any& SQLStatement1,
-                   const css::uno::Any& OpenExclusive, const css::uno::Any& SubType) override;
+    OpenDataSource(const OUString& Name, const cpo::uno::Any& Format,
+                   const cpo::uno::Any& ConfirmConversions, const cpo::uno::Any& ReadOnly,
+                   const cpo::uno::Any& LinkToSource, const cpo::uno::Any& AddToRecentFiles,
+                   const cpo::uno::Any& PasswordDocument, const cpo::uno::Any& PasswordTemplate,
+                   const cpo::uno::Any& Revert, const cpo::uno::Any& WritePasswordDocument,
+                   const cpo::uno::Any& WritePasswordTemplate, const cpo::uno::Any& Connection,
+                   const cpo::uno::Any& SQLStatement, const cpo::uno::Any& SQLStatement1,
+                   const cpo::uno::Any& OpenExclusive, const cpo::uno::Any& SubType) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

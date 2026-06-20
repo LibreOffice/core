@@ -127,6 +127,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::task;
@@ -134,14 +135,14 @@ using namespace ::com::sun::star::document;
 using namespace ::cppu;
 
 
-static css::uno::Any getODFVersionAny(SvtSaveOptions::ODFSaneDefaultVersion v)
+static cpo::uno::Any getODFVersionAny(SvtSaveOptions::ODFSaneDefaultVersion v)
 {
     if (v >= SvtSaveOptions::ODFSaneDefaultVersion::ODFSVER_014)
-        return css::uno::Any(ODFVER_014_TEXT);
+        return cpo::uno::Any(ODFVER_014_TEXT);
     else if (v >= SvtSaveOptions::ODFSaneDefaultVersion::ODFSVER_013)
-        return css::uno::Any(ODFVER_013_TEXT);
+        return cpo::uno::Any(ODFVER_013_TEXT);
     else
-        return css::uno::Any(ODFVER_012_TEXT);
+        return cpo::uno::Any(ODFVER_012_TEXT);
 }
 
 
@@ -155,7 +156,7 @@ void impl_addToModelCollection(const css::uno::Reference< css::frame::XModel >& 
         css::frame::theGlobalEventBroadcaster::get(xContext);
     try
     {
-        xModelCollection->insert(css::uno::Any(xModel));
+        xModelCollection->insert(cpo::uno::Any(xModel));
     }
     catch ( uno::Exception& )
     {
@@ -336,7 +337,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
 
     try
     {
-        xProps->setPropertyValue(u"MediaType"_ustr, uno::Any( aDataFlavor.MimeType ) );
+        xProps->setPropertyValue(u"MediaType"_ustr, cpo::uno::Any( aDataFlavor.MimeType ) );
     }
     catch( uno::Exception& )
     {
@@ -352,10 +353,10 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
     // the default values, that should be used for ODF1.1 and older formats
     uno::Sequence< beans::NamedValue > aEncryptionAlgs
     {
-        { u"StartKeyGenerationAlgorithm"_ustr, css::uno::Any(xml::crypto::DigestID::SHA1) },
-        { u"EncryptionAlgorithm"_ustr, css::uno::Any(xml::crypto::CipherID::BLOWFISH_CFB_8) },
-        { u"ChecksumAlgorithm"_ustr, css::uno::Any(xml::crypto::DigestID::SHA1_1K) },
-        { u"KeyDerivationFunction"_ustr, css::uno::Any(xml::crypto::KDFID::PBKDF2) },
+        { u"StartKeyGenerationAlgorithm"_ustr, cpo::uno::Any(xml::crypto::DigestID::SHA1) },
+        { u"EncryptionAlgorithm"_ustr, cpo::uno::Any(xml::crypto::CipherID::BLOWFISH_CFB_8) },
+        { u"ChecksumAlgorithm"_ustr, cpo::uno::Any(xml::crypto::DigestID::SHA1_1K) },
+        { u"KeyDerivationFunction"_ustr, cpo::uno::Any(xml::crypto::KDFID::PBKDF2) },
     };
 
     if (nDefVersion >= SvtSaveOptions::ODFSVER_012)
@@ -1686,7 +1687,7 @@ bool SfxObjectShell::SaveTo_Impl
                     uno::Reference< beans::XPropertySet > xProps( rMedium.GetStorage(), uno::UNO_QUERY );
                     if (xProps)
                         xProps->setPropertyValue(u"MediaType"_ustr,
-                                                uno::Any( aDataFlavor.MimeType ) );
+                                                cpo::uno::Any( aDataFlavor.MimeType ) );
                 }
                 catch( uno::Exception& )
                 {
@@ -1867,7 +1868,7 @@ bool SfxObjectShell::SaveTo_Impl
 
     if ( bOk )
     {
-        uno::Any mediaType;
+        cpo::uno::Any mediaType;
         if (xODFDecryptedInnerPackageStream.is())
         {   // before the signature copy closes it
             mediaType = uno::Reference<beans::XPropertySet>(xODFDecryptedInnerPackage,
@@ -1989,7 +1990,7 @@ bool SfxObjectShell::SaveTo_Impl
             assert(!rMedium.WillDisposeStorageOnClose_Impl());
             rMedium.CloseStorage();
             // restore encryption for outer package, note: disable for debugging
-            rMedium.GetItemSet().Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, uno::Any(aEncryptionData)));
+            rMedium.GetItemSet().Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, cpo::uno::Any(aEncryptionData)));
             assert(xODFDecryptedInnerPackageStream.is());
             // now create the outer storage
             uno::Reference<embed::XStorage> const xOuterStorage(rMedium.GetOutputStorage());
@@ -2535,7 +2536,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
     {
         try
         {
-            xLoader.set( xFilterFact->createInstanceWithArguments( aFilterName, uno::Sequence < uno::Any >() ), uno::UNO_QUERY );
+            xLoader.set( xFilterFact->createInstanceWithArguments( aFilterName, uno::Sequence < cpo::uno::Any >() ), uno::UNO_QUERY );
         }
         catch(const uno::Exception&)
         {
@@ -2616,7 +2617,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
                         {
                             uno::Reference< lang::XMultiServiceFactory > xFactory(GetModel(), uno::UNO_QUERY);
                             uno::Reference< beans::XPropertySet > xSettings(xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
-                            xSettings->setPropertyValue(u"LoadReadonly"_ustr, uno::Any(true));
+                            xSettings->setPropertyValue(u"LoadReadonly"_ustr, cpo::uno::Any(true));
                         }
                         xPropertyContainer->removeProperty(u"_MarkAsFinal"_ustr);
                     }
@@ -2685,7 +2686,7 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         {
             try
             {
-                xExporter.set( xFilterFact->createInstanceWithArguments( aFilterName, uno::Sequence < uno::Any >() ), uno::UNO_QUERY );
+                xExporter.set( xFilterFact->createInstanceWithArguments( aFilterName, uno::Sequence < cpo::uno::Any >() ), uno::UNO_QUERY );
             }
             catch(const uno::Exception&)
             {
@@ -2737,7 +2738,7 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         }
         catch (const css::uno::RuntimeException&)
         {
-            css::uno::Any ex(cppu::getCaughtException());
+            cpo::uno::Any ex(cppu::getCaughtException());
             TOOLS_INFO_EXCEPTION("sfx.doc", "exception: " << exceptionToString(ex));
         }
         catch (const std::exception& e)
@@ -3220,7 +3221,7 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
             }
 
             if( bRet )
-                pNewFile->GetItemSet().Put( SfxUnoAnyItem(SID_FILTER_DATA, uno::Any(aSaveToFilterDataOptions)));
+                pNewFile->GetItemSet().Put( SfxUnoAnyItem(SID_FILTER_DATA, cpo::uno::Any(aSaveToFilterDataOptions)));
         }
     }
     else
@@ -3977,7 +3978,7 @@ bool SfxObjectShell::WriteThumbnail(bool bEncrypted, const uno::Reference<io::XS
 
         uno::Reference <beans::XPropertySet> xSet(xStream, uno::UNO_QUERY);
         if (xSet.is())
-            xSet->setPropertyValue(u"MediaType"_ustr, uno::Any(u"image/png"_ustr));
+            xSet->setPropertyValue(u"MediaType"_ustr, cpo::uno::Any(u"image/png"_ustr));
         if (bEncrypted)
         {
             const OUString sResID = GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl(

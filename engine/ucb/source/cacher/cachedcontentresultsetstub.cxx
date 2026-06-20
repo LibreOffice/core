@@ -31,6 +31,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace cppu;
 
 
@@ -184,7 +185,7 @@ css::uno::Sequence< OUString > SAL_CALL CachedContentResultSetStub::getSupported
 FetchResult CachedContentResultSetStub::impl_fetchHelper(
         std::unique_lock<std::mutex>& rGuard,
         sal_Int32 nRowStartPosition, sal_Int32 nRowCount, bool bDirection,
-        std::function<void( std::unique_lock<std::mutex>&, css::uno::Any& rRowContent)> impl_loadRow)
+        std::function<void( std::unique_lock<std::mutex>&, cpo::uno::Any& rRowContent)> impl_loadRow)
 {
     impl_EnsureNotDisposed(rGuard);
     if( !m_xResultSetOrigin.is() )
@@ -307,7 +308,7 @@ FetchResult SAL_CALL CachedContentResultSetStub
     std::unique_lock aGuard(m_aMutex);
     impl_init_xRowOrigin(aGuard);
     return impl_fetchHelper( aGuard, nRowStartPosition, nRowCount, bDirection,
-        [&](std::unique_lock<std::mutex>& rGuard, css::uno::Any& rRowContent)
+        [&](std::unique_lock<std::mutex>& rGuard, cpo::uno::Any& rRowContent)
         { return impl_getCurrentRowContent(rGuard, rRowContent, m_xRowOrigin); });
 }
 
@@ -458,7 +459,7 @@ FetchResult SAL_CALL CachedContentResultSetStub
     std::unique_lock aGuard( m_aMutex );
     impl_init_xContentAccessOrigin(aGuard);
     return impl_fetchHelper( aGuard, nRowStartPosition, nRowCount, bDirection,
-        [&](std::unique_lock<std::mutex>& rGuard, css::uno::Any& rRowContent)
+        [&](std::unique_lock<std::mutex>& rGuard, cpo::uno::Any& rRowContent)
         { return impl_getCurrentContentIdentifierString(rGuard, rRowContent, m_xContentAccessOrigin); });
 }
 
@@ -470,7 +471,7 @@ FetchResult SAL_CALL CachedContentResultSetStub
     std::unique_lock aGuard( m_aMutex );
     impl_init_xContentAccessOrigin(aGuard);
     return impl_fetchHelper( aGuard, nRowStartPosition, nRowCount, bDirection,
-        [&](std::unique_lock<std::mutex>& rGuard, css::uno::Any& rRowContent)
+        [&](std::unique_lock<std::mutex>& rGuard, cpo::uno::Any& rRowContent)
         { return impl_getCurrentContentIdentifier(rGuard, rRowContent, m_xContentAccessOrigin); });
 }
 
@@ -482,7 +483,7 @@ FetchResult SAL_CALL CachedContentResultSetStub
     std::unique_lock aGuard( m_aMutex );
     impl_init_xContentAccessOrigin(aGuard);
     return impl_fetchHelper( aGuard, nRowStartPosition, nRowCount, bDirection,
-        [&](std::unique_lock<std::mutex>& rGuard, css::uno::Any& rRowContent)
+        [&](std::unique_lock<std::mutex>& rGuard, cpo::uno::Any& rRowContent)
         { return impl_getCurrentContent(rGuard, rRowContent, m_xContentAccessOrigin); });
 }
 
@@ -518,7 +519,7 @@ css::uno::Sequence< OUString > SAL_CALL CachedContentResultSetStubFactory::getSu
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_CachedContentResultSetStubFactory_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new CachedContentResultSetStubFactory());
 }

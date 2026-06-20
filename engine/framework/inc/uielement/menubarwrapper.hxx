@@ -42,7 +42,7 @@ class MenuBarWrapper final : public MenuBarWrapper_Base
         virtual void SAL_CALL dispose() override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XUIElement
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getRealInterface() override;
@@ -55,7 +55,7 @@ class MenuBarWrapper final : public MenuBarWrapper_Base
         virtual bool SAL_CALL hasElements() override;
 
         // XNameAccess
-        virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+        virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
         virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 

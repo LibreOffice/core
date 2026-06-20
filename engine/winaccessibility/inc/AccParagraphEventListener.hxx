@@ -41,7 +41,7 @@ public:
     notifyEvent(const css::accessibility::AccessibleEventObject& aEvent) override;
 
     //for caret changed event
-    virtual void HandleCaretChangedEvent(css::uno::Any oldValue, css::uno::Any newValue);
+    virtual void HandleCaretChangedEvent(cpo::uno::Any oldValue, cpo::uno::Any newValue);
 
     virtual void SetComponentState(sal_Int64 state, bool enable) override;
 

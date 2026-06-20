@@ -47,7 +47,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedPNGShapeAsOLE)
         xFactory->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr), uno::UNO_QUERY);
     xShape->setSize(awt::Size(10000, 10000));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    xShapeProps->setPropertyValue(u"GraphicURL"_ustr, uno::Any(createFileURL(u"ole2.png")));
+    xShapeProps->setPropertyValue(u"GraphicURL"_ustr, cpo::uno::Any(createFileURL(u"ole2.png")));
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
@@ -543,9 +543,10 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testImageKeepRatio)
     uno::Reference<beans::XPropertySet> xTextGraphic(
         xFactory->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
     xTextGraphic->setPropertyValue(u"AnchorType"_ustr,
-                                   uno::Any(text::TextContentAnchorType_AS_CHARACTER));
-    xTextGraphic->setPropertyValue(u"RelativeWidth"_ustr, uno::Any(static_cast<sal_Int16>(42)));
-    xTextGraphic->setPropertyValue(u"IsSyncHeightToWidth"_ustr, uno::Any(true));
+                                   cpo::uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+    xTextGraphic->setPropertyValue(u"RelativeWidth"_ustr,
+                                   cpo::uno::Any(static_cast<sal_Int16>(42)));
+    xTextGraphic->setPropertyValue(u"IsSyncHeightToWidth"_ustr, cpo::uno::Any(true));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xBodyText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor(xBodyText->createTextCursor());
@@ -605,23 +606,23 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf114769)
 
     // Normal external URL
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 1), uno::UNO_QUERY);
-    xRun->setPropertyValue(u"HyperLinkURL"_ustr, uno::Any(u"http://libreoffice.org/"_ustr));
+    xRun->setPropertyValue(u"HyperLinkURL"_ustr, cpo::uno::Any(u"http://libreoffice.org/"_ustr));
 
     // Bookmark reference
     xRun.set(getRun(getParagraph(2), 1), uno::UNO_QUERY);
-    xRun->setPropertyValue(u"HyperLinkURL"_ustr, uno::Any(u"#some_bookmark"_ustr));
+    xRun->setPropertyValue(u"HyperLinkURL"_ustr, cpo::uno::Any(u"#some_bookmark"_ustr));
 
     // Filesystem absolute link
     xRun.set(getRun(getParagraph(3), 1), uno::UNO_QUERY);
-    xRun->setPropertyValue(u"HyperLinkURL"_ustr, uno::Any(u"C:\\test.txt"_ustr));
+    xRun->setPropertyValue(u"HyperLinkURL"_ustr, cpo::uno::Any(u"C:\\test.txt"_ustr));
 
     // Filesystem relative link
     xRun.set(getRun(getParagraph(4), 1), uno::UNO_QUERY);
-    xRun->setPropertyValue(u"HyperLinkURL"_ustr, uno::Any(u"..\\..\\test.odt"_ustr));
+    xRun->setPropertyValue(u"HyperLinkURL"_ustr, cpo::uno::Any(u"..\\..\\test.odt"_ustr));
 
     // Filesystem relative link
     xRun.set(getRun(getParagraph(5), 1), uno::UNO_QUERY);
-    xRun->setPropertyValue(u"HyperLinkURL"_ustr, uno::Any(u".\\another.odt"_ustr));
+    xRun->setPropertyValue(u"HyperLinkURL"_ustr, cpo::uno::Any(u".\\another.odt"_ustr));
 
     // Export
     save(TestFilter::HTML_WRITER);

@@ -68,6 +68,7 @@
 using namespace fileaccess;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::ucb;
 
 TaskManager::UnqPathData::UnqPathData() = default;
@@ -93,7 +94,7 @@ TaskManager::MyProperty::MyProperty( bool                               theisNat
                                const OUString&                    thePropertyName,
                                sal_Int32                          theHandle,
                                const css::uno::Type&              theTyp,
-                               const css::uno::Any&               theValue,
+                               const cpo::uno::Any&               theValue,
                                const css::beans::PropertyState&   theState,
                                sal_Int16                          theAttributes )
     : PropertyName( thePropertyName ),
@@ -175,7 +176,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
                                              Title,
                                              -1 ,
                                              cppu::UnoType<OUString>::get(),
-                                             uno::Any(),
+                                             cpo::uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
                                              | beans::PropertyAttribute::BOUND ) );
@@ -186,7 +187,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
                     CasePreservingURL,
                     -1 ,
                     cppu::UnoType<OUString>::get(),
-                    uno::Any(),
+                    cpo::uno::Any(),
                     beans::PropertyState_DEFAULT_VALUE,
                     beans::PropertyAttribute::MAYBEVOID
                     | beans::PropertyAttribute::BOUND
@@ -198,7 +199,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
                                              IsFolder,
                                              -1 ,
                                              cppu::UnoType<bool>::get(),
-                                             uno::Any(),
+                                             cpo::uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
                                              | beans::PropertyAttribute::BOUND
@@ -210,7 +211,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
                                              IsDocument,
                                              -1 ,
                                              cppu::UnoType<bool>::get(),
-                                             uno::Any(),
+                                             cpo::uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
                                              | beans::PropertyAttribute::BOUND
@@ -221,7 +222,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
                                              IsVolume,
                                              -1 ,
                                              cppu::UnoType<bool>::get(),
-                                             uno::Any(),
+                                             cpo::uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
                                              | beans::PropertyAttribute::BOUND
@@ -233,7 +234,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
                                              IsRemoveable,
                                              -1 ,
                                              cppu::UnoType<bool>::get(),
-                                             uno::Any(),
+                                             cpo::uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
                                              | beans::PropertyAttribute::BOUND
@@ -244,7 +245,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
                                              IsRemote,
                                              -1 ,
                                              cppu::UnoType<bool>::get(),
-                                             uno::Any(),
+                                             cpo::uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
                                              | beans::PropertyAttribute::BOUND
@@ -255,7 +256,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
                                              IsCompactDisc,
                                              -1 ,
                                              cppu::UnoType<bool>::get(),
-                                             uno::Any(),
+                                             cpo::uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
                                              | beans::PropertyAttribute::BOUND
@@ -266,7 +267,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
                                              IsFloppy,
                                              -1 ,
                                              cppu::UnoType<bool>::get(),
-                                             uno::Any(),
+                                             cpo::uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
                                              | beans::PropertyAttribute::BOUND
@@ -279,7 +280,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
             IsHidden,
             -1 ,
             cppu::UnoType<bool>::get(),
-            uno::Any(),
+            cpo::uno::Any(),
             beans::PropertyState_DEFAULT_VALUE,
             beans::PropertyAttribute::MAYBEVOID
             | beans::PropertyAttribute::BOUND
@@ -295,7 +296,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
                                              ContentType,
                                              -1 ,
                                              cppu::UnoType<OUString>::get(),
-                                             uno::Any(OUString()),
+                                             cpo::uno::Any(OUString()),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
                                              | beans::PropertyAttribute::BOUND
@@ -307,7 +308,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
                                              DateModified,
                                              -1 ,
                                              cppu::UnoType<util::DateTime>::get(),
-                                             uno::Any(),
+                                             cpo::uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
                                              | beans::PropertyAttribute::BOUND ) );
@@ -317,7 +318,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
                                              Size,
                                              -1,
                                              cppu::UnoType<sal_Int64>::get(),
-                                             uno::Any(),
+                                             cpo::uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
                                              | beans::PropertyAttribute::BOUND ) );
@@ -327,7 +328,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
                                              IsReadOnly,
                                              -1 ,
                                              cppu::UnoType<bool>::get(),
-                                             uno::Any(),
+                                             cpo::uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
                                              | beans::PropertyAttribute::BOUND ) );
@@ -338,7 +339,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
                                              CreatableContentsInfo,
                                              -1 ,
                                              cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
-                                             uno::Any(),
+                                             cpo::uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
                                              | beans::PropertyAttribute::BOUND
@@ -523,7 +524,7 @@ TaskManager::deregisterNotifier( const OUString& aUnqPath,Notifier* pNotifier )
 void
 TaskManager::associate( const OUString& aUnqPath,
                   const OUString& PropertyName,
-                  const uno::Any& DefaultValue,
+                  const cpo::uno::Any& DefaultValue,
                   const sal_Int16 Attributes )
 {
     MyProperty newProperty( false,
@@ -826,14 +827,14 @@ TaskManager::info_p( const OUString& aUnqPath )
 //  Sets the values of the properties belonging to fileURL aUnqPath
 
 
-uno::Sequence< uno::Any >
+uno::Sequence< cpo::uno::Any >
 TaskManager::setv( const OUString& aUnqPath,
              const uno::Sequence< beans::PropertyValue >& values )
 {
     std::unique_lock aGuard( m_aMutex );
 
     sal_Int32 propChanged = 0;
-    uno::Sequence< uno::Any > ret( values.getLength() );
+    uno::Sequence< cpo::uno::Any > ret( values.getLength() );
     auto retRange = asNonConstRange(ret);
     uno::Sequence< beans::PropertyChangeEvent > seqChanged( values.getLength() );
     auto seqChangedRange = asNonConstRange(seqChanged);
@@ -841,7 +842,7 @@ TaskManager::setv( const OUString& aUnqPath,
     TaskManager::ContentMap::iterator it = m_aContent.find( aUnqPath );
     PropertySet& properties = it->second.properties;
     TaskManager::PropertySet::const_iterator it1;
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     for( sal_Int32 i = 0; i < values.getLength(); ++i )
     {
@@ -915,9 +916,9 @@ TaskManager::setv( const OUString& aUnqPath,
                     if( err )
                     {
                         --propChanged; // unsuccessful setting
-                        uno::Sequence<uno::Any> names(comphelper::InitAnyPropertySequence(
+                        uno::Sequence<cpo::uno::Any> names(comphelper::InitAnyPropertySequence(
                         {
-                            {"Uri", uno::Any(aUnqPath)}
+                            {"Uri", cpo::uno::Any(aUnqPath)}
                         }));
                         retRange[i] <<= InteractiveAugmentedIOException(
                             OUString(),
@@ -977,9 +978,9 @@ TaskManager::setv( const OUString& aUnqPath,
                     if( err != osl::FileBase::E_None )
                     {
                         --propChanged; // unsuccessful setting
-                        uno::Sequence<uno::Any> names(comphelper::InitAnyPropertySequence(
+                        uno::Sequence<cpo::uno::Any> names(comphelper::InitAnyPropertySequence(
                         {
-                            {"Uri", uno::Any(aUnqPath)}
+                            {"Uri", cpo::uno::Any(aUnqPath)}
                         }));
                         IOErrorCode ioError;
                         switch( err )
@@ -1065,7 +1066,7 @@ TaskManager::getv( sal_Int32 CommandId,
              const OUString& aUnqPath,
              const uno::Sequence< beans::Property >& properties )
 {
-    uno::Sequence< uno::Any > seq( properties.getLength() );
+    uno::Sequence< cpo::uno::Any > seq( properties.getLength() );
 
     sal_Int32 n_Mask;
     getMaskFromProperties( n_Mask,properties );
@@ -1094,11 +1095,11 @@ TaskManager::getv( sal_Int32 CommandId,
         PropertySet& propset = it->second.properties;
 
         std::transform(properties.begin(), properties.end(), seq.getArray(),
-            [&propset](const beans::Property& rProp) -> uno::Any {
+            [&propset](const beans::Property& rProp) -> cpo::uno::Any {
                 MyProperty readProp( rProp.Name );
                 auto it1 = propset.find( readProp );
                 if( it1 == propset.end() )
-                    return uno::Any();
+                    return cpo::uno::Any();
                 return it1->getValue();
             });
     }
@@ -2257,7 +2258,7 @@ TaskManager::commit( std::unique_lock<std::mutex>& rGuard,
     {
         if( aFileStatus.isValid( osl_FileStatus_Mask_FileName ) )
         {
-            it1->setValue( uno::Any(aFileStatus.getFileName()) );
+            it1->setValue( cpo::uno::Any(aFileStatus.getFileName()) );
         }
     }
 
@@ -2266,7 +2267,7 @@ TaskManager::commit( std::unique_lock<std::mutex>& rGuard,
     {
         if( aFileStatus.isValid( osl_FileStatus_Mask_FileURL ) )
         {
-            it1->setValue( uno::Any(aFileStatus.getFileURL()) );
+            it1->setValue( cpo::uno::Any(aFileStatus.getFileURL()) );
         }
     }
 
@@ -2325,15 +2326,15 @@ TaskManager::commit( std::unique_lock<std::mutex>& rGuard,
 
         it1 = properties.find( MyProperty( IsVolume ) );
         if( it1 != properties.end() )
-            it1->setValue( uno::Any( isVolume ) );
+            it1->setValue( cpo::uno::Any( isVolume ) );
 
         it1 = properties.find( MyProperty( IsFolder ) );
         if( it1 != properties.end() )
-            it1->setValue( uno::Any( isDirectory ) );
+            it1->setValue( cpo::uno::Any( isDirectory ) );
 
         it1 = properties.find( MyProperty( IsDocument ) );
         if( it1 != properties.end() )
-            it1->setValue( uno::Any( isFile ) );
+            it1->setValue( cpo::uno::Any( isFile ) );
 
         osl::VolumeInfo aVolumeInfo( osl_VolumeInfo_Mask_Attributes );
         if( isVolume &&
@@ -2348,23 +2349,23 @@ TaskManager::commit( std::unique_lock<std::mutex>& rGuard,
 
             it1 = properties.find( MyProperty( IsRemote ) );
             if( it1 != properties.end() )
-                it1->setValue( uno::Any( isRemote ) );
+                it1->setValue( cpo::uno::Any( isRemote ) );
 
             it1 = properties.find( MyProperty( IsRemoveable ) );
             if( it1 != properties.end() )
-                it1->setValue( uno::Any( isRemoveable ) );
+                it1->setValue( cpo::uno::Any( isRemoveable ) );
 
             it1 = properties.find( MyProperty( IsCompactDisc ) );
             if( it1 != properties.end() )
-                it1->setValue( uno::Any( isCompactDisc ) );
+                it1->setValue( cpo::uno::Any( isCompactDisc ) );
 
             it1 = properties.find( MyProperty( IsFloppy ) );
             if( it1 != properties.end() )
-                it1->setValue( uno::Any( isFloppy ) );
+                it1->setValue( cpo::uno::Any( isFloppy ) );
         }
         else
         {
-            uno::Any aAny(false);
+            cpo::uno::Any aAny(false);
             it1 = properties.find( MyProperty( IsRemote ) );
             if( it1 != properties.end() )
                 it1->setValue( aAny );
@@ -2389,7 +2390,7 @@ TaskManager::commit( std::unique_lock<std::mutex>& rGuard,
 
     it1 = properties.find( MyProperty( Size ) );
     if( it1 != properties.end() )
-        it1->setValue( uno::Any( dirSize ) );
+        it1->setValue( cpo::uno::Any( dirSize ) );
 
     it1 = properties.find( MyProperty( IsReadOnly ) );
     if( it1 != properties.end() )
@@ -2398,7 +2399,7 @@ TaskManager::commit( std::unique_lock<std::mutex>& rGuard,
         {
             sal_uInt64 Attr = aFileStatus.getAttributes();
             bool readonly = ( Attr & osl_File_Attribute_ReadOnly ) != 0;
-            it1->setValue( uno::Any( readonly ) );
+            it1->setValue( cpo::uno::Any( readonly ) );
         }
     }
 
@@ -2409,7 +2410,7 @@ TaskManager::commit( std::unique_lock<std::mutex>& rGuard,
         {
             sal_uInt64 Attr = aFileStatus.getAttributes();
             bool ishidden = ( Attr & osl_File_Attribute_Hidden ) != 0;
-            it1->setValue( uno::Any( ishidden ) );
+            it1->setValue( cpo::uno::Any( ishidden ) );
         }
     }
 
@@ -2442,13 +2443,13 @@ TaskManager::commit( std::unique_lock<std::mutex>& rGuard,
             aDateTime.Day = myDateTime.Day;
             aDateTime.Month = myDateTime.Month;
             aDateTime.Year = myDateTime.Year;
-            it1->setValue( uno::Any( aDateTime ) );
+            it1->setValue( cpo::uno::Any( aDateTime ) );
         }
     }
 
     it1 = properties.find( MyProperty( CreatableContentsInfo ) );
     if( it1 != properties.end() )
-        it1->setValue( uno::Any(
+        it1->setValue( cpo::uno::Any(
             isDirectory || !aFileStatus.isValid( osl_FileStatus_Mask_Type )
                 ? queryCreatableContentsInfo()
                 : uno::Sequence< ucb::ContentInfo >() ) );
@@ -2467,7 +2468,7 @@ TaskManager::getv(
     bool& aIsRegular,
     uno::Reference< sdbc::XRow > & row )
 {
-    uno::Sequence< uno::Any > seq( properties.getLength() );
+    uno::Sequence< cpo::uno::Any > seq( properties.getLength() );
 
     sal_Int32 n_Mask;
     getMaskFromProperties( n_Mask,properties );
@@ -2520,11 +2521,11 @@ TaskManager::getv(
         PropertySet& propset = it->second.properties;
 
         std::transform(properties.begin(), properties.end(), seq.getArray(),
-            [&propset](const beans::Property& rProp) -> uno::Any {
+            [&propset](const beans::Property& rProp) -> cpo::uno::Any {
                 MyProperty readProp( rProp.Name );
                 auto it1 = propset.find( readProp );
                 if( it1 == propset.end() )
-                    return uno::Any();
+                    return cpo::uno::Any();
                 return it1->getValue();
             });
     }

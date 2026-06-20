@@ -50,7 +50,7 @@ namespace svx
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::sdbc::XRowSet;
     using ::com::sun::star::form::runtime::FeatureState;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::beans::NamedValue;
     using ::com::sun::star::beans::XPropertySet;

@@ -29,8 +29,8 @@ class XMLCharHeightHdl : public XMLPropertyHandler
 public:
     virtual ~XMLCharHeightHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 class XMLCharHeightPropHdl : public XMLPropertyHandler
@@ -38,8 +38,8 @@ class XMLCharHeightPropHdl : public XMLPropertyHandler
 public:
     virtual ~XMLCharHeightPropHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 class XMLCharHeightDiffHdl : public XMLPropertyHandler
@@ -47,8 +47,8 @@ class XMLCharHeightDiffHdl : public XMLPropertyHandler
 public:
     virtual ~XMLCharHeightDiffHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

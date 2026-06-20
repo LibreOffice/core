@@ -958,7 +958,7 @@ void BarChart::doXSlot(
                     double nPropVal = pSeries->getValueByProperty(nPointIndex, u"FillColor"_ustr);
                     if(!std::isnan(nPropVal))
                     {
-                        xShape->setPropertyValue(u"FillColor"_ustr, uno::Any(static_cast<sal_Int32>(nPropVal)));
+                        xShape->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(static_cast<sal_Int32>(nPropVal)));
                     }
                 }
                 //set name/classified ObjectID (CID)

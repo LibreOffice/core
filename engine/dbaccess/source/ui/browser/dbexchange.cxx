@@ -33,6 +33,7 @@ namespace dbaui
     constexpr sal_uInt32 FORMAT_OBJECT_ID_HTML = 2;
 
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::lang;

@@ -33,6 +33,7 @@ namespace svt
 {
     using namespace com::sun::star::accessibility;
     using namespace com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::accessibility::AccessibleEventId;
 
 rtl::Reference<comphelper::OAccessible>

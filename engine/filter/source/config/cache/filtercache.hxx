@@ -28,7 +28,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 #include <comphelper/documentconstants.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <rtl/ref.hxx>
@@ -525,7 +525,7 @@ class FilterCache : public cppu::BaseMutex
                         was not migrated to the new one. So we can't provide write access
                         to such items...
          */
-        css::uno::Any getItemWithStateProps( EItemType        eType,
+        cpo::uno::Any getItemWithStateProps( EItemType        eType,
                                              const OUString& sItem);
 
         /** TODO document me
@@ -660,12 +660,12 @@ class FilterCache : public cppu::BaseMutex
             @param      sDirectKey
                         the absolute configuration path, which should be read.
 
-            @return     [css::uno::Any]
+            @return     [cpo::uno::Any]
                         the value of the requested key.
                         Can be empty if an internal error occurred or if the requested
                         key does not exists!
          */
-        css::uno::Any impl_getDirectCFGValue(std::u16string_view sDirectKey);
+        cpo::uno::Any impl_getDirectCFGValue(std::u16string_view sDirectKey);
 
 
         /** @short      load the underlying configuration into this cache.

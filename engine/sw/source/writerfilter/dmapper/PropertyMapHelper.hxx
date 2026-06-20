@@ -23,7 +23,7 @@
 
 namespace writerfilter::dmapper
 {
-void lcl_DumpTableColumnSeparators(const css::uno::Any& rTableColumnSeparators);
+void lcl_DumpTableColumnSeparators(const cpo::uno::Any& rTableColumnSeparators);
 #ifdef DBG_UTIL
 void lcl_DumpPropertyValues(css::beans::PropertyValues const& rValues);
 

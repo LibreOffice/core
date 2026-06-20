@@ -39,7 +39,7 @@ class StatusBarWrapper final : public UIConfigElementWrapperBase
         virtual void SAL_CALL dispose() override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XUIElement
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getRealInterface() override;

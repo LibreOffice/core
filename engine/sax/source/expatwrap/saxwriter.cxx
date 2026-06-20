@@ -45,6 +45,7 @@
 
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::io;
@@ -230,7 +231,7 @@ sal_uInt32 SaxWriterHelper::writeSequence()
     }
     catch (const IOException&)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw SAXException(u"IO exception during writing"_ustr, Reference<XInterface>(), anyEx);
     }
     nLastLineFeedPos -= SEQUENCESIZE;
@@ -1149,7 +1150,7 @@ void SAXWriter::endDocument()
     }
     catch (const IOException&)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw SAXException(u"IO exception during closing the IO Stream"_ustr,
                            Reference<XInterface>(), anyEx);
     }
@@ -1457,7 +1458,7 @@ void SAXWriter::unknown(const OUString& sString)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_extensions_xml_sax_Writer_get_implementation(css::uno::XComponentContext*,
-                                                          css::uno::Sequence<css::uno::Any> const&)
+                                                          css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SAXWriter);
 }

@@ -30,7 +30,7 @@
 using namespace css;
 using namespace xmloff::token;
 
-void XMLImageStyle::exportXML(OUString const & rStrName, uno::Any const & rValue, SvXMLExport& rExport)
+void XMLImageStyle::exportXML(OUString const & rStrName, cpo::uno::Any const & rValue, SvXMLExport& rExport)
 {
     if (rStrName.isEmpty())
         return;
@@ -73,7 +73,7 @@ void XMLImageStyle::exportXML(OUString const & rStrName, uno::Any const & rValue
 }
 
 bool XMLImageStyle::importXML(uno::Reference<xml::sax::XFastAttributeList> const & xAttrList,
-                              uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport)
+                              cpo::uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport)
 {
     bool bHasHRef = false;
     bool bHasName = false;

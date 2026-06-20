@@ -44,7 +44,7 @@ const sal_Int32 nBytesCount = 32000;
 
 OLESimpleStorage::OLESimpleStorage(
         css::uno::Reference<css::uno::XComponentContext> xContext,
-        css::uno::Sequence<css::uno::Any> const &aArguments)
+        css::uno::Sequence<cpo::uno::Any> const &aArguments)
 : m_bDisposed( false )
 , m_xContext(std::move( xContext ))
 , m_bNoTemporaryCopy( false )
@@ -235,7 +235,7 @@ void OLESimpleStorage::InsertNameAccessToStorage_Impl( BaseStorage* pStorage, co
         {
             uno::Reference< io::XInputStream > xInputStream;
             uno::Reference< container::XNameAccess > xSubNameAccess;
-            uno::Any aAny = xNameAccess->getByName( rElement );
+            cpo::uno::Any aAny = xNameAccess->getByName( rElement );
             if ( aAny >>= xInputStream )
                 InsertInputStreamToStorage_Impl( pNewStorage.get(), rElement, xInputStream );
             else if ( aAny >>= xSubNameAccess )
@@ -255,7 +255,7 @@ void OLESimpleStorage::InsertNameAccessToStorage_Impl( BaseStorage* pStorage, co
 //  XNameContainer
 
 
-void SAL_CALL OLESimpleStorage::insertByName( const OUString& aName, const uno::Any& aElement )
+void SAL_CALL OLESimpleStorage::insertByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -296,7 +296,7 @@ void SAL_CALL OLESimpleStorage::insertByName( const OUString& aName, const uno::
     }
     catch( const uno::Exception& )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetException(u"Insert has failed!"_ustr,
                                             uno::Reference< uno::XInterface >(),
                                             anyEx );
@@ -330,7 +330,7 @@ void SAL_CALL OLESimpleStorage::removeByName( const OUString& aName )
 }
 
 
-void SAL_CALL OLESimpleStorage::replaceByName( const OUString& aName, const uno::Any& aElement )
+void SAL_CALL OLESimpleStorage::replaceByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -345,7 +345,7 @@ void SAL_CALL OLESimpleStorage::replaceByName( const OUString& aName, const uno:
     }
     catch( container::ElementExistException& )
     {
-        uno::Any aCaught( ::cppu::getCaughtException() );
+        cpo::uno::Any aCaught( ::cppu::getCaughtException() );
 
         throw lang::WrappedTargetException(u"Can't copy raw stream"_ustr,
                                             uno::Reference< uno::XInterface >(),
@@ -354,7 +354,7 @@ void SAL_CALL OLESimpleStorage::replaceByName( const OUString& aName, const uno:
 }
 
 
-uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -367,7 +367,7 @@ uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
     if ( !m_pStorage->IsContained( aName ) )
         throw container::NoSuchElementException(); // TODO:
 
-    uno::Any aResult;
+    cpo::uno::Any aResult;
 
     uno::Reference< io::XStream > xTempFile = io::TempFile::create(m_xContext);
     uno::Reference< io::XSeekable > xSeekable( xTempFile, uno::UNO_QUERY_THROW );
@@ -441,7 +441,7 @@ uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
         }
         catch (const uno::Exception& ex)
         {
-            css::uno::Any anyEx = cppu::getCaughtException();
+            cpo::uno::Any anyEx = cppu::getCaughtException();
             throw css::lang::WrappedTargetException( ex.Message,
                     nullptr, anyEx );
         }
@@ -684,7 +684,7 @@ uno::Sequence< OUString > SAL_CALL OLESimpleStorage::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_embed_OLESimpleStorage(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &arguments)
+    css::uno::Sequence<cpo::uno::Any> const &arguments)
 {
     return cppu::acquire(new OLESimpleStorage(context, arguments));
 }

@@ -20,7 +20,7 @@
 
 #include <vcl/weld.hxx>
 #include <com/sun/star/beans/StringPair.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include "pickercallbacks.hxx"
 
@@ -94,7 +94,7 @@ public:
     virtual sal_Int32 getAvailableWidth() = 0;
     virtual sal_Int32 getAvailableHeight() = 0;
 
-    virtual void setImage( const css::uno::Any& rImage ) = 0;
+    virtual void setImage( const cpo::uno::Any& rImage ) = 0;
 
     virtual bool getShowState() = 0;
 };

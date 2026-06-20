@@ -40,7 +40,7 @@ protected:
 public:
     ScVbaWorkbook(  const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
             rtl::Reference< ScModelObj > const & xModel );
-    ScVbaWorkbook(  css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
+    ScVbaWorkbook(  css::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
 
     // Attributes
     virtual bool SAL_CALL getProtectStructure() override;
@@ -51,22 +51,22 @@ public:
     virtual void SAL_CALL setAuthor( const OUString& _author ) override;
 
     // Methods
-    virtual css::uno::Any SAL_CALL Worksheets( const css::uno::Any& aIndex ) override;
-    virtual css::uno::Any SAL_CALL Sheets( const css::uno::Any& aIndex ) override;
-    virtual css::uno::Any SAL_CALL Windows( const css::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Worksheets( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Sheets( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Windows( const cpo::uno::Any& aIndex ) override;
     virtual void SAL_CALL Activate() override;
-    virtual void SAL_CALL Protect( const css::uno::Any & aPassword ) override;
-    virtual void SAL_CALL SaveAs( const css::uno::Any& FileName, const css::uno::Any& FileFormat, const css::uno::Any& Password, const css::uno::Any& WriteResPassword, const css::uno::Any& ReadOnlyRecommended, const css::uno::Any& CreateBackup, const css::uno::Any& AccessMode, const css::uno::Any& ConflictResolution, const css::uno::Any& AddToMru, const css::uno::Any& TextCodepage, const css::uno::Any& TextVisualLayout, const css::uno::Any& Local ) override;
-    virtual css::uno::Any SAL_CALL Names( const css::uno::Any& aIndex ) override;
+    virtual void SAL_CALL Protect( const cpo::uno::Any & aPassword ) override;
+    virtual void SAL_CALL SaveAs( const cpo::uno::Any& FileName, const cpo::uno::Any& FileFormat, const cpo::uno::Any& Password, const cpo::uno::Any& WriteResPassword, const cpo::uno::Any& ReadOnlyRecommended, const cpo::uno::Any& CreateBackup, const cpo::uno::Any& AccessMode, const cpo::uno::Any& ConflictResolution, const cpo::uno::Any& AddToMru, const cpo::uno::Any& TextCodepage, const cpo::uno::Any& TextVisualLayout, const cpo::uno::Any& Local ) override;
+    virtual cpo::uno::Any SAL_CALL Names( const cpo::uno::Any& aIndex ) override;
 
-    virtual css::uno::Any SAL_CALL Styles( const css::uno::Any& Item ) override;
+    virtual cpo::uno::Any SAL_CALL Styles( const cpo::uno::Any& Item ) override;
     virtual void SAL_CALL ResetColors(  ) override;
-    virtual css::uno::Any SAL_CALL Colors( const css::uno::Any& Index ) override;
+    virtual cpo::uno::Any SAL_CALL Colors( const cpo::uno::Any& Index ) override;
     virtual ::sal_Int32 SAL_CALL getFileFormat(  ) override;
     virtual void SAL_CALL SaveCopyAs( const OUString& Filename ) override;
-    virtual void SAL_CALL ExportAsFixedFormat( const css::uno::Any& Type, const css::uno::Any& FileName, const css::uno::Any& Quality,
-        const css::uno::Any& IncludeDocProperties, const css::uno::Any& IgnorePrintAreas, const css::uno::Any& From,
-        const css::uno::Any& To, const css::uno::Any& OpenAfterPublish, const css::uno::Any& FixedFormatExtClassPtr) override;
+    virtual void SAL_CALL ExportAsFixedFormat( const cpo::uno::Any& Type, const cpo::uno::Any& FileName, const cpo::uno::Any& Quality,
+        const cpo::uno::Any& IncludeDocProperties, const cpo::uno::Any& IgnorePrintAreas, const cpo::uno::Any& From,
+        const cpo::uno::Any& To, const cpo::uno::Any& OpenAfterPublish, const cpo::uno::Any& FixedFormatExtClassPtr) override;
 
     // code name
     virtual OUString SAL_CALL getCodeName() override;

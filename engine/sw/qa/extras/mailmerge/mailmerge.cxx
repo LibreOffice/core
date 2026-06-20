@@ -336,7 +336,7 @@ DECLARE_FILE_MAILMERGE_TEST(testTdf102010, "empty.odt", "10-testing-addresses.od
             ++aNamedValueIter;
         }
     }
-    mMMargs.emplace_back( UNO_NAME_SAVE_AS_SINGLE_FILE, uno::Any( true ) );
+    mMMargs.emplace_back( UNO_NAME_SAVE_AS_SINGLE_FILE, cpo::uno::Any( true ) );
 
     // Generate correct mail merge result filename
     executeMailMerge();

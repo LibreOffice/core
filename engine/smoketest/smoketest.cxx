@@ -33,7 +33,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -102,7 +102,7 @@ public:
     { OSL_ASSERT(dispatch.is()); }
 
 private:
-    virtual void SAL_CALL notify(css::uno::Any const &) override
+    virtual void SAL_CALL notify(cpo::uno::Any const &) override
     { dispatch_->dispatchWithNotification(url_, arguments_, listener_); }
 
     css::uno::Reference< css::frame::XNotifyingDispatch > dispatch_;
@@ -143,11 +143,11 @@ void Test::test() {
     css::uno::Sequence< css::beans::PropertyValue > args{
         { /* Name   */ u"MacroExecutionMode"_ustr,
           /* Handle */ -1,
-          /* Value  */ css::uno::Any(css::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN),
+          /* Value  */ cpo::uno::Any(css::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN),
           /* State  */ css::beans::PropertyState_DIRECT_VALUE },
         { /* Name   */ u"ReadOnly"_ustr,
           /* Handle */ -1,
-          /* Value  */ css::uno::Any(true),
+          /* Value  */ cpo::uno::Any(true),
           /* State  */ css::beans::PropertyState_DIRECT_VALUE }
     };
     css::util::URL url;
@@ -176,7 +176,7 @@ void Test::test() {
             new Callback(
                 disp, std::move(url), css::uno::Sequence< css::beans::PropertyValue >(),
                 new Listener(&result)),
-            css::uno::Any());
+            cpo::uno::Any());
     // Wait for result.condition or connection_ going stale:
     for (;;) {
         osl::Condition::Result res = result.condition.wait(std::chrono::seconds(1)); // 1 sec delay

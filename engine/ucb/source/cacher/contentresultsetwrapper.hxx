@@ -141,7 +141,7 @@ public:
 
     // XInterface
 
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
     queryInterface( const css::uno::Type & rType ) override;
 
 
@@ -178,12 +178,12 @@ public:
 
     virtual void SAL_CALL
     setPropertyValue( const OUString& aPropertyName,
-                      const css::uno::Any& aValue ) final override;
+                      const cpo::uno::Any& aValue ) final override;
     virtual void
     setPropertyValueImpl( std::unique_lock<std::mutex>& rGuard, const OUString& aPropertyName,
-                      const css::uno::Any& aValue );
+                      const cpo::uno::Any& aValue );
 
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
     getPropertyValue( const OUString& PropertyName ) override;
 
     virtual void SAL_CALL
@@ -325,7 +325,7 @@ public:
     virtual css::uno::Reference< css::io::XInputStream > SAL_CALL
     getCharacterStream( sal_Int32 columnIndex ) override;
 
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
     getObject( sal_Int32 columnIndex,
                const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
 
@@ -357,7 +357,7 @@ public:
 
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         noexcept override;
     virtual void SAL_CALL release()

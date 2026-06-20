@@ -41,7 +41,7 @@ Type elementType(Type type);
 
 css::uno::Type const & mapType(Type type);
 
-Type getDynamicType(css::uno::Any const & value);
+Type getDynamicType(cpo::uno::Any const & value);
 
 }
 

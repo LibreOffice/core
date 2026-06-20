@@ -105,13 +105,13 @@ public:
     virtual void SAL_CALL   removeByName( const OUString& aName ) override;
 
                             // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
                             // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
@@ -177,8 +177,8 @@ public:
     virtual css::uno::Reference< css::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo(  ) override;
     virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
-                                    const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue(
+                                    const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(
                                     const OUString& PropertyName ) override;
     virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
                                     const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
@@ -238,7 +238,7 @@ public:
                             ScDataPilotTableObj(ScDocShell& rDocSh, SCTAB nT, OUString aN);
     virtual                 ~ScDataPilotTableObj() override;
 
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL   acquire() noexcept override;
     virtual void SAL_CALL   release() noexcept override;
 
@@ -258,7 +258,7 @@ public:
     virtual void SAL_CALL   refresh() override;
 
                             // XDataPilotTable2
-    virtual css::uno::Sequence< css::uno::Sequence< css::uno::Any > >
+    virtual css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > >
         SAL_CALL getDrillDownData(const css::table::CellAddress& aAddr) override;
 
     virtual css::sheet::DataPilotTablePositionData
@@ -349,13 +349,13 @@ public:
     virtual             ~ScDataPilotFieldsObj() override;
 
                             // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
                             // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
@@ -384,7 +384,7 @@ private:
     rtl::Reference<ScDataPilotFieldObj> GetObjectByName_Impl( const OUString& rName ) const;
 
 private:
-    css::uno::Any maOrient;    /// Field orientation, no value = all fields.
+    cpo::uno::Any maOrient;    /// Field orientation, no value = all fields.
 };
 
 typedef ::cppu::WeakImplHelper
@@ -408,7 +408,7 @@ public:
                         ScDataPilotFieldObj(
                             ScDataPilotDescriptorBase& rParent,
                             const ScFieldIdentifier& rIdent,
-                            css::uno::Any aOrient );
+                            cpo::uno::Any aOrient );
 
     virtual             ~ScDataPilotFieldObj() override;
 
@@ -420,8 +420,8 @@ public:
     virtual css::uno::Reference< css::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo(  ) override;
     virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
-                                    const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName ) override;
+                                    const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName ) override;
     virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
                                     const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
     virtual void SAL_CALL   removePropertyChangeListener( const OUString& aPropertyName,
@@ -481,7 +481,7 @@ private:
     css::uno::Reference< css::container::XIndexAccess >
                         mxItems;
     SfxItemPropertySet  maPropSet;
-    css::uno::Any maOrient;
+    cpo::uno::Any maOrient;
 };
 
 typedef ::std::vector< OUString > ScFieldGroupMembers;
@@ -516,22 +516,22 @@ public:
     virtual             ~ScDataPilotFieldGroupsObj() override;
 
                             // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                                 // XNameReplace
     virtual void SAL_CALL replaceByName( const OUString& aName,
-                                const css::uno::Any& aElement ) override;
+                                const cpo::uno::Any& aElement ) override;
 
                             // XNameContainer
     virtual void SAL_CALL insertByName( const OUString& aName,
-                                const css::uno::Any& aElement ) override;
+                                const cpo::uno::Any& aElement ) override;
     virtual void SAL_CALL removeByName( const OUString& Name ) override;
 
                         // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
                             // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
@@ -576,22 +576,22 @@ public:
     virtual             ~ScDataPilotFieldGroupObj() override;
 
                             // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                                 // XNameReplace
     virtual void SAL_CALL replaceByName( const OUString& aName,
-                                const css::uno::Any& aElement ) override;
+                                const cpo::uno::Any& aElement ) override;
 
                                 // XNameContainer
     virtual void SAL_CALL insertByName( const OUString& aName,
-                                const css::uno::Any& aElement ) override;
+                                const cpo::uno::Any& aElement ) override;
     virtual void SAL_CALL removeByName( const OUString& Name ) override;
 
                     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
                             // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
@@ -658,13 +658,13 @@ public:
     virtual             ~ScDataPilotItemsObj() override;
 
                             // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
                             // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
@@ -709,8 +709,8 @@ public:
     virtual css::uno::Reference< css::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo(  ) override;
     virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
-                                    const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue(
+                                    const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(
                                     const OUString& PropertyName ) override;
     virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
                                     const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;

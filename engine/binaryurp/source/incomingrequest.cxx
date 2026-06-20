@@ -83,7 +83,7 @@ void IncomingRequest::execute() const {
                     + o3tl::runtimeToOUString(e.what()));
             }
         } catch (const css::uno::RuntimeException &) {
-            css::uno::Any exc(cppu::getCaughtException());
+            cpo::uno::Any exc(cppu::getCaughtException());
             ret = bridge_->mapCppToBinaryAny(exc);
             isExc = true;
         }
@@ -91,7 +91,7 @@ void IncomingRequest::execute() const {
             current_context::set(oldCc);
         }
     } catch (const css::uno::RuntimeException &) {
-        css::uno::Any exc(cppu::getCaughtException());
+        cpo::uno::Any exc(cppu::getCaughtException());
         ret = bridge_->mapCppToBinaryAny(exc);
         isExc = true;
     }
@@ -240,7 +240,7 @@ bool IncomingRequest::execute_throw(
             if (isExc) {
                 *returnValue = BinaryAny(
                     css::uno::TypeDescription(
-                        cppu::UnoType< css::uno::Any >::get()),
+                        cppu::UnoType< cpo::uno::Any >::get()),
                     &exc);
                 uno_any_destruct(&exc, nullptr);
             } else {

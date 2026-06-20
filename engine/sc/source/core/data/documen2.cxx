@@ -1147,7 +1147,7 @@ bool ScDocument::TransferTab( ScDocument& rSrcDoc, SCTAB nSrcPos,
             uno::Reference< container::XNameContainer > xLib;
             if( xLibContainer.is() )
             {
-                uno::Any aLibAny = xLibContainer->getByName(aLibName);
+                cpo::uno::Any aLibAny = xLibContainer->getByName(aLibName);
                 aLibAny >>= xLib;
             }
 

@@ -71,7 +71,7 @@ COMPHELPER_DLLPUBLIC void copyProperties(const css::uno::Reference<css::beans::X
     @exception      InvalidArgumentException thrown if the value could not be converted to the requested type (which is the template argument)
 */
 template <typename T>
-bool tryPropertyValue(css::uno::Any& /*out*/_rConvertedValue, css::uno::Any& /*out*/_rOldValue, const css::uno::Any& _rValueToSet, const T& _rCurrentValue)
+bool tryPropertyValue(cpo::uno::Any& /*out*/_rConvertedValue, cpo::uno::Any& /*out*/_rOldValue, const cpo::uno::Any& _rValueToSet, const T& _rCurrentValue)
 {
     bool bModified(false);
     T aNewValue = T();
@@ -96,7 +96,7 @@ bool tryPropertyValue(css::uno::Any& /*out*/_rConvertedValue, css::uno::Any& /*o
 */
 template <class ENUMTYPE>
 typename std::enable_if<std::is_enum<ENUMTYPE>::value, bool>::type
-tryPropertyValueEnum(css::uno::Any& /*out*/_rConvertedValue, css::uno::Any& /*out*/_rOldValue, const css::uno::Any& _rValueToSet, const ENUMTYPE& _rCurrentValue)
+tryPropertyValueEnum(cpo::uno::Any& /*out*/_rConvertedValue, cpo::uno::Any& /*out*/_rOldValue, const cpo::uno::Any& _rValueToSet, const ENUMTYPE& _rCurrentValue)
 {
     bool bModified(false);
     ENUMTYPE aNewValue;
@@ -122,7 +122,7 @@ tryPropertyValueEnum(css::uno::Any& /*out*/_rConvertedValue, css::uno::Any& /*ou
                     false, if the value could be converted and has not changed
     @exception      InvalidArgumentException thrown if the value could not be converted to the requested type (which is the template argument)
 */
-COMPHELPER_DLLPUBLIC bool tryPropertyValue(css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, const css::uno::Any& _rValueToSet, const css::uno::Any& _rCurrentValue, const css::uno::Type& _rExpectedType);
+COMPHELPER_DLLPUBLIC bool tryPropertyValue(cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, const cpo::uno::Any& _rValueToSet, const cpo::uno::Any& _rCurrentValue, const css::uno::Type& _rExpectedType);
 
 }
 

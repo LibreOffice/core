@@ -32,11 +32,11 @@
 
 namespace com::sun::star::uno
 {
-class Any;
-}
-namespace com::sun::star::uno
-{
 template <typename> class Sequence;
+}
+namespace cpo::uno
+{
+class Any;
 }
 
 class ScDPCache;
@@ -145,7 +145,7 @@ public:
         result to rTabData.  This method is used, for example, to generate
         a drill-down data table. */
     void filterTable(const std::vector<Criterion>& rCriteria,
-                     css::uno::Sequence<css::uno::Sequence<css::uno::Any>>& rTabData,
+                     css::uno::Sequence<css::uno::Sequence<cpo::uno::Any>>& rTabData,
                      const std::unordered_set<sal_Int32>& rRepeatIfEmptyDims);
 
     void clear();

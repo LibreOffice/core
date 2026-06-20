@@ -1824,8 +1824,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo87448)
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
     uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
-            { "OutputStream", uno::Any(xOutputStream) },
-            { "FilterName", uno::Any(u"SVM"_ustr) }
+            { "OutputStream", cpo::uno::Any(xOutputStream) },
+            { "FilterName", cpo::uno::Any(u"SVM"_ustr) }
         }));
     xGraphicExporter->filter(aDescriptor);
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
@@ -1857,7 +1857,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTextCursorInvalidation)
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPageStyle.is());
-    xPageStyle->setPropertyValue(u"HeaderIsOn"_ustr, uno::Any(true));
+    xPageStyle->setPropertyValue(u"HeaderIsOn"_ustr, cpo::uno::Any(true));
     uno::Reference<text::XText> xHeader(getProperty<uno::Reference<text::XText>>(xPageStyle, u"HeaderText"_ustr));
     CPPUNIT_ASSERT(xHeader.is());
     // create cursor inside the header text
@@ -2018,7 +2018,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testDefaultsOfOutlineNumbering)
         CPPUNIT_ASSERT_EQUAL(sal_Int32(5), rPropValues.getLength());
         for(const auto& rPropVal : rPropValues)
         {
-            uno::Any aAny = rPropVal.Value;
+            cpo::uno::Any aAny = rPropVal.Value;
             if(rPropVal.Name == "Prefix" || rPropVal.Name == "Suffix" || rPropVal.Name == "Transliteration")
                 CPPUNIT_ASSERT_EQUAL(u"string"_ustr, aAny.getValueTypeName());
             else if(rPropVal.Name == "NumberingType")
@@ -2082,7 +2082,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testXFlatParagraph)
     CPPUNIT_ASSERT_EQUAL(xFlatPara2->getText(), xFlatPara4->getText());
     //changing the attributes of last para
     uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
-         { "CharWeight", uno::Any(css::awt::FontWeight::BOLD) }
+         { "CharWeight", cpo::uno::Any(css::awt::FontWeight::BOLD) }
     }));
     xFlatPara3->changeAttributes(sal_Int32(0), sal_Int32(5), aDescriptor);
     //checking Language Portions
@@ -2116,7 +2116,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf81995)
             CPPUNIT_ASSERT_EQUAL(sal_Int32(12), aProps.getLength());
             for (const beans::PropertyValue& rProp : aProps)
             {
-                uno::Any aAny = rProp.Value;
+                cpo::uno::Any aAny = rProp.Value;
                 if(rProp.Name == "Prefix" || rProp.Name == "Suffix" || rProp.Name == "BulletChar" || rProp.Name == "BulletFontName" || rProp.Name == "Transliteration")
                     CPPUNIT_ASSERT_EQUAL(u"string"_ustr, aAny.getValueTypeName());
                 else if(rProp.Name == "NumberingType" || rProp.Name == "ParentNumbering" || rProp.Name == "Adjust")

@@ -41,6 +41,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace migration
 {
@@ -372,12 +373,12 @@ void TmpRepositoryCommandEnv::handle(
 }
 
 // XProgressHandler
-void TmpRepositoryCommandEnv::push( uno::Any const & /*Status*/ )
+void TmpRepositoryCommandEnv::push( cpo::uno::Any const & /*Status*/ )
 {
 }
 
 
-void TmpRepositoryCommandEnv::update( uno::Any const & /*Status */)
+void TmpRepositoryCommandEnv::update( cpo::uno::Any const & /*Status */)
 {
 }
 
@@ -391,7 +392,7 @@ void TmpRepositoryCommandEnv::pop()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 desktop_OO3ExtensionMigration_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new migration::OO3ExtensionMigration(context));
 }

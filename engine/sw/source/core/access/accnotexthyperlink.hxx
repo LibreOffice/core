@@ -51,9 +51,9 @@ public:
             getAccessibleActionKeyBinding( sal_Int32 nIndex ) override;
 
     // XAccessibleHyperlink
-    virtual css::uno::Any SAL_CALL getAccessibleActionAnchor(
+    virtual cpo::uno::Any SAL_CALL getAccessibleActionAnchor(
                 sal_Int32 nIndex ) override;
-    virtual css::uno::Any SAL_CALL getAccessibleActionObject(
+    virtual cpo::uno::Any SAL_CALL getAccessibleActionObject(
             sal_Int32 nIndex ) override;
     virtual sal_Int32 SAL_CALL getStartIndex() override;
     virtual sal_Int32 SAL_CALL getEndIndex() override;

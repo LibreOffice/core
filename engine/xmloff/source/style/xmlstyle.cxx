@@ -62,6 +62,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::style;
 using namespace ::xmloff::token;
@@ -731,7 +732,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SvXMLStylesContext::cr
                 {
                     if (xPropertySetInfo->hasPropertyByName(u"IsInPaste"_ustr))
                     {
-                        css::uno::Any value = xImportInfo->getPropertyValue(u"IsInPaste"_ustr);
+                        cpo::uno::Any value = xImportInfo->getPropertyValue(u"IsInPaste"_ustr);
                         if (bool b; (value >>= b) && b)
                             return nullptr; // do not import themes in paste mode
                     }

@@ -21,7 +21,7 @@
 
 #include <string_view>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <ooo/vba/msforms/XShapes.hpp>
 #include <rtl/ustring.hxx>
@@ -58,15 +58,15 @@ private:
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::container::XIndexAccess > getShapesByArrayIndices( const css::uno::Any& Index );
+    css::uno::Reference< css::container::XIndexAccess > getShapesByArrayIndices( const cpo::uno::Any& Index );
     /// @throws css::uno::RuntimeException
     css::uno::Reference< css::drawing::XShape > createShape( const OUString& service );
     /// @throws css::uno::RuntimeException
-    css::uno::Any AddRectangle( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight );
+    cpo::uno::Any AddRectangle( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight );
     /// @throws css::uno::RuntimeException
-    css::uno::Any AddEllipse( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight );
+    cpo::uno::Any AddEllipse( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight );
     /// @throws css::uno::RuntimeException
-    css::uno::Any AddTextboxInWriter( sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight );
+    cpo::uno::Any AddTextboxInWriter( sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight );
     OUString createName( std::u16string_view sName );
     //TODO helperapi using a writer document
     //css::awt::Point calculateTopLeftMargin( css::uno::Reference< ov::XHelperInterface > xDocument );
@@ -82,12 +82,12 @@ public:
 
     virtual void SAL_CALL SelectAll() override;
     //helper::calc
-    virtual css::uno::Any SAL_CALL AddLine( sal_Int32 StartX, sal_Int32 StartY, sal_Int32 endX, sal_Int32 endY ) override;
-    virtual css::uno::Any SAL_CALL AddShape( sal_Int32 _nType, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight ) override;
-    virtual css::uno::Any SAL_CALL AddTextbox( sal_Int32 _nOrientation, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight ) override;
-    virtual css::uno::Reference< ov::msforms::XShapeRange > SAL_CALL Range( const css::uno::Any& shapes ) override;
+    virtual cpo::uno::Any SAL_CALL AddLine( sal_Int32 StartX, sal_Int32 StartY, sal_Int32 endX, sal_Int32 endY ) override;
+    virtual cpo::uno::Any SAL_CALL AddShape( sal_Int32 _nType, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight ) override;
+    virtual cpo::uno::Any SAL_CALL AddTextbox( sal_Int32 _nOrientation, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight ) override;
+    virtual css::uno::Reference< ov::msforms::XShapeRange > SAL_CALL Range( const cpo::uno::Any& shapes ) override;
     // ScVbaCollectionBaseImpl
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 };
 
 #endif // INCLUDED_VBAHELPER_VBASHAPES_HXX

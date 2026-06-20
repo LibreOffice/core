@@ -310,7 +310,7 @@ static void implUpdateVisibility
             sal_Int32 nControlStep = 0;
             if ( xInfo->hasPropertyByName( aPropName ) )
             {
-                uno::Any aVal = xPSet->getPropertyValue( aPropName );
+                cpo::uno::Any aVal = xPSet->getPropertyValue( aPropName );
                 aVal >>= nControlStep;
             }
             bVisible = (nControlStep == 0) || (nControlStep == nDialogStep);
@@ -448,7 +448,7 @@ void UnoControlContainer::removeContainerListener( const uno::Reference< contain
 }
 
 
-::sal_Int32 SAL_CALL UnoControlContainer::insert( const uno::Any& _rElement )
+::sal_Int32 SAL_CALL UnoControlContainer::insert( const cpo::uno::Any& _rElement )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -477,7 +477,7 @@ void SAL_CALL UnoControlContainer::removeByIdentifier( ::sal_Int32 _nIdentifier 
     impl_removeControl( _nIdentifier, xControl );
 }
 
-void SAL_CALL UnoControlContainer::replaceByIdentifer( ::sal_Int32 _nIdentifier, const uno::Any& _rElement )
+void SAL_CALL UnoControlContainer::replaceByIdentifer( ::sal_Int32 _nIdentifier, const cpo::uno::Any& _rElement )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -515,14 +515,14 @@ void SAL_CALL UnoControlContainer::replaceByIdentifer( ::sal_Int32 _nIdentifier,
     }
 }
 
-uno::Any SAL_CALL UnoControlContainer::getByIdentifier( ::sal_Int32 _nIdentifier )
+cpo::uno::Any SAL_CALL UnoControlContainer::getByIdentifier( ::sal_Int32 _nIdentifier )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     uno::Reference< awt::XControl > xControl;
     if ( !mpControls->getControlForIdentifier( _nIdentifier, xControl ) )
         throw container::NoSuchElementException();
-    return uno::Any( xControl );
+    return cpo::uno::Any( xControl );
 }
 
 uno::Sequence< ::sal_Int32 > SAL_CALL UnoControlContainer::getIdentifiers(  )
@@ -743,7 +743,7 @@ void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxT
         OUString aPropName( u"Step"_ustr );
         if ( xInfo->hasPropertyByName( aPropName ) )
         {
-            css::uno::Any aVal = xPSet->getPropertyValue( aPropName );
+            cpo::uno::Any aVal = xPSet->getPropertyValue( aPropName );
             sal_Int32 nDialogStep = 0;
             aVal >>= nDialogStep;
             uno::Reference< awt::XControlContainer > xContainer =
@@ -820,7 +820,7 @@ void UnoControlContainer::PrepareWindowDescriptor( css::awt::WindowDescriptor& r
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlContainer_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlContainer());
 }

@@ -65,7 +65,7 @@ public:
 
     // XScriptProviderFactory
     virtual css::uno::Reference< css::script::provider::XScriptProvider >
-        SAL_CALL createScriptProvider( const css::uno::Any& context ) override;
+        SAL_CALL createScriptProvider( const cpo::uno::Any& context ) override;
 };
 
 

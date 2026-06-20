@@ -57,10 +57,10 @@ typedef std::vector< css::uno::WeakReference< css::sdbc::XConnection > > OWeakCo
 struct DefaultPropertyValue
 {
     OUString               Name;
-    css::uno::Any          DefaultValue;
+    cpo::uno::Any          DefaultValue;
     const css::uno::Type&  ValueType;
 
-    DefaultPropertyValue(const OUString& _aName, const css::uno::Any& _rDefaultValue)
+    DefaultPropertyValue(const OUString& _aName, const cpo::uno::Any& _rDefaultValue)
         :Name( _aName )
         ,DefaultValue( _rDefaultValue )
         ,ValueType( _rDefaultValue.getValueType() )

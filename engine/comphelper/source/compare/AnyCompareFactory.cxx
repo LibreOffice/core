@@ -28,6 +28,7 @@
 #include <rtl/ref.hxx>
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::i18n;
@@ -129,7 +130,7 @@ Sequence< OUString > SAL_CALL AnyCompareFactory::getSupportedServiceNames(  )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 AnyCompareFactory_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new AnyCompareFactory(context));
 }

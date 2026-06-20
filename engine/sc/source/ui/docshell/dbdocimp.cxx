@@ -90,7 +90,7 @@ void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, const SfxViewFrame*
         aSelection[svx::DataAccessDescriptorProperty::Command]      <<= rParam.aStatement;
         aSelection[svx::DataAccessDescriptorProperty::CommandType]  <<= nType;
 
-        xControllerSelection->select(uno::Any(aSelection.createPropertyValueSequence()));
+        xControllerSelection->select(cpo::uno::Any(aSelection.createPropertyValueSequence()));
     }
     else
     {
@@ -150,7 +150,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
     sal_Int32 nRowsRead = 0;
     sal_Int32 nListCount = 0;
 
-    uno::Sequence<uno::Any> aSelection;
+    uno::Sequence<cpo::uno::Any> aSelection;
     if ( pDescriptor && pDescriptor->has(svx::DataAccessDescriptorProperty::Selection) )
     {
         (*pDescriptor)[svx::DataAccessDescriptorProperty::Selection] >>= aSelection;
@@ -204,11 +204,11 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                             ( (rParam.nType == ScDbQuery) ? sdb::CommandType::QUERY :
                                                             sdb::CommandType::TABLE );
 
-                xRowProp->setPropertyValue( u"DataSourceName"_ustr, uno::Any(rParam.aDBName) );
+                xRowProp->setPropertyValue( u"DataSourceName"_ustr, cpo::uno::Any(rParam.aDBName) );
 
-                xRowProp->setPropertyValue( u"Command"_ustr, uno::Any(rParam.aStatement) );
+                xRowProp->setPropertyValue( u"Command"_ustr, cpo::uno::Any(rParam.aStatement) );
 
-                xRowProp->setPropertyValue( u"CommandType"_ustr, uno::Any(nType) );
+                xRowProp->setPropertyValue( u"CommandType"_ustr, cpo::uno::Any(nType) );
 
                 uno::Reference<sdb::XCompletedExecution> xExecute( xRowSet, uno::UNO_QUERY );
                 if ( xExecute.is() )

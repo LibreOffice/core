@@ -29,7 +29,7 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -90,7 +90,7 @@ public:
         return 0;
     }
 
-    virtual css::uno::Any SAL_CALL execute(
+    virtual cpo::uno::Any SAL_CALL execute(
         css::ucb::Command const & command, sal_Int32 commandId,
         css::uno::Reference< css::ucb::XCommandEnvironment > const &) override;
 
@@ -117,7 +117,7 @@ Content::Content(
     }
 }
 
-css::uno::Any Content::execute(
+cpo::uno::Any Content::execute(
     css::ucb::Command const & command, sal_Int32,
     css::uno::Reference< css::ucb::XCommandEnvironment > const &)
 {
@@ -150,7 +150,7 @@ css::uno::Any Content::execute(
         }
         break;
     }
-    return css::uno::Any(uri.toAsciiLowerCase());
+    return cpo::uno::Any(uri.toAsciiLowerCase());
 }
 
 class Provider: public cppu::WeakImplHelper< css::ucb::XContentProvider > {

@@ -86,7 +86,7 @@
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::osl::MutexGuard;
 
 using namespace ::com::sun::star;
@@ -569,7 +569,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartModel::getCurrentSelection()
         uno::Reference< view::XSelectionSupplier >  xSelectionSupl( xController, uno::UNO_QUERY );
         if ( xSelectionSupl.is() )
         {
-            uno::Any aSel = xSelectionSupl->getSelection();
+            cpo::uno::Any aSel = xSelectionSupl->getSelection();
             OUString aObjectCID;
             if( aSel >>= aObjectCID )
                 xReturn.set( ObjectIdentifier::getObjectPropertySet( aObjectCID, this));
@@ -775,16 +775,16 @@ Reference< chart2::data::XDataSource > ChartModel::impl_createDefaultData()
     {
         //init internal dataprovider
         {
-            beans::NamedValue aParam( u"CreateDefaultData"_ustr ,uno::Any(true) );
-            uno::Sequence< uno::Any > aArgs{ uno::Any(aParam) };
+            beans::NamedValue aParam( u"CreateDefaultData"_ustr ,cpo::uno::Any(true) );
+            uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(aParam) };
             m_xInternalDataProvider->initialize(aArgs);
         }
         //create data
         uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
-            { "CellRangeRepresentation", uno::Any( u"all"_ustr ) },
-            { "HasCategories", uno::Any( true ) },
-            { "FirstCellAsLabel", uno::Any( true ) },
-            { "DataRowSource", uno::Any( css::chart::ChartDataRowSource_COLUMNS ) }
+            { "CellRangeRepresentation", cpo::uno::Any( u"all"_ustr ) },
+            { "HasCategories", cpo::uno::Any( true ) },
+            { "FirstCellAsLabel", cpo::uno::Any( true ) },
+            { "DataRowSource", cpo::uno::Any( css::chart::ChartDataRowSource_COLUMNS ) }
             }));
         xDataSource = m_xInternalDataProvider->createDataSource( aArgs );
     }
@@ -867,7 +867,7 @@ void SAL_CALL ChartModel::attachDataProvider( const uno::Reference< chart2::data
             try
             {
                 bool bIncludeHiddenCells = isIncludeHiddenCells();
-                xProp->setPropertyValue(u"IncludeHiddenCells"_ustr, uno::Any(bIncludeHiddenCells));
+                xProp->setPropertyValue(u"IncludeHiddenCells"_ustr, cpo::uno::Any(bIncludeHiddenCells));
             }
             catch (const beans::UnknownPropertyException&)
             {
@@ -1047,9 +1047,9 @@ void ChartModel::setTitleObject( const rtl::Reference< Title >& xTitle )
 }
 
 // ____ XInterface (for old API wrapper) ____
-uno::Any SAL_CALL ChartModel::queryInterface( const uno::Type& aType )
+cpo::uno::Any SAL_CALL ChartModel::queryInterface( const uno::Type& aType )
 {
-    uno::Any aResult( impl::ChartModel_Base::queryInterface( aType ));
+    cpo::uno::Any aResult( impl::ChartModel_Base::queryInterface( aType ));
 
     if( ! aResult.hasValue())
     {
@@ -1129,7 +1129,7 @@ embed::VisualRepresentation SAL_CALL ChartModel::getPreferredVisualRepresentatio
                     u"GDIMetaFile"_ustr,
                     cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
 
-            uno::Any aData( xTransferable->getTransferData( aDataFlavor ) );
+            cpo::uno::Any aData( xTransferable->getTransferData( aDataFlavor ) );
             aData >>= aMetafile;
         }
 
@@ -1154,9 +1154,9 @@ embed::VisualRepresentation SAL_CALL ChartModel::getPreferredVisualRepresentatio
 }
 
 // ____ datatransfer::XTransferable ____
-uno::Any SAL_CALL ChartModel::getTransferData( const datatransfer::DataFlavor& aFlavor )
+cpo::uno::Any SAL_CALL ChartModel::getTransferData( const datatransfer::DataFlavor& aFlavor )
 {
-    uno::Any aResult;
+    cpo::uno::Any aResult;
     if( !isDataFlavorSupported( aFlavor ) )
         throw datatransfer::UnsupportedFlavorException(
             aFlavor.MimeType, static_cast< ::cppu::OWeakObject* >( this ));
@@ -1496,7 +1496,7 @@ bool ChartModel::setIncludeHiddenCells( bool bIncludeHiddenCells )
 
         //set the property on all instances in all cases to get the different objects in sync!
 
-        uno::Any aNewValue(bIncludeHiddenCells);
+        cpo::uno::Any aNewValue(bIncludeHiddenCells);
 
         try
         {
@@ -1552,7 +1552,7 @@ void ChartModel::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 std::shared_ptr<model::Theme> ChartModel::getDocumentTheme() const
 {
     std::shared_ptr<model::Theme> pTheme;
-    uno::Any aThemeValue;
+    cpo::uno::Any aThemeValue;
 
     auto pParent = const_cast<ChartModel*>(this)->getParent();
     uno::Reference<frame::XModel> xDocModel(pParent, uno::UNO_QUERY);
@@ -1643,8 +1643,8 @@ void ChartModel::applyColorPaletteToDataSeries(const ChartColorPalette& rColorPa
     {
         const uno::Reference<beans::XPropertySet> xPropSet = xDataSeriesArray[i];
         const size_t nPaletteIndex = i % rColorPalette.size();
-        xPropSet->setPropertyValue(u"FillStyle"_ustr, uno::Any(drawing::FillStyle_SOLID));
-        xPropSet->setPropertyValue(u"FillColor"_ustr, uno::Any(rColorPalette[nPaletteIndex]));
+        xPropSet->setPropertyValue(u"FillStyle"_ustr, cpo::uno::Any(drawing::FillStyle_SOLID));
+        xPropSet->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(rColorPalette[nPaletteIndex]));
     }
 }
 
@@ -1745,7 +1745,7 @@ void ChartModel::applyGradientPaletteToDataSeries(const ChartGradientPalette& rG
     {
         const uno::Reference<beans::XPropertySet> xPropSet = xDataSeriesArray[i];
         const size_t nPaletteIndex = i % rGradientPalette.size();
-        xPropSet->setPropertyValue(u"FillStyle"_ustr, uno::Any(drawing::FillStyle_GRADIENT));
+        xPropSet->setPropertyValue(u"FillStyle"_ustr, cpo::uno::Any(drawing::FillStyle_GRADIENT));
 
         // check if we have to skip this data set
         const basegfx::BGradient& rGradient = rGradientPalette[nPaletteIndex];
@@ -1756,9 +1756,9 @@ void ChartModel::applyGradientPaletteToDataSeries(const ChartGradientPalette& rG
         awt::Gradient2 aPropGradient = model::gradient::createUnoGradient2(rGradient);
 
         // register a gradient and set it
-        css::uno::Any aGradientVal(aPropGradient);
+        cpo::uno::Any aGradientVal(aPropGradient);
         OUString aNewName = PropertyHelper::addGradientUniqueNameToTable(aGradientVal, this, u""_ustr);
-        xPropSet->setPropertyValue(u"FillGradientName"_ustr, css::uno::Any(aNewName));
+        xPropSet->setPropertyValue(u"FillGradientName"_ustr, cpo::uno::Any(aNewName));
     }
 }
 
@@ -1766,7 +1766,7 @@ void ChartModel::applyGradientPaletteToDataSeries(const ChartGradientPalette& rG
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_ChartModel_get_implementation(css::uno::XComponentContext *context,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::ChartModel(context));
 }

@@ -37,7 +37,7 @@ namespace connectivity::ado
     protected:
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
-                                const css::uno::Any& rValue
+                                const cpo::uno::Any& rValue
                                  ) override;
     public:
         OAdoColumn(bool _bCase,OConnection* _pConnection,_ADOColumn* _pColumn);

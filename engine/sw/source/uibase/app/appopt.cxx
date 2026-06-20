@@ -59,6 +59,7 @@
 #include <sfx2/dispatch.hxx>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 
 std::optional<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )

@@ -38,7 +38,7 @@
 #include <com/sun/star/reflection/XSingletonTypeDescription2.hpp>
 #include <com/sun/star/reflection/XStructTypeDescription.hpp>
 #include <com/sun/star/reflection/XTypeDescription.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -66,8 +66,8 @@ OUString makePrefix(OUString const & name) {
     return name.isEmpty() ? name : name + ".";
 }
 
-css::uno::Any resolveTypedefs(css::uno::Any const & type) {
-    for (css::uno::Any t(type);;) {
+cpo::uno::Any resolveTypedefs(cpo::uno::Any const & type) {
+    for (cpo::uno::Any t(type);;) {
         css::uno::Reference< css::reflection::XIndirectTypeDescription > ind(
             type, css::uno::UNO_QUERY);
         if (!ind.is() || ind->getTypeClass() != css::uno::TypeClass_TYPEDEF) {
@@ -864,7 +864,7 @@ void BaseOffset::calculateBases(
     for (const auto & i : bases) {
         calculate(
             css::uno::Reference< css::reflection::XInterfaceTypeDescription2 >(
-                resolveTypedefs(css::uno::Any(i)),
+                resolveTypedefs(cpo::uno::Any(i)),
                 css::uno::UNO_QUERY_THROW));
     }
 }
@@ -1004,11 +1004,11 @@ private:
     virtual OUString SAL_CALL getName() override
     { return name_; }
 
-    virtual css::uno::Any SAL_CALL getConstantValue() override
+    virtual cpo::uno::Any SAL_CALL getConstantValue() override
     { return value_; }
 
     OUString name_;
-    css::uno::Any value_;
+    cpo::uno::Any value_;
 };
 
 ConstantDescription::ConstantDescription(
@@ -1649,8 +1649,8 @@ private:
     virtual bool SAL_CALL hasMoreElements() override
     { return !positions_.empty(); }
 
-    virtual css::uno::Any SAL_CALL nextElement() override
-    { return css::uno::Any(nextTypeDescription()); }
+    virtual cpo::uno::Any SAL_CALL nextElement() override
+    { return cpo::uno::Any(nextTypeDescription()); }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
     nextTypeDescription() override;
@@ -1821,7 +1821,7 @@ cppuhelper::TypeManager::TypeManager():
     manager_(new unoidl::Manager)
 {}
 
-css::uno::Any cppuhelper::TypeManager::find(OUString const & name) {
+cpo::uno::Any cppuhelper::TypeManager::find(OUString const & name) {
     //TODO: caching? (here or in unoidl::Manager?)
     static constexpr std::pair<std::u16string_view, css::uno::TypeClass> const simple[] = {
         { u"void", css::uno::TypeClass_VOID },
@@ -1841,7 +1841,7 @@ css::uno::Any cppuhelper::TypeManager::find(OUString const & name) {
         { u"any", css::uno::TypeClass_ANY } };
     for (const auto& [ rName, rTypeClass ] : simple) {
         if (name == rName) {
-            return css::uno::Any(
+            return cpo::uno::Any(
                 css::uno::Reference< css::reflection::XTypeDescription >(
                     new SimpleTypeDescription(rTypeClass, name)));
         }
@@ -1881,7 +1881,7 @@ css::uno::Any cppuhelper::TypeManager::find(OUString const & name) {
             }
         }
     }
-    return css::uno::Any();
+    return cpo::uno::Any();
 }
 
 css::uno::Reference< css::reflection::XTypeDescription >
@@ -1916,10 +1916,10 @@ cppuhelper::TypeManager::getSupportedServiceNames()
     return { u"com.sun.star.reflection.TypeDescriptionManager"_ustr }; //TODO
 }
 
-css::uno::Any cppuhelper::TypeManager::getByHierarchicalName(
+cpo::uno::Any cppuhelper::TypeManager::getByHierarchicalName(
     OUString const & aName)
 {
-    css::uno::Any desc(find(aName));
+    cpo::uno::Any desc(find(aName));
     if (!desc.hasValue()) {
         throw css::container::NoSuchElementException(
             aName, static_cast< cppu::OWeakObject * >(this));
@@ -1953,14 +1953,14 @@ cppuhelper::TypeManager::createEnumeration()
         static_cast< cppu::OWeakObject * >(this));
 }
 
-bool cppuhelper::TypeManager::has(css::uno::Any const &)
+bool cppuhelper::TypeManager::has(cpo::uno::Any const &)
 {
     throw css::uno::RuntimeException(
         u"TypeManager has: method not supported"_ustr,
         static_cast< cppu::OWeakObject * >(this));
 }
 
-void cppuhelper::TypeManager::insert(css::uno::Any const & aElement)
+void cppuhelper::TypeManager::insert(cpo::uno::Any const & aElement)
 {
     OUString uri;
     if (!(aElement >>= uri)) {
@@ -1974,7 +1974,7 @@ void cppuhelper::TypeManager::insert(css::uno::Any const & aElement)
     readRdbFile(uri, false);
 }
 
-void cppuhelper::TypeManager::remove(css::uno::Any const & aElement)
+void cppuhelper::TypeManager::remove(cpo::uno::Any const & aElement)
 {
     OUString uri;
     if (!(aElement >>= uri)) {
@@ -2076,17 +2076,17 @@ void cppuhelper::TypeManager::readRdbFile(
     }
 }
 
-css::uno::Any cppuhelper::TypeManager::getSequenceType(
+cpo::uno::Any cppuhelper::TypeManager::getSequenceType(
     OUString const & name)
 {
     assert(name.startsWith("[]"));
-    return css::uno::Any(
+    return cpo::uno::Any(
         css::uno::Reference< css::reflection::XTypeDescription >(
             new SequenceTypeDescription(
                 this, name, name.copy(std::strlen("[]")))));
 }
 
-css::uno::Any cppuhelper::TypeManager::getInstantiatedStruct(
+cpo::uno::Any cppuhelper::TypeManager::getInstantiatedStruct(
     OUString const & name, sal_Int32 separator)
 {
     assert(name.indexOf('<') == separator && separator != -1);
@@ -2095,7 +2095,7 @@ css::uno::Any cppuhelper::TypeManager::getInstantiatedStruct(
         || (ent->getSort()
             != unoidl::Entity::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE))
     {
-        return css::uno::Any();
+        return cpo::uno::Any();
     }
     rtl::Reference< unoidl::PolymorphicStructTypeTemplateEntity > ent2(
         static_cast< unoidl::PolymorphicStructTypeTemplateEntity * >(
@@ -2128,22 +2128,22 @@ css::uno::Any cppuhelper::TypeManager::getInstantiatedStruct(
     if (i != name.getLength() - 1 || name[i] != '>'
         || args.size() != ent2->getTypeParameters().size())
     {
-        return css::uno::Any();
+        return cpo::uno::Any();
     }
-    return css::uno::Any(
+    return cpo::uno::Any(
         css::uno::Reference< css::reflection::XTypeDescription >(
             new InstantiatedPolymorphicStructTypeDescription(
                 this, name, ent2, std::move(args))));
 }
 
-css::uno::Any cppuhelper::TypeManager::getInterfaceMember(
+cpo::uno::Any cppuhelper::TypeManager::getInterfaceMember(
     std::u16string_view name, std::size_t separator)
 {
     assert(name.find(u"::") == separator && separator != std::u16string_view::npos);
     css::uno::Reference< css::reflection::XInterfaceTypeDescription2 > ifc(
         resolveTypedefs(find(OUString(name.substr(0, separator)))), css::uno::UNO_QUERY);
     if (!ifc.is()) {
-        return css::uno::Any();
+        return cpo::uno::Any();
     }
     std::u16string_view member = name.substr(separator + std::strlen("::"));
     const css::uno::Sequence<
@@ -2152,39 +2152,39 @@ css::uno::Any cppuhelper::TypeManager::getInterfaceMember(
                 ifc->getMembers());
     for (const auto & m : mems) {
         if (m->getMemberName() == member) {
-            return css::uno::Any(
+            return cpo::uno::Any(
                 css::uno::Reference< css::reflection::XTypeDescription >(m));
         }
     }
-    return css::uno::Any();
+    return cpo::uno::Any();
 }
 
-css::uno::Any cppuhelper::TypeManager::getNamed(
+cpo::uno::Any cppuhelper::TypeManager::getNamed(
     OUString const & name, rtl::Reference< unoidl::Entity > const & entity)
 {
     assert(entity.is());
     switch (entity->getSort()) {
     case unoidl::Entity::SORT_MODULE:
-        return css::uno::Any(
+        return cpo::uno::Any(
             css::uno::Reference< css::reflection::XTypeDescription >(
                 new ModuleDescription(
                     this, name,
                     static_cast< unoidl::ModuleEntity * >(entity.get()))));
     case unoidl::Entity::SORT_ENUM_TYPE:
-        return css::uno::Any(
+        return cpo::uno::Any(
             css::uno::Reference< css::reflection::XTypeDescription >(
                 new EnumTypeDescription(
                     name,
                     static_cast< unoidl::EnumTypeEntity * >(entity.get()))));
     case unoidl::Entity::SORT_PLAIN_STRUCT_TYPE:
-        return css::uno::Any(
+        return cpo::uno::Any(
             css::uno::Reference< css::reflection::XTypeDescription >(
                 new PlainStructTypeDescription(
                     this, name,
                     static_cast< unoidl::PlainStructTypeEntity * >(
                         entity.get()))));
     case unoidl::Entity::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
-        return css::uno::Any(
+        return cpo::uno::Any(
             css::uno::Reference< css::reflection::XTypeDescription >(
                 new PolymorphicStructTypeTemplateDescription(
                     this, name,
@@ -2192,55 +2192,55 @@ css::uno::Any cppuhelper::TypeManager::getNamed(
                         unoidl::PolymorphicStructTypeTemplateEntity * >(
                             entity.get()))));
     case unoidl::Entity::SORT_EXCEPTION_TYPE:
-        return css::uno::Any(
+        return cpo::uno::Any(
             css::uno::Reference< css::reflection::XTypeDescription >(
                 new ExceptionTypeDescription(
                     this, name,
                     static_cast< unoidl::ExceptionTypeEntity * >(
                         entity.get()))));
     case unoidl::Entity::SORT_INTERFACE_TYPE:
-        return css::uno::Any(
+        return cpo::uno::Any(
             css::uno::Reference< css::reflection::XTypeDescription >(
                 new InterfaceTypeDescription(
                     this, name,
                     static_cast< unoidl::InterfaceTypeEntity * >(
                         entity.get()))));
     case unoidl::Entity::SORT_TYPEDEF:
-        return css::uno::Any(
+        return cpo::uno::Any(
             css::uno::Reference< css::reflection::XTypeDescription >(
                 new TypedefDescription(
                     this, name,
                     static_cast< unoidl::TypedefEntity * >(entity.get()))));
     case unoidl::Entity::SORT_CONSTANT_GROUP:
-        return css::uno::Any(
+        return cpo::uno::Any(
             css::uno::Reference< css::reflection::XTypeDescription >(
                 new ConstantGroupDescription(
                     name,
                     static_cast< unoidl::ConstantGroupEntity * >(
                         entity.get()))));
     case unoidl::Entity::SORT_SINGLE_INTERFACE_BASED_SERVICE:
-        return css::uno::Any(
+        return cpo::uno::Any(
             css::uno::Reference< css::reflection::XTypeDescription >(
                 new SingleInterfaceBasedServiceDescription(
                     this, name,
                     static_cast< unoidl::SingleInterfaceBasedServiceEntity * >(
                         entity.get()))));
     case unoidl::Entity::SORT_ACCUMULATION_BASED_SERVICE:
-        return css::uno::Any(
+        return cpo::uno::Any(
             css::uno::Reference< css::reflection::XTypeDescription >(
                 new AccumulationBasedServiceDescription(
                     this, name,
                     static_cast< unoidl::AccumulationBasedServiceEntity * >(
                         entity.get()))));
     case unoidl::Entity::SORT_INTERFACE_BASED_SINGLETON:
-        return css::uno::Any(
+        return cpo::uno::Any(
             css::uno::Reference< css::reflection::XTypeDescription >(
                 new InterfaceBasedSingletonDescription(
                     this, name,
                     static_cast< unoidl::InterfaceBasedSingletonEntity * >(
                         entity.get()))));
     case unoidl::Entity::SORT_SERVICE_BASED_SINGLETON:
-        return css::uno::Any(
+        return cpo::uno::Any(
             css::uno::Reference< css::reflection::XTypeDescription >(
                 new ServiceBasedSingletonDescription(
                     this, name,
@@ -2251,18 +2251,18 @@ css::uno::Any cppuhelper::TypeManager::getNamed(
     }
 }
 
-css::uno::Any cppuhelper::TypeManager::getEnumMember(
+cpo::uno::Any cppuhelper::TypeManager::getEnumMember(
     rtl::Reference< unoidl::EnumTypeEntity > const & entity,
     std::u16string_view member)
 {
     auto i = std::find_if(entity->getMembers().begin(), entity->getMembers().end(),
         [&member](const unoidl::EnumTypeEntity::Member& rMember) { return rMember.name == member; });
     if (i != entity->getMembers().end())
-        return css::uno::Any(i->value);
-    return css::uno::Any();
+        return cpo::uno::Any(i->value);
+    return cpo::uno::Any();
 }
 
-css::uno::Any cppuhelper::TypeManager::getConstant(
+cpo::uno::Any cppuhelper::TypeManager::getConstant(
     std::u16string_view constantGroupName,
     rtl::Reference< unoidl::ConstantGroupEntity > const & entity,
     std::u16string_view member)
@@ -2270,10 +2270,10 @@ css::uno::Any cppuhelper::TypeManager::getConstant(
     auto i = std::find_if(entity->getMembers().begin(), entity->getMembers().end(),
         [&member](const unoidl::ConstantGroupEntity::Member& rMember) { return rMember.name == member; });
     if (i != entity->getMembers().end())
-        return css::uno::Any(
+        return cpo::uno::Any(
             css::uno::Reference< css::reflection::XTypeDescription >(
                 new ConstantDescription(OUString(constantGroupName), *i)));
-    return css::uno::Any();
+    return cpo::uno::Any();
 }
 
 rtl::Reference< unoidl::Entity > cppuhelper::TypeManager::findEntity(

@@ -33,6 +33,7 @@
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace
 {
@@ -194,14 +195,14 @@ class theExceptionThrower : public rtl::Static<ExceptionThrower, theExceptionThr
 // So we can simply have code that checks what the type of object being thrown
 // is, and explicitly throws such an object then with a normal C++ throw
 // statement. Seems to work.
-template <class E> void tryThrow(css::uno::Any const& aException)
+template <class E> void tryThrow(cpo::uno::Any const& aException)
 {
     E aSpecificException;
     if (aException >>= aSpecificException)
         throw aSpecificException;
 }
 
-void lo_mobile_throwException(css::uno::Any const& aException)
+void lo_mobile_throwException(cpo::uno::Any const& aException)
 {
     assert(aException.getValueTypeClass() == css::uno::TypeClass_EXCEPTION);
 

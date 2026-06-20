@@ -61,8 +61,8 @@ public:
     virtual void SAL_CALL setName( const OUString& aName ) override;
 
     // XFastPropertySet
-    virtual void SAL_CALL setFastPropertyValue( ::sal_Int32 nHandle, const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getFastPropertyValue( ::sal_Int32 nHandle ) override;
+    virtual void SAL_CALL setFastPropertyValue( ::sal_Int32 nHandle, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL getFastPropertyValue( ::sal_Int32 nHandle ) override;
 
 private:
     static rtl::Reference< FastPropertySetInfo > getStaticPropertySetInfo();

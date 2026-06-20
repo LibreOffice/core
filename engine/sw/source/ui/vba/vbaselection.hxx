@@ -43,7 +43,7 @@ private:
 private:
     /// @throws css::script::BasicErrorException
     /// @throws css::uno::RuntimeException
-    void Move( const css::uno::Any& _unit, const css::uno::Any& _count, const css::uno::Any& _extend, ooo::vba::word::E_DIRECTION eDirection );
+    void Move( const cpo::uno::Any& _unit, const cpo::uno::Any& _count, const cpo::uno::Any& _extend, ooo::vba::word::E_DIRECTION eDirection );
     /// @throws css::script::BasicErrorException
     /// @throws css::uno::RuntimeException
     void NextCell( sal_Int32 nCount, ooo::vba::word::E_DIRECTION eDirection );
@@ -67,14 +67,14 @@ public:
     virtual OUString SAL_CALL getText() override;
     virtual void SAL_CALL setText( const OUString& rText ) override;
     virtual css::uno::Reference< ooo::vba::word::XRange > SAL_CALL getRange() override;
-    virtual void SAL_CALL HomeKey( const css::uno::Any& _unit, const css::uno::Any& _extend ) override;
-    virtual void SAL_CALL EndKey( const css::uno::Any& _unit, const css::uno::Any& _extend ) override;
+    virtual void SAL_CALL HomeKey( const cpo::uno::Any& _unit, const cpo::uno::Any& _extend ) override;
+    virtual void SAL_CALL EndKey( const cpo::uno::Any& _unit, const cpo::uno::Any& _extend ) override;
     virtual void SAL_CALL TypeText( const OUString& rText ) override;
-    virtual void SAL_CALL Delete( const css::uno::Any& _unit, const css::uno::Any& _count ) override;
-    virtual void SAL_CALL MoveRight( const css::uno::Any& _unit, const css::uno::Any& _count, const css::uno::Any& _extend ) override;
-    virtual void SAL_CALL MoveLeft( const css::uno::Any& _unit, const css::uno::Any& _count, const css::uno::Any& _extend ) override;
-    virtual void SAL_CALL MoveDown( const css::uno::Any& _unit, const css::uno::Any& _count, const css::uno::Any& _extend ) override;
-    virtual void SAL_CALL MoveUp( const css::uno::Any& _unit, const css::uno::Any& _count, const css::uno::Any& _extend ) override;
+    virtual void SAL_CALL Delete( const cpo::uno::Any& _unit, const cpo::uno::Any& _count ) override;
+    virtual void SAL_CALL MoveRight( const cpo::uno::Any& _unit, const cpo::uno::Any& _count, const cpo::uno::Any& _extend ) override;
+    virtual void SAL_CALL MoveLeft( const cpo::uno::Any& _unit, const cpo::uno::Any& _count, const cpo::uno::Any& _extend ) override;
+    virtual void SAL_CALL MoveDown( const cpo::uno::Any& _unit, const cpo::uno::Any& _count, const cpo::uno::Any& _extend ) override;
+    virtual void SAL_CALL MoveUp( const cpo::uno::Any& _unit, const cpo::uno::Any& _count, const cpo::uno::Any& _extend ) override;
     virtual void SAL_CALL TypeParagraph() override;
     virtual void SAL_CALL InsertParagraph() override;
     virtual void SAL_CALL InsertParagraphBefore() override;
@@ -82,36 +82,36 @@ public:
     virtual css::uno::Reference< ooo::vba::word::XParagraphFormat > SAL_CALL getParagraphFormat() override;
     virtual void SAL_CALL setParagraphFormat( const css::uno::Reference< ooo::vba::word::XParagraphFormat >& rParagraphFormat ) override;
     virtual css::uno::Reference< ooo::vba::word::XFind > SAL_CALL getFind() override;
-    virtual css::uno::Any SAL_CALL getStyle() override;
-    virtual void SAL_CALL setStyle( const css::uno::Any& _xStyle ) override;
+    virtual cpo::uno::Any SAL_CALL getStyle() override;
+    virtual void SAL_CALL setStyle( const cpo::uno::Any& _xStyle ) override;
     virtual css::uno::Reference< ooo::vba::word::XFont > SAL_CALL getFont() override;
     virtual void SAL_CALL TypeBackspace() override;
-    virtual css::uno::Reference< ooo::vba::word::XRange > SAL_CALL GoTo( const css::uno::Any& _what, const css::uno::Any& _which, const css::uno::Any& _count, const css::uno::Any& _name ) override;
+    virtual css::uno::Reference< ooo::vba::word::XRange > SAL_CALL GoTo( const cpo::uno::Any& _what, const cpo::uno::Any& _which, const cpo::uno::Any& _count, const cpo::uno::Any& _name ) override;
     virtual ::sal_Int32 SAL_CALL getLanguageID( ) override;
     virtual void SAL_CALL setLanguageID( ::sal_Int32 _languageid ) override;
-    virtual css::uno::Any SAL_CALL Information( sal_Int32 _type ) override;
-    virtual void SAL_CALL InsertBreak( const css::uno::Any& _breakType ) override;
-    virtual css::uno::Any SAL_CALL Tables( const css::uno::Any& aIndex ) override;
-    virtual css::uno::Any SAL_CALL Fields( const css::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Information( sal_Int32 _type ) override;
+    virtual void SAL_CALL InsertBreak( const cpo::uno::Any& _breakType ) override;
+    virtual cpo::uno::Any SAL_CALL Tables( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Fields( const cpo::uno::Any& aIndex ) override;
     virtual css::uno::Reference< ooo::vba::word::XHeaderFooter > SAL_CALL getHeaderFooter() override;
-    virtual css::uno::Any SAL_CALL ShapeRange( ) override;
+    virtual cpo::uno::Any SAL_CALL ShapeRange( ) override;
     virtual ::sal_Int32 SAL_CALL getStart() override;
     virtual void SAL_CALL setStart( ::sal_Int32 _start ) override;
     virtual ::sal_Int32 SAL_CALL getEnd() override;
     virtual void SAL_CALL setEnd( ::sal_Int32 _end ) override;
     virtual void SAL_CALL SelectRow() override;
     virtual void SAL_CALL SelectColumn() override;
-    virtual css::uno::Any SAL_CALL Rows( const css::uno::Any& aIndex ) override;
-    virtual css::uno::Any SAL_CALL Columns( const css::uno::Any& aIndex ) override;
-    virtual css::uno::Any SAL_CALL Cells( const css::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Rows( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Columns( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Cells( const cpo::uno::Any& aIndex ) override;
     virtual void SAL_CALL Copy(  ) override;
     virtual void SAL_CALL CopyAsPicture(  ) override;
     virtual void SAL_CALL Paste(  ) override;
-    virtual void SAL_CALL Collapse( const css::uno::Any& Direction ) override;
+    virtual void SAL_CALL Collapse( const cpo::uno::Any& Direction ) override;
     virtual void SAL_CALL WholeStory(  ) override;
     virtual bool SAL_CALL InRange( const css::uno::Reference< ::ooo::vba::word::XRange >& Range ) override;
     virtual void SAL_CALL SplitTable() override;
-    virtual css::uno::Any SAL_CALL Paragraphs( const css::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Paragraphs( const cpo::uno::Any& aIndex ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

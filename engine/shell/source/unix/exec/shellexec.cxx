@@ -50,6 +50,7 @@ using com::sun::star::system::XSystemShellExecute;
 using com::sun::star::system::SystemShellExecuteException;
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::system::SystemShellExecuteFlags;
 using namespace cppu;
@@ -304,7 +305,7 @@ Sequence< OUString > SAL_CALL ShellExec::getSupportedServiceNames(   )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 shell_ShellExec_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ShellExec(context));
 }

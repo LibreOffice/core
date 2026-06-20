@@ -51,7 +51,7 @@ namespace dbtools
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::i18n::LocaleData;
     using ::com::sun::star::i18n::LocaleDataItem;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
 
     using namespace ::com::sun::star::sdbc;
     using namespace ::connectivity;

@@ -2749,7 +2749,7 @@ bool SdrObjEditView::EndMacroObj()
 
 /** fills the given any with a XTextCursor for the current text selection.
     Leaves the any untouched if there currently is no text selected */
-void SdrObjEditView::getTextSelection(css::uno::Any& rSelection)
+void SdrObjEditView::getTextSelection(cpo::uno::Any& rSelection)
 {
     if (!IsTextEdit())
         return;

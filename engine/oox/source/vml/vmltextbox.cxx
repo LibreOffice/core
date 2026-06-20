@@ -169,7 +169,7 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
         uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY_THROW);
         aGrabBag.update( xPropertySet->getPropertyValue(u"CharInteropGrabBag"_ustr) );
         aGrabBag[u"mso-pStyle"_ustr] <<= sParaStyle;
-        xPropertySet->setPropertyValue(u"CharInteropGrabBag"_ustr, uno::Any(aGrabBag.getAsConstPropertyValueList()));
+        xPropertySet->setPropertyValue(u"CharInteropGrabBag"_ustr, cpo::uno::Any(aGrabBag.getAsConstPropertyValueList()));
     }
     catch (const uno::Exception&)
     {
@@ -195,9 +195,9 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
     // As a result, we need to set horizontal adjustment here to 'right',
     // that will result in vertical 'top' after writing mode is applied,
     // which matches the VML behavior.
-    xProperties->setPropertyValue(u"TextHorizontalAdjust"_ustr, uno::Any(drawing::TextHorizontalAdjust_RIGHT));
+    xProperties->setPropertyValue(u"TextHorizontalAdjust"_ustr, cpo::uno::Any(drawing::TextHorizontalAdjust_RIGHT));
 
-    xProperties->setPropertyValue( u"TextWritingMode"_ustr, uno::Any( text::WritingMode_TB_RL ) );
+    xProperties->setPropertyValue( u"TextWritingMode"_ustr, cpo::uno::Any( text::WritingMode_TB_RL ) );
 }
 
 } // namespace oox::vml

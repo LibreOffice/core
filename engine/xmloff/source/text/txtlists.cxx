@@ -419,7 +419,7 @@ XMLTextListsHelper::MakeNumRule(
         if( rNumStyles.is() && rNumStyles->hasByName( sDisplayStyleName ) )
         {
             uno::Reference < style::XStyle > xStyle;
-            uno::Any any = rNumStyles->getByName( sDisplayStyleName );
+            cpo::uno::Any any = rNumStyles->getByName( sDisplayStyleName );
             any >>= xStyle;
 
             uno::Reference< beans::XPropertySet > xPropSet( xStyle,

@@ -74,6 +74,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
@@ -184,7 +185,7 @@ static const SfxItemPropertySet* GetLineNumberingSet()
     return &aLineNumberingSet_Impl;
 }
 
-static SwCharFormat* lcl_getCharFormat(SwDoc* pDoc, const uno::Any& aValue)
+static SwCharFormat* lcl_getCharFormat(SwDoc* pDoc, const cpo::uno::Any& aValue)
 {
     SwCharFormat* pRet = nullptr;
     OUString uTmp;
@@ -204,7 +205,7 @@ static SwCharFormat* lcl_getCharFormat(SwDoc* pDoc, const uno::Any& aValue)
     return pRet;
 }
 
-static SwTextFormatColl* lcl_GetParaStyle(SwDoc* pDoc, const uno::Any& aValue)
+static SwTextFormatColl* lcl_GetParaStyle(SwDoc* pDoc, const cpo::uno::Any& aValue)
 {
     OUString uTmp;
     aValue >>= uTmp;
@@ -220,7 +221,7 @@ static SwTextFormatColl* lcl_GetParaStyle(SwDoc* pDoc, const uno::Any& aValue)
     return pRet;
 }
 
-static SwPageDesc* lcl_GetPageDesc(SwDoc* pDoc, const uno::Any& aValue)
+static SwPageDesc* lcl_GetPageDesc(SwDoc* pDoc, const cpo::uno::Any& aValue)
 {
     OUString uTmp;
     aValue >>= uTmp;
@@ -282,7 +283,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXFootnoteProperties::getPropertySet
     return aRef;
 }
 
-void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
+void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, const cpo::uno::Any& aValue)
 {
     SolarMutexGuard aGuard;
     if(!m_pDoc)
@@ -402,10 +403,10 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
 
 }
 
-uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
+cpo::uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if(!m_pDoc)
         throw uno::RuntimeException(u"Footnote's document is not set."_ustr);
 
@@ -562,7 +563,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXEndnoteProperties::getPropertySetI
     return aRef;
 }
 
-void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
+void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const cpo::uno::Any& aValue)
 {
     SolarMutexGuard aGuard;
     if(!m_pDoc)
@@ -636,10 +637,10 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
     m_pDoc->SetEndNoteInfo(aEndInfo);
 }
 
-uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
+cpo::uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if(m_pDoc)
     {
         const SfxItemPropertyMapEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
@@ -1083,7 +1084,7 @@ SwXNumberingRules::~SwXNumberingRules()
         delete m_pNumRule;
 }
 
-void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElement)
+void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const cpo::uno::Any& rElement)
 {
     SolarMutexGuard aGuard;
     if(nIndex < 0 || MAXLEVEL <= nIndex)
@@ -1156,7 +1157,7 @@ sal_Int32 SwXNumberingRules::getCount()
     return MAXLEVEL;
 }
 
-uno::Any SwXNumberingRules::getPropertyByIndex(sal_Int32 nIndex, const OUString& rPropName)
+cpo::uno::Any SwXNumberingRules::getPropertyByIndex(sal_Int32 nIndex, const OUString& rPropName)
 {
     SolarMutexGuard aGuard;
     if(nIndex < 0 || MAXLEVEL <= nIndex)
@@ -1172,10 +1173,10 @@ uno::Any SwXNumberingRules::getPropertyByIndex(sal_Int32 nIndex, const OUString&
     return GetNumberingRuleByIndex(*pRule, nIndex, rPropName);
 }
 
-uno::Any SwXNumberingRules::getByIndex(sal_Int32 nIndex)
+cpo::uno::Any SwXNumberingRules::getByIndex(sal_Int32 nIndex)
 {
     uno::Sequence<beans::PropertyValue> aRet = getRuleByIndex(nIndex);
-    uno::Any aVal;
+    cpo::uno::Any aVal;
     aVal <<= aRet;
     return aVal;
 }
@@ -1289,7 +1290,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
 
 }
 
-uno::Any SwXNumberingRules::GetNumberingRuleByIndex(
+cpo::uno::Any SwXNumberingRules::GetNumberingRuleByIndex(
                 const SwNumRule& rNumRule, sal_Int32 nIndex, const OUString& rPropName) const
 {
     SolarMutexGuard aGuard;
@@ -1504,7 +1505,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
             const SwFormatVertOrient* pOrient = rFormat.GetGraphicOrientation();
             if(pOrient)
             {
-                uno::Any any;
+                cpo::uno::Any any;
                 pOrient->QueryValue(any);
                 aPropertyValues.emplace_back(
                     UNO_NAME_VERT_ORIENT, -1, any, PropertyState_DIRECT_VALUE);
@@ -1519,7 +1520,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
     return ::comphelper::containerToSequence(aPropertyValues);
 }
 
-uno::Any SwXNumberingRules::GetPropertyForNumFormat(
+cpo::uno::Any SwXNumberingRules::GetPropertyForNumFormat(
         const SwNumFormat& rFormat, UIName const& rCharFormatName,
         ProgName const*const pHeadingStyleName, OUString const & referer, OUString const & rPropName)
 {
@@ -1530,44 +1531,44 @@ uno::Any SwXNumberingRules::GetPropertyForNumFormat(
     if (rPropName == u"Adjust"_ustr)
     {
         SvxAdjust eAdj = rFormat.GetNumAdjust();
-        return uno::Any(sal_Int16(aSvxToUnoAdjust[eAdj]));
+        return cpo::uno::Any(sal_Int16(aSvxToUnoAdjust[eAdj]));
     }
     if (rPropName == u"ParentNumbering"_ustr)
-        return uno::Any(sal_Int16(rFormat.GetIncludeUpperLevels()));
+        return cpo::uno::Any(sal_Int16(rFormat.GetIncludeUpperLevels()));
     if (rPropName == u"Prefix"_ustr)
-        return uno::Any(rFormat.GetPrefix());
+        return cpo::uno::Any(rFormat.GetPrefix());
     if (rPropName == u"Suffix"_ustr)
-        return uno::Any(rFormat.GetSuffix());
+        return cpo::uno::Any(rFormat.GetSuffix());
     if (rPropName == u"ListFormat"_ustr)
     {
         if (rFormat.HasListFormat())
-            return uno::Any(rFormat.GetListFormat());
+            return cpo::uno::Any(rFormat.GetListFormat());
         else
-            return uno::Any();
+            return cpo::uno::Any();
     }
     if (rPropName == UNO_NAME_LEVEL_IS_LEGAL)
-        return uno::Any(rFormat.GetIsLegal());
+        return cpo::uno::Any(rFormat.GetIsLegal());
     if (rPropName == u"CharStyleName"_ustr)
     {
         ProgName aUString;
         SwStyleNameMapper::FillProgName( rCharFormatName, aUString, SwGetPoolIdFromName::ChrFmt);
-        return uno::Any(aUString.toString());
+        return cpo::uno::Any(aUString.toString());
     }
     if (rPropName == u"StartWith"_ustr)
-        return uno::Any(sal_Int16(rFormat.GetStart()));
+        return cpo::uno::Any(sal_Int16(rFormat.GetStart()));
     if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
         //leftmargin
         if (rPropName == UNO_NAME_LEFT_MARGIN)
-            return uno::Any(sal_Int32(convertTwipToMm100(rFormat.GetAbsLSpace())));
+            return cpo::uno::Any(sal_Int32(convertTwipToMm100(rFormat.GetAbsLSpace())));
 
         //chartextoffset
         if (rPropName == UNO_NAME_SYMBOL_TEXT_DISTANCE)
-            return uno::Any(sal_Int32(convertTwipToMm100(rFormat.GetCharTextDistance())));
+            return cpo::uno::Any(sal_Int32(convertTwipToMm100(rFormat.GetCharTextDistance())));
 
         //firstlineoffset
         if (rPropName == UNO_NAME_FIRST_LINE_OFFSET)
-            return uno::Any(sal_Int32(convertTwipToMm100(rFormat.GetFirstLineOffset())));
+            return cpo::uno::Any(sal_Int32(convertTwipToMm100(rFormat.GetFirstLineOffset())));
     }
 
     // PositionAndSpaceMode
@@ -1578,7 +1579,7 @@ uno::Any SwXNumberingRules::GetPropertyForNumFormat(
         {
             nINT16 = PositionAndSpaceMode::LABEL_ALIGNMENT;
         }
-        return uno::Any(nINT16);
+        return cpo::uno::Any(nINT16);
     }
 
     if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
@@ -1599,25 +1600,25 @@ uno::Any SwXNumberingRules::GetPropertyForNumFormat(
             {
                 nINT16 = LabelFollow::NEWLINE;
             }
-            return uno::Any(nINT16);
+            return cpo::uno::Any(nINT16);
         }
 
         // ListtabStopPosition
         if (rPropName == UNO_NAME_LISTTAB_STOP_POSITION)
-            return uno::Any(sal_Int32(convertTwipToMm100(rFormat.GetListtabPos())));
+            return cpo::uno::Any(sal_Int32(convertTwipToMm100(rFormat.GetListtabPos())));
 
         // FirstLineIndent
         if (rPropName == UNO_NAME_FIRST_LINE_INDENT)
-            return uno::Any(sal_Int32(convertTwipToMm100(rFormat.GetFirstLineIndent())));
+            return cpo::uno::Any(sal_Int32(convertTwipToMm100(rFormat.GetFirstLineIndent())));
 
         // IndentAt
         if (rPropName == UNO_NAME_INDENT_AT)
-            return uno::Any(sal_Int32(convertTwipToMm100(rFormat.GetIndentAt())));
+            return cpo::uno::Any(sal_Int32(convertTwipToMm100(rFormat.GetIndentAt())));
     }
 
     //numberingtype
     if (rPropName == u"NumberingType"_ustr)
-        return uno::Any(sal_Int16(rFormat.GetNumberingType()));
+        return cpo::uno::Any(sal_Int16(rFormat.GetNumberingType()));
 
     if(!bChapterNum)
     {
@@ -1625,20 +1626,20 @@ uno::Any SwXNumberingRules::GetPropertyForNumFormat(
         {
             //BulletId
             if (rPropName == u"BulletId"_ustr)
-                return uno::Any(sal_Int16(rFormat.GetBulletChar()));
+                return cpo::uno::Any(sal_Int16(rFormat.GetBulletChar()));
 
             //BulletChar
             if (rPropName == u"BulletChar"_ustr)
             {
                 sal_UCS4 cBullet = rFormat.GetBulletChar();
-                return uno::Any(OUString(&cBullet, 1));
+                return cpo::uno::Any(OUString(&cBullet, 1));
             }
 
             //BulletFontName
             if (rPropName == u"BulletFontName"_ustr)
             {
                 const std::optional<vcl::Font>& pFont = rFormat.GetBulletFont();
-                return uno::Any(pFont ? pFont->GetFamilyName() : OUString());
+                return cpo::uno::Any(pFont ? pFont->GetFamilyName() : OUString());
             }
 
             //BulletFont
@@ -1648,7 +1649,7 @@ uno::Any SwXNumberingRules::GetPropertyForNumFormat(
                 {
                     awt::FontDescriptor aDesc;
                     SvxUnoFontDescriptor::ConvertFromFont( *pFont, aDesc );
-                    return uno::Any(aDesc);
+                    return cpo::uno::Any(aDesc);
                 }
             }
         }
@@ -1661,7 +1662,7 @@ uno::Any SwXNumberingRules::GetPropertyForNumFormat(
                 const Graphic* pGraphic = pBrush ? pBrush->GetGraphic(referer) : nullptr;
                 if (pGraphic)
                 {
-                    return uno::Any(uno::Reference<awt::XBitmap>(pGraphic->GetXGraphic(), uno::UNO_QUERY));
+                    return cpo::uno::Any(uno::Reference<awt::XBitmap>(pGraphic->GetXGraphic(), uno::UNO_QUERY));
                 }
             }
 
@@ -1670,7 +1671,7 @@ uno::Any SwXNumberingRules::GetPropertyForNumFormat(
                 Size aSize = rFormat.GetGraphicSize();
                 // #i101131#
                 // adjust conversion due to type mismatch between <Size> and <awt::Size>
-                return uno::Any(awt::Size(convertTwipToMm100(aSize.Width()), convertTwipToMm100(aSize.Height())));
+                return cpo::uno::Any(awt::Size(convertTwipToMm100(aSize.Width()), convertTwipToMm100(aSize.Height())));
             }
 
             if (rPropName == UNO_NAME_VERT_ORIENT)
@@ -1678,7 +1679,7 @@ uno::Any SwXNumberingRules::GetPropertyForNumFormat(
                 const SwFormatVertOrient* pOrient = rFormat.GetGraphicOrientation();
                 if(pOrient)
                 {
-                    uno::Any any;
+                    cpo::uno::Any any;
                     pOrient->QueryValue(any);
                     return any;
                 }
@@ -1688,7 +1689,7 @@ uno::Any SwXNumberingRules::GetPropertyForNumFormat(
     else
     {
         if (rPropName == UNO_NAME_HEADING_STYLE_NAME)
-            return uno::Any(pHeadingStyleName->toString());
+            return cpo::uno::Any(pHeadingStyleName->toString());
     }
 
     throw UnknownPropertyException(rPropName);

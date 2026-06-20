@@ -41,7 +41,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testSetSeriesToSecondaryAxisXLSX)
     Reference<beans::XPropertySet> xPropSet(xSeries, uno::UNO_QUERY_THROW);
     sal_Int32 AxisIndex = 1;
     // Attach the second series to the secondary axis. (The third series is already attached.)
-    xPropSet->setPropertyValue(u"AttachedAxisIndex"_ustr, uno::Any(AxisIndex));
+    xPropSet->setPropertyValue(u"AttachedAxisIndex"_ustr, cpo::uno::Any(AxisIndex));
 
     save(TestFilter::XLSX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
@@ -1499,7 +1499,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDataLabelPlacementPieChart)
     // test the placement of the manually positioned label
     Reference<beans::XPropertySet> xDataPointPropSet(
         xChartDoc->getDiagram()->getDataPointProperties(2, 0), uno::UNO_SET_THROW);
-    uno::Any aAny = xDataPointPropSet->getPropertyValue(u"LabelPlacement"_ustr);
+    cpo::uno::Any aAny = xDataPointPropSet->getPropertyValue(u"LabelPlacement"_ustr);
     CPPUNIT_ASSERT(aAny.hasValue());
     sal_Int32 nLabelPlacement = 0;
     CPPUNIT_ASSERT(aAny >>= nLabelPlacement);

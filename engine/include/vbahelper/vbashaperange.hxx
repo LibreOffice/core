@@ -84,14 +84,14 @@ public:
     virtual void SAL_CALL setRelativeHorizontalPosition( ::sal_Int32 _relativehorizontalposition ) override;
     virtual ::sal_Int32 SAL_CALL getRelativeVerticalPosition() override;
     virtual void SAL_CALL setRelativeVerticalPosition( ::sal_Int32 _relativeverticalposition ) override;
-    virtual css::uno::Any SAL_CALL TextFrame(  ) override;
-    virtual css::uno::Any SAL_CALL WrapFormat(  ) override;
+    virtual cpo::uno::Any SAL_CALL TextFrame(  ) override;
+    virtual cpo::uno::Any SAL_CALL WrapFormat(  ) override;
     virtual void SAL_CALL ZOrder( sal_Int32 ZOrderCmd ) override;
     //XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
     // ScVbaCollectionBaseImpl
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 };
 
 #endif // INCLUDED_VBAHELPER_VBASHAPERANGE_HXX

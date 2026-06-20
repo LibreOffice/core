@@ -37,7 +37,7 @@ public:
                   const rtl::Reference< SwXTextDocument >& xModel );
 
     // XCollection
-    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index ) override;
+    virtual cpo::uno::Any SAL_CALL Item( const cpo::uno::Any& Index ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

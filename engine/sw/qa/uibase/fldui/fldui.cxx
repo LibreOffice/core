@@ -44,7 +44,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBiblioPageNumberUpdate)
         comphelper::makePropertyValue(u"Title"_ustr, u"Title"_ustr),
         comphelper::makePropertyValue(u"URL"_ustr, u"http://www.example.com/test.pdf#page=1"_ustr),
     };
-    xField->setPropertyValue(u"Fields"_ustr, uno::Any(aFields));
+    xField->setPropertyValue(u"Fields"_ustr, cpo::uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -59,7 +59,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBiblioPageNumberUpdate)
         comphelper::makePropertyValue(u"Title"_ustr, u"Title"_ustr),
         comphelper::makePropertyValue(u"URL"_ustr, u"http://www.example.com/test.pdf#page=2"_ustr),
     };
-    xField->setPropertyValue(u"Fields"_ustr, uno::Any(aFields));
+    xField->setPropertyValue(u"Fields"_ustr, cpo::uno::Any(aFields));
     xContent.set(xField, uno::UNO_QUERY);
     xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
 
@@ -100,10 +100,10 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertRefmark)
 
     // When inserting a refmark with text:
     uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue(u"TypeName"_ustr, uno::Any(u"SetRef"_ustr)),
-        comphelper::makePropertyValue(u"Name"_ustr,
-                                      uno::Any(u"ZOTERO_ITEM CSL_CITATION {} RNDpyJknp173F"_ustr)),
-        comphelper::makePropertyValue(u"Content"_ustr, uno::Any(u"aaa<b>bbb</b>ccc"_ustr)),
+        comphelper::makePropertyValue(u"TypeName"_ustr, cpo::uno::Any(u"SetRef"_ustr)),
+        comphelper::makePropertyValue(
+            u"Name"_ustr, cpo::uno::Any(u"ZOTERO_ITEM CSL_CITATION {} RNDpyJknp173F"_ustr)),
+        comphelper::makePropertyValue(u"Content"_ustr, cpo::uno::Any(u"aaa<b>bbb</b>ccc"_ustr)),
     };
     dispatchCommand(mxComponent, u".uno:InsertField"_ustr, aArgs);
 

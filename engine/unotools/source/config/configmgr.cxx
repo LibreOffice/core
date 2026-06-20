@@ -23,7 +23,7 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -115,12 +115,12 @@ utl::ConfigManager & utl::ConfigManager::getConfigManager() {
 
 css::uno::Reference< css::container::XHierarchicalNameAccess >
 utl::ConfigManager::acquireTree(utl::ConfigItem const & item) {
-    css::uno::Sequence< css::uno::Any > args{ css::uno::Any(css::beans::NamedValue(
+    css::uno::Sequence< cpo::uno::Any > args{ cpo::uno::Any(css::beans::NamedValue(
         u"nodepath"_ustr,
-        css::uno::Any("/org.openoffice." + item.GetSubTreeName()))) };
+        cpo::uno::Any("/org.openoffice." + item.GetSubTreeName()))) };
     if (item.GetMode() & ConfigItemMode::AllLocales) {
         args.realloc(2);
-        args.getArray()[1] <<= css::beans::NamedValue(u"locale"_ustr, css::uno::Any(u"*"_ustr));
+        args.getArray()[1] <<= css::beans::NamedValue(u"locale"_ustr, cpo::uno::Any(u"*"_ustr));
     }
     return css::uno::Reference< css::container::XHierarchicalNameAccess >(
         getConfigurationProvider()->createInstanceWithArguments(
@@ -131,9 +131,9 @@ utl::ConfigManager::acquireTree(utl::ConfigItem const & item) {
 
 css::uno::Reference< css::container::XHierarchicalNameAccess >
 utl::ConfigManager::acquireTree(std::u16string_view rSubTreeName) {
-    css::uno::Sequence< css::uno::Any > args{ css::uno::Any(css::beans::NamedValue(
+    css::uno::Sequence< cpo::uno::Any > args{ cpo::uno::Any(css::beans::NamedValue(
         u"nodepath"_ustr,
-        css::uno::Any(OUString::Concat(u"/org.openoffice.") + rSubTreeName))) };
+        cpo::uno::Any(OUString::Concat(u"/org.openoffice.") + rSubTreeName))) };
     return css::uno::Reference< css::container::XHierarchicalNameAccess >(
         getConfigurationProvider()->createInstanceWithArguments(
             u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr,

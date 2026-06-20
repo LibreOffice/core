@@ -35,7 +35,7 @@ public:
     ScVbaCondition(  const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, css::uno::Reference< css::sheet::XSheetCondition >  _xSheetCondition );
 
     /// @throws css::script::BasicErrorException
-    static css::sheet::ConditionOperator retrieveAPIOperator( const css::uno::Any& _aOperator);
+    static css::sheet::ConditionOperator retrieveAPIOperator( const cpo::uno::Any& _aOperator);
 
     virtual OUString SAL_CALL Formula1( ) override;
     virtual OUString SAL_CALL Formula2( ) override;

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CPPUHELPER_EXC_HLP_HXX
 #define INCLUDED_CPPUHELPER_EXC_HLP_HXX
 
-#include "com/sun/star/uno/Any.hxx"
+#include "cpo/uno/Any.hxx"
 #include "cppuhelper/cppuhelperdllapi.h"
 
 namespace cppu
@@ -32,7 +32,7 @@ namespace cppu
     @param rExc
            exception to be thrown.
 */
-CPPUHELPER_DLLPUBLIC void SAL_CALL throwException(const css::uno::Any& rExc);
+CPPUHELPER_DLLPUBLIC void SAL_CALL throwException(const cpo::uno::Any& rExc);
 
 /** Use this function to get the dynamic type of a caught C++-UNO exception;
     completes the above function throwing exceptions generically.
@@ -49,7 +49,7 @@ CPPUHELPER_DLLPUBLIC void SAL_CALL throwException(const css::uno::Any& rExc);
     }
     catch (css::uno::Exception &)
     {
-        css::uno::Any caught( ::cppu::getCaughtException() );
+        cpo::uno::Any caught( ::cppu::getCaughtException() );
         ...
     }
     @endcode
@@ -83,7 +83,7 @@ CPPUHELPER_DLLPUBLIC void SAL_CALL throwException(const css::uno::Any& rExc);
               development, because the whole OOo code base is compiled using the
               same C++ compiler (and linking against one runtime library).
 */
-CPPUHELPER_DLLPUBLIC css::uno::Any SAL_CALL getCaughtException();
+CPPUHELPER_DLLPUBLIC cpo::uno::Any SAL_CALL getCaughtException();
 }
 
 #endif

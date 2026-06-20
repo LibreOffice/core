@@ -509,7 +509,7 @@ include/comphelper/multiinterfacecontainer3.hxx:174
 include/comphelper/multiinterfacecontainer4.hxx:174
     void comphelper::OMultiTypeInterfaceContainerHelperVar4::clear(std::unique_lock<std::mutex> &)
 include/comphelper/namedvaluecollection.hxx:79
-    void comphelper::NamedValueCollection::assign(const com::sun::star::uno::Sequence<com::sun::star::uno::Any> &)
+    void comphelper::NamedValueCollection::assign(const com::sun::star::uno::Sequence<cpo::uno::Any> &)
 include/comphelper/profilezone.hxx:56
      comphelper::ProfileZone::ProfileZone(const char *,const std::map<rtl::OUString, rtl::OUString> &)
 include/comphelper/propagg.hxx:59
@@ -541,7 +541,7 @@ include/comphelper/sequence.hxx:206
 include/comphelper/sequence.hxx:206
     Sequence<type-parameter-?-?> comphelper::containerToSequence(const type-parameter-?-? (&)[S])
 include/comphelper/sequenceashashmap.hxx:403
-    __gnu_debug::_Safe_iterator<struct std::__detail::_Node_const_iterator<struct std::pair<const struct comphelper::OUStringAndHashCode, com::sun::star::uno::Any>, false, true>, std::unordered_map<struct comphelper::OUStringAndHashCode, com::sun::star::uno::Any, struct comphelper::OUStringAndHashCodeHash, struct comphelper::OUStringAndHashCodeEqual> > comphelper::SequenceAsHashMap::find(const struct comphelper::OUStringAndHashCode &) const
+    __gnu_debug::_Safe_iterator<struct std::__detail::_Node_const_iterator<struct std::pair<const struct comphelper::OUStringAndHashCode, cpo::uno::Any>, false, true>, std::unordered_map<struct comphelper::OUStringAndHashCode, cpo::uno::Any, struct comphelper::OUStringAndHashCodeHash, struct comphelper::OUStringAndHashCodeEqual> > comphelper::SequenceAsHashMap::find(const struct comphelper::OUStringAndHashCode &) const
 include/comphelper/singletonref.hxx:133
     type-parameter-?-? & comphelper::SingletonRef::operator*() const
 include/comphelper/stl_types.hxx:78
@@ -555,7 +555,7 @@ include/comphelper/traceevent.hxx:210
 include/comphelper/unique_disposing_ptr.hxx:47
     type-parameter-?-? & comphelper::unique_disposing_ptr::operator*() const
 include/comphelper/unwrapargs.hxx:51
-    void comphelper::detail::unwrapArgs(const com::sun::star::uno::Sequence<com::sun::star::uno::Any> &,int,const com::sun::star::uno::Reference<com::sun::star::uno::XInterface> &)
+    void comphelper::detail::unwrapArgs(const com::sun::star::uno::Sequence<cpo::uno::Any> &,int,const com::sun::star::uno::Reference<com::sun::star::uno::XInterface> &)
 include/connectivity/dbcharset.hxx:138
     const dbtools::OCharsetMap::CharsetIterator & dbtools::OCharsetMap::CharsetIterator::operator--()
 include/connectivity/FValue.hxx:346
@@ -637,7 +637,7 @@ include/framework/addonsoptions.hxx:220
 include/i18nlangtag/languagetag.hxx:270
     enum LanguageTag::ScriptType LanguageTag::getScriptType() const
 include/o3tl/any.hxx:155
-    std::optional<const struct o3tl::detail::Void> o3tl::tryAccess(const com::sun::star::uno::Any &)
+    std::optional<const struct o3tl::detail::Void> o3tl::tryAccess(const cpo::uno::Any &)
 include/o3tl/enumarray.hxx:66
      o3tl::enumarray::enumarray(const Color &,type-parameter-?-? &&...)
 include/o3tl/enumarray.hxx:66
@@ -735,7 +735,7 @@ include/o3tl/vector_pool.hxx:84
 include/oox/drawingml/clrscheme.hxx:80
     const rtl::OUString & oox::drawingml::ClrScheme::GetName() const
 include/oox/drawingml/clrscheme.hxx:82
-    void oox::drawingml::ClrScheme::ToAny(com::sun::star::uno::Any &) const
+    void oox::drawingml::ClrScheme::ToAny(cpo::uno::Any &) const
 include/oox/drawingml/clrscheme.hxx:83
     void oox::drawingml::ClrScheme::fill(model::ColorSet &) const
 include/oox/drawingml/color.hxx:129
@@ -745,7 +745,7 @@ include/oox/drawingml/ThemeFilterBase.hxx:35
 include/oox/export/DMLPresetShapeExport.hxx:100
     _Bool oox::drawingml::DMLPresetShapeExporter::HasHandleValue() const
 include/oox/export/DMLPresetShapeExport.hxx:129
-    com::sun::star::uno::Any oox::drawingml::DMLPresetShapeExporter::FindHandleValue(com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue>,std::basic_string_view<char16_t>)
+    cpo::uno::Any oox::drawingml::DMLPresetShapeExporter::FindHandleValue(com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue>,std::basic_string_view<char16_t>)
 include/oox/export/drawingml.hxx:340
     _Bool oox::drawingml::DrawingML::EqualGradients(const struct com::sun::star::awt::Gradient2 &,const struct com::sun::star::awt::Gradient2 &)
 include/oox/export/drawingml.hxx:377
@@ -2007,7 +2007,7 @@ sw/inc/frameformats.hxx:119
 sw/inc/frameformats.hxx:152
     const type-parameter-?-? & sw::FrameFormats::back() const
 sw/inc/IDocumentLinksAdministration.hxx:53
-    _Bool IDocumentLinksAdministration::GetData(const rtl::OUString &,const rtl::OUString &,com::sun::star::uno::Any &) const
+    _Bool IDocumentLinksAdministration::GetData(const rtl::OUString &,const rtl::OUString &,cpo::uno::Any &) const
 sw/inc/IDocumentLinksAdministration.hxx:55
     void IDocumentLinksAdministration::SetData(const rtl::OUString &)
 sw/inc/modcfg.hxx:338

@@ -194,8 +194,8 @@ public:
 
     SwPageNumSubType    GetSubType() const;
     void                SetSubType(SwPageNumSubType n) { m_nSubType = n; }
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
 
     const OUString& GetUserString() const            { return m_sUserStr; }
     void SetUserString( const OUString& rS )  { m_sUserStr = rS; }
@@ -228,8 +228,8 @@ public:
 
     void         SetExpansion(const OUString& rStr) { m_aContent = rStr; }
 
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 /// Provides the expansion of of an SwFileNameField to a string.
@@ -263,8 +263,8 @@ public:
 
     void         SetExpansion(const OUString& rStr) { m_aContent = rStr; }
 
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 class SAL_DLLPUBLIC_RTTI SwTemplNameFieldType final : public SwFieldType
@@ -287,8 +287,8 @@ public:
     void SetFormat(SwFileNameFormat n) { m_nFormat = n; }
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 // Document statistics
@@ -326,8 +326,8 @@ public:
 
     SwDocStatSubType    GetSubType() const;
     void                SetSubType(SwDocStatSubType nSub);
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 class SAL_DLLPUBLIC_RTTI SwHiddenTextFieldType final : public SwFieldType
@@ -392,8 +392,8 @@ public:
     SwFieldTypesEnum    GetSubType() const;
     void SetSubType(SwFieldTypesEnum n) { m_nSubType = n; }
 
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
 
     static void         ParseIfFieldDefinition(std::u16string_view aFieldDefinition,
                                                OUString& rCondition,
@@ -428,8 +428,8 @@ public:
     /// Query, set condition.
     virtual OUString    GetPar1() const override;
     virtual void        SetPar1(const OUString& rStr) override;
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 class SAL_DLLPUBLIC_RTTI SwMacroFieldType final : public SwFieldType
@@ -470,8 +470,8 @@ public:
     /// Macrotext
     virtual OUString  GetPar2() const override;
     virtual void    SetPar2(const OUString& rStr) override;
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
 
     static void CreateMacroString( OUString& rMacro,
                                    std::u16string_view rMacroName,
@@ -577,8 +577,8 @@ public:
     sal_Int32 GetNumberOfParagraphs() const;
     void ChangeStyleSheetName(std::u16string_view rOldName, const SfxStyleSheetBase* pStyleSheet);
 
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
     virtual OUString    GetDescription() const override;
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
@@ -614,8 +614,8 @@ public:
     const OUString&         GetName() const { return m_aName; }
     void                    SetName( const OUString& rName ) { m_aName = rName; }
     void             SetExpansion(const OUString& rStr) { m_aContent = rStr; }
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 // Extended User settings.
@@ -648,8 +648,8 @@ public:
 
     void         SetExpansion(const OUString& rStr) { m_aContent = rStr; }
 
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 // Relative page numbers - field.
@@ -685,8 +685,8 @@ public:
 
     short GetOffset() const         { return m_nOffset; }
     void SetOffset( short nOff )    { m_nOffset = nOff; }
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 // Relative page numbers - query field.
@@ -726,8 +726,8 @@ public:
     void SetText(const OUString& rText, SwRootFrame const* pLayout);
 
     void ChangeExpansion(const SwFrame& rFrame, const SwTextField* pField);
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 // Field to jump to and edit.
@@ -770,8 +770,8 @@ public:
 
     SwCharFormat* GetCharFormat() const
         { return static_cast<SwJumpEditFieldType*>(GetTyp())->GetCharFormat(); }
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 class SwScriptFieldType final : public SwFieldType
@@ -809,8 +809,8 @@ public:
 
     bool                    IsCodeURL() const { return m_bCodeURL; }
     void                    SetCodeURL( bool bURL ) { m_bCodeURL = bURL; }
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 // Combined Character Fieldtype
@@ -839,8 +839,8 @@ public:
     virtual OUString    GetPar1() const override;
     virtual void        SetPar1(const OUString& rStr) override;
 
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

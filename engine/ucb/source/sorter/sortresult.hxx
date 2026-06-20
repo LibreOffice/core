@@ -269,7 +269,7 @@ public:
                 css::io::XInputStream > SAL_CALL
     getCharacterStream( sal_Int32 columnIndex ) override;
 
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
     getObject( sal_Int32 columnIndex,
                const css::uno::Reference<
                    css::container::XNameAccess >& typeMap ) override;
@@ -302,9 +302,9 @@ public:
 
     virtual void SAL_CALL
     setPropertyValue( const OUString& PropertyName,
-                      const css::uno::Any& Value ) override;
+                      const cpo::uno::Any& Value ) override;
 
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
     getPropertyValue( const OUString& PropertyName ) override;
 
     virtual void SAL_CALL

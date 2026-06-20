@@ -92,7 +92,7 @@ namespace dbp
             return std::make_unique<TYPE>(Application::GetFrameWeld(rParent), m_xObjectModel, m_aContext);
         }
 
-        virtual void implInitialize(const css::uno::Any& _rValue) override
+        virtual void implInitialize(const cpo::uno::Any& _rValue) override
         {
             css::beans::PropertyValue aArgument;
             if (_rValue >>= aArgument)

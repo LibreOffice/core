@@ -104,7 +104,7 @@ void CommandDispatch::fireAllStatusEvents(
 
 void CommandDispatch::fireStatusEventForURL(
     const OUString & rURL,
-    const uno::Any & rState,
+    const cpo::uno::Any & rState,
     bool bEnabled,
     const Reference< frame::XStatusListener > & xSingleListener /* = 0 */)
 {

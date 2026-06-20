@@ -32,6 +32,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 
@@ -117,7 +118,7 @@ cclass_Unicode::toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
     }
     catch (const Exception& e)
     {
-        uno::Any a(cppu::getCaughtException());
+        cpo::uno::Any a(cppu::getCaughtException());
         throw lang::WrappedTargetRuntimeException(
             "wrapped " + a.getValueTypeName() + ": " + e.Message,
             uno::Reference<uno::XInterface>(), a);
@@ -300,7 +301,7 @@ Sequence< OUString > SAL_CALL cclass_Unicode::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_i18n_CharacterClassification_Unicode_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new i18npool::cclass_Unicode(context));
 }

@@ -41,6 +41,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
@@ -285,7 +286,7 @@ void SAL_CALL ToolbarModeMenuController::setPopupMenu( const Reference< css::awt
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_ToolbarModeMenuController_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::ToolbarModeMenuController(context));
 }

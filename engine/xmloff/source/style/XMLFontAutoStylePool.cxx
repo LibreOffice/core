@@ -47,6 +47,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::xmloff::token;
 
 class XMLFontAutoStylePoolEntry_Impl
@@ -655,7 +656,7 @@ OUString SvXMLExport::embedFontFile(OUString const& fileUrl, OUString const& rFa
         outputStream.set( storage->openStreamElement( name, ::embed::ElementModes::WRITE ), UNO_QUERY_THROW );
         uno::Reference < beans::XPropertySet > propertySet( outputStream, uno::UNO_QUERY );
         assert( propertySet.is());
-        propertySet->setPropertyValue( u"MediaType"_ustr, uno::Any( u"application/x-font-ttf"_ustr)); // TODO
+        propertySet->setPropertyValue( u"MediaType"_ustr, cpo::uno::Any( u"application/x-font-ttf"_ustr)); // TODO
         for(;;)
         {
             sal_Int8 buffer[ 4096 ];

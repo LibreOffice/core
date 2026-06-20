@@ -41,7 +41,7 @@
 #include <Struct2.hpp>
 #include <Struct2a.hpp>
 #include <Struct2b.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
@@ -79,18 +79,18 @@ private:
 
 class Impl1: public Interface1, private Base {
 public:
-    virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const & type) override
+    virtual cpo::uno::Any SAL_CALL queryInterface(css::uno::Type const & type) override
     {
         if (type == cppu::UnoType<css::uno::XInterface>::get()) {
             css::uno::Reference< css::uno::XInterface > ref(
                 static_cast< css::uno::XInterface * >(this));
-            return css::uno::Any(&ref, type);
+            return cpo::uno::Any(&ref, type);
         }
         if (type == cppu::UnoType<Interface1>::get()) {
             css::uno::Reference< Interface1 > ref(this);
-            return css::uno::Any(&ref, type);
+            return cpo::uno::Any(&ref, type);
         }
-        return css::uno::Any();
+        return cpo::uno::Any();
     }
 
     virtual void SAL_CALL acquire() noexcept override {
@@ -104,27 +104,27 @@ public:
 
 class Impl2: public Interface2a, public Interface3, private Base {
 public:
-    virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const & type) override
+    virtual cpo::uno::Any SAL_CALL queryInterface(css::uno::Type const & type) override
     {
         if (type == cppu::UnoType<css::uno::XInterface>::get()) {
             css::uno::Reference< css::uno::XInterface > ref(
                 static_cast< css::uno::XInterface * >(
                     static_cast< Interface2a * >(this)));
-            return css::uno::Any(&ref, type);
+            return cpo::uno::Any(&ref, type);
         }
         if (type == cppu::UnoType<Interface2>::get()) {
             css::uno::Reference< Interface2 > ref(this);
-            return css::uno::Any(&ref, type);
+            return cpo::uno::Any(&ref, type);
         }
         if (type == cppu::UnoType<Interface2a>::get()) {
             css::uno::Reference< Interface2a > ref(this);
-            return css::uno::Any(&ref, type);
+            return cpo::uno::Any(&ref, type);
         }
         if (type == cppu::UnoType<Interface3>::get()) {
             css::uno::Reference< Interface3 > ref(this);
-            return css::uno::Any(&ref, type);
+            return cpo::uno::Any(&ref, type);
         }
-        return css::uno::Any();
+        return cpo::uno::Any();
     }
 
     virtual void SAL_CALL acquire() noexcept override {
@@ -138,27 +138,27 @@ public:
 
 class Impl2b: public Interface2b, private Base {
 public:
-    virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const & type) override
+    virtual cpo::uno::Any SAL_CALL queryInterface(css::uno::Type const & type) override
     {
         if (type == cppu::UnoType<css::uno::XInterface>::get()) {
             css::uno::Reference< css::uno::XInterface > ref(
                 static_cast< css::uno::XInterface * >(
                     static_cast< Interface2a * >(this)));
-            return css::uno::Any(&ref, type);
+            return cpo::uno::Any(&ref, type);
         }
         if (type == cppu::UnoType<Interface2>::get()) {
             css::uno::Reference< Interface2 > ref(this);
-            return css::uno::Any(&ref, type);
+            return cpo::uno::Any(&ref, type);
         }
         if (type == cppu::UnoType<Interface2a>::get()) {
             css::uno::Reference< Interface2a > ref(this);
-            return css::uno::Any(&ref, type);
+            return cpo::uno::Any(&ref, type);
         }
         if (type == cppu::UnoType<Interface2b>::get()) {
             css::uno::Reference< Interface2b > ref(this);
-            return css::uno::Any(&ref, type);
+            return cpo::uno::Any(&ref, type);
         }
-        return css::uno::Any();
+        return cpo::uno::Any();
     }
 
     virtual void SAL_CALL acquire() noexcept override {
@@ -220,7 +220,7 @@ public:
 };
 
 void Test::testVoid() {
-    css::uno::Any a;
+    cpo::uno::Any a;
     CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<void>::get()));
     {
         bool b = true;
@@ -323,7 +323,7 @@ void Test::testVoid() {
 }
 
 void Test::testBoolean() {
-    css::uno::Any a(false);
+    cpo::uno::Any a(false);
     CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<bool>::get()));
     {
         bool b = true;
@@ -428,7 +428,7 @@ void Test::testBoolean() {
 }
 
 void Test::testByte() {
-    css::uno::Any a(static_cast< sal_Int8 >(1));
+    cpo::uno::Any a(static_cast< sal_Int8 >(1));
     CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<sal_Int8>::get()));
     {
         bool b = true;
@@ -533,7 +533,7 @@ void Test::testByte() {
 }
 
 void Test::testShort() {
-    css::uno::Any a(static_cast< sal_Int16 >(1));
+    cpo::uno::Any a(static_cast< sal_Int16 >(1));
     CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<sal_Int16>::get()));
     {
         bool b = true;
@@ -639,7 +639,7 @@ void Test::testShort() {
 
 void Test::testUnsignedShort() {
     sal_uInt16 n = 1;
-    css::uno::Any a(&n, cppu::UnoType<cppu::UnoUnsignedShortType>::get());
+    cpo::uno::Any a(&n, cppu::UnoType<cppu::UnoUnsignedShortType>::get());
     CPPUNIT_ASSERT(
         bool(a.getValueType() == cppu::UnoType<cppu::UnoUnsignedShortType>::get()));
     {
@@ -745,7 +745,7 @@ void Test::testUnsignedShort() {
 }
 
 void Test::testLong() {
-    css::uno::Any a(static_cast< sal_Int32 >(1));
+    cpo::uno::Any a(static_cast< sal_Int32 >(1));
     CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<sal_Int32>::get()));
     {
         bool b = true;
@@ -850,7 +850,7 @@ void Test::testLong() {
 }
 
 void Test::testUnsignedLong() {
-    css::uno::Any a(static_cast< sal_uInt32 >(1));
+    cpo::uno::Any a(static_cast< sal_uInt32 >(1));
     CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<sal_uInt32>::get()));
     {
         bool b = true;
@@ -955,7 +955,7 @@ void Test::testUnsignedLong() {
 }
 
 void Test::testHyper() {
-    css::uno::Any a(static_cast< sal_Int64 >(1));
+    cpo::uno::Any a(static_cast< sal_Int64 >(1));
     CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<sal_Int64>::get()));
     {
         bool b = true;
@@ -1060,7 +1060,7 @@ void Test::testHyper() {
 }
 
 void Test::testUnsignedHyper() {
-    css::uno::Any a(static_cast< sal_uInt64 >(1));
+    cpo::uno::Any a(static_cast< sal_uInt64 >(1));
     CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<sal_uInt64>::get()));
     {
         bool b = true;
@@ -1165,7 +1165,7 @@ void Test::testUnsignedHyper() {
 }
 
 void Test::testFloat() {
-    css::uno::Any a(1.f);
+    cpo::uno::Any a(1.f);
     CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<float>::get()));
     {
         bool b = true;
@@ -1270,7 +1270,7 @@ void Test::testFloat() {
 }
 
 void Test::testDouble() {
-    css::uno::Any a(1.);
+    cpo::uno::Any a(1.);
     CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<double>::get()));
     {
         bool b = true;
@@ -1376,7 +1376,7 @@ void Test::testDouble() {
 
 void Test::testChar() {
     sal_Unicode c = '1';
-    css::uno::Any a(&c, cppu::UnoType<cppu::UnoCharType>::get());
+    cpo::uno::Any a(&c, cppu::UnoType<cppu::UnoCharType>::get());
     CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<cppu::UnoCharType>::get()));
     {
         bool b = true;
@@ -1481,7 +1481,7 @@ void Test::testChar() {
 }
 
 void Test::testString() {
-    css::uno::Any a(u"1"_ustr);
+    cpo::uno::Any a(u"1"_ustr);
     CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<OUString>::get()));
     {
         bool b = true;
@@ -1586,7 +1586,7 @@ void Test::testString() {
 }
 
 void Test::testType() {
-    css::uno::Any a(cppu::UnoType<sal_Int32>::get());
+    cpo::uno::Any a(cppu::UnoType<sal_Int32>::get());
     CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<css::uno::Type>::get()));
     {
         bool b = true;
@@ -1690,7 +1690,7 @@ void Test::testType() {
 
 void Test::testSequence() {
     sal_Int32 n = 1;
-    css::uno::Any a(css::uno::Sequence< sal_Int32 >(&n, 1));
+    cpo::uno::Any a(css::uno::Sequence< sal_Int32 >(&n, 1));
     CPPUNIT_ASSERT(
         bool(a.getValueType()
         == cppu::UnoType<css::uno::Sequence<sal_Int32>>::get()));
@@ -1816,7 +1816,7 @@ void Test::testSequence() {
 }
 
 void Test::testEnum() {
-    css::uno::Any a(Enum2_M1);
+    cpo::uno::Any a(Enum2_M1);
     CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<Enum2>::get()));
     {
         bool b = true;
@@ -1926,7 +1926,7 @@ void Test::testEnum() {
 }
 
 void Test::testStruct() {
-    css::uno::Any a(Struct2a(1, 3));
+    cpo::uno::Any a(Struct2a(1, 3));
     CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<Struct2a>::get()));
     {
         bool b = true;
@@ -2050,16 +2050,16 @@ void Test::testStruct() {
 }
 
 void Test::testPoly() {
-    css::uno::Any a;
+    cpo::uno::Any a;
     a <<= Poly< css::uno::Sequence< ::sal_Unicode > >();
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "type name", u"Poly<[]char>"_ustr, a.getValueTypeName() );
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "constructor",
-        css::uno::Any(Poly< css::uno::Sequence< ::sal_Unicode > >()), a);
+        cpo::uno::Any(Poly< css::uno::Sequence< ::sal_Unicode > >()), a);
 }
 
 void Test::testException() {
-    css::uno::Any a(
+    cpo::uno::Any a(
         Exception2a(
             OUString(), css::uno::Reference< css::uno::XInterface >(), 1,
             3));
@@ -2192,7 +2192,7 @@ void Test::testException() {
 
 void Test::testInterface() {
     css::uno::Reference< Interface2a > i2(new Impl2);
-    css::uno::Any a(i2);
+    cpo::uno::Any a(i2);
     CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<Interface2a>::get()));
     {
         bool b = true;
@@ -2318,7 +2318,7 @@ void Test::testInterface() {
 }
 
 void Test::testNull() {
-    css::uno::Any a { css::uno::Reference< Interface2a >() };
+    cpo::uno::Any a { css::uno::Reference< Interface2a >() };
     CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<Interface2a>::get()));
     {
         bool b = true;

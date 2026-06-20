@@ -457,12 +457,12 @@ sal_Int32 SwVbaContentControl::getDateDisplayLocale()
     return word::WdLanguageID::wdEnglishUS;
 }
 
-uno::Any SwVbaContentControl::getDropdownListEntries()
+cpo::uno::Any SwVbaContentControl::getDropdownListEntries()
 {
     if (!m_pCC->GetDropDown() && !m_pCC->GetComboBox())
-        return uno::Any();
+        return cpo::uno::Any();
 
-    return uno::Any(
+    return cpo::uno::Any(
         uno::Reference<XCollection>(new SwVbaContentControlListEntries(this, mxContext, m_pCC)));
 }
 
@@ -671,7 +671,7 @@ void SwVbaContentControl::Cut()
     m_pCC->GetTextAttr()->Delete(/*bSaveContents=*/getLockContents());
 }
 
-void SwVbaContentControl::Delete(const uno::Any& DeleteContents)
+void SwVbaContentControl::Delete(const cpo::uno::Any& DeleteContents)
 {
     if (getLockContentControl() || !m_pCC->GetTextAttr())
         return;
@@ -682,7 +682,7 @@ void SwVbaContentControl::Delete(const uno::Any& DeleteContents)
     m_pCC->GetTextAttr()->Delete(/*bSaveContents=*/!bDeleteContents || getLockContents());
 }
 
-void SwVbaContentControl::SetCheckedSymbol(sal_Int32 Character, const uno::Any& Font)
+void SwVbaContentControl::SetCheckedSymbol(sal_Int32 Character, const cpo::uno::Any& Font)
 {
     if (!m_pCC->GetTextAttr())
         return;
@@ -697,7 +697,7 @@ void SwVbaContentControl::SetCheckedSymbol(sal_Int32 Character, const uno::Any& 
         m_pCC->GetTextAttr()->Invalidate();
 }
 
-void SwVbaContentControl::SetUnCheckedSymbol(sal_Int32 Character, const uno::Any& Font)
+void SwVbaContentControl::SetUnCheckedSymbol(sal_Int32 Character, const cpo::uno::Any& Font)
 {
     if (!m_pCC->GetTextAttr())
         return;
@@ -712,8 +712,8 @@ void SwVbaContentControl::SetUnCheckedSymbol(sal_Int32 Character, const uno::Any
         m_pCC->GetTextAttr()->Invalidate();
 }
 
-void SwVbaContentControl::SetPlaceholderText(const uno::Any& BuildingBlock, const uno::Any& Range,
-                                             const uno::Any& Text)
+void SwVbaContentControl::SetPlaceholderText(const cpo::uno::Any& BuildingBlock,
+                                             const cpo::uno::Any& Range, const cpo::uno::Any& Text)
 {
     SAL_INFO("sw.vba", "SwVbaContentControl::SetPlaceholderText stub");
     if (BuildingBlock.hasValue())

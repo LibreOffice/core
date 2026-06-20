@@ -20,7 +20,7 @@
 #pragma once
 
 #include <o3tl/enumarray.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 namespace framework{
 
@@ -116,10 +116,10 @@ class PropHelper
      *  @return <True/> if value of this property will be changed; <False/> otherwise.
      */
 
-    static bool willPropertyBeChanged( const css::uno::Any& aCurrentValue ,
-                                           const css::uno::Any& aNewValue     ,
-                                                 css::uno::Any& aOldValue     ,
-                                                 css::uno::Any& aChangedValue )
+    static bool willPropertyBeChanged( const cpo::uno::Any& aCurrentValue ,
+                                           const cpo::uno::Any& aNewValue     ,
+                                                 cpo::uno::Any& aOldValue     ,
+                                                 cpo::uno::Any& aChangedValue )
     {
         bool bChanged = false;
 

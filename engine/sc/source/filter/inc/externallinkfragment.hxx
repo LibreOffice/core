@@ -58,7 +58,7 @@ private:
     void                importExtCellString( SequenceInputStream& rStrm );
 
     /** Sets the passed cell value to the current position in the sheet cache. */
-    void                setCellValue( const css::uno::Any& rValue );
+    void                setCellValue( const cpo::uno::Any& rValue );
 
 private:
     css::uno::Reference< css::sheet::XExternalSheetCache >

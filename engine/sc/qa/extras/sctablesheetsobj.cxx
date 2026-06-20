@@ -23,13 +23,14 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <cppu/unotype.hxx>
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace sc_apitest
 {
@@ -131,10 +132,10 @@ uno::Reference<uno::XInterface> ScTableSheetsObj::init()
 
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY_THROW);
     XNameContainer::setElement(
-        uno::Any(xMSF->createInstance(u"com.sun.star.sheet.Spreadsheet"_ustr)));
+        cpo::uno::Any(xMSF->createInstance(u"com.sun.star.sheet.Spreadsheet"_ustr)));
     // XNameReplace
     XNameReplace::setElement(
-        uno::Any(xMSF->createInstance(u"com.sun.star.sheet.Spreadsheet"_ustr)));
+        cpo::uno::Any(xMSF->createInstance(u"com.sun.star.sheet.Spreadsheet"_ustr)));
 
     return xReturn;
 }

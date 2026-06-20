@@ -23,7 +23,7 @@
 #include <com/sun/star/container/XStringKeyMap.hpp>
 
 #include <com/sun/star/awt/FontUnderline.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 #include <vector>
 #include <memory>
@@ -92,7 +92,7 @@ private:
         {
             if (xPropertyBag.is())
             {
-                css::uno::Any aLineColor = xPropertyBag->getValue(u"LineColor"_ustr);
+                cpo::uno::Any aLineColor = xPropertyBag->getValue(u"LineColor"_ustr);
                 ::Color lineColor;
 
                 if (aLineColor >>= lineColor)
@@ -117,7 +117,7 @@ private:
         {
             if (xPropertyBag.is())
             {
-                css::uno::Any aLineType = xPropertyBag->getValue(u"LineType"_ustr);
+                cpo::uno::Any aLineType = xPropertyBag->getValue(u"LineType"_ustr);
                 ::sal_Int16 lineType = 0;
 
                 if (!(aLineType >>= lineType))
@@ -158,7 +158,7 @@ private:
         {
             if (xPropertyBag.is())
             {
-                css::uno::Any aLineColor = xPropertyBag->getValue(u"LineColor"_ustr);
+                cpo::uno::Any aLineColor = xPropertyBag->getValue(u"LineColor"_ustr);
                 ::Color lineColor;
 
                 if (aLineColor >>= lineColor)
@@ -183,7 +183,7 @@ private:
         {
             if (xPropertyBag.is())
             {
-                css::uno::Any aLineType = xPropertyBag->getValue(u"LineType"_ustr);
+                cpo::uno::Any aLineType = xPropertyBag->getValue(u"LineType"_ustr);
                 ::sal_Int16 lineType = 0;
 
                 if (!(aLineType >>= lineType))

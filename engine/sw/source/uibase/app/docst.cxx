@@ -802,7 +802,7 @@ void syncEndnoteOrientation(const uno::Reference< style::XStyleFamiliesSupplier 
     auto const nWidth = xEndnotePagePropSet->getPropertyValue(u"Width"_ustr);
     auto const nHeight = xEndnotePagePropSet->getPropertyValue(u"Height"_ustr);
 
-    xEndnotePagePropSet->setPropertyValue(u"IsLandscape"_ustr, css::uno::toAny(bIsDefLandScape));
+    xEndnotePagePropSet->setPropertyValue(u"IsLandscape"_ustr, cpo::uno::toAny(bIsDefLandScape));
     xEndnotePagePropSet->setPropertyValue(u"Width"_ustr, nHeight);
     xEndnotePagePropSet->setPropertyValue(u"Height"_ustr, nWidth);
 }
@@ -969,7 +969,7 @@ void SwDocShell::Edit(
         rSet.Put(SvxBitmapListItem(pDrawModel->GetBitmapList(), SID_BITMAP_LIST));
         rSet.Put(SvxPatternListItem(pDrawModel->GetPatternList(), SID_PATTERN_LIST));
 
-        std::map<OUString, css::uno::Any> aGrabBagMap;
+        std::map<OUString, cpo::uno::Any> aGrabBagMap;
         if (SfxGrabBagItem const* pItem = rSet.GetItemIfSet(SID_ATTR_CHAR_GRABBAG))
             aGrabBagMap = pItem->GetGrabBag();
         bool bGutterAtTop

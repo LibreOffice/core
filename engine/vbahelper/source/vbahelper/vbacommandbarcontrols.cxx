@@ -42,12 +42,12 @@ public:
             return true;
         return false;
     }
-    virtual uno::Any SAL_CALL nextElement() override
+    virtual cpo::uno::Any SAL_CALL nextElement() override
     {
         if( !hasMoreElements() )
             throw container::NoSuchElementException();
 
-        return m_pCommandBarControls->createCollectionObject( uno::Any( m_nCurrentPosition++ ) );
+        return m_pCommandBarControls->createCollectionObject( cpo::uno::Any( m_nCurrentPosition++ ) );
     }
 };
 
@@ -62,7 +62,7 @@ uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateMenuItemDat
                                                                                    const OUString& sHelpURL,
                                                                                    const OUString& sLabel,
                                                                                    sal_uInt16 nType,
-                                                                                   const uno::Any& aSubMenu,
+                                                                                   const cpo::uno::Any& aSubMenu,
                                                                                    bool isVisible,
                                                                                    bool isEnabled )
 {
@@ -83,7 +83,7 @@ uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateToolbarItem
                                                                                       const OUString& sHelpURL,
                                                                                       const OUString& sLabel,
                                                                                       sal_uInt16 nType,
-                                                                                      const uno::Any& aSubMenu,
+                                                                                      const cpo::uno::Any& aSubMenu,
                                                                                       bool isVisible,
                                                                                       sal_Int32 nStyle )
 {
@@ -113,8 +113,8 @@ ScVbaCommandBarControls::createEnumeration()
     return uno::Reference< container::XEnumeration >( new CommandBarControlEnumeration( this ) );
 }
 
-uno::Any
-ScVbaCommandBarControls::createCollectionObject( const uno::Any& aSource )
+cpo::uno::Any
+ScVbaCommandBarControls::createCollectionObject( const cpo::uno::Any& aSource )
 {
     sal_Int32 nPosition = -1;
     aSource >>= nPosition;
@@ -128,12 +128,12 @@ ScVbaCommandBarControls::createCollectionObject( const uno::Any& aSource )
     else
         pNewCommandBarControl = new ScVbaCommandBarButton( this, mxContext, m_xIndexAccess, pCBarHelper, m_xBarSettings, m_sResourceUrl, nPosition );
 
-    return uno::Any( uno::Reference< XCommandBarControl > ( pNewCommandBarControl ) );
+    return cpo::uno::Any( uno::Reference< XCommandBarControl > ( pNewCommandBarControl ) );
 }
 
 // Methods
-uno::Any SAL_CALL
-ScVbaCommandBarControls::Item( const uno::Any& aIndex, const uno::Any& /*aIndex*/ )
+cpo::uno::Any SAL_CALL
+ScVbaCommandBarControls::Item( const cpo::uno::Any& aIndex, const cpo::uno::Any& /*aIndex*/ )
 {
     sal_Int32 nPosition = -1;
     if( aIndex.getValueTypeClass() == uno::TypeClass_STRING )
@@ -152,11 +152,11 @@ ScVbaCommandBarControls::Item( const uno::Any& aIndex, const uno::Any& /*aIndex*
         throw uno::RuntimeException();
     }
 
-    return createCollectionObject( uno::Any( nPosition ) );
+    return createCollectionObject( cpo::uno::Any( nPosition ) );
 }
 
 uno::Reference< XCommandBarControl > SAL_CALL
-ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const uno::Any& Parameter, const uno::Any& Before, SAL_UNUSED_PARAMETER const uno::Any& )
+ScVbaCommandBarControls::Add( const cpo::uno::Any& Type, const cpo::uno::Any& Id, const cpo::uno::Any& Parameter, const cpo::uno::Any& Before, SAL_UNUSED_PARAMETER const cpo::uno::Any& )
 {
     // Parameter is not supported
     // the following name needs to be individually created;
@@ -184,7 +184,7 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
     else
         nPosition = m_xIndexAccess->getCount();
 
-    uno::Any aSubMenu;
+    cpo::uno::Any aSubMenu;
     if( nType == office::MsoControlType::msoControlPopup )
     {
         // it is a Popmenu
@@ -206,7 +206,7 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
 
 
     uno::Reference< container::XIndexContainer > xIndexContainer( m_xIndexAccess, uno::UNO_QUERY_THROW );
-    xIndexContainer->insertByIndex( nPosition, uno::Any( aProps ) );
+    xIndexContainer->insertByIndex( nPosition, cpo::uno::Any( aProps ) );
 
     pCBarHelper->ApplyTempChange( m_sResourceUrl, m_xBarSettings );
 
@@ -245,7 +245,7 @@ public:
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) override
         { return 0; }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 /*Index*/ ) override
+    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 /*Index*/ ) override
         { throw lang::IndexOutOfBoundsException(); }
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) override
@@ -274,19 +274,19 @@ uno::Reference< container::XEnumeration > VbaDummyCommandBarControls::createEnum
     return uno::Reference< container::XEnumeration >( new CommandBarControlEnumeration( this ) );
 }
 
-uno::Any VbaDummyCommandBarControls::createCollectionObject( const uno::Any& /*aSource*/ )
+cpo::uno::Any VbaDummyCommandBarControls::createCollectionObject( const cpo::uno::Any& /*aSource*/ )
 {
-    return uno::Any( uno::Reference< XCommandBarControl >() );
+    return cpo::uno::Any( uno::Reference< XCommandBarControl >() );
 }
 
 // Methods
-uno::Any SAL_CALL VbaDummyCommandBarControls::Item( const uno::Any& /*aIndex*/, const uno::Any& /*aIndex*/ )
+cpo::uno::Any SAL_CALL VbaDummyCommandBarControls::Item( const cpo::uno::Any& /*aIndex*/, const cpo::uno::Any& /*aIndex*/ )
 {
-    return uno::Any( uno::Reference< XCommandBarControl >() );
+    return cpo::uno::Any( uno::Reference< XCommandBarControl >() );
 }
 
 uno::Reference< XCommandBarControl > SAL_CALL VbaDummyCommandBarControls::Add(
-        const uno::Any& /*Type*/, const uno::Any& /*Id*/, const uno::Any& /*Parameter*/, const uno::Any& /*Before*/, const uno::Any& /*Temporary*/ )
+        const cpo::uno::Any& /*Type*/, const cpo::uno::Any& /*Id*/, const cpo::uno::Any& /*Parameter*/, const cpo::uno::Any& /*Before*/, const cpo::uno::Any& /*Temporary*/ )
 {
     return uno::Reference< XCommandBarControl >();
 }

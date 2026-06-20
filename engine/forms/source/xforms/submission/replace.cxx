@@ -37,6 +37,7 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::lang;

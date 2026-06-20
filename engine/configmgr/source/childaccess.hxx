@@ -85,12 +85,12 @@ public:
     void setNode(rtl::Reference< Node > const & node);
 
     void setProperty(
-        css::uno::Any const & value,
+        cpo::uno::Any const & value,
         Modifications * localModifications);
 
-    css::uno::Any asValue();
+    cpo::uno::Any asValue();
     static bool asSimpleValue(const rtl::Reference< Node > &rNode,
-                              css::uno::Any &value,
+                              cpo::uno::Any &value,
                               Components &components);
 
     void commitChanges(bool valid, Modifications * globalModifications);
@@ -104,14 +104,14 @@ private:
     virtual void addSupportedServiceNames(
         std::vector<OUString> * services) override;
 
-    virtual css::uno::Any SAL_CALL queryInterface(
+    virtual cpo::uno::Any SAL_CALL queryInterface(
         css::uno::Type const & aType) override;
 
     rtl::Reference< RootAccess > root_;
     rtl::Reference< Access > parent_; // null if free node
     OUString name_;
     rtl::Reference< Node > node_;
-    std::optional< css::uno::Any > changedValue_;
+    std::optional< cpo::uno::Any > changedValue_;
     bool inTransaction_;
         // to determine if a free node can be inserted underneath some root
     std::shared_ptr<osl::Mutex> lock_;

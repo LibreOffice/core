@@ -100,7 +100,7 @@ void SwDBFieldType::ReleaseRef()
     }
 }
 
-void SwDBFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+void SwDBFieldType::QueryValue( cpo::uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -121,7 +121,7 @@ void SwDBFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     }
 }
 
-void SwDBFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+void SwDBFieldType::PutValue( const cpo::uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -370,7 +370,7 @@ void SwDBField::SetSubType(SwDBFieldSubType nType)
     m_nSubType = nType;
 }
 
-bool SwDBField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwDBField::QueryValue( cpo::uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -395,7 +395,7 @@ bool SwDBField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     return true;
 }
 
-bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwDBField::PutValue( const cpo::uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -491,7 +491,7 @@ OUString SwDBNameInfField::GetFieldName() const
     return lcl_DBSeparatorConvert(sStr);
 }
 
-bool SwDBNameInfField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwDBNameInfField::QueryValue( cpo::uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -513,7 +513,7 @@ bool SwDBNameInfField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     return true;
 }
 
-bool SwDBNameInfField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwDBNameInfField::PutValue( const cpo::uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -611,7 +611,7 @@ void SwDBNextSetField::SetPar1(const OUString& rStr)
     m_aCond = rStr;
 }
 
-bool SwDBNextSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwDBNextSetField::QueryValue( cpo::uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     bool bRet = true;
     switch( nWhichId )
@@ -625,7 +625,7 @@ bool SwDBNextSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     return bRet;
 }
 
-bool SwDBNextSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwDBNextSetField::PutValue( const cpo::uno::Any& rAny, sal_uInt16 nWhichId )
 {
     bool bRet = true;
     switch( nWhichId )
@@ -711,7 +711,7 @@ void SwDBNumSetField::SetPar2(const OUString& rStr)
     m_aPar2 = rStr;
 }
 
-bool SwDBNumSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwDBNumSetField::QueryValue( cpo::uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     bool bRet = true;
     switch( nWhichId )
@@ -728,7 +728,7 @@ bool SwDBNumSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     return bRet;
 }
 
-bool    SwDBNumSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool    SwDBNumSetField::PutValue( const cpo::uno::Any& rAny, sal_uInt16 nWhichId )
 {
     bool bRet = true;
     switch( nWhichId )
@@ -787,12 +787,12 @@ std::unique_ptr<SwField> SwDBNameField::Copy() const
     return std::unique_ptr<SwField>(pTmp.release());
 }
 
-bool SwDBNameField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwDBNameField::QueryValue( cpo::uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     return SwDBNameInfField::QueryValue(rAny, nWhichId );
 }
 
-bool SwDBNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwDBNameField::PutValue( const cpo::uno::Any& rAny, sal_uInt16 nWhichId )
 {
     return SwDBNameInfField::PutValue(rAny, nWhichId );
 }
@@ -843,7 +843,7 @@ std::unique_ptr<SwField> SwDBSetNumberField::Copy() const
     return std::unique_ptr<SwField>(pTmp.release());
 }
 
-bool SwDBSetNumberField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwDBSetNumberField::QueryValue( cpo::uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     bool bRet = true;
     switch( nWhichId )
@@ -860,7 +860,7 @@ bool SwDBSetNumberField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     return bRet;
 }
 
-bool SwDBSetNumberField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwDBSetNumberField::PutValue( const cpo::uno::Any& rAny, sal_uInt16 nWhichId )
 {
     bool bRet = true;
     switch( nWhichId )

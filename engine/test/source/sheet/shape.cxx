@@ -14,7 +14,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/table/XCell.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -22,13 +22,14 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace apitest
 {
 void Shape::testShapePropertiesAnchor()
 {
     uno::Reference<beans::XPropertySet> xShape(init(), UNO_QUERY_THROW);
-    uno::Any aNewValue;
+    cpo::uno::Any aNewValue;
 
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(getXSheetDocument(), UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_SET_THROW);
@@ -53,7 +54,7 @@ void Shape::testShapePropertiesAnchor()
     CPPUNIT_ASSERT(xShape->getPropertyValue(u"ResizeWithCell"_ustr) >>= bIsResizeWithCell);
     CPPUNIT_ASSERT_MESSAGE("Shape should not resize with the cell", !bIsResizeWithCell);
 
-    xShape->setPropertyValue(u"ResizeWithCell"_ustr, uno::Any(true));
+    xShape->setPropertyValue(u"ResizeWithCell"_ustr, cpo::uno::Any(true));
     CPPUNIT_ASSERT(xShape->getPropertyValue(u"ResizeWithCell"_ustr) >>= bIsResizeWithCell);
     CPPUNIT_ASSERT_MESSAGE("Shape should resize with the cell", bIsResizeWithCell);
 
@@ -75,7 +76,7 @@ void Shape::testShapePropertiesAnchor()
     CPPUNIT_ASSERT(xShape->getPropertyValue(u"ResizeWithCell"_ustr) >>= bIsResizeWithCell);
     CPPUNIT_ASSERT_MESSAGE("ResizeWithCell should be false for sheet anchored shapes",
                            !bIsResizeWithCell);
-    xShape->setPropertyValue(u"ResizeWithCell"_ustr, uno::Any(true));
+    xShape->setPropertyValue(u"ResizeWithCell"_ustr, cpo::uno::Any(true));
     CPPUNIT_ASSERT(xShape->getPropertyValue(u"ResizeWithCell"_ustr) >>= bIsResizeWithCell);
     CPPUNIT_ASSERT_MESSAGE("ResizeWithCell should be unchangeable for sheet anchored shapes",
                            !bIsResizeWithCell);
@@ -84,7 +85,7 @@ void Shape::testShapePropertiesAnchor()
 void Shape::testShapePropertiesPosition()
 {
     uno::Reference<beans::XPropertySet> xShape(init(), UNO_QUERY_THROW);
-    uno::Any aNewValue;
+    cpo::uno::Any aNewValue;
 
     sal_Int32 nHoriOrientPositionGet = 0;
     sal_Int32 nHoriOrientPositionSet = 0;

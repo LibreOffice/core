@@ -202,7 +202,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL SwXLineBreak::getPropertySetInf
 }
 
 void SAL_CALL SwXLineBreak::setPropertyValue(const OUString& rPropertyName,
-                                             const css::uno::Any& rValue)
+                                             const cpo::uno::Any& rValue)
 {
     SolarMutexGuard aGuard;
 
@@ -225,11 +225,11 @@ void SAL_CALL SwXLineBreak::setPropertyValue(const OUString& rPropertyName,
     }
 }
 
-uno::Any SAL_CALL SwXLineBreak::getPropertyValue(const OUString& rPropertyName)
+cpo::uno::Any SAL_CALL SwXLineBreak::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if (sw::GetDefaultTextContentValue(aRet, rPropertyName))
     {
         return aRet;

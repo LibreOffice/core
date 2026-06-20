@@ -76,7 +76,7 @@ sal_Int32 SwXAutoTextContainer::getCount()
     return static_cast<sal_Int32>(m_pGlossaries->GetGroupCnt());
 }
 
-uno::Any SwXAutoTextContainer::getByIndex(sal_Int32 nIndex)
+cpo::uno::Any SwXAutoTextContainer::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
     const size_t nCount = m_pGlossaries->GetGroupCnt();
@@ -97,7 +97,7 @@ bool SwXAutoTextContainer::hasElements()
     return true;
 }
 
-uno::Any SwXAutoTextContainer::getByName(const OUString& GroupName)
+cpo::uno::Any SwXAutoTextContainer::getByName(const OUString& GroupName)
 {
     SolarMutexGuard aGuard;
 
@@ -109,7 +109,7 @@ uno::Any SwXAutoTextContainer::getByName(const OUString& GroupName)
     if ( !xGroup.is() )
         throw container::NoSuchElementException();
 
-    return css::uno::Any( xGroup );
+    return cpo::uno::Any( xGroup );
 }
 
 uno::Sequence< OUString > SwXAutoTextContainer::getElementNames()
@@ -381,7 +381,7 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
     }
     catch (const uno::Exception&)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
                u"Error Getting AutoText!"_ustr,
                getXWeak(),
@@ -462,7 +462,7 @@ sal_Int32 SwXAutoTextGroup::getCount()
     return static_cast<sal_Int32>(pGlosGroup->GetCount());
 }
 
-uno::Any SwXAutoTextGroup::getByIndex(sal_Int32 nIndex)
+cpo::uno::Any SwXAutoTextGroup::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
     if (!m_pGlossaries)
@@ -492,13 +492,13 @@ bool SwXAutoTextGroup::hasElements()
 
 }
 
-uno::Any SwXAutoTextGroup::getByName(const OUString& _rName)
+cpo::uno::Any SwXAutoTextGroup::getByName(const OUString& _rName)
 {
     SolarMutexGuard aGuard;
     uno::Reference< text::XAutoTextEntry > xEntry = m_pGlossaries->GetAutoTextEntry( m_sGroupName, m_sName, _rName );
     OSL_ENSURE( xEntry.is(), "SwXAutoTextGroup::getByName: GetAutoTextEntry is fractious!" );
         // we told it to create the object, so why didn't it?
-    return css::uno::Any( xEntry );
+    return cpo::uno::Any( xEntry );
 }
 
 uno::Sequence< OUString > SwXAutoTextGroup::getElementNames()
@@ -545,7 +545,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXAutoTextGroup::getPropertySetInfo(
 }
 
 void SwXAutoTextGroup::setPropertyValue(
-    const OUString& rPropertyName, const uno::Any& aValue)
+    const OUString& rPropertyName, const cpo::uno::Any& aValue)
 {
     SolarMutexGuard aGuard;
     const SfxItemPropertyMapEntry*   pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
@@ -573,7 +573,7 @@ void SwXAutoTextGroup::setPropertyValue(
     }
 }
 
-uno::Any SwXAutoTextGroup::getPropertyValue(const OUString& rPropertyName)
+cpo::uno::Any SwXAutoTextGroup::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
     const SfxItemPropertyMapEntry*   pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName);
@@ -584,7 +584,7 @@ uno::Any SwXAutoTextGroup::getPropertyValue(const OUString& rPropertyName)
     if(!pGlosGroup  || pGlosGroup->GetError())
         throw uno::RuntimeException();
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     switch(pEntry->nWID)
     {
         case  WID_GROUP_PATH:
@@ -981,7 +981,7 @@ void SwAutoTextEventDescriptor::getByName(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 SwXAutoTextContainer_get_implementation(css::uno::XComponentContext*,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     //the module may not be loaded
     SolarMutexGuard aGuard;

@@ -85,7 +85,7 @@ namespace basctl
     using ::com::sun::star::container::NoSuchElementException;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::task::XStatusIndicator;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::script::XLibraryContainer2;
     using ::com::sun::star::uri::UriReferenceFactory;
     using ::com::sun::star::uri::XUriReferenceFactory;
@@ -94,7 +94,7 @@ namespace basctl
     using ::com::sun::star::util::XMacroExpander;
     using ::com::sun::star::util::theMacroExpander;
     using ::com::sun::star::io::XInputStreamProvider;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::io::XInputStream;
     using ::com::sun::star::frame::XStorable;
     using ::com::sun::star::util::XModifiable;

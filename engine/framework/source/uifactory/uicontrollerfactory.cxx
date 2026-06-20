@@ -32,6 +32,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::beans;
 using namespace css::frame;
@@ -50,7 +51,7 @@ public:
 
     // XMultiComponentFactory
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithContext( const OUString& aServiceSpecifier, const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext( const OUString& ServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments, const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext( const OUString& ServiceSpecifier, const css::uno::Sequence< cpo::uno::Any >& Arguments, const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
 
     // XUIControllerRegistration
@@ -314,7 +315,7 @@ StatusbarControllerFactory::StatusbarControllerFactory( const Reference< XCompon
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_PopupMenuControllerFactory_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new PopupMenuControllerFactory(context));
 }
@@ -322,7 +323,7 @@ com_sun_star_comp_framework_PopupMenuControllerFactory_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_ToolBarControllerFactory_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ToolbarControllerFactory(context));
 }
@@ -330,7 +331,7 @@ com_sun_star_comp_framework_ToolBarControllerFactory_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_StatusBarControllerFactory_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new StatusbarControllerFactory(context));
 }

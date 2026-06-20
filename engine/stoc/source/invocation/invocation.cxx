@@ -48,6 +48,7 @@
 #include <vector>
 
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::script;
 using namespace css::reflection;
@@ -573,7 +574,7 @@ void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
     }
     catch (const Exception & exc)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw InvocationTargetException(
             "exception occurred in setValue(): " + exc.Message,
             Reference< XInterface >(), anyEx );
@@ -1068,7 +1069,7 @@ Reference<XInterface> InvocationService::createInstanceWithArguments(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 stoc_InvocationService_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new InvocationService(context));
 }

@@ -35,7 +35,7 @@ namespace pcr
 {
 
 
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::uno::Type;
 
     namespace PropertyControlType = ::com::sun::star::inspection::PropertyControlType;

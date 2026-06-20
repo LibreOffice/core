@@ -39,7 +39,7 @@ using namespace ::xmloff::token;
 
 using ::com::sun::star::container::XNameReplace;
 using ::com::sun::star::document::XEventsSupplier;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -195,7 +195,7 @@ void XMLAutoTextEventExport::ExportContent_() {}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Writer_XMLOasisAutotextEventsExporter_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new XMLAutoTextEventExport(
         context, u"com.sun.star.comp.Writer.XMLOasisAutotextEventsExporter"_ustr,
@@ -204,7 +204,7 @@ com_sun_star_comp_Writer_XMLOasisAutotextEventsExporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Writer_XMLAutotextEventsExporter_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new XMLAutoTextEventExport(
         context, u"com.sun.star.comp.Writer.XMLAutotextEventsExporter"_ustr,

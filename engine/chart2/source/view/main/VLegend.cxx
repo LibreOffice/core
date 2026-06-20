@@ -178,7 +178,7 @@ awt::Size lcl_createTextShapes(
 
             rtl::Reference<SvxShapeText> xEntry =
                 ShapeFactory::createText( xTarget, aLabelString,
-                        rTextProperties.first, rTextProperties.second, uno::Any() );
+                        rTextProperties.first, rTextProperties.second, cpo::uno::Any() );
 
             // adapt max-extent
             awt::Size aCurrSize( xEntry->getSize());
@@ -292,7 +292,7 @@ awt::Size lcl_placeLegendEntries(
     const sal_Int32 nSymbolToTextDistance = static_cast< sal_Int32 >( std::max( 100.0, fViewFontSize * 0.22 ) );//minimum 1mm
     const sal_Int32 nSymbolPlusDistanceWidth = rMaxSymbolExtent.Width + nSymbolToTextDistance;
     sal_Int32 nMaxTextWidth = rRemainingSpace.Width - nSymbolPlusDistanceWidth;
-    uno::Any* pFrameWidthAny = PropertyMapper::getValuePointer( rTextProperties.second, rTextProperties.first, u"TextMaximumFrameWidth");
+    cpo::uno::Any* pFrameWidthAny = PropertyMapper::getValuePointer( rTextProperties.second, rTextProperties.first, u"TextMaximumFrameWidth");
     if(pFrameWidthAny)
     {
         if( eExpansion == css::chart::ChartLegendExpansion_HIGH )
@@ -425,7 +425,7 @@ awt::Size lcl_placeLegendEntries(
                         {
                             OUString aNewLabel = aLabelString.subView(0, nNewLen) + sDots;
                             rtl::Reference<SvxShapeText> xEntry = ShapeFactory::createText(
-                                xTarget, aNewLabel, rTextProperties.first, rTextProperties.second, uno::Any());
+                                xTarget, aNewLabel, rTextProperties.first, rTextProperties.second, cpo::uno::Any());
                             nSumHeight = xEntry->getSize().Height;
                             nRemainingSpace = rRemainingSpace.Height - nSumHeight;
                             if (nRemainingSpace >= 0)

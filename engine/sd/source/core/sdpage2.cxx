@@ -50,6 +50,7 @@
 using namespace ::sd;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 /*************************************************************************
 |*
@@ -433,7 +434,7 @@ SfxItemSet* SdPage::getOrCreateItems()
     return mpItems.get();
 }
 
-bool SdPage::setAlienAttributes( const css::uno::Any& rAttributes )
+bool SdPage::setAlienAttributes( const cpo::uno::Any& rAttributes )
 {
     SfxItemSet* pSet = getOrCreateItems();
 
@@ -447,7 +448,7 @@ bool SdPage::setAlienAttributes( const css::uno::Any& rAttributes )
     return false;
 }
 
-void SdPage::getAlienAttributes( css::uno::Any& rAttributes )
+void SdPage::getAlienAttributes( cpo::uno::Any& rAttributes )
 {
     const SvXMLAttrContainerItem* pItem;
 

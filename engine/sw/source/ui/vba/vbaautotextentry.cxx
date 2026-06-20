@@ -38,7 +38,7 @@ SwVbaAutoTextEntry::~SwVbaAutoTextEntry()
 {
 }
 
-uno::Reference< word::XRange > SAL_CALL SwVbaAutoTextEntry::Insert( const uno::Reference< word::XRange >& _where, const uno::Any& _richtext )
+uno::Reference< word::XRange > SAL_CALL SwVbaAutoTextEntry::Insert( const uno::Reference< word::XRange >& _where, const cpo::uno::Any& _richtext )
 {
     SwVbaRange* pWhere = dynamic_cast<SwVbaRange*>( _where.get() );
     if( pWhere )
@@ -111,11 +111,11 @@ SwVbaAutoTextEntries::createEnumeration()
     throw uno::RuntimeException(u"Not implemented"_ustr );
 }
 
-uno::Any
-SwVbaAutoTextEntries::createCollectionObject( const css::uno::Any& aSource )
+cpo::uno::Any
+SwVbaAutoTextEntries::createCollectionObject( const cpo::uno::Any& aSource )
 {
     uno::Reference< text::XAutoTextEntry > xEntry( aSource, uno::UNO_QUERY_THROW );
-    return uno::Any( uno::Reference< word::XAutoTextEntry >( new SwVbaAutoTextEntry( this, mxContext, xEntry ) ) );
+    return cpo::uno::Any( uno::Reference< word::XAutoTextEntry >( new SwVbaAutoTextEntry( this, mxContext, xEntry ) ) );
 }
 
 OUString

@@ -69,7 +69,7 @@ public:
     sal_uInt32 fireDragGestureEvent(
         sal_Int8 dragAction, sal_Int32 dragOriginX, sal_Int32 dragOriginY,
         const css::uno::Reference< css::datatransfer::dnd::XDragSource >& dragSource,
-        const css::uno::Any& triggerEvent );
+        const cpo::uno::Any& triggerEvent );
 
     /*
      * XDragGestureRecognizer

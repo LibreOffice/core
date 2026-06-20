@@ -38,15 +38,15 @@ public:
         double fOffsetX, double fOffsetY );
     // XControls
     virtual void SAL_CALL Move( double cx, double cy ) override;
-    virtual css::uno::Any SAL_CALL Add( const css::uno::Any& Object, const css::uno::Any& StringKey, const css::uno::Any& Before, const css::uno::Any& After ) override;
-    virtual void SAL_CALL Remove( const css::uno::Any& StringKeyOrIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Add( const cpo::uno::Any& Object, const cpo::uno::Any& StringKey, const cpo::uno::Any& Before, const cpo::uno::Any& After ) override;
+    virtual void SAL_CALL Remove( const cpo::uno::Any& StringKeyOrIndex ) override;
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // ScVbaCollectionBaseImpl
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 
     // XHelperInterface
     VBAHELPER_DECL_XHELPERINTERFACE

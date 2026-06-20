@@ -38,10 +38,10 @@ void SAL_CALL SwVbaMailMerge::setMainDocumentType(sal_Int32 _maindocumenttype)
 
 // Completely dummy, no-op.
 void SAL_CALL SwVbaMailMerge::OpenDataSource(
-    const OUString&, const css::uno::Any&, const css::uno::Any&, const css::uno::Any&,
-    const css::uno::Any&, const css::uno::Any&, const css::uno::Any&, const css::uno::Any&,
-    const css::uno::Any&, const css::uno::Any&, const css::uno::Any&, const css::uno::Any&,
-    const css::uno::Any&, const css::uno::Any&, const css::uno::Any&, const css::uno::Any&)
+    const OUString&, const cpo::uno::Any&, const cpo::uno::Any&, const cpo::uno::Any&,
+    const cpo::uno::Any&, const cpo::uno::Any&, const cpo::uno::Any&, const cpo::uno::Any&,
+    const cpo::uno::Any&, const cpo::uno::Any&, const cpo::uno::Any&, const cpo::uno::Any&,
+    const cpo::uno::Any&, const cpo::uno::Any&, const cpo::uno::Any&, const cpo::uno::Any&)
 {
 }
 

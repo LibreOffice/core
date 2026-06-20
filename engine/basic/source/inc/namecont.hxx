@@ -58,7 +58,7 @@ class NameContainer final
 {
     cppu::OWeakObject& rOwner;
 
-    std::unordered_map<OUString, css::uno::Any> maMap;
+    std::unordered_map<OUString, cpo::uno::Any> maMap;
     // Enumeration must keep insertion order: it drives the on-disk order of the
     // library index file and module streams, which macro signatures sign over.
     std::vector<OUString> maNamesOrder;
@@ -77,7 +77,7 @@ public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    void insertNoCheck(const OUString& aName, const css::uno::Any& aElement,
+    void insertNoCheck(const OUString& aName, const cpo::uno::Any& aElement,
                        std::unique_lock<std::mutex>& guard);
 
     // Methods XElementAccess
@@ -85,16 +85,16 @@ public:
     bool hasElements();
 
     // Methods XNameAccess
-    css::uno::Any getByName(const OUString& aName);
+    cpo::uno::Any getByName(const OUString& aName);
     css::uno::Sequence<OUString> getElementNames();
     bool hasByName(const OUString& aName);
 
     // Methods XNameReplace
-    void replaceByName(const OUString& aName, const css::uno::Any& aElement,
+    void replaceByName(const OUString& aName, const cpo::uno::Any& aElement,
                        std::unique_lock<std::mutex>& guard);
 
     // Methods XNameContainer
-    void insertByName(const OUString& aName, const css::uno::Any& aElement,
+    void insertByName(const OUString& aName, const cpo::uno::Any& aElement,
                       std::unique_lock<std::mutex>& guard);
     void removeByName(const OUString& Name, std::unique_lock<std::mutex>& guard);
 
@@ -237,8 +237,8 @@ protected:
     virtual rtl::Reference<SfxLibrary> implCreateLibraryLink
         ( const OUString& aName, const OUString& aLibInfoFileURL,
           const OUString& StorageURL, bool ReadOnly ) = 0;
-    virtual css::uno::Any createEmptyLibraryElement() = 0;
-    virtual bool isLibraryElementValid(const css::uno::Any& rElement) const = 0;
+    virtual cpo::uno::Any createEmptyLibraryElement() = 0;
+    virtual bool isLibraryElementValid(const cpo::uno::Any& rElement) const = 0;
     /// @throws css::uno::Exception
     virtual void writeLibraryElement
     (
@@ -247,7 +247,7 @@ protected:
         const css::uno::Reference< css::io::XOutputStream >& xOutput
     ) = 0;
 
-    virtual css::uno::Any importLibraryElement
+    virtual cpo::uno::Any importLibraryElement
     (
         const css::uno::Reference< css::container::XNameContainer>& xLibrary,
         const OUString& aElementName,
@@ -353,7 +353,7 @@ public:
     virtual bool SAL_CALL hasElements() override;
 
     // Methods XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
@@ -369,7 +369,7 @@ public:
     virtual void SAL_CALL removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     // Methods XPersistentLibraryContainer (base of XStorageBasedLibraryContainer)
-    virtual css::uno::Any SAL_CALL getRootLocation() override;
+    virtual cpo::uno::Any SAL_CALL getRootLocation() override;
     virtual OUString SAL_CALL getContainerLocationName() override;
     virtual void SAL_CALL storeLibraries(  ) override;
 
@@ -394,7 +394,7 @@ public:
 
     // Methods XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence<
-        css::uno::Any >& aArguments ) override;
+        cpo::uno::Any >& aArguments ) override;
 
     // Methods XLibraryContainerPassword
     virtual bool SAL_CALL isLibraryPasswordProtected( const OUString& Name ) override;
@@ -433,8 +433,8 @@ public:
     virtual css::uno::Reference<css::beans::XPropertySetInfo>
         SAL_CALL getPropertySetInfo() override;
     virtual void SAL_CALL setPropertyValue(const OUString& aPropertyName,
-                                           const css::uno::Any& aValue) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName) override;
+                                           const cpo::uno::Any& aValue) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName) override;
     virtual void SAL_CALL addPropertyChangeListener(
         const OUString& aPropertyName,
         const css::uno::Reference<css::beans::XPropertyChangeListener>& xListener) override;
@@ -548,15 +548,15 @@ public:
     virtual bool SAL_CALL hasElements(  ) override;
 
     // Methods XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // Methods XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement ) override;
+    virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
 
     // Methods XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement ) override;
+    virtual void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
     virtual void SAL_CALL removeByName( const OUString& Name ) override;
 
     // Methods XContainer
@@ -574,7 +574,7 @@ public:
 protected:
     virtual bool isLoadedStorable();
 
-    virtual bool isLibraryElementValid(const css::uno::Any& rElement) const = 0;
+    virtual bool isLibraryElementValid(const cpo::uno::Any& rElement) const = 0;
 };
 
 

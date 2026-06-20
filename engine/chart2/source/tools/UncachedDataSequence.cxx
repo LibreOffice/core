@@ -31,7 +31,7 @@ using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 
 namespace
 {
@@ -75,7 +75,7 @@ UncachedDataSequence::UncachedDataSequence(
 {
     registerProperties();
     std::unique_lock<std::mutex> aGuard;
-    setFastPropertyValue_NoBroadcast( aGuard, PROP_PROPOSED_ROLE, uno::Any( rRole ));
+    setFastPropertyValue_NoBroadcast( aGuard, PROP_PROPOSED_ROLE, cpo::uno::Any( rRole ));
 }
 
 UncachedDataSequence::UncachedDataSequence( const UncachedDataSequence & rSource )
@@ -169,7 +169,7 @@ Sequence< double > SAL_CALL UncachedDataSequence::getNumericalData()
     std::unique_lock<std::mutex> aGuard;
     if( m_xDataProvider.is())
     {
-        const Sequence< uno::Any > aValues( m_xDataProvider->getDataByRangeRepresentation( m_aSourceRepresentation ));
+        const Sequence< cpo::uno::Any > aValues( m_xDataProvider->getDataByRangeRepresentation( m_aSourceRepresentation ));
         return CommonFunctors::convertToSequence(aValues, CommonFunctors::ToDouble());
     }
     return {};
@@ -181,7 +181,7 @@ Sequence< OUString > SAL_CALL UncachedDataSequence::getTextualData()
     std::unique_lock<std::mutex> aGuard;
     if( m_xDataProvider.is())
     {
-        const Sequence< uno::Any > aValues( m_xDataProvider->getDataByRangeRepresentation( m_aSourceRepresentation ));
+        const Sequence< cpo::uno::Any > aValues( m_xDataProvider->getDataByRangeRepresentation( m_aSourceRepresentation ));
         return CommonFunctors::convertToSequence(aValues, CommonFunctors::ToString());
     }
     return {};
@@ -220,7 +220,7 @@ Sequence< OUString > SAL_CALL UncachedDataSequence::generateLabel( chart2::data:
 }
 
 // ____ XIndexReplace ____
-void SAL_CALL UncachedDataSequence::replaceByIndex( ::sal_Int32 Index, const uno::Any& Element )
+void SAL_CALL UncachedDataSequence::replaceByIndex( ::sal_Int32 Index, const cpo::uno::Any& Element )
 {
     std::unique_lock<std::mutex> aGuard;
     Sequence< Any > aData( getData());
@@ -240,16 +240,16 @@ void SAL_CALL UncachedDataSequence::replaceByIndex( ::sal_Int32 Index, const uno
     return 0;
 }
 
-uno::Any SAL_CALL UncachedDataSequence::getByIndex( ::sal_Int32 )
+cpo::uno::Any SAL_CALL UncachedDataSequence::getByIndex( ::sal_Int32 )
 {
     OSL_FAIL( "Implement!" );
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 // ____ XElementAccess (base of XIndexAccess) ____
 uno::Type SAL_CALL UncachedDataSequence::getElementType()
 {
-    return cppu::UnoType<uno::Any>::get();
+    return cppu::UnoType<cpo::uno::Any>::get();
 }
 
 bool SAL_CALL UncachedDataSequence::hasElements()

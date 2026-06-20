@@ -98,7 +98,7 @@ void RangeHighlighter::determineRanges()
     {
         m_bIncludeHiddenCells = m_xChartModel->isIncludeHiddenCells();
 
-        uno::Any aSelection( m_xSelectionSupplier->getSelection());
+        cpo::uno::Any aSelection( m_xSelectionSupplier->getSelection());
 
         if (aSelection.getValueType() == cppu::UnoType<OUString>::get())
         {

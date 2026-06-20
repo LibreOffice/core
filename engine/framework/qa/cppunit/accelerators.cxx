@@ -48,7 +48,7 @@ void AcceleratorsTest::configNotification()
 
     for (auto& xSwAccelCfg : xSwAccelCfgs)
     {
-        uno::Sequence<uno::Any> args(1);
+        uno::Sequence<cpo::uno::Any> args(1);
         args.getArray()[0] <<= u"com.sun.star.text.TextDocument"_ustr;
 
         xSwAccelCfg.set(xFactory->createInstanceWithArguments(
@@ -62,7 +62,7 @@ void AcceleratorsTest::configNotification()
     CPPUNIT_ASSERT(xSwAccelCfgs[0] != xSwAccelCfgs[1]);
 
     // Create an instance of another module
-    uno::Sequence<uno::Any> args(1);
+    uno::Sequence<cpo::uno::Any> args(1);
     args.getArray()[0] <<= u"com.sun.star.sheet.SpreadsheetDocument"_ustr;
     uno::Reference<ui::XAcceleratorConfiguration> xScAccelCfg(
         xFactory->createInstanceWithArguments(

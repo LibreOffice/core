@@ -160,6 +160,7 @@
 
 using namespace ::com::sun::star    ;
 using namespace uno                 ;
+using namespace ::cpo::uno;
 using namespace beans               ;
 using namespace drawing             ;
 using namespace container           ;
@@ -1697,7 +1698,7 @@ bool PPTConvertOCXControls::InsertControl(
         const css::uno::Reference< css::container::XIndexContainer > & rFormComps =
             GetFormComps();
 
-        css::uno::Any aTmp( &rFComp, cppu::UnoType<css::form::XFormComponent>::get() );
+        cpo::uno::Any aTmp( &rFComp, cppu::UnoType<css::form::XFormComponent>::get() );
 
         rFormComps->insertByIndex( rFormComps->getCount(), aTmp );
 
@@ -1765,7 +1766,7 @@ void PPTConvertOCXControls::GetDrawPage()
     if ( xDrawPages.is() && xDrawPages->getCount() )
     {
         xDrawPages->getCount();
-        css::uno::Any aAny( xDrawPages->getByIndex( xDrawPages->getCount() - 1 ) );
+        cpo::uno::Any aAny( xDrawPages->getByIndex( xDrawPages->getCount() - 1 ) );
         aAny >>= xDrawPage;
     }
 }
@@ -7481,16 +7482,16 @@ static void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell > const
                     const XFillBitmapItem & rXFillBitmapItem(pObj->GetMergedItem( XATTR_FILLBITMAP ));
                     uno::Reference<graphic::XGraphic> xGraphic = rXFillBitmapItem.GetGraphicObject().GetGraphic().GetXGraphic();
                     uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
-                    xPropSet->setPropertyValue(u"FillBitmap"_ustr, uno::Any(xBitmap));
+                    xPropSet->setPropertyValue(u"FillBitmap"_ustr, cpo::uno::Any(xBitmap));
 
                     const XFillBmpStretchItem & rStretchItem(pObj->GetMergedItem( XATTR_FILLBMP_STRETCH ));
                     const XFillBmpTileItem & rTileItem(pObj->GetMergedItem( XATTR_FILLBMP_TILE ));
                     if( rTileItem.GetValue() )
-                        xPropSet->setPropertyValue(u"FillBitmapMode"_ustr, uno::Any(drawing::BitmapMode_REPEAT));
+                        xPropSet->setPropertyValue(u"FillBitmapMode"_ustr, cpo::uno::Any(drawing::BitmapMode_REPEAT));
                     else if( rStretchItem.GetValue() )
-                        xPropSet->setPropertyValue(u"FillBitmapMode"_ustr, uno::Any(drawing::BitmapMode_STRETCH));
+                        xPropSet->setPropertyValue(u"FillBitmapMode"_ustr, cpo::uno::Any(drawing::BitmapMode_STRETCH));
                     else
-                        xPropSet->setPropertyValue(u"FillBitmapMode"_ustr, uno::Any(drawing::BitmapMode_NO_REPEAT));
+                        xPropSet->setPropertyValue(u"FillBitmapMode"_ustr, cpo::uno::Any(drawing::BitmapMode_NO_REPEAT));
                 }
             break;
             default:

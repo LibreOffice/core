@@ -154,7 +154,7 @@ ErrCode LoadOlePropertySet(
         for( const auto& rPropId : aPropIds )
         {
             const OUString aPropName = xCustomSect->GetPropertyName( rPropId );
-            uno::Any aPropValue = xCustomSect->GetAnyValue( rPropId );
+            cpo::uno::Any aPropValue = xCustomSect->GetAnyValue( rPropId );
             if( !aPropName.isEmpty() && aPropValue.hasValue() )
             {
                 try

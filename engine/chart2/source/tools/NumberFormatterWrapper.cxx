@@ -68,7 +68,7 @@ NumberFormatterWrapper::~NumberFormatterWrapper()
 
 namespace
 {
-    bool getDate(const css::uno::Any& rAny, util::Date& rDate)
+    bool getDate(const cpo::uno::Any& rAny, util::Date& rDate)
     {
         if (rAny >>= rDate)
             return true;

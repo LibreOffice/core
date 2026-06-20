@@ -29,6 +29,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace xmlscript
 {
@@ -534,7 +535,7 @@ void FormattedFieldElement::endElement()
         }
         catch (const util::MalformedNumberFormatException & exc)
         {
-            css::uno::Any anyEx = cppu::getCaughtException();
+            cpo::uno::Any anyEx = cppu::getCaughtException();
             SAL_WARN( "xmlscript.xmldlg", exceptionToString(anyEx) );
             // rethrow
             throw xml::sax::SAXException( exc.Message, Reference< XInterface >(), anyEx );

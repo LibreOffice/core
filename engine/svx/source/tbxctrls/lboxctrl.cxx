@@ -37,6 +37,7 @@
 
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
@@ -230,7 +231,7 @@ SvxUndoRedoControl::SvxUndoRedoControl(const css::uno::Reference<css::uno::XComp
 {
 }
 
-void SvxUndoRedoControl::initialize( const css::uno::Sequence< css::uno::Any >& rArguments )
+void SvxUndoRedoControl::initialize( const css::uno::Sequence< cpo::uno::Any >& rArguments )
 {
     PopupWindowController::initialize(rArguments);
 
@@ -339,7 +340,7 @@ css::uno::Sequence<OUString> SvxUndoRedoControl::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_UndoRedoToolBoxControl_get_implementation(
     css::uno::XComponentContext* rContext,
-    css::uno::Sequence<css::uno::Any> const & )
+    css::uno::Sequence<cpo::uno::Any> const & )
 {
     return cppu::acquire(new SvxUndoRedoControl(rContext));
 }

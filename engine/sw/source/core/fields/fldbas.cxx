@@ -145,10 +145,10 @@ UIName SwFieldType::GetName() const
 
 void SwFieldType::SetName(const UIName& /*newName*/) { assert(!"Wrong field type"); }
 
-void SwFieldType::QueryValue( uno::Any&, sal_uInt16 ) const
+void SwFieldType::QueryValue( cpo::uno::Any&, sal_uInt16 ) const
 {
 }
-void SwFieldType::PutValue( const uno::Any& , sal_uInt16 )
+void SwFieldType::PutValue( const cpo::uno::Any& , sal_uInt16 )
 {
 }
 
@@ -543,7 +543,7 @@ void SwField::SetUntypedSubType(sal_uInt16 n)
     }
 }
 
-bool  SwField::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
+bool  SwField::QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -561,7 +561,7 @@ bool  SwField::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
     return true;
 }
 
-bool SwField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
+bool SwField::PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {

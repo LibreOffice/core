@@ -20,12 +20,13 @@
 
 #include <XMLFillBitmapSizePropertyHandler.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmluconv.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 
 XMLFillBitmapSizePropertyHandler::XMLFillBitmapSizePropertyHandler()

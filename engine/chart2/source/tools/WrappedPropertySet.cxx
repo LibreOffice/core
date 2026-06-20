@@ -30,7 +30,7 @@ namespace chart
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 
 WrappedPropertySet::WrappedPropertySet()
 {
@@ -132,7 +132,7 @@ void WrappedPropertySet::setPropertyValue( std::unique_lock<std::mutex>& rGuard,
     }
     catch( const uno::Exception& ex )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         TOOLS_WARN_EXCEPTION( "chart2", "invalid exception caught in WrappedPropertySet::setPropertyValue");
         throw lang::WrappedTargetException( ex.Message, nullptr, anyEx );
     }
@@ -176,7 +176,7 @@ Any WrappedPropertySet::getPropertyValue( std::unique_lock<std::mutex>& rGuard, 
     }
     catch( const uno::Exception& ex )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         TOOLS_WARN_EXCEPTION( "chart2", "invalid exception caught in WrappedPropertySet::setPropertyValue");
         throw lang::WrappedTargetException( ex.Message, nullptr, anyEx );
     }

@@ -57,8 +57,8 @@ public:
     // Deletes the text from the text form field.
     void SAL_CALL Clear() override;
     // Sets the type, default text string, format string, and enabled status
-    void SAL_CALL EditType(sal_Int32 nType, const css::uno::Any& rDefault,
-                           const css::uno::Any& rFormat, const css::uno::Any& rEnabled) override;
+    void SAL_CALL EditType(sal_Int32 nType, const cpo::uno::Any& rDefault,
+                           const cpo::uno::Any& rFormat, const cpo::uno::Any& rEnabled) override;
 
     // XHelperInterface
     OUString getServiceImplName() override;

@@ -52,7 +52,7 @@ namespace frm
         css::uno::Reference< css::uno::XInterface >       xInterface;
         css::uno::Reference< css::beans::XPropertySet >   xPropertySet;
         css::uno::Reference< css::container::XChild >     xChild;
-        css::uno::Any                                     aElementTypeInterface;
+        cpo::uno::Any                                     aElementTypeInterface;
 
     public:
         ElementDescription( );
@@ -131,26 +131,26 @@ public:
     virtual css::uno::Reference< css::container::XEnumeration> SAL_CALL createEnumeration() override;
 
 // css::container::XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getElementNames(  ) override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
 // css::container::XNameReplace
-    virtual void SAL_CALL replaceByName(const OUString& Name, const css::uno::Any& _rElement) override;
+    virtual void SAL_CALL replaceByName(const OUString& Name, const cpo::uno::Any& _rElement) override;
 
 // css::container::XNameContainer
-    virtual void SAL_CALL insertByName(const OUString& Name, const css::uno::Any& _rElement) override;
+    virtual void SAL_CALL insertByName(const OUString& Name, const cpo::uno::Any& _rElement) override;
     virtual void SAL_CALL removeByName(const OUString& Name) override;
 
 // css::container::XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 _nIndex) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex(sal_Int32 _nIndex) override;
 
 // css::container::XIndexReplace
-    virtual void SAL_CALL replaceByIndex(sal_Int32 _nIndex, const css::uno::Any& _rElement) override;
+    virtual void SAL_CALL replaceByIndex(sal_Int32 _nIndex, const cpo::uno::Any& _rElement) override;
 
 // css::container::XIndexContainer
-    virtual void SAL_CALL insertByIndex(sal_Int32 _nIndex, const css::uno::Any& Element) override;
+    virtual void SAL_CALL insertByIndex(sal_Int32 _nIndex, const cpo::uno::Any& Element) override;
     virtual void SAL_CALL removeByIndex(sal_Int32 _nIndex) override;
 
 // css::container::XContainer
@@ -165,7 +165,7 @@ public:
     virtual void SAL_CALL insertEntry( sal_Int32 nIndex ) override;
     virtual void SAL_CALL removeEntry( sal_Int32 nIndex ) override;
     virtual css::uno::Sequence< css::script::ScriptEventDescriptor > SAL_CALL getScriptEvents( sal_Int32 Index ) override;
-    virtual void SAL_CALL attach( sal_Int32 nIndex, const css::uno::Reference< css::uno::XInterface >& xObject, const css::uno::Any& aHelper ) override;
+    virtual void SAL_CALL attach( sal_Int32 nIndex, const css::uno::Reference< css::uno::XInterface >& xObject, const cpo::uno::Any& aHelper ) override;
     virtual void SAL_CALL detach( sal_Int32 nIndex, const css::uno::Reference< css::uno::XInterface >& xObject ) override;
     virtual void SAL_CALL addScriptListener( const css::uno::Reference< css::script::XScriptListener >& xListener ) override;
     virtual void SAL_CALL removeScriptListener( const css::uno::Reference< css::script::XScriptListener >& Listener ) override;
@@ -232,7 +232,7 @@ protected:
     */
     void implReplaceByIndex(
             const sal_Int32 _nIndex,
-            const css::uno::Any& _rNewElement,
+            const cpo::uno::Any& _rNewElement,
             ::osl::ClearableMutexGuard& _rClearBeforeNotify
         );
 
@@ -278,7 +278,7 @@ public:
 
     DECLARE_UNO3_AGG_DEFAULTS(OFormComponents, ::cppu::OComponentHelper)
 
-    virtual css::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
 // OComponentHelper

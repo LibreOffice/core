@@ -303,7 +303,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf57317_autoListName)
 {
     createSwDoc("tdf57317_autoListName.odt");
     // The list style (from styles.xml) overrides a duplicate named auto-style
-    //uno::Any aNumStyle = getStyles("NumberingStyles")->getByName("L1");
+    //cpo::uno::Any aNumStyle = getStyles("NumberingStyles")->getByName("L1");
     //CPPUNIT_ASSERT(aNumStyle.hasValue());
     uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u">1<"_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
@@ -501,7 +501,7 @@ CPPUNIT_TEST_FIXTURE(Test, testStyleLink)
     createSwDoc("style-link.fodt");
 
     // Then make sure the char style links the para one:
-    uno::Any aCharStyle
+    cpo::uno::Any aCharStyle
         = getStyles(u"CharacterStyles"_ustr)->getByName(u"List Paragraph Char"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: List Paragraph
@@ -509,7 +509,8 @@ CPPUNIT_TEST_FIXTURE(Test, testStyleLink)
     // i.e. the linked style was lost on import.
     CPPUNIT_ASSERT_EQUAL(u"List Paragraph"_ustr,
                          getProperty<OUString>(aCharStyle, u"LinkStyle"_ustr));
-    uno::Any aParaStyle = getStyles(u"ParagraphStyles"_ustr)->getByName(u"List Paragraph"_ustr);
+    cpo::uno::Any aParaStyle
+        = getStyles(u"ParagraphStyles"_ustr)->getByName(u"List Paragraph"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: List Paragraph Char
     // - Actual  :
@@ -849,8 +850,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentStyles)
                       .queryThrow<text::XTextContent>());
     auto xCommentText(getProperty<uno::Reference<text::XTextRange>>(xComment, u"TextRange"_ustr));
     xCommentText->setString(u"Hello World"_ustr);
-    xCommentText.queryThrow<beans::XPropertySet>()->setPropertyValue(u"ParaStyleName"_ustr,
-                                                                     uno::Any(u"Heading"_ustr));
+    xCommentText.queryThrow<beans::XPropertySet>()->setPropertyValue(
+        u"ParaStyleName"_ustr, cpo::uno::Any(u"Heading"_ustr));
 
     xComment->attach(getParagraph(1)->getEnd());
 
@@ -911,7 +912,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159382)
         uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xSettings(
             xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(uno::Any(true),
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(true),
                              xSettings->getPropertyValue(u"NoGapAfterNoteNumber"_ustr));
 
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -935,7 +936,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159382)
         uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xSettings(
             xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(uno::Any(true),
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(true),
                              xSettings->getPropertyValue(u"NoGapAfterNoteNumber"_ustr));
 
         pXmlDoc = parseLayoutDump();
@@ -955,7 +956,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159382)
         uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xSettings(
             xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(uno::Any(true),
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(true),
                              xSettings->getPropertyValue(u"NoGapAfterNoteNumber"_ustr));
 
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -975,7 +976,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159382)
         uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xSettings(
             xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(uno::Any(true),
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(true),
                              xSettings->getPropertyValue(u"NoGapAfterNoteNumber"_ustr));
 
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -994,7 +995,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159382)
         uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xSettings(
             xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(uno::Any(false),
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(false),
                              xSettings->getPropertyValue(u"NoGapAfterNoteNumber"_ustr));
     }
 }
@@ -1441,7 +1442,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMsWordUlTrailSpace)
         uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xSettings(
             xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(uno::Any(true),
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(true),
                              xSettings->getPropertyValue(u"MsWordUlTrailSpace"_ustr));
 
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -1478,7 +1479,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMsWordUlTrailSpace)
         uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xSettings(
             xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(uno::Any(true),
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(true),
                              xSettings->getPropertyValue(u"MsWordUlTrailSpace"_ustr));
     }
 
@@ -1487,8 +1488,8 @@ CPPUNIT_TEST_FIXTURE(Test, testMsWordUlTrailSpace)
         uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xSettings(
             xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
-        xSettings->setPropertyValue(u"MsWordUlTrailSpace"_ustr, uno::Any(false));
-        CPPUNIT_ASSERT_EQUAL(uno::Any(false),
+        xSettings->setPropertyValue(u"MsWordUlTrailSpace"_ustr, cpo::uno::Any(false));
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(false),
                              xSettings->getPropertyValue(u"MsWordUlTrailSpace"_ustr));
 
         getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell()->Reformat();
@@ -1519,7 +1520,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMsWordUlTrailSpace)
         uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xSettings(
             xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(uno::Any(false),
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(false),
                              xSettings->getPropertyValue(u"MsWordUlTrailSpace"_ustr));
     }
 
@@ -1529,7 +1530,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMsWordUlTrailSpace)
         uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xSettings(
             xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(uno::Any(false),
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(false),
                              xSettings->getPropertyValue(u"MsWordUlTrailSpace"_ustr));
 
         // tdf#168777: Add a line with trailing spaces; the line must have 'show-underline' set,

@@ -968,10 +968,10 @@ TextpathModel::TextpathModel()
 static beans::PropertyValue lcl_createTextpathProps()
 {
     uno::Sequence<beans::PropertyValue> aTextpathPropSeq( comphelper::InitPropertySequence({
-            { "TextPath", uno::Any(true) },
-            { "TextPathMode", uno::Any(drawing::EnhancedCustomShapeTextPathMode_SHAPE) },
-            { "ScaleX", uno::Any(false) },
-            { "SameLetterHeights", uno::Any(false) }
+            { "TextPath", cpo::uno::Any(true) },
+            { "TextPathMode", cpo::uno::Any(drawing::EnhancedCustomShapeTextPathMode_SHAPE) },
+            { "ScaleX", cpo::uno::Any(false) },
+            { "SameLetterHeights", cpo::uno::Any(false) }
         }));
 
     beans::PropertyValue aRet;
@@ -1006,7 +1006,7 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
             aGeomPropSeq.realloc(nSize+1);
             aGeomPropSeq.getArray()[nSize] = lcl_createTextpathProps();
         }
-        rPropMap.setAnyProperty(PROP_CustomShapeGeometry, uno::Any(aGeomPropSeq));
+        rPropMap.setAnyProperty(PROP_CustomShapeGeometry, cpo::uno::Any(aGeomPropSeq));
     }
     if (moStyle.has_value())
     {
@@ -1025,7 +1025,7 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
                         aValue = aValue.substr(1, aValue.size() - 2);
 
                     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-                    xPropertySet->setPropertyValue(u"CharFontName"_ustr, uno::Any(OUString(aValue)));
+                    xPropertySet->setPropertyValue(u"CharFontName"_ustr, cpo::uno::Any(OUString(aValue)));
                     sFont = aValue;
                 }
                 else if (aName == u"font-size")
@@ -1034,7 +1034,7 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
                     float nSize = drawingml::convertEmuToPoints(lclGetEmu(rGraphicHelper, aOptString, 1));
 
                     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-                    xPropertySet->setPropertyValue(u"CharHeight"_ustr, uno::Any(nSize));
+                    xPropertySet->setPropertyValue(u"CharHeight"_ustr, cpo::uno::Any(nSize));
                 }
             }
         }

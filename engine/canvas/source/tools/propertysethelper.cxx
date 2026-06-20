@@ -103,7 +103,7 @@ namespace canvas
     }
 
     void PropertySetHelper::setPropertyValue( const OUString& aPropertyName,
-                                              const uno::Any&        aValue )
+                                              const cpo::uno::Any&        aValue )
     {
         Callbacks aCallbacks;
         if (!mpMap || !mpMap->lookup(aPropertyName, aCallbacks))
@@ -117,7 +117,7 @@ namespace canvas
         aCallbacks.setter(aValue);
     }
 
-    uno::Any PropertySetHelper::getPropertyValue( const OUString& aPropertyName ) const
+    cpo::uno::Any PropertySetHelper::getPropertyValue( const OUString& aPropertyName ) const
     {
         Callbacks aCallbacks;
         if (!mpMap || !mpMap->lookup(aPropertyName, aCallbacks))
@@ -130,7 +130,7 @@ namespace canvas
 
         // TODO(Q1): subtlety, empty getter method silently returns
         // the empty any
-        return uno::Any();
+        return cpo::uno::Any();
     }
 
     void PropertySetHelper::addPropertyChangeListener( const OUString&                                  aPropertyName,

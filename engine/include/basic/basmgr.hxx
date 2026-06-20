@@ -154,10 +154,10 @@ public:
         If a constant with this name already existed before, its value is changed, and the old constant is
         returned in pOldValue. If it does not yet exist, it is newly created, and inserted into the basic library.
     */
-    void            SetGlobalUNOConstant( const OUString& rName, const css::uno::Any& _rValue, css::uno::Any* pOldValue = nullptr );
+    void            SetGlobalUNOConstant( const OUString& rName, const cpo::uno::Any& _rValue, cpo::uno::Any* pOldValue = nullptr );
 
     /** retrieves a global constant in the basic library, referring to some UNO object, returns true if a value is found ( value is in aOut ) false otherwise. */
-    bool            GetGlobalUNOConstant( const OUString& rName, css::uno::Any& aOut );
+    bool            GetGlobalUNOConstant( const OUString& rName, cpo::uno::Any& aOut );
     /** determines whether there are password-protected modules whose size exceeds the
         B_IMG_VERSION_12 module size
         @param _out_rModuleNames

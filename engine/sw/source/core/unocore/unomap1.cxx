@@ -84,6 +84,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 
 SwUnoPropertyMapProvider aSwMapProvider;
@@ -841,7 +842,7 @@ std::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetGraphicPro
         { UNO_NAME_REPLACEMENT_GRAPHIC, FN_UNO_REPLACEMENT_GRAPHIC, cppu::UnoType<css::graphic::XGraphic>::get(), 0, 0 },
         { UNO_NAME_GRAPHIC_FILTER, FN_UNO_GRAPHIC_FILTER,      cppu::UnoType<OUString>::get(), 0, 0 },
         { UNO_NAME_GRAPHIC, FN_UNO_GRAPHIC, cppu::UnoType<css::graphic::XGraphic>::get(), 0, 0 },
-        { UNO_NAME_GRAPHIC_URL, FN_UNO_GRAPHIC_URL, cppu::UnoType<css::uno::Any>::get(), 0, 0 },
+        { UNO_NAME_GRAPHIC_URL, FN_UNO_GRAPHIC_URL, cppu::UnoType<cpo::uno::Any>::get(), 0, 0 },
         { UNO_NAME_TRANSFORMED_GRAPHIC, FN_UNO_TRANSFORMED_GRAPHIC, cppu::UnoType<css::graphic::XGraphic>::get(), 0, 0 },
         { UNO_NAME_GRAPHIC_PREVIEW, FN_UNO_GRAPHIC_PREVIEW, cppu::UnoType<css::graphic::XGraphic>::get(), 0, 0 },
         { UNO_NAME_ACTUAL_SIZE, FN_UNO_ACTUAL_SIZE,    cppu::UnoType<css::awt::Size>::get(),  PropertyAttribute::READONLY, CONVERT_TWIPS},

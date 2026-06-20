@@ -491,7 +491,7 @@ static bool isOfType(css::uno::XInterface* xInterface, const css::uno::Type& rTy
 
     try
     {
-        css::uno::Any aRet = xInterface->queryInterface(rType);
+        cpo::uno::Any aRet = xInterface->queryInterface(rType);
         const bool bIs = (typelib_TypeClass_INTERFACE == aRet.pType->eTypeClass)
                          && (aRet.pReserved != nullptr);
         return bIs;
@@ -843,21 +843,21 @@ static gboolean lo_accessible_range_set_current_value(GtkAccessibleRange* self, 
     // Different types of numerical values for XAccessibleValue are possible.
     // If current value has an integer type, also use that for the new value, to make
     // sure underlying implementations expecting that can handle the value properly.
-    const css::uno::Any aCurrentValue = xValue->getCurrentValue();
+    const cpo::uno::Any aCurrentValue = xValue->getCurrentValue();
     if (aCurrentValue.getValueTypeClass() == css::uno::TypeClass::TypeClass_LONG)
     {
         const sal_Int32 nValue = std::round<sal_Int32>(fNewValue);
-        xValue->setCurrentValue(css::uno::Any(nValue));
+        xValue->setCurrentValue(cpo::uno::Any(nValue));
         return true;
     }
     else if (aCurrentValue.getValueTypeClass() == css::uno::TypeClass::TypeClass_HYPER)
     {
         const sal_Int64 nValue = std::round<sal_Int64>(fNewValue);
-        xValue->setCurrentValue(css::uno::Any(nValue));
+        xValue->setCurrentValue(cpo::uno::Any(nValue));
         return true;
     }
 
-    css::uno::Any aValue;
+    cpo::uno::Any aValue;
     aValue <<= fNewValue;
     xValue->setCurrentValue(aValue);
     return true;

@@ -89,8 +89,8 @@ public:
             true if a column based header bar, false if a row based header bar
     */
     void commitHeaderBarEvent(sal_Int16 nEventId,
-            const css::uno::Any& rNewValue,
-            const css::uno::Any& rOldValue, bool _bColumnHeaderBar);
+            const cpo::uno::Any& rNewValue,
+            const cpo::uno::Any& rOldValue, bool _bColumnHeaderBar);
 
     // helper functions
     /** commitTableEvent commit the event at all listeners of the table
@@ -102,8 +102,8 @@ public:
             the old value
     */
     void commitTableEvent(sal_Int16 nEventId,
-            const css::uno::Any& rNewValue,
-            const css::uno::Any& rOldValue);
+            const cpo::uno::Any& rNewValue,
+            const cpo::uno::Any& rOldValue);
 
     /** returns the accessible object for the row or the column header bar
     */

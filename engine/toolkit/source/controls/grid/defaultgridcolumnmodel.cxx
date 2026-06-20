@@ -43,6 +43,7 @@ using namespace css::awt::grid;
 using namespace css::container;
 using namespace css::lang;
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace toolkit;
 
 namespace {
@@ -366,7 +367,7 @@ private:
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_DefaultGridColumnModel_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new DefaultGridColumnModel());
 }

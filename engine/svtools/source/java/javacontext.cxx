@@ -18,12 +18,13 @@
  */
 
 #include <comphelper/kit.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <svtools/javacontext.hxx>
 #include <svtools/javainteractionhandler.hxx>
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::task;
 namespace svt
 {

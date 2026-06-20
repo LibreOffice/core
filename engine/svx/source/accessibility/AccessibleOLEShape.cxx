@@ -33,6 +33,7 @@
 using namespace ::accessibility;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::accessibility;
 
 // internal
@@ -73,10 +74,10 @@ Reference<XAccessibleKeyBinding> SAL_CALL AccessibleOLEShape::getAccessibleActio
 }
 
 // XInterface
-css::uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
     AccessibleOLEShape::queryInterface (const css::uno::Type & rType)
 {
-    css::uno::Any aReturn = AccessibleShape::queryInterface (rType);
+    cpo::uno::Any aReturn = AccessibleShape::queryInterface (rType);
     if ( ! aReturn.hasValue())
         aReturn = ::cppu::queryInterface (rType,
             static_cast<XAccessibleAction*>(this));

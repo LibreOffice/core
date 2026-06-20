@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_DRAWINGML_SHAPEPROPERTYMAP_HXX
 #define INCLUDED_OOX_DRAWINGML_SHAPEPROPERTYMAP_HXX
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <o3tl/enumarray.hxx>
 #include <oox/dllapi.h>
 #include <oox/helper/propertymap.hxx>
@@ -119,17 +119,17 @@ public:
     bool                hasNamedLineMarkerInTable( const OUString& rMarkerName ) const;
 
     /** Sets the specified shape property to the passed value. */
-    bool                setAnyProperty( ShapeProperty ePropId, const css::uno::Any& rValue );
+    bool                setAnyProperty( ShapeProperty ePropId, const cpo::uno::Any& rValue );
 
     /** Sets the specified shape property to the passed value. */
     template<typename Type>
     bool setProperty(ShapeProperty ePropId, const Type& rValue)
     {
-        return setAnyProperty(ePropId, css::uno::Any(rValue));
+        return setAnyProperty(ePropId, cpo::uno::Any(rValue));
     }
     bool setProperty(ShapeProperty ePropId, const ::Color& rValue)
     {
-        return setAnyProperty(ePropId, css::uno::Any(rValue));
+        return setAnyProperty(ePropId, cpo::uno::Any(rValue));
     }
 
     using PropertyMap::setAnyProperty;
@@ -137,23 +137,23 @@ public:
 
 private:
     /** Sets an explicit line marker, or creates a named line marker. */
-    bool setLineMarker( sal_Int32 nPropId, const css::uno::Any& rValue );
+    bool setLineMarker( sal_Int32 nPropId, const cpo::uno::Any& rValue );
     /** Sets an explicit line dash, or creates a named line dash. */
-    bool setLineDash( sal_Int32 nPropId, const css::uno::Any& rValue );
+    bool setLineDash( sal_Int32 nPropId, const cpo::uno::Any& rValue );
     /** Sets an explicit fill gradient, or creates a named fill gradient. */
-    bool setFillGradient( sal_Int32 nPropId, const css::uno::Any& rValue );
+    bool setFillGradient( sal_Int32 nPropId, const cpo::uno::Any& rValue );
     /** Creates a named transparency gradient. */
-    bool setGradientTrans( sal_Int32 nPropId, const css::uno::Any& rValue );
+    bool setGradientTrans( sal_Int32 nPropId, const cpo::uno::Any& rValue );
     /** Sets an explicit fill bitmap, or creates a named fill bitmap. */
-    bool setFillBitmap( sal_Int32 nPropId, const css::uno::Any& rValue );
+    bool setFillBitmap( sal_Int32 nPropId, const cpo::uno::Any& rValue );
     /** Sets an explicit fill bitmap and pushes the name to FillBitmapName */
-    bool setFillBitmapName( const css::uno::Any& rValue );
+    bool setFillBitmapName( const cpo::uno::Any& rValue );
     /** Sets an explicit fill hatch, or creates a named fill hatch. */
-    bool setFillHatch( sal_Int32 nPropId, const css::uno::Any& rValue );
+    bool setFillHatch( sal_Int32 nPropId, const cpo::uno::Any& rValue );
 
     // not implemented, to prevent implicit conversion from enum to int
-    css::uno::Any& operator[]( ShapeProperty ePropId ) = delete;
-    const css::uno::Any& operator[]( ShapeProperty ePropId ) const = delete;
+    cpo::uno::Any& operator[]( ShapeProperty ePropId ) = delete;
+    const cpo::uno::Any& operator[]( ShapeProperty ePropId ) const = delete;
 
 private:
     ModelObjectHelper&  mrModelObjHelper;

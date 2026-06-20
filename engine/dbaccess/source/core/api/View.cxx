@@ -30,6 +30,7 @@ namespace dbaccess
 {
 
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::lang::XMultiServiceFactory;
 

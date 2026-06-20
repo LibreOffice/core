@@ -185,16 +185,16 @@ void lcl_ChartInit(const uno::Reference <embed::XEmbeddedObject>& xObj, ScViewDa
     uno::Sequence< beans::PropertyValue > aArgs{
         beans::PropertyValue(
             u"CellRangeRepresentation"_ustr, -1,
-            uno::Any( aRangeString ), beans::PropertyState_DIRECT_VALUE ),
+            cpo::uno::Any( aRangeString ), beans::PropertyState_DIRECT_VALUE ),
         beans::PropertyValue(
             u"HasCategories"_ustr, -1,
-            uno::Any( bHasCategories ), beans::PropertyState_DIRECT_VALUE ),
+            cpo::uno::Any( bHasCategories ), beans::PropertyState_DIRECT_VALUE ),
         beans::PropertyValue(
             u"FirstCellAsLabel"_ustr, -1,
-            uno::Any( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE ),
+            cpo::uno::Any( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE ),
         beans::PropertyValue(
             u"DataRowSource"_ustr, -1,
-            uno::Any( eDataRowSource ), beans::PropertyState_DIRECT_VALUE )
+            cpo::uno::Any( eDataRowSource ), beans::PropertyState_DIRECT_VALUE )
     };
 
     try
@@ -650,10 +650,10 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
                 {
                     css::uno::Reference< css::awt::XWindow > xParent
                         = new weld::TransportAsXWindow(pWin->GetFrameWeld());
-                    uno::Sequence<uno::Any> aSeq(comphelper::InitAnyPropertySequence(
+                    uno::Sequence<cpo::uno::Any> aSeq(comphelper::InitAnyPropertySequence(
                     {
-                        {"ParentWindow", uno::Any(xParent)},
-                        {"ChartModel", uno::Any(xChartModel)}
+                        {"ParentWindow", cpo::uno::Any(xParent)},
+                        {"ChartModel", cpo::uno::Any(xChartModel)}
                     }));
                     xInit->initialize( aSeq );
 
@@ -674,12 +674,12 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
                                     //calculate and set new position
                                     Point aDialogPos = rViewShell.GetChartDialogPos( aDialogSize, aRect );
                                     xDialogProps->setPropertyValue(u"Position"_ustr,
-                                        uno::Any( awt::Point(aDialogPos.getX(),aDialogPos.getY()) ) );
+                                        cpo::uno::Any( awt::Point(aDialogPos.getX(),aDialogPos.getY()) ) );
                                 }
                             }
                             //tell the dialog to unlock controller
                             xDialogProps->setPropertyValue(u"UnlockControllersOnExecute"_ustr,
-                                        uno::Any( true ) );
+                                        cpo::uno::Any( true ) );
 
                         }
                         catch( uno::Exception& )

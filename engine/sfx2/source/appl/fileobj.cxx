@@ -24,7 +24,7 @@
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sot/exchange.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <sfx2/docfac.hxx>
 #include <com/sun/star/document/XTypeDetection.hpp>
@@ -72,7 +72,7 @@ SvFileObject::~SvFileObject()
         Application::RemoveUserEvent(nPostUserEventId);
 }
 
-bool SvFileObject::GetData( css::uno::Any & rData,
+bool SvFileObject::GetData( cpo::uno::Any & rData,
                                 const OUString & rMimeType,
                                 bool /*bGetSynchron*/ )
 {
@@ -447,7 +447,7 @@ void SvFileObject::SendStateChg_Impl( sfx2::LinkManager::LinkState nState )
     if( !bStateChangeCalled && HasDataLinks() )
     {
         DataChanged( SotExchange::GetFormatName(
-                        sfx2::LinkManager::RegisterStatusInfoId()), css::uno::Any(OUString::number( nState )) );
+                        sfx2::LinkManager::RegisterStatusInfoId()), cpo::uno::Any(OUString::number( nState )) );
         bStateChangeCalled = true;
     }
 }

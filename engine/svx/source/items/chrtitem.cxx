@@ -44,7 +44,7 @@ SvxChartTextOrderItem* SvxChartTextOrderItem::Clone(SfxItemPool* /*pPool*/) cons
     return new SvxChartTextOrderItem(*this);
 }
 
-bool SvxChartTextOrderItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxChartTextOrderItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     // the order of the two enums is not equal, so a mapping is required
     css::chart::ChartAxisArrangeOrderType eAO;
@@ -68,7 +68,7 @@ bool SvxChartTextOrderItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMember
 }
 
 
-bool SvxChartTextOrderItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvxChartTextOrderItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     // the order of the two enums is not equal, so a mapping is required
     css::chart::ChartAxisArrangeOrderType eAO;
@@ -135,13 +135,13 @@ SvxDoubleItem* SvxDoubleItem::Clone(SfxItemPool* /*pPool*/) const
     return new SvxDoubleItem(*this);
 }
 
-bool SvxDoubleItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxDoubleItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= m_fVal;
     return true;
 }
 
-bool SvxDoubleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvxDoubleItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
     return rVal >>= m_fVal;
@@ -198,7 +198,7 @@ SvxChartColorPaletteItem::SvxChartColorPaletteItem(const SvxChartColorPaletteIte
 {
 }
 
-bool SvxChartColorPaletteItem::QueryValue(uno::Any& rVal, const sal_uInt8 nMemberId) const
+bool SvxChartColorPaletteItem::QueryValue(cpo::uno::Any& rVal, const sal_uInt8 nMemberId) const
 {
     if (nMemberId == MID_CHART_COLOR_PALETTE_TYPE)
     {
@@ -213,7 +213,7 @@ bool SvxChartColorPaletteItem::QueryValue(uno::Any& rVal, const sal_uInt8 nMembe
     return false;
 }
 
-bool SvxChartColorPaletteItem::PutValue(const uno::Any& rVal, const sal_uInt8 nMemberId)
+bool SvxChartColorPaletteItem::PutValue(const cpo::uno::Any& rVal, const sal_uInt8 nMemberId)
 {
     if (nMemberId == MID_CHART_COLOR_PALETTE_TYPE)
     {
@@ -277,7 +277,7 @@ SvxChartGradientPresetItem::SvxChartGradientPresetItem(const SvxChartGradientPre
 {
 }
 
-bool SvxChartGradientPresetItem::QueryValue(uno::Any& rVal, const sal_uInt8 nMemberId) const
+bool SvxChartGradientPresetItem::QueryValue(cpo::uno::Any& rVal, const sal_uInt8 nMemberId) const
 {
     if (nMemberId == MID_CHART_GRADIENT_PRESET_VARIATION)
     {
@@ -292,7 +292,7 @@ bool SvxChartGradientPresetItem::QueryValue(uno::Any& rVal, const sal_uInt8 nMem
     return false;
 }
 
-bool SvxChartGradientPresetItem::PutValue(const uno::Any& rVal, const sal_uInt8 nMemberId)
+bool SvxChartGradientPresetItem::PutValue(const cpo::uno::Any& rVal, const sal_uInt8 nMemberId)
 {
     if (nMemberId == MID_CHART_GRADIENT_PRESET_VARIATION)
     {

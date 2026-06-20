@@ -776,10 +776,10 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf92527)
     xShape1->setSize(awt::Size(10000, 10000));
     xShape1->setPosition(awt::Point(1000, 1000));
     uno::Sequence<beans::PropertyValue> aShapeGeometry(comphelper::InitPropertySequence({
-        { "Type", uno::Any(u"diamond"_ustr) },
+        { "Type", cpo::uno::Any(u"diamond"_ustr) },
     }));
     uno::Reference<beans::XPropertySet> xPropertySet1(xShape1, uno::UNO_QUERY);
-    xPropertySet1->setPropertyValue(u"CustomShapeGeometry"_ustr, uno::Any(aShapeGeometry));
+    xPropertySet1->setPropertyValue(u"CustomShapeGeometry"_ustr, cpo::uno::Any(aShapeGeometry));
 
     saveAndReload(TestFilter::PPTX);
 
@@ -1009,7 +1009,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf105739)
     save(TestFilter::ODP);
     uno::Reference<drawing::XDrawPage> xPage = getPage(0);
     uno::Reference<beans::XPropertySet> xPropSet(xPage, uno::UNO_QUERY);
-    uno::Any aAny = xPropSet->getPropertyValue(u"Background"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"Background"_ustr);
     CPPUNIT_ASSERT(aAny.hasValue());
     if (aAny.hasValue())
     {
@@ -1050,7 +1050,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testPageBitmapWithTransparency)
     uno::Reference<drawing::XDrawPage> xPage(getPage(0));
 
     uno::Reference<beans::XPropertySet> xPropSet(xPage, uno::UNO_QUERY);
-    uno::Any aAny = xPropSet->getPropertyValue(u"Background"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"Background"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Slide background is missing", aAny.hasValue());
 
     uno::Reference<beans::XPropertySet> aXBackgroundPropSet;
@@ -1811,7 +1811,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTextColumns_tdf140852)
                                                  uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCols->getColumnCount());
         uno::Reference<beans::XPropertySet> xColProps(xCols, uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(1000)),
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int32(1000)),
                              xColProps->getPropertyValue(u"AutomaticDistance"_ustr));
     }
     save(TestFilter::PPTX);
@@ -1829,7 +1829,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTextColumns_tdf140852)
                                                  uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCols->getColumnCount());
         uno::Reference<beans::XPropertySet> xColProps(xCols, uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(1000)),
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int32(1000)),
                              xColProps->getPropertyValue(u"AutomaticDistance"_ustr));
     }
 
@@ -1851,7 +1851,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTextColumns_3columns)
                                                  uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(3), xCols->getColumnCount());
         uno::Reference<beans::XPropertySet> xColProps(xCols, uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(300)),
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int32(300)),
                              xColProps->getPropertyValue(u"AutomaticDistance"_ustr));
         // Scale value may be unstable; just test that the text is actually scaled
         double fFontScale;
@@ -1871,7 +1871,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTextColumns_3columns)
                                                  uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(3), xCols->getColumnCount());
         uno::Reference<beans::XPropertySet> xColProps(xCols, uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(300)),
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int32(300)),
                              xColProps->getPropertyValue(u"AutomaticDistance"_ustr));
         // Scale value may be unstable; just test that the text is actually scaled
         double fFontScale;

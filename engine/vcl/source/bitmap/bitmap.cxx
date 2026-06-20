@@ -2302,7 +2302,7 @@ bool Bitmap::Create( const css::uno::Reference< css::rendering::XBitmapCanvas > 
     if( xFastPropertySet )
     {
         // 0 means get Bitmap
-        css::uno::Any aAny = xFastPropertySet->getFastPropertyValue( 0 );
+        cpo::uno::Any aAny = xFastPropertySet->getFastPropertyValue( 0 );
         std::unique_ptr<Bitmap> xBitmap(reinterpret_cast<Bitmap*>(*o3tl::doAccess<sal_Int64>(aAny)));
         if( xBitmap )
         {

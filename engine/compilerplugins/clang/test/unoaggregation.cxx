@@ -18,13 +18,13 @@
 class Base : public cppu::WeakAggImplHelper1<css::lang::XInitialization>
 {
 public:
-    void SAL_CALL initialize(css::uno::Sequence<css::uno::Any> const& aArguments) override;
+    void SAL_CALL initialize(css::uno::Sequence<cpo::uno::Any> const& aArguments) override;
 };
 
 class Good : public Base, public css::lang::XMain
 {
 public:
-    css::uno::Any SAL_CALL queryInterface(css::uno::Type const& aType) override
+    cpo::uno::Any SAL_CALL queryInterface(css::uno::Type const& aType) override
     {
         return Base::queryInterface(aType);
     }

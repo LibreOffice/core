@@ -112,9 +112,9 @@ public:
 
     virtual void SAL_CALL setPropertyValue(
             const OUString& rPropertyName,
-            const css::uno::Any& rValue) override;
+            const cpo::uno::Any& rValue) override;
 
-    virtual css::uno::Any SAL_CALL getPropertyValue(
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(
             const OUString& rPropertyName) override;
 
     virtual void SAL_CALL addPropertyChangeListener(
@@ -212,7 +212,7 @@ public:
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     // XDataSequence
-    virtual css::uno::Sequence< css::uno::Any >
+    virtual css::uno::Sequence< cpo::uno::Any >
         SAL_CALL getData() override;
     virtual OUString SAL_CALL getSourceRangeRepresentation() override;
     virtual css::uno::Sequence< OUString >
@@ -244,9 +244,9 @@ public:
 
     virtual void SAL_CALL setPropertyValue(
             const OUString& rPropertyName,
-            const css::uno::Any& rValue) override;
+            const cpo::uno::Any& rValue) override;
 
-    virtual css::uno::Any SAL_CALL getPropertyValue(
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(
             const OUString& rPropertyName) override;
 
     virtual void SAL_CALL addPropertyChangeListener(
@@ -359,7 +359,7 @@ private:
      * numerical and textural data series if they turn out to be bottlenecks
      * under certain scenarios.
      */
-    css::uno::Sequence< css::uno::Any > m_aMixedDataCache;
+    css::uno::Sequence< cpo::uno::Any > m_aMixedDataCache;
 
     css::uno::Sequence<sal_Int32>  m_aHiddenValues;
 

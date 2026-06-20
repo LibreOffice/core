@@ -30,6 +30,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace
 {
@@ -92,8 +93,8 @@ Reference<XInterface> SwXHeadFootText::init()
 
     Reference<beans::XPropertySet> xPropSet(xStyle, UNO_QUERY_THROW);
 
-    xPropSet->setPropertyValue(u"HeaderIsOn"_ustr, uno::Any(true));
-    xPropSet->setPropertyValue(u"FooterIsOn"_ustr, uno::Any(true));
+    xPropSet->setPropertyValue(u"HeaderIsOn"_ustr, cpo::uno::Any(true));
+    xPropSet->setPropertyValue(u"FooterIsOn"_ustr, cpo::uno::Any(true));
     Reference<text::XText> xText(xPropSet->getPropertyValue(u"HeaderText"_ustr), UNO_QUERY_THROW);
 
     return Reference<XInterface>(xText, UNO_QUERY_THROW);

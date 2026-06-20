@@ -76,7 +76,7 @@ public:
       *        This can be any of the CONTINUATION_* constants combinations
       *        listed above.
       */
-    SimpleInteractionRequest(const css::uno::Any& rRequest, const ContinuationFlags nContinuations);
+    SimpleInteractionRequest(const cpo::uno::Any& rRequest, const ContinuationFlags nContinuations);
 
     /**
       * After passing this request to XInteractionHandler::handle, this method

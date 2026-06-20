@@ -53,7 +53,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 
 constexpr OUString m_aMultiClick = u"MultiClick"_ustr;
 constexpr OUString m_aDragMethodEquals = u"DragMethod="_ustr;

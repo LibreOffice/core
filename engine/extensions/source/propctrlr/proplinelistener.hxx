@@ -20,7 +20,7 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 namespace pcr
 {
@@ -30,7 +30,7 @@ namespace pcr
     {
     public:
         virtual void    Clicked(    const OUString& _rName, bool _bPrimary ) = 0;
-        virtual void    Commit(     const OUString& _rName, const css::uno::Any& _rVal ) = 0;
+        virtual void    Commit(     const OUString& _rName, const cpo::uno::Any& _rVal ) = 0;
 
     protected:
         ~IPropertyLineListener() {}

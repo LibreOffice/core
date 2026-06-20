@@ -159,7 +159,7 @@ canvas/inc/base/graphicdevicebase.hxx:239
 canvas/inc/base/graphicdevicebase.hxx:245
     class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> canvas::GraphicDeviceBase::createInstance(const class rtl::OUString &,)
 canvas/inc/base/graphicdevicebase.hxx:253
-    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> canvas::GraphicDeviceBase::createInstanceWithArguments(const class rtl::OUString &,const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,)
+    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> canvas::GraphicDeviceBase::createInstanceWithArguments(const class rtl::OUString &,const class com::sun::star::uno::Sequence<class cpo::uno::Any> &,)
 canvas/inc/base/graphicdevicebase.hxx:261
     class com::sun::star::uno::Sequence<class rtl::OUString> canvas::GraphicDeviceBase::getAvailableServiceNames()
 canvas/inc/base/graphicdevicebase.hxx:268
@@ -167,9 +167,9 @@ canvas/inc/base/graphicdevicebase.hxx:268
 canvas/inc/base/graphicdevicebase.hxx:278
     class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySetInfo> canvas::GraphicDeviceBase::getPropertySetInfo()
 canvas/inc/base/graphicdevicebase.hxx:284
-    void canvas::GraphicDeviceBase::setPropertyValue(const class rtl::OUString &,const class com::sun::star::uno::Any &,)
+    void canvas::GraphicDeviceBase::setPropertyValue(const class rtl::OUString &,const class cpo::uno::Any &,)
 canvas/inc/base/graphicdevicebase.hxx:291
-    class com::sun::star::uno::Any canvas::GraphicDeviceBase::getPropertyValue(const class rtl::OUString &,)
+    class cpo::uno::Any canvas::GraphicDeviceBase::getPropertyValue(const class rtl::OUString &,)
 canvas/inc/base/graphicdevicebase.hxx:297
     void canvas::GraphicDeviceBase::addPropertyChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertyChangeListener> &,)
 canvas/inc/base/graphicdevicebase.hxx:305
@@ -239,7 +239,7 @@ forms/source/xforms/namedcollection.hxx:80
 forms/source/xforms/namedcollection.hxx:85
     unsigned char NamedCollection::hasElements()
 forms/source/xforms/namedcollection.hxx:91
-    class com::sun::star::uno::Any NamedCollection::getByName(const class rtl::OUString &,)
+    class cpo::uno::Any NamedCollection::getByName(const class rtl::OUString &,)
 forms/source/xforms/namedcollection.hxx:99
     class com::sun::star::uno::Sequence<class rtl::OUString> NamedCollection::getElementNames()
 forms/source/xforms/namedcollection.hxx:104
@@ -251,7 +251,7 @@ include/comphelper/interaction.hxx:53
 include/comphelper/proparrhlp.hxx:83
     class cppu::IPropertyArrayHelper * comphelper::OAggregationArrayUsageHelper::createArrayHelper()const
 include/comphelper/propshlp.hxx:175
-    class com::sun::star::uno::Any comphelper::OPropertySetHelper::getPropertyValueImpl(class std::unique_lock<class std::mutex> &,const class rtl::OUString &,)
+    class cpo::uno::Any comphelper::OPropertySetHelper::getPropertyValueImpl(class std::unique_lock<class std::mutex> &,const class rtl::OUString &,)
 include/comphelper/solarmutex.hxx:59
     _Bool comphelper::SolarMutex::tryToAcquire()
 include/comphelper/unique_disposing_ptr.hxx:170
@@ -275,7 +275,7 @@ include/svx/svdundo.hxx:765
 include/vbahelper/vbacollectionimpl.hxx:287
     int ScVbaCollectionBase::getCount()
 include/vbahelper/vbacollectionimpl.hxx:292
-    class com::sun::star::uno::Any ScVbaCollectionBase::Item(const class com::sun::star::uno::Any &,const class com::sun::star::uno::Any &,)
+    class cpo::uno::Any ScVbaCollectionBase::Item(const class cpo::uno::Any &,const class cpo::uno::Any &,)
 include/vbahelper/vbacollectionimpl.hxx:330
     unsigned char ScVbaCollectionBase::hasElements()
 include/vbahelper/vbahelperinterface.hxx:74
@@ -283,7 +283,7 @@ include/vbahelper/vbahelperinterface.hxx:74
 include/vbahelper/vbahelperinterface.hxx:78
     class com::sun::star::uno::Reference<class ooo::vba::XHelperInterface> InheritedHelperInterfaceImpl::getParent()
 include/vbahelper/vbahelperinterface.hxx:80
-    class com::sun::star::uno::Any InheritedHelperInterfaceImpl::Application()
+    class cpo::uno::Any InheritedHelperInterfaceImpl::Application()
 include/vbahelper/vbahelperinterface.hxx:88
     class rtl::OUString InheritedHelperInterfaceImpl::getImplementationName()
 include/vbahelper/vbahelperinterface.hxx:89
@@ -321,55 +321,55 @@ sc/source/ui/vba/vbacondition.hxx:41
 sc/source/ui/vba/vbacondition.hxx:43
     int ScVbaCondition::Operator(_Bool,)
 sc/source/ui/vba/vbaformat.hxx:73
-    class com::sun::star::uno::Any ScVbaFormat::Borders(const class com::sun::star::uno::Any &,)
+    class cpo::uno::Any ScVbaFormat::Borders(const class cpo::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:76
     class com::sun::star::uno::Reference<class ooo::vba::excel::XFont> ScVbaFormat::Font()
 sc/source/ui/vba/vbaformat.hxx:79
     class com::sun::star::uno::Reference<class ooo::vba::excel::XInterior> ScVbaFormat::Interior()
 sc/source/ui/vba/vbaformat.hxx:82
-    void ScVbaFormat::setNumberFormat(const class com::sun::star::uno::Any &,)
+    void ScVbaFormat::setNumberFormat(const class cpo::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:85
-    class com::sun::star::uno::Any ScVbaFormat::getNumberFormat()
+    class cpo::uno::Any ScVbaFormat::getNumberFormat()
 sc/source/ui/vba/vbaformat.hxx:88
-    void ScVbaFormat::setNumberFormatLocal(const class com::sun::star::uno::Any &,)
+    void ScVbaFormat::setNumberFormatLocal(const class cpo::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:91
-    class com::sun::star::uno::Any ScVbaFormat::getNumberFormatLocal()
+    class cpo::uno::Any ScVbaFormat::getNumberFormatLocal()
 sc/source/ui/vba/vbaformat.hxx:94
-    void ScVbaFormat::setIndentLevel(const class com::sun::star::uno::Any &,)
+    void ScVbaFormat::setIndentLevel(const class cpo::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:97
-    class com::sun::star::uno::Any ScVbaFormat::getIndentLevel()
+    class cpo::uno::Any ScVbaFormat::getIndentLevel()
 sc/source/ui/vba/vbaformat.hxx:100
-    void ScVbaFormat::setHorizontalAlignment(const class com::sun::star::uno::Any &,)
+    void ScVbaFormat::setHorizontalAlignment(const class cpo::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:103
-    class com::sun::star::uno::Any ScVbaFormat::getHorizontalAlignment()
+    class cpo::uno::Any ScVbaFormat::getHorizontalAlignment()
 sc/source/ui/vba/vbaformat.hxx:106
-    void ScVbaFormat::setVerticalAlignment(const class com::sun::star::uno::Any &,)
+    void ScVbaFormat::setVerticalAlignment(const class cpo::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:109
-    class com::sun::star::uno::Any ScVbaFormat::getVerticalAlignment()
+    class cpo::uno::Any ScVbaFormat::getVerticalAlignment()
 sc/source/ui/vba/vbaformat.hxx:112
-    void ScVbaFormat::setOrientation(const class com::sun::star::uno::Any &,)
+    void ScVbaFormat::setOrientation(const class cpo::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:115
-    class com::sun::star::uno::Any ScVbaFormat::getOrientation()
+    class cpo::uno::Any ScVbaFormat::getOrientation()
 sc/source/ui/vba/vbaformat.hxx:118
-    void ScVbaFormat::setShrinkToFit(const class com::sun::star::uno::Any &,)
+    void ScVbaFormat::setShrinkToFit(const class cpo::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:121
-    class com::sun::star::uno::Any ScVbaFormat::getShrinkToFit()
+    class cpo::uno::Any ScVbaFormat::getShrinkToFit()
 sc/source/ui/vba/vbaformat.hxx:124
-    void ScVbaFormat::setWrapText(const class com::sun::star::uno::Any &,)
+    void ScVbaFormat::setWrapText(const class cpo::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:127
-    class com::sun::star::uno::Any ScVbaFormat::getWrapText()
+    class cpo::uno::Any ScVbaFormat::getWrapText()
 sc/source/ui/vba/vbaformat.hxx:130
-    void ScVbaFormat::setLocked(const class com::sun::star::uno::Any &,)
+    void ScVbaFormat::setLocked(const class cpo::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:133
-    class com::sun::star::uno::Any ScVbaFormat::getLocked()
+    class cpo::uno::Any ScVbaFormat::getLocked()
 sc/source/ui/vba/vbaformat.hxx:136
-    void ScVbaFormat::setFormulaHidden(const class com::sun::star::uno::Any &,)
+    void ScVbaFormat::setFormulaHidden(const class cpo::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:139
-    class com::sun::star::uno::Any ScVbaFormat::getFormulaHidden()
+    class cpo::uno::Any ScVbaFormat::getFormulaHidden()
 sc/source/ui/vba/vbaformat.hxx:148
-    void ScVbaFormat::setReadingOrder(const class com::sun::star::uno::Any &,)
+    void ScVbaFormat::setReadingOrder(const class cpo::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:151
-    class com::sun::star::uno::Any ScVbaFormat::getReadingOrder()
+    class cpo::uno::Any ScVbaFormat::getReadingOrder()
 sc/source/ui/vba/vbapagebreak.hxx:44
     int ScVbaPageBreak::getType()
 sc/source/ui/vba/vbapagebreak.hxx:45

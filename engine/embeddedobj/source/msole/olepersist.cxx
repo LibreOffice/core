@@ -188,7 +188,7 @@ static OUString GetNewFilledTempFile_Impl( const uno::Reference< embed::XOptimiz
 static void SetStreamMediaType_Impl( const uno::Reference< io::XStream >& xStream, const OUString& aMediaType )
 {
     uno::Reference< beans::XPropertySet > xPropSet( xStream, uno::UNO_QUERY_THROW );
-    xPropSet->setPropertyValue("MediaType", uno::Any( aMediaType ) );
+    xPropSet->setPropertyValue("MediaType", cpo::uno::Any( aMediaType ) );
 }
 #endif
 
@@ -196,7 +196,7 @@ static void LetCommonStoragePassBeUsed_Impl( const uno::Reference< io::XStream >
 {
     uno::Reference< beans::XPropertySet > xPropSet( xStream, uno::UNO_QUERY_THROW );
     xPropSet->setPropertyValue(u"UseCommonStoragePasswordEncryption"_ustr,
-                                uno::Any( true ) );
+                                cpo::uno::Any( true ) );
 }
 #ifdef _WIN32
 
@@ -361,8 +361,8 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
     if ( !xTargetStream.is() || !xCachedVisualRepresentation.is() )
         throw uno::RuntimeException();
 
-    uno::Sequence< uno::Any > aArgs{ uno::Any(xTargetStream),
-                                     uno::Any(true) }; // do not create copy
+    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xTargetStream),
+                                     cpo::uno::Any(true) }; // do not create copy
 
     uno::Reference< container::XNameContainer > xNameContainer(
             m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
@@ -486,9 +486,9 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
     // insert the result file as replacement image
     OUString aCacheName = u"\002OlePres000"_ustr;
     if ( xNameContainer->hasByName( aCacheName ) )
-        xNameContainer->replaceByName( aCacheName, uno::Any( xTempFile ) );
+        xNameContainer->replaceByName( aCacheName, cpo::uno::Any( xTempFile ) );
     else
-        xNameContainer->insertByName( aCacheName, uno::Any( xTempFile ) );
+        xNameContainer->insertByName( aCacheName, cpo::uno::Any( xTempFile ) );
 
     uno::Reference< embed::XTransactedObject > xTransacted( xNameContainer, uno::UNO_QUERY_THROW );
     xTransacted->commit();
@@ -501,8 +501,8 @@ void OleEmbeddedObject::RemoveVisualCache_Impl( const uno::Reference< io::XStrea
     if ( !xTargetStream.is() )
         throw uno::RuntimeException();
 
-    uno::Sequence< uno::Any > aArgs{ uno::Any(xTargetStream),
-                                     uno::Any(true) }; // do not create copy
+    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xTargetStream),
+                                     cpo::uno::Any(true) }; // do not create copy
     uno::Reference< container::XNameContainer > xNameContainer(
             m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                     u"com.sun.star.embed.OLESimpleStorage"_ustr,
@@ -562,8 +562,8 @@ bool OleEmbeddedObject::HasVisReplInStream()
             {
                 bool bExists = false;
 
-                uno::Sequence< uno::Any > aArgs{ uno::Any(xStream),
-                                                 uno::Any(true) }; // do not create copy
+                uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xStream),
+                                                 cpo::uno::Any(true) }; // do not create copy
                 uno::Reference< container::XNameContainer > xNameContainer(
                         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                                 u"com.sun.star.embed.OLESimpleStorage"_ustr,
@@ -606,8 +606,8 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
         SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::TryToRetrieveCachedVisualRepresentation, retrieving" );
 
         uno::Reference< container::XNameContainer > xNameContainer;
-        uno::Sequence< uno::Any > aArgs{ uno::Any(xStream),
-                                         uno::Any(true) }; // do not create copy
+        uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xStream),
+                                         cpo::uno::Any(true) }; // do not create copy
         try
         {
             xNameContainer.set(

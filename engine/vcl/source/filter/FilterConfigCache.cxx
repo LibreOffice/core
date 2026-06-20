@@ -24,7 +24,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <comphelper/configuration.hxx>
 #include <tools/svlibrary.h>
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/uno/Exception.hpp>
@@ -37,6 +37,7 @@
 using namespace ::com::sun::star::lang          ;   // XMultiServiceFactory
 using namespace ::com::sun::star::container     ;   // XNameAccess
 using namespace ::com::sun::star::uno           ;   // Reference
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans         ;   // PropertyValue
 using namespace ::com::sun::star::configuration ;
 

@@ -25,6 +25,7 @@ using css::uno::Reference;
 using css::beans::XPropertySet;
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 class Chart2ExportTest : public ChartTest
 {
@@ -369,7 +370,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testScatterChartTextXValues)
     CPPUNIT_ASSERT(xCT.is());
 
     // Make sure we have exactly 3 data series.
-    std::vector<uno::Sequence<uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
+    std::vector<uno::Sequence<cpo::uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
     CPPUNIT_ASSERT_EQUAL(size_t(3), aLabels.size());
     CPPUNIT_ASSERT_EQUAL(u"Series 1"_ustr, aLabels[0][0].get<OUString>());
     CPPUNIT_ASSERT_EQUAL(u"Series 2"_ustr, aLabels[1][0].get<OUString>());
@@ -1056,7 +1057,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testScatterPlotLabels)
     CPPUNIT_ASSERT(xCT.is());
 
     // Make sure the original chart has 'a', 'b', 'c' as its data labels.
-    std::vector<uno::Sequence<uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
+    std::vector<uno::Sequence<cpo::uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
     CPPUNIT_ASSERT_EQUAL(size_t(3), aLabels.size());
     CPPUNIT_ASSERT_EQUAL(u"a"_ustr, aLabels[0][0].get<OUString>());
     CPPUNIT_ASSERT_EQUAL(u"b"_ustr, aLabels[1][0].get<OUString>());
@@ -1094,7 +1095,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testErrorBarDataRangeODS)
     // test that y error bars are there
     Reference< beans::XPropertySet > xErrorBarYProps;
     xPropSet->getPropertyValue(CHART_UNONAME_ERRORBAR_Y) >>= xErrorBarYProps;
-    uno::Any aAny = xErrorBarYProps->getPropertyValue(u"ErrorBarRangePositive"_ustr);
+    cpo::uno::Any aAny = xErrorBarYProps->getPropertyValue(u"ErrorBarRangePositive"_ustr);
     CPPUNIT_ASSERT(aAny.hasValue());
     OUString aPosRange;
     aAny >>= aPosRange;
@@ -1123,7 +1124,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, tdf50934_barOfPie)
 
     // Verify that it saves and loads as bar-of-pie
     Reference< beans::XPropertySet > xPropSet( xChartType, uno::UNO_QUERY_THROW );
-    uno::Any aAny = xPropSet->getPropertyValue(u"SubPieType"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"SubPieType"_ustr);
     CPPUNIT_ASSERT(aAny.hasValue());
     chart2::PieChartSubType subPieType;
     aAny >>= subPieType;
@@ -1146,7 +1147,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, tdf50934_pieOfPie)
 
     // Verify that it saves and loads as pie-of-pie
     Reference< beans::XPropertySet > xPropSet( xChartType, uno::UNO_QUERY_THROW );
-    uno::Any aAny = xPropSet->getPropertyValue(u"SubPieType"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"SubPieType"_ustr);
     CPPUNIT_ASSERT(aAny.hasValue());
     chart2::PieChartSubType subPieType;
     aAny >>= subPieType;
@@ -1166,7 +1167,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, tdf161800_barOfPie_split_pos)
 
     // Verify that it saves and loads with the correct split position
     Reference< beans::XPropertySet > xPropSet( xChartType, uno::UNO_QUERY_THROW );
-    uno::Any aAny = xPropSet->getPropertyValue(u"SplitPos"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"SplitPos"_ustr);
     CPPUNIT_ASSERT(aAny.hasValue());
     double nSplitPos;
     aAny >>= nSplitPos;
@@ -1189,7 +1190,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, tdf161800_pieOfPie_split_pos)
 
     // Verify that it saves and loads with the correct split position
     Reference< beans::XPropertySet > xPropSet( xChartType, uno::UNO_QUERY_THROW );
-    uno::Any aAny = xPropSet->getPropertyValue(u"SplitPos"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"SplitPos"_ustr);
     CPPUNIT_ASSERT(aAny.hasValue());
     double nSplitPos;
     aAny >>= nSplitPos;
@@ -1255,7 +1256,7 @@ namespace {
 
 void checkGapWidth(Reference<beans::XPropertySet> const & xPropSet, sal_Int32 nValue)
 {
-    uno::Any aAny = xPropSet->getPropertyValue(u"GapwidthSequence"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"GapwidthSequence"_ustr);
     CPPUNIT_ASSERT(aAny.hasValue());
     uno::Sequence< sal_Int32 > aSequence;
     aAny >>= aSequence;
@@ -1265,7 +1266,7 @@ void checkGapWidth(Reference<beans::XPropertySet> const & xPropSet, sal_Int32 nV
 
 void checkOverlap(Reference<beans::XPropertySet> const & xPropSet, sal_Int32 nValue)
 {
-    uno::Any aAny = xPropSet->getPropertyValue(u"OverlapSequence"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"OverlapSequence"_ustr);
     CPPUNIT_ASSERT(aAny.hasValue());
     uno::Sequence< sal_Int32 > aSequence;
     aAny >>= aSequence;

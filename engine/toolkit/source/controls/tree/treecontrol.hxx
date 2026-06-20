@@ -29,7 +29,7 @@ namespace toolkit
 class UnoTreeModel : public UnoControlModel
 {
 protected:
-    css::uno::Any ImplGetDefaultValue(sal_uInt16 nPropId) const override;
+    cpo::uno::Any ImplGetDefaultValue(sal_uInt16 nPropId) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:

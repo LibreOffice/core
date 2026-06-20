@@ -52,7 +52,7 @@ class PackageManagerImpl final : private cppu::BaseMutex, public t_pm_helper
     //This mutex is only used for synchronization in addPackage
     std::mutex m_addMutex;
     css::uno::Reference<css::ucb::XProgressHandler> m_xLogFile;
-    inline void logIntern( css::uno::Any const & status );
+    inline void logIntern( cpo::uno::Any const & status );
     void fireModified();
 
     css::uno::Reference<css::deployment::XPackageRegistry> m_xRegistry;
@@ -108,8 +108,8 @@ class PackageManagerImpl final : private cppu::BaseMutex, public t_pm_helper
         getProgressHandler() override;
 
         // XProgressHandler
-        virtual void SAL_CALL push( css::uno::Any const & Status ) override;
-        virtual void SAL_CALL update( css::uno::Any const & Status ) override;
+        virtual void SAL_CALL push( cpo::uno::Any const & Status ) override;
+        virtual void SAL_CALL update( cpo::uno::Any const & Status ) override;
         virtual void SAL_CALL pop() override;
     };
 
@@ -222,7 +222,7 @@ inline void PackageManagerImpl::check()
 }
 
 
-inline void PackageManagerImpl::logIntern( css::uno::Any const & status )
+inline void PackageManagerImpl::logIntern( cpo::uno::Any const & status )
 {
     if (m_xLogFile.is())
         m_xLogFile->update( status );

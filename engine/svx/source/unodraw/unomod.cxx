@@ -78,7 +78,7 @@ public:
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override ;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
@@ -202,7 +202,7 @@ uno::Reference< uno::XInterface > SvxUnoDrawMSFactory::createTextField( std::u16
     return SvxUnoTextCreateTextField( ServiceSpecifier );
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstanceWithArguments( const OUString& ServiceSpecifier, const uno::Sequence< css::uno::Any >& Arguments )
+uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstanceWithArguments( const OUString& ServiceSpecifier, const uno::Sequence< cpo::uno::Any >& Arguments )
 {
     OUString arg;
     if ((ServiceSpecifier == "com.sun.star.drawing.GraphicObjectShape"
@@ -238,9 +238,9 @@ SvxUnoDrawingModel::~SvxUnoDrawingModel() noexcept
 {
 }
 
-uno::Any SAL_CALL SvxUnoDrawingModel::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxUnoDrawingModel::queryInterface( const uno::Type & rType )
 {
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     QUERYINT(lang::XServiceInfo);
     else QUERYINT(lang::XMultiServiceFactory);
@@ -538,11 +538,11 @@ sal_Int32 SAL_CALL SvxUnoDrawPagesAccess::getCount()
     return nCount;
 }
 
-uno::Any SAL_CALL SvxUnoDrawPagesAccess::getByIndex( sal_Int32 Index )
+cpo::uno::Any SAL_CALL SvxUnoDrawPagesAccess::getByIndex( sal_Int32 Index )
 {
     ::SolarMutexGuard aGuard;
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     if( mrModel.mpDoc )
     {

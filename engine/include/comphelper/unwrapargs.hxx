@@ -49,7 +49,7 @@ namespace detail {
     }
 
     inline void unwrapArgs(
-        const css::uno::Sequence< css::uno::Any >&,
+        const css::uno::Sequence< cpo::uno::Any >&,
         sal_Int32,
         const css::uno::Reference< css::uno::XInterface >& )
     {
@@ -57,7 +57,7 @@ namespace detail {
     }
 
     inline void unwrapArgs(
-        const css::uno::Sequence< css::uno::Any >&,
+        const css::uno::Sequence< cpo::uno::Any >&,
         sal_Int32 )
     {
         return;
@@ -65,12 +65,12 @@ namespace detail {
 
     template< typename T, typename... Args >
     inline void unwrapArgs(
-        const css::uno::Sequence< css::uno::Any >& seq,
+        const css::uno::Sequence< cpo::uno::Any >& seq,
         sal_Int32 nArg, ::std::optional< T >& v, Args&... args );
 
     template< typename T, typename... Args >
     inline void unwrapArgs(
-        const css::uno::Sequence< css::uno::Any >& seq,
+        const css::uno::Sequence< cpo::uno::Any >& seq,
         sal_Int32 nArg, T& v, Args&... args )
     {
         if( seq.getLength() <= nArg )
@@ -93,7 +93,7 @@ namespace detail {
 
     template< typename T, typename... Args >
     inline void unwrapArgs(
-        const css::uno::Sequence< css::uno::Any >& seq,
+        const css::uno::Sequence< cpo::uno::Any >& seq,
         sal_Int32 nArg, ::std::optional< T >& v, Args&... args )
     {
         if( nArg < seq.getLength() )
@@ -109,7 +109,7 @@ namespace detail {
 
 template< typename... Args >
 inline void unwrapArgs(
-    const css::uno::Sequence< css::uno::Any >& seq,
+    const css::uno::Sequence< cpo::uno::Any >& seq,
     Args&... args )
 {
     return detail::unwrapArgs( seq, 0, args... );

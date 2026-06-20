@@ -49,6 +49,7 @@ constexpr OUString aSlotNewDocDirect = u".uno:AddDirect"_ustr;
 constexpr OUString aSlotAutoPilot = u".uno:AutoPilotMenu"_ustr;
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
@@ -500,7 +501,7 @@ void NewMenuController::initializeImpl( std::unique_lock<std::mutex>& rGuard, co
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_NewMenuController_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::NewMenuController(context));
 }

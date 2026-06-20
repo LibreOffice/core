@@ -35,7 +35,7 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -66,7 +66,7 @@ public:
             css::uno::Sequence< OUString >())
     {}
 
-    virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const & type)
+    virtual cpo::uno::Any SAL_CALL queryInterface(css::uno::Type const & type)
         throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL acquire() throw () { OWeakObject::acquire(); }
@@ -94,10 +94,10 @@ private:
     virtual ~Empty1() {}
 };
 
-css::uno::Any Empty1::queryInterface(css::uno::Type const & type)
+cpo::uno::Any Empty1::queryInterface(css::uno::Type const & type)
     throw (css::uno::RuntimeException)
 {
-    css::uno::Any a(OWeakObject::queryInterface(type));
+    cpo::uno::Any a(OWeakObject::queryInterface(type));
     if (a.hasValue()) {
         return a;
     }
@@ -124,7 +124,7 @@ public:
             css::uno::Sequence< OUString >())
     {}
 
-    virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const & type)
+    virtual cpo::uno::Any SAL_CALL queryInterface(css::uno::Type const & type)
         throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL acquire() throw () { OWeakObject::acquire(); }
@@ -152,10 +152,10 @@ private:
     virtual ~Empty2() {}
 };
 
-css::uno::Any Empty2::queryInterface(css::uno::Type const & type)
+cpo::uno::Any Empty2::queryInterface(css::uno::Type const & type)
     throw (css::uno::RuntimeException)
 {
-    css::uno::Any a(OWeakObject::queryInterface(type));
+    cpo::uno::Any a(OWeakObject::queryInterface(type));
     if (a.hasValue()) {
         return a;
     }
@@ -194,7 +194,7 @@ public:
             false)
     {}
 
-    virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const & type)
+    virtual cpo::uno::Any SAL_CALL queryInterface(css::uno::Type const & type)
         throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL acquire() throw () { OWeakObject::acquire(); }
@@ -249,10 +249,10 @@ private:
         css::beans::Defaulted< css::beans::Optional< sal_Int32 > > > m_a2;
 };
 
-css::uno::Any Full::queryInterface(css::uno::Type const & type)
+cpo::uno::Any Full::queryInterface(css::uno::Type const & type)
     throw (css::uno::RuntimeException)
 {
-    css::uno::Any a(OWeakObject::queryInterface(type));
+    cpo::uno::Any a(OWeakObject::queryInterface(type));
     if (a.hasValue()) {
         return a;
     }
@@ -273,8 +273,8 @@ sal_Int32 Full::getFirst() throw (css::uno::RuntimeException) {
 
 void Full::setFirst(sal_Int32 value) throw (css::uno::RuntimeException) {
     prepareSet(
-        OUString("First"), css::uno::Any(),
-        css::uno::Any(), 0);
+        OUString("First"), cpo::uno::Any(),
+        cpo::uno::Any(), 0);
     osl::MutexGuard g(m_mutex);
     m_a1 = value;
 }
@@ -296,13 +296,13 @@ void Full::setSecond(
         css::beans::PropertyVetoException, css::beans::UnknownPropertyException,
         css::uno::RuntimeException)
 {
-    css::uno::Any v;
+    cpo::uno::Any v;
     if (value.Value.Value.IsPresent) {
         v <<= value.Value.Value.Value;
     }
     BoundListeners l;
     prepareSet(
-        OUString("Second"), css::uno::Any(),
+        OUString("Second"), cpo::uno::Any(),
         v, &l);
     {
         osl::MutexGuard g(m_mutex);

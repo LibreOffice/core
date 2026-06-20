@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CPPUHELPER_IMPLBASE_EX_HXX
 #define INCLUDED_CPPUHELPER_IMPLBASE_EX_HXX
 
-#include "com/sun/star/uno/Any.h"
+#include "cpo/uno/Any.h"
 #include "com/sun/star/uno/Sequence.h"
 #include "com/sun/star/uno/Type.h"
 #include "com/sun/star/uno/genfunc.h"
@@ -101,13 +101,13 @@ struct SAL_WARN_UNUSED class_data
 
 /** ImplHelper
 */
-CPPUHELPER_DLLPUBLIC css::uno::Any SAL_CALL ImplHelper_query(
+CPPUHELPER_DLLPUBLIC cpo::uno::Any SAL_CALL ImplHelper_query(
     css::uno::Type const & rType,
     class_data * cd,
     void * that );
 /** ImplHelper
 */
-CPPUHELPER_DLLPUBLIC css::uno::Any SAL_CALL ImplHelper_queryNoXInterface(
+CPPUHELPER_DLLPUBLIC cpo::uno::Any SAL_CALL ImplHelper_queryNoXInterface(
     css::uno::Type const & rType,
     class_data * cd,
     void * that );
@@ -130,7 +130,7 @@ SAL_CALL ImplHelper_getImplementationId(
 
 /** WeakImplHelper
 */
-CPPUHELPER_DLLPUBLIC css::uno::Any SAL_CALL WeakImplHelper_query(
+CPPUHELPER_DLLPUBLIC cpo::uno::Any SAL_CALL WeakImplHelper_query(
     css::uno::Type const & rType,
     class_data * cd,
     void * that,
@@ -143,7 +143,7 @@ SAL_CALL WeakImplHelper_getTypes(
 
 /** WeakAggImplHelper
 */
-CPPUHELPER_DLLPUBLIC css::uno::Any
+CPPUHELPER_DLLPUBLIC cpo::uno::Any
 SAL_CALL WeakAggImplHelper_queryAgg(
     css::uno::Type const & rType,
     class_data * cd,

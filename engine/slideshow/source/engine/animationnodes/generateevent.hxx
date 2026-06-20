@@ -22,7 +22,7 @@
 
 #include <slideshowcontext.hxx>
 #include <delayevent.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 namespace slideshow::internal {
 
@@ -41,7 +41,7 @@ namespace slideshow::internal {
     Additional delay, gets added on top of timeout.
 */
 EventSharedPtr generateEvent(
-    css::uno::Any const& rEventDescription,
+    cpo::uno::Any const& rEventDescription,
     Delay::FunctorT const& rFunctor,
     SlideShowContext const& rContext,
     double nAdditionalDelay );

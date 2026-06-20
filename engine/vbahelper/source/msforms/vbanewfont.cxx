@@ -39,29 +39,29 @@ VbaNewFont::VbaNewFont(
 
 OUString SAL_CALL VbaNewFont::getName()
 {
-    uno::Any aAny = mxProps->getPropertyValue( u"FontName"_ustr );
+    cpo::uno::Any aAny = mxProps->getPropertyValue( u"FontName"_ustr );
     return aAny.get< OUString >();
 }
 
 void SAL_CALL VbaNewFont::setName( const OUString& rName )
 {
-    mxProps->setPropertyValue( u"FontName"_ustr , uno::Any( rName ) );
+    mxProps->setPropertyValue( u"FontName"_ustr , cpo::uno::Any( rName ) );
 }
 
 double SAL_CALL VbaNewFont::getSize()
 {
-    uno::Any aAny = mxProps->getPropertyValue( u"FontHeight"_ustr );
+    cpo::uno::Any aAny = mxProps->getPropertyValue( u"FontHeight"_ustr );
     return aAny.get< float >();
 }
 
 void SAL_CALL VbaNewFont::setSize( double fSize )
 {
-    mxProps->setPropertyValue( u"FontHeight"_ustr , uno::Any( static_cast< float >( fSize ) ) );
+    mxProps->setPropertyValue( u"FontHeight"_ustr , cpo::uno::Any( static_cast< float >( fSize ) ) );
 }
 
 sal_Int16 SAL_CALL VbaNewFont::getCharset()
 {
-    uno::Any aAny = mxProps->getPropertyValue( u"FontCharset"_ustr );
+    cpo::uno::Any aAny = mxProps->getPropertyValue( u"FontCharset"_ustr );
     return rtl_getBestWindowsCharsetFromTextEncoding( static_cast< rtl_TextEncoding >( aAny.get< sal_Int16 >() ) );
 }
 
@@ -72,7 +72,7 @@ void SAL_CALL VbaNewFont::setCharset( sal_Int16 nCharset )
         eFontEnc = rtl_getTextEncodingFromWindowsCharset( static_cast< sal_uInt8 >( nCharset ) );
     if( eFontEnc == RTL_TEXTENCODING_DONTKNOW )
         throw uno::RuntimeException(u"an unknown or missing encoding"_ustr);
-    mxProps->setPropertyValue( u"FontCharset"_ustr , uno::Any( static_cast< sal_Int16 >( eFontEnc ) ) );
+    mxProps->setPropertyValue( u"FontCharset"_ustr , cpo::uno::Any( static_cast< sal_Int16 >( eFontEnc ) ) );
 }
 
 sal_Int16 SAL_CALL VbaNewFont::getWeight()
@@ -87,46 +87,46 @@ void SAL_CALL VbaNewFont::setWeight( sal_Int16 nWeight )
 
 bool SAL_CALL VbaNewFont::getBold()
 {
-    uno::Any aAny = mxProps->getPropertyValue( u"FontWeight"_ustr );
+    cpo::uno::Any aAny = mxProps->getPropertyValue( u"FontWeight"_ustr );
     return aAny.get< float >() > awt::FontWeight::NORMAL;
 }
 
 void SAL_CALL VbaNewFont::setBold( bool bBold )
 {
-    mxProps->setPropertyValue( u"FontWeight"_ustr , uno::Any( bBold ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL ) );
+    mxProps->setPropertyValue( u"FontWeight"_ustr , cpo::uno::Any( bBold ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL ) );
 }
 
 bool SAL_CALL VbaNewFont::getItalic()
 {
-    uno::Any aAny = mxProps->getPropertyValue( u"FontSlant"_ustr );
+    cpo::uno::Any aAny = mxProps->getPropertyValue( u"FontSlant"_ustr );
     return aAny.get< awt::FontSlant >() != awt::FontSlant_NONE;
 }
 
 void SAL_CALL VbaNewFont::setItalic( bool bItalic )
 {
-    mxProps->setPropertyValue( u"FontSlant"_ustr , uno::Any( bItalic ? awt::FontSlant_ITALIC : awt::FontSlant_NONE ) );
+    mxProps->setPropertyValue( u"FontSlant"_ustr , cpo::uno::Any( bItalic ? awt::FontSlant_ITALIC : awt::FontSlant_NONE ) );
 }
 
 bool SAL_CALL VbaNewFont::getUnderline()
 {
-    uno::Any aAny = mxProps->getPropertyValue(u"FontUnderline"_ustr );
+    cpo::uno::Any aAny = mxProps->getPropertyValue(u"FontUnderline"_ustr );
     return aAny.get< sal_Int16 >() != awt::FontUnderline::NONE;
 }
 
 void SAL_CALL VbaNewFont::setUnderline( bool bUnderline )
 {
-    mxProps->setPropertyValue(u"FontUnderline"_ustr , uno::Any( bUnderline ? awt::FontUnderline::SINGLE : awt::FontUnderline::NONE ) );
+    mxProps->setPropertyValue(u"FontUnderline"_ustr , cpo::uno::Any( bUnderline ? awt::FontUnderline::SINGLE : awt::FontUnderline::NONE ) );
 }
 
 bool SAL_CALL VbaNewFont::getStrikethrough()
 {
-    uno::Any aAny = mxProps->getPropertyValue( u"FontStrikeout"_ustr );
+    cpo::uno::Any aAny = mxProps->getPropertyValue( u"FontStrikeout"_ustr );
     return aAny.get< sal_Int16 >() != awt::FontStrikeout::NONE;
 }
 
 void SAL_CALL VbaNewFont::setStrikethrough( bool bStrikethrough )
 {
-    mxProps->setPropertyValue( u"FontStrikeout"_ustr ,uno::Any( bStrikethrough ? awt::FontStrikeout::SINGLE : awt::FontStrikeout::NONE ) );
+    mxProps->setPropertyValue( u"FontStrikeout"_ustr ,cpo::uno::Any( bStrikethrough ? awt::FontStrikeout::SINGLE : awt::FontStrikeout::NONE ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

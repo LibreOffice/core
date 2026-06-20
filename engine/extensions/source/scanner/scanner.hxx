@@ -65,7 +65,7 @@ public:
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
-    virtual void SAL_CALL                   initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
+    virtual void SAL_CALL                   initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
 #ifdef _WIN32
     void*                                   GetData() const { return mpData; }

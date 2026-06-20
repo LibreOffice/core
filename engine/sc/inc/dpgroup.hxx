@@ -168,7 +168,7 @@ public:
     virtual void                    FilterCacheTable(std::vector<ScDPFilteredCache::Criterion>&& rCriteria, std::unordered_set<sal_Int32>&& rDataDims) override;
     virtual void                    GetDrillDownData(std::vector<ScDPFilteredCache::Criterion>&& rCriteria,
                                                      std::unordered_set<sal_Int32>&& rCatDims,
-                                                     css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& rData) override;
+                                                     css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > >& rData) override;
     virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow) override;
     virtual const ScDPFilteredCache&   GetCacheTable() const override;
     virtual void ReloadCacheTable() override;

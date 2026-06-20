@@ -68,8 +68,8 @@ namespace svt
         OControlAccess( IFilePickerController* pController, SvtFileView* pFileView );
 
         // XControlAccess implementation
-        void setControlProperty( std::u16string_view rControlName, const OUString& rControlProperty, const css::uno::Any& rValue );
-        css::uno::Any  getControlProperty( std::u16string_view rControlName, const OUString& rControlProperty );
+        void setControlProperty( std::u16string_view rControlName, const OUString& rControlProperty, const cpo::uno::Any& rValue );
+        cpo::uno::Any  getControlProperty( std::u16string_view rControlName, const OUString& rControlProperty );
 
         // XControlInformation implementation
         css::uno::Sequence< OUString >  getSupportedControls(  ) const;
@@ -78,8 +78,8 @@ namespace svt
         bool                            isControlPropertySupported( std::u16string_view rControlName, const OUString& rControlProperty );
 
         // XFilePickerControlAccess
-        void                        setValue( sal_Int16 nId, sal_Int16 nCtrlAction, const css::uno::Any& rValue );
-        css::uno::Any               getValue( sal_Int16 nId, sal_Int16 nCtrlAction ) const;
+        void                        setValue( sal_Int16 nId, sal_Int16 nCtrlAction, const cpo::uno::Any& rValue );
+        cpo::uno::Any               getValue( sal_Int16 nId, sal_Int16 nCtrlAction ) const;
         void                        setLabel( sal_Int16 nId, const OUString& rValue );
         OUString                    getLabel( sal_Int16 nId ) const;
         void                        enableControl( sal_Int16 nId, bool bEnable );
@@ -104,7 +104,7 @@ namespace svt
         */
         void                        implSetControlProperty(
                                         sal_Int16 nControlId,
-                                        weld::Widget* pControl, PropFlags nProperty, const css::uno::Any& rValue,
+                                        weld::Widget* pControl, PropFlags nProperty, const cpo::uno::Any& rValue,
                                         bool bIgnoreIllegalArgument = true );
 
         weld::Widget* implGetControl( std::u16string_view rControlName, sal_Int16* pId, PropFlags* pPropertyMask = nullptr ) const;
@@ -119,11 +119,11 @@ namespace svt
                 See PropFlags::*
             @return
         */
-        css::uno::Any  implGetControlProperty( weld::Widget const * pControl, PropFlags nProperty ) const;
+        cpo::uno::Any  implGetControlProperty( weld::Widget const * pControl, PropFlags nProperty ) const;
 
         bool IsFileViewWidget(weld::Widget const * pControl) const;
 
-        static void implDoListboxAction(weld::ComboBox* pListbox, sal_Int16 nCtrlAction, const css::uno::Any& rValue);
+        static void implDoListboxAction(weld::ComboBox* pListbox, sal_Int16 nCtrlAction, const cpo::uno::Any& rValue);
 
     };
 

@@ -34,7 +34,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -71,12 +71,12 @@ public:
     void testRecursive();
     void testCrossThreads();
 
-    css::uno::Any getKey(
+    cpo::uno::Any getKey(
         OUString const & path, OUString const & relative) const;
 
     void setKey(
         OUString const & path, OUString const & name,
-        css::uno::Any const & value) const;
+        cpo::uno::Any const & value) const;
 
     bool resetKey(OUString const & path, OUString const & name) const;
 
@@ -199,7 +199,7 @@ void SimpleRecursiveTest::step() const
         u"/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands/"
                  ".uno:WebHtml"_ustr,
         u"Label"_ustr,
-        css::uno::Any(u"step"_ustr));
+        cpo::uno::Any(u"step"_ustr));
 }
 
 void Test::setUp()
@@ -229,7 +229,7 @@ void Test::testKeySet()
     setKey(
         u"/org.openoffice.System/L10N"_ustr,
         u"Locale"_ustr,
-        css::uno::Any(u"com.sun.star.configuration.backend.LocaleBackend UILocale"_ustr));
+        cpo::uno::Any(u"com.sun.star.configuration.backend.LocaleBackend UILocale"_ustr));
     OUString s;
     CPPUNIT_ASSERT(
         getKey(
@@ -299,21 +299,21 @@ void Test::testInsertSetMember() {
         css::uno::Reference<css::lang::XSingleServiceFactory>(
             access, css::uno::UNO_QUERY_THROW)->createInstance());
     CPPUNIT_ASSERT(member.is());
-    access->insertByName(u"A"_ustr, css::uno::Any(member));
+    access->insertByName(u"A"_ustr, cpo::uno::Any(member));
     member.set(
         css::uno::Reference<css::lang::XSingleServiceFactory>(
             access, css::uno::UNO_QUERY_THROW)->createInstance());
     CPPUNIT_ASSERT(member.is());
     try {
-        access->insertByName(u""_ustr, css::uno::Any(member));
+        access->insertByName(u""_ustr, cpo::uno::Any(member));
         CPPUNIT_FAIL("expected IllegalArgumentException");
     } catch (css::lang::IllegalArgumentException &) {}
     try {
-        access->insertByName(u"\x01"_ustr, css::uno::Any(member));
+        access->insertByName(u"\x01"_ustr, cpo::uno::Any(member));
         CPPUNIT_FAIL("expected IllegalArgumentException");
     } catch (css::lang::IllegalArgumentException &) {}
     try {
-        access->insertByName(u"a/b"_ustr, css::uno::Any(member));
+        access->insertByName(u"a/b"_ustr, cpo::uno::Any(member));
     } catch (css::lang::IllegalArgumentException &) {
         CPPUNIT_FAIL("unexpected IllegalArgumentException");
     }
@@ -454,12 +454,12 @@ void Test::testCrossThreads()
     CPPUNIT_ASSERT(destroyed);
 }
 
-css::uno::Any Test::getKey(
+cpo::uno::Any Test::getKey(
     OUString const & path, OUString const & relative) const
 {
     css::uno::Reference< css::container::XHierarchicalNameAccess > access(
         createViewAccess(path), css::uno::UNO_QUERY_THROW);
-    css::uno::Any value(access->getByHierarchicalName(relative));
+    cpo::uno::Any value(access->getByHierarchicalName(relative));
     css::uno::Reference< css::lang::XComponent >(
         access, css::uno::UNO_QUERY_THROW)->dispose();
     return value;
@@ -467,7 +467,7 @@ css::uno::Any Test::getKey(
 
 void Test::setKey(
     OUString const & path, OUString const & name,
-    css::uno::Any const & value) const
+    cpo::uno::Any const & value) const
 {
     css::uno::Reference< css::container::XNameReplace > access(
         createUpdateAccess(path), css::uno::UNO_QUERY_THROW);
@@ -499,25 +499,25 @@ bool Test::resetKey(OUString const & path, OUString const & name)
 css::uno::Reference< css::uno::XInterface > Test::createViewAccess(
     OUString const & path) const
 {
-    css::uno::Any arg(
+    cpo::uno::Any arg(
             css::beans::NamedValue(
                 u"nodepath"_ustr,
-                css::uno::Any(path)));
+                cpo::uno::Any(path)));
     return provider_->createInstanceWithArguments(
         u"com.sun.star.configuration.ConfigurationAccess"_ustr,
-        css::uno::Sequence< css::uno::Any >(&arg, 1));
+        css::uno::Sequence< cpo::uno::Any >(&arg, 1));
 }
 
 css::uno::Reference< css::uno::XInterface > Test::createUpdateAccess(
     OUString const & path) const
 {
-    css::uno::Any arg(
+    cpo::uno::Any arg(
             css::beans::NamedValue(
                 u"nodepath"_ustr,
-                css::uno::Any(path)));
+                cpo::uno::Any(path)));
     return provider_->createInstanceWithArguments(
         u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr,
-        css::uno::Sequence< css::uno::Any >(&arg, 1));
+        css::uno::Sequence< cpo::uno::Any >(&arg, 1));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

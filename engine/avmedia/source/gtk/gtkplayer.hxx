@@ -49,7 +49,7 @@ public:
     virtual sal_Int16 SAL_CALL getVolumeDB() override;
     virtual css::awt::Size SAL_CALL getPreferredPlayerWindowSize() override;
     virtual css::uno::Reference<css::media::XPlayerWindow>
-        SAL_CALL createPlayerWindow(const css::uno::Sequence<css::uno::Any>& rArgs) override;
+        SAL_CALL createPlayerWindow(const css::uno::Sequence<cpo::uno::Any>& rArgs) override;
     virtual css::uno::Reference<css::media::XFrameGrabber> SAL_CALL createFrameGrabber() override;
 
     virtual OUString SAL_CALL getImplementationName() override;

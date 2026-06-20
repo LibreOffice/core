@@ -4383,7 +4383,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
         {
             try
             {
-                uno::Any aData = rxDataObj->getTransferData( aFlavor );
+                cpo::uno::Any aData = rxDataObj->getTransferData( aFlavor );
                 uno::Sequence< sal_Int8 > aSeq;
                 aData >>= aSeq;
                 {
@@ -4406,7 +4406,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
                 MSE40HTMLClipFormatObj aMSE40HTMLClipFormatObj;
                 try
                 {
-                    uno::Any aData = rxDataObj->getTransferData(aFlavor);
+                    cpo::uno::Any aData = rxDataObj->getTransferData(aFlavor);
                     uno::Sequence< sal_Int8 > aSeq;
                     aData >>= aSeq;
                     {
@@ -4441,7 +4441,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
                 }
                 try
                 {
-                    uno::Any aData = rxDataObj->getTransferData( aFlavor );
+                    cpo::uno::Any aData = rxDataObj->getTransferData( aFlavor );
                     uno::Sequence< sal_Int8 > aSeq;
                     aData >>= aSeq;
                     {
@@ -4466,7 +4466,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
             {
                 try
                 {
-                    uno::Any aData = rxDataObj->getTransferData( aFlavor );
+                    cpo::uno::Any aData = rxDataObj->getTransferData( aFlavor );
                     OUString aMDString;
                     aData >>= aMDString;
                     {
@@ -4493,7 +4493,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
             {
                 try
                 {
-                    uno::Any aData = rxDataObj->getTransferData(aFlavor);
+                    cpo::uno::Any aData = rxDataObj->getTransferData(aFlavor);
                     uno::Sequence<sal_Int8> aSeq;
                     aData >>= aSeq;
                     SvMemoryStream aHtmlStream(aSeq.getArray(), aSeq.getLength(), StreamMode::READ);
@@ -4514,7 +4514,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
         {
             try
             {
-                uno::Any aData = rxDataObj->getTransferData( aFlavor );
+                cpo::uno::Any aData = rxDataObj->getTransferData( aFlavor );
                 OUString aText;
                 aData >>= aText;
                 aNewSelection = ImpInsertText( EditSelection(rPaM), aText );

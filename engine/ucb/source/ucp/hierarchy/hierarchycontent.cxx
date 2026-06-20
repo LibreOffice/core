@@ -56,7 +56,7 @@
 #include <com/sun/star/ucb/UnsupportedNameClashException.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
@@ -170,9 +170,9 @@ void SAL_CALL HierarchyContent::release()
 
 
 // virtual
-uno::Any SAL_CALL HierarchyContent::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL HierarchyContent::queryInterface( const uno::Type & rType )
 {
-    uno::Any aRet = ContentImplHelper::queryInterface( rType );
+    cpo::uno::Any aRet = ContentImplHelper::queryInterface( rType );
 
     if ( !aRet.hasValue() )
     {
@@ -183,7 +183,7 @@ uno::Any SAL_CALL HierarchyContent::queryInterface( const uno::Type & rType )
         if ( aRet.hasValue() )
         {
             if ( !isFolder() || isReadOnly() )
-                return uno::Any();
+                return cpo::uno::Any();
         }
     }
 
@@ -293,12 +293,12 @@ HierarchyContent::getIdentifier()
 
 
 // virtual
-uno::Any SAL_CALL HierarchyContent::execute(
+cpo::uno::Any SAL_CALL HierarchyContent::execute(
         const ucb::Command& aCommand,
         sal_Int32 /*CommandId*/,
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
 
     if ( aCommand.Name == "getPropertyValues" )
     {
@@ -310,7 +310,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         if ( !( aCommand.Argument >>= Properties ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::Any( lang::IllegalArgumentException(
+                cpo::uno::Any( lang::IllegalArgumentException(
                                     u"Wrong argument type!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
@@ -330,7 +330,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         if ( !( aCommand.Argument >>= aProperties ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::Any( lang::IllegalArgumentException(
+                cpo::uno::Any( lang::IllegalArgumentException(
                                     u"Wrong argument type!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
@@ -341,7 +341,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         if ( !aProperties.hasElements() )
         {
             ucbhelper::cancelCommandExecution(
-                uno::Any( lang::IllegalArgumentException(
+                cpo::uno::Any( lang::IllegalArgumentException(
                                     u"No properties!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
@@ -377,7 +377,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         if ( !( aCommand.Argument >>= aOpenCommand ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::Any( lang::IllegalArgumentException(
+                cpo::uno::Any( lang::IllegalArgumentException(
                                     u"Wrong argument type!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
@@ -400,7 +400,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         if ( !( aCommand.Argument >>= aArg ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::Any( lang::IllegalArgumentException(
+                cpo::uno::Any( lang::IllegalArgumentException(
                                     u"Wrong argument type!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
@@ -427,9 +427,9 @@ uno::Any SAL_CALL HierarchyContent::execute(
         // Remove own and all children's persistent data.
         if ( !removeData() )
         {
-            uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+            uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
             {
-                {"Uri", uno::Any(m_xIdentifier->getContentIdentifier())}
+                {"Uri", cpo::uno::Any(m_xIdentifier->getContentIdentifier())}
             }));
             ucbhelper::cancelCommandExecution(
                 ucb::IOErrorCode_CANT_WRITE,
@@ -455,7 +455,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         {
             OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
-                uno::Any( lang::IllegalArgumentException(
+                cpo::uno::Any( lang::IllegalArgumentException(
                                     u"Wrong argument type!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
@@ -477,7 +477,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         {
             OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
-                uno::Any( lang::IllegalArgumentException(
+                cpo::uno::Any( lang::IllegalArgumentException(
                                     u"Wrong argument type!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
@@ -494,7 +494,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
 
 
         ucbhelper::cancelCommandExecution(
-            uno::Any( ucb::UnsupportedCommandException(
+            cpo::uno::Any( ucb::UnsupportedCommandException(
                                 OUString(),
                                 getXWeak() ) ),
             Environment );
@@ -868,7 +868,7 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
             else if ( rProp.Name == "CreatableContentsInfo" )
             {
                 xRow->appendObject(
-                    rProp, uno::Any( rData.getCreatableContentsInfo() ) );
+                    rProp, cpo::uno::Any( rData.getCreatableContentsInfo() ) );
             }
             else if ( rProp.Name == "TargetURL" )
             {
@@ -956,7 +956,7 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
                 cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
                 beans::PropertyAttribute::BOUND
                 | beans::PropertyAttribute::READONLY ),
-            uno::Any( rData.getCreatableContentsInfo() ) );
+            cpo::uno::Any( rData.getCreatableContentsInfo() ) );
 
         // Append all Additional Core Properties.
 
@@ -981,13 +981,13 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
 }
 
 
-uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
+uno::Sequence< cpo::uno::Any > HierarchyContent::setPropertyValues(
         const uno::Sequence< beans::PropertyValue >& rValues,
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
 {
     osl::ResettableGuard< osl::Mutex > aGuard( m_aMutex );
 
-    uno::Sequence< uno::Any > aRet( rValues.getLength() );
+    uno::Sequence< cpo::uno::Any > aRet( rValues.getLength() );
     auto aRetRange = asNonConstRange(aRet);
     uno::Sequence< beans::PropertyChangeEvent > aChanges( rValues.getLength() );
     sal_Int32 nChanged = 0;
@@ -1165,7 +1165,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
             {
                 try
                 {
-                    uno::Any aOldValue = xAdditionalPropSet->getPropertyValue(
+                    cpo::uno::Any aOldValue = xAdditionalPropSet->getPropertyValue(
                                                                 rValue.Name );
                     if ( aOldValue != rValue.Value )
                     {
@@ -1257,9 +1257,9 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
         {
             if ( !storeData() )
             {
-                uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+                uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
                 {
-                    {"Uri", uno::Any(m_xIdentifier->getContentIdentifier())}
+                    {"Uri", cpo::uno::Any(m_xIdentifier->getContentIdentifier())}
                 }));
                 ucbhelper::cancelCommandExecution(
                     ucb::IOErrorCode_CANT_WRITE,
@@ -1291,7 +1291,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
     if ( m_eKind == ROOT )
     {
         ucbhelper::cancelCommandExecution(
-            uno::Any( ucb::UnsupportedCommandException(
+            cpo::uno::Any( ucb::UnsupportedCommandException(
                                 u"Not supported by root folder!"_ustr,
                                 getXWeak() ) ),
             xEnv );
@@ -1303,7 +1303,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
     {
         uno::Sequence<OUString> aProps { u"Title"_ustr };
         ucbhelper::cancelCommandExecution(
-            uno::Any( ucb::MissingPropertiesException(
+            cpo::uno::Any( ucb::MissingPropertiesException(
                                 OUString(),
                                 getXWeak(),
                                 aProps ) ),
@@ -1325,7 +1325,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
             if ( hasData( xId ) )
             {
                 ucbhelper::cancelCommandExecution(
-                    uno::Any(
+                    cpo::uno::Any(
                         ucb::NameClashException(
                             OUString(),
                             getXWeak(),
@@ -1356,7 +1356,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
                 if ( nTry == 1000 )
                 {
                     ucbhelper::cancelCommandExecution(
-                        uno::Any(
+                        cpo::uno::Any(
                             ucb::UnsupportedNameClashException(
                                 u"Unable to resolve name clash!"_ustr,
                                 getXWeak(),
@@ -1378,7 +1378,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
             if ( hasData( xId ) )
             {
                 ucbhelper::cancelCommandExecution(
-                    uno::Any(
+                    cpo::uno::Any(
                         ucb::UnsupportedNameClashException(
                                 OUString(),
                                 getXWeak(),
@@ -1396,9 +1396,9 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
 
     if ( !storeData() )
     {
-        uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+        uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"Uri", uno::Any(m_xIdentifier->getContentIdentifier())}
+            {"Uri", cpo::uno::Any(m_xIdentifier->getContentIdentifier())}
         }));
         ucbhelper::cancelCommandExecution(
             ucb::IOErrorCode_CANT_WRITE,
@@ -1433,7 +1433,7 @@ void HierarchyContent::destroy( bool bDeletePhysical,
     if ( m_eState != PERSISTENT )
     {
         ucbhelper::cancelCommandExecution(
-            uno::Any( ucb::UnsupportedCommandException(
+            cpo::uno::Any( ucb::UnsupportedCommandException(
                                 u"Not persistent!"_ustr,
                                 getXWeak() ) ),
             xEnv );
@@ -1444,7 +1444,7 @@ void HierarchyContent::destroy( bool bDeletePhysical,
     if ( m_eKind == ROOT )
     {
         ucbhelper::cancelCommandExecution(
-            uno::Any( ucb::UnsupportedCommandException(
+            cpo::uno::Any( ucb::UnsupportedCommandException(
                                 u"Not supported by root folder!"_ustr,
                                 getXWeak() ) ),
             xEnv );
@@ -1481,7 +1481,7 @@ void HierarchyContent::transfer(
     if ( m_eState != PERSISTENT )
     {
         ucbhelper::cancelCommandExecution(
-            uno::Any( ucb::UnsupportedCommandException(
+            cpo::uno::Any( ucb::UnsupportedCommandException(
                                 u"Not persistent!"_ustr,
                                 getXWeak() ) ),
             xEnv );
@@ -1492,7 +1492,7 @@ void HierarchyContent::transfer(
     if ( !rInfo.SourceURL.startsWith( HIERARCHY_URL_SCHEME ":/" ) )
     {
         ucbhelper::cancelCommandExecution(
-            uno::Any( ucb::InteractiveBadTransferURLException(
+            cpo::uno::Any( ucb::InteractiveBadTransferURLException(
                             OUString(),
                             getXWeak() ) ),
             xEnv );
@@ -1512,9 +1512,9 @@ void HierarchyContent::transfer(
     {
         if ( aId.startsWith( rInfo.SourceURL ) )
         {
-            uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+            uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
             {
-                {"Uri", uno::Any(rInfo.SourceURL)}
+                {"Uri", cpo::uno::Any(rInfo.SourceURL)}
             }));
             ucbhelper::cancelCommandExecution(
                 ucb::IOErrorCode_RECURSIVE,
@@ -1549,9 +1549,9 @@ void HierarchyContent::transfer(
 
     if ( !xSource.is() )
     {
-        uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+        uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"Uri", uno::Any(xId->getContentIdentifier())}
+            {"Uri", cpo::uno::Any(xId->getContentIdentifier())}
         }));
         ucbhelper::cancelCommandExecution(
             ucb::IOErrorCode_CANT_READ,
@@ -1579,9 +1579,9 @@ void HierarchyContent::transfer(
             createNewContent( aContentInfo ).get() );
     if ( !xTarget.is() )
     {
-        uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+        uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"Folder", uno::Any(aId)}
+            {"Folder", cpo::uno::Any(aId)}
         }));
         ucbhelper::cancelCommandExecution(
             ucb::IOErrorCode_CANT_CREATE,
@@ -1707,9 +1707,9 @@ void HierarchyContent::transfer(
     // Remove all persistent data of source and its children.
     if ( !xSource->removeData() )
     {
-        uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+        uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"Uri", uno::Any(xSource->m_xIdentifier->getContentIdentifier())}
+            {"Uri", cpo::uno::Any(xSource->m_xIdentifier->getContentIdentifier())}
         }));
         ucbhelper::cancelCommandExecution(
             ucb::IOErrorCode_CANT_WRITE,

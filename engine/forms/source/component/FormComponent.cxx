@@ -61,6 +61,7 @@
 namespace frm
 {
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
@@ -640,7 +641,7 @@ OUString SAL_CALL OControlModel::getName()
     }
     catch (const css::beans::UnknownPropertyException&)
     {
-        css::uno::Any a(cppu::getCaughtException());
+        cpo::uno::Any a(cppu::getCaughtException());
         throw WrappedTargetRuntimeException(
             u"OControlModel::getName"_ustr,
             *this,
@@ -658,7 +659,7 @@ void SAL_CALL OControlModel::setName(const OUString& _rName)
     }
     catch (const css::beans::UnknownPropertyException&)
     {
-        css::uno::Any a(cppu::getCaughtException());
+        cpo::uno::Any a(cppu::getCaughtException());
         throw WrappedTargetRuntimeException(
             u"OControlModel::setName"_ustr,
             *this,
@@ -2757,7 +2758,7 @@ bool SAL_CALL OBoundControlModel::isValid(  )
     return m_bIsCurrentValueValid;
 }
 
-css::uno::Any OBoundControlModel::getCurrentFormComponentValue() const
+cpo::uno::Any OBoundControlModel::getCurrentFormComponentValue() const
 {
     if ( hasValidator() )
         return translateControlValueToValidatableValue();

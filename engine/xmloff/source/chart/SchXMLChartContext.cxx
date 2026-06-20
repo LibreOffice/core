@@ -80,7 +80,7 @@ void lcl_setRoleAtLabeledSequence(
     {
         uno::Reference< beans::XPropertySet > xProp( xValues, uno::UNO_QUERY );
         if( xProp.is())
-            xProp->setPropertyValue(u"Role"_ustr, uno::Any( rRole ));
+            xProp->setPropertyValue(u"Role"_ustr, cpo::uno::Any( rRole ));
     }
 }
 
@@ -499,7 +499,7 @@ void SchXMLChartContext::startFastElement( sal_Int32 /*nElement*/,
             {
                 xDocProp->getPropertyValue(u"BaseDiagram"_ustr) >>= aOldChartTypeName;
                 maChartTypeServiceName =  SchXMLTools::GetNewChartTypeName( aOldChartTypeName );
-                xDocProp->setPropertyValue(u"RefreshAddInAllowed"_ustr, uno::Any( false) );
+                xDocProp->setPropertyValue(u"RefreshAddInAllowed"_ustr, cpo::uno::Any( false) );
             }
             catch(const uno::Exception&)
             {
@@ -722,15 +722,15 @@ static void lcl_ApplyDataFromRectangularRangeToDiagram(
     uno::Sequence< beans::PropertyValue > aArgs{
         beans::PropertyValue(
            u"CellRangeRepresentation"_ustr,
-           -1, uno::Any( rRectangularRange ),
+           -1, cpo::uno::Any( rRectangularRange ),
            beans::PropertyState_DIRECT_VALUE ),
         beans::PropertyValue(
            u"DataRowSource"_ustr,
-           -1, uno::Any( eDataRowSource ),
+           -1, cpo::uno::Any( eDataRowSource ),
            beans::PropertyState_DIRECT_VALUE ),
         beans::PropertyValue(
            u"FirstCellAsLabel"_ustr,
-           -1, uno::Any( bFirstCellAsLabel ),
+           -1, cpo::uno::Any( bFirstCellAsLabel ),
            beans::PropertyState_DIRECT_VALUE )
     };
 
@@ -739,7 +739,7 @@ static void lcl_ApplyDataFromRectangularRangeToDiagram(
         aArgs.realloc( aArgs.getLength() + 1 );
         aArgs.getArray()[ sal::static_int_cast<sal_uInt32>(aArgs.getLength()) - 1 ] = beans::PropertyValue(
             u"SequenceMapping"_ustr,
-            -1, uno::Any( !sColTrans.empty()
+            -1, cpo::uno::Any( !sColTrans.empty()
                 ? lcl_getNumberSequenceFromString( sColTrans, bHasCateories && !xNewDoc->hasInternalDataProvider() )
                 : lcl_getNumberSequenceFromString( sRowTrans, bHasCateories && !xNewDoc->hasInternalDataProvider() ) ),
         beans::PropertyState_DIRECT_VALUE );
@@ -763,7 +763,7 @@ static void lcl_ApplyDataFromRectangularRangeToDiagram(
             aArgs.realloc( aArgs.getLength() + 1 );
             aArgs.getArray()[ sal::static_int_cast<sal_uInt32>(aArgs.getLength()) - 1 ] = beans::PropertyValue(
                 u"ChartOleObjectName"_ustr,
-                -1, uno::Any( aChartOleObjectName ),
+                -1, cpo::uno::Any( aChartOleObjectName ),
                 beans::PropertyState_DIRECT_VALUE );
         }
     }
@@ -775,11 +775,11 @@ static void lcl_ApplyDataFromRectangularRangeToDiagram(
     auto pArgs = aArgs.getArray();
     pArgs[ sal::static_int_cast<sal_uInt32>(aArgs.getLength()) - 2 ] = beans::PropertyValue(
         u"HasCategories"_ustr,
-        -1, uno::Any( bHasCateories ),
+        -1, cpo::uno::Any( bHasCateories ),
         beans::PropertyState_DIRECT_VALUE );
     pArgs[ sal::static_int_cast<sal_uInt32>(aArgs.getLength()) - 1 ] = beans::PropertyValue(
         u"UseCategoriesAsX"_ustr,
-        -1, uno::Any( false ),//categories in ODF files are not to be used as x values (independent from what is offered in our ui)
+        -1, cpo::uno::Any( false ),//categories in ODF files are not to be used as x values (independent from what is offered in our ui)
         beans::PropertyState_DIRECT_VALUE );
 
     xNewDia->setDiagramData( xDataSource, aArgs );
@@ -814,8 +814,8 @@ void SchXMLChartContext::endFastElement(sal_Int32 )
         Reference< chart2::XDiagram> xDia(xNewDoc->getFirstDiagram());
         uno::Reference< beans::XPropertySet > xDiaProp( xDia, uno::UNO_QUERY );
         if( xDiaProp.is()) {
-            xDiaProp->setPropertyValue(u"SubPieType"_ustr, uno::Any(mPieSubType));
-            xDiaProp->setPropertyValue(u"SplitPos"_ustr, uno::Any(mfPieSplitPos));
+            xDiaProp->setPropertyValue(u"SubPieType"_ustr, cpo::uno::Any(mPieSubType));
+            xDiaProp->setPropertyValue(u"SplitPos"_ustr, cpo::uno::Any(mfPieSplitPos));
         }
     }
 
@@ -901,7 +901,7 @@ void SchXMLChartContext::endFastElement(sal_Int32 )
             try
             {
                 if( bOlderThan2_3 && xDiaProp.is() )//for older charts the hidden cells were removed by calc on the fly
-                    xDiaProp->setPropertyValue(u"IncludeHiddenCells"_ustr,uno::Any(false));
+                    xDiaProp->setPropertyValue(u"IncludeHiddenCells"_ustr,cpo::uno::Any(false));
 
                 // note: mbRowHasLabels means the first row contains labels, that means we have "column-descriptions",
                 // (analogously mbColHasLabels means we have "row-descriptions")
@@ -1013,7 +1013,7 @@ void SchXMLChartContext::endFastElement(sal_Int32 )
     }
 
     if( xProp.is())
-        xProp->setPropertyValue(u"RefreshAddInAllowed"_ustr, uno::Any( true) );
+        xProp->setPropertyValue(u"RefreshAddInAllowed"_ustr, cpo::uno::Any( true) );
 }
 
 void SchXMLChartContext::MergeSeriesForStockChart()
@@ -1119,7 +1119,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLChartContext::cr
             {
                 if( xProp.is())
                 {
-                    xProp->setPropertyValue(u"HasMainTitle"_ustr, uno::Any(true) );
+                    xProp->setPropertyValue(u"HasMainTitle"_ustr, cpo::uno::Any(true) );
                 }
                 pContext = new SchXMLTitleContext( mrImportHelper, GetImport(),
                                                    maMainTitle, xDoc->getTitle() );
@@ -1130,7 +1130,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLChartContext::cr
             {
                 if( xProp.is())
                 {
-                    xProp->setPropertyValue(u"HasSubTitle"_ustr, uno::Any(true) );
+                    xProp->setPropertyValue(u"HasSubTitle"_ustr, cpo::uno::Any(true) );
                 }
                 pContext = new SchXMLTitleContext( mrImportHelper, GetImport(),
                                                    maSubTitle, xDoc->getSubTitle() );

@@ -33,7 +33,7 @@ ScVbaCommandBarControl::ScVbaCommandBarControl( const css::uno::Reference< ov::X
 void ScVbaCommandBarControl::ApplyChange()
 {
     uno::Reference< container::XIndexContainer > xIndexContainer( m_xCurrentSettings, uno::UNO_QUERY_THROW );
-    xIndexContainer->replaceByIndex( m_nPosition, uno::Any( m_aPropertyValues ) );
+    xIndexContainer->replaceByIndex( m_nPosition, cpo::uno::Any( m_aPropertyValues ) );
     pCBarHelper->ApplyTempChange( m_sResourceUrl, m_xBarSettings );
 }
 
@@ -50,7 +50,7 @@ void SAL_CALL
 ScVbaCommandBarControl::setCaption( const OUString& _caption )
 {
     OUString sCaption = _caption.replace('&','~');
-    setPropertyValue( m_aPropertyValues, u"Label"_ustr , uno::Any( sCaption ) );
+    setPropertyValue( m_aPropertyValues, u"Label"_ustr , cpo::uno::Any( sCaption ) );
     ApplyChange();
 }
 
@@ -72,7 +72,7 @@ ScVbaCommandBarControl::setOnAction( const OUString& _onaction )
     {
         OUString aCommandURL = ooo::vba::makeMacroURL( aResolvedMacro.msResolvedMacro );
         SAL_INFO("vbahelper", "ScVbaCommandBarControl::setOnAction: " << aCommandURL);
-        setPropertyValue( m_aPropertyValues, u"CommandURL"_ustr , uno::Any( aCommandURL ) );
+        setPropertyValue( m_aPropertyValues, u"CommandURL"_ustr , cpo::uno::Any( aCommandURL ) );
         ApplyChange();
     }
 }
@@ -81,7 +81,7 @@ bool SAL_CALL
 ScVbaCommandBarControl::getVisible()
 {
     bool bVisible = true;
-    uno::Any aValue = getPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_ISVISIBLE );
+    cpo::uno::Any aValue = getPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_ISVISIBLE );
     if( aValue.hasValue() )
         aValue >>= bVisible;
     return bVisible;
@@ -89,10 +89,10 @@ ScVbaCommandBarControl::getVisible()
 void SAL_CALL
 ScVbaCommandBarControl::setVisible( bool _visible )
 {
-    uno::Any aValue = getPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_ISVISIBLE );
+    cpo::uno::Any aValue = getPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_ISVISIBLE );
     if( aValue.hasValue() )
     {
-        setPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_ISVISIBLE , uno::Any( _visible ) );
+        setPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_ISVISIBLE , cpo::uno::Any( _visible ) );
         ApplyChange();
     }
 }
@@ -102,7 +102,7 @@ ScVbaCommandBarControl::getEnabled()
 {
     bool bEnabled = true;
 
-    uno::Any aValue = getPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_ENABLED );
+    cpo::uno::Any aValue = getPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_ENABLED );
     if( aValue.hasValue() )
     {
         aValue >>= bEnabled;
@@ -118,10 +118,10 @@ ScVbaCommandBarControl::getEnabled()
 void SAL_CALL
 ScVbaCommandBarControl::setEnabled( bool _enabled )
 {
-    uno::Any aValue = getPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_ENABLED );
+    cpo::uno::Any aValue = getPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_ENABLED );
     if( aValue.hasValue() )
     {
-        setPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_ENABLED , uno::Any( _enabled ) );
+        setPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_ENABLED , cpo::uno::Any( _enabled ) );
         ApplyChange();
     }
     else
@@ -160,8 +160,8 @@ ScVbaCommandBarControl::Delete(  )
     }
 }
 
-uno::Any SAL_CALL
-ScVbaCommandBarControl::Controls( const uno::Any& aIndex )
+cpo::uno::Any SAL_CALL
+ScVbaCommandBarControl::Controls( const cpo::uno::Any& aIndex )
 {
     // only Popup Menu has controls
     uno::Reference< container::XIndexAccess > xSubMenu;
@@ -172,9 +172,9 @@ ScVbaCommandBarControl::Controls( const uno::Any& aIndex )
     uno::Reference< XCommandBarControls > xCommandBarControls( new ScVbaCommandBarControls( this, mxContext, xSubMenu, pCBarHelper, m_xBarSettings, m_sResourceUrl ) );
     if( aIndex.hasValue() )
     {
-        return xCommandBarControls->Item( aIndex, uno::Any() );
+        return xCommandBarControls->Item( aIndex, cpo::uno::Any() );
     }
-    return uno::Any( xCommandBarControls );
+    return cpo::uno::Any( xCommandBarControls );
 }
 
 OUString

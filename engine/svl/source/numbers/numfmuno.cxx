@@ -657,16 +657,16 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL SvNumberFormatObj::getPropertyS
 }
 
 void SAL_CALL SvNumberFormatObj::setPropertyValue( const OUString&,
-                                                   const uno::Any& )
+                                                   const cpo::uno::Any& )
 {
     throw beans::UnknownPropertyException(); // Everything is read-only
 }
 
-uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const OUString& aPropertyName )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     const SvNumberformat* pFormat = pFormatter ? pFormatter->GetEntry(nKey) : nullptr;
     if (!pFormat)
@@ -806,19 +806,19 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
     lang::Locale aLocale( LanguageTag( pFormat->GetLanguage()).getLocale());
 
     uno::Sequence<beans::PropertyValue> aSeq( comphelper::InitPropertySequence({
-            { PROPERTYNAME_FMTSTR, uno::Any(aFmtStr) },
-            { PROPERTYNAME_LOCALE, uno::Any(aLocale) },
-            { PROPERTYNAME_TYPE, uno::Any(sal_Int16( pFormat->GetType() )) },
-            { PROPERTYNAME_COMMENT, uno::Any(aComment) },
-            { PROPERTYNAME_STDFORM, uno::Any(bStandard) },
-            { PROPERTYNAME_USERDEF, uno::Any(bUserDef) },
-            { PROPERTYNAME_DECIMALS, uno::Any(sal_Int16( nDecimals )) },
-            { PROPERTYNAME_LEADING, uno::Any(sal_Int16( nLeading )) },
-            { PROPERTYNAME_NEGRED, uno::Any(bRed) },
-            { PROPERTYNAME_THOUS, uno::Any(bThousand) },
-            { PROPERTYNAME_CURRSYM, uno::Any(aSymbol) },
-            { PROPERTYNAME_CURREXT, uno::Any(aExt) },
-            { PROPERTYNAME_CURRABB, uno::Any(aAbb) }
+            { PROPERTYNAME_FMTSTR, cpo::uno::Any(aFmtStr) },
+            { PROPERTYNAME_LOCALE, cpo::uno::Any(aLocale) },
+            { PROPERTYNAME_TYPE, cpo::uno::Any(sal_Int16( pFormat->GetType() )) },
+            { PROPERTYNAME_COMMENT, cpo::uno::Any(aComment) },
+            { PROPERTYNAME_STDFORM, cpo::uno::Any(bStandard) },
+            { PROPERTYNAME_USERDEF, cpo::uno::Any(bUserDef) },
+            { PROPERTYNAME_DECIMALS, cpo::uno::Any(sal_Int16( nDecimals )) },
+            { PROPERTYNAME_LEADING, cpo::uno::Any(sal_Int16( nLeading )) },
+            { PROPERTYNAME_NEGRED, cpo::uno::Any(bRed) },
+            { PROPERTYNAME_THOUS, cpo::uno::Any(bThousand) },
+            { PROPERTYNAME_CURRSYM, cpo::uno::Any(aSymbol) },
+            { PROPERTYNAME_CURREXT, cpo::uno::Any(aExt) },
+            { PROPERTYNAME_CURRABB, cpo::uno::Any(aAbb) }
         }));
 
     return aSeq;
@@ -866,7 +866,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL SvNumberFormatSettingsObj::getP
 }
 
 void SAL_CALL SvNumberFormatSettingsObj::setPropertyValue( const OUString& aPropertyName,
-                                                           const uno::Any& aValue )
+                                                           const cpo::uno::Any& aValue )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -903,11 +903,11 @@ void SAL_CALL SvNumberFormatSettingsObj::setPropertyValue( const OUString& aProp
 
 }
 
-uno::Any SAL_CALL SvNumberFormatSettingsObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL SvNumberFormatSettingsObj::getPropertyValue( const OUString& aPropertyName )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     if (!pFormatter)
         throw uno::RuntimeException();
@@ -975,7 +975,7 @@ uno::Sequence<OUString> SAL_CALL SvNumberFormatSettingsObj::getSupportedServiceN
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_uno_util_numbers_SvNumberFormatterServiceObject_get_implementation(css::uno::XComponentContext*,
-                                                                                css::uno::Sequence<css::uno::Any> const &)
+                                                                                css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SvNumberFormatterServiceObj());
 }

@@ -56,23 +56,23 @@ public:
     SvxUnoXPropertyTable( sal_Int16 nWhich, XPropertyList& rList ) noexcept;
 
     /// @throws uno::RuntimeException
-    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const = 0;
+    virtual cpo::uno::Any getAny( const XPropertyEntry* pEntry ) const = 0;
     /// @throws uno::RuntimeException
     /// @throws lang::IllegalArgumentException
-    virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const uno::Any& rAny) const = 0;
+    virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const cpo::uno::Any& rAny) const = 0;
 
     // XServiceInfo
     virtual bool SAL_CALL supportsService( const  OUString& ServiceName ) override;
 
     // XNameContainer
-    virtual void SAL_CALL insertByName( const  OUString& aName, const  uno::Any& aElement ) override;
+    virtual void SAL_CALL insertByName( const  OUString& aName, const  cpo::uno::Any& aElement ) override;
     virtual void SAL_CALL removeByName( const  OUString& Name ) override;
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const  OUString& aName, const  uno::Any& aElement ) override;
+    virtual void SAL_CALL replaceByName( const  OUString& aName, const  cpo::uno::Any& aElement ) override;
 
     // XNameAccess
-    virtual uno::Any SAL_CALL getByName( const  OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const  OUString& aName ) override;
     virtual uno::Sequence<  OUString > SAL_CALL getElementNames(  ) override;
     virtual bool SAL_CALL hasByName( const  OUString& aName ) override;
 
@@ -99,7 +99,7 @@ bool SAL_CALL SvxUnoXPropertyTable::supportsService( const  OUString& ServiceNam
 }
 
 // XNameContainer
-void SAL_CALL SvxUnoXPropertyTable::insertByName( const  OUString& aName, const  uno::Any& aElement )
+void SAL_CALL SvxUnoXPropertyTable::insertByName( const  OUString& aName, const  cpo::uno::Any& aElement )
 {
     SolarMutexGuard aGuard;
 
@@ -137,7 +137,7 @@ void SAL_CALL SvxUnoXPropertyTable::removeByName( const  OUString& Name )
 }
 
 // XNameReplace
-void SAL_CALL SvxUnoXPropertyTable::replaceByName( const  OUString& aName, const  uno::Any& aElement )
+void SAL_CALL SvxUnoXPropertyTable::replaceByName( const  OUString& aName, const  cpo::uno::Any& aElement )
 {
     SolarMutexGuard aGuard;
 
@@ -163,7 +163,7 @@ void SAL_CALL SvxUnoXPropertyTable::replaceByName( const  OUString& aName, const
 }
 
 // XNameAccess
-uno::Any SAL_CALL SvxUnoXPropertyTable::getByName( const  OUString& aName )
+cpo::uno::Any SAL_CALL SvxUnoXPropertyTable::getByName( const  OUString& aName )
 {
     SolarMutexGuard aGuard;
 
@@ -235,8 +235,8 @@ public:
     explicit SvxUnoXColorTable( XPropertyList& rList ) noexcept : SvxUnoXPropertyTable( XATTR_LINECOLOR, rList ) {};
 
     // SvxUnoXPropertyTable
-    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const noexcept override;
-    virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const uno::Any& rAny) const override;
+    virtual cpo::uno::Any getAny( const XPropertyEntry* pEntry ) const noexcept override;
+    virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const cpo::uno::Any& rAny) const override;
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() override;
@@ -254,12 +254,12 @@ uno::Reference< container::XNameContainer > SvxUnoXColorTable_createInstance( XP
 }
 
 // SvxUnoXPropertyTable
-uno::Any SvxUnoXColorTable::getAny( const XPropertyEntry* pEntry ) const noexcept
+cpo::uno::Any SvxUnoXColorTable::getAny( const XPropertyEntry* pEntry ) const noexcept
 {
-    return uno::Any( static_cast<sal_Int32>(static_cast<const XColorEntry*>(pEntry)->GetColor()) );
+    return cpo::uno::Any( static_cast<sal_Int32>(static_cast<const XColorEntry*>(pEntry)->GetColor()) );
 }
 
-std::unique_ptr<XPropertyEntry> SvxUnoXColorTable::createEntry(const OUString& rName, const uno::Any& rAny) const
+std::unique_ptr<XPropertyEntry> SvxUnoXColorTable::createEntry(const OUString& rName, const cpo::uno::Any& rAny) const
 {
     Color aColor;
     if( !(rAny >>= aColor) )
@@ -293,8 +293,8 @@ public:
     explicit SvxUnoXLineEndTable( XPropertyList& rTable ) noexcept : SvxUnoXPropertyTable( XATTR_LINEEND, rTable ) {};
 
     // SvxUnoXPropertyTable
-    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const noexcept override;
-    virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const uno::Any& rAny) const override;
+    virtual cpo::uno::Any getAny( const XPropertyEntry* pEntry ) const noexcept override;
+    virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const cpo::uno::Any& rAny) const override;
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() override;
@@ -312,15 +312,15 @@ uno::Reference< container::XNameContainer > SvxUnoXLineEndTable_createInstance( 
 }
 
 // SvxUnoXPropertyTable
-uno::Any SvxUnoXLineEndTable::getAny( const XPropertyEntry* pEntry ) const noexcept
+cpo::uno::Any SvxUnoXLineEndTable::getAny( const XPropertyEntry* pEntry ) const noexcept
 {
     drawing::PolyPolygonBezierCoords aBezier;
     basegfx::utils::B2DPolyPolygonToUnoPolyPolygonBezierCoords( static_cast<const XLineEndEntry*>(pEntry)->GetLineEnd(),
                                                           aBezier );
-    return uno::Any(aBezier);
+    return cpo::uno::Any(aBezier);
 }
 
-std::unique_ptr<XPropertyEntry> SvxUnoXLineEndTable::createEntry(const OUString& rName, const uno::Any& rAny) const
+std::unique_ptr<XPropertyEntry> SvxUnoXLineEndTable::createEntry(const OUString& rName, const cpo::uno::Any& rAny) const
 {
     auto pCoords = o3tl::tryAccess<drawing::PolyPolygonBezierCoords>(rAny);
     if( !pCoords )
@@ -361,8 +361,8 @@ public:
     explicit SvxUnoXDashTable( XPropertyList& rTable ) noexcept : SvxUnoXPropertyTable( XATTR_LINEDASH, rTable ) {};
 
     // SvxUnoXPropertyTable
-    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const noexcept override;
-    virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const uno::Any& rAny) const override;
+    virtual cpo::uno::Any getAny( const XPropertyEntry* pEntry ) const noexcept override;
+    virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const cpo::uno::Any& rAny) const override;
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() override;
@@ -380,7 +380,7 @@ uno::Reference< container::XNameContainer > SvxUnoXDashTable_createInstance( XPr
 }
 
 // SvxUnoXPropertyTable
-uno::Any SvxUnoXDashTable::getAny( const XPropertyEntry* pEntry ) const noexcept
+cpo::uno::Any SvxUnoXDashTable::getAny( const XPropertyEntry* pEntry ) const noexcept
 {
     const XDash& rXD = static_cast<const XDashEntry*>(pEntry)->GetDash();
 
@@ -393,10 +393,10 @@ uno::Any SvxUnoXDashTable::getAny( const XPropertyEntry* pEntry ) const noexcept
     aLineDash.DashLen = rXD.GetDashLen();
     aLineDash.Distance = rXD.GetDistance();
 
-    return uno::Any(aLineDash);
+    return cpo::uno::Any(aLineDash);
 }
 
-std::unique_ptr<XPropertyEntry> SvxUnoXDashTable::createEntry(const OUString& rName, const uno::Any& rAny) const
+std::unique_ptr<XPropertyEntry> SvxUnoXDashTable::createEntry(const OUString& rName, const cpo::uno::Any& rAny) const
 {
     drawing::LineDash aLineDash;
     if(!(rAny >>= aLineDash))
@@ -439,8 +439,8 @@ public:
     explicit SvxUnoXHatchTable( XPropertyList& rTable ) noexcept : SvxUnoXPropertyTable( XATTR_FILLHATCH, rTable ) {};
 
     // SvxUnoXPropertyTable
-    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const noexcept override;
-    virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const uno::Any& rAny) const override;
+    virtual cpo::uno::Any getAny( const XPropertyEntry* pEntry ) const noexcept override;
+    virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const cpo::uno::Any& rAny) const override;
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() override;
@@ -458,7 +458,7 @@ uno::Reference< container::XNameContainer > SvxUnoXHatchTable_createInstance( XP
 }
 
 // SvxUnoXPropertyTable
-uno::Any SvxUnoXHatchTable::getAny( const XPropertyEntry* pEntry ) const noexcept
+cpo::uno::Any SvxUnoXHatchTable::getAny( const XPropertyEntry* pEntry ) const noexcept
 {
     const XHatch& aHatch = static_cast<const XHatchEntry*>(pEntry)->GetHatch();
 
@@ -469,10 +469,10 @@ uno::Any SvxUnoXHatchTable::getAny( const XPropertyEntry* pEntry ) const noexcep
     aUnoHatch.Distance = aHatch.GetDistance();
     aUnoHatch.Angle = aHatch.GetAngle().get();
 
-    return uno::Any(aUnoHatch);
+    return cpo::uno::Any(aUnoHatch);
 }
 
-std::unique_ptr<XPropertyEntry> SvxUnoXHatchTable::createEntry(const OUString& rName, const uno::Any& rAny) const
+std::unique_ptr<XPropertyEntry> SvxUnoXHatchTable::createEntry(const OUString& rName, const cpo::uno::Any& rAny) const
 {
     drawing::Hatch aUnoHatch;
     if(!(rAny >>= aUnoHatch))
@@ -512,8 +512,8 @@ public:
     explicit SvxUnoXGradientTable( XPropertyList& rTable ) noexcept : SvxUnoXPropertyTable( XATTR_FILLGRADIENT, rTable ) {};
 
     // SvxUnoXPropertyTable
-    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const noexcept override;
-    virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const uno::Any& rAny) const override;
+    virtual cpo::uno::Any getAny( const XPropertyEntry* pEntry ) const noexcept override;
+    virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const cpo::uno::Any& rAny) const override;
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() override;
@@ -531,17 +531,17 @@ uno::Reference< container::XNameContainer > SvxUnoXGradientTable_createInstance(
 }
 
 // SvxUnoXPropertyTable
-uno::Any SvxUnoXGradientTable::getAny( const XPropertyEntry* pEntry ) const noexcept
+cpo::uno::Any SvxUnoXGradientTable::getAny( const XPropertyEntry* pEntry ) const noexcept
 {
     const basegfx::BGradient& aBGradient = static_cast<const XGradientEntry*>(pEntry)->GetGradient();
 
     awt::Gradient2 aGradient = model::gradient::createUnoGradient2(aBGradient);
     assert(aGradient.ColorStops.get() && "cid#1524745 aGradient.ColorStops._pSequence won't be null here");
 
-    return uno::Any(aGradient);
+    return cpo::uno::Any(aGradient);
 }
 
-std::unique_ptr<XPropertyEntry> SvxUnoXGradientTable::createEntry(const OUString& rName, const uno::Any& rAny) const
+std::unique_ptr<XPropertyEntry> SvxUnoXGradientTable::createEntry(const OUString& rName, const cpo::uno::Any& rAny) const
 {
     if (!rAny.has<css::awt::Gradient>() || !rAny.has<css::awt::Gradient2>())
         return std::unique_ptr<XPropertyEntry>();
@@ -575,8 +575,8 @@ public:
     explicit SvxUnoXBitmapTable( XPropertyList& rTable ) noexcept : SvxUnoXPropertyTable( XATTR_FILLBITMAP, rTable ) {};
 
     // SvxUnoXPropertyTable
-    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const override;
-    virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const uno::Any& rAny) const override;
+    virtual cpo::uno::Any getAny( const XPropertyEntry* pEntry ) const override;
+    virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const cpo::uno::Any& rAny) const override;
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() override;
@@ -594,14 +594,14 @@ uno::Reference< container::XNameContainer > SvxUnoXBitmapTable_createInstance( X
 }
 
 // SvxUnoXPropertyTable
-uno::Any SvxUnoXBitmapTable::getAny( const XPropertyEntry* pEntry ) const
+cpo::uno::Any SvxUnoXBitmapTable::getAny( const XPropertyEntry* pEntry ) const
 {
     auto xBitmapEntry = static_cast<const XBitmapEntry*>(pEntry);
     css::uno::Reference<css::awt::XBitmap> xBitmap(xBitmapEntry->GetGraphicObject().GetGraphic().GetXGraphic(), uno::UNO_QUERY);
-    return uno::Any(xBitmap);
+    return cpo::uno::Any(xBitmap);
 }
 
-std::unique_ptr<XPropertyEntry> SvxUnoXBitmapTable::createEntry(const OUString& rName, const uno::Any& rAny) const
+std::unique_ptr<XPropertyEntry> SvxUnoXBitmapTable::createEntry(const OUString& rName, const cpo::uno::Any& rAny) const
 {
     if (!rAny.has<uno::Reference<awt::XBitmap>>())
         return std::unique_ptr<XPropertyEntry>();

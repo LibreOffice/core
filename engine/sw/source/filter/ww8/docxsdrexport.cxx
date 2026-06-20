@@ -795,14 +795,14 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
 
             // The import has added a difference to dist* in case of contour wrap for to give a
             // rendering nearer to Word. In that case, we need to subtract it on export.
-            uno::Any aAny;
+            cpo::uno::Any aAny;
             pObj->GetGrabBagItem(aAny);
             comphelper::SequenceAsHashMap aGrabBag(aAny);
             auto it = aGrabBag.find(u"AnchorDistDiff"_ustr);
             if (it != aGrabBag.end())
             {
                 comphelper::SequenceAsHashMap aAnchorDistDiff(it->second);
-                for (const std::pair<const comphelper::OUStringAndHashCode, uno::Any>& rDiff :
+                for (const std::pair<const comphelper::OUStringAndHashCode, cpo::uno::Any>& rDiff :
                      aAnchorDistDiff)
                 {
                     const OUString& rName = rDiff.first.maString;
@@ -1154,7 +1154,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     sal_Int64 nBottomExtEMU = TwipsToEMU(nBottomExt);
     if (pObj)
     {
-        uno::Any aAny;
+        cpo::uno::Any aAny;
         pObj->GetGrabBagItem(aAny);
         comphelper::SequenceAsHashMap aGrabBag(aAny);
         auto it = aGrabBag.find(u"CT_EffectExtent"_ustr);
@@ -1165,7 +1165,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
             sal_Int64 nTopExtGrabBag(0);
             sal_Int64 nRightExtGrabBag(0);
             sal_Int64 nBottomExtGrabBag(0);
-            for (const std::pair<const comphelper::OUStringAndHashCode, uno::Any>& rDirection :
+            for (const std::pair<const comphelper::OUStringAndHashCode, cpo::uno::Any>& rDirection :
                  aEffectExtent)
             {
                 const OUString& rName = rDirection.first.maString;
@@ -1289,7 +1289,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     // rotation. So it is likely, that it is still usable.
     if (pObj)
     {
-        uno::Any aAny;
+        cpo::uno::Any aAny;
         pObj->GetGrabBagItem(aAny);
         comphelper::SequenceAsHashMap aGrabBag(aAny);
         auto it = aGrabBag.find(u"CT_WrapPath"_ustr);
@@ -1866,7 +1866,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, bool bText
         pFS->startElementNS(XML_wps, XML_wsp);
         pFS->singleElementNS(XML_wps, XML_cNvSpPr, XML_txBox, "1");
 
-        uno::Any aRotation;
+        cpo::uno::Any aRotation;
         m_pImpl->setDMLandVMLTextFrameRotation(0_deg100);
         if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(u"FrameInteropGrabBag"_ustr))
         {

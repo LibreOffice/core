@@ -330,7 +330,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMargin)
 
     // Set the gutter margin to 2cm.
     sal_Int32 nGutterMm100 = 2000;
-    xStandard->setPropertyValue(u"GutterMargin"_ustr, uno::Any(nGutterMm100));
+    xStandard->setPropertyValue(u"GutterMargin"_ustr, cpo::uno::Any(nGutterMm100));
 
     // Verify that the new left edge is larger.
     tools::Long nNewLeft = pPage->getFramePrintArea().Left();
@@ -351,7 +351,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterTopMargin)
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xSettings(
         xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
-    xSettings->setPropertyValue(u"GutterAtTop"_ustr, uno::Any(true));
+    xSettings->setPropertyValue(u"GutterAtTop"_ustr, cpo::uno::Any(true));
     uno::Reference<beans::XPropertySet> xStandard(
         getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
@@ -360,7 +360,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterTopMargin)
 
     // Set the gutter margin to 2cm.
     sal_Int32 nGutterMm100 = 2000;
-    xStandard->setPropertyValue(u"GutterMargin"_ustr, uno::Any(nGutterMm100));
+    xStandard->setPropertyValue(u"GutterMargin"_ustr, cpo::uno::Any(nGutterMm100));
 
     // Verify that the new top edge is larger.
     tools::Long nNewTop = pPage->getFramePrintArea().Top();
@@ -387,9 +387,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMirrorMargin)
 
     uno::Reference<beans::XPropertySet> xStandard(
         getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
-    xStandard->setPropertyValue(u"PageStyleLayout"_ustr, uno::Any(style::PageStyleLayout_MIRRORED));
+    xStandard->setPropertyValue(u"PageStyleLayout"_ustr,
+                                cpo::uno::Any(style::PageStyleLayout_MIRRORED));
     sal_Int32 nGutterMm100 = 2000;
-    xStandard->setPropertyValue(u"GutterMargin"_ustr, uno::Any(nGutterMm100));
+    xStandard->setPropertyValue(u"GutterMargin"_ustr, cpo::uno::Any(nGutterMm100));
 
     tools::Long nNewLeft = pPage->getFramePrintArea().Left();
     tools::Long nGutterTwips = o3tl::toTwips(nGutterMm100, o3tl::Length::mm100);
@@ -414,9 +415,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testRtlGutterMargin)
     tools::Long nOldRight = pPage->getFramePrintArea().Right();
 
     // When setting enable RTL gutter mode and setting a gutter margin:
-    xStandard->setPropertyValue(u"RtlGutter"_ustr, uno::Any(true));
+    xStandard->setPropertyValue(u"RtlGutter"_ustr, cpo::uno::Any(true));
     sal_Int32 nGutterMm100 = 2000;
-    xStandard->setPropertyValue(u"GutterMargin"_ustr, uno::Any(nGutterMm100));
+    xStandard->setPropertyValue(u"GutterMargin"_ustr, cpo::uno::Any(nGutterMm100));
 
     // Then make sure the new right edge of the print area is decreased:
     tools::Long nNewRight = pPage->getFramePrintArea().Right();
@@ -439,13 +440,13 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMarginPageBorder)
     uno::Reference<beans::XPropertySet> xStandard(
         getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     sal_Int32 nGutterMm100 = 2000;
-    xStandard->setPropertyValue(u"GutterMargin"_ustr, uno::Any(nGutterMm100));
+    xStandard->setPropertyValue(u"GutterMargin"_ustr, cpo::uno::Any(nGutterMm100));
 
     // When setting a left border.
     table::BorderLine2 aBorder;
     aBorder.LineWidth = 2;
     aBorder.OuterLineWidth = 2;
-    xStandard->setPropertyValue(u"LeftBorder"_ustr, uno::Any(aBorder));
+    xStandard->setPropertyValue(u"LeftBorder"_ustr, cpo::uno::Any(aBorder));
 
     // Then make sure border is at the left edge of the text area.
     SwDocShell* pShell = getSwDocShell();
@@ -863,13 +864,13 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testNegativePageBorder)
     uno::Reference<beans::XPropertySet> xPageStyle(
         getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     xPageStyle->setPropertyValue(u"TopMargin"_ustr,
-                                 uno::Any(static_cast<sal_Int32>(501))); // 284 twips
+                                 cpo::uno::Any(static_cast<sal_Int32>(501))); // 284 twips
     table::BorderLine2 aBorder;
     aBorder.LineWidth = 159; // 90 twips
     aBorder.OuterLineWidth = 159;
-    xPageStyle->setPropertyValue(u"TopBorder"_ustr, uno::Any(aBorder));
+    xPageStyle->setPropertyValue(u"TopBorder"_ustr, cpo::uno::Any(aBorder));
     sal_Int32 nTopBorderDistance = -646; // -366 twips
-    xPageStyle->setPropertyValue(u"TopBorderDistance"_ustr, uno::Any(nTopBorderDistance));
+    xPageStyle->setPropertyValue(u"TopBorderDistance"_ustr, cpo::uno::Any(nTopBorderDistance));
     nTopBorderDistance = 0;
     xPageStyle->getPropertyValue(u"TopBorderDistance"_ustr) >>= nTopBorderDistance;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-646), nTopBorderDistance);
@@ -904,13 +905,14 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testNegativePageBorderNoMargin)
     pWrtShell->Insert(u"test"_ustr);
     uno::Reference<beans::XPropertySet> xPageStyle(
         getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
-    xPageStyle->setPropertyValue(u"TopMargin"_ustr, uno::Any(static_cast<sal_Int32>(0))); // 0 twips
+    xPageStyle->setPropertyValue(u"TopMargin"_ustr,
+                                 cpo::uno::Any(static_cast<sal_Int32>(0))); // 0 twips
     table::BorderLine2 aBorder;
     aBorder.LineWidth = 159; // 90 twips
     aBorder.OuterLineWidth = 159;
-    xPageStyle->setPropertyValue(u"TopBorder"_ustr, uno::Any(aBorder));
+    xPageStyle->setPropertyValue(u"TopBorder"_ustr, cpo::uno::Any(aBorder));
     sal_Int32 nTopBorderDistance = -1147; // -650 twips
-    xPageStyle->setPropertyValue(u"TopBorderDistance"_ustr, uno::Any(nTopBorderDistance));
+    xPageStyle->setPropertyValue(u"TopBorderDistance"_ustr, cpo::uno::Any(nTopBorderDistance));
 
     // When rendering that border:
     std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();

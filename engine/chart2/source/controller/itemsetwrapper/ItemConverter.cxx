@@ -154,7 +154,7 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
 
     bool bItemsChanged = false;
     tPropertyNameWithMemberId aProperty;
-    uno::Any aValue;
+    cpo::uno::Any aValue;
 
     // tdf#165491 the Item with WhichID SCHATTR_STAT_KIND_ERROR *has* to
     // be handled 1st since it sets additional information about the

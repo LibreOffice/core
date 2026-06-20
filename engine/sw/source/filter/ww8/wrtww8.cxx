@@ -3519,7 +3519,7 @@ bool SwWW8Writer::InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec 
                 rCodec.InitKey( aPassword, pDocId );
                 aEncryptionData = rCodec.GetEncryptionData();
 
-                mpMedium->GetItemSet().Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData ) ) );
+                mpMedium->GetItemSet().Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, cpo::uno::Any( aEncryptionData ) ) );
             }
         }
 
@@ -3800,8 +3800,8 @@ ErrCodeMsg SwWW8Writer::WriteStorage()
             if (sCryptoType.getLength())
             {
                 const uno::Reference<uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
-                uno::Sequence<uno::Any> aArguments{
-                    uno::Any(beans::NamedValue(u"Binary"_ustr, uno::Any(true))) };
+                uno::Sequence<cpo::uno::Any> aArguments{
+                    cpo::uno::Any(beans::NamedValue(u"Binary"_ustr, cpo::uno::Any(true))) };
                 xPackageEncryption.set(
                     xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                         "com.sun.star.comp.oox.crypto." + sCryptoType, aArguments, xComponentContext), uno::UNO_QUERY);

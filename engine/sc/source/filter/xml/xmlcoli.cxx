@@ -126,7 +126,7 @@ void SAL_CALL ScXMLTableColContext::endFastElement( sal_Int32 /*nElement*/ )
                 bool bValue(true);
                 if (!IsXMLToken(sVisibility, XML_VISIBLE))
                     bValue = false;
-                xColumnProperties->setPropertyValue(SC_UNONAME_CELLVIS, uno::Any(bValue));
+                xColumnProperties->setPropertyValue(SC_UNONAME_CELLVIS, cpo::uno::Any(bValue));
             }
         }
     }

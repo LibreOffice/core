@@ -28,6 +28,7 @@ using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace cppu;
 using namespace osl;
 
@@ -128,7 +129,7 @@ void SAL_CALL GenericClipboard::removeClipboardListener( const Reference< XClipb
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 dtrans_GenericClipboard_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new GenericClipboard());
 }

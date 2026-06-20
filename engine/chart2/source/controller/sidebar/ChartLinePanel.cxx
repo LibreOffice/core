@@ -52,7 +52,7 @@ OUString getCID(const rtl::Reference<::chart::ChartModel>& xModel)
     if (!xSelectionSupplier.is())
         return OUString();
 
-    css::uno::Any aAny = xSelectionSupplier->getSelection();
+    cpo::uno::Any aAny = xSelectionSupplier->getSelection();
     if (!aAny.hasValue())
         return OUString();
 
@@ -240,7 +240,7 @@ void ChartLinePanel::setLineTransparency(const XLineTransparenceItem& rItem)
         return;
 
     PreventUpdate aPreventUpdate(mbUpdate);
-    xPropSet->setPropertyValue(u"LineTransparence"_ustr, css::uno::Any(rItem.GetValue()));
+    xPropSet->setPropertyValue(u"LineTransparence"_ustr, cpo::uno::Any(rItem.GetValue()));
 }
 
 void ChartLinePanel::setLineWidth(const XLineWidthItem& rItem)
@@ -252,7 +252,7 @@ void ChartLinePanel::setLineWidth(const XLineWidthItem& rItem)
         return;
 
     PreventUpdate aPreventUpdate(mbUpdate);
-    xPropSet->setPropertyValue(u"LineWidth"_ustr, css::uno::Any(rItem.GetValue()));
+    xPropSet->setPropertyValue(u"LineWidth"_ustr, cpo::uno::Any(rItem.GetValue()));
 }
 
 void ChartLinePanel::updateLineWidth(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem)

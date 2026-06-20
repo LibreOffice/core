@@ -42,7 +42,7 @@ protected:
         const InterpretedData& aInterpretedData ) override;
     virtual InterpretedData reinterpretDataSeries(
         const InterpretedData& aInterpretedData ) override;
-    virtual css::uno::Any getChartTypeSpecificData(
+    virtual cpo::uno::Any getChartTypeSpecificData(
         const OUString& sKey ) override;
 
 private:

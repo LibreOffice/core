@@ -66,7 +66,7 @@ CoinMpSolveResult coinmpSolveLinearModel(const uno::Sequence<table::CellAddress>
             double fDirectValue = 0.0;
             bool bRightCell = false;
             table::CellAddress aRightAddress;
-            const uno::Any& rRightAny = rConstraints[nConstraintPosition].Right;
+            const cpo::uno::Any& rRightAny = rConstraints[nConstraintPosition].Right;
             if (rRightAny >>= aRightAddress)
                 bRightCell = true;
             else

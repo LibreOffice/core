@@ -69,8 +69,8 @@ namespace calc
         // XValueBinding
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getSupportedValueTypes(  ) override;
         virtual bool SAL_CALL supportsType( const css::uno::Type& aType ) override;
-        virtual css::uno::Any SAL_CALL getValue( const css::uno::Type& aType ) override;
-        virtual void SAL_CALL setValue( const css::uno::Any& aValue ) override;
+        virtual cpo::uno::Any SAL_CALL getValue( const css::uno::Type& aType ) override;
+        virtual void SAL_CALL setValue( const cpo::uno::Any& aValue ) override;
 
         // OComponentHelper/XComponent
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
@@ -82,7 +82,7 @@ namespace calc
 
         // OPropertyImplHelper
         using OCellValueBinding_Base::getFastPropertyValue;
-        virtual void getFastPropertyValue( std::unique_lock<std::mutex>& rGuard, css::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
+        virtual void getFastPropertyValue( std::unique_lock<std::mutex>& rGuard, cpo::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
 
         // ::comphelper::OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
@@ -96,7 +96,7 @@ namespace calc
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     private:
         void    checkValueType( std::unique_lock<std::mutex>& rGuard, const css::uno::Type& _rType ) const;

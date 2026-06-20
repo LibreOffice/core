@@ -64,7 +64,7 @@ public:
     virtual void SAL_CALL disposing() override;
 
     // XPropertySet
-    virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle ) const override;
+    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
     // XPersistObject
     virtual void SAL_CALL write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
@@ -100,10 +100,10 @@ private:
     virtual void readAggregate( const css::uno::Reference< css::io::XObjectInputStream >& _rxInStream ) override;
 
     // OBoundControlModel overridables
-    virtual css::uno::Any   translateDbColumnToControlValue( ) override;
+    virtual cpo::uno::Any   translateDbColumnToControlValue( ) override;
     virtual bool            commitControlValueToDbColumn( bool _bPostReset ) override;
 
-    virtual css::uno::Any   getDefaultForReset() const override;
+    virtual cpo::uno::Any   getDefaultForReset() const override;
 
     virtual void            onConnectedDbColumn( const css::uno::Reference< css::uno::XInterface >& _rxForm ) override;
     virtual void            onDisconnectedDbColumn() override;
@@ -138,7 +138,7 @@ public:
     virtual ~OEditControl() override;
 
     DECLARE_UNO3_AGG_DEFAULTS(OEditControl, OBoundControl)
-    virtual css::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
 
     virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
 

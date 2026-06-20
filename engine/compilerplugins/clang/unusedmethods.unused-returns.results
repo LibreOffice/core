@@ -1037,37 +1037,37 @@ sc/source/ui/inc/drawview.hxx:161
 sc/source/ui/inc/select.hxx:71
     _Bool ScViewFunctionSet::SetCursorAtCell(short,int,_Bool)
 sc/source/ui/vba/vbaformat.hxx:69
-    com::sun::star::uno::Any ScVbaFormat::getAddIndent()
+    cpo::uno::Any ScVbaFormat::getAddIndent()
 sc/source/ui/vba/vbaformat.hxx:73
-    com::sun::star::uno::Any ScVbaFormat::Borders(const com::sun::star::uno::Any &)
+    cpo::uno::Any ScVbaFormat::Borders(const cpo::uno::Any &)
 sc/source/ui/vba/vbaformat.hxx:76
     com::sun::star::uno::Reference<ooo::vba::excel::XFont> ScVbaFormat::Font()
 sc/source/ui/vba/vbaformat.hxx:79
     com::sun::star::uno::Reference<ooo::vba::excel::XInterior> ScVbaFormat::Interior()
 sc/source/ui/vba/vbaformat.hxx:85
-    com::sun::star::uno::Any ScVbaFormat::getNumberFormat()
+    cpo::uno::Any ScVbaFormat::getNumberFormat()
 sc/source/ui/vba/vbaformat.hxx:91
-    com::sun::star::uno::Any ScVbaFormat::getNumberFormatLocal()
+    cpo::uno::Any ScVbaFormat::getNumberFormatLocal()
 sc/source/ui/vba/vbaformat.hxx:97
-    com::sun::star::uno::Any ScVbaFormat::getIndentLevel()
+    cpo::uno::Any ScVbaFormat::getIndentLevel()
 sc/source/ui/vba/vbaformat.hxx:103
-    com::sun::star::uno::Any ScVbaFormat::getHorizontalAlignment()
+    cpo::uno::Any ScVbaFormat::getHorizontalAlignment()
 sc/source/ui/vba/vbaformat.hxx:109
-    com::sun::star::uno::Any ScVbaFormat::getVerticalAlignment()
+    cpo::uno::Any ScVbaFormat::getVerticalAlignment()
 sc/source/ui/vba/vbaformat.hxx:115
-    com::sun::star::uno::Any ScVbaFormat::getOrientation()
+    cpo::uno::Any ScVbaFormat::getOrientation()
 sc/source/ui/vba/vbaformat.hxx:121
-    com::sun::star::uno::Any ScVbaFormat::getShrinkToFit()
+    cpo::uno::Any ScVbaFormat::getShrinkToFit()
 sc/source/ui/vba/vbaformat.hxx:127
-    com::sun::star::uno::Any ScVbaFormat::getWrapText()
+    cpo::uno::Any ScVbaFormat::getWrapText()
 sc/source/ui/vba/vbaformat.hxx:133
-    com::sun::star::uno::Any ScVbaFormat::getLocked()
+    cpo::uno::Any ScVbaFormat::getLocked()
 sc/source/ui/vba/vbaformat.hxx:139
-    com::sun::star::uno::Any ScVbaFormat::getFormulaHidden()
+    cpo::uno::Any ScVbaFormat::getFormulaHidden()
 sc/source/ui/vba/vbaformat.hxx:145
-    com::sun::star::uno::Any ScVbaFormat::getMergeCells()
+    cpo::uno::Any ScVbaFormat::getMergeCells()
 sc/source/ui/vba/vbaformat.hxx:151
-    com::sun::star::uno::Any ScVbaFormat::getReadingOrder()
+    cpo::uno::Any ScVbaFormat::getReadingOrder()
 sd/inc/drawdoc.hxx:698
     _Bool SdDrawDocument::ResolvePageLinks(const std::vector<rtl::OUString> &,unsigned short,_Bool,_Bool,_Bool)
 sd/inc/drawdoc.hxx:719
@@ -1145,7 +1145,7 @@ sw/inc/redline.hxx:268
 sw/inc/tblafmt.hxx:278
     _Bool SwTableAutoFormatTable::Load(SvStream &)
 sw/inc/unocrsrhelper.hxx:75
-    _Bool SwUnoCursorHelper::SwAnyMapHelper::FillValue(unsigned short,unsigned short,const com::sun::star::uno::Any *&)
+    _Bool SwUnoCursorHelper::SwAnyMapHelper::FillValue(unsigned short,unsigned short,const cpo::uno::Any *&)
 sw/source/core/inc/laycache.hxx:64
     _Bool SwLayoutCache::CompareLayout(const SwDoc &) const
 sw/source/filter/ww8/ww8toolbar.hxx:337

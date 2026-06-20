@@ -42,6 +42,7 @@
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace {
 
@@ -107,7 +108,7 @@ public:
     virtual void SAL_CALL start(const OUString& aText, sal_Int32 nRange) override;
 
     // XInitialize
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any>& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any>& aArguments ) override;
 
     virtual OUString SAL_CALL getImplementationName() override
     { return u"com.sun.star.office.comp.SplashScreen"_ustr; }
@@ -241,7 +242,7 @@ void SAL_CALL SplashScreen::setValue(sal_Int32 nValue)
 
 // XInitialize
 void SAL_CALL
-SplashScreen::initialize( const css::uno::Sequence< css::uno::Any>& aArguments )
+SplashScreen::initialize( const css::uno::Sequence< cpo::uno::Any>& aArguments )
 {
     static std::mutex aMutex;
     std::lock_guard  aGuard( aMutex );
@@ -611,7 +612,7 @@ void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 desktop_SplashScreen_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SplashScreen());
 }

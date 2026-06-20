@@ -26,6 +26,7 @@ using namespace css::container;
 using namespace css::lang;
 using namespace css::script;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace
 {

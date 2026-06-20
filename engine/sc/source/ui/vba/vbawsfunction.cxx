@@ -31,7 +31,7 @@ using namespace ooo::vba;
 
 namespace {
 
-void lclConvertDoubleToBoolean( uno::Any& rAny )
+void lclConvertDoubleToBoolean( cpo::uno::Any& rAny )
 {
     if( rAny.has< double >() )
     {
@@ -44,7 +44,7 @@ void lclConvertDoubleToBoolean( uno::Any& rAny )
     }
 }
 
-void lclConvertBooleanToDouble( uno::Any& rAny )
+void lclConvertBooleanToDouble( cpo::uno::Any& rAny )
 {
     bool bValue( false );
     if ( rAny >>= bValue )
@@ -69,14 +69,14 @@ ScVbaWSFunction::getIntrospection()
     return uno::Reference<beans::XIntrospectionAccess>();
 }
 
-uno::Any SAL_CALL
-ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::Any >& Params, uno::Sequence< sal_Int16 >& /*OutParamIndex*/, uno::Sequence< uno::Any >& /*OutParam*/)
+cpo::uno::Any SAL_CALL
+ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< cpo::uno::Any >& Params, uno::Sequence< sal_Int16 >& /*OutParamIndex*/, uno::Sequence< cpo::uno::Any >& /*OutParam*/)
 {
     // create copy of parameters, replace Excel range objects with UNO range objects
-    uno::Sequence< uno::Any > aParamTemp( Params );
+    uno::Sequence< cpo::uno::Any > aParamTemp( Params );
     if( aParamTemp.hasElements() )
     {
-        for( uno::Any & rArray : asNonConstRange(aParamTemp) )
+        for( cpo::uno::Any & rArray : asNonConstRange(aParamTemp) )
         {
             switch( rArray.getValueTypeClass()  )
             {
@@ -118,9 +118,9 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::
                         rArray >>= aTmp.getArray()[ 0 ];
                         rArray <<= aTmp;
                     }
-                    else if ( aType.equals( cppu::UnoType<uno::Sequence<uno::Any>>::get() ) )
+                    else if ( aType.equals( cppu::UnoType<uno::Sequence<cpo::uno::Any>>::get() ) )
                     {
-                        uno::Sequence< uno::Sequence<uno::Any > > aTmp(1);
+                        uno::Sequence< uno::Sequence<cpo::uno::Any > > aTmp(1);
                         rArray >>= aTmp.getArray()[ 0 ];
                         rArray <<= aTmp;
                     }
@@ -132,7 +132,7 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::
         }
     }
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     bool bAsArray = true;
 
     // special handing for some functions that don't work correctly in FunctionAccess
@@ -145,7 +145,7 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::
         {
             if( aParamTemp.getLength() != 1 )
                 throw lang::IllegalArgumentException();
-            const uno::Any& rParam = aParamTemp[ 0 ];
+            const cpo::uno::Any& rParam = aParamTemp[ 0 ];
             if( rParam.has< bool >() )
             {
                 aRet <<= true;
@@ -171,13 +171,13 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::
             u"com.sun.star.sheet.FunctionAccess"_ustr, mxContext ),
             uno::UNO_QUERY_THROW );
         uno::Reference< beans::XPropertySet > xPropSet( xFunctionAccess, uno::UNO_QUERY_THROW );
-        xPropSet->setPropertyValue(u"IsArrayFunction"_ustr, uno::Any( bAsArray ) );
+        xPropSet->setPropertyValue(u"IsArrayFunction"_ustr, cpo::uno::Any( bAsArray ) );
         aRet = xFunctionAccess->callFunction( FunctionName, aParamTemp );
     }
 
     /*  Convert return value from double to Boolean for some functions that
         return Booleans. */
-    typedef uno::Sequence< uno::Sequence< uno::Any > > AnySeqSeq;
+    typedef uno::Sequence< uno::Sequence< cpo::uno::Any > > AnySeqSeq;
     if( (eOpCode == ocIsEmpty) || (eOpCode == ocIsString) || (eOpCode == ocIsNonString) || (eOpCode == ocIsLogical) ||
         (eOpCode == ocIsRef) || (eOpCode == ocIsValue) || (eOpCode == ocIsFormula) || (eOpCode == ocIsNA) ||
         (eOpCode == ocIsErr) || (eOpCode == ocIsError) || (eOpCode == ocIsEven) || (eOpCode == ocIsOdd) ||
@@ -222,7 +222,7 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::
         double fVal = 0.0;
         if( aRet >>= fVal )
             return aRet;
-        uno::Sequence< uno::Sequence< uno::Any > > aSequence;
+        uno::Sequence< uno::Sequence< cpo::uno::Any > > aSequence;
         if( !( ( aRet >>= aSequence ) && ( aSequence.getLength() > 0 ) &&
             ( aSequence[0].getLength() > 0 ) && ( aSequence[0][0] >>= fVal ) ) )
                 throw uno::RuntimeException();
@@ -234,12 +234,12 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::
 }
 
 void SAL_CALL
-ScVbaWSFunction::setValue(const OUString& /*PropertyName*/, const uno::Any& /*Value*/)
+ScVbaWSFunction::setValue(const OUString& /*PropertyName*/, const cpo::uno::Any& /*Value*/)
 {
     throw beans::UnknownPropertyException();
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaWSFunction::getValue(const OUString& /*PropertyName*/)
 {
     throw beans::UnknownPropertyException();

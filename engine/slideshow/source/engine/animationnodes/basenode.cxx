@@ -246,7 +246,7 @@ bool isMainSequenceRootNode_(
     // end-of-mainsequence signalling below)
     beans::NamedValue const aSearchKey(
         u"node-type"_ustr,
-        uno::Any( presentation::EffectNodeType::MAIN_SEQUENCE ) );
+        cpo::uno::Any( presentation::EffectNodeType::MAIN_SEQUENCE ) );
 
     uno::Sequence<beans::NamedValue> const userData(xNode->getUserData());
     return findNamedValue( userData, aSearchKey );
@@ -458,7 +458,7 @@ bool BaseNode::resolve()
         // resolved at the same time (otherwise, the delayed subset creation
         // will not work, i.e. deactivate the subsets too late in the master
         // shape).
-        uno::Any const aBegin( mxAnimationNode->getBegin() );
+        cpo::uno::Any const aBegin( mxAnimationNode->getBegin() );
         if (aBegin.hasValue()) {
             auto self(mpSelf);
             mpCurrentEvent = generateEvent(

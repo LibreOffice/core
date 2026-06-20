@@ -39,7 +39,7 @@ class SvDDEObject : public SvLinkSource
     std::unique_ptr<DdeConnection> pConnection;
     std::unique_ptr<DdeLink> pLink;
     std::unique_ptr<DdeRequest> pRequest;
-    css::uno::Any * pGetData;
+    cpo::uno::Any * pGetData;
 
     bool bWaitForData;  // waiting for data?
 
@@ -54,7 +54,7 @@ protected:
 public:
     SvDDEObject();
 
-    virtual bool    GetData( css::uno::Any & rData /*out param*/,
+    virtual bool    GetData( cpo::uno::Any & rData /*out param*/,
                                 const OUString & aMimeType,
                                 bool bSynchron = false ) override;
 

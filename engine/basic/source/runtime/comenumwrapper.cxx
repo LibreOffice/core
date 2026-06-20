@@ -39,15 +39,15 @@ bool SAL_CALL ComEnumerationWrapper::hasMoreElements()
     return bResult;
 }
 
-uno::Any SAL_CALL ComEnumerationWrapper::nextElement()
+cpo::uno::Any SAL_CALL ComEnumerationWrapper::nextElement()
 {
     try
     {
         if ( m_xInvocation.is() )
         {
             uno::Sequence< sal_Int16 > aNamedParamIndex;
-            uno::Sequence< uno::Any > aNamedParam;
-            uno::Sequence< uno::Any > aArgs{ uno::Any(m_nCurInd++) };
+            uno::Sequence< cpo::uno::Any > aNamedParam;
+            uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(m_nCurInd++) };
 
             return m_xInvocation->invoke( u"item"_ustr,
                                           aArgs,

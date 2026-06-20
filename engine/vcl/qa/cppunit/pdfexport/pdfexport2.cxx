@@ -87,7 +87,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf160705)
 {
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) } }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
 
@@ -155,8 +155,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf159895)
 {
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
-        { "PDFUACompliance", uno::Any(true) },
-        { "ExportFormFields", uno::Any(true) },
+        { "PDFUACompliance", cpo::uno::Any(true) },
+        { "ExportFormFields", cpo::uno::Any(true) },
     }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
@@ -379,7 +379,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf129085)
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
         // if the Quality is too high (like 90) then the image will be a DIB,
         // not a JPEG! 80 works currently but set it lower to be sure...
-        { "Quality", uno::Any(sal_Int32(50)) },
+        { "Quality", cpo::uno::Any(sal_Int32(50)) },
     }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
@@ -614,13 +614,13 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testReduceImage)
     uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aOutputStream));
 
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "ReduceImageResolution", uno::Any(false) } }));
+        comphelper::InitPropertySequence({ { "ReduceImageResolution", cpo::uno::Any(false) } }));
 
     // This is intentionally in an "unlucky" order, output stream comes before filter data.
     uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
-        { "FilterName", uno::Any(u"writer_pdf_Export"_ustr) },
-        { "OutputStream", uno::Any(xOutputStream) },
-        { "FilterData", uno::Any(aFilterData) },
+        { "FilterName", cpo::uno::Any(u"writer_pdf_Export"_ustr) },
+        { "OutputStream", cpo::uno::Any(xOutputStream) },
+        { "FilterData", cpo::uno::Any(aFilterData) },
     }));
     xFilter->filter(aDescriptor);
     aOutputStream.Close();
@@ -746,7 +746,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testPdfImageResourceInlineXObjectRef)
     uno::Reference<beans::XPropertySet> xGraphicObject(
         xFactory->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
     OUString aURL = createFileURL(u"pdf-image-resource-inline-xobject-ref.pdf");
-    xGraphicObject->setPropertyValue(u"GraphicURL"_ustr, uno::Any(aURL));
+    xGraphicObject->setPropertyValue(u"GraphicURL"_ustr, cpo::uno::Any(aURL));
     uno::Reference<drawing::XShape> xShape(xGraphicObject, uno::UNO_QUERY);
     xShape->setSize(awt::Size(1000, 1000));
     uno::Reference<text::XTextContent> xTextContent(xGraphicObject, uno::UNO_QUERY);
@@ -817,7 +817,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testVersion15)
 
     // Save as PDF.
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
-        { { "SelectPdfVersion", uno::Any(static_cast<sal_Int32>(15)) } }));
+        { { "SelectPdfVersion", cpo::uno::Any(static_cast<sal_Int32>(15)) } }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
@@ -844,8 +844,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf160196)
     xDocumentProperties->setTitle(u"Title"_ustr);
 
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) },
-                                           { "SelectPdfVersion", uno::Any(sal_Int32(20)) } }));
+        comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) },
+                                           { "SelectPdfVersion", cpo::uno::Any(sal_Int32(20)) } }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     // Without the fix in place, the validation would have failed
@@ -859,7 +859,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testVersion20)
 
     // Save as PDF.
     uno::Sequence<beans::PropertyValue> aFilterData = comphelper::InitPropertySequence(
-        { { "SelectPdfVersion", uno::Any(static_cast<sal_Int32>(20)) } });
+        { { "SelectPdfVersion", cpo::uno::Any(static_cast<sal_Int32>(20)) } });
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
@@ -1019,7 +1019,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFormFontName)
 {
     // Import the bugdoc and export as PDF.
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
-        { "ExportFormFields", uno::Any(true) },
+        { "ExportFormFields", cpo::uno::Any(true) },
     }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
@@ -1383,7 +1383,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testPdfUaMetadata)
 {
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) } }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
 
@@ -1463,8 +1463,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf139736)
 {
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) },
-                                           { "SelectPdfVersion", uno::Any(sal_Int32(17)) } }));
+        comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) },
+                                           { "SelectPdfVersion", cpo::uno::Any(sal_Int32(17)) } }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
 
@@ -1570,8 +1570,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf139736)
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf168057)
 {
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) },
-                                           { "SelectPdfVersion", uno::Any(sal_Int32(20)) } }));
+        comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) },
+                                           { "SelectPdfVersion", cpo::uno::Any(sal_Int32(20)) } }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     loadFromFile(u"tdf168057.odt");
@@ -1583,9 +1583,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152231)
 {
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) },
-                                           { "ExportNotesInMargin", uno::Any(true) },
-                                           { "SelectPdfVersion", uno::Any(sal_Int32(17)) } }));
+        comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) },
+                                           { "ExportNotesInMargin", cpo::uno::Any(true) },
+                                           { "SelectPdfVersion", cpo::uno::Any(sal_Int32(17)) } }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     vcl::filter::PDFDocument aDocument;
@@ -1694,7 +1694,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152231)
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf136805)
 {
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
-        { "SelectPdfVersion", uno::Any(static_cast<sal_Int32>(1)) },
+        { "SelectPdfVersion", cpo::uno::Any(static_cast<sal_Int32>(1)) },
     }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
@@ -1707,8 +1707,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157517)
 {
     // Only reproduced with PPDF-A/2 / bDF-A/3b and PDF/UA.
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
-        { "PDFUACompliance", uno::Any(true) },
-        { "SelectPdfVersion", uno::Any(static_cast<sal_Int32>(3)) },
+        { "PDFUACompliance", cpo::uno::Any(true) },
+        { "SelectPdfVersion", cpo::uno::Any(static_cast<sal_Int32>(3)) },
     }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
@@ -1720,7 +1720,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157517)
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152218)
 {
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
-        { "PDFUACompliance", uno::Any(true) },
+        { "PDFUACompliance", cpo::uno::Any(true) },
     }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
@@ -1733,11 +1733,11 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152235)
 {
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
-        { { "PDFUACompliance", uno::Any(true) },
-          { "Watermark", uno::Any(u"kendy"_ustr) },
+        { { "PDFUACompliance", cpo::uno::Any(true) },
+          { "Watermark", cpo::uno::Any(u"kendy"_ustr) },
           // need to set a font to avoid assertions about missing "Helvetica"
-          { "WatermarkFontName", uno::Any(u"Liberation Sans"_ustr) },
-          { "SelectPdfVersion", uno::Any(sal_Int32(17)) } }));
+          { "WatermarkFontName", cpo::uno::Any(u"Liberation Sans"_ustr) },
+          { "SelectPdfVersion", cpo::uno::Any(sal_Int32(17)) } }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     loadFromURL(u"private:factory/swriter"_ustr);
@@ -1822,7 +1822,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152235)
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf167290)
 {
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
-        { "SelectPdfVersion", uno::Any(static_cast<sal_Int32>(1)) },
+        { "SelectPdfVersion", cpo::uno::Any(static_cast<sal_Int32>(1)) },
     }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
@@ -1834,7 +1834,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf149140)
 {
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) } }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     vcl::filter::PDFDocument aDocument;
@@ -1893,7 +1893,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testNestedSection)
 {
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) } }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
 
@@ -2040,7 +2040,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157817)
 {
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) } }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
 
@@ -2237,7 +2237,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf135638)
 {
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) } }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
 
@@ -2334,7 +2334,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157703)
 {
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) } }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
 
@@ -2415,7 +2415,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testSpans)
 {
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) } }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
 
@@ -2933,9 +2933,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testSpans)
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157182)
 {
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
-        { "PDFUACompliance", uno::Any(true) },
+        { "PDFUACompliance", cpo::uno::Any(true) },
         // only happens with PDF/A-1
-        { "SelectPdfVersion", uno::Any(static_cast<sal_Int32>(1)) },
+        { "SelectPdfVersion", cpo::uno::Any(static_cast<sal_Int32>(1)) },
     }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
@@ -2950,7 +2950,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf57423)
 {
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) } }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
 
@@ -3056,7 +3056,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf154982)
 {
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) } }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
 
@@ -3136,8 +3136,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157397)
 {
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
-        { "PDFUACompliance", uno::Any(true) },
-        { "ExportFormFields", uno::Any(true) },
+        { "PDFUACompliance", cpo::uno::Any(true) },
+        { "ExportFormFields", cpo::uno::Any(true) },
     }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
@@ -3467,7 +3467,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf135192)
 {
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) } }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
 
@@ -3600,7 +3600,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf154955)
 {
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) } }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     vcl::filter::PDFDocument aDocument;
@@ -3734,7 +3734,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf155190)
 {
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) } }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
 
@@ -3824,7 +3824,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testMediaShapeAnnot)
 {
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) } }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
 
@@ -3964,7 +3964,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFlyFrameHyperlinkAnnot)
 {
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) } }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
 
@@ -4098,8 +4098,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFormControlAnnot)
 {
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
-        { "PDFUACompliance", uno::Any(true) },
-        { "ExportFormFields", uno::Any(true) },
+        { "PDFUACompliance", cpo::uno::Any(true) },
+        { "ExportFormFields", cpo::uno::Any(true) },
     }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
@@ -4238,7 +4238,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf142129)
 
     // Enable Outlines export
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "ExportBookmarks", uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { "ExportBookmarks", cpo::uno::Any(true) } }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
@@ -4325,7 +4325,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testPdfImageRotate180)
     uno::Reference<beans::XPropertySet> xGraphicObject(
         xFactory->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
     OUString aURL = createFileURL(u"pdf-image-rotate-180.pdf");
-    xGraphicObject->setPropertyValue(u"GraphicURL"_ustr, uno::Any(aURL));
+    xGraphicObject->setPropertyValue(u"GraphicURL"_ustr, cpo::uno::Any(aURL));
     uno::Reference<drawing::XShape> xShape(xGraphicObject, uno::UNO_QUERY);
     xShape->setSize(awt::Size(1000, 1000));
     uno::Reference<text::XTextContent> xTextContent(xGraphicObject, uno::UNO_QUERY);
@@ -4566,8 +4566,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testURIs)
     {
         // Test the filename rewriting
         uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
-            { "ExportLinksRelativeFsys", uno::Any(uri.relativeFsys) },
-            { "ConvertOOoTargetToPDFTarget", uno::Any(true) },
+            { "ExportLinksRelativeFsys", cpo::uno::Any(uri.relativeFsys) },
+            { "ConvertOOoTargetToPDFTarget", cpo::uno::Any(true) },
         }));
         comphelper::SequenceAsHashMap aMediaDescriptor;
         aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
@@ -4576,8 +4576,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testURIs)
         xCursor->gotoStart(/*bExpand=*/false);
         xCursor->gotoEnd(/*bExpand=*/true);
         uno::Reference<beans::XPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
-        xCursorProps->setPropertyValue(u"HyperLinkURL"_ustr, uno::Any(uri.in));
-        xCursorProps->setPropertyValue(u"HyperLinkName"_ustr, uno::Any(u"Testname"_ustr));
+        xCursorProps->setPropertyValue(u"HyperLinkURL"_ustr, cpo::uno::Any(uri.in));
+        xCursorProps->setPropertyValue(u"HyperLinkName"_ustr, cpo::uno::Any(u"Testname"_ustr));
 
         // Save as PDF.
         save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
@@ -4644,14 +4644,14 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testExternalLinkOutsideDocTreeStaysAbsolute
     xCursor->gotoStart(/*bExpand=*/false);
     xCursor->gotoEnd(/*bExpand=*/true);
     uno::Reference<beans::XPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
-    xCursorProps->setPropertyValue(u"HyperLinkURL"_ustr, uno::Any(aTarget));
+    xCursorProps->setPropertyValue(u"HyperLinkURL"_ustr, cpo::uno::Any(aTarget));
 
     // The document's own location, on a filesystem root unrelated to the target.
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     xModel->attachResource(maTempFile.GetURL(), xModel->getArgs());
 
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "ExportLinksRelativeFsys", uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { "ExportLinksRelativeFsys", cpo::uno::Any(true) } }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
@@ -4709,7 +4709,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testPdfImageEncryption)
     uno::Reference<beans::XPropertySet> xGraphicObject(
         xFactory->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
     OUString aURL = createFileURL(u"rectangles.pdf");
-    xGraphicObject->setPropertyValue(u"GraphicURL"_ustr, uno::Any(aURL));
+    xGraphicObject->setPropertyValue(u"GraphicURL"_ustr, cpo::uno::Any(aURL));
     uno::Reference<drawing::XShape> xShape(xGraphicObject, uno::UNO_QUERY);
     xShape->setSize(awt::Size(1000, 1000));
     uno::Reference<text::XTextContent> xTextContent(xGraphicObject, uno::UNO_QUERY);
@@ -4882,7 +4882,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testRexportFilterSingletonArray)
 {
     // the test fails with tagged PDF enabled
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "UseTaggedPDF", uno::Any(false) } }));
+        comphelper::InitPropertySequence({ { "UseTaggedPDF", cpo::uno::Any(false) } }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
 
@@ -5027,7 +5027,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152246)
 {
     // Import the bugdoc and export as PDF.
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
-        { "ExportFormFields", uno::Any(true) },
+        { "ExportFormFields", cpo::uno::Any(true) },
     }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
@@ -5292,7 +5292,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf159817)
 {
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "ExportFormFields", uno::Any(false) } }));
+        comphelper::InitPropertySequence({ { "ExportFormFields", cpo::uno::Any(false) } }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     loadFromFile(u"tdf159817.fodt");
@@ -6327,7 +6327,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFormRoundtrip)
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterName"_ustr] <<= u"draw_pdf_Export"_ustr;
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "UseTaggedPDF", uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { "UseTaggedPDF", cpo::uno::Any(true) } }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
 
     loadFromFile(u"FilledUpForm.pdf");

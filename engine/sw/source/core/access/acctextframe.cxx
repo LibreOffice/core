@@ -76,8 +76,8 @@ void SwAccessibleTextFrame::Notify(const SfxHint& rHint)
         {
             auto rTitleChanged = static_cast<const sw::TitleChanged&>(rHint);
             msTitle = rTitleChanged.m_sNew;
-            FireAccessibleEvent(AccessibleEventId::NAME_CHANGED, uno::Any(rTitleChanged.m_sOld),
-                                uno::Any(msTitle));
+            FireAccessibleEvent(AccessibleEventId::NAME_CHANGED, cpo::uno::Any(rTitleChanged.m_sOld),
+                                cpo::uno::Any(msTitle));
             if(!pFlyFrameFormat || !pFlyFrameFormat->GetObjDescription().isEmpty())
                 break;
             [[fallthrough]];
@@ -92,8 +92,8 @@ void SwAccessibleTextFrame::Notify(const SfxHint& rHint)
                 msDesc = msTitle;
             if(msDesc == sOldDesc)
                 return;
-            FireAccessibleEvent(AccessibleEventId::DESCRIPTION_CHANGED, uno::Any(sOldDesc),
-                                uno::Any(msDesc));
+            FireAccessibleEvent(AccessibleEventId::DESCRIPTION_CHANGED, cpo::uno::Any(sOldDesc),
+                                cpo::uno::Any(msDesc));
             return;
         }
     }
@@ -101,10 +101,10 @@ void SwAccessibleTextFrame::Notify(const SfxHint& rHint)
 
 // XInterface
 
-css::uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
     SwAccessibleTextFrame::queryInterface (const css::uno::Type & rType)
 {
-    css::uno::Any aReturn = SwAccessibleContext::queryInterface (rType);
+    cpo::uno::Any aReturn = SwAccessibleContext::queryInterface (rType);
     if ( ! aReturn.hasValue())
         aReturn = ::cppu::queryInterface (rType,
             static_cast< css::accessibility::XAccessibleSelection* >(this)

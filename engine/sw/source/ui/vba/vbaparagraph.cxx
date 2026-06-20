@@ -44,7 +44,7 @@ SwVbaParagraph::getRange( )
     return uno::Reference< word::XRange >( new SwVbaRange( this, mxContext, mxTextDocument, mxTextRange->getStart(), mxTextRange->getEnd(), mxTextRange->getText() ) );
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwVbaParagraph::getStyle( )
 {
     uno::Reference< word::XRange > xRange = getRange();
@@ -52,7 +52,7 @@ SwVbaParagraph::getStyle( )
 }
 
 void SAL_CALL
-SwVbaParagraph::setStyle( const uno::Any& style )
+SwVbaParagraph::setStyle( const cpo::uno::Any& style )
 {
     uno::Reference< word::XRange > xRange = getRange();
     xRange->setStyle( style );
@@ -112,7 +112,7 @@ public:
         }
         return nCount;
     }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
+    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         if( Index < getCount() )
         {
@@ -124,7 +124,7 @@ public:
                 if( xServiceInfo->supportsService(u"com.sun.star.text.Paragraph"_ustr) )
                 {
                     if( Index == nCount )
-                        return uno::Any( xServiceInfo );
+                        return cpo::uno::Any( xServiceInfo );
                     nCount++;
                 }
             }
@@ -160,11 +160,11 @@ SwVbaParagraphs::createEnumeration()
     return xEnumerationAccess->createEnumeration();
 }
 
-uno::Any
-SwVbaParagraphs::createCollectionObject( const css::uno::Any& aSource )
+cpo::uno::Any
+SwVbaParagraphs::createCollectionObject( const cpo::uno::Any& aSource )
 {
     uno::Reference< text::XTextRange > xTextRange( aSource, uno::UNO_QUERY_THROW );
-    return uno::Any( uno::Reference< word::XParagraph >( new SwVbaParagraph( this, mxContext, mxTextDocument, xTextRange ) ) );
+    return cpo::uno::Any( uno::Reference< word::XParagraph >( new SwVbaParagraph( this, mxContext, mxTextDocument, xTextRange ) ) );
 }
 
 OUString

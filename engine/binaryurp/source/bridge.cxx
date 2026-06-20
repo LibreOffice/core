@@ -346,13 +346,13 @@ void Bridge::terminate(bool final) {
 }
 
 
-BinaryAny Bridge::mapCppToBinaryAny(css::uno::Any const & cppAny) {
-    css::uno::Any in(cppAny);
+BinaryAny Bridge::mapCppToBinaryAny(cpo::uno::Any const & cppAny) {
+    cpo::uno::Any in(cppAny);
     BinaryAny out;
     out.~BinaryAny();
     uno_copyAndConvertData(
         &out.get(), &in,
-        css::uno::TypeDescription(cppu::UnoType< css::uno::Any >::get()).get(),
+        css::uno::TypeDescription(cppu::UnoType< cpo::uno::Any >::get()).get(),
         cppToBinaryMapping_.get());
     return out;
 }
@@ -774,7 +774,7 @@ void Bridge::handleCommitChangeRequest(
             bCcMode = false;
             bExc = true;
             ret = mapCppToBinaryAny(
-                css::uno::Any(
+                cpo::uno::Any(
                     css::bridge::InvalidProtocolChangeException(
                         u"InvalidProtocolChangeException"_ustr,
                         css::uno::Reference< css::uno::XInterface >(), pp,
@@ -948,7 +948,7 @@ void Bridge::sendCommitChangeRequest() {
     assert(mode_ == MODE_REQUESTED || mode_ == MODE_REPLY_1);
     css::uno::Sequence< css::bridge::ProtocolProperty > s(1);
     s.getArray()[0].Name = u"CurrentContext"_ustr;
-    std::vector< BinaryAny > a { mapCppToBinaryAny(css::uno::Any(s)) };
+    std::vector< BinaryAny > a { mapCppToBinaryAny(cpo::uno::Any(s)) };
     sendProtPropRequest(OutgoingRequest::KIND_COMMIT_CHANGE, a);
 }
 
@@ -1011,13 +1011,13 @@ void Bridge::throwException(bool exception, BinaryAny const & value) {
     }
 }
 
-css::uno::Any Bridge::mapBinaryToCppAny(BinaryAny const & binaryAny) {
+cpo::uno::Any Bridge::mapBinaryToCppAny(BinaryAny const & binaryAny) {
     BinaryAny in(binaryAny);
-    css::uno::Any out;
+    cpo::uno::Any out;
     out.~Any();
     uno_copyAndConvertData(
         &out, &in.get(),
-        css::uno::TypeDescription(cppu::UnoType< css::uno::Any >::get()).get(),
+        css::uno::TypeDescription(cppu::UnoType< cpo::uno::Any >::get()).get(),
         binaryToCppMapping_.get());
     return out;
 }

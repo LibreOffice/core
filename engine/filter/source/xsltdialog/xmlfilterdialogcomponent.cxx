@@ -34,6 +34,7 @@
 
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
@@ -204,7 +205,7 @@ void SAL_CALL XMLFilterDialogComponent::initialize( const Sequence< Any >& aArgu
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_XSLTFilterDialog_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new XMLFilterDialogComponent(context));
 }

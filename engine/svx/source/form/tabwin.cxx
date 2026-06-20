@@ -51,6 +51,7 @@ const tools::Long STD_WIN_SIZE_Y = 150;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;

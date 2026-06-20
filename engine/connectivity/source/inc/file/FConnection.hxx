@@ -96,7 +96,7 @@ namespace connectivity::file
         // XCloseable
         virtual void SAL_CALL close(  ) override final;
         // XWarningsSupplier
-        virtual css::uno::Any SAL_CALL getWarnings(  ) override;
+        virtual cpo::uno::Any SAL_CALL getWarnings(  ) override;
         virtual void SAL_CALL clearWarnings(  ) override;
         //XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;

@@ -73,13 +73,13 @@ namespace pcr
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
         virtual bool SAL_CALL convertFastPropertyValue(
-                css::uno::Any & rConvertedValue, css::uno::Any & rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue
+                cpo::uno::Any & rConvertedValue, cpo::uno::Any & rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue
             ) override;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-                sal_Int32 nHandle, const css::uno::Any& rValue
+                sal_Int32 nHandle, const cpo::uno::Any& rValue
             ) override;
         virtual void SAL_CALL getFastPropertyValue(
-                css::uno::Any& rValue, sal_Int32 nHandle
+                cpo::uno::Any& rValue, sal_Int32 nHandle
             ) const override;
     private:
         using FormController_PropertyBase1::getFastPropertyValue;

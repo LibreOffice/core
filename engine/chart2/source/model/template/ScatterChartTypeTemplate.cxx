@@ -132,7 +132,7 @@ ScatterChartTypeTemplate::~ScatterChartTypeTemplate()
 {}
 
 // ____ OPropertySet ____
-void ScatterChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
+void ScatterChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = StaticScatterChartTypeTemplateDefaults();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
@@ -179,7 +179,7 @@ void ScatterChartTypeTemplate::applyStyle2(
         xSeries->switchLinesOnOrOff( m_bHasLines );
         xSeries->makeLinesThickOrThin( m_nDim==2 );
         if( m_nDim==3 )
-            xSeries->setPropertyAlsoToAllAttributedDataPoints( u"BorderStyle"_ustr, uno::Any( drawing::LineStyle_NONE ) );
+            xSeries->setPropertyAlsoToAllAttributedDataPoints( u"BorderStyle"_ustr, cpo::uno::Any( drawing::LineStyle_NONE ) );
     }
     catch( const uno::Exception & )
     {

@@ -85,7 +85,7 @@ public:
     EffectSequence getSelection() const;
 
     // events
-    void onSelectionChanged(const css::uno::Any& rSelection);
+    void onSelectionChanged(const cpo::uno::Any& rSelection);
 
     void Select();
 

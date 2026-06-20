@@ -48,7 +48,7 @@ using UcbStore_Base = comphelper::WeakComponentImplHelper <
 class UcbStore : public UcbStore_Base
 {
     css::uno::Reference< css::uno::XComponentContext >    m_xContext;
-    css::uno::Sequence< css::uno::Any >                   m_aInitArgs;
+    css::uno::Sequence< cpo::uno::Any >                   m_aInitArgs;
     rtl::Reference< PropertySetRegistry >                 m_xTheRegistry;
 
 public:
@@ -66,7 +66,7 @@ public:
 
     // XInitialization
     virtual void SAL_CALL
-    initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 };
 
 
@@ -83,7 +83,7 @@ class PropertySetRegistry : public cppu::WeakImplHelper <
     friend class PersistentPropertySet;
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    const css::uno::Sequence< css::uno::Any >             m_aInitArgs;
+    const css::uno::Sequence< cpo::uno::Any >             m_aInitArgs;
     PropertySetMap_Impl               m_aPropSets;
     css::uno::Reference< css::lang::XMultiServiceFactory > m_xConfigProvider;
     css::uno::Reference< css::uno::XInterface >           m_xRootReadAccess;
@@ -105,7 +105,7 @@ private:
 public:
     PropertySetRegistry(
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
-        const css::uno::Sequence< css::uno::Any >& rInitArgs);
+        const css::uno::Sequence< cpo::uno::Any >& rInitArgs);
     virtual ~PropertySetRegistry() override;
 
 
@@ -127,7 +127,7 @@ public:
     hasElements() override;
 
     // XNameAccess
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
     getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
     getElementNames() override;
@@ -201,8 +201,8 @@ public:
     getPropertySetInfo() override;
     virtual void SAL_CALL
     setPropertyValue( const OUString& aPropertyName,
-                      const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL
+                      const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL
     getPropertyValue( const OUString& PropertyName ) override;
     virtual void SAL_CALL
     addPropertyChangeListener( const OUString& aPropertyName,
@@ -233,7 +233,7 @@ public:
     virtual void SAL_CALL
     addProperty( const OUString& Name,
                  sal_Int16 Attributes,
-                 const css::uno::Any& DefaultValue ) override;
+                 const cpo::uno::Any& DefaultValue ) override;
     virtual void SAL_CALL
     removeProperty( const OUString& Name ) override;
 

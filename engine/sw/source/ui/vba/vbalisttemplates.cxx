@@ -37,10 +37,10 @@ public:
         return ( m_nIndex <= m_pListTemplates->getCount() );
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         if ( m_nIndex <= m_pListTemplates->getCount() )
-            return m_pListTemplates->Item( uno::Any( m_nIndex++ ), uno::Any() );
+            return m_pListTemplates->Item( cpo::uno::Any( m_nIndex++ ), cpo::uno::Any() );
         throw container::NoSuchElementException();
     }
 };
@@ -57,7 +57,7 @@ SwVbaListTemplates::SwVbaListTemplates( const uno::Reference< XHelperInterface >
     return 7;
 }
 
-uno::Any SAL_CALL SwVbaListTemplates::Item( const uno::Any& Index1, const uno::Any& /*not processed in this base class*/ )
+cpo::uno::Any SAL_CALL SwVbaListTemplates::Item( const cpo::uno::Any& Index1, const cpo::uno::Any& /*not processed in this base class*/ )
 {
     sal_Int32 nIndex = 0;
     if( !( Index1 >>= nIndex ) )
@@ -65,7 +65,7 @@ uno::Any SAL_CALL SwVbaListTemplates::Item( const uno::Any& Index1, const uno::A
     if( nIndex <=0 || nIndex > getCount() )
         throw  uno::RuntimeException(u"Index out of bounds"_ustr );
 
-    return uno::Any( uno::Reference< word::XListTemplate >( new SwVbaListTemplate( this, mxContext, mxTextDocument, mnGalleryType, nIndex ) ) );
+    return cpo::uno::Any( uno::Reference< word::XListTemplate >( new SwVbaListTemplate( this, mxContext, mxTextDocument, mnGalleryType, nIndex ) ) );
 }
 
 // XEnumerationAccess
@@ -81,8 +81,8 @@ SwVbaListTemplates::createEnumeration()
     return new ListTemplatesEnumWrapper( this );
 }
 
-uno::Any
-SwVbaListTemplates::createCollectionObject( const css::uno::Any& aSource )
+cpo::uno::Any
+SwVbaListTemplates::createCollectionObject( const cpo::uno::Any& aSource )
 {
     return aSource;
 }

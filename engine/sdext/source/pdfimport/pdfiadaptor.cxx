@@ -128,7 +128,7 @@ bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::PropertyVal
         }
         if( xSubStream.is() )
         {
-            uno::Sequence< uno::Any > aArgs{ uno::Any(m_xModel), uno::Any(xSubStream) };
+            uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(m_xModel), cpo::uno::Any(xSubStream) };
 
             SAL_INFO("sdext.pdfimport", "try to instantiate subfilter" );
             uno::Reference< document::XFilter > xSubFilter;
@@ -203,7 +203,7 @@ css::uno::Sequence<OUString> PDFIHybridAdaptor::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 sdext_PDFIHybridAdaptor_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new pdfi::PDFIHybridAdaptor( context ));
 }

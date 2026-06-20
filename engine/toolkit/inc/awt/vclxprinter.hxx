@@ -78,8 +78,8 @@ public:
 
     // css::beans::XPropertySet
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-    void SAL_CALL setPropertyValue( const OUString& rPropertyName, const css::uno::Any& aValue ) override { OPropertySetHelper::setPropertyValue( rPropertyName, aValue ); }
-    css::uno::Any SAL_CALL getPropertyValue( const OUString& rPropertyName ) override { return OPropertySetHelper::getPropertyValue( rPropertyName ); }
+    void SAL_CALL setPropertyValue( const OUString& rPropertyName, const cpo::uno::Any& aValue ) override { OPropertySetHelper::setPropertyValue( rPropertyName, aValue ); }
+    cpo::uno::Any SAL_CALL getPropertyValue( const OUString& rPropertyName ) override { return OPropertySetHelper::getPropertyValue( rPropertyName ); }
     void SAL_CALL addPropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { OPropertySetHelper::addPropertyChangeListener( rPropertyName, rxListener ); }
     void SAL_CALL removePropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { OPropertySetHelper::removePropertyChangeListener( rPropertyName, rxListener ); }
     void SAL_CALL addVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { OPropertySetHelper::addVetoableChangeListener( rPropertyName, rxListener ); }
@@ -87,10 +87,10 @@ public:
 
     // ::cppu::OPropertySetHelper
     ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
-    bool SAL_CALL convertFastPropertyValue( css::uno::Any & rConvertedValue, css::uno::Any & rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
-    void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+    bool SAL_CALL convertFastPropertyValue( cpo::uno::Any & rConvertedValue, cpo::uno::Any & rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+    void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
     using cppu::OPropertySetHelper::getFastPropertyValue;
-    void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const override;
+    void SAL_CALL getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
     // css::awt::XPrinterPropertySet
     void SAL_CALL setHorizontal( bool bHorizontal ) override;
@@ -116,8 +116,8 @@ public:
 
     // css::beans::XPropertySet
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override { return VCLXPrinterPropertySet::getPropertySetInfo(); }
-    void SAL_CALL setPropertyValue( const OUString& rPropertyName, const css::uno::Any& aValue ) override { VCLXPrinterPropertySet::setPropertyValue( rPropertyName, aValue ); }
-    css::uno::Any SAL_CALL getPropertyValue( const OUString& rPropertyName ) override { return VCLXPrinterPropertySet::getPropertyValue( rPropertyName ); }
+    void SAL_CALL setPropertyValue( const OUString& rPropertyName, const cpo::uno::Any& aValue ) override { VCLXPrinterPropertySet::setPropertyValue( rPropertyName, aValue ); }
+    cpo::uno::Any SAL_CALL getPropertyValue( const OUString& rPropertyName ) override { return VCLXPrinterPropertySet::getPropertyValue( rPropertyName ); }
     void SAL_CALL addPropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { VCLXPrinterPropertySet::addPropertyChangeListener( rPropertyName, rxListener ); }
     void SAL_CALL removePropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { VCLXPrinterPropertySet::removePropertyChangeListener( rPropertyName, rxListener ); }
     void SAL_CALL addVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { VCLXPrinterPropertySet::addVetoableChangeListener( rPropertyName, rxListener ); }
@@ -152,8 +152,8 @@ public:
 
     // css::beans::XPropertySet
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override { return VCLXPrinterPropertySet::getPropertySetInfo(); }
-    void SAL_CALL setPropertyValue( const OUString& rPropertyName, const css::uno::Any& aValue ) override { VCLXPrinterPropertySet::setPropertyValue( rPropertyName, aValue ); }
-    css::uno::Any SAL_CALL getPropertyValue( const OUString& rPropertyName ) override { return VCLXPrinterPropertySet::getPropertyValue( rPropertyName ); }
+    void SAL_CALL setPropertyValue( const OUString& rPropertyName, const cpo::uno::Any& aValue ) override { VCLXPrinterPropertySet::setPropertyValue( rPropertyName, aValue ); }
+    cpo::uno::Any SAL_CALL getPropertyValue( const OUString& rPropertyName ) override { return VCLXPrinterPropertySet::getPropertyValue( rPropertyName ); }
     void SAL_CALL addPropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { VCLXPrinterPropertySet::addPropertyChangeListener( rPropertyName, rxListener ); }
     void SAL_CALL removePropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { VCLXPrinterPropertySet::removePropertyChangeListener( rPropertyName, rxListener ); }
     void SAL_CALL addVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { VCLXPrinterPropertySet::addVetoableChangeListener( rPropertyName, rxListener ); }

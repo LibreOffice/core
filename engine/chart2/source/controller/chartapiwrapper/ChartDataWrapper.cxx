@@ -242,7 +242,7 @@ struct lcl_ComplexRowDescriptionsOperator : public lcl_Operator
 
 struct lcl_AnyRowDescriptionsOperator : public lcl_Operator
 {
-    explicit lcl_AnyRowDescriptionsOperator( const Sequence< Sequence< uno::Any > >& rAnyRowDescriptions )
+    explicit lcl_AnyRowDescriptionsOperator( const Sequence< Sequence< cpo::uno::Any > >& rAnyRowDescriptions )
         : m_rAnyRowDescriptions( rAnyRowDescriptions )
     {
     }
@@ -258,7 +258,7 @@ struct lcl_AnyRowDescriptionsOperator : public lcl_Operator
             xDataAccess->setAnyRowDescriptions( m_rAnyRowDescriptions );
     }
 
-    const Sequence< Sequence< uno::Any > >& m_rAnyRowDescriptions;
+    const Sequence< Sequence< cpo::uno::Any > >& m_rAnyRowDescriptions;
 };
 
 struct lcl_ColumnDescriptionsOperator : public lcl_Operator
@@ -325,7 +325,7 @@ struct lcl_ComplexColumnDescriptionsOperator : public lcl_Operator
 
 struct lcl_AnyColumnDescriptionsOperator : public lcl_Operator
 {
-    explicit lcl_AnyColumnDescriptionsOperator( const Sequence< Sequence< uno::Any > >& rAnyColumnDescriptions )
+    explicit lcl_AnyColumnDescriptionsOperator( const Sequence< Sequence< cpo::uno::Any > >& rAnyColumnDescriptions )
         : m_rAnyColumnDescriptions( rAnyColumnDescriptions )
     {
     }
@@ -341,7 +341,7 @@ struct lcl_AnyColumnDescriptionsOperator : public lcl_Operator
             xDataAccess->setAnyColumnDescriptions( m_rAnyColumnDescriptions );
     }
 
-    const Sequence< Sequence< uno::Any > >& m_rAnyColumnDescriptions;
+    const Sequence< Sequence< cpo::uno::Any > >& m_rAnyColumnDescriptions;
 };
 
 struct lcl_DateCategoriesOperator : public lcl_Operator
@@ -435,19 +435,19 @@ Sequence< Sequence< OUString > > SAL_CALL ChartDataWrapper::getComplexColumnDesc
 }
 
 // ____ XAnyDescriptionAccess (read) ____
-Sequence< Sequence< uno::Any > > SAL_CALL ChartDataWrapper::getAnyRowDescriptions()
+Sequence< Sequence< cpo::uno::Any > > SAL_CALL ChartDataWrapper::getAnyRowDescriptions()
 {
     initDataAccess();
     if( m_xDataAccess.is() )
         return m_xDataAccess->getAnyRowDescriptions();
-    return Sequence< Sequence< uno::Any > >();
+    return Sequence< Sequence< cpo::uno::Any > >();
 }
-Sequence< Sequence< uno::Any > > SAL_CALL ChartDataWrapper::getAnyColumnDescriptions()
+Sequence< Sequence< cpo::uno::Any > > SAL_CALL ChartDataWrapper::getAnyColumnDescriptions()
 {
     initDataAccess();
     if( m_xDataAccess.is() )
         return m_xDataAccess->getAnyColumnDescriptions();
-    return Sequence< Sequence< uno::Any > >();
+    return Sequence< Sequence< cpo::uno::Any > >();
 }
 
 // ____ XDateCategories (read) ____
@@ -490,12 +490,12 @@ void SAL_CALL ChartDataWrapper::setComplexColumnDescriptions( const Sequence< Se
 }
 
 // ____ XAnyDescriptionAccess (write) ____
-void SAL_CALL ChartDataWrapper::setAnyRowDescriptions( const Sequence< Sequence< uno::Any > >& rRowDescriptions )
+void SAL_CALL ChartDataWrapper::setAnyRowDescriptions( const Sequence< Sequence< cpo::uno::Any > >& rRowDescriptions )
 {
     lcl_AnyRowDescriptionsOperator aOperator( rRowDescriptions );
     applyData( aOperator );
 }
-void SAL_CALL ChartDataWrapper::setAnyColumnDescriptions( const Sequence< Sequence< uno::Any > >& rColumnDescriptions )
+void SAL_CALL ChartDataWrapper::setAnyColumnDescriptions( const Sequence< Sequence< cpo::uno::Any > >& rColumnDescriptions )
 {
     lcl_AnyColumnDescriptionsOperator aOperator( rColumnDescriptions );
     applyData( aOperator );

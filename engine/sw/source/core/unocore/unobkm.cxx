@@ -379,7 +379,7 @@ SwXBookmark::getPropertySetInfo()
 
 void SAL_CALL
 SwXBookmark::setPropertyValue(const OUString& PropertyName,
-        const uno::Any& rValue)
+        const cpo::uno::Any& rValue)
 {
     SolarMutexGuard g;
 
@@ -423,11 +423,11 @@ SwXBookmark::setPropertyValue(const OUString& PropertyName,
             + PropertyName, getXWeak(), 0 );
 }
 
-uno::Any SAL_CALL SwXBookmark::getPropertyValue(const OUString& rPropertyName)
+cpo::uno::Any SAL_CALL SwXBookmark::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard g;
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if (! ::sw::GetDefaultTextContentValue(aRet, rPropertyName))
     {
         if(rPropertyName == UNO_LINK_DISPLAY_NAME)
@@ -495,7 +495,7 @@ SwXBookmark::removeVetoableChangeListener(
 }
 
 
-void SwXFieldmarkParameters::insertByName(const OUString& aName, const uno::Any& aElement)
+void SwXFieldmarkParameters::insertByName(const OUString& aName, const cpo::uno::Any& aElement)
 {
     SolarMutexGuard aGuard;
     Fieldmark::parameter_map_t* pParameters = getCoreParameters();
@@ -511,7 +511,7 @@ void SwXFieldmarkParameters::removeByName(const OUString& aName)
         throw container::NoSuchElementException();
 }
 
-void SwXFieldmarkParameters::replaceByName(const OUString& aName, const uno::Any& aElement)
+void SwXFieldmarkParameters::replaceByName(const OUString& aName, const cpo::uno::Any& aElement)
 {
     SolarMutexGuard aGuard;
     Fieldmark::parameter_map_t* pParameters = getCoreParameters();
@@ -521,7 +521,7 @@ void SwXFieldmarkParameters::replaceByName(const OUString& aName, const uno::Any
     pEntry->second = aElement;
 }
 
-uno::Any SwXFieldmarkParameters::getByName(const OUString& aName)
+cpo::uno::Any SwXFieldmarkParameters::getByName(const OUString& aName)
 {
     SolarMutexGuard aGuard;
     Fieldmark::parameter_map_t* pParameters = getCoreParameters();
@@ -720,7 +720,7 @@ SwXFieldmark::getCheckboxFieldmark()
 
 void SAL_CALL
 SwXFieldmark::setPropertyValue(const OUString& PropertyName,
-        const uno::Any& rValue)
+        const cpo::uno::Any& rValue)
 {
     SolarMutexGuard g;
     if ( PropertyName == "Checked" )
@@ -747,7 +747,7 @@ SwXFieldmark::setPropertyValue(const OUString& PropertyName,
 // support 'hidden' "Checked" property ( note: this property is just for convenience to support
 // docx import filter thus not published via PropertySet info )
 
-uno::Any SAL_CALL SwXFieldmark::getPropertyValue(const OUString& rPropertyName)
+cpo::uno::Any SAL_CALL SwXFieldmark::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard g;
     if ( rPropertyName == "Checked" )
@@ -757,9 +757,9 @@ uno::Any SAL_CALL SwXFieldmark::getPropertyValue(const OUString& rPropertyName)
             throw uno::RuntimeException(
                 u"SwXFieldmark::getPropertyValue(): Mark is empty"_ustr);
 
-        return uno::Any( pCheckboxFm->IsChecked() );
+        return cpo::uno::Any( pCheckboxFm->IsChecked() );
     }
-    return uno::Any(); // this doesn't support any SwXBookmark property
+    return cpo::uno::Any(); // this doesn't support any SwXBookmark property
 }
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL

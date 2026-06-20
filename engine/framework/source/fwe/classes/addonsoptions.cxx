@@ -24,7 +24,7 @@
 #include <unotools/configitem.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/stream.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -46,6 +46,7 @@
 using namespace ::utl;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;

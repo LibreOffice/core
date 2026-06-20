@@ -22,7 +22,7 @@
 #include <string_view>
 
 #include <svl/visitem.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <osl/diagnose.h>
 
 
@@ -46,14 +46,14 @@ bool SfxVisibilityItem::GetPresentation(SfxItemPresentation,
 
 
 // virtual
-bool SfxVisibilityItem::QueryValue(css::uno::Any& rVal, sal_uInt8) const
+bool SfxVisibilityItem::QueryValue(cpo::uno::Any& rVal, sal_uInt8) const
 {
     rVal <<= m_nValue;
     return true;
 }
 
 // virtual
-bool SfxVisibilityItem::PutValue(const css::uno::Any& rVal, sal_uInt8)
+bool SfxVisibilityItem::PutValue(const cpo::uno::Any& rVal, sal_uInt8)
 {
     if (rVal >>= m_nValue)
         return true;

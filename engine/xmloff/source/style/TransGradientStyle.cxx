@@ -59,7 +59,7 @@ XMLTransGradientStyleImport::XMLTransGradientStyleImport( SvXMLImport& rImp )
 
 void XMLTransGradientStyleImport::importXML(
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
-    uno::Any& rValue,
+    cpo::uno::Any& rValue,
     OUString& rStrName )
 {
     OUString aDisplayName;
@@ -178,7 +178,7 @@ XMLTransGradientStyleExport::XMLTransGradientStyleExport( SvXMLExport& rExp )
 
 void XMLTransGradientStyleExport::exportXML(
     const OUString& rStrName,
-    const uno::Any& rValue )
+    const cpo::uno::Any& rValue )
 {
     // MCGR: We try to write the gradient so, that applications without multi-color gradient support
     // can render it as best as possible.

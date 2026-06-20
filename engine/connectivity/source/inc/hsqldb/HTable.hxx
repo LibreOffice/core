@@ -86,7 +86,7 @@ namespace connectivity::hsqldb
         // ODescriptor
         virtual void construct() override;
 
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
         //XTypeProvider
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
         // XAlterTable

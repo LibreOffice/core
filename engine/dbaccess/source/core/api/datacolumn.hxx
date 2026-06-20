@@ -50,7 +50,7 @@ namespace dbaccess
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // css::uno::XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
         virtual void SAL_CALL acquire() noexcept override { OResultColumn::acquire(); }
         virtual void SAL_CALL release() noexcept override { OResultColumn::release(); }
 
@@ -77,7 +77,7 @@ namespace dbaccess
         virtual css::util::DateTime SAL_CALL getTimestamp(  ) override;
         virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getBinaryStream(  ) override;
         virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getCharacterStream(  ) override;
-        virtual css::uno::Any SAL_CALL getObject( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual cpo::uno::Any SAL_CALL getObject( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
         virtual css::uno::Reference< css::sdbc::XRef > SAL_CALL getRef(  ) override;
         virtual css::uno::Reference< css::sdbc::XBlob > SAL_CALL getBlob(  ) override;
         virtual css::uno::Reference< css::sdbc::XClob > SAL_CALL getClob(  ) override;
@@ -99,8 +99,8 @@ namespace dbaccess
         virtual void SAL_CALL updateTimestamp( const css::util::DateTime& x ) override;
         virtual void SAL_CALL updateBinaryStream( const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
         virtual void SAL_CALL updateCharacterStream( const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
-        virtual void SAL_CALL updateObject( const css::uno::Any& x ) override;
-        virtual void SAL_CALL updateNumericObject( const css::uno::Any& x, sal_Int32 scale ) override;
+        virtual void SAL_CALL updateObject( const cpo::uno::Any& x ) override;
+        virtual void SAL_CALL updateNumericObject( const cpo::uno::Any& x, sal_Int32 scale ) override;
     };
 }
 

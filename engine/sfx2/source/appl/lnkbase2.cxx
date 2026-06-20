@@ -21,7 +21,7 @@
 #include <memory>
 #include <sfx2/lnkbase.hxx>
 #include <sot/exchange.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <sfx2/linkmgr.hxx>
@@ -37,6 +37,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace sfx2
 {
@@ -437,7 +438,7 @@ void SvBaseLink::Disconnect()
     }
 }
 
-SvBaseLink::UpdateResult SvBaseLink::DataChanged( const OUString &, const css::uno::Any & )
+SvBaseLink::UpdateResult SvBaseLink::DataChanged( const OUString &, const cpo::uno::Any & )
 {
     if ( mnObjType == SvBaseLinkObjectType::DdeExternal )
     {

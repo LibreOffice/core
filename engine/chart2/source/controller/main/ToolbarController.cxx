@@ -19,7 +19,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart {
 
-ChartToolbarController::ChartToolbarController(const css::uno::Sequence<css::uno::Any>& rProperties)
+ChartToolbarController::ChartToolbarController(const css::uno::Sequence<cpo::uno::Any>& rProperties)
 {
     for (const auto& rProperty : rProperties)
     {
@@ -86,7 +86,7 @@ void ChartToolbarController::disposing(const css::lang::EventObject& /*rSource*/
 {
 }
 
-void ChartToolbarController::initialize(const css::uno::Sequence<css::uno::Any>& /*rAny*/)
+void ChartToolbarController::initialize(const css::uno::Sequence<cpo::uno::Any>& /*rAny*/)
 {
 }
 
@@ -113,7 +113,7 @@ css::uno::Sequence<OUString> ChartToolbarController::getSupportedServiceNames()
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-org_libreoffice_chart2_Chart2ToolboxController(css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const & rProperties)
+org_libreoffice_chart2_Chart2ToolboxController(css::uno::XComponentContext*, css::uno::Sequence<cpo::uno::Any> const & rProperties)
 {
     return cppu::acquire(new ::chart::ChartToolbarController(rProperties));
 }

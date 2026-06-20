@@ -61,7 +61,7 @@ class GlobalSettings_Access : public ::cppu::WeakImplHelper<
 
         // settings access
         bool HasToolbarStatesInfo();
-        bool GetToolbarStateInfo( GlobalSettings::StateInfo eStateInfo, css::uno::Any& aValue );
+        bool GetToolbarStateInfo( GlobalSettings::StateInfo eStateInfo, cpo::uno::Any& aValue );
 
     private:
         void impl_initConfigAccess();
@@ -131,7 +131,7 @@ bool GlobalSettings_Access::HasToolbarStatesInfo()
     {
         try
         {
-            css::uno::Any a;
+            cpo::uno::Any a;
             bool      bValue;
             a = m_xConfigAccess->getByName( m_aPropStatesEnabled );
             if ( a >>= bValue )
@@ -148,7 +148,7 @@ bool GlobalSettings_Access::HasToolbarStatesInfo()
     return false;
 }
 
-bool GlobalSettings_Access::GetToolbarStateInfo( GlobalSettings::StateInfo eStateInfo, css::uno::Any& aValue )
+bool GlobalSettings_Access::GetToolbarStateInfo( GlobalSettings::StateInfo eStateInfo, cpo::uno::Any& aValue )
 {
     std::unique_lock g(m_mutex);
 
@@ -166,7 +166,7 @@ bool GlobalSettings_Access::GetToolbarStateInfo( GlobalSettings::StateInfo eStat
 
     try
     {
-        css::uno::Any a = m_xConfigAccess->getByName( m_aNodeRefStates );
+        cpo::uno::Any a = m_xConfigAccess->getByName( m_aNodeRefStates );
         css::uno::Reference< css::container::XNameAccess > xNameAccess;
         if ( a >>= xNameAccess )
         {
@@ -198,9 +198,9 @@ void GlobalSettings_Access::impl_initConfigAccess()
             css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider =
                  css::configuration::theDefaultProvider::get( m_xContext );
 
-            uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+            uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
             {
-                {"nodepath", uno::Any(u"/org.openoffice.Office.UI.GlobalSettings/Toolbars"_ustr)}
+                {"nodepath", cpo::uno::Any(u"/org.openoffice.Office.UI.GlobalSettings/Toolbars"_ustr)}
             }));
             m_xConfigAccess.set(xConfigProvider->createInstanceWithArguments(
                                     SERVICENAME_CFGREADACCESS, aArgs ),
@@ -247,7 +247,7 @@ bool GlobalSettings::HasToolbarStatesInfo() const
         return false;
 }
 
-bool GlobalSettings::GetToolbarStateInfo( StateInfo eStateInfo, css::uno::Any& aValue )
+bool GlobalSettings::GetToolbarStateInfo( StateInfo eStateInfo, cpo::uno::Any& aValue )
 {
     GlobalSettings_Access* pSettings( GetGlobalSettings( m_xContext ));
 

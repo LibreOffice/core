@@ -389,9 +389,9 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument& rDoc, co
                             else
                             {
                                 xProps->setPropertyValue(u"DisableDataTableDialog"_ustr,
-                                    uno::Any( false ) );
+                                    cpo::uno::Any( false ) );
                                 xProps->setPropertyValue(u"DisableComplexChartTypes"_ustr,
-                                    uno::Any( false ) );
+                                    cpo::uno::Any( false ) );
                             }
                         }
                     }

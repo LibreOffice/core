@@ -337,7 +337,7 @@ namespace svt::table
 
         /** retrieves the content of the given cell
         */
-        virtual void getCellContent( ColPos const i_col, RowPos const i_row, css::uno::Any& o_cellContent ) = 0;
+        virtual void getCellContent( ColPos const i_col, RowPos const i_row, cpo::uno::Any& o_cellContent ) = 0;
 
         /** returns an object which should be displayed as tooltip for the given cell
 
@@ -354,11 +354,11 @@ namespace svt::table
             @param o_cellToolTip
                 takes the tooltip object upon return.
         */
-        virtual void getCellToolTip( ColPos const i_col, RowPos const i_row, css::uno::Any & o_cellToolTip ) = 0;
+        virtual void getCellToolTip( ColPos const i_col, RowPos const i_row, cpo::uno::Any & o_cellToolTip ) = 0;
 
         /** retrieves title of a given row
         */
-        virtual css::uno::Any      getRowHeading( RowPos const i_rowPos ) const = 0;
+        virtual cpo::uno::Any      getRowHeading( RowPos const i_rowPos ) const = 0;
 
         /** returns the color to be used for rendering the grid lines.
 

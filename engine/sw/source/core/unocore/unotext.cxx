@@ -147,10 +147,10 @@ css::uno::Reference< css::text::XTextCursor > SAL_CALL SwXText::createTextCursor
 }
 
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwXText::queryInterface(const uno::Type& rType)
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if (rType == cppu::UnoType<text::XText>::get())
     {
         aRet <<= uno::Reference< text::XText >(this);
@@ -297,7 +297,7 @@ SwXText::insertString(const uno::Reference< text::XTextRange >& xTextRange,
         catch (const lang::IllegalArgumentException& iae)
         {
             // stupid method not allowed to throw iae
-            css::uno::Any anyEx = cppu::getCaughtException();
+            cpo::uno::Any anyEx = cppu::getCaughtException();
             throw lang::WrappedTargetRuntimeException( iae.Message,
                             uno::Reference< uno::XInterface >(), anyEx );
         }
@@ -992,12 +992,12 @@ SwXText::getPropertySetInfo()
 
 void SAL_CALL
 SwXText::setPropertyValue(const OUString& /*aPropertyName*/,
-        const uno::Any& /*aValue*/)
+        const cpo::uno::Any& /*aValue*/)
 {
     throw lang::IllegalArgumentException();
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwXText::getPropertyValue(
     const OUString& rPropertyName)
 {
@@ -1013,7 +1013,7 @@ SwXText::getPropertyValue(
     if (!pEntry)
         throw beans::UnknownPropertyException("Unknown property: " + rPropertyName);
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     switch (pEntry->nWID)
     {
 //          no code necessary - the redline is always located at the end node
@@ -1408,7 +1408,7 @@ SwXText::insertTextContentWithProperties(
         }
         catch (const uno::Exception& e)
         {
-            css::uno::Any anyEx = cppu::getCaughtException();
+            cpo::uno::Any anyEx = cppu::getCaughtException();
             m_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, &aRewriter);
             throw lang::WrappedTargetRuntimeException( e.Message,
                             uno::Reference< uno::XInterface >(), anyEx );
@@ -2061,7 +2061,7 @@ typedef uno::Sequence< text::TableColumnSeparator > TableColumnSeparators;
 static void
 lcl_ApplyRowProperties(
     uno::Sequence<beans::PropertyValue> const& rRowProperties,
-    uno::Any const& rRow,
+    cpo::uno::Any const& rRow,
     TableColumnSeparators & rRowSeparators)
 {
     uno::Reference< beans::XPropertySet > xRow;
@@ -2099,7 +2099,7 @@ lcl_ApplyCellProperties(
     for (const auto& rCellProperty : rCellProperties)
     {
         const OUString & rName  = rCellProperty.Name;
-        const uno::Any & rValue = rCellProperty.Value;
+        const cpo::uno::Any & rValue = rCellProperty.Value;
         if ( rName == "VerticalMerge" )
         {
             // determine left border position
@@ -2181,12 +2181,12 @@ lcl_MergeCells(std::vector<VerticallyMergedCell> & rMergedCells)
             SAL_WARN("sw.uno", "incomplete vertical cell merge");
             continue;
         }
-        aMergedCell.aCells.front()->setPropertyValue(UNO_NAME_ROW_SPAN, uno::Any(nCellCount--));
+        aMergedCell.aCells.front()->setPropertyValue(UNO_NAME_ROW_SPAN, cpo::uno::Any(nCellCount--));
         nCellCount*=-1;
         for(auto pxPSet = aMergedCell.aCells.begin()+1; nCellCount<0; ++pxPSet, ++nCellCount)
         {
-            (*pxPSet)->setPropertyValue(UNO_NAME_ROW_SPAN, uno::Any(nCellCount));
-            (*pxPSet)->setPropertyValue(u"VerticalMerge"_ustr, uno::Any(true));
+            (*pxPSet)->setPropertyValue(UNO_NAME_ROW_SPAN, cpo::uno::Any(nCellCount));
+            (*pxPSet)->setPropertyValue(u"VerticalMerge"_ustr, cpo::uno::Any(true));
         }
     }
 }
@@ -2441,10 +2441,10 @@ SwXBodyText::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwXBodyText::queryInterface(const uno::Type& rType)
 {
-    const uno::Any ret = SwXText::queryInterface(rType);
+    const cpo::uno::Any ret = SwXText::queryInterface(rType);
     return (ret.getValueType() == cppu::UnoType<void>::get())
         ?   SwXBodyText_Base::queryInterface(rType)
         :   ret;
@@ -2657,9 +2657,9 @@ uno::Sequence<sal_Int8> SAL_CALL SwXHeadFootText::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-uno::Any SAL_CALL SwXHeadFootText::queryInterface(const uno::Type& rType)
+cpo::uno::Any SAL_CALL SwXHeadFootText::queryInterface(const uno::Type& rType)
 {
-    const uno::Any ret = SwXHeadFootText_Base::queryInterface(rType);
+    const cpo::uno::Any ret = SwXHeadFootText_Base::queryInterface(rType);
     return (ret.getValueType() == cppu::UnoType<void>::get())
         ? SwXText::queryInterface(rType)
         : ret;

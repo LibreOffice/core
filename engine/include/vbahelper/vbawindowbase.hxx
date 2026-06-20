@@ -21,7 +21,7 @@
 #define INCLUDED_VBAHELPER_VBAWINDOWBASE_HXX
 
 #include <cppuhelper/weakref.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <ooo/vba/XWindowBase.hpp>
@@ -55,7 +55,7 @@ public:
         const css::uno::Reference< css::frame::XController >& xController );
     /// @throws css::uno::RuntimeException
     VbaWindowBase(
-        css::uno::Sequence< css::uno::Any > const& aArgs,
+        css::uno::Sequence< cpo::uno::Any > const& aArgs,
         css::uno::Reference< css::uno::XComponentContext > const& xContext );
 
     // XWindowBase

@@ -642,7 +642,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167583)
         auto xFactory = mxComponent.queryThrow<lang::XMultiServiceFactory>();
         uno::Reference<beans::XPropertySet> xSettings(
             xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
-        xSettings->setPropertyValue(u"AdjustTableLineHeightsToGridHeight"_ustr, uno::Any(false));
+        xSettings->setPropertyValue(u"AdjustTableLineHeightsToGridHeight"_ustr,
+                                    cpo::uno::Any(false));
     }
 
     fnVerify(false);

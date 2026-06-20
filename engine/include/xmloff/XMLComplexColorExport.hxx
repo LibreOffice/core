@@ -13,7 +13,7 @@
 #include <rtl/ustring.hxx>
 #include <xmloff/xmltoken.hxx>
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 class Any;
 }
@@ -36,7 +36,7 @@ public:
 
     void exportComplexColor(model::ComplexColor const& rComplexColor, sal_uInt16 nPrefix,
                             xmloff::token::XMLTokenEnum nToken);
-    void exportXML(const css::uno::Any& rAny, sal_uInt16 nPrefix, const OUString& rLocalName);
+    void exportXML(const cpo::uno::Any& rAny, sal_uInt16 nPrefix, const OUString& rLocalName);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

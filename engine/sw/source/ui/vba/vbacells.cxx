@@ -41,7 +41,7 @@ public:
         return ( mnIndex < mxIndexAccess->getCount() );
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         if( mnIndex < mxIndexAccess->getCount() )
         {
@@ -73,7 +73,7 @@ public:
     {
         return ( mnRight - mnLeft + 1 ) * ( mnBottom - mnTop + 1 );
     }
-    virtual uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override
     {
         if ( Index < 0 || Index >= getCount() )
             throw css::lang::IndexOutOfBoundsException();
@@ -83,7 +83,7 @@ public:
             for( sal_Int32 col = mnLeft; col <= mnRight; col++ )
             {
                 if( Index == ( ( row - mnTop ) * ( mnRight - mnLeft + 1 ) + ( col - mnLeft ) ) )
-                    return uno::Any( uno::Reference< word::XCell >( new SwVbaCell( mxParent, mxContext, mxTextTable, col, row ) ) );
+                    return cpo::uno::Any( uno::Reference< word::XCell >( new SwVbaCell( mxParent, mxContext, mxTextTable, col, row ) ) );
             }
         }
         throw css::lang::IndexOutOfBoundsException();
@@ -126,13 +126,13 @@ void SAL_CALL SwVbaCells::setWidth( ::sal_Int32 _width )
     }
 }
 
-uno::Any SAL_CALL SwVbaCells::getHeight()
+cpo::uno::Any SAL_CALL SwVbaCells::getHeight()
 {
     uno::Reference< word::XRow > xRow( new SwVbaRow( getParent(), mxContext, mxTextTable, mnTop ) );
     return xRow->getHeight();
 }
 
-void SAL_CALL SwVbaCells::setHeight( const uno::Any& _height )
+void SAL_CALL SwVbaCells::setHeight( const cpo::uno::Any& _height )
 {
     for( sal_Int32 row = mnTop; row <= mnBottom; row++ )
     {
@@ -189,8 +189,8 @@ SwVbaCells::createEnumeration()
     return xEnumAccess->createEnumeration();
 }
 
-uno::Any
-SwVbaCells::createCollectionObject( const uno::Any& aSource )
+cpo::uno::Any
+SwVbaCells::createCollectionObject( const cpo::uno::Any& aSource )
 {
     return aSource;
 }

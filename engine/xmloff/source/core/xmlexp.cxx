@@ -109,6 +109,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -556,11 +557,11 @@ SvXMLExport::~SvXMLExport()
                     {
                         sal_Int32 nProgressMax(mpProgressBarHelper->GetReference());
                         sal_Int32 nProgressCurrent(mpProgressBarHelper->GetValue());
-                        mxExportInfo->setPropertyValue(sProgressMax, uno::Any(nProgressMax));
-                        mxExportInfo->setPropertyValue(sProgressCurrent, uno::Any(nProgressCurrent));
+                        mxExportInfo->setPropertyValue(sProgressMax, cpo::uno::Any(nProgressMax));
+                        mxExportInfo->setPropertyValue(sProgressCurrent, cpo::uno::Any(nProgressCurrent));
                     }
                     if (xPropertySetInfo->hasPropertyByName(sRepeat))
-                        mxExportInfo->setPropertyValue(sRepeat, css::uno::Any(mpProgressBarHelper->GetRepeat()));
+                        mxExportInfo->setPropertyValue(sRepeat, cpo::uno::Any(mpProgressBarHelper->GetRepeat()));
                 }
                 if (mpNumExport && (mnExportFlags & (SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::STYLES)))
                 {
@@ -606,7 +607,7 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
             OUString sUsePrettyPrinting(u"UsePrettyPrinting"_ustr);
             if (xPropertySetInfo->hasPropertyByName(sUsePrettyPrinting))
             {
-                uno::Any aAny = mxExportInfo->getPropertyValue(sUsePrettyPrinting);
+                cpo::uno::Any aAny = mxExportInfo->getPropertyValue(sUsePrettyPrinting);
                 if (::cppu::any2bool(aAny))
                     mnExportFlags |= SvXMLExportFlags::PRETTY;
                 else
@@ -618,7 +619,7 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
                 OUString sWrittenNumberFormats(XML_WRITTENNUMBERSTYLES);
                 if (xPropertySetInfo->hasPropertyByName(sWrittenNumberFormats))
                 {
-                    uno::Any aAny = mxExportInfo->getPropertyValue(sWrittenNumberFormats);
+                    cpo::uno::Any aAny = mxExportInfo->getPropertyValue(sWrittenNumberFormats);
                     uno::Sequence<sal_Int32> aWasUsed;
                     if(aAny >>= aWasUsed)
                         mpNumExport->SetWasUsed(aWasUsed);
@@ -660,7 +661,7 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
 }
 
 // XInitialize
-void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArguments )
+void SAL_CALL SvXMLExport::initialize( const uno::Sequence< cpo::uno::Any >& aArguments )
 {
     // #93186# we need to queryInterface every single Any with any expected outcome. This variable hold the queryInterface results.
 
@@ -712,7 +713,7 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
     static constexpr OUString sBaseURI = u"BaseURI"_ustr;
     if( xPropertySetInfo->hasPropertyByName(sBaseURI) )
     {
-        uno::Any aAny = mxExportInfo->getPropertyValue(sBaseURI);
+        cpo::uno::Any aAny = mxExportInfo->getPropertyValue(sBaseURI);
         aAny >>= msOrigFileName;
         mpImpl->msPackageURI = msOrigFileName;
         mpImpl->SetSchemeOf( msOrigFileName );
@@ -721,14 +722,14 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
     static constexpr OUString sStreamRelPath = u"StreamRelPath"_ustr;
     if( xPropertySetInfo->hasPropertyByName(sStreamRelPath) )
     {
-        uno::Any aAny = mxExportInfo->getPropertyValue(sStreamRelPath);
+        cpo::uno::Any aAny = mxExportInfo->getPropertyValue(sStreamRelPath);
         aAny >>= sRelPath;
     }
     OUString sName;
     static constexpr OUString sStreamName = u"StreamName"_ustr;
     if( xPropertySetInfo->hasPropertyByName(sStreamName) )
     {
-        uno::Any aAny = mxExportInfo->getPropertyValue(sStreamName);
+        cpo::uno::Any aAny = mxExportInfo->getPropertyValue(sStreamName);
         aAny >>= sName;
     }
     if( !msOrigFileName.isEmpty() && !sName.isEmpty() )
@@ -746,7 +747,7 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
             u"OutlineStyleAsNormalListStyle"_ustr );
     if( xPropertySetInfo->hasPropertyByName( sOutlineStyleAsNormalListStyle ) )
     {
-        uno::Any aAny = mxExportInfo->getPropertyValue( sOutlineStyleAsNormalListStyle );
+        cpo::uno::Any aAny = mxExportInfo->getPropertyValue( sOutlineStyleAsNormalListStyle );
         aAny >>= mpImpl->mbOutlineStyleAsNormalListStyle;
     }
 
@@ -758,7 +759,7 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
             u"ExportTextNumberElement"_ustr );
     if( xPropertySetInfo->hasPropertyByName( sExportTextNumberElement ) )
     {
-        uno::Any aAny = mxExportInfo->getPropertyValue( sExportTextNumberElement );
+        cpo::uno::Any aAny = mxExportInfo->getPropertyValue( sExportTextNumberElement );
         aAny >>= mpImpl->mbExportTextNumberElement;
     }
 }
@@ -847,7 +848,7 @@ bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue >& 
     {
         // We must catch exceptions, because according to the
         // API definition export must not throw one!
-        css::uno::Any ex(cppu::getCaughtException());
+        cpo::uno::Any ex(cppu::getCaughtException());
         OUString sMessage( ex.getValueTypeName() + ": \"" + e.Message + "\"");
         if (e.Context.is())
         {
@@ -1557,7 +1558,7 @@ void SvXMLExport::ExportStyles_( bool )
                 {
                     try
                     {
-                        uno::Any aValue = xGradient->getByName( rStrName );
+                        cpo::uno::Any aValue = xGradient->getByName( rStrName );
 
                         aGradientStyle.exportXML( rStrName, aValue );
                     }
@@ -1587,7 +1588,7 @@ void SvXMLExport::ExportStyles_( bool )
                 {
                     try
                     {
-                        uno::Any aValue = xHatch->getByName( rStrName );
+                        cpo::uno::Any aValue = xHatch->getByName( rStrName );
 
                         aHatchStyle.exportXML( rStrName, aValue );
                     }
@@ -1614,7 +1615,7 @@ void SvXMLExport::ExportStyles_( bool )
                 {
                     try
                     {
-                        uno::Any aValue = xBitmap->getByName( rStrName );
+                        cpo::uno::Any aValue = xBitmap->getByName( rStrName );
 
                         XMLImageStyle::exportXML( rStrName, aValue, *this );
                     }
@@ -1644,7 +1645,7 @@ void SvXMLExport::ExportStyles_( bool )
                 {
                     try
                     {
-                        uno::Any aValue = xTransGradient->getByName( rStrName );
+                        cpo::uno::Any aValue = xTransGradient->getByName( rStrName );
 
                         aTransGradientstyle.exportXML( rStrName, aValue );
                     }
@@ -1674,7 +1675,7 @@ void SvXMLExport::ExportStyles_( bool )
                 {
                     try
                     {
-                        uno::Any aValue = xMarker->getByName( rStrName );
+                        cpo::uno::Any aValue = xMarker->getByName( rStrName );
 
                         aMarkerStyle.exportXML( rStrName, aValue );
                     }
@@ -1704,7 +1705,7 @@ void SvXMLExport::ExportStyles_( bool )
                 {
                     try
                     {
-                        uno::Any aValue = xDashes->getByName( rStrName );
+                        cpo::uno::Any aValue = xDashes->getByName( rStrName );
 
                         aDashStyle.exportXML( rStrName, aValue );
                     }
@@ -1833,7 +1834,7 @@ void SvXMLExport::GetViewSettingsAndViews(uno::Sequence<beans::PropertyValue>& r
         xIndexAccess = xViewDataSupplier->getViewData();
     }
     bool bAdd = false;
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     if(xIndexAccess.is() && xIndexAccess->hasElements() )
     {
         sal_Int32 nCount = xIndexAccess->getCount();
@@ -2069,7 +2070,7 @@ ProgressBarHelper*  SvXMLExport::GetProgressBarHelper()
                     xPropertySetInfo->hasPropertyByName(sProgressCurrent) &&
                     xPropertySetInfo->hasPropertyByName(sProgressRange))
                 {
-                    uno::Any aAny;
+                    cpo::uno::Any aAny;
                     sal_Int32 nProgressMax(0);
                     sal_Int32 nProgressCurrent(0);
                     sal_Int32 nProgressRange(0);
@@ -2085,7 +2086,7 @@ ProgressBarHelper*  SvXMLExport::GetProgressBarHelper()
                 }
                 if (xPropertySetInfo->hasPropertyByName(sRepeat))
                 {
-                    uno::Any aAny = mxExportInfo->getPropertyValue(sRepeat);
+                    cpo::uno::Any aAny = mxExportInfo->getPropertyValue(sRepeat);
                     if (aAny.getValueType() == cppu::UnoType<bool>::get())
                         mpProgressBarHelper->SetRepeat(::cppu::any2bool(aAny));
                     else {

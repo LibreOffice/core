@@ -394,7 +394,7 @@ public:
        Only returns a reference to XMultiPropertySet, XFastPropertySet, XPropertySet and
        XEventListener.
      */
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) SAL_OVERRIDE;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) SAL_OVERRIDE;
 
     /** eases implementing XTypeProvider::getTypes, returns the types of XMultiPropertySet, XFastPropertySet, XPropertySet
 
@@ -415,12 +415,12 @@ public:
        rPropertyName does not exist or is readonly. Otherwise rPropertyName is changed to its handle
        value and setFastPropertyValue is called.
      */
-    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& rPropertyName, const css::uno::Any& aValue ) SAL_OVERRIDE;
+    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& rPropertyName, const cpo::uno::Any& aValue ) SAL_OVERRIDE;
     /**
        Throw UnknownPropertyException if the property with the name
        rPropertyName does not exist.
      */
-    virtual css::uno::Any SAL_CALL getPropertyValue(const ::rtl::OUString& aPropertyName) SAL_OVERRIDE;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(const ::rtl::OUString& aPropertyName) SAL_OVERRIDE;
     /** Ignored if the property is not bound. */
     virtual void SAL_CALL addPropertyChangeListener(
         const ::rtl::OUString& aPropertyName,
@@ -448,20 +448,20 @@ public:
        is changed with the setFastPropertyValue_NoBroadcast method and the bound listeners are
        notified.
       */
-    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const css::uno::Any& rValue ) SAL_OVERRIDE;
+    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const cpo::uno::Any& rValue ) SAL_OVERRIDE;
 
     /**
        @exception css::beans::UnknownPropertyException
          if the property with the handle nHandle does not exist.
      */
-    virtual css::uno::Any SAL_CALL getFastPropertyValue( sal_Int32 nHandle ) SAL_OVERRIDE;
+    virtual cpo::uno::Any SAL_CALL getFastPropertyValue( sal_Int32 nHandle ) SAL_OVERRIDE;
 
     // XMultiPropertySet
     virtual void SAL_CALL setPropertyValues(
         const css::uno::Sequence< ::rtl::OUString >& PropertyNames,
-        const css::uno::Sequence< css::uno::Any >& Values ) SAL_OVERRIDE;
+        const css::uno::Sequence< cpo::uno::Any >& Values ) SAL_OVERRIDE;
 
-    virtual css::uno::Sequence< css::uno::Any > SAL_CALL getPropertyValues(
+    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL getPropertyValues(
         const css::uno::Sequence< ::rtl::OUString >& PropertyNames ) SAL_OVERRIDE;
 
     virtual void SAL_CALL addPropertiesChangeListener(
@@ -492,8 +492,8 @@ protected:
      */
     void SAL_CALL fire(
         sal_Int32 * pnHandles,
-        const css::uno::Any * pNewValues,
-        const css::uno::Any * pOldValues,
+        const cpo::uno::Any * pNewValues,
+        const cpo::uno::Any * pOldValues,
         sal_Int32 nCount,
         bool bVetoable );
 
@@ -509,7 +509,7 @@ protected:
     void SAL_CALL setFastPropertyValues(
         sal_Int32 nSeqLen,
         sal_Int32 * pHandles,
-        const css::uno::Any * pValues,
+        const cpo::uno::Any * pValues,
         sal_Int32 nHitCount );
 
     /**
@@ -534,10 +534,10 @@ protected:
        @throws css::uno::RuntimeException
      */
     virtual bool SAL_CALL convertFastPropertyValue(
-        css::uno::Any & rConvertedValue,
-        css::uno::Any & rOldValue,
+        cpo::uno::Any & rConvertedValue,
+        cpo::uno::Any & rOldValue,
         sal_Int32 nHandle,
-        const css::uno::Any& rValue ) = 0;
+        const cpo::uno::Any& rValue ) = 0;
 
     /** The same as setFastPropertyValue; nHandle is always valid.
         The changes must not be broadcasted in this method.
@@ -560,14 +560,14 @@ protected:
     */
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
         sal_Int32 nHandle,
-        const css::uno::Any& rValue ) = 0;
+        const cpo::uno::Any& rValue ) = 0;
     /**
        The same as getFastPropertyValue, but return the value through rValue and nHandle
        is always valid.
        The method is not implemented in this class.
      */
     virtual void SAL_CALL getFastPropertyValue(
-        css::uno::Any& rValue,
+        cpo::uno::Any& rValue,
         sal_Int32 nHandle ) const = 0;
 
     /** sets an dependent property's value
@@ -590,7 +590,7 @@ protected:
     */
     void    setDependentFastPropertyValue(
                 sal_Int32 i_handle,
-                const css::uno::Any& i_value
+                const cpo::uno::Any& i_value
             );
 
     /** The common data of a broadcaster. Use the mutex, disposing state and the listener container. */
@@ -620,8 +620,8 @@ private:
     */
     void    impl_fireAll(
                 sal_Int32* i_handles,
-                const css::uno::Any * i_newValues,
-                const css::uno::Any * i_oldValues,
+                const cpo::uno::Any * i_newValues,
+                const cpo::uno::Any * i_oldValues,
                 sal_Int32 i_count
             );
 
@@ -657,7 +657,7 @@ public:
         bool bIgnoreRuntimeExceptionsWhileFiring = false);
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) SAL_OVERRIDE;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) SAL_OVERRIDE;
 
     // XPropertySetOption
     virtual void SAL_CALL enableChangeListenerNotification( bool bEnable ) SAL_OVERRIDE;

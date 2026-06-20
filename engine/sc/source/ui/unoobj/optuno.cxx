@@ -30,7 +30,7 @@ using namespace com::sun::star;
 
 bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
                 const SfxItemPropertyMap& rPropMap,
-                std::u16string_view aPropertyName, const uno::Any& aValue )
+                std::u16string_view aPropertyName, const cpo::uno::Any& aValue )
 {
     //! use map (with new identifiers)
 
@@ -100,12 +100,12 @@ bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
     return true;
 }
 
-uno::Any ScDocOptionsHelper::getPropertyValue(
+cpo::uno::Any ScDocOptionsHelper::getPropertyValue(
                 const ScDocOptions& rOptions,
                 const SfxItemPropertyMap& rPropMap,
                 std::u16string_view aPropertyName )
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     const SfxItemPropertyMapEntry* pEntry = rPropMap.getByName( aPropertyName );
     if( !pEntry || !pEntry->nWID )
         return aRet;
@@ -169,7 +169,7 @@ ScDocOptionsObj::~ScDocOptionsObj()
 }
 
 void SAL_CALL ScDocOptionsObj::setPropertyValue(
-                        const OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
 
@@ -179,11 +179,11 @@ void SAL_CALL ScDocOptionsObj::setPropertyValue(
         ScModelObj::setPropertyValue( aPropertyName, aValue );
 }
 
-uno::Any SAL_CALL ScDocOptionsObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ScDocOptionsObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
 
-    uno::Any aRet(ScDocOptionsHelper::getPropertyValue( aOptions, GetPropertySet().getPropertyMap(), aPropertyName ));
+    cpo::uno::Any aRet(ScDocOptionsHelper::getPropertyValue( aOptions, GetPropertySet().getPropertyMap(), aPropertyName ));
     if ( !aRet.hasValue() )
         aRet =  ScModelObj::getPropertyValue( aPropertyName );
 

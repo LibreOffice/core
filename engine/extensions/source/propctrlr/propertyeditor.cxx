@@ -28,7 +28,7 @@
 
 namespace pcr
 {
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::inspection::XPropertyControl;
     using ::com::sun::star::uno::Reference;
 

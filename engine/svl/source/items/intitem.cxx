@@ -18,7 +18,7 @@
  */
 
 #include <svl/intitem.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <osl/diagnose.h>
 #include <tools/bigint.hxx>
 #include <svl/metitem.hxx>
@@ -65,7 +65,7 @@ boost::property_tree::ptree SfxInt16Item::dumpAsJSON() const
 
 
 // virtual
-bool SfxInt16Item::QueryValue(css::uno::Any& rVal, sal_uInt8) const
+bool SfxInt16Item::QueryValue(cpo::uno::Any& rVal, sal_uInt8) const
 {
     sal_Int16 nValue = m_nValue;
     rVal <<= nValue;
@@ -73,7 +73,7 @@ bool SfxInt16Item::QueryValue(css::uno::Any& rVal, sal_uInt8) const
 }
 
 // virtual
-bool SfxInt16Item::PutValue(const css::uno::Any& rVal, sal_uInt8 )
+bool SfxInt16Item::PutValue(const cpo::uno::Any& rVal, sal_uInt8 )
 {
     sal_Int16 nValue = sal_Int16();
     if (rVal >>= nValue)

@@ -268,7 +268,7 @@ sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOpt )
     {
         try
         {
-            uno::Any aAny = xOpt->getPropertyValue( u"NullDate"_ustr );
+            cpo::uno::Any aAny = xOpt->getPropertyValue( u"NullDate"_ustr );
             util::Date  aDate;
             if( aAny >>= aDate )
                 return DateToDays( aDate.Day, aDate.Month, aDate.Year );
@@ -1446,7 +1446,7 @@ bool SortedIndividualInt32List::Find( sal_Int32 nVal ) const
 
 void SortedIndividualInt32List::InsertHolidayList(
         const ScaAnyConverter& rAnyConv,
-        const uno::Any& rHolAny,
+        const cpo::uno::Any& rHolAny,
         sal_Int32 nNullDate,
         bool bInsertOnWeekend )
 {
@@ -1459,19 +1459,19 @@ void SortedIndividualInt32List::InsertHolidayList(
 void SortedIndividualInt32List::InsertHolidayList(
         ScaAnyConverter& rAnyConv,
         const uno::Reference< beans::XPropertySet >& xOptions,
-        const uno::Any& rHolAny,
+        const cpo::uno::Any& rHolAny,
         sal_Int32 nNullDate )
 {
     rAnyConv.init( xOptions );
     if( rHolAny.getValueTypeClass() == uno::TypeClass_SEQUENCE )
     {
-        uno::Sequence< uno::Sequence< uno::Any > > aAnySeq;
+        uno::Sequence< uno::Sequence< cpo::uno::Any > > aAnySeq;
         if( !(rHolAny >>= aAnySeq) )
             throw lang::IllegalArgumentException();
 
-        for (const uno::Sequence<uno::Any>& rSubSeq : aAnySeq)
+        for (const uno::Sequence<cpo::uno::Any>& rSubSeq : aAnySeq)
         {
-            for( const uno::Any& rAny : rSubSeq )
+            for( const cpo::uno::Any& rAny : rSubSeq )
                 InsertHolidayList( rAnyConv, rAny, nNullDate, false/*bInsertOnWeekend*/ );
         }
     }
@@ -1503,11 +1503,11 @@ void ScaDoubleList::Append(
 
 void ScaDoubleList::Append(
         const ScaAnyConverter& rAnyConv,
-        const uno::Any& rAny,
+        const cpo::uno::Any& rAny,
         bool bIgnoreEmpty )
 {
     if( auto s = o3tl::tryAccess<
-            css::uno::Sequence<css::uno::Sequence<css::uno::Any>>>(rAny) )
+            css::uno::Sequence<css::uno::Sequence<cpo::uno::Any>>>(rAny) )
         Append( rAnyConv, *s, bIgnoreEmpty );
     else
     {
@@ -1522,27 +1522,27 @@ void ScaDoubleList::Append(
 
 void ScaDoubleList::Append(
         const ScaAnyConverter& rAnyConv,
-        const uno::Sequence< uno::Any >& rAnySeq,
+        const uno::Sequence< cpo::uno::Any >& rAnySeq,
         bool bIgnoreEmpty )
 {
-    for( const uno::Any& rAny : rAnySeq )
+    for( const cpo::uno::Any& rAny : rAnySeq )
         Append( rAnyConv, rAny, bIgnoreEmpty );
 }
 
 
 void ScaDoubleList::Append(
         const ScaAnyConverter& rAnyConv,
-        const uno::Sequence< uno::Sequence< uno::Any > >& rAnySeq,
+        const uno::Sequence< uno::Sequence< cpo::uno::Any > >& rAnySeq,
         bool bIgnoreEmpty )
 {
-    for( const uno::Sequence< uno::Any >& rArray : rAnySeq )
+    for( const uno::Sequence< cpo::uno::Any >& rArray : rAnySeq )
         Append( rAnyConv, rArray, bIgnoreEmpty );
 }
 
 void ScaDoubleList::Append(
         ScaAnyConverter& rAnyConv,
         const uno::Reference< beans::XPropertySet >& xOpt,
-        const uno::Sequence< uno::Any >& rAnySeq )
+        const uno::Sequence< cpo::uno::Any >& rAnySeq )
 {
     rAnyConv.init( xOpt );
     Append( rAnyConv, rAnySeq, true/*bIgnoreEmpty*/ );
@@ -1827,9 +1827,9 @@ void ComplexList::Append( const uno::Sequence< uno::Sequence< OUString > >& r )
 }
 
 
-void ComplexList::Append( const uno::Sequence< uno::Any >& aMultPars )
+void ComplexList::Append( const uno::Sequence< cpo::uno::Any >& aMultPars )
 {
-    for( const uno::Any& r : aMultPars )
+    for( const cpo::uno::Any& r : aMultPars )
     {
         switch( r.getValueTypeClass() )
         {
@@ -1847,11 +1847,11 @@ void ComplexList::Append( const uno::Sequence< uno::Any >& aMultPars )
                 break;
             case uno::TypeClass_SEQUENCE:
                 {
-                uno::Sequence< uno::Sequence< uno::Any > >           aValArr;
+                uno::Sequence< uno::Sequence< cpo::uno::Any > >           aValArr;
                 if( !(r >>= aValArr) )
                     throw lang::IllegalArgumentException();
 
-                for (const uno::Sequence<uno::Any>& rArr : aValArr)
+                for (const uno::Sequence<cpo::uno::Any>& rArr : aValArr)
                     Append( rArr );
                 }
                 break;
@@ -2523,7 +2523,7 @@ double ScaAnyConverter::convertToDouble( const OUString& rString ) const
 
 bool ScaAnyConverter::getDouble(
         double& rfResult,
-        const uno::Any& rAny ) const
+        const cpo::uno::Any& rAny ) const
 {
     rfResult = 0.0;
     bool bContainsVal = true;
@@ -2558,7 +2558,7 @@ bool ScaAnyConverter::getDouble(
 bool ScaAnyConverter::getDouble(
         double& rfResult,
         const uno::Reference< beans::XPropertySet >& xPropSet,
-        const uno::Any& rAny )
+        const cpo::uno::Any& rAny )
 {
     init( xPropSet );
     return getDouble( rfResult, rAny );
@@ -2566,7 +2566,7 @@ bool ScaAnyConverter::getDouble(
 
 double ScaAnyConverter::getDouble(
         const uno::Reference< beans::XPropertySet >& xPropSet,
-        const uno::Any& rAny,
+        const cpo::uno::Any& rAny,
         double fDefault )
 {
     double fResult;
@@ -2578,7 +2578,7 @@ double ScaAnyConverter::getDouble(
 bool ScaAnyConverter::getInt32(
         sal_Int32& rnResult,
         const uno::Reference< beans::XPropertySet >& xPropSet,
-        const uno::Any& rAny )
+        const cpo::uno::Any& rAny )
 {
     double fResult;
     bool bContainsVal = getDouble( fResult, xPropSet, rAny );
@@ -2591,7 +2591,7 @@ bool ScaAnyConverter::getInt32(
 
 sal_Int32 ScaAnyConverter::getInt32(
         const uno::Reference< beans::XPropertySet >& xPropSet,
-        const uno::Any& rAny,
+        const cpo::uno::Any& rAny,
         sal_Int32 nDefault )
 {
     sal_Int32 nResult;

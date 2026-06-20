@@ -55,6 +55,7 @@ using namespace ::com::sun::star;
 using namespace awt;
 using namespace lang;
 using namespace uno;
+using namespace ::cpo::uno;
 using namespace script;
 using namespace beans;
 using namespace document;
@@ -688,7 +689,7 @@ namespace dlgprov
 
     extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
     scripting_DialogProviderImpl_get_implementation(
-        css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+        css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
     {
         return cppu::acquire(new DialogProviderImpl(context));
     }

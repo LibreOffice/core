@@ -887,7 +887,7 @@ void SwAssignFieldsControl::Init(SwAssignFieldsDialog* pDialog, SwMailMergeConfi
         if (xColAccess.is() && rNewLB.get_active() > 0 &&
             xColAccess->hasByName(rNewLB.get_active_text()))
         {
-            uno::Any aCol = xColAccess->getByName(rNewLB.get_active_text());
+            cpo::uno::Any aCol = xColAccess->getByName(rNewLB.get_active_text());
             uno::Reference< XColumn > xColumn;
             aCol >>= xColumn;
             if(xColumn.is())
@@ -939,7 +939,7 @@ IMPL_LINK(SwAssignFieldsControl, MatchHdl_Impl, weld::ComboBox&, rBox, void)
     OUString sPreview;
     if(xColAccess.is() && xColAccess->hasByName(sColumn))
     {
-        uno::Any aCol = xColAccess->getByName(sColumn);
+        cpo::uno::Any aCol = xColAccess->getByName(sColumn);
         uno::Reference< XColumn > xColumn;
         aCol >>= xColumn;
         if(xColumn.is())
@@ -1158,7 +1158,7 @@ void AddressMultiLineEdit::SetText( const OUString& rStr )
             SfxItemSet aSet(m_xEditEngine->GetEmptyItemSet());
             // make each one different, so they are not collapsed together
             // as one attribute
-            std::map<OUString, css::uno::Any> aGrabBagMap;
+            std::map<OUString, cpo::uno::Any> aGrabBagMap;
             aGrabBagMap[u"Index"_ustr] <<= nSequence++;
             aSet.Put(SfxGrabBagItem(EE_CHAR_GRABBAG, std::move(aGrabBagMap)));
             m_xEditEngine->QuickSetAttribs(aSet, ESelection(nPara, nStart, nPara, nEnd + 1));

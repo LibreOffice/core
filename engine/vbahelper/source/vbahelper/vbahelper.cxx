@@ -99,7 +99,7 @@ nViewNo && !pView->GetObjectShell()->IsInPlaceActive() )
 }
 
 uno::Reference< beans::XIntrospectionAccess >
-getIntrospectionAccess( const uno::Any& aObject )
+getIntrospectionAccess( const cpo::uno::Any& aObject )
 {
     static uno::Reference< beans::XIntrospection > xIntrospection( beans::theIntrospection::get( comphelper::getProcessComponentContext() ) );
     return xIntrospection->inspect( aObject );
@@ -111,10 +111,10 @@ getTypeConverter( const uno::Reference< uno::XComponentContext >& xContext )
     static uno::Reference< script::XTypeConverter > xTypeConv( script::Converter::create(xContext) );
     return xTypeConv;
 }
-const uno::Any&
+const cpo::uno::Any&
 aNULL()
 {
-    static  uno::Any aNULLL{ uno::Reference< uno::XInterface >() };
+    static  cpo::uno::Any aNULLL{ uno::Reference< uno::XInterface >() };
     return aNULLL;
 }
 
@@ -200,7 +200,7 @@ getCurrentDoc( const OUString& sKey )
     }
 
 
-    uno::Any aModel;
+    cpo::uno::Any aModel;
     SbxVariable *pCompVar = basicChosen->Find(  sKey, SbxClassType::Object );
 
     if ( pCompVar )
@@ -293,24 +293,24 @@ XLRGBToOORGB( sal_Int32 nCol )
     sal_Int32 nRGB =  ( nAutoBits | (nRed << 16) | (nGreen << 8) | nBlue );
     return nRGB;
 }
-uno::Any
-OORGBToXLRGB( const uno::Any& aCol )
+cpo::uno::Any
+OORGBToXLRGB( const cpo::uno::Any& aCol )
 {
     sal_Int32 nCol(0);
     aCol >>= nCol;
     nCol = OORGBToXLRGB( nCol );
-    return uno::Any( nCol );
+    return cpo::uno::Any( nCol );
 }
-uno::Any
-XLRGBToOORGB(  const uno::Any& aCol )
+cpo::uno::Any
+XLRGBToOORGB(  const cpo::uno::Any& aCol )
 {
     sal_Int32 nCol(0);
     aCol >>= nCol;
     nCol = XLRGBToOORGB( nCol );
-    return uno::Any( nCol );
+    return cpo::uno::Any( nCol );
 }
 
-void PrintOutHelper( SfxViewShell const * pViewShell, const uno::Any& From, const uno::Any& To, const uno::Any& Copies, const uno::Any& Preview, const uno::Any& /*ActivePrinter*/, const uno::Any& /*PrintToFile*/, const uno::Any& Collate, const uno::Any& PrToFileName, bool bUseSelection  )
+void PrintOutHelper( SfxViewShell const * pViewShell, const cpo::uno::Any& From, const cpo::uno::Any& To, const cpo::uno::Any& Copies, const cpo::uno::Any& Preview, const cpo::uno::Any& /*ActivePrinter*/, const cpo::uno::Any& /*PrintToFile*/, const cpo::uno::Any& Collate, const cpo::uno::Any& PrToFileName, bool bUseSelection  )
 {
     sal_Int32 nTo = 0;
     sal_Int32 nFrom = 0;
@@ -394,7 +394,7 @@ void PrintOutHelper( SfxViewShell const * pViewShell, const uno::Any& From, cons
     //   of this method
 }
 
-void PrintPreviewHelper( const css::uno::Any& /*EnableChanges*/, SfxViewShell const * pViewShell )
+void PrintPreviewHelper( const cpo::uno::Any& /*EnableChanges*/, SfxViewShell const * pViewShell )
 {
     SfxViewFrame* pViewFrame = nullptr;
     if ( pViewShell )
@@ -415,7 +415,7 @@ void WaitUntilPreviewIsClosed( SfxViewFrame* pViewFrame )
         Application::Yield();
 }
 
-bool extractBoolFromAny( const uno::Any& rAny )
+bool extractBoolFromAny( const cpo::uno::Any& rAny )
 {
     switch( rAny.getValueTypeClass() )
     {
@@ -436,7 +436,7 @@ bool extractBoolFromAny( const uno::Any& rAny )
     throw uno::RuntimeException( u"Invalid type, cannot convert to boolean."_ustr , nullptr );
 }
 
-OUString extractStringFromAny( const uno::Any& rAny, bool bUppercaseBool )
+OUString extractStringFromAny( const cpo::uno::Any& rAny, bool bUppercaseBool )
 {
     switch( rAny.getValueTypeClass() )
     {
@@ -461,12 +461,12 @@ OUString extractStringFromAny( const uno::Any& rAny, bool bUppercaseBool )
     throw uno::RuntimeException( u"Invalid type, cannot convert to string."_ustr , nullptr );
 }
 
-OUString extractStringFromAny( const uno::Any& rAny, const OUString& rDefault, bool bUppercaseBool )
+OUString extractStringFromAny( const cpo::uno::Any& rAny, const OUString& rDefault, bool bUppercaseBool )
 {
     return rAny.hasValue() ? extractStringFromAny( rAny, bUppercaseBool ) : rDefault;
 }
 
-OUString getAnyAsString( const uno::Any& pvargItem )
+OUString getAnyAsString( const cpo::uno::Any& pvargItem )
 {
     return extractStringFromAny( pvargItem );
 }
@@ -668,7 +668,7 @@ void setCursorHelper( const uno::Reference< frame::XModel >& xModel, PointerStyl
     }
 }
 
-void setDefaultPropByIntrospection( const uno::Any& aObj, const uno::Any& aValue  )
+void setDefaultPropByIntrospection( const cpo::uno::Any& aObj, const cpo::uno::Any& aValue  )
 {
     uno::Reference< beans::XIntrospectionAccess > xUnoAccess( getIntrospectionAccess( aObj ) );
 
@@ -685,16 +685,16 @@ void setDefaultPropByIntrospection( const uno::Any& aObj, const uno::Any& aValue
     xPropSet->setPropertyValue( xDflt->getDefaultPropertyName(), aValue );
 }
 
-uno::Any getPropertyValue( const uno::Sequence< beans::PropertyValue >& aProp, const OUString& aName )
+cpo::uno::Any getPropertyValue( const uno::Sequence< beans::PropertyValue >& aProp, const OUString& aName )
 {
     auto pProp = std::find_if(aProp.begin(), aProp.end(),
         [&aName](const beans::PropertyValue& rProp) { return rProp.Name == aName; });
     if (pProp != aProp.end())
         return pProp->Value;
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
-bool setPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, const OUString& aName, const uno::Any& aValue )
+bool setPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, const OUString& aName, const cpo::uno::Any& aValue )
 {
     auto [begin, end] = asNonConstRange(aProp);
     auto pProp = std::find_if(begin, end,
@@ -707,7 +707,7 @@ bool setPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, const OUStr
     return false;
 }
 
-void setOrAppendPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, const OUString& aName, const uno::Any& aValue )
+void setOrAppendPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, const OUString& aName, const cpo::uno::Any& aValue )
 {
     if( setPropertyValue( aProp, aName, aValue ) )
         return;
@@ -850,7 +850,7 @@ void UserFormGeometryHelper::implSetPos( double fPos, bool bPosY )
     awt::Point aPosPixel = mxUnitConv->convertPointToPixel( awt::Point( nPosPixel, nPosPixel ), util::MeasureUnit::POINT );
     // pixel to appfont
     awt::Point aPosAppFont = mxUnitConv->convertPointToLogic( aPosPixel, util::MeasureUnit::APPFONT );
-    mxModelProps->setPropertyValue( bPosY ? saPosYName : saPosXName, uno::Any( bPosY ? aPosAppFont.Y : aPosAppFont.X ) );
+    mxModelProps->setPropertyValue( bPosY ? saPosYName : saPosXName, cpo::uno::Any( bPosY ? aPosAppFont.Y : aPosAppFont.X ) );
 }
 
 double UserFormGeometryHelper::implGetSize( bool bHeight, bool bOuter ) const
@@ -903,7 +903,7 @@ void UserFormGeometryHelper::implSetSize( double fSize, bool bHeight, bool bOute
     }
 
     awt::Size aSizeAppFont = mxUnitConv->convertSizeToLogic( aSizePixel, util::MeasureUnit::APPFONT );
-    mxModelProps->setPropertyValue( bHeight ? saHeightName : saWidthName, uno::Any( bHeight ? aSizeAppFont.Height : aSizeAppFont.Width ) );
+    mxModelProps->setPropertyValue( bHeight ? saHeightName : saWidthName, cpo::uno::Any( bHeight ? aSizeAppFont.Height : aSizeAppFont.Width ) );
 }
 
 

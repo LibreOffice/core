@@ -68,8 +68,8 @@ class UNOTOOLS_DLLPUBLIC GlobalEventConfig final :
         virtual ~GlobalEventConfig( ) override;
 
         css::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents(  ) override;
-        void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement ) override;
-        css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+        void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
+        cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
         css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
         bool SAL_CALL hasByName( const OUString& aName ) override;
         css::uno::Type SAL_CALL getElementType(  ) override;

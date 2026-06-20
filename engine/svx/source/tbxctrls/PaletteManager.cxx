@@ -523,6 +523,7 @@ void PaletteManager::DispatchColorCommand(const OUString& aCommand, const NamedC
 {
     using namespace css;
     using namespace css::uno;
+    using namespace cpo::uno;
     using namespace css::frame;
     using namespace css::beans;
     using namespace css::util;
@@ -549,7 +550,7 @@ void PaletteManager::DispatchColorCommand(const OUString& aCommand, const NamedC
         if (rColor.m_nLumMod != 0)
             aComplexColor.addTransformation({model::TransformationType::LumOff, rColor.m_nLumOff});
 
-        uno::Any aAny;
+        cpo::uno::Any aAny;
         aAny <<= OStringToOUString(model::color::convertToJSON(aComplexColor), RTL_TEXTENCODING_UTF8);
 
         aArgs.push_back(comphelper::makePropertyValue(aObj.GetURLPath() + ".ComplexColorJSON", aAny));

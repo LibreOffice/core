@@ -30,7 +30,7 @@
 class VCL_DLLPUBLIC CharacterAttributesHelper
 {
 private:
-    typedef std::map<OUString, css::uno::Any> AttributeMap;
+    typedef std::map<OUString, cpo::uno::Any> AttributeMap;
 
     AttributeMap m_aAttributeMap;
 

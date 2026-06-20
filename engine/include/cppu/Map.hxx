@@ -64,7 +64,7 @@ namespace cppu
         @param  outerEnv  the target environment
      */
     // Problem: any gets assigned to something, acquire/releases may be called in wrong env.
-    inline void mapOutAny(css::uno::Any const & any, css::uno::Any * res, css::uno::Environment const & outerEnv)
+    inline void mapOutAny(cpo::uno::Any const & any, cpo::uno::Any * res, css::uno::Environment const & outerEnv)
     {
         css::uno::Mapping curr2outer(css::uno::Environment::getCurrent(), outerEnv);
 
@@ -83,7 +83,7 @@ namespace cppu
         @param  res       the target any
         @param  outerEnv  the source environment
      */
-    inline void mapInAny(css::uno::Any const & any, css::uno::Any * res, css::uno::Environment const & outerEnv)
+    inline void mapInAny(cpo::uno::Any const & any, cpo::uno::Any * res, css::uno::Environment const & outerEnv)
     {
         css::uno::Mapping outer2curr(outerEnv, css::uno::Environment::getCurrent());
 

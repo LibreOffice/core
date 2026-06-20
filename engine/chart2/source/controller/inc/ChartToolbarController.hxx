@@ -29,7 +29,7 @@ typedef comphelper::WeakComponentImplHelper<
 class ChartToolbarController final : public ChartToolbarControllerBase
 {
 public:
-    ChartToolbarController(const css::uno::Sequence<css::uno::Any>& rProperties);
+    ChartToolbarController(const css::uno::Sequence<cpo::uno::Any>& rProperties);
     virtual ~ChartToolbarController() override;
 
     ChartToolbarController(const ChartToolbarController&) = delete;
@@ -61,7 +61,7 @@ public:
     virtual void SAL_CALL disposing(const css::lang::EventObject& rSource) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rAny) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& rAny) override;
 
     // XUpdatable
     virtual void SAL_CALL update() override;

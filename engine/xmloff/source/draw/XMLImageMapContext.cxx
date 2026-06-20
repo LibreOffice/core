@@ -50,7 +50,7 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::XInterface;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::document::XEventsSupplier;
 
 namespace {
@@ -299,7 +299,7 @@ void XMLImageMapRectangleContext::ProcessAttribute(
 void XMLImageMapRectangleContext::Prepare(
     Reference<XPropertySet> & rPropertySet)
 {
-    rPropertySet->setPropertyValue( u"Boundary"_ustr, uno::Any(aRectangle) );
+    rPropertySet->setPropertyValue( u"Boundary"_ustr, cpo::uno::Any(aRectangle) );
 
     // common properties handled by super class
     XMLImageMapObjectContext::Prepare(rPropertySet);
@@ -467,9 +467,9 @@ void XMLImageMapCircleContext::Prepare(
     Reference<XPropertySet> & rPropertySet)
 {
     // center (x,y)
-    rPropertySet->setPropertyValue( u"Center"_ustr, uno::Any(aCenter) );
+    rPropertySet->setPropertyValue( u"Center"_ustr, cpo::uno::Any(aCenter) );
     // radius
-    rPropertySet->setPropertyValue( u"Radius"_ustr, uno::Any(nRadius) );
+    rPropertySet->setPropertyValue( u"Radius"_ustr, cpo::uno::Any(nRadius) );
 
     // common properties handled by super class
     XMLImageMapObjectContext::Prepare(rPropertySet);
@@ -528,7 +528,7 @@ void XMLImageMapContext::endFastElement(sal_Int32 )
     Reference < XPropertySetInfo > xInfo =
         xPropertySet->getPropertySetInfo();
     if( xInfo.is() && xInfo->hasPropertyByName( gsImageMap ) )
-        xPropertySet->setPropertyValue(gsImageMap, uno::Any( xImageMap ) );
+        xPropertySet->setPropertyValue(gsImageMap, cpo::uno::Any( xImageMap ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

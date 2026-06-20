@@ -67,6 +67,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
@@ -406,7 +407,7 @@ ErrCodeMsg SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
             if( !pStream->GetError() )
             {
                 uno::Reference < beans::XPropertySet > xSet( xStm, UNO_QUERY );
-                uno::Any aAny2;
+                cpo::uno::Any aAny2;
                 aAny2 <<= u"application/binary"_ustr;
                 xSet->setPropertyValue(u"MediaType"_ustr, aAny2 );
                 m_pDoc->WriteLayoutCache( *pStream );

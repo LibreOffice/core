@@ -258,7 +258,7 @@ bool OAuth2Request::Impl::openBrowser() const
     }
     catch (const css::uno::Exception&)
     {
-        css::uno::Any exc(::cppu::getCaughtException());
+        cpo::uno::Any exc(::cppu::getCaughtException());
         OUString msg(::comphelper::anyToString(exc));
         const SolarMutexGuard guard;
         std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(

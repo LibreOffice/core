@@ -53,7 +53,7 @@ public:
                 return ( nIndex < m_xIndexAccess->getCount() );
         }
 
-        virtual uno::Any SAL_CALL nextElement(  ) override
+        virtual cpo::uno::Any SAL_CALL nextElement(  ) override
         {
                 if ( nIndex < m_xIndexAccess->getCount() )
                         return m_xIndexAccess->getByIndex( nIndex++ );
@@ -118,16 +118,16 @@ public:
 
     }
     virtual ::sal_Int32 SAL_CALL getCount() override { return mCoordinates.size(); }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
+    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         try
         {
             AxesCoordinate dIndexes = mCoordinates[ Index ];
-            return uno::Any( ScVbaAxes::createAxis( mxChart, mxContext, dIndexes.second, dIndexes.first ) );
+            return cpo::uno::Any( ScVbaAxes::createAxis( mxChart, mxContext, dIndexes.second, dIndexes.first ) );
         }
         catch (const css::script::BasicErrorException&)
         {
-            css::uno::Any anyEx = cppu::getCaughtException();
+            cpo::uno::Any anyEx = cppu::getCaughtException();
             throw css::lang::WrappedTargetException(
                    u"Error Getting Index!"_ustr,
                    getXWeak(),
@@ -169,8 +169,8 @@ ScVbaAxes::createEnumeration()
     return new EnumWrapper( m_xIndexAccess );
 }
 
-uno::Any SAL_CALL
-ScVbaAxes::Item( const css::uno::Any& _nType, const css::uno::Any& _oAxisGroup)
+cpo::uno::Any SAL_CALL
+ScVbaAxes::Item( const cpo::uno::Any& _nType, const cpo::uno::Any& _oAxisGroup)
 {
     // #TODO map the possible index combinations to a container::XIndexAccess wrapper impl
     // using a vector of valid std::pair maybe?
@@ -183,11 +183,11 @@ ScVbaAxes::Item( const css::uno::Any& _nType, const css::uno::Any& _oAxisGroup)
     if ( _oAxisGroup.hasValue() )
         _oAxisGroup >>= nAxisGroup ;
 
-    return uno::Any( createAxis( moChartParent, mxContext, nType, nAxisGroup ) );
+    return cpo::uno::Any( createAxis( moChartParent, mxContext, nType, nAxisGroup ) );
 }
 
-uno::Any
-ScVbaAxes::createCollectionObject(const css::uno::Any& aSource)
+cpo::uno::Any
+ScVbaAxes::createCollectionObject(const cpo::uno::Any& aSource)
 {
     return aSource; // pass through ( it's already an XAxis object
 }

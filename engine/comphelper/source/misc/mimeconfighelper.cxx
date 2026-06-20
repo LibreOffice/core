@@ -111,9 +111,9 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetConfigurati
         if ( !m_xConfigProvider.is() )
             m_xConfigProvider = configuration::theDefaultProvider::get( m_xContext );
 
-        uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+        uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", uno::Any(aPath)}
+            {"nodepath", cpo::uno::Any(aPath)}
         }));
         xConfig.set( m_xConfigProvider->createInstanceWithArguments(
                         u"com.sun.star.configuration.ConfigurationAccess"_ustr,
@@ -186,7 +186,7 @@ OUString MimeConfigurationHelper::GetDocServiceNameFromFilter( const OUString& a
             GetFilterFactory(),
             uno::UNO_SET_THROW );
 
-        uno::Any aFilterAnyData = xFilterFactory->getByName( aFilterName );
+        cpo::uno::Any aFilterAnyData = xFilterFactory->getByName( aFilterName );
         uno::Sequence< beans::PropertyValue > aFilterData;
         if ( aFilterAnyData >>= aFilterData )
         {
@@ -213,7 +213,7 @@ OUString MimeConfigurationHelper::GetDocServiceNameFromMediaType( const OUString
         try
         {
             // make query for all types matching the properties
-            uno::Sequence < beans::NamedValue > aSeq { { u"MediaType"_ustr, css::uno::Any(aMediaType) } };
+            uno::Sequence < beans::NamedValue > aSeq { { u"MediaType"_ustr, cpo::uno::Any(aMediaType) } };
 
             uno::Reference < container::XEnumeration > xEnum = xTypeCFG->createSubSetEnumerationByProperties( aSeq );
             while ( xEnum->hasMoreElements() )
@@ -349,8 +349,8 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByStri
     if ( ClassIDsEqual( aClassID, GetSequenceClassID( SO3_DUMMY_CLASSID ) ) )
     {
         aObjProps = { { u"ObjectFactory"_ustr,
-                        uno::Any(u"com.sun.star.embed.OOoSpecialEmbeddedObjectFactory"_ustr) },
-                      { u"ClassID"_ustr, uno::Any(aClassID) } };
+                        cpo::uno::Any(u"com.sun.star.embed.OOoSpecialEmbeddedObjectFactory"_ustr) },
+                      { u"ClassID"_ustr, cpo::uno::Any(aClassID) } };
         return aObjProps;
     }
 
@@ -380,8 +380,8 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByClas
     if ( ClassIDsEqual( aClassID, GetSequenceClassID( SO3_DUMMY_CLASSID ) ) )
     {
         aObjProps = { { u"ObjectFactory"_ustr,
-                        uno::Any(u"com.sun.star.embed.OOoSpecialEmbeddedObjectFactory"_ustr) },
-                      { u"ClassID"_ustr, uno::Any(aClassID) } };
+                        cpo::uno::Any(u"com.sun.star.embed.OOoSpecialEmbeddedObjectFactory"_ustr) },
+                      { u"ClassID"_ustr, cpo::uno::Any(aClassID) } };
     }
 
     OUString aStringClassID = GetStringClassIDRepresentation( aClassID );
@@ -655,7 +655,7 @@ SfxFilterFlags MimeConfigurationHelper::GetFilterFlags( const OUString& aFilterN
                 GetFilterFactory(),
                 uno::UNO_SET_THROW );
 
-            uno::Any aFilterAny = xFilterFactory->getByName( aFilterName );
+            cpo::uno::Any aFilterAny = xFilterFactory->getByName( aFilterName );
             uno::Sequence< beans::PropertyValue > aData;
             if ( aFilterAny >>= aData )
             {
@@ -698,8 +698,8 @@ OUString MimeConfigurationHelper::GetDefaultFilterFromServiceName( const OUStrin
 
             uno::Sequence< beans::NamedValue > aSearchRequest
             {
-                { u"DocumentService"_ustr, css::uno::Any(aServiceName) },
-                { u"FileFormatVersion"_ustr, css::uno::Any(nVersion) }
+                { u"DocumentService"_ustr, cpo::uno::Any(aServiceName) },
+                { u"FileFormatVersion"_ustr, cpo::uno::Any(nVersion) }
             };
 
             uno::Reference< container::XEnumeration > xFilterEnum =
@@ -764,7 +764,7 @@ OUString MimeConfigurationHelper::GetExportFilterFromImportFilter( const OUStrin
                 GetFilterFactory(),
                 uno::UNO_SET_THROW );
 
-            uno::Any aImpFilterAny = xFilterFactory->getByName( aImportFilterName );
+            cpo::uno::Any aImpFilterAny = xFilterFactory->getByName( aImportFilterName );
             uno::Sequence< beans::PropertyValue > aImpData;
             if ( aImpFilterAny >>= aImpData )
             {
@@ -791,8 +791,8 @@ OUString MimeConfigurationHelper::GetExportFilterFromImportFilter( const OUStrin
                     {
                         uno::Sequence< beans::NamedValue > aSearchRequest
                         {
-                            { u"Type"_ustr, css::uno::Any(aTypeName) },
-                            { u"DocumentService"_ustr, css::uno::Any(aDocumentServiceName) }
+                            { u"Type"_ustr, cpo::uno::Any(aTypeName) },
+                            { u"DocumentService"_ustr, cpo::uno::Any(aDocumentServiceName) }
                         };
 
                         uno::Sequence< beans::PropertyValue > aExportFilterProps = SearchForFilter(

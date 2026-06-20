@@ -56,11 +56,11 @@ public:
         return ( m_nIndex < mxIndexAccess->getCount() );
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         if( m_nIndex < mxIndexAccess->getCount() )
         {
-            return uno::Any( uno::Reference< word::XRow > ( new SwVbaRow( mxParent.get(), mxContext, mxTextTable, m_nIndex++ ) ) );
+            return cpo::uno::Any( uno::Reference< word::XRow > ( new SwVbaRow( mxParent.get(), mxContext, mxTextTable, m_nIndex++ ) ) );
         }
         throw container::NoSuchElementException();
     }
@@ -139,10 +139,10 @@ void SAL_CALL SwVbaRows::setAlignment( ::sal_Int32 _alignment )
             nAlignment = text::HoriOrientation::LEFT;
         }
     }
-    mxTextTable->setPropertyValue(u"HoriOrient"_ustr, uno::Any( nAlignment ) );
+    mxTextTable->setPropertyValue(u"HoriOrient"_ustr, cpo::uno::Any( nAlignment ) );
 }
 
-uno::Any SAL_CALL SwVbaRows::getAllowBreakAcrossPages()
+cpo::uno::Any SAL_CALL SwVbaRows::getAllowBreakAcrossPages()
 {
     bool bAllowBreak = false;
     uno::Reference< container::XIndexAccess > xRowsAccess( mxTableRows, uno::UNO_QUERY_THROW );
@@ -157,13 +157,13 @@ uno::Any SAL_CALL SwVbaRows::getAllowBreakAcrossPages()
         }
         if( bSplit != bAllowBreak )
         {
-            return uno::Any( sal_Int32(word::WdConstants::wdUndefined) );
+            return cpo::uno::Any( sal_Int32(word::WdConstants::wdUndefined) );
         }
     }
-    return uno::Any( bAllowBreak );
+    return cpo::uno::Any( bAllowBreak );
 }
 
-void SAL_CALL SwVbaRows::setAllowBreakAcrossPages( const uno::Any& _allowbreakacrosspages )
+void SAL_CALL SwVbaRows::setAllowBreakAcrossPages( const cpo::uno::Any& _allowbreakacrosspages )
 {
     bool bAllowBreak = false;
     _allowbreakacrosspages >>= bAllowBreak;
@@ -171,7 +171,7 @@ void SAL_CALL SwVbaRows::setAllowBreakAcrossPages( const uno::Any& _allowbreakac
     for( sal_Int32 index = mnStartRowIndex; index <= mnEndRowIndex; ++index )
     {
         uno::Reference< beans::XPropertySet > xRowProps( xRowsAccess->getByIndex( index ), uno::UNO_QUERY_THROW );
-        xRowProps->setPropertyValue(u"IsSplitAllowed"_ustr, uno::Any( bAllowBreak ) );
+        xRowProps->setPropertyValue(u"IsSplitAllowed"_ustr, cpo::uno::Any( bAllowBreak ) );
     }
 }
 
@@ -197,8 +197,8 @@ void SAL_CALL SwVbaRows::setSpaceBetweenColumns( float _spacebetweencolumns )
         for( sal_Int32 column = 0; column < nColumns; ++column )
         {
             rtl::Reference< SwXCell > xCellProps( mxTextTable->getSwCellByPosition( column, row ) );
-            xCellProps->setPropertyValue(u"LeftBorderDistance"_ustr, uno::Any( nSpace ) );
-            xCellProps->setPropertyValue(u"RightBorderDistance"_ustr, uno::Any( nSpace ) );
+            xCellProps->setPropertyValue(u"LeftBorderDistance"_ustr, cpo::uno::Any( nSpace ) );
+            xCellProps->setPropertyValue(u"RightBorderDistance"_ustr, cpo::uno::Any( nSpace ) );
         }
     }
 }
@@ -246,13 +246,13 @@ void SwVbaRows::setIndentWithAdjustNone( sal_Int32 indent )
     sal_Int32 nMargin = 0;
     mxTextTable->getPropertyValue(u"LeftMargin"_ustr) >>= nMargin;
     nMargin += indent;
-    mxTextTable->setPropertyValue(u"LeftMargin"_ustr, uno::Any( nMargin ) );
+    mxTextTable->setPropertyValue(u"LeftMargin"_ustr, cpo::uno::Any( nMargin ) );
 }
 
  void SwVbaRows::setIndentWithAdjustFirstColumn( const uno::Reference< word::XColumns >& xColumns, sal_Int32 indent )
  {
     uno::Reference< XCollection > xCol( xColumns, uno::UNO_QUERY_THROW );
-    uno::Reference< word::XColumn > xColumn( xCol->Item( uno::Any( sal_Int32(1) ), uno::Any() ), uno::UNO_QUERY_THROW );
+    uno::Reference< word::XColumn > xColumn( xCol->Item( cpo::uno::Any( sal_Int32(1) ), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
     sal_Int32 nWidth = xColumn->getWidth();
     nWidth -= indent;
     xColumn->setWidth( nWidth );
@@ -282,7 +282,7 @@ void SwVbaRows::setIndentWithAdjustNone( sal_Int32 indent )
     sal_Int32 nColCount = xCol->getCount();
     for( sal_Int32 i = 0; i < nColCount; i++ )
     {
-        uno::Reference< word::XColumn > xColumn( xCol->Item( uno::Any( i ), uno::Any() ), uno::UNO_QUERY_THROW );
+        uno::Reference< word::XColumn > xColumn( xCol->Item( cpo::uno::Any( i ), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
         sal_Int32 nColWidth = xColumn->getWidth();
         sal_Int32 nNewColWidth = static_cast<sal_Int32>( propFactor * nColWidth );
         xColumn->setWidth( nNewColWidth );
@@ -290,7 +290,7 @@ void SwVbaRows::setIndentWithAdjustNone( sal_Int32 indent )
 
     // set the width and position of the table
     setIndentWithAdjustNone( indent );
-    mxTextTable->setPropertyValue(u"Width"_ustr, uno::Any( nNewWidth ) );
+    mxTextTable->setPropertyValue(u"Width"_ustr, cpo::uno::Any( nNewWidth ) );
  }
 
  void SwVbaRows::setIndentWithAdjustSameWidth( const uno::Reference< word::XColumns >& xColumns, sal_Int32 indent )
@@ -306,13 +306,13 @@ void SwVbaRows::setIndentWithAdjustNone( sal_Int32 indent )
     sal_Int32 nNewColWidth = static_cast<sal_Int32>( double( nNewWidth )/nColCount );
     for( sal_Int32 i = 0; i < nColCount; i++ )
     {
-        uno::Reference< word::XColumn > xColumn( xCol->Item( uno::Any( i ), uno::Any() ), uno::UNO_QUERY_THROW );
+        uno::Reference< word::XColumn > xColumn( xCol->Item( cpo::uno::Any( i ), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
         xColumn->setWidth( nNewColWidth );
     }
 
     // set the width and position of the table
     setIndentWithAdjustNone( indent );
-    mxTextTable->setPropertyValue(u"Width"_ustr, uno::Any( nNewWidth ) );
+    mxTextTable->setPropertyValue(u"Width"_ustr, cpo::uno::Any( nNewWidth ) );
  }
 
 void SAL_CALL SwVbaRows::Select(  )
@@ -325,7 +325,7 @@ void SAL_CALL SwVbaRows::Select(  )
     return ( mnEndRowIndex - mnStartRowIndex + 1 );
 }
 
-uno::Any SAL_CALL SwVbaRows::Item( const uno::Any& Index1, const uno::Any& /*not processed in this base class*/ )
+cpo::uno::Any SAL_CALL SwVbaRows::Item( const cpo::uno::Any& Index1, const cpo::uno::Any& /*not processed in this base class*/ )
 {
     sal_Int32 nIndex = 0;
     if( Index1 >>= nIndex )
@@ -334,7 +334,7 @@ uno::Any SAL_CALL SwVbaRows::Item( const uno::Any& Index1, const uno::Any& /*not
         {
             throw  lang::IndexOutOfBoundsException(u"Index out of bounds"_ustr );
         }
-        return uno::Any( uno::Reference< word::XRow >( new SwVbaRow( this, mxContext, mxTextTable, nIndex - 1 ) ) );
+        return cpo::uno::Any( uno::Reference< word::XRow >( new SwVbaRow( this, mxContext, mxTextTable, nIndex - 1 ) ) );
     }
     throw  uno::RuntimeException(u"Index out of bounds"_ustr );
 }
@@ -351,8 +351,8 @@ SwVbaRows::createEnumeration()
     return new RowsEnumWrapper( this, mxContext, mxTextTable );
 }
 
-uno::Any
-SwVbaRows::createCollectionObject( const uno::Any& aSource )
+cpo::uno::Any
+SwVbaRows::createCollectionObject( const cpo::uno::Any& aSource )
 {
     return aSource;
 }

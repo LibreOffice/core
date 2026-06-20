@@ -48,11 +48,11 @@ public:
         return ( mnIndex < mxIndexAccess->getCount() );
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         if( mnIndex < mxIndexAccess->getCount() )
         {
-            return uno::Any( uno::Reference< word::XColumn > ( new SwVbaColumn( mxParent.get(), mxContext, mxTextTable, mnIndex++ ) ) );
+            return cpo::uno::Any( uno::Reference< word::XColumn > ( new SwVbaColumn( mxParent.get(), mxContext, mxTextTable, mnIndex++ ) ) );
         }
         throw container::NoSuchElementException();
     }
@@ -101,7 +101,7 @@ void SAL_CALL SwVbaColumns::Select(  )
     return ( mnEndColumnIndex - mnStartColumnIndex + 1 );
 }
 
-uno::Any SAL_CALL SwVbaColumns::Item( const uno::Any& Index1, const uno::Any& /*not processed in this base class*/ )
+cpo::uno::Any SAL_CALL SwVbaColumns::Item( const cpo::uno::Any& Index1, const cpo::uno::Any& /*not processed in this base class*/ )
 {
     sal_Int32 nIndex = 0;
     if( Index1 >>= nIndex )
@@ -110,7 +110,7 @@ uno::Any SAL_CALL SwVbaColumns::Item( const uno::Any& Index1, const uno::Any& /*
         {
             throw  lang::IndexOutOfBoundsException(u"Index out of bounds"_ustr );
         }
-        return uno::Any( uno::Reference< word::XColumn >( new SwVbaColumn( this, mxContext, mxTextTable, nIndex - 1 ) ) );
+        return cpo::uno::Any( uno::Reference< word::XColumn >( new SwVbaColumn( this, mxContext, mxTextTable, nIndex - 1 ) ) );
     }
     throw  uno::RuntimeException(u"Index out of bounds"_ustr );
 }
@@ -127,8 +127,8 @@ SwVbaColumns::createEnumeration()
     return new ColumnsEnumWrapper( this, mxContext, mxTextTable );
 }
 
-uno::Any
-SwVbaColumns::createCollectionObject( const uno::Any& aSource )
+cpo::uno::Any
+SwVbaColumns::createCollectionObject( const cpo::uno::Any& aSource )
 {
     return aSource;
 }

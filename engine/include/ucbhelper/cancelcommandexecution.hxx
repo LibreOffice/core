@@ -25,10 +25,10 @@
 #include <ucbhelper/ucbhelperdllapi.h>
 
 namespace com::sun::star {
-    namespace uno { class Any; }
     namespace ucb { class XCommandEnvironment; }
     namespace ucb { class XCommandProcessor; }
 }
+namespace cpo::uno { class Any; }
 
 namespace ucbhelper
 {
@@ -52,7 +52,7 @@ namespace ucbhelper
 
     @throws css::uno::Exception
  */
-UCBHELPER_DLLPUBLIC void cancelCommandExecution( const css::uno::Any & rException,
+UCBHELPER_DLLPUBLIC void cancelCommandExecution( const cpo::uno::Any & rException,
                              const css::uno::Reference<
                                 css::ucb::XCommandEnvironment > &
                                     xEnv );
@@ -89,7 +89,7 @@ UCBHELPER_DLLPUBLIC void cancelCommandExecution( const css::uno::Any & rExceptio
     @throws css::uno::Exception
  */
 UCBHELPER_DLLPUBLIC void cancelCommandExecution( const css::ucb::IOErrorCode eError,
-                             const css::uno::Sequence< css::uno::Any > & rArgs,
+                             const css::uno::Sequence< cpo::uno::Any > & rArgs,
                              const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv,
                              const OUString & rMessage = OUString(),
                              const css::uno::Reference< css::ucb::XCommandProcessor > & xContext = nullptr );

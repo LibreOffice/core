@@ -32,19 +32,19 @@ SwVbaListTemplate::~SwVbaListTemplate()
 {
 }
 
-uno::Any SAL_CALL
-SwVbaListTemplate::ListLevels( const uno::Any& index )
+cpo::uno::Any SAL_CALL
+SwVbaListTemplate::ListLevels( const cpo::uno::Any& index )
 {
     uno::Reference< XCollection > xCol( new SwVbaListLevels( mxParent, mxContext, m_pListHelper ) );
     if ( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-    return uno::Any( xCol );
+        return xCol->Item( index, cpo::uno::Any() );
+    return cpo::uno::Any( xCol );
 }
 
 void SwVbaListTemplate::applyListTemplate( uno::Reference< beans::XPropertySet > const & xProps )
 {
     uno::Reference< container::XIndexReplace > xNumberingRules = m_pListHelper->getNumberingRules();
-    xProps->setPropertyValue(u"NumberingRules"_ustr, uno::Any( xNumberingRules ) );
+    xProps->setPropertyValue(u"NumberingRules"_ustr, cpo::uno::Any( xNumberingRules ) );
 }
 
 OUString

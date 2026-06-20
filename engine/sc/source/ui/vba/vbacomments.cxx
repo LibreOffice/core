@@ -27,14 +27,14 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-static uno::Any AnnotationToComment( const uno::Any& aSource, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel )
+static cpo::uno::Any AnnotationToComment( const cpo::uno::Any& aSource, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel )
 {
     uno::Reference< sheet::XSheetAnnotation > xAnno( aSource, uno::UNO_QUERY_THROW );
     uno::Reference< container::XChild > xChild( xAnno, uno::UNO_QUERY_THROW );
     uno::Reference< table::XCellRange > xCellRange( xChild->getParent(), uno::UNO_QUERY_THROW );
 
     // #FIXME needs to find the correct Parent
-    return uno::Any( uno::Reference< excel::XComment > (
+    return cpo::uno::Any( uno::Reference< excel::XComment > (
         new ScVbaComment( uno::Reference< XHelperInterface >(), xContext, xModel, xCellRange ) ) );
 }
 
@@ -54,7 +54,7 @@ public:
         mxModel( xModel, uno::UNO_SET_THROW )
     {}
 
-    virtual uno::Any SAL_CALL nextElement() override
+    virtual cpo::uno::Any SAL_CALL nextElement() override
     {
         return AnnotationToComment( m_xEnumeration->nextElement(), m_xContext, mxModel );
     }
@@ -82,8 +82,8 @@ ScVbaComments::createEnumeration()
     return new CommentEnumeration( mxParent, mxContext, xEnumAccess->createEnumeration(), mxModel );
 }
 
-uno::Any
-ScVbaComments::createCollectionObject( const css::uno::Any& aSource )
+cpo::uno::Any
+ScVbaComments::createCollectionObject( const cpo::uno::Any& aSource )
 {
     return AnnotationToComment( aSource,  mxContext, mxModel );
 }

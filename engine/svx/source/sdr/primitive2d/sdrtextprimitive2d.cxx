@@ -48,7 +48,7 @@ namespace
         {
             try
             {
-                const uno::Any aNumber(xSet->getPropertyValue(u"Number"_ustr));
+                const cpo::uno::Any aNumber(xSet->getPropertyValue(u"Number"_ustr));
                 aNumber >>= nRetval;
             }
             catch(const uno::Exception&)

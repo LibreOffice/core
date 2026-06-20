@@ -38,6 +38,7 @@ const sal_uInt16 START_ITEMID = 1000;
 
 using namespace com::sun::star::awt;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;

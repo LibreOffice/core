@@ -166,9 +166,9 @@ Desktop::~Desktop()
     SAL_WARN_IF( m_aTransactionManager.getWorkingMode()!=E_CLOSE, "fwk.desktop", "Desktop::~Desktop(): Who forgot to dispose this service?" );
 }
 
-css::uno::Any SAL_CALL Desktop::queryInterface( const css::uno::Type& _rType )
+cpo::uno::Any SAL_CALL Desktop::queryInterface( const css::uno::Type& _rType )
 {
-    css::uno::Any aRet = Desktop_BASE::queryInterface( _rType );
+    cpo::uno::Any aRet = Desktop_BASE::queryInterface( _rType );
     if ( !aRet.hasValue() )
         aRet = OPropertySetHelper::queryInterface( _rType );
     return aRet;
@@ -1206,7 +1206,7 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
     // Attention: don't set it on internal member BEFORE interaction is finished - because
     // "loadComponentFromURL()" yields until this member is changed. If we do it before
     // interaction finishes we can't guarantee correct functionality. Maybe we cancel load process to earlier...
-    css::uno::Any aRequest = xRequest->getRequest();
+    cpo::uno::Any aRequest = xRequest->getRequest();
 
     // extract continuations from request
     css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
@@ -1307,10 +1307,10 @@ OUString SAL_CALL Desktop::getUntitledPrefix()
     @onerror    IllegalArgumentException, if you call this with an invalid argument
     @threadsafe yes
 *//*-*************************************************************************************************************/
-bool SAL_CALL Desktop::convertFastPropertyValue(       css::uno::Any&   aConvertedValue ,
-                                                           css::uno::Any&   aOldValue       ,
+bool SAL_CALL Desktop::convertFastPropertyValue(       cpo::uno::Any&   aConvertedValue ,
+                                                           cpo::uno::Any&   aOldValue       ,
                                                            sal_Int32        nHandle         ,
-                                                     const css::uno::Any&   aValue          )
+                                                     const cpo::uno::Any&   aValue          )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Register transaction and reject wrong calls.
@@ -1324,21 +1324,21 @@ bool SAL_CALL Desktop::convertFastPropertyValue(       css::uno::Any&   aConvert
     {
         case PropHandle::SuspendQuickstartVeto:
                 bReturn = PropHelper::willPropertyBeChanged(
-                    css::uno::Any(m_bSuspendQuickstartVeto),
+                    cpo::uno::Any(m_bSuspendQuickstartVeto),
                     aValue,
                     aOldValue,
                     aConvertedValue);
                 break;
         case PropHandle::DispatchRecorderSupplier :
                 bReturn = PropHelper::willPropertyBeChanged(
-                    css::uno::Any(m_xDispatchRecorderSupplier),
+                    cpo::uno::Any(m_xDispatchRecorderSupplier),
                     aValue,
                     aOldValue,
                     aConvertedValue);
                 break;
         case PropHandle::Title :
                 bReturn = PropHelper::willPropertyBeChanged(
-                    css::uno::Any(m_sTitle),
+                    cpo::uno::Any(m_sTitle),
                     aValue,
                     aOldValue,
                     aConvertedValue);
@@ -1364,7 +1364,7 @@ bool SAL_CALL Desktop::convertFastPropertyValue(       css::uno::Any&   aConvert
     @threadsafe yes
 *//*-*************************************************************************************************************/
 void SAL_CALL Desktop::setFastPropertyValue_NoBroadcast(       sal_Int32        nHandle ,
-                                                         const css::uno::Any&   aValue  )
+                                                         const cpo::uno::Any&   aValue  )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Register transaction and reject wrong calls.
@@ -1394,7 +1394,7 @@ void SAL_CALL Desktop::setFastPropertyValue_NoBroadcast(       sal_Int32        
     @param      "aValue"    current value of property
     @threadsafe yes
 *//*-*************************************************************************************************************/
-void SAL_CALL Desktop::getFastPropertyValue( css::uno::Any& aValue  ,
+void SAL_CALL Desktop::getFastPropertyValue( cpo::uno::Any& aValue  ,
                                              sal_Int32      nHandle ) const
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
@@ -1755,7 +1755,7 @@ const rtl::Reference<framework::Desktop> & framework::getDesktop(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_Desktop_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(framework::getDesktop(context).get());
 }

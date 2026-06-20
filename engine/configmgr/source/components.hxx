@@ -94,7 +94,7 @@ public:
         css::uno::Sequence< OUString > const & excludedPaths,
         Modifications * modifications);
 
-    css::beans::Optional< css::uno::Any >
+    css::beans::Optional< cpo::uno::Any >
     getExternalValue(std::u16string_view descriptor);
 
     osl::Mutex & getLock() const { return *lock_; }

@@ -55,6 +55,7 @@ namespace basic
 using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::script;
@@ -643,7 +644,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                             aSourceStreamName,
                             embed::ElementModes::READWRITE );
                     uno::Reference< beans::XPropertySet > xProps( xSourceStream, uno::UNO_QUERY_THROW );
-                    xProps->setPropertyValue(u"MediaType"_ustr, uno::Any( u"text/xml"_ustr ) );
+                    xProps->setPropertyValue(u"MediaType"_ustr, cpo::uno::Any( u"text/xml"_ustr ) );
 
                     // Set encryption key
                     setStreamKey( xSourceStream, pLib->maPassword );
@@ -768,7 +769,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                     }
 
                     uno::Reference< beans::XPropertySet > xProps( xSourceStream, uno::UNO_QUERY_THROW );
-                    xProps->setPropertyValue(u"MediaType"_ustr, uno::Any( u"text/xml"_ustr ) );
+                    xProps->setPropertyValue(u"MediaType"_ustr, cpo::uno::Any( u"text/xml"_ustr ) );
 
                     Reference< XOutputStream > xOut = xSourceStream->getOutputStream();
                     Reference< XNameContainer > xLib( pLib );
@@ -1162,7 +1163,7 @@ bool SfxScriptLibrary::containsValidModule(const Any& rElement)
     return ( !sModuleText.isEmpty() );
 }
 
-bool SfxScriptLibrary::isLibraryElementValid(const css::uno::Any& rElement) const
+bool SfxScriptLibrary::isLibraryElementValid(const cpo::uno::Any& rElement) const
 {
     return SfxScriptLibrary::containsValidModule(rElement);
 }
@@ -1202,7 +1203,7 @@ void SAL_CALL SfxScriptLibrary::removeModuleInfo( const OUString& ModuleName )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_sfx2_ScriptLibraryContainer_get_implementation(css::uno::XComponentContext*,
-                                                                 css::uno::Sequence<css::uno::Any> const &)
+                                                                 css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new basic::SfxScriptLibraryContainer());
 }

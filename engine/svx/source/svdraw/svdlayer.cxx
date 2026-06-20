@@ -46,7 +46,7 @@ void SdrLayerIDSet::operator&=(const SdrLayerIDSet& r2ndSet)
 
 /** initialize this set with a UNO sequence of sal_Int8 (e.g. as stored in settings.xml)
 */
-void SdrLayerIDSet::PutValue( const css::uno::Any & rAny )
+void SdrLayerIDSet::PutValue( const cpo::uno::Any & rAny )
 {
     css::uno::Sequence< sal_Int8 > aSeq;
     if( !(rAny >>= aSeq) )
@@ -314,7 +314,7 @@ void SdrLayerAdmin::getLockedLayersODF( SdrLayerIDSet& rOutSet) const
 
     // Generates a bitfield for settings.xml from the SdrLayerIDSet.
     // Output is a UNO sequence of BYTE (which is 'short' in API).
-void SdrLayerAdmin::QueryValue(const SdrLayerIDSet& rViewLayerSet, css::uno::Any& rAny)
+void SdrLayerAdmin::QueryValue(const SdrLayerIDSet& rViewLayerSet, cpo::uno::Any& rAny)
 {
     // tdf#119392 The SdrLayerIDSet in a view is ordered according LayerID, but in file
     // the bitfield is interpreted in order of layers in <draw:layer-set>.

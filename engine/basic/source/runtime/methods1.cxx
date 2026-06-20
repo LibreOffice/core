@@ -67,6 +67,7 @@ using namespace com::sun::star::i18n;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sheet;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 static Reference< XCalendar4 > const & getLocaleCalendar()
 {

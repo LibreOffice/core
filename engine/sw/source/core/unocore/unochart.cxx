@@ -2014,13 +2014,13 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getTextualData()
     return vTextData;
 }
 
-uno::Sequence< uno::Any > SAL_CALL SwChartDataSequence::getData()
+uno::Sequence< cpo::uno::Any > SAL_CALL SwChartDataSequence::getData()
 {
     SolarMutexGuard aGuard;
     try
     {
         auto vCells(GetCells());
-        uno::Sequence< uno::Any > vAnyData(vCells.size());
+        uno::Sequence< cpo::uno::Any > vAnyData(vCells.size());
         std::transform(vCells.begin(),
             vCells.end(),
             vAnyData.getArray(),
@@ -2032,7 +2032,7 @@ uno::Sequence< uno::Any > SAL_CALL SwChartDataSequence::getData()
     {
         TOOLS_WARN_EXCEPTION( "sw", "unexpected exception caught" );
     }
-    return uno::Sequence< uno::Any >{};
+    return uno::Sequence< cpo::uno::Any >{};
 }
 
 uno::Sequence< double > SAL_CALL SwChartDataSequence::getNumericalData()
@@ -2068,7 +2068,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL SwChartDataSequence::getPrope
 
 void SAL_CALL SwChartDataSequence::setPropertyValue(
         const OUString& rPropertyName,
-        const uno::Any& rValue )
+        const cpo::uno::Any& rValue )
 {
     SolarMutexGuard aGuard;
     if (m_bDisposed)
@@ -2081,7 +2081,7 @@ void SAL_CALL SwChartDataSequence::setPropertyValue(
         throw lang::IllegalArgumentException();
 }
 
-uno::Any SAL_CALL SwChartDataSequence::getPropertyValue(
+cpo::uno::Any SAL_CALL SwChartDataSequence::getPropertyValue(
         const OUString& rPropertyName )
 {
     SolarMutexGuard aGuard;
@@ -2091,7 +2091,7 @@ uno::Any SAL_CALL SwChartDataSequence::getPropertyValue(
     if (!(rPropertyName == UNO_NAME_ROLE))
         throw beans::UnknownPropertyException(rPropertyName);
 
-    return uno::Any(m_aRole);
+    return cpo::uno::Any(m_aRole);
 }
 
 void SAL_CALL SwChartDataSequence::addPropertyChangeListener(

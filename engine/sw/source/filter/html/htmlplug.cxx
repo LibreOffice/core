@@ -537,9 +537,9 @@ bool SwHTMLParser::InsertEmbed()
                     if (bOwnFormat)
                     {
                         uno::Sequence<beans::PropertyValue> aMedium = comphelper::InitPropertySequence(
-                            { { "InputStream", uno::Any(xInStream) },
-                              { "URL", uno::Any(u"private:stream"_ustr) },
-                              { "DocumentBaseURL", uno::Any(m_sBaseURL) } });
+                            { { "InputStream", cpo::uno::Any(xInStream) },
+                              { "URL", cpo::uno::Any(u"private:stream"_ustr) },
+                              { "DocumentBaseURL", cpo::uno::Any(m_sBaseURL) } });
                         xObj = aCnt.InsertEmbeddedObject(aMedium, aName, &m_sBaseURL);
                     }
                     else
@@ -572,7 +572,7 @@ bool SwHTMLParser::InsertEmbed()
                     // Set media type of the native data.
                     uno::Reference<beans::XPropertySet> xOutStreamProps(xOutStream, uno::UNO_QUERY);
                     if (xOutStreamProps.is())
-                        xOutStreamProps->setPropertyValue(u"MediaType"_ustr, uno::Any(aType));
+                        xOutStreamProps->setPropertyValue(u"MediaType"_ustr, cpo::uno::Any(aType));
                 }
             }
             xObj = aCnt.GetEmbeddedObject(aObjName);
@@ -611,7 +611,7 @@ bool SwHTMLParser::InsertEmbed()
         // during parsing.
         uno::Sequence<beans::PropertyValue> aValues{ comphelper::makePropertyValue(u"StreamReadOnly"_ustr,
                                                                                    true) };
-        uno::Sequence<uno::Any> aArguments{ uno::Any(aValues) };
+        uno::Sequence<cpo::uno::Any> aArguments{ cpo::uno::Any(aValues) };
         xObjInitialization->initialize(aArguments);
     }
 
@@ -625,7 +625,7 @@ bool SwHTMLParser::InsertEmbed()
     {
         uno::Sequence<beans::PropertyValue> aValues{ comphelper::makePropertyValue(u"StreamReadOnly"_ustr,
                                                                                    false) };
-        uno::Sequence<uno::Any> aArguments{ uno::Any(aValues) };
+        uno::Sequence<cpo::uno::Any> aArguments{ cpo::uno::Any(aValues) };
         xObjInitialization->initialize(aArguments);
     }
 
@@ -738,24 +738,24 @@ void SwHTMLParser::InsertFloatingFrame()
                 if (INetURLObject(sHRef).IsExoticProtocol())
                     NotifyMacroEventRead();
 
-                xSet->setPropertyValue(u"FrameURL"_ustr, uno::Any( sHRef ) );
-                xSet->setPropertyValue(u"FrameName"_ustr, uno::Any( aName ) );
+                xSet->setPropertyValue(u"FrameURL"_ustr, cpo::uno::Any( sHRef ) );
+                xSet->setPropertyValue(u"FrameName"_ustr, cpo::uno::Any( aName ) );
 
                 if ( eScroll == ScrollingMode::Auto )
                     xSet->setPropertyValue(u"FrameIsAutoScroll"_ustr,
-                        uno::Any( true ) );
+                        cpo::uno::Any( true ) );
                 else
                     xSet->setPropertyValue(u"FrameIsScrollingMode"_ustr,
-                        uno::Any( eScroll == ScrollingMode::Yes ) );
+                        cpo::uno::Any( eScroll == ScrollingMode::Yes ) );
 
                 xSet->setPropertyValue(u"FrameIsBorder"_ustr,
-                        uno::Any( bHasBorder ) );
+                        cpo::uno::Any( bHasBorder ) );
 
                 xSet->setPropertyValue(u"FrameMarginWidth"_ustr,
-                    uno::Any( sal_Int32( aMargin.Width() ) ) );
+                    cpo::uno::Any( sal_Int32( aMargin.Width() ) ) );
 
                 xSet->setPropertyValue(u"FrameMarginHeight"_ustr,
-                    uno::Any( sal_Int32( aMargin.Height() ) ) );
+                    cpo::uno::Any( sal_Int32( aMargin.Height() ) ) );
             }
         }
     }
@@ -990,10 +990,10 @@ static bool TrySaveFormulaAsPDF(SwHTMLWriter& rWrt, const SwFrameFormat& rFrameF
     aDescr[u"FilterName"_ustr] <<= u"math_pdf_Export"_ustr;
     // Properties from starmath/inc/unomodel.hxx
     aDescr[u"FilterData"_ustr] <<= comphelper::InitPropertySequence({
-        { u"TitleRow"_ustr, css::uno::Any(false) },
-        { u"FormulaText"_ustr, css::uno::Any(false) },
-        { u"Border"_ustr, css::uno::Any(false) },
-        { u"PrintFormat"_ustr, css::uno::Any(sal_Int32(1)) }, // PRINT_SIZE_SCALED
+        { u"TitleRow"_ustr, cpo::uno::Any(false) },
+        { u"FormulaText"_ustr, cpo::uno::Any(false) },
+        { u"Border"_ustr, cpo::uno::Any(false) },
+        { u"PrintFormat"_ustr, cpo::uno::Any(sal_Int32(1)) }, // PRINT_SIZE_SCALED
     });
     xStorable->storeToURL(aFileName, aDescr.getAsConstPropertyValueList());
 

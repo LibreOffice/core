@@ -44,6 +44,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::scanner;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer::clipboard;
@@ -124,9 +125,9 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
                         {
                             //  initialize dialog
                             weld::Window* pWindow = rReq.GetFrameWeld();
-                            uno::Sequence<uno::Any> aSeq(comphelper::InitAnyPropertySequence(
+                            uno::Sequence<cpo::uno::Any> aSeq(comphelper::InitAnyPropertySequence(
                             {
-                                {"ParentWindow", pWindow ? uno::Any(pWindow->GetXWindow()) : uno::Any(Reference<awt::XWindow>())}
+                                {"ParentWindow", pWindow ? cpo::uno::Any(pWindow->GetXWindow()) : cpo::uno::Any(Reference<awt::XWindow>())}
                             }));
                             xInit->initialize( aSeq );
                         }

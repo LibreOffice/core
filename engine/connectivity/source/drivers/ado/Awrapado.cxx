@@ -1429,7 +1429,7 @@ bool WpADOUser::SetPermissions(
     return SUCCEEDED(pInterface->SetPermissions(Name,ObjectType,Action,Rights,adInheritNone,ObjectTypeId));
 }
 
-ADORecordset* WpADOConnection::getExportedKeys( const css::uno::Any& catalog, const OUString& schema, std::u16string_view table )
+ADORecordset* WpADOConnection::getExportedKeys( const cpo::uno::Any& catalog, const OUString& schema, std::u16string_view table )
 {
     // Create elements used in the array
     SAFEARRAYBOUND rgsabound[1];
@@ -1469,7 +1469,7 @@ ADORecordset* WpADOConnection::getExportedKeys( const css::uno::Any& catalog, co
     return pRecordset;
 }
 
-ADORecordset* WpADOConnection::getImportedKeys( const css::uno::Any& catalog, const OUString& schema, std::u16string_view table )
+ADORecordset* WpADOConnection::getImportedKeys( const cpo::uno::Any& catalog, const OUString& schema, std::u16string_view table )
 {
     // Create elements used in the array
     SAFEARRAYBOUND rgsabound[1];
@@ -1511,7 +1511,7 @@ ADORecordset* WpADOConnection::getImportedKeys( const css::uno::Any& catalog, co
 
 }
 
-ADORecordset* WpADOConnection::getPrimaryKeys( const css::uno::Any& catalog, const OUString& schema, std::u16string_view table )
+ADORecordset* WpADOConnection::getPrimaryKeys( const cpo::uno::Any& catalog, const OUString& schema, std::u16string_view table )
 {
     // Create elements used in the array
     SAFEARRAYBOUND rgsabound[1];
@@ -1550,7 +1550,7 @@ ADORecordset* WpADOConnection::getPrimaryKeys( const css::uno::Any& catalog, con
 }
 
 ADORecordset* WpADOConnection::getIndexInfo(
-    const css::uno::Any& catalog, const OUString& schema, std::u16string_view table,
+    const cpo::uno::Any& catalog, const OUString& schema, std::u16string_view table,
     bool /*unique*/, bool /*approximate*/ )
 {
     // Create elements used in the array
@@ -1592,7 +1592,7 @@ ADORecordset* WpADOConnection::getIndexInfo(
     return pRecordset;
 }
 
-ADORecordset* WpADOConnection::getTablePrivileges( const css::uno::Any& catalog,
+ADORecordset* WpADOConnection::getTablePrivileges( const cpo::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   std::u16string_view tableNamePattern )
 {
@@ -1634,10 +1634,10 @@ ADORecordset* WpADOConnection::getTablePrivileges( const css::uno::Any& catalog,
     return pRecordset;
 }
 
-ADORecordset* WpADOConnection::getCrossReference( const css::uno::Any& primaryCatalog,
+ADORecordset* WpADOConnection::getCrossReference( const cpo::uno::Any& primaryCatalog,
                                                   const OUString& primarySchema,
                                                   std::u16string_view primaryTable,
-                                                  const css::uno::Any& foreignCatalog,
+                                                  const cpo::uno::Any& foreignCatalog,
                                                   const OUString& foreignSchema,
                                                   std::u16string_view foreignTable)
 {
@@ -1687,7 +1687,7 @@ ADORecordset* WpADOConnection::getCrossReference( const css::uno::Any& primaryCa
     return pRecordset;
 }
 
-ADORecordset* WpADOConnection::getProcedures( const css::uno::Any& catalog,
+ADORecordset* WpADOConnection::getProcedures( const cpo::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   std::u16string_view procedureNamePattern )
 {
@@ -1726,7 +1726,7 @@ ADORecordset* WpADOConnection::getProcedures( const css::uno::Any& catalog,
     return pRecordset;
 }
 
-ADORecordset* WpADOConnection::getProcedureColumns( const css::uno::Any& catalog,
+ADORecordset* WpADOConnection::getProcedureColumns( const cpo::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   std::u16string_view procedureNamePattern,
                                                   std::u16string_view columnNamePattern )
@@ -1771,7 +1771,7 @@ ADORecordset* WpADOConnection::getProcedureColumns( const css::uno::Any& catalog
     return pRecordset;
 }
 
-ADORecordset* WpADOConnection::getTables( const css::uno::Any& catalog,
+ADORecordset* WpADOConnection::getTables( const cpo::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   std::u16string_view tableNamePattern,
                                                   const css::uno::Sequence< OUString >& types )
@@ -1832,7 +1832,7 @@ ADORecordset* WpADOConnection::getTables( const css::uno::Any& catalog,
     return pRecordset;
 }
 
-ADORecordset* WpADOConnection::getColumns( const css::uno::Any& catalog,
+ADORecordset* WpADOConnection::getColumns( const cpo::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   std::u16string_view tableNamePattern,
                                                   std::u16string_view columnNamePattern )
@@ -1876,7 +1876,7 @@ ADORecordset* WpADOConnection::getColumns( const css::uno::Any& catalog,
     return pRecordset;
 }
 
-ADORecordset* WpADOConnection::getColumnPrivileges( const css::uno::Any& catalog,
+ADORecordset* WpADOConnection::getColumnPrivileges( const cpo::uno::Any& catalog,
                                                   const OUString& schema,
                                                   std::u16string_view table,
                                                   std::u16string_view columnNamePattern )

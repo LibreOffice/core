@@ -28,6 +28,7 @@
 #include <svx/svxbmpnumiconview.hxx>
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::text;
@@ -74,7 +75,7 @@ public:
     std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& rArguments ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -307,7 +308,7 @@ VclPtr<vcl::Window> NumberingToolBoxControl::createVclPopupWindow( vcl::Window* 
     return mxInterimPopover;
 }
 
-void SAL_CALL NumberingToolBoxControl::initialize( const css::uno::Sequence< css::uno::Any >& rArguments )
+void SAL_CALL NumberingToolBoxControl::initialize( const css::uno::Sequence< cpo::uno::Any >& rArguments )
 {
     svt::PopupWindowController::initialize( rArguments );
 

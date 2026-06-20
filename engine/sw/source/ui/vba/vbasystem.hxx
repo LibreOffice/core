@@ -36,8 +36,8 @@ public:
     void Initialize( const OUString& rFileName, const OString& rGroupName, const OString& rKey );
 
     //PropListener
-    virtual void setValueEvent( const css::uno::Any& value ) override;
-    virtual css::uno::Any getValueEvent() override;
+    virtual void setValueEvent( const cpo::uno::Any& value ) override;
+    virtual cpo::uno::Any getValueEvent() override;
 };
 
 class SwVbaSystem : public SwVbaSystem_BASE
@@ -52,7 +52,7 @@ public:
     // XSystem
     virtual sal_Int32 SAL_CALL getCursor() override;
     virtual void SAL_CALL setCursor( sal_Int32 _cursor ) override;
-    virtual css::uno::Any SAL_CALL PrivateProfileString( const OUString& rFilename, const OUString& rSection, const OUString& rKey ) override;
+    virtual cpo::uno::Any SAL_CALL PrivateProfileString( const OUString& rFilename, const OUString& rSection, const OUString& rKey ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

@@ -114,7 +114,7 @@ public:
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
 // css::uno::XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
 
 // OComponentHelper
     virtual void SAL_CALL disposing() override;
@@ -138,7 +138,7 @@ public:
     virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCommand( const OUString& command, sal_Int32 commandType ) override;
 
 // css::sdbc::XWarningsSupplier
-    virtual css::uno::Any SAL_CALL getWarnings(  ) override;
+    virtual cpo::uno::Any SAL_CALL getWarnings(  ) override;
     virtual void SAL_CALL clearWarnings(  ) override;
 
 // css::lang::XServiceInfo
@@ -171,7 +171,7 @@ public:
 
     // XMultiServiceFactory
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments ) override;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const css::uno::Sequence< cpo::uno::Any >& Arguments ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
 
     // XUsersSupplier

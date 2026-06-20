@@ -33,7 +33,7 @@ namespace chart
 
 WrappedDefaultProperty::WrappedDefaultProperty(
     const OUString& rOuterName, const OUString& rInnerName,
-    uno::Any aNewOuterDefault ) :
+    cpo::uno::Any aNewOuterDefault ) :
         WrappedProperty( rOuterName, rInnerName ),
         m_aOuterDefaultValue(std::move( aNewOuterDefault ))
 {}
@@ -49,7 +49,7 @@ void WrappedDefaultProperty::setPropertyToDefault(
         setPropertyValue( m_aOuterDefaultValue, xInnerPropSet );
 }
 
-uno::Any WrappedDefaultProperty::getPropertyDefault(
+cpo::uno::Any WrappedDefaultProperty::getPropertyDefault(
     const Reference< beans::XPropertyState >& /* xInnerPropertyState */ ) const
 {
     return m_aOuterDefaultValue;
@@ -62,7 +62,7 @@ beans::PropertyState WrappedDefaultProperty::getPropertyState(
     try
     {
         Reference< beans::XPropertySet > xInnerProp( xInnerPropertyState, uno::UNO_QUERY_THROW );
-        uno::Any aValue = getPropertyValue( xInnerProp );
+        cpo::uno::Any aValue = getPropertyValue( xInnerProp );
         if( m_aOuterDefaultValue == convertInnerToOuterValue( aValue ))
             aState = beans::PropertyState_DEFAULT_VALUE;
     }

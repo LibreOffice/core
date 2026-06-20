@@ -70,6 +70,7 @@
 //      using namespace
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
@@ -129,9 +130,9 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
     registerProperty( LAYOUTMANAGER_PROPNAME_ASCII_HIDECURRENTUI, LAYOUTMANAGER_PROPHANDLE_HIDECURRENTUI, beans::PropertyAttribute::TRANSIENT, &m_bHideCurrentUI, cppu::UnoType<decltype(m_bHideCurrentUI)>::get() );
     registerProperty( LAYOUTMANAGER_PROPNAME_ASCII_LOCKCOUNT, LAYOUTMANAGER_PROPHANDLE_LOCKCOUNT, beans::PropertyAttribute::TRANSIENT | beans::PropertyAttribute::READONLY, &m_nLockCount, cppu::UnoType<decltype(m_nLockCount)>::get()  );
     registerProperty( LAYOUTMANAGER_PROPNAME_MENUBARCLOSER, LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER, beans::PropertyAttribute::TRANSIENT, &m_bMenuBarCloseButton, cppu::UnoType<decltype(m_bMenuBarCloseButton)>::get() );
-    registerPropertyNoMember( LAYOUTMANAGER_PROPNAME_ASCII_REFRESHVISIBILITY, LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY, beans::PropertyAttribute::TRANSIENT, cppu::UnoType<bool>::get(), css::uno::Any(false) );
+    registerPropertyNoMember( LAYOUTMANAGER_PROPNAME_ASCII_REFRESHVISIBILITY, LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY, beans::PropertyAttribute::TRANSIENT, cppu::UnoType<bool>::get(), cpo::uno::Any(false) );
     registerProperty( LAYOUTMANAGER_PROPNAME_ASCII_PRESERVE_CONTENT_SIZE, LAYOUTMANAGER_PROPHANDLE_PRESERVE_CONTENT_SIZE, beans::PropertyAttribute::TRANSIENT, &m_bPreserveContentSize, cppu::UnoType<decltype(m_bPreserveContentSize)>::get() );
-    registerPropertyNoMember( LAYOUTMANAGER_PROPNAME_ASCII_REFRESHTOOLTIP, LAYOUTMANAGER_PROPHANDLE_REFRESHTOOLTIP, beans::PropertyAttribute::TRANSIENT, cppu::UnoType<bool>::get(), css::uno::Any(false) );
+    registerPropertyNoMember( LAYOUTMANAGER_PROPNAME_ASCII_REFRESHTOOLTIP, LAYOUTMANAGER_PROPHANDLE_REFRESHTOOLTIP, beans::PropertyAttribute::TRANSIENT, cppu::UnoType<bool>::get(), cpo::uno::Any(false) );
 }
 
 LayoutManager::~LayoutManager()
@@ -612,7 +613,7 @@ bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& rElem
                     bInGlobalSettings = true;
                 }
 
-                uno::Any aValue;
+                cpo::uno::Any aValue;
                 if ( pGlobalSettings->GetToolbarStateInfo(
                                                     GlobalSettings::STATEINFO_LOCKED,
                                                     aValue ))
@@ -753,7 +754,7 @@ void LayoutManager::implts_setVisibleState( bool bShow )
 void LayoutManager::implts_updateUIElementsVisibleState( bool bSetVisible )
 {
     // notify listeners
-    uno::Any a;
+    cpo::uno::Any a;
     if ( bSetVisible )
         implts_notifyListeners( frame::LayoutManagerEvents::VISIBLE, a );
     else
@@ -1248,7 +1249,7 @@ bool SAL_CALL LayoutManager::setMergedMenuBar(
 {
     implts_setInplaceMenuBar( xMergedMenuBar );
 
-    uno::Any a;
+    cpo::uno::Any a;
     implts_notifyListeners( frame::LayoutManagerEvents::MERGEDMENUBAR, a );
     return true;
 }
@@ -1502,7 +1503,7 @@ void SAL_CALL LayoutManager::createElement( const OUString& aName )
     if ( bNotify )
     {
         // UI element is invisible - provide information to listeners
-        implts_notifyListeners( frame::LayoutManagerEvents::UIELEMENT_VISIBLE, uno::Any( aName ) );
+        implts_notifyListeners( frame::LayoutManagerEvents::UIELEMENT_VISIBLE, cpo::uno::Any( aName ) );
     }
 }
 
@@ -1572,7 +1573,7 @@ void SAL_CALL LayoutManager::destroyElement( const OUString& aName )
         doLayout();
 
     if ( bNotify )
-        implts_notifyListeners( frame::LayoutManagerEvents::UIELEMENT_INVISIBLE, uno::Any( aName ) );
+        implts_notifyListeners( frame::LayoutManagerEvents::UIELEMENT_INVISIBLE, cpo::uno::Any( aName ) );
 }
 
 bool SAL_CALL LayoutManager::requestElement( const OUString& rResourceURL )
@@ -1646,7 +1647,7 @@ bool SAL_CALL LayoutManager::requestElement( const OUString& rResourceURL )
     }
 
     if ( bNotify )
-        implts_notifyListeners( frame::LayoutManagerEvents::UIELEMENT_VISIBLE, uno::Any( rResourceURL ) );
+        implts_notifyListeners( frame::LayoutManagerEvents::UIELEMENT_VISIBLE, cpo::uno::Any( rResourceURL ) );
 
     return bResult;
 }
@@ -1774,7 +1775,7 @@ bool SAL_CALL LayoutManager::showElement( const OUString& aName )
         doLayout();
 
     if ( bNotify )
-        implts_notifyListeners( frame::LayoutManagerEvents::UIELEMENT_VISIBLE, uno::Any( aName ) );
+        implts_notifyListeners( frame::LayoutManagerEvents::UIELEMENT_VISIBLE, cpo::uno::Any( aName ) );
 
     return bResult;
 }
@@ -1856,7 +1857,7 @@ bool SAL_CALL LayoutManager::hideElement( const OUString& aName )
         doLayout();
 
     if ( bNotify )
-        implts_notifyListeners( frame::LayoutManagerEvents::UIELEMENT_INVISIBLE, uno::Any( aName ) );
+        implts_notifyListeners( frame::LayoutManagerEvents::UIELEMENT_INVISIBLE, cpo::uno::Any( aName ) );
 
     return false;
 }
@@ -2539,7 +2540,7 @@ void LayoutManager::implts_createMSCompatibleMenuBar( const OUString& aName )
     assert(xFormsMenuIndex->getCount() >= 1);
     uno::Sequence< beans::PropertyValue > aNewFormsMenu;
     xFormsMenuIndex->getByIndex( 0 ) >>= aNewFormsMenu;
-    xMenuIndex->replaceByIndex(nFormsMenu, uno::Any(aNewFormsMenu));
+    xMenuIndex->replaceByIndex(nFormsMenu, cpo::uno::Any(aNewFormsMenu));
 
     setMergedMenuBar( xMenuIndex );
 
@@ -2582,7 +2583,7 @@ void SAL_CALL LayoutManager::removeLayoutManagerEventListener( const uno::Refere
     m_aListenerContainer.removeInterface( cppu::UnoType<frame::XLayoutManagerListener>::get(), xListener );
 }
 
-void LayoutManager::implts_notifyListeners(short nEvent, const uno::Any& rInfoParam)
+void LayoutManager::implts_notifyListeners(short nEvent, const cpo::uno::Any& rInfoParam)
 {
     comphelper::OInterfaceContainerHelper2* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<frame::XLayoutManagerListener>::get());
     if (pContainer==nullptr)
@@ -3014,7 +3015,7 @@ void SAL_CALL LayoutManager::elementReplaced( const ui::ConfigurationEvent& Even
 }
 
 void SAL_CALL LayoutManager::setFastPropertyValue_NoBroadcast( sal_Int32       nHandle,
-                                                               const uno::Any& aValue  )
+                                                               const cpo::uno::Any& aValue  )
 {
     if ( (nHandle != LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY) && (nHandle != LAYOUTMANAGER_PROPHANDLE_REFRESHTOOLTIP) )
         LayoutManager_PBase::setFastPropertyValue_NoBroadcast( nHandle, aValue );
@@ -3092,7 +3093,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL LayoutManager::getPropertySet
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_LayoutManager_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new framework::LayoutManager(context));
 }

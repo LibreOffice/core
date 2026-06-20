@@ -44,7 +44,7 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
 using ::std::vector;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
 
 
@@ -161,32 +161,32 @@ void XMLFootnoteSeparatorImport::startFastElement(
     sal_Int32 nIndex;
 
     nIndex = rMapper->FindEntryIndex(CTF_PM_FTN_LINE_ADJUST);
-    XMLPropertyState aLineAdjust( nIndex, uno::Any(sal_Int16(eLineAdjust)) );
+    XMLPropertyState aLineAdjust( nIndex, cpo::uno::Any(sal_Int16(eLineAdjust)) );
     rProperties.push_back(aLineAdjust);
 
     nIndex = rMapper->FindEntryIndex(CTF_PM_FTN_LINE_COLOR);
-    XMLPropertyState aLineColor( nIndex, uno::Any(nLineColor) );
+    XMLPropertyState aLineColor( nIndex, cpo::uno::Any(nLineColor) );
     rProperties.push_back(aLineColor);
 
     nIndex = rMapper->FindEntryIndex(CTF_PM_FTN_LINE_STYLE);
-    XMLPropertyState aLineStyle( nIndex, uno::Any(nLineStyle) );
+    XMLPropertyState aLineStyle( nIndex, cpo::uno::Any(nLineStyle) );
     rProperties.push_back(aLineStyle);
 
     nIndex = rMapper->FindEntryIndex(CTF_PM_FTN_DISTANCE);
-    XMLPropertyState aLineDistance( nIndex, uno::Any(nLineDistance) );
+    XMLPropertyState aLineDistance( nIndex, cpo::uno::Any(nLineDistance) );
     rProperties.push_back(aLineDistance);
 
     nIndex = rMapper->FindEntryIndex(CTF_PM_FTN_LINE_WIDTH);
-    XMLPropertyState aLineRelWidth( nIndex, uno::Any(nLineRelWidth));
+    XMLPropertyState aLineRelWidth( nIndex, cpo::uno::Any(nLineRelWidth));
     rProperties.push_back(aLineRelWidth);
 
     nIndex = rMapper->FindEntryIndex(CTF_PM_FTN_LINE_DISTANCE);
-    XMLPropertyState aLineTextDistance( nIndex, uno::Any(nLineTextDistance));
+    XMLPropertyState aLineTextDistance( nIndex, cpo::uno::Any(nLineTextDistance));
     rProperties.push_back(aLineTextDistance);
 
     SAL_WARN_IF( rMapper->FindEntryIndex(CTF_PM_FTN_LINE_WEIGHT) != nPropIndex, "xmloff",
                 "Received wrong property map index!" );
-    XMLPropertyState aLineWeight( nPropIndex, uno::Any(nLineWeight) );
+    XMLPropertyState aLineWeight( nPropIndex, cpo::uno::Any(nLineWeight) );
     rProperties.push_back(aLineWeight);
 }
 

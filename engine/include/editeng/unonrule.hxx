@@ -46,18 +46,18 @@ public:
     virtual ~SvxUnoNumberingRules() noexcept override;
 
     //XIndexReplace
-    virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const css::uno::Any& Element ) override;
+    virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override ;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
     //XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 
     // XAnyCompare
-    virtual sal_Int16 SAL_CALL compare( const css::uno::Any& Any1, const css::uno::Any& Any2 ) override;
+    virtual sal_Int16 SAL_CALL compare( const cpo::uno::Any& Any1, const cpo::uno::Any& Any2 ) override;
 
     // XCloneable
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
@@ -74,7 +74,7 @@ public:
     /// @throws css::lang::IllegalArgumentException
     void setNumberingRuleByIndex(const css::uno::Sequence<css::beans::PropertyValue>& rProperties, sal_Int32 nIndex);
 
-    static sal_Int16 Compare( const css::uno::Any& rAny1, const css::uno::Any& rAny2 );
+    static sal_Int16 Compare( const cpo::uno::Any& rAny1, const cpo::uno::Any& rAny2 );
 
     const SvxNumRule& getNumRule() const { return maRule; }
 };

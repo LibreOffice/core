@@ -22,7 +22,7 @@
 #include <rtl/ustring.hxx>
 
 class SvXMLExport;
-namespace com::sun::star::uno { class Any; }
+namespace cpo::uno { class Any; }
 
 class XMLTextDropCapExport
 {
@@ -32,7 +32,7 @@ public:
 
     explicit XMLTextDropCapExport( SvXMLExport& rExport );
 
-    void exportXML( const css::uno::Any& rAny,
+    void exportXML( const cpo::uno::Any& rAny,
                     bool bWholeWord,
                     const OUString& rStyleName );
 };

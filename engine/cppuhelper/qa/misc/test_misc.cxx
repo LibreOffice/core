@@ -29,7 +29,7 @@ public:
 
 void Test::testCatchThrow()
 {
-    css::uno::Any aSavedException;
+    cpo::uno::Any aSavedException;
     try
     {
         throw css::uno::RuntimeException(u"RuntimeException"_ustr);
@@ -55,7 +55,7 @@ void Test::testCatchThrow()
 
 void Test::testgetCaughtException()
 {
-    css::uno::Any aSavedExceptionAny;
+    cpo::uno::Any aSavedExceptionAny;
     std::exception_ptr
         aSavedException; /// exception caught during unzipping is saved to be thrown during reading
     try

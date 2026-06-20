@@ -94,7 +94,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, selectTextRange)
     uno::Reference<view::XSelectionSupplier> const xView(xTD->getCurrentController(),
                                                          uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"test"_ustr, xAnchor->getString());
-    CPPUNIT_ASSERT(xView->select(uno::Any(xAnchor)));
+    CPPUNIT_ASSERT(xView->select(cpo::uno::Any(xAnchor)));
     uno::Reference<container::XIndexAccess> xSel;
     CPPUNIT_ASSERT(xView->getSelection() >>= xSel);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSel->getCount());
@@ -112,7 +112,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, flyAtParaAnchor)
         xMSF->createInstance(u"com.sun.star.text.TextFrame"_ustr), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> const xFrameProps(xTextFrame, uno::UNO_QUERY_THROW);
     xFrameProps->setPropertyValue(u"AnchorType"_ustr,
-                                  uno::Any(text::TextContentAnchorType_AT_PARAGRAPH));
+                                  cpo::uno::Any(text::TextContentAnchorType_AT_PARAGRAPH));
     auto const xText = xTD->getText();
     auto const xTextCursor = xText->createTextCursor();
     CPPUNIT_ASSERT(xTextCursor.is());
@@ -133,7 +133,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testRtlGutter)
     // - Unknown property: RtlGutter
     auto bRtlGutter = getProperty<bool>(xPageStyle, u"RtlGutter"_ustr);
     CPPUNIT_ASSERT(!bRtlGutter);
-    xPageStyle->setPropertyValue(u"RtlGutter"_ustr, uno::Any(true));
+    xPageStyle->setPropertyValue(u"RtlGutter"_ustr, cpo::uno::Any(true));
     bRtlGutter = getProperty<bool>(xPageStyle, u"RtlGutter"_ustr);
     CPPUNIT_ASSERT(bRtlGutter);
 }
@@ -156,7 +156,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testBiblioLocalCopy)
         comphelper::makePropertyValue(u"URL"_ustr, u"http://www.example.com/test.pdf"_ustr),
         comphelper::makePropertyValue(u"LocalURL"_ustr, u"file:///home/me/test.pdf"_ustr),
     };
-    xField->setPropertyValue(u"Fields"_ustr, uno::Any(aFields));
+    xField->setPropertyValue(u"Fields"_ustr, cpo::uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -182,7 +182,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testLinkedStyles)
     uno::Reference<beans::XPropertySet> xParaStyle(xParaStyles->getByName(u"Caption"_ustr),
                                                    uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(xParaStyle, u"LinkStyle"_ustr));
-    xParaStyle->setPropertyValue(u"LinkStyle"_ustr, uno::Any(u"Emphasis"_ustr));
+    xParaStyle->setPropertyValue(u"LinkStyle"_ustr, cpo::uno::Any(u"Emphasis"_ustr));
     // Then make sure we get the linked char style back:
     CPPUNIT_ASSERT_EQUAL(u"Emphasis"_ustr, getProperty<OUString>(xParaStyle, u"LinkStyle"_ustr));
 
@@ -191,7 +191,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testLinkedStyles)
     uno::Reference<beans::XPropertySet> xCharStyle(xCharStyles->getByName(u"Emphasis"_ustr),
                                                    uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(xCharStyle, u"LinkStyle"_ustr));
-    xCharStyle->setPropertyValue(u"LinkStyle"_ustr, uno::Any(u"Caption"_ustr));
+    xCharStyle->setPropertyValue(u"LinkStyle"_ustr, cpo::uno::Any(u"Caption"_ustr));
     // Then make sure we get the linked para style back:
     CPPUNIT_ASSERT_EQUAL(u"Caption"_ustr, getProperty<OUString>(xCharStyle, u"LinkStyle"_ustr));
 }
@@ -263,7 +263,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testLineBreakInsert)
         xMSF->createInstance(u"com.sun.star.text.LineBreak"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
     auto eClear = static_cast<sal_Int16>(SwLineBreakClear::ALL);
-    xLineBreakProps->setPropertyValue(u"Clear"_ustr, uno::Any(eClear));
+    xLineBreakProps->setPropertyValue(u"Clear"_ustr, cpo::uno::Any(eClear));
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
     xText->insertTextContent(xCursor, xLineBreak, /*bAbsorb=*/false);
@@ -294,7 +294,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testLineBreakTextPortionEnum)
         xMSF->createInstance(u"com.sun.star.text.LineBreak"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
     auto eClear = static_cast<sal_Int16>(SwLineBreakClear::ALL);
-    xLineBreakProps->setPropertyValue(u"Clear"_ustr, uno::Any(eClear));
+    xLineBreakProps->setPropertyValue(u"Clear"_ustr, cpo::uno::Any(eClear));
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
     xText->insertTextContent(xCursor, xLineBreak, /*bAbsorb=*/false);
@@ -324,9 +324,9 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testUserFieldTooltip)
         xFactory->createInstance(u"com.sun.star.text.TextField.User"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xMaster(
         xFactory->createInstance(u"com.sun.star.text.FieldMaster.User"_ustr), uno::UNO_QUERY);
-    xMaster->setPropertyValue(u"Name"_ustr, uno::Any(u"a_user_field"_ustr));
+    xMaster->setPropertyValue(u"Name"_ustr, cpo::uno::Any(u"a_user_field"_ustr));
     xField->attachTextFieldMaster(xMaster);
-    xField->getTextFieldMaster()->setPropertyValue(u"Content"_ustr, uno::Any(u"42"_ustr));
+    xField->getTextFieldMaster()->setPropertyValue(u"Content"_ustr, cpo::uno::Any(u"42"_ustr));
     uno::Reference<text::XTextDocument> xDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xDocument->getText();
     xText->insertTextContent(xText->createTextCursor(), xField, /*bAbsorb=*/false);
@@ -334,7 +334,7 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testUserFieldTooltip)
 
     // When setting a tooltip on the field:
     OUString aExpected(u"first line\nsecond line"_ustr);
-    xFieldProps->setPropertyValue(u"Title"_ustr, uno::Any(aExpected));
+    xFieldProps->setPropertyValue(u"Title"_ustr, cpo::uno::Any(aExpected));
 
     // Then make sure that the tooltip we read back matches the one previously specified:
     // Without the accompanying fix in place, this test would have failed with:
@@ -361,7 +361,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlInsert)
         xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     // Set a custom property on the content control:
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue(u"ShowingPlaceHolder"_ustr, uno::Any(true));
+    xContentControlProps->setPropertyValue(u"ShowingPlaceHolder"_ustr, cpo::uno::Any(true));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // Then make sure that the text attribute is inserted:
@@ -401,11 +401,12 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testImageTooltip)
         xFactory->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
     xText->insertTextContent(xCursor, xImage, /*bAbsorb=*/false);
     uno::Reference<beans::XPropertySet> xImageProps(xImage, uno::UNO_QUERY);
-    xImageProps->setPropertyValue(u"HyperLinkURL"_ustr, uno::Any(u"http://www.example.com"_ustr));
+    xImageProps->setPropertyValue(u"HyperLinkURL"_ustr,
+                                  cpo::uno::Any(u"http://www.example.com"_ustr));
 
     // When setting a tooltip on the image:
     OUString aExpected(u"first line\nsecond line"_ustr);
-    xImageProps->setPropertyValue(u"Tooltip"_ustr, uno::Any(aExpected));
+    xImageProps->setPropertyValue(u"Tooltip"_ustr, cpo::uno::Any(aExpected));
 
     // Then make sure that the tooltip we read back matches the one previously specified:
     // Without the accompanying fix in place, this test would have failed with:
@@ -489,10 +490,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlCheckbox)
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have failed with:
     // An uncaught exception of type com.sun.star.beans.UnknownPropertyException
-    xContentControlProps->setPropertyValue(u"Checkbox"_ustr, uno::Any(true));
-    xContentControlProps->setPropertyValue(u"Checked"_ustr, uno::Any(true));
-    xContentControlProps->setPropertyValue(u"CheckedState"_ustr, uno::Any(u"☒"_ustr));
-    xContentControlProps->setPropertyValue(u"UncheckedState"_ustr, uno::Any(u"☐"_ustr));
+    xContentControlProps->setPropertyValue(u"Checkbox"_ustr, cpo::uno::Any(true));
+    xContentControlProps->setPropertyValue(u"Checked"_ustr, cpo::uno::Any(true));
+    xContentControlProps->setPropertyValue(u"CheckedState"_ustr, cpo::uno::Any(u"☒"_ustr));
+    xContentControlProps->setPropertyValue(u"UncheckedState"_ustr, cpo::uno::Any(u"☐"_ustr));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // Then make sure that the specified properties are set:
@@ -528,21 +529,21 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlDropdown)
     {
         uno::Sequence<beans::PropertyValues> aListItems = {
             {
-                comphelper::makePropertyValue(u"DisplayText"_ustr, uno::Any(u"red"_ustr)),
-                comphelper::makePropertyValue(u"Value"_ustr, uno::Any(u"R"_ustr)),
+                comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(u"red"_ustr)),
+                comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(u"R"_ustr)),
             },
             {
-                comphelper::makePropertyValue(u"DisplayText"_ustr, uno::Any(u"green"_ustr)),
-                comphelper::makePropertyValue(u"Value"_ustr, uno::Any(u"G"_ustr)),
+                comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(u"green"_ustr)),
+                comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(u"G"_ustr)),
             },
             {
-                comphelper::makePropertyValue(u"DisplayText"_ustr, uno::Any(u"blue"_ustr)),
-                comphelper::makePropertyValue(u"Value"_ustr, uno::Any(u"B"_ustr)),
+                comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(u"blue"_ustr)),
+                comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(u"B"_ustr)),
             },
         };
         // Without the accompanying fix in place, this test would have failed with:
         // An uncaught exception of type com.sun.star.beans.UnknownPropertyException
-        xContentControlProps->setPropertyValue(u"ListItems"_ustr, uno::Any(aListItems));
+        xContentControlProps->setPropertyValue(u"ListItems"_ustr, cpo::uno::Any(aListItems));
     }
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
@@ -599,7 +600,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlPicture)
     uno::Reference<beans::XPropertySet> xTextGraphic(
         xMSF->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
     xTextGraphic->setPropertyValue(u"AnchorType"_ustr,
-                                   uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+                                   cpo::uno::Any(text::TextContentAnchorType_AS_CHARACTER));
     uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
     xText->insertTextContent(xCursor, xTextContent, false);
     xCursor->gotoStart(/*bExpand=*/false);
@@ -609,7 +610,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlPicture)
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have failed with:
     // An uncaught exception of type com.sun.star.beans.UnknownPropertyException
-    xContentControlProps->setPropertyValue(u"Picture"_ustr, uno::Any(true));
+    xContentControlProps->setPropertyValue(u"Picture"_ustr, cpo::uno::Any(true));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // Then make sure that the specified properties are set:
@@ -641,27 +642,28 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlDate)
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have failed with:
     // An uncaught exception of type com.sun.star.beans.UnknownPropertyException
-    xContentControlProps->setPropertyValue(u"Date"_ustr, uno::Any(true));
-    xContentControlProps->setPropertyValue(u"DateFormat"_ustr, uno::Any(u"M/d/yyyy"_ustr));
-    xContentControlProps->setPropertyValue(u"DateLanguage"_ustr, uno::Any(u"en-US"_ustr));
+    xContentControlProps->setPropertyValue(u"Date"_ustr, cpo::uno::Any(true));
+    xContentControlProps->setPropertyValue(u"DateFormat"_ustr, cpo::uno::Any(u"M/d/yyyy"_ustr));
+    xContentControlProps->setPropertyValue(u"DateLanguage"_ustr, cpo::uno::Any(u"en-US"_ustr));
     xContentControlProps->setPropertyValue(u"CurrentDate"_ustr,
-                                           uno::Any(u"2022-05-25T00:00:00Z"_ustr));
+                                           cpo::uno::Any(u"2022-05-25T00:00:00Z"_ustr));
     xContentControlProps->setPropertyValue(u"PlaceholderDocPart"_ustr,
-                                           uno::Any(u"DefaultPlaceholder_-1854013437"_ustr));
+                                           cpo::uno::Any(u"DefaultPlaceholder_-1854013437"_ustr));
     xContentControlProps->setPropertyValue(
         u"DataBindingPrefixMappings"_ustr,
-        uno::Any(u"xmlns:ns0='http://schemas.microsoft.com/vsto/samples' "_ustr));
+        cpo::uno::Any(u"xmlns:ns0='http://schemas.microsoft.com/vsto/samples' "_ustr));
     xContentControlProps->setPropertyValue(
         u"DataBindingXpath"_ustr,
-        uno::Any(u"/ns0:employees[1]/ns0:employee[1]/ns0:hireDate[1]"_ustr));
+        cpo::uno::Any(u"/ns0:employees[1]/ns0:employee[1]/ns0:hireDate[1]"_ustr));
     xContentControlProps->setPropertyValue(
-        u"DataBindingStoreItemID"_ustr, uno::Any(u"{241A8A02-7FFD-488D-8827-63FBE74E8BC9}"_ustr));
-    xContentControlProps->setPropertyValue(u"Color"_ustr, uno::Any(u"008000"_ustr));
-    xContentControlProps->setPropertyValue(u"Alias"_ustr, uno::Any(u"myalias"_ustr));
-    xContentControlProps->setPropertyValue(u"Tag"_ustr, uno::Any(u"mytag"_ustr));
-    xContentControlProps->setPropertyValue(u"Id"_ustr, uno::Any(static_cast<sal_Int32>(123)));
-    xContentControlProps->setPropertyValue(u"TabIndex"_ustr, uno::Any(sal_uInt32(1)));
-    xContentControlProps->setPropertyValue(u"Lock"_ustr, uno::Any(u"sdtContentLocked"_ustr));
+        u"DataBindingStoreItemID"_ustr,
+        cpo::uno::Any(u"{241A8A02-7FFD-488D-8827-63FBE74E8BC9}"_ustr));
+    xContentControlProps->setPropertyValue(u"Color"_ustr, cpo::uno::Any(u"008000"_ustr));
+    xContentControlProps->setPropertyValue(u"Alias"_ustr, cpo::uno::Any(u"myalias"_ustr));
+    xContentControlProps->setPropertyValue(u"Tag"_ustr, cpo::uno::Any(u"mytag"_ustr));
+    xContentControlProps->setPropertyValue(u"Id"_ustr, cpo::uno::Any(static_cast<sal_Int32>(123)));
+    xContentControlProps->setPropertyValue(u"TabIndex"_ustr, cpo::uno::Any(sal_uInt32(1)));
+    xContentControlProps->setPropertyValue(u"Lock"_ustr, cpo::uno::Any(u"sdtContentLocked"_ustr));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // Then make sure that the specified properties are set:
@@ -709,7 +711,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlPlainText)
     uno::Reference<text::XTextContent> xContentControl(
         xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue(u"PlainText"_ustr, uno::Any(true));
+    xContentControlProps->setPropertyValue(u"PlainText"_ustr, cpo::uno::Any(true));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // Then make sure that the text attribute is inserted:
@@ -764,22 +766,22 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlComboBox)
     {
         uno::Sequence<beans::PropertyValues> aListItems = {
             {
-                comphelper::makePropertyValue(u"DisplayText"_ustr, uno::Any(u"red"_ustr)),
-                comphelper::makePropertyValue(u"Value"_ustr, uno::Any(u"R"_ustr)),
+                comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(u"red"_ustr)),
+                comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(u"R"_ustr)),
             },
             {
-                comphelper::makePropertyValue(u"DisplayText"_ustr, uno::Any(u"green"_ustr)),
-                comphelper::makePropertyValue(u"Value"_ustr, uno::Any(u"G"_ustr)),
+                comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(u"green"_ustr)),
+                comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(u"G"_ustr)),
             },
             {
-                comphelper::makePropertyValue(u"DisplayText"_ustr, uno::Any(u"blue"_ustr)),
-                comphelper::makePropertyValue(u"Value"_ustr, uno::Any(u"B"_ustr)),
+                comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(u"blue"_ustr)),
+                comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(u"B"_ustr)),
             },
         };
-        xContentControlProps->setPropertyValue(u"ListItems"_ustr, uno::Any(aListItems));
+        xContentControlProps->setPropertyValue(u"ListItems"_ustr, cpo::uno::Any(aListItems));
         // Without the accompanying fix in place, this test would have failed with:
         // An uncaught exception of type com.sun.star.beans.UnknownPropertyException
-        xContentControlProps->setPropertyValue(u"ComboBox"_ustr, uno::Any(true));
+        xContentControlProps->setPropertyValue(u"ComboBox"_ustr, cpo::uno::Any(true));
     }
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
@@ -818,7 +820,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControls)
         uno::Reference<text::XTextContent> xContentControl(
             xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-        xContentControlProps->setPropertyValue(u"Tag"_ustr, uno::Any(u"tag1"_ustr));
+        xContentControlProps->setPropertyValue(u"Tag"_ustr, cpo::uno::Any(u"tag1"_ustr));
         xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
     }
     xCursor->gotoStart(/*bExpand=*/false);
@@ -830,7 +832,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControls)
         uno::Reference<text::XTextContent> xContentControl(
             xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-        xContentControlProps->setPropertyValue(u"Tag"_ustr, uno::Any(u"tag2"_ustr));
+        xContentControlProps->setPropertyValue(u"Tag"_ustr, cpo::uno::Any(u"tag2"_ustr));
         xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
     }
 
@@ -902,7 +904,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testFlySplit)
     CPPUNIT_ASSERT(!bIsSplitAllowed);
 
     // When marking it as IsSplitAllowed=true:
-    xFrame->setPropertyValue(u"IsSplitAllowed"_ustr, uno::Any(true));
+    xFrame->setPropertyValue(u"IsSplitAllowed"_ustr, cpo::uno::Any(true));
 
     // Then make sure that IsSplitAllowed is true when asking back:
     xFrame->getPropertyValue(u"IsSplitAllowed"_ustr) >>= bIsSplitAllowed;
@@ -1065,7 +1067,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testWrapTextAtFlyStart)
     CPPUNIT_ASSERT(!bWrapTextAtFlyStart);
 
     // When marking it as WrapTextAtFlyStart=true:
-    xFrame->setPropertyValue(u"WrapTextAtFlyStart"_ustr, uno::Any(true));
+    xFrame->setPropertyValue(u"WrapTextAtFlyStart"_ustr, cpo::uno::Any(true));
 
     // Then make sure that WrapTextAtFlyStart is true when asking back:
     xFrame->getPropertyValue(u"WrapTextAtFlyStart"_ustr) >>= bWrapTextAtFlyStart;

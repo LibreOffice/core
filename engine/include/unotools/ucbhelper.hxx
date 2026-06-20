@@ -28,13 +28,13 @@
 
 namespace com::sun::star {
     namespace uno {
-        class Any;
         class XComponentContext;
     }
     namespace ucb{
         class XCommandEnvironment;
     }
 }
+namespace cpo::uno { class Any; }
 namespace ucbhelper { class Content; }
 
 namespace utl::UCBContentHelper {
@@ -52,7 +52,7 @@ UNOTOOLS_DLLPUBLIC bool GetTitle(
 
 UNOTOOLS_DLLPUBLIC bool Kill(OUString const & url);
 
-UNOTOOLS_DLLPUBLIC css::uno::Any GetProperty(
+UNOTOOLS_DLLPUBLIC cpo::uno::Any GetProperty(
     OUString const & url, OUString const & property);
 
 UNOTOOLS_DLLPUBLIC bool MakeFolder(

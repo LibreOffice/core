@@ -183,7 +183,7 @@ static std::vector<sal_Int32> lcl_getLimitingBorders( const std::vector< Complex
     return aLimitingBorders;
 }
 
-void ExplicitCategoriesProvider::convertCategoryAnysToText( uno::Sequence< OUString >& rOutTexts, const uno::Sequence< uno::Any >& rInAnys, ChartModel& rModel )
+void ExplicitCategoriesProvider::convertCategoryAnysToText( uno::Sequence< OUString >& rOutTexts, const uno::Sequence< cpo::uno::Any >& rInAnys, ChartModel& rModel )
 {
     sal_Int32 nCount = rInAnys.getLength();
     if(!nCount)
@@ -208,7 +208,7 @@ void ExplicitCategoriesProvider::convertCategoryAnysToText( uno::Sequence< OUStr
     for(sal_Int32 nN=0;nN<nCount;nN++)
     {
         OUString aText;
-        const uno::Any& aAny = rInAnys[nN];
+        const cpo::uno::Any& aAny = rInAnys[nN];
         if( aAny.hasValue() )
         {
             double fDouble = 0;
@@ -413,7 +413,7 @@ static bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >&
 
     if( xDataSequence.is() )
     {
-        uno::Sequence< uno::Any > aValues = xDataSequence->getData();
+        uno::Sequence< cpo::uno::Any > aValues = xDataSequence->getData();
         sal_Int32 nCount = aValues.getLength();
         rDateCategories.reserve(nCount);
         Reference< util::XNumberFormats > xNumberFormats( rModel.getNumberFormats() );
@@ -451,7 +451,7 @@ static bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >&
                 bIsDate = true;
 
             bool bContainsEmptyString = false;
-            const uno::Any& aAny = aValues[nN];
+            const cpo::uno::Any& aAny = aValues[nN];
             if( aAny.hasValue() )
             {
                 OUString aTest;

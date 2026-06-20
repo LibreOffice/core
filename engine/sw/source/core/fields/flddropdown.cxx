@@ -147,7 +147,7 @@ void SwDropDownField::SetToolTip(const OUString & rToolTip)
     m_aToolTip = rToolTip;
 }
 
-bool SwDropDownField::QueryValue(::uno::Any &rVal, sal_uInt16 nWhich) const
+bool SwDropDownField::QueryValue(::cpo::uno::Any &rVal, sal_uInt16 nWhich) const
 {
     nWhich &= ~CONVERT_TWIPS;
     switch( nWhich )
@@ -174,7 +174,7 @@ bool SwDropDownField::QueryValue(::uno::Any &rVal, sal_uInt16 nWhich) const
     return true;
 }
 
-bool SwDropDownField::PutValue(const uno::Any &rVal,
+bool SwDropDownField::PutValue(const cpo::uno::Any &rVal,
                                sal_uInt16 nWhich)
 {
     switch( nWhich )

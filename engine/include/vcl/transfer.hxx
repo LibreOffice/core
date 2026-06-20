@@ -163,7 +163,7 @@ private:
 
 private:
 
-    css::uno::Any                                                             maAny;
+    cpo::uno::Any                                                             maAny;
     OUString                                                                  maLastFormat;
     mutable css::uno::Reference< css::datatransfer::clipboard::XClipboard >   mxClipboard;
     rtl::Reference< TerminateListener >                                       mxTerminateListener;
@@ -179,12 +179,12 @@ protected:
 public:
 
     // XTransferable
-    virtual css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& rFlavor ) override;
+    virtual cpo::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& rFlavor ) override;
     virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors() override;
     virtual bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& rFlavor ) override;
 
     // Transferable2
-    virtual css::uno::Any SAL_CALL getTransferData2(
+    virtual cpo::uno::Any SAL_CALL getTransferData2(
         const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
     virtual bool SAL_CALL isComplex() override;
 
@@ -229,7 +229,7 @@ protected:
     bool                HasFormat( SotClipboardFormatId nFormat );
     void                ClearFormats();
 
-    bool                SetAny( const css::uno::Any& rAny );
+    bool                SetAny( const cpo::uno::Any& rAny );
     bool                SetString( const OUString& rString );
     bool                SetBitmap(const Bitmap& rBitmap, const css::datatransfer::DataFlavor& rFlavor);
     bool                SetGDIMetaFile( const GDIMetaFile& rMtf );
@@ -308,8 +308,8 @@ public:
 
     void                        Rebind( const css::uno::Reference< css::datatransfer::XTransferable >& _rxNewData );
 
-    css::uno::Any GetAny( SotClipboardFormatId nFormat, const OUString& rDestDoc ) const;
-    css::uno::Any GetAny( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) const;
+    cpo::uno::Any GetAny( SotClipboardFormatId nFormat, const OUString& rDestDoc ) const;
+    cpo::uno::Any GetAny( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) const;
 
     bool                        GetString( SotClipboardFormatId nFormat, OUString& rStr ) const;
     bool                        GetString( const css::datatransfer::DataFlavor& rFlavor, OUString& rStr ) const;

@@ -51,7 +51,7 @@ namespace sfx2
      */
     css::uno::Reference<css::uno::XInterface>
         SFX2_DLLPUBLIC createSfxModelInstance(
-            const css::uno::Sequence<css::uno::Any> & rxArgs,
+            const css::uno::Sequence<cpo::uno::Any> & rxArgs,
             std::function<css::uno::Reference<css::uno::XInterface>( SfxModelFlags )> creationFunc
         );
 

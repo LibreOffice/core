@@ -334,7 +334,7 @@ void OOXMLStreamImpl::init()
 
     if (xHierarchicalStorageAccess.is())
     {
-        uno::Any aAny(xHierarchicalStorageAccess->
+        cpo::uno::Any aAny(xHierarchicalStorageAccess->
                       openStreamElementByHierarchicalName
                       (msTarget, embed::ElementModes::SEEKABLEREAD));
         aAny >>= mxDocumentStream;

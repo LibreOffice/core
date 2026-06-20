@@ -50,7 +50,7 @@ public:
     virtual bool SAL_CALL isMute() override;
     virtual css::awt::Size SAL_CALL getPreferredPlayerWindowSize() override;
     virtual css::uno::Reference<css::media::XPlayerWindow>
-        SAL_CALL createPlayerWindow(const css::uno::Sequence<css::uno::Any>& rArgs) override;
+        SAL_CALL createPlayerWindow(const css::uno::Sequence<cpo::uno::Any>& rArgs) override;
     virtual css::uno::Reference<css::media::XFrameGrabber> SAL_CALL createFrameGrabber() override;
 
     // XServiceInfo

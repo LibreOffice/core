@@ -256,7 +256,7 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
             try
             {
                 xStatusIndicator = xStatusIndicatorFactory->createStatusIndicator();
-                xPropSet->setPropertyValue( u"IndicatorInterception"_ustr , uno::Any( xStatusIndicator ));
+                xPropSet->setPropertyValue( u"IndicatorInterception"_ustr , cpo::uno::Any( xStatusIndicator ));
             }
             catch ( const uno::RuntimeException& )
             {
@@ -285,7 +285,7 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
         if ( xPropSet.is() )
         {
             xStatusIndicator.clear();
-            xPropSet->setPropertyValue( u"IndicatorInterception"_ustr , uno::Any( xStatusIndicator ));
+            xPropSet->setPropertyValue( u"IndicatorInterception"_ustr , cpo::uno::Any( xStatusIndicator ));
         }
     }
     catch ( const uno::RuntimeException& )
@@ -407,12 +407,12 @@ uno::Reference< css::frame::XLayoutManager > SAL_CALL SfxInPlaceClient_Impl::get
     uno::Reference< css::frame::XLayoutManager > xMan;
     try
     {
-        uno::Any aAny = xFrame->getPropertyValue( u"LayoutManager"_ustr );
+        cpo::uno::Any aAny = xFrame->getPropertyValue( u"LayoutManager"_ustr );
         aAny >>= xMan;
     }
     catch ( uno::Exception& ex )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException( ex.Message,
                         nullptr, anyEx );
     }

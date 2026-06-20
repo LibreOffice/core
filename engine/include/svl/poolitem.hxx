@@ -24,7 +24,7 @@
 
 #include <memory>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <svl/hint.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
@@ -40,7 +40,7 @@ class IntlWrapper;
 #define CONVERT_TWIPS                       0x80    // Uno conversion for measurement (for MemberId)
 
 // warning, if there is no boolean inside the any this will always return the value false
-inline bool Any2Bool( const css::uno::Any&rValue )
+inline bool Any2Bool( const cpo::uno::Any&rValue )
 {
     bool bValue = false;
     if( !(rValue >>= bValue) )
@@ -744,8 +744,8 @@ public:
     virtual void             ScaleMetrics( double fScale );
     virtual bool             HasMetrics() const;
 
-    virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId );
+    virtual bool             QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool             PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId );
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const = 0;
     // clone and call SetWhich

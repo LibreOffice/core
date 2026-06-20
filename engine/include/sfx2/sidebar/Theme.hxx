@@ -101,8 +101,8 @@ public:
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
     virtual void SAL_CALL setPropertyValue (
         const OUString& rsPropertyName,
-        const css::uno::Any& rValue) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue (
+        const cpo::uno::Any& rValue) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue (
         const OUString& rsPropertyName) override;
     virtual void SAL_CALL addPropertyChangeListener(
         const OUString& rsPropertyName,
@@ -135,7 +135,7 @@ private:
     PropertyNameToIdMap maPropertyNameToIdMap;
     typedef std::vector<OUString> PropertyIdToNameMap;
     PropertyIdToNameMap maPropertyIdToNameMap;
-    typedef ::std::vector<css::uno::Any> RawValueContainer;
+    typedef ::std::vector<cpo::uno::Any> RawValueContainer;
     RawValueContainer maRawValues;
 
     typedef std::vector<css::uno::Reference<css::beans::XPropertyChangeListener> > ChangeListenerContainer;
@@ -174,7 +174,7 @@ private:
         const ChangeListenerContainer* pListeners,
         const css::beans::PropertyChangeEvent& rEvent);
     void ProcessNewValue (
-        const css::uno::Any& rValue,
+        const cpo::uno::Any& rValue,
         const ThemeItem eItem,
         const PropertyType eType);
 };

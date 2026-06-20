@@ -66,7 +66,7 @@ using ::com::sun::star::uno::Sequence;
 
 namespace
 {
-uno::Any getPropertyIfSame(std::vector<Reference<beans::XPropertySet>>& xProperties,
+cpo::uno::Any getPropertyIfSame(std::vector<Reference<beans::XPropertySet>>& xProperties,
                            const OUString& aPropName)
 {
     if (xProperties.size() < 1)
@@ -75,7 +75,7 @@ uno::Any getPropertyIfSame(std::vector<Reference<beans::XPropertySet>>& xPropert
     if (!xProperties[0])
         return {};
 
-    uno::Any aValue = xProperties[0]->getPropertyValue(aPropName);
+    cpo::uno::Any aValue = xProperties[0]->getPropertyValue(aPropName);
     for (std::size_t i = 1; i < xProperties.size(); i++)
     {
         if (xProperties[i] && aValue != xProperties[i]->getPropertyValue(aPropName))
@@ -193,7 +193,7 @@ void ControllerState::update(
     if( !xSelectionSupplier.is())
         return;
 
-    uno::Any aSelObj( xSelectionSupplier->getSelection() );
+    cpo::uno::Any aSelObj( xSelectionSupplier->getSelection() );
     ObjectIdentifier aSelOID( aSelObj );
     const OUString& aSelObjCID( aSelOID.getObjectCID() );
 
@@ -527,11 +527,11 @@ void ControllerCommandDispatch::fireStatusEventForURLImpl(
     const OUString & rURL,
     const Reference< frame::XStatusListener > & xSingleListener )
 {
-    std::map< OUString, uno::Any >::const_iterator aArgIt( m_aCommandArguments.find( rURL ));
+    std::map< OUString, cpo::uno::Any >::const_iterator aArgIt( m_aCommandArguments.find( rURL ));
     if( aArgIt != m_aCommandArguments.end())
         fireStatusEventForURL( rURL, aArgIt->second, commandAvailable( rURL ), xSingleListener );
     else
-        fireStatusEventForURL( rURL, uno::Any(), commandAvailable( rURL ), xSingleListener );
+        fireStatusEventForURL( rURL, cpo::uno::Any(), commandAvailable( rURL ), xSingleListener );
 }
 
 void ControllerCommandDispatch::updateCommandAvailability()
@@ -748,7 +748,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
                         FontLineStyle eFU = aEditAttr.Get(EE_CHAR_UNDERLINE).GetLineStyle();
                         FontStrikeout eFSO = aEditAttr.Get(EE_CHAR_STRIKEOUT).GetStrikeout();
 
-                        uno::Any aFF;
+                        cpo::uno::Any aFF;
                         aEditAttr.Get(EE_CHAR_FONTINFO).QueryValue(aFF, 0);
                         float nFFS = aEditAttr.Get(EE_CHAR_FONTHEIGHT).GetHeight();
                         nFFS = o3tl::convert(nFFS, o3tl::Length::mm100, o3tl::Length::pt);
@@ -966,7 +966,7 @@ void ControllerCommandDispatch::fireStatusEvent(
 {
     if (rURL.isEmpty() || rURL == ".uno:ChartElementSelector")
     {
-        uno::Any aArg;
+        cpo::uno::Any aArg;
         aArg <<= Reference< frame::XController >(m_xChartController);
         fireStatusEventForURL( u".uno:ChartElementSelector"_ustr, aArg, true, xSingleListener );
     }

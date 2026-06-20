@@ -58,7 +58,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -367,7 +367,7 @@ bool Access::hasElements() {
     return !isAllChildrenEmpty();
 }
 
-bool Access::getByNameFast(const OUString & name, css::uno::Any & value)
+bool Access::getByNameFast(const OUString & name, cpo::uno::Any & value)
 {
     bool bGotValue = false;
     rtl::Reference< ChildAccess > child;
@@ -403,12 +403,12 @@ bool Access::getByNameFast(const OUString & name, css::uno::Any & value)
     return true;
 }
 
-css::uno::Any Access::getByName(OUString const & aName)
+cpo::uno::Any Access::getByName(OUString const & aName)
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    css::uno::Any value;
+    cpo::uno::Any value;
     if (!getByNameFast(aName, value))
         throw css::container::NoSuchElementException(
             aName, getXWeak());
@@ -437,7 +437,7 @@ bool Access::hasByName(OUString const & aName)
     return getChild(aName).is();
 }
 
-css::uno::Any Access::getByHierarchicalName(OUString const & aName)
+cpo::uno::Any Access::getByHierarchicalName(OUString const & aName)
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
@@ -516,7 +516,7 @@ bool Access::hasByHierarchicalName(OUString const & aName)
 }
 
 void Access::replaceByHierarchicalName(
-    OUString const & aName, css::uno::Any const & aElement)
+    OUString const & aName, cpo::uno::Any const & aElement)
 {
     //TODO: Actually support sets and combine with replaceByName:
     assert(thisIs(IS_UPDATE));
@@ -760,7 +760,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > Access::getPropertySetInfo()
 }
 
 void Access::setPropertyValue(
-    OUString const & aPropertyName, css::uno::Any const & aValue)
+    OUString const & aPropertyName, cpo::uno::Any const & aValue)
 {
     assert(thisIs(IS_GROUP));
     Broadcaster bc;
@@ -781,12 +781,12 @@ void Access::setPropertyValue(
     bc.send();
 }
 
-css::uno::Any Access::getPropertyValue(OUString const & PropertyName)
+cpo::uno::Any Access::getPropertyValue(OUString const & PropertyName)
 {
     assert(thisIs(IS_GROUP));
     osl::MutexGuard g(*lock_);
 
-    css::uno::Any value;
+    cpo::uno::Any value;
     if (!getByNameFast(PropertyName, value))
         throw css::beans::UnknownPropertyException(
             PropertyName, getXWeak());
@@ -886,7 +886,7 @@ void Access::removeVetoableChangeListener(
 
 void Access::setPropertyValues(
     css::uno::Sequence< OUString > const & aPropertyNames,
-    css::uno::Sequence< css::uno::Any > const & aValues)
+    css::uno::Sequence< cpo::uno::Any > const & aValues)
 {
     assert(thisIs(IS_GROUP));
     Broadcaster bc;
@@ -916,12 +916,12 @@ void Access::setPropertyValues(
     bc.send();
 }
 
-css::uno::Sequence< css::uno::Any > Access::getPropertyValues(
+css::uno::Sequence< cpo::uno::Any > Access::getPropertyValues(
     css::uno::Sequence< OUString > const & aPropertyNames)
 {
     assert(thisIs(IS_GROUP));
     osl::MutexGuard g(*lock_);
-    css::uno::Sequence< css::uno::Any > vals(aPropertyNames.getLength());
+    css::uno::Sequence< cpo::uno::Any > vals(aPropertyNames.getLength());
     auto aValsRange = asNonConstRange(vals);
     for (sal_Int32 i = 0; i < aPropertyNames.getLength(); ++i)
     {
@@ -995,7 +995,7 @@ Access::getHierarchicalPropertySetInfo() {
 
 void Access::setHierarchicalPropertyValue(
     OUString const & aHierarchicalPropertyName,
-    css::uno::Any const & aValue)
+    cpo::uno::Any const & aValue)
 {
     assert(thisIs(IS_GROUP));
     Broadcaster bc;
@@ -1021,7 +1021,7 @@ void Access::setHierarchicalPropertyValue(
     bc.send();
 }
 
-css::uno::Any Access::getHierarchicalPropertyValue(
+cpo::uno::Any Access::getHierarchicalPropertyValue(
     OUString const & aHierarchicalPropertyName)
 {
     assert(thisIs(IS_GROUP));
@@ -1037,7 +1037,7 @@ css::uno::Any Access::getHierarchicalPropertyValue(
 
 void Access::setHierarchicalPropertyValues(
     css::uno::Sequence< OUString > const & aHierarchicalPropertyNames,
-    css::uno::Sequence< css::uno::Any > const & Values)
+    css::uno::Sequence< cpo::uno::Any > const & Values)
 {
     assert(thisIs(IS_GROUP));
     Broadcaster bc;
@@ -1072,12 +1072,12 @@ void Access::setHierarchicalPropertyValues(
     bc.send();
 }
 
-css::uno::Sequence< css::uno::Any > Access::getHierarchicalPropertyValues(
+css::uno::Sequence< cpo::uno::Any > Access::getHierarchicalPropertyValues(
     css::uno::Sequence< OUString > const & aHierarchicalPropertyNames)
 {
     assert(thisIs(IS_GROUP));
     osl::MutexGuard g(*lock_);
-    css::uno::Sequence< css::uno::Any > vals(
+    css::uno::Sequence< cpo::uno::Any > vals(
         aHierarchicalPropertyNames.getLength());
     auto aValsRange = asNonConstRange(vals);
     for (sal_Int32 i = 0; i < aHierarchicalPropertyNames.getLength(); ++i) {
@@ -1116,7 +1116,7 @@ bool Access::hasPropertyByHierarchicalName(
 }
 
 void Access::replaceByName(
-    OUString const & aName, css::uno::Any const & aElement)
+    OUString const & aName, cpo::uno::Any const & aElement)
 {
     assert(thisIs(IS_UPDATE));
     Broadcaster bc;
@@ -1156,7 +1156,7 @@ void Access::replaceByName(
 }
 
 void Access::insertByName(
-    OUString const & aName, css::uno::Any const & aElement)
+    OUString const & aName, cpo::uno::Any const & aElement)
 {
     assert(thisIs(IS_EXTENSIBLE|IS_UPDATE));
     Broadcaster bc;
@@ -1268,7 +1268,7 @@ css::uno::Reference< css::uno::XInterface > Access::createInstance()
 }
 
 css::uno::Reference< css::uno::XInterface > Access::createInstanceWithArguments(
-    css::uno::Sequence< css::uno::Any > const & aArguments)
+    css::uno::Sequence< cpo::uno::Any > const & aArguments)
 {
     assert(thisIs(IS_SET|IS_UPDATE));
     if (aArguments.hasElements()) {
@@ -1362,9 +1362,9 @@ void Access::clearListeners() noexcept {
     }
 }
 
-css::uno::Any Access::queryInterface(css::uno::Type const & aType)
+cpo::uno::Any Access::queryInterface(css::uno::Type const & aType)
 {
-    css::uno::Any res(OWeakObject::queryInterface(aType));
+    cpo::uno::Any res(OWeakObject::queryInterface(aType));
     if (res.hasValue()) {
         return res;
     }
@@ -1584,7 +1584,7 @@ bool Access::isAllChildrenEmpty() {
     return true;
 }
 
-void Access::checkValue(css::uno::Any const & value, Type type, bool nillable) {
+void Access::checkValue(cpo::uno::Any const & value, Type type, bool nillable) {
     bool ok;
     switch (type) {
     case TYPE_ERROR:
@@ -1619,7 +1619,7 @@ void Access::checkValue(css::uno::Any const & value, Type type, bool nillable) {
 }
 
 void Access::insertLocalizedValueChild(
-    OUString const & name, css::uno::Any const & value,
+    OUString const & name, cpo::uno::Any const & value,
     Modifications * localModifications)
 {
     assert(localModifications != nullptr);
@@ -1732,8 +1732,8 @@ void Access::initBroadcasterAndChanges(
                                     containerListener,
                                     css::container::ContainerEvent(
                                         getXWeak(),
-                                        css::uno::Any(i.first),
-                                        css::uno::Any(), css::uno::Any()));
+                                        cpo::uno::Any(i.first),
+                                        cpo::uno::Any(), cpo::uno::Any()));
                                 //TODO: non-void Element, ReplacedElement
                         }
                         PropertyChangeListeners::iterator j(
@@ -1745,8 +1745,8 @@ void Access::initBroadcasterAndChanges(
                                     propertyChangeListenerElement,
                                     css::beans::PropertyChangeEvent(
                                         getXWeak(),
-                                        i.first, false, -1, css::uno::Any(),
-                                        css::uno::Any()));
+                                        i.first, false, -1, cpo::uno::Any(),
+                                        cpo::uno::Any()));
                             }
                         }
                         j = propertyChangeListeners_.find(u""_ustr);
@@ -1757,23 +1757,23 @@ void Access::initBroadcasterAndChanges(
                                     propertyChangeListenerElement,
                                     css::beans::PropertyChangeEvent(
                                         getXWeak(),
-                                        i.first, false, -1, css::uno::Any(),
-                                        css::uno::Any()));
+                                        i.first, false, -1, cpo::uno::Any(),
+                                        cpo::uno::Any()));
                             }
                         }
                         if (allChanges != nullptr) {
                             allChanges->push_back(
                                 css::util::ElementChange(
-                                    css::uno::Any(
+                                    cpo::uno::Any(
                                         child->getRelativePathRepresentation()),
-                                    css::uno::Any(), css::uno::Any()));
+                                    cpo::uno::Any(), cpo::uno::Any()));
                                 //TODO: non-void Element, ReplacedElement
                         }
                         if (collectPropChanges) {
                             propChanges.emplace_back(
                                     getXWeak(),
-                                    i.first, false, -1, css::uno::Any(),
-                                    css::uno::Any());
+                                    i.first, false, -1, cpo::uno::Any(),
+                                    cpo::uno::Any());
                         }
                     }
                 }
@@ -1787,16 +1787,16 @@ void Access::initBroadcasterAndChanges(
                         containerListener,
                         css::container::ContainerEvent(
                             getXWeak(),
-                            css::uno::Any(i.first), child->asValue(),
-                            css::uno::Any()));
+                            cpo::uno::Any(i.first), child->asValue(),
+                            cpo::uno::Any()));
                         //TODO: distinguish add/modify; non-void ReplacedElement
                 }
                 if (allChanges != nullptr) {
                     allChanges->push_back(
                         css::util::ElementChange(
-                            css::uno::Any(
+                            cpo::uno::Any(
                                 child->getRelativePathRepresentation()),
-                            child->asValue(), css::uno::Any()));
+                            child->asValue(), cpo::uno::Any()));
                         //TODO: non-void ReplacedElement
                 }
                 assert(!collectPropChanges);
@@ -1809,8 +1809,8 @@ void Access::initBroadcasterAndChanges(
                             containerListener,
                             css::container::ContainerEvent(
                                 getXWeak(),
-                                css::uno::Any(i.first), child->asValue(),
-                                css::uno::Any()));
+                                cpo::uno::Any(i.first), child->asValue(),
+                                cpo::uno::Any()));
                             //TODO: distinguish add/remove/modify; non-void
                             // ReplacedElement
                     }
@@ -1823,8 +1823,8 @@ void Access::initBroadcasterAndChanges(
                                 propertyChangeListenerElement,
                                 css::beans::PropertyChangeEvent(
                                     getXWeak(),
-                                    i.first, false, -1, css::uno::Any(),
-                                    css::uno::Any()));
+                                    i.first, false, -1, cpo::uno::Any(),
+                                    cpo::uno::Any()));
                         }
                     }
                     j = propertyChangeListeners_.find(u""_ustr);
@@ -1835,23 +1835,23 @@ void Access::initBroadcasterAndChanges(
                                 propertyChangeListenerElement,
                                 css::beans::PropertyChangeEvent(
                                     getXWeak(),
-                                    i.first, false, -1, css::uno::Any(),
-                                    css::uno::Any()));
+                                    i.first, false, -1, cpo::uno::Any(),
+                                    cpo::uno::Any()));
                         }
                     }
                     if (allChanges != nullptr) {
                         allChanges->push_back(
                             css::util::ElementChange(
-                                css::uno::Any(
+                                cpo::uno::Any(
                                     child->getRelativePathRepresentation()),
-                                child->asValue(), css::uno::Any()));
+                                child->asValue(), cpo::uno::Any()));
                             //TODO: non-void ReplacedElement
                     }
                     if (collectPropChanges) {
                         propChanges.emplace_back(
                                 getXWeak(),
-                                i.first, false, -1, css::uno::Any(),
-                                css::uno::Any());
+                                i.first, false, -1, cpo::uno::Any(),
+                                cpo::uno::Any());
                     }
                 }
                 break;
@@ -1866,15 +1866,15 @@ void Access::initBroadcasterAndChanges(
                                     containerListener,
                                     css::container::ContainerEvent(
                                         getXWeak(),
-                                        css::uno::Any(i.first),
-                                        child->asValue(), css::uno::Any()));
+                                        cpo::uno::Any(i.first),
+                                        child->asValue(), cpo::uno::Any()));
                         }
                         if (allChanges != nullptr) {
                             allChanges->push_back(
                                 css::util::ElementChange(
-                                    css::uno::Any(
+                                    cpo::uno::Any(
                                         child->getRelativePathRepresentation()),
-                                    css::uno::Any(), css::uno::Any()));
+                                    cpo::uno::Any(), cpo::uno::Any()));
                                 //TODO: non-void Element, ReplacedElement
                         }
                     }
@@ -1902,8 +1902,8 @@ void Access::initBroadcasterAndChanges(
                         containerListener,
                         css::container::ContainerEvent(
                             getXWeak(),
-                            css::uno::Any(i.first), css::uno::Any(),
-                            css::uno::Any()));
+                            cpo::uno::Any(i.first), cpo::uno::Any(),
+                            cpo::uno::Any()));
                         //TODO: non-void ReplacedElement
                 }
                 if (allChanges != nullptr) {
@@ -1914,8 +1914,8 @@ void Access::initBroadcasterAndChanges(
                     path.append(Data::createSegment(u"*", i.first));
                     allChanges->push_back(
                         css::util::ElementChange(
-                            css::uno::Any(path.makeStringAndClear()),
-                            css::uno::Any(), css::uno::Any()));
+                            cpo::uno::Any(path.makeStringAndClear()),
+                            cpo::uno::Any(), cpo::uno::Any()));
                         //TODO: non-void ReplacedElement
                 }
                 assert(!collectPropChanges);
@@ -1929,8 +1929,8 @@ void Access::initBroadcasterAndChanges(
                             containerListener,
                             css::container::ContainerEvent(
                                 getXWeak(),
-                                css::uno::Any(i.first), css::uno::Any(),
-                                css::uno::Any()));
+                                cpo::uno::Any(i.first), cpo::uno::Any(),
+                                cpo::uno::Any()));
                             //TODO: non-void ReplacedElement
                     }
                     PropertyChangeListeners::iterator j(
@@ -1942,8 +1942,8 @@ void Access::initBroadcasterAndChanges(
                                 propertyChangeListenerElement,
                                 css::beans::PropertyChangeEvent(
                                     getXWeak(),
-                                    i.first, false, -1, css::uno::Any(),
-                                    css::uno::Any()));
+                                    i.first, false, -1, cpo::uno::Any(),
+                                    cpo::uno::Any()));
                         }
                     }
                     j = propertyChangeListeners_.find(u""_ustr);
@@ -1954,8 +1954,8 @@ void Access::initBroadcasterAndChanges(
                                 propertyChangeListenerElement,
                                 css::beans::PropertyChangeEvent(
                                     getXWeak(),
-                                    i.first, false, -1, css::uno::Any(),
-                                    css::uno::Any()));
+                                    i.first, false, -1, cpo::uno::Any(),
+                                    cpo::uno::Any()));
                         }
                     }
                     if (allChanges != nullptr) {
@@ -1967,15 +1967,15 @@ void Access::initBroadcasterAndChanges(
                         path.append(i.first);
                         allChanges->push_back(
                             css::util::ElementChange(
-                                css::uno::Any(path.makeStringAndClear()),
-                                css::uno::Any(), css::uno::Any()));
+                                cpo::uno::Any(path.makeStringAndClear()),
+                                cpo::uno::Any(), cpo::uno::Any()));
                             //TODO: non-void ReplacedElement
                     }
                     if (collectPropChanges) {
                         propChanges.emplace_back(
                                 getXWeak(),
-                                i.first, false, -1, css::uno::Any(),
-                                css::uno::Any());
+                                i.first, false, -1, cpo::uno::Any(),
+                                cpo::uno::Any());
                     }
                 }
                 break;
@@ -1988,8 +1988,8 @@ void Access::initBroadcasterAndChanges(
                             containerListener,
                             css::container::ContainerEvent(
                                 getXWeak(),
-                                css::uno::Any(i.first),
-                                css::uno::Any(), css::uno::Any()));
+                                cpo::uno::Any(i.first),
+                                cpo::uno::Any(), cpo::uno::Any()));
                             //TODO: non-void ReplacedElement
                     }
                     if (allChanges != nullptr) {
@@ -2001,8 +2001,8 @@ void Access::initBroadcasterAndChanges(
                         path.append(Data::createSegment(u"*", i.first));
                         allChanges->push_back(
                             css::util::ElementChange(
-                                css::uno::Any(path.makeStringAndClear()),
-                                css::uno::Any(), css::uno::Any()));
+                                cpo::uno::Any(path.makeStringAndClear()),
+                                cpo::uno::Any(), cpo::uno::Any()));
                             //TODO: non-void ReplacedElement
                     }
                 }
@@ -2157,7 +2157,7 @@ rtl::Reference< ChildAccess > Access::getSubChild(OUString const & path) {
 }
 
 bool Access::setChildProperty(
-    OUString const & name, css::uno::Any const & value,
+    OUString const & name, cpo::uno::Any const & value,
     Modifications * localModifications)
 {
     assert(localModifications != nullptr);
@@ -2262,7 +2262,7 @@ void Access::checkKnownProperty(OUString const & descriptor) {
 }
 
 rtl::Reference< ChildAccess > Access::getFreeSetMember(
-    css::uno::Any const & value)
+    cpo::uno::Any const & value)
 {
     css::uno::Reference<XInterface> xTmp;
     value >>= xTmp;

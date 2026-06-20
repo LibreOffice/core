@@ -205,7 +205,7 @@ awt::Size SAL_CALL QtPlayer::getPreferredPlayerWindowSize()
 }
 
 uno::Reference<::media::XPlayerWindow>
-    SAL_CALL QtPlayer::createPlayerWindow(const uno::Sequence<uno::Any>& rArguments)
+    SAL_CALL QtPlayer::createPlayerWindow(const uno::Sequence<cpo::uno::Any>& rArguments)
 {
     osl::MutexGuard aGuard(m_aMutex);
 

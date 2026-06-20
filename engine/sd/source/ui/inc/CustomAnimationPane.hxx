@@ -94,11 +94,11 @@ private:
     std::unique_ptr<STLPropertySet> createSelectionSet();
     void changeSelection( STLPropertySet const * pResultSet, STLPropertySet const * pOldSet );
 
-    static css::uno::Any getProperty1Value( sal_Int32 nType, const CustomAnimationEffectPtr& pEffect );
-    static bool setProperty1Value( sal_Int32 nType, const CustomAnimationEffectPtr& pEffect, const css::uno::Any& rValue );
+    static cpo::uno::Any getProperty1Value( sal_Int32 nType, const CustomAnimationEffectPtr& pEffect );
+    static bool setProperty1Value( sal_Int32 nType, const CustomAnimationEffectPtr& pEffect, const cpo::uno::Any& rValue );
     sal_Int32 fillAnimationLB( bool bHasText );
     PathKind getCreatePathKind() const;
-    void createPath( PathKind eKind, std::vector< css::uno::Any >& rTargets, double fDuration );
+    void createPath( PathKind eKind, std::vector< cpo::uno::Any >& rTargets, double fDuration );
 
     DECL_LINK( implControlListBoxHdl, weld::ComboBox&, void );
     DECL_LINK( implClickHdl, weld::Button&, void );
@@ -154,7 +154,7 @@ private:
     sal_Int32   mnFreeformPathPos;
 
     EffectSequence  maListSelection;
-    css::uno::Any   maViewSelection;
+    cpo::uno::Any   maViewSelection;
 
     MainSequencePtr mpMainSequence;
 

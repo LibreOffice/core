@@ -29,11 +29,11 @@ namespace com::sun::star::io {
 /// Handles <style:font-face>
 class XMLFontStyleContextFontFace : public SvXMLStyleContext
 {
-    css::uno::Any aFamilyName;
-    css::uno::Any aStyleName;
-    css::uno::Any aFamily;
-    css::uno::Any aPitch;
-    css::uno::Any aEnc;
+    cpo::uno::Any aFamilyName;
+    cpo::uno::Any aStyleName;
+    cpo::uno::Any aFamily;
+    cpo::uno::Any aPitch;
+    cpo::uno::Any aEnc;
 
     rtl::Reference<XMLFontStylesContext> xStyles;
 

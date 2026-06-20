@@ -93,9 +93,9 @@ LegendSymbolStyle NetChart::getLegendSymbolStyle()
     return LegendSymbolStyle::Line;
 }
 
-uno::Any NetChart::getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPointIndex )
+cpo::uno::Any NetChart::getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPointIndex )
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
 
     Symbol* pSymbolProperties = rSeries.getSymbolProperties( nPointIndex );
     if( pSymbolProperties )

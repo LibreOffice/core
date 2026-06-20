@@ -111,7 +111,7 @@ using namespace ::xmloff::token;
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::std::vector;
 
 namespace
@@ -620,7 +620,7 @@ void lcl_getLabelStringSequence( Sequence< OUString >& rOutLabels, const Referen
     }
     else if( xLabelSeq.is())
     {
-        Sequence< uno::Any > aAnies( xLabelSeq->getData());
+        Sequence< cpo::uno::Any > aAnies( xLabelSeq->getData());
         rOutLabels.realloc( aAnies.getLength());
         auto pOutLabels = rOutLabels.getArray();
         for( sal_Int32 i=0; i<aAnies.getLength(); ++i )
@@ -658,7 +658,7 @@ uno::Sequence< OUString > lcl_DataSequenceToStringSequence(
     }
     else
     {
-        uno::Sequence< uno::Any > aValues = xDataSequence->getData();
+        uno::Sequence< cpo::uno::Any > aValues = xDataSequence->getData();
         aResult.realloc(aValues.getLength());
         auto pResult = aResult.getArray();
 
@@ -682,7 +682,7 @@ uno::Sequence< OUString > lcl_DataSequenceToStringSequence(
     }
     else
     {
-        Sequence< uno::Any > aAnies( xSeq->getData() );
+        Sequence< cpo::uno::Any > aAnies( xSeq->getData() );
         aValuesSequence.realloc( aAnies.getLength() );
         auto pValuesSequence = aValuesSequence.getArray();
         for( sal_Int32 i=0; i<aAnies.getLength(); ++i )
@@ -756,8 +756,8 @@ struct lcl_TableData
     tStringVector       aRowDescriptions;
     tStringVector       aRowDescriptions_Ranges;
 
-    Sequence< Sequence< uno::Any > >    aComplexColumnDescriptions;//outer index is columns - inner index is level
-    Sequence< Sequence< uno::Any > >    aComplexRowDescriptions;//outer index is rows - inner index is level
+    Sequence< Sequence< cpo::uno::Any > >    aComplexColumnDescriptions;//outer index is columns - inner index is level
+    Sequence< Sequence< cpo::uno::Any > >    aComplexRowDescriptions;//outer index is rows - inner index is level
 
     ::std::vector< sal_Int32 > aHiddenColumns;
 };
@@ -1687,7 +1687,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
     }
 }
 
-static void lcl_exportComplexLabel( const Sequence< uno::Any >& rComplexLabel, SvXMLExport& rExport )
+static void lcl_exportComplexLabel( const Sequence< cpo::uno::Any >& rComplexLabel, SvXMLExport& rExport )
 {
     sal_Int32 nLength = rComplexLabel.getLength();
     if( nLength<=1 )
@@ -1810,7 +1810,7 @@ void SchXMLExportHelper_Impl::exportTable()
         //export column descriptions
         tStringVector::const_iterator aColumnDescriptions_RangeIter( aData.aColumnDescriptions_Ranges.begin());
         const tStringVector::const_iterator aColumnDescriptions_RangeEnd( aData.aColumnDescriptions_Ranges.end());
-        const Sequence< Sequence< uno::Any > >& rComplexColumnDescriptions = aData.aComplexColumnDescriptions;
+        const Sequence< Sequence< cpo::uno::Any > >& rComplexColumnDescriptions = aData.aComplexColumnDescriptions;
         sal_Int32 nComplexCount = rComplexColumnDescriptions.getLength();
         sal_Int32 nC = 0;
         for( const auto& rDesc : aData.aColumnDescriptions )
@@ -1818,7 +1818,7 @@ void SchXMLExportHelper_Impl::exportTable()
             bool bExportString = true;
             if( nC < nComplexCount )
             {
-                const Sequence< uno::Any >& rComplexLabel = rComplexColumnDescriptions[nC];
+                const Sequence< cpo::uno::Any >& rComplexLabel = rComplexColumnDescriptions[nC];
                 if( rComplexLabel.hasElements() )
                 {
                     double fValue=0.0;
@@ -1860,7 +1860,7 @@ void SchXMLExportHelper_Impl::exportTable()
     {
         SvXMLElementExport aRows( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_ROWS, true, true );
         tStringVector::const_iterator aRowDescriptionsIter( aData.aRowDescriptions.begin());
-        const Sequence< Sequence< uno::Any > >& rComplexRowDescriptions = aData.aComplexRowDescriptions;
+        const Sequence< Sequence< cpo::uno::Any > >& rComplexRowDescriptions = aData.aComplexRowDescriptions;
         sal_Int32 nComplexCount = rComplexRowDescriptions.getLength();
         sal_Int32 nC = 0;
 
@@ -1873,7 +1873,7 @@ void SchXMLExportHelper_Impl::exportTable()
                 bool bExportString = true;
                 if( nC < nComplexCount )
                 {
-                    const Sequence< uno::Any >& rComplexLabel = rComplexRowDescriptions[nC];
+                    const Sequence< cpo::uno::Any >& rComplexLabel = rComplexRowDescriptions[nC];
                     if( rComplexLabel.hasElements() )
                     {
                         double fValue=0.0;
@@ -2464,10 +2464,10 @@ void SchXMLExportHelper_Impl::exportAxis(
             if (sChartType == u"com.sun.star.chart.BarDiagram" || sChartType == u"com.sun.star.chart.StockDiagram")
             {
                 if (!bShiftedCatPos)
-                    rAxisProps->setPropertyValue(u"MajorOrigin"_ustr, uno::Any(0.0));
+                    rAxisProps->setPropertyValue(u"MajorOrigin"_ustr, cpo::uno::Any(0.0));
             }
             else if (bShiftedCatPos)
-                rAxisProps->setPropertyValue(u"MajorOrigin"_ustr, uno::Any(0.5));
+                rAxisProps->setPropertyValue(u"MajorOrigin"_ustr, cpo::uno::Any(0.5));
         }
 
         lcl_exportNumberFormat( u"NumberFormat"_ustr, rAxisProps, mrExport );
@@ -2661,7 +2661,7 @@ namespace
         if( !xDataSequence.is() )
             return false;//have no data
 
-        Sequence< uno::Any > aData;
+        Sequence< cpo::uno::Any > aData;
         Reference< chart2::data::XNumericalDataSequence > xNumericalDataSequence( xDataSequence, uno::UNO_QUERY );
         if( xNumericalDataSequence.is() )
         {
@@ -2674,7 +2674,7 @@ namespace
             aData = xDataSequence->getData();
             double fDouble = 0.0;
             bool bHaveDouble = std::any_of(std::cbegin(aData), std::cend(aData),
-                [&fDouble](const uno::Any& rData) { return (rData >>= fDouble) && !std::isnan( fDouble ); });
+                [&fDouble](const cpo::uno::Any& rData) { return (rData >>= fDouble) && !std::isnan( fDouble ); });
             if (bHaveDouble)
                 return false;//have double value
         }
@@ -2693,7 +2693,7 @@ namespace
                 aData = xDataSequence->getData();
             OUString aString;
             bool bHaveText = std::any_of(std::cbegin(aData), std::cend(aData),
-                [&aString](const uno::Any& rData) { return (rData >>= aString) && !aString.isEmpty(); });
+                [&aString](const cpo::uno::Any& rData) { return (rData >>= aString) && !aString.isEmpty(); });
             if (bHaveText)
                 return true;//have text
         }
@@ -3218,7 +3218,7 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
 
         // Add service name (which is regression type)
         sal_Int32 nIndex = GetPropertySetMapper()->FindEntryIndex(XML_SCH_CONTEXT_SPECIAL_REGRESSION_TYPE);
-        XMLPropertyState property(nIndex,  uno::Any(aService));
+        XMLPropertyState property(nIndex,  cpo::uno::Any(aService));
         aPropertyStates.push_back(property);
 
         Reference< beans::XPropertySet > xEquationProperties;
@@ -3589,7 +3589,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                     if (nPlacement == chart::DataLabelPlacement::CUSTOM)
                     {
                         xPropSet->setPropertyValue(u"LabelPlacement"_ustr,
-                                                  uno::Any(chart::DataLabelPlacement::OUTSIDE));
+                                                  cpo::uno::Any(chart::DataLabelPlacement::OUTSIDE));
                     }
                 }
 
@@ -4130,7 +4130,7 @@ void SchXMLExportHelper_Impl::InitRangeSegmentationProperties( const Reference< 
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Chart_XMLExporter_get_implementation(uno::XComponentContext* pCtx,
-                                                       uno::Sequence<uno::Any> const& /*rSeq*/)
+                                                       uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(
         new SchXMLExport(pCtx, u"SchXMLExport.Compact"_ustr,
@@ -4142,7 +4142,7 @@ com_sun_star_comp_Chart_XMLExporter_get_implementation(uno::XComponentContext* p
 // Oasis format
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Chart_XMLOasisExporter_get_implementation(uno::XComponentContext* pCtx,
-                                                            uno::Sequence<uno::Any> const& /*rSeq*/)
+                                                            uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(
         new SchXMLExport(pCtx, u"SchXMLExport.Oasis.Compact"_ustr,
@@ -4156,7 +4156,7 @@ com_sun_star_comp_Chart_XMLOasisExporter_get_implementation(uno::XComponentConte
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Chart_XMLStylesExporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SchXMLExport(pCtx, u"SchXMLExport.Styles"_ustr, SvXMLExportFlags::STYLES));
 }
@@ -4164,7 +4164,7 @@ com_sun_star_comp_Chart_XMLStylesExporter_get_implementation(
 // Oasis format
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Chart_XMLOasisStylesExporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SchXMLExport(pCtx, u"SchXMLExport.Oasis.Styles"_ustr,
                                           SvXMLExportFlags::STYLES | SvXMLExportFlags::OASIS));
@@ -4172,7 +4172,7 @@ com_sun_star_comp_Chart_XMLOasisStylesExporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Chart_XMLContentExporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SchXMLExport(pCtx, u"SchXMLExport.Content"_ustr,
                                           SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::CONTENT
@@ -4181,7 +4181,7 @@ com_sun_star_comp_Chart_XMLContentExporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Chart_XMLOasisContentExporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SchXMLExport(pCtx, u"SchXMLExport.Oasis.Content"_ustr,
                                           SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::CONTENT
@@ -4193,7 +4193,7 @@ com_sun_star_comp_Chart_XMLOasisContentExporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Chart_XMLOasisMetaExporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SchXMLExport(pCtx, u"SchXMLExport.Oasis.Meta"_ustr,
                                           SvXMLExportFlags::META | SvXMLExportFlags::OASIS));

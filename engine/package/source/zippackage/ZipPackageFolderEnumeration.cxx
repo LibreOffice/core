@@ -35,9 +35,9 @@ bool SAL_CALL ZipPackageFolderEnumeration::hasMoreElements()
 {
     return (aIterator != rContents.end());
 }
-uno::Any SAL_CALL ZipPackageFolderEnumeration::nextElement()
+cpo::uno::Any SAL_CALL ZipPackageFolderEnumeration::nextElement()
 {
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     if (aIterator == rContents.end())
         throw container::NoSuchElementException();
     aAny <<= uno::Reference(cppu::getXWeak((*aIterator).second.xPackageEntry.get()));

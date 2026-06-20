@@ -49,6 +49,7 @@
 #include <comphelper/propertyvalue.hxx>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
@@ -148,7 +149,7 @@ void SAL_CALL SvxLineStyleToolBoxControl::execute(sal_Int16 /*KeyModifier*/)
     }
 }
 
-void SvxLineStyleToolBoxControl::initialize( const css::uno::Sequence<css::uno::Any>& rArguments )
+void SvxLineStyleToolBoxControl::initialize( const css::uno::Sequence<cpo::uno::Any>& rArguments )
 {
     svt::PopupWindowController::initialize( rArguments );
 
@@ -214,7 +215,7 @@ css::uno::Sequence<OUString> SvxLineStyleToolBoxControl::getSupportedServiceName
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_LineStyleToolBoxControl_get_implementation(
     css::uno::XComponentContext* rContext,
-    css::uno::Sequence<css::uno::Any> const & )
+    css::uno::Sequence<cpo::uno::Any> const & )
 {
     return cppu::acquire( new SvxLineStyleToolBoxControl( rContext ) );
 }
@@ -227,7 +228,7 @@ public:
     explicit SvxLineEndToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext );
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence<css::uno::Any>& rArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence<cpo::uno::Any>& rArguments ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -495,7 +496,7 @@ void SAL_CALL SvxLineEndToolBoxControl::execute(sal_Int16 /*KeyModifier*/)
     }
 }
 
-void SvxLineEndToolBoxControl::initialize( const css::uno::Sequence<css::uno::Any>& rArguments )
+void SvxLineEndToolBoxControl::initialize( const css::uno::Sequence<cpo::uno::Any>& rArguments )
 {
     svt::PopupWindowController::initialize( rArguments );
 
@@ -541,7 +542,7 @@ css::uno::Sequence<OUString> SvxLineEndToolBoxControl::getSupportedServiceNames(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_LineEndToolBoxControl_get_implementation(
     css::uno::XComponentContext* rContext,
-    css::uno::Sequence<css::uno::Any> const & )
+    css::uno::Sequence<cpo::uno::Any> const & )
 {
     return cppu::acquire( new SvxLineEndToolBoxControl( rContext ) );
 }

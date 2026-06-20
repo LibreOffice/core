@@ -42,7 +42,7 @@ class SwXRedlineText final :
 public:
     SwXRedlineText(SwDoc* pDoc, const SwNodeIndex& aNodeIndex);
 
-    virtual     css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+    virtual     cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
     virtual void SAL_CALL acquire(  ) noexcept override {OWeakObject::acquire();}
     virtual void SAL_CALL release(  ) noexcept override {OWeakObject::release();}
 
@@ -75,7 +75,7 @@ public:
     virtual ~SwXRedline() override;
 
 
-    virtual     css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+    virtual     cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
     virtual void SAL_CALL acquire(  ) noexcept override {OWeakObject::acquire();}
     virtual void SAL_CALL release(  ) noexcept override {OWeakObject::release();}
 
@@ -89,8 +89,8 @@ public:
 
     //XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
     virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
     virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
     virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;

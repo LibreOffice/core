@@ -20,7 +20,7 @@
 
 #include <sfx2/linksrc.hxx>
 #include <sfx2/lnkbase.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 #include <utility>
 #include <vcl/timer.hxx>
@@ -30,6 +30,7 @@
 
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace sfx2
 {
@@ -307,7 +308,7 @@ void SvLinkSource::NotifyDataChanged()
 // notify the sink, the mime type is not
 // a selection criterion
 void SvLinkSource::DataChanged( const OUString & rMimeType,
-                                const css::uno::Any & rVal )
+                                const cpo::uno::Any & rVal )
 {
     if( pImpl->nTimeout && !rVal.hasValue() )
     {   // only when no data was included
@@ -404,7 +405,7 @@ bool SvLinkSource::Connect( SvBaseLink* )
     return true;
 }
 
-bool SvLinkSource::GetData( css::uno::Any &, const OUString &, bool )
+bool SvLinkSource::GetData( cpo::uno::Any &, const OUString &, bool )
 {
     return false;
 }

@@ -25,8 +25,8 @@
 
 namespace com::sun::star::uno {
     class Type;
-    class Any;
 }
+namespace cpo::uno { class Any; }
 
 
 #define BASEPROPERTY_NOTFOUND                        0
@@ -238,7 +238,7 @@ const css::uno::Type*  GetPropertyType( sal_uInt16 nPropertyId );
 const OUString&        GetPropertyName( sal_uInt16 nPropertyId );
 sal_Int16                           GetPropertyAttribs( sal_uInt16 nPropertyId );
 bool                            DoesDependOnOthers( sal_uInt16 nPropertyId );
-bool                            CompareProperties( const css::uno::Any& r1, const css::uno::Any& r2 );
+bool                            CompareProperties( const cpo::uno::Any& r1, const cpo::uno::Any& r2 );
 
 
 #endif // INCLUDED_TOOLKIT_HELPER_PROPERTY_HXX

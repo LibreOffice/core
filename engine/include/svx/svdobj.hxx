@@ -19,7 +19,7 @@
 #pragma once
 
 #include <memory>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ustring.hxx>
@@ -395,9 +395,9 @@ public:
     void SetOrdNum(sal_uInt32 nNum);
 
     // GrabBagItem for interim interop purposes
-    void GetGrabBagItem(css::uno::Any& rVal) const;
+    void GetGrabBagItem(cpo::uno::Any& rVal) const;
 
-    virtual void SetGrabBagItem(const css::uno::Any& rVal);
+    virtual void SetGrabBagItem(const cpo::uno::Any& rVal);
 
     // Return the position in the navigation order for the called object.
     // Note that this method may update the navigation position of the

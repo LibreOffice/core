@@ -74,10 +74,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf167760_numberedPara)
                          getProperty<OUString>(getParagraph(1), u"ListLabelString"_ustr));
 
     // apply the non-numbered style while holding down the Ctrl-key
-    dispatchCommand(mxComponent, u".uno:StyleApply"_ustr,
-                    { comphelper::makePropertyValue(u"FamilyName"_ustr, u"ParagraphStyles"_ustr),
-                      comphelper::makePropertyValue(u"Style"_ustr, u"Text body"_ustr),
-                      comphelper::makePropertyValue(u"KeyModifier"_ustr, uno::Any(KEY_MOD1)) });
+    dispatchCommand(
+        mxComponent, u".uno:StyleApply"_ustr,
+        { comphelper::makePropertyValue(u"FamilyName"_ustr, u"ParagraphStyles"_ustr),
+          comphelper::makePropertyValue(u"Style"_ustr, u"Text body"_ustr),
+          comphelper::makePropertyValue(u"KeyModifier"_ustr, cpo::uno::Any(KEY_MOD1)) });
     // the numbering should be removed when the Ctrl-key is held down
     CPPUNIT_ASSERT_EQUAL(OUString(),
                          getProperty<OUString>(getParagraph(1), u"ListLabelString"_ustr));
@@ -568,7 +569,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testPageSizeKeepsOrientation)
     createSwDoc();
 
     dispatchCommand(mxComponent, u".uno:Orientation"_ustr,
-                    comphelper::InitPropertySequence({ { "isLandscape", uno::Any(true) } }));
+                    comphelper::InitPropertySequence({ { "isLandscape", cpo::uno::Any(true) } }));
 
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     const size_t nPageDesc = pWrtShell->GetCurPageDesc();
@@ -578,9 +579,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testPageSizeKeepsOrientation)
         = pWrtShell->GetPageDesc(nPageDesc).GetMaster().GetFrameSize().GetSize();
     CPPUNIT_ASSERT_GREATER(aLandscapeA4.Height(), aLandscapeA4.Width());
 
-    dispatchCommand(
-        mxComponent, u".uno:AttributePageSize"_ustr,
-        comphelper::InitPropertySequence({ { "PaperFormat", uno::Any(sal_uInt16(PAPER_A3)) } }));
+    dispatchCommand(mxComponent, u".uno:AttributePageSize"_ustr,
+                    comphelper::InitPropertySequence(
+                        { { "PaperFormat", cpo::uno::Any(sal_uInt16(PAPER_A3)) } }));
 
     const SwPageDesc& rPageDesc = pWrtShell->GetPageDesc(nPageDesc);
     CPPUNIT_ASSERT(rPageDesc.GetLandscape());

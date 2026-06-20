@@ -730,7 +730,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableCellMargin, "table-cell-margin.docx")
         uno::Reference<beans::XPropertySet> xPropSet(xCell, uno::UNO_QUERY_THROW);
         sal_Int32 aLeftMargin = -1;
         xPropSet->getPropertyValue(u"LeftBorderDistance"_ustr) >>= aLeftMargin;
-        uno::Any aLeftBorder = xPropSet->getPropertyValue(u"LeftBorder"_ustr);
+        cpo::uno::Any aLeftBorder = xPropSet->getPropertyValue(u"LeftBorder"_ustr);
         table::BorderLine2 aLeftBorderLine;
         aLeftBorder >>= aLeftBorderLine;
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
@@ -744,7 +744,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableCellMargin, "table-cell-margin.docx")
             // tdf#119885: cell's edit area must touch right border
             sal_Int32 aRightMargin = -1;
             xPropSet->getPropertyValue(u"RightBorderDistance"_ustr) >>= aRightMargin;
-            uno::Any aRightBorder = xPropSet->getPropertyValue(u"RightBorder"_ustr);
+            cpo::uno::Any aRightBorder = xPropSet->getPropertyValue(u"RightBorder"_ustr);
             table::BorderLine2 aRightBorderLine;
             aRightBorder >>= aRightBorderLine;
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Incorrect cell right padding",
@@ -799,7 +799,7 @@ DECLARE_OOXMLEXPORT_TEST(testTablePosition14, "table-position-14.docx")
         // Verify X coord
         uno::Reference<view::XSelectionSupplier> xCtrl(xModel->getCurrentController(),
                                                        uno::UNO_QUERY);
-        xCtrl->select(uno::Any(xTable1));
+        xCtrl->select(cpo::uno::Any(xTable1));
         uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xCtrl,
                                                                               uno::UNO_QUERY);
         uno::Reference<text::XTextViewCursor> xCursor = xTextViewCursorSupplier->getViewCursor();
@@ -827,7 +827,7 @@ DECLARE_OOXMLEXPORT_TEST(testTablePosition15, "table-position-15.docx")
         // Verify X coord
         uno::Reference<view::XSelectionSupplier> xCtrl(xModel->getCurrentController(),
                                                        uno::UNO_QUERY);
-        xCtrl->select(uno::Any(xTable1));
+        xCtrl->select(cpo::uno::Any(xTable1));
         uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xCtrl,
                                                                               uno::UNO_QUERY);
         uno::Reference<text::XTextViewCursor> xCursor = xTextViewCursorSupplier->getViewCursor();

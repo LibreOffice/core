@@ -74,13 +74,13 @@ class MultiPropertySetHelper
     std::unique_ptr<sal_Int16[]> pSequenceIndex;
 
     /// the last set of values retrieved by getValues
-    css::uno::Sequence<css::uno::Any> aValues;
+    css::uno::Sequence<cpo::uno::Any> aValues;
 
     /// result of aValues.getConstArray()
-    const css::uno::Any* pValues;
+    const cpo::uno::Any* pValues;
 
     /// an empty Any
-    css::uno::Any aEmptyAny;
+    cpo::uno::Any aEmptyAny;
 
 public:
     MultiPropertySetHelper(std::span<const OUString> pNames);
@@ -122,7 +122,7 @@ public:
      *
      * May only be called after getValues() was called.
      */
-    inline const css::uno::Any& getValue(sal_Int16 nIndex);
+    inline const cpo::uno::Any& getValue(sal_Int16 nIndex);
 
     /**
      * Find out if this property is supported.
@@ -141,7 +141,7 @@ public:
      * bTryMult is set, the XMultiPropertySet is used to get the values.
      *
      */
-    const css::uno::Any& getValue(sal_Int16 nIndex,
+    const cpo::uno::Any& getValue(sal_Int16 nIndex,
                                   const css::uno::Reference<css::beans::XPropertySet>&,
                                   bool bTryMulti = false);
 
@@ -155,7 +155,7 @@ public:
      * XMultiPropertySet is used to get the values.
      *
      */
-    const css::uno::Any& getValue(sal_Int16 nIndex,
+    const cpo::uno::Any& getValue(sal_Int16 nIndex,
                                   const css::uno::Reference<css::beans::XMultiPropertySet>&);
 
     void resetValues() { pValues = nullptr; }
@@ -163,7 +163,7 @@ public:
 
 // inline implementations of the often-called methods getValue and hasProperty:
 
-const css::uno::Any& MultiPropertySetHelper::getValue(sal_Int16 nValueNo)
+const cpo::uno::Any& MultiPropertySetHelper::getValue(sal_Int16 nValueNo)
 {
     assert(pValues && "called getValue() without calling getValues()");
     assert(pSequenceIndex && "called getValue() without calling hasProperties()");

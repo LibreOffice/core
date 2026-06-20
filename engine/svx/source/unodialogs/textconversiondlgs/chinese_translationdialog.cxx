@@ -29,6 +29,7 @@ namespace textconversiondlgs
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 ChineseTranslationDialog::ChineseTranslationDialog(weld::Window* pParent)
     : GenericDialogController(pParent, u"svx/ui/chineseconversiondialog.ui"_ustr, u"ChineseConversionDialog"_ustr)

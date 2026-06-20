@@ -145,7 +145,7 @@ static void InsertMenu_Impl( const uno::Reference< container::XIndexContainer >&
         pTargetProps[nInd-1].Value <<= xSourceDisp;
     }
 
-    xTargetMenu->insertByIndex( nTargetIndex, uno::Any( aTargetProps ) );
+    xTargetMenu->insertByIndex( nTargetIndex, cpo::uno::Any( aTargetProps ) );
 }
 
 namespace embeddedobj
@@ -173,10 +173,10 @@ DocumentHolder::DocumentHolder( uno::Reference< uno::XComponentContext > xContex
     }
     osl_atomic_decrement(&m_refCount);
 
-    m_aOutplaceFrameProps = { uno::Any(beans::NamedValue{ u"TopWindow"_ustr, uno::Any(true) }),
-                              uno::Any(beans::NamedValue{ u"MakeVisible"_ustr, uno::Any(false) }),
+    m_aOutplaceFrameProps = { cpo::uno::Any(beans::NamedValue{ u"TopWindow"_ustr, cpo::uno::Any(true) }),
+                              cpo::uno::Any(beans::NamedValue{ u"MakeVisible"_ustr, cpo::uno::Any(false) }),
                               //TODO/LATER: should use parent document frame
-                              uno::Any(beans::NamedValue{ u"ParentFrame"_ustr, uno::Any(xDesktop) }) };
+                              cpo::uno::Any(beans::NamedValue{ u"ParentFrame"_ustr, cpo::uno::Any(xDesktop) }) };
 }
 
 
@@ -435,7 +435,7 @@ bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& xPar
         // create a frame based on the specified window
         uno::Reference< lang::XSingleServiceFactory > xFrameFact = frame::TaskCreator::create(m_xContext);
 
-        uno::Sequence< uno::Any > aArgs( xContFrame.is() ? 2 : 1 );
+        uno::Sequence< cpo::uno::Any > aArgs( xContFrame.is() ? 2 : 1 );
         auto pArgs = aArgs.getArray();
         beans::NamedValue aArg;
 

@@ -28,7 +28,7 @@ namespace dbaccess
 {
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::xml::sax::XAttributeList;
 
     // SettingsImport
@@ -134,7 +134,7 @@ namespace dbaccess
         m_rSettings.put( sItemName, aValue );
     }
 
-    void ConfigItemImport::getItemValue( css::uno::Any& o_rValue ) const
+    void ConfigItemImport::getItemValue( cpo::uno::Any& o_rValue ) const
     {
         o_rValue.clear();
 

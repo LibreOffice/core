@@ -42,6 +42,7 @@
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 
 namespace {
@@ -91,7 +92,7 @@ public:
         : maTransferable(rTransferable)
     {}
 
-    virtual void SAL_CALL notify(css::uno::Any const &) override
+    virtual void SAL_CALL notify(cpo::uno::Any const &) override
     {
         maTransferable.clear();
     }
@@ -197,7 +198,7 @@ CXTDataObject::~CXTDataObject()
 {
     css::awt::AsyncCallback::create(m_XComponentContext)->addCallback(
         new AsyncDereference(m_XTransferable),
-        css::uno::Any());
+        cpo::uno::Any());
 }
 
 // IUnknown->QueryInterface

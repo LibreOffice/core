@@ -72,6 +72,7 @@
 using namespace chelp;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::io;
 using namespace com::sun::star::container;
 using namespace com::sun::star::i18n;
@@ -913,7 +914,7 @@ void Databases::cascadingStylesheet( const OUString& Language,
                 uno::Reference< awt::XVclWindowPeer > xVclWindowPeer( xTopWindow, uno::UNO_QUERY );
                 if ( xVclWindowPeer.is() )
                 {
-                    uno::Any aHCMode = xVclWindowPeer->getProperty( u"HighContrastMode"_ustr );
+                    cpo::uno::Any aHCMode = xVclWindowPeer->getProperty( u"HighContrastMode"_ustr );
                     if ( ( aHCMode >>= bHighContrastMode ) && bHighContrastMode )
                     {
                         aCSS = u"highcontrastblack"_ustr;

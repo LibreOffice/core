@@ -690,7 +690,7 @@ css::uno::Reference<css::io::XStream> OleEmbeddedObject::getStream()
     return m_xObjectStream;
 }
 
-void OleEmbeddedObject::initialize(const uno::Sequence<uno::Any>& rArguments)
+void OleEmbeddedObject::initialize(const uno::Sequence<cpo::uno::Any>& rArguments)
 {
     if (!rArguments.hasElements())
         return;

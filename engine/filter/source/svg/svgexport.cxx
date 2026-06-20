@@ -84,6 +84,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
+using namespace ::cpo::uno;
 using namespace ::xmloff::token;
 
 // - ooo elements and attributes -
@@ -828,7 +829,7 @@ bool SVGFilter::implExportWriterOrCalc( const Reference< XOutputStream >& rxOStm
 
 bool SVGFilter::implExportWriterTextGraphic( const Reference< view::XSelectionSupplier >& xSelectionSupplier )
 {
-    Any selection = xSelectionSupplier->getSelection();
+    cpo::uno::Any selection = xSelectionSupplier->getSelection();
     uno::Reference<lang::XServiceInfo> xSelection;
     selection >>= xSelection;
     if (!xSelection)
@@ -910,7 +911,7 @@ bool SVGFilter::implExportWriterTextGraphic( const Reference< view::XSelectionSu
     rtl::Reference<SdrGrafObj> pGraphicObj = new SdrGrafObj(rModel, aGraphic, tools::Rectangle( aPos, aSize ));
     uno::Reference< drawing::XShape > xShape = GetXShapeForSdrObject(pGraphicObj.get());
     uno::Reference< XPropertySet > xShapePropSet(xShape, uno::UNO_QUERY);
-    xShapePropSet->setPropertyValue(u"Graphic"_ustr, uno::Any(xGraphic));
+    xShapePropSet->setPropertyValue(u"Graphic"_ustr, cpo::uno::Any(xGraphic));
 
     maShapeSelection = drawing::ShapeCollection::create(comphelper::getProcessComponentContext());
     maShapeSelection->add(xShape);

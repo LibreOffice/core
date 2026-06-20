@@ -118,9 +118,9 @@ bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescri
               beans::PropertyAttribute::MAYBEVOID, 0 } };
     uno::Reference<beans::XPropertySet> xInfoSet(
         comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(aInfoMap)));
-    xInfoSet->setPropertyValue(u"BaseURI"_ustr, uno::Any(aSourceURL));
+    xInfoSet->setPropertyValue(u"BaseURI"_ustr, cpo::uno::Any(aSourceURL));
 
-    xInitialization->initialize({ uno::Any(xExportHandler), uno::Any(xInfoSet) });
+    xInitialization->initialize({ cpo::uno::Any(xExportHandler), cpo::uno::Any(xInfoSet) });
     uno::Reference<document::XExporter> xExporter(xInitialization, uno::UNO_QUERY);
     xExporter->setSourceDocument(mxSourceDocument);
     uno::Reference<document::XFilter> xFilter(xInitialization, uno::UNO_QUERY);
@@ -208,7 +208,7 @@ uno::Sequence<OUString> EPUBExportFilter::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Writer_EPUBExportFilter_get_implementation(
-    uno::XComponentContext* pContext, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pContext, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new EPUBExportFilter(pContext));
 }

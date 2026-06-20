@@ -43,7 +43,7 @@
 #include <memory>
 #include <string_view>
 
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 
 constexpr int MAX_TAB_NAME_LENGTH = 31;
 

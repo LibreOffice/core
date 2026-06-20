@@ -208,7 +208,7 @@ namespace svxform
         virtual ~FormController() override;
 
     // XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) override;
         virtual void SAL_CALL acquire() noexcept override;
         virtual void SAL_CALL release() noexcept override;
 
@@ -232,11 +232,11 @@ namespace svxform
         virtual void SAL_CALL disposing() override;
 
     // OPropertySetHelper
-        virtual bool SAL_CALL convertFastPropertyValue( css::uno::Any & rConvertedValue, css::uno::Any & rOldValue,
-                                                sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+        virtual bool SAL_CALL convertFastPropertyValue( cpo::uno::Any & rConvertedValue, cpo::uno::Any & rOldValue,
+                                                sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
 
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
-        virtual void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+        virtual void SAL_CALL getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
         virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
         virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
@@ -283,7 +283,7 @@ namespace svxform
 
     // css::container::XIndexAccess
         virtual sal_Int32 SAL_CALL getCount() override;
-        virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 Index) override;
+        virtual cpo::uno::Any SAL_CALL getByIndex(sal_Int32 Index) override;
 
     // XModifyBroadcaster
         virtual void SAL_CALL addModifyListener(const css::uno::Reference< css::util::XModifyListener>& l) override;

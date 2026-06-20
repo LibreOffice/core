@@ -65,7 +65,7 @@ void UndoCommandDispatch::fireStatusEvent(
         return;
 
     const bool bFireAll = rURL.isEmpty();
-    uno::Any aUndoState, aRedoState, aUndoStrings, aRedoStrings;
+    cpo::uno::Any aUndoState, aRedoState, aUndoStrings, aRedoStrings;
     if( m_xUndoManager->isUndoPossible())
         aUndoState <<= SvtResId( STR_UNDO ) + m_xUndoManager->getCurrentUndoActionTitle();
     if( m_xUndoManager->isRedoPossible())

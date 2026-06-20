@@ -47,6 +47,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 
 namespace vcl
@@ -188,7 +189,7 @@ void GenericClipboard::removeClipboardListener( const Reference< datatransfer::c
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 vcl_SystemClipboard_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const& args)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const& args)
 {
     SolarMutexGuard aGuard;
     auto xClipboard = ImplGetSVData()->mpDefInst->CreateClipboard( args );

@@ -135,7 +135,7 @@ with git_grep_process.stdout as txt:
         func = line[idx1+1 : idx2]
         uno_constructor_entrypoints.add(func.decode('utf-8'))
 for caller in callDict:
-    if "(com::sun::star::uno::XComponentContext *,const com::sun::star::uno::Sequence<com::sun::star::uno::Any> &)" in caller:
+    if "(com::sun::star::uno::XComponentContext *,const com::sun::star::uno::Sequence<cpo::uno::Any> &)" in caller:
         for func in uno_constructor_entrypoints:
             if func in caller:
                 to_be_removed.add(caller)

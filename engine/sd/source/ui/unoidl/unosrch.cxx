@@ -673,7 +673,7 @@ uno::Reference< css::beans::XPropertySetInfo > SAL_CALL SdUnoSearchReplaceDescri
     return mpPropSet->getPropertySetInfo();
 }
 
-void SAL_CALL SdUnoSearchReplaceDescriptor::setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue )
+void SAL_CALL SdUnoSearchReplaceDescriptor::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
 
@@ -700,11 +700,11 @@ void SAL_CALL SdUnoSearchReplaceDescriptor::setPropertyValue( const OUString& aP
         throw lang::IllegalArgumentException();
 }
 
-uno::Any SAL_CALL SdUnoSearchReplaceDescriptor::getPropertyValue( const OUString& PropertyName )
+cpo::uno::Any SAL_CALL SdUnoSearchReplaceDescriptor::getPropertyValue( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     const SfxItemPropertyMapEntry* pEntry = mpPropSet->getPropertyMapEntry(PropertyName);
 
@@ -759,12 +759,12 @@ sal_Int32 SAL_CALL SdUnoFindAllAccess::getCount()
     return maSequence.getLength();
 }
 
-uno::Any SAL_CALL SdUnoFindAllAccess::getByIndex( sal_Int32 Index )
+cpo::uno::Any SAL_CALL SdUnoFindAllAccess::getByIndex( sal_Int32 Index )
 {
     if( Index < 0 || Index >= getCount() )
         throw lang::IndexOutOfBoundsException();
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     aAny <<= maSequence[Index];
     return aAny;
 }

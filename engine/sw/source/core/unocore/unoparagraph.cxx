@@ -289,7 +289,7 @@ SwXParagraph::getPropertySetInfo()
 
 void SAL_CALL
 SwXParagraph::setPropertyValue(const OUString& rPropertyName,
-        const uno::Any& rValue)
+        const cpo::uno::Any& rValue)
 {
     SolarMutexGuard aGuard;
     // See XMLTextImportHelper::DeleteParagraph
@@ -301,18 +301,18 @@ SwXParagraph::setPropertyValue(const OUString& rPropertyName,
     SetPropertyValues_Impl( { rPropertyName }, { rValue } );
 }
 
-uno::Any
+cpo::uno::Any
 SwXParagraph::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
     uno::Sequence<OUString> aPropertyNames { rPropertyName };
-    const uno::Sequence< uno::Any > aRet = GetPropertyValues_Impl(aPropertyNames);
+    const uno::Sequence< cpo::uno::Any > aRet = GetPropertyValues_Impl(aPropertyNames);
     return aRet.getConstArray()[0];
 }
 
 void SwXParagraph::SetPropertyValues_Impl(
     const uno::Sequence< OUString >& rPropertyNames,
-    const uno::Sequence< uno::Any >& rValues )
+    const uno::Sequence< cpo::uno::Any >& rValues )
 {
     SwTextNode & rTextNode(GetTextNodeOrThrow());
 
@@ -323,7 +323,7 @@ void SwXParagraph::SetPropertyValues_Impl(
     uno::Sequence< beans::PropertyValue > aValues( rPropertyNames.getLength() );
     std::transform(
         rPropertyNames.begin(), rPropertyNames.end(), rValues.begin(), aValues.getArray(),
-        [&rMap = m_rPropSet.getPropertyMap(), this](const OUString& name, const uno::Any& value)
+        [&rMap = m_rPropSet.getPropertyMap(), this](const OUString& name, const cpo::uno::Any& value)
         {
             if (SfxItemPropertyMapEntry const* const pEntry = rMap.getByName(name); !pEntry)
             {
@@ -340,7 +340,7 @@ void SwXParagraph::SetPropertyValues_Impl(
 
 void SAL_CALL SwXParagraph::setPropertyValues(
     const uno::Sequence< OUString >& rPropertyNames,
-    const uno::Sequence< uno::Any >& rValues )
+    const uno::Sequence< cpo::uno::Any >& rValues )
 {
     if (rPropertyNames.getLength() != rValues.getLength())
         throw lang::IllegalArgumentException(u"lengths do not match"_ustr,
@@ -368,7 +368,7 @@ void SAL_CALL SwXParagraph::setPropertyValues(
 void SwXParagraph::GetSinglePropertyValue_Impl(
     const SfxItemPropertyMapEntry& rEntry,
     const SfxItemSet& rSet,
-    uno::Any& rAny )
+    cpo::uno::Any& rAny )
 {
     bool bDone(false);
 
@@ -453,14 +453,14 @@ void SwXParagraph::GetSinglePropertyValue_Impl(
     }
 }
 
-uno::Sequence< uno::Any > SwXParagraph::GetPropertyValues_Impl(
+uno::Sequence< cpo::uno::Any > SwXParagraph::GetPropertyValues_Impl(
         const uno::Sequence< OUString > & rPropertyNames )
 {
     SwTextNode & rTextNode(GetTextNodeOrThrow());
 
-    uno::Sequence< uno::Any > aValues(rPropertyNames.getLength());
+    uno::Sequence< cpo::uno::Any > aValues(rPropertyNames.getLength());
     SwPaM aPam( rTextNode );
-    uno::Any* pValues = aValues.getArray();
+    cpo::uno::Any* pValues = aValues.getArray();
     const OUString* pPropertyNames = rPropertyNames.getConstArray();
     const SfxItemPropertyMap &rMap = m_rPropSet.getPropertyMap();
     const SwAttrSet& rAttrSet( rTextNode.GetSwAttrSet() );
@@ -527,11 +527,11 @@ uno::Sequence< uno::Any > SwXParagraph::GetPropertyValues_Impl(
     return aValues;
 }
 
-uno::Sequence< uno::Any > SAL_CALL
+uno::Sequence< cpo::uno::Any > SAL_CALL
 SwXParagraph::getPropertyValues(const uno::Sequence< OUString >& rPropertyNames)
 {
     SolarMutexGuard aGuard;
-    uno::Sequence< uno::Any > aValues;
+    uno::Sequence< cpo::uno::Any > aValues;
 
     // workaround for bad designed API
     try
@@ -540,13 +540,13 @@ SwXParagraph::getPropertyValues(const uno::Sequence< OUString >& rPropertyNames)
     }
     catch (beans::UnknownPropertyException &)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(u"Unknown property exception caught"_ustr,
                 getXWeak(), anyEx );
     }
     catch (lang::WrappedTargetException &)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(u"WrappedTargetException caught"_ustr,
                 getXWeak(), anyEx );
     }
@@ -579,7 +579,7 @@ void SAL_CALL SwXParagraph::firePropertiesChangeEvent(
 uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL
 SwXParagraph::setPropertyValuesTolerant(
         const uno::Sequence< OUString >& rPropertyNames,
-        const uno::Sequence< uno::Any >& rValues )
+        const uno::Sequence< cpo::uno::Any >& rValues )
 {
     SolarMutexGuard aGuard;
 
@@ -598,7 +598,7 @@ SwXParagraph::setPropertyValuesTolerant(
     const OUString *pProp = rPropertyNames.getConstArray();
 
     //sal_Int32 nVals = rValues.getLength();
-    const uno::Any *pValue = rValues.getConstArray();
+    const cpo::uno::Any *pValue = rValues.getConstArray();
 
     sal_Int32 nFailed = 0;
     uno::Sequence< beans::SetPropertyTolerantFailed > aFailed( nProps );
@@ -747,7 +747,7 @@ SwXParagraph::GetPropertyValuesTolerant_Impl(
                 {
                     // get property value
                     // (compare to SwXParagraph::getPropertyValue(s))
-                    uno::Any aValue;
+                    cpo::uno::Any aValue;
                     if (! ::sw::GetDefaultTextContentValue(
                                 aValue, rProp, pEntry->nWID ) )
                     {
@@ -804,7 +804,7 @@ SwXParagraph::GetPropertyValuesTolerant_Impl(
 }
 
 bool ::sw::GetDefaultTextContentValue(
-        uno::Any& rAny, std::u16string_view rPropertyName, sal_uInt16 nWID)
+        cpo::uno::Any& rAny, std::u16string_view rPropertyName, sal_uInt16 nWID)
 {
     if(!nWID)
     {
@@ -1121,14 +1121,14 @@ SwXParagraph::setPropertyToDefault(const OUString& rPropertyName)
     }
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwXParagraph::getPropertyDefault(const OUString& rPropertyName)
 {
     SolarMutexGuard g;
 
     SwTextNode & rTextNode(GetTextNodeOrThrow());
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if (::sw::GetDefaultTextContentValue(aRet, rPropertyName))
     {
         return aRet;

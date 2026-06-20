@@ -88,7 +88,7 @@ rtl::Reference<ChartType> HistogramChartTypeTemplate::getChartTypeForNewSeries2(
 }
 
 // ____ OPropertySet ____
-void HistogramChartTypeTemplate::GetDefaultValue(sal_Int32 nHandle, uno::Any& rAny) const
+void HistogramChartTypeTemplate::GetDefaultValue(sal_Int32 nHandle, cpo::uno::Any& rAny) const
 {
     static ::chart::tPropertyValueMap aStaticDefaults = []() {
         ::chart::tPropertyValueMap aTmp;
@@ -123,14 +123,14 @@ void HistogramChartTypeTemplate::applyStyle2(const rtl::Reference<DataSeries>& x
 {
     ChartTypeTemplate::applyStyle2(xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount);
     xSeries->setPropertyAlsoToAllAttributedDataPoints(u"BorderStyle"_ustr,
-                                                      uno::Any(drawing::LineStyle_NONE));
+                                                      cpo::uno::Any(drawing::LineStyle_NONE));
 }
 
 void HistogramChartTypeTemplate::resetStyles2(const rtl::Reference<::chart::Diagram>& xDiagram)
 {
     ChartTypeTemplate::resetStyles2(xDiagram);
     std::vector<rtl::Reference<DataSeries>> aSeriesVec(xDiagram->getDataSeries());
-    uno::Any aLineStyleAny(drawing::LineStyle_NONE);
+    cpo::uno::Any aLineStyleAny(drawing::LineStyle_NONE);
     for (auto const& series : aSeriesVec)
     {
         if (series->getPropertyValue(u"BorderStyle"_ustr) == aLineStyleAny)

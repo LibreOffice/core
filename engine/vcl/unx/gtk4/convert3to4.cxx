@@ -1596,7 +1596,7 @@ void builder_add_from_gtk3_file(GtkBuilder* pBuilder, const OUString& rUri)
     css::uno::Reference<css::beans::XPropertySet> xTempFile(css::io::TempFile::create(xContext),
                                                             css::uno::UNO_QUERY_THROW);
     css::uno::Reference<css::io::XStream> xTempStream(xTempFile, css::uno::UNO_QUERY_THROW);
-    xTempFile->setPropertyValue(u"RemoveFile"_ustr, css::uno::Any(false));
+    xTempFile->setPropertyValue(u"RemoveFile"_ustr, cpo::uno::Any(false));
 
     // serialize it back to xml
     css::uno::Reference<css::xml::sax::XSAXSerializable> xSerializer(xDocument,

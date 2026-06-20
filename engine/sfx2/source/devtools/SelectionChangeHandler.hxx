@@ -51,7 +51,7 @@ public:
                                                                      css::uno::UNO_QUERY);
         if (xSupplier.is())
         {
-            css::uno::Any aAny = xSupplier->getSelection();
+            cpo::uno::Any aAny = xSupplier->getSelection();
             auto xInterface = aAny.get<css::uno::Reference<css::uno::XInterface>>();
             mpDockingWindow->selectionChanged(xInterface);
         }

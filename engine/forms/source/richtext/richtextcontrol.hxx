@@ -51,7 +51,7 @@ namespace frm
 
         // UNO
         DECLARE_UNO3_AGG_DEFAULTS( ORichTextControl, UnoEditControl )
-        virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
 
         // XControl
         virtual void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& _rToolkit, const css::uno::Reference< css::awt::XWindowPeer >& _rParent ) override;
@@ -102,7 +102,7 @@ namespace frm
         void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) override;
 
         // XVclWindowPeer
-        virtual void SAL_CALL setProperty( const OUString& _rPropertyName, const css::uno::Any& _rValue ) override;
+        virtual void SAL_CALL setProperty( const OUString& _rPropertyName, const cpo::uno::Any& _rValue ) override;
 
         // XTypeProvider
         DECLARE_XTYPEPROVIDER( )

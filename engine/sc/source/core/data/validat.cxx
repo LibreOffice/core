@@ -194,7 +194,7 @@ bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
     bool bScriptReturnedFalse = false;  // default: do not abort
 
     //  1) entered or calculated value
-    css::uno::Any aParam0(rInput);
+    cpo::uno::Any aParam0(rInput);
     if ( pCell )                // if cell exists, call interpret
     {
         if ( pCell->IsValue() )
@@ -207,7 +207,7 @@ bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
     OUString aPosStr(rPos.Format(ScRefFlags::VALID | ScRefFlags::TAB_3D, &rDocument, rDocument.GetAddressConvention()));
 
     // Set up parameters
-    css::uno::Sequence< css::uno::Any > aParams{ aParam0, css::uno::Any(aPosStr) };
+    css::uno::Sequence< cpo::uno::Any > aParams{ aParam0, cpo::uno::Any(aPosStr) };
 
     //  use link-update flag to prevent closing the document
     //  while the macro is running
@@ -218,9 +218,9 @@ bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
     if ( pCell )
         rDocument.LockTable( rPos.Tab() );
 
-    css::uno::Any aRet;
+    cpo::uno::Any aRet;
     css::uno::Sequence< sal_Int16 > aOutArgsIndex;
-    css::uno::Sequence< css::uno::Any > aOutArgs;
+    css::uno::Sequence< cpo::uno::Any > aOutArgs;
 
     ErrCode eRet = pDocSh->CallXScript(
         aErrorTitle, aParams, aRet, aOutArgsIndex, aOutArgs );

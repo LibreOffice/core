@@ -74,9 +74,9 @@ namespace toolkit { class ScriptEventContainer; }
         bool        m_bCloneable;
 
     protected:
-        static css::uno::Any   ImplGetDefaultValueByHandle(sal_Int32 nHandle);
-        css::uno::Any          ImplGetPropertyValueByHandle(sal_Int32 nHandle) const;
-        void                   ImplSetPropertyValueByHandle(sal_Int32 nHandle, const css::uno::Any& aValue);
+        static cpo::uno::Any   ImplGetDefaultValueByHandle(sal_Int32 nHandle);
+        cpo::uno::Any          ImplGetPropertyValueByHandle(sal_Int32 nHandle) const;
+        void                   ImplSetPropertyValueByHandle(sal_Int32 nHandle, const cpo::uno::Any& aValue);
 
     protected:
         /**
@@ -102,11 +102,11 @@ namespace toolkit { class ScriptEventContainer; }
         virtual ~OGeometryControlModel_Base() override;
 
         // XAggregation
-        css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _aType ) override;
+        cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _aType ) override;
 
     public:
         // XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
         virtual void SAL_CALL acquire(  ) noexcept override;
         virtual void SAL_CALL release(  ) noexcept override;
 
@@ -116,20 +116,20 @@ namespace toolkit { class ScriptEventContainer; }
 
         // OPropertySetHelper overridables
         virtual bool SAL_CALL convertFastPropertyValue(
-                css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue,
-                sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
+                cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue,
+                sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
 
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-                sal_Int32 _nHandle, const css::uno::Any& _rValue) override;
+                sal_Int32 _nHandle, const cpo::uno::Any& _rValue) override;
 
         using comphelper::OPropertySetAggregationHelper::getFastPropertyValue;
         virtual void SAL_CALL getFastPropertyValue(
-            css::uno::Any& _rValue, sal_Int32 _nHandle) const override;
+            cpo::uno::Any& _rValue, sal_Int32 _nHandle) const override;
 
         // OPropertyStateHelper overridables
         virtual css::beans::PropertyState  getPropertyStateByHandle(sal_Int32 nHandle) override;
         virtual void                                    setPropertyToDefaultByHandle(sal_Int32 nHandle) override;
-        virtual css::uno::Any              getPropertyDefaultByHandle(sal_Int32 nHandle) const override;
+        virtual cpo::uno::Any              getPropertyDefaultByHandle(sal_Int32 nHandle) const override;
 
         // XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
@@ -239,7 +239,7 @@ namespace toolkit { class ScriptEventContainer; }
 
     private:
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-                sal_Int32 _nHandle, const css::uno::Any& _rValue) override;
+                sal_Int32 _nHandle, const cpo::uno::Any& _rValue) override;
     };
 
 #include <controls/geometrycontrolmodel_impl.hxx>

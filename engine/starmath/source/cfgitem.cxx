@@ -40,6 +40,7 @@
 #include <format.hxx>
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::beans;
 
 constexpr OUString SYMBOL_LIST = u"SymbolList"_ustr;

@@ -46,6 +46,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal,
                                               const Reference< XTypeConverter >&  _rxTypeConverter)

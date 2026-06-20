@@ -221,13 +221,13 @@ void SfxPoolItem::ScaleMetrics(double /*fScale*/) {}
 
 bool SfxPoolItem::HasMetrics() const { return false; }
 
-bool SfxPoolItem::QueryValue(css::uno::Any&, sal_uInt8) const
+bool SfxPoolItem::QueryValue(cpo::uno::Any&, sal_uInt8) const
 {
     OSL_FAIL("There is no implementation for QueryValue for this item!");
     return false;
 }
 
-bool SfxPoolItem::PutValue(const css::uno::Any&, sal_uInt8)
+bool SfxPoolItem::PutValue(const cpo::uno::Any&, sal_uInt8)
 {
     OSL_FAIL("There is no implementation for PutValue for this item!");
     return false;

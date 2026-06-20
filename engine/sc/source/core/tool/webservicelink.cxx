@@ -34,7 +34,7 @@ ScWebServiceLink::ScWebServiceLink(ScDocument* pD, OUString _aURL)
 
 ScWebServiceLink::~ScWebServiceLink() {}
 
-sfx2::SvBaseLink::UpdateResult ScWebServiceLink::DataChanged(const OUString&, const css::uno::Any&)
+sfx2::SvBaseLink::UpdateResult ScWebServiceLink::DataChanged(const OUString&, const cpo::uno::Any&)
 {
     aResult.clear();
     bHasResult = false;

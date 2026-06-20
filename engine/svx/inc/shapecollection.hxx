@@ -52,7 +52,7 @@ public:
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 Index) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex(sal_Int32 Index) override;
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;

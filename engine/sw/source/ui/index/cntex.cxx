@@ -49,6 +49,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 static void lcl_SetProp( uno::Reference< XPropertySetInfo > const & xInfo,
                            uno::Reference< XPropertySet > const & xProps,
@@ -56,7 +57,7 @@ static void lcl_SetProp( uno::Reference< XPropertySetInfo > const & xInfo,
 {
     if(xInfo->hasPropertyByName(aPropName))
     {
-        uno::Any aValue;
+        cpo::uno::Any aValue;
         aValue <<= rValue;
         xProps->setPropertyValue(aPropName, aValue);
     }
@@ -68,7 +69,7 @@ static void lcl_SetProp( uno::Reference< XPropertySetInfo > const & xInfo,
 {
     if(xInfo->hasPropertyByName(aPropName))
     {
-        uno::Any aValue;
+        cpo::uno::Any aValue;
         aValue <<= nValue;
         xProps->setPropertyValue(aPropName, aValue);
     }
@@ -182,7 +183,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
             if(xInfo->hasPropertyByName(UNO_NAME_LEVEL_PARAGRAPH_STYLES))
             {
                 bool bOn( nContentOptions&SwTOXElement::Template );
-                uno::Any aStyleNames(xIdxProps->getPropertyValue(UNO_NAME_LEVEL_PARAGRAPH_STYLES));
+                cpo::uno::Any aStyleNames(xIdxProps->getPropertyValue(UNO_NAME_LEVEL_PARAGRAPH_STYLES));
                 uno::Reference< container::XIndexReplace >  xAcc;
                 aStyleNames >>= xAcc;
 
@@ -198,7 +199,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                     sal_Int32 nPos {0};
                     for(sal_Int32 nStyle = 0; nStyle < nStyles; ++nStyle)
                         pArr[nStyle] = sLevel.getToken(0, TOX_STYLE_DELIMITER, nPos);
-                    uno::Any aAny(&aStyles, cppu::UnoType<uno::Sequence<OUString>>::get());
+                    cpo::uno::Any aAny(&aStyles, cppu::UnoType<uno::Sequence<OUString>>::get());
                     xAcc->replaceByIndex(i, aAny);
                 }
             }
@@ -337,13 +338,13 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                     }
                     aSequPropVals.realloc(nTokenIndex);
 
-                    uno::Any aFormatAccess = xIdxProps->getPropertyValue(UNO_NAME_LEVEL_FORMAT);
+                    cpo::uno::Any aFormatAccess = xIdxProps->getPropertyValue(UNO_NAME_LEVEL_FORMAT);
                     OSL_ENSURE(aFormatAccess.getValueType() == cppu::UnoType<container::XIndexReplace>::get(),
                         "wrong property type");
 
                     uno::Reference< container::XIndexReplace >  xFormatAccess;
                     aFormatAccess >>= xFormatAccess;
-                    uno::Any aLevelProp(&aSequPropVals, cppu::UnoType<uno::Sequence<beans::PropertyValues>>::get());
+                    cpo::uno::Any aLevelProp(&aSequPropVals, cppu::UnoType<uno::Sequence<beans::PropertyValues>>::get());
                     xFormatAccess->replaceByIndex(nCurrLevel, aLevelProp);
                 }
             }

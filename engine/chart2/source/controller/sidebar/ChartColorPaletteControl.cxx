@@ -45,7 +45,7 @@ ChartColorPaletteControl::ChartColorPaletteControl(
 
 ChartColorPaletteControl::~ChartColorPaletteControl() = default;
 
-void ChartColorPaletteControl::initialize(const uno::Sequence<uno::Any>& rArguments)
+void ChartColorPaletteControl::initialize(const uno::Sequence<cpo::uno::Any>& rArguments)
 {
     svt::PopupWindowController::initialize(rArguments);
 
@@ -234,7 +234,7 @@ uno::Sequence<OUString> ChartColorPaletteControl::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_chart2_ChartColorPaletteControl_get_implementation(
-    uno::XComponentContext* rContext, uno::Sequence<uno::Any> const&)
+    uno::XComponentContext* rContext, uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ChartColorPaletteControl(rContext));
 }

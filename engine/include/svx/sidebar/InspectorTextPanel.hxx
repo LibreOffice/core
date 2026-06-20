@@ -27,7 +27,7 @@ namespace svx::sidebar
 struct TreeNode
 {
     OUString sNodeName;
-    css::uno::Any aValue;
+    cpo::uno::Any aValue;
     bool isGrey;
     enum
     {

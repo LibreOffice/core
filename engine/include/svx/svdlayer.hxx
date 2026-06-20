@@ -157,7 +157,7 @@ public:
 
     // Generates a bitfield for settings.xml from the SdrLayerIDSet.
     // Output is a UNO sequence of BYTE (which is 'short' in API).
-    void               QueryValue(const SdrLayerIDSet& rViewLayerSet, css::uno::Any& rAny);
+    void               QueryValue(const SdrLayerIDSet& rViewLayerSet, cpo::uno::Any& rAny);
 };
 
 #endif // INCLUDED_SVX_SVDLAYER_HXX

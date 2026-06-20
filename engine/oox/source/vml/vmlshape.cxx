@@ -73,7 +73,7 @@
 #include <o3tl/string_view.hxx>
 
 using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -83,6 +83,7 @@ namespace oox::vml {
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::io;
 
 using ::oox::core::XmlFilterBase;
@@ -402,7 +403,7 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                 if (xSInfo->supportsService(u"com.sun.star.text.TextFrame"_ustr))
                 {
                     uno::Reference<beans::XPropertySet> propertySet (xShape, uno::UNO_QUERY);
-                    uno::Any aAny = propertySet->getPropertyValue(u"FrameInteropGrabBag"_ustr);
+                    cpo::uno::Any aAny = propertySet->getPropertyValue(u"FrameInteropGrabBag"_ustr);
                     auto aGrabBag = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aAny.get< uno::Sequence<beans::PropertyValue> >());
 
                     aGrabBag.push_back(comphelper::makePropertyValue(u"VML-Z-ORDER"_ustr, maTypeModel.maZIndex.toInt32()));
@@ -420,7 +421,7 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
 
                     if(!maTypeModel.maRotation.isEmpty())
                         aGrabBag.push_back(comphelper::makePropertyValue(u"mso-rotation-angle"_ustr, ConversionHelper::decodeRotation(maTypeModel.maRotation).get()));
-                    propertySet->setPropertyValue(u"FrameInteropGrabBag"_ustr, uno::Any(comphelper::containerToSequence(aGrabBag)));
+                    propertySet->setPropertyValue(u"FrameInteropGrabBag"_ustr, cpo::uno::Any(comphelper::containerToSequence(aGrabBag)));
                     sal_Int32 backColorTransparency = 0;
                     propertySet->getPropertyValue(u"BackColorTransparency"_ustr)
                         >>= backColorTransparency;
@@ -469,14 +470,14 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                             pGrabBag[length+3].Name = u"LinkChainName"_ustr;
                             pGrabBag[length+3].Value <<= sLinkChainName;
                         }
-                        propertySet->setPropertyValue( u"InteropGrabBag"_ustr, uno::Any(aGrabBag) );
+                        propertySet->setPropertyValue( u"InteropGrabBag"_ustr, cpo::uno::Any(aGrabBag) );
                     }
                 }
                 Reference< XControlShape > xControlShape( xShape, uno::UNO_QUERY );
                 if ( xControlShape.is() && !getTypeModel().mbVisible )
                 {
                     PropertySet aControlShapeProp( xControlShape->getControl() );
-                    aControlShapeProp.setProperty( PROP_EnableVisible, uno::Any( false ) );
+                    aControlShapeProp.setProperty( PROP_EnableVisible, cpo::uno::Any( false ) );
                 }
 
                 xShape = finalImplConvertAndInsert(xShape);
@@ -756,20 +757,20 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     if (!maTypeModel.maWrapDistanceLeft.isEmpty())
         aWrapDistanceLeft = maTypeModel.maWrapDistanceLeft;
     sal_Int32 nWrapDistanceLeft = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, aWrapDistanceLeft, 0, true, false);
-    PropertySet(xShape).setAnyProperty(PROP_LeftMargin, uno::Any(nWrapDistanceLeft));
+    PropertySet(xShape).setAnyProperty(PROP_LeftMargin, cpo::uno::Any(nWrapDistanceLeft));
     OUString aWrapDistanceRight = OUString::number(0x0001BE7C);
     if (!maTypeModel.maWrapDistanceRight.isEmpty())
         aWrapDistanceRight = maTypeModel.maWrapDistanceRight;
     sal_Int32 nWrapDistanceRight = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, aWrapDistanceRight, 0, true, false);
-    PropertySet(xShape).setAnyProperty(PROP_RightMargin, uno::Any(nWrapDistanceRight));
+    PropertySet(xShape).setAnyProperty(PROP_RightMargin, cpo::uno::Any(nWrapDistanceRight));
     sal_Int32 nWrapDistanceTop = 0;
     if (!maTypeModel.maWrapDistanceTop.isEmpty())
         nWrapDistanceTop = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maWrapDistanceTop, 0, false, true);
-    PropertySet(xShape).setAnyProperty(PROP_TopMargin, uno::Any(nWrapDistanceTop));
+    PropertySet(xShape).setAnyProperty(PROP_TopMargin, cpo::uno::Any(nWrapDistanceTop));
     sal_Int32 nWrapDistanceBottom = 0;
     if (!maTypeModel.maWrapDistanceBottom.isEmpty())
         nWrapDistanceBottom = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maWrapDistanceBottom, 0, false, true);
-    PropertySet(xShape).setAnyProperty(PROP_BottomMargin, uno::Any(nWrapDistanceBottom));
+    PropertySet(xShape).setAnyProperty(PROP_BottomMargin, cpo::uno::Any(nWrapDistanceBottom));
 
     if ( maService == "com.sun.star.text.TextFrame" )
     {
@@ -794,7 +795,7 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         }
         if (nWritingMode != text::WritingMode2::LR_TB)
         {
-            PropertySet(xShape).setAnyProperty(PROP_WritingMode, uno::Any(nWritingMode));
+            PropertySet(xShape).setAnyProperty(PROP_WritingMode, cpo::uno::Any(nWritingMode));
         }
         // tdf#123626
         if (!maShapeModel.maHyperlink.isEmpty())
@@ -896,8 +897,8 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         }
         if (!maTypeModel.mbVisible)
         {
-            aPropertySet.setAnyProperty(PROP_Visible, uno::Any(false));
-            aPropertySet.setAnyProperty(PROP_Printable, uno::Any(false));
+            aPropertySet.setAnyProperty(PROP_Visible, cpo::uno::Any(false));
+            aPropertySet.setAnyProperty(PROP_Printable, cpo::uno::Any(false));
         }
         // custom shape geometry attributes
         std::vector<css::beans::PropertyValue> aPropVec;
@@ -964,7 +965,7 @@ Reference<XShape> SimpleShape::finalImplConvertAndInsert(const css::uno::Referen
         // Note: if you set a new property then you have to handle it in the proper
         // SwTextBoxHelper::syncProperty function.
         if (maTypeModel.maLayoutFlowAlt == "bottom-to-top")
-            aPropertySet.setAnyProperty(PROP_TextWritingMode, uno::Any(text::WritingMode2::BT_LR));
+            aPropertySet.setAnyProperty(PROP_TextWritingMode, cpo::uno::Any(text::WritingMode2::BT_LR));
     }
     return ShapeBase::finalImplConvertAndInsert(rxShape);
 }
@@ -1005,10 +1006,10 @@ Reference< XShape > SimpleShape::createPictureObject(const Reference< XShapes >&
         const sal_Int32 nWrapDistanceRight = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maWrapDistanceRight, 0, true, true);
         const sal_Int32 nWrapDistanceTop = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maWrapDistanceTop, 0, false, true);
         const sal_Int32 nWrapDistanceBottom = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maWrapDistanceBottom, 0, false, true);
-        aPropSet.setProperty(PROP_LeftMargin, uno::Any(nWrapDistanceLeft));
-        aPropSet.setProperty(PROP_RightMargin, uno::Any(nWrapDistanceRight));
-        aPropSet.setProperty(PROP_TopMargin, uno::Any(nWrapDistanceTop));
-        aPropSet.setProperty(PROP_BottomMargin, uno::Any(nWrapDistanceBottom));
+        aPropSet.setProperty(PROP_LeftMargin, cpo::uno::Any(nWrapDistanceLeft));
+        aPropSet.setProperty(PROP_RightMargin, cpo::uno::Any(nWrapDistanceRight));
+        aPropSet.setProperty(PROP_TopMargin, cpo::uno::Any(nWrapDistanceTop));
+        aPropSet.setProperty(PROP_BottomMargin, cpo::uno::Any(nWrapDistanceBottom));
 
         if (maTypeModel.moCropBottom.has_value() || maTypeModel.moCropLeft.has_value() || maTypeModel.moCropRight.has_value() || maTypeModel.moCropTop.has_value())
         {
@@ -1030,7 +1031,7 @@ Reference< XShape > SimpleShape::createPictureObject(const Reference< XShapes >&
         if (maTypeModel.mnGain == -70 && maTypeModel.mnBlacklevel == 70)
         {
             // Map MSO 'washout' to our watermark colormode.
-            aPropSet.setProperty(PROP_GraphicColorMode, uno::Any(drawing::ColorMode_WATERMARK));
+            aPropSet.setProperty(PROP_GraphicColorMode, cpo::uno::Any(drawing::ColorMode_WATERMARK));
         }
     }
     return xShape;
@@ -1478,33 +1479,33 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
 
         // Store signature line properties
         uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-        xPropertySet->setPropertyValue(u"IsSignatureLine"_ustr, uno::Any(true));
+        xPropertySet->setPropertyValue(u"IsSignatureLine"_ustr, cpo::uno::Any(true));
         xPropertySet->setPropertyValue(u"SignatureLineId"_ustr,
-                                        uno::Any(getShapeModel().maSignatureId));
+                                        cpo::uno::Any(getShapeModel().maSignatureId));
         xPropertySet->setPropertyValue(
             u"SignatureLineSuggestedSignerName"_ustr,
-            uno::Any(getShapeModel().maSignatureLineSuggestedSignerName));
+            cpo::uno::Any(getShapeModel().maSignatureLineSuggestedSignerName));
         xPropertySet->setPropertyValue(
             u"SignatureLineSuggestedSignerTitle"_ustr,
-            uno::Any(getShapeModel().maSignatureLineSuggestedSignerTitle));
+            cpo::uno::Any(getShapeModel().maSignatureLineSuggestedSignerTitle));
         xPropertySet->setPropertyValue(
             u"SignatureLineSuggestedSignerEmail"_ustr,
-            uno::Any(getShapeModel().maSignatureLineSuggestedSignerEmail));
+            cpo::uno::Any(getShapeModel().maSignatureLineSuggestedSignerEmail));
         xPropertySet->setPropertyValue(
             u"SignatureLineSigningInstructions"_ustr,
-            uno::Any(getShapeModel().maSignatureLineSigningInstructions));
+            cpo::uno::Any(getShapeModel().maSignatureLineSigningInstructions));
         xPropertySet->setPropertyValue(
             u"SignatureLineShowSignDate"_ustr,
-            uno::Any(getShapeModel().mbSignatureLineShowSignDate));
+            cpo::uno::Any(getShapeModel().mbSignatureLineShowSignDate));
         xPropertySet->setPropertyValue(
             u"SignatureLineCanAddComment"_ustr,
-            uno::Any(getShapeModel().mbSignatureLineCanAddComment));
-        xPropertySet->setPropertyValue(u"SignatureLineIsSigned"_ustr, uno::Any(bIsSigned));
+            cpo::uno::Any(getShapeModel().mbSignatureLineCanAddComment));
+        xPropertySet->setPropertyValue(u"SignatureLineIsSigned"_ustr, cpo::uno::Any(bIsSigned));
 
         if (!aGraphicPath.isEmpty())
         {
             xGraphic = rFilter.getGraphicHelper().importEmbeddedGraphic(aGraphicPath);
-            xPropertySet->setPropertyValue(u"SignatureLineUnsignedImage"_ustr, uno::Any(xGraphic));
+            xPropertySet->setPropertyValue(u"SignatureLineUnsignedImage"_ustr, cpo::uno::Any(xGraphic));
         }
         return xShape;
     }
@@ -1593,7 +1594,7 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
         sal_Int32 nLength = aGrabBag.getLength();
         aGrabBag.realloc(nLength + 1);
         aGrabBag.getArray()[nLength] = comphelper::makePropertyValue(u"mso-edit-as"_ustr, maTypeModel.maEditAs);
-        xPropertySet->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(aGrabBag));
+        xPropertySet->setPropertyValue(u"InteropGrabBag"_ustr, cpo::uno::Any(aGrabBag));
     }
     // Make sure group shapes are inline as well, unless there is an explicit different style.
     PropertySet aPropertySet(xGroupShape);

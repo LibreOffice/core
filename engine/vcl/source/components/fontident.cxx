@@ -52,16 +52,16 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>&) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>&) override;
 
     // XMaterialHolder
-    virtual css::uno::Any SAL_CALL getMaterial() override;
+    virtual cpo::uno::Any SAL_CALL getMaterial() override;
 
 };
 
 }
 
-void SAL_CALL FontIdentificator::initialize(const css::uno::Sequence<css::uno::Any>& i_rArgs)
+void SAL_CALL FontIdentificator::initialize(const css::uno::Sequence<cpo::uno::Any>& i_rArgs)
 {
     if( !ImplGetSVData() )
         return; // VCL not initialized
@@ -77,10 +77,10 @@ void SAL_CALL FontIdentificator::initialize(const css::uno::Sequence<css::uno::A
     }
 }
 
-css::uno::Any SAL_CALL FontIdentificator::getMaterial()
+cpo::uno::Any SAL_CALL FontIdentificator::getMaterial()
 {
     if( !ImplGetSVData() )
-        return css::uno::Any(); // VCL not initialized
+        return cpo::uno::Any(); // VCL not initialized
 
     css::awt::FontDescriptor aFD;
     aFD.Name                = m_aFont.GetFamilyName();
@@ -139,7 +139,7 @@ css::uno::Any SAL_CALL FontIdentificator::getMaterial()
         aFD.Slant = css::awt::FontSlant_DONTKNOW;
         break;
     }
-    return css::uno::Any( aFD );
+    return cpo::uno::Any( aFD );
 }
 
 // XServiceInfo
@@ -162,7 +162,7 @@ css::uno::Sequence<OUString> SAL_CALL FontIdentificator::getSupportedServiceName
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 vcl_FontIdentificator_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new vcl::FontIdentificator());
 }

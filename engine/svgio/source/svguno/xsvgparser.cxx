@@ -62,7 +62,7 @@ namespace svgio::svgreader
                 const uno::Reference< ::io::XInputStream >& xSVGStream,
                 const OUString& aAbsolutePath) override;
 
-            virtual uno::Any SAL_CALL getDrawCommands(
+            virtual cpo::uno::Any SAL_CALL getDrawCommands(
                 uno::Reference<io::XInputStream> const & xSvgStream,
                 const OUString& aAbsolutePath) override;
 
@@ -96,7 +96,7 @@ namespace svgio::svgreader
                 // that use entities to define XML namespaces.
                 uno::Reference<lang::XInitialization> const xInit(xParser,
                         uno::UNO_QUERY_THROW);
-                uno::Sequence<uno::Any> args{ uno::Any(u"DoSmeplease"_ustr) };
+                uno::Sequence<cpo::uno::Any> args{ cpo::uno::Any(u"DoSmeplease"_ustr) };
                 xInit->initialize(args);
 
                 // connect parser and filter
@@ -147,11 +147,11 @@ namespace svgio::svgreader
             return aRetval.toSequence();
         }
 
-        uno::Any SAL_CALL XSvgParser::getDrawCommands(
+        cpo::uno::Any SAL_CALL XSvgParser::getDrawCommands(
                 uno::Reference<io::XInputStream> const & xSvgStream,
                 const OUString& aAbsolutePath)
         {
-            uno::Any aAnyResult;
+            cpo::uno::Any aAnyResult;
 
             if (!xSvgStream.is())
                 return aAnyResult;
@@ -194,7 +194,7 @@ namespace svgio::svgreader
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 svgio_XSvgParser_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new svgio::svgreader::XSvgParser(context));
 }

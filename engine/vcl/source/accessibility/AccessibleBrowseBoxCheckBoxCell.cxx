@@ -25,6 +25,7 @@
 
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 AccessibleCheckBoxCell::AccessibleCheckBoxCell(const Reference<XAccessible>& _rxParent,
                                                vcl::IAccessibleTableProvider& _rBrowseBox,

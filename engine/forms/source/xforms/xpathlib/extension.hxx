@@ -21,7 +21,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -46,7 +46,7 @@ public:
     }
 
     virtual css::xml::xpath::Libxml2ExtensionHandle SAL_CALL getLibxml2ExtensionHandle() override;
-    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& aSequence) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& aSequence) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

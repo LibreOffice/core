@@ -182,7 +182,7 @@ namespace drawinglayer::unorenderer
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 drawinglayer_XPrimitive2DRenderer(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new drawinglayer::unorenderer::XPrimitive2DRenderer());
 }

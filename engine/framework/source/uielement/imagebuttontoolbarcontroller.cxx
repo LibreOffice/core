@@ -35,6 +35,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 
@@ -95,7 +96,7 @@ void ImageButtonToolbarController::executeControlCommand( const css::frame::Cont
                 m_xToolbar->SetItemImage( m_nID, aImage );
 
                 // send notification
-                uno::Sequence< beans::NamedValue > aInfo { { u"URL"_ustr, css::uno::Any(aURL) } };
+                uno::Sequence< beans::NamedValue > aInfo { { u"URL"_ustr, cpo::uno::Any(aURL) } };
                 addNotifyInfo( u"ImageChanged"_ustr,
                             getDispatchFromCommand( m_aCommandURL ),
                             aInfo );

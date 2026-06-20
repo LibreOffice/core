@@ -38,7 +38,7 @@ namespace comphelper
     #define DECLARE_UNO3_AGG_DEFAULTS(classname, baseclass) \
         virtual void            SAL_CALL acquire() noexcept override { baseclass::acquire(); } \
         virtual void            SAL_CALL release() noexcept override { baseclass::release(); }    \
-        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override \
+        virtual cpo::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override \
             { return baseclass::queryInterface(_rType); }
 
     /** Use this macro to forward XComponent methods to base class
@@ -66,7 +66,7 @@ namespace comphelper
     #define DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS(classname, baseclass, implhelper) \
         virtual void SAL_CALL acquire() noexcept override { baseclass::acquire(); }   \
         virtual void SAL_CALL release() noexcept override { baseclass::release(); }   \
-        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override \
+        virtual cpo::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override \
             { return baseclass::queryInterface(_rType); }                               \
         virtual void SAL_CALL dispose() override \
         {                                                                               \
@@ -88,7 +88,7 @@ namespace comphelper
     //= forwarding/merging XInterface functionality
 
     #define DECLARE_XINTERFACE( )   \
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override; \
+        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override; \
         virtual void SAL_CALL acquire() noexcept override; \
         virtual void SAL_CALL release() noexcept override;
 
@@ -98,9 +98,9 @@ namespace comphelper
 
     #define IMPLEMENT_FORWARD_XINTERFACE2( classname, refcountbase, baseclass2 ) \
         IMPLEMENT_FORWARD_REFCOUNT( classname, refcountbase ) \
-        css::uno::Any SAL_CALL classname::queryInterface( const css::uno::Type& _rType ) \
+        cpo::uno::Any SAL_CALL classname::queryInterface( const css::uno::Type& _rType ) \
         { \
-            css::uno::Any aReturn = refcountbase::queryInterface( _rType ); \
+            cpo::uno::Any aReturn = refcountbase::queryInterface( _rType ); \
             if ( !aReturn.hasValue() ) \
                 aReturn = baseclass2::queryInterface( _rType ); \
             return aReturn; \
@@ -108,9 +108,9 @@ namespace comphelper
 
     #define IMPLEMENT_FORWARD_XINTERFACE3( classname, refcountbase, baseclass2, baseclass3 ) \
         IMPLEMENT_FORWARD_REFCOUNT( classname, refcountbase ) \
-        css::uno::Any SAL_CALL classname::queryInterface( const css::uno::Type& _rType ) \
+        cpo::uno::Any SAL_CALL classname::queryInterface( const css::uno::Type& _rType ) \
         { \
-            css::uno::Any aReturn = refcountbase::queryInterface( _rType ); \
+            cpo::uno::Any aReturn = refcountbase::queryInterface( _rType ); \
             if ( !aReturn.hasValue() ) \
             { \
                 aReturn = baseclass2::queryInterface( _rType ); \

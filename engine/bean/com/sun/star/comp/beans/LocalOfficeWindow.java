@@ -35,7 +35,7 @@ import com.sun.star.awt.WindowAttribute;
 import com.sun.star.awt.WindowClass;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
-import com.sun.star.uno.Any;
+import cpo.uno.Any;
 import com.sun.star.uno.Type;
 import com.sun.star.beans.NamedValue;
 

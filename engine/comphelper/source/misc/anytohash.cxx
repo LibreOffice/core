@@ -22,7 +22,7 @@
 
 #include <o3tl/hash_combine.hxx>
 #include <typelib/typedescription.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 #include "typedescriptionref.hxx"
 
@@ -198,7 +198,7 @@ std::optional<size_t> hashValue( size_t hash,
 } // anon namespace
 
 
-std::optional<size_t> anyToHash( uno::Any const & value )
+std::optional<size_t> anyToHash( cpo::uno::Any const & value )
 {
     size_t hash = 0;
     return hashValue( hash, value.getValue(), value.getValueTypeRef());

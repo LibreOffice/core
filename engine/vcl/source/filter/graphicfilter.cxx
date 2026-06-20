@@ -1743,7 +1743,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
 
                         css::uno::Reference< css::xml::sax::XDocumentHandler > xSaxWriter(
                             css::xml::sax::Writer::create( xContext ), css::uno::UNO_QUERY_THROW);
-                        css::uno::Sequence< css::uno::Any > aArguments{ css::uno::Any(
+                        css::uno::Sequence< cpo::uno::Any > aArguments{ cpo::uno::Any(
                             aConfigItem.GetFilterData()) };
                         css::uno::Reference< css::svg::XSVGWriter > xSVGWriter(
                             xContext->getServiceManager()->createInstanceWithArgumentsAndContext( u"com.sun.star.svg.SVGWriter"_ustr, aArguments, xContext),

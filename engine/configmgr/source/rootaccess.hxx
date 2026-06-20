@@ -109,7 +109,7 @@ private:
 
     virtual void clearListeners() noexcept override;
 
-    virtual css::uno::Any SAL_CALL queryInterface(
+    virtual cpo::uno::Any SAL_CALL queryInterface(
         css::uno::Type const & aType) override;
 
     virtual OUString SAL_CALL getImplementationName() override;

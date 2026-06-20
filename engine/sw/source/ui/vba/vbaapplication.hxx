@@ -70,11 +70,11 @@ public:
     virtual css::uno::Reference< ooo::vba::word::XOptions > SAL_CALL getOptions() override;
     virtual css::uno::Reference< ooo::vba::word::XSelection > SAL_CALL getSelection() override;
     virtual css::uno::Reference< ooo::vba::word::XWordBasic > SAL_CALL getWordBasic() override;
-    virtual css::uno::Any SAL_CALL CommandBars( const css::uno::Any& aIndex ) override;
-    virtual css::uno::Any SAL_CALL Documents( const css::uno::Any& aIndex ) override;
-    virtual css::uno::Any SAL_CALL Addins( const css::uno::Any& aIndex ) override;
-    virtual css::uno::Any SAL_CALL Dialogs( const css::uno::Any& aIndex ) override;
-    virtual css::uno::Any SAL_CALL ListGalleries( const css::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL CommandBars( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Documents( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Addins( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Dialogs( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL ListGalleries( const cpo::uno::Any& aIndex ) override;
     virtual bool SAL_CALL getDisplayAutoCompleteTips() override;
     virtual void SAL_CALL setDisplayAutoCompleteTips( bool _displayAutoCompleteTips ) override;
     virtual sal_Int32 SAL_CALL getEnableCancelKey() override;
@@ -91,8 +91,8 @@ public:
     virtual void SAL_CALL setTop( sal_Int32 _top ) override;
     virtual OUString SAL_CALL getStatusBar() override;
     virtual void SAL_CALL setStatusBar( const OUString& _statusbar ) override;
-    virtual css::uno::Any SAL_CALL getCustomizationContext() override;
-    virtual void SAL_CALL setCustomizationContext( const css::uno::Any& _customizationcontext ) override;
+    virtual cpo::uno::Any SAL_CALL getCustomizationContext() override;
+    virtual void SAL_CALL setCustomizationContext( const cpo::uno::Any& _customizationcontext ) override;
     virtual float SAL_CALL CentimetersToPoints( float Centimeters ) override;
     virtual float SAL_CALL PointsToCentimeters( float Points ) override;
     virtual float SAL_CALL PixelsToPoints( float Pixels, bool fVertical ) override;
@@ -123,7 +123,7 @@ public:
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 
     // XSinkCaller
-    virtual void SAL_CALL CallSinks( const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments ) override;
+    virtual void SAL_CALL CallSinks( const OUString& Method, css::uno::Sequence< cpo::uno::Any >& Arguments ) override;
 
     // this should be SwXTextDocument, but the inheritance hierarchy makes that impossible
     virtual SfxBaseModel* getCurrentDocument() override;

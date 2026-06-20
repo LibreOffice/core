@@ -84,7 +84,7 @@ void VTitle::changePosition( const awt::Point& rPos )
         ::basegfx::B2DHomMatrix aM;
         aM.rotate( basegfx::deg2rad(-m_fRotationAngleDegree) );//#i78696#->#i80521#
         aM.translate( m_nXPos, m_nYPos);
-        m_xShape->SvxShape::setPropertyValue( u"Transformation"_ustr, uno::Any( B2DHomMatrixToHomogenMatrix3(aM) ) );
+        m_xShape->SvxShape::setPropertyValue( u"Transformation"_ustr, cpo::uno::Any( B2DHomMatrixToHomogenMatrix3(aM) ) );
     }
     catch( const uno::Exception& )
     {

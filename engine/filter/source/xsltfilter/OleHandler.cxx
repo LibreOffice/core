@@ -17,7 +17,7 @@
 
 #include <cppuhelper/factory.hxx>
 #include <comphelper/base64.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -31,6 +31,7 @@
 #include <package/InflateZlib.hxx>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::embed;

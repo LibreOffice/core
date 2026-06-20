@@ -19,7 +19,7 @@
 #pragma once
 
 #include <com/sun/star/beans/PropertyState.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <rtl/ustring.hxx>
 
 #include <map>
@@ -49,12 +49,12 @@ public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const;
 
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const;
+    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const;
 
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
@@ -63,15 +63,15 @@ public:
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const;
+    virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const;
 
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
     virtual css::beans::PropertyState getPropertyState( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const;
 
 protected:
-    virtual css::uno::Any convertInnerToOuterValue( const css::uno::Any& rInnerValue ) const;
-    virtual css::uno::Any convertOuterToInnerValue( const css::uno::Any& rOuterValue ) const;
+    virtual cpo::uno::Any convertInnerToOuterValue( const cpo::uno::Any& rInnerValue ) const;
+    virtual cpo::uno::Any convertOuterToInnerValue( const cpo::uno::Any& rOuterValue ) const;
 
 protected:
     OUString             m_aOuterName;

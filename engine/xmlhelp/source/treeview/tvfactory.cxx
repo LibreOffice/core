@@ -31,6 +31,7 @@
 using namespace treeview;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
@@ -68,9 +69,9 @@ Reference< XInterface > SAL_CALL
 TVFactory::createInstance(
     const OUString& aServiceSpecifier )
 {
-    uno::Sequence<uno::Any> seq(comphelper::InitAnyPropertySequence(
+    uno::Sequence<cpo::uno::Any> seq(comphelper::InitAnyPropertySequence(
     {
-        {"nodepath", uno::Any(OUString())}
+        {"nodepath", cpo::uno::Any(OUString())}
     }));
 
     return createInstanceWithArguments( aServiceSpecifier, seq );
@@ -122,7 +123,7 @@ TVFactory::getAvailableServiceNames( )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_help_TreeViewImpl_get_implementation(
-    css::uno::XComponentContext* /*context*/, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* /*context*/, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new TVFactory);
 }

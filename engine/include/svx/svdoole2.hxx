@@ -206,7 +206,7 @@ public:
 
     SAL_DLLPRIVATE virtual void        Closed() override;
     SAL_DLLPRIVATE virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const OUString& rMimeType, const css::uno::Any & rValue ) override;
+        const OUString& rMimeType, const cpo::uno::Any & rValue ) override;
 
     void                Connect() { GetRealObject(); }
 };
@@ -218,7 +218,7 @@ class SVXCORE_DLLPUBLIC SdrIFrameLink final : public sfx2::SvBaseLink
 public:
     explicit SdrIFrameLink(SdrOle2Obj* pObject);
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const OUString& rMimeType, const css::uno::Any & rValue ) override;
+        const OUString& rMimeType, const cpo::uno::Any & rValue ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

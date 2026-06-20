@@ -29,7 +29,7 @@ public:
 
     // ____ XRequestCallback ____
     virtual void SAL_CALL addCallback(const css::uno::Reference<::css::awt::XCallback>& xCallback,
-                                      const css::uno::Any& aData) override;
+                                      const cpo::uno::Any& aData) override;
 
 private:
     css::uno::Reference<css::awt::XCallback> m_xCallback;

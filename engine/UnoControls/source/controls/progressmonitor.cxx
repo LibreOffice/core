@@ -34,6 +34,7 @@
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
+using namespace css::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::awt;
 
@@ -46,7 +47,7 @@ constexpr OUString DEFAULT_BUTTONLABEL = u"Abbrechen"_ustr;
 
 namespace unocontrols {
 
-ProgressMonitor::ProgressMonitor( const cpo::uno::Reference< XComponentContext >& rxContext )
+ProgressMonitor::ProgressMonitor( const css::uno::Reference< XComponentContext >& rxContext )
     : ProgressMonitor_BASE(rxContext)
 {
     // It's not allowed to work with member in this method (refcounter !!!)
@@ -254,7 +255,7 @@ sal_Int32 SAL_CALL ProgressMonitor::getValue ()
 }
 
 //  XButton
-void SAL_CALL ProgressMonitor::addActionListener ( const cpo::uno::Reference< XActionListener > & rListener )
+void SAL_CALL ProgressMonitor::addActionListener ( const css::uno::Reference< XActionListener > & rListener )
 {
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex );
@@ -266,7 +267,7 @@ void SAL_CALL ProgressMonitor::addActionListener ( const cpo::uno::Reference< XA
 }
 
 //  XButton
-void SAL_CALL ProgressMonitor::removeActionListener ( const cpo::uno::Reference< XActionListener > & rListener )
+void SAL_CALL ProgressMonitor::removeActionListener ( const css::uno::Reference< XActionListener > & rListener )
 {
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex );
@@ -302,24 +303,24 @@ void SAL_CALL ProgressMonitor::setActionCommand ( const OUString& rCommand )
 }
 
 //  XLayoutConstrains
-cpo::awt::Size SAL_CALL ProgressMonitor::getMinimumSize ()
+css::awt::Size SAL_CALL ProgressMonitor::getMinimumSize ()
 {
-    return cpo::awt::Size (PROGRESSMONITOR_DEFAULT_WIDTH, PROGRESSMONITOR_DEFAULT_HEIGHT);
+    return css::awt::Size (PROGRESSMONITOR_DEFAULT_WIDTH, PROGRESSMONITOR_DEFAULT_HEIGHT);
 }
 
 //  XLayoutConstrains
-cpo::awt::Size SAL_CALL ProgressMonitor::getPreferredSize ()
+css::awt::Size SAL_CALL ProgressMonitor::getPreferredSize ()
 {
     // Ready for multithreading
     ClearableMutexGuard aGuard ( m_aMutex );
 
     // get information about required place of child controls
 
-    cpo::awt::Size        aTopicSize_Top      =   m_xTopic_Top->getPreferredSize          ();
-    cpo::awt::Size        aTopicSize_Bottom   =   m_xTopic_Bottom->getPreferredSize       ();
-    cpo::awt::Size        aButtonSize         =   m_xButton->getPreferredSize             ();
+    css::awt::Size        aTopicSize_Top      =   m_xTopic_Top->getPreferredSize          ();
+    css::awt::Size        aTopicSize_Bottom   =   m_xTopic_Bottom->getPreferredSize       ();
+    css::awt::Size        aButtonSize         =   m_xButton->getPreferredSize             ();
     Rectangle   aTempRectangle      = m_xProgressBar->getPosSize();
-    cpo::awt::Size        aProgressBarSize( aTempRectangle.Width, aTempRectangle.Height );
+    css::awt::Size        aProgressBarSize( aTempRectangle.Width, aTempRectangle.Height );
 
     aGuard.clear ();
 
@@ -345,17 +346,17 @@ cpo::awt::Size SAL_CALL ProgressMonitor::getPreferredSize ()
     }
 
     // return to caller
-    return cpo::awt::Size ( nWidth, nHeight );
+    return css::awt::Size ( nWidth, nHeight );
 }
 
 //  XLayoutConstrains
-cpo::awt::Size SAL_CALL ProgressMonitor::calcAdjustedSize ( const cpo::awt::Size& /*rNewSize*/ )
+css::awt::Size SAL_CALL ProgressMonitor::calcAdjustedSize ( const css::awt::Size& /*rNewSize*/ )
 {
     return getPreferredSize ();
 }
 
 //  XControl
-void SAL_CALL ProgressMonitor::createPeer ( const cpo::uno::Reference< XToolkit > & rToolkit, const cpo::uno::Reference< XWindowPeer > & rParent    )
+void SAL_CALL ProgressMonitor::createPeer ( const css::uno::Reference< XToolkit > & rToolkit, const css::uno::Reference< XWindowPeer > & rParent    )
 {
     if (!getPeer().is())
     {
@@ -364,24 +365,24 @@ void SAL_CALL ProgressMonitor::createPeer ( const cpo::uno::Reference< XToolkit 
         // If user forget to call "setPosSize()", we have still a correct size.
         // And a "MinimumSize" IS A "MinimumSize"!
         // We change not the position of control at this point.
-        cpo::awt::Size aDefaultSize = getMinimumSize ();
+        css::awt::Size aDefaultSize = getMinimumSize ();
         setPosSize ( 0, 0, aDefaultSize.Width, aDefaultSize.Height, PosSize::SIZE );
     }
 }
 
 //  XControl
-bool SAL_CALL ProgressMonitor::setModel ( const cpo::uno::Reference< XControlModel > & /*rModel*/ )
+bool SAL_CALL ProgressMonitor::setModel ( const css::uno::Reference< XControlModel > & /*rModel*/ )
 {
     // We have no model.
     return false;
 }
 
 //  XControl
-cpo::uno::Reference< XControlModel > SAL_CALL ProgressMonitor::getModel ()
+css::uno::Reference< XControlModel > SAL_CALL ProgressMonitor::getModel ()
 {
     // We have no model.
     // return (XControlModel*)this;
-    return cpo::uno::Reference< XControlModel >  ();
+    return css::uno::Reference< XControlModel >  ();
 }
 
 //  XComponent
@@ -434,7 +435,7 @@ void SAL_CALL ProgressMonitor::setPosSize ( sal_Int32 nX, sal_Int32 nY, sal_Int3
 }
 
 //  protected method
-void ProgressMonitor::impl_paint ( sal_Int32 nX, sal_Int32 nY, const cpo::uno::Reference< XGraphics > & rGraphics )
+void ProgressMonitor::impl_paint ( sal_Int32 nX, sal_Int32 nY, const css::uno::Reference< XGraphics > & rGraphics )
 {
     if (!rGraphics.is())
         return;
@@ -497,11 +498,11 @@ void ProgressMonitor::impl_recalcLayout ()
 
     // get information about required place of child controls
 
-    cpo::awt::Size    aTopicSize_Top      =   m_xTopic_Top->getPreferredSize      ();
-    cpo::awt::Size    aTextSize_Top       =   m_xText_Top->getPreferredSize       ();
-    cpo::awt::Size    aTopicSize_Bottom   =   m_xTopic_Bottom->getPreferredSize   ();
-    cpo::awt::Size    aTextSize_Bottom    =   m_xText_Bottom->getPreferredSize    ();
-    cpo::awt::Size    aButtonSize         =   m_xButton->getPreferredSize         ();
+    css::awt::Size    aTopicSize_Top      =   m_xTopic_Top->getPreferredSize      ();
+    css::awt::Size    aTextSize_Top       =   m_xText_Top->getPreferredSize       ();
+    css::awt::Size    aTopicSize_Bottom   =   m_xTopic_Bottom->getPreferredSize   ();
+    css::awt::Size    aTextSize_Bottom    =   m_xText_Bottom->getPreferredSize    ();
+    css::awt::Size    aButtonSize         =   m_xButton->getPreferredSize         ();
 
     // calc position and size of child controls
     // Button has preferred size!
@@ -589,7 +590,7 @@ void ProgressMonitor::impl_recalcLayout ()
 
     // All childcontrols make an implicit repaint in setPosSize()!
     // Make it also for this 3D-line ...
-    cpo::uno::Reference< XGraphics >  xGraphics = impl_getGraphicsPeer ();
+    css::uno::Reference< XGraphics >  xGraphics = impl_getGraphicsPeer ();
 
     xGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_SHADOW  );
     xGraphics->drawLine     ( m_a3DLine.X, m_a3DLine.Y, m_a3DLine.X+m_a3DLine.Width, m_a3DLine.Y );
@@ -740,9 +741,9 @@ bool ProgressMonitor::impl_debug_checkParameter ( std::u16string_view rTopic )
 
 }   // namespace unocontrols
 
-extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 stardiv_UnoControls_ProgressMonitor_get_implementation(
-    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new unocontrols::ProgressMonitor(context));
 }

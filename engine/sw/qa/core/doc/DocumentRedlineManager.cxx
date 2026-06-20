@@ -121,7 +121,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHighlightOnInsContext)
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 5, /*bBasicCall=*/false);
     uno::Sequence<beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"CharBackColor"_ustr,
-                                      uno::Any(static_cast<sal_Int32>(0xffff00))),
+                                      cpo::uno::Any(static_cast<sal_Int32>(0xffff00))),
     };
     dispatchCommand(mxComponent, u".uno:CharBackColor"_ustr, aArgs);
 
@@ -211,16 +211,16 @@ CPPUNIT_TEST_FIXTURE(Test, testFormatRedlineRecordOldCharStyle)
     pWrtShell->Insert(u"x"_ustr);
     pWrtShell->SelAll();
     uno::Sequence<beans::PropertyValue> aPropertyValues = {
-        comphelper::makePropertyValue(u"Style"_ustr, uno::Any(u"Emphasis"_ustr)),
-        comphelper::makePropertyValue(u"FamilyName"_ustr, uno::Any(u"CharacterStyles"_ustr)),
+        comphelper::makePropertyValue(u"Style"_ustr, cpo::uno::Any(u"Emphasis"_ustr)),
+        comphelper::makePropertyValue(u"FamilyName"_ustr, cpo::uno::Any(u"CharacterStyles"_ustr)),
     };
     dispatchCommand(mxComponent, u".uno:StyleApply"_ustr, aPropertyValues);
     pDocShell->SetChangeRecording(true);
 
     // When changing to a second char style:
     aPropertyValues = {
-        comphelper::makePropertyValue(u"Style"_ustr, uno::Any(u"Strong Emphasis"_ustr)),
-        comphelper::makePropertyValue(u"FamilyName"_ustr, uno::Any(u"CharacterStyles"_ustr)),
+        comphelper::makePropertyValue(u"Style"_ustr, cpo::uno::Any(u"Strong Emphasis"_ustr)),
+        comphelper::makePropertyValue(u"FamilyName"_ustr, cpo::uno::Any(u"CharacterStyles"_ustr)),
     };
     dispatchCommand(mxComponent, u".uno:StyleApply"_ustr, aPropertyValues);
 

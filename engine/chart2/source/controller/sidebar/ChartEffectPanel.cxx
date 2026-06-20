@@ -32,7 +32,7 @@ OUString getCID(const rtl::Reference<::chart::ChartModel>& xModel)
     if (!xSelectionSupplier.is())
         return OUString();
 
-    css::uno::Any aAny = xSelectionSupplier->getSelection();
+    cpo::uno::Any aAny = xSelectionSupplier->getSelection();
     if (!aAny.hasValue())
     {
         // if no selection, default to diagram wall so sidebar can show some editable properties
@@ -40,7 +40,7 @@ OUString getCID(const rtl::Reference<::chart::ChartModel>& xModel)
         if (pController)
         {
             pController->select(
-                css::uno::Any(ObjectIdentifier::createClassifiedIdentifier(OBJECTTYPE_PAGE, u"")));
+                cpo::uno::Any(ObjectIdentifier::createClassifiedIdentifier(OBJECTTYPE_PAGE, u"")));
             xSelectionSupplier = css::uno::Reference<css::view::XSelectionSupplier>(
                 xController, css::uno::UNO_QUERY);
             if (xSelectionSupplier.is())
@@ -139,7 +139,7 @@ void ChartEffectPanel::setGlowColor(const XColorItem& rItem)
     if (!xPropSet.is())
         return;
 
-    xPropSet->setPropertyValue(u"GlowEffectColor"_ustr, css::uno::Any(rItem.GetColorValue()));
+    xPropSet->setPropertyValue(u"GlowEffectColor"_ustr, cpo::uno::Any(rItem.GetColorValue()));
 }
 
 void ChartEffectPanel::setGlowRadius(const SdrMetricItem& rItem)
@@ -149,7 +149,7 @@ void ChartEffectPanel::setGlowRadius(const SdrMetricItem& rItem)
     if (!xPropSet.is())
         return;
 
-    xPropSet->setPropertyValue(u"GlowEffectRadius"_ustr, css::uno::Any(rItem.GetValue()));
+    xPropSet->setPropertyValue(u"GlowEffectRadius"_ustr, cpo::uno::Any(rItem.GetValue()));
 }
 
 void ChartEffectPanel::setGlowTransparency(const SdrPercentItem& rItem)
@@ -159,7 +159,7 @@ void ChartEffectPanel::setGlowTransparency(const SdrPercentItem& rItem)
     if (!xPropSet.is())
         return;
 
-    xPropSet->setPropertyValue(u"GlowEffectTransparency"_ustr, css::uno::Any(rItem.GetValue()));
+    xPropSet->setPropertyValue(u"GlowEffectTransparency"_ustr, cpo::uno::Any(rItem.GetValue()));
 }
 
 void ChartEffectPanel::setSoftEdgeRadius(const SdrMetricItem& rItem)
@@ -169,7 +169,7 @@ void ChartEffectPanel::setSoftEdgeRadius(const SdrMetricItem& rItem)
     if (!xPropSet.is())
         return;
 
-    xPropSet->setPropertyValue(u"SoftEdgeRadius"_ustr, css::uno::Any(rItem.GetValue()));
+    xPropSet->setPropertyValue(u"SoftEdgeRadius"_ustr, cpo::uno::Any(rItem.GetValue()));
 }
 
 void ChartEffectPanel::updateData()

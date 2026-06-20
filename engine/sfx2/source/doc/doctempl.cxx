@@ -22,7 +22,7 @@
 #include <mutex>
 #include <string_view>
 
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 #include <sal/log.hxx>
 
 #include <unotools/pathoptions.hxx>
@@ -76,6 +76,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::document;
 using namespace ::rtl;

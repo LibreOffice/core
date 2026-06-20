@@ -48,7 +48,7 @@ public:
     {
         return m_nCurrentPosition < m_sNames.getLength();
     }
-    virtual uno::Any SAL_CALL nextElement() override
+    virtual cpo::uno::Any SAL_CALL nextElement() override
     {
         // FIXME: should be add menubar
         if( !hasMoreElements() )
@@ -62,7 +62,7 @@ public:
             // Strange, shouldn't the Enumeration support match/share the
             // iteration code? ( e.g. ScVbaCommandBars::Item(...) )
             // and we at least should return here ( something ) it seems
-            return uno::Any( xCommandBar );
+            return cpo::uno::Any( xCommandBar );
         }
         else
             return nextElement();
@@ -94,15 +94,15 @@ ScVbaCommandBars::createEnumeration()
     return uno::Reference< container::XEnumeration >( new CommandBarEnumeration( this, mxContext, m_pCBarHelper ) );
 }
 
-uno::Any
-ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
+cpo::uno::Any
+ScVbaCommandBars::createCollectionObject( const cpo::uno::Any& aSource )
 {
     // aSource should be a name at this time, because of the class is API wrapper.
     OUString sResourceUrl;
     uno::Reference< container::XIndexAccess > xBarSettings;
     OUString sBarName;
     bool bMenu = false;
-    uno::Any aRet;
+    cpo::uno::Any aRet;
 
     if( aSource >>= sBarName )
     {
@@ -153,7 +153,7 @@ ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
 
 // XCommandBars
 uno::Reference< XCommandBar > SAL_CALL
-ScVbaCommandBars::Add( const css::uno::Any& Name, const css::uno::Any& /*Position*/, const css::uno::Any& /*MenuBar*/, const css::uno::Any& /*Temporary*/ )
+ScVbaCommandBars::Add( const cpo::uno::Any& Name, const cpo::uno::Any& /*Position*/, const cpo::uno::Any& /*MenuBar*/, const cpo::uno::Any& /*Temporary*/ )
 {
     // FIXME: only support to add Toolbar
     // Position - MsoBar MenuBar - bool
@@ -192,8 +192,8 @@ ScVbaCommandBars::getCount()
 }
 
 // ScVbaCollectionBaseImpl
-uno::Any SAL_CALL
-ScVbaCommandBars::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ )
+cpo::uno::Any SAL_CALL
+ScVbaCommandBars::Item( const cpo::uno::Any& aIndex, const cpo::uno::Any& /*aIndex2*/ )
 {
     if( aIndex.getValueTypeClass() == uno::TypeClass_STRING )
     {
@@ -205,7 +205,7 @@ ScVbaCommandBars::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ )
     aIndex >>= nIndex;
     if( nIndex == 1 )
     {
-        uno::Any aSource;
+        cpo::uno::Any aSource;
         if( m_pCBarHelper->getModuleId() == "com.sun.star.sheet.SpreadsheetDocument" )
             aSource <<= u"Worksheet Menu Bar"_ustr;
         else if( m_pCBarHelper->getModuleId() == "com.sun.star.text.TextDocument" )
@@ -213,7 +213,7 @@ ScVbaCommandBars::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ )
         if( aSource.hasValue() )
             return createCollectionObject( aSource );
     }
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 // XHelperInterface

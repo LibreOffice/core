@@ -719,13 +719,13 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                         pFieldmark->GetParameters()->insert(rParametersToAdd.begin(), rParametersToAdd.end());
                         OUString sFieldId = OUString::number( m_aFieldStack.back().mnFieldId );
                         pFieldmark->GetParameters()->insert(
-                                std::pair< OUString, uno::Any > (
+                                std::pair< OUString, cpo::uno::Any > (
                                     ODF_ID_PARAM,
-                                    uno::Any( sFieldId ) ) );
+                                    cpo::uno::Any( sFieldId ) ) );
                         pFieldmark->GetParameters()->insert(
-                                std::pair< OUString, uno::Any > (
+                                std::pair< OUString, cpo::uno::Any > (
                                     ODF_CODE_PARAM,
-                                    uno::Any( aCode ) ) );
+                                    cpo::uno::Any( aCode ) ) );
 
                         if ( m_aFieldStack.back().mnObjLocFc > 0 )
                         {
@@ -759,8 +759,8 @@ sal_uInt16 SwWW8ImplReader::End_Field()
 
                             // Store the OLE Id as a parameter
                             pFieldmark->GetParameters()->insert(
-                                    std::pair< OUString, uno::Any >(
-                                        ODF_OLE_PARAM, uno::Any( sOleId ) ) );
+                                    std::pair< OUString, cpo::uno::Any >(
+                                        ODF_OLE_PARAM, cpo::uno::Any( sOleId ) ) );
                         }
                     }
                 }

@@ -274,7 +274,7 @@ public:
     OUString const & getContainerName() const { return m_aContainerName; }
 // XInterface
 
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override ;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override ;
 
     virtual void SAL_CALL acquire()
         noexcept override;
@@ -428,7 +428,7 @@ public:
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XInitialization
-    void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
+    void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // XTypeProvider
     css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;

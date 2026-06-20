@@ -141,7 +141,7 @@ void DevelopmentToolDockingWindow::changeToCurrentSelection()
 {
     if (mxSelectionSupplier.is())
     {
-        css::uno::Any aAny = mxSelectionSupplier->getSelection();
+        cpo::uno::Any aAny = mxSelectionSupplier->getSelection();
         if (aAny.hasValue())
         {
             auto xInterface = aAny.get<css::uno::Reference<css::uno::XInterface>>();

@@ -350,7 +350,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 svx::ODataAccessDescriptor aDesc;
                 if ( pReqArgs->GetItemState( nSlot, true, &pItem ) == SfxItemState::SET )
                 {
-                    uno::Any aAny = static_cast<const SfxUnoAnyItem*>(pItem)->GetValue();
+                    cpo::uno::Any aAny = static_cast<const SfxUnoAnyItem*>(pItem)->GetValue();
                     uno::Sequence<beans::PropertyValue> aProperties;
                     if ( aAny >>= aProperties )
                         aDesc.initializeFrom( aProperties );
@@ -2899,7 +2899,7 @@ void ScDocShell::GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,
 #if defined(_WIN32)
 bool ScDocShell::DdeGetData( const OUString& rItem,
                              const OUString& rMimeType,
-                             css::uno::Any & rValue )
+                             cpo::uno::Any & rValue )
 {
     SotClipboardFormatId eFormatId = SotExchange::GetFormatIdFromMimeType( rMimeType );
     if (SotClipboardFormatId::STRING == eFormatId || SotClipboardFormatId::STRING_TSVC == eFormatId)
@@ -2948,7 +2948,7 @@ bool ScDocShell::DdeGetData( const OUString& rItem,
 
 bool ScDocShell::DdeSetData( const OUString& rItem,
                              const OUString& rMimeType,
-                             const css::uno::Any & rValue )
+                             const cpo::uno::Any & rValue )
 {
     SotClipboardFormatId eFormatId = SotExchange::GetFormatIdFromMimeType( rMimeType );
     if (SotClipboardFormatId::STRING == eFormatId || SotClipboardFormatId::STRING_TSVC == eFormatId)

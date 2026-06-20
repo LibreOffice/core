@@ -35,15 +35,15 @@ public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
     ScVbaHyperlink(
-        const css::uno::Sequence< css::uno::Any >& rArgs,
+        const css::uno::Sequence< cpo::uno::Any >& rArgs,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     /// @throws css::uno::RuntimeException
     ScVbaHyperlink(
         const css::uno::Reference< ov::XHelperInterface >& rxAnchor,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-        const css::uno::Any& rAddress, const css::uno::Any& rSubAddress,
-        const css::uno::Any& rScreenTip, const css::uno::Any& rTextToDisplay );
+        const cpo::uno::Any& rAddress, const cpo::uno::Any& rSubAddress,
+        const cpo::uno::Any& rScreenTip, const cpo::uno::Any& rTextToDisplay );
 
     virtual ~ScVbaHyperlink() override;
 

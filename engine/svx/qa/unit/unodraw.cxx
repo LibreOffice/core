@@ -66,8 +66,8 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testWriterGraphicExport)
     xExportFilter->setSourceDocument(xShape);
 
     uno::Sequence<beans::PropertyValue> aProperties(
-        comphelper::InitPropertySequence({ { "URL", uno::Any(maTempFile.GetURL()) },
-                                           { "MediaType", uno::Any(u"image/jpeg"_ustr) } }));
+        comphelper::InitPropertySequence({ { "URL", cpo::uno::Any(maTempFile.GetURL()) },
+                                           { "MediaType", cpo::uno::Any(u"image/jpeg"_ustr) } }));
     CPPUNIT_ASSERT(xExportFilter->filter(aProperties));
 }
 
@@ -118,9 +118,9 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testTableShadowDirect)
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have failed with throwing a
     // beans.UnknownPropertyException, as shadow-as-direct-formatting on tables were not possible.
-    xShapeProps->setPropertyValue(u"Shadow"_ustr, uno::Any(true));
+    xShapeProps->setPropertyValue(u"Shadow"_ustr, cpo::uno::Any(true));
     Color nRed = COL_LIGHTRED;
-    xShapeProps->setPropertyValue(u"ShadowColor"_ustr, uno::Any(nRed));
+    xShapeProps->setPropertyValue(u"ShadowColor"_ustr, cpo::uno::Any(nRed));
     CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"ShadowColor"_ustr) >>= nRed);
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, nRed);
 

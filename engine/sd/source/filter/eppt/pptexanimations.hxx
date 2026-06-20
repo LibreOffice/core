@@ -24,7 +24,7 @@
 #endif
 
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 
 #include <memory>
@@ -69,15 +69,15 @@ const int AFTEREFFECT_SET = 2;
 
 class AnimationExporter
 {
-    css::uno::Any aTarget;
+    cpo::uno::Any aTarget;
     const EscherSolverContainer& mrSolverContainer;
     ppt::ExSoundCollection& mrExSoundCollection;
     std::vector< AfterEffectNodePtr > maAfterEffectNodes;
     sal_Int32 mnCurrentGroup;
 
     static void writeZString( SvStream& rStrm, std::u16string_view aVal );
-    static bool getColorAny( const css::uno::Any& rAny, const sal_Int16 nColorSpace, sal_Int32& rMode, sal_Int32& rA, sal_Int32& rB, sal_Int32& rC );
-    static bool exportAnimProperty( SvStream& rStrm, const sal_uInt16 nPropertyId, const css::uno::Any& rAny, const TranslateMode eTranslateMode );
+    static bool getColorAny( const cpo::uno::Any& rAny, const sal_Int16 nColorSpace, sal_Int32& rMode, sal_Int32& rA, sal_Int32& rB, sal_Int32& rC );
+    static bool exportAnimProperty( SvStream& rStrm, const sal_uInt16 nPropertyId, const cpo::uno::Any& rAny, const TranslateMode eTranslateMode );
     static void exportAnimPropertyString( SvStream& rStrm, const sal_uInt16 nPropertyId, const OUString& rVal, const TranslateMode eTranslateMode );
     static void exportAnimPropertyFloat( SvStream& rStrm, const sal_uInt16 nPropertyId, const double& rVal );
     static void exportAnimPropertyuInt32( SvStream& rStrm, const sal_uInt16 nPropertyId, const sal_uInt32 nVal );
@@ -96,7 +96,7 @@ class AnimationExporter
     void exportNode( SvStream& rStrm, css::uno::Reference< css::animations::XAnimationNode > const & xNode,
                      const sal_uInt16 nContainerRecType, const sal_uInt16 nInstance, const sal_Int32 nGroupLevel, const bool bTakeBackInteractiveSequenceTiming,
                      const sal_Int16 nFillDefault );
-    void exportAnimateTargetElement( SvStream& rStrm, const css::uno::Any& rAny, const bool bCreate2b01Atom );
+    void exportAnimateTargetElement( SvStream& rStrm, const cpo::uno::Any& rAny, const bool bCreate2b01Atom );
     static void exportAnimateKeyPoints( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimate >& xAnimate );
     static void exportAnimValue( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >& xNode, const bool bExportAlways );
     void exportTransitionFilter( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
@@ -119,16 +119,16 @@ public:
     void doexport( const css::uno::Reference< css::drawing::XDrawPage >& xPage, SvStream& rStrm );
 
         // helper methods also used in ooxml export
-    static css::uno::Any convertAnimateValue( const css::uno::Any& rSource, std::u16string_view rAttributeName );
+    static cpo::uno::Any convertAnimateValue( const cpo::uno::Any& rSource, std::u16string_view rAttributeName );
         static bool GetNodeType( const css::uno::Reference< css::animations::XAnimationNode >& xNode, sal_Int16& nType );
         static sal_Int16 GetFillMode( const css::uno::Reference< css::animations::XAnimationNode >& xNode, const sal_Int16 nFillDefault );
-        static void GetUserData( const css::uno::Sequence< css::beans::NamedValue >& rUserData, const css::uno::Any ** pAny, std::size_t nLen );
+        static void GetUserData( const css::uno::Sequence< css::beans::NamedValue >& rUserData, const cpo::uno::Any ** pAny, std::size_t nLen );
         static sal_uInt32 TranslatePresetSubType( const sal_uInt32 nPresetClass, const sal_uInt32 nPresetId, std::u16string_view rPresetSubType );
         static sal_uInt32 GetPresetID( std::u16string_view aPreset, sal_uInt32 nAPIPresetClass, bool& bPresetId );
         static sal_uInt32 GetValueTypeForAttributeName( std::u16string_view rAttributeName );
 
     static const char* FindTransitionName( const sal_Int16 nType, const sal_Int16 nSubType, const bool bDirection );
-    static css::uno::Reference< css::drawing::XShape > getTargetElementShape( const css::uno::Any& rAny, sal_Int32& rBegin, sal_Int32& rEnd, bool& rParagraphTarget );
+    static css::uno::Reference< css::drawing::XShape > getTargetElementShape( const cpo::uno::Any& rAny, sal_Int32& rBegin, sal_Int32& rEnd, bool& rParagraphTarget );
 };
 } // namespace ppt
 

@@ -52,7 +52,7 @@ namespace gio
 inline constexpr OUString GIO_FILE_TYPE = u"application/vnd.sun.staroffice.gio-file"_ustr;
 inline constexpr OUString GIO_FOLDER_TYPE = u"application/vnd.sun.staroffice.gio-folder"_ustr;
 
-css::uno::Any convertToException(GError *pError,
+cpo::uno::Any convertToException(GError *pError,
     const css::uno::Reference< css::uno::XInterface >& rContext, bool bThrow=true);
 /// @throws css::io::IOException
 /// @throws css::uno::RuntimeException
@@ -72,8 +72,8 @@ private:
         GError **ppError=nullptr);
     bool isFolder(const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv);
 
-    css::uno::Any mapGIOError( GError *error );
-    css::uno::Any getBadArgExcept();
+    cpo::uno::Any mapGIOError( GError *error );
+    cpo::uno::Any getBadArgExcept();
 
     css::uno::Reference< css::sdbc::XRow >
         getPropertyValues(
@@ -88,7 +88,7 @@ private:
     bool doSetFileInfo ( GFileInfo *pNewInfo );
 
     /// @throws css::uno::Exception
-    css::uno::Any open(const css::ucb::OpenCommandArgument2 & rArg,
+    cpo::uno::Any open(const css::ucb::OpenCommandArgument2 & rArg,
         const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
     /// @throws css::uno::Exception
@@ -105,7 +105,7 @@ private:
     static void copyData( const css::uno::Reference< css::io::XInputStream >& xIn,
         const css::uno::Reference< css::io::XOutputStream >& xOut );
 
-    css::uno::Sequence< css::uno::Any >
+    css::uno::Sequence< cpo::uno::Any >
         setPropertyValues( const css::uno::Sequence<
             css::beans::PropertyValue >& rValues,
             const css::uno::Reference<
@@ -144,7 +144,7 @@ public:
     virtual OUString getParentURL() override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         noexcept override;
     virtual void SAL_CALL release()
@@ -162,7 +162,7 @@ public:
     virtual OUString SAL_CALL
     getContentType() override;
 
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
         execute( const css::ucb::Command& aCommand,
         sal_Int32 CommandId,
         const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override;

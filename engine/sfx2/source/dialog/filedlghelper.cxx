@@ -120,6 +120,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::ui::dialogs::TemplateDescription;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::cppu;
 
@@ -1604,7 +1605,7 @@ ErrCode FileDialogHelper_Impl::execute( css::uno::Sequence<OUString>& rpURLList,
                 }
 
                 if ( aEncryptionData.hasElements() )
-                    rpSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData) ) );
+                    rpSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, cpo::uno::Any( aEncryptionData) ) );
                 else
                     return ERRCODE_ABORT;
             }
@@ -2849,7 +2850,7 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
         rpSet->Put(SfxBoolItem(SID_DOC_READONLY, true));
 
     uno::Reference< ui::dialogs::XFilePickerControlAccess > xExtFileDlg( pDialog->GetFilePicker(), uno::UNO_QUERY );
-    uno::Any aVal = xExtFileDlg->getValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS, 0 );
+    cpo::uno::Any aVal = xExtFileDlg->getValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS, 0 );
     if (aVal.has<bool>() && pDialog->CheckCurrentFilterOptionsCapability())
         rShowFilterDialog = aVal.get<bool>();
 
@@ -2913,7 +2914,7 @@ ErrCode SetPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, SfxI
         // be unavailable, even for non-ODF documents, so append it here unconditionally
         pSet->Put(SfxUnoAnyItem(
             SID_ENCRYPTIONDATA,
-            uno::Any(comphelper::concatSequences(
+            cpo::uno::Any(comphelper::concatSequences(
                 aEncryptionData, comphelper::OStorageHelper::CreatePackageEncryptionData(
                                     rPasswordToOpen)))));
     }
@@ -2938,7 +2939,7 @@ ErrCode SetPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, SfxI
                     rPasswordToModify);
             if (aModifyPasswordInfo.hasElements() && pSet)
                 pSet->Put(
-                    SfxUnoAnyItem(SID_MODIFYPASSWORDINFO, uno::Any(aModifyPasswordInfo)));
+                    SfxUnoAnyItem(SID_MODIFYPASSWORDINFO, cpo::uno::Any(aModifyPasswordInfo)));
         }
         else
         {
@@ -2947,14 +2948,14 @@ ErrCode SetPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, SfxI
                 rPasswordToModify,
                 pCurrentFilter->GetServiceName() == "com.sun.star.text.TextDocument");
             if (nHash && pSet)
-                pSet->Put(SfxUnoAnyItem(SID_MODIFYPASSWORDINFO, uno::Any(nHash)));
+                pSet->Put(SfxUnoAnyItem(SID_MODIFYPASSWORDINFO, cpo::uno::Any(nHash)));
         }
     }
     else
     {
         uno::Sequence< beans::PropertyValue > aModifyPasswordInfo = ::comphelper::DocPasswordHelper::GenerateNewModifyPasswordInfo( rPasswordToModify );
         if ( aModifyPasswordInfo.hasElements() && pSet)
-            pSet->Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, uno::Any( aModifyPasswordInfo ) ) );
+            pSet->Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, cpo::uno::Any( aModifyPasswordInfo ) ) );
     }
     return ERRCODE_NONE;
 }

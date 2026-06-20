@@ -26,6 +26,7 @@
 
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace dp_registry::backend::component {
 

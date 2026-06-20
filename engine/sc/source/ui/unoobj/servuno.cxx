@@ -86,16 +86,16 @@ namespace {
 #if HAVE_FEATURE_SCRIPTING
 class ScVbaObjectForCodeNameProvider : public ::cppu::WeakImplHelper< container::XNameAccess >
 {
-    uno::Any maWorkbook;
-    uno::Any maCachedObject;
+    cpo::uno::Any maWorkbook;
+    cpo::uno::Any maCachedObject;
     ScDocShell* mpDocShell;
 public:
     explicit ScVbaObjectForCodeNameProvider( ScDocShell* pDocShell ) : mpDocShell( pDocShell )
     {
-        uno::Sequence< uno::Any > aArgs{
+        uno::Sequence< cpo::uno::Any > aArgs{
             // access the application object ( parent for workbook )
-            uno::Any(ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.Application", {} )),
-            uno::Any(uno::Reference(static_cast<css::sheet::XSpreadsheetDocument*>(mpDocShell->GetModel())))
+            cpo::uno::Any(ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.Application", {} )),
+            cpo::uno::Any(uno::Reference(static_cast<css::sheet::XSpreadsheetDocument*>(mpDocShell->GetModel())))
         };
         maWorkbook <<= ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.excel.Workbook", aArgs );
     }
@@ -103,7 +103,7 @@ public:
     virtual bool SAL_CALL hasByName( const OUString& aName ) override
     {
         SolarMutexGuard aGuard;
-        maCachedObject = uno::Any(); // clear cached object
+        maCachedObject = cpo::uno::Any(); // clear cached object
 
         ScDocument& rDoc = mpDocShell->GetDocument();
         // aName is generated from the stream name which can be different ( case-wise )
@@ -128,7 +128,7 @@ public:
                         uno::Reference<sheet::XSpreadsheets > xSheets( xSpreadDoc->getSheets(), uno::UNO_SET_THROW );
                         uno::Reference< container::XIndexAccess > xIndexAccess( xSheets, uno::UNO_QUERY_THROW );
                         uno::Reference< sheet::XSpreadsheet > xSheet( xIndexAccess->getByIndex( i ), uno::UNO_QUERY_THROW );
-                        uno::Sequence< uno::Any > aArgs{ maWorkbook, uno::Any(uno::Reference< frame::XModel >(xSpreadDoc)), uno::Any(sSheetName) };
+                        uno::Sequence< cpo::uno::Any > aArgs{ maWorkbook, cpo::uno::Any(uno::Reference< frame::XModel >(xSpreadDoc)), cpo::uno::Any(sSheetName) };
                         // use the convenience function
                         maCachedObject <<= ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.excel.Worksheet", aArgs );
                         break;
@@ -139,7 +139,7 @@ public:
         return maCachedObject.hasValue();
 
     }
-    css::uno::Any SAL_CALL getByName( const OUString& aName ) override
+    cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override
     {
         SolarMutexGuard aGuard;
         if ( !hasByName( aName ) )
@@ -585,12 +585,12 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
         case Type::VBAGLOBALS:
             if (pDocShell)
             {
-                uno::Any aGlobs;
+                cpo::uno::Any aGlobs;
                 if ( !pDocShell->GetBasicManager()->GetGlobalUNOConstant( u"VBAGlobals"_ustr, aGlobs ) )
                 {
-                    uno::Sequence< uno::Any > aArgs{ uno::Any(uno::Reference(static_cast<css::sheet::XSpreadsheetDocument*>(pDocShell->GetModel()))) };
+                    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(uno::Reference(static_cast<css::sheet::XSpreadsheetDocument*>(pDocShell->GetModel()))) };
                     xRet = ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( u"ooo.vba.excel.Globals"_ustr, aArgs );
-                    pDocShell->GetBasicManager()->SetGlobalUNOConstant( u"VBAGlobals"_ustr, uno::Any( xRet ) );
+                    pDocShell->GetBasicManager()->SetGlobalUNOConstant( u"VBAGlobals"_ustr, cpo::uno::Any( xRet ) );
                     BasicManager* pAppMgr = SfxApplication::GetBasicManager();
                     if ( pAppMgr )
                         pAppMgr->SetGlobalUNOConstant( u"ThisExcelDoc"_ustr, aArgs[ 0 ] );

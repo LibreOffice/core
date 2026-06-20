@@ -42,50 +42,50 @@ public:
 
 void TypesTest::testGetINT64()
 {
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(1337), ::comphelper::getINT64(uno::Any(sal_Int64(1337))));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(1337), ::comphelper::getINT64(cpo::uno::Any(sal_Int64(1337))));
 
-    uno::Any aValue;
+    cpo::uno::Any aValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int64(0), ::comphelper::getINT64(aValue));
 }
 
 void TypesTest::testGetINT32()
 {
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1337), ::comphelper::getINT32(uno::Any(sal_Int32(1337))));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1337), ::comphelper::getINT32(cpo::uno::Any(sal_Int32(1337))));
 
-    uno::Any aValue;
+    cpo::uno::Any aValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), ::comphelper::getINT32(aValue));
 }
 
 void TypesTest::testGetINT16()
 {
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(1337), ::comphelper::getINT16(uno::Any(sal_Int16(1337))));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1337), ::comphelper::getINT16(cpo::uno::Any(sal_Int16(1337))));
 
-    uno::Any aValue;
+    cpo::uno::Any aValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), ::comphelper::getINT16(aValue));
 }
 
 void TypesTest::testGetDouble()
 {
-    CPPUNIT_ASSERT_EQUAL(1337.1337, ::comphelper::getDouble(uno::Any(1337.1337)));
+    CPPUNIT_ASSERT_EQUAL(1337.1337, ::comphelper::getDouble(cpo::uno::Any(1337.1337)));
 
-    uno::Any aValue;
+    cpo::uno::Any aValue;
     CPPUNIT_ASSERT_EQUAL(0.0, ::comphelper::getDouble(aValue));
 }
 
 void TypesTest::testGetFloat()
 {
     CPPUNIT_ASSERT_EQUAL(static_cast<float>(1337.0),
-                         ::comphelper::getFloat(uno::Any(static_cast<float>(1337.0))));
+                         ::comphelper::getFloat(cpo::uno::Any(static_cast<float>(1337.0))));
 
-    uno::Any aValue;
+    cpo::uno::Any aValue;
     CPPUNIT_ASSERT_EQUAL(static_cast<float>(0.0), ::comphelper::getFloat(aValue));
 }
 
 void TypesTest::testGetString()
 {
-    CPPUNIT_ASSERT_EQUAL(u"1337"_ustr, ::comphelper::getString(uno::Any(u"1337"_ustr)));
+    CPPUNIT_ASSERT_EQUAL(u"1337"_ustr, ::comphelper::getString(cpo::uno::Any(u"1337"_ustr)));
 
-    uno::Any aValue;
+    cpo::uno::Any aValue;
     CPPUNIT_ASSERT_EQUAL(u""_ustr, ::comphelper::getString(aValue));
 }
 

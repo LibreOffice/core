@@ -72,7 +72,7 @@ public:
     void            SetDoneHdl( const Link<Graphic*,void>& i_rHdl ) { maDoneHdl = i_rHdl; }
 
     // css::uno::XInterface
-    css::uno::Any   SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    cpo::uno::Any   SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     void            SAL_CALL acquire() noexcept override  { OWeakObject::acquire(); }
     void            SAL_CALL release() noexcept override  { OWeakObject::release(); }
 
@@ -85,7 +85,7 @@ public:
     void SAL_CALL startProduction(  ) override;
 
     // css::lang::XInitialization
-    void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     OUString SAL_CALL getImplementationName() override;
     bool SAL_CALL supportsService(OUString const & ServiceName) override;

@@ -471,7 +471,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
                 bOK = aEditHelper.GetString(SotClipboardFormatId::MARKDOWN, aMarkdown);
                 if (bOK)
                 {
-                    bOK = SetAny(uno::Any(aMarkdown));
+                    bOK = SetAny(cpo::uno::Any(aMarkdown));
                 }
             }
         }
@@ -482,7 +482,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             // Markdown table from multi-cell range
             ScRange aRange = lcl_reduceBlock(*m_pDoc, m_aBlock);
             bool bAnnotated = (nFormat == SotClipboardFormatId::MARKDOWN_ANNOTATED);
-            bOK = SetAny(uno::Any(
+            bOK = SetAny(cpo::uno::Any(
                 ScTransferObj::GetMarkdownFromRange(*m_pDoc, aRange, bAnnotated)));
         }
         else if ( ( nFormat == SotClipboardFormatId::RTF || nFormat == SotClipboardFormatId::RICHTEXT ||

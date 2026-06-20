@@ -618,9 +618,9 @@ bool SAL_CALL SfxBaseController::suspend( bool bSuspend )
 //  SfxBaseController -> XController
 
 
-uno::Any SfxBaseController::getViewData()
+cpo::uno::Any SfxBaseController::getViewData()
 {
-    uno::Any         aAny;
+    cpo::uno::Any         aAny;
     SolarMutexGuard aGuard;
     if ( m_pData->m_pViewShell )
     {
@@ -636,7 +636,7 @@ uno::Any SfxBaseController::getViewData()
 //  SfxBaseController -> XController
 
 
-void SAL_CALL SfxBaseController::restoreViewData( const uno::Any& aValue )
+void SAL_CALL SfxBaseController::restoreViewData( const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
     if ( m_pData->m_pViewShell )
@@ -1152,7 +1152,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                         Reference< beans::XPropertySet > xFrameProps( m_pData->m_xFrame, uno::UNO_QUERY_THROW );
                         Reference< beans::XPropertySet > xLayouterProps(
                             xFrameProps->getPropertyValue(u"LayoutManager"_ustr), uno::UNO_QUERY_THROW );
-                        xLayouterProps->setPropertyValue(u"PreserveContentSize"_ustr, uno::Any( true ) );
+                        xLayouterProps->setPropertyValue(u"PreserveContentSize"_ustr, cpo::uno::Any( true ) );
                     }
                     catch (const uno::Exception&)
                     {
@@ -1423,7 +1423,7 @@ void SAL_CALL SfxBaseController::removeTitleChangeListener(const Reference< fram
         xBroadcaster->removeTitleChangeListener (xListener);
 }
 
-void SfxBaseController::initialize( const css::uno::Sequence< css::uno::Any >& /*aArguments*/ )
+void SfxBaseController::initialize( const css::uno::Sequence< cpo::uno::Any >& /*aArguments*/ )
 {
 }
 

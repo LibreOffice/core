@@ -15,7 +15,7 @@
 #include <com/sun/star/text/XAutoTextGroup.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <cppunit/TestAssert.h>

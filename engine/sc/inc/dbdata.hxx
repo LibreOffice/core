@@ -59,8 +59,8 @@ public:
     ScDatabaseSettingItem( const ScDatabaseSettingItem& rItem );
     virtual ~ScDatabaseSettingItem() override;
 
-    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool            QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     ScDatabaseSettingItem& operator=( const ScDatabaseSettingItem& rItem );
     virtual bool operator==( const SfxPoolItem& ) const override;

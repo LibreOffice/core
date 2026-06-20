@@ -317,13 +317,13 @@ WinUserInfoBe::WinUserInfoBe()
 
 WinUserInfoBe::~WinUserInfoBe() {}
 
-void WinUserInfoBe::setPropertyValue(OUString const&, css::uno::Any const&)
+void WinUserInfoBe::setPropertyValue(OUString const&, cpo::uno::Any const&)
 {
     throw css::lang::IllegalArgumentException("setPropertyValue not supported",
                                               static_cast<cppu::OWeakObject*>(this), -1);
 }
 
-css::uno::Any WinUserInfoBe::getPropertyValue(OUString const& PropertyName)
+cpo::uno::Any WinUserInfoBe::getPropertyValue(OUString const& PropertyName)
 {
     OUString sValue;
     // Only process the first argument of possibly multiple space- or comma-separated arguments
@@ -399,8 +399,8 @@ css::uno::Any WinUserInfoBe::getPropertyValue(OUString const& PropertyName)
     else
         throw css::beans::UnknownPropertyException(sToken, static_cast<cppu::OWeakObject*>(this));
 
-    return css::uno::Any(css::beans::Optional<css::uno::Any>(
-        !sValue.isEmpty(), sValue.isEmpty() ? css::uno::Any() : css::uno::Any(sValue)));
+    return cpo::uno::Any(css::beans::Optional<cpo::uno::Any>(
+        !sValue.isEmpty(), sValue.isEmpty() ? cpo::uno::Any() : cpo::uno::Any(sValue)));
 }
 
 OUString SAL_CALL WinUserInfoBe::getImplementationName()
@@ -423,7 +423,7 @@ css::uno::Sequence<OUString> SAL_CALL WinUserInfoBe::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 extensions_WinUserInfoBe_get_implementation(css::uno::XComponentContext*,
-                                            css::uno::Sequence<css::uno::Any> const&)
+                                            css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new extensions::config::WinUserInfo::WinUserInfoBe());
 }

@@ -335,28 +335,28 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     if ( pMarginItem )
                         aMargin = pMarginItem->GetSize();
 
-                    xSet->setPropertyValue(u"FrameURL"_ustr, uno::Any( pURLItem->GetValue() ) );
+                    xSet->setPropertyValue(u"FrameURL"_ustr, cpo::uno::Any( pURLItem->GetValue() ) );
                     if ( pNameItem )
-                        xSet->setPropertyValue(u"FrameName"_ustr, uno::Any( pNameItem->GetValue() ) );
+                        xSet->setPropertyValue(u"FrameName"_ustr, cpo::uno::Any( pNameItem->GetValue() ) );
 
                     if ( eScroll == ScrollingMode::Auto )
                         xSet->setPropertyValue(u"FrameIsAutoScroll"_ustr,
-                            uno::Any( true ) );
+                            cpo::uno::Any( true ) );
                     else
                         xSet->setPropertyValue(u"FrameIsScrollingMode"_ustr,
-                            uno::Any( eScroll == ScrollingMode::Yes ) );
+                            cpo::uno::Any( eScroll == ScrollingMode::Yes ) );
 
                     if ( pBorderItem )
                         xSet->setPropertyValue(u"FrameIsBorder"_ustr,
-                            uno::Any( pBorderItem->GetValue() ) );
+                            cpo::uno::Any( pBorderItem->GetValue() ) );
 
                     if ( pMarginItem )
                     {
                         xSet->setPropertyValue(u"FrameMarginWidth"_ustr,
-                            uno::Any( sal_Int32( aMargin.Width() ) ) );
+                            cpo::uno::Any( sal_Int32( aMargin.Width() ) ) );
 
                         xSet->setPropertyValue(u"FrameMarginHeight"_ustr,
-                            uno::Any( sal_Int32( aMargin.Height() ) ) );
+                            cpo::uno::Any( sal_Int32( aMargin.Height() ) ) );
                     }
                 }
                 catch (const uno::Exception&)

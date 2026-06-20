@@ -77,10 +77,10 @@ OInputCompStream::~OInputCompStream()
     }
 }
 
-uno::Any SAL_CALL OInputCompStream::queryInterface( const uno::Type& rType )
+cpo::uno::Any SAL_CALL OInputCompStream::queryInterface( const uno::Type& rType )
 {
     // common interfaces
-    uno::Any aReturn = ::cppu::queryInterface
+    cpo::uno::Any aReturn = ::cppu::queryInterface
                 (   rType
                     ,   static_cast<io::XInputStream*> ( this )
                     ,   static_cast<io::XStream*> ( this )
@@ -505,7 +505,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL OInputCompStream::getProperty
     return uno::Reference< beans::XPropertySetInfo >();
 }
 
-void SAL_CALL OInputCompStream::setPropertyValue( const OUString& aPropertyName, const uno::Any& /*aValue*/ )
+void SAL_CALL OInputCompStream::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& /*aValue*/ )
 {
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
@@ -523,7 +523,7 @@ void SAL_CALL OInputCompStream::setPropertyValue( const OUString& aPropertyName,
     throw beans::UnknownPropertyException(aPropertyName); // TODO
 }
 
-uno::Any SAL_CALL OInputCompStream::getPropertyValue( const OUString& aProp )
+cpo::uno::Any SAL_CALL OInputCompStream::getPropertyValue( const OUString& aProp )
 {
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 

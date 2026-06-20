@@ -94,7 +94,7 @@ bool ClusteredColumnChartTypeTemplate::matchesTemplate2(
         if (!bGeomAmbiguous)
         {
             setFastPropertyValue_NoBroadcast(PROP_CLUSTEREDCOLUMN_TEMPLATE_GEOMETRY3D,
-                                             uno::Any(aCommonGeom));
+                                             cpo::uno::Any(aCommonGeom));
         }
     }
 
@@ -116,7 +116,7 @@ rtl::Reference<ChartType> ClusteredColumnChartTypeTemplate::getChartTypeForNewSe
 }
 
 // ____ OPropertySet ____
-void ClusteredColumnChartTypeTemplate::GetDefaultValue(sal_Int32 nHandle, uno::Any& rAny) const
+void ClusteredColumnChartTypeTemplate::GetDefaultValue(sal_Int32 nHandle, cpo::uno::Any& rAny) const
 {
     static ::chart::tPropertyValueMap aStaticDefaults = []() {
         ::chart::tPropertyValueMap aTmp;
@@ -154,14 +154,14 @@ void ClusteredColumnChartTypeTemplate::applyStyle2(const rtl::Reference<DataSeri
 {
     ChartTypeTemplate::applyStyle2(xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount);
     xSeries->setPropertyAlsoToAllAttributedDataPoints(u"BorderStyle"_ustr,
-                                                      uno::Any(drawing::LineStyle_NONE));
+                                                      cpo::uno::Any(drawing::LineStyle_NONE));
     if (getDimension() != 3)
         return;
 
     try
     {
         //apply Geometry3D
-        uno::Any aAGeometry3D;
+        cpo::uno::Any aAGeometry3D;
         getFastPropertyValue(aAGeometry3D, PROP_CLUSTEREDCOLUMN_TEMPLATE_GEOMETRY3D);
         xSeries->setPropertyAlsoToAllAttributedDataPoints(u"Geometry3D"_ustr, aAGeometry3D);
     }
@@ -176,7 +176,7 @@ void ClusteredColumnChartTypeTemplate::resetStyles2(
 {
     ChartTypeTemplate::resetStyles2(xDiagram);
     std::vector<rtl::Reference<DataSeries>> aSeriesVec(xDiagram->getDataSeries());
-    uno::Any aLineStyleAny(drawing::LineStyle_NONE);
+    cpo::uno::Any aLineStyleAny(drawing::LineStyle_NONE);
     for (auto const& series : aSeriesVec)
     {
         if (getDimension() == 3)

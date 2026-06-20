@@ -28,7 +28,7 @@
 #include "com/sun/star/uno/Reference.h"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
-#include "com/sun/star/uno/Any.hxx"
+#include "cpo/uno/Any.hxx"
 #include "cppu/cppudllapi.h"
 
 extern "C" CPPU_DLLPUBLIC rtl_uString * SAL_CALL cppu_unsatisfied_iquery_msg(
@@ -47,7 +47,7 @@ inline XInterface * BaseReference::iquery(
 {
     if (pInterface)
     {
-        Any aRet( pInterface->queryInterface( rType ) );
+        cpo::uno::Any aRet( pInterface->queryInterface( rType ) );
         if (typelib_TypeClass_INTERFACE == aRet.pType->eTypeClass)
         {
             XInterface * pRet = static_cast< XInterface * >( aRet.pReserved );
@@ -168,7 +168,7 @@ inline Reference< interface_type >::Reference( XInterface * pInterface, UnoRefer
 }
 
 template< class interface_type >
-inline Reference< interface_type >::Reference( const Any & rAny, UnoReference_Query )
+inline Reference< interface_type >::Reference( const cpo::uno::Any & rAny, UnoReference_Query )
 {
     _pInterface = (typelib_TypeClass_INTERFACE == rAny.pType->eTypeClass
                    ? iquery( static_cast< XInterface * >( rAny.pReserved ) ) : NULL);
@@ -187,7 +187,7 @@ inline Reference< interface_type >::Reference( XInterface * pInterface, UnoRefer
 }
 
 template< class interface_type >
-inline Reference< interface_type >::Reference( const Any & rAny, UnoReference_QueryThrow )
+inline Reference< interface_type >::Reference( const cpo::uno::Any & rAny, UnoReference_QueryThrow )
 {
     _pInterface = iquery_throw( typelib_TypeClass_INTERFACE == rAny.pType->eTypeClass
                                 ? static_cast< XInterface * >( rAny.pReserved ) : NULL );
@@ -265,7 +265,7 @@ inline bool Reference< interface_type >::set(
 
 template< class interface_type >
 inline bool Reference< interface_type >::set(
-    Any const & rAny, UnoReference_Query )
+    cpo::uno::Any const & rAny, UnoReference_Query )
 {
     return set(
         castFromXInterface(
@@ -293,7 +293,7 @@ inline void Reference< interface_type >::set(
 
 template< class interface_type >
 inline void Reference< interface_type >::set(
-    Any const & rAny, UnoReference_QueryThrow )
+    cpo::uno::Any const & rAny, UnoReference_QueryThrow )
 {
     set( castFromXInterface(
              iquery_throw(
@@ -372,19 +372,6 @@ inline Reference< other_type > Reference< interface_type >::queryThrow() const
     return Reference< other_type >(*this, UNO_QUERY_THROW);
 }
 
-template< class interface_type >
-inline Reference< interface_type > Any::query() const
-{
-    return Reference< interface_type >(*this, UNO_QUERY);
-}
-
-template< class interface_type >
-inline Reference< interface_type > Any::queryThrow() const
-{
-    return Reference< interface_type >(*this, UNO_QUERY_THROW);
-}
-
-
 inline bool BaseReference::operator == ( XInterface * pInterface ) const
 {
     if (_pInterface == pInterface)
@@ -445,6 +432,23 @@ template<typename charT, typename traits> std::basic_ostream<charT, traits> &
 operator <<(
     std::basic_ostream<charT, traits> & stream, BaseReference const & ref)
 { return stream << ref.get(); }
+
+}
+
+namespace cpo::uno
+{
+
+template< class interface_type >
+inline css::uno::Reference< interface_type > Any::query() const
+{
+    return css::uno::Reference< interface_type >(*this, css::uno::UNO_QUERY);
+}
+
+template< class interface_type >
+inline css::uno::Reference< interface_type > Any::queryThrow() const
+{
+    return css::uno::Reference< interface_type >(*this, css::uno::UNO_QUERY_THROW);
+}
 
 }
 

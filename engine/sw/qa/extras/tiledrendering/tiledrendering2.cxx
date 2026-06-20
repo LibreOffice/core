@@ -281,7 +281,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSignatureState)
 
     // When initializing tiled rendering with an author name:
     uno::Sequence<beans::PropertyValue> aPropertyValues
-        = { comphelper::makePropertyValue(u".uno:Author"_ustr, uno::Any(u"A"_ustr)) };
+        = { comphelper::makePropertyValue(u".uno:Author"_ustr, cpo::uno::Any(u"A"_ustr)) };
     pXTextDocument->initializeForTiledRendering(aPropertyValues);
     SignatureState eState = getSwDocShell()->GetDocumentSignatureState();
 
@@ -1088,7 +1088,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testBackgroundImageLinkSurvivesUpdate
 
     // deliver a locally loadable graphic to both links, standing in for the
     // arrival of the remote data
-    uno::Any aFetched(createFileURL(u"fill.png"));
+    cpo::uno::Any aFetched(createFileURL(u"fill.png"));
     rLinkMgr.GetLinks()[0]->DataChanged(u"image/png"_ustr, aFetched);
     rLinkMgr.GetLinks()[1]->DataChanged(u"image/png"_ustr, aFetched);
 

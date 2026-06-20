@@ -151,8 +151,8 @@ SwVbaApplication::getOptions()
     return uno::Reference< word::XOptions >( new SwVbaOptions( mxContext ) );
 }
 
-uno::Any SAL_CALL
-SwVbaApplication::CommandBars( const uno::Any& aIndex )
+cpo::uno::Any SAL_CALL
+SwVbaApplication::CommandBars( const cpo::uno::Any& aIndex )
 {
     try
     {
@@ -160,7 +160,7 @@ SwVbaApplication::CommandBars( const uno::Any& aIndex )
     }
     catch (const uno::RuntimeException&)
     {
-        return uno::Any();
+        return cpo::uno::Any();
     }
 }
 
@@ -177,41 +177,41 @@ SwVbaApplication::getWordBasic()
     return xWB;
 }
 
-uno::Any SAL_CALL
-SwVbaApplication::Documents( const uno::Any& index )
+cpo::uno::Any SAL_CALL
+SwVbaApplication::Documents( const cpo::uno::Any& index )
 {
     uno::Reference< XCollection > xCol( new SwVbaDocuments( this, mxContext ) );
     if ( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-    return uno::Any( xCol );
+        return xCol->Item( index, cpo::uno::Any() );
+    return cpo::uno::Any( xCol );
 }
 
-uno::Any SAL_CALL
-SwVbaApplication::Addins( const uno::Any& index )
+cpo::uno::Any SAL_CALL
+SwVbaApplication::Addins( const cpo::uno::Any& index )
 {
     static uno::Reference< XCollection > xCol( new SwVbaAddins( this, mxContext ) );
     if ( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-    return uno::Any( xCol );
+        return xCol->Item( index, cpo::uno::Any() );
+    return cpo::uno::Any( xCol );
 }
 
-uno::Any SAL_CALL
-SwVbaApplication::Dialogs( const uno::Any& index )
+cpo::uno::Any SAL_CALL
+SwVbaApplication::Dialogs( const cpo::uno::Any& index )
 {
     uno::Reference< word::XDialogs > xCol( new SwVbaDialogs( this, mxContext, getCurrentSwDocument() ));
     if ( index.hasValue() )
         return xCol->Item( index );
-    return uno::Any( xCol );
+    return cpo::uno::Any( xCol );
 }
 
-uno::Any SAL_CALL
-SwVbaApplication::ListGalleries( const uno::Any& index )
+cpo::uno::Any SAL_CALL
+SwVbaApplication::ListGalleries( const cpo::uno::Any& index )
 {
     rtl::Reference< SwXTextDocument > xTextDoc( getCurrentSwDocument() );
     uno::Reference< XCollection > xCol( new SwVbaListGalleries( this, mxContext, xTextDoc ) );
     if ( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-    return uno::Any( xCol );
+        return xCol->Item( index, cpo::uno::Any() );
+    return cpo::uno::Any( xCol );
 }
 
 bool SAL_CALL SwVbaApplication::getDisplayAutoCompleteTips()
@@ -240,7 +240,7 @@ sal_Int32 SAL_CALL SwVbaApplication::getWindowState()
     auto xWindow = getActiveWindow();
     if (xWindow.is())
     {
-        uno::Any aState = xWindow->getWindowState();
+        cpo::uno::Any aState = xWindow->getWindowState();
         sal_Int32 nState;
         if (aState >>= nState)
             return nState;
@@ -256,7 +256,7 @@ void SAL_CALL SwVbaApplication::setWindowState( sal_Int32 _windowstate )
         auto xWindow = getActiveWindow();
         if (xWindow.is())
         {
-            uno::Any aState;
+            cpo::uno::Any aState;
             aState <<= _windowstate;
             xWindow->setWindowState( aState );
         }
@@ -319,12 +319,12 @@ OUString SAL_CALL SwVbaApplication::getStatusBar()
     return u""_ustr;
 }
 
-uno::Any SAL_CALL SwVbaApplication::getCustomizationContext()
+cpo::uno::Any SAL_CALL SwVbaApplication::getCustomizationContext()
 {
-    return uno::Any(); // ???
+    return cpo::uno::Any(); // ???
 }
 
-void SAL_CALL SwVbaApplication::setCustomizationContext(const uno::Any& /*_customizationcontext*/)
+void SAL_CALL SwVbaApplication::setCustomizationContext(const cpo::uno::Any& /*_customizationcontext*/)
 {
     // ???
 }
@@ -505,7 +505,7 @@ SwVbaApplication::getCurrentSwDocument()
 // XSinkCaller
 
 void SAL_CALL
-SwVbaApplication::CallSinks( const OUString& Method, uno::Sequence< uno::Any >& Arguments )
+SwVbaApplication::CallSinks( const OUString& Method, uno::Sequence< cpo::uno::Any >& Arguments )
 {
     for (auto& i : mvSinks)
     {

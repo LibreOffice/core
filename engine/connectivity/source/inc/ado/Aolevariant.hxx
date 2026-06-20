@@ -107,7 +107,7 @@ namespace connectivity::ado
         css::util::DateTime getDateTime() const;
         css::uno::Sequence<sal_Int8> getByteSequence() const;
         SAFEARRAY*      getUI1SAFEARRAYPtr() const;
-        css::uno::Any makeAny() const;
+        cpo::uno::Any makeAny() const;
 
         static VARIANT_BOOL VariantBool(bool bEinBoolean);
 

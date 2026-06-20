@@ -39,7 +39,7 @@ using namespace ::xmloff::token;
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 
 XMLIndexTableSourceContext::XMLIndexTableSourceContext(
     SvXMLImport& rImport, Reference<XPropertySet> & rPropSet)
@@ -107,16 +107,16 @@ void XMLIndexTableSourceContext::ProcessAttribute(const sax_fastparser::FastAttr
 
 void XMLIndexTableSourceContext::endFastElement(sal_Int32 nElement)
 {
-    rIndexPropertySet->setPropertyValue(u"CreateFromLabels"_ustr, css::uno::Any(bUseCaption));
+    rIndexPropertySet->setPropertyValue(u"CreateFromLabels"_ustr, cpo::uno::Any(bUseCaption));
 
     if (bSequenceOK)
     {
-        rIndexPropertySet->setPropertyValue(u"LabelCategory"_ustr, css::uno::Any(sSequence));
+        rIndexPropertySet->setPropertyValue(u"LabelCategory"_ustr, cpo::uno::Any(sSequence));
     }
 
     if (bDisplayFormatOK)
     {
-        rIndexPropertySet->setPropertyValue(u"LabelDisplayType"_ustr, css::uno::Any(nDisplayFormat));
+        rIndexPropertySet->setPropertyValue(u"LabelDisplayType"_ustr, cpo::uno::Any(nDisplayFormat));
     }
 
     XMLIndexSourceBaseContext::endFastElement(nElement);

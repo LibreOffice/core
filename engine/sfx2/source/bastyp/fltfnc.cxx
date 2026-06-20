@@ -418,7 +418,7 @@ ErrCode  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, std:
                 // If there is no acceptable type for this document at all, the type detection has possibly returned something else.
                 // The DocumentService property is only a preselection, and all preselections are considered as optional!
                 // This "wrong" type will be sorted out now because we match only allowed filters to the detected type
-                uno::Sequence< beans::NamedValue > lQuery { { u"Name"_ustr, css::uno::Any(sTypeName) } };
+                uno::Sequence< beans::NamedValue > lQuery { { u"Name"_ustr, cpo::uno::Any(sTypeName) } };
 
                 xNewFilter = GetFilterForProps(lQuery, nMust, nDont);
                 if (xNewFilter && xNewFilter->GetFilterName().endsWith("_pdf_addstream_import")
@@ -635,7 +635,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4Mime( const OUStrin
         return nullptr;
     }
 
-    css::uno::Sequence < css::beans::NamedValue > aSeq { { u"MediaType"_ustr, css::uno::Any(rMediaType) } };
+    css::uno::Sequence < css::beans::NamedValue > aSeq { { u"MediaType"_ustr, cpo::uno::Any(rMediaType) } };
     return GetFilterForProps( aSeq, nMust, nDont );
 }
 
@@ -661,7 +661,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4EA( const OUString&
         return nullptr;
     }
 
-    css::uno::Sequence < css::beans::NamedValue > aSeq { { u"Name"_ustr, css::uno::Any(rType) } };
+    css::uno::Sequence < css::beans::NamedValue > aSeq { { u"Name"_ustr, cpo::uno::Any(rType) } };
     return GetFilterForProps( aSeq, nMust, nDont );
 }
 
@@ -697,7 +697,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4Extension( const OU
         sExt = sExt.copy(1);
 
     css::uno::Sequence < css::beans::NamedValue > aSeq
-        { { u"Extensions"_ustr, css::uno::Any(uno::Sequence < OUString > { sExt } ) } };
+        { { u"Extensions"_ustr, cpo::uno::Any(uno::Sequence < OUString > { sExt } ) } };
     return GetFilterForProps( aSeq, nMust, nDont );
 }
 
@@ -707,7 +707,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4ClipBoardId( SotCli
         return nullptr;
 
     css::uno::Sequence < css::beans::NamedValue > aSeq
-        { { u"ClipboardFormat"_ustr, css::uno::Any(SotExchange::GetFormatName( nId )) } };
+        { { u"ClipboardFormat"_ustr, cpo::uno::Any(SotExchange::GetFormatName( nId )) } };
     return GetFilterForProps( aSeq, nMust, nDont );
 }
 
@@ -869,14 +869,14 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
     OUString sFilterName( rName );
     SfxFilterList_Impl& rList = *pFilterArr;
     uno::Sequence< beans::PropertyValue > lFilterProperties;
-    uno::Any aResult;
+    cpo::uno::Any aResult;
     try
     {
         aResult = xFilterCFG->getByName( sFilterName );
     }
     catch( container::NoSuchElementException& )
     {
-        aResult = uno::Any();
+        aResult = cpo::uno::Any();
     }
 
     if( !(aResult >>= lFilterProperties) )
@@ -947,7 +947,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
             }
             catch (const container::NoSuchElementException&)
             {
-                aResult = uno::Any();
+                aResult = cpo::uno::Any();
             }
 
             uno::Sequence< beans::PropertyValue > lTypeProperties;

@@ -32,7 +32,7 @@
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using namespace ::xmloff::token;
 
 
@@ -101,11 +101,11 @@ void XMLIndexObjectSourceContext::ProcessAttribute(const sax_fastparser::FastAtt
 
 void XMLIndexObjectSourceContext::endFastElement(sal_Int32 nElement)
 {
-    rIndexPropertySet->setPropertyValue(u"CreateFromStarCalc"_ustr, css::uno::Any(bUseCalc));
-    rIndexPropertySet->setPropertyValue(u"CreateFromStarChart"_ustr, css::uno::Any(bUseChart));
-    rIndexPropertySet->setPropertyValue(u"CreateFromStarDraw"_ustr, css::uno::Any(bUseDraw));
-    rIndexPropertySet->setPropertyValue(u"CreateFromStarMath"_ustr, css::uno::Any(bUseMath));
-    rIndexPropertySet->setPropertyValue(u"CreateFromOtherEmbeddedObjects"_ustr, css::uno::Any(bUseOtherObjects));
+    rIndexPropertySet->setPropertyValue(u"CreateFromStarCalc"_ustr, cpo::uno::Any(bUseCalc));
+    rIndexPropertySet->setPropertyValue(u"CreateFromStarChart"_ustr, cpo::uno::Any(bUseChart));
+    rIndexPropertySet->setPropertyValue(u"CreateFromStarDraw"_ustr, cpo::uno::Any(bUseDraw));
+    rIndexPropertySet->setPropertyValue(u"CreateFromStarMath"_ustr, cpo::uno::Any(bUseMath));
+    rIndexPropertySet->setPropertyValue(u"CreateFromOtherEmbeddedObjects"_ustr, cpo::uno::Any(bUseOtherObjects));
 
     XMLIndexSourceBaseContext::endFastElement(nElement);
 }

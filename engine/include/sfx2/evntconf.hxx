@@ -96,7 +96,7 @@ class SFX2_DLLPUBLIC SfxEventConfiguration
 {
 public:
     static void                         ConfigureEvent( const OUString& aName, const SvxMacro&, SfxObjectShell const * pObjSh);
-    static std::unique_ptr<SvxMacro>    ConvertToMacro( const css::uno::Any& rElement, SfxObjectShell* pDoc );
+    static std::unique_ptr<SvxMacro>    ConvertToMacro( const cpo::uno::Any& rElement, SfxObjectShell* pDoc );
 };
 
 #endif

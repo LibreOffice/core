@@ -219,13 +219,13 @@ sal_Int32 SwVbaReadFieldParams::FindNextStringPiece(const sal_Int32 nStart)
 
 // SwVbaFields
 
-static uno::Any lcl_createField( const uno::Reference< XHelperInterface >& xParent,
+static cpo::uno::Any lcl_createField( const uno::Reference< XHelperInterface >& xParent,
                                  const uno::Reference< uno::XComponentContext >& xContext,
-                                 const uno::Any& aSource )
+                                 const cpo::uno::Any& aSource )
 {
     uno::Reference< text::XTextField > xTextField( aSource, uno::UNO_QUERY_THROW );
     uno::Reference< word::XField > xField( new SwVbaField( xParent, xContext, xTextField ) );
-    return uno::Any( xField );
+    return cpo::uno::Any( xField );
 }
 
 namespace {
@@ -251,7 +251,7 @@ public:
     {
         return mxEnumeration->hasMoreElements();
     }
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         if ( !hasMoreElements() )
             throw container::NoSuchElementException();
@@ -290,7 +290,7 @@ public:
         }
         return nCount;
     }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
+    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         if( Index < 0 || Index >= getCount() )
             throw lang::IndexOutOfBoundsException();
@@ -326,7 +326,7 @@ SwVbaFields::SwVbaFields( const uno::Reference< XHelperInterface >& xParent,
 }
 
 uno::Reference< word::XField > SAL_CALL
-SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, const css::uno::Any& Type, const css::uno::Any& Text, const css::uno::Any& /*PreserveFormatting*/ )
+SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, const cpo::uno::Any& Type, const cpo::uno::Any& Text, const cpo::uno::Any& /*PreserveFormatting*/ )
 {
     sal_Int32 nType = word::WdFieldType::wdFieldEmpty;
     Type >>= nType;
@@ -389,7 +389,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_FileName( const OUS
     }
 
     uno::Reference< beans::XPropertySet > xProps( xTextField, uno::UNO_QUERY_THROW );
-    xProps->setPropertyValue(u"FileFormat"_ustr, uno::Any( nFileFormat ) );
+    xProps->setPropertyValue(u"FileFormat"_ustr, cpo::uno::Any( nFileFormat ) );
 
     return xTextField;
 }
@@ -489,7 +489,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
     if( bCustom )
     {
         uno::Reference< beans::XPropertySet > xProps( xTextField, uno::UNO_QUERY_THROW );
-        xProps->setPropertyValue(u"Name"_ustr, uno::Any( aDocProperty ) );
+        xProps->setPropertyValue(u"Name"_ustr, cpo::uno::Any( aDocProperty ) );
     }
 
     return xTextField;
@@ -503,8 +503,8 @@ SwVbaFields::createEnumeration()
 }
 
 // ScVbaCollectionBaseImpl
-uno::Any
-SwVbaFields::createCollectionObject( const uno::Any& aSource )
+cpo::uno::Any
+SwVbaFields::createCollectionObject( const cpo::uno::Any& aSource )
 {
     return lcl_createField( mxParent, mxContext, aSource );
 }

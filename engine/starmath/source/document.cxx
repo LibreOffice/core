@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 
 #include <comphelper/fileformat.h>
 #include <comphelper/accessibletexthelper.hxx>
@@ -91,6 +91,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SmDocShell, SfxObjectShell)

@@ -104,7 +104,7 @@ bool LegendItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSe
                 if( ! (GetPropertySet()->getPropertyValue( u"Show"_ustr ) >>= bWasShown) ||
                     ( bWasShown != bShow ))
                 {
-                    GetPropertySet()->setPropertyValue( u"Show"_ustr , uno::Any( bShow ));
+                    GetPropertySet()->setPropertyValue( u"Show"_ustr , cpo::uno::Any( bShow ));
                     bChanged = true;
                 }
             }
@@ -138,9 +138,9 @@ bool LegendItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSe
                     if( ! ( GetPropertySet()->getPropertyValue( u"AnchorPosition"_ustr ) >>= eOldPos ) ||
                         ( eOldPos != eNewPos ))
                     {
-                        GetPropertySet()->setPropertyValue( u"AnchorPosition"_ustr , uno::Any( eNewPos ));
-                        GetPropertySet()->setPropertyValue( u"Expansion"_ustr , uno::Any( eExpansion ));
-                        GetPropertySet()->setPropertyValue( u"RelativePosition"_ustr , uno::Any());
+                        GetPropertySet()->setPropertyValue( u"AnchorPosition"_ustr , cpo::uno::Any( eNewPos ));
+                        GetPropertySet()->setPropertyValue( u"Expansion"_ustr , cpo::uno::Any( eExpansion ));
+                        GetPropertySet()->setPropertyValue( u"RelativePosition"_ustr , cpo::uno::Any());
                         bChanged = true;
                     }
                 }
@@ -160,7 +160,7 @@ bool LegendItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSe
                 if(!(GetPropertySet()->getPropertyValue(u"Overlay"_ustr) >>= bOldOverlay) ||
                     (bOldOverlay != bOverlay))
                 {
-                    GetPropertySet()->setPropertyValue(u"Overlay"_ustr, uno::Any(bOverlay));
+                    GetPropertySet()->setPropertyValue(u"Overlay"_ustr, cpo::uno::Any(bOverlay));
                     bChanged = true;
                 }
             }

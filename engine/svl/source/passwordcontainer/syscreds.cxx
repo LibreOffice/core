@@ -65,7 +65,7 @@ SysCredentialsConfigItem::getSystemCredentialsURLs(std::unique_lock<std::mutex>&
     {
         // read config item
         uno::Sequence<OUString> aPropNames { u"AuthenticateUsingSystemCredentials"_ustr };
-        uno::Sequence< uno::Any > aAnyValues(
+        uno::Sequence< cpo::uno::Any > aAnyValues(
             utl::ConfigItem::GetProperties( aPropNames ) );
 
         OSL_ENSURE(
@@ -89,7 +89,7 @@ void SysCredentialsConfigItem::setSystemCredentialsURLs(
 {
     // write config item.
     uno::Sequence< OUString > aPropNames{ u"AuthenticateUsingSystemCredentials"_ustr };
-    uno::Sequence< uno::Any > aPropValues{ uno::Any(seqURLList) };
+    uno::Sequence< cpo::uno::Any > aPropValues{ cpo::uno::Any(seqURLList) };
 
     utl::ConfigItem::SetModified();
     utl::ConfigItem::PutProperties( aPropNames, aPropValues );

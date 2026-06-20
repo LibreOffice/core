@@ -50,7 +50,7 @@ namespace comphelper
         OPropertyStateHelper(::cppu::OBroadcastHelper& rBHlp,
                              ::cppu::IEventNotificationHook *i_pFireEvents);
 
-        virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& aType) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface(const css::uno::Type& aType) override;
 
     // XPropertyState
         virtual css::beans::PropertyState SAL_CALL
@@ -59,18 +59,18 @@ namespace comphelper
             getPropertyStates(const css::uno::Sequence< OUString >& aPropertyName) override final;
         virtual void SAL_CALL
             setPropertyToDefault(const OUString& PropertyName) override;
-        virtual css::uno::Any SAL_CALL
+        virtual cpo::uno::Any SAL_CALL
             getPropertyDefault(const OUString& aPropertyName) override;
 
     // access via handle
         virtual css::beans::PropertyState  getPropertyStateByHandle(sal_Int32 nHandle);
         virtual void                                    setPropertyToDefaultByHandle(sal_Int32 nHandle);
-        virtual css::uno::Any              getPropertyDefaultByHandle(sal_Int32 nHandle) const;
+        virtual cpo::uno::Any              getPropertyDefaultByHandle(sal_Int32 nHandle) const;
 
     protected:
         virtual ~OPropertyStateHelper() override;
 
-        void firePropertyChange(sal_Int32 nHandle, const css::uno::Any& aNewValue, const css::uno::Any& aOldValue);
+        void firePropertyChange(sal_Int32 nHandle, const cpo::uno::Any& aNewValue, const cpo::uno::Any& aOldValue);
 
         static css::uno::Sequence<css::uno::Type> getTypes();
     };

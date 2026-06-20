@@ -44,9 +44,9 @@ private:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
-    void SetStyleSheet( const css::uno::Any& rAny );
+    void SetStyleSheet( const cpo::uno::Any& rAny );
     /// @throws css::beans::UnknownPropertyException
-    css::uno::Any GetStyleSheet() const;
+    cpo::uno::Any GetStyleSheet() const;
 
     // Intern
     /// @throws std::exception
@@ -69,11 +69,11 @@ public:
     SdXShape(SvxShape* pShape, SdXImpressDocument* pModel);
     virtual ~SdXShape() noexcept;
 
-    virtual bool queryAggregation( const css::uno::Type & rType, css::uno::Any& aAny ) override;
+    virtual bool queryAggregation( const css::uno::Type & rType, cpo::uno::Any& aAny ) override;
     virtual void dispose() override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override;
     virtual void SAL_CALL release() noexcept override;
 
@@ -82,13 +82,13 @@ public:
 
     //XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
 
     //XPropertyState
     virtual css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) override;
     virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) override;
-    virtual css::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;

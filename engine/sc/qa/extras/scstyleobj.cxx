@@ -23,7 +23,7 @@
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 using namespace css;
@@ -111,13 +111,13 @@ uno::Reference<uno::XInterface> ScStyleObj::init()
     {
         xNC->removeByName(u"ScStyleObj"_ustr);
     }
-    xNC->insertByName(u"ScStyleObj"_ustr, uno::Any(xStyle));
+    xNC->insertByName(u"ScStyleObj"_ustr, cpo::uno::Any(xStyle));
 
     uno::Reference<container::XIndexAccess> xIA_sheets(xDoc->getSheets(), uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet0(xIA_sheets->getByIndex(0), uno::UNO_QUERY_THROW);
     uno::Reference<table::XCell> xCell = xSheet0->getCellByPosition(2, 3);
     uno::Reference<beans::XPropertySet> xPS(xCell, uno::UNO_QUERY_THROW);
-    xPS->setPropertyValue(u"CellStyle"_ustr, uno::Any(xStyle->getName()));
+    xPS->setPropertyValue(u"CellStyle"_ustr, cpo::uno::Any(xStyle->getName()));
 
     return xStyle;
 }

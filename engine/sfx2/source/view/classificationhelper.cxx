@@ -462,9 +462,9 @@ void SfxClassificationHelper::Impl::pushToDocumentProperties()
             try
             {
                 if (lcl_containsProperty(aProperties, rLabel.first))
-                    xPropertySet->setPropertyValue(rLabel.first, uno::Any(rLabel.second));
+                    xPropertySet->setPropertyValue(rLabel.first, cpo::uno::Any(rLabel.second));
                 else
-                    xPropertyContainer->addProperty(rLabel.first, beans::PropertyAttribute::REMOVABLE, uno::Any(rLabel.second));
+                    xPropertyContainer->addProperty(rLabel.first, beans::PropertyAttribute::REMOVABLE, cpo::uno::Any(rLabel.second));
             }
             catch (const uno::Exception&)
             {
@@ -574,7 +574,7 @@ SfxClassificationHelper::SfxClassificationHelper(const uno::Reference<document::
         if (!rProperty.Name.startsWith("urn:bails:"))
             continue;
 
-        uno::Any aAny = xPropertySet->getPropertyValue(rProperty.Name);
+        cpo::uno::Any aAny = xPropertySet->getPropertyValue(rProperty.Name);
         OUString aValue;
         if (aAny >>= aValue)
         {

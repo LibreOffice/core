@@ -32,7 +32,7 @@
 #include <unotools/transliterationwrapper.hxx>
 
 #include <optutil.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <miscuno.hxx>
 #include <osl/diagnose.h>
@@ -59,6 +59,7 @@ const SCSIZE ASCIIDLG_MAXROWS                = MAXROWCOUNT;
 constexpr sal_uInt32 kMaxEmbeddedLinefeeds = 500;
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace {
 // The values of this enum are stored in config's "SeparatorType" node

@@ -74,7 +74,7 @@ bool SAL_CALL ScannerManager::configureScanner( ScannerContext& rContext )
     return configureScannerAndScan( rContext, nullptr );
 }
 
-void SAL_CALL ScannerManager::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
+void SAL_CALL ScannerManager::initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     ::comphelper::NamedValueCollection aProperties(rArguments);
     if (aProperties.has(u"ParentWindow"_ustr))
@@ -83,7 +83,7 @@ void SAL_CALL ScannerManager::initialize(const css::uno::Sequence<css::uno::Any>
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 extensions_ScannerManager_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ScannerManager());
 }

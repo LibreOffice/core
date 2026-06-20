@@ -63,7 +63,7 @@ public:
     bool hasValue() const { return maData.index() != 0; }
     virtual int getInt() const override;
     virtual OUString getString() const override;
-    virtual css::uno::Any getAny() const override;
+    virtual cpo::uno::Any getAny() const override;
     virtual writerfilter::Reference<Properties>::Pointer_t getProperties() const override;
     virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() const override;
 #ifdef DBG_UTIL

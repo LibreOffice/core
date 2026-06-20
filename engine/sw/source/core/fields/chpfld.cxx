@@ -229,7 +229,7 @@ void SwChapterField::ChangeExpansion(const SwTextNode &rTextNd, bool bSrchNum,
                 *pTextNd, false, false, ExpandMode(0)));
 }
 
-bool SwChapterField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwChapterField::QueryValue( cpo::uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -268,7 +268,7 @@ bool SwChapterField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     return true;
 }
 
-bool SwChapterField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwChapterField::PutValue( const cpo::uno::Any& rAny, sal_uInt16 nWhichId )
 {
     bool bRet = true;
     switch( nWhichId )

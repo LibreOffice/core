@@ -418,16 +418,16 @@ SwXReferenceMark::getPropertySetInfo()
 }
 
 void SAL_CALL SwXReferenceMark::setPropertyValue(
-    const OUString& /*rPropertyName*/, const uno::Any& /*rValue*/ )
+    const OUString& /*rPropertyName*/, const cpo::uno::Any& /*rValue*/ )
 {
     throw lang::IllegalArgumentException();
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwXReferenceMark::getPropertyValue(const OUString& rPropertyName)
 {
     // does not seem to need SolarMutex
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if (! ::sw::GetDefaultTextContentValue(aRet, rPropertyName))
     {
         throw beans::UnknownPropertyException(rPropertyName);
@@ -1268,7 +1268,7 @@ SwXMetaField::getPropertySetInfo()
 
 void SAL_CALL
 SwXMetaField::setPropertyValue(
-        const OUString& rPropertyName, const uno::Any& rValue)
+        const OUString& rPropertyName, const cpo::uno::Any& rValue)
 {
     SolarMutexGuard g;
 
@@ -1299,7 +1299,7 @@ SwXMetaField::setPropertyValue(
     }
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwXMetaField::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard g;
@@ -1308,7 +1308,7 @@ SwXMetaField::getPropertyValue(const OUString& rPropertyName)
     if (!pMeta)
         throw lang::DisposedException();
 
-    uno::Any any;
+    cpo::uno::Any any;
 
     if ( rPropertyName == "NumberFormat" )
     {
@@ -1437,7 +1437,7 @@ getPrefixAndSuffix(
     } catch (uno::RuntimeException &) {
         throw;
     } catch (const uno::Exception &) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(u"getPrefixAndSuffix: exception"_ustr, nullptr, anyEx);
     }
 }

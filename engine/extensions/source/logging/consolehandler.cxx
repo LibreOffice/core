@@ -62,7 +62,7 @@ namespace logging
 
     public:
         ConsoleHandler(const Reference<XComponentContext> &context,
-            const css::uno::Sequence<css::uno::Any> &arguments);
+            const css::uno::Sequence<cpo::uno::Any> &arguments);
         virtual ~ConsoleHandler() override;
 
     private:
@@ -97,7 +97,7 @@ namespace logging
     }
 
     ConsoleHandler::ConsoleHandler(const Reference<XComponentContext> &context,
-            const css::uno::Sequence<css::uno::Any> &arguments)
+            const css::uno::Sequence<cpo::uno::Any> &arguments)
         :ConsoleHandler_Base( m_aMutex )
         ,m_aHandlerHelper( context, m_aMutex, rBHelper )
         ,m_nThreshold( css::logging::LogLevel::SEVERE )
@@ -256,7 +256,7 @@ namespace logging
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_extensions_ConsoleHandler(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &arguments)
+    css::uno::Sequence<cpo::uno::Any> const &arguments)
 {
     return cppu::acquire(new logging::ConsoleHandler(context, arguments));
 }

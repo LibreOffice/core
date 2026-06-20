@@ -240,7 +240,7 @@ void AccessibleImageBullet::SetState( const sal_Int64 nStateId )
     if( !(mnStateSet & nStateId) )
     {
         mnStateSet |= nStateId;
-        NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, uno::Any(), uno::Any(nStateId));
+        NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, cpo::uno::Any(), cpo::uno::Any(nStateId));
     }
 }
 
@@ -249,15 +249,15 @@ void AccessibleImageBullet::UnSetState( const sal_Int64 nStateId )
     if( mnStateSet & nStateId )
     {
         mnStateSet &= ~nStateId;
-        NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, uno::Any(nStateId), uno::Any());
+        NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, cpo::uno::Any(nStateId), cpo::uno::Any());
     }
 }
 
 
 void AccessibleImageBullet::SetParagraphIndex( sal_Int32 nIndex )
 {
-    uno::Any aOldDesc;
-    uno::Any aOldName;
+    cpo::uno::Any aOldDesc;
+    cpo::uno::Any aOldName;
 
     try
     {
@@ -275,8 +275,8 @@ void AccessibleImageBullet::SetParagraphIndex( sal_Int32 nIndex )
         if( nOldIndex != nIndex )
         {
             // index and therefore description changed
-            NotifyAccessibleEvent(AccessibleEventId::DESCRIPTION_CHANGED, aOldDesc, uno::Any(getAccessibleDescription()));
-            NotifyAccessibleEvent(AccessibleEventId::NAME_CHANGED, aOldName, uno::Any(getAccessibleName()));
+            NotifyAccessibleEvent(AccessibleEventId::DESCRIPTION_CHANGED, aOldDesc, cpo::uno::Any(getAccessibleDescription()));
+            NotifyAccessibleEvent(AccessibleEventId::NAME_CHANGED, aOldName, cpo::uno::Any(getAccessibleName()));
         }
     }
     catch( const uno::Exception& ) {} // optional behaviour

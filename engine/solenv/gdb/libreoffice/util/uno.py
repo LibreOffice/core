@@ -227,7 +227,7 @@ def make_uno_type(val):
     elif type_class == TypeClass.TYPE:
         uno_type = PrimitiveType(type_class, name, 'com::sun::star::uno::Type')
     elif type_class == TypeClass.ANY:
-        uno_type = PrimitiveType(type_class, name, 'com::sun::star::uno::Any')
+        uno_type = PrimitiveType(type_class, name, 'cpo::uno::Any')
     elif type_class == TypeClass.ENUM:
         uno_type = EnumType(val, full_val)
     elif type_class == TypeClass.TYPEDEF:

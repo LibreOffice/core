@@ -53,6 +53,7 @@ using namespace ::comphelper;
 
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
@@ -113,9 +114,9 @@ void java_sql_ResultSet::disposing()
     SDBThreadAttach::releaseRef();
 }
 
-css::uno::Any SAL_CALL java_sql_ResultSet::queryInterface( const css::uno::Type & rType )
+cpo::uno::Any SAL_CALL java_sql_ResultSet::queryInterface( const css::uno::Type & rType )
 {
-    css::uno::Any aRet = OPropertySetHelper::queryInterface(rType);
+    cpo::uno::Any aRet = OPropertySetHelper::queryInterface(rType);
     return aRet.hasValue() ? aRet : java_sql_ResultSet_BASE::queryInterface(rType);
 }
 
@@ -505,7 +506,7 @@ void SAL_CALL java_sql_ResultSet::clearWarnings(  )
     callVoidMethod_ThrowSQL("clearWarnings", mID);
 }
 
-css::uno::Any SAL_CALL java_sql_ResultSet::getWarnings(  )
+cpo::uno::Any SAL_CALL java_sql_ResultSet::getWarnings(  )
 {
     SDBThreadAttach t;
     static jmethodID mID(nullptr);
@@ -519,7 +520,7 @@ css::uno::Any SAL_CALL java_sql_ResultSet::getWarnings(  )
                 java_sql_SQLWarning(warn_base,*this)));
     }
 
-    return css::uno::Any();
+    return cpo::uno::Any();
 }
 
 
@@ -766,7 +767,7 @@ void SAL_CALL java_sql_ResultSet::updateCharacterStream( sal_Int32 columnIndex, 
     }
 }
 
-void SAL_CALL java_sql_ResultSet::updateObject( sal_Int32 columnIndex, const css::uno::Any& x )
+void SAL_CALL java_sql_ResultSet::updateObject( sal_Int32 columnIndex, const cpo::uno::Any& x )
 {
     if(!::dbtools::implUpdateObject(this,columnIndex,x))
     {
@@ -780,7 +781,7 @@ void SAL_CALL java_sql_ResultSet::updateObject( sal_Int32 columnIndex, const css
 }
 
 
-void SAL_CALL java_sql_ResultSet::updateNumericObject( sal_Int32 columnIndex, const css::uno::Any& x, sal_Int32 scale )
+void SAL_CALL java_sql_ResultSet::updateNumericObject( sal_Int32 columnIndex, const cpo::uno::Any& x, sal_Int32 scale )
 {
     //  OSL_FAIL("java_sql_ResultSet::updateNumericObject: NYI");
     try
@@ -916,10 +917,10 @@ void java_sql_ResultSet::setFetchSize(sal_Int32 _par0)
 }
 
 bool java_sql_ResultSet::convertFastPropertyValue(
-                            css::uno::Any & rConvertedValue,
-                            css::uno::Any & rOldValue,
+                            cpo::uno::Any & rConvertedValue,
+                            cpo::uno::Any & rOldValue,
                             sal_Int32 nHandle,
-                            const css::uno::Any& rValue )
+                            const cpo::uno::Any& rValue )
 {
     bool bRet = false;
     switch(nHandle)
@@ -943,7 +944,7 @@ bool java_sql_ResultSet::convertFastPropertyValue(
 
 void java_sql_ResultSet::setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
-                                const css::uno::Any& rValue
+                                const cpo::uno::Any& rValue
                                                  )
 {
     switch(nHandle)
@@ -964,7 +965,7 @@ void java_sql_ResultSet::setFastPropertyValue_NoBroadcast(
 }
 
 void java_sql_ResultSet::getFastPropertyValue(
-                                css::uno::Any& rValue,
+                                cpo::uno::Any& rValue,
                                 sal_Int32 nHandle
                                      ) const
 {

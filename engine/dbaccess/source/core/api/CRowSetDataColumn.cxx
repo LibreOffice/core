@@ -31,6 +31,7 @@ using namespace dbaccess;
 using namespace comphelper;
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
@@ -110,7 +111,7 @@ void SAL_CALL ORowSetDataColumn::getFastPropertyValue( Any& rValue, sal_Int32 nH
         }
         catch(const SQLException &e)
         {
-            css::uno::Any anyEx = cppu::getCaughtException();
+            cpo::uno::Any anyEx = cppu::getCaughtException();
             throw WrappedTargetRuntimeException("Could not retrieve column value: " + e.Message,
                                                 *const_cast<ORowSetDataColumn*>(this),
                                                 anyEx);

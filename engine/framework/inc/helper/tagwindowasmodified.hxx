@@ -71,7 +71,7 @@ class TagWindowAsModified final : public  ::cppu::WeakImplHelper<
         // XInterface, XTypeProvider
 
         // XInitialization
-        virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& lArguments) override;
+        virtual void SAL_CALL initialize(const css::uno::Sequence< cpo::uno::Any >& lArguments) override;
 
         // XModifyListener
         virtual void SAL_CALL modified(const css::lang::EventObject& aEvent) override;

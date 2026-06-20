@@ -18,7 +18,7 @@
  */
 
 #include "shadwhdl.hxx"
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <rtl/ustrbuf.hxx>
 
 
@@ -40,7 +40,7 @@ XMLShadowPropHdl::~XMLShadowPropHdl()
     // nothing to do
 }
 
-bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     bool bRet = false;
     table::ShadowFormat aShadow;
@@ -117,7 +117,7 @@ bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
     return bRet;
 }
 
-bool XMLShadowPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLShadowPropHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     bool bRet = false;
     table::ShadowFormat aShadow;

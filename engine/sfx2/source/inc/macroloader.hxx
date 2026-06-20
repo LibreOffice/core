@@ -51,7 +51,7 @@ class SfxMacroLoader final : public cppu::WeakImplHelper<
 public:
     /// @throws css::uno::Exception
     /// @throws css::uno::RuntimeException
-    SfxMacroLoader(const css::uno::Sequence< css::uno::Any >& aArguments);
+    SfxMacroLoader(const css::uno::Sequence< cpo::uno::Any >& aArguments);
 
     virtual OUString SAL_CALL getImplementationName() override;
 
@@ -61,7 +61,7 @@ public:
 
     /// @throws css::uno::RuntimeException
     /// @throws css::ucb::ContentCreationException
-    static ErrCode loadMacro( const OUString& aURL, css::uno::Any& rRetval, SfxObjectShell* pDoc );
+    static ErrCode loadMacro( const OUString& aURL, cpo::uno::Any& rRetval, SfxObjectShell* pDoc );
 
     virtual css::uno::Reference < css::frame::XDispatch > SAL_CALL queryDispatch(
             const css::util::URL& aURL, const OUString& sTargetFrameName,
@@ -74,7 +74,7 @@ public:
 
     virtual void SAL_CALL dispatch( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& lArgs ) override;
 
-    virtual css::uno::Any SAL_CALL dispatchWithReturnValue( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& lArgs ) override;
+    virtual cpo::uno::Any SAL_CALL dispatchWithReturnValue( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& lArgs ) override;
 
     virtual void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) override;
 

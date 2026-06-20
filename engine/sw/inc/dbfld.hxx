@@ -47,8 +47,8 @@ public:
     const OUString&     GetColumnName() const {return m_sColumn;}
     const SwDBData& GetDBData() const {return m_aDBData;}
 
-    virtual void QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual void PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual void QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual void PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
     virtual void UpdateFields() override {};
 };
 
@@ -104,8 +104,8 @@ public:
 
     /// DBName
     const SwDBData&  GetDBData() const { return static_cast<SwDBFieldType*>(GetTyp())->GetDBData(); }
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
 
     static bool FormatValue( SvNumberFormatter const * pDocFormatter, OUString const &aString, sal_uInt32 nFormat,
                              double &aNumber, sal_Int32 nColumnType, SwDBField *pField = nullptr );
@@ -145,8 +145,8 @@ public:
 
     virtual OUString        GetFieldName() const override;
 
-    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool            QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool            PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
     SwDBFieldSubType        GetSubType() const;
     void                    SetSubType(SwDBFieldSubType nType);
 };
@@ -180,8 +180,8 @@ public:
     // Condition
     virtual OUString    GetPar1() const override;
     virtual void        SetPar1(const OUString& rStr) override;
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 inline bool SwDBNextSetField::IsCondValid() const
@@ -226,8 +226,8 @@ public:
     virtual void            SetPar2(const OUString& rStr) override;
 
     // Number of data record is in nFormat!!
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 inline bool SwDBNumSetField::IsCondValid() const
@@ -255,8 +255,8 @@ public:
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 // Number of data record.
@@ -281,8 +281,8 @@ public:
 
     inline tools::Long     GetSetNumber() const;
     inline void     SetSetNumber(tools::Long nNum);
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 inline tools::Long SwDBSetNumberField::GetSetNumber() const

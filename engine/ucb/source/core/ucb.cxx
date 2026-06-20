@@ -42,7 +42,7 @@
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
@@ -54,6 +54,7 @@
 
 using namespace comphelper;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace ucb_impl;
@@ -63,7 +64,7 @@ using namespace ucbhelper;
 namespace {
 
 bool fillPlaceholders(OUString const & rInput,
-                      uno::Sequence< uno::Any > const & rReplacements,
+                      uno::Sequence< cpo::uno::Any > const & rReplacements,
                       OUString * pOutput)
 {
     sal_Unicode const * p = rInput.getStr();
@@ -295,7 +296,7 @@ css::uno::Sequence< OUString > SAL_CALL UniversalContentBroker::getSupportedServ
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_UniversalContentBroker_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new UniversalContentBroker(context));
 }
@@ -787,9 +788,9 @@ bool UniversalContentBroker::getContentProviderData(
         makeAndAppendXMLName( aFullPath, rKey2 );
         aFullPath.append( "']/ProviderData" );
 
-        uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+        uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", uno::Any(aFullPath.makeStringAndClear())}
+            {"nodepath", cpo::uno::Any(aFullPath.makeStringAndClear())}
         }));
 
         uno::Reference< uno::XInterface > xInterface(

@@ -44,23 +44,23 @@ SwVbaRow::~SwVbaRow()
 {
 }
 
-uno::Any SAL_CALL SwVbaRow::getHeight()
+cpo::uno::Any SAL_CALL SwVbaRow::getHeight()
 {
     if( getHeightRule() == word::WdRowHeightRule::wdRowHeightAuto )
-        return uno::Any( sal_Int32( word::WdConstants::wdUndefined ) );
+        return cpo::uno::Any( sal_Int32( word::WdConstants::wdUndefined ) );
 
     sal_Int32 nHeight = 0;
     mxRowProps->getPropertyValue(u"Height"_ustr) >>= nHeight;
-    return uno::Any( static_cast<float>(Millimeter::getInPoints( nHeight )) );
+    return cpo::uno::Any( static_cast<float>(Millimeter::getInPoints( nHeight )) );
 }
 
-void SAL_CALL SwVbaRow::setHeight( const uno::Any& _height )
+void SAL_CALL SwVbaRow::setHeight( const cpo::uno::Any& _height )
 {
     float height = 0;
     _height >>= height;
 
     sal_Int32 nHeight = Millimeter::getInHundredthsOfOneMillimeter( height );
-    mxRowProps->setPropertyValue(u"Height"_ustr, uno::Any( nHeight ) );
+    mxRowProps->setPropertyValue(u"Height"_ustr, cpo::uno::Any( nHeight ) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaRow::getHeightRule()
@@ -73,7 +73,7 @@ void SAL_CALL SwVbaRow::setHeight( const uno::Any& _height )
 void SAL_CALL SwVbaRow::setHeightRule( ::sal_Int32 _heightrule )
 {
     bool isAutoHeight = ( _heightrule == word::WdRowHeightRule::wdRowHeightAuto );
-    mxRowProps->setPropertyValue(u"IsAutoHeight"_ustr, uno::Any( isAutoHeight ) );
+    mxRowProps->setPropertyValue(u"IsAutoHeight"_ustr, cpo::uno::Any( isAutoHeight ) );
 }
 
 void SAL_CALL
@@ -96,13 +96,13 @@ void SwVbaRow::SelectRow( const rtl::Reference< SwXTextDocument >& xModel, const
     uno::Reference< table::XCellRange > xSelRange = xCellRange->getCellRangeByName( sRangeName );
 
     uno::Reference< view::XSelectionSupplier > xSelection( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
-    xSelection->select( uno::Any( xSelRange ) );
+    xSelection->select( cpo::uno::Any( xSelRange ) );
 }
 
 void SAL_CALL SwVbaRow::SetHeight( float height, sal_Int32 heightrule )
 {
     setHeightRule( heightrule );
-    setHeight( uno::Any( height ) );
+    setHeight( cpo::uno::Any( height ) );
 }
 
 OUString

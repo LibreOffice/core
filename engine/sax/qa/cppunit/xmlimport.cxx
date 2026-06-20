@@ -357,10 +357,10 @@ void XMLImportTest::setUp()
     xTokenHandler.set( new DummyTokenHandler );
     uno::Reference<lang::XInitialization> const xInit(m_xLegacyFastParser,
                             uno::UNO_QUERY_THROW);
-    xInit->initialize({ uno::Any(xTokenHandler) });
+    xInit->initialize({ cpo::uno::Any(xTokenHandler) });
 
     sal_Int32 nNamespaceCount = SAL_N_ELEMENTS(DummyTokenHandler::namespaceURIs);
-    uno::Sequence<uno::Any> namespaceArgs( nNamespaceCount + 1 );
+    uno::Sequence<cpo::uno::Any> namespaceArgs( nNamespaceCount + 1 );
     auto p_namespaceArgs = namespaceArgs.getArray();
     p_namespaceArgs[0] <<= u"registerNamespaces"_ustr;
     for (sal_Int32 i = 1; i <= nNamespaceCount; i++ )
@@ -404,7 +404,7 @@ void XMLImportTest::testMissingNamespaceDeclaration()
 
     uno::Reference<lang::XInitialization> const xInit(m_xLegacyFastParser,
                             uno::UNO_QUERY_THROW);
-    xInit->initialize({ uno::Any(u"IgnoreMissingNSDecl"_ustr) });
+    xInit->initialize({ cpo::uno::Any(u"IgnoreMissingNSDecl"_ustr) });
 
     for (sal_uInt16 i = 0; i < std::size( fileNames ); i++)
     {

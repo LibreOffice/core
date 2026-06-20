@@ -104,7 +104,7 @@ namespace accessibility
 
         // XInterface and XTypeProvider
         /// @throws css::uno::RuntimeException
-        css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType );
+        cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType );
         /// @throws css::uno::RuntimeException
         css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  );
 
@@ -142,7 +142,7 @@ namespace accessibility
         using OProxyAggregation::getComponentContext;
 
         // XInterface
-        css::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) override;
+        cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) override;
 
         // XTypeProvider
         DECLARE_XTYPEPROVIDER( )

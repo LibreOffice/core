@@ -64,10 +64,10 @@ ResultSetBase::release()
 }
 
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ResultSetBase::queryInterface( const uno::Type& rType )
 {
-    uno::Any aRet = cppu::queryInterface( rType,
+    cpo::uno::Any aRet = cppu::queryInterface( rType,
                                           static_cast< lang::XComponent* >(this),
                                           static_cast< sdbc::XRow* >(this),
                                           static_cast< sdbc::XResultSet* >(this),
@@ -348,9 +348,9 @@ public:
         OWeakObject::release();
     }
 
-    uno::Any SAL_CALL queryInterface( const uno::Type& rType ) override
+    cpo::uno::Any SAL_CALL queryInterface( const uno::Type& rType ) override
     {
-        uno::Any aRet = cppu::queryInterface( rType,
+        cpo::uno::Any aRet = cppu::queryInterface( rType,
                                               static_cast< beans::XPropertySetInfo* >(this) );
         return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
     }
@@ -398,7 +398,7 @@ ResultSetBase::getPropertySetInfo()
 
 
 void SAL_CALL ResultSetBase::setPropertyValue(
-    const OUString& aPropertyName, const uno::Any& )
+    const OUString& aPropertyName, const cpo::uno::Any& )
 {
     if( aPropertyName == "IsRowCountFinal" ||
         aPropertyName == "RowCount" )
@@ -408,17 +408,17 @@ void SAL_CALL ResultSetBase::setPropertyValue(
 }
 
 
-uno::Any SAL_CALL ResultSetBase::getPropertyValue(
+cpo::uno::Any SAL_CALL ResultSetBase::getPropertyValue(
     const OUString& PropertyName )
 {
     if( PropertyName == "IsRowCountFinal" )
     {
-        return uno::Any(true);
+        return cpo::uno::Any(true);
     }
     else if ( PropertyName == "RowCount" )
     {
         sal_Int32 count = m_aItems.size();
-        return uno::Any(count);
+        return cpo::uno::Any(count);
     }
     else
         throw beans::UnknownPropertyException(PropertyName);

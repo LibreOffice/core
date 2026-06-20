@@ -91,10 +91,10 @@ ScVbaChart::getName()
     return sName;
 }
 
-uno::Any  SAL_CALL
-ScVbaChart::SeriesCollection(const uno::Any&)
+cpo::uno::Any  SAL_CALL
+ScVbaChart::SeriesCollection(const cpo::uno::Any&)
 {
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 ::sal_Int32 SAL_CALL
@@ -289,8 +289,8 @@ ScVbaChart::setChartType( ::sal_Int32 _nChartType )
         case xlStockVHLC:
         case xlStockVOHLC:
             setDiagram( u"com.sun.star.chart.StockDiagram"_ustr);
-            mxDiagramPropertySet->setPropertyValue( UPDOWN, uno::Any((_nChartType == xlStockOHLC) || (_nChartType == xlStockVOHLC)));
-            mxDiagramPropertySet->setPropertyValue( VOLUME, uno::Any((_nChartType == xlStockVHLC) || (_nChartType == xlStockVOHLC)));
+            mxDiagramPropertySet->setPropertyValue( UPDOWN, cpo::uno::Any((_nChartType == xlStockOHLC) || (_nChartType == xlStockVOHLC)));
+            mxDiagramPropertySet->setPropertyValue( VOLUME, cpo::uno::Any((_nChartType == xlStockVHLC) || (_nChartType == xlStockVOHLC)));
             break;
 
         case xlPieOfPie:                            // not possible
@@ -320,15 +320,15 @@ ScVbaChart::setChartType( ::sal_Int32 _nChartType )
                 case xlXYScatter:
                 case xlBubble:                      // not possible
                 case xlBubble3DEffect:              // not possible
-                    mxDiagramPropertySet->setPropertyValue(LINES, uno::Any( false ));
+                    mxDiagramPropertySet->setPropertyValue(LINES, cpo::uno::Any( false ));
                     break;
                 case xlXYScatterLines:
                 case xlXYScatterLinesNoMarkers:
-                    mxDiagramPropertySet->setPropertyValue(LINES, uno::Any( true ));
+                    mxDiagramPropertySet->setPropertyValue(LINES, cpo::uno::Any( true ));
                     break;
                 case xlXYScatterSmooth:
                 case xlXYScatterSmoothNoMarkers:
-                    mxDiagramPropertySet->setPropertyValue(SPLINETYPE, uno::Any( sal_Int32(1)));
+                    mxDiagramPropertySet->setPropertyValue(SPLINETYPE, cpo::uno::Any( sal_Int32(1)));
                     break;
                 default:
                     break;
@@ -349,12 +349,12 @@ ScVbaChart::setChartType( ::sal_Int32 _nChartType )
         case xlXYScatter:
         case xlBubble:                      // not possible
         case xlBubble3DEffect:              // not possible
-            mxDiagramPropertySet->setPropertyValue(SYMBOLTYPE, uno::Any( chart::ChartSymbolType::AUTO));
+            mxDiagramPropertySet->setPropertyValue(SYMBOLTYPE, cpo::uno::Any( chart::ChartSymbolType::AUTO));
             break;
         default:
             if (mxDiagramPropertySet->getPropertySetInfo()->hasPropertyByName(SYMBOLTYPE))
             {
-                mxDiagramPropertySet->setPropertyValue(SYMBOLTYPE, uno::Any(chart::ChartSymbolType::NONE));
+                mxDiagramPropertySet->setPropertyValue(SYMBOLTYPE, cpo::uno::Any(chart::ChartSymbolType::NONE));
             }
             break;
         }
@@ -369,12 +369,12 @@ ScVbaChart::setChartType( ::sal_Int32 _nChartType )
         case xlSurfaceWireframe:
         case xlSurfaceTopView:
         case xlSurfaceTopViewWireframe:
-            mxDiagramPropertySet->setPropertyValue(DEEP,uno::Any( true ));
+            mxDiagramPropertySet->setPropertyValue(DEEP,cpo::uno::Any( true ));
             break;
         default:
                 if (mxDiagramPropertySet->getPropertySetInfo()->hasPropertyByName(DEEP))
                 {
-                    mxDiagramPropertySet->setPropertyValue(DEEP, uno::Any( false));
+                    mxDiagramPropertySet->setPropertyValue(DEEP, cpo::uno::Any( false));
                 }
                 break;
         }
@@ -388,7 +388,7 @@ ScVbaChart::setChartType( ::sal_Int32 _nChartType )
                 case xlConeBarStacked:
                 case xlConeBarStacked100:
                 case xlConeCol:
-                        mxDiagramPropertySet->setPropertyValue(SOLIDTYPE, uno::Any(chart::ChartSolidType::CONE));
+                        mxDiagramPropertySet->setPropertyValue(SOLIDTYPE, cpo::uno::Any(chart::ChartSolidType::CONE));
                         break;
                 case xlPyramidColClustered:
                 case xlPyramidColStacked:
@@ -397,7 +397,7 @@ ScVbaChart::setChartType( ::sal_Int32 _nChartType )
                 case xlPyramidBarStacked:
                 case xlPyramidBarStacked100:
                 case xlPyramidCol:
-                        mxDiagramPropertySet->setPropertyValue(SOLIDTYPE, uno::Any(chart::ChartSolidType::PYRAMID));
+                        mxDiagramPropertySet->setPropertyValue(SOLIDTYPE, cpo::uno::Any(chart::ChartSolidType::PYRAMID));
                         break;
                 case xlCylinderColClustered:
                 case xlCylinderColStacked:
@@ -406,12 +406,12 @@ ScVbaChart::setChartType( ::sal_Int32 _nChartType )
                 case xlCylinderBarStacked:
                 case xlCylinderBarStacked100:
                 case xlCylinderCol:
-                        mxDiagramPropertySet->setPropertyValue(SOLIDTYPE, uno::Any(chart::ChartSolidType::CYLINDER));
+                        mxDiagramPropertySet->setPropertyValue(SOLIDTYPE, cpo::uno::Any(chart::ChartSolidType::CYLINDER));
                         break;
                 default:
                     if (mxDiagramPropertySet->getPropertySetInfo()->hasPropertyByName(SOLIDTYPE))
                     {
-                            mxDiagramPropertySet->setPropertyValue(SOLIDTYPE, uno::Any(chart::ChartSolidType::RECTANGULAR_SOLID));
+                            mxDiagramPropertySet->setPropertyValue(SOLIDTYPE, cpo::uno::Any(chart::ChartSolidType::RECTANGULAR_SOLID));
                     }
                     break;
         }
@@ -438,12 +438,12 @@ ScVbaChart::setChartType( ::sal_Int32 _nChartType )
             case xlSurfaceWireframe:
             case xlSurfaceTopView:
             case xlSurfaceTopViewWireframe:
-                mxDiagramPropertySet->setPropertyValue(VERTICAL, uno::Any( true));
+                mxDiagramPropertySet->setPropertyValue(VERTICAL, cpo::uno::Any( true));
                 break;
             default:
                 if (mxDiagramPropertySet->getPropertySetInfo()->hasPropertyByName(VERTICAL))
                 {
-                    mxDiagramPropertySet->setPropertyValue(VERTICAL, uno::Any(false));
+                    mxDiagramPropertySet->setPropertyValue(VERTICAL, cpo::uno::Any(false));
                 }
                 break;
         }
@@ -464,8 +464,8 @@ ScVbaChart::setChartType( ::sal_Int32 _nChartType )
             case xlConeBarStacked:
             case xlPyramidColStacked:
             case xlPyramidBarStacked:
-                mxDiagramPropertySet->setPropertyValue(PERCENT, uno::Any( false ));
-                mxDiagramPropertySet->setPropertyValue(STACKED, uno::Any( true ));
+                mxDiagramPropertySet->setPropertyValue(PERCENT, cpo::uno::Any( false ));
+                mxDiagramPropertySet->setPropertyValue(STACKED, cpo::uno::Any( true ));
                 break;
             case xlPyramidColStacked100:
             case xlPyramidBarStacked100:
@@ -481,12 +481,12 @@ ScVbaChart::setChartType( ::sal_Int32 _nChartType )
             case xlBarStacked100:
             case xl3DColumnStacked100:
             case xlColumnStacked100:
-                mxDiagramPropertySet->setPropertyValue(STACKED, uno::Any( true));
-                mxDiagramPropertySet->setPropertyValue(PERCENT, uno::Any( true ));
+                mxDiagramPropertySet->setPropertyValue(STACKED, cpo::uno::Any( true));
+                mxDiagramPropertySet->setPropertyValue(PERCENT, cpo::uno::Any( true ));
                 break;
             default:
-                mxDiagramPropertySet->setPropertyValue(PERCENT, uno::Any( false));
-                mxDiagramPropertySet->setPropertyValue(STACKED, uno::Any( false));
+                mxDiagramPropertySet->setPropertyValue(PERCENT, cpo::uno::Any( false));
+                mxDiagramPropertySet->setPropertyValue(STACKED, cpo::uno::Any( false));
                 break;
         }
         switch (_nChartType)
@@ -525,12 +525,12 @@ ScVbaChart::setChartType( ::sal_Int32 _nChartType )
             case xlCylinderBarStacked:
             case xlCylinderBarStacked100:
             case xlCylinderCol:
-                mxDiagramPropertySet->setPropertyValue(DIM3D, uno::Any( true));
+                mxDiagramPropertySet->setPropertyValue(DIM3D, cpo::uno::Any( true));
                 break;
             default:
                 if (mxDiagramPropertySet->getPropertySetInfo()->hasPropertyByName(DIM3D))
                 {
-                    mxDiagramPropertySet->setPropertyValue(DIM3D, uno::Any( false));
+                    mxDiagramPropertySet->setPropertyValue(DIM3D, cpo::uno::Any( false));
                 }
                 break;
         }
@@ -558,7 +558,7 @@ ScVbaChart::Activate()
 }
 
 void SAL_CALL
-ScVbaChart::setSourceData( const css::uno::Reference< ::ooo::vba::excel::XRange >& _xCalcRange, const css::uno::Any& _aPlotBy )
+ScVbaChart::setSourceData( const css::uno::Reference< ::ooo::vba::excel::XRange >& _xCalcRange, const cpo::uno::Any& _aPlotBy )
 {
     try
     {
@@ -643,10 +643,10 @@ ScVbaChart::setPlotBy( ::sal_Int32 _nPlotBy )
         switch (_nPlotBy)
         {
             case xlRows:
-                mxDiagramPropertySet->setPropertyValue( DATAROWSOURCE,  uno::Any( chart::ChartDataRowSource_ROWS ) );
+                mxDiagramPropertySet->setPropertyValue( DATAROWSOURCE,  cpo::uno::Any( chart::ChartDataRowSource_ROWS ) );
                 break;
             case xlColumns:
-                mxDiagramPropertySet->setPropertyValue( DATAROWSOURCE, uno::Any( chart::ChartDataRowSource_COLUMNS) );
+                mxDiagramPropertySet->setPropertyValue( DATAROWSOURCE, cpo::uno::Any( chart::ChartDataRowSource_COLUMNS) );
                 break;
             default:
                 throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), OUString() );
@@ -711,7 +711,7 @@ ScVbaChart::getLocation()
 }
 
 void SAL_CALL
-ScVbaChart::setLocation( ::sal_Int32 /*where*/, const css::uno::Any& /*Name*/ )
+ScVbaChart::setLocation( ::sal_Int32 /*where*/, const cpo::uno::Any& /*Name*/ )
 {
     // Helper api just stubs out the code <shrug>
     // #TODO come back and make sense out of this
@@ -818,7 +818,7 @@ ScVbaChart::setHasTitle( bool bTitle )
 {
     try
     {
-        mxChartPropertySet->setPropertyValue(HASMAINTITLE, uno::Any( bTitle ));
+        mxChartPropertySet->setPropertyValue(HASMAINTITLE, cpo::uno::Any( bTitle ));
     }
     catch (const uno::Exception&)
     {
@@ -847,7 +847,7 @@ ScVbaChart::setHasLegend( bool bLegend )
 {
     try
     {
-        mxChartPropertySet->setPropertyValue(HASLEGEND, uno::Any(bLegend));
+        mxChartPropertySet->setPropertyValue(HASLEGEND, cpo::uno::Any(bLegend));
     }
     catch (const uno::Exception&)
     {
@@ -863,13 +863,13 @@ ScVbaChart::getChartTitle(  )
     return new ScVbaChartTitle(this, mxContext, xTitleShape);
 }
 
-uno::Any SAL_CALL
-ScVbaChart::Axes( const uno::Any& Type, const uno::Any& AxisGroup )
+cpo::uno::Any SAL_CALL
+ScVbaChart::Axes( const cpo::uno::Any& Type, const cpo::uno::Any& AxisGroup )
 {
     // mmm chart probably is the parent, #TODO check parent
     uno::Reference< excel::XAxes > xAxes = new ScVbaAxes( this, mxContext, this );
     if ( !Type.hasValue() )
-        return uno::Any( xAxes );
+        return cpo::uno::Any( xAxes );
     return xAxes->Item( Type, AxisGroup );
 }
 bool

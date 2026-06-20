@@ -55,13 +55,14 @@ using namespace com::sun::star;
 static std::vector<SfxFrame*> gaFramesArr_Impl;
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 
 SfxPoolItem* SfxUnoAnyItem::CreateDefault()
 {
-    return new SfxUnoAnyItem(0, uno::Any());
+    return new SfxUnoAnyItem(0, cpo::uno::Any());
 }
 
 SfxPoolItem* SfxUnoFrameItem::CreateDefault()
@@ -282,7 +283,7 @@ void SfxFrame::GetViewData_Impl()
         SfxItemSet *pSet = GetDescriptor()->GetArgs();
         if ( GetController().is() && pSet->GetItemState( SID_VIEW_DATA ) != SfxItemState::SET )
         {
-            css::uno::Any aData = GetController()->getViewData();
+            cpo::uno::Any aData = GetController()->getViewData();
             pSet->Put( SfxUnoAnyItem( SID_VIEW_DATA, aData ) );
         }
 
@@ -406,7 +407,7 @@ SfxFrameItem* SfxFrameItem::Clone( SfxItemPool *) const
     return pNew;
 }
 
-bool SfxFrameItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
+bool SfxFrameItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 ) const
 {
     if ( wFrame )
     {
@@ -417,7 +418,7 @@ bool SfxFrameItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
     return false;
 }
 
-bool SfxFrameItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
+bool SfxFrameItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 )
 {
     Reference < XFrame > xFrame;
     if ( (rVal >>= xFrame) && xFrame.is() )
@@ -440,7 +441,7 @@ bool SfxFrameItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
 }
 
 
-SfxUnoAnyItem::SfxUnoAnyItem( sal_uInt16 nWhichId, const css::uno::Any& rAny )
+SfxUnoAnyItem::SfxUnoAnyItem( sal_uInt16 nWhichId, const cpo::uno::Any& rAny )
     : SfxPoolItem( nWhichId )
 {
     aValue = rAny;
@@ -457,13 +458,13 @@ SfxUnoAnyItem* SfxUnoAnyItem::Clone( SfxItemPool *) const
     return new SfxUnoAnyItem( *this );
 }
 
-bool SfxUnoAnyItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SfxUnoAnyItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal = aValue;
     return true;
 }
 
-bool SfxUnoAnyItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SfxUnoAnyItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     aValue = rVal;
     return true;
@@ -491,13 +492,13 @@ SfxUnoFrameItem* SfxUnoFrameItem::Clone( SfxItemPool* ) const
     return new SfxUnoFrameItem( *this );
 }
 
-bool SfxUnoFrameItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SfxUnoFrameItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= m_xFrame;
     return true;
 }
 
-bool SfxUnoFrameItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SfxUnoFrameItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     return ( rVal >>= m_xFrame );
 }

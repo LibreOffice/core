@@ -35,8 +35,8 @@ class SfxDialogLibraryContainer final : public SfxLibraryContainer
     virtual rtl::Reference<SfxLibrary> implCreateLibraryLink
         ( const OUString& aName, const OUString& aLibInfoFileURL,
           const OUString& StorageURL, bool ReadOnly ) override;
-    virtual css::uno::Any createEmptyLibraryElement() override;
-    virtual bool isLibraryElementValid(const css::uno::Any& rElement) const override;
+    virtual cpo::uno::Any createEmptyLibraryElement() override;
+    virtual bool isLibraryElementValid(const cpo::uno::Any& rElement) const override;
     virtual void writeLibraryElement
     (
         const css::uno::Reference< css::container::XNameContainer>& xLibrary,
@@ -44,7 +44,7 @@ class SfxDialogLibraryContainer final : public SfxLibraryContainer
         const css::uno::Reference< css::io::XOutputStream >& xOutput
     ) override;
 
-    virtual css::uno::Any importLibraryElement
+    virtual cpo::uno::Any importLibraryElement
     (
         const css::uno::Reference< css::container::XNameContainer>& xLibrary,
         const OUString& aElementName,
@@ -131,10 +131,10 @@ public:
         return m_xStringResourcePersistence;
     }
 
-    static bool containsValidDialog( const css::uno::Any& aElement );
+    static bool containsValidDialog( const cpo::uno::Any& aElement );
 
 private:
-    virtual bool isLibraryElementValid(const css::uno::Any& rElement) const override;
+    virtual bool isLibraryElementValid(const cpo::uno::Any& rElement) const override;
 };
 
 }   // namespace basic

@@ -73,7 +73,7 @@ class SalGtkPicker
         // to instantiate own services
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-        static GtkWidget* GetParentWidget(const css::uno::Sequence<css::uno::Any>& rArguments);
+        static GtkWidget* GetParentWidget(const css::uno::Sequence<cpo::uno::Any>& rArguments);
 
         static OUString getResString( sal_Int32 aId );
 };

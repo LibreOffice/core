@@ -71,7 +71,7 @@ bool SvxRubyItem::GetPresentation(SfxItemPresentation /*ePres*/, MapUnit /*eCore
     return true;
 }
 
-bool SvxRubyItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId) const
+bool SvxRubyItem::QueryValue(cpo::uno::Any& rVal, sal_uInt8 nMemberId) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch (nMemberId)
@@ -92,7 +92,7 @@ bool SvxRubyItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId) const
     return false;
 }
 
-bool SvxRubyItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
+bool SvxRubyItem::PutValue(const cpo::uno::Any& rVal, sal_uInt8 nMemberId)
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch (nMemberId)

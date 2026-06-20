@@ -30,6 +30,7 @@
 #include <unomsaaevent.hxx>
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::accessibility;
 
 AccTableEventListener::AccTableEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager& rManager)

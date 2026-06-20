@@ -45,7 +45,7 @@ public:
 
     // XSingleServiceFactory
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(  ) throw (css::uno::Exception, css::uno::RuntimeException);
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException);
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const css::uno::Sequence< cpo::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException);

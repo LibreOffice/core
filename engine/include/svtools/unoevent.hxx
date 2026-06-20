@@ -79,12 +79,12 @@ public:
     /// calls replaceByName(const sal_uInt16, const SvxMacro&)
     virtual void SAL_CALL replaceByName(
         const OUString& rName,                /// API name of event
-        const css::uno::Any& rElement ) /// event (PropertyValues)
+        const cpo::uno::Any& rElement ) /// event (PropertyValues)
              override;
 
     // XNameAccess (via XNameReplace)
     /// calls getByName(sal_uInt16)
-    virtual css::uno::Any SAL_CALL getByName(
+    virtual cpo::uno::Any SAL_CALL getByName(
         const OUString& rName )  /// API name of event
              override;
 

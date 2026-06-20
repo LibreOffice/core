@@ -31,6 +31,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
 
@@ -80,7 +81,7 @@ awt::Rectangle AccessiblePageShape::implGetBounds()
         uno::Reference<beans::XPropertySet> xSet (mxPage, uno::UNO_QUERY);
         if (xSet.is())
         {
-            uno::Any aValue;
+            cpo::uno::Any aValue;
 
             aValue = xSet->getPropertyValue (u"BorderLeft"_ustr);
             aValue >>= aBoundingBox.X;
@@ -142,7 +143,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getForeground()
         uno::Reference<beans::XPropertySet> aSet (mxPage, uno::UNO_QUERY);
         if (aSet.is())
         {
-            uno::Any aColor = aSet->getPropertyValue (u"LineColor"_ustr);
+            cpo::uno::Any aColor = aSet->getPropertyValue (u"LineColor"_ustr);
             aColor >>= nColor;
         }
     }
@@ -166,7 +167,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground()
         uno::Reference<beans::XPropertySet> xSet (mxPage, uno::UNO_QUERY);
         if (xSet.is())
         {
-            uno::Any aBGSet = xSet->getPropertyValue (u"Background"_ustr);
+            cpo::uno::Any aBGSet = xSet->getPropertyValue (u"Background"_ustr);
             Reference<beans::XPropertySet> xBGSet (aBGSet, uno::UNO_QUERY);
             if ( ! xBGSet.is())
             {
@@ -184,7 +185,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground()
             // gradients, hashes, and bitmaps.
             if (xBGSet.is())
             {
-                uno::Any aColor = xBGSet->getPropertyValue (u"FillColor"_ustr);
+                cpo::uno::Any aColor = xBGSet->getPropertyValue (u"FillColor"_ustr);
                 aColor >>= nColor;
             }
             else

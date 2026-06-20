@@ -216,7 +216,7 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
         // execute it synchron
         else if (xSJob.is())
         {
-            css::uno::Any aResult;
+            cpo::uno::Any aResult;
             {
                 SolarMutexAntiGuard const ag(aWriteLock);
                 /* } SAFE */
@@ -444,7 +444,7 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
     @param  aResult
                 the job result for analyzing
 */
-void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
+void Job::impl_reactForJobResult( /*IN*/ const cpo::uno::Any& aResult )
 {
     SolarMutexGuard g;
 
@@ -643,7 +643,7 @@ void Job::impl_stopListening()
                 its results
 */
 void SAL_CALL Job::jobFinished( /*IN*/ const css::uno::Reference< css::task::XAsyncJob >& xJob    ,
-                                /*IN*/ const css::uno::Any&                               aResult )
+                                /*IN*/ const cpo::uno::Any&                               aResult )
 {
     SolarMutexGuard g;
 

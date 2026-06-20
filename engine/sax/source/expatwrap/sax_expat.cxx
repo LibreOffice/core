@@ -90,7 +90,7 @@ namespace {
         catch( const css::uno::Exception &e ) {\
             pThis->bExceptionWasThrown = true; \
             pThis->bRTExceptionWasThrown = true; \
-            pImpl->rtexception = WrappedTargetRuntimeException(u"Non-runtime UNO exception caught during parse"_ustr, e.Context, css::uno::Any(e)); \
+            pImpl->rtexception = WrappedTargetRuntimeException(u"Non-runtime UNO exception caught during parse"_ustr, e.Context, cpo::uno::Any(e)); \
         }\
     }\
     ((void)0)
@@ -109,7 +109,7 @@ public:
     SaxExpatParser();
 
     // css::lang::XInitialization:
-    virtual void SAL_CALL initialize(css::uno::Sequence<css::uno::Any> const& rArguments) override;
+    virtual void SAL_CALL initialize(css::uno::Sequence<cpo::uno::Any> const& rArguments) override;
 
     // The SAX-Parser-Interface
     virtual void SAL_CALL parseStream(  const InputSource& structSource) override;
@@ -366,7 +366,7 @@ SaxExpatParser::SaxExpatParser(  )
 
 // css::lang::XInitialization:
 void SAL_CALL
-SaxExpatParser::initialize(css::uno::Sequence< css::uno::Any > const& rArguments)
+SaxExpatParser::initialize(css::uno::Sequence< cpo::uno::Any > const& rArguments)
 {
     // possible arguments: a string "DoSmeplease"
     if (rArguments.hasElements())
@@ -417,7 +417,7 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
     if( ! entity.structSource.aInputStream.is() )
     {
         throw SAXException(u"No input source"_ustr,
-                            css::uno::Reference< css::uno::XInterface > () , css::uno::Any() );
+                            css::uno::Reference< css::uno::XInterface > () , cpo::uno::Any() );
     }
 
     entity.converter.setInputStream( entity.structSource.aInputStream );
@@ -432,7 +432,7 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
     if( ! entity.pParser )
     {
         throw SAXException(u"Couldn't create parser"_ustr,
-                            css::uno::Reference< css::uno::XInterface > (), css::uno::Any() );
+                            css::uno::Reference< css::uno::XInterface > (), cpo::uno::Any() );
     }
 
     // set all necessary C-Callbacks
@@ -664,7 +664,7 @@ void SaxExpatParser_Impl::parse( )
             SAXParseException aExcept(
                 getErrorMessage(xmlE , sSystemId, nLine) ,
                 css::uno::Reference< css::uno::XInterface >(),
-                css::uno::Any( &exception , cppu::UnoType<decltype(exception)>::get() ),
+                cpo::uno::Any( &exception , cppu::UnoType<decltype(exception)>::get() ),
                 rDocumentLocator->getPublicId(),
                 rDocumentLocator->getSystemId(),
                 rDocumentLocator->getLineNumber(),
@@ -674,7 +674,7 @@ void SaxExpatParser_Impl::parse( )
             if( rErrorHandler.is() ) {
 
                 // error handler is set, so the handler may throw the exception
-                css::uno::Any a;
+                cpo::uno::Any a;
                 a <<= aExcept;
                 rErrorHandler->fatalError( a );
             }
@@ -764,7 +764,7 @@ void SaxExpatParser_Impl::callbackEntityDecl(
         XML_StopParser(pImpl->getEntity().pParser, XML_FALSE);
         pImpl->exception = SAXParseException(
             u"SaxExpatParser: internal entity declaration, stopping"_ustr,
-            nullptr, css::uno::Any(),
+            nullptr, cpo::uno::Any(),
             pImpl->rDocumentLocator->getPublicId(),
             pImpl->rDocumentLocator->getSystemId(),
             pImpl->rDocumentLocator->getLineNumber(),
@@ -908,7 +908,7 @@ void SaxExpatParser_Impl::callErrorHandler( SaxExpatParser_Impl *pImpl ,
     try
     {
         if( pImpl->rErrorHandler.is() ) {
-            css::uno::Any a;
+            cpo::uno::Any a;
             a <<= e;
             pImpl->rErrorHandler->error( a );
         }
@@ -947,7 +947,7 @@ void SaxExpatParser_Impl::callbackEndCDATA( void *pvThis )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_extensions_xml_sax_ParserExpat_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SaxExpatParser);
 }

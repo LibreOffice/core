@@ -30,9 +30,6 @@
 #include <o3tl/typed_flags_set.hxx>
 
 namespace com::sun::star {
-    namespace uno{
-        class Any;
-    }
     namespace beans{
         struct PropertyValue;
     }
@@ -40,6 +37,7 @@ namespace com::sun::star {
         class XHierarchicalNameAccess;
     }
 }
+namespace cpo::uno { class Any; }
 
 enum class ConfigItemMode
 {
@@ -95,7 +93,7 @@ class ConfigChangeListener_Impl;
             void                    SetModified  (); // mark item as modified
             void                    ClearModified(); // reset state after commit!
 
-            css::uno::Sequence< css::uno::Any>
+            css::uno::Sequence< cpo::uno::Any>
                                     GetProperties(const css::uno::Sequence< OUString >& rNames);
 
             css::uno::Sequence< bool >
@@ -103,7 +101,7 @@ class ConfigChangeListener_Impl;
 
             bool                PutProperties(
                                         const css::uno::Sequence< OUString >& rNames,
-                                        const css::uno::Sequence< css::uno::Any>& rValues);
+                                        const css::uno::Sequence< cpo::uno::Any>& rValues);
 
             /** enables notifications about changes on selected sub nodes/values
 
@@ -164,14 +162,14 @@ class ConfigChangeListener_Impl;
             static css::uno::Sequence< OUString > GetNodeNames(
                     css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
                     const OUString& rNode, ConfigNameFormat eFormat);
-            static css::uno::Sequence< css::uno::Any> GetProperties(
+            static css::uno::Sequence< cpo::uno::Any> GetProperties(
                     css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
                     const css::uno::Sequence< OUString >& rNames,
                     bool bAllLocales);
             static bool PutProperties(
                     css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
                     const css::uno::Sequence< OUString >& rNames,
-                    const css::uno::Sequence< css::uno::Any>& rValues,
+                    const css::uno::Sequence< cpo::uno::Any>& rValues,
                     bool bAllLocales);
             // remove all members of a set
             static bool ClearNodeSet(

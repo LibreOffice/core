@@ -48,9 +48,9 @@ class ChartObjectEnumerationImpl : public EnumerationHelperImpl
 public:
     /// @throws uno::RuntimeException
     ChartObjectEnumerationImpl( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration, uno::Reference< drawing::XDrawPageSupplier >  _xDrawPageSupplier, const uno::Reference< XHelperInterface >& _xParent ) : EnumerationHelperImpl( _xParent, xContext, xEnumeration ), xDrawPageSupplier(std::move( _xDrawPageSupplier )) {}
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
-        uno::Any ret;
+        cpo::uno::Any ret;
 
         try
         {
@@ -72,7 +72,7 @@ public:
         }
         catch (const uno::Exception&)
         {
-            css::uno::Any anyEx(cppu::getCaughtException());
+            cpo::uno::Any anyEx(cppu::getCaughtException());
             throw lang::WrappedTargetException(
                     u"Error creating ScVbaChartObject!"_ustr,
                     getXWeak(),
@@ -131,7 +131,7 @@ ScVbaChartObjects::getChartObjectNames() const
 }
 
 // XChartObjects
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaChartObjects::Add( double _nX, double _nY, double _nWidth, double _nHeight )
 {
     try
@@ -147,7 +147,7 @@ ScVbaChartObjects::Add( double _nX, double _nY, double _nWidth, double _nHeight 
         xTableCharts->addNewByName(sPersistChartName, aRectangle, aCellRangeAddress, true, false );
         uno::Reference< excel::XChartObject > xChartObject( getItemByStringIndex( sPersistChartName ), uno::UNO_QUERY_THROW );
         xChartObject->getChart()->setChartType(excel::XlChartType::xlColumnClustered);
-        return uno::Any( xChartObject );
+        return cpo::uno::Any( xChartObject );
     }
     catch (const uno::Exception&)
     {
@@ -180,12 +180,12 @@ ScVbaChartObjects::getElementType()
 }
 
 // ScVbaCollectionBaseImpl
-uno::Any
-ScVbaChartObjects::createCollectionObject( const css::uno::Any& aSource )
+cpo::uno::Any
+ScVbaChartObjects::createCollectionObject( const cpo::uno::Any& aSource )
 {
     uno::Reference< table::XTableChart > xTableChart( aSource, uno::UNO_QUERY_THROW );
     // correct parent object is sheet
-    return uno::Any( uno::Reference< excel::XChartObject > ( new ScVbaChartObject( getParent(), mxContext, xTableChart, xDrawPageSupplier ) ) );
+    return cpo::uno::Any( uno::Reference< excel::XChartObject > ( new ScVbaChartObject( getParent(), mxContext, xTableChart, xDrawPageSupplier ) ) );
 }
 
 OUString

@@ -32,13 +32,14 @@
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/linkmgr.hxx>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <svl/svdde.hxx>
 #include <sot/formats.hxx>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace sfx2
 {
@@ -109,7 +110,7 @@ SvDDEObject::~SvDDEObject()
     pConnection.reset();
 }
 
-bool SvDDEObject::GetData( css::uno::Any & rData /*out param*/,
+bool SvDDEObject::GetData( cpo::uno::Any & rData /*out param*/,
                             const OUString & rMimeType,
                             bool bSynchron )
 {

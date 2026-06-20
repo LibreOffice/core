@@ -62,7 +62,7 @@ private:
 
     DWORD GetMSAAStateFromUNO(sal_Int64 xState);//translate state from UNO to MSAA value
     css::accessibility::XAccessibleSelection* GetXAccessibleSelection();
-    static OUString GetMAccessibleValueFromAny(css::uno::Any pAny);
+    static OUString GetMAccessibleValueFromAny(cpo::uno::Any pAny);
 
 public:
 
@@ -95,7 +95,7 @@ public:
     void  DecreaseState( sal_Int64 xState );//call COM interface DecreaseState method
     void  IncreaseState( sal_Int64 xState );//call COM interface IncreaseState method
 
-    void  SetValue( css::uno::Any pAny );
+    void  SetValue( cpo::uno::Any pAny );
 
     short GetRole() const;
 

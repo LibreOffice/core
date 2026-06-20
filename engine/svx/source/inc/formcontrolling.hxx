@@ -134,7 +134,7 @@ namespace svx
         css::uno::Reference< css::form::runtime::XFormOperations >
                                         m_xFormOperations;
 
-        css::uno::Any      m_aOperationError;
+        cpo::uno::Any      m_aOperationError;
 
     public:
         /** constructs the helper from a <type scope="css::form::runtime">XFormController<type> instance
@@ -159,7 +159,7 @@ namespace svx
                     ) const;
         bool        isEnabled( sal_Int32 _nSlotId ) const;
         void        execute( sal_Int32 _nSlotId ) const;
-        void        execute( sal_Int32 _nSlotId, const OUString& _rParamName, const css::uno::Any& _rParamValue ) const;
+        void        execute( sal_Int32 _nSlotId, const OUString& _rParamName, const cpo::uno::Any& _rParamValue ) const;
         bool        commitCurrentRecord() const;
         bool        commitCurrentControl( ) const;
         bool        isInsertionRow() const;

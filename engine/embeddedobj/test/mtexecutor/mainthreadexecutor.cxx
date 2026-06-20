@@ -48,7 +48,7 @@ uno::Reference< uno::XInterface > SAL_CALL MainThreadExecutor::impl_staticCreate
 }
 
 
-uno::Any SAL_CALL MainThreadExecutor::execute( const uno::Sequence< beans::NamedValue >& aArguments )
+cpo::uno::Any SAL_CALL MainThreadExecutor::execute( const uno::Sequence< beans::NamedValue >& aArguments )
     throw ( lang::IllegalArgumentException,
             uno::Exception,
             uno::RuntimeException )
@@ -74,7 +74,7 @@ uno::Any SAL_CALL MainThreadExecutor::execute( const uno::Sequence< beans::Named
     }
 
     // TODO: wait for result
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 

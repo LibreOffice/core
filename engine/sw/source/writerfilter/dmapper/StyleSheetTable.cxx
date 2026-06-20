@@ -344,14 +344,14 @@ StyleSheetTable::StyleSheetTable(DomainMapper& rDMapper,
 , m_bIsNewDoc(bIsNewDoc)
 {
     //set font height default to 10pt
-    uno::Any aVal( 10.0 );
+    cpo::uno::Any aVal( 10.0 );
     m_pDefaultCharProps->Insert( PROP_CHAR_HEIGHT, aVal );
     m_pDefaultCharProps->Insert( PROP_CHAR_HEIGHT_ASIAN, aVal );
     m_pDefaultCharProps->Insert( PROP_CHAR_HEIGHT_COMPLEX, aVal );
 
     // See SwDoc::RemoveAllFormatLanguageDependencies(), internal filters
     // disable kerning by default, do the same here.
-    m_pDefaultCharProps->Insert(PROP_CHAR_AUTO_KERNING, uno::Any(false));
+    m_pDefaultCharProps->Insert(PROP_CHAR_AUTO_KERNING, cpo::uno::Any(false));
 }
 
 
@@ -359,7 +359,7 @@ StyleSheetTable::~StyleSheetTable()
 {
 }
 
-void StyleSheetTable::SetDefaultParaProps(PropertyIds eId, const css::uno::Any& rAny)
+void StyleSheetTable::SetDefaultParaProps(PropertyIds eId, const cpo::uno::Any& rAny)
 {
     m_pDefaultParaProps->Insert(eId, rAny, /*bOverwrite=*/false, NO_GRAB_BAG, /*bDocDefault=*/true);
 }
@@ -660,7 +660,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
             if ( nSprmId == NS_ooxml::LN_CT_DocDefaults_pPrDefault && m_pDefaultParaProps &&
                 !m_pDefaultParaProps->isSet( PROP_PARA_TOP_MARGIN ) )
             {
-                SetDefaultParaProps( PROP_PARA_TOP_MARGIN, uno::Any( sal_Int32(0) ) );
+                SetDefaultParaProps( PROP_PARA_TOP_MARGIN, cpo::uno::Any( sal_Int32(0) ) );
             }
             m_rDMapper.PopStyleSheetProperties();
             applyDefaults( true );
@@ -682,7 +682,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         break;
         case NS_ooxml::LN_CT_TblPrBase_jc:     //table alignment - row properties!
              m_pCurrentEntry->m_pProperties->Insert( PROP_HORI_ORIENT,
-                uno::Any( ConversionHelper::convertTableJustification( nIntValue )));
+                cpo::uno::Any( ConversionHelper::convertTableJustification( nIntValue )));
         break;
         case NS_ooxml::LN_CT_TrPrBase_jc:     //table alignment - row properties!
         break;
@@ -806,7 +806,7 @@ void StyleSheetTable::lcl_entry(const writerfilter::Reference<Properties>::Point
         aValue.Name = u"latentStyles"_ustr;
         aValue.Value <<= aLatentStyles;
         aGrabBag.push_back(aValue);
-        m_xTextDocument->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(comphelper::containerToSequence(aGrabBag)));
+        m_xTextDocument->setPropertyValue(u"InteropGrabBag"_ustr, cpo::uno::Any(comphelper::containerToSequence(aGrabBag)));
     }
 
     m_pCurrentEntry = StyleSheetEntryPtr();
@@ -823,7 +823,7 @@ public:
     PropValVector(){}
 
     void Insert(const beans::PropertyValue& rVal);
-    uno::Sequence< uno::Any > getValues();
+    uno::Sequence< cpo::uno::Any > getValues();
     uno::Sequence< OUString > getNames();
     const std::vector<beans::PropertyValue>& getProperties() const { return m_aValues; };
 };
@@ -842,11 +842,11 @@ void PropValVector::Insert(const beans::PropertyValue& rVal)
     m_aValues.push_back(rVal);
 }
 
-uno::Sequence< uno::Any > PropValVector::getValues()
+uno::Sequence< cpo::uno::Any > PropValVector::getValues()
 {
-    std::vector<uno::Any> aRet;
+    std::vector<cpo::uno::Any> aRet;
     std::transform(m_aValues.begin(), m_aValues.end(), std::back_inserter(aRet),
-            [](const beans::PropertyValue& rValue) -> const uno::Any& { return rValue.Value; });
+            [](const beans::PropertyValue& rValue) -> const cpo::uno::Any& { return rValue.Value; });
     return comphelper::containerToSequence(aRet);
 }
 
@@ -886,7 +886,7 @@ void StyleSheetTable::ApplyNumberingStyleNameToParaStyles()
                     const OUString sNumberingStyleName = m_rDMapper.GetListStyleName( pStyleSheetProperties->props().GetListId() );
                     if ( !sNumberingStyleName.isEmpty()
                          || !pStyleSheetProperties->props().GetListId() )
-                        xStyle->setPropertyValue( getPropertyName(PROP_NUMBERING_STYLE_NAME), uno::Any(sNumberingStyleName) );
+                        xStyle->setPropertyValue( getPropertyName(PROP_NUMBERING_STYLE_NAME), cpo::uno::Any(sNumberingStyleName) );
 
                     // Word 2010+ (not Word 2003, and Word 2007 is completely broken)
                     // does something rather strange. It does not allow two paragraph styles
@@ -940,7 +940,7 @@ void StyleSheetTable::ReApplyInheritedOutlineLevelFromChapterNumbering()
             if (nListId == -1 && !sParentNumberingStyleName.isEmpty())
             {
                 xStyle->setPropertyValue(getPropertyName(PROP_NUMBERING_STYLE_NAME),
-                                               uno::Any(sParentNumberingStyleName));
+                                               cpo::uno::Any(sParentNumberingStyleName));
             }
 
             sal_Int16 nOutlineLevel = pEntry->m_pProperties->GetOutlineLevel();
@@ -953,7 +953,7 @@ void StyleSheetTable::ReApplyInheritedOutlineLevelFromChapterNumbering()
             // convert MS level to LO equivalent outline level
             ++nOutlineLevel;
 
-            xStyle->setPropertyValue(getPropertyName(PROP_OUTLINE_LEVEL), uno::Any(nOutlineLevel));
+            xStyle->setPropertyValue(getPropertyName(PROP_OUTLINE_LEVEL), cpo::uno::Any(nOutlineLevel));
         }
     }
     catch( const uno::Exception& )
@@ -979,7 +979,7 @@ void StyleSheetTable::ApplyClonedTOCStylesToXText(uno::Reference<text::XText> co
                 auto const it(m_ClonedTOCStylesMap.find(styleName));
                 if (it != m_ClonedTOCStylesMap.end())
                 {
-                    xPara->setPropertyValue(u"ParaStyleName"_ustr, uno::Any(it->second));
+                    xPara->setPropertyValue(u"ParaStyleName"_ustr, cpo::uno::Any(it->second));
                 }
             }
             uno::Reference<container::XEnumerationAccess> const xParaEA{xPara, uno::UNO_QUERY_THROW};
@@ -992,7 +992,7 @@ void StyleSheetTable::ApplyClonedTOCStylesToXText(uno::Reference<text::XText> co
                     auto const it{m_ClonedTOCStylesMap.find(styleName)};
                     if (it != m_ClonedTOCStylesMap.end())
                     {
-                        xPortion->setPropertyValue(u"CharStyleName"_ustr, uno::Any(it->second));
+                        xPortion->setPropertyValue(u"CharStyleName"_ustr, cpo::uno::Any(it->second));
                     }
                 }
             }
@@ -1148,7 +1148,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                                         comphelper::makePropertyValue(
                                             u"NumberingType"_ustr, style::NumberingType::NUMBER_NONE)
                                     };
-                                    xNumberingRules->replaceByIndex(i, uno::Any(aLvlProps));
+                                    xNumberingRules->replaceByIndex(i, cpo::uno::Any(aLvlProps));
                                 }
                             }
                         }
@@ -1187,7 +1187,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                         sal_uInt32 nFontCount = rFontTable->size();
                         if( !m_rDMapper.IsOOXMLImport() && nFontCount > 2 )
                         {
-                            uno::Any aTwoHundredFortyTwip(12.);
+                            cpo::uno::Any aTwoHundredFortyTwip(12.);
 
                             // font size to 240 twip (12 pts) for all if not set
                             pEntry->m_pProperties->Insert(PROP_CHAR_HEIGHT, aTwoHundredFortyTwip, false);
@@ -1195,18 +1195,18 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                             // western font not already set -> apply first font
                             const FontEntry::Pointer_t pWesternFontEntry(rFontTable->getFontEntry( 0 ));
                             OUString sWesternFontName = pWesternFontEntry->sFontName;
-                            pEntry->m_pProperties->Insert(PROP_CHAR_FONT_NAME, uno::Any( sWesternFontName ), false);
+                            pEntry->m_pProperties->Insert(PROP_CHAR_FONT_NAME, cpo::uno::Any( sWesternFontName ), false);
 
                             // CJK  ... apply second font
                             const FontEntry::Pointer_t pCJKFontEntry(rFontTable->getFontEntry( 2 ));
-                            pEntry->m_pProperties->Insert(PROP_CHAR_FONT_NAME_ASIAN, uno::Any( pCJKFontEntry->sFontName ), false);
+                            pEntry->m_pProperties->Insert(PROP_CHAR_FONT_NAME_ASIAN, cpo::uno::Any( pCJKFontEntry->sFontName ), false);
                             pEntry->m_pProperties->Insert(PROP_CHAR_HEIGHT_ASIAN, aTwoHundredFortyTwip, false);
 
                             // CTL  ... apply third font, if available
                             if( nFontCount > 3 )
                             {
                                 const FontEntry::Pointer_t pCTLFontEntry(rFontTable->getFontEntry( 3 ));
-                                pEntry->m_pProperties->Insert(PROP_CHAR_FONT_NAME_COMPLEX, uno::Any( pCTLFontEntry->sFontName ), false);
+                                pEntry->m_pProperties->Insert(PROP_CHAR_FONT_NAME_COMPLEX, cpo::uno::Any( pCTLFontEntry->sFontName ), false);
                                 pEntry->m_pProperties->Insert(PROP_CHAR_HEIGHT_COMPLEX, aTwoHundredFortyTwip, false);
                             }
                         }
@@ -1252,7 +1252,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                                     ++nLvl;
 
                                 beans::PropertyValue aLvlVal(getPropertyName(PROP_OUTLINE_LEVEL), 0,
-                                                             uno::Any(nLvl),
+                                                             cpo::uno::Any(nLvl),
                                                              beans::PropertyState_DIRECT_VALUE);
                                 aPropValues.push_back(aLvlVal);
                             }
@@ -1392,7 +1392,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                                     stLeftCh.First -= stFirstCh.First;
                                     beans::PropertyValue aPV(
                                         getPropertyName(PROP_PARA_LEFT_MARGIN_UNIT), 0,
-                                        uno::Any(stLeftCh), beans::PropertyState_DIRECT_VALUE);
+                                        cpo::uno::Any(stLeftCh), beans::PropertyState_DIRECT_VALUE);
                                     aPropValues.push_back(aPV);
                                 }
                             }
@@ -1496,12 +1496,12 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                     beans::PropertyValues aGrabBag = pEntry->GetInteropGrabBagSeq();
                     if (aGrabBag.hasElements())
                     {
-                        xStyle->setPropertyValue(u"StyleInteropGrabBag"_ustr, uno::Any(aGrabBag));
+                        xStyle->setPropertyValue(u"StyleInteropGrabBag"_ustr, cpo::uno::Any(aGrabBag));
                     }
 
                     // Only paragraph styles support automatic updates.
                     if (pEntry->m_bAutoRedefine && bParaStyle)
-                        xStyle->setPropertyValue(u"IsAutoUpdate"_ustr, uno::Any(true));
+                        xStyle->setPropertyValue(u"IsAutoUpdate"_ustr, cpo::uno::Any(true));
                 }
                 else if(pEntry->m_nStyleTypeCode == StyleType::Table)
                 {
@@ -1525,7 +1525,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
             {
                 try
                 {
-                    iter.second->setPropertyValue( u"FollowStyle"_ustr, uno::Any(iter.first) );
+                    iter.second->setPropertyValue( u"FollowStyle"_ustr, cpo::uno::Any(iter.first) );
                 }
                 catch( uno::Exception & ) {}
             }
@@ -1535,7 +1535,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
             {
                 try
                 {
-                    rLinked.second->setPropertyValue(u"LinkStyle"_ustr, uno::Any(rLinked.first));
+                    rLinked.second->setPropertyValue(u"LinkStyle"_ustr, cpo::uno::Any(rLinked.first));
                 }
                 catch (uno::Exception&)
                 {
@@ -1548,13 +1548,13 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
             if (!aTableStylesVec.empty())
             {
                 // If we had any table styles, add a new document-level InteropGrabBag entry for them.
-                uno::Any aAny = m_xTextDocument->getPropertyValue(u"InteropGrabBag"_ustr);
+                cpo::uno::Any aAny = m_xTextDocument->getPropertyValue(u"InteropGrabBag"_ustr);
                 auto aGrabBag = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aAny.get< uno::Sequence<beans::PropertyValue> >());
                 beans::PropertyValue aValue;
                 aValue.Name = u"tableStyles"_ustr;
                 aValue.Value <<= comphelper::containerToSequence(aTableStylesVec);
                 aGrabBag.push_back(aValue);
-                m_xTextDocument->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(comphelper::containerToSequence(aGrabBag)));
+                m_xTextDocument->setPropertyValue(u"InteropGrabBag"_ustr, cpo::uno::Any(comphelper::containerToSequence(aGrabBag)));
             }
         }
     }
@@ -2132,11 +2132,11 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
         if( bParaProperties && m_pDefaultParaProps)
         {
             // tdf#87533 LO will have different defaults here, depending on the locale. Import with documented defaults
-            SetDefaultParaProps(PROP_WRITING_MODE, uno::Any(sal_Int16(text::WritingMode_LR_TB)));
-            SetDefaultParaProps(PROP_PARA_ADJUST, uno::Any(sal_Int16(style::ParagraphAdjust_LEFT)));
+            SetDefaultParaProps(PROP_WRITING_MODE, cpo::uno::Any(sal_Int16(text::WritingMode_LR_TB)));
+            SetDefaultParaProps(PROP_PARA_ADJUST, cpo::uno::Any(sal_Int16(style::ParagraphAdjust_LEFT)));
 
             // Widow/Orphan -> set both to two if not already set
-            uno::Any aTwo(sal_Int8(2));
+            cpo::uno::Any aTwo(sal_Int8(2));
             SetDefaultParaProps(PROP_PARA_WIDOWS, aTwo);
             SetDefaultParaProps(PROP_PARA_ORPHANS, aTwo);
 
@@ -2164,7 +2164,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
             // but that is valid only if DocDefaults_rPrDefault is omitted.
             // Now that DocDefaults_rPrDefault is known, the defaults should be reset to Times New Roman/10pt.
             if ( m_rDMapper.IsOOXMLImport() )
-                m_xTextDefaults->setPropertyValue( getPropertyName(PROP_CHAR_FONT_NAME), css::uno::Any(u"Times New Roman"_ustr) );
+                m_xTextDefaults->setPropertyValue( getPropertyName(PROP_CHAR_FONT_NAME), cpo::uno::Any(u"Times New Roman"_ustr) );
 
             const std::vector< beans::PropertyValue >& rPropValues = m_pDefaultCharProps->GetPropertyValues();
             for( const auto& rPropValue : rPropValues )

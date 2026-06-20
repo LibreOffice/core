@@ -111,7 +111,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL SdLayer::getPropertySetInfo( 
     return pPropSet->getPropertySetInfo();
 }
 
-void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
+void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
 
@@ -179,7 +179,7 @@ void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const un
         mxLayerManager->GetDocShell()->SetModified();
 }
 
-uno::Any SAL_CALL SdLayer::getPropertyValue( const OUString& PropertyName )
+cpo::uno::Any SAL_CALL SdLayer::getPropertyValue( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
@@ -188,7 +188,7 @@ uno::Any SAL_CALL SdLayer::getPropertyValue( const OUString& PropertyName )
 
     const SfxItemPropertyMapEntry* pEntry = pPropSet->getPropertyMapEntry(PropertyName);
 
-    uno::Any aValue;
+    cpo::uno::Any aValue;
 
     switch( pEntry ? pEntry->nWID : -1 )
     {
@@ -526,7 +526,7 @@ sal_Int32 SAL_CALL SdLayerManager::getCount()
     return 0;
 }
 
-uno::Any SAL_CALL SdLayerManager::getByIndex( sal_Int32 nLayer )
+cpo::uno::Any SAL_CALL SdLayerManager::getByIndex( sal_Int32 nLayer )
 {
     SolarMutexGuard aGuard;
 
@@ -536,7 +536,7 @@ uno::Any SAL_CALL SdLayerManager::getByIndex( sal_Int32 nLayer )
     if( nLayer >= getCount() || nLayer < 0 )
         throw lang::IndexOutOfBoundsException();
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     if( mpModel->mpDoc )
     {
@@ -548,7 +548,7 @@ uno::Any SAL_CALL SdLayerManager::getByIndex( sal_Int32 nLayer )
 }
 
 // XNameAccess
-uno::Any SAL_CALL SdLayerManager::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL SdLayerManager::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 
@@ -560,7 +560,7 @@ uno::Any SAL_CALL SdLayerManager::getByName( const OUString& aName )
     if( pLayer == nullptr )
         throw container::NoSuchElementException();
 
-    return uno::Any( css::uno::Reference< css::drawing::XLayer>(GetLayer(pLayer)) );
+    return cpo::uno::Any( css::uno::Reference< css::drawing::XLayer>(GetLayer(pLayer)) );
 }
 
 uno::Sequence< OUString > SAL_CALL SdLayerManager::getElementNames()

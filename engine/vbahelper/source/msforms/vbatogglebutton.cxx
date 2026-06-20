@@ -28,7 +28,7 @@ ScVbaToggleButton::ScVbaToggleButton( const css::uno::Reference< ov::XHelperInte
     : ToggleButtonImpl_BASE( xParent, xContext, xControl, xModel, std::move(pGeomHelper) )
 {
     SAL_INFO("vbahelper", "ScVbaToggleButton(ctor)");
-    m_xProps->setPropertyValue( u"Toggle"_ustr, uno::Any( true ) );
+    m_xProps->setPropertyValue( u"Toggle"_ustr, cpo::uno::Any( true ) );
 }
 
 ScVbaToggleButton::~ScVbaToggleButton()
@@ -48,20 +48,20 @@ ScVbaToggleButton::getCaption()
 void SAL_CALL
 ScVbaToggleButton::setCaption( const OUString& _caption )
 {
-    m_xProps->setPropertyValue( u"Label"_ustr, uno::Any( _caption ) );
+    m_xProps->setPropertyValue( u"Label"_ustr, cpo::uno::Any( _caption ) );
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaToggleButton::getValue()
 {
     sal_Int16 nState = 0;
     m_xProps->getPropertyValue( u"State"_ustr ) >>= nState;
-    return uno::Any( nState ? sal_Int16( -1 ) : sal_Int16( 0 ) );
+    return cpo::uno::Any( nState ? sal_Int16( -1 ) : sal_Int16( 0 ) );
 }
 
 
 void SAL_CALL
-ScVbaToggleButton::setValue( const uno::Any& _value )
+ScVbaToggleButton::setValue( const cpo::uno::Any& _value )
 {
     sal_Int16 nState = 0;
     if ( ! ( _value >>= nState ) )
@@ -74,7 +74,7 @@ ScVbaToggleButton::setValue( const uno::Any& _value )
     SAL_INFO("vbahelper", "nState - " << nState );
     nState = ( nState == -1 ) ?  1 : 0;
     SAL_INFO("vbahelper", "nState - " << nState );
-    m_xProps->setPropertyValue( u"State"_ustr, uno::Any(   nState ) );
+    m_xProps->setPropertyValue( u"State"_ustr, cpo::uno::Any(   nState ) );
 }
 
 bool SAL_CALL ScVbaToggleButton::getAutoSize()

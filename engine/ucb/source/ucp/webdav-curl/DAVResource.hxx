@@ -23,7 +23,7 @@
 #include <vector>
 
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 namespace http_dav_ucp
 {
@@ -31,7 +31,7 @@ namespace http_dav_ucp
 struct DAVPropertyValue
 {
     OUString            Name;
-    css::uno::Any       Value;
+    cpo::uno::Any       Value;
     bool                IsCaseSensitive;
 
     DAVPropertyValue() : IsCaseSensitive( true ) {}

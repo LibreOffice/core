@@ -55,7 +55,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 
 namespace
 {
@@ -132,7 +132,7 @@ OUString lcl_getDataPointValueText( const rtl::Reference< DataSeries >& xSeries,
             uno::Reference<beans::XPropertySet> xProp(xDataSequence, uno::UNO_QUERY );
             if( xProp.is())
             {
-                uno::Any aARole = xProp->getPropertyValue( u"Role"_ustr );
+                cpo::uno::Any aARole = xProp->getPropertyValue( u"Role"_ustr );
                 OUString aRole;
                 aARole >>= aRole;
 
@@ -197,7 +197,7 @@ OUString lcl_getDataPointValueText( const rtl::Reference< DataSeries >& xSeries,
         {
             try
             {
-                uno::Sequence<uno::Any> aCalcData = xCalculatedSeq->getValues()->getData();
+                uno::Sequence<cpo::uno::Any> aCalcData = xCalculatedSeq->getValues()->getData();
                 if (nPointIndex >= 0 && nPointIndex < aCalcData.getLength())
                 {
                     double fCalculatedValue = 0.0;

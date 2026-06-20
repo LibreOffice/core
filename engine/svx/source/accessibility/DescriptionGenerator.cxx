@@ -79,7 +79,7 @@ void DescriptionGenerator::Initialize(std::u16string_view sPrefix)
     {
         if (mxSet.is())
         {
-            uno::Any aValue = mxSet->getPropertyValue(u"Style"_ustr);
+            cpo::uno::Any aValue = mxSet->getPropertyValue(u"Style"_ustr);
             uno::Reference<container::XNamed> xStyle(aValue, uno::UNO_QUERY);
             if (xStyle.is())
                 msDescription.append(xStyle->getName());
@@ -151,7 +151,7 @@ void DescriptionGenerator::AddColor(const OUString& sPropertyName)
         tools::Long nValue(0);
         if (mxSet.is())
         {
-            uno::Any aValue = mxSet->getPropertyValue(sPropertyName);
+            cpo::uno::Any aValue = mxSet->getPropertyValue(sPropertyName);
             aValue >>= nValue;
         }
 
@@ -171,7 +171,7 @@ void DescriptionGenerator::AddInteger(const OUString& sPropertyName)
     {
         if (mxSet.is())
         {
-            uno::Any aValue = mxSet->getPropertyValue(sPropertyName);
+            cpo::uno::Any aValue = mxSet->getPropertyValue(sPropertyName);
             tools::Long nValue = 0;
             aValue >>= nValue;
             msDescription.append(nValue);

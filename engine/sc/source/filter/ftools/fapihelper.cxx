@@ -39,7 +39,7 @@
 #include <svl/itemset.hxx>
 #include <miscuno.hxx>
 
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;
@@ -122,7 +122,7 @@ uno::Sequence< beans::NamedValue > ScfApiHelper::QueryEncryptionDataForMedium( S
     rMedium.GetItemSet().ClearItem( SID_ENCRYPTIONDATA );
 
     if( !bIsDefaultPassword && aEncryptionData.hasElements() )
-        rMedium.GetItemSet().Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData ) ) );
+        rMedium.GetItemSet().Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, cpo::uno::Any( aEncryptionData ) ) );
 
     return aEncryptionData;
 }

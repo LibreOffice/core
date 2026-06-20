@@ -41,19 +41,19 @@ using namespace ::ooo::vba;
 typedef  std::unordered_map< OUString,
 sal_Int32 > NameIndexHash;
 
-static uno::Reference< XHelperInterface > lcl_createWorkbookHIParent( const rtl::Reference< ScModelObj >& xModel, const uno::Reference< uno::XComponentContext >& xContext, const uno::Any& aApplication )
+static uno::Reference< XHelperInterface > lcl_createWorkbookHIParent( const rtl::Reference< ScModelObj >& xModel, const uno::Reference< uno::XComponentContext >& xContext, const cpo::uno::Any& aApplication )
 {
     return new ScVbaWorkbook( uno::Reference< XHelperInterface >( aApplication, uno::UNO_QUERY_THROW ), xContext,  xModel );
 }
 
-static uno::Any ComponentToWindow( const uno::Any& aSource, const uno::Reference< uno::XComponentContext > & xContext, const uno::Any& aApplication )
+static cpo::uno::Any ComponentToWindow( const cpo::uno::Any& aSource, const uno::Reference< uno::XComponentContext > & xContext, const cpo::uno::Any& aApplication )
 {
     uno::Reference< frame::XModel > xModel( aSource, uno::UNO_QUERY_THROW );
     ScModelObj* pModel = dynamic_cast<ScModelObj*>(xModel.get());
     // !! TODO !! iterate over all controllers
     uno::Reference< frame::XController > xController( pModel->getCurrentController(), uno::UNO_SET_THROW );
     uno::Reference< excel::XWindow > xWin( new ScVbaWindow( lcl_createWorkbookHIParent( pModel, xContext, aApplication ), xContext, pModel, xController ) );
-    return uno::Any( xWin );
+    return cpo::uno::Any( xWin );
 }
 
 typedef std::vector < uno::Reference< sheet::XSpreadsheetDocument > > Components;
@@ -95,22 +95,22 @@ public:
         return m_it != m_components.end();
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         if ( !hasMoreElements() )
         {
             throw container::NoSuchElementException();
         }
-        return css::uno::Any( *(m_it++) );
+        return cpo::uno::Any( *(m_it++) );
     }
 };
 
 class WindowEnumImpl : public  WindowComponentEnumImpl
 {
-    uno::Any m_aApplication;
+    cpo::uno::Any m_aApplication;
 public:
-    WindowEnumImpl( const uno::Reference< uno::XComponentContext >& xContext,  uno::Any  aApplication ): WindowComponentEnumImpl( xContext ), m_aApplication(std::move( aApplication )) {}
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    WindowEnumImpl( const uno::Reference< uno::XComponentContext >& xContext,  cpo::uno::Any  aApplication ): WindowComponentEnumImpl( xContext ), m_aApplication(std::move( aApplication )) {}
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         return ComponentToWindow( WindowComponentEnumImpl::nextElement(), m_xContext, m_aApplication );
     }
@@ -186,12 +186,12 @@ public:
     {
         return m_windows.size();
     }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
+    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         if ( Index < 0
             || o3tl::make_unsigned( Index ) >= m_windows.size() )
             throw lang::IndexOutOfBoundsException();
-        return css::uno::Any( m_windows[ Index ] ); // returns xspreadsheetdoc
+        return cpo::uno::Any( m_windows[ Index ] ); // returns xspreadsheetdoc
     }
 
     //XElementAccess
@@ -206,12 +206,12 @@ public:
     }
 
     //XNameAccess
-    virtual uno::Any SAL_CALL getByName( const OUString& aName ) override
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override
     {
         NameIndexHash::const_iterator it = namesToIndices.find( aName );
         if ( it == namesToIndices.end() )
             throw container::NoSuchElementException();
-        return css::uno::Any( m_windows[ it->second ] );
+        return cpo::uno::Any( m_windows[ it->second ] );
 
     }
 
@@ -239,8 +239,8 @@ ScVbaWindows::createEnumeration()
     return new WindowEnumImpl( mxContext, Application() );
 }
 
-uno::Any
-ScVbaWindows::createCollectionObject( const css::uno::Any& aSource )
+cpo::uno::Any
+ScVbaWindows::createCollectionObject( const cpo::uno::Any& aSource )
 {
     return ComponentToWindow( aSource,  mxContext, Application() );
 }
@@ -252,7 +252,7 @@ ScVbaWindows::getElementType()
 }
 
 void SAL_CALL
-ScVbaWindows::Arrange( ::sal_Int32 /*ArrangeStyle*/, const uno::Any& /*ActiveWorkbook*/, const uno::Any& /*SyncHorizontal*/, const uno::Any& /*SyncVertical*/ )
+ScVbaWindows::Arrange( ::sal_Int32 /*ArrangeStyle*/, const cpo::uno::Any& /*ActiveWorkbook*/, const cpo::uno::Any& /*SyncHorizontal*/, const cpo::uno::Any& /*SyncVertical*/ )
 {
     //#TODO #FIXME see what can be done for an implementation here
 }

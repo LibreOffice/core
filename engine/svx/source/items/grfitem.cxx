@@ -62,7 +62,7 @@ size_t SvxGrfCrop::hashCode() const
     return seed;
 }
 
-bool SvxGrfCrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxGrfCrop::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     text::GraphicCrop aRet;
@@ -84,7 +84,7 @@ bool SvxGrfCrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-bool SvxGrfCrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxGrfCrop::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);

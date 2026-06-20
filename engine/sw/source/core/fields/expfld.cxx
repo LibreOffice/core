@@ -89,7 +89,7 @@ static sal_Int16 lcl_SubTypeToAPI(SwGetSetExpType nSubType)
         return nRet;
 }
 
-static std::optional<SwGetSetExpType> lcl_APIToSubType(const uno::Any& rAny)
+static std::optional<SwGetSetExpType> lcl_APIToSubType(const cpo::uno::Any& rAny)
 {
         sal_Int16 nVal = 0;
         rAny >>= nVal;
@@ -422,7 +422,7 @@ void SwGetExpField::SetLanguage(LanguageType nLng)
         SwValueField::SetLanguage(nLng);
 }
 
-bool SwGetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwGetExpField::QueryValue( cpo::uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -456,7 +456,7 @@ bool SwGetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     return true;
 }
 
-bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwGetExpField::PutValue( const cpo::uno::Any& rAny, sal_uInt16 nWhichId )
 {
     sal_Int32 nTmp = 0;
     switch( nWhichId )
@@ -668,7 +668,7 @@ void SwSetExpFieldType::SetChapter(SwSetExpField& rField, const SwNode& rNd,
     }
 }
 
-void SwSetExpFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+void SwSetExpFieldType::QueryValue( cpo::uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -692,7 +692,7 @@ void SwSetExpFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     }
 }
 
-void SwSetExpFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+void SwSetExpFieldType::PutValue( const cpo::uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -1089,7 +1089,7 @@ void SwSetExpField::SetPar2(const OUString& rStr)
     }
 }
 
-bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwSetExpField::PutValue( const cpo::uno::Any& rAny, sal_uInt16 nWhichId )
 {
     sal_Int32 nTmp32 = 0;
     sal_Int16 nTmp16 = 0;
@@ -1216,7 +1216,7 @@ void SwSetExpField::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwSetExpField::QueryValue( cpo::uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -1401,7 +1401,7 @@ bool SwInputField::isFormField() const
            || !maToolTip.isEmpty();
 }
 
-bool SwInputField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwInputField::QueryValue( cpo::uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -1428,7 +1428,7 @@ bool SwInputField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     return true;
 }
 
-bool SwInputField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwInputField::PutValue( const cpo::uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {

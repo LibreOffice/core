@@ -617,7 +617,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                         // set default VertOrient before inserting
                         uno::Reference<beans::XPropertySet>(xShape, uno::UNO_QUERY_THROW)
                             ->setPropertyValue(u"VertOrient"_ustr,
-                                               uno::Any(text::VertOrientation::NONE));
+                                               cpo::uno::Any(text::VertOrientation::NONE));
                         m_xDstDoc->getDrawPage()->add(xShape);
                     }
                     m_pSdrImport->pushParent(xGroupShape);

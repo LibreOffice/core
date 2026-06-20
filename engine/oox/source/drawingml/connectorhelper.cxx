@@ -302,15 +302,15 @@ void ConnectorHelper::applyConnections(const oox::drawingml::ShapePtr& pConnecto
         return;
 
     // MS Office allows route between shapes with small distance. LO default is 5mm.
-    xPropSet->setPropertyValue(u"EdgeNode1HorzDist"_ustr, uno::Any(sal_Int32(0)));
-    xPropSet->setPropertyValue(u"EdgeNode1VertDist"_ustr, uno::Any(sal_Int32(0)));
-    xPropSet->setPropertyValue(u"EdgeNode2HorzDist"_ustr, uno::Any(sal_Int32(0)));
-    xPropSet->setPropertyValue(u"EdgeNode2VertDist"_ustr, uno::Any(sal_Int32(0)));
+    xPropSet->setPropertyValue(u"EdgeNode1HorzDist"_ustr, cpo::uno::Any(sal_Int32(0)));
+    xPropSet->setPropertyValue(u"EdgeNode1VertDist"_ustr, cpo::uno::Any(sal_Int32(0)));
+    xPropSet->setPropertyValue(u"EdgeNode2HorzDist"_ustr, cpo::uno::Any(sal_Int32(0)));
+    xPropSet->setPropertyValue(u"EdgeNode2VertDist"_ustr, cpo::uno::Any(sal_Int32(0)));
 
     // A OOXML curvedConnector uses a routing method which is basically incompatible with the
     // traditional way of LibreOffice. A compatible way was added and needs to be enabled before
     // connections are set, so that the method is used in the default routing.
-    xPropSet->setPropertyValue(u"EdgeOOXMLCurve"_ustr, uno::Any(true));
+    xPropSet->setPropertyValue(u"EdgeOOXMLCurve"_ustr, cpo::uno::Any(true));
 
     oox::drawingml::ConnectorShapePropertiesList aConnectorShapeProperties
         = pConnector->getConnectorShapeProperties();
@@ -326,9 +326,9 @@ void ConnectorHelper::applyConnections(const oox::drawingml::ShapePtr& pConnecto
         {
             // Connect to the found shape.
             if (aIt.mbStartShape)
-                xPropSet->setPropertyValue(u"StartShape"_ustr, uno::Any(xShape));
+                xPropSet->setPropertyValue(u"StartShape"_ustr, cpo::uno::Any(xShape));
             else
-                xPropSet->setPropertyValue(u"EndShape"_ustr, uno::Any(xShape));
+                xPropSet->setPropertyValue(u"EndShape"_ustr, cpo::uno::Any(xShape));
 
             // The first four glue points are the default glue points, which are set by LibreOffice.
             // They do not belong to the preset geometry of the shape.
@@ -367,9 +367,9 @@ void ConnectorHelper::applyConnections(const oox::drawingml::ShapePtr& pConnecto
             }
 
             if (aIt.mbStartShape)
-                xPropSet->setPropertyValue(u"StartGluePointIndex"_ustr, uno::Any(nGlueId));
+                xPropSet->setPropertyValue(u"StartGluePointIndex"_ustr, cpo::uno::Any(nGlueId));
             else
-                xPropSet->setPropertyValue(u"EndGluePointIndex"_ustr, uno::Any(nGlueId));
+                xPropSet->setPropertyValue(u"EndGluePointIndex"_ustr, cpo::uno::Any(nGlueId));
         }
     }
 }
@@ -401,7 +401,7 @@ void ConnectorHelper::applyBentHandleAdjustments(oox::drawingml::ShapePtr pConne
             else
                 nDiff = basegfx::fround(aDiff.getX());
             xPropSet->setPropertyValue("EdgeLine" + OUString::number(i + 1) + "Delta",
-                                       uno::Any(nDiff));
+                                       cpo::uno::Any(nDiff));
         }
     }
 }
@@ -433,7 +433,7 @@ void ConnectorHelper::applyCurvedHandleAdjustments(oox::drawingml::ShapePtr pCon
             else
                 nDiff = basegfx::fround(aDiff.getX());
             xPropSet->setPropertyValue("EdgeLine" + OUString::number(i + 1) + "Delta",
-                                       uno::Any(nDiff));
+                                       cpo::uno::Any(nDiff));
         }
     }
 }

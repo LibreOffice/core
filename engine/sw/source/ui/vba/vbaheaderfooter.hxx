@@ -49,7 +49,7 @@ public:
     virtual bool SAL_CALL getLinkToPrevious() override;
     virtual void SAL_CALL setLinkToPrevious( bool _linktoprevious ) override;
     virtual css::uno::Reference< ::ooo::vba::word::XRange > SAL_CALL getRange() override;
-    virtual css::uno::Any SAL_CALL Shapes( const css::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Shapes( const cpo::uno::Any& aIndex ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

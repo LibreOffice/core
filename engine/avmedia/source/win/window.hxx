@@ -43,7 +43,7 @@ public:
             Window( Player& rPlayer );
             ~Window() override;
 
-    bool    create( const css::uno::Sequence< css::uno::Any >& aArguments );
+    bool    create( const css::uno::Sequence< cpo::uno::Any >& aArguments );
     void    updatePointer();
 
     // XPlayerWindow

@@ -70,7 +70,7 @@ public:
     virtual ::sal_Int64 SAL_CALL getLength() override;
 
     // css::lang::XInitialization:
-    virtual void SAL_CALL initialize( const uno::Sequence< css::uno::Any > & aArguments ) override;
+    virtual void SAL_CALL initialize( const uno::Sequence< cpo::uno::Any > & aArguments ) override;
 
     // comphelper::ByteReader
     virtual sal_Int32 readSomeBytes(sal_Int8* aData, sal_Int32 nBytesToRead) override;
@@ -189,7 +189,7 @@ void SAL_CALL SequenceInputStreamService::seek( ::sal_Int64 location )
 }
 
 // css::lang::XInitialization:
-void SAL_CALL SequenceInputStreamService::initialize( const uno::Sequence< css::uno::Any > & aArguments )
+void SAL_CALL SequenceInputStreamService::initialize( const uno::Sequence< cpo::uno::Any > & aArguments )
 {
     std::scoped_lock aGuard( m_aMutex );
     if ( m_bInitialized )
@@ -215,7 +215,7 @@ void SAL_CALL SequenceInputStreamService::initialize( const uno::Sequence< css::
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_SequenceInputStreamService(
                                              css::uno::XComponentContext *,
-                                             css::uno::Sequence<css::uno::Any> const &)
+                                             css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SequenceInputStreamService());
 }

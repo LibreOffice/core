@@ -60,12 +60,12 @@ protected:
     virtual bool SAL_CALL hasElements() override;
 
     // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XGalleryThemeProvider
     virtual css::uno::Reference< css::gallery::XGalleryTheme > SAL_CALL insertNewByName( const OUString& ThemeName ) override;
@@ -117,7 +117,7 @@ uno::Sequence< sal_Int8 > SAL_CALL GalleryThemeProvider::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-void SAL_CALL GalleryThemeProvider::initialize( const uno::Sequence< uno::Any >& rArguments )
+void SAL_CALL GalleryThemeProvider::initialize( const uno::Sequence< cpo::uno::Any >& rArguments )
 {
     uno::Sequence< beans::PropertyValue >   aParams;
 
@@ -149,10 +149,10 @@ bool SAL_CALL GalleryThemeProvider::hasElements()
 }
 
 
-uno::Any SAL_CALL GalleryThemeProvider::getByName( const OUString& rName )
+cpo::uno::Any SAL_CALL GalleryThemeProvider::getByName( const OUString& rName )
 {
     const SolarMutexGuard aGuard;
-    uno::Any            aRet;
+    cpo::uno::Any            aRet;
 
     if( !mpGallery || !mpGallery->HasTheme( rName ) )
     {
@@ -232,7 +232,7 @@ void SAL_CALL GalleryThemeProvider::removeByName( const OUString& rName )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_gallery_GalleryThemeProvider_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new GalleryThemeProvider);
 }

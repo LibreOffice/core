@@ -47,7 +47,7 @@ public:
     virtual ~OFileControlModel() override;
 
     DECLARE_UNO3_AGG_DEFAULTS(OFileControlModel, OControlModel)
-    virtual css::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override
@@ -59,12 +59,12 @@ public:
     virtual void SAL_CALL disposing() override;
 
     // XPropertySet and friends
-    virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle) const override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const css::uno::Any& rValue) override;
+    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
 
-    virtual bool SAL_CALL convertFastPropertyValue(css::uno::Any& rConvertedValue, css::uno::Any& rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+    virtual bool SAL_CALL convertFastPropertyValue(cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
 
-    virtual css::uno::Any getPropertyDefaultByHandle( sal_Int32 _nHandle ) const override;
+    virtual cpo::uno::Any getPropertyDefaultByHandle( sal_Int32 _nHandle ) const override;
 
     // XPersistObject
     virtual OUString SAL_CALL getServiceName() override;

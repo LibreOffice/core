@@ -83,14 +83,14 @@ AreaChartTypeTemplate::AreaChartTypeTemplate(
         ChartTypeTemplate( xContext, rServiceName ),
         m_eStackMode( eStackMode )
 {
-    setFastPropertyValue_NoBroadcast( PROP_AREA_TEMPLATE_DIMENSION, uno::Any( nDim ));
+    setFastPropertyValue_NoBroadcast( PROP_AREA_TEMPLATE_DIMENSION, cpo::uno::Any( nDim ));
 }
 
 AreaChartTypeTemplate::~AreaChartTypeTemplate()
 {}
 
 // ____ OPropertySet ____
-void AreaChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
+void AreaChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const
 {
     static ::chart::tPropertyValueMap aStaticDefaults = []()
     {
@@ -148,7 +148,7 @@ void AreaChartTypeTemplate::applyStyle2(
     ::sal_Int32 nSeriesCount )
 {
     ChartTypeTemplate::applyStyle2( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
-    xSeries->setPropertyAlsoToAllAttributedDataPoints( u"BorderStyle"_ustr, uno::Any( drawing::LineStyle_NONE ) );
+    xSeries->setPropertyAlsoToAllAttributedDataPoints( u"BorderStyle"_ustr, cpo::uno::Any( drawing::LineStyle_NONE ) );
 }
 
 void AreaChartTypeTemplate::resetStyles2( const rtl::Reference< ::chart::Diagram >& xDiagram )
@@ -156,7 +156,7 @@ void AreaChartTypeTemplate::resetStyles2( const rtl::Reference< ::chart::Diagram
     ChartTypeTemplate::resetStyles2( xDiagram );
     std::vector< rtl::Reference< ::chart::DataSeries > > aSeriesVec(
         xDiagram->getDataSeries());
-    uno::Any aLineStyleAny( drawing::LineStyle_NONE );
+    cpo::uno::Any aLineStyleAny( drawing::LineStyle_NONE );
     for (auto const& series : aSeriesVec)
     {
         if( series->getPropertyValue( u"BorderStyle"_ustr) == aLineStyleAny )

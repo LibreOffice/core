@@ -38,6 +38,7 @@
 #include <helpids.h>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 constexpr OUString USERITEM_NAME = u"UserItem"_ustr;
 

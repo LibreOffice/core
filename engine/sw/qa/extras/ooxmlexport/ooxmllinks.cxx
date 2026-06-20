@@ -53,7 +53,7 @@ public:
         /* Create & apply new URL */
         OUString sOriginalFileInTempDir = sTempDir + sFileName;
         uno::Reference<beans::XPropertySet> xPropertySet(xText, css::uno::UNO_QUERY);
-        xPropertySet->setPropertyValue(u"HyperLinkURL"_ustr, css::uno::Any(sOriginalFileInTempDir));
+        xPropertySet->setPropertyValue(u"HyperLinkURL"_ustr, cpo::uno::Any(sOriginalFileInTempDir));
     }
 };
 

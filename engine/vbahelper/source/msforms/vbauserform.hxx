@@ -39,14 +39,14 @@ protected:
 public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    ScVbaUserForm( css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
+    ScVbaUserForm( css::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
     virtual ~ScVbaUserForm() override;
     static css::uno::Reference< css::awt::XControl > nestedSearch( const OUString& aPropertyName, css::uno::Reference< css::awt::XControlContainer > const & xContainer );
     // XUserForm
     virtual void SAL_CALL RePaint(  ) override;
     virtual void SAL_CALL Show(  ) override;
-    virtual void SAL_CALL setValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getValue( const OUString& aPropertyName ) override;
+    virtual void SAL_CALL setValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL getValue( const OUString& aPropertyName ) override;
     virtual OUString SAL_CALL getCaption() override;
     virtual void SAL_CALL setCaption( const OUString& _caption ) override;
     virtual double SAL_CALL getInnerWidth() override;
@@ -55,12 +55,12 @@ public:
     virtual void SAL_CALL setInnerHeight( double fInnerHeight ) override;
     virtual void SAL_CALL Hide(  ) override;
     virtual void SAL_CALL UnloadObject(  ) override;
-    virtual css::uno::Any SAL_CALL Controls( const css::uno::Any& index ) override;
+    virtual cpo::uno::Any SAL_CALL Controls( const cpo::uno::Any& index ) override;
     virtual bool SAL_CALL getVisible() override;
     virtual void SAL_CALL setVisible( bool bVis ) override;
     // XIntrospection
     virtual css::uno::Reference< css::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  ) override;
-    virtual css::uno::Any SAL_CALL invoke( const OUString& aFunctionName, const css::uno::Sequence< css::uno::Any >& aParams, css::uno::Sequence< ::sal_Int16 >& aOutParamIndex, css::uno::Sequence< css::uno::Any >& aOutParam ) override;
+    virtual cpo::uno::Any SAL_CALL invoke( const OUString& aFunctionName, const css::uno::Sequence< cpo::uno::Any >& aParams, css::uno::Sequence< ::sal_Int16 >& aOutParamIndex, css::uno::Sequence< cpo::uno::Any >& aOutParam ) override;
     virtual bool SAL_CALL hasMethod( const OUString& aName ) override;
     virtual bool SAL_CALL hasProperty( const OUString& aName ) override;
     //XHelperInterface

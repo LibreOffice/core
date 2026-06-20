@@ -162,12 +162,12 @@ bool SwModelTestBase::hasProperty(const uno::Reference<uno::XInterface>& obj,
     return properties->getPropertySetInfo()->hasPropertyByName(name);
 }
 
-xml::AttributeData SwModelTestBase::getUserDefineAttribute(const uno::Any& obj,
+xml::AttributeData SwModelTestBase::getUserDefineAttribute(const cpo::uno::Any& obj,
                                                            const OUString& name,
                                                            const OUString& rValue) const
 {
     uno::Reference<container::XNameContainer> attrsCnt(
-        getProperty<uno::Any>(obj, u"UserDefinedAttributes"_ustr), uno::UNO_QUERY_THROW);
+        getProperty<cpo::uno::Any>(obj, u"UserDefinedAttributes"_ustr), uno::UNO_QUERY_THROW);
 
     xml::AttributeData aValue;
     attrsCnt->getByName(name) >>= aValue;
@@ -336,7 +336,7 @@ void SwModelTestBase::selectShape(int number)
 {
     uno::Reference<view::XSelectionSupplier> xSelectionSupplier(
         getSwTextDoc()->getCurrentController(), uno::UNO_QUERY);
-    xSelectionSupplier->select(uno::Any(getShape(number)));
+    xSelectionSupplier->select(cpo::uno::Any(getShape(number)));
     CPPUNIT_ASSERT(xSelectionSupplier->getSelection().hasValue());
 
     SwView* pView = getSwDocShell()->GetView();

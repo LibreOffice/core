@@ -171,7 +171,7 @@ namespace oox::ppt {
         return bRet;
     }
 
-    bool convertAnimationValue(AnimationAttributeEnum eAttribute, css::uno::Any& rValue)
+    bool convertAnimationValue(AnimationAttributeEnum eAttribute, cpo::uno::Any& rValue)
     {
         using css::animations::ValuePair;
         bool bRet = false;

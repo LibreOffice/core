@@ -38,6 +38,7 @@ namespace dbaxml
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::xml::sax;
     using namespace xmloff::token;
@@ -80,10 +81,10 @@ OXMLTable::OXMLTable( ODBFilter& _rImport
                 XMLOFF_WARN_UNKNOWN("dbaccess", aIter);
         }
     }
-    uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+    uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
     {
-        {"Name", uno::Any(m_sName)}, // set as folder
-        {"Parent", uno::Any(m_xParentContainer)}
+        {"Name", cpo::uno::Any(m_sName)}, // set as folder
+        {"Parent", cpo::uno::Any(m_xParentContainer)}
     }));
     m_xTable.set(
         GetOwnImport().GetComponentContext()->getServiceManager()->createInstanceWithArgumentsAndContext(_sServiceName,aArguments, GetOwnImport().GetComponentContext()),

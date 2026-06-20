@@ -20,7 +20,7 @@
 #define INCLUDED_VBAHELPER_VBAHELPERINTERFACE_HXX
 
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -77,7 +77,7 @@ public:
     }
     virtual css::uno::Reference< ov::XHelperInterface > SAL_CALL getParent(  ) override { return mxParent; }
 
-    virtual css::uno::Any SAL_CALL Application(  ) override {
+    virtual cpo::uno::Any SAL_CALL Application(  ) override {
             // The application could certainly be passed around in the context - seems
             // to make sense
             css::uno::Reference< css::container::XNameAccess > xNameAccess( mxContext, css::uno::UNO_QUERY_THROW );

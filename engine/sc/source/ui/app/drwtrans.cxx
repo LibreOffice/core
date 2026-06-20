@@ -133,7 +133,7 @@ ScDrawTransferObj::ScDrawTransferObj( std::unique_ptr<SdrModel> pClipModel, ScDo
 
                     if(xInfo->hasPropertyByName( sPropButtonType ))
                     {
-                        uno::Any aAny = xPropSet->getPropertyValue( sPropButtonType );
+                        cpo::uno::Any aAny = xPropSet->getPropertyValue( sPropButtonType );
                         form::FormButtonType eTmp;
                         if ( (aAny >>= eTmp) && eTmp == form::FormButtonType_URL )
                         {

@@ -171,6 +171,7 @@ using namespace sfx2;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::scanner;
 using namespace ::com::sun::star::beans;
@@ -2281,7 +2282,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         case FN_STAT_TEMPLATE:
         {
             weld::Window* pDialogParent = GetViewFrame().GetFrameWeld();
-            css::uno::Any aAny(pDialogParent->GetXWindow());
+            cpo::uno::Any aAny(pDialogParent->GetXWindow());
             SfxUnoAnyItem aDialogParent(SID_DIALOG_PARENT, aAny);
             const SfxPoolItem* pInternalItems[ 2 ];
             pInternalItems[ 0 ] = &aDialogParent;

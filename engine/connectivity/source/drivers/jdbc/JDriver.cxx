@@ -29,6 +29,7 @@
 
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
@@ -220,7 +221,7 @@ sal_Int32 SAL_CALL java_sql_Driver::getMinorVersion(  )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 connectivity_java_sql_Driver_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new java_sql_Driver(context));
 }

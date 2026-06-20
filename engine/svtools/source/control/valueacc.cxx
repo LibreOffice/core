@@ -272,7 +272,7 @@ sal_Int32 SAL_CALL ValueItemAcc::getBackground(  )
     return static_cast<sal_Int32>(nColor);
 }
 
-void ValueItemAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
+void ValueItemAcc::FireAccessibleEvent( short nEventId, const cpo::uno::Any& rOldValue, const cpo::uno::Any& rNewValue )
 {
     NotifyAccessibleEvent(nEventId, rOldValue, rNewValue);
 }
@@ -289,7 +289,7 @@ ValueSetAcc::~ValueSetAcc()
 }
 
 
-void ValueSetAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
+void ValueSetAcc::FireAccessibleEvent( short nEventId, const cpo::uno::Any& rOldValue, const cpo::uno::Any& rNewValue )
 {
     NotifyAccessibleEvent(nEventId, rOldValue, rNewValue);
 }
@@ -304,7 +304,7 @@ void ValueSetAcc::GetFocus()
     mbIsFocused = true;
 
     // Broadcast the state change.
-    css::uno::Any aOldState, aNewState;
+    cpo::uno::Any aOldState, aNewState;
     aNewState <<= css::accessibility::AccessibleStateType::FOCUSED;
     FireAccessibleEvent(
         css::accessibility::AccessibleEventId::STATE_CHANGED,
@@ -317,7 +317,7 @@ void ValueSetAcc::LoseFocus()
     mbIsFocused = false;
 
     // Broadcast the state change.
-    css::uno::Any aOldState, aNewState;
+    cpo::uno::Any aOldState, aNewState;
     aOldState <<= css::accessibility::AccessibleStateType::FOCUSED;
     FireAccessibleEvent(
         css::accessibility::AccessibleEventId::STATE_CHANGED,

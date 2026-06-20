@@ -191,7 +191,7 @@ public:
     virtual LegendSymbolStyle getLegendSymbolStyle();
     virtual css::awt::Size getPreferredLegendKeyAspectRatio() override;
 
-    virtual css::uno::Any getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPointIndex/*-1 for series symbol*/ );
+    virtual cpo::uno::Any getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPointIndex/*-1 for series symbol*/ );
 
     rtl::Reference<SvxShapeGroup> createLegendSymbolForSeries(
                   const css::awt::Size& rEntryKeyAspectRatio

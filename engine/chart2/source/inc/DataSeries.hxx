@@ -95,11 +95,11 @@ public:
     virtual css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > SAL_CALL getDataSequences() override;
 
     // ____ OPropertySet ____
-    virtual void GetDefaultValue( sal_Int32 nHandle, css::uno::Any& rAny ) const override;
-    virtual void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const override;
+    virtual void GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const override;
+    virtual void SAL_CALL getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast
         ( sal_Int32 nHandle,
-          const css::uno::Any& rValue ) override;
+          const cpo::uno::Any& rValue ) override;
 
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
@@ -172,11 +172,11 @@ public:
 
     bool hasAttributedDataPointDifferentValue(
         const OUString& rPropertyName,
-        const css::uno::Any& rPropertyValue );
+        const cpo::uno::Any& rPropertyValue );
 
     void setPropertyAlsoToAllAttributedDataPoints(
             const OUString& rPropertyName,
-            const css::uno::Any& rPropertyValue );
+            const cpo::uno::Any& rPropertyValue );
 
     bool hasDataLabelsAtSeries();
 

@@ -67,22 +67,22 @@ namespace vclcanvas
         DeviceHelper::disposing();
     }
 
-    uno::Any SpriteDeviceHelper::isAccelerated() const
+    cpo::uno::Any SpriteDeviceHelper::isAccelerated() const
     {
         return DeviceHelper::isAccelerated();
     }
 
-    uno::Any SpriteDeviceHelper::getDeviceHandle() const
+    cpo::uno::Any SpriteDeviceHelper::getDeviceHandle() const
     {
         return DeviceHelper::getDeviceHandle();
     }
 
-    uno::Any SpriteDeviceHelper::getSurfaceHandle() const
+    cpo::uno::Any SpriteDeviceHelper::getSurfaceHandle() const
     {
         if( !mpBackBuffer )
-            return uno::Any();
+            return cpo::uno::Any();
 
-        return uno::Any(
+        return cpo::uno::Any(
             reinterpret_cast< sal_Int64 >(&mpBackBuffer->getOutDev()) );
     }
 

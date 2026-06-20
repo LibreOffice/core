@@ -28,6 +28,7 @@
 SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlDraw, SfxBoolItem);
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::frame;
 
 
@@ -38,7 +39,7 @@ SvxTbxCtlDraw::SvxTbxCtlDraw( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rT
     rTbx.Invalidate();
 }
 
-void SAL_CALL SvxTbxCtlDraw::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+void SAL_CALL SvxTbxCtlDraw::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     svt::ToolboxController::initialize(aArguments);
     /*

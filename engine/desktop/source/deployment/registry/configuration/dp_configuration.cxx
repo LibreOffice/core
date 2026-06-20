@@ -52,6 +52,7 @@
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::ucb;
 
 namespace dp_registry::backend::configuration {
@@ -783,7 +784,7 @@ void BackendImpl::PackageImpl::processPackage_(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_deployment_configuration_PackageRegistryBackend_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new dp_registry::backend::configuration::BackendImpl(args, context));
 }

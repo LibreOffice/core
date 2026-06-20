@@ -118,8 +118,8 @@ uno::Reference<text::XTextField> getNewField(const uno::Reference<uno::XInterfac
     uno::Reference<text::XTextField> xField(
         xSM->createInstance(u"com.sun.star.text.TextField.URL"_ustr), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropSet(xField, uno::UNO_QUERY_THROW);
-    xPropSet->setPropertyValue(u"Representation"_ustr, uno::Any(u"LibreOffice"_ustr));
-    xPropSet->setPropertyValue(u"URL"_ustr, uno::Any(u"http://www.libreoffice.org/"_ustr));
+    xPropSet->setPropertyValue(u"Representation"_ustr, cpo::uno::Any(u"LibreOffice"_ustr));
+    xPropSet->setPropertyValue(u"URL"_ustr, cpo::uno::Any(u"http://www.libreoffice.org/"_ustr));
     return xField;
 }
 

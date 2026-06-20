@@ -32,7 +32,7 @@ using namespace ::xmloff::token;
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 
 XMLIndexTOCSourceContext::XMLIndexTOCSourceContext(
     SvXMLImport& rImport,
@@ -115,11 +115,11 @@ void XMLIndexTOCSourceContext::ProcessAttribute(const sax_fastparser::FastAttrib
 
 void XMLIndexTOCSourceContext::endFastElement(sal_Int32 nElement)
 {
-    rIndexPropertySet->setPropertyValue(u"CreateFromMarks"_ustr, css::uno::Any(bUseMarks));
-    rIndexPropertySet->setPropertyValue(u"CreateFromOutline"_ustr, css::uno::Any(bUseOutline));
-    rIndexPropertySet->setPropertyValue(u"CreateFromLevelParagraphStyles"_ustr, css::uno::Any(bUseParagraphStyles));
+    rIndexPropertySet->setPropertyValue(u"CreateFromMarks"_ustr, cpo::uno::Any(bUseMarks));
+    rIndexPropertySet->setPropertyValue(u"CreateFromOutline"_ustr, cpo::uno::Any(bUseOutline));
+    rIndexPropertySet->setPropertyValue(u"CreateFromLevelParagraphStyles"_ustr, cpo::uno::Any(bUseParagraphStyles));
 
-    rIndexPropertySet->setPropertyValue(u"Level"_ustr, css::uno::Any(static_cast<sal_Int16>(nOutlineLevel)));
+    rIndexPropertySet->setPropertyValue(u"Level"_ustr, cpo::uno::Any(static_cast<sal_Int16>(nOutlineLevel)));
 
     // process common attributes
     XMLIndexSourceBaseContext::endFastElement(nElement);

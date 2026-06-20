@@ -92,6 +92,7 @@
 
 using com::sun::star::uno::Reference;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::reflection;
 using namespace com::sun::star::beans;
@@ -2566,7 +2567,7 @@ bool isVeryLargeUnoProperty(SbxVariable const * pVar)
         auto pParent = dynamic_cast<const SbUnoObject*>(pUnoVar->GetParent());
         if (!pParent)
             return false;
-        css::uno::Any aAny = const_cast<SbUnoObject*>(pParent)->getUnoAny();
+        cpo::uno::Any aAny = const_cast<SbUnoObject*>(pParent)->getUnoAny();
         css::uno::Reference<css::sheet::XSheetCellCursor> xCursor = aAny.query<css::sheet::XSheetCellCursor>();
         if (xCursor)
             return true;

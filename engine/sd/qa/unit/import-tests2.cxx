@@ -250,7 +250,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf99030)
     uno::Reference<beans::XPropertySet> xPropSet(xPage, uno::UNO_QUERY);
 
     Color nFillColor;
-    uno::Any aAny = xPropSet->getPropertyValue(u"Background"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"Background"_ustr);
     if (aAny.hasValue())
     {
         uno::Reference<beans::XPropertySet> xBackgroundPropSet;
@@ -856,7 +856,7 @@ bool SdImportTest2::checkPattern(int nShapeNumber, std::vector<sal_uInt8>& rExpe
     Bitmap aBitmap;
     if (xShape.is())
     {
-        uno::Any aBitmapAny = xShape->getPropertyValue(u"FillBitmap"_ustr);
+        cpo::uno::Any aBitmapAny = xShape->getPropertyValue(u"FillBitmap"_ustr);
         uno::Reference<awt::XBitmap> xBitmap;
         if (aBitmapAny >>= xBitmap)
         {
@@ -1290,7 +1290,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testPptIndentationBullets)
 
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf114821)
 {
-    css::uno::Any aAny;
+    cpo::uno::Any aAny;
 
     createSdImpressDoc("pptx/tdf114821.pptx");
 
@@ -1589,7 +1589,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf120028)
                                              uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(4), xCols->getColumnCount());
     uno::Reference<beans::XPropertySet> xColProps(xCols, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(0)),
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int32(0)),
                          xColProps->getPropertyValue(u"AutomaticDistance"_ustr));
 
     // Check font size in the shape.
@@ -2402,7 +2402,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf168109)
 
         CPPUNIT_ASSERT_EQUAL(u"com.sun.star.presentation.PageShape"_ustr,
                              xDescriptor->getShapeType());
-        CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(1)),
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int32(1)),
                              xThumbnail->getPropertyValue(u"PageNumber"_ustr));
     }
 
@@ -2415,7 +2415,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf168109)
 
         CPPUNIT_ASSERT_EQUAL(u"com.sun.star.presentation.PageShape"_ustr,
                              xDescriptor->getShapeType());
-        CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(2)),
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int32(2)),
                              xThumbnail->getPropertyValue(u"PageNumber"_ustr));
     }
 }
@@ -2458,14 +2458,14 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testHTMLClipboardImport)
         }
 
         // XTransferable
-        uno::Any SAL_CALL getTransferData(const datatransfer::DataFlavor& aFlavor) override
+        cpo::uno::Any SAL_CALL getTransferData(const datatransfer::DataFlavor& aFlavor) override
         {
             if (!isDataFlavorSupported(aFlavor))
                 return {};
             SvFileStream aStream(m_aFileURL, StreamMode::READ);
             uno::Sequence<sal_Int8> bytes(aStream.remainingSize());
             aStream.ReadBytes(bytes.getArray(), aStream.remainingSize());
-            return uno::Any(bytes);
+            return cpo::uno::Any(bytes);
         }
         uno::Sequence<datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override
         {

@@ -115,6 +115,7 @@ namespace pcr
 
     using namespace ::com::sun::star;
     using namespace uno;
+    using namespace cpo::uno;
     using namespace lang;
     using namespace beans;
     using namespace frame;
@@ -328,7 +329,7 @@ namespace pcr
         if ( PROPERTY_ID_IMAGE_URL == nPropId && ( _rValue >>= xGrfObj ) )
         {
             DBG_ASSERT( xGrfObj.is(), "FormComponentPropertyHandler::setPropertyValue() xGrfObj is invalid");
-            xComponent->setPropertyValue(PROPERTY_GRAPHIC, uno::Any(xGrfObj->getGraphic()));
+            xComponent->setPropertyValue(PROPERTY_GRAPHIC, cpo::uno::Any(xGrfObj->getGraphic()));
         }
         else if ( PROPERTY_ID_FONT == nPropId )
         {
@@ -2729,9 +2730,9 @@ namespace pcr
         if (xController.is())
         {
             // do a preview by default
-            xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, css::uno::Any(true));
+            xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, cpo::uno::Any(true));
 
-            xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, css::uno::Any(bIsLink));
+            xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, cpo::uno::Any(bIsLink));
             xController->enableControl(ExtendedFilePickerElementIds::CHECKBOX_LINK, bHandleNonLink );
 
         }
@@ -2974,7 +2975,7 @@ namespace pcr
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 extensions_propctrlr_FormComponentPropertyHandler_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new pcr::FormComponentPropertyHandler(context));
 }

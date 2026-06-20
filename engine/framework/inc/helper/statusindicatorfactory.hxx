@@ -190,7 +190,7 @@ class StatusIndicatorFactory final : public  ::cppu::WeakImplHelper<
         }
 
         // XInitialization
-        virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& lArguments) override;
+        virtual void SAL_CALL initialize(const css::uno::Sequence< cpo::uno::Any >& lArguments) override;
 
         // XStatusIndicatorFactory
         virtual css::uno::Reference< css::task::XStatusIndicator > SAL_CALL createStatusIndicator() override;

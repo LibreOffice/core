@@ -105,8 +105,8 @@ void SwVbaFormFieldTextInput::Clear()
     m_rTextInput.ReplaceContent(u""_ustr);
 }
 
-void SwVbaFormFieldTextInput::EditType(sal_Int32 nType, const uno::Any& rDefault,
-                                       const uno::Any& rFormat, const uno::Any& rEnabled)
+void SwVbaFormFieldTextInput::EditType(sal_Int32 nType, const cpo::uno::Any& rDefault,
+                                       const cpo::uno::Any& rFormat, const cpo::uno::Any& rEnabled)
 {
     OUString sDefault;
     OUString sFormat;

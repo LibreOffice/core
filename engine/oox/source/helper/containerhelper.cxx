@@ -28,6 +28,7 @@ namespace oox {
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace {
 

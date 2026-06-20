@@ -38,6 +38,7 @@
 using namespace basegfx;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace drawinglayer::primitive2d;
 using namespace drawinglayer::processor2d;
 
@@ -51,7 +52,7 @@ bool IsDocEncrypted(const OUString& rURL)
     {
         auto xFactory = embed::StorageFactory::create(comphelper::getProcessComponentContext());
         auto xStorage(xFactory->createInstanceWithArguments(
-            { uno::Any(rURL), uno::Any(embed::ElementModes::READ) }));
+            { cpo::uno::Any(rURL), cpo::uno::Any(embed::ElementModes::READ) }));
         if (uno::Reference<beans::XPropertySet> xStorageProps{ xStorage, uno::UNO_QUERY })
         {
             try

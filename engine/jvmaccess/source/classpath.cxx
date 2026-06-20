@@ -70,7 +70,7 @@ jobjectArray jvmaccess::ClassPath::translateToUrls(
                 try {
                     url = expUrl->expand( expander );
                 } catch (const css::lang::IllegalArgumentException & e) {
-                    css::uno::Any anyEx = cppu::getCaughtException();
+                    cpo::uno::Any anyEx = cppu::getCaughtException();
                     throw css::lang::WrappedTargetRuntimeException(
                         "com.sun.star.lang.IllegalArgumentException: "
                          + e.Message,

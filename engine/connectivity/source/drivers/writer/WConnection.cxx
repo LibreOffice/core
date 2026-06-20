@@ -112,7 +112,7 @@ uno::Reference<text::XTextDocument> const& OWriterConnection::acquireDoc()
     uno::Reference<frame::XDesktop2> xDesktop
         = frame::Desktop::create(getDriver()->getComponentContext());
     uno::Reference<lang::XComponent> xComponent;
-    uno::Any aLoaderException;
+    cpo::uno::Any aLoaderException;
     try
     {
         xComponent = xDesktop->loadComponentFromURL(m_aFileName, u"_blank"_ustr, 0, aArgs);

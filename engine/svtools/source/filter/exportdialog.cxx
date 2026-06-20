@@ -325,7 +325,7 @@ awt::Size ExportDialog::GetOriginalSize()
         {
             sal_Int32 nWidth = 0;
             sal_Int32 nHeight= 0;
-            css::uno::Any aAny;
+            cpo::uno::Any aAny;
             aAny = xPagePropSet->getPropertyValue(u"Width"_ustr);
             aAny >>= nWidth;
             aAny = xPagePropSet->getPropertyValue(u"Height"_ustr);

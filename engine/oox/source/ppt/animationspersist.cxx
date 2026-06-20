@@ -21,7 +21,7 @@
 
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
@@ -35,6 +35,7 @@
 #include <oox/token/tokens.hxx>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::drawing;
@@ -74,7 +75,7 @@ Any addToSequence( const Any& rOldValue, const Any& rNewValue )
 
 namespace oox::ppt {
 
-    void ShapeTargetElement::convert( css::uno::Any & rTarget, sal_Int16 & rSubType ) const
+    void ShapeTargetElement::convert( cpo::uno::Any & rTarget, sal_Int16 & rSubType ) const
     {
         switch(mnType)
         {

@@ -50,9 +50,9 @@ class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLSettingsExportHelper
 
     css::uno::Reference< css::util::XStringSubstitution > mxStringSubstitution;
 
-    void ManipulateSetting( css::uno::Any& rAny, std::u16string_view rName ) const;
+    void ManipulateSetting( cpo::uno::Any& rAny, std::u16string_view rName ) const;
 
-    void CallTypeFunction(const css::uno::Any& rAny,
+    void CallTypeFunction(const cpo::uno::Any& rAny,
                         const OUString& rName) const;
 
     void exportBool(const bool bValue, const OUString& rName) const;
@@ -69,7 +69,7 @@ class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLSettingsExportHelper
     void exportbase64Binary(
         const css::uno::Sequence<sal_Int8>& aProps,
         const OUString& rName) const;
-    void exportMapEntry(const css::uno::Any& rAny,
+    void exportMapEntry(const cpo::uno::Any& rAny,
                         const OUString& rName,
                         const bool bNameAccess) const;
     void exportNameAccess(

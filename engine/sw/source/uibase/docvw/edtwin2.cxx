@@ -73,7 +73,7 @@ using namespace css;
 
 namespace {
 
-bool HasValidPropertyValue(const uno::Any& rAny)
+bool HasValidPropertyValue(const cpo::uno::Any& rAny)
 {
     if (bool bValue; rAny >>= bValue)
     {
@@ -192,7 +192,7 @@ bool PSCSDFPropsQuickHelp(const HelpEvent &rEvt, SwWrtShell& rSh)
                     if (xRange->getPropertyState(rPropName)
                             == beans::PropertyState_DIRECT_VALUE)
                     {
-                        const uno::Any aAny = xRange->getPropertyValue(rPropName);
+                        const cpo::uno::Any aAny = xRange->getPropertyValue(rPropName);
                         if (HasValidPropertyValue(aAny))
                         {
                             sText = UIName(SwResId(STR_CHARACTER_DIRECT_FORMATTING));

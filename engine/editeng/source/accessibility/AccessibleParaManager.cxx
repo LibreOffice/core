@@ -20,7 +20,7 @@
 #include <cassert>
 
 // Global header
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
@@ -301,8 +301,8 @@ class StateChangeEvent
 {
 public:
     StateChangeEvent( const sal_Int16 nEventId,
-                      const uno::Any& rNewValue,
-                      const uno::Any& rOldValue ) :
+                      const cpo::uno::Any& rNewValue,
+                      const cpo::uno::Any& rOldValue ) :
         mnEventId( nEventId ),
         mrNewValue( rNewValue ),
         mrOldValue( rOldValue ) {}
@@ -313,8 +313,8 @@ public:
 
 private:
     const sal_Int16 mnEventId;
-    const uno::Any& mrNewValue;
-    const uno::Any& mrOldValue;
+    const cpo::uno::Any& mrNewValue;
+    const cpo::uno::Any& mrOldValue;
 };
 
 }
@@ -322,8 +322,8 @@ private:
 void AccessibleParaManager::FireEvent( sal_Int32 nStartPara,
                                        sal_Int32 nEndPara,
                                        const sal_Int16 nEventId,
-                                       const uno::Any& rNewValue,
-                                       const uno::Any& rOldValue ) const
+                                       const cpo::uno::Any& rNewValue,
+                                       const cpo::uno::Any& rOldValue ) const
 {
     DBG_ASSERT( 0 <= nStartPara && 0 <= nEndPara &&
                 maChildren.size() > o3tl::make_unsigned(nStartPara) &&

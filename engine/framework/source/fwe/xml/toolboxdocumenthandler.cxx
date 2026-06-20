@@ -38,6 +38,7 @@
 #include <comphelper/propertyvalue.hxx>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::xml::sax;
@@ -355,11 +356,11 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
                 }
 
                 auto aToolbarItemProp( comphelper::InitPropertySequence( {
-                    { m_aCommandURL, css::uno::Any( aCommandURL ) },
-                    { m_aLabel, css::uno::Any( aLabel ) },
-                    { m_aType, css::uno::Any( css::ui::ItemType::DEFAULT ) },
-                    { m_aStyle, css::uno::Any( nItemBits ) },
-                    { m_aIsVisible, css::uno::Any( bVisible ) },
+                    { m_aCommandURL, cpo::uno::Any( aCommandURL ) },
+                    { m_aLabel, cpo::uno::Any( aLabel ) },
+                    { m_aType, cpo::uno::Any( css::ui::ItemType::DEFAULT ) },
+                    { m_aStyle, cpo::uno::Any( nItemBits ) },
+                    { m_aIsVisible, cpo::uno::Any( bVisible ) },
                 } ) );
 
                 m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), Any( aToolbarItemProp ) );

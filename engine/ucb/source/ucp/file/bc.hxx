@@ -111,7 +111,7 @@ namespace fileaccess {
         virtual sal_Int32 SAL_CALL
         createCommandIdentifier() override;
 
-        virtual css::uno::Any SAL_CALL
+        virtual cpo::uno::Any SAL_CALL
         execute(
             const css::ucb::Command& aCommand,
             sal_Int32 CommandId,
@@ -153,7 +153,7 @@ namespace fileaccess {
         addProperty(
             const OUString& Name,
             sal_Int16 Attributes,
-            const css::uno::Any& DefaultValue ) override;
+            const cpo::uno::Any& DefaultValue ) override;
 
         virtual void SAL_CALL
         removeProperty( const OUString& Name ) override;
@@ -225,7 +225,7 @@ namespace fileaccess {
             sal_Int32 nMyCommandIdentifier,
             const css::uno::Sequence< css::beans::Property >& PropertySet );
 
-        css::uno::Sequence< css::uno::Any >
+        css::uno::Sequence< cpo::uno::Any >
         setPropertyValues(
             sal_Int32 nMyCommandIdentifier,
             const css::uno::Sequence< css::beans::PropertyValue >& Values );

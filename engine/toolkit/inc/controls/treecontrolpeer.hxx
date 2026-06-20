@@ -50,14 +50,14 @@ public:
     vcl::Window* createVclControl( vcl::Window* pParent, sal_Int64 nWinStyle );
 
     // css::view::XSelectionSupplier
-    virtual bool SAL_CALL select( const css::uno::Any& xSelection ) override;
-    virtual css::uno::Any SAL_CALL getSelection(  ) override;
+    virtual bool SAL_CALL select( const cpo::uno::Any& xSelection ) override;
+    virtual cpo::uno::Any SAL_CALL getSelection(  ) override;
     virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
     virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 
     // css::view::XMultiSelectionSupplier
-    virtual bool SAL_CALL addSelection( const css::uno::Any& Selection ) override;
-    virtual void SAL_CALL removeSelection( const css::uno::Any& Selection ) override;
+    virtual bool SAL_CALL addSelection( const cpo::uno::Any& Selection ) override;
+    virtual void SAL_CALL removeSelection( const cpo::uno::Any& Selection ) override;
     virtual void SAL_CALL clearSelection(  ) override;
     virtual ::sal_Int32 SAL_CALL getSelectionCount(  ) override;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSelectionEnumeration(  ) override;
@@ -101,8 +101,8 @@ public:
     css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& aNewSize ) override;
 
     // css::awt::XVclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
-    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
+    void SAL_CALL setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
+    cpo::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
 
 private:
     /// @throws css::lang::IllegalArgumentException
@@ -123,13 +123,13 @@ private:
     void updateNode( UnoTreeListBoxImpl const & rTree, const css::uno::Reference< css::awt::tree::XTreeNode >& xNode );
     void updateChildNodes( UnoTreeListBoxImpl const & rTree, const css::uno::Reference< css::awt::tree::XTreeNode >& xParentNode, UnoTreeListEntry* pParentEntry );
 
-    static OUString getEntryString( const css::uno::Any& rValue );
+    static OUString getEntryString( const cpo::uno::Any& rValue );
 
     /// @throws css::uno::RuntimeException
     UnoTreeListBoxImpl& getTreeListBoxOrThrow() const;
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
-    void ChangeNodesSelection( const css::uno::Any& rSelection, bool bSelect, bool bSetSelection );
+    void ChangeNodesSelection( const cpo::uno::Any& rSelection, bool bSelect, bool bSetSelection );
 
     void onChangeDataModel( UnoTreeListBoxImpl& rTree, const css::uno::Reference< css::awt::tree::XTreeDataModel >& xDataModel );
 

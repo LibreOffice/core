@@ -197,7 +197,7 @@ protected:
 
     /// @throws css::uno::Exception
     /// @throws css::uno::RuntimeException
-    void implInitializeCommonParameters( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< css::uno::Any >& aArguments );
+    void implInitializeCommonParameters( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< cpo::uno::Any >& aArguments );
 
     // Scan locale properties files
     virtual void implScanLocales(std::unique_lock<std::mutex>& rGuard);
@@ -348,7 +348,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XModifyBroadcaster
     virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
@@ -430,7 +430,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XModifyBroadcaster
     virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;

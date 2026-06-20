@@ -33,6 +33,7 @@ namespace frm
 {
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
@@ -235,14 +236,14 @@ void OCurrencyModel::resetNoBroadcast()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OCurrencyModel_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OCurrencyModel(component));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OCurrencyControl_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OCurrencyControl(component));
 }

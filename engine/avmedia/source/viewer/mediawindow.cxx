@@ -268,7 +268,7 @@ bool MediaWindow::executeMediaURLDialog(weld::Window* pParent, OUString& rURL, b
         // for video link should be the default
         xCtrlAcc->setValue(
                 ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0,
-                uno::Any(true) );
+                cpo::uno::Any(true) );
         // disabled for now: TODO: preview?
         xCtrlAcc->enableControl(
                 ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_PREVIEW,
@@ -282,7 +282,7 @@ bool MediaWindow::executeMediaURLDialog(weld::Window* pParent, OUString& rURL, b
 
         if (o_pbLink != nullptr)
         {
-            uno::Any const any = xCtrlAcc->getValue(
+            cpo::uno::Any const any = xCtrlAcc->getValue(
                 ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0);
             if (!(any >>= *o_pbLink))
             {
@@ -453,10 +453,10 @@ void MediaWindow::dispatchInsertAVMedia(const css::uno::Reference<css::frame::XD
 
     css::uno::Reference<css::frame::XDispatch> xDispatch = rDispatchProvider->queryDispatch(aDispatchURL, u""_ustr, 0);
     css::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { "URL", css::uno::Any(rURL) },
-        { "Size.Width", uno::Any(rSize.Width)},
-        { "Size.Height", uno::Any(rSize.Height)},
-        { "IsLink", css::uno::Any(bLink) },
+        { "URL", cpo::uno::Any(rURL) },
+        { "Size.Width", cpo::uno::Any(rSize.Width)},
+        { "Size.Height", cpo::uno::Any(rSize.Height)},
+        { "IsLink", cpo::uno::Any(bLink) },
     }));
     xDispatch->dispatch(aDispatchURL, aArgs);
 }

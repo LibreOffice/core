@@ -76,7 +76,7 @@ inline bool getBoolAttr(
         {
             throw css::xml::sax::SAXException(
                 rAttrName + ": no boolean value (true|false)!",
-                css::uno::Reference<css::uno::XInterface>(), css::uno::Any() );
+                css::uno::Reference<css::uno::XInterface>(), cpo::uno::Any() );
         }
     }
     return false;
@@ -485,13 +485,13 @@ public:
         try
         {
             _pImport->_xDialogModel->insertByName(
-                _aId, css::uno::Any(
+                _aId, cpo::uno::Any(
                     css::uno::Reference<css::awt::XControlModel>::query(
                         _xControlModel ) ) );
         }
         catch(const css::container::ElementExistException &e)
         {
-            throw css::lang::WrappedTargetRuntimeException(u""_ustr, e.Context, css::uno::Any(e));
+            throw css::lang::WrappedTargetRuntimeException(u""_ustr, e.Context, cpo::uno::Any(e));
         }
     }
 };

@@ -273,7 +273,7 @@ SfxNewFileDialog::SfxNewFileDialog(weld::Window *pParent, SfxNewFileDialogMode n
     SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
     if (aDlgOpt.Exists())
     {
-        css::uno::Any aUserItem = aDlgOpt.GetUserItem(u"UserItem"_ustr);
+        cpo::uno::Any aUserItem = aDlgOpt.GetUserItem(u"UserItem"_ustr);
         aUserItem >>= sExtraData;
     }
 
@@ -307,7 +307,7 @@ SfxNewFileDialog::SfxNewFileDialog(weld::Window *pParent, SfxNewFileDialogMode n
 SfxNewFileDialog::~SfxNewFileDialog()
 {
     SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
-    aDlgOpt.SetUserItem(u"UserItem"_ustr, css::uno::Any(m_xMoreBt->get_expanded() ? u"Y"_ustr : u"N"_ustr));
+    aDlgOpt.SetUserItem(u"UserItem"_ustr, cpo::uno::Any(m_xMoreBt->get_expanded() ? u"Y"_ustr : u"N"_ustr));
 }
 
 bool SfxNewFileDialog::IsTemplate() const

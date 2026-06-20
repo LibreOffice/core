@@ -36,9 +36,9 @@ public:
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // XWindows
-    virtual void SAL_CALL Arrange( ::sal_Int32 ArrangeStyle, const css::uno::Any& ActiveWorkbook, const css::uno::Any& SyncHorizontal, const css::uno::Any& SyncVertical ) override;
+    virtual void SAL_CALL Arrange( ::sal_Int32 ArrangeStyle, const cpo::uno::Any& ActiveWorkbook, const cpo::uno::Any& SyncHorizontal, const cpo::uno::Any& SyncVertical ) override;
     // ScVbaCollectionBaseImpl
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

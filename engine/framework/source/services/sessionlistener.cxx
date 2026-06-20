@@ -40,12 +40,13 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <utility>
 
 using namespace css;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::util;
 using namespace com::sun::star::beans;
 using namespace framework;
@@ -124,7 +125,7 @@ public:
     virtual void SAL_CALL disposing(const css::lang::EventObject&) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any  >& args) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence< cpo::uno::Any  >& args) override;
 
     // XSessionManagerListener
     virtual void SAL_CALL doSave( bool bShutdown, bool bCancelable ) override;
@@ -404,7 +405,7 @@ void SessionListener::doQuit()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_frame_SessionListener_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     SAL_INFO("fwk.session", "com_sun_star_comp_frame_SessionListener_get_implementation");
 

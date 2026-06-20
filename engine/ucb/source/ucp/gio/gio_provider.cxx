@@ -79,9 +79,9 @@ void SAL_CALL ContentProvider::release()
     OWeakObject::release();
 }
 
-css::uno::Any SAL_CALL ContentProvider::queryInterface( const css::uno::Type & rType )
+cpo::uno::Any SAL_CALL ContentProvider::queryInterface( const css::uno::Type & rType )
 {
-    css::uno::Any aRet = cppu::queryInterface( rType,
+    cpo::uno::Any aRet = cppu::queryInterface( rType,
                                                static_cast< css::lang::XTypeProvider* >(this),
                                                static_cast< css::lang::XServiceInfo* >(this),
                                                static_cast< css::ucb::XContentProvider* >(this)
@@ -126,7 +126,7 @@ static bool isDisabled()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_gio_ContentProvider_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
 {
     if (isDisabled())
         return nullptr;

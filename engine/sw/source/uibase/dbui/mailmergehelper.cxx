@@ -47,6 +47,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -602,9 +603,9 @@ SwConnectionContext::~SwConnectionContext()
 {
 }
 
-uno::Any SwConnectionContext::getValueByName( const OUString& rName )
+cpo::uno::Any SwConnectionContext::getValueByName( const OUString& rName )
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if( rName == "ServerName" )
         aRet <<= m_sMailServer;
     else if( rName == "Port" )
@@ -650,9 +651,9 @@ SwMailTransferable::~SwMailTransferable()
 {
 }
 
-uno::Any SwMailTransferable::getTransferData( const datatransfer::DataFlavor& /*aFlavor*/ )
+cpo::uno::Any SwMailTransferable::getTransferData( const datatransfer::DataFlavor& /*aFlavor*/ )
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if( m_bIsBody )
         aRet <<= m_sBody;
     else
@@ -699,13 +700,13 @@ uno::Reference< beans::XPropertySetInfo > SwMailTransferable::getPropertySetInfo
     return uno::Reference< beans::XPropertySetInfo >();
 }
 
-void SwMailTransferable::setPropertyValue( const OUString& , const uno::Any& )
+void SwMailTransferable::setPropertyValue( const OUString& , const cpo::uno::Any& )
 {
 }
 
-uno::Any SwMailTransferable::getPropertyValue( const OUString& rPropertyName )
+cpo::uno::Any SwMailTransferable::getPropertyValue( const OUString& rPropertyName )
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if ( rPropertyName == "URL" )
         aRet <<= m_aURL;
     return aRet;

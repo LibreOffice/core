@@ -89,7 +89,7 @@ namespace framework
             ~ImageManagerImpl();
 
             void dispose();
-            void initialize( const css::uno::Sequence< css::uno::Any >& aArguments );
+            void initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments );
             /// @throws css::uno::RuntimeException
             void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener );
             /// @throws css::uno::RuntimeException

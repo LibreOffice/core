@@ -114,7 +114,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf150302)
         static_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape)));
     const SdrCustomShapeGeometryItem& rGeometryItem(
         pSdrCustomShape->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY));
-    const css::uno::Any* pAny
+    const cpo::uno::Any* pAny
         = rGeometryItem.GetPropertyValueByName(u"TextPath"_ustr, u"SameLetterHeights"_ustr);
     if (pAny)
         *pAny >>= bSameHeights;
@@ -810,7 +810,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf115813_OOXML_XY_handle)
         OUString sShapeType(u"non-primitive"_ustr); // default for ODF
         const SdrCustomShapeGeometryItem& rGeometryItem(
             rSdrObjCustomShape.GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY));
-        const uno::Any* pAny = rGeometryItem.GetPropertyValueByName(u"Type"_ustr);
+        const cpo::uno::Any* pAny = rGeometryItem.GetPropertyValueByName(u"Type"_ustr);
         if (pAny)
             *pAny >>= sShapeType;
 
@@ -880,7 +880,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf126512_OOXML_handle_in_ODP)
         OUString sShapeType(u"non-primitive"_ustr); // only to initialize, value not used here
         const SdrCustomShapeGeometryItem& rGeometryItem(
             rSdrObjCustomShape.GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY));
-        const uno::Any* pAny = rGeometryItem.GetPropertyValueByName(u"Type"_ustr);
+        const cpo::uno::Any* pAny = rGeometryItem.GetPropertyValueByName(u"Type"_ustr);
         if (pAny)
             *pAny >>= sShapeType;
 
@@ -1254,7 +1254,7 @@ bool lcl_getShapeSegments(uno::Sequence<drawing::EnhancedCustomShapeSegment>& rS
                           const uno::Reference<drawing::XShape>& xShape)
 {
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY_THROW);
-    uno::Any anotherAny = xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr);
+    cpo::uno::Any anotherAny = xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr);
     uno::Sequence<beans::PropertyValue> aCustomShapeGeometry;
     if (!(anotherAny >>= aCustomShapeGeometry))
         return false;
@@ -1346,7 +1346,7 @@ bool lcl_getShapeCoordinates(uno::Sequence<drawing::EnhancedCustomShapeParameter
                              const uno::Reference<drawing::XShape>& xShape)
 {
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY_THROW);
-    uno::Any anotherAny = xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr);
+    cpo::uno::Any anotherAny = xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr);
     uno::Sequence<beans::PropertyValue> aCustomShapeGeometry;
     if (!(anotherAny >>= aCustomShapeGeometry))
         return false;

@@ -36,7 +36,7 @@ private:
 
     // object stack to remember previously inspected objects so it is
     // possible to return back to them
-    std::deque<css::uno::Any> maInspectionStack;
+    std::deque<cpo::uno::Any> maInspectionStack;
 
     // just the current context
     css::uno::Reference<css::uno::XComponentContext> mxContext;
@@ -63,8 +63,8 @@ private:
 
     // Object stack handling
     void clearStack();
-    void addToStack(css::uno::Any const& rAny);
-    css::uno::Any popFromStack();
+    void addToStack(cpo::uno::Any const& rAny);
+    cpo::uno::Any popFromStack();
 
     void updateBackButtonState();
 

@@ -54,7 +54,7 @@ XMLHatchStyleImport::XMLHatchStyleImport( SvXMLImport& rImp )
 
 void XMLHatchStyleImport::importXML(
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
-    uno::Any& rValue,
+    cpo::uno::Any& rValue,
     OUString& rStrName )
 {
     OUString aDisplayName;
@@ -133,7 +133,7 @@ XMLHatchStyleExport::XMLHatchStyleExport( SvXMLExport& rExp )
 
 void XMLHatchStyleExport::exportXML(
     const OUString& rStrName,
-    const uno::Any& rValue )
+    const cpo::uno::Any& rValue )
 {
     drawing::Hatch aHatch;
 

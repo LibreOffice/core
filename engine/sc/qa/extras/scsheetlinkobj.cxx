@@ -78,7 +78,7 @@ uno::Reference<uno::XInterface> ScSheetLinkObj::init()
     CPPUNIT_ASSERT(xPropSet->getPropertyValue(u"SheetLinks"_ustr) >>= sheetLinks);
     CPPUNIT_ASSERT(sheetLinks.is());
 
-    uno::Any aAny = sheetLinks->getByName(sheetLinks->getElementNames()[0]);
+    cpo::uno::Any aAny = sheetLinks->getByName(sheetLinks->getElementNames()[0]);
     uno::Reference<beans::XPropertySet> sheetLink;
     aAny >>= sheetLink;
     return sheetLink;

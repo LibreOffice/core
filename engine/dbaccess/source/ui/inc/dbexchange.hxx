@@ -46,7 +46,7 @@ namespace dbaui
 
         ODataClipboard(
             const css::uno::Reference< css::beans::XPropertySet >& i_rAliveForm,
-            const css::uno::Sequence< css::uno::Any >& i_rSelectedRows,
+            const css::uno::Sequence< cpo::uno::Any >& i_rSelectedRows,
             const bool i_bBookmarkSelection,
             const css::uno::Reference< css::uno::XComponentContext >& i_rORB
         );

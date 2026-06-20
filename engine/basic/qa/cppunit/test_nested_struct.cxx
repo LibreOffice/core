@@ -181,7 +181,7 @@ void Nested_Struct::testAssign1Alt()
     myMacro.Compile();
     CPPUNIT_ASSERT_MESSAGE("testAssign1Alt fails with compile error",!myMacro.HasError() );
     SbxVariableRef pNew = myMacro.Run();
-    uno::Any aRet = sbxToUnoValue( pNew.get() );
+    cpo::uno::Any aRet = sbxToUnoValue( pNew.get() );
     table::TableBorder aBorder;
     aRet >>= aBorder;
 
@@ -204,7 +204,7 @@ void Nested_Struct::testOldAssignAlt()
     myMacro.Compile();
     CPPUNIT_ASSERT_MESSAGE("testOldAssign fails with compile error",!myMacro.HasError() );
     SbxVariableRef pNew = myMacro.Run();
-    uno::Any aRet = sbxToUnoValue( pNew.get() );
+    cpo::uno::Any aRet = sbxToUnoValue( pNew.get() );
     table::TableBorder aBorder;
     aRet >>= aBorder;
 
@@ -228,9 +228,9 @@ void Nested_Struct::testUnfixedVarAssignAlt()
     myMacro.Compile();
     CPPUNIT_ASSERT_MESSAGE("testUnfixedVarAssignAlt fails with compile error",!myMacro.HasError() );
     SbxVariableRef pNew = myMacro.Run();
-    uno::Any aRet = sbxToUnoValue( pNew.get() );
+    cpo::uno::Any aRet = sbxToUnoValue( pNew.get() );
 
-    uno::Sequence< uno::Any > aResult;
+    uno::Sequence< cpo::uno::Any > aResult;
     bool bRes = aRet >>= aResult;
     CPPUNIT_ASSERT_EQUAL(true, bRes );
 
@@ -264,9 +264,9 @@ void Nested_Struct::testFixedVarAssignAlt()
     myMacro.Compile();
     CPPUNIT_ASSERT_MESSAGE("testFixedVarAssignAlt fails with compile error",!myMacro.HasError() );
     SbxVariableRef pNew = myMacro.Run();
-    uno::Any aRet = sbxToUnoValue( pNew.get() );
+    cpo::uno::Any aRet = sbxToUnoValue( pNew.get() );
 
-    uno::Sequence< uno::Any > aResult;
+    uno::Sequence< cpo::uno::Any > aResult;
     bool bRes = aRet >>= aResult;
     CPPUNIT_ASSERT_EQUAL(true, bRes );
 
@@ -291,7 +291,7 @@ void Nested_Struct::testUnoAccess()
     myMacro.Compile();
     CPPUNIT_ASSERT_MESSAGE("testUnoAccess fails with compile error",!myMacro.HasError() );
     SbxVariableRef pNew = myMacro.Run();
-    uno::Any aRet = sbxToUnoValue( pNew.get() );
+    cpo::uno::Any aRet = sbxToUnoValue( pNew.get() );
     awt::WindowDescriptor aWinDesc;
     aRet >>= aWinDesc;
 

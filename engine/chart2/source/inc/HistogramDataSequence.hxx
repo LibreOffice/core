@@ -25,7 +25,7 @@
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
@@ -75,7 +75,7 @@ public:
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
 
     // XDataSequence
-    css::uno::Sequence<css::uno::Any> SAL_CALL getData() override;
+    css::uno::Sequence<cpo::uno::Any> SAL_CALL getData() override;
     OUString SAL_CALL getSourceRangeRepresentation() override;
     css::uno::Sequence<OUString>
         SAL_CALL generateLabel(css::chart2::data::LabelOrigin nLabelOrigin) override;
@@ -108,7 +108,7 @@ private:
     rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
     OUString m_sRole;
     css::uno::Sequence<OUString> mxLabels;
-    css::uno::Sequence<css::uno::Any> mxValues;
+    css::uno::Sequence<cpo::uno::Any> mxValues;
     css::uno::Reference<css::chart2::data::XDataSequence> m_xRawData;
     bool m_bIsCategory;
     bool m_bIsDirty;

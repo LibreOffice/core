@@ -56,7 +56,7 @@ class SVT_DLLPUBLIC DocumentToGraphicRenderer
     css::uno::Reference<css::frame::XController>    mxController;
     css::uno::Reference<css::view::XRenderable>     mxRenderable;
     css::uno::Reference<css::awt::XToolkit>         mxToolkit;
-    css::uno::Any                                   maSelection;
+    cpo::uno::Any                                   maSelection;
     DocType                                         meDocType;
     std::vector<OUString>                           maChapterNames;
 
@@ -65,7 +65,7 @@ class SVT_DLLPUBLIC DocumentToGraphicRenderer
     /** Always something even if hasSelection() is false (in which case the
         selection is mxDocument).
      */
-    css::uno::Any getSelection() const;
+    cpo::uno::Any getSelection() const;
 
     sal_Int32 getCurrentPageWriter();
 

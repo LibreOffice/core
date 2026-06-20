@@ -1113,7 +1113,7 @@ void SAL_CALL SAXEventKeeperImpl::setDocumentLocator( const css::uno::Reference<
 }
 
 /* XInitialization */
-void SAL_CALL SAXEventKeeperImpl::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+void SAL_CALL SAXEventKeeperImpl::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     OSL_ASSERT(aArguments.getLength() == 1);
 

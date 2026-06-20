@@ -18,7 +18,7 @@
 
 #include <optional>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -26,8 +26,8 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-// Some functionality related to css::uno::Any that would ideally be part of
-// <com/sun/star/uno/Any.hxx>, but (for now) cannot be for some reason.
+// Some functionality related to cpo::uno::Any that would ideally be part of
+// <cpo/uno/Any.hxx>, but (for now) cannot be for some reason.
 
 namespace o3tl {
 
@@ -86,7 +86,7 @@ template<typename T> struct IsUnoSequenceType<cppu::UnoSequenceType<T>>:
 {};
 
 template<typename T> inline std::optional<T const> tryGetConverted(
-    css::uno::Any const & any)
+    cpo::uno::Any const & any)
 {
     T v;
     return (any >>= v)
@@ -114,18 +114,18 @@ template<typename T> inline std::optional<T const> tryGetConverted(
     restricted to lvalue arguments (i.e., to non-temporary Any objects), to
     avoid misuses like
     @code
-      css::uno::Any f();
+      cpo::uno::Any f();
 
       if (auto p = o3tl::tryAccess<css::beans::NamedValue>(f())) {
         return p->Name;
       }
     @endcode
 
-    @note Ideally this would be a public member function of css::uno::Any (at
+    @note Ideally this would be a public member function of cpo::uno::Any (at
     least conditional on LIBO_INTERNAL_ONLY, as it requires C++11).  However, as
     std::optional (which would be needed to implement the proxies) is only
     available since C++14, we need to use std::optional for now.  But To not
-    make every entity that includes <com/sun/star/uno/Any.hxx> depend on
+    make every entity that includes <cpo/uno/Any.hxx> depend on
     boost_headers, keep this here for now.
 
     @tparam T  the C++ representation of a UNO type that can be contained in a
@@ -145,7 +145,7 @@ typename std::enable_if<
       || detail::IsUnoSequenceType<T>::value
       || std::is_base_of<css::uno::XInterface, T>::value),
     typename detail::Optional<T>::type>::type
-tryAccess(css::uno::Any const & any) {
+tryAccess(cpo::uno::Any const & any) {
     // CHAR, STRING, TYPE, sequence types, enum types, struct types, exception
     // types, and com.sun.star.uno.XInterface interface type:
     return cppu::UnoType<T>::get().isAssignableFrom(any.getValueType())
@@ -153,7 +153,7 @@ tryAccess(css::uno::Any const & any) {
 }
 
 template<> inline detail::Optional<void>::type tryAccess<void>(
-    css::uno::Any const & any)
+    cpo::uno::Any const & any)
 {
     return any.hasValue()
         ? std::optional<detail::Void const>()
@@ -161,67 +161,67 @@ template<> inline detail::Optional<void>::type tryAccess<void>(
 }
 
 template<> inline detail::Optional<bool>::type tryAccess<bool>(
-    css::uno::Any const & any)
+    cpo::uno::Any const & any)
 {
     return detail::tryGetConverted<bool>(any);
 }
 
 template<> inline detail::Optional<sal_Int8>::type tryAccess<sal_Int8>(
-    css::uno::Any const & any)
+    cpo::uno::Any const & any)
 {
     return detail::tryGetConverted<sal_Int8>(any);
 }
 
 template<> inline detail::Optional<sal_Int16>::type tryAccess<sal_Int16>(
-    css::uno::Any const & any)
+    cpo::uno::Any const & any)
 {
     return detail::tryGetConverted<sal_Int16>(any);
 }
 
 template<> inline detail::Optional<sal_uInt16>::type tryAccess<sal_uInt16>(
-    css::uno::Any const & any)
+    cpo::uno::Any const & any)
 {
     return detail::tryGetConverted<sal_uInt16>(any);
 }
 
 template<> inline detail::Optional<sal_Int32>::type tryAccess<sal_Int32>(
-    css::uno::Any const & any)
+    cpo::uno::Any const & any)
 {
     return detail::tryGetConverted<sal_Int32>(any);
 }
 
 template<> inline detail::Optional<sal_uInt32>::type tryAccess<sal_uInt32>(
-    css::uno::Any const & any)
+    cpo::uno::Any const & any)
 {
     return detail::tryGetConverted<sal_uInt32>(any);
 }
 
 template<> inline detail::Optional<sal_Int64>::type tryAccess<sal_Int64>(
-    css::uno::Any const & any)
+    cpo::uno::Any const & any)
 {
     return detail::tryGetConverted<sal_Int64>(any);
 }
 
 template<> inline detail::Optional<sal_uInt64>::type tryAccess<sal_uInt64>(
-    css::uno::Any const & any)
+    cpo::uno::Any const & any)
 {
     return detail::tryGetConverted<sal_uInt64>(any);
 }
 
 template<> inline detail::Optional<float>::type tryAccess<float>(
-    css::uno::Any const & any)
+    cpo::uno::Any const & any)
 {
     return detail::tryGetConverted<float>(any);
 }
 
 template<> inline detail::Optional<double>::type tryAccess<double>(
-    css::uno::Any const & any)
+    cpo::uno::Any const & any)
 {
     return detail::tryGetConverted<double>(any);
 }
 
-template<> detail::Optional<css::uno::Any>::type tryAccess<css::uno::Any>(
-    css::uno::Any const &) = delete;
+template<> detail::Optional<cpo::uno::Any>::type tryAccess<cpo::uno::Any>(
+    cpo::uno::Any const &) = delete;
 
 /*
 
@@ -229,13 +229,13 @@ template<> detail::Optional<css::uno::Any>::type tryAccess<css::uno::Any>(
 // be complete:
 
 template<> detail::Optional<cppu::UnoVoidType>::type
-tryAccess<cppu::UnoVoidType>(css::uno::Any const &) = delete;
+tryAccess<cppu::UnoVoidType>(cpo::uno::Any const &) = delete;
 
 template<> detail::Optional<cppu::UnoUnsignedShortType>::type
-tryAccess<cppu::UnoUnsignedShortType>(css::uno::Any const &) = delete;
+tryAccess<cppu::UnoUnsignedShortType>(cpo::uno::Any const &) = delete;
 
 template<> detail::Optional<cppu::UnoCharType>::type
-tryAccess<cppu::UnoCharType>(css::uno::Any const &) = delete;
+tryAccess<cppu::UnoCharType>(cpo::uno::Any const &) = delete;
 
 */
 
@@ -243,12 +243,12 @@ template<typename T> inline
 typename std::enable_if<
     detail::IsDerivedReference<T>::value,
     typename detail::Optional<T>::type>::type
-tryAccess(css::uno::Any const & any) {
+tryAccess(cpo::uno::Any const & any) {
     return detail::tryGetConverted<T>(any);
 }
 
 template<typename T> typename detail::Optional<T>::type tryAccess(
-    css::uno::Any const volatile &&) = delete;
+    cpo::uno::Any const volatile &&) = delete;
 
 /** Access the value of a specific type stored in an Any, throwing an exception
     on failure.
@@ -259,7 +259,7 @@ template<typename T> typename detail::Optional<T>::type tryAccess(
     allowing this function to operate on temporaries appears to outweigh its
     dangers.
 
-    @note Ideally this would be a public member function of css::uno::Any.  See
+    @note Ideally this would be a public member function of cpo::uno::Any.  See
     tryAccess for details.
 
     @tparam T  the C++ representation of a UNO type that can be contained in a
@@ -274,7 +274,7 @@ template<typename T> typename detail::Optional<T>::type tryAccess(
     cannot be obtained.
 */
 template<typename T> inline typename detail::Optional<T>::type doAccess(
-    css::uno::Any const & any)
+    cpo::uno::Any const & any)
 {
     auto opt = tryAccess<T>(any);
     if (!opt) {
@@ -296,7 +296,7 @@ template<typename T> inline typename detail::Optional<T>::type doAccess(
     allowing this function to operate on temporaries appears to outweigh its
     dangers.
 
-    @note Ideally this would be a public member function of css::uno::Any.  See
+    @note Ideally this would be a public member function of cpo::uno::Any.  See
     tryAccess for details.
 
     @tparam T  the C++ representation of a UNO type that can be contained in a
@@ -308,7 +308,7 @@ template<typename T> inline typename detail::Optional<T>::type doAccess(
     the given Any.  See tryAccess for details.
 */
 template<typename T> inline typename detail::Optional<T>::type forceAccess(
-    css::uno::Any const & any)
+    cpo::uno::Any const & any)
 {
     auto opt = tryAccess<T>(any);
     assert(opt);

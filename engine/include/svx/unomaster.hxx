@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_UNOMASTER_HXX
 
 #include <com/sun/star/uno/Type.h>
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 
@@ -33,7 +33,7 @@
 class SvxShapeMaster
 {
 public:
-    virtual bool queryAggregation( const css::uno::Type & rType, css::uno::Any& aAny ) = 0;
+    virtual bool queryAggregation( const css::uno::Type & rType, cpo::uno::Any& aAny ) = 0;
 
     /// @throws css::uno::RuntimeException
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) = 0;
@@ -42,11 +42,11 @@ public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) = 0;
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) = 0;
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) = 0;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) = 0;
 
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
@@ -57,7 +57,7 @@ public:
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    virtual css::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) = 0;
+    virtual cpo::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) = 0;
 
     /// @throws css::uno::RuntimeException
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) = 0;

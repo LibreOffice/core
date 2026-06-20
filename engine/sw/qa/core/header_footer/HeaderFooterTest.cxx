@@ -425,7 +425,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testImageInFooter)
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testTdf112694)
 {
     auto verify = [this]() {
-        uno::Any aPageStyle = getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr);
+        cpo::uno::Any aPageStyle = getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr);
         // Header was on when header for file was for explicit first pages only
         // but <w:titlePg> was missing.
         CPPUNIT_ASSERT(!getProperty<bool>(aPageStyle, u"HeaderIsOn"_ustr));
@@ -674,12 +674,12 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testBnc519228OddBreaks)
         {
             xStyle.set(xStyles->getByName(u"Standard"_ustr), uno::UNO_QUERY);
             auto aPageLayout = xStyle->getPropertyValue(u"PageStyleLayout"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(style::PageStyleLayout_ALL), aPageLayout);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(style::PageStyleLayout_ALL), aPageLayout);
         }
         {
             xStyle.set(xStyles->getByName(u"First Page"_ustr), uno::UNO_QUERY);
             auto aPageLayout = xStyle->getPropertyValue(u"PageStyleLayout"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(style::PageStyleLayout_ALL), aPageLayout);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(style::PageStyleLayout_ALL), aPageLayout);
         }
 
         uno::Reference<beans::XPropertySet> page1Style;
@@ -689,7 +689,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testBnc519228OddBreaks)
             OUString page1StyleName = getProperty<OUString>(xPara, u"PageDescName"_ustr);
             page1Style.set(xStyles->getByName(page1StyleName), uno::UNO_QUERY);
             auto aPageLayout = page1Style->getPropertyValue(u"PageStyleLayout"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(style::PageStyleLayout_RIGHT), aPageLayout);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(style::PageStyleLayout_RIGHT), aPageLayout);
 
             auto xHeaderText
                 = getProperty<uno::Reference<text::XText>>(page1Style, u"HeaderText"_ustr);
@@ -706,7 +706,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testBnc519228OddBreaks)
             uno::Reference<beans::XPropertySet> page2Style;
             page2Style.set(xStyles->getByName(aFollowStyleName), uno::UNO_QUERY);
             auto aPage2Layout = page2Style->getPropertyValue(u"PageStyleLayout"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(style::PageStyleLayout_ALL), aPage2Layout);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(style::PageStyleLayout_ALL), aPage2Layout);
 
             auto xHeaderTextLeft
                 = getProperty<uno::Reference<text::XText>>(page2Style, u"HeaderTextLeft"_ustr);
@@ -737,7 +737,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testBnc519228OddBreaks)
             uno::Reference<beans::XPropertySet> page5Style(xStyles->getByName(page5StyleName),
                                                            uno::UNO_QUERY);
             auto aPageLayout = page5Style->getPropertyValue(u"PageStyleLayout"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(style::PageStyleLayout_RIGHT), aPageLayout);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(style::PageStyleLayout_RIGHT), aPageLayout);
 
             auto xHeaderText
                 = getProperty<uno::Reference<text::XText>>(page5Style, u"HeaderText"_ustr);

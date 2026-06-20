@@ -24,7 +24,7 @@
 #include <sfx2/shell.hxx>
 #include <sal/types.h>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <vcl/vclptr.hxx>
 #include <rtl/ustring.hxx>
 #include <svl/poolitem.hxx>
@@ -159,25 +159,25 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxFrameItem*   Clone( SfxItemPool *pPool = nullptr ) const override;
 
-    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool            QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     SfxFrame*               GetFrame() const { return wFrame; }
 };
 
 class SFX2_DLLPUBLIC SfxUnoAnyItem final : public SfxPoolItem
 {
-    css::uno::Any  aValue;
+    cpo::uno::Any  aValue;
 public:
                                 static SfxPoolItem* CreateDefault();
                                 DECLARE_ITEM_TYPE_FUNCTION(SfxUnoAnyItem)
-                                SfxUnoAnyItem( sal_uInt16 nWhich, const css::uno::Any& rAny );
-    const css::uno::Any&        GetValue() const
+                                SfxUnoAnyItem( sal_uInt16 nWhich, const cpo::uno::Any& rAny );
+    const cpo::uno::Any&        GetValue() const
                                 { return aValue; }
     virtual bool                operator==( const SfxPoolItem& ) const override;
     virtual SfxUnoAnyItem*      Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual bool                QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool                PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool                QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool                PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };
 
 class SFX2_DLLPUBLIC SfxUnoFrameItem final : public SfxPoolItem
@@ -195,8 +195,8 @@ public:
                                 { return m_xFrame; }
     virtual bool                operator==( const SfxPoolItem& ) const override;
     virtual SfxUnoFrameItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual bool                QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool                PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool                QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool                PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };
 
 #endif

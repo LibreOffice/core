@@ -85,7 +85,7 @@ static JSTreeView* g_DragSource;
 
 JSDropTarget::JSDropTarget() {}
 
-void JSDropTarget::initialize(const css::uno::Sequence<css::uno::Any>& /*rArgs*/) {}
+void JSDropTarget::initialize(const css::uno::Sequence<cpo::uno::Any>& /*rArgs*/) {}
 
 void JSDropTarget::addDropTargetListener(
     const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>& xListener)

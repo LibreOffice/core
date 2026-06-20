@@ -39,6 +39,7 @@
 using namespace css::lang;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 class ScPDFExportTest : public UnoApiTest
 {
@@ -164,7 +165,7 @@ void ScPDFExportTest::exportToPDF(const uno::Reference<frame::XModel>& xModel, c
         uno::Reference<view::XSelectionSupplier> xSelection(xController, uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT(xSelection.is());
 
-        uno::Any rCellRangeAny(xCellRange);
+        cpo::uno::Any rCellRangeAny(xCellRange);
         xSelection->select(rCellRangeAny);
     }
 
@@ -193,18 +194,19 @@ void ScPDFExportTest::exportToPDF(const uno::Reference<frame::XModel>& xModel, c
 void ScPDFExportTest::exportToPDFWithUnoCommands(const OUString& rRange)
 {
     uno::Sequence<beans::PropertyValue> aArgs
-        = comphelper::InitPropertySequence({ { "ToPoint", uno::Any(rRange) } });
+        = comphelper::InitPropertySequence({ { "ToPoint", cpo::uno::Any(rRange) } });
     dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aArgs);
 
     dispatchCommand(mxComponent, u".uno:DefinePrintArea"_ustr, {});
 
-    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
-        { { "ViewPDFAfterExport", uno::Any(true) }, { "Printing", uno::Any(sal_Int32(2)) } }));
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "ViewPDFAfterExport", cpo::uno::Any(true) },
+                                           { "Printing", cpo::uno::Any(sal_Int32(2)) } }));
 
     uno::Sequence<beans::PropertyValue> aDescriptor(
-        comphelper::InitPropertySequence({ { "FilterName", uno::Any(u"calc_pdf_Export"_ustr) },
-                                           { "FilterData", uno::Any(aFilterData) },
-                                           { "URL", uno::Any(maTempFile.GetURL()) } }));
+        comphelper::InitPropertySequence({ { "FilterName", cpo::uno::Any(u"calc_pdf_Export"_ustr) },
+                                           { "FilterData", cpo::uno::Any(aFilterData) },
+                                           { "URL", cpo::uno::Any(maTempFile.GetURL()) } }));
 
     dispatchCommand(mxComponent, u".uno:ExportToPDF"_ustr, aDescriptor);
 }
@@ -377,10 +379,10 @@ void ScPDFExportTest::testExportFitToPage_Tdf103516()
                                                                UNO_SET_THROW);
     uno::Reference<container::XNameAccess> xPageStyles(
         xStyleFamiliesNames->getByName(u"PageStyles"_ustr), UNO_QUERY_THROW);
-    uno::Any aDefaultStyle = xPageStyles->getByName(u"Default"_ustr);
+    cpo::uno::Any aDefaultStyle = xPageStyles->getByName(u"Default"_ustr);
     uno::Reference<beans::XPropertySet> xProp(aDefaultStyle, UNO_QUERY_THROW);
 
-    uno::Any aScaleX, aScaleY;
+    cpo::uno::Any aScaleX, aScaleY;
     sal_Int16 nScale;
     aScaleX <<= static_cast<sal_Int16>(1);
     xProp->setPropertyValue(u"ScaleToPagesX"_ustr, aScaleX);
@@ -800,7 +802,7 @@ void ScPDFExportTest::testTdf120190()
     xSheet0->getCellByPosition(0, 0)->setFormula(u"=5&CHAR(10)&6"_ustr);
 
     uno::Sequence<beans::PropertyValue> aArgs
-        = comphelper::InitPropertySequence({ { "ToPoint", uno::Any(u"A1"_ustr) } });
+        = comphelper::InitPropertySequence({ { "ToPoint", cpo::uno::Any(u"A1"_ustr) } });
     dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aArgs);
 
     dispatchCommand(mxComponent, u".uno:ConvertFormulaToValue"_ustr, {});

@@ -53,9 +53,9 @@ class ScVbaWorksheet : public WorksheetImpl_BASE
     css::uno::Reference< ov::excel::XRange > getSheetRange();
 
     css::uno::Reference< css::container::XNameAccess > getFormControls() const;
-    css::uno::Any getControlShape( std::u16string_view sName );
+    cpo::uno::Any getControlShape( std::u16string_view sName );
 
-    css::uno::Any getButtons( const css::uno::Any &rIndex, bool bOptionButtons );
+    cpo::uno::Any getButtons( const cpo::uno::Any &rIndex, bool bOptionButtons );
 
 public:
     /// @throws css::uno::RuntimeException
@@ -65,7 +65,7 @@ public:
         css::uno::Reference< css::frame::XModel > xModel )  ;
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    ScVbaWorksheet( css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
+    ScVbaWorksheet( css::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
 
     virtual ~ScVbaWorksheet() override;
 
@@ -89,11 +89,11 @@ public:
     virtual bool SAL_CALL getProtectDrawingObjects() override;
     virtual bool SAL_CALL getProtectScenarios() override;
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getUsedRange() override ;
-    virtual css::uno::Any SAL_CALL ChartObjects( const css::uno::Any& Index ) override;
+    virtual cpo::uno::Any SAL_CALL ChartObjects( const cpo::uno::Any& Index ) override;
     virtual css::uno::Reference< ov::excel::XOutline > SAL_CALL Outline( ) override;
     virtual css::uno::Reference< ov::excel::XPageSetup > SAL_CALL PageSetup( ) override;
-    virtual css::uno::Any SAL_CALL HPageBreaks( const css::uno::Any& aIndex ) override;
-    virtual css::uno::Any SAL_CALL VPageBreaks( const css::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL HPageBreaks( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL VPageBreaks( const cpo::uno::Any& aIndex ) override;
     virtual css::uno::Reference< ov::excel::XWorksheet > SAL_CALL getNext() override;
     virtual css::uno::Reference< ov::excel::XWorksheet > SAL_CALL getPrevious() override;
      virtual sal_Int16 SAL_CALL getIndex() override;
@@ -105,48 +105,48 @@ public:
     // Methods
     virtual void SAL_CALL Activate() override;
     virtual void SAL_CALL Select() override;
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Range( const css::uno::Any& Cell1, const css::uno::Any& Cell2 ) override;
-    virtual void SAL_CALL Move( const css::uno::Any& Before, const css::uno::Any& After ) override ;
-     virtual void SAL_CALL Copy( const css::uno::Any& Before, const css::uno::Any& After ) override;
-    virtual void SAL_CALL Paste( const css::uno::Any& Destination, const css::uno::Any& Link ) override;
+    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Range( const cpo::uno::Any& Cell1, const cpo::uno::Any& Cell2 ) override;
+    virtual void SAL_CALL Move( const cpo::uno::Any& Before, const cpo::uno::Any& After ) override ;
+     virtual void SAL_CALL Copy( const cpo::uno::Any& Before, const cpo::uno::Any& After ) override;
+    virtual void SAL_CALL Paste( const cpo::uno::Any& Destination, const cpo::uno::Any& Link ) override;
     virtual void SAL_CALL Delete(  ) override;
-    virtual void SAL_CALL Protect( const css::uno::Any& Password, const css::uno::Any& DrawingObjects, const css::uno::Any& Contents, const css::uno::Any& Scenarios, const css::uno::Any& UserInterfaceOnly ) override;
-    virtual void SAL_CALL Unprotect( const css::uno::Any& Password ) override;
+    virtual void SAL_CALL Protect( const cpo::uno::Any& Password, const cpo::uno::Any& DrawingObjects, const cpo::uno::Any& Contents, const cpo::uno::Any& Scenarios, const cpo::uno::Any& UserInterfaceOnly ) override;
+    virtual void SAL_CALL Unprotect( const cpo::uno::Any& Password ) override;
 
     virtual void SAL_CALL Calculate(  ) override;
-    virtual void SAL_CALL CheckSpelling( const css::uno::Any& CustomDictionary,const css::uno::Any& IgnoreUppercase,const css::uno::Any& AlwaysSuggest, const css::uno::Any& SpellingLang ) override;
+    virtual void SAL_CALL CheckSpelling( const cpo::uno::Any& CustomDictionary,const cpo::uno::Any& IgnoreUppercase,const cpo::uno::Any& AlwaysSuggest, const cpo::uno::Any& SpellingLang ) override;
     // Hacks (?)
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Cells( const css::uno::Any &nRow, const css::uno::Any &nCol ) override;
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Rows(const css::uno::Any& aIndex ) override;
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Columns(const css::uno::Any& aIndex ) override;
+    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Cells( const cpo::uno::Any &nRow, const cpo::uno::Any &nCol ) override;
+    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Rows(const cpo::uno::Any& aIndex ) override;
+    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Columns(const cpo::uno::Any& aIndex ) override;
 
-    virtual css::uno::Any SAL_CALL Evaluate( const OUString& Name ) override;
-    virtual css::uno::Any SAL_CALL PivotTables( const css::uno::Any& Index ) override;
-    virtual css::uno::Any SAL_CALL Comments( const css::uno::Any& Index ) override;
-    virtual css::uno::Any SAL_CALL Hyperlinks( const css::uno::Any& aIndex ) override;
-    virtual css::uno::Any SAL_CALL Names( const css::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Evaluate( const OUString& Name ) override;
+    virtual cpo::uno::Any SAL_CALL PivotTables( const cpo::uno::Any& Index ) override;
+    virtual cpo::uno::Any SAL_CALL Comments( const cpo::uno::Any& Index ) override;
+    virtual cpo::uno::Any SAL_CALL Hyperlinks( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Names( const cpo::uno::Any& aIndex ) override;
 
-    virtual css::uno::Any SAL_CALL OLEObjects( const css::uno::Any& Index ) override;
-    virtual css::uno::Any SAL_CALL Shapes( const css::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL OLEObjects( const cpo::uno::Any& Index ) override;
+    virtual cpo::uno::Any SAL_CALL Shapes( const cpo::uno::Any& aIndex ) override;
 
-    virtual css::uno::Any SAL_CALL Buttons( const css::uno::Any& rIndex ) override;
-    virtual css::uno::Any SAL_CALL CheckBoxes( const css::uno::Any& rIndex ) override;
-    virtual css::uno::Any SAL_CALL DropDowns( const css::uno::Any& rIndex ) override;
-    virtual css::uno::Any SAL_CALL GroupBoxes( const css::uno::Any& rIndex ) override;
-    virtual css::uno::Any SAL_CALL Labels( const css::uno::Any& rIndex ) override;
-    virtual css::uno::Any SAL_CALL ListBoxes( const css::uno::Any& rIndex ) override;
-    virtual css::uno::Any SAL_CALL OptionButtons( const css::uno::Any& rIndex ) override;
-    virtual css::uno::Any SAL_CALL ScrollBars( const css::uno::Any& rIndex ) override;
-    virtual css::uno::Any SAL_CALL Spinners( const css::uno::Any& rIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Buttons( const cpo::uno::Any& rIndex ) override;
+    virtual cpo::uno::Any SAL_CALL CheckBoxes( const cpo::uno::Any& rIndex ) override;
+    virtual cpo::uno::Any SAL_CALL DropDowns( const cpo::uno::Any& rIndex ) override;
+    virtual cpo::uno::Any SAL_CALL GroupBoxes( const cpo::uno::Any& rIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Labels( const cpo::uno::Any& rIndex ) override;
+    virtual cpo::uno::Any SAL_CALL ListBoxes( const cpo::uno::Any& rIndex ) override;
+    virtual cpo::uno::Any SAL_CALL OptionButtons( const cpo::uno::Any& rIndex ) override;
+    virtual cpo::uno::Any SAL_CALL ScrollBars( const cpo::uno::Any& rIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Spinners( const cpo::uno::Any& rIndex ) override;
 
     virtual void SAL_CALL setEnableCalculation( bool EnableCalculation ) override;
     virtual bool SAL_CALL getEnableCalculation(  ) override;
     virtual void SAL_CALL ShowDataForm(  ) override;
     // XInvocation
     virtual css::uno::Reference< css::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  ) override;
-    virtual css::uno::Any SAL_CALL invoke( const OUString& aFunctionName, const css::uno::Sequence< css::uno::Any >& aParams, css::uno::Sequence< ::sal_Int16 >& aOutParamIndex, css::uno::Sequence< css::uno::Any >& aOutParam ) override;
-    virtual void SAL_CALL setValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getValue( const OUString& aPropertyName ) override;
+    virtual cpo::uno::Any SAL_CALL invoke( const OUString& aFunctionName, const css::uno::Sequence< cpo::uno::Any >& aParams, css::uno::Sequence< ::sal_Int16 >& aOutParamIndex, css::uno::Sequence< cpo::uno::Any >& aOutParam ) override;
+    virtual void SAL_CALL setValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL getValue( const OUString& aPropertyName ) override;
     virtual bool SAL_CALL hasMethod( const OUString& aName ) override;
     virtual bool SAL_CALL hasProperty( const OUString& aName ) override;
     // CodeName
@@ -154,10 +154,10 @@ public:
     /// @throws css::uno::RuntimeException
     sal_Int16 getSheetID() const;
 
-    virtual void SAL_CALL PrintOut( const css::uno::Any& From, const css::uno::Any& To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName, const css::uno::Any& IgnorePrintAreas ) override;
-    virtual void SAL_CALL ExportAsFixedFormat(const css::uno::Any& Type, const css::uno::Any& FileName, const css::uno::Any& Quality,
-        const css::uno::Any& IncludeDocProperties, const css::uno::Any& IgnorePrintAreas, const css::uno::Any& From,
-        const css::uno::Any& To, const css::uno::Any& OpenAfterPublish, const css::uno::Any& FixedFormatExtClassPtr) override;
+    virtual void SAL_CALL PrintOut( const cpo::uno::Any& From, const cpo::uno::Any& To, const cpo::uno::Any& Copies, const cpo::uno::Any& Preview, const cpo::uno::Any& ActivePrinter, const cpo::uno::Any& PrintToFile, const cpo::uno::Any& Collate, const cpo::uno::Any& PrToFileName, const cpo::uno::Any& IgnorePrintAreas ) override;
+    virtual void SAL_CALL ExportAsFixedFormat(const cpo::uno::Any& Type, const cpo::uno::Any& FileName, const cpo::uno::Any& Quality,
+        const cpo::uno::Any& IncludeDocProperties, const cpo::uno::Any& IgnorePrintAreas, const cpo::uno::Any& From,
+        const cpo::uno::Any& To, const cpo::uno::Any& OpenAfterPublish, const cpo::uno::Any& FixedFormatExtClassPtr) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

@@ -39,6 +39,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 /* Implementation of Macros test */
 
@@ -477,7 +478,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf71271)
         uno::Reference<container::XIndexAccess> xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
         uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xProps(xSheet, uno::UNO_QUERY_THROW);
-        xProps->setPropertyValue(u"CodeName"_ustr, uno::Any(u"NewCodeName"_ustr));
+        xProps->setPropertyValue(u"CodeName"_ustr, cpo::uno::Any(u"NewCodeName"_ustr));
     }
 
     saveAndReload(TestFilter::ODS);
@@ -535,10 +536,10 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf133887)
 {
     createScDoc("tdf133887.ods");
 
-    css::uno::Any aRet;
+    cpo::uno::Any aRet;
     css::uno::Sequence<sal_Int16> aOutParamIndex;
-    css::uno::Sequence<css::uno::Any> aOutParam;
-    css::uno::Sequence<css::uno::Any> aParams{ css::uno::Any(sal_Int16(0)) };
+    css::uno::Sequence<cpo::uno::Any> aOutParam;
+    css::uno::Sequence<cpo::uno::Any> aParams{ cpo::uno::Any(sal_Int16(0)) };
 
     SfxObjectShell::CallXScript(
         mxComponent,
@@ -559,10 +560,10 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf133889)
 {
     createScDoc("tdf133889.ods");
 
-    css::uno::Any aRet;
+    cpo::uno::Any aRet;
     css::uno::Sequence<sal_Int16> aOutParamIndex;
-    css::uno::Sequence<css::uno::Any> aOutParam;
-    css::uno::Sequence<css::uno::Any> aParams{ css::uno::Any(sal_Int32(0)) };
+    css::uno::Sequence<cpo::uno::Any> aOutParam;
+    css::uno::Sequence<cpo::uno::Any> aParams{ cpo::uno::Any(sal_Int32(0)) };
 
     SfxObjectShell::CallXScript(
         mxComponent,
@@ -722,7 +723,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf107572)
     auto xLibrary = xLibs->createLibrary(u"TestLibrary"_ustr);
     xLibrary->insertByName(
         u"TestModule"_ustr,
-        uno::Any(
+        cpo::uno::Any(
             u"Function Main\n"
                      "  thisComponent.Sheets(0).getCellRangeByName(\"A1:F14\").autoformat(\"Default\")\n"
                      "End Function\n"_ustr));
@@ -776,7 +777,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testCool15956)
     auto xLibs = xDocScr->getBasicLibraries().queryThrow<script::XLibraryContainer>();
     auto xLibrary = xLibs->createLibrary(u"TestLibrary"_ustr);
     for (const OUString& rName : order)
-        xLibrary->insertByName(rName, uno::Any(u"Sub "_ustr + rName + u"\nEnd Sub\n"_ustr));
+        xLibrary->insertByName(rName, cpo::uno::Any(u"Sub "_ustr + rName + u"\nEnd Sub\n"_ustr));
 
     // In memory, getElementNames() must reflect insertion order.
     checkOrder(xLibrary->getElementNames());
@@ -802,7 +803,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testShapeLayerId)
     auto xLibrary = xLibs->createLibrary(u"TestLibrary"_ustr);
     xLibrary->insertByName(
         u"TestModule"_ustr,
-        uno::Any(
+        cpo::uno::Any(
             u"Function TestLayerID\n"
                      "  xShape = thisComponent.createInstance(\"com.sun.star.drawing.TextShape\")\n"
                      "  thisComponent.DrawPages(0).Add(xShape)\n"
@@ -839,8 +840,8 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testFunctionAccessIndirect)
     // tdf#148040: without the fix in place, this would have failed with:
     //   An uncaught exception of type com.sun.star.lang.IllegalArgumentException
     // because of disallowed external link update (needed to obtain the cell value).
-    css::uno::Any aResult = xFunc->callFunction(u"INDIRECT"_ustr, {css::uno::Any(aReference)});
-    CPPUNIT_ASSERT_EQUAL(css::uno::Any(u"a1"_ustr), aResult);
+    cpo::uno::Any aResult = xFunc->callFunction(u"INDIRECT"_ustr, {cpo::uno::Any(aReference)});
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"a1"_ustr), aResult);
 }
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf147122)
@@ -852,7 +853,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf147122)
     auto xLibrary = xLibs->createLibrary(u"TestLibrary"_ustr);
     xLibrary->insertByName(
         u"TestModule"_ustr,
-        uno::Any(
+        cpo::uno::Any(
             u"Function TestMergedSelection\n"
                      // Insert test string into cell A1
                      "  oActiveSheet = ThisComponent.CurrentController.ActiveSheet\n"
@@ -884,7 +885,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf154803)
     auto xLibrary = xLibs->createLibrary(u"TestLibrary"_ustr);
     xLibrary->insertByName(
         u"TestModule"_ustr,
-        uno::Any(
+        cpo::uno::Any(
             u"Function TestExtendedMergedSelection\n"
                      // Merge A1:B2 cell range
                      "  oActiveSheet = ThisComponent.CurrentController.ActiveSheet\n"
@@ -916,7 +917,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf116127)
     auto xLibrary = xLibs->createLibrary(u"TestLibrary"_ustr);
     xLibrary->insertByName(
         u"TestModule"_ustr,
-        uno::Any(u"Function TestClearContents\n"
+        cpo::uno::Any(u"Function TestClearContents\n"
             // Insert test string into cell A1
             "  oActiveSheet = ThisComponent.CurrentController.ActiveSheet\n"
             "  oActiveCell = oActiveSheet.getCellRangeByName(\"A1\")\n"
@@ -949,10 +950,10 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf159412)
     // passing a small integer value to arguments of types Long and Double
     createScDoc("tdf159412.fods");
 
-    css::uno::Any aRet;
+    cpo::uno::Any aRet;
     css::uno::Sequence<sal_Int16> aOutParamIndex;
-    css::uno::Sequence<css::uno::Any> aOutParam;
-    css::uno::Sequence<css::uno::Any> aParams;
+    css::uno::Sequence<cpo::uno::Any> aOutParam;
+    css::uno::Sequence<cpo::uno::Any> aParams;
 
     SfxObjectShell::CallXScript(
         mxComponent,

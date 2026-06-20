@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/script/Converter.hpp>
 
@@ -58,12 +58,12 @@ SfxGlobalNameItem* SfxGlobalNameItem::Clone(SfxItemPool *) const
 }
 
 // virtual
-bool SfxGlobalNameItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
+bool SfxGlobalNameItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 )
 {
     css::uno::Reference < css::script::XTypeConverter > xConverter
             ( css::script::Converter::create( ::comphelper::getProcessComponentContext() ));
     css::uno::Sequence< sal_Int8 > aSeq;
-    css::uno::Any aNew;
+    cpo::uno::Any aNew;
 
     try { aNew = xConverter->convertTo( rVal, cppu::UnoType<css::uno::Sequence < sal_Int8 >>::get() ); }
     catch (css::uno::Exception&) {}
@@ -79,7 +79,7 @@ bool SfxGlobalNameItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
 }
 
 // virtual
-bool SfxGlobalNameItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
+bool SfxGlobalNameItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 ) const
 {
     css::uno::Sequence< sal_Int8 > aSeq( 16 );
     void const * pData = &m_aName.GetCLSID();

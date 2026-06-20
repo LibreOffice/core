@@ -33,7 +33,7 @@
 #include <osl/conditn.hxx>
 #include <osl/thread.h>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <i18nlangtag/lang.h>
@@ -205,12 +205,12 @@ class LngXStringKeyMap : public ::cppu::WeakImplHelper<css::container::XStringKe
 public:
     LngXStringKeyMap();
 
-    virtual css::uno::Any SAL_CALL getValue(const OUString& aKey) override;
+    virtual cpo::uno::Any SAL_CALL getValue(const OUString& aKey) override;
     virtual bool SAL_CALL hasValue(const OUString& aKey) override;
-    virtual void SAL_CALL insertValue(const OUString& aKey, const css::uno::Any& aValue) override;
+    virtual void SAL_CALL insertValue(const OUString& aKey, const cpo::uno::Any& aValue) override;
     virtual ::sal_Int32 SAL_CALL getCount() override;
     virtual OUString SAL_CALL getKeyByIndex(::sal_Int32 nIndex) override;
-    virtual css::uno::Any SAL_CALL getValueByIndex(::sal_Int32 nIndex) override;
+    virtual cpo::uno::Any SAL_CALL getValueByIndex(::sal_Int32 nIndex) override;
 
 private:
     LngXStringKeyMap(LngXStringKeyMap const &) = delete;
@@ -218,7 +218,7 @@ private:
 
     ~LngXStringKeyMap() override{};
 
-    std::map<OUString, css::uno::Any> maMap;
+    std::map<OUString, cpo::uno::Any> maMap;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

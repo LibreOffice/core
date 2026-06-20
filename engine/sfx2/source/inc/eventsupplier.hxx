@@ -55,10 +55,10 @@ public:
                                virtual ~SfxEvents_Impl() override;
 
     //  --- XNameReplace ---
-    virtual void SAL_CALL       replaceByName( const OUString & aName, const css::uno::Any & aElement ) override;
+    virtual void SAL_CALL       replaceByName( const OUString & aName, const cpo::uno::Any & aElement ) override;
 
     //  --- XNameAccess ( parent of XNameReplace ) ---
-    virtual css::uno::Any SAL_CALL        getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL        getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL   hasByName( const OUString& aName ) override;
 
@@ -73,8 +73,8 @@ public:
     virtual void SAL_CALL       disposing( const css::lang::EventObject& Source ) override;
 
     // convert and normalize
-    static std::unique_ptr<SvxMacro>  ConvertToMacro( const css::uno::Any& rElement, SfxObjectShell* pDoc );
-    static void                 NormalizeMacro( const css::uno::Any& rIn, css::uno::Any& rOut, SfxObjectShell* pDoc );
+    static std::unique_ptr<SvxMacro>  ConvertToMacro( const cpo::uno::Any& rElement, SfxObjectShell* pDoc );
+    static void                 NormalizeMacro( const cpo::uno::Any& rIn, cpo::uno::Any& rOut, SfxObjectShell* pDoc );
     static void                 NormalizeMacro(
                                     const ::comphelper::NamedValueCollection& i_eventDescriptor,
                                     ::comphelper::NamedValueCollection& o_normalizedDescriptor,

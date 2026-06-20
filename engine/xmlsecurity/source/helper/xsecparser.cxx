@@ -1513,7 +1513,7 @@ void SAL_CALL XSecParser::startElement(
         {
             throw css::xml::sax::SAXException(
                 u"xmlsecurity: unexpected root element"_ustr, nullptr,
-                css::uno::Any());
+                cpo::uno::Any());
         }
 
         pContext.reset(new DsigSignaturesContext(*this, std::move(pRewindMap)));
@@ -1538,7 +1538,7 @@ void SAL_CALL XSecParser::startElement(
     }
     catch (css::uno::Exception& )
     {//getCaughtException MUST be the first line in the catch block
-        css::uno::Any exc =  cppu::getCaughtException();
+        cpo::uno::Any exc =  cppu::getCaughtException();
         throw css::xml::sax::SAXException(
             u"xmlsecurity: Exception in XSecParser::startElement"_ustr,
             nullptr, exc);
@@ -1547,7 +1547,7 @@ void SAL_CALL XSecParser::startElement(
     {
         throw css::xml::sax::SAXException(
             u"xmlsecurity: unexpected exception in XSecParser::startElement"_ustr, nullptr,
-            css::uno::Any());
+            cpo::uno::Any());
     }
 }
 
@@ -1566,7 +1566,7 @@ void SAL_CALL XSecParser::endElement(const OUString& rName)
     }
     catch (css::uno::Exception& )
     {//getCaughtException MUST be the first line in the catch block
-        css::uno::Any exc =  cppu::getCaughtException();
+        cpo::uno::Any exc =  cppu::getCaughtException();
         throw css::xml::sax::SAXException(
             u"xmlsecurity: Exception in XSecParser::endElement"_ustr,
             nullptr, exc);
@@ -1575,7 +1575,7 @@ void SAL_CALL XSecParser::endElement(const OUString& rName)
     {
         throw css::xml::sax::SAXException(
             u"xmlsecurity: unexpected exception in XSecParser::endElement"_ustr, nullptr,
-            css::uno::Any());
+            cpo::uno::Any());
     }
 
     if (m_ContextStack.top()->m_pOldNamespaceMap)
@@ -1624,7 +1624,7 @@ void SAL_CALL XSecParser::setDocumentLocator( const css::uno::Reference< css::xm
  * XInitialization
  */
 void SAL_CALL XSecParser::initialize(
-    const css::uno::Sequence< css::uno::Any >& aArguments )
+    const css::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     aArguments[0] >>= m_xNextHandler;
 }

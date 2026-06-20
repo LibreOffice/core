@@ -237,8 +237,8 @@ namespace svt::table
         bool        markAllRowsAsSelected();
 
         void commitAccessibleEvent( sal_Int16 const i_eventID );
-        void commitCellEvent( sal_Int16 const i_eventID, const css::uno::Any& i_newValue, const css::uno::Any& i_oldValue );
-        void commitTableEvent( sal_Int16 const i_eventID, const css::uno::Any& i_newValue, const css::uno::Any& i_oldValue );
+        void commitCellEvent( sal_Int16 const i_eventID, const cpo::uno::Any& i_newValue, const cpo::uno::Any& i_oldValue );
+        void commitTableEvent( sal_Int16 const i_eventID, const cpo::uno::Any& i_newValue, const cpo::uno::Any& i_oldValue );
 
         // ITableControl
         virtual void                hideCursor() override;
@@ -306,7 +306,7 @@ namespace svt::table
     private:
         void            impl_commitAccessibleEvent(
                             sal_Int16 const i_eventID,
-                            css::uno::Any const & i_newValue
+                            cpo::uno::Any const & i_newValue
                         );
 
         /** toggles the cursor visibility

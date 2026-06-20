@@ -30,7 +30,7 @@ namespace desktop
     explicit DesktopContext( const css::uno::Reference< css::uno::XCurrentContext > & ctx);
 
         // XCurrentContext
-        virtual css::uno::Any SAL_CALL getValueByName( const OUString& Name ) override;
+        virtual cpo::uno::Any SAL_CALL getValueByName( const OUString& Name ) override;
 
     private:
             css::uno::Reference< css::uno::XCurrentContext > m_xNextContext;

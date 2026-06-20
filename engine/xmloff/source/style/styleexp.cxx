@@ -43,6 +43,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
@@ -80,7 +81,7 @@ void XMLStyleExport::exportStyleContent( const Reference< XStyle >& rStyle )
 
     try
     {
-        uno::Any aProperty = xPropSet->getPropertyValue( u"ParaStyleConditions"_ustr );
+        cpo::uno::Any aProperty = xPropSet->getPropertyValue( u"ParaStyleConditions"_ustr );
         uno::Sequence< beans::NamedValue > aSeq;
 
         aProperty >>= aSeq;

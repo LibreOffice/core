@@ -126,7 +126,7 @@ namespace svt
 
         // OPropertySetHelper overridden methods
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-                sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
+                sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
 
 
         // XExecutableDialog functions
@@ -139,8 +139,8 @@ namespace svt
 
         // XControlAccess functions
 
-        virtual void SAL_CALL setControlProperty( const OUString& aControlName, const OUString& aControlProperty, const css::uno::Any& aValue ) override;
-        virtual css::uno::Any SAL_CALL getControlProperty( const OUString& aControlName, const OUString& aControlProperty ) override;
+        virtual void SAL_CALL setControlProperty( const OUString& aControlName, const OUString& aControlProperty, const cpo::uno::Any& aValue ) override;
+        virtual cpo::uno::Any SAL_CALL getControlProperty( const OUString& aControlName, const OUString& aControlProperty ) override;
 
 
         // XControlInformation functions
@@ -159,7 +159,7 @@ namespace svt
         // XInitialization functions
 
 
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
 
         // misc
@@ -177,7 +177,7 @@ namespace svt
         */
         virtual bool    implHandleInitializationArgument(
                                 const OUString& _rName,
-                                const css::uno::Any& _rValue
+                                const cpo::uno::Any& _rValue
                             );
 
     private:

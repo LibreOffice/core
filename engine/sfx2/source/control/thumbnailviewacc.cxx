@@ -308,7 +308,7 @@ void ThumbnailViewAcc::ThrowIfDisposed()
     DBG_ASSERT (mpThumbnailView!=nullptr, "ValueSetAcc not disposed but mpThumbnailView == NULL");
 }
 
-void ThumbnailViewAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
+void ThumbnailViewAcc::FireAccessibleEvent( short nEventId, const cpo::uno::Any& rOldValue, const cpo::uno::Any& rNewValue )
 {
     NotifyAccessibleEvent(nEventId, rOldValue, rNewValue);
 }
@@ -321,7 +321,7 @@ bool ThumbnailViewAcc::HasAccessibleListeners() const
 void ThumbnailViewAcc::GetFocus()
 {
     // Broadcast the state change.
-    css::uno::Any aOldState, aNewState;
+    cpo::uno::Any aOldState, aNewState;
     aNewState <<= css::accessibility::AccessibleStateType::FOCUSED;
     FireAccessibleEvent(
         css::accessibility::AccessibleEventId::STATE_CHANGED,
@@ -331,7 +331,7 @@ void ThumbnailViewAcc::GetFocus()
 void ThumbnailViewAcc::LoseFocus()
 {
     // Broadcast the state change.
-    css::uno::Any aOldState, aNewState;
+    cpo::uno::Any aOldState, aNewState;
     aOldState <<= css::accessibility::AccessibleStateType::FOCUSED;
     FireAccessibleEvent(
         css::accessibility::AccessibleEventId::STATE_CHANGED,

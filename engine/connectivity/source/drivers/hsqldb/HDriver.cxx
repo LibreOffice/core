@@ -61,6 +61,7 @@ namespace connectivity
 
     using namespace hsqldb;
     using namespace css::uno;
+using namespace cpo::uno;
     using namespace css::sdbc;
     using namespace css::sdbcx;
     using namespace css::beans;
@@ -883,7 +884,7 @@ namespace connectivity
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 connectivity_hsqldb_ODriverDelegator_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new connectivity::ODriverDelegator(context));
 }

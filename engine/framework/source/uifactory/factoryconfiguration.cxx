@@ -38,6 +38,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
@@ -194,9 +195,9 @@ void ConfigurationAccess_ControllerFactory::readConfigurationData()
 
     if ( !m_bConfigAccessInitialized )
     {
-        uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+        uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", uno::Any(m_sRoot)}
+            {"nodepath", cpo::uno::Any(m_sRoot)}
         }));
         try
         {

@@ -48,7 +48,7 @@ namespace logging
     using ::com::sun::star::logging::XLogger;
     using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::container::XNameContainer;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::lang::XSingleServiceFactory;

@@ -17,7 +17,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 using namespace css;
@@ -46,7 +46,8 @@ uno::Reference<drawing::XControlShape> OOO_DLLPUBLIC_TEST createControlShape(
         uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet(aComponent, uno::UNO_QUERY_THROW);
     xPropertySet->setPropertyValue(
-        u"DefaultControl"_ustr, uno::Any(OUString::Concat("com.sun.star.form.control.") + r_aKind));
+        u"DefaultControl"_ustr,
+        cpo::uno::Any(OUString::Concat("com.sun.star.form.control.") + r_aKind));
     uno::Reference<awt::XControlModel> xControlModel(aComponent, uno::UNO_QUERY_THROW);
 
     xControlShape->setSize(awt::Size(nHeight, nWidth));

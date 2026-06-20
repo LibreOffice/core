@@ -17,7 +17,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <officecfg/Office/UI.hxx>
@@ -43,7 +43,7 @@ getSettingsForFilterOptions(const OUString& filter,
     if (!xNameContainer->hasByName(filter))
     {
         auto xFactory = xNameContainer.queryThrow<css::lang::XSingleServiceFactory>();
-        xNameContainer->insertByName(filter, css::uno::Any(xFactory->createInstance()));
+        xNameContainer->insertByName(filter, cpo::uno::Any(xFactory->createInstance()));
     }
     return xNameContainer->getByName(filter).query<css::beans::XPropertySet>();
 }

@@ -64,11 +64,11 @@ public:
         return SAL_N_ELEMENTS(spnDefColorTable8);
     }
 
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
+    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         if ( Index < 0 || Index >= getCount() )
             throw lang::IndexOutOfBoundsException();
-        return uno::Any( sal_Int32( spnDefColorTable8[ Index ] ) );
+        return cpo::uno::Any( sal_Int32( spnDefColorTable8[ Index ] ) );
     }
 
     // Methods XElementAccess

@@ -59,7 +59,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public InterceptedInteraction
 
 
             /** @short  contains the interaction request, which should be intercepted. */
-            css::uno::Any Request;
+            cpo::uno::Any Request;
 
 
             /** @short  specify the fix continuation, which must be selected, if the
@@ -87,7 +87,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public InterceptedInteraction
             {
                 Handle     = INVALID_HANDLE;
             }
-            InterceptedRequest(css::uno::Any Request_, css::uno::Type Continuation_, sal_Int32 Handle_)
+            InterceptedRequest(cpo::uno::Any Request_, css::uno::Type Continuation_, sal_Int32 Handle_)
                 : Request(std::move(Request_)), Continuation(std::move(Continuation_)), Handle(Handle_)
             {
             }

@@ -65,7 +65,7 @@ ShellJob::~ShellJob()
 {
 }
 
-css::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::NamedValue >& lJobArguments)
+cpo::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::NamedValue >& lJobArguments)
 {
     ::comphelper::SequenceAsHashMap lArgs  (lJobArguments);
     /** address job configuration inside argument set provided on method execute(). */
@@ -88,7 +88,7 @@ css::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::N
     // do it
     bool bDone = impl_execute(sRealCommand, lCommandArguments, bCheckExitCode);
     if (! bDone)
-        return css::uno::Any();
+        return cpo::uno::Any();
 
     // Job was done ... user configured deactivation of this job
     // in such case.
@@ -97,13 +97,13 @@ css::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::N
 
     // There was no decision about deactivation of this job.
     // So we have to return nothing here !
-    return css::uno::Any();
+    return cpo::uno::Any();
 }
 
-css::uno::Any ShellJob::impl_generateAnswer4Deactivation()
+cpo::uno::Any ShellJob::impl_generateAnswer4Deactivation()
 {
-    css::uno::Sequence< css::beans::NamedValue > aAnswer { { JobConst::ANSWER_DEACTIVATE_JOB, css::uno::Any(true) } };
-    return css::uno::Any(aAnswer);
+    css::uno::Sequence< css::beans::NamedValue > aAnswer { { JobConst::ANSWER_DEACTIVATE_JOB, cpo::uno::Any(true) } };
+    return cpo::uno::Any(aAnswer);
 }
 
 OUString ShellJob::impl_substituteCommandVariables(const OUString& sCommand)
@@ -160,7 +160,7 @@ bool ShellJob::impl_execute(const OUString&                       sCommand      
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_ShellJob_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::ShellJob(context));
 }

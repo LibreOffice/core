@@ -30,7 +30,7 @@
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 
 namespace chart::wrapper
 {
@@ -43,7 +43,7 @@ WrappedBarPositionProperty_Base::WrappedBarPositionProperty_Base(
                 , OUString aInnerSequencePropertyName
                 , sal_Int32 nDefaultValue
                 , std::shared_ptr<Chart2ModelContact> spChart2ModelContact )
-            : WrappedDefaultProperty( rOuterName, OUString(), uno::Any( nDefaultValue ) )
+            : WrappedDefaultProperty( rOuterName, OUString(), cpo::uno::Any( nDefaultValue ) )
             , m_nDimensionIndex(0)
             , m_nAxisIndex(0)
             , m_spChart2ModelContact(std::move( spChart2ModelContact ))
@@ -95,7 +95,7 @@ void WrappedBarPositionProperty_Base::setPropertyValue( const Any& rOuterValue, 
             }
             pBarPositionSequence[m_nAxisIndex] = nNewValue;
 
-            chartType->setPropertyValue( m_InnerSequencePropertyName, uno::Any( aBarPositionSequence ) );
+            chartType->setPropertyValue( m_InnerSequencePropertyName, cpo::uno::Any( aBarPositionSequence ) );
         }
         catch( uno::Exception& e )
         {

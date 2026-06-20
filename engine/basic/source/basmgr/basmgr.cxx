@@ -114,7 +114,7 @@ public:
         , maLibName(std::move( aLibName )) {}
 
     static void insertLibraryImpl( const uno::Reference< script::XLibraryContainer >& xScriptCont, BasicManager* pMgr,
-                                   const uno::Any& aLibAny, const OUString& aLibName );
+                                   const cpo::uno::Any& aLibAny, const OUString& aLibName );
     static void addLibraryModulesImpl( BasicManager const * pMgr, const uno::Reference< container::XNameAccess >& xLibNameAccess,
                                        std::u16string_view aLibName );
 
@@ -133,7 +133,7 @@ public:
 
 
 void BasMgrContainerListenerImpl::insertLibraryImpl( const uno::Reference< script::XLibraryContainer >& xScriptCont,
-    BasicManager* pMgr, const uno::Any& aLibAny, const OUString& aLibName )
+    BasicManager* pMgr, const cpo::uno::Any& aLibAny, const OUString& aLibName )
 {
     Reference< container::XNameAccess > xLibNameAccess;
     aLibAny >>= xLibNameAccess;
@@ -171,7 +171,7 @@ void BasMgrContainerListenerImpl::addLibraryModulesImpl( BasicManager const * pM
 
     for (const OUString& aModuleName : xLibNameAccess->getElementNames())
     {
-        uno::Any aElement = xLibNameAccess->getByName( aModuleName );
+        cpo::uno::Any aElement = xLibNameAccess->getByName( aModuleName );
         OUString aMod;
         aElement >>= aMod;
         uno::Reference< vba::XVBAModuleInfo > xVBAModuleInfo( xLibNameAccess, uno::UNO_QUERY );
@@ -485,7 +485,7 @@ static void copyToLibraryContainer( StarBASIC* pBasic, const LibraryContainerInf
     if( !xScriptCont->hasByName( aLibName ) )
         xScriptCont->createLibrary( aLibName );
 
-    uno::Any aLibAny = xScriptCont->getByName( aLibName );
+    cpo::uno::Any aLibAny = xScriptCont->getByName( aLibName );
     uno::Reference< container::XNameContainer > xLib;
     aLibAny >>= xLib;
     if ( !xLib.is() )
@@ -497,7 +497,7 @@ static void copyToLibraryContainer( StarBASIC* pBasic, const LibraryContainerInf
         if( !xLib->hasByName( aModName ) )
         {
             OUString aSource = pModule->GetSource();
-            uno::Any aSourceAny;
+            cpo::uno::Any aSourceAny;
             aSourceAny <<= aSource;
             xLib->insertByName( aModName, aSourceAny );
         }
@@ -534,7 +534,7 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
         {
             for(const auto& rScriptLibName : aScriptLibNames)
             {
-                uno::Any aLibAny = xScriptCont->getByName( rScriptLibName );
+                cpo::uno::Any aLibAny = xScriptCont->getByName( rScriptLibName );
 
                 if ( rScriptLibName == "Standard" || rScriptLibName == "VBAProject")
                     xScriptCont->loadLibrary( rScriptLibName );
@@ -573,8 +573,8 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
         }
     }
 
-    SetGlobalUNOConstant( u"BasicLibraries"_ustr, uno::Any( maContainerInfo.mxScriptCont ) );
-    SetGlobalUNOConstant( u"DialogLibraries"_ustr, uno::Any( maContainerInfo.mxDialogCont ) );
+    SetGlobalUNOConstant( u"BasicLibraries"_ustr, cpo::uno::Any( maContainerInfo.mxScriptCont ) );
+    SetGlobalUNOConstant( u"DialogLibraries"_ustr, cpo::uno::Any( maContainerInfo.mxDialogCont ) );
 }
 
 BasicManager::BasicManager( StarBASIC* pSLib, OUString const * pLibPath, bool bDocMgr ) : mbDocMgr( bDocMgr )
@@ -1350,7 +1350,7 @@ bool BasicManager::IsBasicModified() const
 }
 
 
-bool BasicManager::GetGlobalUNOConstant( const OUString& rName, uno::Any& aOut )
+bool BasicManager::GetGlobalUNOConstant( const OUString& rName, cpo::uno::Any& aOut )
 {
     bool bRes = false;
     StarBASIC* pStandardLib = GetStdLib();
@@ -1360,7 +1360,7 @@ bool BasicManager::GetGlobalUNOConstant( const OUString& rName, uno::Any& aOut )
     return bRes;
 }
 
-void BasicManager::SetGlobalUNOConstant( const OUString& rName, const uno::Any& _rValue, css::uno::Any* pOldValue )
+void BasicManager::SetGlobalUNOConstant( const OUString& rName, const cpo::uno::Any& _rValue, cpo::uno::Any* pOldValue )
 {
     StarBASIC* pStandardLib = GetStdLib();
     OSL_PRECOND( pStandardLib, "BasicManager::SetGlobalUNOConstant: no lib to insert into!" );
@@ -1649,15 +1649,15 @@ public:
     virtual bool SAL_CALL hasElements() override;
 
     // Methods XNameAccess
-    virtual uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // Methods XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement ) override;
+    virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
 
     // Methods XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const uno::Any& aElement ) override;
+    virtual void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
     virtual void SAL_CALL removeByName( const OUString& Name ) override;
 };
 
@@ -1676,13 +1676,13 @@ bool ModuleContainer_Impl::hasElements()
 }
 
 // Methods XNameAccess
-uno::Any ModuleContainer_Impl::getByName( const OUString& aName )
+cpo::uno::Any ModuleContainer_Impl::getByName( const OUString& aName )
 {
     SbModule* pMod = mpLib ? mpLib->FindModule( aName ) : nullptr;
     if( !pMod )
         throw container::NoSuchElementException();
     uno::Reference< script::XStarBasicModuleInfo > xMod = new ModuleInfo_Impl( aName, u"StarBasic"_ustr, pMod->GetSource() );
-    uno::Any aRetAny;
+    cpo::uno::Any aRetAny;
     aRetAny <<= xMod;
     return aRetAny;
 }
@@ -1708,7 +1708,7 @@ bool ModuleContainer_Impl::hasByName( const OUString& aName )
 
 
 // Methods XNameReplace
-void ModuleContainer_Impl::replaceByName( const OUString& aName, const uno::Any& aElement )
+void ModuleContainer_Impl::replaceByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
     removeByName( aName );
     insertByName( aName, aElement );
@@ -1716,7 +1716,7 @@ void ModuleContainer_Impl::replaceByName( const OUString& aName, const uno::Any&
 
 
 // Methods XNameContainer
-void ModuleContainer_Impl::insertByName( const OUString& aName, const uno::Any& aElement )
+void ModuleContainer_Impl::insertByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
     uno::Type aModuleType = cppu::UnoType<script::XStarBasicModuleInfo>::get();
     const uno::Type& aAnyType = aElement.getValueType();
@@ -1780,15 +1780,15 @@ public:
     virtual bool SAL_CALL hasElements() override;
 
     // Methods XNameAccess
-    virtual uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // Methods XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement ) override;
+    virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
 
     // Methods XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const uno::Any& aElement ) override;
+    virtual void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
     virtual void SAL_CALL removeByName( const OUString& Name ) override;
 };
 
@@ -1820,7 +1820,7 @@ bool DialogContainer_Impl::hasElements()
 }
 
 // Methods XNameAccess
-uno::Any DialogContainer_Impl::getByName( const OUString& aName )
+cpo::uno::Any DialogContainer_Impl::getByName( const OUString& aName )
 {
     SbxVariable* pVar = mpLib->GetObjects()->Find( aName, SbxClassType::DontCare );
     SbxObject* pObj = dynamic_cast<SbxObject*>(pVar);
@@ -1832,7 +1832,7 @@ uno::Any DialogContainer_Impl::getByName( const OUString& aName )
     uno::Reference< script::XStarBasicDialogInfo > xDialog =
         new DialogInfo_Impl(aName, implGetDialogData(pObj));
 
-    uno::Any aRetAny;
+    cpo::uno::Any aRetAny;
     aRetAny <<= xDialog;
     return aRetAny;
 }
@@ -1872,7 +1872,7 @@ bool DialogContainer_Impl::hasByName( const OUString& aName )
 
 
 // Methods XNameReplace
-void DialogContainer_Impl::replaceByName( const OUString& aName, const uno::Any& aElement )
+void DialogContainer_Impl::replaceByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
     removeByName( aName );
     insertByName( aName, aElement );
@@ -1880,7 +1880,7 @@ void DialogContainer_Impl::replaceByName( const OUString& aName, const uno::Any&
 
 
 // Methods XNameContainer
-void DialogContainer_Impl::insertByName( const OUString&, const uno::Any& aElement )
+void DialogContainer_Impl::insertByName( const OUString&, const cpo::uno::Any& aElement )
 {
     uno::Type aModuleType = cppu::UnoType<script::XStarBasicDialogInfo>::get();
     const uno::Type& aAnyType = aElement.getValueType();
@@ -1919,15 +1919,15 @@ public:
     virtual bool SAL_CALL hasElements() override;
 
     // Methods XNameAccess
-    virtual uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // Methods XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement ) override;
+    virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
 
     // Methods XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const uno::Any& aElement ) override;
+    virtual void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
     virtual void SAL_CALL removeByName( const OUString& Name ) override;
 };
 
@@ -1947,9 +1947,9 @@ bool LibraryContainer_Impl::hasElements()
 }
 
 // Methods XNameAccess
-uno::Any LibraryContainer_Impl::getByName( const OUString& aName )
+cpo::uno::Any LibraryContainer_Impl::getByName( const OUString& aName )
 {
-    uno::Any aRetAny;
+    cpo::uno::Any aRetAny;
     if( !mpMgr->HasLib( aName ) )
         throw container::NoSuchElementException();
     StarBASIC* pLib = mpMgr->GetLib( aName );
@@ -2008,14 +2008,14 @@ bool LibraryContainer_Impl::hasByName( const OUString& aName )
 }
 
 // Methods XNameReplace
-void LibraryContainer_Impl::replaceByName( const OUString& aName, const uno::Any& aElement )
+void LibraryContainer_Impl::replaceByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
     removeByName( aName );
     insertByName( aName, aElement );
 }
 
 // Methods XNameContainer
-void LibraryContainer_Impl::insertByName( const OUString&, const uno::Any& )
+void LibraryContainer_Impl::insertByName( const OUString&, const cpo::uno::Any& )
 {
     // TODO: Insert a complete Library?!
 }

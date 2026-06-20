@@ -253,7 +253,7 @@ OString lcl_getParagraphBodyText(const uno::Reference<text::XTextContent>& xText
     uno::Reference<container::XEnumeration> xTextPortions = xTextPortionEnumerationAccess->createEnumeration();
     while (xTextPortions->hasMoreElements())
     {
-        uno::Any elem = xTextPortions->nextElement();
+        cpo::uno::Any elem = xTextPortions->nextElement();
 
         //TODO: Consider including hidden and conditional texts/portions.
         OUString aTextPortionType;
@@ -715,7 +715,7 @@ static void insertFieldToDocument(uno::Reference<text::XText> const & rxText, rt
                            OUString const & rsKey)
 {
     rtl::Reference<SwXTextField> xField = SwXTextField::CreateXTextField(nullptr, nullptr, SwServiceType::FieldTypeDocInfoCustom);
-    xField->setPropertyValue(UNO_NAME_NAME, uno::Any(rsKey));
+    xField->setPropertyValue(UNO_NAME_NAME, cpo::uno::Any(rsKey));
     uno::Reference<text::XTextContent> xTextContent(xField);
 
     rxText->insertTextContent(static_cast<text::XSentenceCursor*>(rxParagraphCursor.get()), xTextContent, false);
@@ -855,7 +855,7 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
         bool bHeaderIsOn = false;
         xPageStyle->getPropertyValue(UNO_NAME_HEADER_IS_ON) >>= bHeaderIsOn;
         if (!bHeaderIsOn)
-            xPageStyle->setPropertyValue(UNO_NAME_HEADER_IS_ON, uno::Any(true));
+            xPageStyle->setPropertyValue(UNO_NAME_HEADER_IS_ON, cpo::uno::Any(true));
         uno::Reference<text::XText> xHeaderText;
         xPageStyle->getPropertyValue(UNO_NAME_HEADER_TEXT) >>= xHeaderText;
         equaliseNumberOfParagraph(rResults, xHeaderText);
@@ -864,7 +864,7 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
         bool bFooterIsOn = false;
         xPageStyle->getPropertyValue(UNO_NAME_FOOTER_IS_ON) >>= bFooterIsOn;
         if (!bFooterIsOn)
-            xPageStyle->setPropertyValue(UNO_NAME_FOOTER_IS_ON, uno::Any(true));
+            xPageStyle->setPropertyValue(UNO_NAME_FOOTER_IS_ON, cpo::uno::Any(true));
         uno::Reference<text::XText> xFooterText;
         xPageStyle->getPropertyValue(UNO_NAME_FOOTER_TEXT) >>= xFooterText;
         equaliseNumberOfParagraph(rResults, xFooterText);
@@ -934,13 +934,13 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
 
                     if (rResult.msName == "BOLD")
                     {
-                        xHeaderParagraphCursor->setPropertyValue(u"CharWeight"_ustr, uno::Any(awt::FontWeight::BOLD));
-                        xFooterParagraphCursor->setPropertyValue(u"CharWeight"_ustr, uno::Any(awt::FontWeight::BOLD));
+                        xHeaderParagraphCursor->setPropertyValue(u"CharWeight"_ustr, cpo::uno::Any(awt::FontWeight::BOLD));
+                        xFooterParagraphCursor->setPropertyValue(u"CharWeight"_ustr, cpo::uno::Any(awt::FontWeight::BOLD));
                     }
                     else
                     {
-                        xHeaderParagraphCursor->setPropertyValue(u"CharWeight"_ustr, uno::Any(awt::FontWeight::NORMAL));
-                        xFooterParagraphCursor->setPropertyValue(u"CharWeight"_ustr, uno::Any(awt::FontWeight::NORMAL));
+                        xHeaderParagraphCursor->setPropertyValue(u"CharWeight"_ustr, cpo::uno::Any(awt::FontWeight::NORMAL));
+                        xFooterParagraphCursor->setPropertyValue(u"CharWeight"_ustr, cpo::uno::Any(awt::FontWeight::NORMAL));
                     }
                 }
                 break;
@@ -1007,7 +1007,7 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
 
         // Check font weight
         uno::Reference<beans::XPropertySet> xParagraphPropertySet(xTextPortionEnumerationAccess, uno::UNO_QUERY_THROW);
-        uno::Any aAny = xParagraphPropertySet->getPropertyValue(u"CharWeight"_ustr);
+        cpo::uno::Any aAny = xParagraphPropertySet->getPropertyValue(u"CharWeight"_ustr);
 
         OUString sWeight = (aAny.get<float>() >= awt::FontWeight::BOLD) ? u"BOLD"_ustr : u"NORMAL"_ustr;
 
@@ -1117,7 +1117,7 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
             bool bHeaderIsOn = false;
             xPageStyle->getPropertyValue(UNO_NAME_HEADER_IS_ON) >>= bHeaderIsOn;
             if (!bHeaderIsOn)
-                xPageStyle->setPropertyValue(UNO_NAME_HEADER_IS_ON, uno::Any(true));
+                xPageStyle->setPropertyValue(UNO_NAME_HEADER_IS_ON, cpo::uno::Any(true));
 
             // If the header already contains a document header field, no need to do anything.
             uno::Reference<text::XText> xHeaderText;
@@ -1129,7 +1129,7 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
                 {
                     // Append a field to the end of the header text.
                     rtl::Reference<SwXTextField> xField = SwXTextField::CreateXTextField(nullptr, nullptr, SwServiceType::FieldTypeDocInfoCustom);
-                    xField->setPropertyValue(UNO_NAME_NAME, uno::Any(SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY() + SfxClassificationHelper::PROP_DOCHEADER()));
+                    xField->setPropertyValue(UNO_NAME_NAME, cpo::uno::Any(SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY() + SfxClassificationHelper::PROP_DOCHEADER()));
                     uno::Reference<text::XTextContent> xTextContent(xField);
                     xHeaderText->insertTextContent(xHeaderText->getEnd(), xTextContent, /*bAbsorb=*/false);
                 }
@@ -1146,7 +1146,7 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
             bool bFooterIsOn = false;
             xPageStyle->getPropertyValue(UNO_NAME_FOOTER_IS_ON) >>= bFooterIsOn;
             if (!bFooterIsOn)
-                xPageStyle->setPropertyValue(UNO_NAME_FOOTER_IS_ON, uno::Any(true));
+                xPageStyle->setPropertyValue(UNO_NAME_FOOTER_IS_ON, cpo::uno::Any(true));
 
             // If the footer already contains a document header field, no need to do anything.
             uno::Reference<text::XText> xFooterText;
@@ -1156,7 +1156,7 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
             {
                 // Append a field to the end of the footer text.
                 rtl::Reference<SwXTextField> xField = SwXTextField::CreateXTextField(nullptr, nullptr, SwServiceType::FieldTypeDocInfoCustom);
-                xField->setPropertyValue(UNO_NAME_NAME, uno::Any(sFooter));
+                xField->setPropertyValue(UNO_NAME_NAME, cpo::uno::Any(sFooter));
                 uno::Reference<text::XTextContent> xTextContent(xField);
                 xFooterText->insertTextContent(xFooterText->getEnd(), xTextContent, /*bAbsorb=*/false);
             }
@@ -1555,30 +1555,30 @@ static void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
     aMatrix.Line3.Column2 = 0;
     aMatrix.Line3.Column3 = 1;
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue(UNO_NAME_ANCHOR_TYPE, uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+    xPropertySet->setPropertyValue(UNO_NAME_ANCHOR_TYPE, cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
     uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY);
     xHeaderText->insertTextContent(xHeaderText->getEnd(), xTextContent, false);
 
     // The remaining properties have to be set after the shape is inserted: do that in one batch to avoid flickering.
     uno::Reference<document::XActionLockable> xLockable(xShape, uno::UNO_QUERY);
     xLockable->addActionLock();
-    xPropertySet->setPropertyValue(UNO_NAME_FILLCOLOR, uno::Any(static_cast<sal_Int32>(nColor)));
-    xPropertySet->setPropertyValue(UNO_NAME_FILLSTYLE, uno::Any(drawing::FillStyle_SOLID));
-    xPropertySet->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, uno::Any(nTransparency));
-    xPropertySet->setPropertyValue(UNO_NAME_LINESTYLE, uno::Any(drawing::LineStyle_NONE));
-    xPropertySet->setPropertyValue(UNO_NAME_OPAQUE, uno::Any(false));
-    xPropertySet->setPropertyValue(UNO_NAME_TEXT_AUTOGROWHEIGHT, uno::Any(false));
-    xPropertySet->setPropertyValue(UNO_NAME_TEXT_AUTOGROWWIDTH, uno::Any(false));
-    xPropertySet->setPropertyValue(UNO_NAME_TEXT_MINFRAMEHEIGHT, uno::Any(nHeight));
-    xPropertySet->setPropertyValue(UNO_NAME_TEXT_MINFRAMEWIDTH, uno::Any(nWidth));
-    xPropertySet->setPropertyValue(UNO_NAME_TEXT_WRAP, uno::Any(text::WrapTextMode_THROUGH));
-    xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT_RELATION, uno::Any(text::RelOrientation::PAGE_PRINT_AREA));
-    xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT_RELATION, uno::Any(text::RelOrientation::PAGE_PRINT_AREA));
-    xPropertySet->setPropertyValue(UNO_NAME_CHAR_FONT_NAME, uno::Any(sFont));
-    xPropertySet->setPropertyValue(UNO_NAME_CHAR_FONT_NAME_ASIAN, uno::Any(sFont));
-    xPropertySet->setPropertyValue(UNO_NAME_CHAR_FONT_NAME_COMPLEX, uno::Any(sFont));
-    xPropertySet->setPropertyValue(UNO_NAME_CHAR_HEIGHT, uno::Any(WATERMARK_AUTO_SIZE));
-    xPropertySet->setPropertyValue(u"Transformation"_ustr, uno::Any(aMatrix));
+    xPropertySet->setPropertyValue(UNO_NAME_FILLCOLOR, cpo::uno::Any(static_cast<sal_Int32>(nColor)));
+    xPropertySet->setPropertyValue(UNO_NAME_FILLSTYLE, cpo::uno::Any(drawing::FillStyle_SOLID));
+    xPropertySet->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, cpo::uno::Any(nTransparency));
+    xPropertySet->setPropertyValue(UNO_NAME_LINESTYLE, cpo::uno::Any(drawing::LineStyle_NONE));
+    xPropertySet->setPropertyValue(UNO_NAME_OPAQUE, cpo::uno::Any(false));
+    xPropertySet->setPropertyValue(UNO_NAME_TEXT_AUTOGROWHEIGHT, cpo::uno::Any(false));
+    xPropertySet->setPropertyValue(UNO_NAME_TEXT_AUTOGROWWIDTH, cpo::uno::Any(false));
+    xPropertySet->setPropertyValue(UNO_NAME_TEXT_MINFRAMEHEIGHT, cpo::uno::Any(nHeight));
+    xPropertySet->setPropertyValue(UNO_NAME_TEXT_MINFRAMEWIDTH, cpo::uno::Any(nWidth));
+    xPropertySet->setPropertyValue(UNO_NAME_TEXT_WRAP, cpo::uno::Any(text::WrapTextMode_THROUGH));
+    xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT_RELATION, cpo::uno::Any(text::RelOrientation::PAGE_PRINT_AREA));
+    xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT_RELATION, cpo::uno::Any(text::RelOrientation::PAGE_PRINT_AREA));
+    xPropertySet->setPropertyValue(UNO_NAME_CHAR_FONT_NAME, cpo::uno::Any(sFont));
+    xPropertySet->setPropertyValue(UNO_NAME_CHAR_FONT_NAME_ASIAN, cpo::uno::Any(sFont));
+    xPropertySet->setPropertyValue(UNO_NAME_CHAR_FONT_NAME_COMPLEX, cpo::uno::Any(sFont));
+    xPropertySet->setPropertyValue(UNO_NAME_CHAR_HEIGHT, cpo::uno::Any(WATERMARK_AUTO_SIZE));
+    xPropertySet->setPropertyValue(u"Transformation"_ustr, cpo::uno::Any(aMatrix));
 
     uno::Reference<text::XTextRange> xTextRange(xShape, uno::UNO_QUERY);
     xTextRange->setString(rWatermark.GetText());
@@ -1590,7 +1590,7 @@ static void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
     auto aGeomPropVec = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aGeomPropSeq);
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"TextPath", uno::Any(true)},
+        {"TextPath", cpo::uno::Any(true)},
     }));
     auto it = std::find_if(aGeomPropVec.begin(), aGeomPropVec.end(), [](const beans::PropertyValue& rValue)
     {
@@ -1600,15 +1600,15 @@ static void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
         aGeomPropVec.push_back(comphelper::makePropertyValue(u"TextPath"_ustr, aPropertyValues));
     else
         it->Value <<= aPropertyValues;
-    xPropertySet->setPropertyValue(u"CustomShapeGeometry"_ustr, uno::Any(comphelper::containerToSequence(aGeomPropVec)));
+    xPropertySet->setPropertyValue(u"CustomShapeGeometry"_ustr, cpo::uno::Any(comphelper::containerToSequence(aGeomPropVec)));
 
     // tdf#108494, tdf#109313 the header height was switched to height of a watermark
     // and shape was moved to the lower part of a page, force position update
     xPropertySet->getPropertyValue(u"Transformation"_ustr) >>= aMatrix;
-    xPropertySet->setPropertyValue(u"Transformation"_ustr, uno::Any(aMatrix));
+    xPropertySet->setPropertyValue(u"Transformation"_ustr, cpo::uno::Any(aMatrix));
 
-    xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT, uno::Any(text::HoriOrientation::CENTER));
-    xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT, uno::Any(text::VertOrientation::CENTER));
+    xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT, cpo::uno::Any(text::HoriOrientation::CENTER));
+    xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT, cpo::uno::Any(text::VertOrientation::CENTER));
 
     xLockable->removeActionLock();
 }
@@ -1637,7 +1637,7 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
             if (bNoWatermark)
                 continue; // the style doesn't have any watermark - no need to do anything
 
-            xPageStyle->setPropertyValue(UNO_NAME_HEADER_IS_ON, uno::Any(true));
+            xPageStyle->setPropertyValue(UNO_NAME_HEADER_IS_ON, cpo::uno::Any(true));
         }
 
         // backup header height
@@ -1645,7 +1645,7 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
         sal_Int32 nOldValue;
         xPageStyle->getPropertyValue(UNO_NAME_HEADER_HEIGHT) >>= nOldValue;
         xPageStyle->getPropertyValue(UNO_NAME_HEADER_IS_DYNAMIC_HEIGHT) >>= bDynamicHeight;
-        xPageStyle->setPropertyValue(UNO_NAME_HEADER_IS_DYNAMIC_HEIGHT, uno::Any(false));
+        xPageStyle->setPropertyValue(UNO_NAME_HEADER_IS_DYNAMIC_HEIGHT, cpo::uno::Any(false));
 
         // If the header already contains a document header field, no need to do anything.
         uno::Reference<text::XText> xHeaderText;
@@ -1667,9 +1667,9 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
 
         // tdf#108494 the header height was switched to height of a watermark
         // and shape was moved to the lower part of a page
-        xPageStyle->setPropertyValue(UNO_NAME_HEADER_HEIGHT, uno::Any(sal_Int32(11)));
-        xPageStyle->setPropertyValue(UNO_NAME_HEADER_HEIGHT, uno::Any(nOldValue));
-        xPageStyle->setPropertyValue(UNO_NAME_HEADER_IS_DYNAMIC_HEIGHT, uno::Any(bDynamicHeight));
+        xPageStyle->setPropertyValue(UNO_NAME_HEADER_HEIGHT, cpo::uno::Any(sal_Int32(11)));
+        xPageStyle->setPropertyValue(UNO_NAME_HEADER_HEIGHT, cpo::uno::Any(nOldValue));
+        xPageStyle->setPropertyValue(UNO_NAME_HEADER_IS_DYNAMIC_HEIGHT, cpo::uno::Any(bDynamicHeight));
     }
 }
 

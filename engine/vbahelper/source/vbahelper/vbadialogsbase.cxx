@@ -27,10 +27,10 @@ using namespace ::com::sun::star;
     return 0;
 }
 
-uno::Any VbaDialogsBase::Item(const uno::Any& /* &aItem */)
+cpo::uno::Any VbaDialogsBase::Item(const cpo::uno::Any& /* &aItem */)
 {
     //#STUB
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

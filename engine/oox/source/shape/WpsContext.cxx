@@ -480,9 +480,9 @@ void lcl_setTextAnchorFromTextProps(const uno::Reference<beans::XPropertySet>& x
         default:
             eHorzAdjust = drawing::TextHorizontalAdjust_CENTER;
     }
-    xShapePropertySet->setPropertyValue(u"TextHorizontalAdjust"_ustr, uno::Any(eHorzAdjust));
+    xShapePropertySet->setPropertyValue(u"TextHorizontalAdjust"_ustr, cpo::uno::Any(eHorzAdjust));
     xShapePropertySet->setPropertyValue(u"TextVerticalAdjust"_ustr,
-                                        uno::Any(drawing::TextVerticalAdjust_TOP));
+                                        cpo::uno::Any(drawing::TextVerticalAdjust_TOP));
 }
 
 void lcl_setTextPropsToShape(const uno::Reference<beans::XPropertySet>& xShapePropertySet,
@@ -612,14 +612,14 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 if (nVert == XML_eaVert)
                 {
                     xPropertySet->setPropertyValue(u"TextWritingMode"_ustr,
-                                                   uno::Any(text::WritingMode_TB_RL));
+                                                   cpo::uno::Any(text::WritingMode_TB_RL));
                     xPropertySet->setPropertyValue(u"WritingMode"_ustr,
-                                                   uno::Any(text::WritingMode2::TB_RL));
+                                                   cpo::uno::Any(text::WritingMode2::TB_RL));
                 }
                 else if (nVert == XML_mongolianVert)
                 {
                     xPropertySet->setPropertyValue(u"WritingMode"_ustr,
-                                                   uno::Any(text::WritingMode2::TB_LR));
+                                                   cpo::uno::Any(text::WritingMode2::TB_LR));
                 }
                 else if (nVert == XML_wordArtVert || nVert == XML_wordArtVertRtl)
                 {
@@ -627,7 +627,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     // It will render all the text in 1 line.
                     // Map 'wordArtVertRtl' to 'wordArtVert', as they are the same now.
                     xPropertySet->setPropertyValue(u"WritingMode"_ustr,
-                                                   uno::Any(text::WritingMode2::STACKED));
+                                                   cpo::uno::Any(text::WritingMode2::STACKED));
                 }
                 else if (nVert != XML_horz) // cases XML_vert and XML_vert270
                 {
@@ -659,15 +659,15 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                         || (nVert == XML_vert270 && nRotate == 90))
                     {
                         xPropertySet->setPropertyValue(u"WritingMode"_ustr,
-                                                       uno::Any(text::WritingMode2::LR_TB));
+                                                       cpo::uno::Any(text::WritingMode2::LR_TB));
                         // ToDo: Remember original vert value and remove hack on export.
                     }
                     else if (nVert == XML_vert)
                         xPropertySet->setPropertyValue(u"WritingMode"_ustr,
-                                                       uno::Any(text::WritingMode2::TB_RL90));
+                                                       cpo::uno::Any(text::WritingMode2::TB_RL90));
                     else // nVert == XML_vert270
                         xPropertySet->setPropertyValue(u"WritingMode"_ustr,
-                                                       uno::Any(text::WritingMode2::BT_LR));
+                                                       cpo::uno::Any(text::WritingMode2::BT_LR));
                 }
 
                 if (bool bUpright = rAttribs.getBool(XML_upright, false))
@@ -679,7 +679,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     auto pGrabBag = aGrabBag.getArray();
                     pGrabBag[length].Name = u"Upright"_ustr;
                     pGrabBag[length].Value <<= bUpright;
-                    xPropertySet->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(aGrabBag));
+                    xPropertySet->setPropertyValue(u"InteropGrabBag"_ustr, cpo::uno::Any(aGrabBag));
                 }
 
                 auto xPropertySetInfo = xPropertySet->getPropertySetInfo();
@@ -707,7 +707,8 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                         if (!oInsets[i])
                             continue;
                         if (xPropertySetInfo && xPropertySetInfo->hasPropertyByName(aShapeProps[i]))
-                            xPropertySet->setPropertyValue(aShapeProps[i], uno::Any(*oInsets[i]));
+                            xPropertySet->setPropertyValue(aShapeProps[i],
+                                                           cpo::uno::Any(*oInsets[i]));
                         else
                             SAL_WARN("oox", "Property: " << aShapeProps[i] << " not supported");
                     }
@@ -722,7 +723,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                         drawing::TextVerticalAdjust eAdjust = drawingml::GetTextVerticalAdjust(
                             rAttribs.getToken(XML_anchor, XML_t));
                         xPropertySet->setPropertyValue(u"TextVerticalAdjust"_ustr,
-                                                       uno::Any(eAdjust));
+                                                       cpo::uno::Any(eAdjust));
                     }
                     else
                         SAL_WARN("oox", "Property: TextVerticalAdjust not supported");
@@ -732,7 +733,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 uno::Reference<text::XText> xText(mxShape, uno::UNO_QUERY);
                 if (xText)
                 {
-                    uno::Any xCharColor = xPropertySet->getPropertyValue(u"CharColor"_ustr);
+                    cpo::uno::Any xCharColor = xPropertySet->getPropertyValue(u"CharColor"_ustr);
                     Color aColor = COL_AUTO;
                     if ((xCharColor >>= aColor) && aColor != COL_AUTO)
                     {
@@ -797,7 +798,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 {
                     auto nWrappingType = rAttribs.getToken(XML_wrap, XML_square);
                     xPropertySet->setPropertyValue(u"TextWordWrap"_ustr,
-                                                   uno::Any(nWrappingType == XML_square));
+                                                   cpo::uno::Any(nWrappingType == XML_square));
                 }
                 else
                     SAL_WARN("oox", "Property: TextWordWrap not supported");
@@ -852,7 +853,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 if (xServiceInfo->supportsService(u"com.sun.star.text.TextFrame"_ustr))
                     xPropertySet->setPropertyValue(
                         u"FrameIsAutomaticHeight"_ustr,
-                        uno::Any(getBaseToken(nElementToken) == XML_spAutoFit));
+                        cpo::uno::Any(getBaseToken(nElementToken) == XML_spAutoFit));
                 else
                 {
                     auto xPropertySetInfo = xPropertySet->getPropertySetInfo();
@@ -861,7 +862,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     {
                         xPropertySet->setPropertyValue(
                             u"TextAutoGrowHeight"_ustr,
-                            uno::Any(getBaseToken(nElementToken) == XML_spAutoFit));
+                            cpo::uno::Any(getBaseToken(nElementToken) == XML_spAutoFit));
                     }
                     else
                         SAL_WARN("oox", "Property: TextAutoGrowHeight not supported");
@@ -882,7 +883,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     aCustomShapeGeometry[u"PresetTextWarp"_ustr] <<= preset;
                     xPropertySet->setPropertyValue(
                         u"CustomShapeGeometry"_ustr,
-                        uno::Any(aCustomShapeGeometry.getAsConstPropertyValueList()));
+                        cpo::uno::Any(aCustomShapeGeometry.getAsConstPropertyValueList()));
                 }
             }
             return new oox::drawingml::PresetTextShapeContext(
@@ -979,7 +980,7 @@ void WpsContext::onEndElement()
     pCustomShape->NbcSetText(sFrameContent);
 
     // Setting the property "TextBox" to false includes removing the attached frame from the shape.
-    xShapePropertySet->setPropertyValue(u"TextBox"_ustr, uno::Any(false));
+    xShapePropertySet->setPropertyValue(u"TextBox"_ustr, cpo::uno::Any(false));
 
     // Set the shape into text path mode, so that the text is drawn as Fontwork. Word renders a legacy
     // "text on path" without the legacy stretching, therefore use false for bFromWordArt.
@@ -1018,8 +1019,8 @@ void WpsContext::onEndElement()
         lcl_applyUsedTextPropsToAllTextRuns(xNewText, aTextPropVec);
 
     // Fontwork stretches the text to the given path. So adapt shape size to text is nonsensical.
-    xShapePropertySet->setPropertyValue(u"TextAutoGrowHeight"_ustr, uno::Any(false));
-    xShapePropertySet->setPropertyValue(u"TextAutoGrowWidth"_ustr, uno::Any(false));
+    xShapePropertySet->setPropertyValue(u"TextAutoGrowHeight"_ustr, cpo::uno::Any(false));
+    xShapePropertySet->setPropertyValue(u"TextAutoGrowWidth"_ustr, cpo::uno::Any(false));
 }
 }
 

@@ -65,17 +65,17 @@ public:
     ~IUnknownWrapper() override;
 
     //XInterface
-    css::uno::Any SAL_CALL queryInterface(const css::uno::Type& t) override;
+    cpo::uno::Any SAL_CALL queryInterface(const css::uno::Type& t) override;
 
     // XInvokation
     virtual css::uno::Reference< css::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  ) override;
-    virtual css::uno::Any SAL_CALL invoke( const OUString& aFunctionName,
-                                 const css::uno::Sequence< css::uno::Any >& aParams,
+    virtual cpo::uno::Any SAL_CALL invoke( const OUString& aFunctionName,
+                                 const css::uno::Sequence< cpo::uno::Any >& aParams,
                                  css::uno::Sequence< sal_Int16 >& aOutParamIndex,
-                                 css::uno::Sequence< css::uno::Any >& aOutParam ) override;
+                                 css::uno::Sequence< cpo::uno::Any >& aOutParam ) override;
     virtual void SAL_CALL setValue( const OUString& aPropertyName,
-                                    const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getValue( const OUString& aPropertyName ) override;
+                                    const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL getValue( const OUString& aPropertyName ) override;
     virtual bool SAL_CALL hasMethod( const OUString& aName ) override;
     virtual bool SAL_CALL hasProperty( const OUString& aName ) override;
 
@@ -84,13 +84,13 @@ public:
     // IUnknown or IDispatch within the function anyToVariant. The function asks
     // every UNO object for its XBridgeSupplier2 and if it is available uses it to convert
     // the object with its own supplier.
-    virtual css::uno::Any SAL_CALL createBridge( const css::uno::Any& modelDepObject,
+    virtual cpo::uno::Any SAL_CALL createBridge( const cpo::uno::Any& modelDepObject,
                                        const css::uno::Sequence< sal_Int8 >& aProcessId,
                                        sal_Int16 sourceModelType,
                                        sal_Int16 destModelType ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XDefaultProperty
     virtual OUString SAL_CALL getDefaultPropertyName(  ) override { return m_sDefaultMember; }
@@ -98,32 +98,32 @@ public:
     // XDefaultMethod
     virtual OUString SAL_CALL getDefaultMethodName(  ) override { return m_sDefaultMember; }
 
-    virtual css::uno::Any SAL_CALL invokeGetProperty( const OUString& aFunctionName, const css::uno::Sequence< css::uno::Any >& aParams, css::uno::Sequence< ::sal_Int16 >& aOutParamIndex, css::uno::Sequence< css::uno::Any >& aOutParam ) override;
-    virtual css::uno::Any SAL_CALL invokePutProperty( const OUString& aFunctionName, const css::uno::Sequence< css::uno::Any >& aParams, css::uno::Sequence< ::sal_Int16 >& aOutParamIndex, css::uno::Sequence< css::uno::Any >& aOutParam ) override;
+    virtual cpo::uno::Any SAL_CALL invokeGetProperty( const OUString& aFunctionName, const css::uno::Sequence< cpo::uno::Any >& aParams, css::uno::Sequence< ::sal_Int16 >& aOutParamIndex, css::uno::Sequence< cpo::uno::Any >& aOutParam ) override;
+    virtual cpo::uno::Any SAL_CALL invokePutProperty( const OUString& aFunctionName, const css::uno::Sequence< cpo::uno::Any >& aParams, css::uno::Sequence< ::sal_Int16 >& aOutParamIndex, css::uno::Sequence< cpo::uno::Any >& aOutParam ) override;
 
     // XDirectInvocation
-    virtual css::uno::Any SAL_CALL directInvoke( const OUString& aName, const css::uno::Sequence< css::uno::Any >& aParams ) override;
+    virtual cpo::uno::Any SAL_CALL directInvoke( const OUString& aName, const css::uno::Sequence< cpo::uno::Any >& aParams ) override;
     virtual bool SAL_CALL hasMember( const OUString& aName ) override;
 
 
-    css::uno::Any  invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
+    cpo::uno::Any  invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
                             const OUString& sFuncName,
-                            const css::uno::Sequence< css::uno::Any >& Params,
+                            const css::uno::Sequence< cpo::uno::Any >& Params,
                             css::uno::Sequence< sal_Int16 >& OutParamIndex,
-                            css::uno::Sequence< css::uno::Any >& OutParam);
+                            css::uno::Sequence< cpo::uno::Any >& OutParam);
 
 
 protected:
 
-    virtual css::uno::Any invokeWithDispIdUnoTlb(const OUString& sFunctionName,
-                                       const css::uno::Sequence< css::uno::Any >& Params,
+    virtual cpo::uno::Any invokeWithDispIdUnoTlb(const OUString& sFunctionName,
+                                       const css::uno::Sequence< cpo::uno::Any >& Params,
                                        css::uno::Sequence<sal_Int16 >& OutParamIndex,
-                                       css::uno::Sequence< css::uno::Any >& OutParam);
+                                       css::uno::Sequence< cpo::uno::Any >& OutParam);
     // Is used for OleObjectFactory service
-    virtual css::uno::Any invokeWithDispIdComTlb(const OUString& sFuncName,
-                                       const css::uno::Sequence< css::uno::Any >& Params,
+    virtual cpo::uno::Any invokeWithDispIdComTlb(const OUString& sFuncName,
+                                       const css::uno::Sequence< cpo::uno::Any >& Params,
                                        css::uno::Sequence< sal_Int16 >& OutParamIndex,
-                                       css::uno::Sequence< css::uno::Any >& OutParam);
+                                       css::uno::Sequence< cpo::uno::Any >& OutParam);
 
     // UnoConversionUtilities -------------------------------------------------------------------------------
     virtual css::uno::Reference<css::uno::XInterface> createUnoWrapperInstance() override;
@@ -197,7 +197,7 @@ protected:
         Thrown if no adequate FUNCDESC could be found.
     */
     void getFuncDescForInvoke(const OUString & sFuncName,
-                              const css::uno::Sequence<css::uno::Any> & seqArgs, FUNCDESC** pFuncDesc);
+                              const css::uno::Sequence<cpo::uno::Any> & seqArgs, FUNCDESC** pFuncDesc);
 
     // Finds out whether the wrapped IDispatch is a JScript Object. This is
     // done by

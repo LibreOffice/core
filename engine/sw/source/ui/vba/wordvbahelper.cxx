@@ -157,7 +157,7 @@ bool gotoSelectedObjectAnchor( const rtl::Reference<SwXTextDocument>& xModel )
     {
         uno::Reference< text::XTextRange > xTextRange( xTextContent->getAnchor(), uno::UNO_SET_THROW );
         uno::Reference< view::XSelectionSupplier > xSelectSupp( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
-        xSelectSupp->select( uno::Any( xTextRange ) );
+        xSelectSupp->select( cpo::uno::Any( xTextRange ) );
         isObjectSelected = true;
     }
     return isObjectSelected;

@@ -180,7 +180,7 @@ public:
         m_aComplexColor = rComplexColor;
     }
 
-    bool setComplexColorFromAny(css::uno::Any const& rValue);
+    bool setComplexColorFromAny(cpo::uno::Any const& rValue);
 
 
     Color           GetColorOut( bool bLeftOrTop = true ) const;

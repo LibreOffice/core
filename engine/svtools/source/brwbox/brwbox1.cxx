@@ -46,6 +46,7 @@ using namespace com::sun::star::accessibility::AccessibleTableModelChangeType;
 using com::sun::star::accessibility::AccessibleTableModelChange;
 using namespace com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace svt;
 
 namespace

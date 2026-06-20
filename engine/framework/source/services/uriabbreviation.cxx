@@ -67,7 +67,7 @@ OUString SAL_CALL UriAbbreviation::abbreviateString(const css::uno::Reference< c
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_UriAbbreviation_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::UriAbbreviation(context));
 }

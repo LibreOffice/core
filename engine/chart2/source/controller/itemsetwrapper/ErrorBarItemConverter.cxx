@@ -169,7 +169,7 @@ bool ErrorBarItemConverter::ApplySpecialItem(
                         nStyle = css::chart::ErrorBarStyle::FROM_DATA; break;
                 }
 
-                xErrorBarProp->setPropertyValue( u"ErrorBarStyle"_ustr , uno::Any( nStyle ));
+                xErrorBarProp->setPropertyValue( u"ErrorBarStyle"_ustr , cpo::uno::Any( nStyle ));
                 bChanged = true;
             }
         }
@@ -190,8 +190,8 @@ bool ErrorBarItemConverter::ApplySpecialItem(
             if( ! ( ::rtl::math::approxEqual( fPos, fValue ) &&
                     ::rtl::math::approxEqual( fNeg, fValue )))
             {
-                xErrorBarProp->setPropertyValue( u"PositiveError"_ustr , uno::Any( fValue ));
-                xErrorBarProp->setPropertyValue( u"NegativeError"_ustr , uno::Any( fValue ));
+                xErrorBarProp->setPropertyValue( u"PositiveError"_ustr , cpo::uno::Any( fValue ));
+                xErrorBarProp->setPropertyValue( u"NegativeError"_ustr , cpo::uno::Any( fValue ));
                 bChanged = true;
             }
         }
@@ -207,7 +207,7 @@ bool ErrorBarItemConverter::ApplySpecialItem(
 
             if( ! ::rtl::math::approxEqual( fPos, fValue ))
             {
-                GetPropertySet()->setPropertyValue( u"PositiveError"_ustr , uno::Any( fValue ));
+                GetPropertySet()->setPropertyValue( u"PositiveError"_ustr , cpo::uno::Any( fValue ));
                 bChanged = true;
             }
         }
@@ -225,7 +225,7 @@ bool ErrorBarItemConverter::ApplySpecialItem(
 
             if( ! ::rtl::math::approxEqual( fNeg, fValue ))
             {
-                xErrorBarProp->setPropertyValue( u"NegativeError"_ustr , uno::Any( fValue ));
+                xErrorBarProp->setPropertyValue( u"NegativeError"_ustr , cpo::uno::Any( fValue ));
                 bChanged = true;
             }
         }
@@ -248,8 +248,8 @@ bool ErrorBarItemConverter::ApplySpecialItem(
             if( bShowPos != bNewIndPos ||
                 bShowNeg != bNewIndNeg )
             {
-                xErrorBarProp->setPropertyValue( u"ShowPositiveError"_ustr , uno::Any( bNewIndPos ));
-                xErrorBarProp->setPropertyValue( u"ShowNegativeError"_ustr , uno::Any( bNewIndNeg ));
+                xErrorBarProp->setPropertyValue( u"ShowPositiveError"_ustr , cpo::uno::Any( bNewIndPos ));
+                xErrorBarProp->setPropertyValue( u"ShowNegativeError"_ustr , cpo::uno::Any( bNewIndNeg ));
                 bChanged = true;
             }
         }

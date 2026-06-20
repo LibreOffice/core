@@ -836,7 +836,7 @@ void GetDocStructureDocProps(tools::JsonWriter& rJsonWriter, const SwDocShell* p
         {
             const OUString& rKey = rProperty.Name;
             auto aNode = rJsonWriter.startNode(OUStringToOString(rKey, RTL_TEXTENCODING_UTF8));
-            uno::Any aValue = aUserDefinedPropertySet->getPropertyValue(rKey);
+            cpo::uno::Any aValue = aUserDefinedPropertySet->getPropertyValue(rKey);
 
             OUString aAnyType = aValue.getValueTypeName();
             rJsonWriter.put("type", aAnyType);
@@ -1148,7 +1148,7 @@ sal_Int32 WriteLinkTargets(const uno::Reference<container::XNameAccess>& xLinks,
     sal_Int32 nLeaves = 0;
     for (const OUString& aLink : xLinks->getElementNames())
     {
-        uno::Any aAny;
+        cpo::uno::Any aAny;
         try
         {
             aAny = xLinks->getByName(aLink);

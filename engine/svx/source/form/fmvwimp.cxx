@@ -96,7 +96,7 @@ using namespace ::dbtools;
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::form::FormButtonType_SUBMIT;
     using ::com::sun::star::form::binding::XValueBinding;

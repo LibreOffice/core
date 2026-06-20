@@ -60,10 +60,10 @@ namespace frm
         virtual ~OReferenceValueComponent() override;
 
         // OPropertySet and friends
-        virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle) const override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+        virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
         virtual bool SAL_CALL convertFastPropertyValue(
-                    css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
+                    cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
         virtual void describeFixedProperties(
             css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
         ) const override;
@@ -72,12 +72,12 @@ namespace frm
         // OBoundControlModel overridables
         virtual css::uno::Sequence< css::uno::Type >
                                 getSupportedBindingTypes() override;
-        virtual css::uno::Any   translateExternalValueToControlValue( const css::uno::Any& _rExternalValue ) const override;
-        virtual css::uno::Any   translateControlValueToExternalValue( ) const override;
+        virtual cpo::uno::Any   translateExternalValueToControlValue( const cpo::uno::Any& _rExternalValue ) const override;
+        virtual cpo::uno::Any   translateControlValueToExternalValue( ) const override;
 
-        virtual css::uno::Any   translateControlValueToValidatableValue( ) const override;
+        virtual cpo::uno::Any   translateControlValueToValidatableValue( ) const override;
 
-        virtual css::uno::Any   getDefaultForReset() const override;
+        virtual cpo::uno::Any   getDefaultForReset() const override;
     };
 
 

@@ -492,7 +492,7 @@ void SwWW8AttrIter::OutAttr(sal_Int32 nSwPos, bool bWriteCombChars)
     {
         if (const SfxGrabBagItem *pCharFmtGrabBag = aExportSet.GetItem<SfxGrabBagItem>(RES_CHRATR_GRABBAG, false))
         {
-            std::map<OUString, css::uno::Any> aNewGrabBagMap = pCharFmtGrabBag->GetGrabBag();
+            std::map<OUString, cpo::uno::Any> aNewGrabBagMap = pCharFmtGrabBag->GetGrabBag();
             for (auto const & item : pAutoFmtGrabBag->GetGrabBag())
             {
                 if (item.second.hasValue())
@@ -2658,7 +2658,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                             if ( it != pFieldmark->GetParameters()->end() )
                             {
                                 OUString sOleId;
-                                uno::Any aValue = it->second;
+                                cpo::uno::Any aValue = it->second;
                                 aValue >>= sOleId;
                                 if ( !sOleId.isEmpty() )
                                     OutputLinkedOLE( sOleId );
@@ -3492,17 +3492,17 @@ void MSWordExportBase::UpdateTocSectionNodeProperties(const SwSectionNode& rSect
     {
         uno::Sequence<beans::PropertyValue> aDocPropertyValues(comphelper::InitPropertySequence(
         {
-            {"ooxml:CT_SdtDocPart_docPartGallery", uno::Any(u"Table of Contents"_ustr)},
-            {"ooxml:CT_SdtDocPart_docPartUnique",  uno::Any(u"true"_ustr)},
+            {"ooxml:CT_SdtDocPart_docPartGallery", cpo::uno::Any(u"Table of Contents"_ustr)},
+            {"ooxml:CT_SdtDocPart_docPartUnique",  cpo::uno::Any(u"true"_ustr)},
         }));
 
         uno::Sequence<beans::PropertyValue> aSdtPrPropertyValues(comphelper::InitPropertySequence(
         {
-            {"ooxml:CT_SdtPr_docPartObj", uno::Any(aDocPropertyValues)},
+            {"ooxml:CT_SdtPr_docPartObj", cpo::uno::Any(aDocPropertyValues)},
         }));
 
         SfxGrabBagItem aGrabBag(RES_PARATR_GRABBAG,
-            std::map<OUString, css::uno::Any>{{ u"SdtPr"_ustr, uno::Any(aSdtPrPropertyValues) }});
+            std::map<OUString, cpo::uno::Any>{{ u"SdtPr"_ustr, cpo::uno::Any(aSdtPrPropertyValues) }});
 
         // set new attr to node
         SetAttrNoBroadcast(*const_cast<SwContentNode*>(pNode), aGrabBag);
@@ -3518,7 +3518,7 @@ void MSWordExportBase::UpdateTocSectionNodeProperties(const SwSectionNode& rSect
         if (pNodeAfterToc)
         {
             SfxGrabBagItem aGrabBag(RES_PARATR_GRABBAG,
-                std::map<OUString, css::uno::Any>{{u"ParaSdtEndBefore"_ustr, uno::Any(true)}});
+                std::map<OUString, cpo::uno::Any>{{u"ParaSdtEndBefore"_ustr, cpo::uno::Any(true)}});
 
             // set new attr to node
             SetAttrNoBroadcast(*const_cast<SwContentNode*>(pNodeAfterToc), aGrabBag);

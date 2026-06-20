@@ -40,6 +40,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::cppu;
 using namespace ::osl;
@@ -74,7 +75,7 @@ css::uno::Sequence< OUString > SAL_CALL PopupMenuDispatcher::getSupportedService
     return { SERVICENAME_PROTOCOLHANDLER };
 }
 
-void SAL_CALL PopupMenuDispatcher::initialize( const css::uno::Sequence< css::uno::Any >& lArguments )
+void SAL_CALL PopupMenuDispatcher::initialize( const css::uno::Sequence< cpo::uno::Any >& lArguments )
 {
     css::uno::Reference< css::frame::XFrame > xFrame;
 
@@ -261,7 +262,7 @@ void PopupMenuDispatcher::impl_RetrievePopupControllerQuery()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_PopupMenuDispatcher_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::PopupMenuDispatcher(context));
 }

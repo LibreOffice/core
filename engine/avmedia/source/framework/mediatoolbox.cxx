@@ -118,7 +118,7 @@ void MediaToolBoxControl::implUpdateMediaControl()
 void MediaToolBoxControl::implExecuteMediaControl( const MediaItem& rItem )
 {
     MediaItem                               aExecItem( SID_AVMEDIA_TOOLBOX );
-    uno::Any                                aAny;
+    cpo::uno::Any                                aAny;
 
     aExecItem.merge( rItem );
     aExecItem.QueryValue( aAny );

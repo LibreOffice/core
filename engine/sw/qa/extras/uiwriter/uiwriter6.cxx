@@ -73,6 +73,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
@@ -115,7 +116,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf116640)
     createSwDoc();
 
     uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "Columns", uno::Any(sal_Int32(2)) } }));
+        comphelper::InitPropertySequence({ { "Columns", cpo::uno::Any(sal_Int32(2)) } }));
 
     dispatchCommand(mxComponent, u".uno:InsertSection"_ustr, aArgs);
 
@@ -415,7 +416,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testSectionInTableInTable3)
     uno::Reference<text::XTextTable> xRowSupplier(xTable, uno::UNO_QUERY);
     uno::Reference<table::XTableRows> xRows = xRowSupplier->getRows();
     uno::Reference<beans::XPropertySet> xRow(xRows->getByIndex(1), uno::UNO_QUERY);
-    xRow->setPropertyValue(u"IsSplitAllowed"_ustr, uno::Any(true));
+    xRow->setPropertyValue(u"IsSplitAllowed"_ustr, cpo::uno::Any(true));
     // This never returned.
     calcLayout();
 
@@ -894,10 +895,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf108048)
     createSwDoc();
 
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "Kind", uno::Any(sal_Int16(3)) },
-        { "TemplateName", uno::Any(u"Default Page Style"_ustr) },
-        { "PageNumber", uno::Any(sal_uInt16(6)) }, // Even number to avoid auto-inserted blank page
-        { "PageNumberFilled", uno::Any(true) },
+        { "Kind", cpo::uno::Any(sal_Int16(3)) },
+        { "TemplateName", cpo::uno::Any(u"Default Page Style"_ustr) },
+        { "PageNumber",
+          cpo::uno::Any(sal_uInt16(6)) }, // Even number to avoid auto-inserted blank page
+        { "PageNumberFilled", cpo::uno::Any(true) },
     });
     dispatchCommand(mxComponent, u".uno:InsertBreak"_ustr, aPropertyValues);
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
@@ -2052,7 +2054,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157533)
     auto xModel = mxComponent.queryThrow<frame::XModel>();
     uno::Reference<drawing::XShape> xShape(getShapeByName(u"Objet2"));
     uno::Reference<view::XSelectionSupplier> xCtrl(xModel->getCurrentController(), uno::UNO_QUERY);
-    xCtrl->select(uno::Any(xShape));
+    xCtrl->select(cpo::uno::Any(xShape));
 
     dispatchCommand(mxComponent, u".uno:Escape"_ustr, {});
 
@@ -2067,7 +2069,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157533)
     CPPUNIT_ASSERT(pTextNode->GetText().indexOf("and the second formula") > -1);
 
     uno::Reference<drawing::XShape> xShape2(getShapeByName(u"Objet11"));
-    xCtrl->select(uno::Any(xShape2));
+    xCtrl->select(cpo::uno::Any(xShape2));
 
     dispatchCommand(mxComponent, u".uno:Escape"_ustr, {});
 
@@ -2081,7 +2083,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157533)
     CPPUNIT_ASSERT(bSameBox);
 
     uno::Reference<drawing::XShape> xShape3(getShapeByName(u"Objet10"));
-    xCtrl->select(uno::Any(xShape3));
+    xCtrl->select(cpo::uno::Any(xShape3));
 
     dispatchCommand(mxComponent, u".uno:Escape"_ustr, {});
 
@@ -2160,7 +2162,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testXDrawPagesSupplier)
     CPPUNIT_ASSERT(xDrawPages.is());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There must be only a single DrawPage in Writer documents",
                                  sal_Int32(1), xDrawPages->getCount());
-    uno::Any aDrawPage = xDrawPages->getByIndex(0);
+    cpo::uno::Any aDrawPage = xDrawPages->getByIndex(0);
     uno::Reference<drawing::XDrawPage> xDrawPageFromXDrawPages(aDrawPage, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDrawPageFromXDrawPages.is());
 
@@ -2363,12 +2365,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testSpellOnlineParameter)
     bool bSet = pOpt->IsOnlineSpell();
 
     uno::Sequence<beans::PropertyValue> params
-        = comphelper::InitPropertySequence({ { "Enable", uno::Any(!bSet) } });
+        = comphelper::InitPropertySequence({ { "Enable", cpo::uno::Any(!bSet) } });
     dispatchCommand(mxComponent, u".uno:SpellOnline"_ustr, params);
     CPPUNIT_ASSERT_EQUAL(!bSet, pOpt->IsOnlineSpell());
 
     // set the same state as now and we don't expect any change (no-toggle)
-    params = comphelper::InitPropertySequence({ { "Enable", uno::Any(!bSet) } });
+    params = comphelper::InitPropertySequence({ { "Enable", cpo::uno::Any(!bSet) } });
     dispatchCommand(mxComponent, u".uno:SpellOnline"_ustr, params);
     CPPUNIT_ASSERT_EQUAL(!bSet, pOpt->IsOnlineSpell());
 }
@@ -2380,7 +2382,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf124603)
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     const SwViewOption* pOpt = pWrtShell->GetViewOptions();
     uno::Sequence<beans::PropertyValue> params
-        = comphelper::InitPropertySequence({ { "Enable", uno::Any(true) } });
+        = comphelper::InitPropertySequence({ { "Enable", cpo::uno::Any(true) } });
     dispatchCommand(mxComponent, u".uno:SpellOnline"_ustr, params);
 
     // Automatic Spell Checking is enabled
@@ -2428,7 +2430,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf45949)
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     const SwViewOption* pOpt = pWrtShell->GetViewOptions();
     uno::Sequence<beans::PropertyValue> params
-        = comphelper::InitPropertySequence({ { "Enable", uno::Any(true) } });
+        = comphelper::InitPropertySequence({ { "Enable", cpo::uno::Any(true) } });
     dispatchCommand(mxComponent, u".uno:SpellOnline"_ustr, params);
 
     // Automatic Spell Checking is enabled
@@ -2478,7 +2480,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157442)
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     const SwViewOption* pOpt = pWrtShell->GetViewOptions();
     uno::Sequence<beans::PropertyValue> params
-        = comphelper::InitPropertySequence({ { "Enable", uno::Any(true) } });
+        = comphelper::InitPropertySequence({ { "Enable", cpo::uno::Any(true) } });
     dispatchCommand(mxComponent, u".uno:SpellOnline"_ustr, params);
 
     // Automatic Spell Checking is enabled
@@ -2514,7 +2516,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf65535)
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     const SwViewOption* pOpt = pWrtShell->GetViewOptions();
     uno::Sequence<beans::PropertyValue> params
-        = comphelper::InitPropertySequence({ { "Enable", uno::Any(true) } });
+        = comphelper::InitPropertySequence({ { "Enable", cpo::uno::Any(true) } });
     dispatchCommand(mxComponent, u".uno:SpellOnline"_ustr, params);
 
     // Automatic Spell Checking is enabled
@@ -3008,7 +3010,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testInsertPdf)
 
     // insert the PDF into the document
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "FileName", uno::Any(createFileURL(u"hello-world.pdf")) } }));
+        { { "FileName", cpo::uno::Any(createFileURL(u"hello-world.pdf")) } }));
     dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);
 
     // Save and load cycle
@@ -3063,10 +3065,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testHatchFill)
     xShape->setSize(awt::Size(10000, 10000));
     xShape->setPosition(awt::Point(1000, 1000));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    xShapeProps->setPropertyValue(u"FillStyle"_ustr, uno::Any(drawing::FillStyle_HATCH));
-    xShapeProps->setPropertyValue(u"FillHatchName"_ustr, uno::Any(u"Black 0 Degrees"_ustr));
-    xShapeProps->setPropertyValue(u"FillBackground"_ustr, uno::Any(false));
-    xShapeProps->setPropertyValue(u"FillTransparence"_ustr, uno::Any(sal_Int32(30)));
+    xShapeProps->setPropertyValue(u"FillStyle"_ustr, cpo::uno::Any(drawing::FillStyle_HATCH));
+    xShapeProps->setPropertyValue(u"FillHatchName"_ustr, cpo::uno::Any(u"Black 0 Degrees"_ustr));
+    xShapeProps->setPropertyValue(u"FillBackground"_ustr, cpo::uno::Any(false));
+    xShapeProps->setPropertyValue(u"FillTransparence"_ustr, cpo::uno::Any(sal_Int32(30)));
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     xDrawPage->add(xShape);
@@ -3161,7 +3163,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf151828_Comment2)
 
     // Add a basic shape to the document.
     uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "KeyModifier", uno::Any(KEY_MOD1) } }));
+        comphelper::InitPropertySequence({ { "KeyModifier", cpo::uno::Any(KEY_MOD1) } }));
     dispatchCommand(mxComponent, u".uno:BasicShapes"_ustr, aArgs);
 
     auto xBasicShape = getShape(1);

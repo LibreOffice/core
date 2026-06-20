@@ -23,7 +23,7 @@
 
 class SchXMLCalculationSettingsContext : public SvXMLImportContext
 {
-    css::uno::Any m_aNullDate;
+    cpo::uno::Any m_aNullDate;
 public:
     SchXMLCalculationSettingsContext( SvXMLImport& rImport,
                                     const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );

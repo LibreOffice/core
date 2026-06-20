@@ -180,14 +180,14 @@ static OUString GetOUString( NSString* pStr )
 }
 
 void MacOSXBackend::setPropertyValue(
-    OUString const &, css::uno::Any const &)
+    OUString const &, cpo::uno::Any const &)
 {
     throw css::lang::IllegalArgumentException(
         "setPropertyValue not supported",
         getXWeak(), -1);
 }
 
-css::uno::Any MacOSXBackend::getPropertyValue(
+cpo::uno::Any MacOSXBackend::getPropertyValue(
     OUString const & PropertyName)
 {
     if ( PropertyName == "WorkPathVariable" )
@@ -202,9 +202,9 @@ css::uno::Any MacOSXBackend::getPropertyValue(
             if( aDocDir.getLength() > 0 &&
                 osl_getFileURLFromSystemPath( aDocDir.pData, &aDocURL.pData ) == osl_File_E_None )
             {
-                return css::uno::Any(
-                    css::beans::Optional< css::uno::Any >(
-                        true, css::uno::Any( aDocURL ) ) );
+                return cpo::uno::Any(
+                    css::beans::Optional< cpo::uno::Any >(
+                        true, cpo::uno::Any( aDocURL ) ) );
             }
             else
             {
@@ -215,7 +215,7 @@ css::uno::Any MacOSXBackend::getPropertyValue(
         {
             SAL_WARN("shell", "Got nil or empty list of user document directories" );
         }
-        return css::uno::Any(css::beans::Optional< css::uno::Any >());
+        return cpo::uno::Any(css::beans::Optional< cpo::uno::Any >());
     } else if ( PropertyName == "ooInetHTTPProxyName" )
     {
         char host[MAXHOSTNAMELEN];
@@ -229,12 +229,12 @@ css::uno::Any MacOSXBackend::getPropertyValue(
             auto const Server = OUString::createFromAscii( host );
             if( Server.getLength() > 0 )
             {
-                return css::uno::Any(
-                    css::beans::Optional< css::uno::Any >(
-                        true, uno::Any( Server ) ) );
+                return cpo::uno::Any(
+                    css::beans::Optional< cpo::uno::Any >(
+                        true, cpo::uno::Any( Server ) ) );
             }
         }
-        return css::uno::Any(css::beans::Optional< css::uno::Any >());
+        return cpo::uno::Any(css::beans::Optional< cpo::uno::Any >());
     } else if ( PropertyName == "ooInetHTTPProxyPort" )
     {
         char host[MAXHOSTNAMELEN];
@@ -245,11 +245,11 @@ css::uno::Any MacOSXBackend::getPropertyValue(
 
         if (retVal && port > 0)
         {
-            return css::uno::Any(
-                css::beans::Optional< css::uno::Any >(
-                    true, uno::Any( sal_Int32(port) ) ) );
+            return cpo::uno::Any(
+                css::beans::Optional< cpo::uno::Any >(
+                    true, cpo::uno::Any( sal_Int32(port) ) ) );
         }
-        return css::uno::Any(css::beans::Optional< css::uno::Any >());
+        return cpo::uno::Any(css::beans::Optional< cpo::uno::Any >());
     } else if ( PropertyName == "ooInetHTTPSProxyName" )
     {
         char host[MAXHOSTNAMELEN];
@@ -263,12 +263,12 @@ css::uno::Any MacOSXBackend::getPropertyValue(
             auto const Server = OUString::createFromAscii( host );
             if( Server.getLength() > 0 )
             {
-                return css::uno::Any(
-                    css::beans::Optional< css::uno::Any >(
-                        true, uno::Any( Server ) ) );
+                return cpo::uno::Any(
+                    css::beans::Optional< cpo::uno::Any >(
+                        true, cpo::uno::Any( Server ) ) );
             }
         }
-        return css::uno::Any(css::beans::Optional< css::uno::Any >());
+        return cpo::uno::Any(css::beans::Optional< cpo::uno::Any >());
     } else if ( PropertyName == "ooInetHTTPSProxyPort" )
     {
         char host[MAXHOSTNAMELEN];
@@ -279,17 +279,17 @@ css::uno::Any MacOSXBackend::getPropertyValue(
 
         if (retVal && port > 0)
         {
-            return css::uno::Any(
-                css::beans::Optional< css::uno::Any >(
-                    true, uno::Any( sal_Int32(port) ) ) );
+            return cpo::uno::Any(
+                css::beans::Optional< cpo::uno::Any >(
+                    true, cpo::uno::Any( sal_Int32(port) ) ) );
         }
-        return css::uno::Any(css::beans::Optional< css::uno::Any >());
+        return cpo::uno::Any(css::beans::Optional< cpo::uno::Any >());
     } else if ( PropertyName == "ooInetProxyType" )
     {
         // override default for ProxyType, which is "0" meaning "No proxies".
-        return css::uno::Any(
-            css::beans::Optional< css::uno::Any >(
-                true, uno::Any( sal_Int32(1) ) ) );
+        return cpo::uno::Any(
+            css::beans::Optional< cpo::uno::Any >(
+                true, cpo::uno::Any( sal_Int32(1) ) ) );
     } else if ( PropertyName == "ooInetNoProxy" )
     {
         OUString aProxyBypassList;
@@ -321,12 +321,12 @@ css::uno::Any MacOSXBackend::getPropertyValue(
         // fill proxy bypass list
         if( aProxyBypassList.getLength() > 0 )
         {
-            return css::uno::Any(
-                css::beans::Optional< css::uno::Any >(
+            return cpo::uno::Any(
+                css::beans::Optional< cpo::uno::Any >(
                     true,
-                    uno::Any( aProxyBypassList.replace( SPACE, SEMI_COLON ) ) ) );
+                    cpo::uno::Any( aProxyBypassList.replace( SPACE, SEMI_COLON ) ) ) );
         }
-        return css::uno::Any(css::beans::Optional< css::uno::Any >());
+        return cpo::uno::Any(css::beans::Optional< cpo::uno::Any >());
     } else {
         throw css::beans::UnknownPropertyException(
             PropertyName, getXWeak());
@@ -350,7 +350,7 @@ uno::Sequence<OUString> SAL_CALL MacOSXBackend::getSupportedServiceNames(void)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 shell_MacOSXBackend_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new MacOSXBackend());
 }

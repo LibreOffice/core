@@ -45,6 +45,7 @@
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::container;
 
 struct Prop_Impl
@@ -710,7 +711,7 @@ Reference<XNameAccess> CuiAboutConfigTabPage::getConfigAccess(const OUString& sN
     aProperty.Name = u"nodepath"_ustr;
     aProperty.Value <<= sNodePath;
 
-    uno::Sequence<uno::Any> aArgumentList{ uno::Any(aProperty) };
+    uno::Sequence<cpo::uno::Any> aArgumentList{ cpo::uno::Any(aProperty) };
 
     OUString sAccessString;
 

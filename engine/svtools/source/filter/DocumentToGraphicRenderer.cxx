@@ -43,6 +43,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::beans;
 
@@ -81,7 +82,7 @@ DocumentToGraphicRenderer::DocumentToGraphicRenderer( const Reference<XComponent
         uno::Reference< view::XSelectionSupplier > xSelSup( mxController, uno::UNO_QUERY);
         if (xSelSup.is())
         {
-            uno::Any aViewSelection( xSelSup->getSelection());
+            cpo::uno::Any aViewSelection( xSelSup->getSelection());
             if (aViewSelection.hasValue())
             {
                 /* FIXME: Writer always has a selection even if nothing is
@@ -114,9 +115,9 @@ bool DocumentToGraphicRenderer::hasSelection() const
     return maSelection.hasValue();
 }
 
-uno::Any DocumentToGraphicRenderer::getSelection() const
+cpo::uno::Any DocumentToGraphicRenderer::getSelection() const
 {
-    uno::Any aSelection;
+    cpo::uno::Any aSelection;
     if (hasSelection())
         aSelection = maSelection;
     else
@@ -129,7 +130,7 @@ Size DocumentToGraphicRenderer::getDocumentSizeIn100mm(sal_Int32 nCurrentPage,
 {
     Reference< awt::XDevice > xDevice(mxToolkit->createScreenCompatibleDevice( 32, 32 ) );
 
-    uno::Any selection( getSelection());
+    cpo::uno::Any selection( getSelection());
 
     PropertyValues renderProperties{ comphelper::makePropertyValue(u"IsPrinter"_ustr, true),
                                      comphelper::makePropertyValue(u"RenderDevice"_ustr, xDevice),
@@ -237,7 +238,7 @@ Graphic DocumentToGraphicRenderer::renderToGraphic(
         pOutputDev->Erase();
     }
 
-    uno::Any aSelection( getSelection());
+    cpo::uno::Any aSelection( getSelection());
     mxRenderable->render(nCurrentPage - 1, aSelection, renderProps );
 
     aMtf.Stop();
@@ -271,7 +272,7 @@ sal_Int32 DocumentToGraphicRenderer::getPageCount()
 {
     Reference< awt::XDevice > xDevice(mxToolkit->createScreenCompatibleDevice( 32, 32 ) );
 
-    uno::Any selection( getSelection() );
+    cpo::uno::Any selection( getSelection() );
 
     PropertyValues renderProperties{ comphelper::makePropertyValue(u"IsPrinter"_ustr, true),
                                      comphelper::makePropertyValue(u"RenderDevice"_ustr, xDevice),
@@ -304,7 +305,7 @@ bool DocumentToGraphicRenderer::isShapeSelected(
         uno::Reference< view::XSelectionSupplier > xSelectionSupplier( rxController, uno::UNO_QUERY);
         if (xSelectionSupplier.is())
         {
-            uno::Any aAny( xSelectionSupplier->getSelection());
+            cpo::uno::Any aAny( xSelectionSupplier->getSelection());
             if (aAny >>= rxShapes)
                 bShape = true;
             else if (aAny >>= rxShape)

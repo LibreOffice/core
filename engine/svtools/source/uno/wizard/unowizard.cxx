@@ -49,7 +49,7 @@ namespace {
     using css::uno::Reference;
     using css::uno::XInterface;
     using css::uno::UNO_QUERY;
-    using css::uno::Any;
+    using cpo::uno::Any;
     using css::uno::Sequence;
     using css::ui::dialogs::XWizard;
     using css::beans::XPropertySetInfo;
@@ -122,7 +122,7 @@ namespace {
         virtual ::sal_Int16 SAL_CALL execute(  ) override;
 
         // lang::XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
    protected:
         virtual ~Wizard() override;
@@ -442,7 +442,7 @@ namespace {
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svtools_uno_Wizard_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new Wizard(context));
 }

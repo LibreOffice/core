@@ -68,6 +68,7 @@ namespace dbaui
 {
 using namespace ::dbtools;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::task;
@@ -378,7 +379,7 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver(const OUString
     }
     catch (const Exception&)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         // wrap the exception into an SQLException
         throw SQLException(sCurrentActionError, getORB(), u"S1000"_ustr, 0, anyEx);
     }

@@ -54,7 +54,7 @@ class LocalizationMgr
         MOVE_RESOURCES,
         COPY_RESOURCES
     };
-    static sal_Int32 implHandleControlResourceProperties(const css::uno::Any& rControlAny,
+    static sal_Int32 implHandleControlResourceProperties(const cpo::uno::Any& rControlAny,
             std::u16string_view aDialogName,
             std::u16string_view aCtrlName,
             const css::uno::Reference< css::resource::XStringResourceManager >& xStringResourceManager,
@@ -99,13 +99,13 @@ public:
     void handleBasicStopped();
 
     static void setControlResourceIDsForNewEditorObject(DlgEditor const * pEditor,
-        const css::uno::Any& rControlAny, std::u16string_view aCtrlName);
+        const cpo::uno::Any& rControlAny, std::u16string_view aCtrlName);
 
     static void renameControlResourceIDsForEditorObject(DlgEditor const * pEditor,
-        const css::uno::Any& rControlAny, std::u16string_view aNewCtrlName);
+        const cpo::uno::Any& rControlAny, std::u16string_view aNewCtrlName);
 
     static void deleteControlResourceIDsForDeletedEditorObject(DlgEditor const * pEditor,
-        const css::uno::Any& rControlAny, std::u16string_view aCtrlName);
+        const cpo::uno::Any& rControlAny, std::u16string_view aCtrlName);
 
     static void setStringResourceAtDialog( const ScriptDocument& rDocument, const OUString& aLibName, std::u16string_view aDlgName,
         const css::uno::Reference< css::container::XNameContainer >& xDialogModel );
@@ -129,7 +129,7 @@ public:
         const css::uno::Reference< css::resource::XStringResourceManager >& xStringResourceManager );
 
     static void copyResourcesForPastedEditorObject( DlgEditor const * pEditor,
-        const css::uno::Any& rControlAny, std::u16string_view aCtrlName,
+        const cpo::uno::Any& rControlAny, std::u16string_view aCtrlName,
         const css::uno::Reference< css::resource::XStringResourceResolver >& xSourceStringResolver );
 
     static void copyResourceForDroppedDialog(

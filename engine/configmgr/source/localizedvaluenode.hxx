@@ -21,7 +21,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 #include "node.hxx"
 
@@ -31,21 +31,21 @@ class LocalizedValueNode : public Node
 {
 public:
     explicit LocalizedValueNode(int layer);
-    LocalizedValueNode(int layer, css::uno::Any value);
+    LocalizedValueNode(int layer, cpo::uno::Any value);
 
     virtual rtl::Reference<Node> clone(bool keepTemplateName) const override;
 
     virtual OUString getTemplateName() const override;
 
-    const css::uno::Any& getValue() const { return value_; }
-    css::uno::Any* getValuePtr(int layer, bool bIsUserModification)
+    const cpo::uno::Any& getValue() const { return value_; }
+    cpo::uno::Any* getValuePtr(int layer, bool bIsUserModification)
     {
         setLayer(layer);
         modified_ = bIsUserModification;
         return &value_;
     }
 
-    void setValue(int layer, css::uno::Any const& value, bool bIsUserModification);
+    void setValue(int layer, cpo::uno::Any const& value, bool bIsUserModification);
 
     bool isModified() { return modified_; }
 
@@ -56,7 +56,7 @@ private:
 
     virtual Kind kind() const override;
 
-    css::uno::Any value_;
+    cpo::uno::Any value_;
     bool modified_;
 };
 }

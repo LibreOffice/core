@@ -52,8 +52,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableWrapTextAtFlyStartExport)
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFrame(
         xTextFramesSupplier->getTextFrames()->getByName(u"Frame1"_ustr), uno::UNO_QUERY);
-    xFrame->setPropertyValue(u"IsSplitAllowed"_ustr, uno::Any(true));
-    xFrame->setPropertyValue(u"WrapTextAtFlyStart"_ustr, uno::Any(true));
+    xFrame->setPropertyValue(u"IsSplitAllowed"_ustr, cpo::uno::Any(true));
+    xFrame->setPropertyValue(u"WrapTextAtFlyStart"_ustr, cpo::uno::Any(true));
 
     // When saving to ODT:
     save(TestFilter::ODT);

@@ -508,8 +508,8 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(comphelper::SequenceAsHash
             cache.load(FilterCache::E_CONTAINS_FILTERS);
 
             css::beans::NamedValue lIProps[] {
-                { PROPNAME_DOCUMENTSERVICE, uno::Any(sDocumentService) },
-                { PROPNAME_TYPE, uno::Any(sRealType) } };
+                { PROPNAME_DOCUMENTSERVICE, cpo::uno::Any(sDocumentService) },
+                { PROPNAME_TYPE, cpo::uno::Any(sRealType) } };
             std::vector<OUString> lFilters = cache.getMatchingItemsByProps(FilterCache::E_FILTER, lIProps);
 
             aLock.unlock();
@@ -580,7 +580,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(comphelper::SequenceAsHash
         cache.load(FilterCache::E_CONTAINS_FILTERS);
 
         css::beans::NamedValue lIProps[] {
-            { PROPNAME_TYPE, uno::Any(sType) } };
+            { PROPNAME_TYPE, cpo::uno::Any(sType) } };
         std::vector<OUString> lFilters = cache.getMatchingItemsByProps(FilterCache::E_FILTER, lIProps);
 
         for (auto const& filter : lFilters)
@@ -728,7 +728,7 @@ void TypeDetection::impl_getPreselectionForDocumentService(
         cache.load(FilterCache::E_CONTAINS_FILTERS);
 
         css::beans::NamedValue lIProps[] {
-            { PROPNAME_DOCUMENTSERVICE, css::uno::Any(sPreSelDocumentService) } };
+            { PROPNAME_DOCUMENTSERVICE, cpo::uno::Any(sPreSelDocumentService) } };
         lFilters = cache.getMatchingItemsByProps(FilterCache::E_FILTER, lIProps);
     }
     catch (const css::container::NoSuchElementException&)
@@ -870,11 +870,11 @@ static bool isBrokenZIP(const css::uno::Reference<css::io::XInputStream>& xStrea
         return false;
     }
 
-    std::vector<css::uno::Any> aArguments{
-        css::uno::Any(xStream),
-        css::uno::Any(css::beans::NamedValue(u"AllowRemoveOnInsert"_ustr, css::uno::Any(false))),
-        css::uno::Any(css::beans::NamedValue(u"StorageFormat"_ustr,
-                                             css::uno::Any(css::embed::StorageFormats::ZIP))),
+    std::vector<cpo::uno::Any> aArguments{
+        cpo::uno::Any(xStream),
+        cpo::uno::Any(css::beans::NamedValue(u"AllowRemoveOnInsert"_ustr, cpo::uno::Any(false))),
+        cpo::uno::Any(css::beans::NamedValue(u"StorageFormat"_ustr,
+                                             cpo::uno::Any(css::embed::StorageFormats::ZIP))),
     };
     try
     {
@@ -886,7 +886,7 @@ static bool isBrokenZIP(const css::uno::Reference<css::io::XInputStream>& xStrea
     catch (const css::packages::zip::ZipIOException&)
     {
         // Now test if repair will succeed
-        aArguments.emplace_back(css::beans::NamedValue(u"RepairPackage"_ustr, css::uno::Any(true)));
+        aArguments.emplace_back(css::beans::NamedValue(u"RepairPackage"_ustr, cpo::uno::Any(true)));
         try
         {
             // If this is a broken ZIP package that can be repaired, this would succeed,
@@ -1307,7 +1307,7 @@ bool TypeDetection::impl_validateAndSetFilterOnDescriptor( comphelper::SequenceA
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_TypeDetection_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new filter::config::TypeDetection(context));
 }

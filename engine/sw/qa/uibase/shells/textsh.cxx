@@ -45,8 +45,8 @@ CPPUNIT_TEST_FIXTURE(Test, testDeleteSections)
     SwDoc* pDoc = getSwDoc();
     uno::Sequence<css::beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"RegionName"_ustr,
-                                      uno::Any(u"ZOTERO_BIBL {} CSL_BIBLIOGRAPHY RND"_ustr)),
-        comphelper::makePropertyValue(u"Content"_ustr, uno::Any(u"old content"_ustr)),
+                                      cpo::uno::Any(u"ZOTERO_BIBL {} CSL_BIBLIOGRAPHY RND"_ustr)),
+        comphelper::makePropertyValue(u"Content"_ustr, cpo::uno::Any(u"old content"_ustr)),
     };
     dispatchCommand(mxComponent, u".uno:InsertSection"_ustr, aArgs);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDoc->GetSections().size());

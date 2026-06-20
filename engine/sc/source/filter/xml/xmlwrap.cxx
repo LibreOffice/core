@@ -79,6 +79,7 @@
 
 using namespace com::sun::star;
 using namespace css::uno;
+using namespace cpo::uno;
 
 ScXMLImportWrapper::ScXMLImportWrapper( ScDocShell& rDocSh, SfxMedium* pM, uno::Reference < embed::XStorage > xStor ) :
     mrDocShell(rDocSh),
@@ -105,7 +106,7 @@ ErrCodeMsg ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
     const uno::Reference<frame::XModel>& xModel,
     xml::sax::InputSource& aParserInput,
     const OUString& sComponentName, const OUString& sDocName,
-    const uno::Sequence<uno::Any>& aArgs,
+    const uno::Sequence<cpo::uno::Any>& aArgs,
     bool bMustBeSuccessful)
 {
     uno::Reference < io::XStream > xDocStream;
@@ -125,7 +126,7 @@ ErrCodeMsg ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
             aParserInput.aInputStream = xDocStream->getInputStream();
             uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
 
-            uno::Any aAny = xSet->getPropertyValue(u"Encrypted"_ustr);
+            cpo::uno::Any aAny = xSet->getPropertyValue(u"Encrypted"_ustr);
             aAny >>= bEncrypted;
         }
         catch( const packages::WrongPasswordException& )
@@ -151,7 +152,7 @@ ErrCodeMsg ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
     OSL_ENSURE( xInfoSet.is(), "missing property set" );
     if( xInfoSet.is() )
     {
-        xInfoSet->setPropertyValue( u"StreamName"_ustr, uno::Any( sDocName ) );
+        xInfoSet->setPropertyValue( u"StreamName"_ustr, cpo::uno::Any( sDocName ) );
     }
 
     ErrCodeMsg nReturn = ERRCODE_NONE;
@@ -188,7 +189,7 @@ ErrCodeMsg ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
     }
     catch( const xml::sax::SAXParseException& r )
     {
-        css::uno::Any ex( cppu::getCaughtException() );
+        cpo::uno::Any ex( cppu::getCaughtException() );
         // sax parser sends wrapped exceptions,
         // try to find the original one
         xml::sax::SAXException aSaxEx = *static_cast<xml::sax::SAXException const *>(&r);
@@ -234,7 +235,7 @@ ErrCodeMsg ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
     }
     catch( const xml::sax::SAXException& r )
     {
-        css::uno::Any ex( cppu::getCaughtException() );
+        cpo::uno::Any ex( cppu::getCaughtException() );
         packages::zip::ZipIOException aBrokenPackage;
         if ( r.WrappedException >>= aBrokenPackage )
             return ERRCODE_IO_BROKENPACKAGE;
@@ -314,7 +315,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aImportInfoMap ) ) );
 
     // No need to lock solar mutex when calling from the wrapper.
-    xInfoSet->setPropertyValue(SC_UNO_ODS_LOCK_SOLAR_MUTEX, uno::Any(false));
+    xInfoSet->setPropertyValue(SC_UNO_ODS_LOCK_SOLAR_MUTEX, cpo::uno::Any(false));
 
     // ---- get BuildId from parent container if available
 
@@ -337,7 +338,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
     {
         sal_Int32 nProgressRange(1000000);
         xStatusIndicator->start(SvxResId(RID_SVXSTR_DOC_LOAD), nProgressRange);
-        xInfoSet->setPropertyValue(u"ProgressRange"_ustr, uno::Any(nProgressRange));
+        xInfoSet->setPropertyValue(u"ProgressRange"_ustr, cpo::uno::Any(nProgressRange));
     }
 
     // Set base URI
@@ -346,7 +347,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
     // needed for relative URLs, but in clipboard copy/paste there may be none
     SAL_INFO_IF(aBaseURL.isEmpty(), "sc.filter", "ScXMLImportWrapper: no base URL");
     OUString sPropName(u"BaseURI"_ustr);
-    xInfoSet->setPropertyValue( sPropName, uno::Any( aBaseURL ) );
+    xInfoSet->setPropertyValue( sPropName, cpo::uno::Any( aBaseURL ) );
 
     // TODO/LATER: do not do it for embedded links
     OUString aName;
@@ -365,14 +366,14 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
         if( !aName.isEmpty() )
         {
             sPropName = u"StreamRelPath"_ustr;
-            xInfoSet->setPropertyValue( sPropName, uno::Any( aName ) );
+            xInfoSet->setPropertyValue( sPropName, cpo::uno::Any( aName ) );
         }
     }
 
     if (mrDocShell.GetCreateMode() == SfxObjectCreateMode::ORGANIZER)
-        xInfoSet->setPropertyValue(u"OrganizerMode"_ustr, uno::Any(true));
+        xInfoSet->setPropertyValue(u"OrganizerMode"_ustr, cpo::uno::Any(true));
 
-    xInfoSet->setPropertyValue( u"SourceStorage"_ustr, uno::Any( xStorage ) );
+    xInfoSet->setPropertyValue( u"SourceStorage"_ustr, cpo::uno::Any( xStorage ) );
 
     bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
 
@@ -409,7 +410,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
     ErrCodeMsg nMetaRetval(ERRCODE_NONE);
     if (nMode & ImportFlags::Metadata)
     {
-        uno::Sequence<uno::Any> aMetaArgs { Any(xInfoSet) };
+        uno::Sequence<cpo::uno::Any> aMetaArgs { Any(xInfoSet) };
 
         SAL_INFO( "sc.filter", "meta import start" );
 
@@ -436,7 +437,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
         xObjectHelper = SvXMLEmbeddedObjectHelper::Create(xStorage, mrDocShell, SvXMLEmbeddedObjectHelperMode::Read);
         xObjectResolver = xObjectHelper.get();
     }
-    uno::Sequence<uno::Any> aStylesArgs
+    uno::Sequence<cpo::uno::Any> aStylesArgs
     {
         Any(xInfoSet),
         Any(xGraphicStorageHandler),
@@ -450,7 +451,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
         //  Settings must be loaded first because of the printer setting,
         //  which is needed in the page styles (paper tray).
 
-        uno::Sequence<uno::Any> aSettingsArgs { Any(xInfoSet) };
+        uno::Sequence<cpo::uno::Any> aSettingsArgs { Any(xInfoSet) };
 
         SAL_INFO( "sc.filter", "settings import start" );
 
@@ -486,9 +487,9 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
 
         if (mrDocShell.GetCreateMode() == SfxObjectCreateMode::INTERNAL)
             // We only need to import content for external link cache document.
-            xInfoSet->setPropertyValue(SC_UNO_ODS_IMPORT_STYLES, uno::Any(false));
+            xInfoSet->setPropertyValue(SC_UNO_ODS_IMPORT_STYLES, cpo::uno::Any(false));
 
-        uno::Sequence<uno::Any> aDocArgs
+        uno::Sequence<cpo::uno::Any> aDocArgs
         {
             Any(xInfoSet),
             Any(xGraphicStorageHandler),
@@ -547,7 +548,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
         }
 
         // Set Code Names
-        uno::Any aAny = xInfoSet->getPropertyValue(u"ScriptConfiguration"_ustr);
+        cpo::uno::Any aAny = xInfoSet->getPropertyValue(u"ScriptConfiguration"_ustr);
         uno::Reference <container::XNameAccess> xCodeNameAccess;
         if( aAny >>= xCodeNameAccess )
             XMLCodeNameProvider::set( xCodeNameAccess, &rDoc );
@@ -598,7 +599,7 @@ bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentC
     const uno::Reference<frame::XModel>& xModel, const uno::Reference<xml::sax::XWriter>& xWriter,
     const uno::Sequence<beans::PropertyValue>& aDescriptor, const OUString& sName,
     const OUString& sMediaType, const OUString& sComponentName,
-    const uno::Sequence<uno::Any>& aArgs, std::unique_ptr<ScMySharedData>& pSharedData)
+    const uno::Sequence<cpo::uno::Any>& aArgs, std::unique_ptr<ScMySharedData>& pSharedData)
 {
     bool bRet(false);
     uno::Reference<io::XOutputStream> xOut;
@@ -617,10 +618,10 @@ bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentC
         uno::Reference < beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
         if (xSet.is())
         {
-            xSet->setPropertyValue(u"MediaType"_ustr, uno::Any(sMediaType));
+            xSet->setPropertyValue(u"MediaType"_ustr, cpo::uno::Any(sMediaType));
 
             // advise storage impl to use common encryption
-            xSet->setPropertyValue( u"UseCommonStoragePasswordEncryption"_ustr, uno::Any(true) );
+            xSet->setPropertyValue( u"UseCommonStoragePasswordEncryption"_ustr, cpo::uno::Any(true) );
         }
 
         xOut = xStream->getOutputStream();
@@ -633,7 +634,7 @@ bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentC
     OSL_ENSURE( xInfoSet.is(), "missing property set" );
     if( xInfoSet.is() )
     {
-        xInfoSet->setPropertyValue( u"StreamName"_ustr, uno::Any( sName ) );
+        xInfoSet->setPropertyValue( u"StreamName"_ustr, cpo::uno::Any( sName ) );
     }
 
     xWriter->setOutputStream( xOut );
@@ -737,7 +738,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         sFileName = pMedium->GetName();
     ScDocShell* pObjSh = rDoc.GetDocumentShell();
     uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
-            { "FileName", uno::Any(sFileName) }
+            { "FileName", cpo::uno::Any(sFileName) }
         }));
 
     /** property map for export info set */
@@ -796,17 +797,17 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         sal_Int32 nProgressRange(1000000);
         if(xStatusIndicator.is())
             xStatusIndicator->start(ScResId(STR_SAVE_DOC), nProgressRange);
-        xInfoSet->setPropertyValue(u"ProgressRange"_ustr, uno::Any(nProgressRange));
+        xInfoSet->setPropertyValue(u"ProgressRange"_ustr, cpo::uno::Any(nProgressRange));
 
         bool bUsePrettyPrinting = officecfg::Office::Common::Save::Document::PrettyPrinting::get();
-        xInfoSet->setPropertyValue(u"UsePrettyPrinting"_ustr, uno::Any(bUsePrettyPrinting));
+        xInfoSet->setPropertyValue(u"UsePrettyPrinting"_ustr, cpo::uno::Any(bUsePrettyPrinting));
 
-        xInfoSet->setPropertyValue( u"TargetStorage"_ustr, uno::Any( xStorage ) );
+        xInfoSet->setPropertyValue( u"TargetStorage"_ustr, cpo::uno::Any( xStorage ) );
 
         OSL_ENSURE( pMedium, "There is no medium to get MediaDescriptor from!" );
         OUString aBaseURL = pMedium ? pMedium->GetBaseURL( true ) : OUString();
         OUString sPropName(u"BaseURI"_ustr);
-        xInfoSet->setPropertyValue( sPropName, uno::Any( aBaseURL ) );
+        xInfoSet->setPropertyValue( sPropName, cpo::uno::Any( aBaseURL ) );
 
         // TODO/LATER: do not do it for embedded links
         if( SfxObjectCreateMode::EMBEDDED == pObjSh->GetCreateMode() )
@@ -823,7 +824,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
             if( !aName.isEmpty() )
             {
                 sPropName = u"StreamRelPath"_ustr;
-                xInfoSet->setPropertyValue( sPropName, uno::Any( aName ) );
+                xInfoSet->setPropertyValue( sPropName, cpo::uno::Any( aName ) );
             }
         }
 
@@ -861,7 +862,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         // meta export
         if (!bStylesOnly && !bMetaRet)
         {
-            uno::Sequence<uno::Any> aMetaArgs
+            uno::Sequence<cpo::uno::Any> aMetaArgs
             {
                 Any(xInfoSet),
                 Any(xWriter),
@@ -895,7 +896,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         // styles export
 
         {
-            uno::Sequence<uno::Any> aStylesArgs
+            uno::Sequence<cpo::uno::Any> aStylesArgs
             {
                 Any(xInfoSet),
                 Any(xGraphicStorageHandler),
@@ -920,7 +921,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
 
         if (!bStylesOnly)
         {
-            uno::Sequence<uno::Any> aDocArgs
+            uno::Sequence<cpo::uno::Any> aDocArgs
             {
                 Any(xInfoSet),
                 Any(xGraphicStorageHandler),
@@ -953,7 +954,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
 
         if (!bStylesOnly)
         {
-            uno::Sequence<uno::Any> aSettingsArgs
+            uno::Sequence<cpo::uno::Any> aSettingsArgs
             {
                 Any(xInfoSet),
                 Any(xWriter),

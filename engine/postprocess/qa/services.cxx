@@ -292,13 +292,13 @@ void Test::createInstance(
         if (withArguments) {
             inst = m_xContext->getServiceManager()
                 ->createInstanceWithArgumentsAndContext(
-                    name, css::uno::Sequence<css::uno::Any>(), m_xContext);
+                    name, css::uno::Sequence<cpo::uno::Any>(), m_xContext);
         } else {
             inst = m_xContext->getServiceManager()->createInstanceWithContext(
                 name, m_xContext);
         }
     } catch (css::uno::Exception & e) {
-        css::uno::Any a(cppu::getCaughtException());
+        cpo::uno::Any a(cppu::getCaughtException());
         CPPUNIT_FAIL(
             OString(
                 "instantiating \"" + msg(implementationName) + "\" via \""

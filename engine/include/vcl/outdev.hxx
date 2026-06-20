@@ -290,8 +290,8 @@ public:
     /// Create Surface for given bitmap data
     cairo::SurfaceSharedPtr     CreateBitmapSurface(const BitmapSystemData& rData, const Size& rSize) const;
     /// Return native handle for underlying surface
-    css::uno::Any               GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const;
-    SAL_DLLPRIVATE css::uno::Any GetSystemGfxDataAny() const;
+    cpo::uno::Any               GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const;
+    SAL_DLLPRIVATE cpo::uno::Any GetSystemGfxDataAny() const;
 
     void                        SetRefPoint();
     void                        SetRefPoint( const Point& rRefPoint );

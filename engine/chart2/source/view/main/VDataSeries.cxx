@@ -180,7 +180,7 @@ VDataSeries::VDataSeries( const rtl::Reference< DataSeries >& xDataSeries )
         {
             try
             {
-                uno::Any aARole = xProp->getPropertyValue(u"Role"_ustr);
+                cpo::uno::Any aARole = xProp->getPropertyValue(u"Role"_ustr);
                 OUString aRole;
                 aARole >>= aRole;
 
@@ -614,7 +614,7 @@ sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const rtl::Refe
         {
             nLabelPlacement = aAvailablePlacements[0];
             if( xPointProps.is() )
-                xPointProps->setPropertyValue(u"LabelPlacement"_ustr, uno::Any(nLabelPlacement));
+                xPointProps->setPropertyValue(u"LabelPlacement"_ustr, cpo::uno::Any(nLabelPlacement));
             return nLabelPlacement;
         }
 

@@ -71,7 +71,7 @@ void EffectProperties::pushToPropMap( PropertyMap& rPropMap,
                                                                 // Default values of sx, sy should be 100000 in this case.
             sal_Int32 nAttrBlur = 0;
 
-            std::map< OUString, css::uno::Any >::const_iterator attribIt = it->maAttribs.find( u"dir"_ustr );
+            std::map< OUString, cpo::uno::Any >::const_iterator attribIt = it->maAttribs.find( u"dir"_ustr );
             if( attribIt != it->maAttribs.end() )
                 attribIt->second >>= nAttrDir;
 

@@ -126,7 +126,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAddressConversionObj::getProp
     }
 }
 
-void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
+void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     if ( !pDocShell )
         throw uno::RuntimeException();
@@ -208,13 +208,13 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropert
         throw lang::IllegalArgumentException();
 }
 
-uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const OUString& aPropertyName )
 {
     if ( !pDocShell )
         throw uno::RuntimeException();
 
     ScDocument& rDoc = pDocShell->GetDocument();
-    uno::Any aRet;
+    cpo::uno::Any aRet;
 
     if ( aPropertyName == SC_UNONAME_ADDRESS )
     {

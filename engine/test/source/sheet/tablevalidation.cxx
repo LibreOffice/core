@@ -12,13 +12,14 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
 #include <com/sun/star/sheet/ValidationType.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <cppunit/TestAssert.h>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace apitest
 {
@@ -26,10 +27,10 @@ void TableValidation::testTableValidationProperties()
 {
     uno::Reference<beans::XPropertySet> xTableValidation(init(), UNO_QUERY_THROW);
     OUString propName;
-    uno::Any aNewValue;
+    cpo::uno::Any aNewValue;
 
     propName = u"Type"_ustr;
-    uno::Any aValue = xTableValidation->getPropertyValue(propName);
+    cpo::uno::Any aValue = xTableValidation->getPropertyValue(propName);
     sheet::ValidationType aValidationType;
     aValue >>= aValidationType;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get property value Type", sheet::ValidationType_ANY,

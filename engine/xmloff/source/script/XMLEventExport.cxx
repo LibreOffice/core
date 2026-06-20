@@ -33,6 +33,7 @@
 
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::document::XEventsSupplier;

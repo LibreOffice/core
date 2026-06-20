@@ -102,7 +102,7 @@ public:
 
     // OPropertySetHelper
     virtual void SAL_CALL getFastPropertyValue(
-                                css::uno::Any& o_rValue,
+                                cpo::uno::Any& o_rValue,
                                 sal_Int32 i_nHandle
                             ) const override;
 
@@ -123,7 +123,7 @@ public:
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
     // XCommandProcessor
-    virtual css::uno::Any SAL_CALL execute( const css::ucb::Command& aCommand, sal_Int32 CommandId, const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override ;
+    virtual cpo::uno::Any SAL_CALL execute( const css::ucb::Command& aCommand, sal_Int32 CommandId, const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override ;
 
     // XRename
     virtual void SAL_CALL rename( const OUString& newName ) override;
@@ -182,8 +182,8 @@ public:
     const OUString& getCurrentName() const { return m_pImpl->m_aProps.aTitle; }
     void firePropertyChange(
                   sal_Int32 i_nHandle,
-            const css::uno::Any& i_rNewValue,
-            const css::uno::Any& i_rOldValue,
+            const cpo::uno::Any& i_rNewValue,
+            const cpo::uno::Any& i_rOldValue,
                   bool i_bVetoable,
             const NotifierAccess&
         );
@@ -238,7 +238,7 @@ private:
     // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
-    virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, css::uno::Any& _rDefault ) const override;
+    virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, cpo::uno::Any& _rDefault ) const override;
 
     // helper
     virtual void SAL_CALL disposing() override;
@@ -318,13 +318,13 @@ private:
 
     //- commands
 
-    void onCommandGetDocumentProperties( css::uno::Any& _rProps );
+    void onCommandGetDocumentProperties( cpo::uno::Any& _rProps );
     /// @throws css::uno::Exception
     void onCommandInsert( const OUString& _sURL, const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment );
-    void onCommandPreview( css::uno::Any& _rImage );
-    css::uno::Any
+    void onCommandPreview( cpo::uno::Any& _rImage );
+    cpo::uno::Any
         onCommandOpenSomething(
-            const css::uno::Any& _rArgument,
+            const cpo::uno::Any& _rArgument,
             const bool _bActivate,
             const css::uno::Reference< css::ucb::XCommandEnvironment >& _rxEnvironment
         );
@@ -344,8 +344,8 @@ public:
 
 private:
             ODocumentDefinition&            m_rDocumentDefinition;
-    const   css::uno::Any                   m_aOldValue;
-    const   css::uno::Any                   m_aNewValue;
+    const   cpo::uno::Any                   m_aOldValue;
+    const   cpo::uno::Any                   m_aNewValue;
     ::osl::ResettableMutexGuard&            m_rClearForNotify;
 
     void    impl_fireEvent_throw( const bool i_bVetoable );

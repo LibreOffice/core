@@ -169,7 +169,7 @@ public:
             const css::uno::Reference< css::frame::XFrame >& rxFrame) override;
 
 
-    virtual void ShowAsyncScriptErrorDialog(weld::Window* pParent, const css::uno::Any& rException) override;
+    virtual void ShowAsyncScriptErrorDialog(weld::Window* pParent, const cpo::uno::Any& rException) override;
 
     virtual VclPtr<VclAbstractDialog>  CreateSvxMacroAssignDlg(
                 weld::Window* _pParent,

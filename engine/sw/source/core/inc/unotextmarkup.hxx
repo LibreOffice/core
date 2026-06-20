@@ -80,12 +80,12 @@ public:
     SwXStringKeyMap();
 
     // css::container::XStringKeyMap:
-    virtual css::uno::Any SAL_CALL getValue(const OUString & aKey) override;
+    virtual cpo::uno::Any SAL_CALL getValue(const OUString & aKey) override;
     virtual bool SAL_CALL hasValue(const OUString & aKey) override;
-    virtual void SAL_CALL insertValue(const OUString & aKey, const css::uno::Any & aValue) override;
+    virtual void SAL_CALL insertValue(const OUString & aKey, const cpo::uno::Any & aValue) override;
     virtual ::sal_Int32 SAL_CALL getCount() override;
     virtual OUString SAL_CALL getKeyByIndex(::sal_Int32 nIndex) override;
-    virtual css::uno::Any SAL_CALL getValueByIndex(::sal_Int32 nIndex) override;
+    virtual cpo::uno::Any SAL_CALL getValueByIndex(::sal_Int32 nIndex) override;
 
 private:
     SwXStringKeyMap(SwXStringKeyMap const &) = delete;
@@ -93,7 +93,7 @@ private:
 
     virtual ~SwXStringKeyMap() override {}
 
-    std::map< OUString, css::uno::Any > maMap;
+    std::map< OUString, cpo::uno::Any > maMap;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

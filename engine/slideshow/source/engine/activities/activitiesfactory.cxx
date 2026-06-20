@@ -379,9 +379,9 @@ private:
 */
 template<class BaseType, typename AnimationType>
 AnimationActivitySharedPtr createFromToByActivity(
-    const uno::Any&                                          rFromAny,
-    const uno::Any&                                          rToAny,
-    const uno::Any&                                          rByAny,
+    const cpo::uno::Any&                                          rFromAny,
+    const cpo::uno::Any&                                          rToAny,
+    const cpo::uno::Any&                                          rByAny,
     const ActivityParameters&                                rParms,
     const ::std::shared_ptr< AnimationType >&              rAnim,
     const Interpolator< typename AnimationType::ValueType >& rInterpolator,
@@ -606,7 +606,7 @@ private:
 */
 template<class BaseType, typename AnimationType>
 AnimationActivitySharedPtr createValueListActivity(
-    const uno::Sequence<uno::Any>&                            rValues,
+    const uno::Sequence<cpo::uno::Any>&                            rValues,
     const ActivityParameters&                                 rParms,
     const std::shared_ptr<AnimationType>&                   rAnim,
     const Interpolator<typename AnimationType::ValueType>&    rInterpolator,

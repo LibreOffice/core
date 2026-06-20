@@ -43,7 +43,7 @@ OUString SAL_CALL SfxUnoPanels::getDeckId()
 
 // XNameAccess
 
-uno::Any SAL_CALL SfxUnoPanels::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL SfxUnoPanels::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 
@@ -51,7 +51,7 @@ uno::Any SAL_CALL SfxUnoPanels::getByName( const OUString& aName )
         throw container::NoSuchElementException();
 
     uno::Reference<ui::XPanel> xPanel = new SfxUnoPanel(xFrame, aName, mDeckId);
-    return uno::Any(xPanel);
+    return cpo::uno::Any(xPanel);
 }
 
 
@@ -120,11 +120,11 @@ sal_Int32 SAL_CALL SfxUnoPanels::getCount()
     return panels.getLength();
 }
 
-uno::Any SAL_CALL SfxUnoPanels::getByIndex( sal_Int32 Index )
+cpo::uno::Any SAL_CALL SfxUnoPanels::getByIndex( sal_Int32 Index )
 {
     SolarMutexGuard aGuard;
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
 
     uno::Sequence< OUString > panels = getElementNames();
 

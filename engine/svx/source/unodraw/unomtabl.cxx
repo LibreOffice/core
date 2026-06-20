@@ -74,7 +74,7 @@ public:
     // SfxListener
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) noexcept override;
 
-    void ImplInsertByName( const OUString& aName, const uno::Any& aElement );
+    void ImplInsertByName( const OUString& aName, const cpo::uno::Any& aElement );
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
@@ -85,14 +85,14 @@ public:
     virtual void SAL_CALL cancel() override;
 
     // XNameContainer
-    virtual void SAL_CALL insertByName( const  OUString& aName, const  uno::Any& aElement ) override;
+    virtual void SAL_CALL insertByName( const  OUString& aName, const  cpo::uno::Any& aElement ) override;
     virtual void SAL_CALL removeByName( const  OUString& Name ) override;
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const  OUString& aName, const  uno::Any& aElement ) override;
+    virtual void SAL_CALL replaceByName( const  OUString& aName, const  cpo::uno::Any& aElement ) override;
 
     // XNameAccess
-    virtual uno::Any SAL_CALL getByName( const  OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const  OUString& aName ) override;
     virtual uno::Sequence<  OUString > SAL_CALL getElementNames(  ) override;
     virtual bool SAL_CALL hasByName( const  OUString& aName ) override;
 
@@ -152,7 +152,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getSupportedServiceNames( 
     return aSNS;
 }
 
-void SvxUnoMarkerTable::ImplInsertByName( const OUString& aName, const uno::Any& aElement )
+void SvxUnoMarkerTable::ImplInsertByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
     maItemSetVector.push_back(
         std::make_unique<SfxItemSetFixed<XATTR_LINESTART, XATTR_LINEEND>>( *mpModelPool ));
@@ -172,7 +172,7 @@ void SvxUnoMarkerTable::ImplInsertByName( const OUString& aName, const uno::Any&
 }
 
 // XNameContainer
-void SAL_CALL SvxUnoMarkerTable::insertByName( const OUString& aApiName, const uno::Any& aElement )
+void SAL_CALL SvxUnoMarkerTable::insertByName( const OUString& aApiName, const cpo::uno::Any& aElement )
 {
     SolarMutexGuard aGuard;
 
@@ -214,7 +214,7 @@ void SAL_CALL SvxUnoMarkerTable::removeByName( const OUString& aApiName )
 }
 
 // XNameReplace
-void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const uno::Any& aElement )
+void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const cpo::uno::Any& aElement )
 {
     SolarMutexGuard aGuard;
 
@@ -285,7 +285,7 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
     ImplInsertByName( aName, aElement );
 }
 
-static bool getByNameFromPool( std::u16string_view rSearchName, SfxItemPool const * pPool, SfxItemType eItemType, uno::Any& rAny )
+static bool getByNameFromPool( std::u16string_view rSearchName, SfxItemPool const * pPool, SfxItemType eItemType, cpo::uno::Any& rAny )
 {
     if (pPool)
     {
@@ -305,13 +305,13 @@ static bool getByNameFromPool( std::u16string_view rSearchName, SfxItemPool cons
 }
 
 // XNameAccess
-uno::Any SAL_CALL SvxUnoMarkerTable::getByName( const OUString& aApiName )
+cpo::uno::Any SAL_CALL SvxUnoMarkerTable::getByName( const OUString& aApiName )
 {
     SolarMutexGuard aGuard;
 
     OUString aName = SvxUnogetInternalNameForItem(XATTR_LINEEND, aApiName);
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     if (mpModelPool && !aName.isEmpty())
     {

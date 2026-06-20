@@ -39,10 +39,10 @@ ScVbaFileDialog::ScVbaFileDialog( const uno::Reference< XHelperInterface >& xPar
     , m_bMultiSelectMode(false)
 {}
 
-uno::Any
-ScVbaFileDialog::getInitialFileName() { return uno::Any( m_sInitialFileName ); }
+cpo::uno::Any
+ScVbaFileDialog::getInitialFileName() { return cpo::uno::Any( m_sInitialFileName ); }
 
-void ScVbaFileDialog::setInitialFileName( const css::uno::Any& rName )
+void ScVbaFileDialog::setInitialFileName( const cpo::uno::Any& rName )
 {
     OUString sDefaultPath;
 
@@ -58,19 +58,19 @@ void ScVbaFileDialog::setInitialFileName( const css::uno::Any& rName )
     }
 }
 
-css::uno::Any ScVbaFileDialog::getTitle() { return uno::Any( m_sTitle ); }
+cpo::uno::Any ScVbaFileDialog::getTitle() { return cpo::uno::Any( m_sTitle ); }
 
-void ScVbaFileDialog::setTitle( const css::uno::Any& rTitle )
+void ScVbaFileDialog::setTitle( const cpo::uno::Any& rTitle )
 {
     rTitle >>= m_sTitle;
 }
 
-uno::Any ScVbaFileDialog::getAllowMultiSelect()
+cpo::uno::Any ScVbaFileDialog::getAllowMultiSelect()
 {
-    return uno::Any(m_bMultiSelectMode);
+    return cpo::uno::Any(m_bMultiSelectMode);
 }
 
-void ScVbaFileDialog::setAllowMultiSelect(const uno::Any& rAllowMultiSelect)
+void ScVbaFileDialog::setAllowMultiSelect(const cpo::uno::Any& rAllowMultiSelect)
 {
     rAllowMultiSelect >>= m_bMultiSelectMode;
 }

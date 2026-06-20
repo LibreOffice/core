@@ -104,6 +104,7 @@ namespace com::sun::star::linguistic2 { class XSpellChecker; }
 using namespace ::sd;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::linguistic2;
 
 using namespace com::sun::star::xml::dom;
@@ -748,7 +749,7 @@ void lcl_copyUserDefinedProperties(const SfxObjectShell* pSource, const SfxObjec
     for (const beans::Property& rProperty : aProperties)
     {
         const OUString& rKey = rProperty.Name;
-        uno::Any aValue = xSourcePropertySet->getPropertyValue(rKey);
+        cpo::uno::Any aValue = xSourcePropertySet->getPropertyValue(rKey);
         // We know that pDestination was just created, so has no properties: addProperty() will never throw.
         xDestinationPropertyContainer->addProperty(rKey, beans::PropertyAttribute::REMOVABLE, aValue);
     }

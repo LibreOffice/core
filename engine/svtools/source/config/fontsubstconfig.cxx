@@ -29,6 +29,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::beans;
 
 
@@ -90,7 +91,7 @@ std::vector<SubstitutionStruct> GetFontSubstitutions()
 void SetFontSubstitutions(bool bIsEnabled, std::vector<SubstitutionStruct> const & aSubstArr)
 {
     Reference<css::container::XHierarchicalNameAccess> xHierarchyAccess = utl::ConfigManager::acquireTree(u"Office.Common/Font/Substitution");
-    utl::ConfigItem::PutProperties(xHierarchyAccess, {cReplacement}, {css::uno::Any(bIsEnabled)}, /*bAllLocales*/false);
+    utl::ConfigItem::PutProperties(xHierarchyAccess, {cReplacement}, {cpo::uno::Any(bIsEnabled)}, /*bAllLocales*/false);
 
     OUString sNode(cFontPairs);
     if(aSubstArr.empty())

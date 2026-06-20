@@ -88,7 +88,7 @@ public:
 
     css::uno::Mapping & getCppToBinaryMapping() { return cppToBinaryMapping_;}
 
-    BinaryAny mapCppToBinaryAny(css::uno::Any const & cppAny);
+    BinaryAny mapCppToBinaryAny(cpo::uno::Any const & cppAny);
 
     uno_ThreadPool getThreadPool();
 
@@ -203,7 +203,7 @@ private:
 
     void throwException(bool exception, BinaryAny const & value);
 
-    css::uno::Any mapBinaryToCppAny(BinaryAny const & binaryAny);
+    cpo::uno::Any mapBinaryToCppAny(BinaryAny const & binaryAny);
 
     bool becameUnused() const;
 

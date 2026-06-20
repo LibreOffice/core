@@ -220,12 +220,12 @@ namespace framework
             void    implts_setVisibleState( bool bShow );
             void    implts_updateUIElementsVisibleState( bool bShow );
             void    implts_setCurrentUIVisibility( bool bShow );
-            void    implts_notifyListeners(short nEvent, const css::uno::Any& rInfoParam);
+            void    implts_notifyListeners(short nEvent, const cpo::uno::Any& rInfoParam);
 
             //  OPropertySetHelper
 
             virtual void                                                SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32                        nHandle         ,
-                                                                                                                const css::uno::Any&  aValue          ) override;
+                                                                                                                const cpo::uno::Any&  aValue          ) override;
             virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper() override;
             virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
 

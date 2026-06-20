@@ -34,6 +34,7 @@
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::bridge::oleautomation;
 using namespace connectivity::ado;
 
@@ -355,7 +356,7 @@ void OLEVariant::ChangeType(VARTYPE vartype, const OLEVariant* pSrc)
                 nullptr,
                 "S1000",
                 1000,
-                css::uno::Any()
+                cpo::uno::Any()
             );
         }
     }
@@ -599,9 +600,9 @@ SAFEARRAY* OLEVariant::getUI1SAFEARRAYPtr() const
     return V_ARRAY(&varDest);
 }
 
-css::uno::Any OLEVariant::makeAny() const
+cpo::uno::Any OLEVariant::makeAny() const
 {
-    css::uno::Any aValue;
+    cpo::uno::Any aValue;
     switch (V_VT(this))
     {
         case VT_EMPTY:

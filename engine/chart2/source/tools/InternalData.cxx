@@ -55,9 +55,9 @@ struct lcl_NumberedStringGenerator
             m_nWildcardLength( rWildcard.size())
     {
     }
-    std::vector< uno::Any > operator()()
+    std::vector< cpo::uno::Any > operator()()
     {
-        return { uno::Any(m_aStub.replaceAt( m_nStubStartIndex, m_nWildcardLength, OUString::number( ++m_nCounter ))) };
+        return { cpo::uno::Any(m_aStub.replaceAt( m_nStubStartIndex, m_nWildcardLength, OUString::number( ++m_nCounter ))) };
     }
 private:
     OUString m_aStub;
@@ -198,7 +198,7 @@ void InternalData::setRowValues( sal_Int32 nRowIndex, const std::vector< double 
     m_aData[ std::slice( nRowIndex*m_nColumnCount, m_nColumnCount, 1 ) ]= aSlice;
 }
 
-void InternalData::setComplexColumnLabel( sal_Int32 nColumnIndex, std::vector< uno::Any >&& rComplexLabel )
+void InternalData::setComplexColumnLabel( sal_Int32 nColumnIndex, std::vector< cpo::uno::Any >&& rComplexLabel )
 {
     if( nColumnIndex < 0 )
         return;
@@ -212,7 +212,7 @@ void InternalData::setComplexColumnLabel( sal_Int32 nColumnIndex, std::vector< u
     dump();
 }
 
-void InternalData::setComplexRowLabel( sal_Int32 nRowIndex, std::vector< uno::Any >&& rComplexLabel )
+void InternalData::setComplexRowLabel( sal_Int32 nRowIndex, std::vector< cpo::uno::Any >&& rComplexLabel )
 {
     if( nRowIndex < 0 )
         return;
@@ -226,7 +226,7 @@ void InternalData::setComplexRowLabel( sal_Int32 nRowIndex, std::vector< uno::An
     dump();
 }
 
-void InternalData::setComplexCategoryLabel(sal_Int32 nRowIndex, std::vector< uno::Any >&& rComplexLabel)
+void InternalData::setComplexCategoryLabel(sal_Int32 nRowIndex, std::vector< cpo::uno::Any >&& rComplexLabel)
 {
     if (nRowIndex < 0)
         return;
@@ -247,19 +247,19 @@ void InternalData::setComplexCategoryLabel(sal_Int32 nRowIndex, std::vector< uno
     }
 }
 
-std::vector< uno::Any > InternalData::getComplexColumnLabel( sal_Int32 nColumnIndex ) const
+std::vector< cpo::uno::Any > InternalData::getComplexColumnLabel( sal_Int32 nColumnIndex ) const
 {
     if( nColumnIndex < static_cast< sal_Int32 >( m_aColumnLabels.size() ) )
         return m_aColumnLabels[nColumnIndex];
     else
-        return std::vector< uno::Any >();
+        return std::vector< cpo::uno::Any >();
 }
-std::vector< uno::Any > InternalData::getComplexRowLabel( sal_Int32 nRowIndex ) const
+std::vector< cpo::uno::Any > InternalData::getComplexRowLabel( sal_Int32 nRowIndex ) const
 {
     if( nRowIndex < static_cast< sal_Int32 >( m_aRowLabels.size() ) )
         return m_aRowLabels[nRowIndex];
     else
-        return std::vector< uno::Any >();
+        return std::vector< cpo::uno::Any >();
 }
 
 void InternalData::swapRowWithNext( sal_Int32 nRowIndex )
@@ -345,7 +345,7 @@ void InternalData::insertColumn( sal_Int32 nAfterIndex )
 
     // labels
     if( nAfterIndex < static_cast< sal_Int32 >( m_aColumnLabels.size()))
-        m_aColumnLabels.insert( m_aColumnLabels.begin() + (nAfterIndex + 1), std::vector< uno::Any >(1) );
+        m_aColumnLabels.insert( m_aColumnLabels.begin() + (nAfterIndex + 1), std::vector< cpo::uno::Any >(1) );
 
     dump();
 }
@@ -402,7 +402,7 @@ void InternalData::insertRow( sal_Int32 nAfterIndex )
 
     // labels
     if( nAfterIndex < static_cast< sal_Int32 >( m_aRowLabels.size()))
-        m_aRowLabels.insert( m_aRowLabels.begin() + nIndex, std::vector< uno::Any > (1));
+        m_aRowLabels.insert( m_aRowLabels.begin() + nIndex, std::vector< cpo::uno::Any > (1));
 
     dump();
 }

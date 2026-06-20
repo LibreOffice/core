@@ -31,7 +31,7 @@
 
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -45,6 +45,7 @@ using namespace ::osl;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 using ::std::pair;
@@ -567,7 +568,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_LibXSLTTransformer_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new XSLT::LibXSLTTransformer(context));
 }

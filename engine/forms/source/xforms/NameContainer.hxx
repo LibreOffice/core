@@ -26,7 +26,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <osl/diagnose.h>
 
@@ -94,13 +94,13 @@ public:
     // methods for XNameAccess (inherits XElementAccess)
 
 
-    virtual css::uno::Any SAL_CALL getByName(
+    virtual cpo::uno::Any SAL_CALL getByName(
         const OUString& rName ) override
     {
         typename map_t::const_iterator aIter = findItem( rName );
         if( aIter == maItems.end() )
             throw css::container::NoSuchElementException();
-        return css::uno::Any( aIter->second );
+        return cpo::uno::Any( aIter->second );
     }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getElementNames() override
@@ -120,7 +120,7 @@ public:
 
     virtual void SAL_CALL replaceByName(
         const OUString& rName,
-        const css::uno::Any& aElement ) override
+        const cpo::uno::Any& aElement ) override
     {
         T aItem;
         if( !(aElement >>= aItem) )
@@ -136,7 +136,7 @@ public:
 
     virtual void SAL_CALL insertByName(
         const OUString& rName,
-        const css::uno::Any& aElement ) override
+        const cpo::uno::Any& aElement ) override
     {
         T aItem;
         if( !(aElement >>= aItem) )

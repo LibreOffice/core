@@ -20,7 +20,7 @@
 
 #include <sal/types.h>
 #include <tools/toolsdllapi.h>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <config_global.h>
 #include <basegfx/color/bcolor.hxx>
 #include <osl/endian.h>
@@ -413,7 +413,7 @@ public:
 };
 
 // to reduce the noise when moving these into and out of Any
-inline bool operator >>=( const css::uno::Any & rAny, Color & value )
+inline bool operator >>=( const cpo::uno::Any & rAny, Color & value )
 {
   sal_Int32 nTmp = {}; // spurious -Werror=maybe-uninitialized
   if (!(rAny >>= nTmp))
@@ -422,12 +422,12 @@ inline bool operator >>=( const css::uno::Any & rAny, Color & value )
   return true;
 }
 
-inline void operator <<=( css::uno::Any & rAny, Color value )
+inline void operator <<=( cpo::uno::Any & rAny, Color value )
 {
     rAny <<= sal_Int32(value);
 }
 
-namespace com::sun::star::uno {
+namespace cpo::uno {
     template<> inline Any::Any(Color const & value): Any(sal_Int32(value)) {}
 }
 

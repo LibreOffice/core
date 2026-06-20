@@ -311,7 +311,7 @@ namespace slideshow::internal
                         }
 
                         // create visible object
-                        uno::Sequence< uno::Any > aDeviceParams;
+                        uno::Sequence< cpo::uno::Any > aDeviceParams;
 
                         if( ::canvastools::getDeviceInfo( xCanvas, aDeviceParams ).getLength() > 1 )
                         {
@@ -404,7 +404,7 @@ namespace slideshow::internal
 
 
         void ViewMediaShape::implInitializePlayerWindow( const ::basegfx::B2DRectangle&   rBounds,
-                                                                 const uno::Sequence< uno::Any >& rVCLDeviceParams )
+                                                                 const uno::Sequence< cpo::uno::Any >& rVCLDeviceParams )
         {
             SAL_INFO("slideshow", "ViewMediaShape::implInitializePlayerWindow" );
             if( mpMediaWindow || rBounds.isEmpty() )
@@ -474,12 +474,12 @@ namespace slideshow::internal
                             if (pMediaItem)
                                 pMediaItem->setState(avmedia::MediaState::Play);
 
-                            uno::Sequence< uno::Any >   aArgs{
-                                uno::Any(nParentWindowHandle),
-                                uno::Any(aAWTRect),
-                                uno::Any(reinterpret_cast< sal_IntPtr >( mpMediaWindow.get() )),
+                            uno::Sequence< cpo::uno::Any >   aArgs{
+                                cpo::uno::Any(nParentWindowHandle),
+                                cpo::uno::Any(aAWTRect),
+                                cpo::uno::Any(reinterpret_cast< sal_IntPtr >( mpMediaWindow.get() )),
                                 // Media item contains media properties, e.g. cropping.
-                                uno::Any(reinterpret_cast< sal_IntPtr >( pMediaItem ))
+                                cpo::uno::Any(reinterpret_cast< sal_IntPtr >( pMediaItem ))
                             };
 
                             mxPlayerWindow.set( mxPlayer->createPlayerWindow( aArgs ) );

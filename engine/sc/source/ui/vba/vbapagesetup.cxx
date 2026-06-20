@@ -52,7 +52,7 @@ ScVbaPageSetup::ScVbaPageSetup(const uno::Reference< XHelperInterface >& xParent
 {
     // query for current page style
     uno::Reference< beans::XPropertySet > xSheetProps( mxSheet, uno::UNO_QUERY_THROW );
-    uno::Any aValue = xSheetProps->getPropertyValue(u"PageStyle"_ustr);
+    cpo::uno::Any aValue = xSheetProps->getPropertyValue(u"PageStyle"_ustr);
     OUString aStyleName;
     aValue >>= aStyleName;
 
@@ -139,12 +139,12 @@ void SAL_CALL ScVbaPageSetup::setFooterMargin( double margin )
     VbaPageSetupBase::setFooterMargin( margin );
 }
 
-uno::Any SAL_CALL ScVbaPageSetup::getFitToPagesTall()
+cpo::uno::Any SAL_CALL ScVbaPageSetup::getFitToPagesTall()
 {
     return mxPageProps->getPropertyValue(u"ScaleToPagesY"_ustr);
 }
 
-void SAL_CALL ScVbaPageSetup::setFitToPagesTall( const uno::Any& fitToPagesTall)
+void SAL_CALL ScVbaPageSetup::setFitToPagesTall( const cpo::uno::Any& fitToPagesTall)
 {
     try
     {
@@ -155,19 +155,19 @@ void SAL_CALL ScVbaPageSetup::setFitToPagesTall( const uno::Any& fitToPagesTall)
             fitToPagesTall >>= scaleToPageY;
         }
 
-        mxPageProps->setPropertyValue(u"ScaleToPagesY"_ustr, uno::Any( scaleToPageY ));
+        mxPageProps->setPropertyValue(u"ScaleToPagesY"_ustr, cpo::uno::Any( scaleToPageY ));
     }
     catch( uno::Exception& )
     {
     }
 }
 
-uno::Any SAL_CALL ScVbaPageSetup::getFitToPagesWide()
+cpo::uno::Any SAL_CALL ScVbaPageSetup::getFitToPagesWide()
 {
     return mxPageProps->getPropertyValue(u"ScaleToPagesX"_ustr);
 }
 
-void SAL_CALL ScVbaPageSetup::setFitToPagesWide( const uno::Any& fitToPagesWide)
+void SAL_CALL ScVbaPageSetup::setFitToPagesWide( const cpo::uno::Any& fitToPagesWide)
 {
     try
     {
@@ -178,19 +178,19 @@ void SAL_CALL ScVbaPageSetup::setFitToPagesWide( const uno::Any& fitToPagesWide)
             fitToPagesWide >>= scaleToPageX;
         }
 
-        mxPageProps->setPropertyValue(u"ScaleToPagesX"_ustr, uno::Any( scaleToPageX ));
+        mxPageProps->setPropertyValue(u"ScaleToPagesX"_ustr, cpo::uno::Any( scaleToPageX ));
     }
     catch( uno::Exception& )
     {
     }
 }
 
-uno::Any SAL_CALL ScVbaPageSetup::getZoom()
+cpo::uno::Any SAL_CALL ScVbaPageSetup::getZoom()
 {
     return mxPageProps->getPropertyValue(u"PageScale"_ustr);
 }
 
-void SAL_CALL ScVbaPageSetup::setZoom( const uno::Any& zoom)
+void SAL_CALL ScVbaPageSetup::setZoom( const cpo::uno::Any& zoom)
 {
     sal_uInt16 pageScale = 0;
     try
@@ -215,9 +215,9 @@ void SAL_CALL ScVbaPageSetup::setZoom( const uno::Any& zoom)
 
         // these only exist in S08
         sal_uInt16 nScale = 0;
-        mxPageProps->setPropertyValue(u"ScaleToPages"_ustr, uno::Any( nScale ));
-        mxPageProps->setPropertyValue(u"ScaleToPagesX"_ustr, uno::Any( nScale ));
-        mxPageProps->setPropertyValue(u"ScaleToPagesY"_ustr, uno::Any( nScale ));
+        mxPageProps->setPropertyValue(u"ScaleToPages"_ustr, cpo::uno::Any( nScale ));
+        mxPageProps->setPropertyValue(u"ScaleToPagesX"_ustr, cpo::uno::Any( nScale ));
+        mxPageProps->setPropertyValue(u"ScaleToPagesY"_ustr, cpo::uno::Any( nScale ));
     }
     catch (const beans::UnknownPropertyException&)
     {
@@ -230,7 +230,7 @@ void SAL_CALL ScVbaPageSetup::setZoom( const uno::Any& zoom)
     {
     }
 
-    mxPageProps->setPropertyValue(u"PageScale"_ustr, uno::Any( pageScale ));
+    mxPageProps->setPropertyValue(u"PageScale"_ustr, cpo::uno::Any( pageScale ));
 }
 
 OUString SAL_CALL ScVbaPageSetup::getLeftHeader()
@@ -256,7 +256,7 @@ void SAL_CALL ScVbaPageSetup::setLeftHeader( const OUString& leftHeader)
         uno::Reference<sheet::XHeaderFooterContent> xHeaderContent( mxPageProps->getPropertyValue(u"RightPageHeaderContent"_ustr), uno::UNO_QUERY_THROW);
         uno::Reference< text::XText > xText = xHeaderContent->getLeftText();
         xText->setString( leftHeader );
-        mxPageProps->setPropertyValue(u"RightPageHeaderContent"_ustr, uno::Any(xHeaderContent) );
+        mxPageProps->setPropertyValue(u"RightPageHeaderContent"_ustr, cpo::uno::Any(xHeaderContent) );
     }
     catch( uno::Exception& )
     {
@@ -286,7 +286,7 @@ void SAL_CALL ScVbaPageSetup::setCenterHeader( const OUString& centerHeader)
         uno::Reference<sheet::XHeaderFooterContent> xHeaderContent( mxPageProps->getPropertyValue(u"RightPageHeaderContent"_ustr), uno::UNO_QUERY_THROW);
         uno::Reference< text::XText > xText = xHeaderContent->getCenterText();
         xText->setString( centerHeader );
-        mxPageProps->setPropertyValue(u"RightPageHeaderContent"_ustr, uno::Any(xHeaderContent) );
+        mxPageProps->setPropertyValue(u"RightPageHeaderContent"_ustr, cpo::uno::Any(xHeaderContent) );
     }
     catch( uno::Exception& )
     {
@@ -316,7 +316,7 @@ void SAL_CALL ScVbaPageSetup::setRightHeader( const OUString& rightHeader)
         uno::Reference<sheet::XHeaderFooterContent> xHeaderContent( mxPageProps->getPropertyValue(u"RightPageHeaderContent"_ustr), uno::UNO_QUERY_THROW);
         uno::Reference< text::XText > xText = xHeaderContent->getRightText();
         xText->setString( rightHeader );
-        mxPageProps->setPropertyValue(u"RightPageHeaderContent"_ustr, uno::Any(xHeaderContent) );
+        mxPageProps->setPropertyValue(u"RightPageHeaderContent"_ustr, cpo::uno::Any(xHeaderContent) );
     }
     catch( uno::Exception& )
     {
@@ -346,7 +346,7 @@ void SAL_CALL ScVbaPageSetup::setLeftFooter( const OUString& leftFooter)
         uno::Reference<sheet::XHeaderFooterContent> xFooterContent( mxPageProps->getPropertyValue(u"RightPageFooterContent"_ustr), uno::UNO_QUERY_THROW);
         uno::Reference< text::XText > xText = xFooterContent->getLeftText();
         xText->setString( leftFooter );
-        mxPageProps->setPropertyValue(u"RightPageFooterContent"_ustr, uno::Any(xFooterContent) );
+        mxPageProps->setPropertyValue(u"RightPageFooterContent"_ustr, cpo::uno::Any(xFooterContent) );
     }
     catch( uno::Exception& )
     {
@@ -376,7 +376,7 @@ void SAL_CALL ScVbaPageSetup::setCenterFooter( const OUString& centerFooter)
         uno::Reference<sheet::XHeaderFooterContent> xFooterContent( mxPageProps->getPropertyValue(u"RightPageFooterContent"_ustr), uno::UNO_QUERY_THROW);
         uno::Reference< text::XText > xText = xFooterContent->getCenterText();
         xText->setString( centerFooter );
-        mxPageProps->setPropertyValue(u"RightPageFooterContent"_ustr, uno::Any(xFooterContent) );
+        mxPageProps->setPropertyValue(u"RightPageFooterContent"_ustr, cpo::uno::Any(xFooterContent) );
     }
     catch( uno::Exception& )
     {
@@ -407,7 +407,7 @@ void SAL_CALL ScVbaPageSetup::setRightFooter( const OUString& rightFooter)
         uno::Reference<sheet::XHeaderFooterContent> xFooterContent( mxPageProps->getPropertyValue(u"RightPageFooterContent"_ustr), uno::UNO_QUERY_THROW);
         uno::Reference< text::XText > xText = xFooterContent->getRightText();
         xText->setString( rightFooter );
-        mxPageProps->setPropertyValue(u"RightPageFooterContent"_ustr, uno::Any(xFooterContent) );
+        mxPageProps->setPropertyValue(u"RightPageFooterContent"_ustr, cpo::uno::Any(xFooterContent) );
     }
     catch( uno::Exception& )
     {
@@ -419,7 +419,7 @@ sal_Int32 SAL_CALL ScVbaPageSetup::getOrder()
     sal_Int32 order = excel::XlOrder::xlDownThenOver;
     try
     {
-        uno::Any aValue = mxPageProps->getPropertyValue(u"PrintDownFirst"_ustr);
+        cpo::uno::Any aValue = mxPageProps->getPropertyValue(u"PrintDownFirst"_ustr);
         bool bPrintDownFirst = false;
         aValue >>= bPrintDownFirst;
         if( !bPrintDownFirst )
@@ -448,7 +448,7 @@ void SAL_CALL ScVbaPageSetup::setOrder(sal_Int32 order)
 
     try
     {
-        mxPageProps->setPropertyValue(u"PrintDownFirst"_ustr, uno::Any( bOrder ));
+        mxPageProps->setPropertyValue(u"PrintDownFirst"_ustr, cpo::uno::Any( bOrder ));
     }
     catch (const uno::Exception&)
     {
@@ -460,7 +460,7 @@ sal_Int32 SAL_CALL ScVbaPageSetup::getFirstPageNumber()
     sal_Int16 number = 0;
     try
     {
-        uno::Any aValue = mxPageProps->getPropertyValue(u"FirstPageNumber"_ustr);
+        cpo::uno::Any aValue = mxPageProps->getPropertyValue(u"FirstPageNumber"_ustr);
         aValue >>= number;
     }
     catch( uno::Exception& )
@@ -482,7 +482,7 @@ void SAL_CALL ScVbaPageSetup::setFirstPageNumber( sal_Int32 firstPageNumber)
 
     try
     {
-        uno::Any aValue;
+        cpo::uno::Any aValue;
         aValue <<= static_cast<sal_Int16>(firstPageNumber);
         mxPageProps->setPropertyValue(u"FirstPageNumber"_ustr, aValue );
     }
@@ -496,7 +496,7 @@ bool SAL_CALL ScVbaPageSetup::getCenterVertically()
     bool centerVertically = false;
     try
     {
-        uno::Any aValue = mxPageProps->getPropertyValue(u"CenterVertically"_ustr);
+        cpo::uno::Any aValue = mxPageProps->getPropertyValue(u"CenterVertically"_ustr);
         aValue >>= centerVertically;
     }
     catch (const uno::Exception&)
@@ -509,7 +509,7 @@ void SAL_CALL ScVbaPageSetup::setCenterVertically( bool centerVertically)
 {
     try
     {
-        mxPageProps->setPropertyValue(u"CenterVertically"_ustr, uno::Any( centerVertically ));
+        mxPageProps->setPropertyValue(u"CenterVertically"_ustr, cpo::uno::Any( centerVertically ));
     }
     catch (const uno::Exception&)
     {
@@ -521,7 +521,7 @@ bool SAL_CALL ScVbaPageSetup::getCenterHorizontally()
     bool centerHorizontally = false;
     try
     {
-        uno::Any aValue = mxPageProps->getPropertyValue(u"CenterHorizontally"_ustr);
+        cpo::uno::Any aValue = mxPageProps->getPropertyValue(u"CenterHorizontally"_ustr);
         aValue >>= centerHorizontally;
     }
     catch (const uno::Exception&)
@@ -534,7 +534,7 @@ void SAL_CALL ScVbaPageSetup::setCenterHorizontally( bool centerHorizontally)
 {
     try
     {
-        mxPageProps->setPropertyValue(u"CenterHorizontally"_ustr, uno::Any( centerHorizontally ));
+        mxPageProps->setPropertyValue(u"CenterHorizontally"_ustr, cpo::uno::Any( centerHorizontally ));
     }
     catch (const uno::Exception&)
     {
@@ -546,7 +546,7 @@ bool SAL_CALL ScVbaPageSetup::getPrintHeadings()
     bool printHeadings = false;
     try
     {
-        uno::Any aValue = mxPageProps->getPropertyValue(u"PrintHeaders"_ustr);
+        cpo::uno::Any aValue = mxPageProps->getPropertyValue(u"PrintHeaders"_ustr);
         aValue >>= printHeadings;
     }
     catch (const uno::Exception&)
@@ -559,7 +559,7 @@ void SAL_CALL ScVbaPageSetup::setPrintHeadings( bool printHeadings)
 {
     try
     {
-        mxPageProps->setPropertyValue(u"PrintHeaders"_ustr, uno::Any( printHeadings ));
+        mxPageProps->setPropertyValue(u"PrintHeaders"_ustr, cpo::uno::Any( printHeadings ));
     }
     catch( uno::Exception& )
     {
@@ -611,7 +611,7 @@ void SAL_CALL ScVbaPageSetup::setPaperSize( sal_Int32 papersize )
         awt::Size aPaperSize = msfilter::util::PaperSizeConv::getApiSizeForMSPaperSizeIndex( papersize );
         if ( mbIsLandscape )
             ::std::swap( aPaperSize.Width, aPaperSize.Height );
-        mxPageProps->setPropertyValue( u"Size"_ustr, uno::Any( aPaperSize ) );
+        mxPageProps->setPropertyValue( u"Size"_ustr, cpo::uno::Any( aPaperSize ) );
     }
 }
 

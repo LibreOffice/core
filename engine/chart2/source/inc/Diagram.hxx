@@ -90,7 +90,7 @@ public:
     explicit Diagram( const Diagram & rOther );
 
     // ____ OPropertySet ____
-    virtual void GetDefaultValue( sal_Int32 nHandle, css::uno::Any& rAny ) const override;
+    virtual void GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const override;
 
     // ____ OPropertySet ____
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
@@ -100,13 +100,13 @@ public:
         getPropertySetInfo() override;
 
     // ____ XFastPropertySet ____
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
 
     /// make original interface function visible again
     using ::com::sun::star::beans::XFastPropertySet::getFastPropertyValue;
 
     virtual void SAL_CALL getFastPropertyValue(
-        css::uno::Any& rValue, sal_Int32 nHandle ) const override;
+        cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
     // ____ XDiagram ____
     virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getWall() override;

@@ -58,7 +58,7 @@ public:
     virtual bool SAL_CALL hasElements() override;
 
     // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName(
+    virtual cpo::uno::Any SAL_CALL getByName(
             const OUString& rName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
         getElementNames() override;
@@ -116,7 +116,7 @@ public:
                 css::util::XRefreshListener>& xListener) override;
 
     // container::XUniqueIDAccess
-    virtual css::uno::Any SAL_CALL getByUniqueID( const OUString& ID ) override;
+    virtual cpo::uno::Any SAL_CALL getByUniqueID( const OUString& ID ) override;
     virtual void SAL_CALL removeByUniqueID( const OUString& ID ) override;
 
     rtl::Reference<SwXFieldEnumeration> createFieldEnumeration();

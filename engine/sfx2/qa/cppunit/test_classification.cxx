@@ -48,8 +48,8 @@ void ClassificationTest::testClassification()
 {
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"Name", uno::Any(u"Non-Business"_ustr)},
-        {"Type", uno::Any(u"urn:bails:ExportControl:"_ustr)},
+        {"Name", cpo::uno::Any(u"Non-Business"_ustr)},
+        {"Type", cpo::uno::Any(u"urn:bails:ExportControl:"_ustr)},
     }));
     dispatchCommand(mxComponent, u".uno:ClassificationApply"_ustr, aPropertyValues);
 
@@ -57,13 +57,13 @@ void ClassificationTest::testClassification()
     CPPUNIT_ASSERT(xDocumentPropertiesSupplier.is());
     uno::Reference<document::XDocumentProperties> xDocumentProperties = xDocumentPropertiesSupplier->getDocumentProperties();
     uno::Reference<beans::XPropertySet> xPropertySet(xDocumentProperties->getUserDefinedProperties(), uno::UNO_QUERY);
-    uno::Any aAny = xPropertySet->getPropertyValue(u"urn:bails:ExportControl:BusinessAuthorizationCategory:Identifier"_ustr);
+    cpo::uno::Any aAny = xPropertySet->getPropertyValue(u"urn:bails:ExportControl:BusinessAuthorizationCategory:Identifier"_ustr);
     CPPUNIT_ASSERT_EQUAL(u"urn:example:tscp:1:non-business"_ustr, aAny.get<OUString>());
 
     aPropertyValues = comphelper::InitPropertySequence(
     {
-        {"Name", uno::Any(u"Confidential"_ustr)},
-        {"Type", uno::Any(u"urn:bails:NationalSecurity:"_ustr)},
+        {"Name", cpo::uno::Any(u"Confidential"_ustr)},
+        {"Type", cpo::uno::Any(u"urn:bails:NationalSecurity:"_ustr)},
     });
     dispatchCommand(mxComponent, u".uno:ClassificationApply"_ustr, aPropertyValues);
     aAny = xPropertySet->getPropertyValue(u"urn:bails:NationalSecurity:BusinessAuthorizationCategory:Identifier"_ustr);
@@ -71,8 +71,8 @@ void ClassificationTest::testClassification()
 
     aPropertyValues = comphelper::InitPropertySequence(
     {
-        {"Name", uno::Any(u"Internal Only"_ustr)},
-        {"Type", uno::Any(u"urn:bails:IntellectualProperty:"_ustr)},
+        {"Name", cpo::uno::Any(u"Internal Only"_ustr)},
+        {"Type", cpo::uno::Any(u"urn:bails:IntellectualProperty:"_ustr)},
     });
     dispatchCommand(mxComponent, u".uno:ClassificationApply"_ustr, aPropertyValues);
     aAny = xPropertySet->getPropertyValue(u"urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Identifier"_ustr);

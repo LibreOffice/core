@@ -43,14 +43,14 @@ public:
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // ScVbaWorkbooks_BASE
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 
     // XWorkbooks
-    virtual css::uno::Any SAL_CALL Add( const css::uno::Any& Template ) override;
+    virtual cpo::uno::Any SAL_CALL Add( const cpo::uno::Any& Template ) override;
     virtual void SAL_CALL Close(  ) override;
-    virtual css::uno::Any SAL_CALL Open( const OUString& Filename, const css::uno::Any& UpdateLinks, const css::uno::Any& ReadOnly, const css::uno::Any& Format, const css::uno::Any& Password, const css::uno::Any& WriteResPassword, const css::uno::Any& IgnoreReadOnlyRecommended, const css::uno::Any& Origin, const css::uno::Any& Delimiter, const css::uno::Any& Editable, const css::uno::Any& Notify, const css::uno::Any& Converter, const css::uno::Any& AddToMru ) override;
+    virtual cpo::uno::Any SAL_CALL Open( const OUString& Filename, const cpo::uno::Any& UpdateLinks, const cpo::uno::Any& ReadOnly, const cpo::uno::Any& Format, const cpo::uno::Any& Password, const cpo::uno::Any& WriteResPassword, const cpo::uno::Any& IgnoreReadOnlyRecommended, const cpo::uno::Any& Origin, const cpo::uno::Any& Delimiter, const cpo::uno::Any& Editable, const cpo::uno::Any& Notify, const cpo::uno::Any& Converter, const cpo::uno::Any& AddToMru ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

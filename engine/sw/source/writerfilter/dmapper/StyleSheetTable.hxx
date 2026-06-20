@@ -118,7 +118,7 @@ public:
 
     OUString getOrCreateCharStyle( const PropertyValueVector_t& rCharProperties, bool bAlwaysCreate );
 
-    void SetDefaultParaProps(PropertyIds eId, const css::uno::Any& rAny);
+    void SetDefaultParaProps(PropertyIds eId, const cpo::uno::Any& rAny);
     PropertyMapPtr const & GetDefaultParaProps() const;
     /// Returns the default character properties.
     PropertyMapPtr const & GetDefaultCharProps() const;

@@ -32,7 +32,7 @@ public:
         return (mnIndex < mxIndexAccess->getCount());
     }
 
-    virtual uno::Any SAL_CALL nextElement() override
+    virtual cpo::uno::Any SAL_CALL nextElement() override
     {
         if (mnIndex < mxIndexAccess->getCount())
         {
@@ -63,12 +63,12 @@ public:
 
     sal_Int32 SAL_CALL getCount() override { return m_pCC->GetListItems().size(); }
 
-    uno::Any SAL_CALL getByIndex(sal_Int32 Index) override
+    cpo::uno::Any SAL_CALL getByIndex(sal_Int32 Index) override
     {
         if (Index < 0 || Index >= getCount())
             throw lang::IndexOutOfBoundsException();
 
-        return uno::Any(uno::Reference<word::XContentControlListEntry>(
+        return cpo::uno::Any(uno::Reference<word::XContentControlListEntry>(
             new SwVbaContentControlListEntry(mxParent, mxContext, m_pCC, Index)));
     }
 
@@ -103,8 +103,8 @@ SwVbaContentControlListEntries::SwVbaContentControlListEntries(
 }
 
 uno::Reference<word::XContentControlListEntry>
-SwVbaContentControlListEntries::Add(const OUString& rName, const uno::Any& rValue,
-                                    const uno::Any& rIndex)
+SwVbaContentControlListEntries::Add(const OUString& rName, const cpo::uno::Any& rValue,
+                                    const cpo::uno::Any& rIndex)
 {
     // No duplicate Names allowed in VBA
     for (auto& rListItem : m_pCC->GetListItems())
@@ -147,7 +147,7 @@ uno::Reference<container::XEnumeration> SwVbaContentControlListEntries::createEn
 }
 
 // SwVbaContentControlListEntries_BASE
-uno::Any SwVbaContentControlListEntries::createCollectionObject(const uno::Any& aSource)
+cpo::uno::Any SwVbaContentControlListEntries::createCollectionObject(const cpo::uno::Any& aSource)
 {
     return aSource;
 }

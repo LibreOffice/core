@@ -24,7 +24,7 @@
 #include <utility>
 #include <vector>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <oox/dllapi.h>
@@ -39,7 +39,7 @@ namespace com::sun::star::beans {
 namespace oox {
 
 
-typedef ::std::map< OUString, css::uno::Any > PropertyNameMap;
+typedef ::std::map< OUString, cpo::uno::Any > PropertyNameMap;
 
 /** A helper that maps property identifiers to property values.
 
@@ -64,7 +64,7 @@ public:
 
     /** Sets the specified property to the passed value. Does nothing, if the
         identifier is invalid. */
-    bool                setAnyProperty( sal_Int32 nPropId, const css::uno::Any& rValue );
+    bool                setAnyProperty( sal_Int32 nPropId, const cpo::uno::Any& rValue );
 
     /** Sets the specified property to the passed value. Does nothing, if the
         identifier is invalid. */
@@ -79,9 +79,9 @@ public:
     }
 
     /** setAnyProperty should be used */
-    bool                setProperty( sal_Int32, const css::uno::Any& ) = delete;
+    bool                setProperty( sal_Int32, const cpo::uno::Any& ) = delete;
 
-    css::uno::Any       getProperty( sal_Int32 nPropId ) const;
+    cpo::uno::Any       getProperty( sal_Int32 nPropId ) const;
 
     void                erase( sal_Int32 nPropId );
 
@@ -100,7 +100,7 @@ public:
     /** Fills the passed sequences of names and anys with all contained properties. */
     void                fillSequences(
                             css::uno::Sequence< OUString >& rNames,
-                            css::uno::Sequence< css::uno::Any >& rValues ) const;
+                            css::uno::Sequence< cpo::uno::Any >& rValues ) const;
 
     void                fillPropertyNameMap(PropertyNameMap& rMap) const;
 
@@ -117,7 +117,7 @@ public:
 #endif
 private:
     const std::vector<OUString>* mpPropNames;
-    std::map< sal_Int32, css::uno::Any > maProperties;
+    std::map< sal_Int32, cpo::uno::Any > maProperties;
 };
 
 

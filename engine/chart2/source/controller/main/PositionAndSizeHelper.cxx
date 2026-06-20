@@ -57,7 +57,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
         Point aPos = aObjectRect.TopLeft();
         aRelativePosition.Primary = (double(aPos.X())+double(aObjectRect.getOpenWidth())/2.0)/double(aPageRect.getOpenWidth());
         aRelativePosition.Secondary = (double(aPos.Y())+double(aObjectRect.getOpenHeight())/2.0)/double(aPageRect.getOpenHeight());
-        xObjectProp->setPropertyValue( u"RelativePosition"_ustr, uno::Any(aRelativePosition) );
+        xObjectProp->setPropertyValue( u"RelativePosition"_ustr, cpo::uno::Any(aRelativePosition) );
     }
     else if( eObjectType == OBJECTTYPE_DATA_LABEL )
     {
@@ -83,7 +83,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
 
         aCustomLabelPosition.Primary = double(aPos.X()) / double(aPageRect.getOpenWidth()) - aAbsolutePosition.Primary;
         aCustomLabelPosition.Secondary = double(aPos.Y()) / double(aPageRect.getOpenHeight()) - aAbsolutePosition.Secondary;
-        xObjectProp->setPropertyValue(u"CustomLabelPosition"_ustr, uno::Any(aCustomLabelPosition));
+        xObjectProp->setPropertyValue(u"CustomLabelPosition"_ustr, cpo::uno::Any(aCustomLabelPosition));
     }
     else if( eObjectType==OBJECTTYPE_DATA_CURVE_EQUATION )
     {
@@ -94,11 +94,11 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
         Point aPos = aObjectRect.TopLeft();
         aRelativePosition.Primary = double(aPos.X())/double(aPageRect.getOpenWidth());
         aRelativePosition.Secondary = double(aPos.Y())/double(aPageRect.getOpenHeight());
-        xObjectProp->setPropertyValue( u"RelativePosition"_ustr, uno::Any(aRelativePosition) );
+        xObjectProp->setPropertyValue( u"RelativePosition"_ustr, cpo::uno::Any(aRelativePosition) );
     }
     else if(eObjectType==OBJECTTYPE_LEGEND)
     {
-        xObjectProp->setPropertyValue( u"Expansion"_ustr, uno::Any(css::chart::ChartLegendExpansion_CUSTOM));
+        xObjectProp->setPropertyValue( u"Expansion"_ustr, cpo::uno::Any(css::chart::ChartLegendExpansion_CUSTOM));
         chart2::RelativePosition aRelativePosition;
         chart2::RelativeSize aRelativeSize;
         Point aAnchor = aObjectRect.TopLeft();
@@ -110,7 +110,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
             static_cast< double >( aAnchor.Y()) /
             static_cast< double >( aPageRect.getOpenHeight());
 
-        xObjectProp->setPropertyValue( u"RelativePosition"_ustr, uno::Any(aRelativePosition) );
+        xObjectProp->setPropertyValue( u"RelativePosition"_ustr, cpo::uno::Any(aRelativePosition) );
 
         aRelativeSize.Primary =
             static_cast< double >( aObjectRect.getOpenWidth()) /
@@ -123,7 +123,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
         if (aRelativeSize.Secondary > 1.0)
             aRelativeSize.Secondary = 1.0;
 
-        xObjectProp->setPropertyValue( u"RelativeSize"_ustr, uno::Any(aRelativeSize) );
+        xObjectProp->setPropertyValue( u"RelativeSize"_ustr, cpo::uno::Any(aRelativeSize) );
     }
     else if(eObjectType==OBJECTTYPE_DIAGRAM || eObjectType==OBJECTTYPE_DIAGRAM_WALL || eObjectType==OBJECTTYPE_DIAGRAM_FLOOR)
     {
@@ -136,7 +136,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
         Point aPos = aObjectRect.Center();
         aRelativePosition.Primary = double(aPos.X())/double(aPageRect.getOpenWidth());
         aRelativePosition.Secondary = double(aPos.Y())/double(aPageRect.getOpenHeight());
-        xObjectProp->setPropertyValue( u"RelativePosition"_ustr, uno::Any(aRelativePosition) );
+        xObjectProp->setPropertyValue( u"RelativePosition"_ustr, cpo::uno::Any(aRelativePosition) );
 
         //set size:
         RelativeSize aRelativeSize;
@@ -144,7 +144,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
         //and in the middle of the page
         aRelativeSize.Primary = double(aObjectRect.getOpenWidth())/double(aPageRect.getOpenWidth());
         aRelativeSize.Secondary = double(aObjectRect.getOpenHeight())/double(aPageRect.getOpenHeight());
-        xObjectProp->setPropertyValue( u"RelativeSize"_ustr, uno::Any(aRelativeSize) );
+        xObjectProp->setPropertyValue( u"RelativeSize"_ustr, cpo::uno::Any(aRelativeSize) );
     }
     else
         return false;

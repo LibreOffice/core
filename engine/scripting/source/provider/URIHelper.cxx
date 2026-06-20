@@ -71,7 +71,7 @@ ScriptingFrameworkURIHelper::~ScriptingFrameworkURIHelper()
 
 void SAL_CALL
 ScriptingFrameworkURIHelper::initialize(
-    const uno::Sequence < uno::Any >& args )
+    const uno::Sequence < cpo::uno::Any >& args )
 {
     if ( args.getLength() != 2 ||
          args[0].getValueType() != ::cppu::UnoType<OUString>::get() ||
@@ -242,7 +242,7 @@ ScriptingFrameworkURIHelper::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 scripting_ScriptingFrameworkURIHelper_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ScriptingFrameworkURIHelper(context));
 }

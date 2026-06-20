@@ -319,7 +319,7 @@ InterpretedData StockDataInterpreter::reinterpretDataSeries(
     return aInterpretedData;
 }
 
-uno::Any StockDataInterpreter::getChartTypeSpecificData(
+cpo::uno::Any StockDataInterpreter::getChartTypeSpecificData(
     const OUString& sKey )
 {
     if( sKey == "stock variant" )
@@ -331,9 +331,9 @@ uno::Any StockDataInterpreter::getChartTypeSpecificData(
             { StockChartTypeTemplate::StockVariant::Volume, 2 },
             { StockChartTypeTemplate::StockVariant::VolumeOpen, 3 }
         };
-        return uno::Any( aTranslation[eStockVariant] );
+        return cpo::uno::Any( aTranslation[eStockVariant] );
     }
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 } // namespace chart

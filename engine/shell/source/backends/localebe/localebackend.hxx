@@ -54,9 +54,9 @@ class LocaleBackend final : public ::cppu::WeakImplHelper <
         { return css::uno::Reference< css::beans::XPropertySetInfo >(); }
 
         virtual void SAL_CALL setPropertyValue(
-            OUString const &, css::uno::Any const &) override;
+            OUString const &, cpo::uno::Any const &) override;
 
-        virtual css::uno::Any SAL_CALL getPropertyValue(
+        virtual cpo::uno::Any SAL_CALL getPropertyValue(
             OUString const & PropertyName) override;
 
         virtual void SAL_CALL addPropertyChangeListener(
@@ -91,13 +91,13 @@ class LocaleBackend final : public ::cppu::WeakImplHelper <
 
     private:
         // Returns the user locale
-        static css::beans::Optional<css::uno::Any> getLocale();
+        static css::beans::Optional<cpo::uno::Any> getLocale();
 
         // Returns the user UI locale
-        static css::beans::Optional<css::uno::Any> getUILocale();
+        static css::beans::Optional<cpo::uno::Any> getUILocale();
 
         // Returns the system default locale
-        static css::beans::Optional<css::uno::Any> getSystemLocale();
+        static css::beans::Optional<cpo::uno::Any> getSystemLocale();
 } ;
 
 

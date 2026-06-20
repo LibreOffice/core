@@ -272,7 +272,7 @@ struct SubstreamContext
     bool bIsFirstRun = false;
     bool bIsOutsideAParagraph = true;
     bool bDummyParaAddedForTableInSection = false; // tdf#161631
-    std::map<sal_Int32, css::uno::Any> deferredCharacterProperties;
+    std::map<sal_Int32, cpo::uno::Any> deferredCharacterProperties;
     // inline paragraph: hidden paragraph mark by w:specVanish
     bool bIsInlineParagraph = false;
     bool bIsPreviousInlineParagraph = false;
@@ -356,7 +356,7 @@ public:
     void AppendResult(std::u16string_view rResult) { m_sResult += rResult; }
     const OUString&  GetResult() const { return m_sResult; }
 
-    void CacheVariableValue(const css::uno::Any& rAny);
+    void CacheVariableValue(const cpo::uno::Any& rAny);
     const OUString& GetVariableValue() { return m_sVariableValue; }
 
     void                    SetCommandCompleted() { m_bFieldCommandCompleted = true; }
@@ -748,7 +748,7 @@ public:
     {
         return m_xTextDocument;
     }
-    void SetDocumentSettingsProperty( const OUString& rPropName, const css::uno::Any& rValue );
+    void SetDocumentSettingsProperty( const OUString& rPropName, const cpo::uno::Any& rValue );
 
     void CreateRedline(css::uno::Reference<css::text::XTextRange> const& xRange, const RedlineParamsPtr& pRedline);
 
@@ -915,16 +915,16 @@ public:
     OUString  GetDefaultParaStyleName();
 
     // specified style - including inherited properties. Indicate whether paragraph defaults should be checked.
-    css::uno::Any GetPropertyFromStyleSheet(PropertyIds eId, const StyleSheetEntryPtr& pEntry,
+    cpo::uno::Any GetPropertyFromStyleSheet(PropertyIds eId, const StyleSheetEntryPtr& pEntry,
                                             const bool bDocDefaults, const bool bPara, bool* bIsDocDefault = nullptr);
     // current paragraph style - including inherited properties
-    css::uno::Any GetPropertyFromParaStyleSheet(PropertyIds eId);
+    cpo::uno::Any GetPropertyFromParaStyleSheet(PropertyIds eId);
     // only get inherited property
-    css::uno::Any GetInheritedParaProperty(PropertyIds eId);
+    cpo::uno::Any GetInheritedParaProperty(PropertyIds eId);
     // context's character style - including inherited properties
-    css::uno::Any GetPropertyFromCharStyleSheet(PropertyIds eId, const PropertyMapPtr& rContext);
+    cpo::uno::Any GetPropertyFromCharStyleSheet(PropertyIds eId, const PropertyMapPtr& rContext);
     // get property first from the given context, or secondly via inheritance from styles/docDefaults
-    css::uno::Any GetAnyProperty(PropertyIds eId, const PropertyMapPtr& rContext);
+    cpo::uno::Any GetAnyProperty(PropertyIds eId, const PropertyMapPtr& rContext);
     void        SetDocDefaultsImport( bool bSet ) { m_bInDocDefaultsImport = bSet;}
     bool        IsDocDefaultsImport()const { return m_bInDocDefaultsImport;}
     void        SetStyleSheetImport( bool bSet ) { m_bInStyleSheetImport = bSet;}
@@ -1163,7 +1163,7 @@ public:
      on another one that comes in the same CONTEXT_CHARACTER). The property will be processed
      again in DomainMapper::processDeferredCharacterProperties().
     */
-    void deferCharacterProperty(sal_Int32 id, const css::uno::Any& value);
+    void deferCharacterProperty(sal_Int32 id, const cpo::uno::Any& value);
     /**
      Processes properties deferred using deferCharacterProperty(). To be called whenever the top
      CONTEXT_CHARACTER is going to be used (e.g. by appendText()).

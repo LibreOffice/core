@@ -81,6 +81,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::i18n;
 using namespace com::sun::star::lang;
 
@@ -1287,7 +1288,7 @@ Sequence< OUString > DefaultNumberingProvider::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_text_DefaultNumberingProvider_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new i18npool::DefaultNumberingProvider(context));
 }

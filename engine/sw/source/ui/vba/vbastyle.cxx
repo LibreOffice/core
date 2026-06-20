@@ -65,7 +65,7 @@ LanguageType SwVbaStyle::getLanguageID( const uno::Reference< beans::XPropertySe
 void SwVbaStyle::setLanguageID( const uno::Reference< beans::XPropertySet >& xTCProps, LanguageType _languageid )
 {
     lang::Locale aLocale = LanguageTag( _languageid ).getLocale();
-    xTCProps->setPropertyValue(u"CharLocale"_ustr, uno::Any( aLocale ) ) ;
+    xTCProps->setPropertyValue(u"CharLocale"_ustr, cpo::uno::Any( aLocale ) ) ;
 }
 
 ::sal_Int32 SAL_CALL SwVbaStyle::getLanguageID()
@@ -98,7 +98,7 @@ SwVbaStyle::getFont()
     return new SwVbaFont( mxParent, mxContext, aColors.getPalette(), mxStyleProps );
 }
 
-void SwVbaStyle::setStyle( const uno::Reference< beans::XPropertySet >& xParaProps, const uno::Any& rStyle )
+void SwVbaStyle::setStyle( const uno::Reference< beans::XPropertySet >& xParaProps, const cpo::uno::Any& rStyle )
 {
     OUString sStyle;
     uno::Reference< word::XStyle > xStyle;
@@ -113,7 +113,7 @@ void SwVbaStyle::setStyle( const uno::Reference< beans::XPropertySet >& xParaPro
 
     if( !sStyle.isEmpty() )
     {
-        xParaProps->setPropertyValue(u"ParaStyleName"_ustr, uno::Any( sStyle ) );
+        xParaProps->setPropertyValue(u"ParaStyleName"_ustr, cpo::uno::Any( sStyle ) );
         return;
     }
 
@@ -129,7 +129,7 @@ OUString SAL_CALL SwVbaStyle::getNameLocal()
 
 void SAL_CALL SwVbaStyle::setNameLocal( const OUString& _namelocal )
 {
-    mxStyleProps->setPropertyValue(u"DisplayName"_ustr, uno::Any( _namelocal ) );
+    mxStyleProps->setPropertyValue(u"DisplayName"_ustr, cpo::uno::Any( _namelocal ) );
 }
 
 uno::Reference< word::XParagraphFormat > SAL_CALL SwVbaStyle::getParagraphFormat()
@@ -151,10 +151,10 @@ bool SAL_CALL SwVbaStyle::getAutomaticallyUpdate()
 
 void SAL_CALL SwVbaStyle::setAutomaticallyUpdate( bool _automaticallyupdate )
 {
-    mxStyleProps->setPropertyValue(u"IsAutoUpdate"_ustr, uno::Any( _automaticallyupdate ) );
+    mxStyleProps->setPropertyValue(u"IsAutoUpdate"_ustr, cpo::uno::Any( _automaticallyupdate ) );
 }
 
-uno::Any SAL_CALL SwVbaStyle::getBaseStyle()
+cpo::uno::Any SAL_CALL SwVbaStyle::getBaseStyle()
 {
     // ParentStyle
     OUString sBaseStyle;
@@ -165,10 +165,10 @@ uno::Any SAL_CALL SwVbaStyle::getBaseStyle()
     }
 
     uno::Reference< XCollection > xCol( new SwVbaStyles( this, mxContext, mxModel ) );
-    return xCol->Item( uno::Any( sBaseStyle ), uno::Any() );
+    return xCol->Item( cpo::uno::Any( sBaseStyle ), cpo::uno::Any() );
 }
 
-void SAL_CALL SwVbaStyle::setBaseStyle( const uno::Any& _basestyle )
+void SAL_CALL SwVbaStyle::setBaseStyle( const cpo::uno::Any& _basestyle )
 {
     uno::Reference< word::XStyle > xStyle;
     _basestyle >>= xStyle;
@@ -178,10 +178,10 @@ void SAL_CALL SwVbaStyle::setBaseStyle( const uno::Any& _basestyle )
     }
 
     OUString sBaseStyle = xStyle->getName();
-    mxStyleProps->setPropertyValue(u"ParentStyle"_ustr, uno::Any( sBaseStyle ) );
+    mxStyleProps->setPropertyValue(u"ParentStyle"_ustr, cpo::uno::Any( sBaseStyle ) );
 }
 
-uno::Any SAL_CALL SwVbaStyle::getNextParagraphStyle()
+cpo::uno::Any SAL_CALL SwVbaStyle::getNextParagraphStyle()
 {
     //FollowStyle
     OUString sFollowStyle;
@@ -192,10 +192,10 @@ uno::Any SAL_CALL SwVbaStyle::getNextParagraphStyle()
     }
 
     uno::Reference< XCollection > xCol( new SwVbaStyles( this, mxContext, mxModel ) );
-    return xCol->Item( uno::Any( sFollowStyle ), uno::Any() );
+    return xCol->Item( cpo::uno::Any( sFollowStyle ), cpo::uno::Any() );
 }
 
-void SAL_CALL SwVbaStyle::setNextParagraphStyle( const uno::Any& _nextparagraphstyle )
+void SAL_CALL SwVbaStyle::setNextParagraphStyle( const cpo::uno::Any& _nextparagraphstyle )
 {
     uno::Reference< word::XStyle > xStyle;
     _nextparagraphstyle >>= xStyle;
@@ -205,7 +205,7 @@ void SAL_CALL SwVbaStyle::setNextParagraphStyle( const uno::Any& _nextparagraphs
     }
 
     OUString sFollowStyle = xStyle->getName();
-    mxStyleProps->setPropertyValue(u"FollowStyle"_ustr, uno::Any( sFollowStyle ) );
+    mxStyleProps->setPropertyValue(u"FollowStyle"_ustr, cpo::uno::Any( sFollowStyle ) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaStyle::getListLevelNumber()

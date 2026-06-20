@@ -41,8 +41,8 @@ namespace pcr
         OFormatSampleControl(std::unique_ptr<weld::Container> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
         // XPropertyControl
-        virtual css::uno::Any SAL_CALL getValue() override;
-        virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+        virtual cpo::uno::Any SAL_CALL getValue() override;
+        virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
         virtual css::uno::Type SAL_CALL getValueType() override;
 
         virtual void SAL_CALL disposing() override
@@ -91,8 +91,8 @@ namespace pcr
         OFormattedNumericControl(std::unique_ptr<weld::FormattedSpinButton> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
         // XPropertyControl
-        virtual css::uno::Any SAL_CALL getValue() override;
-        virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+        virtual cpo::uno::Any SAL_CALL getValue() override;
+        virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
         virtual css::uno::Type SAL_CALL getValueType() override;
 
         void SetFormatDescription( const FormatDescription& rDesc );
@@ -124,8 +124,8 @@ namespace pcr
         OFileUrlControl(std::unique_ptr<SvtURLBox> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
         // XPropertyControl
-        virtual css::uno::Any SAL_CALL getValue() override;
-        virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+        virtual cpo::uno::Any SAL_CALL getValue() override;
+        virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
         virtual css::uno::Type SAL_CALL getValueType() override;
 
         virtual void SetModifyHandler() override

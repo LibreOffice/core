@@ -75,7 +75,7 @@ bool SwVbaView::getShowAll()
 
 void SwVbaView::setShowAll(bool bSet)
 {
-    mxViewSettings->setPropertyValue(u"ShowNonprintingCharacters"_ustr, uno::Any(bSet));
+    mxViewSettings->setPropertyValue(u"ShowNonprintingCharacters"_ustr, cpo::uno::Any(bSet));
 }
 
 ::sal_Int32 SAL_CALL
@@ -212,7 +212,7 @@ SwVbaView::getTableGridLines()
 void SAL_CALL
 SwVbaView::setTableGridLines( bool _tablegridlines )
 {
-    mxViewSettings->setPropertyValue(u"ShowTableBoundaries"_ustr, uno::Any( _tablegridlines ) );
+    mxViewSettings->setPropertyValue(u"ShowTableBoundaries"_ustr, cpo::uno::Any( _tablegridlines ) );
 }
 
 ::sal_Int32 SAL_CALL
@@ -233,17 +233,17 @@ SwVbaView::setType( ::sal_Int32 _type )
         case word::WdViewType::wdPrintView:
         case word::WdViewType::wdNormalView:
         {
-            mxViewSettings->setPropertyValue(u"ShowOnlineLayout"_ustr, uno::Any( false ) );
+            mxViewSettings->setPropertyValue(u"ShowOnlineLayout"_ustr, cpo::uno::Any( false ) );
             break;
         }
         case word::WdViewType::wdWebView:
         {
-            mxViewSettings->setPropertyValue(u"ShowOnlineLayout"_ustr, uno::Any( true ) );
+            mxViewSettings->setPropertyValue(u"ShowOnlineLayout"_ustr, cpo::uno::Any( true ) );
             break;
         }
         case word::WdViewType::wdPrintPreview:
         {
-            PrintPreviewHelper( uno::Any(),word::getView( mxModel ) );
+            PrintPreviewHelper( cpo::uno::Any(),word::getView( mxModel ) );
             break;
         }
         default:
@@ -345,8 +345,8 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType )
     xStyle->getPropertyValue( aPropIsShared ) >>= isShared;
     if( !isOn )
     {
-        xStyle->setPropertyValue( aPropIsOn, uno::Any( true ) );
-        xStyle->setPropertyValue( aPropBodyDistance, uno::Any( DEFAULT_BODY_DISTANCE ) );
+        xStyle->setPropertyValue( aPropIsOn, cpo::uno::Any( true ) );
+        xStyle->setPropertyValue( aPropBodyDistance, cpo::uno::Any( DEFAULT_BODY_DISTANCE ) );
     }
     if( !isShared )
     {

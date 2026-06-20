@@ -28,7 +28,7 @@ namespace frm
 class OCurrencyModel final
                 :public OEditBaseModel
 {
-    css::uno::Any          m_aSaveValue;
+    cpo::uno::Any          m_aSaveValue;
 
 public:
     OCurrencyModel(
@@ -56,10 +56,10 @@ public:
 
 private:
     // OBoundControlModel overridables
-    virtual css::uno::Any   translateDbColumnToControlValue( ) override;
+    virtual cpo::uno::Any   translateDbColumnToControlValue( ) override;
     virtual bool            commitControlValueToDbColumn( bool _bPostReset ) override;
 
-    virtual css::uno::Any   getDefaultForReset() const override;
+    virtual cpo::uno::Any   getDefaultForReset() const override;
 
     virtual void            resetNoBroadcast() override;
 

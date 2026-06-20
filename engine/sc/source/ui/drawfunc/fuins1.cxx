@@ -63,6 +63,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 void ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
 {

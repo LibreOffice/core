@@ -1329,7 +1329,7 @@ IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, weld::ComboBox&, rBox, void)
         {
             if(m_xBibAccess->hasByName(sEntry))
             {
-                uno::Any aEntry(m_xBibAccess->getByName(sEntry));
+                cpo::uno::Any aEntry(m_xBibAccess->getByName(sEntry));
                 uno::Sequence<beans::PropertyValue> aFieldProps;
                 if(aEntry >>= aFieldProps)
                 {
@@ -1484,7 +1484,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, ChangeSourceHdl, weld::Toggleable&, void)
             OUString uPropName(u"BibliographyDataFieldNames"_ustr);
             if(xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName(uPropName))
             {
-                uno::Any aNames = xPropSet->getPropertyValue(uPropName);
+                cpo::uno::Any aNames = xPropSet->getPropertyValue(uPropName);
                 uno::Sequence<beans::PropertyValue> aSeq;
                 if( aNames >>= aSeq)
                 {

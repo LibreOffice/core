@@ -38,7 +38,7 @@
 #endif
 #include <windows.h>
 
-static css::beans::Optional<css::uno::Any> ImplGetLocale(LCID lcid)
+static css::beans::Optional<cpo::uno::Any> ImplGetLocale(LCID lcid)
 {
     WCHAR buffer[8];
     PWSTR cp = buffer;
@@ -50,7 +50,7 @@ static css::beans::Optional<css::uno::Any> ImplGetLocale(LCID lcid)
             // #i50822# minus character must be written before cp
             *(cp - 1) = '-';
 
-        return {true, css::uno::Any(OUString(o3tl::toU(buffer)))};
+        return {true, cpo::uno::Any(OUString(o3tl::toU(buffer)))};
     }
 
     return {false, {}};
@@ -118,7 +118,7 @@ namespace /* private */
         return CFLocaleCreateCanonicalLocaleIdentifierFromString(kCFAllocatorDefault, sref);
     }
 
-    css::beans::Optional<css::uno::Any> ImplGetLocale(const char* pref)
+    css::beans::Optional<cpo::uno::Any> ImplGetLocale(const char* pref)
     {
         CFStringRef sref = ImplGetAppPreference(pref);
         CFStringGuard srefGuard(sref);
@@ -149,7 +149,7 @@ namespace /* private */
                 }
             }
         }
-        return {true, css::uno::Any(aLocaleBuffer.makeStringAndClear())};
+        return {true, cpo::uno::Any(aLocaleBuffer.makeStringAndClear())};
     }
 
 } // namespace /* private */
@@ -160,7 +160,7 @@ namespace /* private */
 #include <cstdlib>
 #include <cstring>
 
-static css::beans::Optional<css::uno::Any> ImplGetLocale(char const * category)
+static css::beans::Optional<cpo::uno::Any> ImplGetLocale(char const * category)
 {
     const char *locale = std::getenv("LC_ALL");
     if (locale == nullptr || *locale == '\0') {
@@ -173,7 +173,7 @@ static css::beans::Optional<css::uno::Any> ImplGetLocale(char const * category)
     // Return "en-US" for C locales
     if( (locale == nullptr) || *locale == '\0' || std::strcmp(locale, "C") == 0
         || std::strcmp(locale, "POSIX") == 0 )
-        return {true, css::uno::Any(u"en-US"_ustr)};
+        return {true, cpo::uno::Any(u"en-US"_ustr)};
 
 
     const char *cp;
@@ -210,7 +210,7 @@ static css::beans::Optional<css::uno::Any> ImplGetLocale(char const * category)
     if (nLang != LANGUAGE_DONTKNOW)
     {
         const OUString aLangTagStr( LanguageTag::convertToBcp47( nLang));
-        return {true, css::uno::Any(aLangTagStr)};
+        return {true, cpo::uno::Any(aLangTagStr)};
     }
 
     // As a fallback, strip encoding and modifier and return just a
@@ -229,7 +229,7 @@ static css::beans::Optional<css::uno::Any> ImplGetLocale(char const * category)
         aLocaleBuffer.appendAscii(locale, end - locale);
     }
 
-    return {true, css::uno::Any(aLocaleBuffer.makeStringAndClear())};
+    return {true, cpo::uno::Any(aLocaleBuffer.makeStringAndClear())};
 }
 
 #endif
@@ -246,7 +246,7 @@ LocaleBackend::~LocaleBackend()
 
 
 
-css::beans::Optional<css::uno::Any> LocaleBackend::getLocale()
+css::beans::Optional<cpo::uno::Any> LocaleBackend::getLocale()
 {
 #if defined(_WIN32)
     return ImplGetLocale( GetUserDefaultLCID() );
@@ -258,7 +258,7 @@ css::beans::Optional<css::uno::Any> LocaleBackend::getLocale()
 }
 
 
-css::beans::Optional<css::uno::Any> LocaleBackend::getUILocale()
+css::beans::Optional<cpo::uno::Any> LocaleBackend::getUILocale()
 {
 #if defined(_WIN32)
     return ImplGetLocale( MAKELCID(GetUserDefaultUILanguage(), SORT_DEFAULT) );
@@ -270,7 +270,7 @@ css::beans::Optional<css::uno::Any> LocaleBackend::getUILocale()
 }
 
 
-css::beans::Optional<css::uno::Any> LocaleBackend::getSystemLocale()
+css::beans::Optional<cpo::uno::Any> LocaleBackend::getSystemLocale()
 {
 // note: the implementation differs from getLocale() only on Windows
 #if defined(_WIN32)
@@ -282,24 +282,24 @@ css::beans::Optional<css::uno::Any> LocaleBackend::getSystemLocale()
 
 
 void LocaleBackend::setPropertyValue(
-    OUString const &, css::uno::Any const &)
+    OUString const &, cpo::uno::Any const &)
 {
     throw css::lang::IllegalArgumentException(
         u"setPropertyValue not supported"_ustr,
         getXWeak(), -1);
 }
 
-css::uno::Any LocaleBackend::getPropertyValue(
+cpo::uno::Any LocaleBackend::getPropertyValue(
     OUString const & PropertyName)
 {
     if ( PropertyName == "Locale" ) {
-        return css::uno::Any(getLocale());
+        return cpo::uno::Any(getLocale());
     } else if (PropertyName == "SystemLocale")
     {
-        return css::uno::Any(getSystemLocale());
+        return cpo::uno::Any(getSystemLocale());
     } else if (PropertyName == "UILocale")
     {
-        return css::uno::Any(getUILocale());
+        return cpo::uno::Any(getUILocale());
     } else {
         throw css::beans::UnknownPropertyException(
             PropertyName, getXWeak());
@@ -324,7 +324,7 @@ uno::Sequence<OUString> SAL_CALL LocaleBackend::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 shell_LocaleBackend_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new LocaleBackend());
 }

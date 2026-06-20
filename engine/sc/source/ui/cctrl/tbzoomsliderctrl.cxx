@@ -271,7 +271,7 @@ bool ScZoomSlider::MouseButtonDown( const MouseEvent& rMEvt )
 
     SvxZoomSliderItem   aZoomSliderItem( mnCurrentZoom );
 
-    css::uno::Any  a;
+    cpo::uno::Any  a;
     aZoomSliderItem.QueryValue( a );
 
     css::uno::Sequence aArgs{ comphelper::makePropertyValue(u"ScalingFactor"_ustr, a) };
@@ -306,7 +306,7 @@ bool ScZoomSlider::MouseMove( const MouseEvent& rMEvt )
             // commit state change
             SvxZoomSliderItem aZoomSliderItem( mnCurrentZoom );
 
-            css::uno::Any a;
+            cpo::uno::Any a;
             aZoomSliderItem.QueryValue( a );
 
             css::uno::Sequence aArgs{ comphelper::makePropertyValue(u"ScalingFactor"_ustr, a) };

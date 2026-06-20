@@ -83,8 +83,8 @@ public:
     const OUString& GetNumber(SwRootFrame const* pLayout = nullptr) const;
     const OUString& GetTitle(SwRootFrame const* pLayout = nullptr) const;
 
-    virtual bool         QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool         PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool         QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool         PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

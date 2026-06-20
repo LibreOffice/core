@@ -62,9 +62,9 @@ public:
     sal_Int32 getGalleryType() const { return mnGalleryType; }
     const css::uno::Reference< css::container::XIndexReplace >& getNumberingRules() const { return mxNumberingRules; }
     /// @throws css::uno::RuntimeException
-    css::uno::Any getPropertyValueWithNameAndLevel( sal_Int32 nLevel, const OUString& sName );
+    cpo::uno::Any getPropertyValueWithNameAndLevel( sal_Int32 nLevel, const OUString& sName );
     /// @throws css::uno::RuntimeException
-    void setPropertyValueWithNameAndLevel( sal_Int32 nLevel, const OUString& sName, const css::uno::Any& aValue );
+    void setPropertyValueWithNameAndLevel( sal_Int32 nLevel, const OUString& sName, const cpo::uno::Any& aValue );
 
 };
 

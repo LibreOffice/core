@@ -631,9 +631,9 @@ void DesktopKitTest::testSearchCalc()
 
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"SearchItem.SearchString", uno::Any(u"foo"_ustr)},
-        {"SearchItem.Backward", uno::Any(false)},
-        {"SearchItem.Command", uno::Any(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
+        {"SearchItem.SearchString", cpo::uno::Any(u"foo"_ustr)},
+        {"SearchItem.Backward", cpo::uno::Any(false)},
+        {"SearchItem.Command", cpo::uno::Any(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
     }));
     dispatchCommand(mxComponent, u".uno:ExecuteSearch"_ustr, aPropertyValues);
 
@@ -661,9 +661,9 @@ void DesktopKitTest::testSearchAllNotificationsCalc()
 
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"SearchItem.SearchString", uno::Any(u"foo"_ustr)},
-        {"SearchItem.Backward", uno::Any(false)},
-        {"SearchItem.Command", uno::Any(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
+        {"SearchItem.SearchString", cpo::uno::Any(u"foo"_ustr)},
+        {"SearchItem.Backward", cpo::uno::Any(false)},
+        {"SearchItem.Command", cpo::uno::Any(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
     }));
     dispatchCommand(mxComponent, u".uno:ExecuteSearch"_ustr, aPropertyValues);
 
@@ -858,7 +858,7 @@ void DesktopKitTest::testPasteWriterJPEG()
     uno::Reference<lang::XComponent>(xShape, uno::UNO_QUERY_THROW)->dispose();
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"AnchorType", uno::Any(static_cast<sal_uInt16>(text::TextContentAnchorType_AT_CHARACTER))},
+        {"AnchorType", cpo::uno::Any(static_cast<sal_uInt16>(text::TextContentAnchorType_AT_CHARACTER))},
     }));
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, aPropertyValues);
     xShape.set(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -1343,7 +1343,7 @@ void DesktopKitTest::testSheetDragDrop()
         SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
 
         OUString sValue;
-        css::uno::Any aValue;
+        cpo::uno::Any aValue;
         css::util::URL aURL;
         std::unique_ptr<SfxPoolItem> pState;
 
@@ -1399,7 +1399,7 @@ void DesktopKitTest::testSheetDragDrop()
         SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
 
         OUString sValue;
-        css::uno::Any aValue;
+        cpo::uno::Any aValue;
         css::util::URL aURL;
         std::unique_ptr<SfxPoolItem> pState;
 
@@ -2290,7 +2290,7 @@ void DesktopKitTest::testRedlineWriter()
     // Load a Writer document, enable change recording and press a key.
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue(u"RecordChanges"_ustr, uno::Any(true));
+    xPropertySet->setPropertyValue(u"RecordChanges"_ustr, cpo::uno::Any(true));
     pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 't', 0);
     pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYUP, 't', 0);
     Scheduler::ProcessEventsToIdle();
@@ -2317,7 +2317,7 @@ void DesktopKitTest::testRedlineCalc()
     // Load a Writer document, enable change recording and press a key.
     LibLODocument_Impl* pDocument = loadDoc("sheets.ods");
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue(u"RecordChanges"_ustr, uno::Any(true));
+    xPropertySet->setPropertyValue(u"RecordChanges"_ustr, cpo::uno::Any(true));
     pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 't', 0);
     pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYUP, 't', 0);
     pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
@@ -2704,7 +2704,7 @@ void DesktopKitTest::testPaintPartTileDifferentSchemes()
     {
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", uno::Any(u"Dark"_ustr) },
+                { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
             }
         );
         dispatchCommand(mxComponent, u".uno:ChangeTheme"_ustr, aPropertyValues);

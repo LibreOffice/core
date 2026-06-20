@@ -113,7 +113,7 @@ bool RegressionEquationItemConverter::ApplySpecialItem(
     {
         case SID_ATTR_NUMBERFORMAT_VALUE:
         {
-            uno::Any aValue( static_cast< sal_Int32 >(
+            cpo::uno::Any aValue( static_cast< sal_Int32 >(
                 static_cast< const SfxUInt32Item & >(
                     rItemSet.Get( nWhichId )).GetValue()));
             if (GetPropertySet()->getPropertyValue(CHART_UNONAME_NUMFMT) != aValue)

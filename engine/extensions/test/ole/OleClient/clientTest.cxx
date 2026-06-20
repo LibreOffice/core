@@ -45,6 +45,7 @@ END_OBJECT_MAP()
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::script;
 using namespace com::sun::star::bridge::oleautomation;
 using namespace cppu;

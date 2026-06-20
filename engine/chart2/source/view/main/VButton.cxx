@@ -69,11 +69,11 @@ rtl::Reference<SvxShapePolyPolygon> VButton::createTriangle(awt::Size aSize)
     pInnerSequenceY[2] = 0.0;
     pInnerSequenceZ[2] = 0.0;
 
-    xShape->SvxShape::setPropertyValue(u"Name"_ustr, uno::Any(m_sCID));
+    xShape->SvxShape::setPropertyValue(u"Name"_ustr, cpo::uno::Any(m_sCID));
     xShape->SvxShape::setPropertyValue(UNO_NAME_POLYPOLYGON,
-                                       uno::Any(PolyToPointSequence(aPolyPolygon)));
-    xShape->SvxShape::setPropertyValue(u"LineStyle"_ustr, uno::Any(drawing::LineStyle_NONE));
-    xShape->SvxShape::setPropertyValue(u"FillColor"_ustr, uno::Any(m_nArrowColor));
+                                       cpo::uno::Any(PolyToPointSequence(aPolyPolygon)));
+    xShape->SvxShape::setPropertyValue(u"LineStyle"_ustr, cpo::uno::Any(drawing::LineStyle_NONE));
+    xShape->SvxShape::setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(m_nArrowColor));
 
     return xShape;
 }
@@ -110,7 +110,7 @@ void VButton::createShapes(const uno::Reference<beans::XPropertySet>& xTextProp)
     PropertyMapper::getMultiPropertyListsFromValueMap(aPropNames, aPropValues, aTextValueMap);
 
     rtl::Reference<SvxShapeText> xEntry
-        = ShapeFactory::createText(xContainer, m_sLabel, aPropNames, aPropValues, uno::Any());
+        = ShapeFactory::createText(xContainer, m_sLabel, aPropNames, aPropValues, cpo::uno::Any());
 
     if (xEntry.is())
     {

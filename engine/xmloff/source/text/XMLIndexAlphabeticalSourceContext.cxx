@@ -36,7 +36,7 @@
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using namespace ::xmloff::token;
 
 XMLIndexAlphabeticalSourceContext::XMLIndexAlphabeticalSourceContext(
@@ -165,19 +165,19 @@ void XMLIndexAlphabeticalSourceContext::endFastElement(sal_Int32 nElement)
         rIndexPropertySet->setPropertyValue(u"MainEntryCharacterStyleName"_ustr,aAny);
     }
 
-    rIndexPropertySet->setPropertyValue(u"UseAlphabeticalSeparators"_ustr, css::uno::Any(bSeparators));
-    rIndexPropertySet->setPropertyValue(u"UseCombinedEntries"_ustr, css::uno::Any(bCombineEntries));
-    rIndexPropertySet->setPropertyValue(u"IsCaseSensitive"_ustr, css::uno::Any(bCaseSensitive));
-    rIndexPropertySet->setPropertyValue(u"UseKeyAsEntry"_ustr, css::uno::Any(bEntry));
-    rIndexPropertySet->setPropertyValue(u"UseUpperCase"_ustr, css::uno::Any(bUpperCase));
-    rIndexPropertySet->setPropertyValue(u"UseDash"_ustr, css::uno::Any(bCombineDash));
-    rIndexPropertySet->setPropertyValue(u"UsePP"_ustr, css::uno::Any(bCombinePP));
-    rIndexPropertySet->setPropertyValue(u"IsCommaSeparated"_ustr, css::uno::Any(bCommaSeparated));
+    rIndexPropertySet->setPropertyValue(u"UseAlphabeticalSeparators"_ustr, cpo::uno::Any(bSeparators));
+    rIndexPropertySet->setPropertyValue(u"UseCombinedEntries"_ustr, cpo::uno::Any(bCombineEntries));
+    rIndexPropertySet->setPropertyValue(u"IsCaseSensitive"_ustr, cpo::uno::Any(bCaseSensitive));
+    rIndexPropertySet->setPropertyValue(u"UseKeyAsEntry"_ustr, cpo::uno::Any(bEntry));
+    rIndexPropertySet->setPropertyValue(u"UseUpperCase"_ustr, cpo::uno::Any(bUpperCase));
+    rIndexPropertySet->setPropertyValue(u"UseDash"_ustr, cpo::uno::Any(bCombineDash));
+    rIndexPropertySet->setPropertyValue(u"UsePP"_ustr, cpo::uno::Any(bCombinePP));
+    rIndexPropertySet->setPropertyValue(u"IsCommaSeparated"_ustr, cpo::uno::Any(bCommaSeparated));
 
 
     if (!sAlgorithm.isEmpty())
     {
-        rIndexPropertySet->setPropertyValue(u"SortAlgorithm"_ustr, css::uno::Any(sAlgorithm));
+        rIndexPropertySet->setPropertyValue(u"SortAlgorithm"_ustr, cpo::uno::Any(sAlgorithm));
     }
 
     if ( !maLanguageTagODF.isEmpty() )

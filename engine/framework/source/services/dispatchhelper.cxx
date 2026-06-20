@@ -81,7 +81,7 @@ DispatchHelper::~DispatchHelper() {}
 
     @return An Any which capsulate a possible result of the internal wrapped dispatch.
  */
-css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
+cpo::uno::Any SAL_CALL DispatchHelper::executeDispatch(
     const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider,
     const OUString& sURL, const OUString& sTargetFrameName, sal_Int32 nSearchFlags,
     const css::uno::Sequence<css::beans::PropertyValue>& lArguments)
@@ -89,7 +89,7 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
     // check for valid parameters
     if ((!xDispatchProvider.is()) || (!m_xContext.is()) || (sURL.isEmpty()))
     {
-        return css::uno::Any();
+        return cpo::uno::Any();
     }
 
     // parse given URL
@@ -114,14 +114,14 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
 
     if (bOnMainThread)
         return vcl::solarthread::syncExecute(
-            [this, &xDispatch, &aURL, &lArguments]() -> css::uno::Any {
+            [this, &xDispatch, &aURL, &lArguments]() -> cpo::uno::Any {
                 return executeDispatch(xDispatch, aURL, true, lArguments);
             });
     else
         return executeDispatch(xDispatch, aURL, true, lArguments);
 }
 
-const css::uno::Any&
+const cpo::uno::Any&
 DispatchHelper::executeDispatch(const css::uno::Reference<css::frame::XDispatch>& xDispatch,
                                 const css::util::URL& aURL, bool SyncronFlag,
                                 const css::uno::Sequence<css::beans::PropertyValue>& lArguments)
@@ -211,7 +211,7 @@ void SAL_CALL DispatchHelper::disposing(const css::lang::EventObject&)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_DispatchHelper_get_implementation(css::uno::XComponentContext* context,
-                                            css::uno::Sequence<css::uno::Any> const&)
+                                            css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new framework::DispatchHelper(context));
 }

@@ -68,14 +68,14 @@ public:
     void SAL_CALL removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
 
     // css::container::XIdentifierContainer
-    virtual ::sal_Int32 SAL_CALL insert( const css::uno::Any& aElement ) override;
+    virtual ::sal_Int32 SAL_CALL insert( const cpo::uno::Any& aElement ) override;
 
     // css::container::XIdentifierReplace
     virtual void SAL_CALL removeByIdentifier( ::sal_Int32 Identifier ) override;
-    virtual void SAL_CALL replaceByIdentifer( ::sal_Int32 Identifier, const css::uno::Any& aElement ) override;
+    virtual void SAL_CALL replaceByIdentifer( ::sal_Int32 Identifier, const cpo::uno::Any& aElement ) override;
 
     // css::container::XIdentifierAccess
-    virtual css::uno::Any SAL_CALL getByIdentifier( ::sal_Int32 Identifier ) override;
+    virtual cpo::uno::Any SAL_CALL getByIdentifier( ::sal_Int32 Identifier ) override;
     virtual css::uno::Sequence< ::sal_Int32 > SAL_CALL getIdentifiers(  ) override;
 
     // css::container::XElementAccess

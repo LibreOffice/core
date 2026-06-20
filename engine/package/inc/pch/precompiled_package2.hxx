@@ -109,8 +109,8 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
-#include <com/sun/star/uno/Any.h>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.h>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.h>

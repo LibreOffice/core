@@ -24,6 +24,7 @@
 #include <utility>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::xml;
 using namespace ::com::sun::star::xml::sax;
 namespace sax_fastparser

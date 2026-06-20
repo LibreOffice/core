@@ -34,7 +34,7 @@
 #include <sal/log.hxx>
 
 using com::sun::star::uno::Reference;
-using com::sun::star::uno::Any;
+using cpo::uno::Any;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::container::XNameContainer;
 using com::sun::star::xml::sax::XFastAttributeList;

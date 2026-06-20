@@ -30,7 +30,7 @@ bool SvxStatusItem::operator==(const SfxPoolItem& rItem) const
            && static_cast<const SvxStatusItem&>(rItem).m_eCategory == m_eCategory;
 }
 
-bool SvxStatusItem::QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId) const
+bool SvxStatusItem::QueryValue(cpo::uno::Any& rVal, sal_uInt8 nMemberId) const
 {
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -60,7 +60,7 @@ bool SvxStatusItem::QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId) const
     return true;
 }
 
-bool SvxStatusItem::PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId)
+bool SvxStatusItem::PutValue(const cpo::uno::Any& rVal, sal_uInt8 nMemberId)
 {
     nMemberId &= ~CONVERT_TWIPS;
     bool bRet;

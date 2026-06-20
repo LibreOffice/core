@@ -93,7 +93,7 @@ found cycle
     void oox::PropertyMap::dumpCode(const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> &)
     include/oox/helper/propertymap.hxx:113
 
-    const char * oox::lclDumpAnyValueCode(const com::sun::star::uno::Any &,int)
+    const char * oox::lclDumpAnyValueCode(const cpo::uno::Any &,int)
     oox/source/helper/propertymap.cxx:548
 
 found cycle

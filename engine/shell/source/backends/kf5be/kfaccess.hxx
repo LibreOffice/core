@@ -32,7 +32,7 @@ class Any;
 
 namespace kfaccess
 {
-css::beans::Optional<css::uno::Any> getValue(std::u16string_view id);
+css::beans::Optional<cpo::uno::Any> getValue(std::u16string_view id);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

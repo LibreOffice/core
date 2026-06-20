@@ -46,8 +46,8 @@ namespace com::sun::star {
     namespace awt { struct Rectangle; }
     namespace drawing { class XShape; }
     namespace drawing { class XShapes; }
-    namespace uno { class Any; }
 }
+namespace cpo::uno { class Any; }
 
 namespace oox::core {
     class XmlFilterBase;
@@ -235,7 +235,7 @@ public:
 
     // access to DiagramHelper
     DiagramHelper_oox* getDiagramHelper() const { return mpDiagramHelper; }
-    SAL_DLLPRIVATE css::uno::Sequence< css::uno::Sequence< css::uno::Any > >resolveRelationshipsOfTypeFromOfficeDoc(
+    SAL_DLLPRIVATE css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > >resolveRelationshipsOfTypeFromOfficeDoc(
                                                                           core::XmlFilterBase& rFilter, const OUString& sFragment, std::u16string_view sType );
     void                setLinkedTxbxAttributes(const LinkedTxbxAttr& rhs){ maLinkedTxbxAttr = rhs; };
     void                setTxbxHasLinkedTxtBox( const bool rhs){ mbHasLinkedTxbx = rhs; };
@@ -325,7 +325,7 @@ protected:
                             const css::uno::Reference< css::drawing::XShapes >& rxShapes );
 
     SAL_DLLPRIVATE void putPropertyToGrabBag(
-                            const OUString& sPropertyName, const css::uno::Any& aPropertyValue );
+                            const OUString& sPropertyName, const cpo::uno::Any& aPropertyValue );
     SAL_DLLPRIVATE void putPropertyToGrabBag(
                             const css::beans::PropertyValue& pProperty );
     SAL_DLLPRIVATE void putPropertiesToGrabBag(

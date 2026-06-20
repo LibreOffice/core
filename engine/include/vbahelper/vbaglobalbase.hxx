@@ -51,7 +51,7 @@ public:
     virtual ~VbaGlobalsBase() override;
     // XMultiServiceFactory
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments ) override;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const css::uno::Sequence< cpo::uno::Any >& Arguments ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
 };
 #endif

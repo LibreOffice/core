@@ -57,7 +57,7 @@ namespace dbaccess
 
     protected:
         // OPropertyContainer
-        virtual void SAL_CALL getFastPropertyValue( css::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
+        virtual void SAL_CALL getFastPropertyValue( cpo::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
 
     private:
          css::uno::Reference< css::sdb::tools::XViewAccess>     m_xViewAccess;

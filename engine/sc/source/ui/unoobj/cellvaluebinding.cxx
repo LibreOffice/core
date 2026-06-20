@@ -45,6 +45,7 @@ namespace calc
 
     namespace lang = css::lang;
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::table;
     using namespace ::com::sun::star::text;
@@ -65,7 +66,7 @@ namespace calc
             PROP_HANDLE_BOUND_CELL,
             PropertyAttribute::BOUND | PropertyAttribute::READONLY,
             cppu::UnoType<CellAddress>::get(),
-            css::uno::Any(CellAddress())
+            cpo::uno::Any(CellAddress())
         );
 
         // TODO: implement a ReadOnly property as required by the service,

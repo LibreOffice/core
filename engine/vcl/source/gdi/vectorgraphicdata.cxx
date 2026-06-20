@@ -211,7 +211,7 @@ void VectorGraphicData::ensureSequenceAndRange()
 
                 if (!mbEnableEMFPlus)
                 {
-                    aPropertySequence = { comphelper::makePropertyValue(u"EMFPlusEnable"_ustr, uno::Any(false)) };
+                    aPropertySequence = { comphelper::makePropertyValue(u"EMFPlusEnable"_ustr, cpo::uno::Any(false)) };
                 }
 
                 maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xEmfParser->getDecomposition(xInputStream, OUString(), aPropertySequence));
@@ -223,7 +223,7 @@ void VectorGraphicData::ensureSequenceAndRange()
         {
             const uno::Reference<graphic::XPdfDecomposer> xPdfDecomposer = graphic::PdfTools::create(xContext);
             uno::Sequence<beans::PropertyValue> aDecompositionParameters = comphelper::InitPropertySequence({
-                {"PageIndex", uno::Any(sal_Int32(mnPageIndex))},
+                {"PageIndex", cpo::uno::Any(sal_Int32(mnPageIndex))},
             });
 
             rtl::Reference<UnoBinaryDataContainer> xDataContainer = new UnoBinaryDataContainer(getBinaryDataContainer());

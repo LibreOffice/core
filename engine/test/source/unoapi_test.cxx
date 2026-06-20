@@ -32,6 +32,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 UnoApiTest::UnoApiTest(OUString path)
     : mbSkipValidation(false)
@@ -334,12 +335,12 @@ OUString UnoApiTest::loadFromFile(std::u16string_view aFileBase, const char* pPa
     return aFileName;
 }
 
-uno::Any UnoApiTest::executeMacro(const OUString& rScriptURL,
-                                  const uno::Sequence<uno::Any>& rParams)
+cpo::uno::Any UnoApiTest::executeMacro(const OUString& rScriptURL,
+                                       const uno::Sequence<cpo::uno::Any>& rParams)
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     uno::Sequence<sal_Int16> aOutParamIndex;
-    uno::Sequence<uno::Any> aOutParam;
+    uno::Sequence<cpo::uno::Any> aOutParam;
 
     ErrCode result = SfxObjectShell::CallXScript(mxComponent, rScriptURL, rParams, aRet,
                                                  aOutParamIndex, aOutParam);
@@ -371,8 +372,8 @@ void UnoApiTest::save(TestFilter eFilter, const uno::Sequence<beans::PropertyVal
         {
             OUString sPassword = OUString::createFromAscii(pPassword);
             uno::Sequence<beans::NamedValue> aEncryptionData{
-                { u"CryptoType"_ustr, uno::Any(u"Standard"_ustr) },
-                { u"OOXPassword"_ustr, uno::Any(sPassword) }
+                { u"CryptoType"_ustr, cpo::uno::Any(u"Standard"_ustr) },
+                { u"OOXPassword"_ustr, cpo::uno::Any(sPassword) }
             };
             aMediaDescriptor[utl::MediaDescriptor::PROP_ENCRYPTIONDATA] <<= aEncryptionData;
         }

@@ -212,91 +212,92 @@ void XMLContentControlContext::endFastElement(sal_Int32)
 
     if (m_bShowingPlaceHolder)
     {
-        xPropertySet->setPropertyValue(u"ShowingPlaceHolder"_ustr, uno::Any(m_bShowingPlaceHolder));
+        xPropertySet->setPropertyValue(u"ShowingPlaceHolder"_ustr,
+                                       cpo::uno::Any(m_bShowingPlaceHolder));
     }
 
     if (m_bCheckbox)
     {
-        xPropertySet->setPropertyValue(u"Checkbox"_ustr, uno::Any(m_bCheckbox));
+        xPropertySet->setPropertyValue(u"Checkbox"_ustr, cpo::uno::Any(m_bCheckbox));
     }
     if (m_bChecked)
     {
-        xPropertySet->setPropertyValue(u"Checked"_ustr, uno::Any(m_bChecked));
+        xPropertySet->setPropertyValue(u"Checked"_ustr, cpo::uno::Any(m_bChecked));
     }
     if (!m_aCheckedState.isEmpty())
     {
-        xPropertySet->setPropertyValue(u"CheckedState"_ustr, uno::Any(m_aCheckedState));
+        xPropertySet->setPropertyValue(u"CheckedState"_ustr, cpo::uno::Any(m_aCheckedState));
     }
     if (!m_aUncheckedState.isEmpty())
     {
-        xPropertySet->setPropertyValue(u"UncheckedState"_ustr, uno::Any(m_aUncheckedState));
+        xPropertySet->setPropertyValue(u"UncheckedState"_ustr, cpo::uno::Any(m_aUncheckedState));
     }
     if (!m_aListItems.empty())
     {
-        xPropertySet->setPropertyValue(u"ListItems"_ustr,
-                                       uno::Any(comphelper::containerToSequence(m_aListItems)));
+        xPropertySet->setPropertyValue(
+            u"ListItems"_ustr, cpo::uno::Any(comphelper::containerToSequence(m_aListItems)));
     }
 
     if (m_bPicture)
     {
-        xPropertySet->setPropertyValue(u"Picture"_ustr, uno::Any(m_bPicture));
+        xPropertySet->setPropertyValue(u"Picture"_ustr, cpo::uno::Any(m_bPicture));
     }
 
     if (m_bDate)
     {
-        xPropertySet->setPropertyValue(u"Date"_ustr, uno::Any(m_bDate));
+        xPropertySet->setPropertyValue(u"Date"_ustr, cpo::uno::Any(m_bDate));
     }
     if (!m_aDateFormat.isEmpty())
     {
-        xPropertySet->setPropertyValue(u"DateFormat"_ustr, uno::Any(m_aDateFormat));
+        xPropertySet->setPropertyValue(u"DateFormat"_ustr, cpo::uno::Any(m_aDateFormat));
     }
     if (!m_aDateLanguage.isEmpty())
     {
-        xPropertySet->setPropertyValue(u"DateLanguage"_ustr, uno::Any(m_aDateLanguage));
+        xPropertySet->setPropertyValue(u"DateLanguage"_ustr, cpo::uno::Any(m_aDateLanguage));
     }
     if (!m_aCurrentDate.isEmpty())
     {
-        xPropertySet->setPropertyValue(u"CurrentDate"_ustr, uno::Any(m_aCurrentDate));
+        xPropertySet->setPropertyValue(u"CurrentDate"_ustr, cpo::uno::Any(m_aCurrentDate));
     }
 
     if (m_bPlainText)
     {
-        xPropertySet->setPropertyValue(u"PlainText"_ustr, uno::Any(m_bPlainText));
+        xPropertySet->setPropertyValue(u"PlainText"_ustr, cpo::uno::Any(m_bPlainText));
     }
 
     if (m_bComboBox)
     {
-        xPropertySet->setPropertyValue(u"ComboBox"_ustr, uno::Any(m_bComboBox));
+        xPropertySet->setPropertyValue(u"ComboBox"_ustr, cpo::uno::Any(m_bComboBox));
     }
 
     if (m_bDropDown)
     {
-        xPropertySet->setPropertyValue(u"DropDown"_ustr, uno::Any(m_bDropDown));
+        xPropertySet->setPropertyValue(u"DropDown"_ustr, cpo::uno::Any(m_bDropDown));
     }
 
     if (!m_aAlias.isEmpty())
     {
-        xPropertySet->setPropertyValue(u"Alias"_ustr, uno::Any(m_aAlias));
+        xPropertySet->setPropertyValue(u"Alias"_ustr, cpo::uno::Any(m_aAlias));
     }
 
     if (!m_aTag.isEmpty())
     {
-        xPropertySet->setPropertyValue(u"Tag"_ustr, uno::Any(m_aTag));
+        xPropertySet->setPropertyValue(u"Tag"_ustr, cpo::uno::Any(m_aTag));
     }
 
     if (m_nId)
     {
-        xPropertySet->setPropertyValue(u"Id"_ustr, uno::Any(m_nId));
+        xPropertySet->setPropertyValue(u"Id"_ustr, cpo::uno::Any(m_nId));
     }
 
     if (m_nTabIndex)
     {
-        xPropertySet->setPropertyValue(u"TabIndex"_ustr, uno::Any(m_nTabIndex));
+        xPropertySet->setPropertyValue(u"TabIndex"_ustr, cpo::uno::Any(m_nTabIndex));
     }
 
     if (!m_aLock.isEmpty())
     {
-        xPropertySet->setPropertyValue(u"Lock"_ustr, uno::Any(m_aLock));
+        xPropertySet->setPropertyValue(u"Lock"_ustr, cpo::uno::Any(m_aLock));
     }
 }
 
@@ -360,8 +361,8 @@ void XMLListItemContext::startFastElement(
     }
 
     uno::Sequence<beans::PropertyValue> aListItem = {
-        comphelper::makePropertyValue(u"DisplayText"_ustr, uno::Any(aDisplayText)),
-        comphelper::makePropertyValue(u"Value"_ustr, uno::Any(aValue)),
+        comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(aDisplayText)),
+        comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(aValue)),
     };
     m_rContentControl.AppendListItem(aListItem);
 }

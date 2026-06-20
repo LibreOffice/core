@@ -34,6 +34,7 @@ namespace frm
 using namespace comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
@@ -231,14 +232,14 @@ void SAL_CALL OImageButtonControl::mouseExited(const awt::MouseEvent& /*e*/)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OImageButtonModel_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OImageButtonModel(component));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OImageButtonControl_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OImageButtonControl(component));
 }

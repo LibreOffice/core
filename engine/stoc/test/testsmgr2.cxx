@@ -33,6 +33,7 @@
 
 using namespace ::cppu;
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::container;
 using namespace css::registry;

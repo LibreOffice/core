@@ -58,11 +58,11 @@ class OGridControlModel final :public OControlModel
     ::comphelper::OInterfaceContainerHelper3<css::sdb::XRowSetChangeListener> m_aRowSetChangeListeners;
 
 // [properties]
-    css::uno::Any                    m_aRowHeight; // Row height
-    css::uno::Any                    m_aTabStop;
-    css::uno::Any                    m_aBackgroundColor;
-    css::uno::Any                    m_aCursorColor; // transient
-    css::uno::Any                    m_aBorderColor;
+    cpo::uno::Any                    m_aRowHeight; // Row height
+    cpo::uno::Any                    m_aTabStop;
+    cpo::uno::Any                    m_aBackgroundColor;
+    cpo::uno::Any                    m_aCursorColor; // transient
+    cpo::uno::Any                    m_aBorderColor;
     OUString                         m_aDefaultControl;
     OUString                         m_sHelpText;
 // [properties]
@@ -97,7 +97,7 @@ public:
 
     // UNO Binding
     DECLARE_UNO3_AGG_DEFAULTS(OGridControlModel, OControlModel)
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
 
     // XChild
     virtual void SAL_CALL setParent(const css::uno::Reference<css::uno::XInterface>& Parent) override;
@@ -123,8 +123,8 @@ public:
     virtual void SAL_CALL removeResetListener(const css::uno::Reference< css::form::XResetListener>& _rxListener) override;
 
     // XSelectionSupplier
-    virtual bool SAL_CALL select(const css::uno::Any& aElement) override;
-    virtual css::uno::Any SAL_CALL getSelection() override;
+    virtual bool SAL_CALL select(const cpo::uno::Any& aElement) override;
+    virtual cpo::uno::Any SAL_CALL getSelection() override;
     virtual void SAL_CALL addSelectionChangeListener(const css::uno::Reference< css::view::XSelectionChangeListener >& xListener) override;
     virtual void SAL_CALL removeSelectionChangeListener(const css::uno::Reference< css::view::XSelectionChangeListener >& xListener) override;
 
@@ -138,13 +138,13 @@ public:
     virtual void SAL_CALL read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
     // XPropertySet
-    virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle ) const override;
-    virtual bool SAL_CALL convertFastPropertyValue(css::uno::Any& rConvertedValue, css::uno::Any& rOldValue,
-                                          sal_Int32 nHandle, const css::uno::Any& rValue ) override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const css::uno::Any& rValue) override;
+    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
+    virtual bool SAL_CALL convertFastPropertyValue(cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue,
+                                          sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
 
     // XPropertyState
-    virtual css::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const override;
+    virtual cpo::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const override;
 
     // XSQLErrorListener
     virtual void SAL_CALL errorOccured( const css::sdb::SQLErrorEvent& _rEvent ) override;

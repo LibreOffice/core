@@ -35,7 +35,7 @@ inline const css::uno::Type& TaskManager::MyProperty::getType() const
 {
     return Typ;
 }
-inline const css::uno::Any& TaskManager::MyProperty::getValue() const
+inline const cpo::uno::Any& TaskManager::MyProperty::getValue() const
 {
     return Value;
 }
@@ -47,7 +47,7 @@ inline const sal_Int16& TaskManager::MyProperty::getAttributes() const
 {
     return Attributes;
 }
-inline void TaskManager::MyProperty::setValue( css::uno::Any theValue ) const
+inline void TaskManager::MyProperty::setValue( cpo::uno::Any theValue ) const
 {
     const_cast<MyProperty*>(this)->Value = std::move(theValue);
 }

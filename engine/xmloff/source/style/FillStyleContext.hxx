@@ -32,7 +32,7 @@
 class XMLGradientStyleContext: public SvXMLStyleContext
 {
 private:
-    css::uno::Any          maAny;
+    cpo::uno::Any          maAny;
     OUString               maStrName;
     std::vector<css::awt::ColorStop> maColorStopVec;
 
@@ -56,7 +56,7 @@ public:
 class XMLHatchStyleContext: public SvXMLStyleContext
 {
 private:
-    css::uno::Any          maAny;
+    cpo::uno::Any          maAny;
     OUString               maStrName;
 
 public:
@@ -75,7 +75,7 @@ public:
 class XMLBitmapStyleContext: public SvXMLStyleContext
 {
 private:
-    css::uno::Any          maAny;
+    cpo::uno::Any          maAny;
     OUString               maStrName;
     css::uno::Reference < css::io::XOutputStream > mxBase64Stream;
 
@@ -98,7 +98,7 @@ public:
 class XMLTransGradientStyleContext: public SvXMLStyleContext
 {
 private:
-    css::uno::Any          maAny;
+    cpo::uno::Any          maAny;
     OUString               maStrName;
     std::vector<css::awt::ColorStop> maColorStopVec; // Transparency is handled as color gray.
 
@@ -134,7 +134,7 @@ public:
 class XMLMarkerStyleContext: public SvXMLStyleContext
 {
 private:
-    css::uno::Any          maAny;
+    cpo::uno::Any          maAny;
     OUString               maStrName;
 
 public:
@@ -153,7 +153,7 @@ public:
 class XMLDashStyleContext: public SvXMLStyleContext
 {
 private:
-    css::uno::Any          maAny;
+    cpo::uno::Any          maAny;
     OUString               maStrName;
 
 public:

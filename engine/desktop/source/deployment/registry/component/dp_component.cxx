@@ -60,6 +60,7 @@
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::ucb;
 
 namespace dp_registry::backend::component {
@@ -1187,7 +1188,7 @@ void BackendImpl::ComponentPackageImpl::componentLiveInsertion(
     for (auto const& implementationName : data.implementationNames)
     {
         try {
-            set->insert(css::uno::Any(*factory++));
+            set->insert(cpo::uno::Any(*factory++));
         } catch (const container::ElementExistException &) {
             SAL_WARN("desktop.deployment", "implementation already registered " << implementationName);
         }
@@ -1204,15 +1205,15 @@ void BackendImpl::ComponentPackageImpl::componentLiveInsertion(
             cont->removeByName( name + "/arguments");
         } catch (const container::NoSuchElementException &) {}
         try {
-            cont->insertByName( name + "/service", css::uno::Any(singleton.second));
+            cont->insertByName( name + "/service", cpo::uno::Any(singleton.second));
         } catch (const container::ElementExistException &) {
-            cont->replaceByName( name + "/service", css::uno::Any(singleton.second));
+            cont->replaceByName( name + "/service", cpo::uno::Any(singleton.second));
         }
         try {
-            cont->insertByName(name, css::uno::Any());
+            cont->insertByName(name, cpo::uno::Any());
         } catch (const container::ElementExistException &) {
             SAL_WARN("desktop.deployment", "singleton already registered " << singleton.first);
-            cont->replaceByName(name, css::uno::Any());
+            cont->replaceByName(name, cpo::uno::Any());
         }
     }
 }
@@ -1227,7 +1228,7 @@ void BackendImpl::ComponentPackageImpl::componentLiveRemoval(
     for (auto const& implementationName : data.implementationNames)
     {
         try {
-            set->remove(css::uno::Any(implementationName));
+            set->remove(cpo::uno::Any(implementationName));
         } catch (const css::container::NoSuchElementException &) {
             // ignore if factory has not been live deployed
         }
@@ -1489,7 +1490,7 @@ void BackendImpl::TypelibraryPackageImpl::processPackage_(
                     u"/singletons"
                     "/com.sun.star.reflection.theTypeDescriptionManager"_ustr),
                 css::uno::UNO_QUERY_THROW)->insert(
-                    css::uno::Any(expandUnoRcUrl(url)));
+                    cpo::uno::Any(expandUnoRcUrl(url)));
         }
 
         that->addToUnoRc( m_jarFile ? RCITEM_JAR_TYPELIB : RCITEM_RDB_TYPELIB,
@@ -1507,7 +1508,7 @@ void BackendImpl::TypelibraryPackageImpl::processPackage_(
                     u"/singletons"
                     "/com.sun.star.reflection.theTypeDescriptionManager"_ustr),
                 css::uno::UNO_QUERY_THROW)->remove(
-                    css::uno::Any(expandUnoRcUrl(url)));
+                    cpo::uno::Any(expandUnoRcUrl(url)));
         }
     }
 }
@@ -1663,13 +1664,13 @@ void BackendImpl::ComponentsPackageImpl::processPackage_(
             // supporting the extended XSet semantics:
             css::uno::Sequence< css::beans::NamedValue > args
             {
-                { u"uri"_ustr, css::uno::Any(expandUnoRcUrl(url)) },
-                { u"component-context"_ustr, css::uno::Any(context) }
+                { u"uri"_ustr, cpo::uno::Any(expandUnoRcUrl(url)) },
+                { u"component-context"_ustr, cpo::uno::Any(context) }
             };
             css::uno::Reference< css::container::XSet > smgr(
                 that->getRootContext()->getServiceManager(),
                 css::uno::UNO_QUERY_THROW);
-            smgr->insert(css::uno::Any(args));
+            smgr->insert(cpo::uno::Any(args));
         }
         that->addToUnoRc(RCITEM_COMPONENTS, url, xCmdEnv);
     } else { // revoke
@@ -1677,11 +1678,11 @@ void BackendImpl::ComponentsPackageImpl::processPackage_(
         if (!startup) {
             // This relies on the root component context's service manager
             // supporting the extended XSet semantics:
-            css::uno::Sequence< css::beans::NamedValue > args { { u"uri"_ustr, css::uno::Any(expandUnoRcUrl(url)) } };
+            css::uno::Sequence< css::beans::NamedValue > args { { u"uri"_ustr, cpo::uno::Any(expandUnoRcUrl(url)) } };
             css::uno::Reference< css::container::XSet > smgr(
                 that->getRootContext()->getServiceManager(),
                 css::uno::UNO_QUERY_THROW);
-            smgr->remove(css::uno::Any(args));
+            smgr->remove(cpo::uno::Any(args));
         }
         that->releaseObject(url);
         that->revokeEntryFromDb(url); // in case it got added with old code
@@ -1704,7 +1705,7 @@ BackendImpl::ComponentsPackageImpl::ComponentsPackageImpl(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_deployment_component_PackageRegistryBackend_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new dp_registry::backend::component::BackendImpl(args, context));
 }

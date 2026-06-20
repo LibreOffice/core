@@ -61,11 +61,11 @@ private:
     explicit DataPoint( const DataPoint & rOther );
 
     // ____ OPropertySet ____
-    virtual void GetDefaultValue( sal_Int32 nHandle, css::uno::Any& rAny ) const override;
+    virtual void GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const override;
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast
         ( sal_Int32 nHandle,
-          const css::uno::Any& rValue ) override;
+          const cpo::uno::Any& rValue ) override;
 
     // ____ XPropertySet ____
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL

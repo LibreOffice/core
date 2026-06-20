@@ -999,7 +999,7 @@ void PieChart::createShapes()
     {
         try
         {
-            uno::Any aAny = m_xChartTypeModel->getFastPropertyValue( PROP_PIECHARTTYPE_3DRELATIVEHEIGHT ); // "3DRelativeHeight"
+            cpo::uno::Any aAny = m_xChartTypeModel->getFastPropertyValue( PROP_PIECHARTTYPE_3DRELATIVEHEIGHT ); // "3DRelativeHeight"
             aAny >>= n3DRelativeHeight;
         }
         catch (const uno::Exception&) { }
@@ -1331,7 +1331,7 @@ void PieChart::createOneRing(
             if (!pSeries->hasPointOwnColor(nPropIdx) && m_xColorScheme.is())
             {
                 xPointShape->setPropertyValue(u"FillColor"_ustr,
-                    uno::Any(m_xColorScheme->getColorByIndex( nPropIdx )));
+                    cpo::uno::Any(m_xColorScheme->getColorByIndex( nPropIdx )));
             }
 
 
@@ -1340,7 +1340,7 @@ void PieChart::createOneRing(
                 double nPropVal = pSeries->getValueByProperty(nPropIdx, u"FillColor"_ustr);
                 if(!std::isnan(nPropVal))
                 {
-                    xPointShape->setPropertyValue(u"FillColor"_ustr, uno::Any(static_cast<sal_Int32>( nPropVal)));
+                    xPointShape->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(static_cast<sal_Int32>( nPropVal)));
                 }
             }
 
@@ -1447,7 +1447,7 @@ void PieChart::createOneBar(
         if (!pSeries->hasPointOwnColor(nPropIdx) && m_xColorScheme.is())
         {
             xPointShape->setPropertyValue(u"FillColor"_ustr,
-                uno::Any(m_xColorScheme->getColorByIndex( nPropIdx )));
+                cpo::uno::Any(m_xColorScheme->getColorByIndex( nPropIdx )));
         }
 
 
@@ -1456,7 +1456,7 @@ void PieChart::createOneBar(
             double nPropVal = pSeries->getValueByProperty(nPropIdx, u"FillColor"_ustr);
             if(!std::isnan(nPropVal))
             {
-                xPointShape->setPropertyValue(u"FillColor"_ustr, uno::Any(static_cast<sal_Int32>( nPropVal)));
+                xPointShape->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(static_cast<sal_Int32>( nPropVal)));
             }
         }
 

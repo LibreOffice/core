@@ -3862,7 +3862,7 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
             GetDocument().GetName( nTab, sTabName );
             try
             {
-                xNameContainer->insertByName(sTabName, uno::Any(aTableViewSettings));
+                xNameContainer->insertByName(sTabName, cpo::uno::Any(aTableViewSettings));
             }
             //#101739#; two tables with the same name are possible
             catch ( container::ElementExistException& )
@@ -3976,7 +3976,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
                     SCTAB nTab(0);
                     if (GetDocument().GetTable(sTabName, nTab))
                     {
-                        uno::Any aAny = xNameContainer->getByName(sTabName);
+                        cpo::uno::Any aAny = xNameContainer->getByName(sTabName);
                         uno::Sequence<beans::PropertyValue> aTabSettings;
                         if (aAny >>= aTabSettings)
                         {

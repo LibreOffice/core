@@ -47,6 +47,7 @@ using namespace css::i18n;
 using namespace css::lang;
 using namespace css::ucb;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace {
 
@@ -75,27 +76,27 @@ public:
     virtual css::beans::Pair< ::sal_Int32, bool > SAL_CALL getCurrentSortOrder(  ) override;
 
     // XMutableGridDataModel
-    virtual void SAL_CALL addRow( const css::uno::Any& Heading, const css::uno::Sequence< css::uno::Any >& Data ) override;
-    virtual void SAL_CALL addRows( const css::uno::Sequence< css::uno::Any >& Headings, const css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& Data ) override;
-    virtual void SAL_CALL insertRow( ::sal_Int32 i_index, const css::uno::Any& i_heading, const css::uno::Sequence< css::uno::Any >& Data ) override;
-    virtual void SAL_CALL insertRows( ::sal_Int32 i_index, const css::uno::Sequence< css::uno::Any>& Headings, const css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& Data ) override;
+    virtual void SAL_CALL addRow( const cpo::uno::Any& Heading, const css::uno::Sequence< cpo::uno::Any >& Data ) override;
+    virtual void SAL_CALL addRows( const css::uno::Sequence< cpo::uno::Any >& Headings, const css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > >& Data ) override;
+    virtual void SAL_CALL insertRow( ::sal_Int32 i_index, const cpo::uno::Any& i_heading, const css::uno::Sequence< cpo::uno::Any >& Data ) override;
+    virtual void SAL_CALL insertRows( ::sal_Int32 i_index, const css::uno::Sequence< cpo::uno::Any>& Headings, const css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > >& Data ) override;
     virtual void SAL_CALL removeRow( ::sal_Int32 RowIndex ) override;
     virtual void SAL_CALL removeAllRows(  ) override;
-    virtual void SAL_CALL updateCellData( ::sal_Int32 ColumnIndex, ::sal_Int32 RowIndex, const css::uno::Any& Value ) override;
-    virtual void SAL_CALL updateRowData( const css::uno::Sequence< ::sal_Int32 >& ColumnIndexes, ::sal_Int32 RowIndex, const css::uno::Sequence< css::uno::Any >& Values ) override;
-    virtual void SAL_CALL updateRowHeading( ::sal_Int32 RowIndex, const css::uno::Any& Heading ) override;
-    virtual void SAL_CALL updateCellToolTip( ::sal_Int32 ColumnIndex, ::sal_Int32 RowIndex, const css::uno::Any& Value ) override;
-    virtual void SAL_CALL updateRowToolTip( ::sal_Int32 RowIndex, const css::uno::Any& Value ) override;
+    virtual void SAL_CALL updateCellData( ::sal_Int32 ColumnIndex, ::sal_Int32 RowIndex, const cpo::uno::Any& Value ) override;
+    virtual void SAL_CALL updateRowData( const css::uno::Sequence< ::sal_Int32 >& ColumnIndexes, ::sal_Int32 RowIndex, const css::uno::Sequence< cpo::uno::Any >& Values ) override;
+    virtual void SAL_CALL updateRowHeading( ::sal_Int32 RowIndex, const cpo::uno::Any& Heading ) override;
+    virtual void SAL_CALL updateCellToolTip( ::sal_Int32 ColumnIndex, ::sal_Int32 RowIndex, const cpo::uno::Any& Value ) override;
+    virtual void SAL_CALL updateRowToolTip( ::sal_Int32 RowIndex, const cpo::uno::Any& Value ) override;
     virtual void SAL_CALL addGridDataListener( const css::uno::Reference< css::awt::grid::XGridDataListener >& Listener ) override;
     virtual void SAL_CALL removeGridDataListener( const css::uno::Reference< css::awt::grid::XGridDataListener >& Listener ) override;
 
     // XGridDataModel
     virtual ::sal_Int32 SAL_CALL getRowCount() override;
     virtual ::sal_Int32 SAL_CALL getColumnCount() override;
-    virtual css::uno::Any SAL_CALL getCellData( ::sal_Int32 Column, ::sal_Int32 RowIndex ) override;
-    virtual css::uno::Any SAL_CALL getCellToolTip( ::sal_Int32 Column, ::sal_Int32 RowIndex ) override;
-    virtual css::uno::Any SAL_CALL getRowHeading( ::sal_Int32 RowIndex ) override;
-    virtual css::uno::Sequence< css::uno::Any > SAL_CALL getRowData( ::sal_Int32 RowIndex ) override;
+    virtual cpo::uno::Any SAL_CALL getCellData( ::sal_Int32 Column, ::sal_Int32 RowIndex ) override;
+    virtual cpo::uno::Any SAL_CALL getCellToolTip( ::sal_Int32 Column, ::sal_Int32 RowIndex ) override;
+    virtual cpo::uno::Any SAL_CALL getRowHeading( ::sal_Int32 RowIndex ) override;
+    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL getRowData( ::sal_Int32 RowIndex ) override;
 
     // OComponentHelper
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
@@ -109,7 +110,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XGridDataListener
     virtual void SAL_CALL rowsInserted( const css::awt::grid::GridDataEvent& Event ) override;
@@ -898,7 +899,7 @@ void lcl_clear( STLCONTAINER& i_container )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 org_openoffice_comp_toolkit_SortableGridDataModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SortableGridDataModel(context));
 }

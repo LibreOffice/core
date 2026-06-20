@@ -85,21 +85,21 @@ struct SpellErrorDescription
                 sRuleId == rDesc.sRuleId;
     }
 
-    css::uno::Sequence<css::uno::Any> toSequence() const
+    css::uno::Sequence<cpo::uno::Any> toSequence() const
     {
-        css::uno::Sequence<css::uno::Any> aEntries{ css::uno::Any(bIsGrammarError),
-                                                    css::uno::Any(sErrorText),
-                                                    css::uno::Any(sDialogTitle),
-                                                    css::uno::Any(sExplanation),
-                                                    css::uno::Any(sExplanationURL),
-                                                    css::uno::Any(aLocale),
-                                                    css::uno::Any(xGrammarChecker),
-                                                    css::uno::Any(aSuggestions),
-                                                    css::uno::Any(sRuleId) };
+        css::uno::Sequence<cpo::uno::Any> aEntries{ cpo::uno::Any(bIsGrammarError),
+                                                    cpo::uno::Any(sErrorText),
+                                                    cpo::uno::Any(sDialogTitle),
+                                                    cpo::uno::Any(sExplanation),
+                                                    cpo::uno::Any(sExplanationURL),
+                                                    cpo::uno::Any(aLocale),
+                                                    cpo::uno::Any(xGrammarChecker),
+                                                    cpo::uno::Any(aSuggestions),
+                                                    cpo::uno::Any(sRuleId) };
         return aEntries;
     }
 
-    void fromSequence(const css::uno::Sequence<css::uno::Any>& rEntries)
+    void fromSequence(const css::uno::Sequence<cpo::uno::Any>& rEntries)
     {
         rEntries[0] >>= bIsGrammarError;
         rEntries[1] >>= sErrorText;

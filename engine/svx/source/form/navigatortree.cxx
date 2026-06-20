@@ -62,6 +62,7 @@ namespace svxform
         // Time (in ms) until explorer synchronizes the view after select or deselect
 
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::form;

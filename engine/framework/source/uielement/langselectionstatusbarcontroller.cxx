@@ -49,6 +49,7 @@
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::frame;
 using namespace framework;
@@ -64,7 +65,7 @@ public:
     LangSelectionStatusbarController& operator=(const LangSelectionStatusbarController&) = delete;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XStatusListener
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
@@ -73,7 +74,7 @@ public:
     virtual void SAL_CALL command( const css::awt::Point& aPos,
                                    ::sal_Int32 nCommand,
                                    bool bMouseEvent,
-                                   const css::uno::Any& aData ) override;
+                                   const cpo::uno::Any& aData ) override;
     virtual void SAL_CALL click( const css::awt::Point& aPos ) override;
 
 private:
@@ -98,7 +99,7 @@ LangSelectionStatusbarController::LangSelectionStatusbarController( const uno::R
 {
 }
 
-void SAL_CALL LangSelectionStatusbarController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+void SAL_CALL LangSelectionStatusbarController::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -275,7 +276,7 @@ void SAL_CALL LangSelectionStatusbarController::command(
     const css::awt::Point& aPos,
     ::sal_Int32 nCommand,
     bool /*bMouseEvent*/,
-    const css::uno::Any& /*aData*/ )
+    const cpo::uno::Any& /*aData*/ )
 {
     if ( nCommand & ::awt::Command::CONTEXTMENU )
     {
@@ -352,7 +353,7 @@ void SAL_CALL LangSelectionStatusbarController::statusChanged( const FeatureStat
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_LangSelectionStatusbarController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new LangSelectionStatusbarController(context));
 }

@@ -39,6 +39,7 @@ namespace calc
 #define PROP_HANDLE_RANGE_ADDRESS  1
 
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::table;
     using namespace ::com::sun::star::text;
@@ -60,7 +61,7 @@ namespace calc
             PROP_HANDLE_RANGE_ADDRESS,
             PropertyAttribute::BOUND | PropertyAttribute::READONLY,
             cppu::UnoType<CellRangeAddress>::get(),
-            css::uno::Any(CellRangeAddress())
+            cpo::uno::Any(CellRangeAddress())
         );
     }
 
@@ -137,7 +138,7 @@ namespace calc
         return aAddress;
     }
 
-    OUString OCellListSource::getCellTextContent_noCheck( std::unique_lock<std::mutex>& /*rGuard*/, sal_Int32 _nRangeRelativeRow, css::uno::Any* pAny )
+    OUString OCellListSource::getCellTextContent_noCheck( std::unique_lock<std::mutex>& /*rGuard*/, sal_Int32 _nRangeRelativeRow, cpo::uno::Any* pAny )
     {
         OUString sText;
 

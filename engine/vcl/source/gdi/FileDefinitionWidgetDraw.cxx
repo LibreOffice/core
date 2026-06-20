@@ -515,7 +515,7 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
                     uno::Reference<io::XInputStream> aInputStream(
                         new comphelper::SequenceInputStream(aData));
 
-                    uno::Any aAny = xSvgParser->getDrawCommands(aInputStream, u""_ustr);
+                    cpo::uno::Any aAny = xSvgParser->getDrawCommands(aInputStream, u""_ustr);
                     if (aAny.has<sal_uInt64>())
                     {
                         auto* pDrawRoot = reinterpret_cast<gfx::DrawRoot*>(aAny.get<sal_uInt64>());

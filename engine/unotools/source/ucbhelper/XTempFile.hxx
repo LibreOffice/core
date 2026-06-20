@@ -98,15 +98,15 @@ public:
 
     // XPropertySet
     virtual ::css::uno::Reference< ::css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::css::uno::Any& aValue ) override;
-    virtual ::css::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) override;
+    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Any& aValue ) override;
+    virtual ::cpo::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) override;
     virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::css::uno::Reference< ::css::beans::XPropertyChangeListener >& xListener ) override;
     virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::css::uno::Reference< ::css::beans::XPropertyChangeListener >& aListener ) override;
     virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::css::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::css::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener ) override;
     // XFastPropertySet
-    virtual void SAL_CALL setFastPropertyValue( ::sal_Int32 nHandle, const ::css::uno::Any& aValue ) override;
-    virtual ::css::uno::Any SAL_CALL getFastPropertyValue( ::sal_Int32 nHandle ) override;
+    virtual void SAL_CALL setFastPropertyValue( ::sal_Int32 nHandle, const ::cpo::uno::Any& aValue ) override;
+    virtual ::cpo::uno::Any SAL_CALL getFastPropertyValue( ::sal_Int32 nHandle ) override;
     // XPropertyAccess
     virtual ::css::uno::Sequence< ::css::beans::PropertyValue > SAL_CALL getPropertyValues() override;
     virtual void SAL_CALL setPropertyValues( const ::css::uno::Sequence< ::css::beans::PropertyValue >& aProps ) override;

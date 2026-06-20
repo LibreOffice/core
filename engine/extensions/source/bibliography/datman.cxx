@@ -64,6 +64,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
@@ -1205,7 +1206,7 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
 
             if (bForceListBox)
             {
-                uno::Any aAny;
+                cpo::uno::Any aAny;
 
                 //uno::Reference< beans::XPropertySet >  xPropSet(xControl, UNO_QUERY);
                 aAny <<= sal_Int16(1);

@@ -67,7 +67,7 @@ BubbleChartTypeTemplate::~BubbleChartTypeTemplate()
 {}
 
 // ____ OPropertySet ____
-void BubbleChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
+void BubbleChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const
 {
     static ::chart::tPropertyValueMap aStaticDefaults;
     tPropertyValueMap::const_iterator aFound( aStaticDefaults.find( nHandle ) );
@@ -107,7 +107,7 @@ void BubbleChartTypeTemplate::applyStyle2(
     ::sal_Int32 nSeriesCount )
 {
     ChartTypeTemplate::applyStyle2( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
-    xSeries->setPropertyAlsoToAllAttributedDataPoints( u"BorderStyle"_ustr, uno::Any( drawing::LineStyle_NONE ) );
+    xSeries->setPropertyAlsoToAllAttributedDataPoints( u"BorderStyle"_ustr, cpo::uno::Any( drawing::LineStyle_NONE ) );
 }
 
 // ____ XChartTypeTemplate ____

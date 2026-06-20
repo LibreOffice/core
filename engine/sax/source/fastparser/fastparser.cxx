@@ -59,6 +59,7 @@
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::io;
@@ -176,7 +177,7 @@ struct Entity : public ParserData
     // Exceptions cannot be thrown through the C-XmlParser (possible
     // resource leaks), therefore any exception thrown by a UNO callback
     // must be saved somewhere until the C-XmlParser is stopped.
-    css::uno::Any                           maSavedException;
+    cpo::uno::Any                           maSavedException;
     std::mutex                              maSavedExceptionMutex;
     void saveException( const Any & e );
     // Thread-safe check if maSavedException has value
@@ -1365,7 +1366,7 @@ void FastSaxParserImpl::sendPendingCharacters()
     OUString sChars( pendingCharacters.data(), pendingCharacters.size(), RTL_TEXTENCODING_UTF8 );
 
     if (sChars[0] == '_' && mxMap)
-        mxMap->get(uno::Any(sChars)) >>= sChars;
+        mxMap->get(cpo::uno::Any(sChars)) >>= sChars;
 
     if (rEntity.mbEnableThreads)
     {
@@ -1461,7 +1462,7 @@ FastSaxParser::~FastSaxParser()
 }
 
 void SAL_CALL
-FastSaxParser::initialize(css::uno::Sequence< css::uno::Any > const& rArguments)
+FastSaxParser::initialize(css::uno::Sequence< cpo::uno::Any > const& rArguments)
 {
     if (!rArguments.hasElements())
         return;
@@ -1558,7 +1559,7 @@ uno::Sequence<OUString> FastSaxParser::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_extensions_xml_sax_FastParser_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new FastSaxParser);
 }

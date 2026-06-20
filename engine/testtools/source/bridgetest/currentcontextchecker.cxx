@@ -22,7 +22,7 @@
 
 #include "currentcontextchecker.hxx"
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XCurrentContext.hpp>
 #include <cppu/unotype.hxx>
@@ -49,14 +49,14 @@ public:
     CurrentContext(const CurrentContext&) = delete;
     CurrentContext& operator=(const CurrentContext&) = delete;
 
-    virtual css::uno::Any SAL_CALL getValueByName(OUString const & Name) override;
+    virtual cpo::uno::Any SAL_CALL getValueByName(OUString const & Name) override;
 };
 
 CurrentContext::CurrentContext() {}
 
-css::uno::Any CurrentContext::getValueByName(OUString const & Name)
+cpo::uno::Any CurrentContext::getValueByName(OUString const & Name)
 {
-    return Name == KEY ? css::uno::Any(VALUE) : css::uno::Any();
+    return Name == KEY ? cpo::uno::Any(VALUE) : cpo::uno::Any();
 }
 
 }
@@ -90,7 +90,7 @@ bool testtools::bridgetest::CurrentContextChecker::performCheck(
         if (!context.is()) {
             return false;
         }
-        css::uno::Any a(context->getValueByName(KEY));
+        cpo::uno::Any a(context->getValueByName(KEY));
         if (a.getValueType() != ::cppu::UnoType< OUString >::get()) {
             return false;
         }

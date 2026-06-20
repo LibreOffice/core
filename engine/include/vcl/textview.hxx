@@ -65,12 +65,12 @@ public:
     SvMemoryStream& GetHTMLStream() { return maHTMLStream; }
 
     // css::uno::XInterface
-    css::uno::Any                               SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    cpo::uno::Any                               SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     void                                        SAL_CALL acquire() noexcept override  { OWeakObject::acquire(); }
     void                                        SAL_CALL release() noexcept override  { OWeakObject::release(); }
 
     // css::datatransfer::XTransferable
-    css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor ) override;
+    cpo::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor ) override;
     css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) override;
     bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) override;
 };

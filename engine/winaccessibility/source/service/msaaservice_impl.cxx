@@ -39,7 +39,8 @@
 #include <AccTopWindowListener.hxx>
 
 using namespace ::com::sun::star; // for odk interfaces
-using namespace ::com::sun::star::uno; // for basic types
+using namespace ::com::sun::star::uno;
+using namespace cpo::uno; // for basic types
 using namespace ::com::sun::star::accessibility;
 
 using namespace ::com::sun::star::awt;
@@ -185,7 +186,7 @@ void MSAAServiceImpl::dispose()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 winaccessibility_MSAAServiceImpl_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     Reference< XMSAAService > xAccMgr( new MSAAServiceImpl() );
 

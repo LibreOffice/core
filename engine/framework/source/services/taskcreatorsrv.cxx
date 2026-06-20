@@ -48,10 +48,10 @@ TaskCreatorService::TaskCreatorService(css::uno::Reference< css::uno::XComponent
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createInstance()
 {
-    return createInstanceWithArguments(css::uno::Sequence< css::uno::Any >());
+    return createInstanceWithArguments(css::uno::Sequence< cpo::uno::Any >());
 }
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createInstanceWithArguments(const css::uno::Sequence< css::uno::Any >& lArguments)
+css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createInstanceWithArguments(const css::uno::Sequence< cpo::uno::Any >& lArguments)
 {
     ::comphelper::SequenceAsHashMap lArgs(lArguments);
 
@@ -251,7 +251,7 @@ void TaskCreatorService::implts_establishWindowStateListener( const css::uno::Re
     // See used classes for further information too.
     rtl::Reference<PersistentWindowState> pPersistentStateHandler = new PersistentWindowState( m_xContext );
 
-    css::uno::Sequence< css::uno::Any > lInitData{ css::uno::Any(xFrame) };
+    css::uno::Sequence< cpo::uno::Any > lInitData{ cpo::uno::Any(xFrame) };
     pPersistentStateHandler->initialize(lInitData);
 }
 
@@ -263,7 +263,7 @@ void TaskCreatorService::implts_establishDocModifyListener( const css::uno::Refe
     // It will tag the window as modified if the underlying model was modified ...
     rtl::Reference<TagWindowAsModified> pTag = new TagWindowAsModified();
 
-    css::uno::Sequence< css::uno::Any > lInitData{ css::uno::Any(xFrame) };
+    css::uno::Sequence< cpo::uno::Any > lInitData{ cpo::uno::Any(xFrame) };
     pTag->initialize(lInitData);
 }
 
@@ -271,7 +271,7 @@ void TaskCreatorService::implts_establishTitleBarUpdate( const css::uno::Referen
 {
     rtl::Reference<TitleBarUpdate> pHelper = new TitleBarUpdate (m_xContext);
 
-    css::uno::Sequence< css::uno::Any > lInitData{ css::uno::Any(xFrame) };
+    css::uno::Sequence< cpo::uno::Any > lInitData{ cpo::uno::Any(xFrame) };
     pHelper->initialize(lInitData);
 }
 
@@ -287,7 +287,7 @@ OUString TaskCreatorService::impl_filterNames( const OUString& sName )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_TaskCreator_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new TaskCreatorService(context));
 }

@@ -383,7 +383,7 @@ void ScAccessibleTableBase::CommitTableModelChange(sal_Int32 nStartRow, sal_Int3
     aModelChange.LastColumn = nEndCol;
     aModelChange.Type = nId;
 
-    CommitChange(AccessibleEventId::TABLE_MODEL_CHANGED, uno::Any(), uno::Any(aModelChange));
+    CommitChange(AccessibleEventId::TABLE_MODEL_CHANGED, cpo::uno::Any(), cpo::uno::Any(aModelChange));
 }
 
 bool SAL_CALL ScAccessibleTableBase::selectRow( sal_Int32 )

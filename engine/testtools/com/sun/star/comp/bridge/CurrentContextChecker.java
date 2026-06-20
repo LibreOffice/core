@@ -18,7 +18,7 @@
 
 package com.sun.star.comp.bridge;
 
-import com.sun.star.uno.Any;
+import cpo.uno.Any;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XCurrentContext;

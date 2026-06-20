@@ -11,7 +11,7 @@
 
 #include <svl/itempool.hxx>
 #include <svx/svxdllapi.h>
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 
 //#include <vector>
 
@@ -31,7 +31,7 @@ constexpr OUString sUnoChartTheme = u".uno:ChartTheme"_ustr;
 class ChartElementThemeType
 {
 public:
-    std::vector<std::pair<OUString, css::uno::Any>> m_aProperties;
+    std::vector<std::pair<OUString, cpo::uno::Any>> m_aProperties;
     void convertPoolItemsToProperties(std::vector<SfxPoolItem*> aPoolItems);
 };
 

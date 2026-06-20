@@ -528,13 +528,14 @@ void CppProducer::generateStructHeader(std::string_view name,
     // Generate includes following the pattern used in generateStructSource
     file.beginLine().append("#include <sal/types.h>").endLine();
     file.beginLine().append("#include <com/sun/star/uno/Reference.hxx>").endLine();
-    file.beginLine().append("#include <com/sun/star/uno/Any.hxx>").endLine();
+    file.beginLine().append("#include <cpo/uno/Any.hxx>").endLine();
     // Include the struct definition
     std::string headerName(name);
     std::replace(headerName.begin(), headerName.end(), '.', '/');
     file.beginLine().append("#include <").append(headerName).append(".hpp>").endLine();
     file.beginLine().append("").endLine();
-    file.beginLine().append("using namespace com::sun::star::uno;").endLine();
+    file.beginLine().append("using namespace com::sun::star::uno;
+using namespace cpo::uno;").endLine();
 
     file.beginLine().append("extern \"C\"").endLine().beginBlock();
     // Add struct-specific namespace
@@ -669,7 +670,7 @@ void CppProducer::generateCommonIncludes(CppFile& file, std::string_view name, b
     if (needsUnoTypes)
     {
         file.beginLine().append("#include <com/sun/star/uno/Reference.hxx>").endLine();
-        file.beginLine().append("#include <com/sun/star/uno/Any.hxx>").endLine();
+        file.beginLine().append("#include <cpo/uno/Any.hxx>").endLine();
     }
 
     // Include the type-specific header
@@ -803,7 +804,8 @@ void CppProducer::generateEnumSource(std::string_view name,
 // Unified namespace generation function to eliminate duplication
 void CppProducer::generateSourceNamespaces(CppFile& file, std::string_view name)
 {
-    file.beginLine().append("using namespace com::sun::star::uno;").endLine();
+    file.beginLine().append("using namespace com::sun::star::uno;
+using namespace cpo::uno;").endLine();
 
     // Add type-specific namespace
     std::string cppNamespace(name);
@@ -2259,7 +2261,7 @@ OString CppProducer::getCppTypeName(std::u16string_view unoType) const
         return "void"_ostr;
     else if (resolvedType == u"string")
         return "rtl_uString*"_ostr;
-    else if (resolvedType == u"any" || resolvedType == u"com.sun.star.uno.Any")
+    else if (resolvedType == u"any" || resolvedType == u"cpo.uno.Any")
         return "uno_Any*"_ostr;
 
     // Try primitive type mapping

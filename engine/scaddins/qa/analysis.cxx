@@ -40,23 +40,23 @@ CPPUNIT_TEST_FIXTURE(Test, test_getDec2Hex)
 {
     // Test that 'Places' argument accepts different numeric types
     CPPUNIT_ASSERT_EQUAL(u"000000006E"_ustr,
-                         mxAnalysis->getDec2Hex({}, 110, css::uno::Any(sal_Int8(10))));
+                         mxAnalysis->getDec2Hex({}, 110, cpo::uno::Any(sal_Int8(10))));
     CPPUNIT_ASSERT_EQUAL(u"000000006E"_ustr,
-                         mxAnalysis->getDec2Hex({}, 110, css::uno::Any(sal_Int16(10))));
+                         mxAnalysis->getDec2Hex({}, 110, cpo::uno::Any(sal_Int16(10))));
     CPPUNIT_ASSERT_EQUAL(u"000000006E"_ustr,
-                         mxAnalysis->getDec2Hex({}, 110, css::uno::Any(sal_uInt16(10))));
+                         mxAnalysis->getDec2Hex({}, 110, cpo::uno::Any(sal_uInt16(10))));
     CPPUNIT_ASSERT_EQUAL(u"000000006E"_ustr,
-                         mxAnalysis->getDec2Hex({}, 110, css::uno::Any(sal_Int32(10))));
+                         mxAnalysis->getDec2Hex({}, 110, cpo::uno::Any(sal_Int32(10))));
     CPPUNIT_ASSERT_EQUAL(u"000000006E"_ustr,
-                         mxAnalysis->getDec2Hex({}, 110, css::uno::Any(sal_uInt32(10))));
+                         mxAnalysis->getDec2Hex({}, 110, cpo::uno::Any(sal_uInt32(10))));
     CPPUNIT_ASSERT_EQUAL(u"000000006E"_ustr,
-                         mxAnalysis->getDec2Hex({}, 110, css::uno::Any(sal_Int64(10))));
+                         mxAnalysis->getDec2Hex({}, 110, cpo::uno::Any(sal_Int64(10))));
     CPPUNIT_ASSERT_EQUAL(u"000000006E"_ustr,
-                         mxAnalysis->getDec2Hex({}, 110, css::uno::Any(sal_uInt64(10))));
+                         mxAnalysis->getDec2Hex({}, 110, cpo::uno::Any(sal_uInt64(10))));
     CPPUNIT_ASSERT_EQUAL(u"000000006E"_ustr,
-                         mxAnalysis->getDec2Hex({}, 110, css::uno::Any(double(10))));
+                         mxAnalysis->getDec2Hex({}, 110, cpo::uno::Any(double(10))));
     CPPUNIT_ASSERT_EQUAL(u"000000006E"_ustr,
-                         mxAnalysis->getDec2Hex({}, 110, css::uno::Any(float(10))));
+                         mxAnalysis->getDec2Hex({}, 110, cpo::uno::Any(float(10))));
 }
 }
 

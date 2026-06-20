@@ -266,9 +266,9 @@ bool HierarchyEntry::setData( const HierarchyEntryData& rData )
                 bRoot = false;
             }
 
-            uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+            uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
             {
-                {CFGPROPERTY_NODEPATH, uno::Any(aParentPath)}
+                {CFGPROPERTY_NODEPATH, cpo::uno::Any(aParentPath)}
             }));
 
             uno::Reference< util::XChangesBatch > xBatch(
@@ -291,7 +291,7 @@ bool HierarchyEntry::setData( const HierarchyEntryData& rData )
                 // Try to create own key. It must not exist!
 
                 bool bExists = true;
-                uno::Any aMyKey;
+                cpo::uno::Any aMyKey;
 
                 try
                 {
@@ -373,7 +373,7 @@ bool HierarchyEntry::setData( const HierarchyEntryData& rData )
                     // Set Title value.
                     xNameReplace->replaceByName(
                         u"Title"_ustr,
-                        uno::Any( rData.getTitle() ) );
+                        cpo::uno::Any( rData.getTitle() ) );
 
                     // Set TargetURL value.
 
@@ -389,18 +389,18 @@ bool HierarchyEntry::setData( const HierarchyEntryData& rData )
 
                     xNameReplace->replaceByName(
                         u"TargetURL"_ustr,
-                        uno::Any( aValue ) );
+                        cpo::uno::Any( aValue ) );
 
                     // Set Type value.
                     sal_Int32 nType
                         = rData.getType() == HierarchyEntryData::LINK ? 0 : 1;
                     xNameReplace->replaceByName(
                         u"Type"_ustr,
-                        uno::Any( nType ) );
+                        cpo::uno::Any( nType ) );
 
                     if ( xContainer.is() )
                         xContainer->insertByName(
-                            m_aName, uno::Any( xNameReplace ) );
+                            m_aName, cpo::uno::Any( xNameReplace ) );
 
                     // Commit changes.
                     xBatch->commitChanges();
@@ -512,9 +512,9 @@ bool HierarchyEntry::move(
             bNewRoot = false;
         }
 
-        uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+        uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
         {
-            {CFGPROPERTY_NODEPATH, uno::Any(aOldParentPath)}
+            {CFGPROPERTY_NODEPATH, cpo::uno::Any(aOldParentPath)}
         }));
 
         xOldParentBatch.set(
@@ -535,9 +535,9 @@ bool HierarchyEntry::move(
         }
         else
         {
-            uno::Sequence<uno::Any> aArguments2(comphelper::InitAnyPropertySequence(
+            uno::Sequence<cpo::uno::Any> aArguments2(comphelper::InitAnyPropertySequence(
             {
-                {CFGPROPERTY_NODEPATH, uno::Any(aNewParentPath)}
+                {CFGPROPERTY_NODEPATH, cpo::uno::Any(aNewParentPath)}
             }));
 
             xNewParentBatch.set(
@@ -569,7 +569,7 @@ bool HierarchyEntry::move(
     // (1) Get entry...
 
 
-    uno::Any aEntry;
+    cpo::uno::Any aEntry;
     uno::Reference< container::XNameAccess >    xOldParentNameAccess;
     uno::Reference< container::XNameContainer > xOldNameContainer;
 
@@ -673,7 +673,7 @@ bool HierarchyEntry::move(
 
         xNewNameReplace->replaceByName(
             u"Title"_ustr,
-            uno::Any( rData.getTitle() ) );
+            cpo::uno::Any( rData.getTitle() ) );
 
         // TargetURL property may contain a reference to the Office
         // installation directory. To ensure a reloctable office
@@ -685,11 +685,11 @@ bool HierarchyEntry::move(
             aValue = m_xOfficeInstDirs->makeRelocatableURL( aValue );
         xNewNameReplace->replaceByName(
             u"TargetURL"_ustr,
-            uno::Any( aValue ) );
+            cpo::uno::Any( aValue ) );
         sal_Int32 nType = rData.getType() == HierarchyEntryData::LINK ? 0 : 1;
         xNewNameReplace->replaceByName(
             u"Type"_ustr,
-            uno::Any( nType ) );
+            cpo::uno::Any( nType ) );
 
         xNewNameContainer->insertByName( aNewKey, aEntry );
         xNewParentBatch->commitChanges();
@@ -758,9 +758,9 @@ bool HierarchyEntry::remove()
                 bRoot = false;
             }
 
-            uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+            uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
             {
-                {CFGPROPERTY_NODEPATH, uno::Any(aParentPath)}
+                {CFGPROPERTY_NODEPATH, cpo::uno::Any(aParentPath)}
             }));
 
             uno::Reference< util::XChangesBatch > xBatch(
@@ -983,9 +983,9 @@ HierarchyEntry::getRootReadAccess()
                 {
                     // Create Root object.
 
-                    uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+                    uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
                     {
-                        {CFGPROPERTY_NODEPATH, uno::Any(OUString())} // root path
+                        {CFGPROPERTY_NODEPATH, cpo::uno::Any(OUString())} // root path
                     }));
 
                     m_bTriedToGetRootReadAccess = true;

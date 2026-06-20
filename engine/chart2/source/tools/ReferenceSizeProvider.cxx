@@ -144,13 +144,13 @@ void ReferenceSizeProvider::setValuesAtPropertySet(
         if( useAutoScale())
         {
             if( ! bHasOldRefSize )
-                xProp->setPropertyValue( aRefSizeName, uno::Any( aRefSize ));
+                xProp->setPropertyValue( aRefSizeName, cpo::uno::Any( aRefSize ));
         }
         else
         {
             if( bHasOldRefSize )
             {
-                xProp->setPropertyValue( aRefSizeName, uno::Any());
+                xProp->setPropertyValue( aRefSizeName, cpo::uno::Any());
 
                 // adapt font sizes
                 if( bAdaptFontSizes )

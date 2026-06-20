@@ -66,6 +66,7 @@
 
 using namespace css;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::io;
 using namespace com::sun::star::embed;
 using namespace com::sun::star::lang;
@@ -83,7 +84,7 @@ class ModuleUIConfigurationManager : public cppu::WeakImplHelper<
 public:
     ModuleUIConfigurationManager(
             const css::uno::Reference< css::uno::XComponentContext >& xServiceManager,
-            const css::uno::Sequence< css::uno::Any >& aArguments);
+            const css::uno::Sequence< cpo::uno::Any >& aArguments);
 
     virtual OUString SAL_CALL getImplementationName() override
     {
@@ -822,7 +823,7 @@ void ModuleUIConfigurationManager::impl_Initialize()
 
 ModuleUIConfigurationManager::ModuleUIConfigurationManager(
         const Reference< XComponentContext >& xContext,
-        const css::uno::Sequence< css::uno::Any >& aArguments)
+        const css::uno::Sequence< cpo::uno::Any >& aArguments)
     : m_bReadOnly( true )
     , m_bModified( false )
     , m_bDisposed( false )
@@ -1026,7 +1027,7 @@ void SAL_CALL ModuleUIConfigurationManager::reset()
             }
             catch (const Exception&)
             {
-                css::uno::Any anyEx = cppu::getCaughtException();
+                cpo::uno::Any anyEx = cppu::getCaughtException();
                 throw css::lang::WrappedTargetRuntimeException(
                         u"ModuleUIConfigurationManager::reset exception"_ustr,
                         css::uno::Reference<css::uno::XInterface>(*this), anyEx);
@@ -1402,11 +1403,11 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getImageManager()
     {
         m_xModuleImageManager = new ImageManager( m_xContext, /*bForModule*/true );
 
-        uno::Sequence<uno::Any> aPropSeq(comphelper::InitAnyPropertySequence(
+        uno::Sequence<cpo::uno::Any> aPropSeq(comphelper::InitAnyPropertySequence(
         {
-            {"UserConfigStorage", uno::Any(m_xUserConfigStorage)},
-            {"ModuleIdentifier", uno::Any(m_aModuleIdentifier)},
-            {"UserRootCommit", uno::Any(m_xUserRootCommit)},
+            {"UserConfigStorage", cpo::uno::Any(m_xUserConfigStorage)},
+            {"ModuleIdentifier", cpo::uno::Any(m_aModuleIdentifier)},
+            {"UserRootCommit", cpo::uno::Any(m_xUserRootCommit)},
         }));
         m_xModuleImageManager->initialize( aPropSeq );
     }
@@ -1644,7 +1645,7 @@ void ModuleUIConfigurationManager::implts_notifyContainerListener( const ui::Con
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_ModuleUIConfigurationManager_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &arguments)
+    css::uno::Sequence<cpo::uno::Any> const &arguments)
 {
     return cppu::acquire(new ModuleUIConfigurationManager(context, arguments));
 }

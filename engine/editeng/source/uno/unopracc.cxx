@@ -19,7 +19,7 @@
 
 
 #include <cppuhelper/typeprovider.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unopracc.hxx>
@@ -43,7 +43,7 @@ uno::Reference< text::XText > SAL_CALL SvxAccessibleTextPropertySet::getText()
   return uno::Reference< text::XText > ();
 }
 
-uno::Any SAL_CALL SvxAccessibleTextPropertySet::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxAccessibleTextPropertySet::queryInterface( const uno::Type & rType )
 {
     return OWeakObject::queryInterface(rType);
 }

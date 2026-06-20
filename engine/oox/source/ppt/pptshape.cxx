@@ -51,6 +51,7 @@ using namespace ::oox::drawingml;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::drawing;
@@ -691,7 +692,7 @@ void PPTShape::addShape(
                     }
 
                     sAPIEventName = u"OnClick"_ustr;
-                    xEvents->replaceByName(sAPIEventName, uno::Any(aProperties));
+                    xEvents->replaceByName(sAPIEventName, cpo::uno::Any(aProperties));
                 }
             }
         }

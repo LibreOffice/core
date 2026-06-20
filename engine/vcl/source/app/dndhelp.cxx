@@ -64,9 +64,9 @@ vcl::unohelper::DragAndDropWrapper::~DragAndDropWrapper()
 }
 
 // uno::XInterface
-uno::Any vcl::unohelper::DragAndDropWrapper::queryInterface( const uno::Type & rType )
+cpo::uno::Any vcl::unohelper::DragAndDropWrapper::queryInterface( const uno::Type & rType )
 {
-    uno::Any aRet = ::cppu::queryInterface( rType,
+    cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                             static_cast< css::lang::XEventListener* >( static_cast<css::datatransfer::dnd::XDragGestureListener*>(this) ),
                             static_cast< css::datatransfer::dnd::XDragGestureListener* >(this),
                             static_cast< css::datatransfer::dnd::XDragSourceListener* >(this),
@@ -147,9 +147,9 @@ vcl::OleDnDHelper(const css::uno::Reference<css::lang::XInitialization>& xDnD, c
     if (pWin && xDnD)
     {
         if (eDoD == vcl::DragOrDrop::Drag)
-            xDnD->initialize({ uno::Any(), uno::Any(static_cast<sal_uInt64>(pWin)) });
+            xDnD->initialize({ cpo::uno::Any(), cpo::uno::Any(static_cast<sal_uInt64>(pWin)) });
         else
-            xDnD->initialize({ uno::Any(static_cast<sal_uInt64>(pWin)), uno::Any() });
+            xDnD->initialize({ cpo::uno::Any(static_cast<sal_uInt64>(pWin)), cpo::uno::Any() });
     }
 }
 

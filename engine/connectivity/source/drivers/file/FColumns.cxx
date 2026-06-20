@@ -26,6 +26,7 @@
 using namespace connectivity::file;
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::sdbc;
 
 css::uno::Reference< css::beans::XPropertySet > OColumns::createObject(const OUString& _rName)

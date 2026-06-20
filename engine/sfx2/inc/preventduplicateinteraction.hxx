@@ -201,7 +201,7 @@ class PreventDuplicateInteraction final :
     // uno interface
     public:
 
-        virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
+        virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
         /**
             @interface  XInteractionHandler
@@ -236,7 +236,7 @@ class PreventDuplicateInteraction final :
 
             @threadsafe yes
         */
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
 
     // c++ interface
     public:

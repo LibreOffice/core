@@ -84,8 +84,8 @@ public:
          @param rOldValue
              the old value
      */
-     void commitCellEvent(sal_Int16 nEventId, const css::uno::Any& rNewValue,
-             const css::uno::Any& rOldValue);
+     void commitCellEvent(sal_Int16 nEventId, const cpo::uno::Any& rNewValue,
+             const cpo::uno::Any& rOldValue);
 
      /** commitTableEvent commit the event at all listeners of the table
          @param nEventId
@@ -95,8 +95,8 @@ public:
          @param rOldValue
              the old value
      */
-     void commitTableEvent(sal_Int16 nEventId, const css::uno::Any& rNewValue,
-             const css::uno::Any& rOldValue);
+     void commitTableEvent(sal_Int16 nEventId, const cpo::uno::Any& rNewValue,
+             const cpo::uno::Any& rOldValue);
 
 private:
     // internal virtual methods -----------------------------------------------

@@ -277,8 +277,8 @@ public:
 
     void Validate(const SwDoc& rDoc);
     void dumpAsXml(xmlTextWriterPtr w) const;
-    SW_DLLPUBLIC void GetGrabBagItem(css::uno::Any& rVal) const;
-    void SetGrabBagItem(const css::uno::Any& rVal);
+    SW_DLLPUBLIC void GetGrabBagItem(cpo::uno::Any& rVal) const;
+    void SetGrabBagItem(const cpo::uno::Any& rVal);
 
     void RegisterGrfLinks(SwDoc& rDoc);
     void RemoveGrfLinks(SwDoc& rDoc);

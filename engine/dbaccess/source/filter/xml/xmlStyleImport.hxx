@@ -56,7 +56,7 @@ namespace dbaxml
 
         virtual void SetDefaults() override;
 
-        void AddProperty(sal_Int16 nContextID, const css::uno::Any& aValue);
+        void AddProperty(sal_Int16 nContextID, const cpo::uno::Any& aValue);
     };
 
     class OTableStylesContext : public SvXMLStylesContext

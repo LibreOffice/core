@@ -54,7 +54,7 @@ using namespace ::com::sun::star;
 
     //  --- XNameReplace ---
 
-void SAL_CALL SfxEvents_Impl::replaceByName( const OUString & aName, const uno::Any & rElement )
+void SAL_CALL SfxEvents_Impl::replaceByName( const OUString & aName, const cpo::uno::Any & rElement )
 {
     std::unique_lock aGuard( maMutex );
 
@@ -109,7 +109,7 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUString & aName, const uno::
 
 //  --- XNameAccess ---
 
-uno::Any SAL_CALL SfxEvents_Impl::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL SfxEvents_Impl::getByName( const OUString& aName )
 {
     std::unique_lock aGuard( maMutex );
 
@@ -117,7 +117,7 @@ uno::Any SAL_CALL SfxEvents_Impl::getByName( const OUString& aName )
 
     auto nIndex = comphelper::findValue(maEventNames, aName);
     if (nIndex != -1)
-        return uno::Any(maEventData[nIndex]);
+        return cpo::uno::Any(maEventData[nIndex]);
 
     throw container::NoSuchElementException();
 }
@@ -225,7 +225,7 @@ void SfxEvents_Impl::Execute( css::uno::Sequence < css::beans::PropertyValue > c
 
     if (aType == STAR_BASIC)
     {
-        uno::Any aAny;
+        cpo::uno::Any aAny;
         SfxMacroLoader::loadMacro( aScript, aAny, pDoc );
     }
     else if (aType == "Service" || aType == "Script")
@@ -332,11 +332,11 @@ SfxEvents_Impl::~SfxEvents_Impl()
 }
 
 
-std::unique_ptr<SvxMacro> SfxEvents_Impl::ConvertToMacro( const uno::Any& rElement, SfxObjectShell* pObjShell )
+std::unique_ptr<SvxMacro> SfxEvents_Impl::ConvertToMacro( const cpo::uno::Any& rElement, SfxObjectShell* pObjShell )
 {
     std::unique_ptr<SvxMacro> pMacro;
     uno::Sequence < beans::PropertyValue > aProperties;
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     NormalizeMacro( rElement, aAny, pObjShell );
 
     if ( aAny >>= aProperties )
@@ -391,7 +391,7 @@ std::unique_ptr<SvxMacro> SfxEvents_Impl::ConvertToMacro( const uno::Any& rEleme
     return pMacro;
 }
 
-void SfxEvents_Impl::NormalizeMacro( const uno::Any& rEvent, uno::Any& rRet, SfxObjectShell* pDoc )
+void SfxEvents_Impl::NormalizeMacro( const cpo::uno::Any& rEvent, cpo::uno::Any& rRet, SfxObjectShell* pDoc )
 {
     const ::comphelper::NamedValueCollection aEventDescriptor( rEvent );
     ::comphelper::NamedValueCollection aEventDescriptorOut;

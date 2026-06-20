@@ -53,7 +53,7 @@ public:
 
     void UpdateLinks() override;
 
-    bool GetData(const OUString& rItem, const OUString& rMimeType, css::uno::Any& rValue) const override;
+    bool GetData(const OUString& rItem, const OUString& rMimeType, cpo::uno::Any& rValue) const override;
 
     void SetData(const OUString& rItem) override;
 

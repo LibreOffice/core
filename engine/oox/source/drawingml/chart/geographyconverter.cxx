@@ -23,25 +23,25 @@ uno::Sequence<beans::PropertyValue> addressToProps(const GeoAddressModel& rAddr)
 {
     std::vector<beans::PropertyValue> aVec;
     if (rAddr.mosAddress1.has_value())
-        aVec.push_back({ u"address1"_ustr, 0, uno::Any(*rAddr.mosAddress1),
+        aVec.push_back({ u"address1"_ustr, 0, cpo::uno::Any(*rAddr.mosAddress1),
                          beans::PropertyState_DIRECT_VALUE });
     if (rAddr.mosCountryRegion.has_value())
-        aVec.push_back({ u"countryRegion"_ustr, 0, uno::Any(*rAddr.mosCountryRegion),
+        aVec.push_back({ u"countryRegion"_ustr, 0, cpo::uno::Any(*rAddr.mosCountryRegion),
                          beans::PropertyState_DIRECT_VALUE });
     if (rAddr.mosAdminDistrict1.has_value())
-        aVec.push_back({ u"adminDistrict1"_ustr, 0, uno::Any(*rAddr.mosAdminDistrict1),
+        aVec.push_back({ u"adminDistrict1"_ustr, 0, cpo::uno::Any(*rAddr.mosAdminDistrict1),
                          beans::PropertyState_DIRECT_VALUE });
     if (rAddr.mosAdminDistrict2.has_value())
-        aVec.push_back({ u"adminDistrict2"_ustr, 0, uno::Any(*rAddr.mosAdminDistrict2),
+        aVec.push_back({ u"adminDistrict2"_ustr, 0, cpo::uno::Any(*rAddr.mosAdminDistrict2),
                          beans::PropertyState_DIRECT_VALUE });
     if (rAddr.mosPostalCode.has_value())
-        aVec.push_back({ u"postalCode"_ustr, 0, uno::Any(*rAddr.mosPostalCode),
+        aVec.push_back({ u"postalCode"_ustr, 0, cpo::uno::Any(*rAddr.mosPostalCode),
                          beans::PropertyState_DIRECT_VALUE });
     if (rAddr.mosLocality.has_value())
-        aVec.push_back({ u"locality"_ustr, 0, uno::Any(*rAddr.mosLocality),
+        aVec.push_back({ u"locality"_ustr, 0, cpo::uno::Any(*rAddr.mosLocality),
                          beans::PropertyState_DIRECT_VALUE });
     if (rAddr.mosIsoCountryCode.has_value())
-        aVec.push_back({ u"isoCountryCode"_ustr, 0, uno::Any(*rAddr.mosIsoCountryCode),
+        aVec.push_back({ u"isoCountryCode"_ustr, 0, cpo::uno::Any(*rAddr.mosIsoCountryCode),
                          beans::PropertyState_DIRECT_VALUE });
     return comphelper::containerToSequence(aVec);
 }
@@ -76,19 +76,19 @@ uno::Sequence<beans::PropertyValue> locationToProps(const GeoLocationModel& rLoc
 {
     std::vector<beans::PropertyValue> aVec;
     if (rLoc.mosLatitude.has_value())
-        aVec.push_back({ u"latitude"_ustr, 0, uno::Any(*rLoc.mosLatitude),
+        aVec.push_back({ u"latitude"_ustr, 0, cpo::uno::Any(*rLoc.mosLatitude),
                          beans::PropertyState_DIRECT_VALUE });
     if (rLoc.mosLongitude.has_value())
-        aVec.push_back({ u"longitude"_ustr, 0, uno::Any(*rLoc.mosLongitude),
+        aVec.push_back({ u"longitude"_ustr, 0, cpo::uno::Any(*rLoc.mosLongitude),
                          beans::PropertyState_DIRECT_VALUE });
     if (rLoc.mosEntityName.has_value())
-        aVec.push_back({ u"entityName"_ustr, 0, uno::Any(*rLoc.mosEntityName),
+        aVec.push_back({ u"entityName"_ustr, 0, cpo::uno::Any(*rLoc.mosEntityName),
                          beans::PropertyState_DIRECT_VALUE });
     if (rLoc.mosEntityType.has_value())
-        aVec.push_back({ u"entityType"_ustr, 0, uno::Any(*rLoc.mosEntityType),
+        aVec.push_back({ u"entityType"_ustr, 0, cpo::uno::Any(*rLoc.mosEntityType),
                          beans::PropertyState_DIRECT_VALUE });
     if (rLoc.mxAddress.has_value())
-        aVec.push_back({ u"address"_ustr, 0, uno::Any(addressToProps(*rLoc.mxAddress)),
+        aVec.push_back({ u"address"_ustr, 0, cpo::uno::Any(addressToProps(*rLoc.mxAddress)),
                          beans::PropertyState_DIRECT_VALUE });
     return comphelper::containerToSequence(aVec);
 }
@@ -136,19 +136,19 @@ uno::Sequence<beans::PropertyValue> locQueryToProps(const GeoLocationQueryModel&
 {
     std::vector<beans::PropertyValue> aVec;
     if (rQ.mosCountryRegion.has_value())
-        aVec.push_back({ u"countryRegion"_ustr, 0, uno::Any(*rQ.mosCountryRegion),
+        aVec.push_back({ u"countryRegion"_ustr, 0, cpo::uno::Any(*rQ.mosCountryRegion),
                          beans::PropertyState_DIRECT_VALUE });
     if (rQ.mosAdminDistrict1.has_value())
-        aVec.push_back({ u"adminDistrict1"_ustr, 0, uno::Any(*rQ.mosAdminDistrict1),
+        aVec.push_back({ u"adminDistrict1"_ustr, 0, cpo::uno::Any(*rQ.mosAdminDistrict1),
                          beans::PropertyState_DIRECT_VALUE });
     if (rQ.mosAdminDistrict2.has_value())
-        aVec.push_back({ u"adminDistrict2"_ustr, 0, uno::Any(*rQ.mosAdminDistrict2),
+        aVec.push_back({ u"adminDistrict2"_ustr, 0, cpo::uno::Any(*rQ.mosAdminDistrict2),
                          beans::PropertyState_DIRECT_VALUE });
     if (rQ.mosPostalCode.has_value())
-        aVec.push_back({ u"postalCode"_ustr, 0, uno::Any(*rQ.mosPostalCode),
+        aVec.push_back({ u"postalCode"_ustr, 0, cpo::uno::Any(*rQ.mosPostalCode),
                          beans::PropertyState_DIRECT_VALUE });
     if (rQ.mosEntityType.has_value())
-        aVec.push_back({ u"entityType"_ustr, 0, uno::Any(*rQ.mosEntityType),
+        aVec.push_back({ u"entityType"_ustr, 0, cpo::uno::Any(*rQ.mosEntityType),
                          beans::PropertyState_DIRECT_VALUE });
     return comphelper::containerToSequence(aVec);
 }
@@ -179,13 +179,14 @@ uno::Sequence<beans::PropertyValue> locResultToProps(const GeoLocationQueryResul
 {
     std::vector<beans::PropertyValue> aVec;
     if (rR.mxQuery.has_value())
-        aVec.push_back({ u"query"_ustr, 0, uno::Any(locQueryToProps(*rR.mxQuery)),
+        aVec.push_back({ u"query"_ustr, 0, cpo::uno::Any(locQueryToProps(*rR.mxQuery)),
                          beans::PropertyState_DIRECT_VALUE });
     std::vector<uno::Sequence<beans::PropertyValue>> aLocs;
     for (const auto& rLoc : rR.maLocations)
         aLocs.push_back(locationToProps(rLoc));
     if (!aLocs.empty())
-        aVec.push_back({ u"locations"_ustr, 0, uno::Any(comphelper::containerToSequence(aLocs)),
+        aVec.push_back({ u"locations"_ustr, 0,
+                         cpo::uno::Any(comphelper::containerToSequence(aLocs)),
                          beans::PropertyState_DIRECT_VALUE });
     return comphelper::containerToSequence(aVec);
 }
@@ -216,14 +217,14 @@ uno::Sequence<beans::PropertyValue> polygonToProps(const GeoPolygonModel& rP)
 {
     std::vector<beans::PropertyValue> aVec;
     if (rP.mosPolygonId.has_value())
-        aVec.push_back({ u"polygonId"_ustr, 0, uno::Any(*rP.mosPolygonId),
+        aVec.push_back({ u"polygonId"_ustr, 0, cpo::uno::Any(*rP.mosPolygonId),
                          beans::PropertyState_DIRECT_VALUE });
     if (rP.mosNumPoints.has_value())
-        aVec.push_back({ u"numPoints"_ustr, 0, uno::Any(*rP.mosNumPoints),
+        aVec.push_back({ u"numPoints"_ustr, 0, cpo::uno::Any(*rP.mosNumPoints),
                          beans::PropertyState_DIRECT_VALUE });
     if (rP.mosPcaRings.has_value())
-        aVec.push_back(
-            { u"pcaRings"_ustr, 0, uno::Any(*rP.mosPcaRings), beans::PropertyState_DIRECT_VALUE });
+        aVec.push_back({ u"pcaRings"_ustr, 0, cpo::uno::Any(*rP.mosPcaRings),
+                         beans::PropertyState_DIRECT_VALUE });
     return comphelper::containerToSequence(aVec);
 }
 
@@ -249,29 +250,30 @@ uno::Sequence<beans::PropertyValue> geoDataToProps(const GeoDataModel& rD)
 {
     std::vector<beans::PropertyValue> aVec;
     if (rD.mosEntityName.has_value())
-        aVec.push_back({ u"entityName"_ustr, 0, uno::Any(*rD.mosEntityName),
+        aVec.push_back({ u"entityName"_ustr, 0, cpo::uno::Any(*rD.mosEntityName),
                          beans::PropertyState_DIRECT_VALUE });
     if (rD.mosEntityId.has_value())
-        aVec.push_back(
-            { u"entityId"_ustr, 0, uno::Any(*rD.mosEntityId), beans::PropertyState_DIRECT_VALUE });
+        aVec.push_back({ u"entityId"_ustr, 0, cpo::uno::Any(*rD.mosEntityId),
+                         beans::PropertyState_DIRECT_VALUE });
     if (rD.mosEast.has_value())
         aVec.push_back(
-            { u"east"_ustr, 0, uno::Any(*rD.mosEast), beans::PropertyState_DIRECT_VALUE });
+            { u"east"_ustr, 0, cpo::uno::Any(*rD.mosEast), beans::PropertyState_DIRECT_VALUE });
     if (rD.mosWest.has_value())
         aVec.push_back(
-            { u"west"_ustr, 0, uno::Any(*rD.mosWest), beans::PropertyState_DIRECT_VALUE });
+            { u"west"_ustr, 0, cpo::uno::Any(*rD.mosWest), beans::PropertyState_DIRECT_VALUE });
     if (rD.mosNorth.has_value())
         aVec.push_back(
-            { u"north"_ustr, 0, uno::Any(*rD.mosNorth), beans::PropertyState_DIRECT_VALUE });
+            { u"north"_ustr, 0, cpo::uno::Any(*rD.mosNorth), beans::PropertyState_DIRECT_VALUE });
     if (rD.mosSouth.has_value())
         aVec.push_back(
-            { u"south"_ustr, 0, uno::Any(*rD.mosSouth), beans::PropertyState_DIRECT_VALUE });
+            { u"south"_ustr, 0, cpo::uno::Any(*rD.mosSouth), beans::PropertyState_DIRECT_VALUE });
     if (!rD.maPolygons.empty())
     {
         std::vector<uno::Sequence<beans::PropertyValue>> aPolys;
         for (const auto& rP : rD.maPolygons)
             aPolys.push_back(polygonToProps(rP));
-        aVec.push_back({ u"polygons"_ustr, 0, uno::Any(comphelper::containerToSequence(aPolys)),
+        aVec.push_back({ u"polygons"_ustr, 0,
+                         cpo::uno::Any(comphelper::containerToSequence(aPolys)),
                          beans::PropertyState_DIRECT_VALUE });
     }
     if (!rD.maCopyrights.empty())
@@ -279,7 +281,7 @@ uno::Sequence<beans::PropertyValue> geoDataToProps(const GeoDataModel& rD)
         std::vector<OUString> aCR;
         for (const auto& rC : rD.maCopyrights)
             aCR.push_back(rC.msText);
-        aVec.push_back({ u"copyrights"_ustr, 0, uno::Any(comphelper::containerToSequence(aCR)),
+        aVec.push_back({ u"copyrights"_ustr, 0, cpo::uno::Any(comphelper::containerToSequence(aCR)),
                          beans::PropertyState_DIRECT_VALUE });
     }
     return comphelper::containerToSequence(aVec);
@@ -330,11 +332,11 @@ uno::Sequence<beans::PropertyValue> dataEntityQueryToProps(const GeoDataEntityQu
 {
     std::vector<beans::PropertyValue> aVec;
     if (rQ.mosEntityType.has_value())
-        aVec.push_back({ u"entityType"_ustr, 0, uno::Any(*rQ.mosEntityType),
+        aVec.push_back({ u"entityType"_ustr, 0, cpo::uno::Any(*rQ.mosEntityType),
                          beans::PropertyState_DIRECT_VALUE });
     if (rQ.mosEntityId.has_value())
-        aVec.push_back(
-            { u"entityId"_ustr, 0, uno::Any(*rQ.mosEntityId), beans::PropertyState_DIRECT_VALUE });
+        aVec.push_back({ u"entityId"_ustr, 0, cpo::uno::Any(*rQ.mosEntityId),
+                         beans::PropertyState_DIRECT_VALUE });
     return comphelper::containerToSequence(aVec);
 }
 
@@ -358,10 +360,10 @@ uno::Sequence<beans::PropertyValue> dataEntityResultToProps(const GeoDataEntityQ
 {
     std::vector<beans::PropertyValue> aVec;
     if (rR.mxQuery.has_value())
-        aVec.push_back({ u"query"_ustr, 0, uno::Any(dataEntityQueryToProps(*rR.mxQuery)),
+        aVec.push_back({ u"query"_ustr, 0, cpo::uno::Any(dataEntityQueryToProps(*rR.mxQuery)),
                          beans::PropertyState_DIRECT_VALUE });
     if (rR.mxData.has_value())
-        aVec.push_back({ u"data"_ustr, 0, uno::Any(geoDataToProps(*rR.mxData)),
+        aVec.push_back({ u"data"_ustr, 0, cpo::uno::Any(geoDataToProps(*rR.mxData)),
                          beans::PropertyState_DIRECT_VALUE });
     return comphelper::containerToSequence(aVec);
 }
@@ -387,13 +389,13 @@ uno::Sequence<beans::PropertyValue> ptQueryToProps(const GeoDataPointQueryModel&
 {
     std::vector<beans::PropertyValue> aVec;
     if (rQ.mosEntityType.has_value())
-        aVec.push_back({ u"entityType"_ustr, 0, uno::Any(*rQ.mosEntityType),
+        aVec.push_back({ u"entityType"_ustr, 0, cpo::uno::Any(*rQ.mosEntityType),
                          beans::PropertyState_DIRECT_VALUE });
     if (rQ.mosLatitude.has_value())
-        aVec.push_back(
-            { u"latitude"_ustr, 0, uno::Any(*rQ.mosLatitude), beans::PropertyState_DIRECT_VALUE });
+        aVec.push_back({ u"latitude"_ustr, 0, cpo::uno::Any(*rQ.mosLatitude),
+                         beans::PropertyState_DIRECT_VALUE });
     if (rQ.mosLongitude.has_value())
-        aVec.push_back({ u"longitude"_ustr, 0, uno::Any(*rQ.mosLongitude),
+        aVec.push_back({ u"longitude"_ustr, 0, cpo::uno::Any(*rQ.mosLongitude),
                          beans::PropertyState_DIRECT_VALUE });
     return comphelper::containerToSequence(aVec);
 }
@@ -420,11 +422,11 @@ uno::Sequence<beans::PropertyValue> ptEntityQueryToProps(const GeoDataPointToEnt
 {
     std::vector<beans::PropertyValue> aVec;
     if (rQ.mosEntityType.has_value())
-        aVec.push_back({ u"entityType"_ustr, 0, uno::Any(*rQ.mosEntityType),
+        aVec.push_back({ u"entityType"_ustr, 0, cpo::uno::Any(*rQ.mosEntityType),
                          beans::PropertyState_DIRECT_VALUE });
     if (rQ.mosEntityId.has_value())
-        aVec.push_back(
-            { u"entityId"_ustr, 0, uno::Any(*rQ.mosEntityId), beans::PropertyState_DIRECT_VALUE });
+        aVec.push_back({ u"entityId"_ustr, 0, cpo::uno::Any(*rQ.mosEntityId),
+                         beans::PropertyState_DIRECT_VALUE });
     return comphelper::containerToSequence(aVec);
 }
 
@@ -449,10 +451,11 @@ uno::Sequence<beans::PropertyValue> ptResultToProps(const GeoDataPointToEntityQu
 {
     std::vector<beans::PropertyValue> aVec;
     if (rR.mxPointQuery.has_value())
-        aVec.push_back({ u"pointQuery"_ustr, 0, uno::Any(ptQueryToProps(*rR.mxPointQuery)),
+        aVec.push_back({ u"pointQuery"_ustr, 0, cpo::uno::Any(ptQueryToProps(*rR.mxPointQuery)),
                          beans::PropertyState_DIRECT_VALUE });
     if (rR.mxEntityQuery.has_value())
-        aVec.push_back({ u"entityQuery"_ustr, 0, uno::Any(ptEntityQueryToProps(*rR.mxEntityQuery)),
+        aVec.push_back({ u"entityQuery"_ustr, 0,
+                         cpo::uno::Any(ptEntityQueryToProps(*rR.mxEntityQuery)),
                          beans::PropertyState_DIRECT_VALUE });
     return comphelper::containerToSequence(aVec);
 }
@@ -478,11 +481,11 @@ uno::Sequence<beans::PropertyValue> childQueryToProps(const GeoChildEntitiesQuer
 {
     std::vector<beans::PropertyValue> aVec;
     if (rQ.mosEntityId.has_value())
-        aVec.push_back(
-            { u"entityId"_ustr, 0, uno::Any(*rQ.mosEntityId), beans::PropertyState_DIRECT_VALUE });
+        aVec.push_back({ u"entityId"_ustr, 0, cpo::uno::Any(*rQ.mosEntityId),
+                         beans::PropertyState_DIRECT_VALUE });
     if (!rQ.maEntityTypes.empty())
         aVec.push_back({ u"entityTypes"_ustr, 0,
-                         uno::Any(comphelper::containerToSequence(rQ.maEntityTypes)),
+                         cpo::uno::Any(comphelper::containerToSequence(rQ.maEntityTypes)),
                          beans::PropertyState_DIRECT_VALUE });
     return comphelper::containerToSequence(aVec);
 }
@@ -513,13 +516,13 @@ uno::Sequence<beans::PropertyValue> hierarchyEntityToProps(const GeoHierarchyEnt
 {
     std::vector<beans::PropertyValue> aVec;
     if (rE.mosEntityName.has_value())
-        aVec.push_back({ u"entityName"_ustr, 0, uno::Any(*rE.mosEntityName),
+        aVec.push_back({ u"entityName"_ustr, 0, cpo::uno::Any(*rE.mosEntityName),
                          beans::PropertyState_DIRECT_VALUE });
     if (rE.mosEntityId.has_value())
-        aVec.push_back(
-            { u"entityId"_ustr, 0, uno::Any(*rE.mosEntityId), beans::PropertyState_DIRECT_VALUE });
+        aVec.push_back({ u"entityId"_ustr, 0, cpo::uno::Any(*rE.mosEntityId),
+                         beans::PropertyState_DIRECT_VALUE });
     if (rE.mosEntityType.has_value())
-        aVec.push_back({ u"entityType"_ustr, 0, uno::Any(*rE.mosEntityType),
+        aVec.push_back({ u"entityType"_ustr, 0, cpo::uno::Any(*rE.mosEntityType),
                          beans::PropertyState_DIRECT_VALUE });
     return comphelper::containerToSequence(aVec);
 }
@@ -546,14 +549,14 @@ uno::Sequence<beans::PropertyValue> childResultToProps(const GeoChildEntitiesQue
 {
     std::vector<beans::PropertyValue> aVec;
     if (rR.mxQuery.has_value())
-        aVec.push_back({ u"query"_ustr, 0, uno::Any(childQueryToProps(*rR.mxQuery)),
+        aVec.push_back({ u"query"_ustr, 0, cpo::uno::Any(childQueryToProps(*rR.mxQuery)),
                          beans::PropertyState_DIRECT_VALUE });
     if (!rR.maEntities.empty())
     {
         std::vector<uno::Sequence<beans::PropertyValue>> aArr;
         for (const auto& rE : rR.maEntities)
             aArr.push_back(hierarchyEntityToProps(rE));
-        aVec.push_back({ u"entities"_ustr, 0, uno::Any(comphelper::containerToSequence(aArr)),
+        aVec.push_back({ u"entities"_ustr, 0, cpo::uno::Any(comphelper::containerToSequence(aArr)),
                          beans::PropertyState_DIRECT_VALUE });
     }
     return comphelper::containerToSequence(aVec);
@@ -589,30 +592,31 @@ uno::Sequence<beans::PropertyValue> parentResultToProps(const GeoParentEntitiesQ
     {
         std::vector<beans::PropertyValue> aQ;
         if (rR.mxQuery->mosEntityId.has_value())
-            aQ.push_back({ u"entityId"_ustr, 0, uno::Any(*rR.mxQuery->mosEntityId),
+            aQ.push_back({ u"entityId"_ustr, 0, cpo::uno::Any(*rR.mxQuery->mosEntityId),
                            beans::PropertyState_DIRECT_VALUE });
-        aVec.push_back({ u"query"_ustr, 0, uno::Any(comphelper::containerToSequence(aQ)),
+        aVec.push_back({ u"query"_ustr, 0, cpo::uno::Any(comphelper::containerToSequence(aQ)),
                          beans::PropertyState_DIRECT_VALUE });
     }
     if (rR.mxEntity.has_value())
     {
         std::vector<beans::PropertyValue> aE;
         if (rR.mxEntity->mosEntityName.has_value())
-            aE.push_back({ u"entityName"_ustr, 0, uno::Any(*rR.mxEntity->mosEntityName),
+            aE.push_back({ u"entityName"_ustr, 0, cpo::uno::Any(*rR.mxEntity->mosEntityName),
                            beans::PropertyState_DIRECT_VALUE });
         if (rR.mxEntity->mosEntityType.has_value())
-            aE.push_back({ u"entityType"_ustr, 0, uno::Any(*rR.mxEntity->mosEntityType),
+            aE.push_back({ u"entityType"_ustr, 0, cpo::uno::Any(*rR.mxEntity->mosEntityType),
                            beans::PropertyState_DIRECT_VALUE });
-        aVec.push_back({ u"entity"_ustr, 0, uno::Any(comphelper::containerToSequence(aE)),
+        aVec.push_back({ u"entity"_ustr, 0, cpo::uno::Any(comphelper::containerToSequence(aE)),
                          beans::PropertyState_DIRECT_VALUE });
     }
     if (rR.mxParentEntity.has_value())
     {
         std::vector<beans::PropertyValue> aP;
         if (rR.mxParentEntity->mosEntityId.has_value())
-            aP.push_back({ u"entityId"_ustr, 0, uno::Any(*rR.mxParentEntity->mosEntityId),
+            aP.push_back({ u"entityId"_ustr, 0, cpo::uno::Any(*rR.mxParentEntity->mosEntityId),
                            beans::PropertyState_DIRECT_VALUE });
-        aVec.push_back({ u"parentEntity"_ustr, 0, uno::Any(comphelper::containerToSequence(aP)),
+        aVec.push_back({ u"parentEntity"_ustr, 0,
+                         cpo::uno::Any(comphelper::containerToSequence(aP)),
                          beans::PropertyState_DIRECT_VALUE });
     }
     return comphelper::containerToSequence(aVec);
@@ -676,7 +680,8 @@ uno::Sequence<beans::PropertyValue> geoClearToPropertyValues(const GeoClearModel
         std::vector<uno::Sequence<beans::PropertyValue>> aArr;
         for (const auto& rR : rModel.maLocResults)
             aArr.push_back(locResultToProps(rR));
-        aVec.push_back({ u"locResults"_ustr, 0, uno::Any(comphelper::containerToSequence(aArr)),
+        aVec.push_back({ u"locResults"_ustr, 0,
+                         cpo::uno::Any(comphelper::containerToSequence(aArr)),
                          beans::PropertyState_DIRECT_VALUE });
     }
     if (!rModel.maDataResults.empty())
@@ -684,7 +689,8 @@ uno::Sequence<beans::PropertyValue> geoClearToPropertyValues(const GeoClearModel
         std::vector<uno::Sequence<beans::PropertyValue>> aArr;
         for (const auto& rR : rModel.maDataResults)
             aArr.push_back(dataEntityResultToProps(rR));
-        aVec.push_back({ u"dataResults"_ustr, 0, uno::Any(comphelper::containerToSequence(aArr)),
+        aVec.push_back({ u"dataResults"_ustr, 0,
+                         cpo::uno::Any(comphelper::containerToSequence(aArr)),
                          beans::PropertyState_DIRECT_VALUE });
     }
     if (!rModel.maPtResults.empty())
@@ -692,7 +698,7 @@ uno::Sequence<beans::PropertyValue> geoClearToPropertyValues(const GeoClearModel
         std::vector<uno::Sequence<beans::PropertyValue>> aArr;
         for (const auto& rR : rModel.maPtResults)
             aArr.push_back(ptResultToProps(rR));
-        aVec.push_back({ u"ptResults"_ustr, 0, uno::Any(comphelper::containerToSequence(aArr)),
+        aVec.push_back({ u"ptResults"_ustr, 0, cpo::uno::Any(comphelper::containerToSequence(aArr)),
                          beans::PropertyState_DIRECT_VALUE });
     }
     if (!rModel.maChildResults.empty())
@@ -700,7 +706,8 @@ uno::Sequence<beans::PropertyValue> geoClearToPropertyValues(const GeoClearModel
         std::vector<uno::Sequence<beans::PropertyValue>> aArr;
         for (const auto& rR : rModel.maChildResults)
             aArr.push_back(childResultToProps(rR));
-        aVec.push_back({ u"childResults"_ustr, 0, uno::Any(comphelper::containerToSequence(aArr)),
+        aVec.push_back({ u"childResults"_ustr, 0,
+                         cpo::uno::Any(comphelper::containerToSequence(aArr)),
                          beans::PropertyState_DIRECT_VALUE });
     }
     if (!rModel.maParentResults.empty())
@@ -708,7 +715,8 @@ uno::Sequence<beans::PropertyValue> geoClearToPropertyValues(const GeoClearModel
         std::vector<uno::Sequence<beans::PropertyValue>> aArr;
         for (const auto& rR : rModel.maParentResults)
             aArr.push_back(parentResultToProps(rR));
-        aVec.push_back({ u"parentResults"_ustr, 0, uno::Any(comphelper::containerToSequence(aArr)),
+        aVec.push_back({ u"parentResults"_ustr, 0,
+                         cpo::uno::Any(comphelper::containerToSequence(aArr)),
                          beans::PropertyState_DIRECT_VALUE });
     }
 

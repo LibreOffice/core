@@ -19,6 +19,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 
@@ -40,7 +41,7 @@ public:
     virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -195,7 +196,7 @@ DisplayModeController::DisplayModeController( const css::uno::Reference< css::un
 {
 }
 
-void SAL_CALL DisplayModeController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+void SAL_CALL DisplayModeController::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     svt::PopupWindowController::initialize( aArguments );
     ToolBox* pToolBox = nullptr;
@@ -256,7 +257,7 @@ Sequence< OUString > SAL_CALL DisplayModeController::getSupportedServiceNames(  
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_sd_DisplayModeController_get_implementation( css::uno::XComponentContext* context,
-                                                               css::uno::Sequence<css::uno::Any> const &)
+                                                               css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new sd::DisplayModeController(context));
 }

@@ -43,6 +43,7 @@ using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::sheet::ReferenceFlags;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 // formula finalizer ==========================================================
 

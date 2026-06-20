@@ -26,7 +26,7 @@
 
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::beans { struct PropertyValue; }
-namespace com::sun::star::uno { class Any; }
+namespace cpo::uno { class Any; }
 namespace com::sun::star::uno { template <class E> class Sequence; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 
@@ -73,7 +73,7 @@ namespace svx
         ODataAccessDescriptor( const css::uno::Sequence< css::beans::PropertyValue >& _rValues );
 
         // allows to construct a descriptor from an Any containing either an XPropertySet or a property value sequence
-        ODataAccessDescriptor( const css::uno::Any& _rValues );
+        ODataAccessDescriptor( const cpo::uno::Any& _rValues );
 
         ODataAccessDescriptor& operator=(const ODataAccessDescriptor& _rSource);
         ODataAccessDescriptor& operator=(ODataAccessDescriptor&& _rSource) noexcept;
@@ -106,12 +106,12 @@ namespace svx
         void        clear();
 
         /// return the value of a given property
-        const   css::uno::Any& operator [] ( DataAccessDescriptorProperty _eWhich ) const;
+        const   cpo::uno::Any& operator [] ( DataAccessDescriptorProperty _eWhich ) const;
 
         /** return the (modifiable) value of a given property
             <p>This operator is not allowed to be called if the descriptor is readonly.</p>
         */
-                css::uno::Any& operator [] ( DataAccessDescriptorProperty _eWhich );
+                cpo::uno::Any& operator [] ( DataAccessDescriptorProperty _eWhich );
 
         /** returns either the data source name if given or the database location
         */

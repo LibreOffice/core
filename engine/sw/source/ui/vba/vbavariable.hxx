@@ -40,8 +40,8 @@ public:
    // XVariable
     virtual OUString SAL_CALL getName() override;
     virtual void SAL_CALL setName( const OUString& ) override;
-    virtual css::uno::Any SAL_CALL getValue() override;
-    virtual void SAL_CALL setValue( const css::uno::Any& rValue ) override;
+    virtual cpo::uno::Any SAL_CALL getValue() override;
+    virtual void SAL_CALL setValue( const cpo::uno::Any& rValue ) override;
     virtual sal_Int32 SAL_CALL getIndex() override;
 
     // XHelperInterface

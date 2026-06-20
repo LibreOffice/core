@@ -508,7 +508,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf155177)
     }
 
     // this should bring one line back
-    xStyle->setPropertyValue(u"ParaTopMargin"_ustr, uno::Any(sal_Int32(200)));
+    xStyle->setPropertyValue(u"ParaTopMargin"_ustr, cpo::uno::Any(sal_Int32(200)));
 
     Scheduler::ProcessEventsToIdle();
 
@@ -524,7 +524,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf155177)
     }
 
     // this should bring second line back
-    xStyle->setPropertyValue(u"ParaTopMargin"_ustr, uno::Any(sal_Int32(120)));
+    xStyle->setPropertyValue(u"ParaTopMargin"_ustr, cpo::uno::Any(sal_Int32(120)));
 
     Scheduler::ProcessEventsToIdle();
 
@@ -673,7 +673,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf122607_regression)
     // does *not* forward initial VCL Window Resize and thereby triggers a
     // layout which does not happen on soffice --convert-to pdf.
     std::vector<beans::PropertyValue> aFilterOptions = {
-        { beans::PropertyValue(u"Hidden"_ustr, -1, uno::Any(true),
+        { beans::PropertyValue(u"Hidden"_ustr, -1, cpo::uno::Any(true),
                                beans::PropertyState_DIRECT_VALUE) },
     };
 
@@ -701,7 +701,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, TestTdf150616)
     // does *not* forward initial VCL Window Resize and thereby triggers a
     // layout which does not happen on soffice --convert-to pdf.
     std::vector<beans::PropertyValue> aFilterOptions = {
-        { beans::PropertyValue(u"Hidden"_ustr, -1, uno::Any(true),
+        { beans::PropertyValue(u"Hidden"_ustr, -1, cpo::uno::Any(true),
                                beans::PropertyState_DIRECT_VALUE) },
     };
 
@@ -1227,9 +1227,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testShapeAllowOverlap)
     xShape->setSize(aSize);
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xDocument, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
-    xShapeProperties->setPropertyValue(u"AllowOverlap"_ustr, uno::Any(false));
+    xShapeProperties->setPropertyValue(u"AllowOverlap"_ustr, cpo::uno::Any(false));
     xShapeProperties->setPropertyValue(u"AnchorType"_ustr,
-                                       uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+                                       cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
     aPoint = awt::Point(2000, 2000);
@@ -1238,9 +1238,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testShapeAllowOverlap)
     xShape->setPosition(aPoint);
     xShape->setSize(aSize);
     xShapeProperties.set(xShape, uno::UNO_QUERY);
-    xShapeProperties->setPropertyValue(u"AllowOverlap"_ustr, uno::Any(false));
+    xShapeProperties->setPropertyValue(u"AllowOverlap"_ustr, cpo::uno::Any(false));
     xShapeProperties->setPropertyValue(u"AnchorType"_ustr,
-                                       uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+                                       cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
     // Now verify that the rectangle of the anchored objects don't overlap.
@@ -1281,10 +1281,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testShapeAllowOverlapWrap)
     xShape->setSize(aSize);
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xDocument, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
-    xShapeProperties->setPropertyValue(u"AllowOverlap"_ustr, uno::Any(false));
+    xShapeProperties->setPropertyValue(u"AllowOverlap"_ustr, cpo::uno::Any(false));
     xShapeProperties->setPropertyValue(u"AnchorType"_ustr,
-                                       uno::Any(text::TextContentAnchorType_AT_CHARACTER));
-    xShapeProperties->setPropertyValue(u"Surround"_ustr, uno::Any(text::WrapTextMode_THROUGH));
+                                       cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+    xShapeProperties->setPropertyValue(u"Surround"_ustr, cpo::uno::Any(text::WrapTextMode_THROUGH));
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
     aPoint = awt::Point(2000, 2000);
@@ -1293,10 +1293,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testShapeAllowOverlapWrap)
     xShape->setPosition(aPoint);
     xShape->setSize(aSize);
     xShapeProperties.set(xShape, uno::UNO_QUERY);
-    xShapeProperties->setPropertyValue(u"AllowOverlap"_ustr, uno::Any(false));
+    xShapeProperties->setPropertyValue(u"AllowOverlap"_ustr, cpo::uno::Any(false));
     xShapeProperties->setPropertyValue(u"AnchorType"_ustr,
-                                       uno::Any(text::TextContentAnchorType_AT_CHARACTER));
-    xShapeProperties->setPropertyValue(u"Surround"_ustr, uno::Any(text::WrapTextMode_THROUGH));
+                                       cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+    xShapeProperties->setPropertyValue(u"Surround"_ustr, cpo::uno::Any(text::WrapTextMode_THROUGH));
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
     // Now verify that the rectangle of the anchored objects do overlap.
@@ -1513,7 +1513,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf156724)
     // does *not* forward initial VCL Window Resize and thereby triggers a
     // layout which does not happen on soffice --convert-to pdf.
     std::vector<beans::PropertyValue> aFilterOptions = {
-        { beans::PropertyValue(u"Hidden"_ustr, -1, uno::Any(true),
+        { beans::PropertyValue(u"Hidden"_ustr, -1, cpo::uno::Any(true),
                                beans::PropertyState_DIRECT_VALUE) },
     };
 
@@ -1548,10 +1548,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testHiddenParagraphFollowFrame)
         ScopedConfigValue<officecfg::Office::Common::Misc::QueryShowFieldName> aCfg(false);
 
         uno::Sequence<beans::PropertyValue> argsSH(
-            comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", uno::Any(true) } }));
+            comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", cpo::uno::Any(true) } }));
         dispatchCommand(mxComponent, u".uno:ShowHiddenParagraphs"_ustr, argsSH);
         uno::Sequence<beans::PropertyValue> args(
-            comphelper::InitPropertySequence({ { "Fieldnames", uno::Any(false) } }));
+            comphelper::InitPropertySequence({ { "Fieldnames", cpo::uno::Any(false) } }));
         dispatchCommand(mxComponent, u".uno:Fieldnames"_ustr, args);
         Scheduler::ProcessEventsToIdle();
 
@@ -1595,10 +1595,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testHiddenParagraphFlys)
         ScopedConfigValue<officecfg::Office::Common::Misc::QueryShowFieldName> aCfg(false);
 
         uno::Sequence<beans::PropertyValue> argsSH(
-            comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", uno::Any(true) } }));
+            comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", cpo::uno::Any(true) } }));
         dispatchCommand(mxComponent, u".uno:ShowHiddenParagraphs"_ustr, argsSH);
         uno::Sequence<beans::PropertyValue> args(
-            comphelper::InitPropertySequence({ { "Fieldnames", uno::Any(false) } }));
+            comphelper::InitPropertySequence({ { "Fieldnames", cpo::uno::Any(false) } }));
         dispatchCommand(mxComponent, u".uno:Fieldnames"_ustr, args);
         Scheduler::ProcessEventsToIdle();
 
@@ -1636,7 +1636,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testSectionUnhide)
     auto xSections = xTextSectionsSupplier->getTextSections();
     CPPUNIT_ASSERT(xSections);
     auto xSection = xSections->getByName(u"Section1"_ustr).queryThrow<css::beans::XPropertySet>();
-    xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(false));
+    xSection->setPropertyValue(u"IsVisible"_ustr, cpo::uno::Any(false));
     calcLayout();
 
     {
@@ -1644,7 +1644,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testSectionUnhide)
         assertXPath(pXmlDoc, "/root/page/body/section/txt/infos/bounds[@height='0']", 4);
     }
 
-    xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(true));
+    xSection->setPropertyValue(u"IsVisible"_ustr, cpo::uno::Any(true));
     calcLayout();
 
     {
@@ -1684,7 +1684,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testHiddenSectionFlys)
     auto xSections = xTextSectionsSupplier->getTextSections();
     CPPUNIT_ASSERT(xSections);
     auto xSection = xSections->getByName(u"Anlage"_ustr).queryThrow<css::beans::XPropertySet>();
-    xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(true));
+    xSection->setPropertyValue(u"IsVisible"_ustr, cpo::uno::Any(true));
     calcLayout();
 
     {
@@ -1698,7 +1698,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testHiddenSectionFlys)
         }
     }
 
-    xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(false));
+    xSection->setPropertyValue(u"IsVisible"_ustr, cpo::uno::Any(false));
     calcLayout();
 
     {
@@ -2186,7 +2186,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf169999)
     auto xSections = xTextSectionsSupplier->getTextSections();
     CPPUNIT_ASSERT(xSections);
     auto xSection = xSections->getByName(u"Section1"_ustr).queryThrow<css::beans::XPropertySet>();
-    xSection->setPropertyValue(u"Condition"_ustr, css::uno::Any(u"1"_ustr));
+    xSection->setPropertyValue(u"Condition"_ustr, cpo::uno::Any(u"1"_ustr));
     Scheduler::ProcessEventsToIdle();
 
     // The footnote must get hidden - without the fix, the text failed, because there was a ftn

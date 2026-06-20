@@ -38,6 +38,7 @@
 using namespace ::com::sun::star::lang      ;   // XMultiServiceFactory
 using namespace ::com::sun::star::beans     ;   // PropertyValue
 using namespace ::com::sun::star::uno       ;   // Reference
+using namespace cpo::uno;
 using namespace ::com::sun::star::util      ;   // XChangesBatch
 using namespace ::com::sun::star::container ;
 using namespace ::com::sun::star::configuration;

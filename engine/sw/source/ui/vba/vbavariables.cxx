@@ -56,16 +56,16 @@ SwVbaVariables::createEnumeration()
     return xEnumerationAccess->createEnumeration();
 }
 
-uno::Any
-SwVbaVariables::createCollectionObject( const css::uno::Any& aSource )
+cpo::uno::Any
+SwVbaVariables::createCollectionObject( const cpo::uno::Any& aSource )
 {
     return aSource;
 }
 
-uno::Any SAL_CALL
-SwVbaVariables::Add( const OUString& rName, const uno::Any& rValue )
+cpo::uno::Any SAL_CALL
+SwVbaVariables::Add( const OUString& rName, const cpo::uno::Any& rValue )
 {
-    uno::Any aValue;
+    cpo::uno::Any aValue;
     if( rValue.hasValue() )
         aValue = rValue;
     else
@@ -73,7 +73,7 @@ SwVbaVariables::Add( const OUString& rName, const uno::Any& rValue )
     uno::Reference< beans::XPropertyContainer > xPropertyContainer( mxUserDefined, uno::UNO_QUERY_THROW );
     xPropertyContainer->addProperty( rName, beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::REMOVABLE, aValue );
 
-    return uno::Any( uno::Reference< word::XVariable >( new SwVbaVariable( getParent(), mxContext, mxUserDefined, rName ) ) );
+    return cpo::uno::Any( uno::Reference< word::XVariable >( new SwVbaVariable( getParent(), mxContext, mxUserDefined, rName ) ) );
 }
 
 OUString

@@ -145,8 +145,8 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual ScProtectionAttr* Clone( SfxItemPool *pPool = nullptr ) const override;
 
-    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool            QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
             bool            GetProtection() const { return bProtection; }
             void            SetProtection( bool bProtect);
@@ -184,8 +184,8 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual ScPageHFItem*   Clone( SfxItemPool *pPool = nullptr ) const override;
 
-    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool            QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     const EditTextObject* GetLeftArea() const       { return pLeftArea.get(); }
     const EditTextObject* GetCenterArea() const     { return pCenterArea.get(); }
@@ -259,8 +259,8 @@ public:
                                   OUString& rText,
                                   const IntlWrapper& ) const override;
 
-    virtual bool                QueryValue( css::uno::Any& rAny, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool                PutValue( const css::uno::Any& rAny, sal_uInt8 nMemberId ) override;
+    virtual bool                QueryValue( cpo::uno::Any& rAny, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool                PutValue( const cpo::uno::Any& rAny, sal_uInt8 nMemberId ) override;
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
 private:

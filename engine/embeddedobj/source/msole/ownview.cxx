@@ -392,7 +392,7 @@ void OwnView_Impl::CreateNative()
         if ( !xInStream.is() )
             throw uno::RuntimeException();
 
-        uno::Sequence< uno::Any > aArgs{ uno::Any(xInStream) };
+        uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xInStream) };
         uno::Reference< container::XNameAccess > xNameAccess(
                 m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                         u"com.sun.star.embed.OLESimpleStorage"_ustr,

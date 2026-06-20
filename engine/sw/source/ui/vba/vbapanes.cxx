@@ -46,11 +46,11 @@ public:
     {
         return 1;
     }
-    virtual uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override
     {
         if( Index != 0 )
             throw lang::IndexOutOfBoundsException();
-        return uno::Any( uno::Reference< word::XPane >( new SwVbaPane( mxParent,  mxContext, mxModel ) ) );
+        return cpo::uno::Any( uno::Reference< word::XPane >( new SwVbaPane( mxParent,  mxContext, mxModel ) ) );
     }
     virtual uno::Type SAL_CALL getElementType(  ) override
     {
@@ -73,7 +73,7 @@ public:
         return ( m_nIndex < m_xIndexAccess->getCount() );
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         if ( m_nIndex < m_xIndexAccess->getCount() )
             return m_xIndexAccess->getByIndex( m_nIndex++ );
@@ -99,8 +99,8 @@ SwVbaPanes::createEnumeration()
     return new PanesEnumWrapper( m_xIndexAccess );
 }
 
-uno::Any
-SwVbaPanes::createCollectionObject( const css::uno::Any& aSource )
+cpo::uno::Any
+SwVbaPanes::createCollectionObject( const cpo::uno::Any& aSource )
 {
     return aSource;
 }

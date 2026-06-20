@@ -65,13 +65,13 @@ public:
     virtual void SAL_CALL   removeByName( const OUString& aName ) override;
 
                             // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
                             // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
@@ -108,9 +108,9 @@ private:
 
     // ::comphelper::OPropertyImplHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
-    virtual void setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+    virtual void setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
     using ScChartObj_Base::getFastPropertyValue;
-    virtual void getFastPropertyValue( std::unique_lock<std::mutex>& rGuard, css::uno::Any& rValue, sal_Int32 nHandle ) const override;
+    virtual void getFastPropertyValue( std::unique_lock<std::mutex>& rGuard, cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
 public:
                             ScChartObj(ScDocShell* pDocSh, SCTAB nT, OUString aN);

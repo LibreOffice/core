@@ -109,7 +109,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
         uno::Reference< beans::XPropertySet > xPropSet( xSubStorage, uno::UNO_QUERY_THROW );
 
         try {
-            uno::Any aAny = xPropSet->getPropertyValue(u"MediaType"_ustr);
+            cpo::uno::Any aAny = xPropSet->getPropertyValue(u"MediaType"_ustr);
             aAny >>= aMediaType;
         }
         catch ( const uno::Exception& )
@@ -138,7 +138,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
         uno::Reference< beans::XPropertySet > xPropSet( xSubStream, uno::UNO_QUERY_THROW );
 
         try {
-            uno::Any aAny = xPropSet->getPropertyValue(u"MediaType"_ustr);
+            cpo::uno::Any aAny = xPropSet->getPropertyValue(u"MediaType"_ustr);
             aAny >>= aMediaType;
             if ( aMediaType == "application/vnd.sun.star.oleobject" )
                 aEmbedFactory = u"com.sun.star.embed.OLEEmbeddedObjectFactory"_ustr;
@@ -418,7 +418,7 @@ uno::Sequence< OUString > SAL_CALL UNOEmbeddedObjectCreator::getSupportedService
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 embeddedobj_UNOEmbeddedObjectCreator_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new UNOEmbeddedObjectCreator(context));
 }

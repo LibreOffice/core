@@ -25,7 +25,7 @@ namespace writerfilter::dmapper
 {
 using namespace ::com::sun::star;
 
-void lcl_DumpTableColumnSeparators(const uno::Any& rTableColumnSeparators)
+void lcl_DumpTableColumnSeparators(const cpo::uno::Any& rTableColumnSeparators)
 {
 #ifdef DBG_UTIL
     uno::Sequence<text::TableColumnSeparator> aSeq;

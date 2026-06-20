@@ -40,6 +40,7 @@ using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 
@@ -160,7 +161,7 @@ Sequence<OUString> SAL_CALL NumberText_Impl::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 lingucomponent_NumberText_get_implementation(css::uno::XComponentContext*,
-                                             css::uno::Sequence<css::uno::Any> const&)
+                                             css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new NumberText_Impl());
 }

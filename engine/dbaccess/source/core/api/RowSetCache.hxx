@@ -137,18 +137,18 @@ namespace dbaccess
         const css::uno::Reference< css::sdbc::XResultSetMetaData >& getMetaData(  ) const { return m_xMetaData;}
 
     // css::sdbcx::XRowLocate
-        css::uno::Any getBookmark(  );
-        bool moveToBookmark( const css::uno::Any& bookmark );
-        bool moveRelativeToBookmark( const css::uno::Any& bookmark, sal_Int32 rows );
-        sal_Int32 compareBookmarks( const css::uno::Any& first, const css::uno::Any& second );
+        cpo::uno::Any getBookmark(  );
+        bool moveToBookmark( const cpo::uno::Any& bookmark );
+        bool moveRelativeToBookmark( const cpo::uno::Any& bookmark, sal_Int32 rows );
+        sal_Int32 compareBookmarks( const cpo::uno::Any& first, const cpo::uno::Any& second );
         bool hasOrderedBookmarks(  );
-        sal_Int32 hashBookmark( const css::uno::Any& bookmark );
+        sal_Int32 hashBookmark( const cpo::uno::Any& bookmark );
 
     // css::sdbc::XRowUpdate
         void updateCharacterStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length,ORowSetValueVector::Vector& io_aRow,std::vector<sal_Int32>& o_ChangedColumns
              );
-        void updateObject( sal_Int32 columnIndex, const css::uno::Any& x,ORowSetValueVector::Vector& io_aRow ,std::vector<sal_Int32>& o_ChangedColumns);
-        void updateNumericObject( sal_Int32 columnIndex, const css::uno::Any& x, ORowSetValueVector::Vector& io_aRow ,std::vector<sal_Int32>& o_ChangedColumns);
+        void updateObject( sal_Int32 columnIndex, const cpo::uno::Any& x,ORowSetValueVector::Vector& io_aRow ,std::vector<sal_Int32>& o_ChangedColumns);
+        void updateNumericObject( sal_Int32 columnIndex, const cpo::uno::Any& x, ORowSetValueVector::Vector& io_aRow ,std::vector<sal_Int32>& o_ChangedColumns);
         void updateNull(sal_Int32 columnIndex
                         ,ORowSetValueVector::Vector& io_aRow
                         ,std::vector<sal_Int32>& o_ChangedColumns
@@ -173,10 +173,10 @@ namespace dbaccess
         bool rowInserted(  );
 
     // css::sdbc::XResultSetUpdate
-        bool insertRow(std::vector< css::uno::Any >& o_aBookmarks);
+        bool insertRow(std::vector< cpo::uno::Any >& o_aBookmarks);
         void resetInsertRow(bool _bClearInsertRow);
 
-        void updateRow( ORowSetMatrix::iterator const & _rUpdateRow, std::vector< css::uno::Any >& o_aBookmarks );
+        void updateRow( ORowSetMatrix::iterator const & _rUpdateRow, std::vector< cpo::uno::Any >& o_aBookmarks );
         bool deleteRow();
         void cancelRowUpdates(  );
         void moveToInsertRow(  );

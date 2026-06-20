@@ -44,6 +44,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
@@ -108,7 +109,7 @@ static void lcl_addAspect(
 {
     sal_Int64 nAspect = rObj.GetViewAspect();
     if ( nAspect )
-        rStates.emplace_back( rMapper->FindEntryIndex( CTF_OLE_DRAW_ASPECT ), uno::Any( nAspect ) );
+        rStates.emplace_back( rMapper->FindEntryIndex( CTF_OLE_DRAW_ASPECT ), cpo::uno::Any( nAspect ) );
 }
 
 static void lcl_addOutplaceProperties(

@@ -46,7 +46,7 @@
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 
 static std::span<const SfxItemPropertyMapEntry> lcl_GetNamedRangeMap()
 {
@@ -369,7 +369,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScNamedRangeObj::getPropertySet
 }
 
 void SAL_CALL ScNamedRangeObj::setPropertyValue(
-                        const OUString& rPropertyName, const uno::Any& /*aValue*/ )
+                        const OUString& rPropertyName, const cpo::uno::Any& /*aValue*/ )
 {
     if ( rPropertyName == SC_UNONAME_ISSHAREDFMLA )
     {
@@ -377,10 +377,10 @@ void SAL_CALL ScNamedRangeObj::setPropertyValue(
     }
 }
 
-uno::Any SAL_CALL ScNamedRangeObj::getPropertyValue( const OUString& rPropertyName )
+cpo::uno::Any SAL_CALL ScNamedRangeObj::getPropertyValue( const OUString& rPropertyName )
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if ( rPropertyName == SC_UNO_LINKDISPBIT )
     {
         //  no target bitmaps for individual entries (would be all equal)
@@ -589,14 +589,14 @@ sal_Int32 SAL_CALL ScNamedRangesObj::getCount()
     return nRet;
 }
 
-uno::Any SAL_CALL ScNamedRangesObj::getByIndex( sal_Int32 nIndex )
+cpo::uno::Any SAL_CALL ScNamedRangesObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     rtl::Reference< ScNamedRangeObj >  xRange(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nIndex)));
     if ( !xRange.is() )
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(uno::Reference< sheet::XNamedRange >(xRange));
+    return cpo::uno::Any(uno::Reference< sheet::XNamedRange >(xRange));
 }
 
 uno::Type SAL_CALL ScNamedRangesObj::getElementType()
@@ -618,7 +618,7 @@ Reference<beans::XPropertySetInfo> SAL_CALL ScNamedRangesObj::getPropertySetInfo
 }
 
 void SAL_CALL ScNamedRangesObj::setPropertyValue(
-                        const OUString& rPropertyName, const uno::Any& aValue )
+                        const OUString& rPropertyName, const cpo::uno::Any& aValue )
 {
     if ( rPropertyName == SC_UNO_MODIFY_BROADCAST )
     {
@@ -639,14 +639,14 @@ Any SAL_CALL ScNamedRangesObj::getPropertyValue( const OUString& rPropertyName )
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScNamedRangesObj )
 
-uno::Any SAL_CALL ScNamedRangesObj::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL ScNamedRangesObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     rtl::Reference< ScNamedRangeObj >  xRange(GetObjectByName_Impl(aName));
     if ( !xRange.is() )
         throw container::NoSuchElementException();
 
-    return uno::Any(uno::Reference< sheet::XNamedRange >(xRange));
+    return cpo::uno::Any(uno::Reference< sheet::XNamedRange >(xRange));
 }
 
 uno::Sequence<OUString> SAL_CALL ScNamedRangesObj::getElementNames()
@@ -1121,14 +1121,14 @@ sal_Int32 SAL_CALL ScLabelRangesObj::getCount()
     return 0;
 }
 
-uno::Any SAL_CALL ScLabelRangesObj::getByIndex( sal_Int32 nIndex )
+cpo::uno::Any SAL_CALL ScLabelRangesObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     rtl::Reference< ScLabelRangeObj >  xRange(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nIndex)));
     if ( !xRange.is() )
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(uno::Reference< sheet::XLabelRange >(xRange));
+    return cpo::uno::Any(uno::Reference< sheet::XLabelRange >(xRange));
 }
 
 uno::Type SAL_CALL ScLabelRangesObj::getElementType()

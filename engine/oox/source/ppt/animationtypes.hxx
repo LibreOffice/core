@@ -20,14 +20,14 @@
 #ifndef INCLUDED_OOX_SOURCE_PPT_ANIMATIONTYPES_HXX
 #define INCLUDED_OOX_SOURCE_PPT_ANIMATIONTYPES_HXX
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 namespace oox::ppt
 {
 // ST_TLTime
-css::uno::Any GetTime(const OUString& val);
+cpo::uno::Any GetTime(const OUString& val);
 // ST_TLTimeAnimateValueTime
-css::uno::Any GetTimeAnimateValueTime(const OUString& val);
+cpo::uno::Any GetTimeAnimateValueTime(const OUString& val);
 }
 
 #endif

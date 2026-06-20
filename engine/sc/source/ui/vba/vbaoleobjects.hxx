@@ -27,7 +27,7 @@ typedef CollTestImplHelper<ov::excel::XOLEObjects> OLEObjectsImpl_BASE;
 class ScVbaOLEObjects : public OLEObjectsImpl_BASE
 {
 protected:
-    virtual css::uno::Any getItemByStringIndex(const OUString& sIndex) override;
+    virtual cpo::uno::Any getItemByStringIndex(const OUString& sIndex) override;
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 
@@ -41,7 +41,7 @@ public:
     virtual css::uno::Reference<css::container::XEnumeration> SAL_CALL createEnumeration() override;
 
     // ScVbaCollectionBaseImpl
-    virtual css::uno::Any createCollectionObject(const css::uno::Any& aSource) override;
+    virtual cpo::uno::Any createCollectionObject(const cpo::uno::Any& aSource) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

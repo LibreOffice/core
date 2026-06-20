@@ -29,7 +29,7 @@
 #include <osl/diagnose.h>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/string_view.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -686,7 +686,7 @@ void SvtModuleOptions_Impl::impl_Read( const css::uno::Sequence< OUString >& lFa
     // Expand every set node name in lFactories to full qualified paths to its properties
     // and get right values from configuration.
     const css::uno::Sequence< OUString > lProperties = impl_ExpandSetNames( lFactories  );
-    const css::uno::Sequence< css::uno::Any >   lValues     = GetProperties( lProperties );
+    const css::uno::Sequence< cpo::uno::Any >   lValues     = GetProperties( lProperties );
 
     // Safe impossible cases.
     // We need values from ALL configuration keys.

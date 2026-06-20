@@ -96,6 +96,7 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::drawing::framework;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace {
 
@@ -895,7 +896,7 @@ OUString ViewShellBase::GetInitialViewShellType() const
         if (xViewData->getCount() == 0)
             break;
 
-        css::uno::Any aAny = xViewData->getByIndex(0);
+        cpo::uno::Any aAny = xViewData->getByIndex(0);
         Sequence<beans::PropertyValue> aProperties;
         if ( ! (aAny >>= aProperties))
             break;

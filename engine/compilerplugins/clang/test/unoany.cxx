@@ -9,20 +9,20 @@
 
 #include "sal/config.h"
 
-#include "com/sun/star/uno/Any.hxx"
+#include "cpo/uno/Any.hxx"
 
 #pragma clang diagnostic ignored "-Wunknown-warning-option" // for Clang < 13
 #pragma clang diagnostic ignored "-Wunused-but-set-variable"
 
-css::uno::Any getAny() { return css::uno::Any(true); }
+cpo::uno::Any getAny() { return cpo::uno::Any(true); }
 
 int main()
 {
-    css::uno::Any a;
-    css::uno::Any b;
+    cpo::uno::Any a;
+    cpo::uno::Any b;
     a = b;
     a = getAny();
-    a = css::uno::Any(true); // expected-error {{unnecessary copy, rather use <<= operator directly with the 'Any' constructor argument [loplugin:unoany]}}
+    a = cpo::uno::Any(true); // expected-error {{unnecessary copy, rather use <<= operator directly with the 'Any' constructor argument [loplugin:unoany]}}
 }
 
 

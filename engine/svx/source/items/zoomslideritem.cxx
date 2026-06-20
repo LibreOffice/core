@@ -55,7 +55,7 @@ bool SvxZoomSliderItem::operator==( const SfxPoolItem& rAttr ) const
              mnMinZoom == rItem.mnMinZoom && mnMaxZoom == rItem.mnMaxZoom );
 }
 
-bool SvxZoomSliderItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxZoomSliderItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -101,7 +101,7 @@ bool SvxZoomSliderItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) c
     return true;
 }
 
-bool SvxZoomSliderItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxZoomSliderItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )

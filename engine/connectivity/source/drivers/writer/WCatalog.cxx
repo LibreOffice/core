@@ -42,7 +42,7 @@ void OWriterCatalog::refreshTables()
     uno::Sequence<OUString> aTypes;
     OWriterConnection::ODocHolder aDocHolder(static_cast<OWriterConnection*>(m_pConnection));
     uno::Reference<sdbc::XResultSet> xResult
-        = m_xMetaData->getTables(uno::Any(), u"%"_ustr, u"%"_ustr, aTypes);
+        = m_xMetaData->getTables(cpo::uno::Any(), u"%"_ustr, u"%"_ustr, aTypes);
 
     if (xResult.is())
     {

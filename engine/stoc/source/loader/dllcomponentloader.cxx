@@ -36,6 +36,7 @@ namespace com::sun::star::registry { class XRegistryKey; }
 
 using namespace com::sun::star;
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::loader;
 using namespace css::lang;
 using namespace css::registry;
@@ -57,7 +58,7 @@ public:
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XImplementationLoader
     virtual Reference<XInterface> SAL_CALL activate( const OUString& implementationName, const OUString& implementationLoaderUrl, const OUString& locationUrl, const Reference<XRegistryKey>& xKey ) override;
@@ -89,7 +90,7 @@ Sequence<OUString> SAL_CALL DllComponentLoader::getSupportedServiceNames(  )
 }
 
 
-void DllComponentLoader::initialize( const css::uno::Sequence< css::uno::Any >& )
+void DllComponentLoader::initialize( const css::uno::Sequence< cpo::uno::Any >& )
 {
     OSL_FAIL( "dllcomponentloader::initialize should not be called !" );
 //      if( aArgs.getLength() != 1 )
@@ -142,7 +143,7 @@ bool SAL_CALL DllComponentLoader::writeRegistryInfo(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_stoc_DLLComponentLoader_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new DllComponentLoader(context));
 }

@@ -121,7 +121,7 @@ namespace dbaui
             @return true when an error occurs
         */
         bool                executeWizard( const OUString& _sTableName,
-                                           const css::uno::Any& _aTextColor,
+                                           const cpo::uno::Any& _aTextColor,
                                            const css::awt::FontDescriptor& _rFont);
 
         virtual ~ODatabaseExport();

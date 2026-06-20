@@ -69,7 +69,7 @@ namespace dxcanvas
         const DXSurfaceBitmapSharedPtr& getBackBuffer() const { return mpBackBuffer; }
         const std::shared_ptr<canvas::ISurfaceProxyManager> &getSurfaceProxy() const { return mpSurfaceProxyManager; }
 
-        css::uno::Any isAccelerated() const;
+        cpo::uno::Any isAccelerated() const;
 
         void notifySizeUpdate( const css::awt::Rectangle& rBounds );
 

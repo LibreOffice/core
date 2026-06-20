@@ -25,7 +25,7 @@
 #include <i18nutil/unicode.hxx>
 #include <i18nutil/transliteration.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 #include <COKit/COKitEnums.h>
 #include <comphelper/kit.hxx>
@@ -110,6 +110,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::beans;
 

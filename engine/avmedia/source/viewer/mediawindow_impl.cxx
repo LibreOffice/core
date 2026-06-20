@@ -447,12 +447,12 @@ void MediaWindowImpl::onURLChanged()
         // tdf#139609 gtk doesn't need the handle, and fetching it is undesirable
         if (!pEnvData || pEnvData->toolkit != SystemEnvData::Toolkit::Gtk)
             nParentWindowHandle = mpChildWindow->GetParentWindowHandle();
-        uno::Sequence<uno::Any> aArgs{
-            uno::Any(nParentWindowHandle),
-            uno::Any(awt::Rectangle(aPoint.X(), aPoint.Y(), aSize.Width(), aSize.Height())),
-            uno::Any(reinterpret_cast<sal_IntPtr>(mpChildWindow.get())),
+        uno::Sequence<cpo::uno::Any> aArgs{
+            cpo::uno::Any(nParentWindowHandle),
+            cpo::uno::Any(awt::Rectangle(aPoint.X(), aPoint.Y(), aSize.Width(), aSize.Height())),
+            cpo::uno::Any(reinterpret_cast<sal_IntPtr>(mpChildWindow.get())),
             // Media item contains media properties, e.g. cropping.
-            uno::Any(reinterpret_cast<sal_IntPtr>(mpItem))
+            cpo::uno::Any(reinterpret_cast<sal_IntPtr>(mpItem))
         };
 
         try

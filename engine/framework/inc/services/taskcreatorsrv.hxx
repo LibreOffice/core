@@ -60,7 +60,7 @@ public:
     virtual css::uno::Reference<css::uno::XInterface> SAL_CALL createInstance() override;
 
     virtual css::uno::Reference<css::uno::XInterface> SAL_CALL
-    createInstanceWithArguments(const css::uno::Sequence<css::uno::Any>& lArguments) override;
+    createInstanceWithArguments(const css::uno::Sequence<cpo::uno::Any>& lArguments) override;
 
 private:
     css::uno::Reference<css::awt::XWindow>

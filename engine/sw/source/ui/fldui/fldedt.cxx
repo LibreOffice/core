@@ -202,7 +202,7 @@ SfxTabPage* SwFieldEditDlg::CreatePage(SwFieldGroup nGroup)
                 uno::Reference< beans::XPropertySet > xUDProps(
                     xDocProps->getUserDefinedProperties(),
                     uno::UNO_QUERY_THROW);
-                pSet->Put( SfxUnoAnyItem( FN_FIELD_DIALOG_DOC_PROPS, uno::Any(xUDProps) ) );
+                pSet->Put( SfxUnoAnyItem( FN_FIELD_DIALOG_DOC_PROPS, cpo::uno::Any(xUDProps) ) );
                 xTabPage = SwFieldDokInfPage::Create(get_content_area(), this, pSet);
             }
             break;

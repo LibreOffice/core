@@ -14,7 +14,7 @@
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <sfx2/app.hxx>
 #include <vcl/svapp.hxx>
 

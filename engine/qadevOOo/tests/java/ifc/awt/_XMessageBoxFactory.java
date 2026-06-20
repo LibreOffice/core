@@ -25,7 +25,7 @@ import com.sun.star.awt.XMessageBoxFactory;
 import com.sun.star.awt.XRequestCallback;
 import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
-import com.sun.star.uno.Any;
+import cpo.uno.Any;
 import com.sun.star.uno.UnoRuntime;
 import lib.MultiMethodTest;
 import util.UITools;

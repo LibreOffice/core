@@ -98,6 +98,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::table;
@@ -290,13 +291,13 @@ GetNestedTextContent(SwTextNode const & rTextNode, sal_Int32 const nIndex,
     return xRet;
 }
 
-static uno::Any GetParaListAutoFormat(SwTextNode const& rNode)
+static cpo::uno::Any GetParaListAutoFormat(SwTextNode const& rNode)
 {
     SwFormatAutoFormat const*const pFormat(
         rNode.GetSwAttrSet().GetItem<SwFormatAutoFormat>(RES_PARATR_LIST_AUTOFMT, false));
     if (!pFormat)
     {
-        return uno::Any();
+        return cpo::uno::Any();
     }
     const auto pSet(pFormat->GetStyleHandle());
     if (!pSet)
@@ -314,7 +315,7 @@ static uno::Any GetParaListAutoFormat(SwTextNode const& rNode)
             props.emplace_back(pEntry->aName, value);
         }
     }
-    return uno::Any(comphelper::containerToSequence(props));
+    return cpo::uno::Any(comphelper::containerToSequence(props));
 }
 
 // Read the special properties of the cursor
@@ -1071,8 +1072,8 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
     uno::Reference < embed::XStorage > xReadStorage;
     if( xInputStream.is() )
     {
-        uno::Sequence< uno::Any > aArgs{ uno::Any(xInputStream),
-                                         uno::Any(embed::ElementModes::READ) };
+        uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xInputStream),
+                                         cpo::uno::Any(embed::ElementModes::READ) };
         try
         {
             xReadStorage.set( ::comphelper::OStorageHelper::GetStorageFactory()->createInstanceWithArguments( aArgs ),
@@ -1319,7 +1320,7 @@ void makeRedline( SwPaM const & rPaM,
             // Build set of attributes we want to fetch
             WhichRangesContainer aWhichPairs;
             std::vector<SfxItemPropertyMapEntry const*> aEntries;
-            std::vector<uno::Any> aValues;
+            std::vector<cpo::uno::Any> aValues;
             aEntries.reserve(aRevertProperties.getLength());
             sal_uInt16 nStyleId = USHRT_MAX;
             sal_uInt16 nCharStyleId = USHRT_MAX;
@@ -1366,7 +1367,7 @@ void makeRedline( SwPaM const & rPaM,
 
                 for (size_t i = 0; i < aEntries.size(); ++i)
                 {
-                    const uno::Any &rValue = aValues[i];
+                    const cpo::uno::Any &rValue = aValues[i];
                     if (i == nNumId)
                     {
                         uno::Reference<container::XNamed> xNumberingRules;
@@ -1581,13 +1582,13 @@ void makeTableCellRedline( SwTableBox& rTableBox,
         throw lang::IllegalArgumentException();
 }
 
-void SwAnyMapHelper::SetValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any& rAny )
+void SwAnyMapHelper::SetValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const cpo::uno::Any& rAny )
 {
     sal_uInt32 nKey = (nWhichId << 16) + nMemberId;
     m_Map[nKey] = rAny;
 }
 
-bool    SwAnyMapHelper::FillValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any*& pAny )
+bool    SwAnyMapHelper::FillValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const cpo::uno::Any*& pAny )
 {
     bool bRet = false;
     sal_uInt32 nKey = (nWhichId << 16) + nMemberId;

@@ -24,7 +24,7 @@
 #include <map>
 #include <mutex>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 namespace http_dav_ucp
 {
@@ -188,11 +188,11 @@ namespace http_dav_ucp
     {
         ProppatchOperation const  operation;
         OUString const            name;
-        css::uno::Any const       value;
+        cpo::uno::Any const       value;
 
         ProppatchValue( const ProppatchOperation o,
                         OUString n,
-                        css::uno::Any v )
+                        cpo::uno::Any v )
             : operation( o ), name( std::move(n) ), value( std::move(v) ) {}
     };
 } // namespace http_dav_ucp

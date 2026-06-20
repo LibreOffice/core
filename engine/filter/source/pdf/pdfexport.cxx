@@ -76,6 +76,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::view;
@@ -311,7 +312,7 @@ static OUString getMimetypeForDocument( const Reference< XComponentContext >& xC
                 beans::NamedValue aPathProp;
                 aPathProp.Name = u"nodepath"_ustr;
                 aPathProp.Value <<= u"/org.openoffice.Setup/Office/Factories/"_ustr;
-                uno::Sequence< uno::Any > aArgs{ uno::Any(aPathProp) };
+                uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(aPathProp) };
 
                 Reference< container::XNameAccess > xSOFConfig(
                     xConfigProvider->createInstanceWithArguments(
@@ -1115,14 +1116,14 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                         xViewProperties->getPropertyValue( sShowOnlineLayout ) >>= bReChangeToNormalView;
                         if( bReChangeToNormalView )
                         {
-                            xViewProperties->setPropertyValue( sShowOnlineLayout, uno::Any( false ) );
+                            xViewProperties->setPropertyValue( sShowOnlineLayout, cpo::uno::Any( false ) );
                         }
 
                         // Also, disable hide-whitespace during export.
                         xViewProperties->getPropertyValue(sHideWhitespace) >>= bReHideWhitespace;
                         if (bReHideWhitespace)
                         {
-                            xViewProperties->setPropertyValue(sHideWhitespace, uno::Any(false));
+                            xViewProperties->setPropertyValue(sHideWhitespace, cpo::uno::Any(false));
                         }
 
                         if (bExportTrackedChanges.has_value())
@@ -1200,7 +1201,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 {
                     try
                     {
-                        xViewProperties->setPropertyValue( sShowOnlineLayout, uno::Any( true ) );
+                        xViewProperties->setPropertyValue( sShowOnlineLayout, cpo::uno::Any( true ) );
                     }
                     catch( const uno::Exception& )
                     {
@@ -1210,7 +1211,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 {
                     try
                     {
-                        xViewProperties->setPropertyValue( sHideWhitespace, uno::Any( true ) );
+                        xViewProperties->setPropertyValue( sHideWhitespace, cpo::uno::Any( true ) );
                     }
                     catch( const uno::Exception& )
                     {
@@ -1249,7 +1250,7 @@ public:
     explicit PDFErrorRequest( task::PDFExportException aExc );
 
     // XInteractionRequest
-    virtual uno::Any SAL_CALL getRequest() override;
+    virtual cpo::uno::Any SAL_CALL getRequest() override;
     virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations() override;
 };
 
@@ -1260,11 +1261,11 @@ PDFErrorRequest::PDFErrorRequest( task::PDFExportException aExc ) :
 }
 
 
-uno::Any SAL_CALL PDFErrorRequest::getRequest()
+cpo::uno::Any SAL_CALL PDFErrorRequest::getRequest()
 {
     std::unique_lock guard( m_aMutex );
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     aRet <<= maExc;
     return aRet;
 }

@@ -41,7 +41,7 @@
 
 #include <com/sun/star/form/binding/IncompatibleTypesException.hpp>
 #include <com/sun/star/form/binding/InvalidBindingStateException.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
@@ -71,7 +71,7 @@ using com::sun::star::form::binding::InvalidBindingStateException;
 using com::sun::star::form::binding::XValueBinding;
 using com::sun::star::lang::EventObject;
 using com::sun::star::lang::IndexOutOfBoundsException;
-using com::sun::star::uno::Any;
+using cpo::uno::Any;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::Sequence;
@@ -942,7 +942,7 @@ bool Binding::supportsType( const css::uno::Type& rType )
     return Convert::get().hasType( rType );
 }
 
-css::uno::Any Binding::getValue( const css::uno::Type& rType )
+cpo::uno::Any Binding::getValue( const css::uno::Type& rType )
 {
     // first, check for model
     checkLive();
@@ -952,7 +952,7 @@ css::uno::Any Binding::getValue( const css::uno::Type& rType )
         throw IncompatibleTypesException(u"type unsupported"_ustr, static_cast<XValueBinding*>(this));
 
     // return string value (if present; else return empty Any)
-    css::uno::Any result;
+    cpo::uno::Any result;
     if(maBindingExpression.hasValue()) {
         OUString pathExpr(maBindingExpression.getString());
         Convert &rConvert = Convert::get();
@@ -962,7 +962,7 @@ css::uno::Any Binding::getValue( const css::uno::Type& rType )
     return result;
 }
 
-void Binding::setValue( const css::uno::Any& aValue )
+void Binding::setValue( const cpo::uno::Any& aValue )
 {
     // first, check for model
     checkLive();
@@ -1076,7 +1076,7 @@ void Binding::removeListEntryListener( const css::uno::Reference<css::form::bind
 // XValidator
 
 
-bool Binding::isValid( const css::uno::Any& )
+bool Binding::isValid( const cpo::uno::Any& )
 {
     // first, check for model
     checkLive();
@@ -1086,7 +1086,7 @@ bool Binding::isValid( const css::uno::Any& )
 }
 
 OUString Binding::explainInvalid(
-    const css::uno::Any& /*Value*/ )
+    const cpo::uno::Any& /*Value*/ )
 {
     // first, check for model
     checkLive();

@@ -25,8 +25,8 @@
 class SvXMLExport;
 namespace com::sun::star {
     namespace style { struct TabStop; }
-    namespace uno { class Any; }
 }
+namespace cpo::uno { class Any; }
 
 
 class SvxXMLTabStopExport final
@@ -40,7 +40,7 @@ public:
     SvxXMLTabStopExport(  SvXMLExport& rExport );
 
     // core API
-    void Export( const css::uno::Any& rAny );
+    void Export( const cpo::uno::Any& rAny );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

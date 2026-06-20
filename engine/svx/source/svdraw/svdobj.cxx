@@ -1038,7 +1038,7 @@ void SdrObject::ensureSortedImmediatelyAfter(const SdrObject& rFirst)
     }
 }
 
-void SdrObject::GetGrabBagItem(css::uno::Any& rVal) const
+void SdrObject::GetGrabBagItem(cpo::uno::Any& rVal) const
 {
     if (m_pGrabBagItem != nullptr)
         m_pGrabBagItem->QueryValue(rVal);
@@ -1046,7 +1046,7 @@ void SdrObject::GetGrabBagItem(css::uno::Any& rVal) const
         rVal <<= uno::Sequence<beans::PropertyValue>();
 }
 
-void SdrObject::SetGrabBagItem(const css::uno::Any& rVal)
+void SdrObject::SetGrabBagItem(const cpo::uno::Any& rVal)
 {
     if (m_pGrabBagItem == nullptr)
         m_pGrabBagItem.reset(new SfxGrabBagItem);
@@ -2166,7 +2166,7 @@ void SdrObject::SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, bool bClear
         // Remove 3D grabbag
         try
         {
-            css::uno::Any aAnyGrabBag;
+            cpo::uno::Any aAnyGrabBag;
             GetGrabBagItem(aAnyGrabBag);
             uno::Sequence<beans::PropertyValue> aSeqGrabBag
                 = aAnyGrabBag.get<uno::Sequence<beans::PropertyValue>>();
@@ -2177,7 +2177,7 @@ void SdrObject::SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, bool bClear
             if (it == aSeqGrabBag.end())
                 return;
             comphelper::removeElementAt(aSeqGrabBag, it - aSeqGrabBag.begin());
-            SetGrabBagItem(css::uno::Any(aSeqGrabBag));
+            SetGrabBagItem(cpo::uno::Any(aSeqGrabBag));
         }
         catch (...)
         {

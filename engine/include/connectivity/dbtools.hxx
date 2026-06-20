@@ -206,7 +206,7 @@ namespace dbtools
     /** returns the primary key columns of the table
     */
     OOO_DLLPUBLIC_DBTOOLS css::uno::Reference< css::container::XNameAccess> getPrimaryKeyColumns_throw(
-        const css::uno::Any& i_aTable
+        const cpo::uno::Any& i_aTable
     );
     OOO_DLLPUBLIC_DBTOOLS css::uno::Reference< css::container::XNameAccess> getPrimaryKeyColumns_throw(
         const css::uno::Reference< css::beans::XPropertySet >& i_xTable
@@ -356,7 +356,7 @@ namespace dbtools
     bool    getDataSourceSetting(
         const css::uno::Reference< css::uno::XInterface >& _rxDataSource,
         const OUString& _sSettingsName,
-        css::uno::Any& /* [out] */ _rSettingsValue
+        cpo::uno::Any& /* [out] */ _rSettingsValue
     );
 
     OOO_DLLPUBLIC_DBTOOLS OUString getDefaultReportEngineServiceName(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
@@ -561,7 +561,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS
     bool implUpdateObject(  const css::uno::Reference< css::sdbc::XRowUpdate >& _rxUpdatedObject,
                                 const sal_Int32 _nColumnIndex,
-                                const css::uno::Any& _rValue);
+                                const cpo::uno::Any& _rValue);
 
 
     /** ask the user for parameters if the prepared statement needs some and sets them in the prepared statement
@@ -588,7 +588,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS
     void setObjectWithInfo( const css::uno::Reference< css::sdbc::XParameters>& _xParameters,
                             sal_Int32 parameterIndex,
-                            const css::uno::Any& x,
+                            const cpo::uno::Any& x,
                             sal_Int32 sqlType,
                             sal_Int32 scale=0);
 
@@ -624,7 +624,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS
     bool implSetObject( const css::uno::Reference< css::sdbc::XParameters>& _rxParameters,
                             const sal_Int32 _nColumnIndex,
-                            const css::uno::Any& _rValue);
+                            const cpo::uno::Any& _rValue);
 
     /** creates the standard sql create table statement without the key part.
         @param  descriptor

@@ -107,6 +107,7 @@ using ::com::sun::star::awt::XWindow;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::presentation;
@@ -3268,7 +3269,7 @@ void SAL_CALL SlideshowImpl::stopSound(  )
     return getSlideCount();
 }
 
-css::uno::Any SAL_CALL SlideshowImpl::getByIndex( ::sal_Int32 Index )
+cpo::uno::Any SAL_CALL SlideshowImpl::getByIndex( ::sal_Int32 Index )
 {
     return Any( getSlideByIndex( Index ) );
 }

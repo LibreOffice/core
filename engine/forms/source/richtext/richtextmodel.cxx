@@ -45,6 +45,7 @@ namespace frm
 {
     using namespace comphelper;
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
@@ -632,7 +633,7 @@ namespace frm
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_forms_ORichTextModel_get_implementation(css::uno::XComponentContext* context,
-                                                          css::uno::Sequence<css::uno::Any> const &)
+                                                          css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::ORichTextModel(context));
 }

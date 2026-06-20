@@ -621,7 +621,7 @@ class TestTransferable : public cppu::WeakImplHelper<datatransfer::XTransferable
 
 public:
     TestTransferable(const std::vector<OString>& rContent, const std::vector<OUString>& rMimeType);
-    uno::Any SAL_CALL getTransferData(const datatransfer::DataFlavor& rFlavor) override;
+    cpo::uno::Any SAL_CALL getTransferData(const datatransfer::DataFlavor& rFlavor) override;
     uno::Sequence<datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
     bool SAL_CALL isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor) override;
 };
@@ -633,13 +633,13 @@ TestTransferable::TestTransferable(const std::vector<OString>& rContent, const s
     CPPUNIT_ASSERT_EQUAL(m_aContent.size(), m_aMimeType.size());
 }
 
-uno::Any TestTransferable::getTransferData(const datatransfer::DataFlavor& rFlavor)
+cpo::uno::Any TestTransferable::getTransferData(const datatransfer::DataFlavor& rFlavor)
 {
     for (size_t nType = 0; nType < m_aMimeType.size(); ++nType)
     {
         if (rFlavor.MimeType == m_aMimeType[nType])
         {
-            uno::Any aRet;
+            cpo::uno::Any aRet;
             SvMemoryStream aStream;
             aStream.WriteOString(m_aContent[nType]);
             aRet <<= uno::Sequence<sal_Int8>(static_cast<const sal_Int8*>(aStream.GetData()),

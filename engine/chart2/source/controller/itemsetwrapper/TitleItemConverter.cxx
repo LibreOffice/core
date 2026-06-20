@@ -176,7 +176,7 @@ bool TitleItemConverter::ApplySpecialItem(
 
             if( ! bPropExisted || fOldVal != fVal )
             {
-                GetPropertySet()->setPropertyValue( u"TextRotation"_ustr , uno::Any( fVal ));
+                GetPropertySet()->setPropertyValue( u"TextRotation"_ustr , cpo::uno::Any( fVal ));
                 bChanged = true;
             }
         }

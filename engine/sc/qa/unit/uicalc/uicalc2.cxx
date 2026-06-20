@@ -66,7 +66,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf150499)
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
 
     uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "Index", uno::Any(sal_uInt16(0)) } }));
+        comphelper::InitPropertySequence({ { "Index", cpo::uno::Any(sal_uInt16(0)) } }));
 
     // Without the fix in place, this test would have crashed here
     dispatchCommand(mxComponent, u".uno:Remove"_ustr, aArgs);
@@ -431,7 +431,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf131073)
     goToCell(u"A1:A3"_ustr);
     dispatchCommand(
         mxComponent, u".uno:SetOptimalRowHeight"_ustr,
-        comphelper::InitPropertySequence({ { "aExtraHeight", uno::Any(sal_uInt16(0)) } }));
+        comphelper::InitPropertySequence({ { "aExtraHeight", cpo::uno::Any(sal_uInt16(0)) } }));
 
     CPPUNIT_ASSERT(!pDoc->RowHidden(0, 0));
     // tdf#131073: Without the fix in place, the second row would not be hidden
@@ -447,7 +447,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf131073)
     goToCell(u"A1:C1"_ustr);
     dispatchCommand(
         mxComponent, u".uno:SetOptimalColumnWidth"_ustr,
-        comphelper::InitPropertySequence({ { "aExtraWidth", uno::Any(sal_uInt16(0)) } }));
+        comphelper::InitPropertySequence({ { "aExtraWidth", cpo::uno::Any(sal_uInt16(0)) } }));
 
     CPPUNIT_ASSERT(!pDoc->ColHidden(0, 0));
     // tdf#131073: Without the fix in place, the second column would not be hidden
@@ -635,7 +635,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf124778)
 
     // Add a new comment
     uno::Sequence<beans::PropertyValue> aArgs
-        = comphelper::InitPropertySequence({ { "Text", uno::Any(u"Comment"_ustr) } });
+        = comphelper::InitPropertySequence({ { "Text", cpo::uno::Any(u"Comment"_ustr) } });
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
     CPPUNIT_ASSERT_MESSAGE("There should be a note on A1", pDoc->HasNote(ScAddress(0, 0, 0)));
@@ -659,7 +659,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf138428)
 
     // Add a new comment
     uno::Sequence<beans::PropertyValue> aArgs
-        = comphelper::InitPropertySequence({ { "Text", uno::Any(u"Comment"_ustr) } });
+        = comphelper::InitPropertySequence({ { "Text", cpo::uno::Any(u"Comment"_ustr) } });
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
     ScDocument* pDoc = getScDoc();
@@ -1721,7 +1721,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf152577)
 
     insertNewSheet(*pDoc);
     uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "Index", uno::Any(sal_uInt16(2)) } }));
+        comphelper::InitPropertySequence({ { "Index", cpo::uno::Any(sal_uInt16(2)) } }));
     dispatchCommand(mxComponent, u".uno:Remove"_ustr, aArgs);
 
     ScDBCollection* pDBs = pDoc->GetDBCollection();
@@ -1774,7 +1774,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf156174)
 
     insertNewSheet(*pDoc);
     uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "Index", uno::Any(sal_uInt16(3)) } }));
+        comphelper::InitPropertySequence({ { "Index", cpo::uno::Any(sal_uInt16(3)) } }));
     dispatchCommand(mxComponent, u".uno:Remove"_ustr, aArgs);
 
     ScDBCollection* pDBs = pDoc->GetDBCollection();
@@ -1801,7 +1801,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf154044)
 
     // Set the background color of A1:CV1
     auto aColorArg(
-        comphelper::InitPropertySequence({ { "BackgroundColor", uno::Any(COL_LIGHTBLUE) } }));
+        comphelper::InitPropertySequence({ { "BackgroundColor", cpo::uno::Any(COL_LIGHTBLUE) } }));
     goToCell(u"A1:CV1"_ustr);
     dispatchCommand(mxComponent, u".uno:BackgroundColor"_ustr, aColorArg);
 
@@ -1979,14 +1979,14 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf170567_paste_Biff12_and_save_ODS)
         }
 
         // XTransferable
-        uno::Any SAL_CALL getTransferData(const datatransfer::DataFlavor& aFlavor) override
+        cpo::uno::Any SAL_CALL getTransferData(const datatransfer::DataFlavor& aFlavor) override
         {
             if (!isDataFlavorSupported(aFlavor))
                 return {};
             SvFileStream aStream(m_aFileURL, StreamMode::READ);
             uno::Sequence<sal_Int8> bytes(aStream.remainingSize());
             aStream.ReadBytes(bytes.getArray(), aStream.remainingSize());
-            return uno::Any(bytes);
+            return cpo::uno::Any(bytes);
         }
         uno::Sequence<datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override
         {
@@ -2232,12 +2232,12 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf166791_PasteSpecialArrayOriginCell)
     // Helper lambda for Paste Special (values only).
     auto pasteSpecialValues = [this]() {
         uno::Sequence<beans::PropertyValue> aArgs = comphelper::InitPropertySequence(
-            { { "Flags", uno::Any(u"V"_ustr) },
-              { "FormulaCommand", uno::Any(sal_uInt16(ScPasteFunc::NONE)) },
-              { "SkipEmptyCells", uno::Any(false) },
-              { "Transpose", uno::Any(false) },
-              { "AsLink", uno::Any(false) },
-              { "MoveMode", uno::Any(sal_uInt16(InsCellCmd::INS_NONE)) } });
+            { { "Flags", cpo::uno::Any(u"V"_ustr) },
+              { "FormulaCommand", cpo::uno::Any(sal_uInt16(ScPasteFunc::NONE)) },
+              { "SkipEmptyCells", cpo::uno::Any(false) },
+              { "Transpose", cpo::uno::Any(false) },
+              { "AsLink", cpo::uno::Any(false) },
+              { "MoveMode", cpo::uno::Any(sal_uInt16(InsCellCmd::INS_NONE)) } });
         dispatchCommand(mxComponent, u".uno:InsertContents"_ustr, aArgs);
     };
 
@@ -2422,10 +2422,10 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testSetHyperlinkKeepSelection)
     // When dispatching .uno:SetHyperlink with Hyperlink.Text differing from the cell content,
     // but marked as a hint:
     uno::Sequence<beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue(u"Hyperlink.Text"_ustr, uno::Any(u"mytext"_ustr)),
-        comphelper::makePropertyValue(u"Hyperlink.TextIsHint"_ustr, uno::Any(true)),
+        comphelper::makePropertyValue(u"Hyperlink.Text"_ustr, cpo::uno::Any(u"mytext"_ustr)),
+        comphelper::makePropertyValue(u"Hyperlink.TextIsHint"_ustr, cpo::uno::Any(true)),
         comphelper::makePropertyValue(u"Hyperlink.URL"_ustr,
-                                      uno::Any(u"http://www.example.com"_ustr)),
+                                      cpo::uno::Any(u"http://www.example.com"_ustr)),
     };
     dispatchCommand(mxComponent, u".uno:SetHyperlink"_ustr, aArgs);
 

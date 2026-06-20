@@ -107,7 +107,7 @@ public:
         return MAXLEVEL;
     }
 
-    virtual uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override
+    virtual cpo::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override
     {
         if (nIndex < 0 || MAXLEVEL <= nIndex)
             throw lang::IndexOutOfBoundsException();
@@ -116,26 +116,26 @@ public:
         SwNumRulesWithName const* pRules(m_rNumRules.GetRules(m_nIndex));
         if (!pRules)
         {
-            return uno::Any();
+            return cpo::uno::Any();
         }
         SwNumFormat const* pNumFormat(nullptr);
         UIName const* pCharStyleName(nullptr);
         pRules->GetNumFormat(nIndex, pNumFormat, pCharStyleName);
         if (!pNumFormat)
         {   // the dialog only fills in those levels that are non-default
-            return uno::Any(); // the export will ignore this level, yay
+            return cpo::uno::Any(); // the export will ignore this level, yay
         }
         assert(pCharStyleName);
         ProgName dummy; // pass in empty HeadingStyleName - can't import anyway
         uno::Sequence<beans::PropertyValue> const ret(
             SwXNumberingRules::GetPropertiesForNumFormat(
                 *pNumFormat, *pCharStyleName, &dummy, u""_ustr));
-        return uno::Any(ret);
+        return cpo::uno::Any(ret);
     }
 
     // XIndexReplace
     virtual void SAL_CALL replaceByIndex(
-            sal_Int32 nIndex, uno::Any const& rElement) override
+            sal_Int32 nIndex, cpo::uno::Any const& rElement) override
     {
         if (nIndex < 0 || MAXLEVEL <= nIndex)
             throw lang::IndexOutOfBoundsException();

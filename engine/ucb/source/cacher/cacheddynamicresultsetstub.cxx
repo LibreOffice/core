@@ -30,6 +30,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 
 CachedDynamicResultSetStub::CachedDynamicResultSetStub(
@@ -166,7 +167,7 @@ css::uno::Sequence< OUString > SAL_CALL CachedDynamicResultSetStubFactory::getSu
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_CachedDynamicResultSetStubFactory_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new CachedDynamicResultSetStubFactory(context));
 }

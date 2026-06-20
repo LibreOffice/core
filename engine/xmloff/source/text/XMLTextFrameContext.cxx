@@ -67,6 +67,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::beans;
@@ -696,12 +697,12 @@ void XMLTextFrameContext_Impl::Create()
 
     if (m_isDecorative && xPropSetInfo->hasPropertyByName(u"Decorative"_ustr))
     {
-        xPropSet->setPropertyValue(u"Decorative"_ustr, uno::Any(true));
+        xPropSet->setPropertyValue(u"Decorative"_ustr, cpo::uno::Any(true));
     }
 
     if (m_isSplitAllowed && xPropSetInfo->hasPropertyByName(u"IsSplitAllowed"_ustr))
     {
-        xPropSet->setPropertyValue(u"IsSplitAllowed"_ustr, uno::Any(true));
+        xPropSet->setPropertyValue(u"IsSplitAllowed"_ustr, cpo::uno::Any(true));
     }
 
     if( XML_TEXT_FRAME_OBJECT != nType  &&

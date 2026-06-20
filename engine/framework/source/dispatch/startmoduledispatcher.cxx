@@ -67,7 +67,7 @@ void SAL_CALL StartModuleDispatcher::dispatchWithNotification(const css::util::U
         }
     }
 
-    implts_notifyResultListener(xListener, nResult, css::uno::Any());
+    implts_notifyResultListener(xListener, nResult, cpo::uno::Any());
 }
 
 css::uno::Sequence< ::sal_Int16 > SAL_CALL StartModuleDispatcher::getSupportedCommandGroups()
@@ -129,7 +129,7 @@ void StartModuleDispatcher::implts_establishBackingMode()
 
 void StartModuleDispatcher::implts_notifyResultListener(const css::uno::Reference< css::frame::XDispatchResultListener >& xListener,
                                                               ::sal_Int16                                                 nState   ,
-                                                        const css::uno::Any&                                              aResult  )
+                                                        const cpo::uno::Any&                                              aResult  )
 {
     if ( ! xListener.is())
         return;

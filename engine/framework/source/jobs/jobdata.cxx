@@ -133,7 +133,7 @@ void JobData::setAlias( const OUString& sAlias )
     css::uno::Reference< css::beans::XPropertySet > xJobProperties(aConfig.cfg(), css::uno::UNO_QUERY);
     if (xJobProperties.is())
     {
-        css::uno::Any aValue;
+        cpo::uno::Any aValue;
 
         // read uno implementation name
         aValue   = xJobProperties->getPropertyValue(u"Service"_ustr);
@@ -248,7 +248,7 @@ void JobData::setJobConfig( std::vector< css::beans::NamedValue >&& lArguments )
         sal_Int32                             nCount = m_lArguments.size();
         css::uno::Sequence< OUString > lNames (nCount);
         auto lNamesRange = asNonConstRange(lNames);
-        css::uno::Sequence< css::uno::Any >   lValues(nCount);
+        css::uno::Sequence< cpo::uno::Any >   lValues(nCount);
         auto lValuesRange = asNonConstRange(lValues);
 
         for (sal_Int32 i=0; i<nCount; ++i)
@@ -330,9 +330,9 @@ css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
     css::uno::Sequence< css::beans::NamedValue > lConfig;
     if (m_eMode==E_ALIAS)
     {
-        lConfig = { { u"Alias"_ustr, css::uno::Any(m_sAlias) },
-                    { u"Service"_ustr, css::uno::Any(m_sService) },
-                    { u"Context"_ustr, css::uno::Any(m_sContext) } };
+        lConfig = { { u"Alias"_ustr, cpo::uno::Any(m_sAlias) },
+                    { u"Service"_ustr, cpo::uno::Any(m_sService) },
+                    { u"Context"_ustr, cpo::uno::Any(m_sContext) } };
     }
     return lConfig;
 }
@@ -386,7 +386,7 @@ void JobData::disableJob()
     if (xPropSet.is())
     {
         // Convert and write the user timestamp to the configuration.
-        css::uno::Any aValue;
+        cpo::uno::Any aValue;
         aValue <<= Converter::convert_DateTime2ISO8601(DateTime( DateTime::SYSTEM));
         xPropSet->setPropertyValue(u"UserTime"_ustr, aValue);
     }
@@ -472,7 +472,7 @@ std::vector< OUString > JobData::getEnabledJobsForEvent( const css::uno::Referen
 
     // step to the job list, which is a child of the event node inside cfg
     // e.g. "/org.openoffice.Office.Jobs/Events/<event name>/JobList"
-    css::uno::Any aJobList = xEventRegistry->getByHierarchicalName(sPath);
+    cpo::uno::Any aJobList = xEventRegistry->getByHierarchicalName(sPath);
     css::uno::Reference< css::container::XNameAccess > xJobList;
     if (!(aJobList >>= xJobList) || !xJobList.is())
         return std::vector< OUString >();

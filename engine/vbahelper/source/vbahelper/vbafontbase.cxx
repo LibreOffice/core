@@ -52,7 +52,7 @@ VbaFontBase::~VbaFontBase()
 }
 
 void SAL_CALL
-VbaFontBase::setSuperscript( const uno::Any& aValue )
+VbaFontBase::setSuperscript( const cpo::uno::Any& aValue )
 {
     // not supported in form controls
     if( mbFormControl )
@@ -68,22 +68,22 @@ VbaFontBase::setSuperscript( const uno::Any& aValue )
         nValue = SUPERSCRIPT;
         nValue2 = SUPERSCRIPTHEIGHT;
     }
-    mxFont->setPropertyValue( u"CharEscapement"_ustr , uno::Any(nValue) );
-    mxFont->setPropertyValue( u"CharEscapementHeight"_ustr , uno::Any(nValue2) );
+    mxFont->setPropertyValue( u"CharEscapement"_ustr , cpo::uno::Any(nValue) );
+    mxFont->setPropertyValue( u"CharEscapementHeight"_ustr , cpo::uno::Any(nValue2) );
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 VbaFontBase::getSuperscript()
 {
     short nValue = NORMAL;
     // not supported in form controls
     if( !mbFormControl )
        mxFont->getPropertyValue( u"CharEscapement"_ustr ) >>= nValue;
-    return uno::Any( nValue == SUPERSCRIPT );
+    return cpo::uno::Any( nValue == SUPERSCRIPT );
 }
 
 void SAL_CALL
-VbaFontBase::setSubscript( const uno::Any& aValue )
+VbaFontBase::setSubscript( const cpo::uno::Any& aValue )
 {
     // not supported in form controls
     if( mbFormControl )
@@ -100,26 +100,26 @@ VbaFontBase::setSubscript( const uno::Any& aValue )
         nValue2 = SUBSCRIPTHEIGHT;
     }
 
-    mxFont->setPropertyValue( u"CharEscapementHeight"_ustr , uno::Any(nValue2) );
-    mxFont->setPropertyValue( u"CharEscapement"_ustr , uno::Any(nValue) );
+    mxFont->setPropertyValue( u"CharEscapementHeight"_ustr , cpo::uno::Any(nValue2) );
+    mxFont->setPropertyValue( u"CharEscapement"_ustr , cpo::uno::Any(nValue) );
 
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 VbaFontBase::getSubscript()
 {
     short nValue = NORMAL;
     // not supported in form controls
     if( !mbFormControl )
        mxFont->getPropertyValue( u"CharEscapement"_ustr ) >>= nValue;
-    return uno::Any( nValue == SUBSCRIPT );
+    return cpo::uno::Any( nValue == SUBSCRIPT );
 }
 
 void SAL_CALL
-VbaFontBase::setSize( const uno::Any& aValue )
+VbaFontBase::setSize( const cpo::uno::Any& aValue )
 {
     // form controls need a sal_Int16 containing points, other APIs need a float
-    uno::Any aVal( aValue );
+    cpo::uno::Any aVal( aValue );
     if( mbFormControl )
     {
         float fVal = 0.0;
@@ -129,14 +129,14 @@ VbaFontBase::setSize( const uno::Any& aValue )
     mxFont->setPropertyValue( VBAFONTBASE_PROPNAME( "CharHeight", "FontHeight" ), aVal );
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 VbaFontBase::getSize()
 {
     return mxFont->getPropertyValue( VBAFONTBASE_PROPNAME( "CharHeight", "FontHeight" ) );
 }
 
 void SAL_CALL
-VbaFontBase::setColorIndex( const uno::Any& _colorindex )
+VbaFontBase::setColorIndex( const cpo::uno::Any& _colorindex )
 {
     sal_Int32 nIndex = 0;
     _colorindex >>= nIndex;
@@ -152,7 +152,7 @@ VbaFontBase::setColorIndex( const uno::Any& _colorindex )
 }
 
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 VbaFontBase::getColorIndex()
 {
     sal_Int32 nColor = 0;
@@ -176,109 +176,109 @@ VbaFontBase::getColorIndex()
             break;
         }
     }
-    return uno::Any( nIndex );
+    return cpo::uno::Any( nIndex );
 }
 
 void SAL_CALL
-VbaFontBase::setBold( const uno::Any& aValue )
+VbaFontBase::setBold( const cpo::uno::Any& aValue )
 {
     bool bValue = false;
     aValue >>= bValue;
     double fBoldValue = awt::FontWeight::NORMAL;
     if( bValue )
         fBoldValue = awt::FontWeight::BOLD;
-    mxFont->setPropertyValue( VBAFONTBASE_PROPNAME( "CharWeight", "FontWeight" ), uno::Any( fBoldValue ) );
+    mxFont->setPropertyValue( VBAFONTBASE_PROPNAME( "CharWeight", "FontWeight" ), cpo::uno::Any( fBoldValue ) );
 
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 VbaFontBase::getBold()
 {
     double fValue = 0.0;
     mxFont->getPropertyValue( VBAFONTBASE_PROPNAME( "CharWeight", "FontWeight" ) ) >>= fValue;
-    return uno::Any( fValue == awt::FontWeight::BOLD );
+    return cpo::uno::Any( fValue == awt::FontWeight::BOLD );
 }
 
 void SAL_CALL
-VbaFontBase::setStrikethrough( const uno::Any& aValue )
+VbaFontBase::setStrikethrough( const cpo::uno::Any& aValue )
 {
     bool bValue = false;
     aValue >>= bValue;
     short nValue = awt::FontStrikeout::NONE;
     if( bValue )
         nValue = awt::FontStrikeout::SINGLE;
-    mxFont->setPropertyValue( VBAFONTBASE_PROPNAME( "CharStrikeout", "FontStrikeout" ), uno::Any( nValue ) );
+    mxFont->setPropertyValue( VBAFONTBASE_PROPNAME( "CharStrikeout", "FontStrikeout" ), cpo::uno::Any( nValue ) );
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 VbaFontBase::getStrikethrough()
 {
     short nValue = 0;
     mxFont->getPropertyValue( VBAFONTBASE_PROPNAME( "CharStrikeout", "FontStrikeout" ) ) >>= nValue;
-    return uno::Any( nValue == awt::FontStrikeout::SINGLE );
+    return cpo::uno::Any( nValue == awt::FontStrikeout::SINGLE );
 }
 
 void  SAL_CALL
-VbaFontBase::setShadow( const uno::Any& aValue )
+VbaFontBase::setShadow( const cpo::uno::Any& aValue )
 {
     if( !mbFormControl )
        mxFont->setPropertyValue( u"CharShadowed"_ustr , aValue );
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 VbaFontBase::getShadow()
 {
-    return mbFormControl ? uno::Any( false ) : mxFont->getPropertyValue( u"CharShadowed"_ustr );
+    return mbFormControl ? cpo::uno::Any( false ) : mxFont->getPropertyValue( u"CharShadowed"_ustr );
 }
 
 void  SAL_CALL
-VbaFontBase::setItalic( const uno::Any& aValue )
+VbaFontBase::setItalic( const cpo::uno::Any& aValue )
 {
     bool bValue = false;
     aValue >>= bValue;
     awt::FontSlant nValue = awt::FontSlant_NONE;
     if( bValue )
         nValue = awt::FontSlant_ITALIC;
-    mxFont->setPropertyValue( VBAFONTBASE_PROPNAME( "CharPosture", "FontSlant" ), uno::Any( static_cast<short>(nValue) ) );
+    mxFont->setPropertyValue( VBAFONTBASE_PROPNAME( "CharPosture", "FontSlant" ), cpo::uno::Any( static_cast<short>(nValue) ) );
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 VbaFontBase::getItalic()
 {
     awt::FontSlant aFS;
     mxFont->getPropertyValue( VBAFONTBASE_PROPNAME( "CharPosture", "FontSlant" ) ) >>= aFS;
-    return uno::Any( aFS == awt::FontSlant_ITALIC );
+    return cpo::uno::Any( aFS == awt::FontSlant_ITALIC );
 }
 
 void  SAL_CALL
-VbaFontBase::setName( const uno::Any& aValue )
+VbaFontBase::setName( const cpo::uno::Any& aValue )
 {
     OUString sString;
     aValue >>= sString;
     mxFont->setPropertyValue( VBAFONTBASE_PROPNAME( "CharFontName", "FontName" ), aValue );
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 VbaFontBase::getName()
 {
     return mxFont->getPropertyValue( VBAFONTBASE_PROPNAME( "CharFontName", "FontName" ) );
 }
 
-uno::Any
+cpo::uno::Any
 VbaFontBase::getColor()
 {
     if (meWhich == EXCEL){
-        uno::Any aAny = OORGBToXLRGB( mxFont->getPropertyValue( VBAFONTBASE_PROPNAME( "CharColor", "TextColor" ) ) );
+        cpo::uno::Any aAny = OORGBToXLRGB( mxFont->getPropertyValue( VBAFONTBASE_PROPNAME( "CharColor", "TextColor" ) ) );
         return aAny;
     }
     else{
-        uno::Any aAny = mxFont->getPropertyValue( VBAFONTBASE_PROPNAME( "CharColor", "TextColor" ) );
+        cpo::uno::Any aAny = mxFont->getPropertyValue( VBAFONTBASE_PROPNAME( "CharColor", "TextColor" ) );
         return aAny;
     }
 }
 
 void
-VbaFontBase::setColor( const uno::Any& _color  )
+VbaFontBase::setColor( const cpo::uno::Any& _color  )
 {
     mxFont->setPropertyValue( VBAFONTBASE_PROPNAME( "CharColor", "TextColor" ), XLRGBToOORGB(_color) );
 }

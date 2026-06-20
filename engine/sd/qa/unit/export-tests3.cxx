@@ -193,7 +193,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest3, testPageWithTransparentBackground)
     uno::Reference<drawing::XDrawPage> xPage(getPage(0));
 
     uno::Reference<beans::XPropertySet> xPropSet(xPage, uno::UNO_QUERY);
-    uno::Any aAny = xPropSet->getPropertyValue(u"Background"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"Background"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Slide background is missing", aAny.hasValue());
 
     uno::Reference<beans::XPropertySet> aXBackgroundPropSet;

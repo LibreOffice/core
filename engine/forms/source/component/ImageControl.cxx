@@ -65,6 +65,7 @@ namespace frm
 using namespace comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
@@ -782,7 +783,7 @@ bool OImageControlControl::implInsertGraphics()
         aDialog.SetTitle( sTitle );
 
         Reference< XFilePickerControlAccess > xController( aDialog.GetFilePicker(), UNO_QUERY_THROW );
-        xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, css::uno::Any(true));
+        xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, cpo::uno::Any(true));
 
         Reference<XPropertySet> xBoundField;
         if ( hasProperty( PROPERTY_BOUNDFIELD, xSet ) )
@@ -971,14 +972,14 @@ void SAL_CALL OImageControlControl::mouseExited(const awt::MouseEvent& /*e*/)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OImageControlModel_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OImageControlModel(component));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OImageControlControl_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OImageControlControl(component));
 }

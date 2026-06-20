@@ -55,7 +55,7 @@ public:
     GraphicRendererVCL();
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override;
     virtual void SAL_CALL release() noexcept override;
 
@@ -69,8 +69,8 @@ public:
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // PropertySetHelper
-    virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const css::uno::Any* pValues ) override;
-    virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, css::uno::Any* pValue ) override;
+    virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const cpo::uno::Any* pValues ) override;
+    virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, cpo::uno::Any* pValue ) override;
 
     // XGraphicRenderer
     virtual void SAL_CALL render( const css::uno::Reference< css::graphic::XGraphic >& Graphic ) override;
@@ -81,7 +81,7 @@ private:
 
     VclPtr<OutputDevice>        mpOutDev;
     tools::Rectangle                   maDestRect;
-    css::uno::Any               maRenderData;
+    cpo::uno::Any               maRenderData;
 };
 
 GraphicRendererVCL::GraphicRendererVCL() :
@@ -90,9 +90,9 @@ GraphicRendererVCL::GraphicRendererVCL() :
 {
 }
 
-uno::Any SAL_CALL GraphicRendererVCL::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL GraphicRendererVCL::queryInterface( const uno::Type & rType )
 {
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     if( rType == cppu::UnoType<lang::XServiceInfo>::get())
         aAny <<= uno::Reference< lang::XServiceInfo >(this);
@@ -166,16 +166,16 @@ rtl::Reference<::comphelper::PropertySetInfo> GraphicRendererVCL::createProperty
 {
     static ::comphelper::PropertyMapEntry const aEntries[] =
     {
-        { u"Device"_ustr, UNOGRAPHIC_DEVICE, cppu::UnoType<uno::Any>::get(), 0, 0 },
+        { u"Device"_ustr, UNOGRAPHIC_DEVICE, cppu::UnoType<cpo::uno::Any>::get(), 0, 0 },
         { u"DestinationRect"_ustr, UNOGRAPHIC_DESTINATIONRECT, cppu::UnoType<awt::Rectangle>::get(), 0, 0 },
-        { u"RenderData"_ustr, UNOGRAPHIC_RENDERDATA, cppu::UnoType<uno::Any>::get(), 0, 0 },
+        { u"RenderData"_ustr, UNOGRAPHIC_RENDERDATA, cppu::UnoType<cpo::uno::Any>::get(), 0, 0 },
     };
 
     return rtl::Reference<::comphelper::PropertySetInfo>( new ::comphelper::PropertySetInfo(aEntries) );
 }
 
 
-void GraphicRendererVCL::_setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const uno::Any* pValues )
+void GraphicRendererVCL::_setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const cpo::uno::Any* pValues )
 {
     SolarMutexGuard aGuard;
 
@@ -225,7 +225,7 @@ void GraphicRendererVCL::_setPropertyValues( const comphelper::PropertyMapEntry*
 }
 
 
-void GraphicRendererVCL::_getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, uno::Any* pValues )
+void GraphicRendererVCL::_getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, cpo::uno::Any* pValues )
 {
     SolarMutexGuard aGuard;
 
@@ -279,7 +279,7 @@ void SAL_CALL GraphicRendererVCL::render( const uno::Reference< graphic::XGraphi
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_graphic_GraphicRendererVCL_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new GraphicRendererVCL);
 }

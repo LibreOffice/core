@@ -1276,7 +1276,7 @@ void SAL_CALL OOXMLSecParser::startElement(const OUString& rName, const uno::Ref
         {
             throw css::xml::sax::SAXException(
                 u"xmlsecurity: unexpected root element"_ustr, nullptr,
-                css::uno::Any());
+                cpo::uno::Any());
         }
 
         pContext.reset(new DsSignatureContext(*this, std::move(pRewindMap)));
@@ -1344,7 +1344,7 @@ void SAL_CALL OOXMLSecParser::setDocumentLocator(const uno::Reference<xml::sax::
         m_xNextHandler->setDocumentLocator(xLocator);
 }
 
-void SAL_CALL OOXMLSecParser::initialize(const uno::Sequence<uno::Any>& rArguments)
+void SAL_CALL OOXMLSecParser::initialize(const uno::Sequence<cpo::uno::Any>& rArguments)
 {
     rArguments[0] >>= m_xNextHandler;
 }

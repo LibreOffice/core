@@ -20,7 +20,7 @@
 
 #include <sal/types.h>
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 class Any;
 }
@@ -35,7 +35,7 @@ class XMLTextColumnsExport
 public:
     XMLTextColumnsExport(SvXMLExport& rExport);
 
-    void exportXML(const css::uno::Any& rAny);
+    void exportXML(const cpo::uno::Any& rAny);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

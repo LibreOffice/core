@@ -131,7 +131,7 @@ namespace sdr::contact {
     using ::com::sun::star::container::XContainerListener;
     using ::com::sun::star::container::XContainer;
     using ::com::sun::star::container::ContainerEvent;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
 
     namespace {
 

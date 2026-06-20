@@ -42,7 +42,7 @@ class ResourceMenuController : public cppu::ImplInheritanceHelper< svt::PopupMen
 {
 public:
     ResourceMenuController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                            const css::uno::Sequence< css::uno::Any >& rxArgs, bool bToolbarContainer );
+                            const css::uno::Sequence< cpo::uno::Any >& rxArgs, bool bToolbarContainer );
 
     // XPopupMenuController
     virtual void SAL_CALL updatePopupMenu() override;
@@ -84,7 +84,7 @@ protected:
 };
 
 ResourceMenuController::ResourceMenuController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                                const css::uno::Sequence< css::uno::Any >& rxArgs, bool bToolbarContainer ) :
+                                                const css::uno::Sequence< cpo::uno::Any >& rxArgs, bool bToolbarContainer ) :
     ImplInheritanceHelper( rxContext ),
     m_bContextMenu( false ),
     m_bInToolbar( false ),
@@ -368,7 +368,7 @@ class SaveAsMenuController : public ResourceMenuController
 {
 public:
     SaveAsMenuController( const css::uno::Reference< css::uno::XComponentContext >& rContext,
-                          const css::uno::Sequence< css::uno::Any >& rArgs );
+                          const css::uno::Sequence< cpo::uno::Any >& rArgs );
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -378,7 +378,7 @@ private:
 };
 
 SaveAsMenuController::SaveAsMenuController( const css::uno::Reference< css::uno::XComponentContext >& rContext,
-                                            const css::uno::Sequence< css::uno::Any >& rArgs )
+                                            const css::uno::Sequence< cpo::uno::Any >& rArgs )
     : ResourceMenuController( rContext, rArgs, false )
 {
 }
@@ -412,7 +412,7 @@ class WindowListMenuController : public ResourceMenuController
 {
 public:
     WindowListMenuController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                              const css::uno::Sequence< css::uno::Any >& rxArgs )
+                              const css::uno::Sequence< cpo::uno::Any >& rxArgs )
         : ResourceMenuController(rxContext, rxArgs, false) {}
 
     // XMenuListener
@@ -550,7 +550,7 @@ OUString WindowListMenuController::getImplementationName()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_ResourceMenuController_get_implementation(
     css::uno::XComponentContext* context,
-    css::uno::Sequence< css::uno::Any > const & args )
+    css::uno::Sequence< cpo::uno::Any > const & args )
 {
     return cppu::acquire( new ResourceMenuController( context, args, false ) );
 }
@@ -558,7 +558,7 @@ com_sun_star_comp_framework_ResourceMenuController_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_ToolbarAsMenuController_get_implementation(
     css::uno::XComponentContext* context,
-    css::uno::Sequence< css::uno::Any > const & args )
+    css::uno::Sequence< cpo::uno::Any > const & args )
 {
     return cppu::acquire( new ResourceMenuController( context, args, true ) );
 }
@@ -566,7 +566,7 @@ com_sun_star_comp_framework_ToolbarAsMenuController_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_WindowListMenuController_get_implementation(
     css::uno::XComponentContext* context,
-    css::uno::Sequence< css::uno::Any > const & args )
+    css::uno::Sequence< cpo::uno::Any > const & args )
 {
     return cppu::acquire( new WindowListMenuController( context, args ) );
 }
@@ -574,7 +574,7 @@ com_sun_star_comp_framework_WindowListMenuController_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_SaveAsMenuController_get_implementation(
     css::uno::XComponentContext* context,
-    css::uno::Sequence< css::uno::Any > const & args )
+    css::uno::Sequence< cpo::uno::Any > const & args )
 {
     return cppu::acquire( new SaveAsMenuController( context, args ) );
 }

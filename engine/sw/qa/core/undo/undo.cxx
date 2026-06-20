@@ -127,7 +127,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testImagePropsCreateUndoAndModifyDoc)
 
     // Check that modifications of the geometry mark document dirty, and create an undo
 
-    xImage->setPropertyValue(u"RelativeWidth"_ustr, css::uno::Any(sal_Int16(80)));
+    xImage->setPropertyValue(u"RelativeWidth"_ustr, cpo::uno::Any(sal_Int16(80)));
 
     // Without the fix, this would fail
     CPPUNIT_ASSERT(pTextDoc->isModified());
@@ -140,7 +140,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testImagePropsCreateUndoAndModifyDoc)
     // Check that modifications of anchor mark document dirty, and create an undo
 
     xImage->setPropertyValue(u"AnchorType"_ustr,
-                             css::uno::Any(css::text::TextContentAnchorType_AT_PARAGRAPH));
+                             cpo::uno::Any(css::text::TextContentAnchorType_AT_PARAGRAPH));
 
     CPPUNIT_ASSERT(pTextDoc->isModified());
     CPPUNIT_ASSERT(pWrtShell->GetLastUndoInfo(nullptr, nullptr, nullptr));

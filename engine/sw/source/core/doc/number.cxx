@@ -581,7 +581,7 @@ public:
     }
 
     virtual UpdateResult DataChanged(const OUString& rMimeType,
-                                     const css::uno::Any& rValue) override
+                                     const cpo::uno::Any& rValue) override
     {
         if (!m_pRule || !m_pDoc)
             return ERROR_GENERAL;
@@ -1381,7 +1381,7 @@ void SwNumRule::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-void SwNumRule::GetGrabBagItem(uno::Any& rVal) const
+void SwNumRule::GetGrabBagItem(cpo::uno::Any& rVal) const
 {
     if (mpGrabBagItem)
         mpGrabBagItem->QueryValue(rVal);
@@ -1389,7 +1389,7 @@ void SwNumRule::GetGrabBagItem(uno::Any& rVal) const
         rVal <<= uno::Sequence<beans::PropertyValue>();
 }
 
-void SwNumRule::SetGrabBagItem(const uno::Any& rVal)
+void SwNumRule::SetGrabBagItem(const cpo::uno::Any& rVal)
 {
     if (!mpGrabBagItem)
         mpGrabBagItem = std::make_shared<SfxGrabBagItem>();
@@ -1530,8 +1530,8 @@ namespace numfunc
     void SwDefBulletConfig::LoadConfig()
     {
         uno::Sequence<OUString> aPropNames = GetPropNames();
-        uno::Sequence<uno::Any> aValues = GetProperties( aPropNames );
-        const uno::Any* pValues = aValues.getConstArray();
+        uno::Sequence<cpo::uno::Any> aValues = GetProperties( aPropNames );
+        const cpo::uno::Any* pValues = aValues.getConstArray();
         OSL_ENSURE( aValues.getLength() == aPropNames.getLength(),
                 "<SwDefBulletConfig::SwDefBulletConfig()> - GetProperties failed");
         if ( aValues.getLength() != aPropNames.getLength() )
@@ -1697,8 +1697,8 @@ namespace numfunc
     void SwNumberingUIBehaviorConfig::LoadConfig()
     {
         css::uno::Sequence<OUString> aPropNames = GetPropNames();
-        css::uno::Sequence<css::uno::Any> aValues = GetProperties( aPropNames );
-        const css::uno::Any* pValues = aValues.getConstArray();
+        css::uno::Sequence<cpo::uno::Any> aValues = GetProperties( aPropNames );
+        const cpo::uno::Any* pValues = aValues.getConstArray();
         OSL_ENSURE( aValues.getLength() == aPropNames.getLength(),
                 "<SwNumberingUIBehaviorConfig::LoadConfig()> - GetProperties failed");
         if ( aValues.getLength() != aPropNames.getLength() )

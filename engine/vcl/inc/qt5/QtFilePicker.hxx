@@ -130,8 +130,8 @@ public:
 
     // XFilePickerControlAccess functions
     virtual void SAL_CALL setValue(sal_Int16 nControlId, sal_Int16 nControlAction,
-                                   const css::uno::Any& rValue) override;
-    virtual css::uno::Any SAL_CALL getValue(sal_Int16 nControlId,
+                                   const cpo::uno::Any& rValue) override;
+    virtual cpo::uno::Any SAL_CALL getValue(sal_Int16 nControlId,
                                             sal_Int16 nControlAction) override;
     virtual void SAL_CALL enableControl(sal_Int16 nControlId, bool bEnable) override;
     virtual void SAL_CALL setLabel(sal_Int16 nControlId, const OUString& rLabel) override;
@@ -141,7 +141,7 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSelectedFiles() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // XEventListener
     void SAL_CALL disposing(const css::lang::EventObject& rEvent) override;
@@ -170,9 +170,9 @@ private:
 
     static QString getResString(TranslateId pRedId);
     void applyTemplate(sal_Int16 nTemplateId);
-    static css::uno::Any handleGetListValue(const QComboBox* pWidget, sal_Int16 nControlAction);
+    static cpo::uno::Any handleGetListValue(const QComboBox* pWidget, sal_Int16 nControlAction);
     static void handleSetListValue(QComboBox* pQComboBox, sal_Int16 nAction,
-                                   const css::uno::Any& rValue);
+                                   const cpo::uno::Any& rValue);
 
     void prepareExecute();
 

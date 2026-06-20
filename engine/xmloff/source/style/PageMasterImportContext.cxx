@@ -44,6 +44,7 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 
 //
@@ -91,7 +92,7 @@ void PageStyleContext::RecoverMissingFillBitmapFromBackGraphic(
     // create the missing bitmap table entry from the old background image
     uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
     if (xBitmap.is())
-        xBitmapTable->insertByName(sBitmapName, uno::Any(xBitmap));
+        xBitmapTable->insertByName(sBitmapName, cpo::uno::Any(xBitmap));
 }
 
 void PageStyleContext::SetAttribute( sal_Int32 nElement,
@@ -442,7 +443,7 @@ void PageStyleContext::FillPropertySet_PageStyle(
         if (!isFullSize)
         {
             SAL_INFO("xmloff.style", "FillPropertySet_PageStyle: Heuristically resetting BackgroundFullSize");
-            xPropSet->setPropertyValue(u"BackgroundFullSize"_ustr, uno::Any(isFullSize));
+            xPropSet->setPropertyValue(u"BackgroundFullSize"_ustr, cpo::uno::Any(isFullSize));
         }
     }
 
@@ -451,7 +452,7 @@ void PageStyleContext::FillPropertySet_PageStyle(
 
     if (!sPageUsage.isEmpty())
     {
-        uno::Any aPageUsage;
+        cpo::uno::Any aPageUsage;
         XMLPMPropHdl_PageStyleLayout aPageUsageHdl;
         if (aPageUsageHdl.importXML(sPageUsage, aPageUsage, GetImport().GetMM100UnitConverter()))
             xPropSet->setPropertyValue(u"PageStyleLayout"_ustr, aPageUsage);

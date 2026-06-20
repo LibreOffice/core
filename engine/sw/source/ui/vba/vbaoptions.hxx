@@ -63,11 +63,11 @@ public:
     virtual void SAL_CALL setAutoFormatApplyBulletedLists( bool _autoformatapplybulletedlists ) override;
 
     // Methods
-    virtual css::uno::Any SAL_CALL DefaultFilePath( sal_Int32 _path ) override;
+    virtual cpo::uno::Any SAL_CALL DefaultFilePath( sal_Int32 _path ) override;
 
     //PropListener
-    virtual void setValueEvent( const css::uno::Any& value ) override;
-    virtual css::uno::Any getValueEvent() override;
+    virtual void setValueEvent( const cpo::uno::Any& value ) override;
+    virtual cpo::uno::Any getValueEvent() override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

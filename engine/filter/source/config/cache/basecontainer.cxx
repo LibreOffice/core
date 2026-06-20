@@ -118,7 +118,7 @@ css::uno::Sequence< OUString > SAL_CALL BaseContainer::getSupportedServiceNames(
 
 
 void SAL_CALL BaseContainer::insertByName(const OUString& sItem ,
-                                          const css::uno::Any&   aValue)
+                                          const cpo::uno::Any&   aValue)
 {
     if (sItem.isEmpty())
         throw css::lang::IllegalArgumentException(u"empty value not allowed as item name."_ustr,
@@ -168,7 +168,7 @@ void SAL_CALL BaseContainer::removeByName(const OUString& sItem)
 
 
 void SAL_CALL BaseContainer::replaceByName(const OUString& sItem ,
-                                           const css::uno::Any&   aValue)
+                                           const cpo::uno::Any&   aValue)
 {
     if (sItem.isEmpty())
         throw css::lang::IllegalArgumentException(u"empty value not allowed as item name."_ustr,
@@ -201,13 +201,13 @@ void SAL_CALL BaseContainer::replaceByName(const OUString& sItem ,
 }
 
 
-css::uno::Any SAL_CALL BaseContainer::getByName(const OUString& sItem)
+cpo::uno::Any SAL_CALL BaseContainer::getByName(const OUString& sItem)
 {
     if (sItem.isEmpty())
         throw css::container::NoSuchElementException( u"An empty item can't be part of this cache!"_ustr,
                 static_cast< css::container::XNameAccess* >(this));
 
-    css::uno::Any aValue;
+    cpo::uno::Any aValue;
 
     // SAFE ->
     std::unique_lock aLock(m_aMutex);
@@ -377,7 +377,7 @@ void SAL_CALL BaseContainer::flush()
         throw css::lang::WrappedTargetRuntimeException(
                 u"Can not guarantee cache consistency. Special flush container does not exists!"_ustr,
                 getXWeak(),
-                css::uno::Any());
+                cpo::uno::Any());
 
     try
     {
@@ -399,7 +399,7 @@ void SAL_CALL BaseContainer::flush()
 
         throw css::lang::WrappedTargetRuntimeException( u"Flush rejected by internal container."_ustr,
                 getXWeak(),
-                css::uno::Any(ex));
+                cpo::uno::Any(ex));
     }
 
     m_pFlushCache.reset();

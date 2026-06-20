@@ -261,7 +261,7 @@ static bool lcl_FunctionAccessLoadWebServiceLink( OUString& rResult, ScDocument*
 {
     // For FunctionAccess service always force a changed data update.
     ScWebServiceLink aLink( pDoc, rURI);
-    if (aLink.DataChanged( OUString(), css::uno::Any()) != sfx2::SvBaseLink::UpdateResult::SUCCESS)
+    if (aLink.DataChanged( OUString(), cpo::uno::Any()) != sfx2::SvBaseLink::UpdateResult::SUCCESS)
         return false;
 
     if (!aLink.HasResult())

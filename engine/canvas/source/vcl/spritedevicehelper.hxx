@@ -42,9 +42,9 @@ namespace vclcanvas
         bool  showBuffer( bool bWindowVisible, bool bUpdateAll );
         bool  switchBuffer( bool bWindowVisible, bool bUpdateAll );
 
-        css::uno::Any isAccelerated() const;
-        css::uno::Any getDeviceHandle() const;
-        css::uno::Any getSurfaceHandle() const;
+        cpo::uno::Any isAccelerated() const;
+        cpo::uno::Any getDeviceHandle() const;
+        cpo::uno::Any getSurfaceHandle() const;
 
         void dumpScreenContent() const;
         const BackBufferSharedPtr& getBackBuffer() const { return mpBackBuffer; }

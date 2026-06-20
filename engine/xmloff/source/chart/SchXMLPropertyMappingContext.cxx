@@ -21,6 +21,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::xmloff::token;
 
 namespace {
@@ -44,7 +45,7 @@ Reference< chart2::data::XLabeledDataSequence2 > createAndAddSequenceToSeries( c
     Reference< chart2::data::XDataSequence > xSeq = SchXMLTools::CreateDataSequence( rRange, xChartDoc );
     Reference< beans::XPropertySet > xSeqProp( xSeq, uno::UNO_QUERY );
     if( xSeqProp.is())
-        xSeqProp->setPropertyValue(u"Role"_ustr, uno::Any( rRole));
+        xSeqProp->setPropertyValue(u"Role"_ustr, cpo::uno::Any( rRole));
     xLabeledSeq->setValues( xSeq );
 
     Reference< chart2::data::XDataSink > xSink( xSeriesSource, uno::UNO_QUERY );

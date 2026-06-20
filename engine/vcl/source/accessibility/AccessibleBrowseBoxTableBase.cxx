@@ -25,7 +25,7 @@
 
 using css::uno::Reference;
 using css::uno::Sequence;
-using css::uno::Any;
+using cpo::uno::Any;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

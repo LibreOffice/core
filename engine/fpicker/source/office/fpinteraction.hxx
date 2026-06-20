@@ -50,7 +50,7 @@ namespace svt
 
     private:
         css::uno::Reference< css::task::XInteractionHandler > m_xMaster;    // our master handler
-        css::uno::Any                                         m_aException; // the last handled request
+        cpo::uno::Any                                         m_aException; // the last handled request
         bool                                                  m_bUsed;      // indicates using of this interaction handler instance
         EInterceptedInteractions                              m_eInterceptions; // enable/disable interception of some special interactions
 

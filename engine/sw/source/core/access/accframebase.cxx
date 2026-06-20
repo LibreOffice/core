@@ -164,8 +164,8 @@ void SwAccessibleFrameBase::InvalidateCursorPos_()
     if( xParent.is() )
     {
         uno::Reference< XAccessible > xChild(this);
-        xParent->FireAccessibleEvent(AccessibleEventId::SELECTION_CHANGED, uno::Any(),
-                                     uno::Any(xChild));
+        xParent->FireAccessibleEvent(AccessibleEventId::SELECTION_CHANGED, cpo::uno::Any(),
+                                     cpo::uno::Any(xChild));
     }
 }
 
@@ -217,8 +217,8 @@ void SwAccessibleFrameBase::Notify(const SfxHint& rHint)
 
         if( sOldName != GetName() )
         {
-            FireAccessibleEvent(AccessibleEventId::NAME_CHANGED, uno::Any(sOldName),
-                                uno::Any(GetName()));
+            FireAccessibleEvent(AccessibleEventId::NAME_CHANGED, cpo::uno::Any(sOldName),
+                                cpo::uno::Any(GetName()));
         }
     }
 }

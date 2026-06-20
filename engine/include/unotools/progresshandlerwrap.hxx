@@ -41,8 +41,8 @@ public:
     ProgressHandlerWrap(css::uno::Reference<css::task::XStatusIndicator> xSI);
 
     // XProgressHandler
-    virtual void SAL_CALL push(const css::uno::Any& Status) override;
-    virtual void SAL_CALL update(const css::uno::Any& Status) override;
+    virtual void SAL_CALL push(const cpo::uno::Any& Status) override;
+    virtual void SAL_CALL update(const cpo::uno::Any& Status) override;
     virtual void SAL_CALL pop() override;
 };
 

@@ -52,7 +52,7 @@ public:
 public:
     DECLARE_UNO3_AGG_DEFAULTS(OFormsCollection, ::cppu::OComponentHelper)
 
-    virtual css::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
@@ -84,25 +84,25 @@ public:
         { return OInterfaceContainer::getElementType(); }
     virtual bool SAL_CALL hasElements() override
         { return OInterfaceContainer::hasElements(); }
-    virtual css::uno::Any SAL_CALL getByName(const OUString& p1) override
+    virtual cpo::uno::Any SAL_CALL getByName(const OUString& p1) override
         { return OInterfaceContainer::getByName(p1); }
     virtual css::uno::Sequence<OUString> SAL_CALL getElementNames() override
         { return OInterfaceContainer::getElementNames(); }
     virtual bool SAL_CALL hasByName(const OUString& p1) override
         { return OInterfaceContainer::hasByName(p1); }
-    virtual void SAL_CALL replaceByName(const OUString& p1, const css::uno::Any& p2) override
+    virtual void SAL_CALL replaceByName(const OUString& p1, const cpo::uno::Any& p2) override
         { OInterfaceContainer::replaceByName(p1, p2); }
-    virtual void SAL_CALL insertByName(const OUString& p1, const css::uno::Any& p2) override
+    virtual void SAL_CALL insertByName(const OUString& p1, const cpo::uno::Any& p2) override
         { OInterfaceContainer::insertByName(p1, p2); }
     virtual void SAL_CALL removeByName(const OUString& p1) override
         { OInterfaceContainer::removeByName(p1); }
     virtual sal_Int32 SAL_CALL getCount() override
         { return OInterfaceContainer::getCount(); }
-    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 p1) override
+    virtual cpo::uno::Any SAL_CALL getByIndex(sal_Int32 p1) override
         { return OInterfaceContainer::getByIndex(p1); }
-    virtual void SAL_CALL replaceByIndex(sal_Int32 p1, const css::uno::Any& p2) override
+    virtual void SAL_CALL replaceByIndex(sal_Int32 p1, const cpo::uno::Any& p2) override
         { return OInterfaceContainer::replaceByIndex(p1, p2); }
-    virtual void SAL_CALL insertByIndex(sal_Int32 p1, const css::uno::Any& p2) override
+    virtual void SAL_CALL insertByIndex(sal_Int32 p1, const cpo::uno::Any& p2) override
         { return OInterfaceContainer::insertByIndex(p1, p2); }
     virtual void SAL_CALL removeByIndex(sal_Int32 p1) override
         { return OInterfaceContainer::removeByIndex(p1); }
@@ -122,7 +122,7 @@ public:
         { OInterfaceContainer::removeEntry(p1); }
     virtual css::uno::Sequence<css::script::ScriptEventDescriptor> SAL_CALL getScriptEvents(sal_Int32 p1) override
         { return OInterfaceContainer::getScriptEvents(p1); }
-    virtual void SAL_CALL attach(sal_Int32 p1, const css::uno::Reference<css::uno::XInterface>& p2, const css::uno::Any& p3) override
+    virtual void SAL_CALL attach(sal_Int32 p1, const css::uno::Reference<css::uno::XInterface>& p2, const cpo::uno::Any& p3) override
         { OInterfaceContainer::attach(p1, p2, p3); }
     virtual void SAL_CALL detach(sal_Int32 p1, const css::uno::Reference<css::uno::XInterface>& p2) override
         { OInterfaceContainer::detach(p1, p2); }

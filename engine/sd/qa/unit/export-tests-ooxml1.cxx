@@ -572,10 +572,10 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testPlaceholderFillAndOutlineExport)
 {
     createSdImpressDoc("pptx/LostPlaceholderFill.odp");
 
-    uno::Any aFillStyle;
-    uno::Any aFillColor;
-    uno::Any aLineStyle;
-    uno::Any aLineColor;
+    cpo::uno::Any aFillStyle;
+    cpo::uno::Any aFillColor;
+    cpo::uno::Any aLineStyle;
+    cpo::uno::Any aLineColor;
 
     for (int i = 1; i <= 2; i++)
     {
@@ -1058,10 +1058,10 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testCellLeftAndRightMargin)
                                                      uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xCellPropSet(xCell, uno::UNO_QUERY_THROW);
 
-    uno::Any aLeftMargin = xCellPropSet->getPropertyValue(u"TextLeftDistance"_ustr);
+    cpo::uno::Any aLeftMargin = xCellPropSet->getPropertyValue(u"TextLeftDistance"_ustr);
     CPPUNIT_ASSERT(aLeftMargin >>= nLeftMargin);
 
-    uno::Any aRightMargin = xCellPropSet->getPropertyValue(u"TextRightDistance"_ustr);
+    cpo::uno::Any aRightMargin = xCellPropSet->getPropertyValue(u"TextRightDistance"_ustr);
     CPPUNIT_ASSERT(aRightMargin >>= nRightMargin);
 
     // Convert values to EMU
@@ -1309,7 +1309,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf125554)
     saveAndReload(TestFilter::PPTX);
 
     uno::Reference<beans::XPropertySet> xShape = getShapeFromPage(0, 0);
-    uno::Any aFillTransparenceGradientName
+    cpo::uno::Any aFillTransparenceGradientName
         = xShape->getPropertyValue(u"FillTransparenceGradientName"_ustr);
     CPPUNIT_ASSERT(aFillTransparenceGradientName.has<OUString>());
     // Without the accompanying fix in place, this test would have failed, i.e. the transparency of

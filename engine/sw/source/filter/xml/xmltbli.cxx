@@ -78,6 +78,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::table;
@@ -1203,7 +1204,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     if( xTable.is() )
     {
         xTable->initialize( 1, 1 );
-        xTable->setPropertyValue(UNO_NAME_TABLE_NAME, css::uno::Any(sTableName));
+        xTable->setPropertyValue(UNO_NAME_TABLE_NAME, cpo::uno::Any(sTableName));
 
         try
         {

@@ -674,10 +674,10 @@ public:
     virtual css::uno::Type SAL_CALL getElementType() override { return cppu::UnoType<io::XInputStream>::get(); }
     virtual bool SAL_CALL hasElements() override { return true; }
     // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override
     {
         uno::Reference< io::XInputStream > xInputStream = ucb::SimpleFileAccess::create(mxContext)->openFileRead( maURL + "/" + aName );
-        return css::uno::Any(xInputStream);
+        return cpo::uno::Any(xInputStream);
     }
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override
     {

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_VBAHELPER_VBADOCUMENTSBASE_HXX
 #define INCLUDED_VBAHELPER_VBADOCUMENTSBASE_HXX
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <ooo/vba/XDocumentsBase.hpp>
@@ -63,13 +63,13 @@ public:
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override = 0;
 
     // VbaDocumentsBase_BASE
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override = 0;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override = 0;
 
 protected:
     /// @throws css::uno::RuntimeException
-    css::uno::Any createDocument();
+    cpo::uno::Any createDocument();
     /// @throws css::uno::RuntimeException
-    css::uno::Any openDocument( const OUString& Filename, const css::uno::Any& ReadOnly, const css::uno::Sequence< css::beans::PropertyValue >& rProps );
+    cpo::uno::Any openDocument( const OUString& Filename, const cpo::uno::Any& ReadOnly, const css::uno::Sequence< css::beans::PropertyValue >& rProps );
 };
 
 #endif /* SC_ INCLUDED_VBAHELPER_VBADOCUMENTSBASE_HXX */

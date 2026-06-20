@@ -166,8 +166,8 @@ public:
     virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getPlainRawStream() override;
 
     // XPropertySet
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;

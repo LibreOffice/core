@@ -91,24 +91,24 @@ SwXFlatParagraph::getPropertySetInfo()
 }
 
 void SAL_CALL
-SwXFlatParagraph::setPropertyValue(const OUString&, const uno::Any&)
+SwXFlatParagraph::setPropertyValue(const OUString&, const cpo::uno::Any&)
 {
     throw lang::IllegalArgumentException(u"no values can be set"_ustr,
             getXWeak(), 0);
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwXFlatParagraph::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard g;
 
     if (rPropertyName == "FieldPositions")
     {
-        return uno::Any( comphelper::containerToSequence( GetConversionMap().getFieldPositions() ) );
+        return cpo::uno::Any( comphelper::containerToSequence( GetConversionMap().getFieldPositions() ) );
     }
     else if (rPropertyName == "FootnotePositions")
     {
-        return uno::Any( comphelper::containerToSequence( GetConversionMap().getFootnotePositions() ) );
+        return cpo::uno::Any( comphelper::containerToSequence( GetConversionMap().getFootnotePositions() ) );
     }
     else if (rPropertyName == "SortedTextId")
     {
@@ -116,7 +116,7 @@ SwXFlatParagraph::getPropertyValue(const OUString& rPropertyName)
         sal_Int32 nIndex = -1;
         if ( pCurrentNode )
             nIndex = pCurrentNode->GetIndex().get();
-        return uno::Any( nIndex );
+        return cpo::uno::Any( nIndex );
     }
     else if (rPropertyName == "DocumentElementsCount")
     {
@@ -124,9 +124,9 @@ SwXFlatParagraph::getPropertyValue(const OUString& rPropertyName)
         sal_Int32 nCount = -1;
         if ( pCurrentNode )
             nCount = pCurrentNode->GetDoc().GetNodes().Count().get();
-        return uno::Any( nCount );
+        return cpo::uno::Any( nCount );
     }
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 void SAL_CALL

@@ -76,7 +76,7 @@ extern std::unordered_map<sal_uIntPtr, css::uno::WeakReference<css::uno::XInterf
 // must be returned.
 extern std::unordered_map<sal_uIntPtr, css::uno::WeakReference<css::uno::XInterface> > UnoObjToWrapperMap;
 
-// This function tries to the change the type of a value (contained in the Any)
+// This function tries to the change the type of a value (contained in the cpo::uno::Any)
 // to the smallest possible that can hold the value. This is actually done only
 // for types of VT_I4 (see o2u_variantToAny). The reason is the following:
 // JavaScript passes integer values always as VT_I4. If there is a parameter or
@@ -84,7 +84,7 @@ extern std::unordered_map<sal_uIntPtr, css::uno::WeakReference<css::uno::XInterf
 // to "o2u_variantToAny". Because the VARTYPE is VT_I4 the value would be converted
 // to TypeClass_LONG. Say the method XPropertySet::setPropertyValue( string name, any value)
 // would be called on an object and the property actually is of TypeClass_SHORT.
-// After conversion of the VARIANT parameter the Any would contain type
+// After conversion of the VARIANT parameter the cpo::uno::Any would contain type
 // TypeClass_LONG. Because the corereflection does not cast from long to short
 // the "setPropertValue" would fail as the value has not the right type.
 
@@ -94,7 +94,7 @@ extern std::unordered_map<sal_uIntPtr, css::uno::WeakReference<css::uno::XInterf
 
 // The function is not used when elements are to be converted for Sequences.
 
-inline void reduceRange( css::uno::Any& any)
+inline void reduceRange( cpo::uno::Any& any)
 {
     OSL_ASSERT( any.getValueTypeClass() == css::uno::TypeClass_LONG);
 
@@ -140,61 +140,61 @@ public:
         @exception com.sun.star.script.CannotConvertException
         The any contains a type class for which no conversion is provided.
     */
-    void anyToVariant(VARIANT* pVariant, const css::uno::Any& rAny);
-    void anyToVariant(VARIANT* pVariant, const css::uno::Any& rAny, VARTYPE type);
+    void anyToVariant(VARIANT* pVariant, const cpo::uno::Any& rAny);
+    void anyToVariant(VARIANT* pVariant, const cpo::uno::Any& rAny, VARTYPE type);
 
     /** @exception com.sun.star.lang.IllegalArgumentException
         If rSeq does not contain a sequence then the exception is thrown.
     */
-    SAFEARRAY*  createUnoSequenceWrapper(const css::uno::Any& rSeq);
+    SAFEARRAY*  createUnoSequenceWrapper(const cpo::uno::Any& rSeq);
     /** @exception com.sun.star.lang.IllegalArgumentException
         If rSeq does not contain a sequence or elemtype has no proper value
         then the exception is thrown.
     */
-    SAFEARRAY*  createUnoSequenceWrapper(const css::uno::Any& rSeq, VARTYPE elemtype);
+    SAFEARRAY*  createUnoSequenceWrapper(const cpo::uno::Any& rSeq, VARTYPE elemtype);
     /**
        @exception com.sun.star.lang.IllegalArgumentException
        If rObj does not contain a struct or interface
      */
-    void createUnoObjectWrapper(const css::uno::Any & rObj, VARIANT * pVar);
+    void createUnoObjectWrapper(const cpo::uno::Any & rObj, VARIANT * pVar);
     /** @exception CannotConvertException
-        Thrown if the VARIANT contains a type that cannot be coerced in the expected Any.
+        Thrown if the VARIANT contains a type that cannot be coerced in the expected cpo::uno::Any.
         ArgumentIndex is 0.
         @IllegalArgumentException
         Thrown if the VARIANT is inappropriate for conversion. ArgumentPosition is -1,
      */
-    void variantToAny(const VARIANT* pVariant, css::uno::Any& rAny, bool bReduceValueRange = true);
+    void variantToAny(const VARIANT* pVariant, cpo::uno::Any& rAny, bool bReduceValueRange = true);
     /** This method converts variants arguments in calls from COM -> UNO. Only then
         the expected UNO type is known.
         @exception CannotConvertException
-        Thrown if the VARIANT contains a type that cannot be coerced in the expected Any.
+        Thrown if the VARIANT contains a type that cannot be coerced in the expected cpo::uno::Any.
         ArgumentIndex is 0.
         @IllegalArgumentException
         Thrown if the VARIANT is inappropriate for conversion. ArgumentPosition is -1,
      */
-    void variantToAny( const VARIANTARG* pArg, css::uno::Any& rAny, const css::uno::Type& ptype, bool bReduceValueRange = true);
+    void variantToAny( const VARIANTARG* pArg, cpo::uno::Any& rAny, const css::uno::Type& ptype, bool bReduceValueRange = true);
 
     /**
        @exception IllegalArgumentException
        -if pVar does not contain VT_UNKNOWN or VT_DISPATCH or
        pVar is used for a particular UNO type which is not supported by pVar
      */
-    css::uno::Any createOleObjectWrapper(VARIANT* pVar, const css::uno::Type& aType= Type());
+    cpo::uno::Any createOleObjectWrapper(VARIANT* pVar, const css::uno::Type& aType= Type());
 
     /*
       Return true means var contained a ValueObject, and it was successfully converted.
       The result is in any. It an error occurred a BridgeRuntimeError will be thrown.
      */
-    bool convertValueObject( const VARIANTARG *var, css::uno::Any& any);
-    void dispatchExObject2Sequence( const VARIANTARG* pvar, css::uno::Any& anySeq, const css::uno::Type& type);
+    bool convertValueObject( const VARIANTARG *var, cpo::uno::Any& any);
+    void dispatchExObject2Sequence( const VARIANTARG* pvar, cpo::uno::Any& anySeq, const css::uno::Type& type);
 
-    css::uno::Sequence<css::uno::Any> createOleArrayWrapperOfDim(SAFEARRAY* pArray, unsigned int dimCount, unsigned int actDim, LONG* index,
+    css::uno::Sequence<cpo::uno::Any> createOleArrayWrapperOfDim(SAFEARRAY* pArray, unsigned int dimCount, unsigned int actDim, LONG* index,
                                              VARTYPE type, const css::uno::Type& unotype);
-    css::uno::Sequence<css::uno::Any> createOleArrayWrapper(SAFEARRAY* pArray, VARTYPE type, const css::uno::Type& unotype= css::uno::Type());
+    css::uno::Sequence<cpo::uno::Any> createOleArrayWrapper(SAFEARRAY* pArray, VARTYPE type, const css::uno::Type& unotype= css::uno::Type());
 
 
     VARTYPE mapTypeClassToVartype( css::uno::TypeClass type);
-    css::uno::Reference< css::lang::XSingleServiceFactory > getInvocationFactory(const css::uno::Any& anyObject);
+    css::uno::Reference< css::lang::XSingleServiceFactory > getInvocationFactory(const cpo::uno::Any& anyObject);
 
 
     virtual css::uno::Reference< css::uno::XInterface > createUnoWrapperInstance()=0;
@@ -208,7 +208,7 @@ protected:
     css::uno::Reference<css::uno::XInterface> createAdapter(const css::uno::Sequence<css::uno::Type>& types, const css::uno::Reference<css::uno::XInterface>& receiver);
 
     // helper function for Sequence conversion
-    void getElementCountAndTypeOfSequence( const css::uno::Any& rSeq, sal_Int32 dim, css::uno::Sequence< sal_Int32 >& seqElementCounts, css::uno::TypeDescription& typeDesc);
+    void getElementCountAndTypeOfSequence( const cpo::uno::Any& rSeq, sal_Int32 dim, css::uno::Sequence< sal_Int32 >& seqElementCounts, css::uno::TypeDescription& typeDesc);
     // helper function for Sequence conversion
     static bool incrementMultidimensionalIndex(sal_Int32 dimensions, const sal_Int32 * parDimensionLength,
                                     sal_Int32 * parMultidimensionalIndex);
@@ -264,9 +264,9 @@ bool convertSelfToCom( T& unoInterface, VARIANT * pVar)
             sal_Int8 arId[16];
             rtl_getGlobalProcessId( reinterpret_cast<sal_uInt8*>(arId));
             css::uno::Sequence<sal_Int8> seqId( arId, 16);
-            css::uno::Any anySource;
+            cpo::uno::Any anySource;
             anySource <<= xInt;
-            css::uno::Any anyDisp = xSupplier->createBridge(
+            cpo::uno::Any anyDisp = xSupplier->createBridge(
                 anySource, seqId, css::bridge::ModelDependent::UNO,
                 css::bridge::ModelDependent::OLE);
 
@@ -290,7 +290,7 @@ bool convertSelfToCom( T& unoInterface, VARIANT * pVar)
 }
 
 
-// Gets the invocation factory depending on the Type in the Any.
+// Gets the invocation factory depending on the Type in the cpo::uno::Any.
 // The factory can be created by a local or remote multi service factory.
 // In case there is a remote multi service factory available there are
 // some services or types for which the local factory is used. The exceptions
@@ -298,7 +298,7 @@ bool convertSelfToCom( T& unoInterface, VARIANT * pVar)
 // Param anyObject - contains the object ( interface, struct) for what we need an invocation object.
 
 template<class T>
-css::uno::Reference< css::lang::XSingleServiceFactory > UnoConversionUtilities<T>::getInvocationFactory(const css::uno::Any& anyObject)
+css::uno::Reference< css::lang::XSingleServiceFactory > UnoConversionUtilities<T>::getInvocationFactory(const cpo::uno::Any& anyObject)
 {
     css::uno::Reference< css::lang::XSingleServiceFactory > retVal;
     osl::MutexGuard guard( getBridgeMutex());
@@ -319,7 +319,7 @@ css::uno::Reference< css::lang::XSingleServiceFactory > UnoConversionUtilities<T
 }
 
 template<class T>
-void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, css::uno::Any& rAny, const css::uno::Type& ptype, bool bReduceValueRange /* = true */)
+void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, cpo::uno::Any& rAny, const css::uno::Type& ptype, bool bReduceValueRange /* = true */)
 {
     try
     {
@@ -395,14 +395,14 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, css::uno::
                     if ((var.vt & VT_ARRAY) != 0)
                     {
                         VARTYPE oleType = ::sal::static_int_cast< VARTYPE, int >( var.vt ^ VT_ARRAY );
-                        css::uno::Sequence<css::uno::Any> unoSeq = createOleArrayWrapper( var.parray, oleType, ptype);
+                        css::uno::Sequence<cpo::uno::Any> unoSeq = createOleArrayWrapper( var.parray, oleType, ptype);
                         css::uno::Reference<css::script::XTypeConverter> conv = getTypeConverter();
                         if (conv.is())
                         {
                             try
                             {
-                                css::uno::Any anySeq(unoSeq);
-                                css::uno::Any convAny = conv->convertTo(anySeq, ptype);
+                                cpo::uno::Any anySeq(unoSeq);
+                                cpo::uno::Any convAny = conv->convertTo(anySeq, ptype);
                                 rAny = convAny;
                             }
                             catch (const css::lang::IllegalArgumentException& e)
@@ -428,13 +428,13 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, css::uno::
                 break;
             case css::uno::TypeClass_ANY:     //  Any
                 // There could be a JScript Array that needs special handling
-                // If an Any is expected and this Any must contain a Sequence
+                // If an cpo::uno::Any is expected and this cpo::uno::Any must contain a Sequence
                 // then we cannot figure out what element type is required.
-                // Therefore we convert to Sequence< Any >
+                // Therefore we convert to Sequence< cpo::uno::Any >
                 if( pArg->vt == VT_DISPATCH &&  isJScriptArray( pArg))
                 {
                     dispatchExObject2Sequence( pArg, rAny,
-                                               cppu::UnoType<css::uno::Sequence<css::uno::Any>>::get());
+                                               cppu::UnoType<css::uno::Sequence<cpo::uno::Any>>::get());
                 }
                 else if (pArg->vt == VT_DECIMAL)
                 {
@@ -625,10 +625,10 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, css::uno::
 
 // The function only converts Sequences to SAFEARRAYS with elements of the type
 // specified by the parameter type. Everything else is forwarded to
-// anyToVariant(VARIANT* pVariant, const Any& rAny)
+// anyToVariant(VARIANT* pVariant, const cpo::uno::Any& rAny)
 // Param type must not be VT_BYREF
 template<class T>
-void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const css::uno::Any& rAny, VARTYPE type)
+void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::Any& rAny, VARTYPE type)
 {
     try
     {
@@ -708,7 +708,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const css::uno::
 }
 
 template<class T>
-void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const css::uno::Any& rAny)
+void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::Any& rAny)
 {
     try
     {
@@ -1035,9 +1035,9 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const css::uno::
 
 // Creates an SAFEARRAY of the specified element and if necessary
 // creates a SAFEARRAY with multiple dimensions.
-// Used by bool anyToVariant(VARIANT* pVariant, const Any& rAny, VARTYPE type);
+// Used by bool anyToVariant(VARIANT* pVariant, const cpo::uno::Any& rAny, VARTYPE type);
 template<class T>
-SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const css::uno::Any& rSeq, VARTYPE elemtype)
+SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const cpo::uno::Any& rSeq, VARTYPE elemtype)
 {
     if (rSeq.getValueTypeClass() != css::uno::TypeClass_SEQUENCE)
         throw css::lang::IllegalArgumentException(
@@ -1145,7 +1145,7 @@ SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const css::uno::
                     // convert the Sequence and put the elements into the Safearray
                     for( sal_Int32 i= 0; i < pCurrentSeq->nElements; i++)
                     {
-                        css::uno::Any unoElement( pCurrentSeq->elements + i * elementSize, rawTypeDesc );
+                        cpo::uno::Any unoElement( pCurrentSeq->elements + i * elementSize, rawTypeDesc );
                         // The any is being converted into a VARIANT which value is then copied
                         // to the SAFEARRAY's data block. When copying one has to follow the rules for
                         // copying certain types, as are VT_DISPATCH, VT_UNKNOWN, VT_VARIANT, VT_BSTR.
@@ -1259,7 +1259,7 @@ size_t UnoConversionUtilities<T>::getOleElementSize( VARTYPE type)
 // dimension.
 // getElementCountAndTypeOfSequence determines the length of each dimension and calls itself recursively
 // in the process.
-// param rSeq - an Any that has to contain a Sequence
+// param rSeq - an cpo::uno::Any that has to contain a Sequence
 // param dim - the dimension for which the number of elements is being determined,
 //              must be one.
 // param seqElementCounts - contains the maximum number of elements for each
@@ -1270,7 +1270,7 @@ size_t UnoConversionUtilities<T>::getOleElementSize( VARTYPE type)
 // param typeClass - TypeClass of the element type that is no Sequence, e.g.
 //                          Sequence< Sequence <Sequence <sal_Int32> > > - type is sal_Int32)
 template<class T>
-void  UnoConversionUtilities<T>::getElementCountAndTypeOfSequence( const css::uno::Any& rSeq, sal_Int32 dim,
+void  UnoConversionUtilities<T>::getElementCountAndTypeOfSequence( const cpo::uno::Any& rSeq, sal_Int32 dim,
                                              css::uno::Sequence< sal_Int32 >& seqElementCounts, css::uno::TypeDescription& typeDesc)
 {
     sal_Int32 dimCount= (*static_cast<uno_Sequence* const *>(rSeq.getValue()))->nElements;
@@ -1291,7 +1291,7 @@ void  UnoConversionUtilities<T>::getElementCountAndTypeOfSequence( const css::un
         for( sal_Int32 i=0; i < dimCount; i++)
         {
             uno_Sequence* arElement=  arSequences[ i];
-            getElementCountAndTypeOfSequence( css::uno::Any( &arElement, pElementDescRef), dim + 1 , seqElementCounts, typeDesc);
+            getElementCountAndTypeOfSequence( cpo::uno::Any( &arElement, pElementDescRef), dim + 1 , seqElementCounts, typeDesc);
         }
     }
     else
@@ -1304,7 +1304,7 @@ void  UnoConversionUtilities<T>::getElementCountAndTypeOfSequence( const css::un
 
 
 template<class T>
-SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const css::uno::Any& rSeq)
+SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const cpo::uno::Any& rSeq)
 {
     SAFEARRAY* pArray = nullptr;
     sal_uInt32 n = 0;
@@ -1338,7 +1338,7 @@ SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const css::uno::
 
     pArray = SafeArrayCreate(VT_VARIANT, 1, rgsabound);
 
-    css::uno::Any unoElement;
+    cpo::uno::Any unoElement;
     char * pSeqData= punoSeq->elements;
 
     for (sal_uInt32 i = 0; i < n; i++)
@@ -1367,7 +1367,7 @@ SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const css::uno::
 pVar must be initialized.
 */
 template<class T>
-void UnoConversionUtilities<T>::createUnoObjectWrapper(const css::uno::Any & rObj, VARIANT * pVar)
+void UnoConversionUtilities<T>::createUnoObjectWrapper(const cpo::uno::Any & rObj, VARIANT * pVar)
 {
     osl::MutexGuard guard(getBridgeMutex());
 
@@ -1432,7 +1432,7 @@ void UnoConversionUtilities<T>::createUnoObjectWrapper(const css::uno::Any & rOb
     css::uno::Reference<css::lang::XSingleServiceFactory> xInvFactory= getInvocationFactory(rObj);
     if (xInvFactory.is())
     {
-        css::uno::Sequence<css::uno::Any> params(2);
+        css::uno::Sequence<cpo::uno::Any> params(2);
         params.getArray()[0] = rObj;
         params.getArray()[1] <<= OUString("FromOLE");
         css::uno::Reference<css::uno::XInterface> xInt2 = xInvFactory->createInstanceWithArguments(params);
@@ -1449,18 +1449,18 @@ void UnoConversionUtilities<T>::createUnoObjectWrapper(const css::uno::Any & rOb
 
             if (xInt.is())
             {
-                css::uno::Any params[3];
+                cpo::uno::Any params[3];
                 params[0] <<= xInv;
                 params[1] <<= xInt;
                 params[2] <<= vartype;
-                xInitWrapper->initialize( css::uno::Sequence<css::uno::Any>(params, 3));
+                xInitWrapper->initialize( css::uno::Sequence<cpo::uno::Any>(params, 3));
             }
             else
             {
-                css::uno::Any params[2];
+                cpo::uno::Any params[2];
                 params[0] <<= xInv;
                 params[1] <<= vartype;
-                xInitWrapper->initialize( css::uno::Sequence<css::uno::Any>(params, 2));
+                xInitWrapper->initialize( css::uno::Sequence<cpo::uno::Any>(params, 2));
             }
 
             // put the newly created object into a map. If the same object will
@@ -1475,7 +1475,7 @@ void UnoConversionUtilities<T>::createUnoObjectWrapper(const css::uno::Any & rOb
 }
 
 template<class T>
-void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, css::uno::Any& rAny,
+void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, cpo::uno::Any& rAny,
                                                   bool bReduceValueRange /* = true */)
 {
     HRESULT hr = S_OK;
@@ -1495,7 +1495,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, css::uno:
             {
                 VARTYPE oleTypeFlags = ::sal::static_int_cast< VARTYPE, int >( var.vt ^ VT_ARRAY );
 
-                css::uno::Sequence<css::uno::Any> unoSeq = createOleArrayWrapper(var.parray, oleTypeFlags);
+                css::uno::Sequence<cpo::uno::Any> unoSeq = createOleArrayWrapper(var.parray, oleTypeFlags);
                 rAny.setValue( &unoSeq, cppu::UnoType<decltype(unoSeq)>::get());
             }
             else
@@ -1670,7 +1670,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, css::uno:
 // UNO wrapper than the original UNO object is being extracted, queried for "aType" (if
 // it is no struct) and returned.
 template<class T>
-css::uno::Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, const css::uno::Type& aType)
+cpo::uno::Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, const css::uno::Type& aType)
 {
     //To allow passing "Nothing" in VS 2008 we need to accept VT_EMPTY
     if (pVar->vt != VT_UNKNOWN && pVar->vt != VT_DISPATCH && pVar->vt != VT_EMPTY)
@@ -1697,7 +1697,7 @@ css::uno::Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, c
     }
 
     static css::uno::Type VOID_TYPE;
-    css::uno::Any ret;
+    cpo::uno::Any ret;
     //If no Type is provided and pVar contains IUnknown then we return a XInterface.
     //If pVar contains an IDispatch then we return a XInvocation.
     css::uno::Type desiredType = aType;
@@ -1745,7 +1745,7 @@ css::uno::Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, c
         }
         else
         {
-            css::uno::Any any;
+            cpo::uno::Any any;
             if( SUCCEEDED( spUno->getOriginalUnoStruct(&any)))
                 ret= any;
         }
@@ -1827,12 +1827,12 @@ css::uno::Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, c
     css::uno::Reference<css::lang::XInitialization> xInit( xIntNewProxy, css::uno::UNO_QUERY);
     OSL_ASSERT( xInit.is());
 
-    css::uno::Any  params[3];
+    cpo::uno::Any  params[3];
     params[0] <<= reinterpret_cast<sal_uIntPtr>(spUnknown.p);
     params[1] <<= (pVar->vt == VT_DISPATCH);
     params[2] <<= seqTypes;
 
-    xInit->initialize( css::uno::Sequence<css::uno::Any>( params, 3));
+    xInit->initialize( css::uno::Sequence<cpo::uno::Any>( params, 3));
     ComPtrToWrapperMap[reinterpret_cast<sal_uInt64>(spUnknown.p)] = xIntNewProxy;
 
     // we have a wrapper object
@@ -1887,7 +1887,7 @@ css::uno::Reference<css::uno::XInterface> UnoConversionUtilities<T>::createAdapt
 // an any. The type contained in the any is stipulated by a "type value" thas
 // was set within the JScript script on the value object ( see JScriptValue).
 template<class T>
-bool UnoConversionUtilities<T>::convertValueObject( const VARIANTARG *var, css::uno::Any& any)
+bool UnoConversionUtilities<T>::convertValueObject( const VARIANTARG *var, cpo::uno::Any& any)
 {
     bool ret = false;
     try
@@ -1960,7 +1960,7 @@ bool UnoConversionUtilities<T>::convertValueObject( const VARIANTARG *var, css::
 }
 
 template<class T>
-void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pvar, css::uno::Any& anySeq, const css::uno::Type& type)
+void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pvar, cpo::uno::Any& anySeq, const css::uno::Type& type)
 {
     try
     {
@@ -2038,7 +2038,7 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
             // If the result is VT_DISPATCH than the Sequence's element type could be Sequence
             // Look that up in the CoreReflection to make clear.
             // That requires a recursive conversion
-            css::uno::Any any;
+            cpo::uno::Any any;
             // Destination address within the out-Sequence "anySeq" where to copy the next converted element
             void* pDest= pArray + (i * nelementSize);
 
@@ -2100,7 +2100,7 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
    it passes the element type which is []long.
 */
 template<class T>
-css::uno::Sequence<css::uno::Any> UnoConversionUtilities<T>::createOleArrayWrapperOfDim(SAFEARRAY* pArray,
+css::uno::Sequence<cpo::uno::Any> UnoConversionUtilities<T>::createOleArrayWrapperOfDim(SAFEARRAY* pArray,
               unsigned int dimCount, unsigned int actDim, LONG* index, VARTYPE type, const css::uno::Type& unotype)
 {
     LONG lBound;
@@ -2111,14 +2111,14 @@ css::uno::Sequence<css::uno::Any> UnoConversionUtilities<T>::createOleArrayWrapp
     SafeArrayGetUBound(pArray, actDim, &uBound);
     nCountElements= uBound - lBound +1;
 
-    css::uno::Sequence<css::uno::Any>   anySeq(nCountElements);
-    css::uno::Any*            pUnoArray = anySeq.getArray();
+    css::uno::Sequence<cpo::uno::Any>   anySeq(nCountElements);
+    cpo::uno::Any*            pUnoArray = anySeq.getArray();
 
     for (index[actDim - 1] = lBound; index[actDim - 1] <= uBound; index[actDim - 1]++)
     {
         if (actDim > 1 )
         {
-            css::uno::Sequence<css::uno::Any> element = createOleArrayWrapperOfDim(pArray, dimCount,
+            css::uno::Sequence<cpo::uno::Any> element = createOleArrayWrapperOfDim(pArray, dimCount,
                 actDim - 1, index, type, getElementTypeOfSequence(unotype));
 
             pUnoArray[index[actDim - 1] - lBound].setValue(&element, cppu::UnoType<decltype(element)>::get());
@@ -2213,11 +2213,11 @@ css::uno::Type UnoConversionUtilities<T>::getElementTypeOfSequence( const css::u
     return retValue;
 }
 template<class T>
-css::uno::Sequence<css::uno::Any> UnoConversionUtilities<T>::createOleArrayWrapper(SAFEARRAY* pArray, VARTYPE type, const css::uno::Type& unoType)
+css::uno::Sequence<cpo::uno::Any> UnoConversionUtilities<T>::createOleArrayWrapper(SAFEARRAY* pArray, VARTYPE type, const css::uno::Type& unoType)
 {
     sal_uInt32 dim = SafeArrayGetDim(pArray);
 
-    css::uno::Sequence<css::uno::Any> ret;
+    css::uno::Sequence<cpo::uno::Any> ret;
 
     if (dim > 0)
     {
@@ -2320,9 +2320,9 @@ css::uno::Sequence<css::uno::Type> UnoConversionUtilities<T>::getImplementedInte
         if (SUCCEEDED( hr))
         {
             // we expect an array( SafeArray or IDispatch) of Strings.
-            css::uno::Any anyNames;
-            variantToAny( &var, anyNames, cppu::UnoType<css::uno::Sequence<css::uno::Any>>::get());
-            css::uno::Sequence<css::uno::Any> seqAny;
+            cpo::uno::Any anyNames;
+            variantToAny( &var, anyNames, cppu::UnoType<css::uno::Sequence<cpo::uno::Any>>::get());
+            css::uno::Sequence<cpo::uno::Any> seqAny;
             if( anyNames >>= seqAny)
             {
                 seqTypes.realloc( seqAny.getLength());

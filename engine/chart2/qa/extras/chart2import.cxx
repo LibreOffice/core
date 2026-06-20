@@ -39,6 +39,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace
 {
@@ -275,7 +276,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testDOCXChartSeries)
     Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xCT.is());
 
-    std::vector<uno::Sequence<uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
+    std::vector<uno::Sequence<cpo::uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
     CPPUNIT_ASSERT_EQUAL(size_t(3), aLabels.size());
     CPPUNIT_ASSERT_EQUAL(u"Series 1"_ustr, aLabels[0][0].get<OUString>());
     CPPUNIT_ASSERT_EQUAL(u"Series 2"_ustr, aLabels[1][0].get<OUString>());
@@ -291,7 +292,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testDOCXChartEmptySeries)
     Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xCT.is());
 
-    std::vector<uno::Sequence<uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
+    std::vector<uno::Sequence<cpo::uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
     CPPUNIT_ASSERT_EQUAL(size_t(3), aLabels.size());
     CPPUNIT_ASSERT_EQUAL(u"1. dataseries"_ustr, aLabels[0][0].get<OUString>());
     CPPUNIT_ASSERT_EQUAL(u"2. dataseries"_ustr, aLabels[1][0].get<OUString>());
@@ -383,7 +384,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTXChartSeries)
     Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xCT.is());
 
-    std::vector<uno::Sequence<uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
+    std::vector<uno::Sequence<cpo::uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
     CPPUNIT_ASSERT_EQUAL(size_t(3), aLabels.size());
     CPPUNIT_ASSERT_EQUAL(u"Column 1"_ustr, aLabels[0][0].get<OUString>());
     CPPUNIT_ASSERT_EQUAL(u"Column 2"_ustr, aLabels[1][0].get<OUString>());
@@ -434,7 +435,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTXHiddenDataSeries)
     CPPUNIT_ASSERT(xCT.is());
 
     // There should be only one data series present.
-    std::vector<uno::Sequence<uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
+    std::vector<uno::Sequence<cpo::uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aLabels.size());
     CPPUNIT_ASSERT_EQUAL(u"Series 3"_ustr, aLabels[0][0].get<OUString>());
 
@@ -714,7 +715,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTransparencyGradientValue)
     uno::Reference< lang::XMultiServiceFactory > xFact(xChartDoc, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xFact.is());
     uno::Reference< container::XNameAccess > xTransparenceGradient(xFact->createInstance(u"com.sun.star.drawing.TransparencyGradientTable"_ustr), uno::UNO_QUERY);
-    uno::Any rTransparenceValue = xTransparenceGradient->getByName(sTranspGradientName);
+    cpo::uno::Any rTransparenceValue = xTransparenceGradient->getByName(sTranspGradientName);
     CPPUNIT_ASSERT(rTransparenceValue >>= aTransparenceGradient);
     const basegfx::BColorStops aColorStops = model::gradient::getColorStopsFromUno(aTransparenceGradient.ColorStops);
 
@@ -786,7 +787,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf127811)
     Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xCT.is());
 
-    std::vector<uno::Sequence<uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
+    std::vector<uno::Sequence<cpo::uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
     CPPUNIT_ASSERT_EQUAL(size_t(2), aLabels.size());
 
     // Without the fix in place, this test would have failed with
@@ -1308,7 +1309,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testDispBlanksAsDefaultValue2007XLSX)
 
     Reference<beans::XPropertySet> xDiagram(xChartDoc->getFirstDiagram(), UNO_QUERY);
     CPPUNIT_ASSERT(xDiagram.is());
-    uno::Any aAny = xDiagram->getPropertyValue(u"MissingValueTreatment"_ustr);
+    cpo::uno::Any aAny = xDiagram->getPropertyValue(u"MissingValueTreatment"_ustr);
     sal_Int32 nMissingValueTreatment = -2;
     CPPUNIT_ASSERT(aAny >>= nMissingValueTreatment);
     CPPUNIT_ASSERT_EQUAL(chart::MissingValueTreatment::LEAVE_GAP, nMissingValueTreatment);
@@ -1322,7 +1323,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testDispBlanksAsDefaultValue2013XLSX)
 
     Reference<beans::XPropertySet> xDiagram(xChartDoc->getFirstDiagram(), UNO_QUERY);
     CPPUNIT_ASSERT(xDiagram.is());
-    uno::Any aAny = xDiagram->getPropertyValue(u"MissingValueTreatment"_ustr);
+    cpo::uno::Any aAny = xDiagram->getPropertyValue(u"MissingValueTreatment"_ustr);
     sal_Int32 nMissingValueTreatment = -2;
     CPPUNIT_ASSERT(aAny >>= nMissingValueTreatment);
     CPPUNIT_ASSERT_EQUAL(chart::MissingValueTreatment::USE_ZERO, nMissingValueTreatment);
@@ -1379,7 +1380,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTrendlineDefaultValue2007XLSX)
     Reference<chart2::XRegressionCurve> xCurve = xRegressionCurveSequence[0];
 
     Reference<beans::XPropertySet> xPropSet(xCurve->getEquationProperties(), uno::UNO_SET_THROW);
-    uno::Any aAny = xPropSet->getPropertyValue(u"ShowEquation"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"ShowEquation"_ustr);
     bool bShowEquation = true;
     CPPUNIT_ASSERT(aAny >>= bShowEquation);
     CPPUNIT_ASSERT(!bShowEquation);
@@ -1405,7 +1406,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTrendlineDefaultValue2013XLSX)
     Reference<chart2::XRegressionCurve> xCurve = xRegressionCurveSequence[0];
 
     Reference<beans::XPropertySet> xPropSet(xCurve->getEquationProperties(), uno::UNO_SET_THROW);
-    uno::Any aAny = xPropSet->getPropertyValue(u"ShowEquation"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"ShowEquation"_ustr);
     bool bShowEquation = false;
     CPPUNIT_ASSERT(aAny >>= bShowEquation);
     CPPUNIT_ASSERT(bShowEquation);
@@ -1425,7 +1426,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testVaryColorDefaultValues2007XLSX)
     Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xDataSeries.is());
     Reference<beans::XPropertySet> xPropSet(xDataSeries, uno::UNO_QUERY_THROW);
-    uno::Any aAny = xPropSet->getPropertyValue(u"VaryColorsByPoint"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"VaryColorsByPoint"_ustr);
     bool bVaryColor = true;
     CPPUNIT_ASSERT(aAny >>= bVaryColor);
     CPPUNIT_ASSERT(!bVaryColor);
@@ -1440,7 +1441,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testVaryColorDefaultValues2013XLSX)
     Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xDataSeries.is());
     Reference<beans::XPropertySet> xPropSet(xDataSeries, uno::UNO_QUERY_THROW);
-    uno::Any aAny = xPropSet->getPropertyValue(u"VaryColorsByPoint"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"VaryColorsByPoint"_ustr);
     bool bVaryColor = false;
     CPPUNIT_ASSERT(aAny >>= bVaryColor);
     CPPUNIT_ASSERT(!bVaryColor);
@@ -1451,7 +1452,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPlotVisOnlyDefaultValue2013XLSX)
     loadFromFile(u"xlsx/plotVisOnly.xlsx");
     uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, 0), UNO_QUERY_THROW);
     Reference<beans::XPropertySet> xPropSet(xChart1Doc->getDiagram(), uno::UNO_QUERY_THROW);
-    uno::Any aAny = xPropSet->getPropertyValue(u"IncludeHiddenCells"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"IncludeHiddenCells"_ustr);
     CPPUNIT_ASSERT(aAny.hasValue());
     bool bShowHiddenValues = true;
     CPPUNIT_ASSERT(aAny >>= bShowHiddenValues);
@@ -1463,7 +1464,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testRAngAxDefaultValue2013XLSX)
     loadFromFile(u"xlsx/rAngAx.xlsx");
     uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, 0), UNO_QUERY_THROW);
     Reference<beans::XPropertySet> xPropSet(xChart1Doc->getDiagram(), uno::UNO_QUERY_THROW);
-    uno::Any aAny = xPropSet->getPropertyValue(u"RightAngledAxes"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"RightAngledAxes"_ustr);
     CPPUNIT_ASSERT(aAny.hasValue());
     bool bRightAngleAxes = false;
     CPPUNIT_ASSERT(aAny >>= bRightAngleAxes);
@@ -1478,7 +1479,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testMajorTickMarksDefaultValue2013XLSX)
     Reference<chart2::XAxis> xXAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
     CPPUNIT_ASSERT(xXAxis.is());
     Reference<beans::XPropertySet> xPropSet(xXAxis, uno::UNO_QUERY_THROW);
-    uno::Any aAny = xPropSet->getPropertyValue(u"MajorTickmarks"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"MajorTickmarks"_ustr);
     sal_Int32 nMajorTickmarks = chart2::TickmarkStyle::NONE;
     CPPUNIT_ASSERT(aAny.hasValue());
     CPPUNIT_ASSERT(aAny >>= nMajorTickmarks);
@@ -1493,7 +1494,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testMinorTickMarksDefaultValue2013XLSX)
     Reference<chart2::XAxis> xXAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
     CPPUNIT_ASSERT(xXAxis.is());
     Reference<beans::XPropertySet> xPropSet(xXAxis, uno::UNO_QUERY_THROW);
-    uno::Any aAny = xPropSet->getPropertyValue(u"MinorTickmarks"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"MinorTickmarks"_ustr);
     sal_Int32 nMajorTickmarks = chart2::TickmarkStyle::NONE;
     CPPUNIT_ASSERT(aAny.hasValue());
     CPPUNIT_ASSERT(aAny >>= nMajorTickmarks);
@@ -1511,7 +1512,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testAxisTitleDefaultRotationXLSX)
     Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
     CPPUNIT_ASSERT(xTitle.is());
     Reference<beans::XPropertySet> xPropSet(xTitle, uno::UNO_QUERY_THROW);
-    uno::Any aAny = xPropSet->getPropertyValue(u"TextRotation"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"TextRotation"_ustr);
     double nRotation = 0;
     CPPUNIT_ASSERT(aAny >>= nRotation);
     CPPUNIT_ASSERT_EQUAL(90.0, nRotation);
@@ -1528,7 +1529,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testSecondaryAxisTitleDefaultRotationXLSX
     Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
     CPPUNIT_ASSERT(xTitle.is());
     Reference<beans::XPropertySet> xPropSet(xTitle, uno::UNO_QUERY_THROW);
-    uno::Any aAny = xPropSet->getPropertyValue(u"TextRotation"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"TextRotation"_ustr);
     double nRotation = 0;
     CPPUNIT_ASSERT(aAny >>= nRotation);
     CPPUNIT_ASSERT_EQUAL(90.0, nRotation);
@@ -1546,7 +1547,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testAxisTitleRotationXLSX)
         Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
         CPPUNIT_ASSERT(xTitle.is());
         Reference<beans::XPropertySet> xPropSet(xTitle, uno::UNO_QUERY_THROW);
-        uno::Any aAny = xPropSet->getPropertyValue(u"TextRotation"_ustr);
+        cpo::uno::Any aAny = xPropSet->getPropertyValue(u"TextRotation"_ustr);
         double nRotation = 0;
         CPPUNIT_ASSERT(aAny >>= nRotation);
         CPPUNIT_ASSERT_EQUAL(340.0, nRotation);
@@ -1558,7 +1559,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testAxisTitleRotationXLSX)
         Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
         CPPUNIT_ASSERT(xTitle.is());
         Reference<beans::XPropertySet> xPropSet(xTitle, uno::UNO_QUERY_THROW);
-        uno::Any aAny = xPropSet->getPropertyValue(u"TextRotation"_ustr);
+        cpo::uno::Any aAny = xPropSet->getPropertyValue(u"TextRotation"_ustr);
         double nRotation = 0;
         CPPUNIT_ASSERT(aAny >>= nRotation);
         CPPUNIT_ASSERT_EQUAL(270.0, nRotation);
@@ -1609,7 +1610,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testCombinedChartAttachedAxisXLSX)
     Reference<beans::XPropertySet> xPropSet(xSeries, uno::UNO_QUERY_THROW);
     sal_Int32 nAxisIndex = -1;
     // First series (column chart) should be attached to secondary axis!
-    uno::Any aAny = xPropSet->getPropertyValue(u"AttachedAxisIndex"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"AttachedAxisIndex"_ustr);
     CPPUNIT_ASSERT(aAny >>= nAxisIndex);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nAxisIndex);
 
@@ -1634,7 +1635,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf140489MultiSeriesChartAxisXLSX)
 
     Reference<beans::XPropertySet> xPropSet(xSeries, uno::UNO_QUERY_THROW);
     sal_Int32 nAxisIndex = -1;
-    uno::Any aAny = xPropSet->getPropertyValue(u"AttachedAxisIndex"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"AttachedAxisIndex"_ustr);
     CPPUNIT_ASSERT(aAny >>= nAxisIndex);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nAxisIndex);
 
@@ -1666,42 +1667,42 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testInternalDataProvider)
     // Parse 42 array
     Reference<chart2::data::XDataSequence> xDataSeq = xDataProvider->createDataSequenceByValueArray(u"values-y"_ustr, u"{42;42;42;42}"_ustr, u""_ustr);
     Sequence<Any> xSequence = xDataSeq->getData();
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[0]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[1]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[2]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[3]);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int32(42)), xSequence[0]);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int32(42)), xSequence[1]);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int32(42)), xSequence[2]);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int32(42)), xSequence[3]);
 
     // Parse empty first and last
     xDataSeq = xDataProvider->createDataSequenceByValueArray(u"values-y"_ustr, u"{\"\";42;42;\"\"}"_ustr, u""_ustr);
     xSequence = xDataSeq->getData();
     CPPUNIT_ASSERT( std::isnan( *static_cast<const double*>(xSequence[0].getValue())));
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[1]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[2]);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int32(42)), xSequence[1]);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int32(42)), xSequence[2]);
     CPPUNIT_ASSERT( std::isnan( *static_cast<const double*>(xSequence[3].getValue())));
 
     // Parse empty middle
     xDataSeq = xDataProvider->createDataSequenceByValueArray(u"values-y"_ustr, u"{42;\"\";\"\";42}"_ustr, u""_ustr);
     xSequence = xDataSeq->getData();
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[0]);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int32(42)), xSequence[0]);
     CPPUNIT_ASSERT( std::isnan( *static_cast<const double*>(xSequence[1].getValue())) );
     CPPUNIT_ASSERT( std::isnan( *static_cast<const double*>(xSequence[2].getValue())) );
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[3]);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int32(42)), xSequence[3]);
 
     // Parse mixed types, numeric only role
     xDataSeq = xDataProvider->createDataSequenceByValueArray(u"values-y"_ustr, u"{42;\"hello\";0;\"world\"}"_ustr, u""_ustr);
     xSequence = xDataSeq->getData();
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[0]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(0)),  xSequence[1]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(0)),  xSequence[2]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(0)),  xSequence[3]);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int32(42)), xSequence[0]);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int32(0)),  xSequence[1]);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int32(0)),  xSequence[2]);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int32(0)),  xSequence[3]);
 
     // Parse mixed types, mixed role
     xDataSeq = xDataProvider->createDataSequenceByValueArray(u"categories"_ustr, u"{42;\"hello\";0;\"world\"}"_ustr, u""_ustr);
     xSequence = xDataSeq->getData();
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Row 1 42"_ustr), xSequence[0]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Row 2 hello"_ustr), xSequence[1]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Row 3 0"_ustr), xSequence[2]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Row 4 world"_ustr), xSequence[3]);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Row 1 42"_ustr), xSequence[0]);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Row 2 hello"_ustr), xSequence[1]);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Row 3 0"_ustr), xSequence[2]);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Row 4 world"_ustr), xSequence[3]);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf90510)
@@ -1710,7 +1711,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf90510)
     loadFromFile(u"xls/piechart_outside.xls");
     uno::Reference< chart::XChartDocument > xChart1Doc( getChartCompFromSheet( 0, 0), UNO_QUERY_THROW );
     Reference<beans::XPropertySet> xPropSet( xChart1Doc->getDiagram()->getDataPointProperties( 0, 0 ), uno::UNO_SET_THROW );
-    uno::Any aAny = xPropSet->getPropertyValue( u"LabelPlacement"_ustr );
+    cpo::uno::Any aAny = xPropSet->getPropertyValue( u"LabelPlacement"_ustr );
     CPPUNIT_ASSERT( aAny.hasValue() );
     sal_Int32 nLabelPlacement = 0;
     CPPUNIT_ASSERT( aAny >>= nLabelPlacement );
@@ -1725,7 +1726,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf109858)
 
     // test data point labels position
     Reference<beans::XPropertySet> xDataPointPropSet( xChart1Doc->getDiagram()->getDataPointProperties( 0, 0 ), uno::UNO_SET_THROW );
-    uno::Any aAny = xDataPointPropSet->getPropertyValue( u"LabelPlacement"_ustr );
+    cpo::uno::Any aAny = xDataPointPropSet->getPropertyValue( u"LabelPlacement"_ustr );
     CPPUNIT_ASSERT( aAny.hasValue() );
     sal_Int32 nLabelPlacement = 0;
     CPPUNIT_ASSERT( aAny >>= nLabelPlacement );
@@ -1747,7 +1748,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf130105)
     CPPUNIT_ASSERT(xDataSeries.is());
 
     uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
-    uno::Any aAny = xPropertySet->getPropertyValue(u"LabelPlacement"_ustr);
+    cpo::uno::Any aAny = xPropertySet->getPropertyValue(u"LabelPlacement"_ustr);
     CPPUNIT_ASSERT(aAny.hasValue());
     sal_Int32 nLabelPlacement = 0;
     CPPUNIT_ASSERT(aAny >>= nLabelPlacement);
@@ -1771,7 +1772,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf122226)
     uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT(xPropertySet.is());
 
-    uno::Any aAny = xPropertySet->getPropertyValue( u"LabelSeparator"_ustr );
+    cpo::uno::Any aAny = xPropertySet->getPropertyValue( u"LabelSeparator"_ustr );
     CPPUNIT_ASSERT( aAny.hasValue() );
     OUString nLabelSeparator;
     CPPUNIT_ASSERT( aAny >>= nLabelSeparator );

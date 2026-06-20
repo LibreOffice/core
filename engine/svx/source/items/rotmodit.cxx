@@ -79,7 +79,7 @@ SvxRotateModeItem* SvxRotateModeItem::Clone( SfxItemPool* ) const
     return new SvxRotateModeItem( *this );
 }
 
-bool SvxRotateModeItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxRotateModeItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     sal_Int32 nUno = table::CellVertJustify2::STANDARD;
     switch ( GetValue() )
@@ -93,7 +93,7 @@ bool SvxRotateModeItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) co
     return true;
 }
 
-bool SvxRotateModeItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvxRotateModeItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     sal_Int32 nUno(0);
     if(!(rVal >>= nUno))

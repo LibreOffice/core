@@ -136,7 +136,7 @@ RemoteFilesDialog::~RemoteFilesDialog()
 
         OUString sUserData = m_xFileView->GetConfigString();
         aDlgOpt.SetUserItem( u"UserData"_ustr,
-                             Any( sSize + sUserData ) );
+                             cpo::uno::Any( sSize + sUserData ) );
     }
 
     // save services
@@ -239,7 +239,7 @@ void RemoteFilesDialog::InitSize()
 
     m_xDialog->set_window_state(aDlgOpt.GetWindowState());
 
-    Any aUserData = aDlgOpt.GetUserItem( u"UserData"_ustr );
+    cpo::uno::Any aUserData = aDlgOpt.GetUserItem( u"UserData"_ustr );
     OUString sCfgStr;
     if( aUserData >>= sCfgStr )
     {
@@ -1164,7 +1164,7 @@ sal_Int32 RemoteFilesDialog::getAvailableHeight()
     return 0;
 }
 
-void RemoteFilesDialog::setImage( const css::uno::Any& )
+void RemoteFilesDialog::setImage( const cpo::uno::Any& )
 {
     // This dialog doesn't contain preview
 }

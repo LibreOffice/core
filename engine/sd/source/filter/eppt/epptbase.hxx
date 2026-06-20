@@ -97,7 +97,7 @@ class PropValue
 {
     protected:
 
-        css::uno::Any                                    mAny;
+        cpo::uno::Any                                    mAny;
         css::uno::Reference< css::beans::XPropertySet >  mXPropSet;
 
         bool    ImplGetPropertyValue( const OUString& rString );
@@ -109,7 +109,7 @@ class PropValue
         PropValue() {}
 
         static bool GetPropertyValue(
-            css::uno::Any& rAny,
+            cpo::uno::Any& rAny,
             const css::uno::Reference< css::beans::XPropertySet > &,
             const OUString& rPropertyName,
             bool bTestPropertyAvailability = false );

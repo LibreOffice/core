@@ -71,7 +71,7 @@ private:
     void Init();
 
     // ____ OPropertySet ____
-    virtual void GetDefaultValue( sal_Int32 nHandle, css::uno::Any& rAny ) const override;
+    virtual void GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const override;
 
     // ____ OPropertySet ____
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;

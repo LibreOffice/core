@@ -28,6 +28,7 @@
 using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 
 namespace cppu
@@ -122,7 +123,7 @@ void WeakComponentImplHelperBase::dispose()
     }
     catch (Exception & exc)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
             "unexpected UNO exception caught: " + exc.Message,
             nullptr, anyEx );
@@ -248,7 +249,7 @@ void WeakAggComponentImplHelperBase::dispose()
     }
     catch (Exception & exc)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
             "unexpected UNO exception caught: " + exc.Message,
             nullptr, anyEx );

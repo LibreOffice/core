@@ -157,6 +157,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 struct ScGridWindow::MouseEventState
 {
@@ -2821,7 +2822,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 {
                     ScAddress aCellPos( nPosX, nPosY, nTab );
                     uno::Reference< table::XCell > xCell( new ScCellObj( mrViewData.GetDocShell(), aCellPos ) );
-                    uno::Sequence< uno::Any > aArgs{ uno::Any(xCell) };
+                    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xCell) };
                     xVbaEvents->processVbaEvent( script::vba::VBAEventId::WORKSHEET_FOLLOWHYPERLINK, aArgs );
                 }
             }

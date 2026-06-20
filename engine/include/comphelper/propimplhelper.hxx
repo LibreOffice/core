@@ -121,7 +121,7 @@ private:
    class MyService : public comphelper::WeakComponentImplHelper<XFoo, XBar>,
                      public comphelper::OPropertySetHelper
    {
-       css::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType) override
+       cpo::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType) override
        {
            auto ret = WeakComponentImplHelper::queryInterface(rType);
            if (!ret.hasValue())
@@ -171,7 +171,7 @@ public:
     // XPropertySet
 
     void SAL_CALL setPropertyValue(const OUString& rPropertyName,
-                                   const css::uno::Any& aValue) override
+                                   const cpo::uno::Any& aValue) override
     {
         cppu::IPropertyArrayHelper& rPH = getInfoHelper();
         sal_Int32 nHandle = rPH.getHandleByName(rPropertyName);
@@ -179,7 +179,7 @@ public:
         setFastPropertyValueImpl(aGuard, nHandle, aValue);
     }
 
-    css::uno::Any SAL_CALL getPropertyValue(const OUString& aPropertyName) override
+    cpo::uno::Any SAL_CALL getPropertyValue(const OUString& aPropertyName) override
     {
         std::unique_lock aGuard(this->m_aMutex);
         return getPropertyValueImpl(aGuard, aPropertyName);
@@ -209,20 +209,20 @@ public:
     // XFastPropertySet
 
     void SAL_CALL setFastPropertyValue(sal_Int32 nHandle,
-                                       const css::uno::Any& rValue) override final
+                                       const cpo::uno::Any& rValue) override final
     {
         std::unique_lock aGuard(this->m_aMutex);
         setFastPropertyValueImpl(aGuard, nHandle, rValue);
     }
 
-    css::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle) override final;
+    cpo::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle) override final;
 
     // XMultiPropertySet
 
     void SAL_CALL setPropertyValues(const css::uno::Sequence<OUString>& PropertyNames,
-                                    const css::uno::Sequence<css::uno::Any>& Values) override;
+                                    const css::uno::Sequence<cpo::uno::Any>& Values) override;
 
-    css::uno::Sequence<css::uno::Any> SAL_CALL
+    css::uno::Sequence<cpo::uno::Any> SAL_CALL
     getPropertyValues(const css::uno::Sequence<OUString>& PropertyNames) override final;
 
     void SAL_CALL addPropertiesChangeListener(
@@ -273,26 +273,26 @@ protected:
 
     /// Override this if you need to do something special during setFastPropertyValue.
     virtual void setFastPropertyValueImpl(std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle,
-                                          const css::uno::Any& rValue);
+                                          const cpo::uno::Any& rValue);
 
-    css::uno::Any getPropertyValueImpl(std::unique_lock<std::mutex>& rGuard,
+    cpo::uno::Any getPropertyValueImpl(std::unique_lock<std::mutex>& rGuard,
                                        const OUString& aPropertyName)
     {
         cppu::IPropertyArrayHelper& rPH = getInfoHelper();
         sal_Int32 nHandle = rPH.getHandleByName(aPropertyName);
         if (nHandle == -1)
             throw css::beans::UnknownPropertyException(aPropertyName);
-        css::uno::Any aAny;
+        cpo::uno::Any aAny;
         getFastPropertyValue(rGuard, aAny, nHandle);
         return aAny;
     }
 
     void fire(std::unique_lock<std::mutex>& rGuard, const sal_Int32* pnHandles,
-              const css::uno::Any* pNewValues, const css::uno::Any* pOldValues, sal_Int32 nCount,
+              const cpo::uno::Any* pNewValues, const cpo::uno::Any* pOldValues, sal_Int32 nCount,
               bool bVetoable);
 
     void setFastPropertyValues(std::unique_lock<std::mutex>& rGuard, sal_Int32 nSeqLen,
-                               sal_Int32* pHandles, const css::uno::Any* pValues,
+                               sal_Int32* pHandles, const cpo::uno::Any* pValues,
                                sal_Int32 nHitCount);
 
     /// Return the property name-to-handle mapping.
@@ -300,30 +300,30 @@ protected:
 
     /// Convert and validate a property value.
     virtual bool convertFastPropertyValue(std::unique_lock<std::mutex>& rGuard,
-                                          css::uno::Any& rConvertedValue, css::uno::Any& rOldValue,
-                                          sal_Int32 nHandle, const css::uno::Any& rValue)
+                                          cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue,
+                                          sal_Int32 nHandle, const cpo::uno::Any& rValue)
         = 0;
 
     /// Set a property without broadcasting.
     virtual void setFastPropertyValue_NoBroadcast(std::unique_lock<std::mutex>& rGuard,
-                                                  sal_Int32 nHandle, const css::uno::Any& rValue)
+                                                  sal_Int32 nHandle, const cpo::uno::Any& rValue)
         = 0;
 
     /// Get a property value by handle.
-    virtual void getFastPropertyValue(std::unique_lock<std::mutex>& rGuard, css::uno::Any& rValue,
+    virtual void getFastPropertyValue(std::unique_lock<std::mutex>& rGuard, cpo::uno::Any& rValue,
                                       sal_Int32 nHandle) const = 0;
 
     /** Set a dependent property from within setFastPropertyValue_NoBroadcast.
         The change event is deferred and fired together with the triggering
         property's event. */
     void setDependentFastPropertyValue(std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle,
-                                       const css::uno::Any& rValue);
+                                       const cpo::uno::Any& rValue);
 
 private:
     template <typename Func> void callNoBroadcast(Func&& fn);
 
     void impl_fireAll(std::unique_lock<std::mutex>& rGuard, sal_Int32* pHandles,
-                      const css::uno::Any* pNewValues, const css::uno::Any* pOldValues,
+                      const cpo::uno::Any* pNewValues, const cpo::uno::Any* pOldValues,
                       sal_Int32 nCount);
 
     template <typename ListenerT>
@@ -354,8 +354,8 @@ private:
     comphelper::OInterfaceContainerHelper4<css::beans::XVetoableChangeListener>
         m_aVetoableChangeListeners;
     std::vector<sal_Int32> m_aPendingHandles;
-    std::vector<css::uno::Any> m_aPendingNewValues;
-    std::vector<css::uno::Any> m_aPendingOldValues;
+    std::vector<cpo::uno::Any> m_aPendingNewValues;
+    std::vector<cpo::uno::Any> m_aPendingOldValues;
     bool m_bIgnoreRuntimeExceptionsWhileFiring = false;
 };
 
@@ -492,14 +492,14 @@ void OPropertyImplHelper<BaseClass, Ifc...>::callNoBroadcast(Func&& fn)
 // XFastPropertySet
 
 template <IsUnoImplBase BaseClass, typename... Ifc>
-css::uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 OPropertyImplHelper<BaseClass, Ifc...>::getFastPropertyValue(sal_Int32 nHandle)
 {
     cppu::IPropertyArrayHelper& rPH = getInfoHelper();
     if (!rPH.fillPropertyMembersByHandle(nullptr, nullptr, nHandle))
         throw css::beans::UnknownPropertyException(OUString::number(nHandle));
 
-    css::uno::Any aRet;
+    cpo::uno::Any aRet;
     std::unique_lock aGuard(this->m_aMutex);
     getFastPropertyValue(aGuard, aRet, nHandle);
     return aRet;
@@ -507,7 +507,7 @@ OPropertyImplHelper<BaseClass, Ifc...>::getFastPropertyValue(sal_Int32 nHandle)
 
 template <IsUnoImplBase BaseClass, typename... Ifc>
 void OPropertyImplHelper<BaseClass, Ifc...>::setFastPropertyValueImpl(
-    std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const css::uno::Any& rValue)
+    std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const cpo::uno::Any& rValue)
 {
     assert(!this->m_bDisposed);
 
@@ -518,8 +518,8 @@ void OPropertyImplHelper<BaseClass, Ifc...>::setFastPropertyValueImpl(
     if (nAttributes & css::beans::PropertyAttribute::READONLY)
         throw css::beans::PropertyVetoException();
 
-    css::uno::Any aConvertedVal;
-    css::uno::Any aOldVal;
+    cpo::uno::Any aConvertedVal;
+    cpo::uno::Any aOldVal;
 
     bool bChanged = convertFastPropertyValue(rGuard, aConvertedVal, aOldVal, nHandle, rValue);
     if (!bChanged)
@@ -538,7 +538,7 @@ void OPropertyImplHelper<BaseClass, Ifc...>::setFastPropertyValueImpl(
 template <IsUnoImplBase BaseClass, typename... Ifc>
 void OPropertyImplHelper<BaseClass, Ifc...>::setPropertyValues(
     const css::uno::Sequence<OUString>& rPropertyNames,
-    const css::uno::Sequence<css::uno::Any>& rValues)
+    const css::uno::Sequence<cpo::uno::Any>& rValues)
 {
     sal_Int32 nSeqLen = rPropertyNames.getLength();
     if (nSeqLen != rValues.getLength())
@@ -554,17 +554,17 @@ void OPropertyImplHelper<BaseClass, Ifc...>::setPropertyValues(
 }
 
 template <IsUnoImplBase BaseClass, typename... Ifc>
-css::uno::Sequence<css::uno::Any> OPropertyImplHelper<BaseClass, Ifc...>::getPropertyValues(
+css::uno::Sequence<cpo::uno::Any> OPropertyImplHelper<BaseClass, Ifc...>::getPropertyValues(
     const css::uno::Sequence<OUString>& rPropertyNames)
 {
     sal_Int32 nSeqLen = rPropertyNames.getLength();
     auto pHandles = std::make_unique<sal_Int32[]>(nSeqLen);
-    css::uno::Sequence<css::uno::Any> aValues(nSeqLen);
+    css::uno::Sequence<cpo::uno::Any> aValues(nSeqLen);
 
     cppu::IPropertyArrayHelper& rPH = getInfoHelper();
     rPH.fillHandles(pHandles.get(), rPropertyNames);
 
-    css::uno::Any* pValues = aValues.getArray();
+    cpo::uno::Any* pValues = aValues.getArray();
     std::unique_lock aGuard(this->m_aMutex);
     for (sal_Int32 i = 0; i < nSeqLen; i++)
         getFastPropertyValue(aGuard, pValues[i], pHandles[i]);
@@ -610,14 +610,14 @@ void OPropertyImplHelper<BaseClass, Ifc...>::firePropertiesChangeEvent(
 
 template <IsUnoImplBase BaseClass, typename... Ifc>
 void OPropertyImplHelper<BaseClass, Ifc...>::setDependentFastPropertyValue(
-    std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const css::uno::Any& rValue)
+    std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const cpo::uno::Any& rValue)
 {
     sal_Int16 nAttributes(0);
     cppu::IPropertyArrayHelper& rPH = getInfoHelper();
     if (!rPH.fillPropertyMembersByHandle(nullptr, &nAttributes, nHandle))
         throw css::beans::UnknownPropertyException(OUString::number(nHandle));
 
-    css::uno::Any aConverted, aOld;
+    cpo::uno::Any aConverted, aOld;
     bool bChanged = convertFastPropertyValue(rGuard, aConverted, aOld, nHandle, rValue);
     if (!bChanged)
         return;
@@ -634,14 +634,14 @@ void OPropertyImplHelper<BaseClass, Ifc...>::setDependentFastPropertyValue(
 template <IsUnoImplBase BaseClass, typename... Ifc>
 void OPropertyImplHelper<BaseClass, Ifc...>::setFastPropertyValues(
     std::unique_lock<std::mutex>& rGuard, sal_Int32 nSeqLen, sal_Int32* pHandles,
-    const css::uno::Any* pValues, sal_Int32 nHitCount)
+    const cpo::uno::Any* pValues, sal_Int32 nHitCount)
 {
     assert(!this->m_bDisposed);
 
     cppu::IPropertyArrayHelper& rPH = getInfoHelper();
 
-    auto pConvertedValues = std::make_unique<css::uno::Any[]>(nHitCount);
-    auto pOldValues = std::make_unique<css::uno::Any[]>(nHitCount);
+    auto pConvertedValues = std::make_unique<cpo::uno::Any[]>(nHitCount);
+    auto pOldValues = std::make_unique<cpo::uno::Any[]>(nHitCount);
     sal_Int32 n = 0;
 
     for (sal_Int32 i = 0; i < nSeqLen; i++)
@@ -672,8 +672,8 @@ void OPropertyImplHelper<BaseClass, Ifc...>::setFastPropertyValues(
 template <IsUnoImplBase BaseClass, typename... Ifc>
 void OPropertyImplHelper<BaseClass, Ifc...>::impl_fireAll(std::unique_lock<std::mutex>& rGuard,
                                                           sal_Int32* pHandles,
-                                                          const css::uno::Any* pNewValues,
-                                                          const css::uno::Any* pOldValues,
+                                                          const cpo::uno::Any* pNewValues,
+                                                          const cpo::uno::Any* pOldValues,
                                                           sal_Int32 nCount)
 {
     if (m_aPendingHandles.empty())
@@ -701,8 +701,8 @@ void OPropertyImplHelper<BaseClass, Ifc...>::impl_fireAll(std::unique_lock<std::
 template <IsUnoImplBase BaseClass, typename... Ifc>
 void OPropertyImplHelper<BaseClass, Ifc...>::fire(std::unique_lock<std::mutex>& rGuard,
                                                   const sal_Int32* pnHandles,
-                                                  const css::uno::Any* pNewValues,
-                                                  const css::uno::Any* pOldValues,
+                                                  const cpo::uno::Any* pNewValues,
+                                                  const cpo::uno::Any* pOldValues,
                                                   sal_Int32 nHandles, bool bVetoable)
 {
     if (!nHandles)

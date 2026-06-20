@@ -43,6 +43,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 
 
@@ -67,7 +68,7 @@ void BibToolBarListener::statusChanged(const css::frame::FeatureStateEvent& rEvt
         SolarMutexGuard aGuard;
         pToolBar->EnableItem(nIndex,rEvt.IsEnabled);
 
-        css::uno::Any aState=rEvt.State;
+        cpo::uno::Any aState=rEvt.State;
         if(auto bChecked = o3tl::tryAccess<bool>(aState))
         {
             pToolBar->CheckItem(nIndex, *bChecked);
@@ -127,7 +128,7 @@ void BibTBQueryMenuListener::statusChanged(const frame::FeatureStateEvent& rEvt)
     SolarMutexGuard aGuard;
     pToolBar->EnableSourceList(rEvt.IsEnabled);
 
-    uno::Any aState=rEvt.State;
+    cpo::uno::Any aState=rEvt.State;
     auto pStringSeq = o3tl::tryAccess<Sequence<OUString>>(aState);
     if(!pStringSeq)
         return;
@@ -160,7 +161,7 @@ void BibTBEditListener::statusChanged(const frame::FeatureStateEvent& rEvt)
         SolarMutexGuard aGuard;
         pToolBar->EnableQuery(rEvt.IsEnabled);
 
-        uno::Any aState=rEvt.State;
+        cpo::uno::Any aState=rEvt.State;
         if(auto aStr = o3tl::tryAccess<OUString>(aState))
         {
             pToolBar->SetQueryString(*aStr);

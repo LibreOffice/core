@@ -19,7 +19,7 @@
 #ifndef INCLUDED_VBAHELPER_VBADOCUMENTBASE_HXX
 #define INCLUDED_VBAHELPER_VBADOCUMENTBASE_HXX
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -50,7 +50,7 @@ protected:
     virtual css::frame::XModel* getModel() const = 0;
 public:
     VbaDocumentBase(    const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext );
-    VbaDocumentBase(    css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
+    VbaDocumentBase(    css::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
 
     // Attributes
     virtual OUString SAL_CALL getName() override;
@@ -58,15 +58,15 @@ public:
     virtual OUString SAL_CALL getFullName() override;
     virtual bool SAL_CALL getSaved() override;
     virtual void SAL_CALL setSaved( bool bSave ) override;
-    virtual css::uno::Any SAL_CALL getVBProject() override;
+    virtual cpo::uno::Any SAL_CALL getVBProject() override;
 
     // Methods
-    virtual void SAL_CALL Close( const css::uno::Any &bSaveChanges,
-                                 const css::uno::Any &aFileName,
-                                 const css::uno::Any &bRouteWorkbook ) override;
+    virtual void SAL_CALL Close( const cpo::uno::Any &bSaveChanges,
+                                 const cpo::uno::Any &aFileName,
+                                 const cpo::uno::Any &bRouteWorkbook ) override;
     /// @throws css::uno::RuntimeException
-    virtual void SAL_CALL Protect( const css::uno::Any &aPassword );
-    virtual void SAL_CALL Unprotect( const css::uno::Any &aPassword ) override;
+    virtual void SAL_CALL Protect( const cpo::uno::Any &aPassword );
+    virtual void SAL_CALL Unprotect( const cpo::uno::Any &aPassword ) override;
     virtual void SAL_CALL Save() override;
     virtual void SAL_CALL Activate() override;
 

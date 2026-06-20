@@ -36,17 +36,17 @@ XMLNumRulePropHdl::~XMLNumRulePropHdl()
     // Nothing to do
 }
 
-bool XMLNumRulePropHdl::equals( const uno::Any& r1, const uno::Any& r2 ) const
+bool XMLNumRulePropHdl::equals( const cpo::uno::Any& r1, const cpo::uno::Any& r2 ) const
 {
     return mxNumRuleCompare.is() && mxNumRuleCompare->compare( r1, r2 ) == 0;
 }
 
-bool XMLNumRulePropHdl::importXML( const OUString& /*rStrImpValue*/, css::uno::Any& /*rValue*/, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
+bool XMLNumRulePropHdl::importXML( const OUString& /*rStrImpValue*/, cpo::uno::Any& /*rValue*/, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     return false;
 }
 
-bool XMLNumRulePropHdl::exportXML( OUString& /*rStrExpValue*/, const css::uno::Any& /*rValue*/, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
+bool XMLNumRulePropHdl::exportXML( OUString& /*rStrExpValue*/, const cpo::uno::Any& /*rValue*/, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     return false;
 }

@@ -97,11 +97,11 @@ void BaseCommandEnv::handle_(bool approve,
 }
 
 // XProgressHandler
-void BaseCommandEnv::push( uno::Any const & /*Status*/ )
+void BaseCommandEnv::push( cpo::uno::Any const & /*Status*/ )
 {
 }
 
-void BaseCommandEnv::update( uno::Any const & /*Status */)
+void BaseCommandEnv::update( cpo::uno::Any const & /*Status */)
 {
 }
 
@@ -123,7 +123,7 @@ TmpRepositoryCommandEnv::TmpRepositoryCommandEnv(
 void TmpRepositoryCommandEnv::handle(
     Reference< task::XInteractionRequest> const & xRequest )
 {
-    uno::Any request( xRequest->getRequest() );
+    cpo::uno::Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
 
     deployment::VersionException verExc;
@@ -155,7 +155,7 @@ LicenseCommandEnv::LicenseCommandEnv(
 void LicenseCommandEnv::handle(
     Reference< task::XInteractionRequest> const & xRequest )
 {
-    uno::Any request( xRequest->getRequest() );
+    cpo::uno::Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
 
     deployment::LicenseException licExc;
@@ -189,7 +189,7 @@ NoLicenseCommandEnv::NoLicenseCommandEnv(
 void NoLicenseCommandEnv::handle(
     Reference< task::XInteractionRequest> const & xRequest )
 {
-    uno::Any request( xRequest->getRequest() );
+    cpo::uno::Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
 
     deployment::LicenseException licExc;
@@ -210,7 +210,7 @@ SilentCheckPrerequisitesCommandEnv::SilentCheckPrerequisitesCommandEnv()
 void SilentCheckPrerequisitesCommandEnv::handle(
        Reference< task::XInteractionRequest> const & xRequest )
 {
-    uno::Any request( xRequest->getRequest() );
+    cpo::uno::Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
 
     deployment::LicenseException licExc;

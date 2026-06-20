@@ -35,7 +35,7 @@ using namespace ::xmloff::token;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XPropertySetInfo;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 
 XMLIndexMarkExport::XMLIndexMarkExport(
     SvXMLExport& rExp)

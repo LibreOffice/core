@@ -34,12 +34,12 @@ public:
     SwVbaBuiltinDocumentProperties( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const rtl::Reference< SwXTextDocument >& xDocument );
 
     // XDocumentProperties
-    virtual css::uno::Reference< ::ooo::vba::XDocumentProperty > SAL_CALL Add( const OUString& Name, bool LinkToContent, ::sal_Int8 Type, const css::uno::Any& Value, const css::uno::Any& LinkSource ) override;
+    virtual css::uno::Reference< ::ooo::vba::XDocumentProperty > SAL_CALL Add( const OUString& Name, bool LinkToContent, ::sal_Int8 Type, const cpo::uno::Any& Value, const cpo::uno::Any& LinkSource ) override;
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
     // ScVbaCollectionBaseImpl
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;
@@ -51,7 +51,7 @@ class SwVbaCustomDocumentProperties : public SwVbaBuiltinDocumentProperties
 public:
     SwVbaCustomDocumentProperties( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const rtl::Reference< SwXTextDocument >& xDocument );
 // XDocumentProperties
-    virtual css::uno::Reference< ::ooo::vba::XDocumentProperty > SAL_CALL Add( const OUString& Name, bool LinkToContent, ::sal_Int8 Type, const css::uno::Any& Value, const css::uno::Any& LinkSource ) override;
+    virtual css::uno::Reference< ::ooo::vba::XDocumentProperty > SAL_CALL Add( const OUString& Name, bool LinkToContent, ::sal_Int8 Type, const cpo::uno::Any& Value, const cpo::uno::Any& LinkSource ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
 };

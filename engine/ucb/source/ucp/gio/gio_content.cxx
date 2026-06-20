@@ -134,9 +134,9 @@ do { \
     aRet <<= aExcept;\
 } while(false)
 
-css::uno::Any convertToException(GError *pError, const css::uno::Reference< css::uno::XInterface >& rContext, bool bThrow)
+cpo::uno::Any convertToException(GError *pError, const css::uno::Reference< css::uno::XInterface >& rContext, bool bThrow)
 {
-    css::uno::Any aRet;
+    cpo::uno::Any aRet;
 
     gint eCode = pError->code;
     OUString sMessage(pError->message, strlen(pError->message), RTL_TEXTENCODING_UTF8);
@@ -144,7 +144,7 @@ css::uno::Any convertToException(GError *pError, const css::uno::Reference< css:
 
     OUString sName;
 
-    css::uno::Sequence< css::uno::Any > aArgs{ css::uno::Any(sName) };
+    css::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(sName) };
 
     switch (eCode)
     {
@@ -284,14 +284,14 @@ void convertToIOException(GError *pError, const css::uno::Reference< css::uno::X
     }
     catch (const css::uno::Exception& e)
     {
-        css::uno::Any a(cppu::getCaughtException());
+        cpo::uno::Any a(cppu::getCaughtException());
         throw css::lang::WrappedTargetRuntimeException(
             "wrapped Exception " + e.Message,
             css::uno::Reference<css::uno::XInterface>(), a);
     }
 }
 
-css::uno::Any Content::mapGIOError( GError *pError )
+cpo::uno::Any Content::mapGIOError( GError *pError )
 {
     if (!pError)
         return getBadArgExcept();
@@ -299,9 +299,9 @@ css::uno::Any Content::mapGIOError( GError *pError )
     return convertToException(pError, getXWeak(), false);
 }
 
-css::uno::Any Content::getBadArgExcept()
+cpo::uno::Any Content::getBadArgExcept()
 {
-    return css::uno::Any( css::lang::IllegalArgumentException(
+    return cpo::uno::Any( css::lang::IllegalArgumentException(
         u"Wrong argument type!"_ustr,
         getXWeak(), -1) );
 }
@@ -538,7 +538,7 @@ css::uno::Reference< css::sdbc::XRow > Content::getPropertyValues(
         }
         else if ( rProp.Name == "CreatableContentsInfo" )
         {
-            xRow->appendObject( rProp, css::uno::Any( queryCreatableContentsInfo( xEnv ) ) );
+            xRow->appendObject( rProp, cpo::uno::Any( queryCreatableContentsInfo( xEnv ) ) );
         }
         else
         {
@@ -657,7 +657,7 @@ void Content::getFileInfo(
     }
 }
 
-css::uno::Sequence< css::uno::Any > Content::setPropertyValues(
+css::uno::Sequence< cpo::uno::Any > Content::setPropertyValues(
     const css::uno::Sequence< css::beans::PropertyValue >& rValues,
     const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
 {
@@ -690,7 +690,7 @@ css::uno::Sequence< css::uno::Any > Content::setPropertyValues(
     css::uno::Sequence< css::beans::PropertyChangeEvent > aChanges(nCount);
     auto aChangesRange = asNonConstRange(aChanges);
 
-    css::uno::Sequence< css::uno::Any > aRet( nCount );
+    css::uno::Sequence< cpo::uno::Any > aRet( nCount );
     auto aRetRange = asNonConstRange(aRet);
     const css::beans::PropertyValue* pValues = rValues.getConstArray();
     for ( sal_Int32 n = 0; n < nCount; ++n )
@@ -870,16 +870,16 @@ bool Content::feedSink( const css::uno::Reference< css::uno::XInterface >& xSink
     return true;
 }
 
-css::uno::Any Content::open(const css::ucb::OpenCommandArgument2 & rOpenCommand,
+cpo::uno::Any Content::open(const css::ucb::OpenCommandArgument2 & rOpenCommand,
     const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
 {
     bool bIsFolder = isFolder(xEnv);
 
     if (!g_file_query_exists(getGFile(), nullptr))
     {
-        css::uno::Sequence< css::uno::Any > aArgs{ css::uno::Any(
+        css::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(
             m_xIdentifier->getContentIdentifier()) };
-        css::uno::Any aErr(
+        cpo::uno::Any aErr(
             css::ucb::InteractiveAugmentedIOException(OUString(), getXWeak(),
                 css::task::InteractionClassification_ERROR,
                 bIsFolder ? css::ucb::IOErrorCode_NOT_EXISTING_PATH : css::ucb::IOErrorCode_NOT_EXISTING, aArgs)
@@ -888,7 +888,7 @@ css::uno::Any Content::open(const css::ucb::OpenCommandArgument2 & rOpenCommand,
         ucbhelper::cancelCommandExecution(aErr, xEnv);
     }
 
-    css::uno::Any aRet;
+    cpo::uno::Any aRet;
 
     bool bOpenFolder = (
         ( rOpenCommand.Mode == css::ucb::OpenMode::ALL ) ||
@@ -910,7 +910,7 @@ css::uno::Any Content::open(const css::ucb::OpenCommandArgument2 & rOpenCommand,
            )
         {
             ucbhelper::cancelCommandExecution(
-                css::uno::Any ( css::ucb::UnsupportedOpenModeException
+                cpo::uno::Any ( css::ucb::UnsupportedOpenModeException
                     ( OUString(), getXWeak(),
                       sal_Int16( rOpenCommand.Mode ) ) ),
                     xEnv );
@@ -924,7 +924,7 @@ css::uno::Any Content::open(const css::ucb::OpenCommandArgument2 & rOpenCommand,
             SAL_WARN("ucb.ucp.gio", "Failed to load data from '" << m_xIdentifier->getContentIdentifier() << "'");
 
             ucbhelper::cancelCommandExecution(
-                css::uno::Any (css::ucb::UnsupportedDataSinkException
+                cpo::uno::Any (css::ucb::UnsupportedDataSinkException
                     ( OUString(), getXWeak(),
                       rOpenCommand.Sink ) ),
                     xEnv );
@@ -935,13 +935,13 @@ css::uno::Any Content::open(const css::ucb::OpenCommandArgument2 & rOpenCommand,
     return aRet;
 }
 
-css::uno::Any SAL_CALL Content::execute(
+cpo::uno::Any SAL_CALL Content::execute(
         const css::ucb::Command& aCommand,
         sal_Int32 /*CommandId*/,
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
 {
     SAL_INFO("ucb.ucp.gio", "Content::execute " << aCommand.Name);
-    css::uno::Any aRet;
+    cpo::uno::Any aRet;
 
     if ( aCommand.Name == "getPropertyValues" )
     {
@@ -1014,7 +1014,7 @@ css::uno::Any SAL_CALL Content::execute(
         SAL_WARN("ucb.ucp.gio", "Unknown command " << aCommand.Name);
 
         ucbhelper::cancelCommandExecution
-            ( css::uno::Any( css::ucb::UnsupportedCommandException
+            ( cpo::uno::Any( css::ucb::UnsupportedCommandException
               ( OUString(),
                 getXWeak() ) ),
               xEnv );
@@ -1056,7 +1056,7 @@ void Content::insert(const css::uno::Reference< css::io::XInputStream > &xInputS
 
     if ( !xInputStream.is() )
     {
-        ucbhelper::cancelCommandExecution( css::uno::Any
+        ucbhelper::cancelCommandExecution( cpo::uno::Any
             ( css::ucb::MissingInputStreamException
               ( OUString(), getXWeak() ) ),
             xEnv );
@@ -1325,9 +1325,9 @@ void SAL_CALL Content::release() noexcept
     ContentImplHelper::release();
 }
 
-css::uno::Any SAL_CALL Content::queryInterface( const css::uno::Type & rType )
+cpo::uno::Any SAL_CALL Content::queryInterface( const css::uno::Type & rType )
 {
-    css::uno::Any aRet = cppu::queryInterface( rType, static_cast< css::ucb::XContentCreator * >( this ) );
+    cpo::uno::Any aRet = cppu::queryInterface( rType, static_cast< css::ucb::XContentCreator * >( this ) );
     return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface(rType);
 }
 

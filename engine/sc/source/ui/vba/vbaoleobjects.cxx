@@ -54,11 +54,11 @@ public:
         return vObjects.size();
     }
 
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
+    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         if ( Index < 0 || Index >= getCount() )
             throw lang::IndexOutOfBoundsException();
-        return uno::Any( vObjects[ Index ] );
+        return cpo::uno::Any( vObjects[ Index ] );
     }
 
         // Methods XElementAccess
@@ -92,12 +92,12 @@ public:
                 return ( nIndex < m_xIndexAccess->getCount() );
         }
 
-        virtual uno::Any SAL_CALL nextElement(  ) override
+        virtual cpo::uno::Any SAL_CALL nextElement(  ) override
         {
             if ( nIndex < m_xIndexAccess->getCount() )
             {
                 uno::Reference< drawing::XControlShape > xControlShape (  m_xIndexAccess->getByIndex( nIndex++ ), uno::UNO_QUERY_THROW );
-                return uno::Any( uno::Reference< ov::excel::XOLEObject >( new ScVbaOLEObject( m_xParent, m_xContext, xControlShape ) ) );
+                return cpo::uno::Any( uno::Reference< ov::excel::XOLEObject >( new ScVbaOLEObject( m_xParent, m_xContext, xControlShape ) ) );
             }
             throw container::NoSuchElementException();
         }
@@ -121,19 +121,19 @@ ScVbaOLEObjects::createEnumeration()
     return new EnumWrapper( getParent(), mxContext, m_xIndexAccess );
 }
 
-uno::Any
-ScVbaOLEObjects::createCollectionObject( const css::uno::Any& aSource )
+cpo::uno::Any
+ScVbaOLEObjects::createCollectionObject( const cpo::uno::Any& aSource )
 {
     if( aSource.hasValue() )
     {
         uno::Reference< drawing::XControlShape > xControlShape( aSource, uno::UNO_QUERY_THROW );
     // parent of OLEObject is the same parent as the collection ( e.g. the sheet )
-        return uno::Any( uno::Reference< ov::excel::XOLEObject >( new ScVbaOLEObject( getParent(), mxContext, xControlShape ) ) );
+        return cpo::uno::Any( uno::Reference< ov::excel::XOLEObject >( new ScVbaOLEObject( getParent(), mxContext, xControlShape ) ) );
     }
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
-uno::Any
+cpo::uno::Any
 ScVbaOLEObjects::getItemByStringIndex( const OUString& sIndex )
 {
     try
@@ -146,7 +146,7 @@ ScVbaOLEObjects::getItemByStringIndex( const OUString& sIndex )
         sal_Int32 nCount = xIndexAccess->getCount();
         for( int index = 0; index < nCount; index++ )
         {
-            uno::Any aUnoObj =  xIndexAccess->getByIndex( index );
+            cpo::uno::Any aUnoObj =  xIndexAccess->getByIndex( index );
             uno::Reference< drawing::XControlShape > xControlShape( aUnoObj, uno::UNO_QUERY_THROW );
             uno::Reference< awt::XControlModel > xControlModel( xControlShape->getControl() );
             uno::Reference< container::XNamed > xNamed( xControlModel, uno::UNO_QUERY_THROW );
@@ -156,7 +156,7 @@ ScVbaOLEObjects::getItemByStringIndex( const OUString& sIndex )
             }
 
         }
-        return uno::Any();
+        return cpo::uno::Any();
     }
 }
 

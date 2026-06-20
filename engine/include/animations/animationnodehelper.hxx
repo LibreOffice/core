@@ -24,7 +24,7 @@
 #include <sal/log.hxx>
 #include <tools/helpers.hxx>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
@@ -45,36 +45,36 @@ namespace anim
 
     /** pushes the given node to the given vector and recursively calls itself for each child node.
     */
-    inline void create_deep_vector( const cpo::uno::Reference< cpo::animations::XAnimationNode >& xNode,
-                                std::vector< cpo::uno::Reference< cpo::animations::XAnimationNode > >& rVector )
+    inline void create_deep_vector( const css::uno::Reference< css::animations::XAnimationNode >& xNode,
+                                std::vector< css::uno::Reference< css::animations::XAnimationNode > >& rVector )
     {
         rVector.push_back( xNode );
 
         try
         {
             // get an XEnumerationAccess to the children
-            cpo::uno::Reference< cpo::container::XEnumerationAccess >
-                  xEnumerationAccess( xNode, cpo::uno::UNO_QUERY );
+            css::uno::Reference< css::container::XEnumerationAccess >
+                  xEnumerationAccess( xNode, css::uno::UNO_QUERY );
 
             if( xEnumerationAccess.is() )
             {
-                cpo::uno::Reference< cpo::container::XEnumeration >
+                css::uno::Reference< css::container::XEnumeration >
                       xEnumeration = xEnumerationAccess->createEnumeration();
 
                 if( xEnumeration.is() )
                 {
                     while( xEnumeration->hasMoreElements() )
                     {
-                        cpo::uno::Reference< cpo::animations::XAnimationNode >
+                        css::uno::Reference< css::animations::XAnimationNode >
                             xChildNode( xEnumeration->nextElement(),
-                                        cpo::uno::UNO_QUERY_THROW );
+                                        css::uno::UNO_QUERY_THROW );
 
                         create_deep_vector( xChildNode, rVector );
                     }
                 }
             }
         }
-        catch( cpo::uno::Exception& )
+        catch( css::uno::Exception& )
         {
         }
     }
@@ -109,7 +109,7 @@ namespace anim
     }
 
     inline bool getVisibilityProperty(
-        const cpo::uno::Reference< cpo::animations::XAnimate >& xAnimateNode, bool& bReturn)
+        const css::uno::Reference< css::animations::XAnimate >& xAnimateNode, bool& bReturn)
     {
         if (xAnimateNode->getAttributeName().equalsIgnoreAsciiCase("visibility"))
         {
@@ -126,8 +126,8 @@ namespace anim
         if (!rTarget.hasValue())
             return;
 
-        cpo::uno::Reference<cpo::uno::XInterface> xRef;
-        if (auto xParagraphTarget = o3tl::tryAccess<cpo::presentation::ParagraphTarget>(rTarget))
+        css::uno::Reference<css::uno::XInterface> xRef;
+        if (auto xParagraphTarget = o3tl::tryAccess<css::presentation::ParagraphTarget>(rTarget))
         {
             if (xParagraphTarget->Shape.is())
             {

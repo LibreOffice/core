@@ -48,29 +48,29 @@ public:
     explicit SvxUnoGluePointAccess( SdrObject* pObject ) noexcept;
 
     // XIdentifierContainer
-    virtual sal_Int32 SAL_CALL insert( const uno::Any& aElement ) override;
+    virtual sal_Int32 SAL_CALL insert( const cpo::uno::Any& aElement ) override;
     virtual void SAL_CALL removeByIdentifier( sal_Int32 Identifier ) override;
 
     // XIdentifierReplace
-    virtual void SAL_CALL replaceByIdentifer( sal_Int32 Identifier, const uno::Any& aElement ) override;
+    virtual void SAL_CALL replaceByIdentifer( sal_Int32 Identifier, const cpo::uno::Any& aElement ) override;
 
     // XIdentifierReplace
-    virtual uno::Any SAL_CALL getByIdentifier( sal_Int32 Identifier ) override;
+    virtual cpo::uno::Any SAL_CALL getByIdentifier( sal_Int32 Identifier ) override;
     virtual uno::Sequence< sal_Int32 > SAL_CALL getIdentifiers(  ) override;
 
     /* deprecated */
     // XIndexContainer
-    virtual void SAL_CALL insertByIndex( sal_Int32 Index, const uno::Any& Element ) override;
+    virtual void SAL_CALL insertByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
     virtual void SAL_CALL removeByIndex( sal_Int32 Index ) override;
 
     /* deprecated */
     // XIndexReplace
-    virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const uno::Any& Element ) override;
+    virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
 
     /* deprecated */
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) override;
-    virtual uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) override;
@@ -202,7 +202,7 @@ SvxUnoGluePointAccess::SvxUnoGluePointAccess( SdrObject* pObject ) noexcept
 }
 
 // XIdentifierContainer
-sal_Int32 SAL_CALL SvxUnoGluePointAccess::insert( const uno::Any& aElement )
+sal_Int32 SAL_CALL SvxUnoGluePointAccess::insert( const cpo::uno::Any& aElement )
 {
     if( auto pObject = mpObject.get() )
     {
@@ -262,7 +262,7 @@ void SAL_CALL SvxUnoGluePointAccess::removeByIdentifier( sal_Int32 Identifier )
 }
 
 // XIdentifierReplace
-void SAL_CALL SvxUnoGluePointAccess::replaceByIdentifer( sal_Int32 Identifier, const uno::Any& aElement )
+void SAL_CALL SvxUnoGluePointAccess::replaceByIdentifer( sal_Int32 Identifier, const cpo::uno::Any& aElement )
 {
     auto pObject = mpObject.get();
     if( !pObject )
@@ -297,7 +297,7 @@ void SAL_CALL SvxUnoGluePointAccess::replaceByIdentifer( sal_Int32 Identifier, c
 }
 
 // XIdentifierAccess
-uno::Any SAL_CALL SvxUnoGluePointAccess::getByIdentifier( sal_Int32 Identifier )
+cpo::uno::Any SAL_CALL SvxUnoGluePointAccess::getByIdentifier( sal_Int32 Identifier )
 {
     auto pObject = mpObject.get();
     if( pObject )
@@ -309,7 +309,7 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIdentifier( sal_Int32 Identifier )
             SdrGluePoint aTempPoint = pObject->GetVertexGluePoint( static_cast<sal_uInt16>(Identifier) );
             aGluePoint.IsUserDefined = false;
             convert( aTempPoint, aGluePoint );
-            return uno::Any( aGluePoint );
+            return cpo::uno::Any( aGluePoint );
         }
         else
         {
@@ -329,7 +329,7 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIdentifier( sal_Int32 Identifier )
                     }
 
                     convert( rTempPoint, aGluePoint );
-                    return uno::Any( aGluePoint );
+                    return cpo::uno::Any( aGluePoint );
                 }
             }
         }
@@ -369,7 +369,7 @@ uno::Sequence< sal_Int32 > SAL_CALL SvxUnoGluePointAccess::getIdentifiers()
 /* deprecated */
 
 // XIndexContainer
-void SAL_CALL SvxUnoGluePointAccess::insertByIndex( sal_Int32, const uno::Any& Element )
+void SAL_CALL SvxUnoGluePointAccess::insertByIndex( sal_Int32, const cpo::uno::Any& Element )
 {
     auto pObject = mpObject.get();
     if( pObject )
@@ -425,7 +425,7 @@ void SAL_CALL SvxUnoGluePointAccess::removeByIndex( sal_Int32 Index )
 }
 
 // XIndexReplace
-void SAL_CALL SvxUnoGluePointAccess::replaceByIndex( sal_Int32 Index, const uno::Any& Element )
+void SAL_CALL SvxUnoGluePointAccess::replaceByIndex( sal_Int32 Index, const cpo::uno::Any& Element )
 {
     drawing::GluePoint2 aUnoGlue;
     if(!(Element >>= aUnoGlue))
@@ -469,7 +469,7 @@ sal_Int32 SAL_CALL SvxUnoGluePointAccess::getCount()
     return nCount;
 }
 
-uno::Any SAL_CALL SvxUnoGluePointAccess::getByIndex( sal_Int32 Index )
+cpo::uno::Any SAL_CALL SvxUnoGluePointAccess::getByIndex( sal_Int32 Index )
 {
     auto pObject = mpObject.get();
     if( Index >= 0 && pObject )
@@ -481,7 +481,7 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIndex( sal_Int32 Index )
             SdrGluePoint aTempPoint = pObject->GetVertexGluePoint( static_cast<sal_uInt16>(Index) );
             aGluePoint.IsUserDefined = false;
             convert( aTempPoint, aGluePoint );
-            return uno::Any(aGluePoint);
+            return cpo::uno::Any(aGluePoint);
         }
         else
         {
@@ -492,7 +492,7 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIndex( sal_Int32 Index )
                 const SdrGluePoint& rTempPoint = (*pList)[static_cast<sal_uInt16>(Index)];
                 aGluePoint.IsUserDefined = true;
                 convert( rTempPoint, aGluePoint );
-                return uno::Any(aGluePoint);
+                return cpo::uno::Any(aGluePoint);
             }
         }
     }

@@ -591,27 +591,27 @@ void Test::testCharHighlightODF()
         switch (i)
         {
             case 1: // non-transparent highlight
-            xRun->setPropertyValue(u"CharBackColor"_ustr, uno::Any(static_cast<sal_Int32>(128)));
-            xRun->setPropertyValue(u"CharBackTransparent"_ustr, uno::Any(true));
-            xRun->setPropertyValue(u"CharHighlight"_ustr, uno::Any(static_cast<sal_Int32>(64)));
+            xRun->setPropertyValue(u"CharBackColor"_ustr, cpo::uno::Any(static_cast<sal_Int32>(128)));
+            xRun->setPropertyValue(u"CharBackTransparent"_ustr, cpo::uno::Any(true));
+            xRun->setPropertyValue(u"CharHighlight"_ustr, cpo::uno::Any(static_cast<sal_Int32>(64)));
             break;
 
             case 2: // transparent backcolor
-            xRun->setPropertyValue(u"CharBackColor"_ustr, uno::Any(static_cast<sal_Int32>(128)));
-            xRun->setPropertyValue(u"CharBackTransparent"_ustr, uno::Any(true));
-            xRun->setPropertyValue(u"CharHighlight"_ustr, uno::Any(static_cast<sal_Int32>(COL_TRANSPARENT)));
+            xRun->setPropertyValue(u"CharBackColor"_ustr, cpo::uno::Any(static_cast<sal_Int32>(128)));
+            xRun->setPropertyValue(u"CharBackTransparent"_ustr, cpo::uno::Any(true));
+            xRun->setPropertyValue(u"CharHighlight"_ustr, cpo::uno::Any(static_cast<sal_Int32>(COL_TRANSPARENT)));
             break;
 
             case 3: // non-transparent backcolor
-            xRun->setPropertyValue(u"CharBackColor"_ustr, uno::Any(static_cast<sal_Int32>(128)));
-            xRun->setPropertyValue(u"CharBackTransparent"_ustr, uno::Any(false));
-            xRun->setPropertyValue(u"CharHighlight"_ustr, uno::Any(static_cast<sal_Int32>(COL_TRANSPARENT)));
+            xRun->setPropertyValue(u"CharBackColor"_ustr, cpo::uno::Any(static_cast<sal_Int32>(128)));
+            xRun->setPropertyValue(u"CharBackTransparent"_ustr, cpo::uno::Any(false));
+            xRun->setPropertyValue(u"CharHighlight"_ustr, cpo::uno::Any(static_cast<sal_Int32>(COL_TRANSPARENT)));
             break;
 
             case 4: // non-transparent highlight again
-            xRun->setPropertyValue(u"CharBackColor"_ustr, uno::Any(static_cast<sal_Int32>(128)));
-            xRun->setPropertyValue(u"CharBackTransparent"_ustr, uno::Any(false));
-            xRun->setPropertyValue(u"CharHighlight"_ustr, uno::Any(static_cast<sal_Int32>(64)));
+            xRun->setPropertyValue(u"CharBackColor"_ustr, cpo::uno::Any(static_cast<sal_Int32>(128)));
+            xRun->setPropertyValue(u"CharBackTransparent"_ustr, cpo::uno::Any(false));
+            xRun->setPropertyValue(u"CharHighlight"_ustr, cpo::uno::Any(static_cast<sal_Int32>(64)));
             break;
         }
     }
@@ -698,9 +698,9 @@ void Test::testMSCharBackgroundEditing()
                 case 3: nBackColor = COL_LIGHTGREEN; break; //green 0x00ff00
                 case 4: nBackColor = COL_LIGHTMAGENTA; break; //magenta 0xff00ff
             }
-            xRun->setPropertyValue(u"CharBackColor"_ustr, uno::Any(nBackColor));
+            xRun->setPropertyValue(u"CharBackColor"_ustr, cpo::uno::Any(nBackColor));
             // Remove highlighting
-            xRun->setPropertyValue(u"CharHighlight"_ustr, uno::Any(COL_TRANSPARENT));
+            xRun->setPropertyValue(u"CharHighlight"_ustr, cpo::uno::Any(COL_TRANSPARENT));
             // Remove shading marker
             uno::Sequence<beans::PropertyValue> aGrabBag = getProperty<uno::Sequence<beans::PropertyValue> >(xRun,u"CharInteropGrabBag"_ustr);
             for (beans::PropertyValue& rProp : asNonConstRange(aGrabBag))
@@ -711,7 +711,7 @@ void Test::testMSCharBackgroundEditing()
                     rProp.Value <<= false;
                 }
             }
-            xRun->setPropertyValue(u"CharInteropGrabBag"_ustr, uno::Any(aGrabBag));
+            xRun->setPropertyValue(u"CharInteropGrabBag"_ustr, cpo::uno::Any(aGrabBag));
         }
 
         // Export the document and import again for a check
@@ -1250,34 +1250,34 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
             auto it(::std::find_if(format.begin(), format.end(),
                     [](auto const& r) { return r.Name == "NumberingType"; }));
             // need something RTL
-            const_cast<uno::Any&>(it->Value) <<= style::NumberingType::CHARS_ARABIC;
+            const_cast<cpo::uno::Any&>(it->Value) <<= style::NumberingType::CHARS_ARABIC;
         }
         {
 #if 0
             // this doesn't work any more
             auto it(::std::find_if(format.begin(), format.end(),
                     [](auto const& r) { return r.Name == "ParentNumbering"; }));
-            const_cast<uno::Any&>(it->Value) <<= sal_Int16(i + 1);
+            const_cast<cpo::uno::Any&>(it->Value) <<= sal_Int16(i + 1);
 #endif
             listFormat.append("%" + OUString::number(i+1) + "%.");
             auto it(::std::find_if(format.begin(), format.end(),
                     [](auto const& r) { return r.Name == "ListFormat"; }));
-            const_cast<uno::Any&>(it->Value) <<= listFormat.toString();
+            const_cast<cpo::uno::Any&>(it->Value) <<= listFormat.toString();
         }
-        xNumRule->replaceByIndex(i, uno::Any(format));
+        xNumRule->replaceByIndex(i, cpo::uno::Any(format));
     }
-    uno::Reference<beans::XPropertySet>(getParagraph(1), uno::UNO_QUERY_THROW)->setPropertyValue(u"NumberingRules"_ustr, uno::Any(xNumRule));
+    uno::Reference<beans::XPropertySet>(getParagraph(1), uno::UNO_QUERY_THROW)->setPropertyValue(u"NumberingRules"_ustr, cpo::uno::Any(xNumRule));
     xText->insertControlCharacter(xText->getEnd(), text::ControlCharacter::PARAGRAPH_BREAK, false);
-    uno::Reference<beans::XPropertySet>(getParagraph(2), uno::UNO_QUERY_THROW)->setPropertyValue(u"NumberingLevel"_ustr, uno::Any(sal_Int16(1)));
+    uno::Reference<beans::XPropertySet>(getParagraph(2), uno::UNO_QUERY_THROW)->setPropertyValue(u"NumberingLevel"_ustr, cpo::uno::Any(sal_Int16(1)));
     xText->insertControlCharacter(xText->getEnd(), text::ControlCharacter::PARAGRAPH_BREAK, false);
-    uno::Reference<beans::XPropertySet>(getParagraph(3), uno::UNO_QUERY_THROW)->setPropertyValue(u"NumberingLevel"_ustr, uno::Any(sal_Int16(2)));
+    uno::Reference<beans::XPropertySet>(getParagraph(3), uno::UNO_QUERY_THROW)->setPropertyValue(u"NumberingLevel"_ustr, cpo::uno::Any(sal_Int16(2)));
 
     // check PDF export of the list items (label in particular)
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) } }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
@@ -1684,7 +1684,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableOfContentLinksHaveContentSet)
     aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) } }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
@@ -1722,7 +1722,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143311)
         uno::Reference<drawing::XShape> xShape(
             xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-        xShapeProps->setPropertyValue(u"Decorative"_ustr, uno::Any(true));
+        xShapeProps->setPropertyValue(u"Decorative"_ustr, cpo::uno::Any(true));
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage());
         xDrawPage->add(xShape);
@@ -1735,7 +1735,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143311)
         // tdf#153925 not imported - check default and set it to test ODF filters
         uno::Reference<beans::XPropertySet> const xStyle(getStyles(u"FrameStyles"_ustr)->getByName(u"Formula"_ustr), uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xStyle, u"Decorative"_ustr));
-        xStyle->setPropertyValue(u"Decorative"_ustr, uno::Any(true));
+        xStyle->setPropertyValue(u"Decorative"_ustr, cpo::uno::Any(true));
     }
     // check ODF filters
     saveAndReload(TestFilter::ODT);
@@ -1748,7 +1748,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143311)
     aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) } }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());

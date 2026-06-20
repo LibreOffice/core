@@ -41,9 +41,9 @@ public:
     notifyEvent(const css::accessibility::AccessibleEventObject& aEvent) override;
 
     //for active descendant changed event
-    virtual void HandleActiveDescendantChangedEvent(css::uno::Any oldValue, css::uno::Any newValue);
+    virtual void HandleActiveDescendantChangedEvent(cpo::uno::Any oldValue, cpo::uno::Any newValue);
     //for value changed event
-    virtual void HandleValueChangedEvent(css::uno::Any oldValue, css::uno::Any newValue) override;
+    virtual void HandleValueChangedEvent(cpo::uno::Any oldValue, cpo::uno::Any newValue) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

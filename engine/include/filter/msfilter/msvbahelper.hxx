@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/vba/XVBAMacroResolver.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -60,7 +60,7 @@ MSFILTER_DLLPUBLIC OUString resolveVBAMacro(SfxObjectShell const* pShell, const 
                                             const OUString& rMacroName, bool bOnlyPublic,
                                             const OUString& sSkipModule);
 MSFILTER_DLLPUBLIC MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& rMacroName, bool bSearchGlobalTemplates = false );
-MSFILTER_DLLPUBLIC bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, css::uno::Sequence< css::uno::Any >& aArgs, css::uno::Any& aRet, const css::uno::Any& aCaller );
+MSFILTER_DLLPUBLIC bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, css::uno::Sequence< cpo::uno::Any >& aArgs, cpo::uno::Any& aRet, const cpo::uno::Any& aCaller );
 /// @throws css::uno::RuntimeException
 MSFILTER_DLLPUBLIC css::awt::KeyEvent parseKeyEvent( std::u16string_view sKey );
 /// @throws css::uno::RuntimeException
@@ -92,7 +92,7 @@ public:
     // com.sun.star.lang.XInitialization interface ----------------------------
 
     virtual void SAL_CALL initialize(
-                            const css::uno::Sequence< css::uno::Any >& rArgs ) override;
+                            const css::uno::Sequence< cpo::uno::Any >& rArgs ) override;
 
     // com.sun.star.script.vba.XVBAMacroResolver interface --------------------
 

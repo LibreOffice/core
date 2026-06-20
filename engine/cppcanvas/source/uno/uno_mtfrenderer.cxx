@@ -25,7 +25,7 @@ namespace {
 class MtfRenderer : public MtfRendererBase
 {
 public:
-    MtfRenderer (css::uno::Sequence<css::uno::Any> const& args,
+    MtfRenderer (css::uno::Sequence<cpo::uno::Any> const& args,
                  css::uno::Reference<css::uno::XComponentContext> const&);
 
     // XMtfRenderer iface
@@ -34,8 +34,8 @@ public:
 
     // XFastPropertySet
     // setFastPropertyValue (0, GDIMetaFile*) is used to speedup the rendering
-    virtual css::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 /*nHandle*/) override { return css::uno::Any(); }
-    virtual void SAL_CALL setFastPropertyValue(sal_Int32 nHandle, const css::uno::Any&) override;
+    virtual cpo::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 /*nHandle*/) override { return cpo::uno::Any(); }
+    virtual void SAL_CALL setFastPropertyValue(sal_Int32 nHandle, const cpo::uno::Any&) override;
 
 private:
     GDIMetaFile* mpMetafile;
@@ -59,14 +59,14 @@ void MtfRenderer::draw (double fScaleX, double fScaleY)
     }
 }
 
-void MtfRenderer::setFastPropertyValue( sal_Int32 nHandle, const uno::Any& aAny)
+void MtfRenderer::setFastPropertyValue( sal_Int32 nHandle, const cpo::uno::Any& aAny)
 {
     if (nHandle == 0) {
         mpMetafile = reinterpret_cast<GDIMetaFile*>( *o3tl::doAccess<sal_Int64>(aAny) );
     }
 }
 
-MtfRenderer::MtfRenderer (uno::Sequence<uno::Any> const& aArgs, uno::Reference<uno::XComponentContext> const&) : mpMetafile (nullptr)
+MtfRenderer::MtfRenderer (uno::Sequence<cpo::uno::Any> const& aArgs, uno::Reference<uno::XComponentContext> const&) : mpMetafile (nullptr)
 {
     if( aArgs.getLength() == 1 ) {
         aArgs[0] >>= mxCanvas;
@@ -77,7 +77,7 @@ MtfRenderer::MtfRenderer (uno::Sequence<uno::Any> const& aArgs, uno::Reference<u
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_rendering_MtfRenderer_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new MtfRenderer(args, context));
 }

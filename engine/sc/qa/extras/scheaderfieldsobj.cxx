@@ -91,7 +91,7 @@ uno::Reference<uno::XInterface> ScHeaderFieldsObj::init()
     uno::Reference<text::XTextContent> xTC(
         xMSF->createInstance(u"com.sun.star.text.TextField.Time"_ustr), uno::UNO_QUERY_THROW);
     m_xText->insertTextContent(m_xText->createTextCursor(), xTC, false);
-    xPropertySet->setPropertyValue(u"RightPageHeaderContent"_ustr, uno::Any(xHFC));
+    xPropertySet->setPropertyValue(u"RightPageHeaderContent"_ustr, cpo::uno::Any(xHFC));
 
     uno::Reference<text::XTextFieldsSupplier> xTFS(m_xText, uno::UNO_QUERY_THROW);
     return xTFS->getTextFields();

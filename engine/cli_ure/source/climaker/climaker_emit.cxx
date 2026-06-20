@@ -33,6 +33,7 @@ using namespace ::System::Reflection;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace climaker
 {
@@ -1331,7 +1332,7 @@ Assembly ^ TypeEmitter::type_resolve(
             if (field_type->FullName->Equals( "uno.Any" ))
             {
                 code->Emit( Emit::OpCodes::Ldarg_0 );
-                code->Emit( Emit::OpCodes::Ldsfld, ::uno::Any::typeid->GetField("VOID"));
+                code->Emit( Emit::OpCodes::Ldsfld, ::cpo::uno::Any::typeid->GetField("VOID"));
                 code->Emit( Emit::OpCodes::Stfld, field );
             }
         }
@@ -1493,7 +1494,7 @@ Assembly ^ TypeEmitter::type_resolve(
     for (int j = seqCtors.getLength() - 1; j >= 0; j--)
     {
         bool bParameterArray = false;
-        ::System::Type ^ typeAny = ::uno::Any::typeid;
+        ::System::Type ^ typeAny = ::cpo::uno::Any::typeid;
         const Reference<reflection::XServiceConstructorDescription> & ctorDes =
             seqCtors[j];
         //obtain the parameter types
@@ -1505,7 +1506,7 @@ Assembly ^ TypeEmitter::type_resolve(
         for (int iparam = 0; iparam != cParams; iparam++)
         {
             if (seqParams[iparam]->isRestParameter())
-                arTypeParameters[iparam + 1] = array< ::uno::Any>::typeid;
+                arTypeParameters[iparam + 1] = array< ::cpo::uno::Any>::typeid;
             else
                 arTypeParameters[iparam + 1] = get_type(seqParams[iparam]->getType());
         }
@@ -1665,7 +1666,7 @@ Assembly ^ TypeEmitter::type_resolve(
             //Any[]. This array is filled with the created Anys which contain the parameters
             //and the values contained in the parameter array
             Emit::LocalBuilder ^ local_anyParams =
-                ilGen->DeclareLocal(array< ::uno::Any>::typeid);
+                ilGen->DeclareLocal(array< ::cpo::uno::Any>::typeid);
 
             //Create the Any for every argument, except for the parameter array
             //arLocalAny contains the LocalBuilder for all these parameters.
@@ -1970,7 +1971,7 @@ Emit::CustomAttributeBuilder^ TypeEmitter::get_exception_attribute(
     //Define locals ---------------------------------
     // Any, returned by XComponentContext.getValueByName
     Emit::LocalBuilder^ local_any =
-        ilGen->DeclareLocal(::uno::Any::typeid);
+        ilGen->DeclareLocal(::cpo::uno::Any::typeid);
 
     //Call XContext::getValueByName
     ilGen->Emit(Emit::OpCodes::Ldarg_0);
@@ -1988,7 +1989,7 @@ Emit::CustomAttributeBuilder^ TypeEmitter::get_exception_attribute(
     //Contains the returned Any a value?
     ilGen->Emit(Emit::OpCodes::Ldloca_S, local_any);
     ::System::Reflection::MethodInfo ^ methodHasValue =
-          ::uno::Any::typeid->GetMethod("hasValue");
+          ::cpo::uno::Any::typeid->GetMethod("hasValue");
     ilGen->Emit(Emit::OpCodes::Call, methodHasValue);
 
     //If not, then throw a DeploymentException
@@ -2012,7 +2013,7 @@ Emit::CustomAttributeBuilder^ TypeEmitter::get_exception_attribute(
 
     //Cast the singleton contained in the Any to the expected interface and return it.
     ilGen->Emit(Emit::OpCodes::Ldloca_S, local_any);
-    ilGen->Emit(Emit::OpCodes::Call,  ::uno::Any::typeid->GetProperty("Value")->GetGetMethod());
+    ilGen->Emit(Emit::OpCodes::Call,  ::cpo::uno::Any::typeid->GetProperty("Value")->GetGetMethod());
     ilGen->Emit(Emit::OpCodes::Castclass, retType);
     ilGen->Emit(Emit::OpCodes::Ret);
 
@@ -2063,7 +2064,7 @@ Emit::CustomAttributeBuilder^ TypeEmitter::get_exception_attribute(
     case TypeClass_TYPE:
         return ::System::Type::typeid;
     case TypeClass_ANY:
-        return ::uno::Any::typeid;
+        return ::cpo::uno::Any::typeid;
     case TypeClass_ENUM:
         return get_type( Reference< reflection::XEnumTypeDescription >(
                              xType, UNO_QUERY_THROW ) );

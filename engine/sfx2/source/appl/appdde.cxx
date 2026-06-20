@@ -353,7 +353,7 @@ bool SfxObjectShell::DdeExecute( const OUString&   rCmd )  // Expressed in our B
 */
 bool SfxObjectShell::DdeGetData( const OUString&,              // the Item to be addressed
                                  const OUString&,              // in: Format
-                                 css::uno::Any& )// out: requested data
+                                 cpo::uno::Any& )// out: requested data
 {
     return false;
 }
@@ -368,7 +368,7 @@ bool SfxObjectShell::DdeGetData( const OUString&,              // the Item to be
 */
 bool SfxObjectShell::DdeSetData( const OUString&,                    // the Item to be addressed
                                  const OUString&,                    // in: Format
-                                 const css::uno::Any& )// out: requested data
+                                 const cpo::uno::Any& )// out: requested data
 {
     return false;
 }
@@ -509,7 +509,7 @@ DdeService* SfxApplication::GetDdeService()
 DdeData* SfxDdeDocTopic_Impl::Get(SotClipboardFormatId nFormat)
 {
     OUString sMimeType( SotExchange::GetFormatMimeType( nFormat ));
-    css::uno::Any aValue;
+    cpo::uno::Any aValue;
     bool bRet = pSh->DdeGetData( GetCurItem(), sMimeType, aValue );
     if( bRet && aValue.hasValue() && ( aValue >>= aSeq ) )
     {
@@ -524,7 +524,7 @@ bool SfxDdeDocTopic_Impl::Put( const DdeData* pData )
 {
     if (pData->getSize())
     {
-        css::uno::Any aValue;
+        cpo::uno::Any aValue;
         if (pData->GetFormat() == SotClipboardFormatId::STRING)
         {
             aValue <<= OUString(reinterpret_cast<const sal_Unicode*>(pData->getData()));

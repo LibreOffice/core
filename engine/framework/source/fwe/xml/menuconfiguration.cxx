@@ -33,6 +33,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::container;
@@ -79,12 +80,12 @@ Reference< XIndexAccess > MenuConfiguration::CreateMenuBarConfigurationFromXML(
     }
     catch ( const RuntimeException& e )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw WrappedTargetException( e.Message, Reference< XInterface >(), anyEx );
     }
     catch( const SAXException& e )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         SAXException aWrappedSAXException;
 
         if ( !( e.WrappedException >>= aWrappedSAXException ))
@@ -94,7 +95,7 @@ Reference< XIndexAccess > MenuConfiguration::CreateMenuBarConfigurationFromXML(
     }
     catch( const css::io::IOException& e )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw WrappedTargetException( e.Message, Reference< XInterface >(), anyEx );
     }
 }
@@ -113,17 +114,17 @@ void MenuConfiguration::StoreMenuBarConfigurationToXML(
     }
     catch ( const RuntimeException& e )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw WrappedTargetException( e.Message, Reference< XInterface >(), anyEx );
     }
     catch ( const SAXException& e )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw WrappedTargetException( e.Message, Reference< XInterface >(), anyEx );
     }
     catch ( const css::io::IOException& e )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw WrappedTargetException( e.Message, Reference< XInterface >(), anyEx );
     }
 }

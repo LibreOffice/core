@@ -152,6 +152,7 @@ namespace treeview {
 using namespace treeview;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::configuration;
 using namespace com::sun::star::lang;

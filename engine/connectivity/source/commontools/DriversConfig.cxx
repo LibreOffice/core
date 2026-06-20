@@ -30,11 +30,11 @@ using namespace ::com::sun::star;
 
 namespace
 {
-    void lcl_convert(const uno::Sequence< OUString >& _aSource,uno::Any& _rDest)
+    void lcl_convert(const uno::Sequence< OUString >& _aSource,cpo::uno::Any& _rDest)
     {
-        uno::Sequence<uno::Any> aRet(_aSource.getLength());
+        uno::Sequence<cpo::uno::Any> aRet(_aSource.getLength());
         std::transform(_aSource.begin(), _aSource.end(), aRet.getArray(),
-                       [](auto& str) { return uno::Any(str); });
+                       [](auto& str) { return cpo::uno::Any(str); });
         _rDest <<= aRet;
     }
     void lcl_fillValues(const ::utl::OConfigurationNode& _aURLPatternNode,const OUString& _sNode,::comphelper::NamedValueCollection& _rValues)
@@ -46,7 +46,7 @@ namespace
         uno::Sequence< OUString > aStringSeq;
         for (auto& prop : aPropertiesNode.getNodeNames())
         {
-            uno::Any aValue = aPropertiesNode.getNodeValue(prop + "/Value");
+            cpo::uno::Any aValue = aPropertiesNode.getNodeValue(prop + "/Value");
             if ( aValue >>= aStringSeq )
             {
                 lcl_convert(aStringSeq,aValue);

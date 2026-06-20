@@ -59,7 +59,7 @@ hyper_link_get_uri( AtkHyperlink *pLink,
                     gint          i )
 {
     try {
-        uno::Any aAny = getHyperlink( pLink )->getAccessibleActionObject( i );
+        cpo::uno::Any aAny = getHyperlink( pLink )->getAccessibleActionObject( i );
         OUString aUri = aAny.get< OUString > ();
         return OUStringToGChar(aUri);
     }

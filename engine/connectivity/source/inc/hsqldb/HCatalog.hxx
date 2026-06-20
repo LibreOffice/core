@@ -50,7 +50,7 @@ namespace connectivity::hsqldb
         sdbcx::OCollection*      getPrivateViews()   const { return m_pViews.get(); }
         const css::uno::Reference< css::sdbc::XConnection >& getConnection() const { return m_xConnection; }
 
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
         // ::cppu::OComponentHelper
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
     };

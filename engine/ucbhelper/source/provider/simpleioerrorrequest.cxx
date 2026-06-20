@@ -27,7 +27,7 @@ using namespace ucbhelper;
 
 SimpleIOErrorRequest::SimpleIOErrorRequest(
                 const ucb::IOErrorCode eError,
-                const uno::Sequence< uno::Any > & rArgs,
+                const uno::Sequence< cpo::uno::Any > & rArgs,
                 const OUString & rMessage,
                 const uno::Reference< ucb::XCommandProcessor > & xContext )
 {
@@ -35,7 +35,7 @@ SimpleIOErrorRequest::SimpleIOErrorRequest(
     ucb::InteractiveAugmentedIOException aRequest(
         rMessage, xContext, task::InteractionClassification_ERROR, eError, rArgs);
 
-    setRequest( uno::Any( aRequest ) );
+    setRequest( cpo::uno::Any( aRequest ) );
 
     // Fill continuations...
     setContinuations({ new InteractionAbort(this) });

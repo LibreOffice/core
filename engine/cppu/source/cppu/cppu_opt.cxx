@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <typelib/typedescription.h>
 #include <uno/any2.h>
 #include <rtl/ustring.hxx>

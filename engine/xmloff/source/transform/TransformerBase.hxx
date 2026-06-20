@@ -103,7 +103,7 @@ public:
     virtual void SAL_CALL unknown(const OUString& sString) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // C++
     const css::uno::Reference< css::xml::sax::XDocumentHandler > & GetDocHandler() const { return m_xHandler; }

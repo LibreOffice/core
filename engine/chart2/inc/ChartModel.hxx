@@ -256,7 +256,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // css::lang::XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // css::frame::XModel (required interface)
 
@@ -363,7 +363,7 @@ public:
         const css::lang::EventObject& Source ) override;
 
     // ____ datatransferable::XTransferable ____
-    virtual css::uno::Any SAL_CALL getTransferData(
+    virtual cpo::uno::Any SAL_CALL getTransferData(
         const css::datatransfer::DataFlavor& aFlavor ) override;
     virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors() override;
     virtual bool SAL_CALL isDataFlavorSupported(
@@ -419,7 +419,7 @@ public:
     virtual void SAL_CALL setTitleObject( const css::uno::Reference< css::chart2::XTitle >& Title ) override;
 
     // ____ XInterface (for old API wrapper) ____
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
 
     // ____ XLoadable ____
     virtual void SAL_CALL initNew() override;
@@ -444,7 +444,7 @@ public:
         createInstance( const OUString& aServiceSpecifier ) override;
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
         createInstanceWithArguments( const OUString& ServiceSpecifier
-                                   , const css::uno::Sequence< css::uno::Any >& Arguments ) override;
+                                   , const css::uno::Sequence< cpo::uno::Any >& Arguments ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
         getAvailableServiceNames() override;
 

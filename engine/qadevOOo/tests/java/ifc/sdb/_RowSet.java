@@ -22,7 +22,7 @@ import lib.MultiPropertyTest;
 import lib.StatusException;
 
 import com.sun.star.sdbc.XConnection;
-import com.sun.star.uno.AnyConverter;
+import cpo.uno.AnyConverter;
 import com.sun.star.uno.Type;
 
 /**

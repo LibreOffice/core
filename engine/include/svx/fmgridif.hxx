@@ -78,7 +78,7 @@ class SAL_WARN_UNUSED FmXModifyMultiplexer final : public OWeakSubObject
 public:
     FmXModifyMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex );
     DECLARE_UNO3_DEFAULTS(FmXModifyMultiplexer,OWeakSubObject)
-    virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+    virtual cpo::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
 
 // css::lang::XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
@@ -98,7 +98,7 @@ public:
     FmXUpdateMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex );
     DECLARE_UNO3_DEFAULTS(FmXUpdateMultiplexer,OWeakSubObject)
 
-    virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+    virtual cpo::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
 
 // css::lang::XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
@@ -119,7 +119,7 @@ public:
     FmXSelectionMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex );
     DECLARE_UNO3_DEFAULTS(FmXSelectionMultiplexer, OWeakSubObject)
 
-    virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+    virtual cpo::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
 
 // css::lang::XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
@@ -139,7 +139,7 @@ public:
     FmXGridControlMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex );
     DECLARE_UNO3_DEFAULTS( FmXGridControlMultiplexer, OWeakSubObject )
 
-    virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+    virtual cpo::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
 
 // css::lang::XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
@@ -158,7 +158,7 @@ class SAL_WARN_UNUSED FmXContainerMultiplexer final : public OWeakSubObject,
 public:
     FmXContainerMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex);
     DECLARE_UNO3_DEFAULTS(FmXContainerMultiplexer,OWeakSubObject)
-    virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+    virtual cpo::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
 
 // css::lang::XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
@@ -205,7 +205,7 @@ public:
 
     // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(FmXGridControl, UnoControl)
-    virtual css::uno::Any  SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
+    virtual cpo::uno::Any  SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
 
 // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type> SAL_CALL getTypes(  ) override;
@@ -241,7 +241,7 @@ public:
 
 // css::container::XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 _rIndex) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex(sal_Int32 _rIndex) override;
 
 // css::form::XGridControl
     virtual void SAL_CALL addGridControlListener( const css::uno::Reference< css::form::XGridControlListener >& _listener ) override;
@@ -253,7 +253,7 @@ public:
 
 // css::form::XGridFieldDataSupplier (base of XGridControl)
     virtual css::uno::Sequence< bool > SAL_CALL queryFieldDataType( const css::uno::Type& xType ) override;
-    virtual css::uno::Sequence< css::uno::Any > SAL_CALL queryFieldData( sal_Int32 nRow, const css::uno::Type& xType ) override;
+    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL queryFieldData( sal_Int32 nRow, const css::uno::Type& xType ) override;
 
 // UnoControl
     virtual OUString GetComponentServiceName() const override;
@@ -281,8 +281,8 @@ public:
     virtual void SAL_CALL releaseDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
 
 // css::view::XSelectionSupplier
-    virtual bool SAL_CALL select( const css::uno::Any& aSelection ) override;
-    virtual css::uno::Any SAL_CALL getSelection(  ) override;
+    virtual bool SAL_CALL select( const cpo::uno::Any& aSelection ) override;
+    virtual cpo::uno::Any SAL_CALL getSelection(  ) override;
     virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
     virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 
@@ -381,7 +381,7 @@ public:
 
 // css::container::XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 _rIndex) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex(sal_Int32 _rIndex) override;
 
 // css::beans::XPropertyChangeListener
     virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) override;
@@ -404,8 +404,8 @@ public:
     virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& Event) override;
 
 // VCLXWindow
-    virtual void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
-    virtual css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
+    virtual void SAL_CALL setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
+    virtual cpo::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
 
 // css::form::XGridControl
     virtual void SAL_CALL addGridControlListener( const css::uno::Reference< css::form::XGridControlListener >& _listener ) override;
@@ -417,7 +417,7 @@ public:
 
 // css::form::XGridFieldDataSupplier (base of XGridControl)
     virtual css::uno::Sequence< bool > SAL_CALL queryFieldDataType( const css::uno::Type& xType ) override;
-    virtual css::uno::Sequence< css::uno::Any > SAL_CALL queryFieldData( sal_Int32 nRow, const css::uno::Type& xType ) override;
+    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL queryFieldData( sal_Int32 nRow, const css::uno::Type& xType ) override;
 
 // css::sdb::XRowSetSupplier
     virtual css::uno::Reference< css::sdbc::XRowSet >  SAL_CALL getRowSet() override;
@@ -473,8 +473,8 @@ public:
     virtual void SAL_CALL resetted(const css::lang::EventObject& rEvent) override;
 
 // css::view::XSelectionSupplier
-    virtual bool SAL_CALL select( const css::uno::Any& aSelection ) override;
-    virtual css::uno::Any SAL_CALL getSelection(  ) override;
+    virtual bool SAL_CALL select( const cpo::uno::Any& aSelection ) override;
+    virtual cpo::uno::Any SAL_CALL getSelection(  ) override;
     virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
     virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 

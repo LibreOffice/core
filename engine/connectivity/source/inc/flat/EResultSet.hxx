@@ -48,7 +48,7 @@ namespace connectivity::flat
         OFlatResultSet( file::OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator&   _aSQLIterator);
 
         // XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
         virtual void SAL_CALL acquire() noexcept override;
         virtual void SAL_CALL release() noexcept override;
         //XTypeProvider
@@ -57,12 +57,12 @@ namespace connectivity::flat
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
 
         // XRowLocate
-        virtual css::uno::Any SAL_CALL getBookmark(  ) override;
-        virtual bool SAL_CALL moveToBookmark( const css::uno::Any& bookmark ) override;
-        virtual bool SAL_CALL moveRelativeToBookmark( const css::uno::Any& bookmark, sal_Int32 rows ) override;
-        virtual sal_Int32 SAL_CALL compareBookmarks( const css::uno::Any& first, const css::uno::Any& second ) override;
+        virtual cpo::uno::Any SAL_CALL getBookmark(  ) override;
+        virtual bool SAL_CALL moveToBookmark( const cpo::uno::Any& bookmark ) override;
+        virtual bool SAL_CALL moveRelativeToBookmark( const cpo::uno::Any& bookmark, sal_Int32 rows ) override;
+        virtual sal_Int32 SAL_CALL compareBookmarks( const cpo::uno::Any& first, const cpo::uno::Any& second ) override;
         virtual bool SAL_CALL hasOrderedBookmarks(  ) override;
-        virtual sal_Int32 SAL_CALL hashBookmark( const css::uno::Any& bookmark ) override;
+        virtual sal_Int32 SAL_CALL hashBookmark( const cpo::uno::Any& bookmark ) override;
     };
 
 }

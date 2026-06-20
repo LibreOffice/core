@@ -471,7 +471,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf137819)
     uno::Reference<beans::XPropertySet> xShapePropSet(getShape(1), uno::UNO_QUERY);
     xShapePropSet->setPropertyValue(
         u"AnchorType"_ustr,
-        uno::Any(text::TextContentAnchorType::TextContentAnchorType_AS_CHARACTER));
+        cpo::uno::Any(text::TextContentAnchorType::TextContentAnchorType_AS_CHARACTER));
 
     // Make the layout xml dump after the change
     auto pXml = parseLayoutDump();
@@ -493,15 +493,15 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testParagraphMarkInCell)
     uno::Reference<view::XViewSettingsSupplier> xViewSettingsSupplier(
         xModel->getCurrentController(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xViewSettings(xViewSettingsSupplier->getViewSettings());
-    uno::Any aOldHidden{ xViewSettings->getPropertyValue(u"ShowHiddenCharacters"_ustr) };
-    uno::Any aOldNon{ xViewSettings->getPropertyValue(u"ShowNonprintingCharacters"_ustr) };
+    cpo::uno::Any aOldHidden{ xViewSettings->getPropertyValue(u"ShowHiddenCharacters"_ustr) };
+    cpo::uno::Any aOldNon{ xViewSettings->getPropertyValue(u"ShowNonprintingCharacters"_ustr) };
     comphelper::ScopeGuard g([&] {
         xViewSettings->setPropertyValue(u"ShowHiddenCharacters"_ustr, aOldHidden);
         xViewSettings->setPropertyValue(u"ShowNonprintingCharacters"_ustr, aOldNon);
     });
 
-    xViewSettings->setPropertyValue(u"ShowHiddenCharacters"_ustr, uno::Any(true));
-    xViewSettings->setPropertyValue(u"ShowNonprintingCharacters"_ustr, uno::Any(true));
+    xViewSettings->setPropertyValue(u"ShowHiddenCharacters"_ustr, cpo::uno::Any(true));
+    xViewSettings->setPropertyValue(u"ShowNonprintingCharacters"_ustr, cpo::uno::Any(true));
 
     {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -511,7 +511,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testParagraphMarkInCell)
         assertXPath(pXmlDoc, "/root/page/body/txt[2]/infos/bounds", "height", u"230");
     }
 
-    xViewSettings->setPropertyValue(u"ShowNonprintingCharacters"_ustr, uno::Any(false));
+    xViewSettings->setPropertyValue(u"ShowNonprintingCharacters"_ustr, cpo::uno::Any(false));
 
     {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -522,7 +522,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testParagraphMarkInCell)
         assertXPath(pXmlDoc, "/root/page/body/txt[2]/infos/bounds", "height", u"230");
     }
 
-    xViewSettings->setPropertyValue(u"ShowNonprintingCharacters"_ustr, uno::Any(true));
+    xViewSettings->setPropertyValue(u"ShowNonprintingCharacters"_ustr, cpo::uno::Any(true));
 
     {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -541,15 +541,15 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testParagraphMarkLineHeight)
     uno::Reference<view::XViewSettingsSupplier> xViewSettingsSupplier(
         xModel->getCurrentController(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xViewSettings(xViewSettingsSupplier->getViewSettings());
-    uno::Any aOldHidden{ xViewSettings->getPropertyValue(u"ShowHiddenCharacters"_ustr) };
-    uno::Any aOldNon{ xViewSettings->getPropertyValue(u"ShowNonprintingCharacters"_ustr) };
+    cpo::uno::Any aOldHidden{ xViewSettings->getPropertyValue(u"ShowHiddenCharacters"_ustr) };
+    cpo::uno::Any aOldNon{ xViewSettings->getPropertyValue(u"ShowNonprintingCharacters"_ustr) };
     comphelper::ScopeGuard g([&] {
         xViewSettings->setPropertyValue(u"ShowHiddenCharacters"_ustr, aOldHidden);
         xViewSettings->setPropertyValue(u"ShowNonprintingCharacters"_ustr, aOldNon);
     });
 
-    xViewSettings->setPropertyValue(u"ShowHiddenCharacters"_ustr, uno::Any(true));
-    xViewSettings->setPropertyValue(u"ShowNonprintingCharacters"_ustr, uno::Any(true));
+    xViewSettings->setPropertyValue(u"ShowHiddenCharacters"_ustr, cpo::uno::Any(true));
+    xViewSettings->setPropertyValue(u"ShowNonprintingCharacters"_ustr, cpo::uno::Any(true));
 
     {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -571,7 +571,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testParagraphMarkLineHeight)
                     u"253");
     }
 
-    xViewSettings->setPropertyValue(u"ShowNonprintingCharacters"_ustr, uno::Any(false));
+    xViewSettings->setPropertyValue(u"ShowNonprintingCharacters"_ustr, cpo::uno::Any(false));
 
     {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -1111,7 +1111,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, TestTextBoxChangeViaUNO)
 
     // So now set the frame as textbox for the shape!
     uno::Reference<beans::XPropertySet>(getShape(1), uno::UNO_QUERY_THROW)
-        ->setPropertyValue(u"TextBoxContent"_ustr, uno::Any(uno::Reference<text::XTextFrame>(
+        ->setPropertyValue(u"TextBoxContent"_ustr, cpo::uno::Any(uno::Reference<text::XTextFrame>(
                                                        getShape(2), uno::UNO_QUERY_THROW)));
 
     CPPUNIT_ASSERT_MESSAGE("This is supposed to be a textbox!",
@@ -1351,7 +1351,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf152031)
     sal_Int32 nWidth = getProperty<sal_Int32>(xTable, u"Width"_ustr) * 4 / 5;
 
     uno::Reference<beans::XPropertySet> xSet(xTable, uno::UNO_QUERY);
-    xSet->setPropertyValue(u"Width"_ustr, uno::Any(nWidth));
+    xSet->setPropertyValue(u"Width"_ustr, cpo::uno::Any(nWidth));
 
     auto pDump = parseLayoutDump();
     // There was a stair effect after change the table size.
@@ -1713,7 +1713,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf166210)
     auto rowHeight1 = getXPath(pXmlDoc, "//body/tab/infos/bounds", "height").toInt32();
 
     // Hide first section
-    xSection1->setPropertyValue(u"Condition"_ustr, css::uno::Any(u"1"_ustr));
+    xSection1->setPropertyValue(u"Condition"_ustr, cpo::uno::Any(u"1"_ustr));
     Scheduler::ProcessEventsToIdle();
     pXmlDoc = parseLayoutDump();
     auto rowHeight2 = getXPath(pXmlDoc, "//body/tab/infos/bounds", "height").toInt32();
@@ -1721,7 +1721,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf166210)
     CPPUNIT_ASSERT_LESS(rowHeight1, rowHeight2);
 
     // Hide second section
-    xSection2->setPropertyValue(u"Condition"_ustr, css::uno::Any(u"1"_ustr));
+    xSection2->setPropertyValue(u"Condition"_ustr, cpo::uno::Any(u"1"_ustr));
     Scheduler::ProcessEventsToIdle();
     pXmlDoc = parseLayoutDump();
     auto rowHeight3 = getXPath(pXmlDoc, "//body/tab/infos/bounds", "height").toInt32();
@@ -1888,7 +1888,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf166978)
     auto xSections = xTextSectionsSupplier->getTextSections();
     CPPUNIT_ASSERT(xSections);
     auto xSection = xSections->getByName(u"Section1"_ustr).queryThrow<css::beans::XPropertySet>();
-    xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(false));
+    xSection->setPropertyValue(u"IsVisible"_ustr, cpo::uno::Any(false));
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(1, getPages()); // must not split the second row of the table to page 2

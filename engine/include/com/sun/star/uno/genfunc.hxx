@@ -25,7 +25,7 @@
 #include <cstddef>
 
 #include "com/sun/star/uno/genfunc.h"
-#include "com/sun/star/uno/Any.hxx"
+#include "cpo/uno/Any.hxx"
 #include "com/sun/star/uno/XInterface.hpp"
 
 
@@ -49,7 +49,7 @@ inline void * SAL_CALL cpp_queryInterface( void * pCppI, typelib_TypeDescription
     {
         try
         {
-            Any aRet( static_cast< XInterface * >( pCppI )->queryInterface(
+            cpo::uno::Any aRet( static_cast< XInterface * >( pCppI )->queryInterface(
                 * reinterpret_cast< const Type * >( &pType ) ) );
             if (typelib_TypeClass_INTERFACE == aRet.pType->eTypeClass)
             {

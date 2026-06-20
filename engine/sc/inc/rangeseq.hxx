@@ -22,7 +22,7 @@
 #include "types.hxx"
 #include <com/sun/star/uno/TypeClass.hpp>
 
-namespace com::sun::star::uno { class Any; }
+namespace cpo::uno { class Any; }
 
 struct ScInterpreterContext;
 class ScDocument;
@@ -32,19 +32,19 @@ class ScRange;
 class ScRangeToSequence
 {
 public:
-    static bool FillLongArray( css::uno::Any& rAny,
+    static bool FillLongArray( cpo::uno::Any& rAny,
                                 ScDocument& rDoc, const ScRange& rRange );
-    static bool FillLongArray( css::uno::Any& rAny,
+    static bool FillLongArray( cpo::uno::Any& rAny,
                                 const ScMatrix* pMatrix );
-    static bool FillDoubleArray( css::uno::Any& rAny,
+    static bool FillDoubleArray( cpo::uno::Any& rAny,
                                 ScDocument& rDoc, const ScRange& rRange );
-    static bool FillDoubleArray( css::uno::Any& rAny,
+    static bool FillDoubleArray( cpo::uno::Any& rAny,
                                 const ScMatrix* pMatrix );
-    static bool FillStringArray( css::uno::Any& rAny,
+    static bool FillStringArray( cpo::uno::Any& rAny,
                                 ScDocument& rDoc, const ScRange& rRange );
-    static bool FillStringArray( css::uno::Any& rAny,
+    static bool FillStringArray( cpo::uno::Any& rAny,
                                 const ScMatrix* pMatrix, const ScInterpreterContext& rContext );
-    static bool FillMixedArray( css::uno::Any& rAny,
+    static bool FillMixedArray( cpo::uno::Any& rAny,
                                 ScDocument& rDoc, const ScRange& rRange,
                                 bool bAllowNV = false );
 
@@ -54,7 +54,7 @@ public:
             implementation of XFormulaParser. If <FALSE/>, boolean values are
             treated as ordinary double values 1 (true) and 0 (false).
      */
-    static bool FillMixedArray( css::uno::Any& rAny,
+    static bool FillMixedArray( cpo::uno::Any& rAny,
                                 const ScMatrix* pMatrix, bool bDataTypes = false );
 };
 
@@ -72,7 +72,7 @@ public:
     static  bool        ConvertAnyToDouble(
                             double & o_fVal,
                             css::uno::TypeClass & o_eClass,
-                            const css::uno::Any & rAny );
+                            const cpo::uno::Any & rAny );
 
 };
 
@@ -87,7 +87,7 @@ public:
         @returns a new'd ScMatrix as ScMatrixRef, NULL if rAny couldn't be read
         as type Sequence<Sequence<Any>>
      */
-    static  ScMatrixRef CreateMixedMatrix( const css::uno::Any & rAny );
+    static  ScMatrixRef CreateMixedMatrix( const cpo::uno::Any & rAny );
 
 };
 
@@ -96,7 +96,7 @@ class ScByteSequenceToString
 public:
     //  rAny must contain either OUString or Sequence<sal_Int8> (thread encoding assumed),
     //  may or may not contain 0-bytes at the end
-    static bool GetString( OUString& rString, const css::uno::Any& rAny );
+    static bool GetString( OUString& rString, const cpo::uno::Any& rAny );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

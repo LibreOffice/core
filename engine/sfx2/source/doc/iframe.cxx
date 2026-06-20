@@ -71,7 +71,7 @@ class IFrameObject : public ::cppu::WeakImplHelper <
 public:
     /// @throws css::uno::Exception
     /// @throws css::uno::RuntimeException
-    IFrameObject(css::uno::Reference < css::uno::XComponentContext> xContext, const css::uno::Sequence< css::uno::Any >& aArguments);
+    IFrameObject(css::uno::Reference < css::uno::XComponentContext> xContext, const css::uno::Sequence< cpo::uno::Any >& aArguments);
 
     virtual OUString SAL_CALL getImplementationName() override
     {
@@ -103,8 +103,8 @@ public:
     virtual void SAL_CALL removePropertyChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener > & aListener) override;
     virtual void SAL_CALL addVetoableChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener > & aListener) override;
     virtual void SAL_CALL removeVetoableChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener > & aListener) override;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
 };
 
 class IFrameWindow_Impl : public vcl::Window
@@ -149,7 +149,7 @@ std::span<const SfxItemPropertyMapEntry> lcl_GetIFramePropertyMap_Impl()
     return aIFramePropertyMap_Impl;
 }
 
-IFrameObject::IFrameObject(uno::Reference < uno::XComponentContext > xContext, const css::uno::Sequence< css::uno::Any >& aArguments)
+IFrameObject::IFrameObject(uno::Reference < uno::XComponentContext > xContext, const css::uno::Sequence< cpo::uno::Any >& aArguments)
     : mxContext(std::move( xContext ))
     , maPropMap( lcl_GetIFramePropertyMap_Impl() )
 {
@@ -275,7 +275,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL IFrameObject::getPropertySetI
     return xInfo;
 }
 
-void SAL_CALL IFrameObject::setPropertyValue(const OUString& aPropertyName, const uno::Any& aAny)
+void SAL_CALL IFrameObject::setPropertyValue(const OUString& aPropertyName, const cpo::uno::Any& aAny)
 {
     const SfxItemPropertyMapEntry* pEntry = maPropMap.getByName( aPropertyName );
     if( !pEntry )
@@ -355,12 +355,12 @@ void SAL_CALL IFrameObject::setPropertyValue(const OUString& aPropertyName, cons
     }
 }
 
-uno::Any SAL_CALL IFrameObject::getPropertyValue(const OUString& aPropertyName)
+cpo::uno::Any SAL_CALL IFrameObject::getPropertyValue(const OUString& aPropertyName)
 {
     const SfxItemPropertyMapEntry* pEntry = maPropMap.getByName( aPropertyName );
     if( !pEntry )
          throw beans::UnknownPropertyException(aPropertyName);
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     switch( pEntry->nWID )
     {
     case WID_FRAME_URL:
@@ -446,7 +446,7 @@ void SAL_CALL IFrameObject::setTitle( const OUString& )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_sfx2_IFrameObject_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &arguments)
+    css::uno::Sequence<cpo::uno::Any> const &arguments)
 {
     return cppu::acquire(new IFrameObject(context, arguments));
 }

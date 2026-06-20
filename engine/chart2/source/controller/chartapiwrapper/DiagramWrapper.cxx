@@ -76,7 +76,7 @@ using namespace ::chart::wrapper;
 using namespace ::chart::DataSeriesProperties;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::chart::XAxis;
@@ -731,12 +731,12 @@ void SAL_CALL DiagramWrapper::setPosition( const awt::Point& aPosition )
     if( aRelativePosition.Primary < 0 || aRelativePosition.Secondary < 0 || aRelativePosition.Primary > 1 || aRelativePosition.Secondary > 1 )
     {
         OSL_FAIL("DiagramWrapper::setPosition called with a position out of range -> automatic values are taken instead" );
-        uno::Any aEmpty;
+        cpo::uno::Any aEmpty;
         xProp->setPropertyValue( u"RelativePosition"_ustr, aEmpty );
         return;
     }
-    xProp->setPropertyValue( u"RelativePosition"_ustr, uno::Any(aRelativePosition) );
-    xProp->setPropertyValue( u"PosSizeExcludeAxes"_ustr, uno::Any(false) );
+    xProp->setPropertyValue( u"RelativePosition"_ustr, cpo::uno::Any(aRelativePosition) );
+    xProp->setPropertyValue( u"PosSizeExcludeAxes"_ustr, cpo::uno::Any(false) );
 }
 
 awt::Size SAL_CALL DiagramWrapper::getSize()
@@ -767,13 +767,13 @@ void SAL_CALL DiagramWrapper::setSize( const awt::Size& aSize )
     if( aRelativeSize.Primary > 1 || aRelativeSize.Secondary > 1 )
     {
         OSL_FAIL("DiagramWrapper::setSize called with sizes bigger than page -> automatic values are taken instead" );
-        uno::Any aEmpty;
+        cpo::uno::Any aEmpty;
         xProp->setPropertyValue( u"RelativeSize"_ustr, aEmpty );
         return;
     }
 
-    xProp->setPropertyValue( u"RelativeSize"_ustr, uno::Any(aRelativeSize) );
-    xProp->setPropertyValue( u"PosSizeExcludeAxes"_ustr, uno::Any(false) );
+    xProp->setPropertyValue( u"RelativeSize"_ustr, cpo::uno::Any(aRelativeSize) );
+    xProp->setPropertyValue( u"PosSizeExcludeAxes"_ustr, cpo::uno::Any(false) );
 }
 
 // ____ XShapeDescriptor (base of XShape) ____
@@ -824,7 +824,7 @@ void SAL_CALL DiagramWrapper::setDiagramPositionExcludingAxes( const awt::Rectan
     DiagramHelper::setDiagramPositioning( xModel, rPositionRect );
     uno::Reference< beans::XPropertySet > xDiaProps( getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
-        xDiaProps->setPropertyValue(u"PosSizeExcludeAxes"_ustr, uno::Any(true) );
+        xDiaProps->setPropertyValue(u"PosSizeExcludeAxes"_ustr, cpo::uno::Any(true) );
 }
 bool SAL_CALL DiagramWrapper::isExcludingDiagramPositioning()
 {
@@ -858,7 +858,7 @@ void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxes( const awt::Rectan
     DiagramHelper::setDiagramPositioning( xModel, rPositionRect );
     uno::Reference< beans::XPropertySet > xDiaProps( getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
-        xDiaProps->setPropertyValue(u"PosSizeExcludeAxes"_ustr, uno::Any(false) );
+        xDiaProps->setPropertyValue(u"PosSizeExcludeAxes"_ustr, cpo::uno::Any(false) );
 }
 awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionIncludingAxes(  )
 {
@@ -1179,11 +1179,11 @@ class WrappedDataRowSourceProperty : public WrappedProperty
 public:
     explicit WrappedDataRowSourceProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
@@ -1272,11 +1272,11 @@ class WrappedStackingProperty : public WrappedProperty
 public:
     WrappedStackingProperty(StackMode eStackMode, std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 protected: //methods
     bool    detectInnerValue( StackMode& eInnerStackMode ) const;
@@ -1374,11 +1374,11 @@ class WrappedDim3DProperty : public WrappedProperty
 public:
     explicit WrappedDim3DProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
@@ -1437,11 +1437,11 @@ class WrappedVerticalProperty : public WrappedProperty
 public:
     explicit WrappedVerticalProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
@@ -1505,14 +1505,14 @@ class WrappedNumberOfLinesProperty : public WrappedProperty
 public:
     explicit WrappedNumberOfLinesProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 protected: //methods
-    bool    detectInnerValue( uno::Any& rInnerValue ) const;
+    bool    detectInnerValue( cpo::uno::Any& rInnerValue ) const;
 
 private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
@@ -1528,7 +1528,7 @@ WrappedNumberOfLinesProperty::WrappedNumberOfLinesProperty(std::shared_ptr<Chart
 {
 }
 
-bool WrappedNumberOfLinesProperty::detectInnerValue( uno::Any& rInnerValue ) const
+bool WrappedNumberOfLinesProperty::detectInnerValue( cpo::uno::Any& rInnerValue ) const
 {
     sal_Int32 nNumberOfLines = 0;
     bool bHasDetectableInnerValue = false;
@@ -1628,7 +1628,7 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
         }
         ControllerLockGuardUNO aCtrlLockGuard( xModel );
         uno::Reference< beans::XPropertySet > xProp( static_cast<cppu::OWeakObject*>(xTemplate.get()), uno::UNO_QUERY );
-        xProp->setPropertyValue( u"NumberOfLines"_ustr, uno::Any(nNewValue) );
+        xProp->setPropertyValue( u"NumberOfLines"_ustr, cpo::uno::Any(nNewValue) );
         xTemplate->changeDiagram( xDiagram );
     }
     catch( const uno::Exception & )
@@ -1660,11 +1660,11 @@ class WrappedAttributedDataPointsProperty : public WrappedProperty
 public:
     explicit WrappedAttributedDataPointsProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
@@ -1698,7 +1698,7 @@ void WrappedAttributedDataPointsProperty::setPropertyValue( const Any& rOuterVal
     sal_Int32 i = 0;
     for (auto const& series : aSeriesVector)
     {
-        uno::Any aVal;
+        cpo::uno::Any aVal;
         if( i < aNewValue.getLength() )
             aVal <<= aNewValue[i];
         else
@@ -1726,7 +1726,7 @@ Any WrappedAttributedDataPointsProperty::getPropertyValue( const Reference< bean
         sal_Int32 i = 0;
         for (auto const& series : aSeriesVector)
         {
-            uno::Any aVal(
+            cpo::uno::Any aVal(
                 series->getFastPropertyValue(PROP_DATASERIES_ATTRIBUTED_DATA_POINTS)); // "AttributedDataPoints"
             uno::Sequence< sal_Int32 > aSeq;
             if( aVal >>= aSeq )
@@ -1754,11 +1754,11 @@ class WrappedSolidTypeProperty : public WrappedProperty
 public:
     explicit WrappedSolidTypeProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
@@ -1809,7 +1809,7 @@ Any WrappedSolidTypeProperty::getPropertyValue( const Reference< beans::XPropert
 
 Any WrappedSolidTypeProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
 {
-    return uno::Any( css::chart::ChartSolidType::RECTANGULAR_SOLID );
+    return cpo::uno::Any( css::chart::ChartSolidType::RECTANGULAR_SOLID );
 }
 
 namespace {
@@ -1819,11 +1819,11 @@ class WrappedAutomaticSizeProperty : public WrappedProperty
 public:
     WrappedAutomaticSizeProperty();
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 };
 
 }
@@ -1884,7 +1884,7 @@ class WrappedIncludeHiddenCellsProperty : public WrappedProperty
 public:
     explicit WrappedIncludeHiddenCellsProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
     virtual Any getPropertyValue(const Reference<beans::XPropertySet>& xInnerPropertySet) const override;
 
 private: //member
@@ -1917,7 +1917,7 @@ void WrappedIncludeHiddenCellsProperty::setPropertyValue( const Any& rOuterValue
 Any WrappedIncludeHiddenCellsProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
 {
     bool bValue = m_spChart2ModelContact->getDocumentModel()->isIncludeHiddenCells();
-    return uno::Any(bValue);
+    return cpo::uno::Any(bValue);
 }
 
 namespace
@@ -1926,7 +1926,7 @@ class WrappedHistogramProperty final : public WrappedProperty
 {
 public:
     WrappedHistogramProperty(const OUString& rPropertyName,
-                             uno::Any aDefaultValue,
+                             cpo::uno::Any aDefaultValue,
                              std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
         : WrappedProperty(rPropertyName, OUString())
         , m_aDefaultValue(std::move(aDefaultValue))
@@ -1934,7 +1934,7 @@ public:
     {
     }
 
-    void setPropertyValue(const uno::Any& rOuterValue,
+    void setPropertyValue(const cpo::uno::Any& rOuterValue,
                           const Reference<beans::XPropertySet>& /*xInnerPropertySet*/) const override
     {
         rtl::Reference<::chart::ChartType> xHistogramType = lcl_getHistogramChartType();
@@ -1964,7 +1964,7 @@ private:
         return nullptr;
     }
 
-    uno::Any m_aDefaultValue;
+    cpo::uno::Any m_aDefaultValue;
     std::shared_ptr<Chart2ModelContact> m_spChart2ModelContact;
 };
 
@@ -2029,11 +2029,11 @@ std::vector< std::unique_ptr<WrappedProperty> > DiagramWrapper::createWrappedPro
     aWrappedProperties.emplace_back( new WrappedIncludeHiddenCellsProperty( m_spChart2ModelContact ) );
 
     aWrappedProperties.emplace_back(new WrappedHistogramProperty(
-        u"BinWidth"_ustr, uno::Any(0.0), m_spChart2ModelContact));
+        u"BinWidth"_ustr, cpo::uno::Any(0.0), m_spChart2ModelContact));
     aWrappedProperties.emplace_back(new WrappedHistogramProperty(
-        u"BinCount"_ustr, uno::Any(sal_Int32(0)), m_spChart2ModelContact));
+        u"BinCount"_ustr, cpo::uno::Any(sal_Int32(0)), m_spChart2ModelContact));
     aWrappedProperties.emplace_back(new WrappedHistogramProperty(
-        u"FrequencyType"_ustr, uno::Any(sal_Int32(0)), m_spChart2ModelContact));
+        u"FrequencyType"_ustr, cpo::uno::Any(sal_Int32(0)), m_spChart2ModelContact));
 
     return aWrappedProperties;
 }

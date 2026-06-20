@@ -34,6 +34,7 @@ namespace dbaxml
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::container;
 using namespace xmloff::token;
@@ -83,7 +84,7 @@ void OTableStyleContext::FillPropertySet(
                 }
                 if ( pStyle )
                 {
-                    uno::Any aNumberFormat;
+                    cpo::uno::Any aNumberFormat;
                     m_nNumberFormat = pStyle->GetKey();
                     aNumberFormat <<= m_nNumberFormat;
                     AddProperty(CTF_DB_NUMBERFORMAT, aNumberFormat);
@@ -98,7 +99,7 @@ void OTableStyleContext::SetDefaults()
 {
 }
 
-void OTableStyleContext::AddProperty(const sal_Int16 nContextID, const uno::Any& rValue)
+void OTableStyleContext::AddProperty(const sal_Int16 nContextID, const cpo::uno::Any& rValue)
 {
     sal_Int32 nIndex(pStyles->GetIndex(nContextID));
     OSL_ENSURE(nIndex != -1, "Property not found in Map");

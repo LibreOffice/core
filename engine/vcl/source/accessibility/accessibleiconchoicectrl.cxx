@@ -31,6 +31,7 @@
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
 
@@ -58,7 +59,7 @@ void AccessibleIconChoiceCtrl::ProcessWindowEvent( const VclWindowEvent& rVclWin
                 {
                     sal_Int32 nPos = getCtrl()->GetEntryListPos( pEntry );
                     Reference< XAccessible > xChild = new AccessibleIconChoiceCtrlEntry( *getCtrl(), nPos, this );
-                    uno::Any aOldValue, aNewValue;
+                    cpo::uno::Any aOldValue, aNewValue;
                     aNewValue <<= xChild;
                     if (getCtrl()->HasFocus())
                         NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldValue, aNewValue );
@@ -78,7 +79,7 @@ void AccessibleIconChoiceCtrl::ProcessWindowEvent( const VclWindowEvent& rVclWin
                 {
                     sal_Int32 nPos = pCtrl->GetEntryListPos( pEntry );
                     Reference< XAccessible > xChild = new AccessibleIconChoiceCtrlEntry( *pCtrl, nPos, this );
-                    uno::Any aOldValue, aNewValue;
+                    cpo::uno::Any aOldValue, aNewValue;
                     aNewValue <<= xChild;
                     NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldValue, aNewValue );
                 }

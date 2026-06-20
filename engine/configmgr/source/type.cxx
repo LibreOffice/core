@@ -21,7 +21,7 @@
 
 #include <cassert>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <cppu/unotype.hxx>
@@ -61,7 +61,7 @@ Type elementType(Type type) {
 css::uno::Type const & mapType(Type type) {
     switch (type) {
     case TYPE_ANY:
-        return cppu::UnoType< css::uno::Any >::get();
+        return cppu::UnoType< cpo::uno::Any >::get();
     case TYPE_BOOLEAN:
         return cppu::UnoType< bool >::get();
     case TYPE_SHORT:
@@ -97,7 +97,7 @@ css::uno::Type const & mapType(Type type) {
     }
 }
 
-Type getDynamicType(css::uno::Any const & value) {
+Type getDynamicType(cpo::uno::Any const & value) {
     switch (value.getValueTypeClass()) {
     case css::uno::TypeClass_VOID:
         return TYPE_NIL;

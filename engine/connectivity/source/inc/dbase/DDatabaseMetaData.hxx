@@ -32,8 +32,8 @@ namespace connectivity::dbase
         virtual css::uno::Reference< css::sdbc::XResultSet > impl_getTypeInfo_throw() override;
         virtual bool SAL_CALL isReadOnly(  ) override;
         virtual OUString SAL_CALL getURL(  ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getColumns( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const OUString& columnNamePattern ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getIndexInfo( const css::uno::Any& catalog, const OUString& schema, const OUString& table, bool unique, bool approximate ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getColumns( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const OUString& columnNamePattern ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getIndexInfo( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table, bool unique, bool approximate ) override;
 
         virtual sal_Int32 SAL_CALL getMaxBinaryLiteralLength(  ) override;
         virtual sal_Int32 SAL_CALL getMaxCharLiteralLength(  ) override;

@@ -126,7 +126,7 @@ void SvxHyperlinkItem::SetMacroTable( const SvxMacroTableDtor& rTbl )
     m_pMacroTable.reset( new SvxMacroTableDtor ( rTbl ) );
 }
 
-bool SvxHyperlinkItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxHyperlinkItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
 //    bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -160,7 +160,7 @@ bool SvxHyperlinkItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) co
     return true;
 }
 
-bool SvxHyperlinkItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxHyperlinkItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     OUString aStr;

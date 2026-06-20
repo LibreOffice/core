@@ -131,7 +131,7 @@ namespace dbaui
         // late construction
         virtual bool Construct(vcl::Window* pParent) override;
         // XInterface
-        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+        virtual cpo::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
 
         // XTypeProvider
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
@@ -154,8 +154,8 @@ namespace dbaui
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         // XSelectionSupplier
-        virtual bool SAL_CALL select( const css::uno::Any& aSelection ) override;
-        virtual css::uno::Any SAL_CALL getSelection(  ) override;
+        virtual bool SAL_CALL select( const cpo::uno::Any& aSelection ) override;
+        virtual cpo::uno::Any SAL_CALL getSelection(  ) override;
         virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
         virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 
@@ -216,7 +216,7 @@ namespace dbaui
         virtual IController&      getCommandController() override;
         virtual ::comphelper::OInterfaceContainerHelper2*
                                   getContextMenuInterceptors() override;
-        virtual css::uno::Any     getCurrentSelection(weld::TreeView& rControl) const override;
+        virtual cpo::uno::Any     getCurrentSelection(weld::TreeView& rControl) const override;
         virtual vcl::Window* getMenuParent() const override;
         virtual void adjustMenuPosition(const weld::TreeView& rControl, ::Point& rPos) const override;
 
@@ -400,7 +400,7 @@ namespace dbaui
         static void extractDescriptorProps(const svx::ODataAccessDescriptor& _rDescriptor,
             OUString& _rDataSource, OUString& _rCommand, sal_Int32& _rCommandType, bool& _rEscapeProcessing);
 
-        void transferChangedControlProperty(const OUString& _rProperty, const css::uno::Any& _rNewValue);
+        void transferChangedControlProperty(const OUString& _rProperty, const cpo::uno::Any& _rNewValue);
 
         // checks whether the given tree entry denotes a data source
         bool impl_isDataSourceEntry(const weld::TreeIter* pEntry) const;

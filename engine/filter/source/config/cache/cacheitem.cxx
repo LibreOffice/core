@@ -90,7 +90,7 @@ css::uno::Sequence< css::beans::PropertyValue > CacheItem::getAsPackedPropertyVa
                       ++pProp           )
     {
         const OUString& rName  = pProp->first.maString;
-        const css::uno::Any&   rValue = pProp->second;
+        const cpo::uno::Any&   rValue = pProp->second;
 
         if (!rValue.hasValue())
             continue;
@@ -112,8 +112,8 @@ css::uno::Sequence< css::beans::PropertyValue > CacheItem::getAsPackedPropertyVa
 }
 
 
-static bool isSubSet(const css::uno::Any& aSubSet,
-                  const css::uno::Any& aSet   )
+static bool isSubSet(const cpo::uno::Any& aSubSet,
+                  const cpo::uno::Any& aSet   )
 {
     const css::uno::Type& aT1 = aSubSet.getValueType();
     const css::uno::Type& aT2 = aSet.getValueType();

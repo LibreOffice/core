@@ -21,7 +21,7 @@
 #define INCLUDED_COMPHELPER_PROPERTYBAG_HXX
 
 #include <config_options.h>
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/propertycontainerhelper.hxx>
 
@@ -41,7 +41,7 @@ namespace comphelper
     */
     class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) PropertyBag final : protected OPropertyContainerHelper
     {
-        std::map< sal_Int32, css::uno::Any > aDefaults;
+        std::map< sal_Int32, cpo::uno::Any > aDefaults;
         bool m_bAllowEmptyPropertyName;
     public:
         PropertyBag();
@@ -80,7 +80,7 @@ namespace comphelper
                     const OUString& _rName,
                     sal_Int32 _nHandle,
                     sal_Int32 _nAttributes,
-                    const css::uno::Any& _rInitialValue
+                    const cpo::uno::Any& _rInitialValue
                 );
 
         /** adds a property to the bag
@@ -146,7 +146,7 @@ namespace comphelper
         */
         void    getFastPropertyValue(
                     sal_Int32 _nHandle,
-                    css::uno::Any& _out_rValue
+                    cpo::uno::Any& _out_rValue
                 ) const;
 
         /** converts a to-be-set value of a property (given by handle) so that it can
@@ -168,9 +168,9 @@ namespace comphelper
         */
         bool    convertFastPropertyValue(
                         sal_Int32 _nHandle,
-                        const css::uno::Any& _rNewValue,
-                        css::uno::Any& _out_rConvertedValue,
-                        css::uno::Any& _out_rCurrentValue
+                        const cpo::uno::Any& _rNewValue,
+                        cpo::uno::Any& _out_rConvertedValue,
+                        cpo::uno::Any& _out_rCurrentValue
                     ) const;
 
         /** sets a new value for a property given by handle
@@ -179,7 +179,7 @@ namespace comphelper
         */
         void    setFastPropertyValue(
                         sal_Int32 _nHandle,
-                        const css::uno::Any& _rValue
+                        const cpo::uno::Any& _rValue
                     );
 
         /** returns the default value for a property given by handle
@@ -196,7 +196,7 @@ namespace comphelper
         */
         void    getPropertyDefaultByHandle(
                         sal_Int32 _nHandle,
-                        css::uno::Any& _out_rValue
+                        cpo::uno::Any& _out_rValue
                     ) const;
 
         /** determines whether a property with a given name is part of the bag

@@ -178,7 +178,7 @@ public:
 
     bool ConvertDataForFlavor( const STGMEDIUM& aMedium,
                                     const datatransfer::DataFlavor& aFlavor,
-                                    uno::Any& aResult );
+                                    cpo::uno::Any& aResult );
 
     bool GraphicalFlavor( const datatransfer::DataFlavor& aFlavor );
 
@@ -241,7 +241,7 @@ static OUString GetFlavorSuffixFromAspect( DWORD nAsp )
 
 bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium,
                                                         const datatransfer::DataFlavor& aFlavor,
-                                                        uno::Any& aResult )
+                                                        cpo::uno::Any& aResult )
 {
     bool bAnyIsReady = false;
 
@@ -1463,7 +1463,7 @@ void OleComponent::OnViewChange_Impl( sal_uInt32 dwAspect )
         uno::Reference < awt::XRequestCallback > xRequestCallback(
             m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.awt.AsyncCallback", m_xContext),
              uno::UNO_QUERY );
-        xRequestCallback->addCallback( new MainThreadNotificationRequest( xLockObject, OLECOMP_ONVIEWCHANGE, dwAspect ), uno::Any() );
+        xRequestCallback->addCallback( new MainThreadNotificationRequest( xLockObject, OLECOMP_ONVIEWCHANGE, dwAspect ), cpo::uno::Any() );
     }
 }
 
@@ -1483,7 +1483,7 @@ void OleComponent::OnClose_Impl()
         uno::Reference < awt::XRequestCallback > xRequestCallback(
             m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.awt.AsyncCallback", m_xContext),
              uno::UNO_QUERY );
-        xRequestCallback->addCallback( new MainThreadNotificationRequest( xLockObject, OLECOMP_ONCLOSE ), uno::Any() );
+        xRequestCallback->addCallback( new MainThreadNotificationRequest( xLockObject, OLECOMP_ONCLOSE ), cpo::uno::Any() );
     }
 }
 
@@ -1572,7 +1572,7 @@ void SAL_CALL OleComponent::removeCloseListener( const uno::Reference< util::XCl
 
 // XTransferable
 
-uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor& aFlavor )
+cpo::uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor& aFlavor )
 {
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1581,7 +1581,7 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
     if (!m_pNativeImpl->m_pObj)
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
-    uno::Any aResult;
+    cpo::uno::Any aResult;
     bool bSupportedFlavor = false;
 
     if ( m_pNativeImpl->GraphicalFlavor( aFlavor ) )

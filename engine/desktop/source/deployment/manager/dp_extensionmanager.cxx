@@ -110,7 +110,7 @@ void writeLastModified(OUString & url, Reference<ucb::XCommandEnvironment> const
     }
     catch(...)
     {
-        uno::Any exc(::cppu::getCaughtException());
+        cpo::uno::Any exc(::cppu::getCaughtException());
         throw css::deployment::DeploymentException("Failed to update" + url, nullptr, exc);
     }
 }
@@ -347,7 +347,7 @@ ExtensionManager::getExtensionsWithSameIdentifier(
     }
     catch (...)
     {
-        uno::Any exc = ::cppu::getCaughtException();
+        cpo::uno::Any exc = ::cppu::getCaughtException();
         throw css::deployment::DeploymentException(
             u"Extension Manager: exception during getExtensionsWithSameIdentifier"_ustr,
             static_cast<OWeakObject*>(this), exc);
@@ -592,7 +592,7 @@ bool ExtensionManager::doChecksForAddExtension(
     } catch (const uno::RuntimeException &) {
         throw;
     } catch (const uno::Exception &) {
-        uno::Any excOccurred = ::cppu::getCaughtException();
+        cpo::uno::Any excOccurred = ::cppu::getCaughtException();
         css::deployment::DeploymentException exc(
             u"Extension Manager: exception in doChecksForAddExtension"_ustr,
             static_cast<OWeakObject*>(this), excOccurred);
@@ -639,7 +639,7 @@ Reference<css::deployment::XPackage> ExtensionManager::addExtension(
         throw css::deployment::DeploymentException(
             ("Extension Manager: Failed to create temporary XPackage for url: "
              + url),
-            static_cast<OWeakObject*>(this), uno::Any());
+            static_cast<OWeakObject*>(this), cpo::uno::Any());
     }
 
     //Make sure the extension is removed from the tmp repository in case
@@ -651,7 +651,7 @@ Reference<css::deployment::XPackage> ExtensionManager::addExtension(
     Reference<css::deployment::XPackage> xOldExtension;
     Reference<css::deployment::XPackage> xExtensionBackup;
 
-    uno::Any excOccurred2;
+    cpo::uno::Any excOccurred2;
     bool bCanInstall = doChecksForAddExtension(
         xPackageManager,
         properties,
@@ -742,7 +742,7 @@ Reference<css::deployment::XPackage> ExtensionManager::addExtension(
                     } catch (const uno::RuntimeException &) {
                         throw;
                     } catch (const uno::Exception &) {
-                        uno::Any excOccurred = ::cppu::getCaughtException();
+                        cpo::uno::Any excOccurred = ::cppu::getCaughtException();
                         css::deployment::DeploymentException exc(
                             u"Extension Manager: Exception on fireModified() "
                             "in the scope of 'if (failedPrereq == 0)'"_ustr,
@@ -764,7 +764,7 @@ Reference<css::deployment::XPackage> ExtensionManager::addExtension(
                     else
                         throw css::deployment::DeploymentException (
                             u"Extension Manager: exception during addExtension, ckeckPrerequisites failed"_ustr,
-                            static_cast<OWeakObject*>(this), uno::Any());
+                            static_cast<OWeakObject*>(this), cpo::uno::Any());
                 }
             }
             catch ( const css::deployment::DeploymentException& ) {
@@ -821,7 +821,7 @@ void ExtensionManager::removeExtension(
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
 {
-    uno::Any excOccurred1;
+    cpo::uno::Any excOccurred1;
     Reference<css::deployment::XPackage> xExtensionBackup;
     Reference<css::deployment::XPackageManager> xPackageManager;
     bool bUserDisabled = false;
@@ -917,7 +917,7 @@ void ExtensionManager::enableExtension(
 {
     ::osl::MutexGuard guard(m_aMutex);
     bool bUserDisabled = false;
-    uno::Any excOccurred;
+    cpo::uno::Any excOccurred;
     try
     {
         if (!extension.is())
@@ -1004,7 +1004,7 @@ sal_Int32 ExtensionManager::checkPrerequisitesAndEnable(
     } catch (const uno::RuntimeException &) {
         throw;
     } catch (...) {
-        uno::Any excOccurred = ::cppu::getCaughtException();
+        cpo::uno::Any excOccurred = ::cppu::getCaughtException();
         css::deployment::DeploymentException exc(
             u"Extension Manager: exception during disableExtension"_ustr,
             static_cast<OWeakObject*>(this), excOccurred);
@@ -1018,7 +1018,7 @@ void ExtensionManager::disableExtension(
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
 {
     ::osl::MutexGuard guard(m_aMutex);
-    uno::Any excOccurred;
+    cpo::uno::Any excOccurred;
     bool bUserDisabled = false;
     try
     {
@@ -1142,7 +1142,7 @@ uno::Sequence< uno::Sequence<Reference<css::deployment::XPackage> > >
     } catch (const uno::RuntimeException &) {
         throw;
     } catch (...) {
-        uno::Any exc = ::cppu::getCaughtException();
+        cpo::uno::Any exc = ::cppu::getCaughtException();
         throw css::deployment::DeploymentException(
             u"Extension Manager: exception during enableExtension"_ustr,
             static_cast<OWeakObject*>(this), exc);
@@ -1221,7 +1221,7 @@ void ExtensionManager::reinstallDeployedExtensions(
     } catch (const uno::RuntimeException &) {
         throw;
     } catch (...) {
-        uno::Any exc = ::cppu::getCaughtException();
+        cpo::uno::Any exc = ::cppu::getCaughtException();
         throw css::deployment::DeploymentException(
             u"Extension Manager: exception during enableExtension"_ustr,
             static_cast<OWeakObject*>(this), exc);
@@ -1288,7 +1288,7 @@ bool ExtensionManager::synchronize(
     } catch (const uno::RuntimeException &) {
         throw;
     } catch (...) {
-        uno::Any exc = ::cppu::getCaughtException();
+        cpo::uno::Any exc = ::cppu::getCaughtException();
         throw css::deployment::DeploymentException(
             u"Extension Manager: exception in synchronize"_ustr,
             static_cast<OWeakObject*>(this), exc);
@@ -1306,7 +1306,7 @@ void ExtensionManager::checkInstall(
     OUString const & displayName,
     Reference<ucb::XCommandEnvironment> const & cmdEnv)
 {
-        uno::Any request(
+        cpo::uno::Any request(
             css::deployment::InstallException(
                 "Extension " + displayName +
                 " is about to be installed.",
@@ -1338,7 +1338,7 @@ void ExtensionManager::checkUpdate(
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
 {
     // package already deployed, interact --force:
-    uno::Any request(
+    cpo::uno::Any request(
         (css::deployment::VersionException(
             DpResId(
                 RID_STR_PACKAGE_ALREADY_ADDED ) + newDisplayName,
@@ -1421,7 +1421,7 @@ void ExtensionManager::fireModified()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_deployment_ExtensionManager_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new dp_manager::ExtensionManager(context));
 }

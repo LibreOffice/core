@@ -78,6 +78,7 @@
 using ::osl::MutexGuard;
 using ::com::sun::star::table::BorderLine;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::style;
@@ -777,7 +778,7 @@ void SAL_CALL SdStyleSheet::dispose(  )
     }
     catch (const Exception & exc)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
             "unexpected UNO exception caught: " + exc.Message ,
             nullptr, anyEx );
@@ -982,7 +983,7 @@ void SAL_CALL SdStyleSheet::setParentStyle( const OUString& rParentName  )
 
 // Does not broadcast
 // Must be guarded by solar mutex; must not be disposed
-void SdStyleSheet::setPropertyValue_Impl(const OUString& aPropertyName, const css::uno::Any& aValue)
+void SdStyleSheet::setPropertyValue_Impl(const OUString& aPropertyName, const cpo::uno::Any& aValue)
 {
     const SfxItemPropertyMapEntry* pEntry = getPropertyMapEntry( aPropertyName );
     if( pEntry == nullptr )
@@ -1099,7 +1100,7 @@ void SdStyleSheet::setPropertyValue_Impl(const OUString& aPropertyName, const cs
 }
 
 // Must be guarded by solar mutex; must not be disposed
-css::uno::Any SdStyleSheet::getPropertyValue_Impl(const OUString& PropertyName)
+cpo::uno::Any SdStyleSheet::getPropertyValue_Impl(const OUString& PropertyName)
 {
     const SfxItemPropertyMapEntry* pEntry = getPropertyMapEntry( PropertyName );
     if( pEntry == nullptr )
@@ -1171,7 +1172,7 @@ css::uno::Any SdStyleSheet::getPropertyValue_Impl(const OUString& PropertyName)
         css::uno::Reference<css::beans::XPropertySet> xProp(xIf, css::uno::UNO_QUERY_THROW);
         xProp->setPropertyValue(
             u"AutomaticDistance"_ustr,
-            css::uno::Any(rStyleSet.Get(SDRATTR_TEXTCOLUMNS_SPACING).GetValue()));
+            cpo::uno::Any(rStyleSet.Get(SDRATTR_TEXTCOLUMNS_SPACING).GetValue()));
         aAny <<= xIf;
     }
     else
@@ -1247,7 +1248,7 @@ void SAL_CALL SdStyleSheet::removeVetoableChangeListener( const OUString& , cons
 // XMultiPropertySet
 
 void SAL_CALL SdStyleSheet::setPropertyValues(const css::uno::Sequence<OUString>& aPropertyNames,
-                                              const css::uno::Sequence<css::uno::Any>& aValues)
+                                              const css::uno::Sequence<cpo::uno::Any>& aValues)
 {
     const sal_Int32 nCount = aPropertyNames.getLength();
 
@@ -1275,14 +1276,14 @@ void SAL_CALL SdStyleSheet::setPropertyValues(const css::uno::Sequence<OUString>
     Broadcast(SfxHint(SfxHintId::DataChanged));
 }
 
-css::uno::Sequence<css::uno::Any>
+css::uno::Sequence<cpo::uno::Any>
 SAL_CALL SdStyleSheet::getPropertyValues(const css::uno::Sequence<OUString>& aPropertyNames)
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
 
     const sal_Int32 nCount = aPropertyNames.getLength();
-    css::uno::Sequence<css::uno::Any> aValues(nCount);
+    css::uno::Sequence<cpo::uno::Any> aValues(nCount);
     Any* pAny = aValues.getArray();
 
     for (sal_Int32 i = 0; i < nCount; ++i)

@@ -33,6 +33,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::accessibility;
@@ -61,7 +62,7 @@ bool VCLXAccessibleBox::IsValid() const
 
 void VCLXAccessibleBox::ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    uno::Any aOldValue, aNewValue;
+    cpo::uno::Any aOldValue, aNewValue;
 
     switch ( rVclWindowEvent.GetId() )
     {

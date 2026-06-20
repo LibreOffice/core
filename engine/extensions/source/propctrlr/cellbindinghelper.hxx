@@ -233,7 +233,7 @@ namespace pcr
                         createDocumentDependentInstance(
                             const OUString& _rService,
                             const OUString& _rArgumentName,
-                            const css::uno::Any& _rArgumentValue
+                            const cpo::uno::Any& _rArgumentValue
                         ) const;
 
         /** converts an address representation into another one
@@ -258,9 +258,9 @@ namespace pcr
         */
         bool            doConvertAddressRepresentations(
                             const OUString& _rInputProperty,
-                            const css::uno::Any& _rInputValue,
+                            const cpo::uno::Any& _rInputValue,
                             const OUString& _rOutputProperty,
-                                  css::uno::Any& _rOutputValue,
+                                  cpo::uno::Any& _rOutputValue,
                             bool _bIsRange
                         ) const;
     };

@@ -98,6 +98,7 @@ using ::com::sun::star::beans::XPropertySetInfo;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::container;
@@ -606,10 +607,10 @@ namespace {
             if (it == maMap.end())
             {
                 SAL_WARN("xmloff", "Key '" << key << "' with no translation");
-                return css::uno::Any(cleanDomain(key.get<OUString>()));
+                return cpo::uno::Any(cleanDomain(key.get<OUString>()));
             }
             else
-                return css::uno::Any(it->second);
+                return cpo::uno::Any(it->second);
         }
         virtual Any SAL_CALL put( const Any&, const Any& ) override
         {
@@ -838,11 +839,11 @@ void SAL_CALL SvXMLImport::endDocument()
                 {
                     sal_Int32 nProgressMax(mpProgressBarHelper->GetReference());
                     sal_Int32 nProgressCurrent(mpProgressBarHelper->GetValue());
-                    mxImportInfo->setPropertyValue(sProgressMax, uno::Any(nProgressMax));
-                    mxImportInfo->setPropertyValue(sProgressCurrent, uno::Any(nProgressCurrent));
+                    mxImportInfo->setPropertyValue(sProgressMax, cpo::uno::Any(nProgressMax));
+                    mxImportInfo->setPropertyValue(sProgressCurrent, cpo::uno::Any(nProgressCurrent));
                 }
                 if (xPropertySetInfo->hasPropertyByName(sRepeat))
-                    mxImportInfo->setPropertyValue(sRepeat, css::uno::Any(mpProgressBarHelper->GetRepeat()));
+                    mxImportInfo->setPropertyValue(sRepeat, cpo::uno::Any(mpProgressBarHelper->GetRepeat()));
                 // pProgressBarHelper is deleted in dtor
             }
             OUString sNumberStyles(XML_NUMBERSTYLES);
@@ -910,7 +911,7 @@ std::optional<SvXMLNamespaceMap> SvXMLImport::processNSAttributes(
             {
                 throw xml::sax::SAXException(u"Inconsistent ODF versions in content.xml and manifest.xml!"_ustr,
                         uno::Reference< uno::XInterface >(),
-                        uno::Any(
+                        cpo::uno::Any(
                             packages::zip::ZipIOException(u"Inconsistent ODF versions in content.xml and manifest.xml!"_ustr ) ) );
             }
         }
@@ -982,7 +983,7 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
             {
                 throw xml::sax::SAXException(u"Inconsistent ODF versions in content.xml and manifest.xml!"_ustr,
                         uno::Reference< uno::XInterface >(),
-                        uno::Any(
+                        cpo::uno::Any(
                             packages::zip::ZipIOException(u"Inconsistent ODF versions in content.xml and manifest.xml!"_ustr ) ) );
             }
         }
@@ -1161,7 +1162,7 @@ void SAL_CALL SvXMLImport::cancel(  )
 }
 
 // XInitialize
-void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArguments )
+void SAL_CALL SvXMLImport::initialize( const uno::Sequence< cpo::uno::Any >& aArguments )
 {
     for( const auto& rAny : aArguments )
     {
@@ -1192,7 +1193,7 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                 OUString sPropName(XML_NUMBERSTYLES);
                 if (xPropertySetInfo->hasPropertyByName(sPropName))
                 {
-                    uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
+                    cpo::uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
                     aAny >>= mxNumberStyles;
                 }
 
@@ -1200,7 +1201,7 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                 if (xPropertySetInfo->hasPropertyByName(sPropName))
                 {
                     Reference < XInterface > xIfc;
-                    uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
+                    cpo::uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
                     aAny >>= xIfc;
 
                     StyleMap *pSMap = dynamic_cast<StyleMap*>( xIfc.get() );
@@ -1213,7 +1214,7 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                 sPropName = u"BaseURI"_ustr;
                 if (xPropertySetInfo->hasPropertyByName(sPropName))
                 {
-                    uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
+                    cpo::uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
                     aAny >>= sBaseURI;
                     mpImpl->aBaseURL.SetURL( sBaseURI );
                     mpImpl->aDocBase.SetURL( sBaseURI );
@@ -1222,14 +1223,14 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                 sPropName = u"StreamRelPath"_ustr;
                 if( xPropertySetInfo->hasPropertyByName(sPropName) )
                 {
-                    uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
+                    cpo::uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
                     aAny >>= sRelPath;
                 }
                 OUString sName;
                 sPropName = u"StreamName"_ustr;
                 if( xPropertySetInfo->hasPropertyByName(sPropName) )
                 {
-                    uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
+                    cpo::uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
                     aAny >>= sName;
                 }
                 if( !sBaseURI.isEmpty() && !sName.isEmpty() )
@@ -1243,13 +1244,13 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                 sPropName = u"ShapePositionInHoriL2R"_ustr;
                 if( xPropertySetInfo->hasPropertyByName(sPropName) )
                 {
-                    uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
+                    cpo::uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
                     aAny >>= mpImpl->mbShapePositionInHoriL2R;
                 }
                 sPropName = u"TextDocInOOoFileFormat"_ustr;
                 if( xPropertySetInfo->hasPropertyByName(sPropName) )
                 {
-                    uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
+                    cpo::uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
                     aAny >>= mpImpl->mbTextDocInOOoFileFormat;
                 }
 
@@ -1263,9 +1264,9 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
     uno::Reference<lang::XInitialization> const xInit(mxParser, uno::UNO_QUERY_THROW);
 
     css::uno::Reference< XMap > xMap = L10nMapper::load(GetSourceStorage());
-    css::uno::Sequence< css::uno::Any > args{
-        css::uno::Any(u"IgnoreMissingNSDecl"_ustr),
-        css::uno::Any(xMap) };
+    css::uno::Sequence< cpo::uno::Any > args{
+        cpo::uno::Any(u"IgnoreMissingNSDecl"_ustr),
+        cpo::uno::Any(xMap) };
     xInit->initialize(args);
 }
 
@@ -1706,7 +1707,7 @@ ProgressBarHelper*  SvXMLImport::GetProgressBarHelper()
                     xPropertySetInfo->hasPropertyByName(sProgressCurrent) &&
                     xPropertySetInfo->hasPropertyByName(sProgressRange))
                 {
-                    uno::Any aAny;
+                    cpo::uno::Any aAny;
                     sal_Int32 nProgressMax(0);
                     sal_Int32 nProgressCurrent(0);
                     sal_Int32 nProgressRange(0);
@@ -1722,7 +1723,7 @@ ProgressBarHelper*  SvXMLImport::GetProgressBarHelper()
                 }
                 if (xPropertySetInfo->hasPropertyByName(sRepeat))
                 {
-                    uno::Any aAny = mxImportInfo->getPropertyValue(sRepeat);
+                    cpo::uno::Any aAny = mxImportInfo->getPropertyValue(sRepeat);
                     if (aAny.getValueType() == cppu::UnoType<bool>::get())
                         mpProgressBarHelper->SetRepeat(::cppu::any2bool(aAny));
                     else {
@@ -1800,7 +1801,7 @@ void SvXMLImport::SetAutoStyles( SvXMLStylesContext *pAutoStyles )
         const uno::Sequence<OUString> aStyleNames = mxNumberStyles->getElementNames();
         for (const auto& name : aStyleNames)
         {
-            uno::Any aAny(mxNumberStyles->getByName(name));
+            cpo::uno::Any aAny(mxNumberStyles->getByName(name));
             sal_Int32 nKey(0);
             if (aAny >>= nKey)
             {
@@ -1913,7 +1914,7 @@ bool SvXMLImport::IsODFVersionConsistent( const OUString& aODFVersion )
                         bResult = aODFVersion == aStorVersion;
                     else
                         xStorProps->setPropertyValue( u"Version"_ustr,
-                                                      uno::Any( aODFVersion ) );
+                                                      cpo::uno::Any( aODFVersion ) );
 
                     if ( bResult )
                     {

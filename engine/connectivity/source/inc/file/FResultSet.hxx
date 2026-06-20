@@ -163,7 +163,7 @@ namespace connectivity::file
         // ::cppu::OComponentHelper
         virtual void SAL_CALL disposing() override final;
         // XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
         virtual void SAL_CALL acquire() noexcept override;
         virtual void SAL_CALL release() noexcept override;
         //XTypeProvider
@@ -205,7 +205,7 @@ namespace connectivity::file
         virtual css::util::DateTime SAL_CALL getTimestamp( sal_Int32 columnIndex ) override;
         virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getBinaryStream( sal_Int32 columnIndex ) override;
         virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getCharacterStream( sal_Int32 columnIndex ) override;
-        virtual css::uno::Any SAL_CALL getObject( sal_Int32 columnIndex, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual cpo::uno::Any SAL_CALL getObject( sal_Int32 columnIndex, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
         virtual css::uno::Reference< css::sdbc::XRef > SAL_CALL getRef( sal_Int32 columnIndex ) override;
         virtual css::uno::Reference< css::sdbc::XBlob > SAL_CALL getBlob( sal_Int32 columnIndex ) override;
         virtual css::uno::Reference< css::sdbc::XClob > SAL_CALL getClob( sal_Int32 columnIndex ) override;
@@ -217,7 +217,7 @@ namespace connectivity::file
         // XCloseable
         virtual void SAL_CALL close(  ) override;
         // XWarningsSupplier
-        virtual css::uno::Any SAL_CALL getWarnings(  ) override;
+        virtual cpo::uno::Any SAL_CALL getWarnings(  ) override;
         virtual void SAL_CALL clearWarnings(  ) override;
         // XResultSetUpdate
         virtual void SAL_CALL insertRow(  ) override;
@@ -242,8 +242,8 @@ namespace connectivity::file
         virtual void SAL_CALL updateTimestamp( sal_Int32 columnIndex, const css::util::DateTime& x ) override;
         virtual void SAL_CALL updateBinaryStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
         virtual void SAL_CALL updateCharacterStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
-        virtual void SAL_CALL updateObject( sal_Int32 columnIndex, const css::uno::Any& x ) override;
-        virtual void SAL_CALL updateNumericObject( sal_Int32 columnIndex, const css::uno::Any& x, sal_Int32 scale ) override;
+        virtual void SAL_CALL updateObject( sal_Int32 columnIndex, const cpo::uno::Any& x ) override;
+        virtual void SAL_CALL updateNumericObject( sal_Int32 columnIndex, const cpo::uno::Any& x, sal_Int32 scale ) override;
         // XColumnLocate
         virtual sal_Int32 SAL_CALL findColumn( const OUString& columnName ) override;
         //XEventlistener

@@ -57,7 +57,7 @@ using namespace ::com::sun::star::chart2;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::chart2::XAnyDescriptionAccess;
 
 namespace chart
@@ -257,7 +257,7 @@ void lcl_switchToDateCategories( const rtl::Reference< ChartModel >& xChartDoc, 
                     Sequence<sal_Int32> aKeySeq = xNumberFormats->queryKeys( util::NumberFormat::DATE,  rLocaleDataWrapper.getLanguageTag().getLocale(), true/*bCreate*/ );
                     if( aKeySeq.hasElements() )
                     {
-                        xAxisProps->setPropertyValue(CHART_UNONAME_NUMFMT, uno::Any(aKeySeq[0]));
+                        xAxisProps->setPropertyValue(CHART_UNONAME_NUMFMT, cpo::uno::Any(aKeySeq[0]));
                     }
                 }
             }
@@ -465,8 +465,8 @@ bool DiagramHelper::setDiagramPositioning( const rtl::Reference<::chart::ChartMo
     if( (aNewPos.Secondary + aNewSize.Secondary) > 1.0 )
         aNewPos.Secondary = 1.0 - aNewSize.Secondary;
 
-    xDiagram->setPropertyValue( u"RelativePosition"_ustr, uno::Any(aNewPos) );
-    xDiagram->setPropertyValue( u"RelativeSize"_ustr, uno::Any(aNewSize) );
+    xDiagram->setPropertyValue( u"RelativePosition"_ustr, cpo::uno::Any(aNewPos) );
+    xDiagram->setPropertyValue( u"RelativeSize"_ustr, cpo::uno::Any(aNewSize) );
 
     bChanged = (aOldPos.Anchor!=aNewPos.Anchor) ||
         (aOldPos.Primary!=aNewPos.Primary) ||

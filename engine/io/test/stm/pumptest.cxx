@@ -42,6 +42,7 @@
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::test;
@@ -255,7 +256,7 @@ public:
         m_bTerminated = true;
 //         printf( "terminated called\n");
     }
-    virtual void SAL_CALL error( const css::uno::Any& aException )
+    virtual void SAL_CALL error( const cpo::uno::Any& aException )
         throw (css::uno::RuntimeException)
     {
         m_bError = true;

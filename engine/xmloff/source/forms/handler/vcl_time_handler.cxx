@@ -32,7 +32,7 @@
 namespace xmloff
 {
 
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::util::Duration;
     using ::com::sun::star::util::Time;
 

@@ -104,7 +104,7 @@ namespace vclcanvas
     {
     public:
         SpriteCanvas( const css::uno::Sequence<
-                            css::uno::Any >&               aArguments,
+                            cpo::uno::Any >&               aArguments,
                       const css::uno::Reference<
                             css::uno::XComponentContext >& rxContext );
 
@@ -152,7 +152,7 @@ namespace vclcanvas
         BackBufferSharedPtr const & getBackBuffer() const { return maDeviceHelper.getBackBuffer(); }
 
     private:
-        css::uno::Sequence< css::uno::Any >                maArguments;
+        css::uno::Sequence< cpo::uno::Any >                maArguments;
     };
 
     typedef ::rtl::Reference< SpriteCanvas > SpriteCanvasRef;

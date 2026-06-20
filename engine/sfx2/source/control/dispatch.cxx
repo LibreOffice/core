@@ -230,7 +230,7 @@ void SfxDispatcher::Call_Impl(SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
 
         if ( xSet.is() )
         {
-            css::uno::Any aProp = xSet->getPropertyValue(u"DispatchRecorderSupplier"_ustr);
+            cpo::uno::Any aProp = xSet->getPropertyValue(u"DispatchRecorderSupplier"_ustr);
             css::uno::Reference< css::frame::XDispatchRecorderSupplier > xSupplier;
             css::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
             aProp >>= xSupplier;
@@ -1022,7 +1022,7 @@ void SfxDispatcher::SetMenu_Impl()
     if ( xPropSet.is() )
     {
         css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-        css::uno::Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
+        cpo::uno::Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
         aValue >>= xLayoutManager;
         if ( xLayoutManager.is() )
         {
@@ -1079,7 +1079,7 @@ void SfxDispatcher::Update_Impl( bool bForce )
     {
         try
         {
-            css::uno::Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
+            cpo::uno::Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
             aValue >>= xLayoutManager;
         }
         catch (const css::uno::Exception&)
@@ -1926,10 +1926,10 @@ boost::property_tree::ptree SfxDispatcher::fillPopupMenu(const rtl::Reference<VC
 
 void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window* pWin, const Point* pPos )
 {
-    css::uno::Sequence< css::uno::Any > aArgs{
-        css::uno::Any(comphelper::makePropertyValue( u"Value"_ustr, rResName )),
-        css::uno::Any(comphelper::makePropertyValue( u"Frame"_ustr, GetFrame()->GetFrame().GetFrameInterface() )),
-        css::uno::Any(comphelper::makePropertyValue( u"IsContextMenu"_ustr, true ))
+    css::uno::Sequence< cpo::uno::Any > aArgs{
+        cpo::uno::Any(comphelper::makePropertyValue( u"Value"_ustr, rResName )),
+        cpo::uno::Any(comphelper::makePropertyValue( u"Frame"_ustr, GetFrame()->GetFrame().GetFrameInterface() )),
+        cpo::uno::Any(comphelper::makePropertyValue( u"IsContextMenu"_ustr, true ))
     };
 
     const css::uno::Reference< css::uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
@@ -2041,7 +2041,7 @@ void SfxDispatcher::HideUI( bool bHide )
                 if ( xPropSet.is() )
                 {
                     css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-                    css::uno::Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
+                    cpo::uno::Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
                     aValue >>= xLayoutManager;
                     if ( xLayoutManager.is() )
                         xLayoutManager->setVisible( !bHide );
@@ -2091,7 +2091,7 @@ SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSlot, SfxPoolItemHolder& rSt
     return SfxItemState::DISABLED;
 }
 
-SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSID, css::uno::Any& rAny )
+SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSID, cpo::uno::Any& rAny )
 {
     SfxShell *pShell = nullptr;
     const SfxSlot *pSlot = nullptr;
@@ -2102,7 +2102,7 @@ SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSID, css::uno::Any& rAny )
             return SfxItemState::DISABLED;
         else
         {
-            css::uno::Any aState;
+            cpo::uno::Any aState;
             if ( !IsDisabledItem(aItem.getItem()) )
             {
                 sal_uInt16 nSubId( 0 );

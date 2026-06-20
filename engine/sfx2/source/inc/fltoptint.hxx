@@ -36,7 +36,7 @@ public:
 
 class RequestFilterOptions final : public ::cppu::WeakImplHelper< css::task::XInteractionRequest >
 {
-    css::uno::Any m_aRequest;
+    cpo::uno::Any m_aRequest;
 
     rtl::Reference<comphelper::OInteractionAbort>  m_xAbort;
     rtl::Reference<FilterOptionsContinuation>      m_xOptions;
@@ -52,7 +52,7 @@ public:
         return m_xOptions->getFilterOptions();
     }
 
-    virtual css::uno::Any SAL_CALL getRequest() override;
+    virtual cpo::uno::Any SAL_CALL getRequest() override;
 
     virtual css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation >
             > SAL_CALL getContinuations() override;

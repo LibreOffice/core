@@ -78,6 +78,7 @@ namespace abp
     using namespace ::comphelper;
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::sdbc;
@@ -356,9 +357,9 @@ namespace abp
                     uno::Reference<embed::XStorage> xStorage = pObjectShell->GetStorage();
                     uno::Sequence<beans::PropertyValue> aSequence = comphelper::InitPropertySequence(
                     {
-                        {"TargetStorage", uno::Any(xStorage)},
-                        {"StreamRelPath", uno::Any(aStreamRelPath)},
-                        {"BaseURI", uno::Any(aOwnURL)}
+                        {"TargetStorage", cpo::uno::Any(xStorage)},
+                        {"StreamRelPath", cpo::uno::Any(aStreamRelPath)},
+                        {"BaseURI", cpo::uno::Any(aOwnURL)}
                     });
                     xStorable->storeAsURL(sTmpName, aSequence);
                     m_pImpl->sName = sTmpName;
@@ -367,7 +368,7 @@ namespace abp
                     // we can load it again next time the file is imported.
                     uno::Reference<lang::XMultiServiceFactory> xFactory(pObjectShell->GetModel(), uno::UNO_QUERY);
                     uno::Reference<beans::XPropertySet> xPropertySet(xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
-                    xPropertySet->setPropertyValue(u"EmbeddedDatabaseName"_ustr, uno::Any(aStreamRelPath));
+                    xPropertySet->setPropertyValue(u"EmbeddedDatabaseName"_ustr, cpo::uno::Any(aStreamRelPath));
                 }
             }
         }

@@ -79,7 +79,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertSignatureLineExternal)
     // Then make sure the shape is marked as a signature line:
     std::vector<SdrObject*> aMarkedObjects = pView->GetMarkedObjects();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aMarkedObjects.size());
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     aMarkedObjects[0]->GetGrabBagItem(aAny);
     comphelper::SequenceAsHashMap aMap(aAny);
     CPPUNIT_ASSERT(aMap.contains(u"SignatureCertificate"_ustr));

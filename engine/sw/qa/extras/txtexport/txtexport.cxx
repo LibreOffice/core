@@ -133,7 +133,7 @@ CPPUNIT_TEST_FIXTURE(TxtExportTest, testClearingBreakExport)
         xMSF->createInstance(u"com.sun.star.text.LineBreak"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
     auto eClear = static_cast<sal_Int16>(SwLineBreakClear::ALL);
-    xLineBreakProps->setPropertyValue(u"Clear"_ustr, uno::Any(eClear));
+    xLineBreakProps->setPropertyValue(u"Clear"_ustr, cpo::uno::Any(eClear));
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
     xText->insertString(xCursor, u"foo"_ustr, /*bAbsorb=*/false);

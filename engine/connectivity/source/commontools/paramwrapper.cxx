@@ -52,7 +52,7 @@ namespace dbtools::param
     using ::com::sun::star::beans::Property;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::sdbc::SQLException;
     using ::com::sun::star::lang::WrappedTargetException;
     using ::com::sun::star::lang::IndexOutOfBoundsException;
@@ -98,9 +98,9 @@ namespace dbtools::param
 
     IMPLEMENT_FORWARD_REFCOUNT( ParameterWrapper, UnoBase )
 
-    css::uno::Any ParameterWrapper::queryInterface(css::uno::Type const & aType)
+    cpo::uno::Any ParameterWrapper::queryInterface(css::uno::Type const & aType)
     {
-        css::uno::Any a(UnoBase::queryInterface(aType));
+        cpo::uno::Any a(UnoBase::queryInterface(aType));
         if (!a.hasValue()) {
             a = PropertyBase::queryInterface(aType);
             if (!a.hasValue()
@@ -215,7 +215,7 @@ namespace dbtools::param
             }
             catch( SQLException& e )
             {
-                throw WrappedTargetException(e.Message, e.Context, css::uno::Any(e));
+                throw WrappedTargetException(e.Message, e.Context, cpo::uno::Any(e));
             }
         }
         else

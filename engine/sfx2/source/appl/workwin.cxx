@@ -57,6 +57,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace {
 
@@ -223,7 +224,7 @@ void SAL_CALL LayoutManagerListener::dispose()
 
     try
     {
-        css::uno::Any aValue = xPropSet->getPropertyValue( g_aLayoutManagerPropName );
+        cpo::uno::Any aValue = xPropSet->getPropertyValue( g_aLayoutManagerPropName );
         aValue >>= xLayoutManager;
 
         // remove as listener from layout manager
@@ -261,7 +262,7 @@ void SAL_CALL LayoutManagerListener::disposing(
 void SAL_CALL LayoutManagerListener::layoutEvent(
     const css::lang::EventObject&,
     ::sal_Int16                   eLayoutEvent,
-    const css::uno::Any&                        )
+    const cpo::uno::Any&                        )
 {
     SolarMutexGuard aGuard;
     if ( !m_pWrkWin )

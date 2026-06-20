@@ -24,10 +24,10 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com::sun::star::uno { class Any; }
+namespace cpo::uno { class Any; }
 
 bool ConvertBufferToFormat(
     void * pBuf, sal_uInt32 nBufSize, OUString const & aFormatShortName,
-    css::uno::Any & aResult);
+    cpo::uno::Any & aResult);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

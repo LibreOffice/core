@@ -44,7 +44,7 @@ namespace framework{
         throw css::xml::sax::SAXException(                              \
                 implts_getErrorLineString() + COMMENT,                  \
                 static_cast< css::xml::sax::XDocumentHandler* >(this),  \
-                css::uno::Any());                                       \
+                cpo::uno::Any());                                       \
     }
 
 AcceleratorConfigurationReader::AcceleratorConfigurationReader(AcceleratorCache& rContainer)

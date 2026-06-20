@@ -71,11 +71,11 @@ bool SAL_CALL OEnumerationByName::hasMoreElements(  )
 }
 
 
-css::uno::Any SAL_CALL OEnumerationByName::nextElement(  )
+cpo::uno::Any SAL_CALL OEnumerationByName::nextElement(  )
 {
     std::lock_guard aLock(m_aLock);
 
-    css::uno::Any aRes;
+    cpo::uno::Any aRes;
     if (m_xAccess.is() && m_nPos < getLength())
         aRes = m_xAccess->getByName(getElement(m_nPos++));
 
@@ -182,11 +182,11 @@ bool SAL_CALL OEnumerationByIndex::hasMoreElements(  )
 }
 
 
-css::uno::Any SAL_CALL OEnumerationByIndex::nextElement(  )
+cpo::uno::Any SAL_CALL OEnumerationByIndex::nextElement(  )
 {
     std::lock_guard aLock(m_aLock);
 
-    css::uno::Any aRes;
+    cpo::uno::Any aRes;
     if (m_xAccess.is() && m_nPos < m_xAccess->getCount())
         aRes = m_xAccess->getByIndex(m_nPos++);
 
@@ -242,7 +242,7 @@ void OEnumerationByIndex::impl_stopDisposeListening()
     osl_atomic_decrement(&m_refCount);
 }
 
-OAnyEnumeration::OAnyEnumeration(const css::uno::Sequence< css::uno::Any >& lItems)
+OAnyEnumeration::OAnyEnumeration(const css::uno::Sequence< cpo::uno::Any >& lItems)
     :m_nPos(0)
     ,m_lItems(lItems)
 {
@@ -262,7 +262,7 @@ bool SAL_CALL OAnyEnumeration::hasMoreElements(  )
 }
 
 
-css::uno::Any SAL_CALL OAnyEnumeration::nextElement(  )
+cpo::uno::Any SAL_CALL OAnyEnumeration::nextElement(  )
 {
     if ( ! hasMoreElements())
         throw css::container::NoSuchElementException();

@@ -81,7 +81,7 @@ static void raiseRuntimeExceptionWhenNeeded()
         PyRef excType, excValue, excTraceback;
         PyErr_Fetch(reinterpret_cast<PyObject **>(&excType), reinterpret_cast<PyObject**>(&excValue), reinterpret_cast<PyObject**>(&excTraceback));
         Runtime runtime;
-        css::uno::Any a = runtime.extractUnoException( excType, excValue, excTraceback );
+        cpo::uno::Any a = runtime.extractUnoException( excType, excValue, excTraceback );
         OUStringBuffer buf( "python-loader:" );
         if( auto e = o3tl::tryAccess<css::uno::Exception>(a) )
             buf.append( e->Message );
@@ -277,7 +277,7 @@ void pythonInit() {
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 pyuno_Loader_get_implementation(
-    css::uno::XComponentContext* ctx , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* ctx , css::uno::Sequence<cpo::uno::Any> const&)
 {
     if (officecfg::Office::Common::Security::Scripting::DisablePythonRuntime::get(ctx))
         return nullptr;
@@ -300,7 +300,7 @@ pyuno_Loader_get_implementation(
         Runtime runtime;
 
         PyRef pyCtx = runtime.any2PyObject(
-            css::uno::Any( css::uno::Reference(ctx) ) );
+            cpo::uno::Any( css::uno::Reference(ctx) ) );
 
         PyRef clazz = getObjectFromLoaderModule( "Loader" );
         PyRef args ( PyTuple_New( 1 ), SAL_NO_ACQUIRE, NOT_NULL );

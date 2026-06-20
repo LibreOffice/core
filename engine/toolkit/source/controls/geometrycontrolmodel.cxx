@@ -53,6 +53,7 @@ namespace
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::util;
@@ -176,9 +177,9 @@ namespace
     }
 
 
-    css::uno::Any OGeometryControlModel_Base::ImplGetDefaultValueByHandle(sal_Int32 nHandle)
+    cpo::uno::Any OGeometryControlModel_Base::ImplGetDefaultValueByHandle(sal_Int32 nHandle)
     {
-        css::uno::Any aDefault;
+        cpo::uno::Any aDefault;
 
         switch ( nHandle )
         {
@@ -198,9 +199,9 @@ namespace
     }
 
 
-    css::uno::Any OGeometryControlModel_Base::ImplGetPropertyValueByHandle(sal_Int32 nHandle) const
+    cpo::uno::Any OGeometryControlModel_Base::ImplGetPropertyValueByHandle(sal_Int32 nHandle) const
     {
-        css::uno::Any aValue;
+        cpo::uno::Any aValue;
 
         switch ( nHandle )
         {
@@ -220,7 +221,7 @@ namespace
     }
 
 
-    void OGeometryControlModel_Base::ImplSetPropertyValueByHandle(sal_Int32 nHandle, const css::uno::Any& aValue)
+    void OGeometryControlModel_Base::ImplSetPropertyValueByHandle(sal_Int32 nHandle, const cpo::uno::Any& aValue)
     {
         switch ( nHandle )
         {
@@ -324,8 +325,8 @@ namespace
 
     css::beans::PropertyState OGeometryControlModel_Base::getPropertyStateByHandle(sal_Int32 nHandle)
     {
-        css::uno::Any aValue = ImplGetPropertyValueByHandle( nHandle );
-        css::uno::Any aDefault = ImplGetDefaultValueByHandle( nHandle );
+        cpo::uno::Any aValue = ImplGetPropertyValueByHandle( nHandle );
+        cpo::uno::Any aDefault = ImplGetDefaultValueByHandle( nHandle );
 
         return CompareProperties( aValue, aDefault ) ? css::beans::PropertyState_DEFAULT_VALUE : css::beans::PropertyState_DIRECT_VALUE;
     }
@@ -337,7 +338,7 @@ namespace
     }
 
 
-    css::uno::Any OGeometryControlModel_Base::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
+    cpo::uno::Any OGeometryControlModel_Base::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
     {
         return ImplGetDefaultValueByHandle( nHandle );
     }
@@ -397,7 +398,7 @@ namespace
 
             for( const OUString& aName : aNames )
             {
-                css::uno::Any aElement = xEventCont->getByName( aName );
+                cpo::uno::Any aElement = xEventCont->getByName( aName );
                 xCloneEventCont->insertByName( aName, aElement );
             }
         }

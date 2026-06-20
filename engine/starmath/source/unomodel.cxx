@@ -58,6 +58,7 @@ using namespace ::cppu;
 using namespace ::comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::formula;
@@ -328,9 +329,9 @@ SmModel::~SmModel() noexcept
 
 SmDocShell* SmModel::GetSmDocShell() const { return static_cast<SmDocShell*>(GetObjectShell()); }
 
-uno::Any SAL_CALL SmModel::queryInterface( const uno::Type& rType )
+cpo::uno::Any SAL_CALL SmModel::queryInterface( const uno::Type& rType )
 {
-    uno::Any aRet =  ::cppu::queryInterface ( rType,
+    cpo::uno::Any aRet =  ::cppu::queryInterface ( rType,
                                     // PropertySetHelper interfaces
                                     static_cast< XPropertySet* > ( this ),
                                     static_cast< XMultiPropertySet* > ( this ),
@@ -374,7 +375,7 @@ sal_Int64 SAL_CALL SmModel::getSomething( const uno::Sequence< sal_Int8 >& rId )
                                         comphelper::FallbackToGetSomethingOf<SfxBaseModel>{});
 }
 
-static sal_Int16 lcl_AnyToINT16(const uno::Any& rAny)
+static sal_Int16 lcl_AnyToINT16(const cpo::uno::Any& rAny)
 {
     sal_Int16 nRet = 0;
     if( auto x = o3tl::tryAccess<double>(rAny) )
@@ -948,7 +949,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
 
 
 sal_Int32 SAL_CALL SmModel::getRendererCount(
-        const uno::Any& /*rSelection*/,
+        const cpo::uno::Any& /*rSelection*/,
         const uno::Sequence< beans::PropertyValue >& /*xOptions*/ )
 {
     return 1;
@@ -956,7 +957,7 @@ sal_Int32 SAL_CALL SmModel::getRendererCount(
 
 uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
         sal_Int32 nRenderer,
-        const uno::Any& /*rSelection*/,
+        const cpo::uno::Any& /*rSelection*/,
         const uno::Sequence< beans::PropertyValue >& /*rxOptions*/ )
 {
     SolarMutexGuard aGuard;
@@ -997,7 +998,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
 
 void SAL_CALL SmModel::render(
         sal_Int32 nRenderer,
-        const uno::Any& rSelection,
+        const cpo::uno::Any& rSelection,
         const uno::Sequence< beans::PropertyValue >& rxOptions )
 {
     SolarMutexGuard aGuard;

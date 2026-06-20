@@ -237,7 +237,7 @@ OUString SvxConfigPageHelper::GetUIModuleName(
 
     try
     {
-        css::uno::Any a = rModuleManager->getByName(aModuleId);
+        cpo::uno::Any a = rModuleManager->getByName(aModuleId);
         css::uno::Sequence<css::beans::PropertyValue> aSeq;
 
         if (a >>= aSeq)

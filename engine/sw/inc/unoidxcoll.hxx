@@ -49,10 +49,10 @@ public:
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
 
     // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName(
+    virtual cpo::uno::Any SAL_CALL getByName(
             const OUString& rName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
         getElementNames() override;

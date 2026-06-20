@@ -73,6 +73,7 @@ namespace com::sun::star::ucb { class XCommandEnvironment; }
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::sdbc;
@@ -1359,7 +1360,7 @@ void UCBStorageStream::CopyTo( BaseStorageStream* pDestStm )
     }
 }
 
-bool UCBStorageStream::SetProperty( const OUString& rName, const css::uno::Any& rValue )
+bool UCBStorageStream::SetProperty( const OUString& rName, const cpo::uno::Any& rValue )
 {
     if ( rName == "Title")
         return false;

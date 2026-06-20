@@ -901,7 +901,7 @@ bool TemplateLocalView::IsInternalTemplate(const OUString& rPath)
     const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     css::uno::Reference< css::util::XPathSettings > xPathSettings = css::util::thePathSettings::get(xContext);
     uno::Sequence<OUString> aInternalTemplateDirs;
-    uno::Any aAny = xPathSettings->getPropertyValue(u"Template_internal"_ustr);
+    cpo::uno::Any aAny = xPathSettings->getPropertyValue(u"Template_internal"_ustr);
     aAny >>= aInternalTemplateDirs;
     SfxURLRelocator_Impl aRelocator(xContext);
     for (OUString& rInternalTemplateDir : asNonConstRange(aInternalTemplateDirs))

@@ -69,7 +69,7 @@
 #include <memory>
 #include <algorithm>
 
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using namespace formula;
 
 #define SRCDOC_LIFE_SPAN     30000      // 5 minutes (in 100th of a sec)

@@ -42,7 +42,7 @@ protected:
     css::uno::Sequence<OUString> SAL_CALL getSupportedOptionalRoles() override;
 
     // ____ OPropertySet ____
-    void GetDefaultValue(sal_Int32 nHandle, css::uno::Any& rAny) const override;
+    void GetDefaultValue(sal_Int32 nHandle, cpo::uno::Any& rAny) const override;
     ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
     // ____ XPropertySet ____

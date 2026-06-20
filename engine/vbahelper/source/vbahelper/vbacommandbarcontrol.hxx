@@ -67,7 +67,7 @@ public:
 
     // Methods
     virtual void SAL_CALL Delete(  ) override;
-    virtual css::uno::Any SAL_CALL Controls( const css::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Controls( const cpo::uno::Any& aIndex ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

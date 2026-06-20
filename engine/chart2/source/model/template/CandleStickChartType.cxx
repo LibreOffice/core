@@ -106,16 +106,16 @@ CandleStickChartType::CandleStickChartType()
     ModifyListenerHelper::addListener( xBlackDayProps, m_xModifyEventForwarder );
 
     setFastPropertyValue_NoBroadcast(
-        PROP_CANDLESTICKCHARTTYPE_WHITE_DAY, uno::Any( xWhiteDayProps ));
+        PROP_CANDLESTICKCHARTTYPE_WHITE_DAY, cpo::uno::Any( xWhiteDayProps ));
     setFastPropertyValue_NoBroadcast(
-        PROP_CANDLESTICKCHARTTYPE_BLACK_DAY, uno::Any( xBlackDayProps ));
+        PROP_CANDLESTICKCHARTTYPE_BLACK_DAY, cpo::uno::Any( xBlackDayProps ));
 }
 
 CandleStickChartType::CandleStickChartType( const CandleStickChartType & rOther ) :
         ChartType( rOther )
 {
     Reference< beans::XPropertySet > xPropertySet;
-    uno::Any aValue;
+    cpo::uno::Any aValue;
 
     getFastPropertyValue( aValue, PROP_CANDLESTICKCHARTTYPE_WHITE_DAY );
     if( ( aValue >>= xPropertySet )
@@ -133,7 +133,7 @@ CandleStickChartType::~CandleStickChartType()
     try
     {
         Reference< beans::XPropertySet > xPropertySet;
-        uno::Any aValue;
+        cpo::uno::Any aValue;
 
         getFastPropertyValue( aValue, PROP_CANDLESTICKCHARTTYPE_WHITE_DAY );
         if( ( aValue >>= xPropertySet )
@@ -219,7 +219,7 @@ OUString SAL_CALL CandleStickChartType::getRoleOfSequenceForSeriesLabel()
 }
 
 // ____ OPropertySet ____
-void CandleStickChartType::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
+void CandleStickChartType::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const
 {
     static const ::chart::tPropertyValueMap aStaticDefaults = []()
         {
@@ -252,12 +252,12 @@ Reference< beans::XPropertySetInfo > SAL_CALL CandleStickChartType::getPropertyS
 }
 
 void SAL_CALL CandleStickChartType::setFastPropertyValue_NoBroadcast(
-    sal_Int32 nHandle, const uno::Any& rValue )
+    sal_Int32 nHandle, const cpo::uno::Any& rValue )
 {
     if(    nHandle == PROP_CANDLESTICKCHARTTYPE_WHITE_DAY
         || nHandle == PROP_CANDLESTICKCHARTTYPE_BLACK_DAY )
     {
-        uno::Any aOldValue;
+        cpo::uno::Any aOldValue;
         Reference< util::XModifyBroadcaster > xBroadcaster;
         getFastPropertyValue( aOldValue, nHandle );
         if( aOldValue.hasValue() &&
@@ -301,7 +301,7 @@ css::uno::Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedServic
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart_CandleStickChartType_get_implementation(css::uno::XComponentContext * /*context*/,
-                                                         css::uno::Sequence<css::uno::Any> const &)
+                                                         css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::CandleStickChartType);
 }

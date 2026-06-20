@@ -287,7 +287,7 @@ Axis::Axis() :
 {
     osl_atomic_increment(&m_refCount);
     setFastPropertyValue_NoBroadcast(
-        ::chart::LinePropertiesHelper::PROP_LINE_COLOR, uno::Any( static_cast< sal_Int32 >( 0xb3b3b3 ) ) );  // gray30
+        ::chart::LinePropertiesHelper::PROP_LINE_COLOR, cpo::uno::Any( static_cast< sal_Int32 >( 0xb3b3b3 ) ) );  // gray30
 
     if( m_xGrid.is())
         ModifyListenerHelper::addListener( m_xGrid, m_xModifyEventForwarder );
@@ -544,7 +544,7 @@ void Axis::fireModifyEvent()
 }
 
 // ____ OPropertySet ____
-void Axis::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
+void Axis::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = StaticAxisDefaults();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
@@ -594,7 +594,7 @@ css::uno::Sequence< OUString > SAL_CALL Axis::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_Axis_get_implementation(css::uno::XComponentContext *,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::Axis);
 }

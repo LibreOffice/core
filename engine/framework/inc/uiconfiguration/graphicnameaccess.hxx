@@ -36,7 +36,7 @@ namespace framework
             void addElement( const OUString& rName, const css::uno::Reference< css::graphic::XGraphic >& rElement );
 
             // XNameAccess
-            virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+            virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
             virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
             virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 

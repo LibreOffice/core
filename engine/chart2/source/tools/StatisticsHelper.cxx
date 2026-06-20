@@ -112,7 +112,7 @@ void lcl_setRole(
 {
     Reference< beans::XPropertySet > xSeqProp( xNewSequence, uno::UNO_QUERY );
     if( xSeqProp.is())
-        xSeqProp->setPropertyValue( u"Role"_ustr, uno::Any( rRole ));
+        xSeqProp->setPropertyValue( u"Role"_ustr, cpo::uno::Any( rRole ));
 }
 
 void lcl_addSequenceToDataSource(
@@ -147,7 +147,7 @@ void lcl_setXMLRangePropertyAtDataSequence(
         Reference< beans::XPropertySet > xProp( xDataSequence, uno::UNO_QUERY_THROW );
         Reference< beans::XPropertySetInfo > xInfo( xProp->getPropertySetInfo());
         if( xInfo.is() && xInfo->hasPropertyByName( aXMLRangePropName ))
-            xProp->setPropertyValue( aXMLRangePropName, uno::Any( rXMLRange ));
+            xProp->setPropertyValue( aXMLRangePropName, cpo::uno::Any( rXMLRange ));
     }
     catch( const uno::Exception & )
     {
@@ -240,7 +240,7 @@ double StatisticsHelper::getErrorFromDataSource(
     }
     else if( xValues.is())
     {
-        Sequence< uno::Any > aData( xValues->getData());
+        Sequence< cpo::uno::Any > aData( xValues->getData());
         if( nIndex < aData.getLength())
             aData[nIndex] >>= fResult;
     }
@@ -299,10 +299,10 @@ Reference< beans::XPropertySet > StatisticsHelper::addErrorBars(
     OSL_ASSERT( xErrorBar.is());
     if( xErrorBar.is())
     {
-        xErrorBar->setPropertyValue( u"ErrorBarStyle"_ustr, uno::Any( nStyle ));
+        xErrorBar->setPropertyValue( u"ErrorBarStyle"_ustr, cpo::uno::Any( nStyle ));
     }
 
-    xDataSeries->setPropertyValue( aPropName, uno::Any( xErrorBar ));
+    xDataSeries->setPropertyValue( aPropName, cpo::uno::Any( xErrorBar ));
 
     return xErrorBar;
 }
@@ -339,7 +339,7 @@ void StatisticsHelper::removeErrorBars(
 {
     Reference< beans::XPropertySet > xErrorBar( getErrorBars( xDataSeries, bYError ));
     if ( xErrorBar.is())
-        xErrorBar->setPropertyValue( u"ErrorBarStyle"_ustr, uno::Any(
+        xErrorBar->setPropertyValue( u"ErrorBarStyle"_ustr, cpo::uno::Any(
                                          css::chart::ErrorBarStyle::NONE ));
 }
 

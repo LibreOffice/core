@@ -174,7 +174,7 @@ class LayoutManagerListener final : public ::cppu::WeakImplHelper<
 
         // XLayoutManagerEventListener
 
-        virtual void SAL_CALL layoutEvent( const css::lang::EventObject& aSource, ::sal_Int16 eLayoutEvent, const css::uno::Any& aInfo ) override;
+        virtual void SAL_CALL layoutEvent( const css::lang::EventObject& aSource, ::sal_Int16 eLayoutEvent, const cpo::uno::Any& aInfo ) override;
 
     private:
         bool                                             m_bHasFrame;

@@ -106,9 +106,9 @@ void LpSolverTest::testSLPSolverNonlinear()
     uno::Sequence<table::CellAddress> aVariables{ { 0, 0, 0 } }; // A1
     uno::Sequence<sheet::SolverConstraint> aConstraints{
         { table::CellAddress(0, 0, 0), sheet::SolverConstraintOperator_GREATER_EQUAL,
-          uno::Any(-10.0) },
+          cpo::uno::Any(-10.0) },
         { table::CellAddress(0, 0, 0), sheet::SolverConstraintOperator_LESS_EQUAL,
-          uno::Any(10.0) }
+          cpo::uno::Any(10.0) }
     };
 
     xSolver->setDocument(m_xDocument);
@@ -149,15 +149,15 @@ void LpSolverTest::testSLPSolverNonlinearConstraint()
     uno::Sequence<sheet::SolverConstraint> aConstraints{
         // x*x + y*y <= 1 (cell B1)
         { table::CellAddress(0, 1, 0), sheet::SolverConstraintOperator_LESS_EQUAL,
-          uno::Any(1.0) },
+          cpo::uno::Any(1.0) },
         { table::CellAddress(0, 0, 0), sheet::SolverConstraintOperator_GREATER_EQUAL,
-          uno::Any(-2.0) },
+          cpo::uno::Any(-2.0) },
         { table::CellAddress(0, 0, 0), sheet::SolverConstraintOperator_LESS_EQUAL,
-          uno::Any(2.0) },
+          cpo::uno::Any(2.0) },
         { table::CellAddress(0, 0, 1), sheet::SolverConstraintOperator_GREATER_EQUAL,
-          uno::Any(-2.0) },
+          cpo::uno::Any(-2.0) },
         { table::CellAddress(0, 0, 1), sheet::SolverConstraintOperator_LESS_EQUAL,
-          uno::Any(2.0) }
+          cpo::uno::Any(2.0) }
     };
 
     xSolver->setDocument(m_xDocument);
@@ -202,10 +202,10 @@ void LpSolverTest::testSLPSolverLargeModel()
     {
         aVariableList.push_back(table::CellAddress(0, 1, nRow)); // B: extraction
         aConstraintList.push_back({ table::CellAddress(0, 1, nRow),
-                                    sheet::SolverConstraintOperator_GREATER_EQUAL, uno::Any(0.0) });
+                                    sheet::SolverConstraintOperator_GREATER_EQUAL, cpo::uno::Any(0.0) });
         // E: stock remaining after this period must not go negative
         aConstraintList.push_back({ table::CellAddress(0, 4, nRow),
-                                    sheet::SolverConstraintOperator_GREATER_EQUAL, uno::Any(0.0) });
+                                    sheet::SolverConstraintOperator_GREATER_EQUAL, cpo::uno::Any(0.0) });
     }
     uno::Sequence<table::CellAddress> aVariables(aVariableList.data(), aVariableList.size());
     uno::Sequence<sheet::SolverConstraint> aConstraints(aConstraintList.data(),
@@ -216,7 +216,7 @@ void LpSolverTest::testSLPSolverLargeModel()
             u"com.sun.star.comp.Calc.SLPSolver"_ustr, m_xContext),
         uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xProperties(xSolver, uno::UNO_QUERY_THROW);
-    xProperties->setPropertyValue(u"Timeout"_ustr, uno::Any(sal_Int32(10)));
+    xProperties->setPropertyValue(u"Timeout"_ustr, cpo::uno::Any(sal_Int32(10)));
 
     xSolver->setDocument(xDocument);
     xSolver->setObjective(aObjective);
@@ -254,7 +254,7 @@ void LpSolverTest::testSolver(OUString const & rName)
     uno::Sequence<sheet::SolverConstraint> aConstraints{
         { /* Left     */ table::CellAddress(0, 0, 0),
           /* Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
-          /* Right    */ uno::Any(5.0) }
+          /* Right    */ cpo::uno::Any(5.0) }
     };
 
     // initialize solver

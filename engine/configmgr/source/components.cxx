@@ -33,7 +33,7 @@
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -431,7 +431,7 @@ void Components::insertModificationXcuFile(
     }
 }
 
-css::beans::Optional< css::uno::Any > Components::getExternalValue(
+css::beans::Optional< cpo::uno::Any > Components::getExternalValue(
     std::u16string_view descriptor)
 {
     size_t i = descriptor.find(' ');
@@ -463,7 +463,7 @@ css::beans::Optional< css::uno::Any > Components::getExternalValue(
         }
         j = externalServices_.emplace(name, propset).first;
     }
-    css::beans::Optional< css::uno::Any > value;
+    css::beans::Optional< cpo::uno::Any > value;
     if (j->second.is()) {
         try {
             if (!(j->second->getPropertyValue(OUString(descriptor.substr(i + 1))) >>=
@@ -476,7 +476,7 @@ css::beans::Optional< css::uno::Any > Components::getExternalValue(
             throw css::uno::RuntimeException(
                 "unknown external value descriptor ID: " + e.Message);
         } catch (css::lang::WrappedTargetException & e) {
-            css::uno::Any anyEx = cppu::getCaughtException();
+            cpo::uno::Any anyEx = cppu::getCaughtException();
             throw css::lang::WrappedTargetRuntimeException(
                 "cannot obtain external value: " + e.Message,
                 nullptr, anyEx );

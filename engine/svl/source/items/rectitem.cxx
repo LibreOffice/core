@@ -19,7 +19,7 @@
 
 
 #include <svl/rectitem.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <osl/diagnose.h>
 
@@ -71,7 +71,7 @@ SfxRectangleItem* SfxRectangleItem::Clone(SfxItemPool *) const
     return new SfxRectangleItem( *this );
 }
 
-bool SfxRectangleItem::QueryValue( css::uno::Any& rVal,
+bool SfxRectangleItem::QueryValue( cpo::uno::Any& rVal,
                                    sal_uInt8 nMemberId) const
 {
     nMemberId &= ~CONVERT_TWIPS;
@@ -96,7 +96,7 @@ bool SfxRectangleItem::QueryValue( css::uno::Any& rVal,
 }
 
 
-bool SfxRectangleItem::PutValue( const css::uno::Any& rVal,
+bool SfxRectangleItem::PutValue( const cpo::uno::Any& rVal,
                                  sal_uInt8 nMemberId )
 {
     bool bRet = false;

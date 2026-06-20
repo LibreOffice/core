@@ -62,12 +62,12 @@ public:
     {
         return ( mIt != mSheetMap.end() );
     }
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         if ( !hasMoreElements() )
             throw container::NoSuchElementException();
         uno::Reference< sheet::XSpreadsheet > xSheet( *mIt++ );
-        return uno::Any( xSheet ) ;
+        return cpo::uno::Any( xSheet ) ;
     }
 };
 
@@ -83,11 +83,11 @@ public:
     virtual uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<sheet::XSpreadsheet>::get(); }
     virtual bool SAL_CALL hasElements(  ) override { return ( !mSheetMap.empty() ); }
     // XNameAccess
-    virtual uno::Any SAL_CALL getByName( const OUString& aName ) override
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override
     {
         if ( !hasByName(aName) )
             throw container::NoSuchElementException();
-        return uno::Any( *cachePos );
+        return cpo::uno::Any( *cachePos );
     }
     virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
@@ -117,12 +117,12 @@ public:
 
     // XElementAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) override { return mSheetMap.size(); }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
+    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         if ( Index < 0 || Index >= getCount() )
             throw lang::IndexOutOfBoundsException();
 
-        return uno::Any( mSheetMap[ Index ] );
+        return cpo::uno::Any( mSheetMap[ Index ] );
 
     }
     // XEnumerationAccess
@@ -139,11 +139,11 @@ public:
     /// @throws uno::RuntimeException
     SheetsEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration,  uno::Reference< frame::XModel > xModel  ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), m_xModel(std::move( xModel )) {}
 
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         uno::Reference< sheet::XSpreadsheet > xSheet( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
         uno::Reference< XHelperInterface > xIf = excel::getUnoSheetModuleObj( xSheet );
-        uno::Any aRet;
+        cpo::uno::Any aRet;
         if ( !xIf.is() )
         {
             // if the Sheet is in a document created by the api unfortunately ( at the
@@ -187,12 +187,12 @@ ScVbaWorksheets::createEnumeration()
     return new SheetsEnumeration( this, mxContext, xEnumAccess->createEnumeration(), mxModel );
 }
 
-uno::Any
-ScVbaWorksheets::createCollectionObject( const uno::Any& aSource )
+cpo::uno::Any
+ScVbaWorksheets::createCollectionObject( const cpo::uno::Any& aSource )
 {
     uno::Reference< sheet::XSpreadsheet > xSheet( aSource, uno::UNO_QUERY );
     uno::Reference< XHelperInterface > xIf = excel::getUnoSheetModuleObj( xSheet );
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if ( !xIf.is() )
     {
         // if the Sheet is in a document created by the api unfortunately ( at the
@@ -206,12 +206,12 @@ ScVbaWorksheets::createCollectionObject( const uno::Any& aSource )
 }
 
 // XWorksheets
-uno::Any
-ScVbaWorksheets::Add( const uno::Any& Before, const uno::Any& After,
-                     const uno::Any& Count, const uno::Any& Type )
+cpo::uno::Any
+ScVbaWorksheets::Add( const cpo::uno::Any& Before, const cpo::uno::Any& After,
+                     const cpo::uno::Any& Count, const cpo::uno::Any& Type )
 {
     if ( isSelectedSheets() )
-        return uno::Any(); // or should we throw?
+        return cpo::uno::Any(); // or should we throw?
 
     OUString aStringSheet;
     bool bBefore(true);
@@ -262,7 +262,7 @@ ScVbaWorksheets::Add( const uno::Any& Before, const uno::Any& After,
 
     SCTAB nSheetName = nCount + 1;
     OUString aStringBase( u"Sheet"_ustr );
-    uno::Any result;
+    cpo::uno::Any result;
     for (SCTAB i=0; i < nNewSheets; i++, nSheetName++)
     {
         OUString aStringName = aStringBase + OUString::number(nSheetName);
@@ -290,7 +290,7 @@ ScVbaWorksheets::Delete()
     sal_Int32 nElems = getCount();
     for ( sal_Int32 nItem = 1; nItem <= nElems; ++nItem )
     {
-        uno::Reference< excel::XWorksheet > xSheet( Item( uno::Any( nItem ), uno::Any() ), uno::UNO_QUERY_THROW );
+        uno::Reference< excel::XWorksheet > xSheet( Item( cpo::uno::Any( nItem ), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
         xSheet->Delete();
     }
 }
@@ -302,7 +302,7 @@ ScVbaWorksheets::isSelectedSheets() const
 }
 
 void SAL_CALL
-ScVbaWorksheets::PrintOut( const uno::Any& From, const uno::Any& To, const uno::Any& Copies, const uno::Any& Preview, const uno::Any& ActivePrinter, const uno::Any& PrintToFile, const uno::Any& Collate, const uno::Any& PrToFileName )
+ScVbaWorksheets::PrintOut( const cpo::uno::Any& From, const cpo::uno::Any& To, const cpo::uno::Any& Copies, const cpo::uno::Any& Preview, const cpo::uno::Any& ActivePrinter, const cpo::uno::Any& PrintToFile, const cpo::uno::Any& Collate, const cpo::uno::Any& PrToFileName )
 {
     sal_Int32 nTo = 0;
     sal_Int32 nFrom = 0;
@@ -317,7 +317,7 @@ ScVbaWorksheets::PrintOut( const uno::Any& From, const uno::Any& To, const uno::
     PrintOutHelper( excel::getBestViewShell( mxModel ), From, To, Copies, Preview, ActivePrinter, PrintToFile, Collate, PrToFileName, bSelection );
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaWorksheets::getVisible()
 {
     bool bVisible = true;
@@ -331,11 +331,11 @@ ScVbaWorksheets::getVisible()
                 break;
         }
     }
-    return uno::Any( bVisible );
+    return cpo::uno::Any( bVisible );
 }
 
 void SAL_CALL
-ScVbaWorksheets::setVisible( const uno::Any& _visible )
+ScVbaWorksheets::setVisible( const cpo::uno::Any& _visible )
 {
     bool bState = false;
     if ( !(_visible >>= bState) )
@@ -351,7 +351,7 @@ ScVbaWorksheets::setVisible( const uno::Any& _visible )
 }
 
 void SAL_CALL
-ScVbaWorksheets::Select( const uno::Any& Replace )
+ScVbaWorksheets::Select( const cpo::uno::Any& Replace )
 {
     ScTabViewShell* pViewShell = excel::getBestViewShell( mxModel );
     if ( !pViewShell )
@@ -367,7 +367,7 @@ ScVbaWorksheets::Select( const uno::Any& Replace )
     sal_Int32 nElems = getCount();
     for ( sal_Int32 nItem = 1; nItem <= nElems; ++nItem )
     {
-        uno::Reference< excel::XWorksheet > xSheet( Item( uno::Any( nItem ), uno::Any() ), uno::UNO_QUERY_THROW );
+        uno::Reference< excel::XWorksheet > xSheet( Item( cpo::uno::Any( nItem ), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
         ScVbaWorksheet* pSheet = excel::getImplFromDocModuleWrapper<ScVbaWorksheet>( xSheet );
         if ( bSelectSingle )
         {
@@ -381,7 +381,7 @@ ScVbaWorksheets::Select( const uno::Any& Replace )
 }
 
 void SAL_CALL
-ScVbaWorksheets::Copy ( const uno::Any& Before, const uno::Any& After)
+ScVbaWorksheets::Copy ( const cpo::uno::Any& Before, const cpo::uno::Any& After)
 {
     uno::Reference<excel::XWorksheet> xSheet;
     sal_Int32 nElems = getCount();
@@ -391,7 +391,7 @@ ScVbaWorksheets::Copy ( const uno::Any& Before, const uno::Any& After)
 
     for ( nItem = 1; nItem <= nElems; ++nItem)
     {
-        uno::Reference<excel::XWorksheet> xWorksheet(Item( uno::Any( nItem ), uno::Any() ), uno::UNO_QUERY_THROW );
+        uno::Reference<excel::XWorksheet> xWorksheet(Item( cpo::uno::Any( nItem ), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
         Sheets.push_back(xWorksheet);
     }
     bool bNewDoc = (!(Before >>= xSheet) && !(After >>=xSheet)&& !(Before.hasValue()) && !(After.hasValue()));
@@ -422,15 +422,15 @@ ScVbaWorksheets::Copy ( const uno::Any& Before, const uno::Any& After)
 }
 
 //ScVbaCollectionBaseImpl
-uno::Any SAL_CALL
-ScVbaWorksheets::Item(const uno::Any& Index, const uno::Any& Index2)
+cpo::uno::Any SAL_CALL
+ScVbaWorksheets::Item(const cpo::uno::Any& Index, const cpo::uno::Any& Index2)
 {
     if ( Index.getValueTypeClass() == uno::TypeClass_SEQUENCE )
     {
         const uno::Reference< script::XTypeConverter >& xConverter = getTypeConverter(mxContext);
-        uno::Any aConverted = xConverter->convertTo( Index, cppu::UnoType<uno::Sequence< uno::Any >>::get() );
+        cpo::uno::Any aConverted = xConverter->convertTo( Index, cppu::UnoType<uno::Sequence< cpo::uno::Any >>::get() );
         SheetMap aSheets;
-        uno::Sequence< uno::Any > sIndices;
+        uno::Sequence< cpo::uno::Any > sIndices;
         aConverted >>= sIndices;
         for (const auto& rIndex : sIndices)
         {
@@ -442,7 +442,7 @@ ScVbaWorksheets::Item(const uno::Any& Index, const uno::Any& Index2)
         }
         uno::Reference< container::XIndexAccess > xIndexAccess = new SheetCollectionHelper( std::move(aSheets) );
         uno::Reference< XCollection > xSelectedSheets(  new ScVbaWorksheets( getParent(), mxContext, xIndexAccess, mxModel ) );
-        return uno::Any( xSelectedSheets );
+        return cpo::uno::Any( xSelectedSheets );
     }
     return  ScVbaWorksheets_BASE::Item( Index, Index2 );
 }
@@ -484,7 +484,7 @@ bool ScVbaWorksheets::nameExists( const uno::Reference <sheet::XSpreadsheetDocum
     return false;
 }
 
-void ScVbaWorksheets::PrintPreview( const css::uno::Any& /*EnableChanges*/ )
+void ScVbaWorksheets::PrintPreview( const cpo::uno::Any& /*EnableChanges*/ )
 {
     // need test, print preview current active sheet
     // !! TODO !! get view shell from controller
@@ -511,7 +511,7 @@ void ScVbaWorksheets::PrintPreview( const css::uno::Any& /*EnableChanges*/ )
     sal_Int32 nElems = getCount();
     for ( sal_Int32 nItem = 1; nItem <= nElems; ++nItem )
     {
-        uno::Reference< excel::XWorksheet > xSheet( Item( uno::Any( nItem ), uno::Any() ), uno::UNO_QUERY_THROW );
+        uno::Reference< excel::XWorksheet > xSheet( Item( cpo::uno::Any( nItem ), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
         ScVbaWorksheet* pSheet = excel::getImplFromDocModuleWrapper<ScVbaWorksheet>( xSheet );
         if ( pSheet )
             aMarkData.SelectTable(static_cast< SCTAB >( pSheet->getSheetID() ), true );

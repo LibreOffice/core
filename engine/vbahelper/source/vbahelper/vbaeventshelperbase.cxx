@@ -37,7 +37,7 @@ using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
 
-VbaEventsHelperBase::VbaEventsHelperBase( const uno::Sequence< uno::Any >& rArgs ) :
+VbaEventsHelperBase::VbaEventsHelperBase( const uno::Sequence< cpo::uno::Any >& rArgs ) :
     VbaEventsHelperBase_BASE(m_aMutex),
     mpShell( nullptr )
 {
@@ -56,7 +56,7 @@ VbaEventsHelperBase::~VbaEventsHelperBase()
 {
 }
 
-bool SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, const uno::Sequence< uno::Any >& rArgs )
+bool SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, const uno::Sequence< cpo::uno::Any >& rArgs )
 {
     /*  Derived classes may add new event identifiers to be processed while
         processing the original event. All unprocessed events are collected in
@@ -86,7 +86,7 @@ bool SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, const un
 
         // get info for next event
         const EventHandlerInfo& rInfo = getEventHandlerInfo( aEventQueue.front().mnEventId );
-        uno::Sequence< uno::Any > aEventArgs = aEventQueue.front().maArgs;
+        uno::Sequence< cpo::uno::Any > aEventArgs = aEventQueue.front().maArgs;
         aEventQueue.pop_front();
         SAL_INFO("vbahelper", "VbaEventsHelperBase::processVbaEvent( \"" << rInfo.maMacroName << "\" )");
 
@@ -100,7 +100,7 @@ bool SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, const un
             if( !aMacroPath.isEmpty() )
             {
                 // build the argument list
-                uno::Sequence< uno::Any > aVbaArgs = implBuildArgumentList( rInfo, aEventArgs );
+                uno::Sequence< cpo::uno::Any > aVbaArgs = implBuildArgumentList( rInfo, aEventArgs );
                 // insert current cancel value
                 if( rInfo.mnCancelIndex >= 0 )
                 {
@@ -109,7 +109,7 @@ bool SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, const un
                     aVbaArgs.getArray()[ rInfo.mnCancelIndex ] <<= bCancel;
                 }
                 // execute the event handler
-                uno::Any aRet, aCaller;
+                cpo::uno::Any aRet, aCaller;
                 executeMacro( mpShell, aMacroPath, aVbaArgs, aRet, aCaller );
                 // extract new cancel value (may be boolean or any integer type)
                 if( rInfo.mnCancelIndex >= 0 )
@@ -198,7 +198,7 @@ bool VbaEventsHelperBase::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-void VbaEventsHelperBase::processVbaEventNoThrow( sal_Int32 nEventId, const uno::Sequence< uno::Any >& rArgs )
+void VbaEventsHelperBase::processVbaEventNoThrow( sal_Int32 nEventId, const uno::Sequence< cpo::uno::Any >& rArgs )
 {
     try
     {
@@ -212,7 +212,7 @@ void VbaEventsHelperBase::processVbaEventNoThrow( sal_Int32 nEventId, const uno:
 // protected ------------------------------------------------------------------
 
 void VbaEventsHelperBase::registerEventHandler( sal_Int32 nEventId, sal_Int32 nModuleType,
-        const char* pcMacroName, sal_Int32 nCancelIndex, const uno::Any& rUserData )
+        const char* pcMacroName, sal_Int32 nCancelIndex, const cpo::uno::Any& rUserData )
 {
     EventHandlerInfo& rInfo = maEventInfos[ nEventId ];
     rInfo.mnEventId = nEventId;
@@ -248,7 +248,7 @@ void VbaEventsHelperBase::stopListening()
     maEventInfos.clear();
 }
 
-bool SAL_CALL VbaEventsHelperBase::hasVbaEventHandler( sal_Int32 nEventId, const uno::Sequence< uno::Any >& rArgs )
+bool SAL_CALL VbaEventsHelperBase::hasVbaEventHandler( sal_Int32 nEventId, const uno::Sequence< cpo::uno::Any >& rArgs )
 {
     EventHandlerInfoMap::const_iterator aIt = maEventInfos.find( nEventId );
     if( aIt == maEventInfos.end() )
@@ -267,7 +267,7 @@ const VbaEventsHelperBase::EventHandlerInfo& VbaEventsHelperBase::getEventHandle
 }
 
 OUString VbaEventsHelperBase::getEventHandlerPath( const EventHandlerInfo& rInfo,
-        const uno::Sequence< uno::Any >& rArgs )
+        const uno::Sequence< cpo::uno::Any >& rArgs )
 {
     OUString aModuleName;
     switch( rInfo.mnModuleType )
@@ -377,7 +377,7 @@ VbaEventsHelperBase::ModulePathMap& VbaEventsHelperBase::updateModulePathMap( co
     {
         EventHandlerInfo& rThisWorksheetInfo
             = maEventInfos[css::script::vba::VBAEventId::WORKBOOK_OPEN];
-        css::uno::Sequence<css::uno::Any> aNoArgs;
+        css::uno::Sequence<cpo::uno::Any> aNoArgs;
         sThisWorkbook = implGetDocumentModuleName(rThisWorksheetInfo, aNoArgs);
     }
 
@@ -387,7 +387,7 @@ VbaEventsHelperBase::ModulePathMap& VbaEventsHelperBase::updateModulePathMap( co
     {
         EventHandlerInfo& rThisDocumentInfo
             = maEventInfos[css::script::vba::VBAEventId::DOCUMENT_OPEN];
-        css::uno::Sequence<css::uno::Any> aNoArgs;
+        css::uno::Sequence<cpo::uno::Any> aNoArgs;
         sThisDocument = implGetDocumentModuleName(rThisDocumentInfo, aNoArgs);
     }
 

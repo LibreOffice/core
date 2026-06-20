@@ -78,7 +78,7 @@ namespace frm
         explicit OFilterControl( const css::uno::Reference< css::uno::XComponentContext >& _rxORB );
 
         DECLARE_UNO3_AGG_DEFAULTS(OFilterControl,OWeakAggObject)
-        css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+        cpo::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
 
         virtual OUString GetComponentServiceName() const override;
         virtual void SAL_CALL   createPeer( const css::uno::Reference< css::awt::XToolkit > & rxToolkit, const css::uno::Reference< css::awt::XWindowPeer >  & rParentPeer ) override;
@@ -116,7 +116,7 @@ namespace frm
         virtual void            SAL_CALL itemStateChanged(const css::awt::ItemEvent& rEvent) override;
 
     // css::util::XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
@@ -125,7 +125,7 @@ namespace frm
 
     private:
         virtual void PrepareWindowDescriptor( css::awt::WindowDescriptor& rDesc ) override;
-        virtual void ImplSetPeerProperty( const OUString& rPropName, const css::uno::Any& rVal ) override;
+        virtual void ImplSetPeerProperty( const OUString& rPropName, const cpo::uno::Any& rVal ) override;
 
         bool ensureInitialized( );
 

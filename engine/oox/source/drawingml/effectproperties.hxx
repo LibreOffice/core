@@ -56,7 +56,7 @@ struct EffectShadowProperties
 struct Effect
 {
     OUString msName;
-    std::map< OUString, css::uno::Any > maAttribs;
+    std::map< OUString, cpo::uno::Any > maAttribs;
     Color moColor;
 
     css::beans::PropertyValue getEffect();

@@ -2327,7 +2327,7 @@ void ScModule::SetAutoSpellProperty( bool bSet )
     // loading the linguistic component
     SvtLinguConfig aConfig;
 
-    aConfig.SetProperty( u"IsSpellAuto", uno::Any(bSet) );
+    aConfig.SetProperty( u"IsSpellAuto", cpo::uno::Any(bSet) );
 }
 
 bool ScModule::GetAutoSpellProperty()
@@ -2390,7 +2390,7 @@ void ScModule::RegisterAutomationApplicationEventsCaller(css::uno::Reference< oo
     mxAutomationApplicationEventsCaller = xCaller;
 }
 
-void ScModule::CallAutomationApplicationEventSinks(const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments)
+void ScModule::CallAutomationApplicationEventSinks(const OUString& Method, css::uno::Sequence< cpo::uno::Any >& Arguments)
 {
     if (mxAutomationApplicationEventsCaller.is())
         mxAutomationApplicationEventsCaller->CallSinks(Method, Arguments);

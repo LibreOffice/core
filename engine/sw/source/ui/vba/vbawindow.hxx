@@ -42,17 +42,17 @@ public:
         const css::uno::Reference< css::frame::XController >& xController );
 
     // Attributes
-    virtual css::uno::Any SAL_CALL getView() override;
-    virtual void SAL_CALL setView( const css::uno::Any& _view ) override;
-    virtual css::uno::Any SAL_CALL getWindowState() override;
-    virtual void SAL_CALL setWindowState( const css::uno::Any& _windowstate ) override;
+    virtual cpo::uno::Any SAL_CALL getView() override;
+    virtual void SAL_CALL setView( const cpo::uno::Any& _view ) override;
+    virtual cpo::uno::Any SAL_CALL getWindowState() override;
+    virtual void SAL_CALL setWindowState( const cpo::uno::Any& _windowstate ) override;
     virtual OUString SAL_CALL getCaption() override;
     virtual void SAL_CALL setCaption( const OUString& _caption ) override;
     // Methods
     virtual void SAL_CALL Activate(  ) override;
-    virtual void SAL_CALL Close( const css::uno::Any& SaveChanges, const css::uno::Any& RouteDocument ) override;
-    virtual css::uno::Any SAL_CALL Panes( const css::uno::Any& aIndex ) override;
-    virtual css::uno::Any SAL_CALL ActivePane() override;
+    virtual void SAL_CALL Close( const cpo::uno::Any& SaveChanges, const cpo::uno::Any& RouteDocument ) override;
+    virtual cpo::uno::Any SAL_CALL Panes( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL ActivePane() override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

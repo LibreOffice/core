@@ -80,7 +80,7 @@ void SdXML3DObjectContext::startFastElement(
         // set parameters
         if(mbSetTransform)
         {
-            xPropSet->setPropertyValue(u"D3DTransformMatrix"_ustr, uno::Any(mxHomMat));
+            xPropSet->setPropertyValue(u"D3DTransformMatrix"_ustr, cpo::uno::Any(mxHomMat));
         }
 
         // call parent
@@ -161,8 +161,8 @@ void SdXML3DCubeObjectShapeContext::startFastElement(
     aDirection3D.DirectionY = maMaxEdge.getY();
     aDirection3D.DirectionZ = maMaxEdge.getZ();
 
-    xPropSet->setPropertyValue(u"D3DPosition"_ustr, uno::Any(aPosition3D));
-    xPropSet->setPropertyValue(u"D3DSize"_ustr, uno::Any(aDirection3D));
+    xPropSet->setPropertyValue(u"D3DPosition"_ustr, cpo::uno::Any(aPosition3D));
+    xPropSet->setPropertyValue(u"D3DSize"_ustr, cpo::uno::Any(aDirection3D));
 }
 
 SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
@@ -235,8 +235,8 @@ void SdXML3DSphereObjectShapeContext::startFastElement(
     aDirection3D.DirectionY = maSphereSize.getY();
     aDirection3D.DirectionZ = maSphereSize.getZ();
 
-    xPropSet->setPropertyValue(u"D3DPosition"_ustr, uno::Any(aPosition3D));
-    xPropSet->setPropertyValue(u"D3DSize"_ustr, uno::Any(aDirection3D));
+    xPropSet->setPropertyValue(u"D3DPosition"_ustr, cpo::uno::Any(aPosition3D));
+    xPropSet->setPropertyValue(u"D3DSize"_ustr, cpo::uno::Any(aDirection3D));
 }
 
 SdXML3DPolygonBasedShapeContext::SdXML3DPolygonBasedShapeContext(
@@ -302,7 +302,7 @@ void SdXML3DPolygonBasedShapeContext::startFastElement(
                 aPolyPolygon3D);
 
             // set polygon data
-            xPropSet->setPropertyValue(u"D3DPolyPolygon3D"_ustr, uno::Any(aPolyPolygon3D));
+            xPropSet->setPropertyValue(u"D3DPolyPolygon3D"_ustr, cpo::uno::Any(aPolyPolygon3D));
         }
         else
         {

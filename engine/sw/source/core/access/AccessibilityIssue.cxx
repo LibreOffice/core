@@ -362,7 +362,7 @@ void AccessibilityIssue::quickFixIssue() const
                             && xRun->getPropertySetInfo()->hasPropertyByName(u"HyperLinkName"_ustr))
                         {
                             xRun->setPropertyValue(u"HyperLinkName"_ustr,
-                                                   uno::Any(xNameDialog->GetName()));
+                                                   cpo::uno::Any(xNameDialog->GetName()));
                         }
                     }
                     else

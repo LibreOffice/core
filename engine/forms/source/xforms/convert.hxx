@@ -22,10 +22,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <map>
 
-namespace com::sun::star::uno
-{
-    class Any;
-}
+namespace cpo::uno { class Any; }
 
 namespace xforms
 {
@@ -40,8 +37,8 @@ struct TypeLess
 class Convert
 {
     // hold conversion objects
-    typedef OUString (*fn_toXSD)( const css::uno::Any& );
-    typedef css::uno::Any (*fn_toAny)( const OUString& );
+    typedef OUString (*fn_toXSD)( const cpo::uno::Any& );
+    typedef cpo::uno::Any (*fn_toAny)( const OUString& );
     typedef std::pair<fn_toXSD,fn_toAny> Convert_t;
     typedef std::map<css::uno::Type, Convert_t, TypeLess> Map_t;
     Map_t maMap;
@@ -61,10 +58,10 @@ public:
     css::uno::Sequence<css::uno::Type> getTypes() const;
 
     /// convert any to XML representation
-    OUString toXSD( const css::uno::Any& rAny );
+    OUString toXSD( const cpo::uno::Any& rAny );
 
     /// convert XML representation to Any of given type
-    css::uno::Any toAny( const OUString&, const css::uno::Type& );
+    cpo::uno::Any toAny( const OUString&, const css::uno::Type& );
 
     /** replace all sequences of 0x08, 0x0A, 0x0D, 0x20 with a single 0x20.
         also strip leading/trailing whitespace.

@@ -58,7 +58,7 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstance()
  * The third value is a media descriptor.
  */
 uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithArguments(
-            const uno::Sequence< uno::Any >& aArguments )
+            const uno::Sequence< cpo::uno::Any >& aArguments )
 {
     sal_Int32 nArgNum = aArguments.getLength();
     OSL_ENSURE( nArgNum < 4, "Wrong parameter number" );
@@ -147,7 +147,7 @@ uno::Sequence< OUString > SAL_CALL FSStorageFactory::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 svl_FSStorageFactory_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new FSStorageFactory(context));
 }

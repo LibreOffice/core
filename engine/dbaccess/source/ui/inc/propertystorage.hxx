@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <map>
 #include <memory>
 
@@ -39,8 +39,8 @@ namespace dbaui
         {
         }
 
-        void getPropertyValue( css::uno::Any& _out_rValue ) const;
-        void setPropertyValue( const css::uno::Any& _rValue );
+        void getPropertyValue( cpo::uno::Any& _out_rValue ) const;
+        void setPropertyValue( const cpo::uno::Any& _rValue );
 
     private:
         SfxItemSet&       m_rItemSet;

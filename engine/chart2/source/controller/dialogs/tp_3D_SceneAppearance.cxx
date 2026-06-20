@@ -69,7 +69,7 @@ void lcl_setShadeModeAtModel( rtl::Reference<::chart::ChartModel> const & xModel
     try
     {
         rtl::Reference< ::chart::Diagram > xDiaProp = xModel->getFirstChartDiagram();
-        xDiaProp->setPropertyValue( u"D3DSceneShadeMode"_ustr , uno::Any( aShadeMode ));
+        xDiaProp->setPropertyValue( u"D3DSceneShadeMode"_ustr , cpo::uno::Any( aShadeMode ));
     }
     catch( const uno::Exception & )
     {

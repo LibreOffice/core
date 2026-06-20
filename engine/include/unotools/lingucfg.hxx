@@ -22,7 +22,7 @@
 
 #include <unotools/unotoolsdllapi.h>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 #include <i18nlangtag/lang.h>
@@ -161,7 +161,7 @@ public:
     css::uno::Sequence< OUString >
         GetNodeNames( const OUString &rNode ) const;
 
-    css::uno::Sequence< css::uno::Any >
+    css::uno::Sequence< cpo::uno::Any >
         GetProperties(
             const css::uno::Sequence< OUString > &rNames ) const;
 
@@ -170,15 +170,15 @@ public:
             const OUString &rNode,
             const css::uno::Sequence< css::beans::PropertyValue >& rValues );
 
-    css::uno::Any
+    cpo::uno::Any
             GetProperty( std::u16string_view rPropertyName ) const;
-    css::uno::Any
+    cpo::uno::Any
             GetProperty( sal_Int32 nPropertyHandle ) const;
 
     bool    SetProperty( std::u16string_view rPropertyName,
-                         const css::uno::Any &rValue );
+                         const cpo::uno::Any &rValue );
     bool    SetProperty( sal_Int32 nPropertyHandle,
-                         const css::uno::Any &rValue );
+                         const cpo::uno::Any &rValue );
 
     void    GetOptions( SvtLinguOptions &rOptions ) const;
 

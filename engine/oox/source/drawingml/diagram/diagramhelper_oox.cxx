@@ -491,7 +491,7 @@ void DiagramHelper_oox::TextInformationChange()
     uno::Reference<beans::XPropertySet> xPropSet(accessRootShape(), uno::UNO_QUERY);
     if (xPropSet->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
         xPropSet->setPropertyValue(u"InteropGrabBag"_ustr,
-                                   uno::Any(uno::Sequence<beans::PropertyValue>()));
+                                   cpo::uno::Any(uno::Sequence<beans::PropertyValue>()));
 }
 
 DiagramDataStatePtr DiagramHelper_oox::extractDiagramDataState() const
@@ -559,18 +559,18 @@ const std::shared_ptr<::oox::drawingml::Theme>& DiagramHelper_oox::getOrCreateTh
     return mpDiagramThemePtr;
 }
 
-void DiagramHelper_oox::setOOXDomValue(DomMapFlag aDomMapFlag, const uno::Any& rValue)
+void DiagramHelper_oox::setOOXDomValue(DomMapFlag aDomMapFlag, const cpo::uno::Any& rValue)
 {
     if (mpDiagramPtr)
         mpDiagramPtr->setOOXDomValue(aDomMapFlag, rValue);
 }
 
-uno::Any DiagramHelper_oox::getOOXDomValue(DomMapFlag aDomMapFlag) const
+cpo::uno::Any DiagramHelper_oox::getOOXDomValue(DomMapFlag aDomMapFlag) const
 {
     if (mpDiagramPtr)
         return mpDiagramPtr->getOOXDomValue(aDomMapFlag);
 
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 bool DiagramHelper_oox::checkMinimalDataDoms() const

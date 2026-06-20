@@ -23,7 +23,7 @@
 #include <utility>
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
 
 namespace chart::wrapper
@@ -63,7 +63,7 @@ void WrappedD3DTransformMatrixProperty::setPropertyValue( const Any& rOuterValue
 
             aHM = BaseGFXHelper::B3DHomMatrixToHomogenMatrix(aNewMatrix);
 
-            WrappedProperty::setPropertyValue( uno::Any(aHM), xInnerPropertySet );
+            WrappedProperty::setPropertyValue( cpo::uno::Any(aHM), xInnerPropertySet );
             return;
         }
     }
@@ -75,7 +75,7 @@ Any WrappedD3DTransformMatrixProperty::getPropertyValue( const Reference< beans:
 {
     if( m_spChart2ModelContact->getDiagram()->isPieOrDonutChart() )
     {
-        uno::Any aAMatrix( WrappedProperty::getPropertyValue( xInnerPropertySet ) );
+        cpo::uno::Any aAMatrix( WrappedProperty::getPropertyValue( xInnerPropertySet ) );
         drawing::HomogenMatrix aHM;
         if( aAMatrix >>= aHM )
         {
@@ -89,7 +89,7 @@ Any WrappedD3DTransformMatrixProperty::getPropertyValue( const Reference< beans:
 
             aHM = BaseGFXHelper::B3DHomMatrixToHomogenMatrix(aNewMatrix);
 
-            return uno::Any(aHM);
+            return cpo::uno::Any(aHM);
         }
     }
 

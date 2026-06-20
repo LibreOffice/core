@@ -119,7 +119,7 @@ private:
                        const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
     /// @throws css::uno::Exception
-    css::uno::Sequence< css::uno::Any >
+    css::uno::Sequence< cpo::uno::Any >
     setPropertyValues( const css::uno::Sequence< css::beans::PropertyValue >& rValues,
                        const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
@@ -145,7 +145,7 @@ private:
 
     // Command "open"
     /// @throws css::uno::Exception
-    css::uno::Any open(
+    cpo::uno::Any open(
                 const css::ucb::OpenCommandArgument3 & rArg,
                 const css::uno::Reference<
                     css::ucb::XCommandEnvironment > & xEnv );
@@ -178,7 +178,7 @@ private:
     /// @throws css::uno::Exception
     void unlock( const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment );
 
-    css::uno::Any MapDAVException( const DAVException & e,
+    cpo::uno::Any MapDAVException( const DAVException & e,
                                                 bool bWrite );
     /// @throws css::uno::Exception
     void cancelCommandExecution(
@@ -223,7 +223,7 @@ public:
     virtual ~Content() override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         noexcept override;
     virtual void SAL_CALL release()
@@ -245,7 +245,7 @@ public:
     getContentType() override;
 
     // XCommandProcessor
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
     execute( const css::ucb::Command& aCommand,
              sal_Int32 CommandId,
              const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override;
@@ -256,7 +256,7 @@ public:
     virtual void SAL_CALL
     addProperty( const OUString& Name,
                  sal_Int16 Attributes,
-                 const css::uno::Any& DefaultValue ) override;
+                 const cpo::uno::Any& DefaultValue ) override;
 
     virtual void SAL_CALL
     removeProperty( const OUString& Name ) override;

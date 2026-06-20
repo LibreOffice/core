@@ -107,7 +107,7 @@ public:
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 Index) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex(sal_Int32 Index) override;
 
     // XFormControllerContext
     virtual void SAL_CALL makeVisible( const css::uno::Reference< css::awt::XControl >& Control ) override;

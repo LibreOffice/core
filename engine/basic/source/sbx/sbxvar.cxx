@@ -36,6 +36,7 @@
 #include <utility>
 #include <filefmt.hxx>
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 // SbxVariable
 

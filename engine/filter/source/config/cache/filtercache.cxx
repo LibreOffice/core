@@ -459,7 +459,7 @@ void FilterCache::refreshItem(      EItemType        eType,
 }
 
 
-css::uno::Any FilterCache::getItemWithStateProps(      EItemType        eType,
+cpo::uno::Any FilterCache::getItemWithStateProps(      EItemType        eType,
                                       const OUString& sItem)
 {
     // SAFE ->
@@ -496,7 +496,7 @@ css::uno::Any FilterCache::getItemWithStateProps(      EItemType        eType,
                         about FINALIZED and MANDATORY very easy ... :-(
                         => set it to readonly/required everytimes :-)
                 */
-                css::uno::Any   aDirectValue       = impl_getDirectCFGValue(CFGDIRECTKEY_DEFAULTFRAMELOADER);
+                cpo::uno::Any   aDirectValue       = impl_getDirectCFGValue(CFGDIRECTKEY_DEFAULTFRAMELOADER);
                 OUString sDefaultFrameLoader;
                 if (
                     (aDirectValue >>= sDefaultFrameLoader) &&
@@ -505,7 +505,7 @@ css::uno::Any FilterCache::getItemWithStateProps(      EItemType        eType,
                    )
                 {
                     css::uno::Sequence aProps = rItem.getAsPackedPropertyValueList(true, true);
-                    return css::uno::Any(aProps);
+                    return cpo::uno::Any(aProps);
                 }
                 /* <-- HACK */
 
@@ -551,7 +551,7 @@ css::uno::Any FilterCache::getItemWithStateProps(      EItemType        eType,
 
     css::uno::Sequence<css::beans::PropertyValue> aProps = rItem.getAsPackedPropertyValueList(bFinalized, bMandatory);
 
-    return css::uno::Any(aProps);
+    return cpo::uno::Any(aProps);
     // <- SAFE
 }
 
@@ -634,7 +634,7 @@ void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XN
 
                 CacheItemList::const_iterator pItem = rCache.find(item);
                 impl_saveItem(xItem, eType, pItem->second);
-                xAddRemoveSet->insertByName(item, css::uno::Any(xItem));
+                xAddRemoveSet->insertByName(item, cpo::uno::Any(xItem));
             }
             break;
 
@@ -840,7 +840,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
     return *pConfig;
 }
 
-css::uno::Any FilterCache::impl_getDirectCFGValue(std::u16string_view sDirectKey)
+cpo::uno::Any FilterCache::impl_getDirectCFGValue(std::u16string_view sDirectKey)
 {
     OUString sRoot;
     OUString sKey ;
@@ -850,19 +850,19 @@ css::uno::Any FilterCache::impl_getDirectCFGValue(std::u16string_view sDirectKey
         (sRoot.isEmpty()                                             ) ||
         (sKey.isEmpty()                                              )
        )
-        return css::uno::Any();
+        return cpo::uno::Any();
 
     css::uno::Reference< css::uno::XInterface > xCfg = impl_createConfigAccess(sRoot    ,
                                                                                true ,  // bReadOnly
                                                                                false); // bLocalesMode
     if (!xCfg.is())
-        return css::uno::Any();
+        return cpo::uno::Any();
 
     css::uno::Reference< css::container::XNameAccess > xAccess(xCfg, css::uno::UNO_QUERY);
     if (!xAccess.is())
-        return css::uno::Any();
+        return cpo::uno::Any();
 
-    css::uno::Any aValue;
+    cpo::uno::Any aValue;
     try
     {
         aValue = xAccess->getByName(sKey);
@@ -895,20 +895,20 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
             css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(
                 css::configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() ) );
 
-            ::std::vector< css::uno::Any > lParams;
+            ::std::vector< cpo::uno::Any > lParams;
             css::beans::NamedValue aParam;
 
             // set root path
             aParam.Name = u"nodepath"_ustr;
             aParam.Value <<= sRoot;
-            lParams.push_back(css::uno::Any(aParam));
+            lParams.push_back(cpo::uno::Any(aParam));
 
             // enable "all locales mode" ... if required
             if (bLocalesMode)
             {
                 aParam.Name = u"locale"_ustr;
                 aParam.Value <<= u"*"_ustr;
-                lParams.push_back(css::uno::Any(aParam));
+                lParams.push_back(cpo::uno::Any(aParam));
             }
 
             // open it
@@ -1155,7 +1155,7 @@ void FilterCache::impl_validateAndOptimize()
     // create dependencies between the global default frame loader
     // and all types (and of course if registered filters), which
     // does not registered for any other loader.
-    css::uno::Any   aDirectValue       = impl_getDirectCFGValue(CFGDIRECTKEY_DEFAULTFRAMELOADER);
+    cpo::uno::Any   aDirectValue       = impl_getDirectCFGValue(CFGDIRECTKEY_DEFAULTFRAMELOADER);
     OUString sDefaultFrameLoader;
 
     if (
@@ -1183,7 +1183,7 @@ void FilterCache::impl_validateAndOptimize()
             continue;
 
         CacheItem&     rLoader   = frameLoader.second;
-        css::uno::Any& rTypesReg = rLoader[PROPNAME_TYPES];
+        cpo::uno::Any& rTypesReg = rLoader[PROPNAME_TYPES];
         const css::uno::Sequence<OUString> lTypesReg = rTypesReg.get<css::uno::Sequence<OUString> >();
 
         for (auto const& typeReg : lTypesReg)
@@ -1399,7 +1399,7 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
 
     try
     {
-        css::uno::Any aVal = xConfig->getByName(sSetName);
+        cpo::uno::Any aVal = xConfig->getByName(sSetName);
         if (!(aVal >>= xSet) || !xSet.is())
         {
             OUString sMsg("Could not open configuration set \"" + sSetName + "\".");
@@ -1483,7 +1483,7 @@ void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::containe
     aLock.clear();
     // <- SAFE ----------------------------------
 
-    css::uno::Any aVal = xNode->getByName(PROPNAME_UINAME);
+    cpo::uno::Any aVal = xNode->getByName(PROPNAME_UINAME);
     css::uno::Reference< css::container::XNameAccess > xUIName;
     if (!(aVal >>= xUIName) && !xUIName.is())
         return;
@@ -1558,7 +1558,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
     // break this operation. Of course returned API object must be
     // checked too.
     css::uno::Reference< css::container::XNameAccess > xItem;
-    css::uno::Any aVal = xSet->getByName(sItem);
+    cpo::uno::Any aVal = xSet->getByName(sItem);
     if (!(aVal >>= xItem) || !xItem.is())
     {
         throw css::uno::RuntimeException("found corrupted item \"" + sItem + "\".",
@@ -1583,7 +1583,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
             {
                 css::uno::Reference< css::beans::XMultiPropertySet >
                     xPropSet( xItem, css::uno::UNO_QUERY_THROW);
-                css::uno::Sequence< css::uno::Any > aValues = xPropSet->getPropertyValues(rNames);
+                css::uno::Sequence< cpo::uno::Any > aValues = xPropSet->getPropertyValues(rNames);
 
                 for (sal_Int32 i = 0; i < aValues.getLength(); i++)
                     aItem[rNames[i]] = aValues[i];
@@ -1607,7 +1607,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
             {
                 css::uno::Reference< css::beans::XMultiPropertySet >
                     xPropSet( xItem, css::uno::UNO_QUERY_THROW);
-                css::uno::Sequence< css::uno::Any > aValues = xPropSet->getPropertyValues(rNames);
+                css::uno::Sequence< cpo::uno::Any > aValues = xPropSet->getPropertyValues(rNames);
 
                 for (sal_Int32 i = 0; i < rNames.getLength(); i++)
                 {
@@ -1790,7 +1790,7 @@ void FilterCache::impl_saveItem(const css::uno::Reference< css::container::XName
             {
                 sal_Int32 nFlags = 0;
                 pIt->second >>= nFlags;
-                css::uno::Any aFlagNameList;
+                cpo::uno::Any aFlagNameList;
                 aFlagNameList <<= FilterCache::impl_convertFlagField2FlagNames(static_cast<SfxFilterFlags>(nFlags));
                 xItem->replaceByName(PROPNAME_FLAGS, aFlagNameList);
             }

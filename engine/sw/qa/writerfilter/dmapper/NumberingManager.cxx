@@ -45,7 +45,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteBulletListStyleName)
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<uno::XInterface> xStyle
         = xFactory->createInstance(u"com.sun.star.style.NumberingStyle"_ustr);
-    xStyles->insertByName(u"WWNum1"_ustr, uno::Any(xStyle));
+    xStyles->insertByName(u"WWNum1"_ustr, cpo::uno::Any(xStyle));
 
     // When pasting bullets to that document:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);

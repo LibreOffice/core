@@ -37,10 +37,10 @@ private:
                                                                         const OUString& sHelpURL,
                                                                         const OUString& sLabel,
                                                                         sal_uInt16 nType,
-                                                                        const css::uno::Any& aSubMenu,
+                                                                        const cpo::uno::Any& aSubMenu,
                                                                         bool isVisible,
                                                                         bool isEnabled );
-    static css::uno::Sequence< css::beans::PropertyValue > CreateToolbarItemData( const OUString& sCommandURL, const OUString& sHelpURL, const OUString& sLabel, sal_uInt16 nType, const css::uno::Any& aSubMenu, bool isVisible, sal_Int32 nStyle );
+    static css::uno::Sequence< css::beans::PropertyValue > CreateToolbarItemData( const OUString& sCommandURL, const OUString& sHelpURL, const OUString& sLabel, sal_uInt16 nType, const cpo::uno::Any& aSubMenu, bool isVisible, sal_Int32 nStyle );
 
 public:
     /// @throws css::uno::RuntimeException
@@ -49,11 +49,11 @@ public:
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 
     // Methods
-    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index, const css::uno::Any& /*Index2*/ ) override;
-    virtual css::uno::Reference< ov::XCommandBarControl > SAL_CALL Add( const css::uno::Any& Type, const css::uno::Any& Id, const css::uno::Any& Parameter, const css::uno::Any& Before, const css::uno::Any& Temporary ) override;
+    virtual cpo::uno::Any SAL_CALL Item( const cpo::uno::Any& Index, const cpo::uno::Any& /*Index2*/ ) override;
+    virtual css::uno::Reference< ov::XCommandBarControl > SAL_CALL Add( const cpo::uno::Any& Type, const cpo::uno::Any& Id, const cpo::uno::Any& Parameter, const cpo::uno::Any& Before, const cpo::uno::Any& Temporary ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
@@ -70,11 +70,11 @@ public:
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 
     // Methods
-    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index, const css::uno::Any& /*Index2*/ ) override;
-    virtual css::uno::Reference< ov::XCommandBarControl > SAL_CALL Add( const css::uno::Any& Type, const css::uno::Any& Id, const css::uno::Any& Parameter, const css::uno::Any& Before, const css::uno::Any& Temporary ) override;
+    virtual cpo::uno::Any SAL_CALL Item( const cpo::uno::Any& Index, const cpo::uno::Any& /*Index2*/ ) override;
+    virtual css::uno::Reference< ov::XCommandBarControl > SAL_CALL Add( const cpo::uno::Any& Type, const cpo::uno::Any& Id, const cpo::uno::Any& Parameter, const cpo::uno::Any& Before, const cpo::uno::Any& Temporary ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

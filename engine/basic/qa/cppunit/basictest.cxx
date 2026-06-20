@@ -71,7 +71,7 @@ void MacroSnippet::LoadSourceFromFile(const OUString& sModuleName, const OUStrin
     MakeModule(sModuleName, sSource);
 }
 
-SbxVariableRef MacroSnippet::Run( const css::uno::Sequence< css::uno::Any >& rArgs )
+SbxVariableRef MacroSnippet::Run( const css::uno::Sequence< cpo::uno::Any >& rArgs )
 {
     SbxVariableRef pReturn;
     if ( !Compile() )
@@ -97,7 +97,7 @@ SbxVariableRef MacroSnippet::Run( const css::uno::Sequence< css::uno::Any >& rAr
 
 SbxVariableRef MacroSnippet::Run()
 {
-    css::uno::Sequence< css::uno::Any > aArgs;
+    css::uno::Sequence< cpo::uno::Any > aArgs;
     return Run( aArgs );
 }
 

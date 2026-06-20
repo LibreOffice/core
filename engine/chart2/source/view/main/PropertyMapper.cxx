@@ -56,7 +56,7 @@ void PropertyMapper::setMappedProperties(
         const OUString & rSource = elem.second;
         if (xInfo->hasPropertyByName(rSource))
         {
-            uno::Any aAny( xSource->getPropertyValue(rSource) );
+            cpo::uno::Any aAny( xSource->getPropertyValue(rSource) );
             if( aAny.hasValue() )
             {
                 //do not set empty anys because of performance (otherwise SdrAttrObj::ItemChange will take much longer)
@@ -107,7 +107,7 @@ void PropertyMapper::setMappedProperties(
         const OUString & rSource = elem.second;
         if (xInfo->hasPropertyByName(rSource))
         {
-            uno::Any aAny( xSource->getPropertyValue(rSource) );
+            cpo::uno::Any aAny( xSource->getPropertyValue(rSource) );
             if( aAny.hasValue() )
             {
                 //do not set empty anys because of performance (otherwise SdrAttrObj::ItemChange will take much longer)
@@ -170,7 +170,7 @@ css::uno::Sequence<css::beans::PropertyValue> PropertyMapper::getPropVals(
         const OUString & rSource = elem.second;
         if (xInfo->hasPropertyByName(rSource))
         {
-            uno::Any aAny( xSource->getPropertyValue(rSource) );
+            cpo::uno::Any aAny( xSource->getPropertyValue(rSource) );
             if( aAny.hasValue() )
             {
                 //do not set empty anys because of performance (otherwise SdrAttrObj::ItemChange will take much longer)
@@ -205,7 +205,7 @@ void PropertyMapper::getValueMap(
             ++i;
         }
 
-        uno::Sequence< uno::Any > xValues = xMultiPropSet->getPropertyValues(aPropSourceNames);
+        uno::Sequence< cpo::uno::Any > xValues = xMultiPropSet->getPropertyValues(aPropSourceNames);
         sal_Int32 n = rNameMap.size();
         for(i = 0;i < n; ++i)
         {
@@ -221,7 +221,7 @@ void PropertyMapper::getValueMap(
             const OUString & rSource = elem.second;
             try
             {
-                uno::Any aAny( xSourceProp->getPropertyValue(rSource) );
+                cpo::uno::Any aAny( xSourceProp->getPropertyValue(rSource) );
                 if( aAny.hasValue() )
                     rValueMap.emplace(  rTarget, aAny );
             }
@@ -249,7 +249,7 @@ void PropertyMapper::getMultiPropertyListsFromValueMap(
     sal_Int32 nN=0;
     for (auto const& elem : rValueMap)
     {
-        const uno::Any& rAny = elem.second;
+        const cpo::uno::Any& rAny = elem.second;
         if( rAny.hasValue() )
         {
             //do not set empty anys because of performance (otherwise SdrAttrObj::ItemChange will take much longer)
@@ -263,7 +263,7 @@ void PropertyMapper::getMultiPropertyListsFromValueMap(
     rValues.realloc(nN);
 }
 
-uno::Any* PropertyMapper::getValuePointer( tAnySequence& rPropValues
+cpo::uno::Any* PropertyMapper::getValuePointer( tAnySequence& rPropValues
                          , const tNameSequence& rPropNames
                          , std::u16string_view rPropName )
 {
@@ -276,7 +276,7 @@ uno::Any* PropertyMapper::getValuePointer( tAnySequence& rPropValues
     return nullptr;
 }
 
-uno::Any* PropertyMapper::getValuePointerForLimitedSpace( tAnySequence& rPropValues
+cpo::uno::Any* PropertyMapper::getValuePointerForLimitedSpace( tAnySequence& rPropValues
                          , const tNameSequence& rPropNames
                          , bool bLimitedHeight)
 {
@@ -551,21 +551,21 @@ void PropertyMapper::getTextLabelMultiPropertyLists(
     PropertyMapper::getValueMap(aValueMap, aNameMap, xSourceProp);
 
     //some more shape properties apart from character properties, position-matrix and label string
-    aValueMap.emplace( "TextHorizontalAdjust", uno::Any(drawing::TextHorizontalAdjust_CENTER) ); // drawing::TextHorizontalAdjust - needs to be overwritten
-    aValueMap.emplace( "TextVerticalAdjust", uno::Any(drawing::TextVerticalAdjust_CENTER) ); //drawing::TextVerticalAdjust - needs to be overwritten
-    aValueMap.emplace( "TextAutoGrowHeight", uno::Any(true) ); // bool
-    aValueMap.emplace( "TextAutoGrowWidth", uno::Any(true) ); // bool
-    aValueMap.emplace( "ParaAdjust", uno::Any(style::ParagraphAdjust_CENTER) ); // style::ParagraphAdjust_CENTER - needs to be overwritten
+    aValueMap.emplace( "TextHorizontalAdjust", cpo::uno::Any(drawing::TextHorizontalAdjust_CENTER) ); // drawing::TextHorizontalAdjust - needs to be overwritten
+    aValueMap.emplace( "TextVerticalAdjust", cpo::uno::Any(drawing::TextVerticalAdjust_CENTER) ); //drawing::TextVerticalAdjust - needs to be overwritten
+    aValueMap.emplace( "TextAutoGrowHeight", cpo::uno::Any(true) ); // bool
+    aValueMap.emplace( "TextAutoGrowWidth", cpo::uno::Any(true) ); // bool
+    aValueMap.emplace( "ParaAdjust", cpo::uno::Any(style::ParagraphAdjust_CENTER) ); // style::ParagraphAdjust_CENTER - needs to be overwritten
     if( bName )
-        aValueMap.emplace( "Name", uno::Any( OUString() ) ); //CID OUString - needs to be overwritten for each point
+        aValueMap.emplace( "Name", cpo::uno::Any( OUString() ) ); //CID OUString - needs to be overwritten for each point
 
     if( nLimitedSpace > 0 )
     {
         if(bLimitedHeight)
-            aValueMap.emplace( "TextMaximumFrameHeight", uno::Any(nLimitedSpace) ); //sal_Int32
+            aValueMap.emplace( "TextMaximumFrameHeight", cpo::uno::Any(nLimitedSpace) ); //sal_Int32
         else
-            aValueMap.emplace( "TextMaximumFrameWidth", uno::Any(nLimitedSpace) ); //sal_Int32
-        aValueMap.emplace( "ParaIsHyphenation", uno::Any(true) );
+            aValueMap.emplace( "TextMaximumFrameWidth", cpo::uno::Any(nLimitedSpace) ); //sal_Int32
+        aValueMap.emplace( "ParaIsHyphenation", cpo::uno::Any(true) );
     }
 
     PropertyMapper::getMultiPropertyListsFromValueMap( rPropNames, rPropValues, aValueMap );
@@ -582,18 +582,18 @@ void PropertyMapper::getPreparedTextShapePropertyLists(
             , xSourceProp );
 
     // auto-grow makes sure the shape has the correct size after setting text
-    aValueMap.emplace( "TextHorizontalAdjust", uno::Any( drawing::TextHorizontalAdjust_CENTER ));
-    aValueMap.emplace( "TextVerticalAdjust", uno::Any( drawing::TextVerticalAdjust_CENTER ));
-    aValueMap.emplace( "TextAutoGrowHeight", uno::Any( true ));
-    aValueMap.emplace( "TextAutoGrowWidth", uno::Any( true ));
+    aValueMap.emplace( "TextHorizontalAdjust", cpo::uno::Any( drawing::TextHorizontalAdjust_CENTER ));
+    aValueMap.emplace( "TextVerticalAdjust", cpo::uno::Any( drawing::TextVerticalAdjust_CENTER ));
+    aValueMap.emplace( "TextAutoGrowHeight", cpo::uno::Any( true ));
+    aValueMap.emplace( "TextAutoGrowWidth", cpo::uno::Any( true ));
 
     // set some distance to the border, in case it is shown
     const sal_Int32 nWidthDist  = 250;
     const sal_Int32 nHeightDist = 125;
-    aValueMap.emplace( "TextLeftDistance",  uno::Any( nWidthDist ));
-    aValueMap.emplace( "TextRightDistance", uno::Any( nWidthDist ));
-    aValueMap.emplace( "TextUpperDistance", uno::Any( nHeightDist ));
-    aValueMap.emplace( "TextLowerDistance", uno::Any( nHeightDist ));
+    aValueMap.emplace( "TextLeftDistance",  cpo::uno::Any( nWidthDist ));
+    aValueMap.emplace( "TextRightDistance", cpo::uno::Any( nWidthDist ));
+    aValueMap.emplace( "TextUpperDistance", cpo::uno::Any( nHeightDist ));
+    aValueMap.emplace( "TextLowerDistance", cpo::uno::Any( nHeightDist ));
 
     // use a line-joint showing the border of thick lines like two rectangles
     // filled in between.

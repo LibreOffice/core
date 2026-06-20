@@ -118,6 +118,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
@@ -556,7 +557,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                             uno::Reference<frame::XDispatchHelper> xDispatcher
                                 = frame::DispatchHelper::create(::comphelper::getProcessComponentContext());
                             // use .uno:CloseDoc to be able to close windows of the same document
-                            css::uno::Any aResult =
+                            cpo::uno::Any aResult =
                                 xDispatcher->executeDispatch(xProvider,
                                                              u".uno:CloseDoc"_ustr,
                                                              u"_self"_ustr,

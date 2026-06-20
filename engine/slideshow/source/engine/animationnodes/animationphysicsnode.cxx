@@ -39,7 +39,7 @@ AnimationActivitySharedPtr AnimationPhysicsNode::createActivity() const
     ENSURE_OR_THROW((mxPhysicsMotionNode->getDuration() >>= fDuration),
                     "Couldn't get the animation duration.");
 
-    ::css::uno::Any aTemp;
+    ::cpo::uno::Any aTemp;
     double fStartVelocityX = fDefaultStartVelocityX;
     aTemp = mxPhysicsMotionNode->getStartVelocityX();
     if (aTemp.hasValue())

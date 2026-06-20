@@ -47,6 +47,7 @@
 
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 AccObjectWinManager::AccObjectWinManager():
         oldFocus(nullptr)

@@ -32,7 +32,7 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <vector>
@@ -157,16 +157,16 @@ public:
         return countItems();
     }
 
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) override
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) override
     {
         if( !isValidIndex( nIndex ) )
             throw css::lang::IndexOutOfBoundsException();
-        return css::uno::Any( getItem( nIndex ) );
+        return cpo::uno::Any( getItem( nIndex ) );
     }
 
     // XIndexReplace : XIndexAccess
     virtual void SAL_CALL replaceByIndex( sal_Int32 nIndex,
-                                          const css::uno::Any& aElement ) override
+                                          const cpo::uno::Any& aElement ) override
     {
         T t;
         if( !isValidIndex( nIndex) )
@@ -184,13 +184,13 @@ public:
 
 
     // XSet : XEnumerationAccess
-    virtual bool SAL_CALL has( const css::uno::Any& aElement ) override
+    virtual bool SAL_CALL has( const cpo::uno::Any& aElement ) override
     {
         T t;
         return ( aElement >>= t ) && hasItem( t );
     }
 
-    virtual void SAL_CALL insert( const css::uno::Any& aElement ) override
+    virtual void SAL_CALL insert( const cpo::uno::Any& aElement ) override
     {
         T t;
         if( !( aElement >>= t )  || !isValid( t ) )
@@ -200,7 +200,7 @@ public:
         addItem( t );
     }
 
-    virtual void SAL_CALL remove( const css::uno::Any& aElement ) override
+    virtual void SAL_CALL remove( const cpo::uno::Any& aElement ) override
     {
         T t;
         if( !(aElement >>= t) )
@@ -239,9 +239,9 @@ protected:
         OSL_ENSURE( isValidIndex(nPos), "invalid index" );
         css::container::ContainerEvent aEvent(
             static_cast<css::container::XIndexReplace*>( this ),
-            css::uno::Any( nPos ),
-            css::uno::Any( getItem( nPos ) ),
-            css::uno::Any() );
+            cpo::uno::Any( nPos ),
+            cpo::uno::Any( getItem( nPos ) ),
+            cpo::uno::Any() );
         for (auto const& listener : maListeners)
         {
             listener->elementInserted( aEvent );
@@ -252,9 +252,9 @@ protected:
     {
         css::container::ContainerEvent aEvent(
             static_cast<css::container::XIndexReplace*>( this ),
-            css::uno::Any(),
-            css::uno::Any( aOld ),
-            css::uno::Any() );
+            cpo::uno::Any(),
+            cpo::uno::Any( aOld ),
+            cpo::uno::Any() );
         for (auto const& listener : maListeners)
         {
             listener->elementRemoved( aEvent );
@@ -266,9 +266,9 @@ protected:
         OSL_ENSURE( isValidIndex(nPos), "invalid index" );
         css::container::ContainerEvent aEvent(
             static_cast<css::container::XIndexReplace*>( this ),
-            css::uno::Any( nPos ),
-            css::uno::Any( getItem( nPos ) ),
-            css::uno::Any( aNew ) );
+            cpo::uno::Any( nPos ),
+            cpo::uno::Any( getItem( nPos ) ),
+            cpo::uno::Any( aNew ) );
         for (auto const& listener : maListeners)
         {
             listener->elementReplaced( aEvent );

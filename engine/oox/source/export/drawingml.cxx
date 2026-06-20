@@ -151,6 +151,7 @@ using namespace ::css::i18n;
 using namespace ::css::style;
 using namespace ::css::text;
 using namespace ::css::uno;
+using namespace ::cpo::uno;
 using namespace ::css::container;
 using namespace ::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand;
 
@@ -213,7 +214,7 @@ GraphicExportCache& GraphicExportCache::get()
     return staticGraphicExportCache;
 }
 
-static css::uno::Any getLineDash( const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rDashName )
+static cpo::uno::Any getLineDash( const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rDashName )
     {
         css::uno::Reference<css::lang::XMultiServiceFactory> xFact(xModel, css::uno::UNO_QUERY);
         css::uno::Reference<css::container::XNameAccess> xNameAccess(
@@ -222,12 +223,12 @@ static css::uno::Any getLineDash( const css::uno::Reference<css::frame::XModel>&
         if(xNameAccess.is())
         {
             if (!xNameAccess->hasByName(rDashName))
-                return css::uno::Any();
+                return cpo::uno::Any();
 
             return xNameAccess->getByName(rDashName);
         }
 
-        return css::uno::Any();
+        return cpo::uno::Any();
     }
 
 namespace
@@ -1056,7 +1057,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
                     if (GetProperty(rXPropSet, u"LineDashName"_ustr))
                         mAny >>= aLineDashName;
                     if (!aLineDashName.isEmpty() && xModel) {
-                        css::uno::Any aAny = getLineDash(xModel, aLineDashName);
+                        cpo::uno::Any aAny = getLineDash(xModel, aLineDashName);
                         aAny >>= aLineDash;
                     }
                 }
@@ -1068,7 +1069,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
                 if (GetProperty(rXPropSet, u"LineDashName"_ustr))
                     mAny >>= aLineDashName;
                 if (!aLineDashName.isEmpty() && xModel) {
-                    css::uno::Any aAny = getLineDash(xModel, aLineDashName);
+                    cpo::uno::Any aAny = getLineDash(xModel, aLineDashName);
                     aAny >>= aLineDash;
                 }
             }
@@ -5140,7 +5141,7 @@ bool DrawingML::WriteCustomGeometry(
     const SdrObjCustomShape& rSdrObjCustomShape)
 {
     uno::Reference< beans::XPropertySet > aXPropSet;
-    uno::Any aAny( rXShape->queryInterface(cppu::UnoType<beans::XPropertySet>::get()));
+    cpo::uno::Any aAny( rXShape->queryInterface(cppu::UnoType<beans::XPropertySet>::get()));
 
     if ( ! (aAny >>= aXPropSet) )
         return false;
@@ -7080,12 +7081,12 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
                             uno::Sequence<beans::StringPair>());
 
         // get originally imported OOXDataImageRels
-        uno::Sequence<uno::Sequence<uno::Any>> xDataImageRelSeq;
+        uno::Sequence<uno::Sequence<cpo::uno::Any>> xDataImageRelSeq;
         rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDataImageRels)
             >>= xDataImageRelSeq;
 
         // get originally imported OOXDataHlinkRels
-        uno::Sequence<uno::Sequence<uno::Any>> xDataHlinkRelSeq;
+        uno::Sequence<uno::Sequence<cpo::uno::Any>> xDataHlinkRelSeq;
         rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDataHlinkRels)
             >>= xDataHlinkRelSeq;
 
@@ -7130,12 +7131,12 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
             uno::Sequence<beans::StringPair>());
 
         // get originally imported OOXDrawingImageRels
-        uno::Sequence<uno::Sequence<uno::Any>> xDrawingImageRelSeq;
+        uno::Sequence<uno::Sequence<cpo::uno::Any>> xDrawingImageRelSeq;
         rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDrawingImageRels)
             >>= xDrawingImageRelSeq;
 
                 // get originally imported OOXDataHlinkRels
-        uno::Sequence<uno::Sequence<uno::Any>> xDrawingHlinkRelSeq;
+        uno::Sequence<uno::Sequence<cpo::uno::Any>> xDrawingHlinkRelSeq;
         rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDrawingHlinkRels)
             >>= xDrawingHlinkRelSeq;
 
@@ -7145,7 +7146,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     }
 }
 
-void DrawingML::writeDiagramImageRels(const uno::Sequence<uno::Sequence<uno::Any>>& xRelSeq,
+void DrawingML::writeDiagramImageRels(const uno::Sequence<uno::Sequence<cpo::uno::Any>>& xRelSeq,
                                       const uno::Reference<io::XOutputStream>& xOutStream)
 {
     // add image relationships of OOXData, SmartArtDiagram
@@ -7159,7 +7160,7 @@ void DrawingML::writeDiagramImageRels(const uno::Sequence<uno::Sequence<uno::Any
     {
         // diagramDataRelTuple[0] => RID,
         // diagramDataRelTuple[1] => XGraphic
-        const uno::Sequence<uno::Any>& diagramDataRelTuple = xRelSeq[j];
+        const uno::Sequence<cpo::uno::Any>& diagramDataRelTuple = xRelSeq[j];
 
         OUString sRelId;
         diagramDataRelTuple[0] >>= sRelId;
@@ -7176,7 +7177,7 @@ void DrawingML::writeDiagramImageRels(const uno::Sequence<uno::Sequence<uno::Any
             const OUString sFragment = writeImageRelToStorage(aGraphic);
 
             PropertySet aProps(xOutStream);
-            aProps.setAnyProperty(PROP_RelId, uno::Any(sRelId.toInt32()));
+            aProps.setAnyProperty(PROP_RelId, cpo::uno::Any(sRelId.toInt32()));
 
             if (GetDocumentType() == DOCUMENT_DOCX)
                 mpFB->addRelation(xOutStream, sType, Concat2View("../" + sFragment));
@@ -7186,7 +7187,7 @@ void DrawingML::writeDiagramImageRels(const uno::Sequence<uno::Sequence<uno::Any
     }
 }
 
-void DrawingML::writeDiagramHlinkRels(const uno::Sequence<uno::Sequence<uno::Any>>& xRelSeq,
+void DrawingML::writeDiagramHlinkRels(const uno::Sequence<uno::Sequence<cpo::uno::Any>>& xRelSeq,
                                       const uno::Reference<io::XOutputStream>& xOutStream)
 {
     uno::Reference<xml::sax::XWriter> xWriter
@@ -7199,7 +7200,7 @@ void DrawingML::writeDiagramHlinkRels(const uno::Sequence<uno::Sequence<uno::Any
         // diagramDataRelTuple[0] => RID,
         // diagramDataRelTuple[1] => Target
         // diagramDataRelTuple[2] => Type
-        const uno::Sequence<uno::Any>& diagramDataRelTuple = xRelSeq[j];
+        const uno::Sequence<cpo::uno::Any>& diagramDataRelTuple = xRelSeq[j];
 
         OUString sRelId;
         OUString sTarget;
@@ -7220,7 +7221,7 @@ void DrawingML::writeDiagramHlinkRels(const uno::Sequence<uno::Sequence<uno::Any
             sRelType = oox::getRelationship(Relationship::HYPERLINK);
 
         PropertySet aProps(xOutStream);
-        aProps.setAnyProperty(PROP_RelId, uno::Any(sRelId.toInt32()));
+        aProps.setAnyProperty(PROP_RelId, cpo::uno::Any(sRelId.toInt32()));
         mpFB->addRelation(xOutStream, sRelType, sTarget, bExtURL);
     }
 }

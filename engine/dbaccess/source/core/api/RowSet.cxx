@@ -76,6 +76,7 @@ using namespace comphelper;
 using namespace dbtools;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
@@ -89,7 +90,7 @@ using namespace ::osl;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_dba_ORowSet_get_implementation(css::uno::XComponentContext* context,
-                                                 css::uno::Sequence<css::uno::Any> const &)
+                                                 css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ORowSet(context));
 }
@@ -1858,7 +1859,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                             pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,Any(sal_Int32(i+1)));
                             pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,Any(sal_Int32(227)));
                             pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,Any(sal_Int32(0)));
-                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN, css::uno::Any(false));
+                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN, cpo::uno::Any(false));
                         }
                         catch(Exception&)
                         {
@@ -2529,7 +2530,7 @@ void SAL_CALL ORowSet::setBinaryStream( sal_Int32 parameterIndex, const Referenc
     }
     catch( Exception const & )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw SQLException(u"ORowSet::setBinaryStream"_ustr, *this, u"S1000"_ustr, 0,anyEx);
     }
 }
@@ -2553,7 +2554,7 @@ void SAL_CALL ORowSet::setCharacterStream( sal_Int32 parameterIndex, const Refer
     }
     catch( Exception const & )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw SQLException(u"ORowSet::setCharacterStream"_ustr, *this, u"S1000"_ustr, 0, anyEx);
     }
 }

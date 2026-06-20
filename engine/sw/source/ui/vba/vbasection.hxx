@@ -46,9 +46,9 @@ public:
     virtual void SAL_CALL setProtectedForForms( bool _protectedforforms ) override;
 
     // Methods
-    virtual css::uno::Any SAL_CALL Headers( const css::uno::Any& index ) override;
-    virtual css::uno::Any SAL_CALL Footers( const css::uno::Any& index ) override;
-    virtual css::uno::Any SAL_CALL PageSetup(  ) override;
+    virtual cpo::uno::Any SAL_CALL Headers( const cpo::uno::Any& index ) override;
+    virtual cpo::uno::Any SAL_CALL Footers( const cpo::uno::Any& index ) override;
+    virtual cpo::uno::Any SAL_CALL PageSetup(  ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

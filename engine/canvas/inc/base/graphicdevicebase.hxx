@@ -128,7 +128,7 @@ namespace canvas
                         { [this] () { return this->maDeviceHelper.getSurfaceHandle(); }, {} } },
                     {"DumpScreenContent",
                         { [this] () { return this->getDumpScreenContent(); },
-                          [this] (css::uno::Any const& rAny) { this->setDumpScreenContent(rAny); } } } } );
+                          [this] (cpo::uno::Any const& rAny) { this->setDumpScreenContent(rAny); } } } } );
         }
 
         virtual void disposeThis() override
@@ -247,10 +247,10 @@ namespace canvas
             return css::uno::Reference< css::rendering::XParametricPolyPolygon2D >(
                 ParametricPolyPolygon::create(this,
                                               aServiceSpecifier,
-                                              css::uno::Sequence< css::uno::Any >()));
+                                              css::uno::Sequence< cpo::uno::Any >()));
         }
 
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& aServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments ) override
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& aServiceSpecifier, const css::uno::Sequence< cpo::uno::Any >& Arguments ) override
         {
             return css::uno::Reference< css::rendering::XParametricPolyPolygon2D >(
                 ParametricPolyPolygon::create(this,
@@ -282,13 +282,13 @@ namespace canvas
         }
 
         virtual void SAL_CALL setPropertyValue( const OUString&                   aPropertyName,
-                                                const css::uno::Any& aValue ) override
+                                                const cpo::uno::Any& aValue ) override
         {
             MutexType aGuard( BaseType::m_aMutex );
             maPropHelper.setPropertyValue( aPropertyName, aValue );
         }
 
-        virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& aPropertyName ) override
+        virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& aPropertyName ) override
         {
             MutexType aGuard( BaseType::m_aMutex );
             return maPropHelper.getPropertyValue( aPropertyName );
@@ -323,12 +323,12 @@ namespace canvas
     protected:
         ~GraphicDeviceBase() {} // we're a ref-counted UNO class. _We_ destroy ourselves.
 
-        css::uno::Any getDumpScreenContent() const
+        cpo::uno::Any getDumpScreenContent() const
         {
-            return css::uno::Any( mbDumpScreenContent );
+            return cpo::uno::Any( mbDumpScreenContent );
         }
 
-        void setDumpScreenContent( const css::uno::Any& rAny )
+        void setDumpScreenContent( const cpo::uno::Any& rAny )
         {
             // TODO(Q1): this was mbDumpScreenContent =
             // rAny.get<bool>(), only that gcc3.3 wouldn't eat it

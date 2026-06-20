@@ -30,6 +30,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace apitest {
 
@@ -145,7 +146,7 @@ void XSpreadsheets2::testImportOverExistingNamedRange()
     importSheetToCopy();
 
     uno::Reference< container::XNameAccess > xDestNamedRangesNameAccess(getNamedRanges(xDestDoc), UNO_QUERY_THROW);
-    uno::Any aNr = xDestNamedRangesNameAccess->getByName(u"initial1"_ustr);
+    cpo::uno::Any aNr = xDestNamedRangesNameAccess->getByName(u"initial1"_ustr);
     uno::Reference< sheet::XNamedRange > xDestNamedRange(aNr, UNO_QUERY_THROW);
     OUString aNrDestContent = xDestNamedRange->getContent();
 
@@ -168,7 +169,7 @@ void XSpreadsheets2::testImportNamedRangeDefinedInSource()
     uno::Reference< container::XNameAccess > xDestNamedRangesNameAccess(getNamedRanges(xDestDoc), UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("InSheetRangeName", xDestNamedRangesNameAccess->hasByName(aNewInSheetNamedRangeString));
 
-    uno::Any aNewInSheetNr = xDestNamedRangesNameAccess->getByName(aNewInSheetNamedRangeString);
+    cpo::uno::Any aNewInSheetNr = xDestNamedRangesNameAccess->getByName(aNewInSheetNamedRangeString);
     uno::Reference< sheet::XNamedRange > xDestNewInSheetNamedRange(aNewInSheetNr, UNO_QUERY_THROW);
     OUString aNewInSheetNrDestContent = xDestNewInSheetNamedRange->getContent();
     OUString aNewInSheetExpectedContent(u"$SheetToCopy.$A$7"_ustr);
@@ -192,7 +193,7 @@ void XSpreadsheets2::testImportNamedRangeRedefinedInSource()
     uno::Reference< container::XNameAccess > xDestNamedRangesNameAccess(getNamedRanges(xDestDoc), UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("aRedefinedInSheetNamedRangeString", xDestNamedRangesNameAccess->hasByName(aRedefinedInSheetNamedRangeString));
 
-    uno::Any aRedefinedInSheetNr = xDestNamedRangesNameAccess->getByName(aRedefinedInSheetNamedRangeString);
+    cpo::uno::Any aRedefinedInSheetNr = xDestNamedRangesNameAccess->getByName(aRedefinedInSheetNamedRangeString);
     uno::Reference< sheet::XNamedRange > xDestRedefinedInSheetNamedRange(aRedefinedInSheetNr, UNO_QUERY_THROW);
     OUString aRedefinedInSheetNrDestContent = xDestRedefinedInSheetNamedRange->getContent();
     std::cout << "testImportSheet : initial2 content " << aRedefinedInSheetNrDestContent << std::endl;
@@ -215,7 +216,7 @@ void XSpreadsheets2::testImportNewNamedRange()
 
     // verify the content of this new namedrange, pointing on $Sheet1.$B$1 in source. This address is already defined in target as NR content
 
-    uno::Any aNewNr = xDestNamedRangesNameAccess->getByName(aNewNamedRangeString);
+    cpo::uno::Any aNewNr = xDestNamedRangesNameAccess->getByName(aNewNamedRangeString);
     uno::Reference< sheet::XNamedRange > xDestNewNamedRange(aNewNr, UNO_QUERY_THROW);
     OUString aNewNrDestContent = xDestNewNamedRange->getContent();
 
@@ -254,12 +255,12 @@ void XSpreadsheets2::testImportCellStyle()
 
     uno::Reference< style::XStyleFamiliesSupplier > xFamiliesSupplier (xDestDoc, UNO_QUERY_THROW);
     uno::Reference< container::XNameAccess > xFamiliesNameAccess (xFamiliesSupplier->getStyleFamilies(), UNO_SET_THROW);
-    uno::Any aCellStylesFamily = xFamiliesNameAccess->getByName(u"CellStyles"_ustr);
+    cpo::uno::Any aCellStylesFamily = xFamiliesNameAccess->getByName(u"CellStyles"_ustr);
     uno::Reference< container::XNameContainer > xCellStylesFamilyNameAccess (aCellStylesFamily, UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT_MESSAGE("New cell style not present", xCellStylesFamilyNameAccess->hasByName(aDestStyleName));
 
-    uno::Any aCellStyle = xCellStylesFamilyNameAccess->getByName(aDestStyleName);
+    cpo::uno::Any aCellStyle = xCellStylesFamilyNameAccess->getByName(aDestStyleName);
     uno::Reference< beans::XPropertySet > xCellStyleProp (aCellStyle, UNO_QUERY_THROW);
     sal_Int32 aVertJustify = 0;
     CPPUNIT_ASSERT(xCellStyleProp->getPropertyValue(u"VertJustify"_ustr) >>= aVertJustify);

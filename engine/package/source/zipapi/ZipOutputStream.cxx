@@ -37,6 +37,7 @@
 using namespace com::sun::star;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::packages::zip::ZipConstants;
 
 /** This class is used to write Zip files

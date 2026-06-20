@@ -30,6 +30,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::beans;
 using namespace css::container;
 using namespace css::frame;

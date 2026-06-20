@@ -23,7 +23,7 @@
 #include <osl/conditn.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/xml/dom/XDocumentFragment.hpp>
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
@@ -74,12 +74,12 @@ public:
     CProgressHandlerHelper()
         : m_count(0)
     {}
-    virtual void SAL_CALL push( const css::uno::Any& /*aStatus*/) override
+    virtual void SAL_CALL push( const cpo::uno::Any& /*aStatus*/) override
     {
         std::unique_lock g(m_mLock);
         m_count++;
     }
-    virtual void SAL_CALL update(const css::uno::Any& /*aStatus*/) override
+    virtual void SAL_CALL update(const cpo::uno::Any& /*aStatus*/) override
     {
     }
     virtual void SAL_CALL pop() override

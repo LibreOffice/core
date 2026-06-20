@@ -793,7 +793,7 @@ public:
 
     /// Restore selections.
     void SpellEnd( SwConversionArgs const *pConvArgs = nullptr, bool bRestoreSelection = true );
-    css::uno::Any SpellContinue(
+    cpo::uno::Any SpellContinue(
                     sal_uInt16* pPageCnt, sal_uInt16* pPageSt,
                     SwConversionArgs const *pConvArgs );
 

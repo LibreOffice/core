@@ -48,7 +48,7 @@ public:
             const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
 
     // XJob
-    virtual css::uno::Any SAL_CALL execute( const css::uno::Sequence< css::beans::NamedValue >& Arguments ) throw (css::lang::IllegalArgumentException, css::uno::Exception, css::uno::RuntimeException);
+    virtual cpo::uno::Any SAL_CALL execute( const css::uno::Sequence< css::beans::NamedValue >& Arguments ) throw (css::lang::IllegalArgumentException, css::uno::Exception, css::uno::RuntimeException);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException);

@@ -30,6 +30,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace apitest
 {
@@ -102,7 +103,7 @@ void XNamedRanges::testAddNewFromTitles()
         CPPUNIT_ASSERT_MESSAGE("Non existing NamedRange", xNamedRanges->hasByName(aString));
 
         // verify it points on the right cell
-        uno::Any aNr = xNamedRangesNameAccess->getByName(aString);
+        cpo::uno::Any aNr = xNamedRangesNameAccess->getByName(aString);
         uno::Reference<sheet::XNamedRange> xNamedRange(aNr, UNO_QUERY_THROW);
 
         uno::Reference<sheet::XCellRangeReferrer> xCellRangeRef(xNamedRange, UNO_QUERY_THROW);
@@ -129,7 +130,7 @@ void XNamedRanges::testAddNewFromTitles()
         CPPUNIT_ASSERT_MESSAGE("Non existing NamedRange", xNamedRanges->hasByName(aString));
 
         // verify it points on the right cell
-        uno::Any aNr = xNamedRangesNameAccess->getByName(aString);
+        cpo::uno::Any aNr = xNamedRangesNameAccess->getByName(aString);
         uno::Reference<sheet::XNamedRange> xNamedRange(aNr, UNO_QUERY_THROW);
 
         uno::Reference<sheet::XCellRangeReferrer> xCellRangeRef(xNamedRange, UNO_QUERY_THROW);

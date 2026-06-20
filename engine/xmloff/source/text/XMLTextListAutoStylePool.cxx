@@ -35,6 +35,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::style;
 
@@ -198,7 +199,7 @@ sal_uInt32 XMLTextListAutoStylePool::Find( const XMLTextListAutoStylePoolEntry_I
     {
         const sal_uInt32 nCount = m_pPool->size();
 
-        uno::Any aAny1, aAny2;
+        cpo::uno::Any aAny1, aAny2;
         aAny1 <<= pEntry->GetNumRules();
 
         for( sal_uInt32 nPos = 0; nPos < nCount; nPos++ )

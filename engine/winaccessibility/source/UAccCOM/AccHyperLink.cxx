@@ -29,6 +29,7 @@
 
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::awt;
 
 /**
@@ -115,7 +116,7 @@ CAccHyperLink::get_anchor(/* [in] */ long index,
         {
             return E_FAIL;
         }
-        css::uno::Any anyVal = m_xHyperlink->getAccessibleActionAnchor(index);
+        cpo::uno::Any anyVal = m_xHyperlink->getAccessibleActionAnchor(index);
         // Convert Any to VARIANT.
         CMAccessible::ConvertAnyToVariant(anyVal, anchor);
 
@@ -149,7 +150,7 @@ CAccHyperLink::get_anchorTarget(/* [in] */ long index,
         {
             return E_FAIL;
         }
-        css::uno::Any anyVal = m_xHyperlink->getAccessibleActionObject(index);
+        cpo::uno::Any anyVal = m_xHyperlink->getAccessibleActionObject(index);
         // Convert Any to VARIANT.
         CMAccessible::ConvertAnyToVariant(anyVal, anchorTarget);
 

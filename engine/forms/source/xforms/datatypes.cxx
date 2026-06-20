@@ -40,7 +40,7 @@ namespace xforms
 
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::util::Date;
     using ::com::sun::star::util::Time;
     using ::com::sun::star::util::DateTime;
@@ -252,7 +252,7 @@ namespace xforms
     }
 
 
-    bool OXSDDataType::checkPropertySanity( sal_Int32 _nHandle, const css::uno::Any& _rNewValue, OUString& _rErrorMessage )
+    bool OXSDDataType::checkPropertySanity( sal_Int32 _nHandle, const cpo::uno::Any& _rNewValue, OUString& _rErrorMessage )
     {
         if ( _nHandle == PROPERTY_ID_XSD_PATTERN )
         {
@@ -304,7 +304,7 @@ namespace xforms
 
     void OValueLimitedType_Base::setFastPropertyValue_NoBroadcast(
         std::unique_lock<std::mutex>& rGuard,
-        sal_Int32 _nHandle, const css::uno::Any& _rValue )
+        sal_Int32 _nHandle, const cpo::uno::Any& _rValue )
     {
         OXSDDataType::setFastPropertyValue_NoBroadcast( rGuard, _nHandle, _rValue );
 

@@ -77,6 +77,7 @@ using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::xmloff::token;
 
 using ::com::sun::star::xml::sax::XFastAttributeList;
@@ -1358,7 +1359,7 @@ void AnimationNodeContext::postProcessRootNode( const Reference< XAnimationNode 
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Xmloff_AnimationsImport(uno::XComponentContext* pCtx,
-                                          uno::Sequence<uno::Any> const& /*rSeq*/)
+                                          uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new xmloff::AnimationsImport(pCtx));
 }

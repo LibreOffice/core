@@ -214,7 +214,7 @@ void Test::testMetaGenerator()
             comphelper::getProcessComponentContext(), u"testdummy"_ustr,
             SvXMLImportFlags::ALL));
 
-        pImport->initialize(uno::Sequence<uno::Any>{ uno::Any(xInfoSet) });
+        pImport->initialize(uno::Sequence<cpo::uno::Any>{ cpo::uno::Any(xInfoSet) });
 
         SvXMLMetaDocumentContext::setBuildId(OUString::createFromAscii(pGenerator), xInfoSet);
         if (pBuildId[0] != '\0')

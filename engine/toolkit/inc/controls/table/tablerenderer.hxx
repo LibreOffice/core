@@ -25,7 +25,7 @@
 
 #include <memory>
 
-namespace com::sun::star::uno { class Any; }
+namespace cpo::uno { class Any; }
 namespace tools { class Rectangle; }
 namespace vcl { class Window; }
 
@@ -219,7 +219,7 @@ namespace svt::table
                 given area.
         */
         virtual bool    FitsIntoCell(
-                            css::uno::Any const & i_cellContent,
+                            cpo::uno::Any const & i_cellContent,
                             OutputDevice& i_targetDevice, tools::Rectangle const & i_targetArea
                         ) const = 0;
 
@@ -233,7 +233,7 @@ namespace svt::table
                 <TRUE/> if and only if the content could be formatted as string
         */
         virtual bool    GetFormattedCellString(
-                            css::uno::Any const & i_cellValue,
+                            cpo::uno::Any const & i_cellValue,
                             OUString & o_cellString
                         ) const = 0;
 

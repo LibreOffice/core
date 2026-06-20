@@ -176,7 +176,7 @@ class StyleCollectionHelper : public ::cppu::WeakImplHelper< container::XNameAcc
 {
 private:
     rtl::Reference< SwXStyleFamily > mxParaStyles;
-    uno::Any m_cachePos;
+    cpo::uno::Any m_cachePos;
 public:
     explicit StyleCollectionHelper( const rtl::Reference< SwXTextDocument >& _xModel )
     {
@@ -188,7 +188,7 @@ public:
     virtual uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<style::XStyle>::get(); }
     virtual bool SAL_CALL hasElements(  ) override { return getCount() > 0; }
     // XNameAccess
-    virtual uno::Any SAL_CALL getByName( const OUString& aName ) override
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override
     {
         if ( !hasByName(aName) )
             throw container::NoSuchElementException();
@@ -240,7 +240,7 @@ public:
     {
         return mxParaStyles->getCount();
     }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
+    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         if ( Index < 0 || Index >= getCount() )
             throw lang::IndexOutOfBoundsException();
@@ -265,10 +265,10 @@ public:
         return ( m_nIndex <= m_pStyles->getCount() );
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         if ( m_nIndex <= m_pStyles->getCount() )
-            return m_pStyles->Item( uno::Any( m_nIndex++ ), uno::Any() );
+            return m_pStyles->Item( cpo::uno::Any( m_nIndex++ ), cpo::uno::Any() );
         throw container::NoSuchElementException();
     }
 };
@@ -283,11 +283,11 @@ SwVbaStyles::SwVbaStyles( const uno::Reference< XHelperInterface >& xParent,
 {
 }
 
-uno::Any
-SwVbaStyles::createCollectionObject(const uno::Any& aObject)
+cpo::uno::Any
+SwVbaStyles::createCollectionObject(const cpo::uno::Any& aObject)
 {
     uno::Reference< beans::XPropertySet > xStyleProp( aObject, uno::UNO_QUERY_THROW );
-    return uno::Any( uno::Reference< word::XStyle >( new SwVbaStyle( this, mxContext, mxModel, xStyleProp ) ) );
+    return cpo::uno::Any( uno::Reference< word::XStyle >( new SwVbaStyle( this, mxContext, mxModel, xStyleProp ) ) );
 }
 
 uno::Type SAL_CALL
@@ -302,8 +302,8 @@ SwVbaStyles::createEnumeration()
     return new StylesEnumWrapper( this );
 }
 
-uno::Any SAL_CALL
-SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 )
+cpo::uno::Any SAL_CALL
+SwVbaStyles::Item( const cpo::uno::Any& Index1, const cpo::uno::Any& Index2 )
 {
     //handle WdBuiltinStyle
     sal_Int32 nIndex = 0;
@@ -344,9 +344,9 @@ SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 )
                     // set the property "NumberingStyleName" if it is a listbullet
                     if( pTable->wdStyleType == word::WdStyleType::wdStyleTypeList )
                     {
-                        xStyleProps->setPropertyValue(u"NumberingStyleName"_ustr, uno::Any( aStyleName ) );
+                        xStyleProps->setPropertyValue(u"NumberingStyleName"_ustr, cpo::uno::Any( aStyleName ) );
                     }
-                    return uno::Any( uno::Reference< word::XStyle >( new SwVbaStyle( this, mxContext, mxModel, xStyleProps ) ) );
+                    return cpo::uno::Any( uno::Reference< word::XStyle >( new SwVbaStyle( this, mxContext, mxModel, xStyleProps ) ) );
                 }
                 else
                 {

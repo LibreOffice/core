@@ -110,7 +110,7 @@ public:
     bool IsRecordIncluded(sal_uInt32 nRecord) const;
     bool IsRecordExcluded(sal_uInt32 nRecord) const;
     void ExcludeRecord(sal_Int32 nRecord, bool bExclude);
-    css::uno::Sequence< css::uno::Any> GetSelection() const;
+    css::uno::Sequence< cpo::uno::Any> GetSelection() const;
 
     const css::uno::Sequence<OUString>& GetSavedDocuments() const;
 

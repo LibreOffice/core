@@ -23,13 +23,13 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-uno::Any
-ScVbaDialogs::Item( const uno::Any &aItem )
+cpo::uno::Any
+ScVbaDialogs::Item( const cpo::uno::Any &aItem )
 {
     sal_Int32 nIndex = 0;
     aItem >>= nIndex;
     uno::Reference< excel::XDialog > aDialog( new ScVbaDialog( uno::Reference< XHelperInterface >( Application(),uno::UNO_QUERY_THROW ), mxContext, m_xModel, nIndex ) );
-    return uno::Any( aDialog );
+    return cpo::uno::Any( aDialog );
 }
 
 OUString

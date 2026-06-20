@@ -22,6 +22,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace oox::ppt
 {
@@ -39,8 +40,8 @@ void PresPropsFragmentHandler::finalizeImport()
         getFilter().getModel(), css::uno::UNO_QUERY_THROW);
     css::uno::Reference<css::beans::XPropertySet> xPresentationProps(
         xPresentationSupplier->getPresentation(), css::uno::UNO_QUERY_THROW);
-    xPresentationProps->setPropertyValue(u"IsEndless"_ustr, css::uno::Any(m_bLoop));
-    xPresentationProps->setPropertyValue(u"IsAutomatic"_ustr, css::uno::Any(!m_bTiming));
+    xPresentationProps->setPropertyValue(u"IsEndless"_ustr, cpo::uno::Any(m_bLoop));
+    xPresentationProps->setPropertyValue(u"IsAutomatic"_ustr, cpo::uno::Any(!m_bTiming));
 
     if (!m_sId.isEmpty())
     {
@@ -50,7 +51,7 @@ void PresPropsFragmentHandler::finalizeImport()
         mxCustShows = XCustPresentationSupplier->getCustomPresentations();
         const css::uno::Sequence<OUString> aNameSeq(mxCustShows->getElementNames());
         xPresentationProps->setPropertyValue(u"CustomShow"_ustr,
-                                             css::uno::Any(aNameSeq[m_sId.toInt32()]));
+                                             cpo::uno::Any(aNameSeq[m_sId.toInt32()]));
     }
 
     if (!m_sSt.isEmpty())
@@ -60,7 +61,7 @@ void PresPropsFragmentHandler::finalizeImport()
         Reference<drawing::XDrawPage> xDrawPage;
         xDrawPages->getByIndex(m_sSt.toInt32() - 1) >>= xDrawPage;
         Reference<container::XNamed> xNamed(xDrawPage, uno::UNO_QUERY_THROW);
-        xPresentationProps->setPropertyValue(u"FirstPage"_ustr, uno::Any(xNamed->getName()));
+        xPresentationProps->setPropertyValue(u"FirstPage"_ustr, cpo::uno::Any(xNamed->getName()));
     }
 }
 

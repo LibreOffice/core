@@ -52,6 +52,7 @@ namespace {
 #endif
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 // Begin initializer and accessor public functions
 
@@ -274,23 +275,23 @@ cairo::SurfaceSharedPtr OutputDevice::CreateBitmapSurface(const BitmapSystemData
     return mpGraphics->CreateBitmapSurface(*this, rData, rSize);
 }
 
-css::uno::Any OutputDevice::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const
+cpo::uno::Any OutputDevice::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const
 {
     if (!mpGraphics && !AcquireGraphics())
-        return css::uno::Any();
+        return cpo::uno::Any();
     assert(mpGraphics);
     return mpGraphics->GetNativeSurfaceHandle(rSurface, rSize);
 }
 
 #endif // ENABLE_CAIRO_CANVAS
 
-css::uno::Any OutputDevice::GetSystemGfxDataAny() const
+cpo::uno::Any OutputDevice::GetSystemGfxDataAny() const
 {
     const SystemGraphicsData aSysData = GetSystemGfxData();
     css::uno::Sequence< sal_Int8 > aSeq( reinterpret_cast<sal_Int8 const *>(&aSysData),
                                                       aSysData.nSize );
 
-    return css::uno::Any(aSeq);
+    return cpo::uno::Any(aSeq);
 }
 
 void OutputDevice::SetRefPoint()

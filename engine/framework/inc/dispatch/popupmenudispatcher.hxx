@@ -72,7 +72,7 @@ class PopupMenuDispatcher final : public  ::cppu::WeakImplHelper<
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& lArguments ) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& lArguments ) override;
         // XDispatchProvider
         virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(
             const css::util::URL&  aURL        ,

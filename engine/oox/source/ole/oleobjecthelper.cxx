@@ -45,6 +45,7 @@ using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 OleObjectInfo::OleObjectInfo() :
     mbLinked( false ),
@@ -121,7 +122,7 @@ void SaveInteropProperties(uno::Reference<frame::XModel> const& xModel,
     aGrabBag[sEmbeddingsPropName] <<= objectsList.getAsConstPropertyValueList();
 
     // put grab bag back into the document
-    xDocProps->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(aGrabBag.getAsConstPropertyValueList()));
+    xDocProps->setPropertyValue(u"InteropGrabBag"_ustr, cpo::uno::Any(aGrabBag.getAsConstPropertyValueList()));
 }
 
 bool OleObjectHelper::importOleObject( PropertyMap& rPropMap, const OleObjectInfo& rOleObject, const awt::Size& rObjSize )

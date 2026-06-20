@@ -22,7 +22,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <vector>
 #include <swtypes.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
@@ -50,6 +50,7 @@
 using namespace utl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdb;
@@ -993,7 +994,7 @@ void SwMailMergeConfigItem::ExcludeRecord(sal_Int32 nRecord, bool bExclude)
         m_aExcludedRecords.erase(nRecord);
 }
 
-uno::Sequence<uno::Any> SwMailMergeConfigItem::GetSelection() const
+uno::Sequence<cpo::uno::Any> SwMailMergeConfigItem::GetSelection() const
 {
     if(!m_pImpl->m_xResultSet.is())
         GetResultSet();
@@ -1001,10 +1002,10 @@ uno::Sequence<uno::Any> SwMailMergeConfigItem::GetSelection() const
         return {};
     m_pImpl->m_xResultSet->last();
     sal_uInt32 nResultSetSize = m_pImpl->m_xResultSet->getRow()+1;
-    std::vector<uno::Any> vResult;
+    std::vector<cpo::uno::Any> vResult;
     for(sal_uInt32 nIdx=1; nIdx<nResultSetSize;++nIdx)
         if( !IsRecordExcluded(nIdx) && IsRecordIncluded(nIdx) )
-            vResult.push_back(uno::Any(sal_uInt32(nIdx)));
+            vResult.push_back(cpo::uno::Any(sal_uInt32(nIdx)));
     return comphelper::containerToSequence(vResult);
 }
 

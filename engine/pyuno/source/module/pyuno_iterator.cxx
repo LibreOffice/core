@@ -31,7 +31,7 @@ using com::sun::star::container::XEnumeration;
 using com::sun::star::container::XIndexAccess;
 using com::sun::star::lang::IndexOutOfBoundsException;
 using com::sun::star::lang::WrappedTargetException;
-using com::sun::star::uno::Any;
+using cpo::uno::Any;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::RuntimeException;
 
@@ -88,23 +88,23 @@ static PyObject* PyUNO_iterator_next( PyObject *self )
     }
     catch( css::container::NoSuchElementException &e )
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
     catch( css::script::CannotConvertException &e )
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
     catch( css::lang::IllegalArgumentException &e )
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
     catch( const css::lang::WrappedTargetException &e )
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
     catch( const css::uno::RuntimeException &e )
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
 
     return nullptr;
@@ -244,19 +244,19 @@ static PyObject* PyUNO_list_iterator_next( PyObject *self )
     }
     catch( css::script::CannotConvertException &e )
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
     catch( css::lang::IllegalArgumentException &e )
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
     catch( const css::lang::WrappedTargetException &e )
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
     catch( const css::uno::RuntimeException &e )
     {
-        raisePyExceptionWithAny( css::uno::Any( e ) );
+        raisePyExceptionWithAny( cpo::uno::Any( e ) );
     }
 
     return nullptr;

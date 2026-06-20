@@ -43,7 +43,7 @@ namespace pcr
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::beans::Property;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::util::VetoException;
@@ -205,7 +205,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL FormController::getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const
+    void SAL_CALL FormController::getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const
     {
         switch ( static_cast<OwnPropertyId>(nHandle) )
         {
@@ -227,7 +227,7 @@ namespace pcr
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 extensions_propctrlr_FormController_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new pcr::FormController( context,
                 u"org.openoffice.comp.extensions.FormController"_ustr,
@@ -237,7 +237,7 @@ extensions_propctrlr_FormController_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 extensions_propctrlr_DialogController_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new pcr::FormController( context,
             u"org.openoffice.comp.extensions.DialogController"_ustr,

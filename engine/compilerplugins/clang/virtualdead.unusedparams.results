@@ -65,7 +65,7 @@ include/comphelper/propmultiplex2.hxx:54
     void comphelper::OPropertyChangeListener2::_disposing(const struct com::sun::star::lang::EventObject &,)
     0
 include/comphelper/propshlp.hxx:255
-    void comphelper::OPropertySetHelper::getFastPropertyValue(class std::unique_lock<class std::mutex> &,class com::sun::star::uno::Any &,int,)const
+    void comphelper::OPropertySetHelper::getFastPropertyValue(class std::unique_lock<class std::mutex> &,class cpo::uno::Any &,int,)const
     011
 include/cppuhelper/propshlp.hxx:330
     void cppu::IEventNotificationHook::fireEvents(int *,int,unsigned char,_Bool,)
@@ -158,7 +158,7 @@ sdext/source/pdfimport/inc/contentsink.hxx:151
     void pdfi::ContentSink::drawMask(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,_Bool,)
     10
 sdext/source/pdfimport/inc/contentsink.hxx:161
-    void pdfi::ContentSink::drawColorMaskedImage(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,)
+    void pdfi::ContentSink::drawColorMaskedImage(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,const class com::sun::star::uno::Sequence<class cpo::uno::Any> &,)
     10
 sdext/source/pdfimport/inc/contentsink.hxx:165
     void pdfi::ContentSink::drawMaskedImage(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,_Bool,)

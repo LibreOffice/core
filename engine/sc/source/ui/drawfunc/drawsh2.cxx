@@ -390,7 +390,7 @@ static void setupFillColorForChart(const SfxViewShell* pShell, SfxItemSet& rSet)
 
     if (xNameAccess.is() && xNameAccess->hasByName(aGradientName))
     {
-        css::uno::Any aAny = xNameAccess->getByName(aGradientName);
+        cpo::uno::Any aAny = xNameAccess->getByName(aGradientName);
 
         XFillGradientItem aItem;
         aItem.SetName(aGradientName);

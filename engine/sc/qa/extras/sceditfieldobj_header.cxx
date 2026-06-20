@@ -139,7 +139,7 @@ uno::Reference<uno::XInterface> ScEditFieldObj_Header::init()
         uno::Reference<text::XTextContent> xContent(mxField, uno::UNO_QUERY_THROW);
         xText->insertTextContent(xRange, xContent, false);
 
-        xPropSet->setPropertyValue(u"RightPageHeaderContent"_ustr, uno::Any(xHeaderContent));
+        xPropSet->setPropertyValue(u"RightPageHeaderContent"_ustr, cpo::uno::Any(xHeaderContent));
 
         mxRightText = xHeaderContent->getRightText();
     }

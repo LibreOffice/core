@@ -119,6 +119,7 @@
 using namespace ::editeng;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
@@ -316,7 +317,7 @@ class FontOptionsListener final : public comphelper::ConfigurationListenerProper
 private:
     SvxFontNameBox_Base& m_rBox;
 
-    virtual void setProperty(const css::uno::Any &rProperty) override;
+    virtual void setProperty(const cpo::uno::Any &rProperty) override;
 public:
     FontOptionsListener(const rtl::Reference<comphelper::ConfigurationListener>& rListener, const OUString& rProp, SvxFontNameBox_Base& rBox)
         : comphelper::ConfigurationListenerProperty<bool>(rListener, rProp)
@@ -402,7 +403,7 @@ public:
     DECL_LINK(DumpAsPropertyTreeHdl, tools::JsonWriter&, void);
 };
 
-void FontOptionsListener::setProperty(const css::uno::Any &rProperty)
+void FontOptionsListener::setProperty(const cpo::uno::Any &rProperty)
 {
     comphelper::ConfigurationListenerProperty<bool>::setProperty(rProperty);
     m_rBox.EnableControls();
@@ -505,7 +506,7 @@ public:
     explicit SvxFrameToolBoxControl( const css::uno::Reference< css::uno::XComponentContext >& rContext );
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& rArguments ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -3375,7 +3376,7 @@ css::uno::Sequence< OUString > SvxStyleToolBoxControl::getSupportedServiceNames(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_StyleToolBoxControl_get_implementation(
     css::uno::XComponentContext*,
-    css::uno::Sequence<css::uno::Any> const & )
+    css::uno::Sequence<cpo::uno::Any> const & )
 {
     return cppu::acquire( new SvxStyleToolBoxControl() );
 }
@@ -3728,7 +3729,7 @@ css::uno::Sequence< OUString > SvxFontNameToolBoxControl::getSupportedServiceNam
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_FontNameToolBoxControl_get_implementation(
     css::uno::XComponentContext*,
-    css::uno::Sequence<css::uno::Any> const & )
+    css::uno::Sequence<cpo::uno::Any> const & )
 {
     return cppu::acquire( new SvxFontNameToolBoxControl() );
 }
@@ -3772,7 +3773,7 @@ sal_uInt16 MapCommandToSlotId(const OUString& rCommand)
 
 }
 
-void SvxColorToolBoxControl::initialize( const css::uno::Sequence<css::uno::Any>& rArguments )
+void SvxColorToolBoxControl::initialize( const css::uno::Sequence<cpo::uno::Any>& rArguments )
 {
     PopupWindowController::initialize( rArguments );
 
@@ -3962,7 +3963,7 @@ void SvxColorToolBoxControl::execute(sal_Int16 /*nSelectModifier*/)
     }
 
     auto aArgs( comphelper::InitPropertySequence( {
-        { m_aCommandURL.copy(5), css::uno::Any(aColor) }
+        { m_aCommandURL.copy(5), cpo::uno::Any(aColor) }
     } ) );
     dispatchCommand( aCommand, aArgs );
 
@@ -4006,7 +4007,7 @@ css::uno::Sequence<OUString> SvxColorToolBoxControl::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_ColorToolBoxControl_get_implementation(
     css::uno::XComponentContext* rContext,
-    css::uno::Sequence<css::uno::Any> const & )
+    css::uno::Sequence<cpo::uno::Any> const & )
 {
     return cppu::acquire( new SvxColorToolBoxControl( rContext ) );
 }
@@ -4030,7 +4031,7 @@ void SAL_CALL SvxFrameToolBoxControl::execute(sal_Int16 /*KeyModifier*/)
     }
 }
 
-void SvxFrameToolBoxControl::initialize( const css::uno::Sequence< css::uno::Any >& rArguments )
+void SvxFrameToolBoxControl::initialize( const css::uno::Sequence< cpo::uno::Any >& rArguments )
 {
     svt::PopupWindowController::initialize( rArguments );
 
@@ -4090,7 +4091,7 @@ css::uno::Sequence< OUString > SvxFrameToolBoxControl::getSupportedServiceNames(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_FrameToolBoxControl_get_implementation(
     css::uno::XComponentContext* rContext,
-    css::uno::Sequence<css::uno::Any> const & )
+    css::uno::Sequence<cpo::uno::Any> const & )
 {
     return cppu::acquire( new SvxFrameToolBoxControl( rContext ) );
 }
@@ -4231,7 +4232,7 @@ namespace
     }
 }
 
-void SvxCurrencyToolBoxControl::initialize( const css::uno::Sequence< css::uno::Any >& rArguments )
+void SvxCurrencyToolBoxControl::initialize( const css::uno::Sequence< cpo::uno::Any >& rArguments )
 {
     PopupWindowController::initialize(rArguments);
 
@@ -4314,7 +4315,7 @@ css::uno::Sequence<OUString> SvxCurrencyToolBoxControl::getSupportedServiceNames
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_CurrencyToolBoxControl_get_implementation(
     css::uno::XComponentContext* rContext,
-    css::uno::Sequence<css::uno::Any> const & )
+    css::uno::Sequence<cpo::uno::Any> const & )
 {
     return cppu::acquire( new SvxCurrencyToolBoxControl( rContext ) );
 }

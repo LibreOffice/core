@@ -80,6 +80,7 @@ using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XEnumeration;
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
@@ -3251,11 +3252,11 @@ void AnimationImporter::dump_atom( const Atom* , bool  )
 {
 }
 
-void AnimationImporter::dump_target( css::uno::Any&  )
+void AnimationImporter::dump_target( cpo::uno::Any&  )
 {
 }
 
-void AnimationImporter::dump( css::uno::Any&  )
+void AnimationImporter::dump( cpo::uno::Any&  )
 {
 }
 

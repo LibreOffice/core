@@ -79,8 +79,8 @@ public:
 
     // XFilePickerControlAccess functions
     virtual void SAL_CALL setValue(sal_Int16 nControlId, sal_Int16 nControlAction,
-                                   const css::uno::Any& rValue) override;
-    virtual css::uno::Any SAL_CALL getValue(sal_Int16 nControlId,
+                                   const cpo::uno::Any& rValue) override;
+    virtual cpo::uno::Any SAL_CALL getValue(sal_Int16 nControlId,
                                             sal_Int16 nControlAction) override;
     virtual void SAL_CALL enableControl(sal_Int16 nControlId, bool bEnable) override;
     virtual void SAL_CALL setLabel(sal_Int16 nControlId, const OUString& rLabel) override;
@@ -92,7 +92,7 @@ public:
     virtual sal_Int32 SAL_CALL  getTargetColorDepth(  );
     virtual sal_Int32 SAL_CALL  getAvailableWidth(  );
     virtual sal_Int32 SAL_CALL  getAvailableHeight(  );
-    virtual void SAL_CALL       setImage( sal_Int16 aImageFormat, const css::uno::Any &rImage );
+    virtual void SAL_CALL       setImage( sal_Int16 aImageFormat, const cpo::uno::Any &rImage );
     virtual bool SAL_CALL   setShowState( bool bShowState );
     virtual bool SAL_CALL   getShowState(  );
     */
@@ -101,7 +101,7 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSelectedFiles() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // XCancellable
     virtual void SAL_CALL cancel() override;

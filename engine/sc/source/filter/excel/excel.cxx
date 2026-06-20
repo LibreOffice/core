@@ -86,7 +86,7 @@ static rtl::Reference<SotStorage> lcl_DRMDecrypt(const SfxMedium& rMedium, const
     rtl::Reference<SotStorage> aNewStorage;
 
     // We have DRM encrypted storage. We should try to decrypt it first, if we can
-    uno::Sequence< uno::Any > aArguments;
+    uno::Sequence< cpo::uno::Any > aArguments;
     const uno::Reference<uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
     uno::Reference< packages::XPackageEncryption > xPackageEncryption(
         xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
@@ -133,7 +133,7 @@ static rtl::Reference<SotStorage> lcl_DRMDecrypt(const SfxMedium& rMedium, const
 
         // Set the media descriptor data
         uno::Sequence<beans::NamedValue> aEncryptionData = xPackageEncryption->createEncryptionData(u""_ustr);
-        rMedium.GetItemSet().Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, uno::Any(aEncryptionData)));
+        rMedium.GetItemSet().Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, cpo::uno::Any(aEncryptionData)));
     }
     catch (const std::exception&)
     {
@@ -277,8 +277,8 @@ static ErrCode lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
         if (sCryptoType.getLength())
         {
             const uno::Reference<uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
-            uno::Sequence<uno::Any> aArguments{
-                uno::Any(beans::NamedValue(u"Binary"_ustr, uno::Any(true))) };
+            uno::Sequence<cpo::uno::Any> aArguments{
+                cpo::uno::Any(beans::NamedValue(u"Binary"_ustr, cpo::uno::Any(true))) };
             xPackageEncryption.set(
                 xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                     "com.sun.star.comp.oox.crypto." + sCryptoType, aArguments, xComponentContext), uno::UNO_QUERY);
@@ -401,7 +401,7 @@ static ErrCode lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
         xEncryptedRootStrg->Commit();
 
         // Restore encryption data
-        rMedium.GetItemSet().Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, uno::Any(aEncryptionData)));
+        rMedium.GetItemSet().Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, cpo::uno::Any(aEncryptionData)));
     }
 
     return eRet;
@@ -457,7 +457,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportXLS(SvStream& rStream)
     ScDLL::Init();
     SfxMedium aMedium;
     css::uno::Reference<css::io::XInputStream> xStm(new utl::OInputStreamWrapper(rStream));
-    aMedium.GetItemSet().Put(SfxUnoAnyItem(SID_INPUTSTREAM, css::uno::Any(xStm)));
+    aMedium.GetItemSet().Put(SfxUnoAnyItem(SID_INPUTSTREAM, cpo::uno::Any(xStm)));
     aMedium.GetItemSet().Put(SfxUInt16Item(SID_UPDATEDOCMODE, css::document::UpdateDocMode::NO_UPDATE));
 
     ScDocShellRef xDocShell = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT |

@@ -30,6 +30,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace framework{
 
@@ -159,7 +160,7 @@ OUString SAL_CALL DispatchRecorder::getRecordedMacro()
     return sScript;
 }
 
-void DispatchRecorder::AppendToBuffer( const css::uno::Any& aValue, OUStringBuffer& aArgumentBuffer )
+void DispatchRecorder::AppendToBuffer( const cpo::uno::Any& aValue, OUStringBuffer& aArgumentBuffer )
 {
     // if value == bool
     if (aValue.getValueTypeClass() == css::uno::TypeClass_STRUCT )
@@ -180,9 +181,9 @@ void DispatchRecorder::AppendToBuffer( const css::uno::Any& aValue, OUStringBuff
     else if (aValue.getValueTypeClass() == css::uno::TypeClass_SEQUENCE )
     {
         // convert to "Sequence of any"
-        css::uno::Sequence < css::uno::Any > aSeq;
-        css::uno::Any aNew;
-        try { aNew = m_xConverter->convertTo( aValue, cppu::UnoType<css::uno::Sequence < css::uno::Any >>::get() ); }
+        css::uno::Sequence < cpo::uno::Any > aSeq;
+        cpo::uno::Any aNew;
+        try { aNew = m_xConverter->convertTo( aValue, cppu::UnoType<css::uno::Sequence < cpo::uno::Any >>::get() ); }
         catch (const css::uno::Exception&) {}
 
         aNew >>= aSeq;
@@ -265,7 +266,7 @@ void DispatchRecorder::AppendToBuffer( const css::uno::Any& aValue, OUStringBuff
     }
     else
     {
-        css::uno::Any aNew;
+        cpo::uno::Any aNew;
         try
         {
             aNew = m_xConverter->convertToSimpleType( aValue, css::uno::TypeClass_STRING );
@@ -384,7 +385,7 @@ sal_Int32 SAL_CALL DispatchRecorder::getCount()
     return m_aStatements.size();
 }
 
-css::uno::Any SAL_CALL DispatchRecorder::getByIndex(sal_Int32 idx)
+cpo::uno::Any SAL_CALL DispatchRecorder::getByIndex(sal_Int32 idx)
 {
     if (idx >= static_cast<sal_Int32>(m_aStatements.size()))
         throw css::lang::IndexOutOfBoundsException( u"Dispatch recorder out of bounds"_ustr  );
@@ -395,7 +396,7 @@ css::uno::Any SAL_CALL DispatchRecorder::getByIndex(sal_Int32 idx)
     return element;
 }
 
-void SAL_CALL DispatchRecorder::replaceByIndex(sal_Int32 idx, const css::uno::Any& element)
+void SAL_CALL DispatchRecorder::replaceByIndex(sal_Int32 idx, const cpo::uno::Any& element)
 {
     if (element.getValueType() !=
         cppu::UnoType<css::frame::DispatchStatement>::get()) {
@@ -423,7 +424,7 @@ void SAL_CALL DispatchRecorder::replaceByIndex(sal_Int32 idx, const css::uno::An
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_DispatchRecorder_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::DispatchRecorder(context));
 }

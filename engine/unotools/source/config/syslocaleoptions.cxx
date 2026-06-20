@@ -27,7 +27,7 @@
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 #include "itemholder1.hxx"
 
@@ -36,6 +36,7 @@
 using namespace osl;
 using namespace utl;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace
 {

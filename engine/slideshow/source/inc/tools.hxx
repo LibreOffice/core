@@ -104,49 +104,49 @@ namespace slideshow
 
         /// extract unary double value from Any
         bool extractValue( double&                              o_rValue,
-                           const css::uno::Any&                rSourceAny,
+                           const cpo::uno::Any&                rSourceAny,
                            const ShapeSharedPtr&                rShape,
                            const basegfx::B2DVector&            rSlideBounds );
 
         /// extract int from Any
         bool extractValue( sal_Int32&                           o_rValue,
-                           const css::uno::Any&                 rSourceAny,
+                           const cpo::uno::Any&                 rSourceAny,
                            const ShapeSharedPtr&                rShape,
                            const basegfx::B2DVector&            rSlideBounds );
 
         /// extract enum/constant group value from Any
         bool extractValue( sal_Int16&                           o_rValue,
-                           const css::uno::Any&                 rSourceAny,
+                           const cpo::uno::Any&                 rSourceAny,
                            const ShapeSharedPtr&                rShape,
                            const basegfx::B2DVector&            rSlideBounds );
 
         /// extract color value from Any
         bool extractValue( RGBColor&                            o_rValue,
-                           const css::uno::Any&                 rSourceAny,
+                           const cpo::uno::Any&                 rSourceAny,
                            const ShapeSharedPtr&                rShape,
                            const basegfx::B2DVector&            rSlideBounds );
 
         /// extract color value from Any
         bool extractValue( HSLColor&                            o_rValue,
-                           const css::uno::Any&                 rSourceAny,
+                           const cpo::uno::Any&                 rSourceAny,
                            const ShapeSharedPtr&                rShape,
                            const basegfx::B2DVector&            rSlideBounds );
 
         /// extract plain string from Any
         bool extractValue( OUString&                            o_rValue,
-                           const css::uno::Any&                 rSourceAny,
+                           const cpo::uno::Any&                 rSourceAny,
                            const ShapeSharedPtr&                rShape,
                            const basegfx::B2DVector&            rSlideBounds );
 
         /// extract bool value from Any
         bool extractValue( bool&                                o_rValue,
-                           const css::uno::Any&    rSourceAny,
+                           const cpo::uno::Any&    rSourceAny,
                            const ShapeSharedPtr&                rShape,
                            const basegfx::B2DVector&            rSlideBounds );
 
         /// extract double 2-tuple from Any
         bool extractValue( basegfx::B2DTuple&                   o_rPair,
-                           const css::uno::Any&                 rSourceAny,
+                           const cpo::uno::Any&                 rSourceAny,
                            const ShapeSharedPtr&                rShape,
                            const basegfx::B2DVector&            rSlideBounds );
 
@@ -283,9 +283,9 @@ namespace slideshow
             OUString const & propName )
         {
             try {
-                const css::uno::Any a(
+                const cpo::uno::Any a(
                     xPropSet->getPropertyValue( propName ) );
-                bool const bRet = css::uno::fromAny(a, &rValue);
+                bool const bRet = cpo::uno::fromAny(a, &rValue);
 #if OSL_DEBUG_LEVEL > 0
                 if( !bRet )
                     SAL_INFO("slideshow", __func__ << ": while retrieving property " << propName << ", cannot extract Any of type "
@@ -311,7 +311,7 @@ namespace slideshow
         {
             try
             {
-                const css::uno::Any a(xPropSet->getPropertyValue( propName ));
+                const cpo::uno::Any a(xPropSet->getPropertyValue( propName ));
                 rIfc.set( a, css::uno::UNO_QUERY );
 
                 bool const bRet = rIfc.is();

@@ -24,7 +24,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -37,7 +37,7 @@ XMLEscapementPropHdl::~XMLEscapementPropHdl()
     // nothing to do
 }
 
-bool XMLEscapementPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLEscapementPropHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int16 nVal;
 
@@ -68,7 +68,7 @@ bool XMLEscapementPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
     return true;
 }
 
-bool XMLEscapementPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLEscapementPropHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int32 nValue = 0;
     OUStringBuffer aOut;
@@ -101,7 +101,7 @@ XMLEscapementHeightPropHdl::~XMLEscapementHeightPropHdl()
     // nothing to do
 }
 
-bool XMLEscapementHeightPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLEscapementHeightPropHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     if( IsXMLToken( rStrImpValue, XML_CASEMAP_SMALL_CAPS ) )
         return false;
@@ -136,7 +136,7 @@ bool XMLEscapementHeightPropHdl::importXML( const OUString& rStrImpValue, uno::A
     return true;
 }
 
-bool XMLEscapementHeightPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLEscapementHeightPropHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     OUStringBuffer aOut( rStrExpValue );
 

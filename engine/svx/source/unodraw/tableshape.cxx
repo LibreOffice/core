@@ -30,6 +30,7 @@
 using namespace sdr::table;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
@@ -46,7 +47,7 @@ SvxTableShape::~SvxTableShape() noexcept
 bool SvxTableShape::setPropertyValueImpl(
     const OUString& rName,
     const SfxItemPropertyMapEntry* pProperty,
-    const css::uno::Any& rValue )
+    const cpo::uno::Any& rValue )
 {
     switch( pProperty->nWID )
     {
@@ -98,7 +99,7 @@ bool SvxTableShape::setPropertyValueImpl(
 bool SvxTableShape::getPropertyValueImpl(
     const OUString& rName,
     const SfxItemPropertyMapEntry* pProperty,
-    css::uno::Any& rValue )
+    cpo::uno::Any& rValue )
 {
     switch( pProperty->nWID )
     {

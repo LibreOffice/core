@@ -122,7 +122,7 @@ public:
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
 // css::uno::XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override;
     virtual void SAL_CALL release() noexcept override;
 
@@ -146,15 +146,15 @@ public:
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
     virtual bool SAL_CALL convertFastPropertyValue(
-                            css::uno::Any & rConvertedValue,
-                            css::uno::Any & rOldValue,
+                            cpo::uno::Any & rConvertedValue,
+                            cpo::uno::Any & rOldValue,
                             sal_Int32 nHandle,
-                            const css::uno::Any& rValue ) override;
+                            const cpo::uno::Any& rValue ) override;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
-                                const css::uno::Any& rValue
+                                const cpo::uno::Any& rValue
                                                  ) override;
-    virtual void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const override;
+    virtual void SAL_CALL getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
 // css::sdb::XCompletedConnection
     virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connectWithCompletion( const css::uno::Reference< css::task::XInteractionHandler >& handler ) override;
@@ -186,7 +186,7 @@ public:
     virtual css::uno::Reference< css::sdb::XOfficeDatabaseDocument > SAL_CALL getDatabaseDocument() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
 protected:
     // ModelDependentComponent overridables

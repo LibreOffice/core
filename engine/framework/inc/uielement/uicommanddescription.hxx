@@ -60,7 +60,7 @@ class UICommandDescription : public UICommandDescription_BASE
 
 private:
         // XNameAccess
-        virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+        virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
 
         virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
 

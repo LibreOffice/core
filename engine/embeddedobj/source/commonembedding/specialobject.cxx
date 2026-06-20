@@ -44,9 +44,9 @@ OSpecialEmbeddedObject::OSpecialEmbeddedObject( const uno::Reference< uno::XComp
 }
 
 
-uno::Any SAL_CALL OSpecialEmbeddedObject::queryInterface( const uno::Type& rType )
+cpo::uno::Any SAL_CALL OSpecialEmbeddedObject::queryInterface( const uno::Type& rType )
 {
-    uno::Any aReturn = ::cppu::queryInterface( rType,
+    cpo::uno::Any aReturn = ::cppu::queryInterface( rType,
                                         static_cast< embed::XEmbeddedObject* >( this ),
                                         static_cast< embed::XInplaceObject* >( this ),
                                         static_cast< embed::XCommonEmbedPersist* >( static_cast< embed::XEmbedPersist* >( this ) ),

@@ -26,7 +26,7 @@
 #include <svx/svxerr.hxx>
 #include <rtl/ref.hxx>
 
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::task::InteractionClassification_QUERY;

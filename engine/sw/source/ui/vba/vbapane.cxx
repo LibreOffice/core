@@ -37,10 +37,10 @@ SwVbaPane::~SwVbaPane()
 {
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwVbaPane::View()
 {
-    return uno::Any( uno::Reference< word::XView >( new SwVbaView( this,  mxContext, mxModel ) ) );
+    return cpo::uno::Any( uno::Reference< word::XView >( new SwVbaView( this,  mxContext, mxModel ) ) );
 }
 
 void SAL_CALL

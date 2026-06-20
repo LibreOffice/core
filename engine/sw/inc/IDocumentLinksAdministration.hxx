@@ -29,7 +29,7 @@
 class SwContentNode;
 class SwFormat;
 
-namespace com::sun::star::uno { class Any; }
+namespace cpo::uno { class Any; }
 namespace sfx2 { class SvLinkSource;  class LinkManager; }
 
 
@@ -55,7 +55,7 @@ namespace sfx2 { class SvLinkSource;  class LinkManager; }
 
     /** for linking of parts of documents.
     */
-    virtual bool GetData(const OUString& rItem, const OUString& rMimeType, css::uno::Any& rValue) const = 0;
+    virtual bool GetData(const OUString& rItem, const OUString& rMimeType, cpo::uno::Any& rValue) const = 0;
 
     virtual void SetData(const OUString& rItem) = 0;
 

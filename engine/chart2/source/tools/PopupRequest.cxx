@@ -21,7 +21,7 @@ PopupRequest::~PopupRequest() {}
 // ____ XRequestCallback ____
 
 void SAL_CALL PopupRequest::addCallback(const uno::Reference<awt::XCallback>& xCallback,
-                                        const uno::Any& /*aData*/)
+                                        const cpo::uno::Any& /*aData*/)
 {
     m_xCallback = xCallback;
 }

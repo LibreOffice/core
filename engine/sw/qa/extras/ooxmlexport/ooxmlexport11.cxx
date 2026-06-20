@@ -270,7 +270,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf76683_negativeTwipsMeasure)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf118361_RTLfootnoteSeparator, "tdf118361_RTLfootnoteSeparator.docx")
 {
-    uno::Any aPageStyle = getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr);
+    cpo::uno::Any aPageStyle = getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Footnote separator RTL", sal_Int16(2), getProperty<sal_Int16>(aPageStyle, u"FootnoteLineAdjust"_ustr));
 }
 

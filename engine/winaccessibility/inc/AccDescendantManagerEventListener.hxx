@@ -47,16 +47,16 @@ public:
 
     //for selection changed event
     virtual void HandleSelectionChangedEvent(
-            css::uno::Any oldValue, css::uno::Any newValue);
+            cpo::uno::Any oldValue, cpo::uno::Any newValue);
 
     virtual void HandleChildChangedNoFocusEvent(
-            css::uno::Any oldValue, css::uno::Any newValue);
+            cpo::uno::Any oldValue, cpo::uno::Any newValue);
 
-    bool NotifyChildEvent(UnoMSAAEvent eWinEvent, const css::uno::Any& Value);
+    bool NotifyChildEvent(UnoMSAAEvent eWinEvent, const cpo::uno::Any& Value);
 
-    void HandleSelectionChangedAddEvent(const css::uno::Any& newValue);
-    void HandleSelectionChangedRemoveEvent(const css::uno::Any& newValue);
-    void HandleSelectionChangedWithinEvent(const css::uno::Any& newValue);
+    void HandleSelectionChangedAddEvent(const cpo::uno::Any& newValue);
+    void HandleSelectionChangedRemoveEvent(const cpo::uno::Any& newValue);
+    void HandleSelectionChangedWithinEvent(const cpo::uno::Any& newValue);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

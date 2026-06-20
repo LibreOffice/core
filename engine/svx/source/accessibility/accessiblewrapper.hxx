@@ -172,7 +172,7 @@ protected:
 
 protected:
     // XInterface
-    css::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) override;
+    cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) override;
 
     // XTypeProvider
     DECLARE_XTYPEPROVIDER( )
@@ -359,7 +359,7 @@ private:
     // XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
-    void    implTranslateChildEventValue( const css::uno::Any& _rInValue, css::uno::Any& _rOutValue );
+    void    implTranslateChildEventValue( const cpo::uno::Any& _rInValue, cpo::uno::Any& _rOutValue );
 
     virtual ~OWrappedAccessibleChildrenManager( ) override;
 

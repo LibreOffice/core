@@ -278,9 +278,9 @@ rtl::Reference< ChartTypeTemplate > ChartTypeDialogController::getCurrentTemplat
             {
                 try
                 {
-                    xTemplateProps->setPropertyValue( CHART_UNONAME_CURVE_STYLE , uno::Any(rParameter.eCurveStyle) );
-                    xTemplateProps->setPropertyValue( CHART_UNONAME_CURVE_RESOLUTION , uno::Any(rParameter.nCurveResolution) );
-                    xTemplateProps->setPropertyValue( CHART_UNONAME_SPLINE_ORDER , uno::Any(rParameter.nSplineOrder) );
+                    xTemplateProps->setPropertyValue( CHART_UNONAME_CURVE_STYLE , cpo::uno::Any(rParameter.eCurveStyle) );
+                    xTemplateProps->setPropertyValue( CHART_UNONAME_CURVE_RESOLUTION , cpo::uno::Any(rParameter.nCurveResolution) );
+                    xTemplateProps->setPropertyValue( CHART_UNONAME_SPLINE_ORDER , cpo::uno::Any(rParameter.nSplineOrder) );
                 }
                 catch( uno::Exception & ex )
                 {
@@ -289,7 +289,7 @@ rtl::Reference< ChartTypeTemplate > ChartTypeDialogController::getCurrentTemplat
                 }
                 try
                 {
-                    xTemplateProps->setPropertyValue( u"Geometry3D"_ustr , uno::Any(rParameter.nGeometry3D) );
+                    xTemplateProps->setPropertyValue( u"Geometry3D"_ustr , cpo::uno::Any(rParameter.nGeometry3D) );
                 }
                 catch( uno::Exception & ex )
                 {
@@ -336,13 +336,13 @@ void ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
 
     if (xDiagram.is())
     {
-        xDiagram->setPropertyValue(CHART_UNONAME_SORT_BY_XVALUES, uno::Any(rParameter.bSortByXValues));
+        xDiagram->setPropertyValue(CHART_UNONAME_SORT_BY_XVALUES, cpo::uno::Any(rParameter.bSortByXValues));
 
         sal_Int32 nSplitPos;
         try {
             if (xTemplateProps.is()) {
                 xTemplateProps->getPropertyValue(u"SplitPos"_ustr) >>= nSplitPos;
-                xDiagram->setPropertyValue(u"SplitPos"_ustr, uno::Any(nSplitPos));
+                xDiagram->setPropertyValue(u"SplitPos"_ustr, cpo::uno::Any(nSplitPos));
             }
         }
         catch( uno::Exception & ex )
@@ -905,7 +905,7 @@ void OfPieChartDialogController::setTemplateProperties( const uno::Reference< be
     if( xTemplateProps.is())
     {
         sal_Int32 nCompositeSize = m_xMF_CompositeSize->get_value();
-        xTemplateProps->setPropertyValue( u"SplitPos"_ustr , uno::Any(nCompositeSize) );
+        xTemplateProps->setPropertyValue( u"SplitPos"_ustr , cpo::uno::Any(nCompositeSize) );
     }
 }
 
@@ -1599,7 +1599,7 @@ void CombiColumnLineChartDialogController::setTemplateProperties( const uno::Ref
     if( xTemplateProps.is() )
     {
         sal_Int32 nNumLines = m_xMF_NumberOfLines->get_value();
-        xTemplateProps->setPropertyValue( u"NumberOfLines"_ustr , uno::Any(nNumLines) );
+        xTemplateProps->setPropertyValue( u"NumberOfLines"_ustr , cpo::uno::Any(nNumLines) );
     }
 }
 

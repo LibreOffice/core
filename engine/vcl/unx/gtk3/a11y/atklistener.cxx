@@ -52,7 +52,7 @@ AtkListener::~AtkListener()
 
 /*****************************************************************************/
 
-static AtkStateType mapState( const uno::Any &rAny )
+static AtkStateType mapState( const cpo::uno::Any &rAny )
 {
     sal_Int64 nState = accessibility::AccessibleStateType::INVALID;
     rAny >>= nState;
@@ -104,7 +104,7 @@ void AtkListener::disposing( const lang::EventObject& )
 
 /*****************************************************************************/
 
-static AtkObject *getObjFromAny( const uno::Any &rAny )
+static AtkObject *getObjFromAny( const cpo::uno::Any &rAny )
 {
     uno::Reference< accessibility::XAccessible > xAccessible;
     rAny >>= xAccessible;

@@ -96,7 +96,7 @@ uno::Sequence< OUString > SAL_CALL FormulaOpCodeMapperObj::getSupportedServiceNa
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 simple_formula_FormulaOpCodeMapperObj(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(
             new formula::FormulaOpCodeMapperObj(std::make_unique<formula::FormulaCompiler>()));

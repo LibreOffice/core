@@ -21,7 +21,7 @@
 
 #include <unotools/useroptions.hxx>
 #include <unotools/syslocale.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include "itemholder1.hxx"
 
 #include <cppuhelper/implbase.hxx>
@@ -183,7 +183,7 @@ void SvtUserOptions::Impl::SetValue_Impl (UserOptToken nToken, ValueType const& 
     try
     {
         if (m_xData.is())
-             m_xData->setPropertyValue(vOptionNames[nToken], uno::Any(sToken));
+             m_xData->setPropertyValue(vOptionNames[nToken], cpo::uno::Any(sToken));
         comphelper::ConfigurationHelper::flush(m_xCfg);
     }
     catch (uno::Exception const&)

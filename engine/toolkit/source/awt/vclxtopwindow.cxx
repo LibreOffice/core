@@ -41,16 +41,16 @@
 #include <vcl/svapp.hxx>
 
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 
 
-css::uno::Any VCLXTopWindow::getWindowHandle( const css::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType )
+cpo::uno::Any VCLXTopWindow::getWindowHandle( const css::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType )
 {
     SolarMutexGuard aGuard;
 
     // TODO, check the process id
-    css::uno::Any aRet;
+    cpo::uno::Any aRet;
     vcl::Window* pWindow = VCLXContainer::GetWindow();
     if ( pWindow )
     {

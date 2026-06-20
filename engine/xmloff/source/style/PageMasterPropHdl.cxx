@@ -24,7 +24,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <comphelper/types.hxx>
@@ -33,6 +33,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::style;
 using namespace ::comphelper;
 using namespace ::xmloff::token;

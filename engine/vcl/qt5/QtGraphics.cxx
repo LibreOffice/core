@@ -81,10 +81,10 @@ cairo::SurfaceSharedPtr QtGraphics::CreateBitmapSurface(const OutputDevice& /*rR
     return nullptr;
 }
 
-css::uno::Any QtGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& /*rSurface*/,
+cpo::uno::Any QtGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& /*rSurface*/,
                                                  const basegfx::B2ISize& /*rSize*/) const
 {
-    return css::uno::Any();
+    return cpo::uno::Any();
 }
 
 #endif

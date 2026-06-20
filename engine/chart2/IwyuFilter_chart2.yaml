@@ -104,7 +104,7 @@ excludelist:
     - com/sun/star/util/XNumberFormatsSupplier.hpp
     chart2/source/inc/PropertyHelper.hxx:
     # base class has to be a complete type
-    - com/sun/star/uno/Any.hxx
+    - cpo/uno/Any.hxx
     chart2/source/inc/PopupRequest.hxx:
     # base class has to be a complete type
     - com/sun/star/awt/XRequestCallback.hpp
@@ -135,7 +135,7 @@ excludelist:
     - com/sun/star/view/XSelectionChangeListener.hpp
     chart2/source/inc/WrappedProperty.hxx:
     # Needed for implicit dtor
-    - com/sun/star/uno/Any.hxx
+    - cpo/uno/Any.hxx
     chart2/source/inc/WrappedPropertySet.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XMultiPropertySet.hpp
@@ -495,7 +495,7 @@ excludelist:
     - Diagram.hxx
     chart2/source/controller/main/ChartModelClone.hxx:
     # Needed for implicit dtor
-    - com/sun/star/uno/Any.hxx
+    - cpo/uno/Any.hxx
     chart2/source/controller/main/ChartFrameloader.hxx:
     # base class has to be a complete type
     - com/sun/star/frame/XSynchronousFrameLoader.hpp

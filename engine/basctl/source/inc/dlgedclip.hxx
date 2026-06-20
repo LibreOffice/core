@@ -31,16 +31,16 @@ class DlgEdTransferableImpl final : public ::cppu::WeakImplHelper< css::datatran
 {
 private:
     css::uno::Sequence< css::datatransfer::DataFlavor > m_SeqFlavors;
-    css::uno::Sequence< css::uno::Any > m_SeqData;
+    css::uno::Sequence< cpo::uno::Any > m_SeqData;
 
     static bool compareDataFlavors( const css::datatransfer::DataFlavor& lFlavor, const css::datatransfer::DataFlavor& rFlavor );
 
 public:
-    DlgEdTransferableImpl( const css::uno::Sequence< css::datatransfer::DataFlavor >& aSeqFlavors, const css::uno::Sequence< css::uno::Any >& aSeqData );
+    DlgEdTransferableImpl( const css::uno::Sequence< css::datatransfer::DataFlavor >& aSeqFlavors, const css::uno::Sequence< cpo::uno::Any >& aSeqData );
     virtual ~DlgEdTransferableImpl() override;
 
     // XTransferable
-    virtual css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& rFlavor ) override;
+    virtual cpo::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& rFlavor ) override;
     virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors() override;
     virtual bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& rFlavor ) override;
 

@@ -29,7 +29,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 
 #include <officecfg/Office/Common.hxx>
 #include <framework/windowstatehelper.hxx>
@@ -70,6 +70,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
@@ -316,7 +317,7 @@ SmXMLExport::SmXMLExport(const css::uno::Reference<css::uno::XComponentContext>&
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_XMLExporter_get_implementation(css::uno::XComponentContext* context,
-                                    css::uno::Sequence<css::uno::Any> const&)
+                                    css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SmXMLExport(context, u"com.sun.star.comp.Math.XMLExporter"_ustr,
                                          SvXMLExportFlags::OASIS | SvXMLExportFlags::ALL));
@@ -324,7 +325,7 @@ Math_XMLExporter_get_implementation(css::uno::XComponentContext* context,
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_XMLMetaExporter_get_implementation(css::uno::XComponentContext* context,
-                                        css::uno::Sequence<css::uno::Any> const&)
+                                        css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SmXMLExport(context, u"com.sun.star.comp.Math.XMLMetaExporter"_ustr,
                                          SvXMLExportFlags::META));
@@ -332,7 +333,7 @@ Math_XMLMetaExporter_get_implementation(css::uno::XComponentContext* context,
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_XMLOasisMetaExporter_get_implementation(css::uno::XComponentContext* context,
-                                             css::uno::Sequence<css::uno::Any> const&)
+                                             css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SmXMLExport(context,
                                          u"com.sun.star.comp.Math.XMLOasisMetaExporter"_ustr,
@@ -341,7 +342,7 @@ Math_XMLOasisMetaExporter_get_implementation(css::uno::XComponentContext* contex
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_XMLSettingsExporter_get_implementation(css::uno::XComponentContext* context,
-                                            css::uno::Sequence<css::uno::Any> const&)
+                                            css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SmXMLExport(
         context, u"com.sun.star.comp.Math.XMLSettingsExporter"_ustr, SvXMLExportFlags::SETTINGS));
@@ -349,7 +350,7 @@ Math_XMLSettingsExporter_get_implementation(css::uno::XComponentContext* context
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_XMLOasisSettingsExporter_get_implementation(css::uno::XComponentContext* context,
-                                                 css::uno::Sequence<css::uno::Any> const&)
+                                                 css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SmXMLExport(context,
                                          u"com.sun.star.comp.Math.XMLOasisSettingsExporter"_ustr,
@@ -358,7 +359,7 @@ Math_XMLOasisSettingsExporter_get_implementation(css::uno::XComponentContext* co
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_XMLContentExporter_get_implementation(css::uno::XComponentContext* context,
-                                           css::uno::Sequence<css::uno::Any> const&)
+                                           css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SmXMLExport(context, u"com.sun.star.comp.Math.XMLContentExporter"_ustr,
                                          SvXMLExportFlags::OASIS | SvXMLExportFlags::CONTENT));
@@ -513,7 +514,7 @@ void SmXMLExport::GetConfigurationSettings(Sequence<PropertyValue>& rProps)
 
     // update window state value
     OUString sWindowState = ::framework::WindowStateHelper::GetFromModel(GetModel());
-    xProps->setPropertyValue(u"WindowState"_ustr, css::uno::Any(sWindowState));
+    xProps->setPropertyValue(u"WindowState"_ustr, cpo::uno::Any(sWindowState));
 
     Reference<XPropertySetInfo> xPropertySetInfo = xProps->getPropertySetInfo();
     if (!xPropertySetInfo.is())

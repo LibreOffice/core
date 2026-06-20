@@ -88,12 +88,12 @@ public:
     }
 
     // XNameAccess : XElementAccess
-    virtual css::uno::Any SAL_CALL getByName(
+    virtual cpo::uno::Any SAL_CALL getByName(
         const OUString& aName ) override
     {
         if( !hasItem( aName ) )
             throw css::container::NoSuchElementException();
-        return css::uno::Any( getItem( aName ) );
+        return cpo::uno::Any( getItem( aName ) );
     }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getElementNames() override

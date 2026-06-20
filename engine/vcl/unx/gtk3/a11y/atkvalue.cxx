@@ -44,7 +44,7 @@ static css::uno::Reference<css::accessibility::XAccessibleValue>
     return css::uno::Reference<css::accessibility::XAccessibleValue>();
 }
 
-static void anyToGValue( const uno::Any& aAny, GValue *pValue )
+static void anyToGValue( const cpo::uno::Any& aAny, GValue *pValue )
 {
     // FIXME: expand to lots of types etc.
     double aDouble=0;
@@ -116,19 +116,19 @@ value_wrapper_set_current_value( AtkValue     *value,
             // Different types of numerical values for XAccessibleValue are possible.
             // If current value has an integer type, also use that for the new value, to make
             // sure underlying implementations expecting that can handle the value properly.
-            const css::uno::Any aCurrentValue = pValue->getCurrentValue();
+            const cpo::uno::Any aCurrentValue = pValue->getCurrentValue();
             if (aCurrentValue.getValueTypeClass() == css::uno::TypeClass::TypeClass_LONG)
             {
                 const sal_Int32 nValue = std::round<sal_Int32>(aDouble);
-                return pValue->setCurrentValue(css::uno::Any(nValue));
+                return pValue->setCurrentValue(cpo::uno::Any(nValue));
             }
             else if (aCurrentValue.getValueTypeClass() == css::uno::TypeClass::TypeClass_HYPER)
             {
                 const sal_Int64 nValue = std::round<sal_Int64>(aDouble);
-                return pValue->setCurrentValue(css::uno::Any(nValue));
+                return pValue->setCurrentValue(cpo::uno::Any(nValue));
             }
 
-            return pValue->setCurrentValue( uno::Any(aDouble) );
+            return pValue->setCurrentValue( cpo::uno::Any(aDouble) );
         }
     }
     catch(const uno::Exception&) {

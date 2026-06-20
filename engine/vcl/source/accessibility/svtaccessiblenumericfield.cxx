@@ -38,14 +38,14 @@ void SVTXAccessibleNumericField::ProcessWindowEvent(const VclWindowEvent& rVclWi
 
     if (rVclWindowEvent.GetId() == VclEventId::EditModify)
     {
-        css::uno::Any aNewValue = getCurrentValue();
-        NotifyAccessibleEvent(AccessibleEventId::VALUE_CHANGED, css::uno::Any(), aNewValue);
+        cpo::uno::Any aNewValue = getCurrentValue();
+        NotifyAccessibleEvent(AccessibleEventId::VALUE_CHANGED, cpo::uno::Any(), aNewValue);
     }
 }
 
 sal_Int16 SVTXAccessibleNumericField::getAccessibleRole() { return AccessibleRole::SPIN_BOX; }
 
-css::uno::Any SAL_CALL SVTXAccessibleNumericField::getCurrentValue()
+cpo::uno::Any SAL_CALL SVTXAccessibleNumericField::getCurrentValue()
 {
     OExternalLockGuard aGuard(this);
 
@@ -54,10 +54,10 @@ css::uno::Any SAL_CALL SVTXAccessibleNumericField::getCurrentValue()
     if (pField)
         dValue = pField->GetFormatter().GetValue();
 
-    return css::uno::Any(dValue);
+    return cpo::uno::Any(dValue);
 }
 
-bool SVTXAccessibleNumericField::setCurrentValue(const css::uno::Any& aNumber)
+bool SVTXAccessibleNumericField::setCurrentValue(const cpo::uno::Any& aNumber)
 {
     OExternalLockGuard aGuard(this);
 
@@ -71,7 +71,7 @@ bool SVTXAccessibleNumericField::setCurrentValue(const css::uno::Any& aNumber)
     return true;
 }
 
-css::uno::Any SAL_CALL SVTXAccessibleNumericField::getMaximumValue()
+cpo::uno::Any SAL_CALL SVTXAccessibleNumericField::getMaximumValue()
 {
     OExternalLockGuard aGuard(this);
 
@@ -80,10 +80,10 @@ css::uno::Any SAL_CALL SVTXAccessibleNumericField::getMaximumValue()
     if (pField)
         dValue = pField->GetFormatter().GetMaxValue();
 
-    return css::uno::Any(dValue);
+    return cpo::uno::Any(dValue);
 }
 
-css::uno::Any SAL_CALL SVTXAccessibleNumericField::getMinimumValue()
+cpo::uno::Any SAL_CALL SVTXAccessibleNumericField::getMinimumValue()
 {
     OExternalLockGuard aGuard(this);
 
@@ -92,10 +92,10 @@ css::uno::Any SAL_CALL SVTXAccessibleNumericField::getMinimumValue()
     if (pField)
         dValue = pField->GetFormatter().GetMinValue();
 
-    return css::uno::Any(dValue);
+    return cpo::uno::Any(dValue);
 }
 
-css::uno::Any SAL_CALL SVTXAccessibleNumericField::getMinimumIncrement()
+cpo::uno::Any SAL_CALL SVTXAccessibleNumericField::getMinimumIncrement()
 {
     OExternalLockGuard aGuard(this);
 
@@ -104,7 +104,7 @@ css::uno::Any SAL_CALL SVTXAccessibleNumericField::getMinimumIncrement()
     if (pField)
         dValue = pField->GetFormatter().GetSpinSize();
 
-    return css::uno::Any(dValue);
+    return cpo::uno::Any(dValue);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

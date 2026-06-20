@@ -71,8 +71,8 @@ SwVbaAddins::createEnumeration()
     return xEnumerationAccess->createEnumeration();
 }
 
-uno::Any
-SwVbaAddins::createCollectionObject( const css::uno::Any& aSource )
+cpo::uno::Any
+SwVbaAddins::createCollectionObject( const cpo::uno::Any& aSource )
 {
     return aSource;
 }

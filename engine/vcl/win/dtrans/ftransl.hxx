@@ -40,9 +40,9 @@ public:
 
     // XDataFormatTranslator
 
-    virtual css::uno::Any SAL_CALL getSystemDataTypeFromDataFlavor( const css::datatransfer::DataFlavor& aDataFlavor ) override;
+    virtual cpo::uno::Any SAL_CALL getSystemDataTypeFromDataFlavor( const css::datatransfer::DataFlavor& aDataFlavor ) override;
 
-    virtual css::datatransfer::DataFlavor SAL_CALL getDataFlavorFromSystemDataType( const css::uno::Any& aSysDataType ) override;
+    virtual css::datatransfer::DataFlavor SAL_CALL getDataFlavorFromSystemDataType( const cpo::uno::Any& aSysDataType ) override;
 
     // XServiceInfo
 

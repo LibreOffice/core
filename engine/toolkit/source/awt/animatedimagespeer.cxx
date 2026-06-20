@@ -48,7 +48,7 @@ namespace toolkit
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::container::ContainerEvent;

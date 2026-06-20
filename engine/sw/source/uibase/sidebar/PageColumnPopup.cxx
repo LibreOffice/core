@@ -25,7 +25,7 @@ PageColumnPopup::PageColumnPopup(const css::uno::Reference<css::uno::XComponentC
 {
 }
 
-void PageColumnPopup::initialize( const css::uno::Sequence< css::uno::Any >& rArguments )
+void PageColumnPopup::initialize( const css::uno::Sequence< cpo::uno::Any >& rArguments )
 {
     PopupWindowController::initialize(rArguments);
 
@@ -67,7 +67,7 @@ css::uno::Sequence<OUString> PageColumnPopup::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 lo_writer_PageColumnToolBoxControl_get_implementation(
     css::uno::XComponentContext* rContext,
-    css::uno::Sequence<css::uno::Any> const & )
+    css::uno::Sequence<cpo::uno::Any> const & )
 {
     return cppu::acquire(new PageColumnPopup(rContext));
 }

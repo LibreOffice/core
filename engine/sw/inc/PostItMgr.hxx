@@ -31,7 +31,7 @@
 #include <tools/link.hxx>
 #include "swrect.hxx"
 #include <unotools/configitem.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include "SidebarWindowsTypes.hxx"
 #include <editeng/outlobj.hxx>
 #include <svl/lstner.hxx>

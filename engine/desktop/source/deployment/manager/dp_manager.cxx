@@ -75,6 +75,7 @@
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::logging;
 
@@ -588,7 +589,7 @@ OUString PackageManagerImpl::detectMediaType(
         catch (const lang::IllegalArgumentException &) {
             if (throw_exc)
                 throw;
-            css::uno::Any ex( cppu::getCaughtException() );
+            cpo::uno::Any ex( cppu::getCaughtException() );
             SAL_WARN( "desktop", exceptionToString(ex) );
         }
     }
@@ -1521,7 +1522,7 @@ sal_Int32 PackageManagerImpl::checkPrerequisites(
     } catch (const uno::RuntimeException &) {
         throw;
     } catch (...) {
-        uno::Any excOccurred = ::cppu::getCaughtException();
+        cpo::uno::Any excOccurred = ::cppu::getCaughtException();
         deployment::DeploymentException exc(
             u"PackageManagerImpl::checkPrerequisites: exception "_ustr,
             static_cast<OWeakObject*>(this), excOccurred);

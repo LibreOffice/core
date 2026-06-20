@@ -172,7 +172,7 @@ Reference< drawing::XShape > SchXMLAxisContext::getTitleShape() const
             SAL_INFO("xmloff.chart", "Invalid axis" );
             break;
     }
-    xDiaProp->setPropertyValue( aPropName, uno::Any(true) );
+    xDiaProp->setPropertyValue( aPropName, cpo::uno::Any(true) );
     xResult.set( xAxis->getAxisTitle(), uno::UNO_QUERY );
     return xResult;
 }
@@ -209,7 +209,7 @@ void SchXMLAxisContext::CreateGrid( const OUString& sAutoStyleName, bool bIsMajo
             SAL_INFO("xmloff.chart", "Invalid axis" );
             break;
     }
-    xDiaProp->setPropertyValue( aPropName, uno::Any(true) );
+    xDiaProp->setPropertyValue( aPropName, cpo::uno::Any(true) );
 
     Reference< beans::XPropertySet > xGridProp;
     if( bIsMajor )
@@ -222,7 +222,7 @@ void SchXMLAxisContext::CreateGrid( const OUString& sAutoStyleName, bool bIsMajo
     {
         // the line color is black as default, in the model it is a light gray
         xGridProp->setPropertyValue(u"LineColor"_ustr,
-                                     uno::Any( COL_BLACK ));
+                                     cpo::uno::Any( COL_BLACK ));
         if (!sAutoStyleName.isEmpty())
             m_rImportHelper.FillAutoStyle(sAutoStyleName, xGridProp);
     }
@@ -311,7 +311,7 @@ Reference< chart2::XAxis > lcl_getAxis( const Reference< frame::XModel >& xChart
     return xAxis;
 }
 
-bool lcl_divideBy100( uno::Any& rDoubleAny )
+bool lcl_divideBy100( cpo::uno::Any& rDoubleAny )
 {
     bool bChanged = false;
     double fValue=0.0;
@@ -367,7 +367,7 @@ void SchXMLAxisContext::CreateAxis()
     }
     try
     {
-        xDiaProp->setPropertyValue( aPropName, uno::Any(true) );
+        xDiaProp->setPropertyValue( aPropName, cpo::uno::Any(true) );
     }
     catch( beans::UnknownPropertyException & )
     {
@@ -394,7 +394,7 @@ void SchXMLAxisContext::CreateAxis()
     {
         try
         {
-            xDiaProp->setPropertyValue(u"HasXAxis"_ustr, uno::Any(true) );
+            xDiaProp->setPropertyValue(u"HasXAxis"_ustr, cpo::uno::Any(true) );
         }
         catch( beans::UnknownPropertyException & )
         {
@@ -406,12 +406,12 @@ void SchXMLAxisContext::CreateAxis()
     if( !m_xAxisProps.is())
         return;
 
-    uno::Any aTrueBool( uno::Any( true ));
-    uno::Any aFalseBool( uno::Any( false ));
+    cpo::uno::Any aTrueBool( cpo::uno::Any( true ));
+    cpo::uno::Any aFalseBool( cpo::uno::Any( false ));
 
     // #i109879# the line color is black as default, in the model it is a light gray
     m_xAxisProps->setPropertyValue(u"LineColor"_ustr,
-                                 uno::Any( COL_BLACK ));
+                                 cpo::uno::Any( COL_BLACK ));
 
     m_xAxisProps->setPropertyValue(u"DisplayLabels"_ustr, aFalseBool );
 
@@ -426,7 +426,7 @@ void SchXMLAxisContext::CreateAxis()
     m_xAxisProps->setPropertyValue(u"AutoOrigin"_ustr, aTrueBool );
 
     if( m_bAxisTypeImported )
-        m_xAxisProps->setPropertyValue(u"AxisType"_ustr, uno::Any(m_nAxisType) );
+        m_xAxisProps->setPropertyValue(u"AxisType"_ustr, cpo::uno::Any(m_nAxisType) );
 
     if( !m_aAutoStyleName.isEmpty())
     {
@@ -479,7 +479,7 @@ void SchXMLAxisContext::CreateAxis()
                     if( xNewAxisProp.is() )
                     {
                         xNewAxisProp->setPropertyValue(u"LineStyle"_ustr
-                            , uno::Any(drawing::LineStyle_NONE));
+                            , cpo::uno::Any(drawing::LineStyle_NONE));
                     }
                 }
 
@@ -546,7 +546,7 @@ void SchXMLAxisContext::CreateAxis()
     {
         aScaleData.ShiftedCategoryPosition = rtl::math::approxEqual(fMajorOrigin, 0.5);
         xAxis->setScaleData(aScaleData);
-        m_xAxisProps->setPropertyValue(u"MajorOrigin"_ustr, uno::Any());
+        m_xAxisProps->setPropertyValue(u"MajorOrigin"_ustr, cpo::uno::Any());
     }
 }
 
@@ -695,31 +695,31 @@ void SchXMLAxisContext::CorrectAxisPositions( const Reference< chart2::XChartDoc
                     if( rChartTypeServiceName == u"com.sun.star.chart2.ScatterChartType" )
                     {
                         xMainYAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
-                                , uno::Any( css::chart::ChartAxisPosition_VALUE) );
+                                , cpo::uno::Any( css::chart::ChartAxisPosition_VALUE) );
                         double fCrossoverValue = 0.0;
                         aMainXScale.Origin >>= fCrossoverValue;
                         xMainYAxisProp->setPropertyValue(u"CrossoverValue"_ustr
-                                , uno::Any( fCrossoverValue ) );
+                                , cpo::uno::Any( fCrossoverValue ) );
 
                         if( aMainXScale.Orientation == chart2::AxisOrientation_REVERSE )
                         {
                             xMainYAxisProp->setPropertyValue(u"LabelPosition"_ustr
-                                , uno::Any( css::chart::ChartAxisLabelPosition_OUTSIDE_END) );
+                                , cpo::uno::Any( css::chart::ChartAxisLabelPosition_OUTSIDE_END) );
                             xMainYAxisProp->setPropertyValue(u"MarkPosition"_ustr
-                                , uno::Any( css::chart::ChartAxisMarkPosition_AT_LABELS) );
+                                , cpo::uno::Any( css::chart::ChartAxisMarkPosition_AT_LABELS) );
                             if( xSecondaryYAxisProp.is() )
                                 xSecondaryYAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
-                                , uno::Any( css::chart::ChartAxisPosition_START) );
+                                , cpo::uno::Any( css::chart::ChartAxisPosition_START) );
                         }
                         else
                         {
                             xMainYAxisProp->setPropertyValue(u"LabelPosition"_ustr
-                                , uno::Any( css::chart::ChartAxisLabelPosition_OUTSIDE_START) );
+                                , cpo::uno::Any( css::chart::ChartAxisLabelPosition_OUTSIDE_START) );
                             xMainYAxisProp->setPropertyValue(u"MarkPosition"_ustr
-                                , uno::Any( css::chart::ChartAxisMarkPosition_AT_LABELS) );
+                                , cpo::uno::Any( css::chart::ChartAxisMarkPosition_AT_LABELS) );
                             if( xSecondaryYAxisProp.is() )
                                 xSecondaryYAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
-                                , uno::Any( css::chart::ChartAxisPosition_END) );
+                                , cpo::uno::Any( css::chart::ChartAxisPosition_END) );
                         }
                     }
                     else
@@ -727,48 +727,48 @@ void SchXMLAxisContext::CorrectAxisPositions( const Reference< chart2::XChartDoc
                         if( aMainXScale.Orientation == chart2::AxisOrientation_REVERSE )
                         {
                             xMainYAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
-                                , uno::Any( css::chart::ChartAxisPosition_END) );
+                                , cpo::uno::Any( css::chart::ChartAxisPosition_END) );
                             if( xSecondaryYAxisProp.is() )
                                 xSecondaryYAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
-                                    , uno::Any( css::chart::ChartAxisPosition_START) );
+                                    , cpo::uno::Any( css::chart::ChartAxisPosition_START) );
                         }
                         else
                         {
                             xMainYAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
-                                , uno::Any( css::chart::ChartAxisPosition_START) );
+                                , cpo::uno::Any( css::chart::ChartAxisPosition_START) );
                             if( xSecondaryYAxisProp.is() )
                                 xSecondaryYAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
-                                    , uno::Any( css::chart::ChartAxisPosition_END) );
+                                    , cpo::uno::Any( css::chart::ChartAxisPosition_END) );
                         }
                     }
 
                     chart2::ScaleData aMainYScale = xMainYAxis->getScaleData();
                     xMainXAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
-                            , uno::Any( css::chart::ChartAxisPosition_VALUE) );
+                            , cpo::uno::Any( css::chart::ChartAxisPosition_VALUE) );
                     double fCrossoverValue = 0.0;
                     aMainYScale.Origin >>= fCrossoverValue;
                     xMainXAxisProp->setPropertyValue(u"CrossoverValue"_ustr
-                            , uno::Any( fCrossoverValue ) );
+                            , cpo::uno::Any( fCrossoverValue ) );
 
                     if( aMainYScale.Orientation == chart2::AxisOrientation_REVERSE )
                     {
                         xMainXAxisProp->setPropertyValue(u"LabelPosition"_ustr
-                            , uno::Any( css::chart::ChartAxisLabelPosition_OUTSIDE_END) );
+                            , cpo::uno::Any( css::chart::ChartAxisLabelPosition_OUTSIDE_END) );
                         xMainXAxisProp->setPropertyValue(u"MarkPosition"_ustr
-                            , uno::Any( css::chart::ChartAxisMarkPosition_AT_LABELS) );
+                            , cpo::uno::Any( css::chart::ChartAxisMarkPosition_AT_LABELS) );
                         if( xSecondaryXAxisProp.is() )
                             xSecondaryXAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
-                            , uno::Any( css::chart::ChartAxisPosition_START) );
+                            , cpo::uno::Any( css::chart::ChartAxisPosition_START) );
                     }
                     else
                     {
                         xMainXAxisProp->setPropertyValue(u"LabelPosition"_ustr
-                            , uno::Any( css::chart::ChartAxisLabelPosition_OUTSIDE_START) );
+                            , cpo::uno::Any( css::chart::ChartAxisLabelPosition_OUTSIDE_START) );
                         xMainXAxisProp->setPropertyValue(u"MarkPosition"_ustr
-                            , uno::Any( css::chart::ChartAxisMarkPosition_AT_LABELS) );
+                            , cpo::uno::Any( css::chart::ChartAxisMarkPosition_AT_LABELS) );
                         if( xSecondaryXAxisProp.is() )
                             xSecondaryXAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
-                            , uno::Any( css::chart::ChartAxisPosition_END) );
+                            , cpo::uno::Any( css::chart::ChartAxisPosition_END) );
                     }
                 }
             }
@@ -886,7 +886,7 @@ void DateScaleContext::startFastElement( sal_Int32 /*nElement*/,
     }
 
     if( bSetNewIncrement )
-        m_xAxisProps->setPropertyValue(u"TimeIncrement"_ustr, uno::Any( aIncrement ) );
+        m_xAxisProps->setPropertyValue(u"TimeIncrement"_ustr, cpo::uno::Any( aIncrement ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

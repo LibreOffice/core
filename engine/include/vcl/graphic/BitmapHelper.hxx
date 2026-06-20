@@ -22,7 +22,7 @@ namespace com::sun::star::graphic
 {
 class XGraphic;
 }
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 class Any;
 }
@@ -32,7 +32,7 @@ namespace vcl
 VCL_DLLPUBLIC Bitmap GetBitmap(const css::uno::Reference<css::awt::XBitmap>& xBitmap);
 
 // Checks if the Any contains graphic::XGraphic; or if awt::XBitmap is there, converts it
-VCL_DLLPUBLIC css::uno::Reference<css::graphic::XGraphic> GetGraphic(const css::uno::Any& any);
+VCL_DLLPUBLIC css::uno::Reference<css::graphic::XGraphic> GetGraphic(const cpo::uno::Any& any);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

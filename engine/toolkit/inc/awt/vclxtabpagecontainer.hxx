@@ -62,7 +62,7 @@ public:
     virtual void SAL_CALL propertiesChange( const ::css::uno::Sequence< ::css::beans::PropertyChangeEvent >& aEvent ) override;
 
     // css::awt::XVclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
+    void SAL_CALL setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
 private:
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
 

@@ -79,13 +79,13 @@ IMPL_LINK(UIPickerDialog, OnApplyClick, weld::Button&, rButton, void)
             const utl::OConfigurationTreeRoot aAppNode(
                 xContext, u"org.openoffice.Office.UI.ToolbarMode/Applications/"_ustr, true);
             if (sCurrentApp != "Writer")
-                aAppNode.setNodeValue(u"Writer/Active"_ustr, css::uno::Any(sCmd));
+                aAppNode.setNodeValue(u"Writer/Active"_ustr, cpo::uno::Any(sCmd));
             if (sCurrentApp != "Calc")
-                aAppNode.setNodeValue(u"Calc/Active"_ustr, css::uno::Any(sCmd));
+                aAppNode.setNodeValue(u"Calc/Active"_ustr, cpo::uno::Any(sCmd));
             if (sCurrentApp != "Impress")
-                aAppNode.setNodeValue(u"Impress/Active"_ustr, css::uno::Any(sCmd));
+                aAppNode.setNodeValue(u"Impress/Active"_ustr, cpo::uno::Any(sCmd));
             if (sCurrentApp != "Draw")
-                aAppNode.setNodeValue(u"Draw/Active"_ustr, css::uno::Any(sCmd));
+                aAppNode.setNodeValue(u"Draw/Active"_ustr, cpo::uno::Any(sCmd));
             aAppNode.commit();
         };
     }

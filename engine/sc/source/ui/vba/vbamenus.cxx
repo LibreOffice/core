@@ -34,7 +34,7 @@ public:
     {
         return m_xEnumeration->hasMoreElements();
     }
-    virtual uno::Any SAL_CALL nextElement() override
+    virtual cpo::uno::Any SAL_CALL nextElement() override
     {
         // FIXME: should be add menu
         if( !hasMoreElements() )
@@ -44,11 +44,11 @@ public:
         if( xCommandBarControl->getType() == office::MsoControlType::msoControlPopup )
         {
             uno::Reference< excel::XMenu > xMenu( new ScVbaMenu( m_xParent, m_xContext, xCommandBarControl ) );
-            return uno::Any( xMenu );
+            return cpo::uno::Any( xMenu );
         }
         nextElement();
 
-        return uno::Any();
+        return cpo::uno::Any();
     }
 };
 
@@ -72,8 +72,8 @@ ScVbaMenus::createEnumeration()
     return uno::Reference< container::XEnumeration >( new MenuEnumeration( this, mxContext, xEnumAccess->createEnumeration() ) );
 }
 
-uno::Any
-ScVbaMenus::createCollectionObject( const uno::Any& aSource )
+cpo::uno::Any
+ScVbaMenus::createCollectionObject( const cpo::uno::Any& aSource )
 {
     // make no sense
     return aSource;
@@ -87,20 +87,20 @@ ScVbaMenus::getCount()
 }
 
 // ScVbaCollectionBaseImpl
-uno::Any SAL_CALL
-ScVbaMenus::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ )
+cpo::uno::Any SAL_CALL
+ScVbaMenus::Item( const cpo::uno::Any& aIndex, const cpo::uno::Any& /*aIndex2*/ )
 {
-    uno::Reference< XCommandBarControl > xCommandBarControl( m_xCommandBarControls->Item( aIndex, uno::Any() ), uno::UNO_QUERY_THROW );
+    uno::Reference< XCommandBarControl > xCommandBarControl( m_xCommandBarControls->Item( aIndex, cpo::uno::Any() ), uno::UNO_QUERY_THROW );
     if( xCommandBarControl->getType() != office::MsoControlType::msoControlPopup )
         throw uno::RuntimeException();
-    return uno::Any( uno::Reference< excel::XMenu > ( new ScVbaMenu( this, mxContext, xCommandBarControl ) ) );
+    return cpo::uno::Any( uno::Reference< excel::XMenu > ( new ScVbaMenu( this, mxContext, xCommandBarControl ) ) );
 }
 
-uno::Reference< excel::XMenu > SAL_CALL ScVbaMenus::Add( const OUString& Caption, const css::uno::Any& Before, const css::uno::Any& Restore )
+uno::Reference< excel::XMenu > SAL_CALL ScVbaMenus::Add( const OUString& Caption, const cpo::uno::Any& Before, const cpo::uno::Any& Restore )
 {
     uno::Reference< XCommandBarControl > xCommandBarControl = m_xCommandBarControls->Add(
-            uno::Any( office::MsoControlType::msoControlPopup ),
-            uno::Any(), uno::Any(), Before, Restore );
+            cpo::uno::Any( office::MsoControlType::msoControlPopup ),
+            cpo::uno::Any(), cpo::uno::Any(), Before, Restore );
     xCommandBarControl->setCaption( Caption );
     return uno::Reference< excel::XMenu >( new ScVbaMenu( this, mxContext, xCommandBarControl ) );
 }

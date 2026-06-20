@@ -177,7 +177,7 @@ bool XFillBitmapItem::GetPresentation(
     return true;
 }
 
-bool XFillBitmapItem::QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId) const
+bool XFillBitmapItem::QueryValue(cpo::uno::Any& rVal, sal_uInt8 nMemberId) const
 {
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -222,7 +222,7 @@ bool XFillBitmapItem::QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId) const
     return true;
 }
 
-bool XFillBitmapItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
+bool XFillBitmapItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
 

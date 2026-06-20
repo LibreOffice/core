@@ -284,10 +284,10 @@ rtl::Reference< DataSource > DataInterpreter::mergeInterpretedData(
     return new DataSource(aResultVec);
 }
 
-uno::Any DataInterpreter::getChartTypeSpecificData(
+cpo::uno::Any DataInterpreter::getChartTypeSpecificData(
     const OUString & )
 {
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 // convenience methods
@@ -317,7 +317,7 @@ void DataInterpreter::SetRole( const Reference< data::XDataSequence > & xSeq, co
     try
     {
         Reference< beans::XPropertySet > xProp( xSeq, uno::UNO_QUERY_THROW );
-        xProp->setPropertyValue( u"Role"_ustr, uno::Any( rRole ));
+        xProp->setPropertyValue( u"Role"_ustr, cpo::uno::Any( rRole ));
     }
     catch( const uno::Exception & )
     {
@@ -325,7 +325,7 @@ void DataInterpreter::SetRole( const Reference< data::XDataSequence > & xSeq, co
     }
 }
 
-uno::Any DataInterpreter::GetProperty(
+cpo::uno::Any DataInterpreter::GetProperty(
     const Sequence< beans::PropertyValue > & aArguments,
     std::u16string_view rName )
 {
@@ -334,7 +334,7 @@ uno::Any DataInterpreter::GetProperty(
         if( aArguments[i].Name == rName )
             return aArguments[i].Value;
     }
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 bool DataInterpreter::HasCategories(

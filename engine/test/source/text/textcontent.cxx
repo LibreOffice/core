@@ -12,7 +12,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -32,7 +32,7 @@ void TextContent::testTextContentProperties()
 
     try
     {
-        xPS->setPropertyValue(u"AnchorType"_ustr, uno::Any(m_aNewTCAT));
+        xPS->setPropertyValue(u"AnchorType"_ustr, cpo::uno::Any(m_aNewTCAT));
         text::TextContentAnchorType aNewTCAT;
         CPPUNIT_ASSERT(xPS->getPropertyValue(u"AnchorType"_ustr) >>= aNewTCAT);
         CPPUNIT_ASSERT_EQUAL(m_aNewTCAT, aNewTCAT);
@@ -52,7 +52,7 @@ void TextContent::testTextContentProperties()
 
     try
     {
-        xPS->setPropertyValue(u"TextWrap"_ustr, uno::Any(m_aNewWTM));
+        xPS->setPropertyValue(u"TextWrap"_ustr, cpo::uno::Any(m_aNewWTM));
         text::WrapTextMode aNewWTM;
         CPPUNIT_ASSERT(xPS->getPropertyValue(u"TextWrap"_ustr) >>= aNewWTM);
         CPPUNIT_ASSERT_EQUAL(m_aNewWTM, aNewWTM);

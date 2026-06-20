@@ -136,6 +136,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::drawing;
 using namespace ::oox::core;
 using css::beans::PropertyValue;
@@ -198,7 +199,7 @@ std::vector<Sequence<Reference<chart2::XDataSeries> > > splitDataSeriesByAxis(co
                 continue;
 
             sal_Int32 nAxisIndex = -1;
-            uno::Any aAny = xPropSet->getPropertyValue(u"AttachedAxisIndex"_ustr);
+            cpo::uno::Any aAny = xPropSet->getPropertyValue(u"AttachedAxisIndex"_ustr);
             aAny >>= nAxisIndex;
             size_t nVectorPos = 0;
             if (nAxisIndexOfFirstSeries == -1)
@@ -284,7 +285,7 @@ bool lclGetAutoHistogramBinning(const css::uno::Reference<css::chart2::XDataSeri
     }
 
     std::vector<double> aRawData;
-    css::uno::Sequence<css::uno::Any> aValues = xValuesY->getData();
+    css::uno::Sequence<cpo::uno::Any> aValues = xValuesY->getData();
     aRawData.reserve(aValues.getLength());
 
     for (const auto& rAny : aValues)
@@ -601,7 +602,7 @@ static Sequence< OUString > lcl_getLabelSequence( const Reference< chart2::data:
     }
     else if( xLabelSeq.is())
     {
-        const Sequence< uno::Any > aAnies( xLabelSeq->getData());
+        const Sequence< cpo::uno::Any > aAnies( xLabelSeq->getData());
         aLabels.realloc( aAnies.getLength());
         auto pLabels = aLabels.getArray();
         for( sal_Int32 i=0; i<aAnies.getLength(); ++i )
@@ -627,7 +628,7 @@ static void lcl_fillCategoriesIntoStringVector(
     }
     else
     {
-        Sequence< uno::Any > aAnies( xCategories->getData());
+        Sequence< cpo::uno::Any > aAnies( xCategories->getData());
         rOutCategories.resize( aAnies.getLength());
         for( sal_Int32 i=0; i<aAnies.getLength(); ++i )
             aAnies[i] >>= rOutCategories[i];
@@ -646,7 +647,7 @@ static ::std::vector< double > lcl_getAllValuesFromSequence( const Reference< ch
     }
     else if( xSeq.is())
     {
-        Sequence< uno::Any > aAnies( xSeq->getData());
+        Sequence< cpo::uno::Any > aAnies( xSeq->getData());
         aResult.resize( aAnies.getLength(), std::numeric_limits<double>::quiet_NaN() );
         for( sal_Int32 i=0; i<aAnies.getLength(); ++i )
             aAnies[i] >>= aResult[i];
@@ -790,10 +791,10 @@ uno::Sequence< beans::PropertyValue > createArguments(
         eRowSource = css::chart::ChartDataRowSource_COLUMNS;
 
     uno::Sequence<beans::PropertyValue> aArguments{
-        { u"DataRowSource"_ustr, -1, uno::Any(eRowSource), beans::PropertyState_DIRECT_VALUE },
-        { u"FirstCellAsLabel"_ustr, -1, uno::Any(false), beans::PropertyState_DIRECT_VALUE },
-        { u"HasCategories"_ustr, -1, uno::Any(false), beans::PropertyState_DIRECT_VALUE },
-        { u"CellRangeRepresentation"_ustr, -1, uno::Any(rRangeRepresentation),
+        { u"DataRowSource"_ustr, -1, cpo::uno::Any(eRowSource), beans::PropertyState_DIRECT_VALUE },
+        { u"FirstCellAsLabel"_ustr, -1, cpo::uno::Any(false), beans::PropertyState_DIRECT_VALUE },
+        { u"HasCategories"_ustr, -1, cpo::uno::Any(false), beans::PropertyState_DIRECT_VALUE },
+        { u"CellRangeRepresentation"_ustr, -1, cpo::uno::Any(rRangeRepresentation),
           beans::PropertyState_DIRECT_VALUE }
     };
 
@@ -872,9 +873,9 @@ Sequence< Sequence< OUString > > ChartExport::getSplitCategoriesList( const OUSt
                 try
                 {
                     css::uno::Reference< css::chart2::XAnyDescriptionAccess > xDataAccess(xChartDoc->getDataProvider(), uno::UNO_QUERY);
-                    const Sequence< Sequence< uno::Any > >aAnyCategories(bSeriesUsesColumns ? xDataAccess->getAnyRowDescriptions() : xDataAccess->getAnyColumnDescriptions());
+                    const Sequence< Sequence< cpo::uno::Any > >aAnyCategories(bSeriesUsesColumns ? xDataAccess->getAnyRowDescriptions() : xDataAccess->getAnyColumnDescriptions());
                     auto pMax = std::max_element(aAnyCategories.begin(), aAnyCategories.end(),
-                        [](const Sequence<uno::Any>& a, const Sequence<uno::Any>& b) {
+                        [](const Sequence<cpo::uno::Any>& a, const Sequence<cpo::uno::Any>& b) {
                             return a.getLength() < b.getLength(); });
 
                     //minimum is 1!
@@ -976,9 +977,9 @@ OUString ChartExport::parseFormula( const OUString& rRange )
         uno::Sequence<sheet::FormulaToken> aTokens = xParser->parseFormula( rRange, CellAddress( 0, 0, 0 ) );
         if( xParserProps.is() )
         {
-            xParserProps->setPropertyValue(u"FormulaConvention"_ustr, uno::Any(css::sheet::AddressConvention::XL_OOX) );
+            xParserProps->setPropertyValue(u"FormulaConvention"_ustr, cpo::uno::Any(css::sheet::AddressConvention::XL_OOX) );
             // For referencing named ranges correctly with special excel chart syntax.
-            xParserProps->setPropertyValue(u"RefConventionChartOOXML"_ustr, uno::Any(true) );
+            xParserProps->setPropertyValue(u"RefConventionChartOOXML"_ustr, cpo::uno::Any(true) );
         }
         aResult = xParser->printFormula( aTokens, CellAddress( 0, 0, 0 ) );
     }
@@ -2386,7 +2387,7 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
 
     if (!bIsChartex) {
         uno::Reference<beans::XPropertySet> xDiagramPropSet(xChartDoc->getDiagram(), uno::UNO_QUERY);
-        uno::Any aPlotVisOnly = xDiagramPropSet->getPropertyValue(u"IncludeHiddenCells"_ustr);
+        cpo::uno::Any aPlotVisOnly = xDiagramPropSet->getPropertyValue(u"IncludeHiddenCells"_ustr);
         bool bIncludeHiddenCells = false;
         aPlotVisOnly >>= bIncludeHiddenCells;
         pFS->singleElement(FSNS(XML_c, XML_plotVisOnly), XML_val, ToPsz10(!bIncludeHiddenCells));
@@ -2403,7 +2404,7 @@ void ChartExport::exportMissingValueTreatment(const uno::Reference<beans::XPrope
         return;
 
     sal_Int32 nVal = 0;
-    uno::Any aAny = xPropSet->getPropertyValue(u"MissingValueTreatment"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"MissingValueTreatment"_ustr);
     if (!(aAny >>= nVal))
         return;
 
@@ -2561,7 +2562,7 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
                 }
             }
 
-            uno::Any aRelativePos = xProp->getPropertyValue(u"RelativePosition"_ustr);
+            cpo::uno::Any aRelativePos = xProp->getPropertyValue(u"RelativePosition"_ustr);
             if (aRelativePos.hasValue())
             {
                 pFS->startElement(FSNS(XML_c, XML_layout));
@@ -2577,7 +2578,7 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
                 pFS->singleElement(FSNS(XML_c, XML_x), XML_val, OString::number(x));
                 pFS->singleElement(FSNS(XML_c, XML_y), XML_val, OString::number(y));
 
-                uno::Any aRelativeSize = xProp->getPropertyValue(u"RelativeSize"_ustr);
+                cpo::uno::Any aRelativeSize = xProp->getPropertyValue(u"RelativeSize"_ustr);
                 if (aRelativeSize.hasValue())
                 {
                     chart2::RelativeSize aSize = aRelativeSize.get<chart2::RelativeSize>();
@@ -2600,7 +2601,7 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
         const char *sOverlay = nullptr;
         if (strPos != nullptr)
         {
-            uno::Any aOverlay = xProp->getPropertyValue(u"Overlay"_ustr);
+            cpo::uno::Any aOverlay = xProp->getPropertyValue(u"Overlay"_ustr);
             if(aOverlay.get<bool>())
                 sOverlay = "1";
             else
@@ -2766,7 +2767,7 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape, bool bIsCharte
         pFS->endElement( FSNS( XML_c, XML_tx ) );
     }
 
-    uno::Any aManualLayout = xPropSet->getPropertyValue(u"RelativePosition"_ustr);
+    cpo::uno::Any aManualLayout = xPropSet->getPropertyValue(u"RelativePosition"_ustr);
     if (aManualLayout.hasValue())
     {
         if (bIsChartex) {
@@ -2850,7 +2851,7 @@ void ChartExport::exportPlotArea(const Reference< css::chart::XChartDocument >& 
         Reference<beans::XPropertySet> xWall(mxNewDiagram, uno::UNO_QUERY);
         if( xWall.is() )
         {
-            uno::Any aAny = xWall->getPropertyValue(u"RelativePosition"_ustr);
+            cpo::uno::Any aAny = xWall->getPropertyValue(u"RelativePosition"_ustr);
             if (aAny.hasValue())
             {
                 chart2::RelativePosition aPos = aAny.get<chart2::RelativePosition>();
@@ -3065,7 +3066,7 @@ void ChartExport::exportPlotArea(const Reference< css::chart::XChartDocument >& 
         Reference< beans::XPropertySet > xWallPropSet = xWallFloorSupplier->getWall();
         if( xWallPropSet.is() )
         {
-            uno::Any aAny = xWallPropSet->getPropertyValue(u"LineStyle"_ustr);
+            cpo::uno::Any aAny = xWallPropSet->getPropertyValue(u"LineStyle"_ustr);
             sal_Int32 eChartType = getChartType( );
             // Export LineStyle_NONE instead of default linestyle of PlotArea border, because LibreOffice
             // make invisible the Wall shape properties, in case of these charts. Or in the future set
@@ -3073,7 +3074,7 @@ void ChartExport::exportPlotArea(const Reference< css::chart::XChartDocument >& 
             bool noSupportWallProp = ( (eChartType == chart::TYPEID_PIE) || (eChartType == chart::TYPEID_RADARLINE) || (eChartType == chart::TYPEID_RADARAREA) );
             if ( noSupportWallProp && (aAny != drawing::LineStyle_NONE) )
             {
-                xWallPropSet->setPropertyValue( u"LineStyle"_ustr, uno::Any(drawing::LineStyle_NONE) );
+                xWallPropSet->setPropertyValue( u"LineStyle"_ustr, cpo::uno::Any(drawing::LineStyle_NONE) );
             }
             exportShapeProps( xWallPropSet, bIsChartex ? XML_cx : XML_c );
         }
@@ -3180,7 +3181,7 @@ void ChartExport::exportFill( const Reference< XPropertySet >& xPropSet )
         awt::Gradient aTransparenceGradient;
         uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
         uno::Reference< container::XNameAccess > xTransparenceGradient(xFact->createInstance(u"com.sun.star.drawing.TransparencyGradientTable"_ustr), uno::UNO_QUERY);
-        uno::Any rTransparenceValue = xTransparenceGradient->getByName(sFillTransparenceGradientName);
+        cpo::uno::Any rTransparenceValue = xTransparenceGradient->getByName(sFillTransparenceGradientName);
         rTransparenceValue >>= aTransparenceGradient;
         if (aTransparenceGradient.StartColor == 0xffffff && aTransparenceGradient.EndColor == 0xffffff)
             aFillStyle = FillStyle_NONE;
@@ -3258,7 +3259,7 @@ void ChartExport::exportSolidFill(const Reference< XPropertySet >& xPropSet)
     {
         uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
         uno::Reference< container::XNameAccess > xTransparenceGradient(xFact->createInstance(u"com.sun.star.drawing.TransparencyGradientTable"_ustr), uno::UNO_QUERY);
-        const uno::Any rTransparenceAny = xTransparenceGradient->getByName(sFillTransparenceGradientName);
+        const cpo::uno::Any rTransparenceAny = xTransparenceGradient->getByName(sFillTransparenceGradientName);
 
         aTransparenceGradient = model::gradient::getFromAny(rTransparenceAny);
         basegfx::BColor aSingleColor;
@@ -3297,7 +3298,7 @@ void ChartExport::exportHatch( const Reference< XPropertySet >& xPropSet )
         mAny >>= aHatchName;
         uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
         uno::Reference< container::XNameAccess > xHatchTable( xFact->createInstance(u"com.sun.star.drawing.HatchTable"_ustr), uno::UNO_QUERY );
-        uno::Any rValue = xHatchTable->getByName(aHatchName);
+        cpo::uno::Any rValue = xHatchTable->getByName(aHatchName);
         css::drawing::Hatch aHatch;
         rValue >>= aHatch;
         WritePattFill(xPropSet, aHatch);
@@ -3317,7 +3318,7 @@ void ChartExport::exportBitmapFill( const Reference< XPropertySet >& xPropSet )
     try
     {
         uno::Reference< container::XNameAccess > xBitmapTable( xFact->createInstance(u"com.sun.star.drawing.BitmapTable"_ustr), uno::UNO_QUERY );
-        uno::Any rValue = xBitmapTable->getByName( sFillBitmapName );
+        cpo::uno::Any rValue = xBitmapTable->getByName( sFillBitmapName );
         if (rValue.has<uno::Reference<awt::XBitmap>>())
         {
             uno::Reference<awt::XBitmap> xBitmap = rValue.get<uno::Reference<awt::XBitmap>>();
@@ -3346,7 +3347,7 @@ void ChartExport::exportGradientFill( const Reference< XPropertySet >& xPropSet 
     try
     {
         uno::Reference< container::XNameAccess > xGradient( xFact->createInstance(u"com.sun.star.drawing.GradientTable"_ustr), uno::UNO_QUERY );
-        const uno::Any rGradientAny(xGradient->getByName( sFillGradientName ));
+        const cpo::uno::Any rGradientAny(xGradient->getByName( sFillGradientName ));
         const basegfx::BGradient aGradient = model::gradient::getFromAny(rGradientAny);
         basegfx::BColor aSingleColor;
 
@@ -3359,7 +3360,7 @@ void ChartExport::exportGradientFill( const Reference< XPropertySet >& xPropSet 
             if( (xPropSet->getPropertyValue(u"FillTransparenceGradientName"_ustr) >>= sFillTransparenceGradientName) && !sFillTransparenceGradientName.isEmpty())
             {
                 uno::Reference< container::XNameAccess > xTransparenceGradient(xFact->createInstance(u"com.sun.star.drawing.TransparencyGradientTable"_ustr), uno::UNO_QUERY);
-                const uno::Any rTransparenceAny(xTransparenceGradient->getByName(sFillTransparenceGradientName));
+                const cpo::uno::Any rTransparenceAny(xTransparenceGradient->getByName(sFillTransparenceGradientName));
 
                 aTransparenceGradient = model::gradient::getFromAny(rTransparenceAny);
 
@@ -4258,31 +4259,31 @@ void ChartExport::exportSeries_chartex( const Reference<chart2::XChartType>& xCh
             if (xSeriesProp.is())
             {
                 OUString sParentLabelLayout;
-                uno::Any aParentLL = xSeriesProp->getPropertyValue(u"ParentLabelLayout"_ustr);
+                cpo::uno::Any aParentLL = xSeriesProp->getPropertyValue(u"ParentLabelLayout"_ustr);
                 bool bHasParentLL = (aParentLL >>= sParentLabelLayout);
 
                 OUString sRegionLabelLayout;
-                uno::Any aRegionLL = xSeriesProp->getPropertyValue(u"RegionLabelLayout"_ustr);
+                cpo::uno::Any aRegionLL = xSeriesProp->getPropertyValue(u"RegionLabelLayout"_ustr);
                 bool bHasRegionLL = (aRegionLL >>= sRegionLabelLayout);
 
-                uno::Any aConnLines = xSeriesProp->getPropertyValue(u"ConnectorLines"_ustr);
-                uno::Any aMeanLine = xSeriesProp->getPropertyValue(u"MeanLine"_ustr);
-                uno::Any aMeanMarker = xSeriesProp->getPropertyValue(u"MeanMarker"_ustr);
-                uno::Any aNonoutliers = xSeriesProp->getPropertyValue(u"Nonoutliers"_ustr);
-                uno::Any aOutliers = xSeriesProp->getPropertyValue(u"Outliers"_ustr);
+                cpo::uno::Any aConnLines = xSeriesProp->getPropertyValue(u"ConnectorLines"_ustr);
+                cpo::uno::Any aMeanLine = xSeriesProp->getPropertyValue(u"MeanLine"_ustr);
+                cpo::uno::Any aMeanMarker = xSeriesProp->getPropertyValue(u"MeanMarker"_ustr);
+                cpo::uno::Any aNonoutliers = xSeriesProp->getPropertyValue(u"Nonoutliers"_ustr);
+                cpo::uno::Any aOutliers = xSeriesProp->getPropertyValue(u"Outliers"_ustr);
                 bool bHasVisibility = aConnLines.hasValue() || aMeanLine.hasValue()
                             || aMeanMarker.hasValue() || aNonoutliers.hasValue()
                             || aOutliers.hasValue();
 
                 OUString sQuartileMethod;
-                uno::Any aQM = xSeriesProp->getPropertyValue(u"QuartileMethod"_ustr);
+                cpo::uno::Any aQM = xSeriesProp->getPropertyValue(u"QuartileMethod"_ustr);
                 bool bHasQM = (aQM >>= sQuartileMethod);
 
                 uno::Sequence<sal_Int32> aSubtotalIndices;
-                uno::Any aSubtotals = xSeriesProp->getPropertyValue(u"SubtotalIndices"_ustr);
+                cpo::uno::Any aSubtotals = xSeriesProp->getPropertyValue(u"SubtotalIndices"_ustr);
                 bool bHasSubtotals = (aSubtotals >>= aSubtotalIndices);
 
-                uno::Any aIntervalClosed = xSeriesProp->getPropertyValue( u"IntervalClosed"_ustr);
+                cpo::uno::Any aIntervalClosed = xSeriesProp->getPropertyValue( u"IntervalClosed"_ustr);
                 const bool bHasIC = aIntervalClosed.hasValue();
 
                 bool bHasGeography = false;
@@ -4724,7 +4725,7 @@ void ChartExport::exportTextProps(const Reference<XPropertySet>& xPropSet,
         if (fMultiplier)
         {
             double fTextRotation = 0.0;
-            uno::Any aAny = xPropSet->getPropertyValue(u"TextRotation"_ustr);
+            cpo::uno::Any aAny = xPropSet->getPropertyValue(u"TextRotation"_ustr);
             if (aAny.hasValue() && (aAny >>= fTextRotation))
             {
                 fTextRotation *= fMultiplier;
@@ -5830,7 +5831,7 @@ void ChartExport::writeLabelProperties(
     }
 
     // Export the text "separator" if exists
-    uno::Any aAny = xPropSet->getPropertyValue(u"LabelSeparator"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"LabelSeparator"_ustr);
     if( aAny.hasValue() )
     {
         OUString nLabelSeparator;

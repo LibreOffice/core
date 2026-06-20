@@ -54,7 +54,7 @@ private:
 
 private:
 
-    css::uno::Any getBadArgExcept();
+    cpo::uno::Any getBadArgExcept();
 
     css::uno::Reference< css::sdbc::XRow >
         getPropertyValues(
@@ -99,7 +99,7 @@ public:
     virtual OUString SAL_CALL
     getContentType() override;
 
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
         execute( const css::ucb::Command& aCommand,
         sal_Int32 CommandId,
         const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override;

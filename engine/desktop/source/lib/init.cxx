@@ -265,6 +265,7 @@ using namespace desktop;
 using namespace utl;
 using namespace bridge;
 using namespace uno;
+using namespace ::cpo::uno;
 using namespace lang;
 
 #ifdef UNX
@@ -473,7 +474,7 @@ static void extractLinks(const uno::Reference< container::XNameAccess >& xLinks,
 {
     for (const OUString& aLink : xLinks->getElementNames())
     {
-        uno::Any aAny;
+        cpo::uno::Any aAny;
 
         try
         {
@@ -527,7 +528,7 @@ static void extractLinks(const uno::Reference< container::XNameAccess >& xLinks,
     }
 }
 
-static void unoAnyToJson(tools::JsonWriter& rJson, std::string_view pNodeName, const uno::Any& anyItem)
+static void unoAnyToJson(tools::JsonWriter& rJson, std::string_view pNodeName, const cpo::uno::Any& anyItem)
 {
     auto aNode = rJson.startNode(pNodeName);
     OUString aType = anyItem.getValueTypeName();
@@ -541,7 +542,7 @@ static void unoAnyToJson(tools::JsonWriter& rJson, std::string_view pNodeName, c
         rJson.put("value", OString::number(anyItem.get<sal_Int32>()));
     else if (aType == "[]any")
     {
-        uno::Sequence<uno::Any> aSeq;
+        uno::Sequence<cpo::uno::Any> aSeq;
         if (anyItem >>= aSeq)
         {
             auto valueNode = rJson.startNode("value");
@@ -3336,7 +3337,7 @@ static int lo_runMacro(COKit* pThis, const char *pURL)
     uno::Reference < frame::XSynchronousDispatch > xSyncDisp( xD, uno::UNO_QUERY_THROW );
     uno::Sequence<css::beans::PropertyValue> aEmpty;
     css::beans::PropertyValue aErr;
-    uno::Any aRet = xSyncDisp->dispatchWithReturnValue( aURL, aEmpty );
+    cpo::uno::Any aRet = xSyncDisp->dispatchWithReturnValue( aURL, aEmpty );
     aRet >>= aErr;
 
     if (aErr.Name == "ErrorCode")
@@ -3397,8 +3398,8 @@ static char* lo_extractRequest(COKit* /*pThis*/, const char* pFilePath)
             {
                 uno::Sequence<css::beans::PropertyValue> aFilterOptions(comphelper::InitPropertySequence(
                 {
-                    {u"Hidden"_ustr, css::uno::Any(true)},
-                    {u"ReadOnly"_ustr, css::uno::Any(true)}
+                    {u"Hidden"_ustr, cpo::uno::Any(true)},
+                    {u"ReadOnly"_ustr, cpo::uno::Any(true)}
                 }));
                 xComp = xComponentLoader->loadComponentFromURL( aURL, u"_blank"_ustr, 0, aFilterOptions );
             }
@@ -3447,8 +3448,8 @@ static char* lo_extractDocumentStructureRequest(COKit* /*pThis*/, const char* pF
             {
                 uno::Sequence<css::beans::PropertyValue> aFilterOptions(comphelper::InitPropertySequence(
                 {
-                    {u"Hidden"_ustr, css::uno::Any(true)},
-                    {u"ReadOnly"_ustr, css::uno::Any(true)}
+                    {u"Hidden"_ustr, cpo::uno::Any(true)},
+                    {u"ReadOnly"_ustr, cpo::uno::Any(true)}
                 }));
                 xComp = xComponentLoader->loadComponentFromURL( aURL, u"_blank"_ustr, 0, aFilterOptions );
             }
@@ -5306,7 +5307,7 @@ static size_t doc_renderShapeSelection(COKitDocument* pThis, char** pOutput)
     }
     catch (const uno::Exception& exception)
     {
-        css::uno::Any exAny( cppu::getCaughtException() );
+        cpo::uno::Any exAny( cppu::getCaughtException() );
         SetLastExceptionMsg(exception.Message);
         SAL_WARN("kit", "Failed to render shape selection: " << exceptionToString(exAny));
     }
@@ -6331,7 +6332,7 @@ static bool getFromTransferable(
         return false;
     }
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     try
     {
         aAny = xTransferable->getTransferData(aFlavor);
@@ -6653,10 +6654,10 @@ static bool doc_paste(COKitDocument* pThis, const char* pMimeType, const char* p
 
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"AnchorType", uno::Any(static_cast<sal_uInt16>(css::text::TextContentAnchorType_AS_CHARACTER))},
-        {"IgnoreComments", uno::Any(true)},
+        {"AnchorType", cpo::uno::Any(static_cast<sal_uInt16>(css::text::TextContentAnchorType_AS_CHARACTER))},
+        {"IgnoreComments", cpo::uno::Any(true)},
         // The MIME type is specified explicitly, don't guess.
-        {"SkipDetection", uno::Any(true)},
+        {"SkipDetection", cpo::uno::Any(true)},
     }));
     if (!comphelper::dispatchCommand(u".uno:Paste"_ustr, aPropertyValues))
     {
@@ -9133,7 +9134,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
                 // 3) InitVCL()
                 {
                     comphelper::ProfileZone aInit("preload");
-                    aService->initialize({css::uno::Any(u"preload"_ustr)});
+                    aService->initialize({cpo::uno::Any(u"preload"_ustr)});
                 }
                 { // Force load some modules
                     comphelper::ProfileZone aInit("preload modules");

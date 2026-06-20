@@ -94,7 +94,7 @@ bool FunnelChartTypeTemplate::matchesTemplate2(const rtl::Reference<::chart::Dia
         if (!bGeomAmbiguous)
         {
             setFastPropertyValue_NoBroadcast(PROP_FUNNEL_TEMPLATE_GEOMETRY3D,
-                                             uno::Any(aCommonGeom));
+                                             cpo::uno::Any(aCommonGeom));
         }
     }
 
@@ -116,7 +116,7 @@ rtl::Reference<ChartType> FunnelChartTypeTemplate::getChartTypeForNewSeries2(
 }
 
 // ____ OPropertySet ____
-void FunnelChartTypeTemplate::GetDefaultValue(sal_Int32 nHandle, uno::Any& rAny) const
+void FunnelChartTypeTemplate::GetDefaultValue(sal_Int32 nHandle, cpo::uno::Any& rAny) const
 {
     static ::chart::tPropertyValueMap aStaticDefaults = []() {
         ::chart::tPropertyValueMap aTmp;
@@ -153,14 +153,14 @@ void FunnelChartTypeTemplate::applyStyle2(const rtl::Reference<DataSeries>& xSer
 {
     ChartTypeTemplate::applyStyle2(xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount);
     xSeries->setPropertyAlsoToAllAttributedDataPoints(u"BorderStyle"_ustr,
-                                                      uno::Any(drawing::LineStyle_NONE));
+                                                      cpo::uno::Any(drawing::LineStyle_NONE));
     if (getDimension() != 3)
         return;
 
     try
     {
         //apply Geometry3D
-        uno::Any aAGeometry3D;
+        cpo::uno::Any aAGeometry3D;
         getFastPropertyValue(aAGeometry3D, PROP_FUNNEL_TEMPLATE_GEOMETRY3D);
         xSeries->setPropertyAlsoToAllAttributedDataPoints(u"Geometry3D"_ustr, aAGeometry3D);
     }
@@ -174,7 +174,7 @@ void FunnelChartTypeTemplate::resetStyles2(const rtl::Reference<::chart::Diagram
 {
     ChartTypeTemplate::resetStyles2(xDiagram);
     std::vector<rtl::Reference<DataSeries>> aSeriesVec(xDiagram->getDataSeries());
-    uno::Any aLineStyleAny(drawing::LineStyle_NONE);
+    cpo::uno::Any aLineStyleAny(drawing::LineStyle_NONE);
     for (auto const& series : aSeriesVec)
     {
         if (getDimension() == 3)

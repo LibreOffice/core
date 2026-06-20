@@ -28,7 +28,7 @@ namespace com::sun::star::awt {
     struct FontDescriptor;
 }
 
-namespace com::sun::star::uno { class Any; }
+namespace cpo::uno { class Any; }
 namespace rtl { template <class reference_type> class Reference; }
 
 
@@ -78,16 +78,16 @@ namespace comphelper
     // no, we don't use templates here. This would lead to a lot of implicit uses of the conversion methods,
     // which would be difficult to trace...
 
-    COMPHELPER_DLLPUBLIC sal_Int64      getINT64(const css::uno::Any& _rAny);
-    COMPHELPER_DLLPUBLIC sal_Int32      getINT32(const css::uno::Any& _rAny);
-    COMPHELPER_DLLPUBLIC sal_Int16      getINT16(const css::uno::Any& _rAny);
-    COMPHELPER_DLLPUBLIC double         getDouble(const css::uno::Any& _rAny);
-    COMPHELPER_DLLPUBLIC float          getFloat(const css::uno::Any& _rAny);
-    COMPHELPER_DLLPUBLIC OUString       getString(const css::uno::Any& _rAny);
-    COMPHELPER_DLLPUBLIC bool           getBOOL(const css::uno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC sal_Int64      getINT64(const cpo::uno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC sal_Int32      getINT32(const cpo::uno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC sal_Int16      getINT16(const cpo::uno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC double         getDouble(const cpo::uno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC float          getFloat(const cpo::uno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC OUString       getString(const cpo::uno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC bool           getBOOL(const cpo::uno::Any& _rAny);
 
     /// @throws css::lang::IllegalArgumentException
-    COMPHELPER_DLLPUBLIC sal_Int32      getEnumAsINT32(const css::uno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC sal_Int32      getEnumAsINT32(const cpo::uno::Any& _rAny);
 
 }   // namespace comphelper
 

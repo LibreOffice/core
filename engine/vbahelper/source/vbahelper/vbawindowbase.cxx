@@ -36,7 +36,7 @@ VbaWindowBase::VbaWindowBase(
     construct( xController );
 }
 
-VbaWindowBase::VbaWindowBase( uno::Sequence< uno::Any > const & args,
+VbaWindowBase::VbaWindowBase( uno::Sequence< cpo::uno::Any > const & args,
         uno::Reference< uno::XComponentContext > const & xContext ) :
     WindowBaseImpl_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0, false ), xContext )
 {

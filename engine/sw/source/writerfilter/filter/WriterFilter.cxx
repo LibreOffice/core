@@ -99,7 +99,7 @@ class WriterFilter
     uno::Reference<uno::XComponentContext> m_xContext;
     uno::Reference<lang::XComponent> m_xSrcDoc;
     rtl::Reference<SwXTextDocument> m_xDstDoc;
-    uno::Sequence<uno::Any> m_xInitializationArguments;
+    uno::Sequence<cpo::uno::Any> m_xInitializationArguments;
 
 public:
     explicit WriterFilter(uno::Reference<uno::XComponentContext> xContext)
@@ -118,7 +118,7 @@ public:
     void SAL_CALL setSourceDocument(const uno::Reference<lang::XComponent>& xDoc) override;
 
     // XInitialization
-    void SAL_CALL initialize(const uno::Sequence<uno::Any>& rArguments) override;
+    void SAL_CALL initialize(const uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
@@ -145,7 +145,7 @@ bool WriterFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescriptor
         }
         catch (uno::Exception& e)
         {
-            uno::Any a(cppu::getCaughtException());
+            cpo::uno::Any a(cppu::getCaughtException());
             throw lang::WrappedTargetRuntimeException("wrapped " + a.getValueTypeName() + ": "
                                                           + e.Message,
                                                       uno::Reference<uno::XInterface>(), a);
@@ -161,9 +161,9 @@ bool WriterFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescriptor
     }
     if (m_xDstDoc.is())
     {
-        m_xDstDoc->setPropertyValue(u"UndocumentedWriterfilterHack"_ustr, uno::Any(true));
+        m_xDstDoc->setPropertyValue(u"UndocumentedWriterfilterHack"_ustr, cpo::uno::Any(true));
         comphelper::ScopeGuard g([this] {
-            m_xDstDoc->setPropertyValue(u"UndocumentedWriterfilterHack"_ustr, uno::Any(false));
+            m_xDstDoc->setPropertyValue(u"UndocumentedWriterfilterHack"_ustr, cpo::uno::Any(false));
         });
         comphelper::SequenceAsHashMap aMediaDesc(rDescriptor);
         bool bRepairStorage = aMediaDesc.getUnpackedValueOrDefault(u"RepairPackage"_ustr, false);
@@ -214,13 +214,13 @@ bool WriterFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescriptor
         {
             // note: SfxObjectShell checks for WrongFormatException
             io::WrongFormatException wfe(lcl_GetExceptionMessage(e));
-            throw lang::WrappedTargetRuntimeException(u""_ustr, getXWeak(), uno::Any(wfe));
+            throw lang::WrappedTargetRuntimeException(u""_ustr, getXWeak(), cpo::uno::Any(wfe));
         }
         catch (xml::sax::SAXException const& e)
         {
             // note: SfxObjectShell checks for WrongFormatException
             io::WrongFormatException wfe(lcl_GetExceptionMessage(e));
-            throw lang::WrappedTargetRuntimeException(u""_ustr, getXWeak(), uno::Any(wfe));
+            throw lang::WrappedTargetRuntimeException(u""_ustr, getXWeak(), cpo::uno::Any(wfe));
         }
         catch (uno::RuntimeException const&)
         {
@@ -228,7 +228,7 @@ bool WriterFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescriptor
         }
         catch (uno::Exception const&)
         {
-            css::uno::Any anyEx = cppu::getCaughtException();
+            cpo::uno::Any anyEx = cppu::getCaughtException();
             SAL_WARN("writerfilter",
                      "WriterFilter::filter(): failed with " << exceptionToString(anyEx));
             throw lang::WrappedTargetRuntimeException(u""_ustr, getXWeak(), anyEx);
@@ -305,39 +305,39 @@ void WriterFilter::setTargetDocument(const uno::Reference<lang::XComponent>& xDo
     // Set some compatibility options that are valid for the DOCX format
     rtl::Reference<SwXDocumentSettings> xSettings = m_xDstDoc->createDocumentSettings();
 
-    xSettings->setPropertyValue(u"UseOldNumbering"_ustr, uno::Any(false));
-    xSettings->setPropertyValue(u"IgnoreFirstLineIndentInNumbering"_ustr, uno::Any(false));
-    xSettings->setPropertyValue(u"NoGapAfterNoteNumber"_ustr, uno::Any(true));
-    xSettings->setPropertyValue(u"DoNotResetParaAttrsForNumFont"_ustr, uno::Any(false));
-    xSettings->setPropertyValue(u"UseFormerLineSpacing"_ustr, uno::Any(false));
-    xSettings->setPropertyValue(u"AddParaSpacingToTableCells"_ustr, uno::Any(true));
-    xSettings->setPropertyValue(u"AddParaLineSpacingToTableCells"_ustr, uno::Any(true));
-    xSettings->setPropertyValue(u"UseFormerObjectPositioning"_ustr, uno::Any(false));
-    xSettings->setPropertyValue(u"ConsiderTextWrapOnObjPos"_ustr, uno::Any(true));
-    xSettings->setPropertyValue(u"UseFormerTextWrapping"_ustr, uno::Any(false));
-    xSettings->setPropertyValue(u"IgnoreTabsAndBlanksForLineCalculation"_ustr, uno::Any(true));
-    xSettings->setPropertyValue(u"InvertBorderSpacing"_ustr, uno::Any(true));
-    xSettings->setPropertyValue(u"CollapseEmptyCellPara"_ustr, uno::Any(true));
+    xSettings->setPropertyValue(u"UseOldNumbering"_ustr, cpo::uno::Any(false));
+    xSettings->setPropertyValue(u"IgnoreFirstLineIndentInNumbering"_ustr, cpo::uno::Any(false));
+    xSettings->setPropertyValue(u"NoGapAfterNoteNumber"_ustr, cpo::uno::Any(true));
+    xSettings->setPropertyValue(u"DoNotResetParaAttrsForNumFont"_ustr, cpo::uno::Any(false));
+    xSettings->setPropertyValue(u"UseFormerLineSpacing"_ustr, cpo::uno::Any(false));
+    xSettings->setPropertyValue(u"AddParaSpacingToTableCells"_ustr, cpo::uno::Any(true));
+    xSettings->setPropertyValue(u"AddParaLineSpacingToTableCells"_ustr, cpo::uno::Any(true));
+    xSettings->setPropertyValue(u"UseFormerObjectPositioning"_ustr, cpo::uno::Any(false));
+    xSettings->setPropertyValue(u"ConsiderTextWrapOnObjPos"_ustr, cpo::uno::Any(true));
+    xSettings->setPropertyValue(u"UseFormerTextWrapping"_ustr, cpo::uno::Any(false));
+    xSettings->setPropertyValue(u"IgnoreTabsAndBlanksForLineCalculation"_ustr, cpo::uno::Any(true));
+    xSettings->setPropertyValue(u"InvertBorderSpacing"_ustr, cpo::uno::Any(true));
+    xSettings->setPropertyValue(u"CollapseEmptyCellPara"_ustr, cpo::uno::Any(true));
     // tdf#142404 TabOverSpacing (new for compatibilityMode15/Word2013+) is a subset of TabOverMargin
     // (which applied to DOCX <= compatibilityMode14).
     // TabOverMargin looks at tabs beyond the normal text area,
     // while TabOverSpacing only refers to a tab beyond the paragraph margin.
-    xSettings->setPropertyValue(u"TabOverSpacing"_ustr, uno::Any(true));
-    xSettings->setPropertyValue(u"UnbreakableNumberings"_ustr, uno::Any(true));
+    xSettings->setPropertyValue(u"TabOverSpacing"_ustr, cpo::uno::Any(true));
+    xSettings->setPropertyValue(u"UnbreakableNumberings"_ustr, cpo::uno::Any(true));
 
-    xSettings->setPropertyValue(u"ClippedPictures"_ustr, uno::Any(true));
-    xSettings->setPropertyValue(u"BackgroundParaOverDrawings"_ustr, uno::Any(true));
-    xSettings->setPropertyValue(u"TreatSingleColumnBreakAsPageBreak"_ustr, uno::Any(true));
-    xSettings->setPropertyValue(u"PropLineSpacingShrinksFirstLine"_ustr, uno::Any(true));
-    xSettings->setPropertyValue(u"DoNotCaptureDrawObjsOnPage"_ustr, uno::Any(true));
-    xSettings->setPropertyValue(u"DisableOffPagePositioning"_ustr, uno::Any(true));
-    xSettings->setPropertyValue(u"DropCapPunctuation"_ustr, uno::Any(true));
-    xSettings->setPropertyValue(u"PaintHellOverHeaderFooter"_ustr, uno::Any(true));
+    xSettings->setPropertyValue(u"ClippedPictures"_ustr, cpo::uno::Any(true));
+    xSettings->setPropertyValue(u"BackgroundParaOverDrawings"_ustr, cpo::uno::Any(true));
+    xSettings->setPropertyValue(u"TreatSingleColumnBreakAsPageBreak"_ustr, cpo::uno::Any(true));
+    xSettings->setPropertyValue(u"PropLineSpacingShrinksFirstLine"_ustr, cpo::uno::Any(true));
+    xSettings->setPropertyValue(u"DoNotCaptureDrawObjsOnPage"_ustr, cpo::uno::Any(true));
+    xSettings->setPropertyValue(u"DisableOffPagePositioning"_ustr, cpo::uno::Any(true));
+    xSettings->setPropertyValue(u"DropCapPunctuation"_ustr, cpo::uno::Any(true));
+    xSettings->setPropertyValue(u"PaintHellOverHeaderFooter"_ustr, cpo::uno::Any(true));
 
-    xSettings->setPropertyValue(u"DoNotMirrorRtlDrawObjs"_ustr, uno::Any(true));
-    xSettings->setPropertyValue(u"ContinuousEndnotes"_ustr, uno::Any(true));
+    xSettings->setPropertyValue(u"DoNotMirrorRtlDrawObjs"_ustr, cpo::uno::Any(true));
+    xSettings->setPropertyValue(u"ContinuousEndnotes"_ustr, cpo::uno::Any(true));
     // tdf#161233 pictures with wrap polygon should not be clipped
-    xSettings->setPropertyValue(u"NoClippingWithWrapPolygon"_ustr, uno::Any(true));
+    xSettings->setPropertyValue(u"NoClippingWithWrapPolygon"_ustr, cpo::uno::Any(true));
 }
 
 void WriterFilter::setSourceDocument(const uno::Reference<lang::XComponent>& xDoc)
@@ -345,7 +345,7 @@ void WriterFilter::setSourceDocument(const uno::Reference<lang::XComponent>& xDo
     m_xSrcDoc = xDoc;
 }
 
-void WriterFilter::initialize(const uno::Sequence<uno::Any>& rArguments)
+void WriterFilter::initialize(const uno::Sequence<cpo::uno::Any>& rArguments)
 {
     m_xInitializationArguments = rArguments;
 }
@@ -369,7 +369,7 @@ uno::Sequence<OUString> WriterFilter::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Writer_WriterFilter_get_implementation(
-    uno::XComponentContext* component, uno::Sequence<uno::Any> const& /*rSequence*/)
+    uno::XComponentContext* component, uno::Sequence<cpo::uno::Any> const& /*rSequence*/)
 {
     return cppu::acquire(new WriterFilter(component));
 }

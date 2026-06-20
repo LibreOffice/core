@@ -98,8 +98,8 @@ void SwAccessibleNoTextFrame::Notify(const SfxHint& rHint)
                 if(rTitleChanged.m_sOld == rTitleChanged.m_sNew)
                     break;
                 msTitle = rTitleChanged.m_sNew;
-                FireAccessibleEvent(AccessibleEventId::NAME_CHANGED, uno::Any(rTitleChanged.m_sOld),
-                                    uno::Any(msTitle));
+                FireAccessibleEvent(AccessibleEventId::NAME_CHANGED, cpo::uno::Any(rTitleChanged.m_sOld),
+                                    cpo::uno::Any(msTitle));
 
                 if(!pNd->GetDescription().isEmpty())
                     break;
@@ -114,8 +114,8 @@ void SwAccessibleNoTextFrame::Notify(const SfxHint& rHint)
                     msDesc = msTitle;
                 if(msDesc == sOldDesc)
                     return;
-                FireAccessibleEvent(AccessibleEventId::DESCRIPTION_CHANGED, uno::Any(sOldDesc),
-                                    uno::Any(msDesc));
+                FireAccessibleEvent(AccessibleEventId::DESCRIPTION_CHANGED, cpo::uno::Any(sOldDesc),
+                                    cpo::uno::Any(msDesc));
             }
             return;
     }

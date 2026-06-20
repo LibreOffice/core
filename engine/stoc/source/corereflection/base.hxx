@@ -95,7 +95,7 @@ public:
     /// @throws css::uno::RuntimeException
     const css::uno::Mapping & getUno2Cpp();
     /// @throws css::uno::RuntimeException
-    uno_Interface * mapToUno( const css::uno::Any & rObj, typelib_InterfaceTypeDescription * pTo );
+    uno_Interface * mapToUno( const cpo::uno::Any & rObj, typelib_InterfaceTypeDescription * pTo );
 
     // ctor/ dtor
     explicit IdlReflectionServiceImpl( const css::uno::Reference< css::uno::XComponentContext > & xContext );
@@ -111,10 +111,10 @@ public:
 
     // XIdlReflection
     virtual css::uno::Reference< css::reflection::XIdlClass > SAL_CALL forName( const OUString & rTypeName ) override;
-    virtual css::uno::Reference< css::reflection::XIdlClass > SAL_CALL getType( const css::uno::Any & rObj ) override;
+    virtual css::uno::Reference< css::reflection::XIdlClass > SAL_CALL getType( const cpo::uno::Any & rObj ) override;
 
     // XHierarchicalNameAccess
-    virtual css::uno::Any SAL_CALL getByHierarchicalName( const OUString & rName ) override;
+    virtual cpo::uno::Any SAL_CALL getByHierarchicalName( const OUString & rName ) override;
     virtual bool SAL_CALL hasByHierarchicalName( const OUString & rName ) override;
 
     /// @throws css::uno::RuntimeException
@@ -153,7 +153,7 @@ public:
     virtual bool SAL_CALL equals( const css::uno::Reference< css::reflection::XIdlClass >& xType ) override;
 
     virtual bool SAL_CALL isAssignableFrom( const css::uno::Reference< css::reflection::XIdlClass > & xType ) override;
-    virtual void SAL_CALL createObject( css::uno::Any & rObj ) override;
+    virtual void SAL_CALL createObject( cpo::uno::Any & rObj ) override;
 
     // def impl ????
     virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlClass > > SAL_CALL getClasses() override;
@@ -210,7 +210,7 @@ public:
     virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlMethod > > SAL_CALL getMethods() override;
     virtual css::uno::Reference< css::reflection::XIdlField > SAL_CALL getField( const OUString & rName ) override;
     virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlField > > SAL_CALL getFields() override;
-    virtual void SAL_CALL createObject( css::uno::Any & rObj ) override;
+    virtual void SAL_CALL createObject( cpo::uno::Any & rObj ) override;
 };
 
 
@@ -263,10 +263,10 @@ public:
     virtual css::uno::Reference< css::reflection::XIdlArray > SAL_CALL getArray() override;
 
     // XIdlArray
-    virtual void SAL_CALL realloc( css::uno::Any & rArray, sal_Int32 nLen ) override;
-    virtual sal_Int32 SAL_CALL getLen( const css::uno::Any & rArray ) override;
-    virtual css::uno::Any SAL_CALL get( const css::uno::Any & rArray, sal_Int32 nIndex ) override;
-    virtual void SAL_CALL set( css::uno::Any & rArray, sal_Int32 nIndex, const css::uno::Any & rNewValue ) override;
+    virtual void SAL_CALL realloc( cpo::uno::Any & rArray, sal_Int32 nLen ) override;
+    virtual sal_Int32 SAL_CALL getLen( const cpo::uno::Any & rArray ) override;
+    virtual cpo::uno::Any SAL_CALL get( const cpo::uno::Any & rArray, sal_Int32 nIndex ) override;
+    virtual void SAL_CALL set( cpo::uno::Any & rArray, sal_Int32 nIndex, const cpo::uno::Any & rNewValue ) override;
 };
 
 
@@ -291,7 +291,7 @@ public:
     // IdlClassImpl modifications
     virtual css::uno::Reference< css::reflection::XIdlField > SAL_CALL getField( const OUString & rName ) override;
     virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlField > > SAL_CALL getFields() override;
-    virtual void SAL_CALL createObject( css::uno::Any & rObj ) override;
+    virtual void SAL_CALL createObject( cpo::uno::Any & rObj ) override;
 };
 
 
@@ -330,7 +330,7 @@ public:
 // coerces to type descr pTo else queries for it: the interface pointer is returned via rDest
 // ## type to XidlClass coercion possible
 inline bool extract(
-    const css::uno::Any & rObj, typelib_InterfaceTypeDescription * pTo,
+    const cpo::uno::Any & rObj, typelib_InterfaceTypeDescription * pTo,
     css::uno::Reference< css::uno::XInterface > & rDest,
     IdlReflectionServiceImpl * pRefl )
 {
@@ -358,7 +358,7 @@ inline bool extract(
 }
 
 inline bool coerce_assign(
-    void * pDest, typelib_TypeDescription * pTD, const css::uno::Any & rSource,
+    void * pDest, typelib_TypeDescription * pTD, const cpo::uno::Any & rSource,
     IdlReflectionServiceImpl * pRefl )
 {
     if (pTD->eTypeClass == typelib_TypeClass_INTERFACE)
@@ -379,7 +379,7 @@ inline bool coerce_assign(
     {
         return uno_assignData(
             pDest, pTD,
-            const_cast<css::uno::Any *>(&rSource), pTD,
+            const_cast<cpo::uno::Any *>(&rSource), pTD,
             reinterpret_cast< uno_QueryInterfaceFunc >(css::uno::cpp_queryInterface),
             reinterpret_cast< uno_AcquireFunc >(css::uno::cpp_acquire),
             reinterpret_cast< uno_ReleaseFunc >(css::uno::cpp_release) );

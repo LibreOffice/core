@@ -24,7 +24,7 @@
 #include <tools/debug.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <vector>
@@ -32,6 +32,7 @@
 #include <string_view>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 
 constexpr OUString PATHDELIMITER = u"/"_ustr;

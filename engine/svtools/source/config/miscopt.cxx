@@ -20,7 +20,7 @@
 #include <svtools/miscopt.hxx>
 #include <unotools/configitem.hxx>
 #include <tools/debug.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <tools/link.hxx>
@@ -38,6 +38,7 @@
 
 using namespace ::utl                   ;
 using namespace ::com::sun::star::uno   ;
+using namespace cpo::uno;
 using namespace ::com::sun::star;
 
 // PROPERTYHANDLE defines must be sequential from zero for Commit/Load

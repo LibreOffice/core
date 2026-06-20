@@ -77,7 +77,7 @@ private:
 
 public:
     void YrsInitAcceptor() override;
-    void YrsInitConnector(css::uno::Any const& raConnector) override;
+    void YrsInitConnector(cpo::uno::Any const& raConnector) override;
     IYrsTransactionSupplier::Mode SetYrsMode(IYrsTransactionSupplier::Mode mode) override;
     void YrsCommitModified(bool isUnfinishedUndo) override;
 

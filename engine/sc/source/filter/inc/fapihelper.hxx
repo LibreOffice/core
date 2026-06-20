@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/diagnose.h>
@@ -140,13 +140,13 @@ public:
 
     /** Gets the specified property from the property set.
         @return  true, if the Any could be filled with the property value. */
-    bool                GetAnyProperty( css::uno::Any& rValue, const OUString& rPropName ) const;
+    bool                GetAnyProperty( cpo::uno::Any& rValue, const OUString& rPropName ) const;
 
     /** Gets the specified property from the property set.
         @return  true, if the passed variable could be filled with the property value. */
     template< typename Type >
     bool         GetProperty( Type& rValue, const OUString& rPropName ) const
-                            { css::uno::Any aAny; return GetAnyProperty( aAny, rPropName ) && (aAny >>= rValue); }
+                            { cpo::uno::Any aAny; return GetAnyProperty( aAny, rPropName ) && (aAny >>= rValue); }
 
     /** Gets the specified Boolean property from the property set.
         @return  true = property contains true; false = property contains false or error occurred. */
@@ -162,21 +162,21 @@ public:
     /** Gets the specified properties from the property set. Tries to use the XMultiPropertySet interface.
         @param rPropNames  The property names. MUST be ordered alphabetically.
         @param rValues  The related property values. */
-    void                GetProperties( css::uno::Sequence< css::uno::Any >& rValues, const css::uno::Sequence< OUString >& rPropNames ) const;
+    void                GetProperties( css::uno::Sequence< cpo::uno::Any >& rValues, const css::uno::Sequence< OUString >& rPropNames ) const;
 
     // Set properties ---------------------------------------------------------
 
     /** Puts the passed Any into the property set. */
-    void                SetAnyProperty( const OUString& rPropName, const css::uno::Any& rValue );
+    void                SetAnyProperty( const OUString& rPropName, const cpo::uno::Any& rValue );
 
     /** Puts the passed value into the property set. */
     template< typename Type >
     void         SetProperty( const OUString& rPropName, const Type& rValue )
-                            { SetAnyProperty( rPropName, css::uno::Any( rValue ) ); }
+                            { SetAnyProperty( rPropName, cpo::uno::Any( rValue ) ); }
 
     /** Puts the passed Boolean value into the property set. */
     void         SetBoolProperty( const OUString& rPropName, bool bValue )
-                            { SetAnyProperty( rPropName, css::uno::Any( bValue ) ); }
+                            { SetAnyProperty( rPropName, cpo::uno::Any( bValue ) ); }
 
     /** Puts the passed string into the property set. */
     void         SetStringProperty( const OUString& rPropName, const OUString& rValue )
@@ -189,7 +189,7 @@ public:
     /** Puts the passed properties into the property set. Tries to use the XMultiPropertySet interface.
         @param rPropNames  The property names. MUST be ordered alphabetically.
         @param rValues  The related property values. */
-    void                SetProperties( const css::uno::Sequence< OUString > & rPropNames, const css::uno::Sequence< css::uno::Any >& rValues );
+    void                SetProperties( const css::uno::Sequence< OUString > & rPropNames, const css::uno::Sequence< cpo::uno::Any >& rValues );
 
 private:
     css::uno::Reference< css::beans::XPropertySet >       mxPropSet;          /// The mandatory property set interface.
@@ -225,7 +225,7 @@ public:
     template< typename Type >
     void                ReadValue( Type& rValue );
     /** Reads an Any from the value sequence. */
-    void                ReadValue( css::uno::Any& rAny );
+    void                ReadValue( cpo::uno::Any& rAny );
     /** Reads a color value from the value sequence. */
     void                ReadValue( Color& rColor );
     /** Reads a C++ boolean value from the value sequence. */
@@ -240,7 +240,7 @@ public:
     template< typename Type >
     void                WriteValue( const Type& rValue );
     /** Writes an Any to the value sequence. */
-    void                WriteValue( const css::uno::Any& rAny );
+    void                WriteValue( const cpo::uno::Any& rAny );
     /** Writes a color value to the value sequence. */
     void         WriteValue( const Color& rColor )
                             { WriteValue( sal_Int32( rColor ) ); }
@@ -252,11 +252,11 @@ public:
 
 private:
     /** Returns a pointer to the next Any to be written to. */
-    css::uno::Any*             GetNextAny();
+    cpo::uno::Any*             GetNextAny();
 
 private:
     css::uno::Sequence< OUString >       maNameSeq;          /// Sequence of property names.
-    css::uno::Sequence< css::uno::Any >  maValueSeq;         /// Sequence of property values.
+    css::uno::Sequence< cpo::uno::Any >  maValueSeq;         /// Sequence of property values.
     ScfInt32Vec         maNameOrder;        /// Maps initial order to alphabetical order.
     size_t              mnNextIdx;          /// Counter for next Any to be processed.
 };
@@ -264,7 +264,7 @@ private:
 template< typename Type >
 void ScfPropSetHelper::ReadValue( Type& rValue )
 {
-    css::uno::Any* pAny = GetNextAny();
+    cpo::uno::Any* pAny = GetNextAny();
     if (pAny)
         *pAny >>= rValue;
 }
@@ -272,7 +272,7 @@ void ScfPropSetHelper::ReadValue( Type& rValue )
 template< typename Type >
 void ScfPropSetHelper::WriteValue( const Type& rValue )
 {
-    css::uno::Any* pAny = GetNextAny();
+    cpo::uno::Any* pAny = GetNextAny();
     if( pAny )
         *pAny <<= rValue;
 }

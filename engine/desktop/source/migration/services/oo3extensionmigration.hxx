@@ -76,10 +76,10 @@ namespace migration
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XJob
-        virtual css::uno::Any SAL_CALL execute(
+        virtual cpo::uno::Any SAL_CALL execute(
             const css::uno::Sequence< css::beans::NamedValue >& Arguments ) override;
     };
 
@@ -103,8 +103,8 @@ namespace migration
             css::uno::Reference< css::task::XInteractionRequest > const & xRequest ) override;
 
         // XProgressHandler
-        virtual void SAL_CALL push( css::uno::Any const & Status ) override;
-        virtual void SAL_CALL update( css::uno::Any const & Status ) override;
+        virtual void SAL_CALL push( cpo::uno::Any const & Status ) override;
+        virtual void SAL_CALL update( cpo::uno::Any const & Status ) override;
         virtual void SAL_CALL pop() override;
     };
 

@@ -645,7 +645,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIfTableHeight)
                                                     uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xRow(xTable->getRows()->getByIndex(0), uno::UNO_QUERY);
-    xRow->setPropertyValue(u"Height"_ustr, uno::Any(static_cast<sal_Int32>(1000)));
+    xRow->setPropertyValue(u"Height"_ustr, cpo::uno::Any(static_cast<sal_Int32>(1000)));
 
     // When exporting to reqif-xhtml:
     ExportToReqif();
@@ -915,7 +915,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testBlockQuoteReqIf)
     // Build a document model that uses the Quotations paragraph style.
     createSwDoc();
     uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
-    xParagraph->setPropertyValue(u"ParaStyleName"_ustr, uno::Any(u"Quotations"_ustr));
+    xParagraph->setPropertyValue(u"ParaStyleName"_ustr, cpo::uno::Any(u"Quotations"_ustr));
 
     // Export it.
     ExportToReqif();
@@ -967,8 +967,8 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifComment)
     // Create a document with a comment in it.
     createSwDoc();
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "Text", uno::Any(u"some text"_ustr) },
-        { "Author", uno::Any(u"me"_ustr) },
+        { "Text", cpo::uno::Any(u"some text"_ustr) },
+        { "Author", cpo::uno::Any(u"me"_ustr) },
     });
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aPropertyValues);
 
@@ -984,11 +984,11 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifFontNameSize)
     // Create a document with a custom font name and size in it.
     createSwDoc();
     uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
-    xParagraph->setPropertyValue(u"CharFontName"_ustr, uno::Any(u"Liberation Serif"_ustr));
+    xParagraph->setPropertyValue(u"CharFontName"_ustr, cpo::uno::Any(u"Liberation Serif"_ustr));
     float fCharHeight = 14.0;
-    xParagraph->setPropertyValue(u"CharHeight"_ustr, uno::Any(fCharHeight));
+    xParagraph->setPropertyValue(u"CharHeight"_ustr, cpo::uno::Any(fCharHeight));
     sal_Int32 nCharColor = 0xff0000;
-    xParagraph->setPropertyValue(u"CharColor"_ustr, uno::Any(nCharColor));
+    xParagraph->setPropertyValue(u"CharColor"_ustr, cpo::uno::Any(nCharColor));
     uno::Reference<text::XTextRange> xTextRange(xParagraph, uno::UNO_QUERY);
     xTextRange->setString(u"x"_ustr);
 
@@ -1008,8 +1008,8 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifParagraphAlignment)
     // Create a document with an explicitly aligned paragraph.
     createSwDoc();
     uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
-    xParagraph->setPropertyValue(u"ParaAdjust"_ustr,
-                                 uno::Any(static_cast<sal_Int16>(style::ParagraphAdjust_RIGHT)));
+    xParagraph->setPropertyValue(
+        u"ParaAdjust"_ustr, cpo::uno::Any(static_cast<sal_Int16>(style::ParagraphAdjust_RIGHT)));
 
     // Export it.
     ExportToReqif();
@@ -1185,7 +1185,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testUnderlineNone)
     xText->insertString(xText->getEnd(), u"x"_ustr, /*bAbsorb=*/false);
     uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
     xParagraph->setPropertyValue(u"CharUnderline"_ustr,
-                                 uno::Any(sal_Int16(awt::FontUnderline::NONE)));
+                                 cpo::uno::Any(sal_Int16(awt::FontUnderline::NONE)));
 
     // Export to reqif-xhtml.
     ExportToReqif();
@@ -1425,9 +1425,10 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testBlockQuoteNoMargin)
     xText->insertString(xText->getEnd(), u"string"_ustr, /*bAbsorb=*/false);
     uno::Reference<beans::XPropertySet> xQuotations(
         getStyles(u"ParagraphStyles"_ustr)->getByName(u"Quotations"_ustr), uno::UNO_QUERY);
-    xQuotations->setPropertyValue(u"ParaBottomMargin"_ustr, uno::Any(static_cast<sal_Int32>(0)));
+    xQuotations->setPropertyValue(u"ParaBottomMargin"_ustr,
+                                  cpo::uno::Any(static_cast<sal_Int32>(0)));
     uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
-    xParagraph->setPropertyValue(u"ParaStyleName"_ustr, uno::Any(u"Quotations"_ustr));
+    xParagraph->setPropertyValue(u"ParaStyleName"_ustr, cpo::uno::Any(u"Quotations"_ustr));
 
     // When exporting to XHTML:
     ExportToReqif();
@@ -1537,7 +1538,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedPNGShapeDirectly)
         xFactory->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr), uno::UNO_QUERY);
     xShape->setSize(awt::Size(10000, 10000));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    xShapeProps->setPropertyValue(u"GraphicURL"_ustr, uno::Any(createFileURL(u"ole2.png")));
+    xShapeProps->setPropertyValue(u"GraphicURL"_ustr, cpo::uno::Any(createFileURL(u"ole2.png")));
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
@@ -1562,7 +1563,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedJPGShapeDirectly)
     xShape->setSize(awt::Size(10000, 10000));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     xShapeProps->setPropertyValue(u"GraphicURL"_ustr,
-                                  uno::Any(createFileURL(u"reqif-ole-img.jpg")));
+                                  cpo::uno::Any(createFileURL(u"reqif-ole-img.jpg")));
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
@@ -1601,7 +1602,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testOpticalSizing)
     xRun->setString(u"text"_ustr);
     uno::Reference<beans::XPropertySet> xCursor(xRun, uno::UNO_QUERY);
 
-    xCursor->setPropertyValue(u"CharOpticalSizing"_ustr, uno::Any(false));
+    xCursor->setPropertyValue(u"CharOpticalSizing"_ustr, cpo::uno::Any(false));
     saveAndReload(TestFilter::HTML_WRITER);
 
     uno::Reference<beans::XPropertySet> xRetCursor(getRun(getParagraph(1), 1), uno::UNO_QUERY);
@@ -1615,7 +1616,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testOpticalSizing)
     xRun2->setString(u"text"_ustr);
     uno::Reference<beans::XPropertySet> xCursor2(xRun2, uno::UNO_QUERY);
 
-    xCursor2->setPropertyValue(u"CharOpticalSizing"_ustr, uno::Any(true));
+    xCursor2->setPropertyValue(u"CharOpticalSizing"_ustr, cpo::uno::Any(true));
     saveAndReload(TestFilter::HTML_WRITER);
 
     uno::Reference<beans::XPropertySet> xRetCursor2(getRun(getParagraph(1), 1), uno::UNO_QUERY);

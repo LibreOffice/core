@@ -51,7 +51,7 @@ TitleBarUpdate::~TitleBarUpdate()
 {
 }
 
-void SAL_CALL TitleBarUpdate::initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
+void SAL_CALL TitleBarUpdate::initialize(const css::uno::Sequence< cpo::uno::Any >& lArguments)
 {
     // check arguments
     css::uno::Reference< css::frame::XFrame > xFrame;

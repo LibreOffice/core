@@ -111,7 +111,7 @@ using namespace ::formula;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLOasisImporter_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(
         new ScXMLImport(
@@ -123,7 +123,7 @@ Calc_XMLOasisImporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLOasisMetaImporter_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(
         new ScXMLImport(
@@ -135,7 +135,7 @@ Calc_XMLOasisMetaImporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLOasisStylesImporter_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(
         new ScXMLImport(
@@ -147,7 +147,7 @@ Calc_XMLOasisStylesImporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLOasisContentImporter_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new ScXMLImport(
         context,
@@ -159,7 +159,7 @@ Calc_XMLOasisContentImporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLOasisSettingsImporter_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(
         new ScXMLImport(
@@ -395,7 +395,7 @@ ScXMLImport::~ScXMLImport() noexcept
     moSolarMutexGuard.reset();
 }
 
-void ScXMLImport::initialize( const css::uno::Sequence<css::uno::Any>& aArguments )
+void ScXMLImport::initialize( const css::uno::Sequence<cpo::uno::Any>& aArguments )
 {
     SvXMLImport::initialize(aArguments);
 
@@ -939,14 +939,14 @@ void ScXMLImport::SetType(const uno::Reference <beans::XPropertySet>& rPropertie
                         {
                             if (!xNumberFormatTypes.is())
                                 xNumberFormatTypes.set(uno::Reference <util::XNumberFormatTypes>(xNumberFormats, uno::UNO_QUERY));
-                            rProperties->setPropertyValue( SC_UNONAME_NUMFMT, uno::Any(xNumberFormatTypes->getStandardFormat(nCellType, aLocale)) );
+                            rProperties->setPropertyValue( SC_UNONAME_NUMFMT, cpo::uno::Any(xNumberFormatTypes->getStandardFormat(nCellType, aLocale)) );
                         }
                     }
                     else if (!rCurrency.empty() && !sCurrentCurrency.isEmpty())
                     {
                         if (sCurrentCurrency != rCurrency)
                             if (!IsCurrencySymbol(rNumberFormat, sCurrentCurrency, rCurrency))
-                                rProperties->setPropertyValue( SC_UNONAME_NUMFMT, uno::Any(SetCurrencySymbol(rNumberFormat, rCurrency)));
+                                rProperties->setPropertyValue( SC_UNONAME_NUMFMT, cpo::uno::Any(SetCurrencySymbol(rNumberFormat, rCurrency)));
                     }
                 }
             }
@@ -960,7 +960,7 @@ void ScXMLImport::SetType(const uno::Reference <beans::XPropertySet>& rPropertie
     {
         if ((nCellType == util::NumberFormat::CURRENCY) && !rCurrency.empty() && !sCurrentCurrency.isEmpty() &&
             sCurrentCurrency != rCurrency && !IsCurrencySymbol(rNumberFormat, sCurrentCurrency, rCurrency))
-            rProperties->setPropertyValue( SC_UNONAME_NUMFMT, uno::Any(SetCurrencySymbol(rNumberFormat, rCurrency)));
+            rProperties->setPropertyValue( SC_UNONAME_NUMFMT, cpo::uno::Any(SetCurrencySymbol(rNumberFormat, rCurrency)));
     }
 }
 
@@ -985,7 +985,7 @@ void ScXMLImport::SetStyleToRanges()
                 sal_Int32 nNumberFormat(pStyle->GetNumberFormat());
                 SetType(mxSheetCellRanges, nNumberFormat, nPrevCellType, sPrevCurrency);
 
-                css::uno::Any aAny = mxSheetCellRanges->getPropertyValue(u"FormatID"_ustr);
+                cpo::uno::Any aAny = mxSheetCellRanges->getPropertyValue(u"FormatID"_ustr);
                 sal_uInt64 nKey = 0;
                 if ((aAny >>= nKey) && nKey)
                 {
@@ -1010,7 +1010,7 @@ void ScXMLImport::SetStyleToRanges()
             }
             else
             {
-                mxSheetCellRanges->setPropertyValue(SC_UNONAME_CELLSTYL, uno::Any(GetStyleDisplayName( XmlStyleFamily::TABLE_CELL, sPrevStyleName )));
+                mxSheetCellRanges->setPropertyValue(SC_UNONAME_CELLSTYL, cpo::uno::Any(GetStyleDisplayName( XmlStyleFamily::TABLE_CELL, sPrevStyleName )));
                 sal_Int32 nNumberFormat(GetStyleNumberFormats()->GetStyleNumberFormat(sPrevStyleName));
                 bool bInsert(nNumberFormat == -1);
                 SetType(mxSheetCellRanges, nNumberFormat, nPrevCellType, sPrevCurrency);
@@ -1209,8 +1209,8 @@ void ScXMLImport::SetLabelRanges()
     if (!xPropertySet.is())
         return;
 
-    uno::Any aColAny = xPropertySet->getPropertyValue(SC_UNO_COLLABELRNG);
-    uno::Any aRowAny = xPropertySet->getPropertyValue(SC_UNO_ROWLABELRNG);
+    cpo::uno::Any aColAny = xPropertySet->getPropertyValue(SC_UNO_COLLABELRNG);
+    cpo::uno::Any aRowAny = xPropertySet->getPropertyValue(SC_UNO_ROWLABELRNG);
 
     uno::Reference< sheet::XLabelRanges > xColRanges;
     uno::Reference< sheet::XLabelRanges > xRowRanges;
@@ -1694,9 +1694,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODS(SvStream &rStream)
     };
     uno::Sequence<beans::PropertyValue> aAdaptorArgs(comphelper::InitPropertySequence(
     {
-        { "UserData", uno::Any(aUserData) },
+        { "UserData", cpo::uno::Any(aUserData) },
     }));
-    css::uno::Sequence<uno::Any> aOuterArgs{ uno::Any(aAdaptorArgs) };
+    css::uno::Sequence<cpo::uno::Any> aOuterArgs{ cpo::uno::Any(aAdaptorArgs) };
 
     uno::Reference<lang::XInitialization> xInit(xInterface, uno::UNO_QUERY_THROW);
     xInit->initialize(aOuterArgs);
@@ -1704,8 +1704,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODS(SvStream &rStream)
     uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
-        { "InputStream", uno::Any(xStream) },
-        { "URL", uno::Any(u"private:stream"_ustr) },
+        { "InputStream", cpo::uno::Any(xStream) },
+        { "URL", cpo::uno::Any(u"private:stream"_ustr) },
     }));
     xImporter->setTargetDocument(xModel);
 
@@ -1748,9 +1748,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestFODSExportXLS(SvStream &rStream)
     };
     uno::Sequence<beans::PropertyValue> aAdaptorArgs(comphelper::InitPropertySequence(
     {
-        { "UserData", uno::Any(aUserData) },
+        { "UserData", cpo::uno::Any(aUserData) },
     }));
-    css::uno::Sequence<uno::Any> aOuterArgs{ uno::Any(aAdaptorArgs) };
+    css::uno::Sequence<cpo::uno::Any> aOuterArgs{ cpo::uno::Any(aAdaptorArgs) };
 
     uno::Reference<lang::XInitialization> xInit(xInterface, uno::UNO_QUERY_THROW);
     xInit->initialize(aOuterArgs);
@@ -1758,8 +1758,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestFODSExportXLS(SvStream &rStream)
     uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
-        { "InputStream", uno::Any(xStream) },
-        { "URL", uno::Any(u"private:stream"_ustr) },
+        { "InputStream", cpo::uno::Any(xStream) },
+        { "URL", cpo::uno::Any(u"private:stream"_ustr) },
     }));
     xImporter->setTargetDocument(xModel);
 
@@ -1786,9 +1786,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestFODSExportXLS(SvStream &rStream)
         uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
         }));
         uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
-            { "FilterName", uno::Any(u"Excel 2010–365 Spreadsheet"_ustr) },
-            { "OutputStream", uno::Any(xOutputStream) },
-            { "FilterData", uno::Any(aFilterData) }
+            { "FilterName", cpo::uno::Any(u"Excel 2010–365 Spreadsheet"_ustr) },
+            { "OutputStream", cpo::uno::Any(xOutputStream) },
+            { "FilterData", cpo::uno::Any(aFilterData) }
         }));
         xXLSFilter->filter(aDescriptor);
     }
@@ -1815,8 +1815,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportXLSX(SvStream &rStream)
     uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
-        { "InputStream", uno::Any(xStream) },
-        { "InputMode", uno::Any(true) },
+        { "InputStream", cpo::uno::Any(xStream) },
+        { "InputMode", cpo::uno::Any(true) },
     }));
     xImporter->setTargetDocument(xModel);
 

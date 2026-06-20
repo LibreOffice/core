@@ -446,7 +446,7 @@ public:
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
     virtual ::svt::CellControllerRef CreateController() const override;
 
-    void SetList(const css::uno::Any& rItems);
+    void SetList(const cpo::uno::Any& rItems);
 
 private:
     // DbCellControl
@@ -473,7 +473,7 @@ public:
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
     virtual ::svt::CellControllerRef CreateController() const override;
 
-    void SetList(const css::uno::Any& rItems);
+    void SetList(const cpo::uno::Any& rItems);
 
 private:
     // DbCellControl
@@ -651,7 +651,7 @@ private:
     virtual bool        commitControl( ) override;
     virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
 
-    void SetList(const css::uno::Any& rItems, bool bComboBox);
+    void SetList(const cpo::uno::Any& rItems, bool bComboBox);
     void CreateControl(BrowserDataWin* pParent, const css::uno::Reference< css::beans::XPropertySet >& xModel);
     DECL_LINK(OnToggle, weld::CheckButton&, void);
 
@@ -695,7 +695,7 @@ public:
     void init();
 
     DECLARE_UNO3_AGG_DEFAULTS(FmXGridCell, OComponentHelper)
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
 
     void SetTextLineColor();
     void SetTextLineColor(const Color& _rColor);
@@ -825,7 +825,7 @@ public:
     FmXEditCell( DbGridColumn* pColumn, std::unique_ptr<DbCellControl> pControl );
 
     DECLARE_UNO3_AGG_DEFAULTS(FmXEditCell, FmXTextCell)
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
 
 // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
@@ -889,7 +889,7 @@ public:
 
 // UNO
     DECLARE_UNO3_AGG_DEFAULTS(FmXCheckBoxCell, FmXDataCell)
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
@@ -920,7 +920,7 @@ public:
     FmXListBoxCell( DbGridColumn* pColumn, std::unique_ptr<DbCellControl> pControl );
 
     DECLARE_UNO3_AGG_DEFAULTS(FmXListBoxCell, FmXTextCell)
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
@@ -985,7 +985,7 @@ public:
     FmXComboBoxCell( DbGridColumn* pColumn, std::unique_ptr<DbCellControl> pControl );
 
     DECLARE_UNO3_AGG_DEFAULTS(FmXListBoxCell, FmXTextCell)
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
@@ -1017,7 +1017,7 @@ public:
 
 
     DECLARE_UNO3_AGG_DEFAULTS(FmXFilterCell, FmXGridCell)
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 

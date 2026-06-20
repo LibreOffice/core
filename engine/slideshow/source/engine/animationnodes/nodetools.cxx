@@ -69,7 +69,7 @@ namespace slideshow::internal
             return pRes;
         }
 
-        bool isIndefiniteTiming( const uno::Any& rAny )
+        bool isIndefiniteTiming( const cpo::uno::Any& rAny )
         {
             if( !rAny.hasValue() )
                 return true;

@@ -35,6 +35,7 @@
 using namespace ::com::sun::star;
 using namespace css::awt;
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::beans;
 using namespace css::lang;
 using namespace css::frame;
@@ -60,7 +61,7 @@ ButtonToolbarController::~ButtonToolbarController()
 }
 
         // XInterface
-uno::Any SAL_CALL ButtonToolbarController::queryInterface( const uno::Type& rType )
+cpo::uno::Any SAL_CALL ButtonToolbarController::queryInterface( const uno::Type& rType )
 {
     Any a = ::cppu::queryInterface(
                 rType ,
@@ -88,7 +89,7 @@ void SAL_CALL ButtonToolbarController::release() noexcept
 
 // XInitialization
 void SAL_CALL ButtonToolbarController::initialize(
-    const css::uno::Sequence< css::uno::Any >& aArguments )
+    const css::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -101,7 +102,7 @@ void SAL_CALL ButtonToolbarController::initialize(
     m_bInitialized = true;
 
     PropertyValue aPropValue;
-    for ( const css::uno::Any& rArg : aArguments )
+    for ( const cpo::uno::Any& rArg : aArguments )
     {
         if ( rArg >>= aPropValue )
         {

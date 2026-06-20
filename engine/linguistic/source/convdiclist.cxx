@@ -49,6 +49,7 @@ using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::container;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
@@ -87,15 +88,15 @@ public:
     virtual bool SAL_CALL hasElements(  ) override;
 
     // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement ) override;
+    virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
 
     // XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement ) override;
+    virtual void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
     virtual void SAL_CALL removeByName( const OUString& Name ) override;
 
     // looks for conversion dictionaries with the specified extension
@@ -172,7 +173,7 @@ bool SAL_CALL ConvDicNameContainer::hasElements(  )
     return !aConvDics.empty();
 }
 
-uno::Any SAL_CALL ConvDicNameContainer::getByName( const OUString& rName )
+cpo::uno::Any SAL_CALL ConvDicNameContainer::getByName( const OUString& rName )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     uno::Reference< XConversionDictionary > xRes( GetByName( rName ) );
@@ -202,7 +203,7 @@ bool SAL_CALL ConvDicNameContainer::hasByName( const OUString& rName )
 
 void SAL_CALL ConvDicNameContainer::replaceByName(
         const OUString& rName,
-        const uno::Any& rElement )
+        const cpo::uno::Any& rElement )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -530,7 +531,7 @@ uno::Sequence< OUString > SAL_CALL ConvDicList::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 linguistic_ConvDicList_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(StaticConvDicList().get());
 }

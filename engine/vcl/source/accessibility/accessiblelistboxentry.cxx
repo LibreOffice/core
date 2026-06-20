@@ -39,6 +39,7 @@
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
 using namespace ::comphelper;
@@ -174,7 +175,7 @@ void SAL_CALL AccessibleListBoxEntry::disposing()
     m_pTreeListBox = nullptr;
 }
 
-uno::Any SAL_CALL AccessibleListBoxEntry::queryInterface(const uno::Type& rType)
+cpo::uno::Any SAL_CALL AccessibleListBoxEntry::queryInterface(const uno::Type& rType)
 {
     if (rType == cppu::UnoType<XAccessibleText>::get())
     {
@@ -183,7 +184,7 @@ uno::Any SAL_CALL AccessibleListBoxEntry::queryInterface(const uno::Type& rType)
         // priority than accessible name and just say something like "blank" otherwise
         SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath(m_aEntryPath);
         if (pEntry && !pEntry->GetFirstItem(SvLBoxItemType::String))
-            return uno::Any();
+            return cpo::uno::Any();
     }
 
     return AccessibleListBoxEntry_BASE::queryInterface(rType);

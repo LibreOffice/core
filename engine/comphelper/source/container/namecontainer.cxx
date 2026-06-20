@@ -27,7 +27,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 
-typedef std::map<OUString, css::uno::Any> SvGenericNameContainerMapImpl;
+typedef std::map<OUString, cpo::uno::Any> SvGenericNameContainerMapImpl;
 
 namespace comphelper
 {
@@ -40,14 +40,14 @@ namespace comphelper
         explicit NameContainer( const css::uno::Type& aType );
 
         // XNameContainer
-        virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement ) override;
+        virtual void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
         virtual void SAL_CALL removeByName( const OUString& Name ) override;
 
         // XNameReplace
-        virtual void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement ) override;
+        virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
 
         // XNameAccess
-        virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+        virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
         virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
@@ -66,6 +66,7 @@ namespace comphelper
 
 using namespace ::comphelper;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 

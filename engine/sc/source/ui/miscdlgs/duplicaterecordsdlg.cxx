@@ -31,7 +31,7 @@
 using namespace css;
 
 ScDuplicateRecordsDlg::ScDuplicateRecordsDlg(weld::Window* pParent,
-                                             css::uno::Sequence<uno::Sequence<uno::Any>>& rData,
+                                             css::uno::Sequence<uno::Sequence<cpo::uno::Any>>& rData,
                                              ScViewData& rViewData, ScRange& rRange)
     : weld::GenericDialogController(pParent, u"modules/scalc/ui/duplicaterecordsdlg.ui"_ustr,
                                     u"DuplicateRecordsDialog"_ustr)

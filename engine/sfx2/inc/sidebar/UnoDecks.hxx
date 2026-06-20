@@ -28,7 +28,7 @@ public:
 
 // XNameAccess
 
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
 
@@ -38,7 +38,7 @@ public:
 
     virtual sal_Int32 SAL_CALL getCount() override;
 
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
 // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;

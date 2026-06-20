@@ -56,7 +56,7 @@
 #include <cxxabi.h>
 #endif
 
-static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any & caught)
+static void exceptionToStringImpl(OStringBuffer& sMessage, const cpo::uno::Any & caught)
 {
     auto toOString = [](OUString const & s) {
         return OUStringToOString( s, osl_getThreadTextEncoding() );
@@ -132,7 +132,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
         if ( caught >>= specialized )
         {
             sMessage.append(" UnsatisfiedDependencies: ");
-            sMessage.append(toOString(comphelper::anyToString(css::uno::Any(specialized.UnsatisfiedDependencies))));
+            sMessage.append(toOString(comphelper::anyToString(cpo::uno::Any(specialized.UnsatisfiedDependencies))));
         }
     }
     {
@@ -206,7 +206,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
         if ( caught >>= specialized )
         {
             sMessage.append(" DestinationTypeClass: ");
-            sMessage.append(toOString(comphelper::anyToString(css::uno::Any(specialized.DestinationTypeClass))));
+            sMessage.append(toOString(comphelper::anyToString(cpo::uno::Any(specialized.DestinationTypeClass))));
             sMessage.append(" Reason: ");
             sMessage.append(specialized.Reason);
             sMessage.append(" ArgumentIndex: ");
@@ -286,7 +286,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
         if ( caught >>= specialized )
         {
             sMessage.append(" eError: ");
-            sMessage.append(toOString(comphelper::anyToString( css::uno::Any(specialized.eError) )));
+            sMessage.append(toOString(comphelper::anyToString( cpo::uno::Any(specialized.eError) )));
         }
     }
     {
@@ -294,7 +294,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
         if ( caught >>= specialized )
         {
             sMessage.append(" Properties: ");
-            sMessage.append(toOString(comphelper::anyToString( css::uno::Any(specialized.Properties) )));
+            sMessage.append(toOString(comphelper::anyToString( cpo::uno::Any(specialized.Properties) )));
         }
     }
     {
@@ -318,7 +318,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
         if ( caught >>= specialized )
         {
             sMessage.append(" Code: ");
-            sMessage.append(toOString(comphelper::anyToString( css::uno::Any(specialized.Code) )));
+            sMessage.append(toOString(comphelper::anyToString( cpo::uno::Any(specialized.Code) )));
         }
     }
     {
@@ -353,14 +353,14 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
     }
 }
 
-OString exceptionToString(const css::uno::Any & caught)
+OString exceptionToString(const cpo::uno::Any & caught)
 {
     OStringBuffer sMessage(512);
     exceptionToStringImpl(sMessage, caught);
     return sMessage.makeStringAndClear();
 }
 
-void DbgUnhandledException(const css::uno::Any & caught, const char* currentFunction, const char* fileAndLineNo,
+void DbgUnhandledException(const cpo::uno::Any & caught, const char* currentFunction, const char* fileAndLineNo,
         const char* area, const char* explanatory)
 {
         OStringBuffer sMessage( 512 );

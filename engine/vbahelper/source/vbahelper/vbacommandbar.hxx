@@ -47,9 +47,9 @@ public:
 
     // Methods
     virtual void SAL_CALL Delete(  ) override;
-    virtual css::uno::Any SAL_CALL Controls( const css::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Controls( const cpo::uno::Any& aIndex ) override;
     virtual sal_Int32 SAL_CALL Type(  ) override;
-    virtual css::uno::Any SAL_CALL FindControl( const css::uno::Any& aType, const css::uno::Any& aId, const css::uno::Any& aTag, const css::uno::Any& aVisible, const css::uno::Any& aRecursive ) override;
+    virtual cpo::uno::Any SAL_CALL FindControl( const cpo::uno::Any& aType, const cpo::uno::Any& aId, const cpo::uno::Any& aTag, const cpo::uno::Any& aVisible, const cpo::uno::Any& aRecursive ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;
@@ -76,9 +76,9 @@ public:
 
     // Methods
     virtual void SAL_CALL Delete(  ) override;
-    virtual css::uno::Any SAL_CALL Controls( const css::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Controls( const cpo::uno::Any& aIndex ) override;
     virtual sal_Int32 SAL_CALL Type(  ) override;
-    virtual css::uno::Any SAL_CALL FindControl( const css::uno::Any& aType, const css::uno::Any& aId, const css::uno::Any& aTag, const css::uno::Any& aVisible, const css::uno::Any& aRecursive ) override;
+    virtual cpo::uno::Any SAL_CALL FindControl( const cpo::uno::Any& aType, const cpo::uno::Any& aId, const cpo::uno::Any& aTag, const cpo::uno::Any& aVisible, const cpo::uno::Any& aRecursive ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

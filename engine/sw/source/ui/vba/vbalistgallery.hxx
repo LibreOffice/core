@@ -37,7 +37,7 @@ public:
     virtual ~SwVbaListGallery() override;
 
     // Methods
-    virtual css::uno::Any SAL_CALL ListTemplates( const css::uno::Any& index ) override;
+    virtual cpo::uno::Any SAL_CALL ListTemplates( const cpo::uno::Any& index ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

@@ -434,7 +434,8 @@ CPPUNIT_TEST_FIXTURE(Test, testNestedHyperlink)
         xCursor->gotoStart(/*bExpand=*/false);
         xCursor->gotoEnd(/*bExpand=*/true);
         uno::Reference<beans::XPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
-        xCursorProps->setPropertyValue(u"HyperLinkURL"_ustr, uno::Any(u"http://body.com/"_ustr));
+        xCursorProps->setPropertyValue(u"HyperLinkURL"_ustr,
+                                       cpo::uno::Any(u"http://body.com/"_ustr));
         uno::Reference<text::XText> xFootnoteText(xFootnote, uno::UNO_QUERY);
         xCursor = xFootnoteText->createTextCursor();
         xFootnoteText->insertString(xCursor, u"x"_ustr, /*bAbsorb=*/false);
@@ -442,7 +443,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNestedHyperlink)
         xCursor->gotoEnd(/*bExpand=*/true);
         xCursorProps.set(xCursor, uno::UNO_QUERY);
         xCursorProps->setPropertyValue(u"HyperLinkURL"_ustr,
-                                       uno::Any(u"http://footnote.com/"_ustr));
+                                       cpo::uno::Any(u"http://footnote.com/"_ustr));
     }
 
     // When exporting to RTF:
@@ -702,13 +703,13 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
         pDocShell->GetDoc()->getIDocumentContentOperations().InsertPoolItem(aPaM, aFormatPageDesc);
         uno::Reference<beans::XPropertySet> xPageStyle(
             getStyles(u"PageStyles"_ustr)->getByName(u"Left Page"_ustr), uno::UNO_QUERY);
-        xPageStyle->setPropertyValue(u"TopMargin"_ustr, uno::Any(static_cast<sal_Int32>(501)));
+        xPageStyle->setPropertyValue(u"TopMargin"_ustr, cpo::uno::Any(static_cast<sal_Int32>(501)));
         table::BorderLine2 aBorder;
         aBorder.LineWidth = 159;
         aBorder.OuterLineWidth = 159;
-        xPageStyle->setPropertyValue(u"TopBorder"_ustr, uno::Any(aBorder));
+        xPageStyle->setPropertyValue(u"TopBorder"_ustr, cpo::uno::Any(aBorder));
         sal_Int32 nTopBorderDistance = -646;
-        xPageStyle->setPropertyValue(u"TopBorderDistance"_ustr, uno::Any(nTopBorderDistance));
+        xPageStyle->setPropertyValue(u"TopBorderDistance"_ustr, cpo::uno::Any(nTopBorderDistance));
     }
 
     // When saving that document to RTF:
@@ -837,11 +838,11 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableExport)
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFrame(
         xTextFramesSupplier->getTextFrames()->getByName(u"Frame1"_ustr), uno::UNO_QUERY);
-    xFrame->setPropertyValue(u"IsSplitAllowed"_ustr, uno::Any(true));
+    xFrame->setPropertyValue(u"IsSplitAllowed"_ustr, cpo::uno::Any(true));
     // Originally 10, 30 & 40 twips.
-    xFrame->setPropertyValue(u"VertOrientPosition"_ustr, uno::Any(static_cast<sal_Int32>(18)));
-    xFrame->setPropertyValue(u"LeftMargin"_ustr, uno::Any(static_cast<sal_Int32>(53)));
-    xFrame->setPropertyValue(u"RightMargin"_ustr, uno::Any(static_cast<sal_Int32>(71)));
+    xFrame->setPropertyValue(u"VertOrientPosition"_ustr, cpo::uno::Any(static_cast<sal_Int32>(18)));
+    xFrame->setPropertyValue(u"LeftMargin"_ustr, cpo::uno::Any(static_cast<sal_Int32>(53)));
+    xFrame->setPropertyValue(u"RightMargin"_ustr, cpo::uno::Any(static_cast<sal_Int32>(71)));
 
     // When saving to RTF:
     saveAndReload(TestFilter::RTF);

@@ -191,7 +191,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScFormulaParserObj::getProperty
 }
 
 void SAL_CALL ScFormulaParserObj::setPropertyValue(
-                        const OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
     if ( aPropertyName == SC_UNO_COMPILEFAP )
@@ -255,10 +255,10 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
         throw beans::UnknownPropertyException(aPropertyName);
 }
 
-uno::Any SAL_CALL ScFormulaParserObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ScFormulaParserObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if ( aPropertyName == SC_UNO_COMPILEFAP )
     {
         aRet <<= mbCompileFAP;

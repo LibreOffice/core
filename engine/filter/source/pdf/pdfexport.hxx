@@ -77,7 +77,7 @@ public:
 
     bool                ExportSelection( vcl::pdf::PDFWriter& rPDFWriter,
                                     css::uno::Reference< css::view::XRenderable > const & rRenderable,
-                                    const css::uno::Any& rSelection,
+                                    const cpo::uno::Any& rSelection,
                                     const StringRangeEnumerator& rRangeEnum,
                                     css::uno::Sequence< css::beans::PropertyValue >& rRenderOptions,
                                     sal_Int32 nPageCount );

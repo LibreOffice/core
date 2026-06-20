@@ -101,7 +101,7 @@ class XMLBasedAcceleratorConfiguration : public    ::cppu::WeakImplHelper<
 
         virtual css::uno::Sequence< css::awt::KeyEvent > SAL_CALL getKeyEventsByCommand(const OUString& sCommand) override;
 
-        virtual css::uno::Sequence< css::uno::Any > SAL_CALL getPreferredKeyEventsForCommandList(const css::uno::Sequence< OUString >& lCommandList) override;
+        virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL getPreferredKeyEventsForCommandList(const css::uno::Sequence< OUString >& lCommandList) override;
 
         virtual void SAL_CALL removeCommandFromAllKeyEvents(const OUString& sCommand) override;
 
@@ -239,7 +239,7 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper<
 
         virtual css::uno::Sequence< css::awt::KeyEvent > SAL_CALL getKeyEventsByCommand(const OUString& sCommand) override;
 
-        virtual css::uno::Sequence< css::uno::Any > SAL_CALL getPreferredKeyEventsForCommandList(const css::uno::Sequence< OUString >& lCommandList) override;
+        virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL getPreferredKeyEventsForCommandList(const css::uno::Sequence< OUString >& lCommandList) override;
 
         virtual void SAL_CALL removeCommandFromAllKeyEvents(const OUString& sCommand) override;
 

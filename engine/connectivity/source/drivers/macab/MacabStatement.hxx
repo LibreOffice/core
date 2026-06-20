@@ -80,15 +80,15 @@ namespace connectivity::macab
         // OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
         virtual bool SAL_CALL convertFastPropertyValue(
-                css::uno::Any & rConvertedValue,
-                css::uno::Any & rOldValue,
+                cpo::uno::Any & rConvertedValue,
+                cpo::uno::Any & rOldValue,
                 sal_Int32 nHandle,
-                const css::uno::Any& rValue) override;
+                const cpo::uno::Any& rValue) override;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                 sal_Int32 nHandle,
-                const css::uno::Any& rValue) override;
+                const cpo::uno::Any& rValue) override;
         virtual void SAL_CALL getFastPropertyValue(
-                css::uno::Any& rValue,
+                cpo::uno::Any& rValue,
                 sal_Int32 nHandle) const override;
 
         /// @throws css::sdbc::SQLException
@@ -109,7 +109,7 @@ namespace connectivity::macab
         // XInterface
         virtual void SAL_CALL release() noexcept override;
         virtual void SAL_CALL acquire() noexcept override;
-        virtual css::uno::Any SAL_CALL queryInterface(
+        virtual cpo::uno::Any SAL_CALL queryInterface(
                 const css::uno::Type & rType
                 ) override;
 
@@ -132,7 +132,7 @@ namespace connectivity::macab
                 ) override;
 
         // XWarningsSupplier
-        virtual css::uno::Any SAL_CALL getWarnings(
+        virtual cpo::uno::Any SAL_CALL getWarnings(
                 ) override;
         virtual void SAL_CALL clearWarnings(
                 ) override;

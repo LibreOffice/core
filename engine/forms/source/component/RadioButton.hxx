@@ -44,7 +44,7 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // OPropertySetHelper
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
 
     // XPersistObject
     virtual OUString SAL_CALL    getServiceName() override;
@@ -63,11 +63,11 @@ public:
 
 private:
     // OBoundControlModel overridables
-    virtual css::uno::Any   translateDbColumnToControlValue( ) override;
+    virtual cpo::uno::Any   translateDbColumnToControlValue( ) override;
     virtual bool            commitControlValueToDbColumn( bool _bPostReset ) override;
-    virtual css::uno::Any   translateExternalValueToControlValue( const css::uno::Any& _rExternalValue ) const override;
+    virtual cpo::uno::Any   translateExternalValueToControlValue( const cpo::uno::Any& _rExternalValue ) const override;
 
-    void SetSiblingPropsTo(const OUString& rPropName, const css::uno::Any& rValue);
+    void SetSiblingPropsTo(const OUString& rPropName, const cpo::uno::Any& rValue);
 
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
 

@@ -45,7 +45,7 @@ class IDocumentRedlineAccess;
 class SwGetRefField;
 class SwXFieldMaster;
 enum class ReferencesSubtype : sal_uInt16;
-namespace com::sun::star::uno { class Any; }
+namespace cpo::uno { class Any; }
 
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
@@ -262,8 +262,8 @@ public:
     virtual UIName        GetName() const;
     virtual void SetName(const UIName& newName);
     virtual std::unique_ptr<SwFieldType> Copy() const = 0;
-    virtual void QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const;
-    virtual void PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich );
+    virtual void QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual void PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich );
 
     SwFieldIds              Which() const { return m_nWhich; }
 
@@ -360,8 +360,8 @@ public:
     virtual void        SetPar1(const OUString& rStr);
     virtual void        SetPar2(const OUString& rStr);
 
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhichId ) const;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhichId );
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhichId ) const;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhichId );
 
     /// Does the field possess an action on its ClickHandler? (e.g. INetFields, ...).
     bool            HasClickHdl() const;

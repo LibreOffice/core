@@ -42,6 +42,7 @@ using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::datatransfer::dnd;
 using namespace com::sun::star::datatransfer::dnd::DNDConstants;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::awt::MouseButton;
 using namespace com::sun::star::awt;
 using namespace com::sun::star::lang;

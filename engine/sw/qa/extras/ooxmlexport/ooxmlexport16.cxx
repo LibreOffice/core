@@ -975,7 +975,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentDoneModel)
 
         // First comment: initially resolved, toggled to unresolved on import, unresolved on roundtrip
         CPPUNIT_ASSERT(xFields->hasMoreElements());
-        css::uno::Any aComment = xFields->nextElement();
+        cpo::uno::Any aComment = xFields->nextElement();
         css::uno::Reference<css::beans::XPropertySet> xComment(aComment, css::uno::UNO_QUERY_THROW);
 
         if (!bIsExport)
@@ -983,7 +983,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentDoneModel)
             // Check that it's resolved when initially read
             CPPUNIT_ASSERT_EQUAL(true, xComment->getPropertyValue(u"Resolved"_ustr).get<bool>());
             // Set to unresolved
-            xComment->setPropertyValue(u"Resolved"_ustr, css::uno::Any(false));
+            xComment->setPropertyValue(u"Resolved"_ustr, cpo::uno::Any(false));
         }
         else
         {
@@ -1001,7 +1001,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentDoneModel)
             // Check that it's unresolved when initially read
             CPPUNIT_ASSERT_EQUAL(false, xComment->getPropertyValue(u"Resolved"_ustr).get<bool>());
             // Set to resolved
-            xComment->setPropertyValue(u"Resolved"_ustr, css::uno::Any(true));
+            xComment->setPropertyValue(u"Resolved"_ustr, cpo::uno::Any(true));
         }
         else
         {

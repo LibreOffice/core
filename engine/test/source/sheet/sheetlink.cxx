@@ -10,13 +10,14 @@
 #include <test/sheet/sheetlink.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <cppunit/TestAssert.h>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace apitest
 {
@@ -24,7 +25,7 @@ void SheetLink::testSheetLinkProperties()
 {
     uno::Reference<beans::XPropertySet> xSheetLink(init(), UNO_QUERY_THROW);
     OUString propName;
-    uno::Any aNewValue;
+    cpo::uno::Any aNewValue;
 
     propName = u"Url"_ustr;
     OUString aUrlGet;

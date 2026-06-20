@@ -58,7 +58,7 @@ StatusIndicatorFactory::~StatusIndicatorFactory()
     impl_stopWakeUpThread();
 }
 
-void SAL_CALL StatusIndicatorFactory::initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
+void SAL_CALL StatusIndicatorFactory::initialize(const css::uno::Sequence< cpo::uno::Any >& lArguments)
 {
     if (lArguments.hasElements()) {
         std::scoped_lock g(m_mutex);
@@ -584,7 +584,7 @@ void StatusIndicatorFactory::impl_stopWakeUpThread()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_StatusIndicatorFactory_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new framework::StatusIndicatorFactory(context));
 }

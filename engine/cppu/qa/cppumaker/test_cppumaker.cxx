@@ -355,7 +355,7 @@
 #include <test/codemaker/cppumaker/ProblematicConstantNames.hpp>
 
 #include <memory>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <cppunit/TestFixture.h>
@@ -475,11 +475,11 @@ void Test::testBigStruct() {
 void Test::testPolyStruct() {
     CPPUNIT_ASSERT_EQUAL(
         u"test.codemaker.cppumaker.Struct<char,short>"_ustr,
-        (css::uno::Any(
+        (cpo::uno::Any(
             test::codemaker::cppumaker::Struct< sal_Unicode, sal_Int16 >()).
          getValueTypeName()));
 
-    css::uno::Sequence< css::uno::Sequence< css::uno::Any > >
+    css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > >
         aEmptySequence;
 
     CPPUNIT_ASSERT_EQUAL(
@@ -489,12 +489,12 @@ void Test::testPolyStruct() {
 }
 
 void Test::testExceptions() {
-    css::uno::Sequence< css::uno::Sequence< css::uno::Any > >
+    css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > >
         aEmptySequence;
 
     test::codemaker::cppumaker::TestException1 e11(
         u"abc"_ustr, nullptr, 1,
-        css::uno::Any(123.0),
+        cpo::uno::Any(123.0),
         test::codemaker::cppumaker::HelperEnum_ONE,
         test::codemaker::cppumaker::Struct<sal_Int32, sal_Int32>(5, aEmptySequence), 2);
     test::codemaker::cppumaker::TestException1 e12(e11);
@@ -504,7 +504,7 @@ void Test::testExceptions() {
     CPPUNIT_ASSERT_EQUAL(e11, e13);
     test::codemaker::cppumaker::TestException2 e21(
         u"abc"_ustr, nullptr, 1,
-        css::uno::Any(123.0),
+        cpo::uno::Any(123.0),
         test::codemaker::cppumaker::HelperEnum_ONE,
         test::codemaker::cppumaker::Struct<sal_Int32, sal_Int32>(5, aEmptySequence), 2);
     test::codemaker::cppumaker::TestException2 e22(e21);

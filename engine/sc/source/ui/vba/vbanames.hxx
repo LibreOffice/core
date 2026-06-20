@@ -46,19 +46,19 @@ public:
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // Methods
-    virtual css::uno::Any SAL_CALL Add( const css::uno::Any& aName ,
-                    const css::uno::Any& aRefersTo,
-                    const css::uno::Any& aVisible,
-                    const css::uno::Any& aMacroType,
-                    const css::uno::Any& aShoutcutKey,
-                    const css::uno::Any& aCategory,
-                    const css::uno::Any& aNameLocal,
-                    const css::uno::Any& aRefersToLocal,
-                    const css::uno::Any& aCategoryLocal,
-                    const css::uno::Any& aRefersToR1C1,
-                    const css::uno::Any& aRefersToR1C1Local ) override;
+    virtual cpo::uno::Any SAL_CALL Add( const cpo::uno::Any& aName ,
+                    const cpo::uno::Any& aRefersTo,
+                    const cpo::uno::Any& aVisible,
+                    const cpo::uno::Any& aMacroType,
+                    const cpo::uno::Any& aShoutcutKey,
+                    const cpo::uno::Any& aCategory,
+                    const cpo::uno::Any& aNameLocal,
+                    const cpo::uno::Any& aRefersToLocal,
+                    const cpo::uno::Any& aCategoryLocal,
+                    const cpo::uno::Any& aRefersToR1C1,
+                    const cpo::uno::Any& aRefersToR1C1Local ) override;
 
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 
     // ScVbaNames_BASE
     virtual OUString getServiceImplName() override;

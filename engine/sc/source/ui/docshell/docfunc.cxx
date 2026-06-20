@@ -868,7 +868,7 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const OUString& sSource )
             aLibName = rDocSh.GetBasicManager()->GetName();
         }
 #endif
-        uno::Any aLibAny = xLibContainer->getByName( aLibName );
+        cpo::uno::Any aLibAny = xLibContainer->getByName( aLibName );
         aLibAny >>= xLib;
     }
     if( !xLib.is() )
@@ -880,7 +880,7 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const OUString& sSource )
     while( xLib->hasByName( genModuleName ) )
         genModuleName = "Sheet" + OUString::number( ++nNum );
 
-    uno::Any aSourceAny;
+    cpo::uno::Any aSourceAny;
     OUString sTmpSource = sSource;
     if ( sTmpSource.isEmpty() )
         sTmpSource = u"Rem Attribute VBA_ModuleType=VBADocumentModule\nOption VBASupport 1\n"_ustr;
@@ -910,7 +910,7 @@ void VBA_DeleteModule( ScDocShell& rDocSh, const OUString& sModuleName )
             aLibName = rDocSh.GetBasicManager()->GetName();
         }
 #endif
-        uno::Any aLibAny = xLibContainer->getByName( aLibName );
+        cpo::uno::Any aLibAny = xLibContainer->getByName( aLibName );
         aLibAny >>= xLib;
     }
     if( xLib.is() )

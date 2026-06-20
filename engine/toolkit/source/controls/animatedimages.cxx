@@ -43,6 +43,7 @@ using namespace css::awt;
 using namespace css::container;
 using namespace css::lang;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace {
 
@@ -476,7 +477,7 @@ namespace toolkit {
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 org_openoffice_comp_toolkit_AnimatedImagesControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new AnimatedImagesControl());
 }
@@ -484,7 +485,7 @@ org_openoffice_comp_toolkit_AnimatedImagesControl_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 org_openoffice_comp_toolkit_AnimatedImagesControlModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new toolkit::AnimatedImagesControlModel(context));
 }

@@ -83,6 +83,7 @@
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::task;
@@ -1399,8 +1400,8 @@ void SvtFileDialog::displayIOException( const OUString& _rURL, IOErrorCode _eCod
         // build an own exception which tells "access denied"
         InteractiveAugmentedIOException aException;
         aException.Arguments =
-        { css::uno::Any(sDisplayPath),
-          css::uno::Any(PropertyValue(
+        { cpo::uno::Any(sDisplayPath),
+          cpo::uno::Any(PropertyValue(
             u"Uri"_ustr,
             -1, aException.Arguments[ 0 ], PropertyState_DIRECT_VALUE
           )) };

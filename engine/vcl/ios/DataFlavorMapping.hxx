@@ -47,7 +47,7 @@ public:
 
     /* Get the clipboard data in OOo format.
    */
-    virtual css::uno::Any getOOoData() = 0;
+    virtual cpo::uno::Any getOOoData() = 0;
 };
 
 typedef std::unique_ptr<DataProvider> DataProviderPtr_t;

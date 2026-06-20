@@ -52,7 +52,7 @@ using namespace ::css::chart2;
 
 using ::css::uno::Reference;
 using ::css::uno::Sequence;
-using ::css::uno::Any;
+using ::cpo::uno::Any;
 
 SeriesPlotterContainer::SeriesPlotterContainer(
     std::vector<std::unique_ptr<VCoordinateSystem>>& rVCooSysList)
@@ -221,13 +221,13 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
                 try
                 {
                     sal_Int32 n3DRelativeHeightOldValue(100);
-                    uno::Any aAny = xChartType->getFastPropertyValue(
+                    cpo::uno::Any aAny = xChartType->getFastPropertyValue(
                         PROP_PIECHARTTYPE_3DRELATIVEHEIGHT); // "3DRelativeHeight"
                     aAny >>= n3DRelativeHeightOldValue;
                     if (n3DRelativeHeightOldValue != n3DRelativeHeight)
                         xChartType->setFastPropertyValue(
                             PROP_PIECHARTTYPE_3DRELATIVEHEIGHT, // "3DRelativeHeight"
-                            uno::Any(n3DRelativeHeight));
+                            cpo::uno::Any(n3DRelativeHeight));
                 }
                 catch (const uno::Exception&)
                 {
@@ -237,12 +237,13 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
             if (ePieChartSubType != PieChartSubType_NONE)
             {
                 xChartType->setFastPropertyValue(PROP_PIECHARTTYPE_SUBTYPE,
-                                                 uno::Any(ePieChartSubType));
+                                                 cpo::uno::Any(ePieChartSubType));
                 // Reset the diagram-level property so it's not persistent.
-                xDiagram->setPropertyValue(u"SubPieType"_ustr, uno::Any(PieChartSubType_NONE));
+                xDiagram->setPropertyValue(u"SubPieType"_ustr, cpo::uno::Any(PieChartSubType_NONE));
 
-                xChartType->setFastPropertyValue(PROP_PIECHARTTYPE_SPLIT_POS, uno::Any(nSplitPos));
-                //xDiagram->setPropertyValue(u"SplitPos"_ustr, uno::Any(nSplitPos));
+                xChartType->setFastPropertyValue(PROP_PIECHARTTYPE_SPLIT_POS,
+                                                 cpo::uno::Any(nSplitPos));
+                //xDiagram->setPropertyValue(u"SplitPos"_ustr, cpo::uno::Any(nSplitPos));
             }
 
             if (nT == 0)

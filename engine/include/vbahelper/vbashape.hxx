@@ -108,8 +108,8 @@ public:
     virtual void SAL_CALL setRelativeVerticalPosition(::sal_Int32 _relativeverticalposition) override;
 
     // Methods
-    virtual css::uno::Any SAL_CALL TextFrame(  ) override;
-    virtual css::uno::Any SAL_CALL WrapFormat(  ) override;
+    virtual cpo::uno::Any SAL_CALL TextFrame(  ) override;
+    virtual cpo::uno::Any SAL_CALL WrapFormat(  ) override;
     virtual void SAL_CALL Delete() override;
     virtual void SAL_CALL ZOrder( sal_Int32 ZOrderCmd ) override;
     virtual void SAL_CALL IncrementRotation( double Increment ) override;
@@ -118,8 +118,8 @@ public:
     virtual void SAL_CALL ScaleHeight( double Factor, bool RelativeToOriginalSize, sal_Int32 Scale ) override;
     virtual void SAL_CALL ScaleWidth( double Factor, bool RelativeToOriginalSize, sal_Int32 Scale ) override;
     // Replace??
-    virtual void SAL_CALL Select( const css::uno::Any& Replace ) override;
-    virtual css::uno::Any SAL_CALL ShapeRange( const css::uno::Any& index ) override;
+    virtual void SAL_CALL Select( const cpo::uno::Any& Replace ) override;
+    virtual cpo::uno::Any SAL_CALL ShapeRange( const cpo::uno::Any& index ) override;
     // XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& rEventObject ) override;
 };

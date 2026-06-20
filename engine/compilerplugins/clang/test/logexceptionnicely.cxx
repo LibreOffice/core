@@ -11,7 +11,7 @@
 #include <sal/log.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 void func1();
 
@@ -24,7 +24,7 @@ int main()
     }
     catch (css::uno::Exception const&)
     {
-        css::uno::Any ex(cppu::getCaughtException());
+        cpo::uno::Any ex(cppu::getCaughtException());
         SAL_WARN("avmedia", "exception: " << exceptionToString(ex));
     }
 

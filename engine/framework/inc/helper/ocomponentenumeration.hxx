@@ -105,7 +105,7 @@ class OComponentEnumeration final : public ::cppu::WeakImplHelper< css::containe
             @onerror    If end of enumeration is arrived or there are no elements in list => a NoSuchElementException is thrown.
         *//*-*****************************************************************************************************/
 
-        virtual css::uno::Any SAL_CALL nextElement() override;
+        virtual cpo::uno::Any SAL_CALL nextElement() override;
 
     //  protected methods
 

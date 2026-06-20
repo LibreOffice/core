@@ -23,7 +23,7 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/string.hxx>
 #include <rangeseq.hxx>
@@ -60,7 +60,7 @@ static tools::Long lcl_DoubleToLong( double fVal )
         return 0;       // out of range
 }
 
-bool ScRangeToSequence::FillLongArray( uno::Any& rAny, ScDocument& rDoc, const ScRange& rRange )
+bool ScRangeToSequence::FillLongArray( cpo::uno::Any& rAny, ScDocument& rDoc, const ScRange& rRange )
 {
     SCTAB nTab = rRange.aStart.Tab();
     SCCOL nStartCol = rRange.aStart.Col();
@@ -85,7 +85,7 @@ bool ScRangeToSequence::FillLongArray( uno::Any& rAny, ScDocument& rDoc, const S
     return !lcl_HasErrors( rDoc, rRange );
 }
 
-bool ScRangeToSequence::FillLongArray( uno::Any& rAny, const ScMatrix* pMatrix )
+bool ScRangeToSequence::FillLongArray( cpo::uno::Any& rAny, const ScMatrix* pMatrix )
 {
     if (!pMatrix)
         return false;
@@ -113,7 +113,7 @@ bool ScRangeToSequence::FillLongArray( uno::Any& rAny, const ScMatrix* pMatrix )
     return true;
 }
 
-bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, ScDocument& rDoc, const ScRange& rRange )
+bool ScRangeToSequence::FillDoubleArray( cpo::uno::Any& rAny, ScDocument& rDoc, const ScRange& rRange )
 {
     SCTAB nTab = rRange.aStart.Tab();
     SCCOL nStartCol = rRange.aStart.Col();
@@ -138,7 +138,7 @@ bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, ScDocument& rDoc, const
     return !lcl_HasErrors( rDoc, rRange );
 }
 
-bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, const ScMatrix* pMatrix )
+bool ScRangeToSequence::FillDoubleArray( cpo::uno::Any& rAny, const ScMatrix* pMatrix )
 {
     if (!pMatrix)
         return false;
@@ -166,7 +166,7 @@ bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, const ScMatrix* pMatrix
     return true;
 }
 
-bool ScRangeToSequence::FillStringArray( uno::Any& rAny, ScDocument& rDoc, const ScRange& rRange )
+bool ScRangeToSequence::FillStringArray( cpo::uno::Any& rAny, ScDocument& rDoc, const ScRange& rRange )
 {
     SCTAB nTab = rRange.aStart.Tab();
     SCCOL nStartCol = rRange.aStart.Col();
@@ -197,7 +197,7 @@ bool ScRangeToSequence::FillStringArray( uno::Any& rAny, ScDocument& rDoc, const
     return !bHasErrors;
 }
 
-bool ScRangeToSequence::FillStringArray(uno::Any& rAny, const ScMatrix* pMatrix, const ScInterpreterContext& rContext)
+bool ScRangeToSequence::FillStringArray(cpo::uno::Any& rAny, const ScMatrix* pMatrix, const ScInterpreterContext& rContext)
 {
     if (!pMatrix)
         return false;
@@ -236,7 +236,7 @@ bool ScRangeToSequence::FillStringArray(uno::Any& rAny, const ScMatrix* pMatrix,
     return true;
 }
 
-bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument& rDoc, const ScRange& rRange,
+bool ScRangeToSequence::FillMixedArray( cpo::uno::Any& rAny, ScDocument& rDoc, const ScRange& rRange,
                                         bool bAllowNV )
 {
     SCTAB nTab = rRange.aStart.Tab();
@@ -247,15 +247,15 @@ bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument& rDoc, const 
 
     bool bHasErrors = false;
 
-    uno::Sequence< uno::Sequence<uno::Any> > aRowSeq( nRowCount );
-    uno::Sequence<uno::Any>* pRowAry = aRowSeq.getArray();
+    uno::Sequence< uno::Sequence<cpo::uno::Any> > aRowSeq( nRowCount );
+    uno::Sequence<cpo::uno::Any>* pRowAry = aRowSeq.getArray();
     for (sal_Int32 nRow = 0; nRow < nRowCount; nRow++)
     {
-        uno::Sequence<uno::Any> aColSeq( nColCount );
-        uno::Any* pColAry = aColSeq.getArray();
+        uno::Sequence<cpo::uno::Any> aColSeq( nColCount );
+        cpo::uno::Any* pColAry = aColSeq.getArray();
         for (sal_Int32 nCol = 0; nCol < nColCount; nCol++)
         {
-            uno::Any& rElement = pColAry[nCol];
+            cpo::uno::Any& rElement = pColAry[nCol];
 
             ScAddress aPos( static_cast<SCCOL>(nStartCol+nCol), static_cast<SCROW>(nStartRow+nRow), nTab );
             ScRefCellValue aCell(rDoc, aPos);
@@ -283,7 +283,7 @@ bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument& rDoc, const 
     return bAllowNV || !bHasErrors;
 }
 
-bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, const ScMatrix* pMatrix, bool bDataTypes )
+bool ScRangeToSequence::FillMixedArray( cpo::uno::Any& rAny, const ScMatrix* pMatrix, bool bDataTypes )
 {
     if (!pMatrix)
         return false;
@@ -292,12 +292,12 @@ bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, const ScMatrix* pMatrix,
     SCSIZE nRowCount;
     pMatrix->GetDimensions( nColCount, nRowCount );
 
-    uno::Sequence< uno::Sequence<uno::Any> > aRowSeq( static_cast<sal_Int32>(nRowCount) );
-    uno::Sequence<uno::Any>* pRowAry = aRowSeq.getArray();
+    uno::Sequence< uno::Sequence<cpo::uno::Any> > aRowSeq( static_cast<sal_Int32>(nRowCount) );
+    uno::Sequence<cpo::uno::Any>* pRowAry = aRowSeq.getArray();
     for (SCSIZE nRow = 0; nRow < nRowCount; nRow++)
     {
-        uno::Sequence<uno::Any> aColSeq( static_cast<sal_Int32>(nColCount) );
-        uno::Any* pColAry = aColSeq.getArray();
+        uno::Sequence<cpo::uno::Any> aColSeq( static_cast<sal_Int32>(nColCount) );
+        cpo::uno::Any* pColAry = aColSeq.getArray();
         for (SCSIZE nCol = 0; nCol < nColCount; nCol++)
         {
             if ( pMatrix->IsStringOrEmpty( nCol, nRow ) )
@@ -326,7 +326,7 @@ bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, const ScMatrix* pMatrix,
 
 bool ScApiTypeConversion::ConvertAnyToDouble( double & o_fVal,
         css::uno::TypeClass & o_eClass,
-        const css::uno::Any & rAny )
+        const cpo::uno::Any & rAny )
 {
     bool bRet = false;
     o_eClass = rAny.getValueTypeClass();
@@ -354,10 +354,10 @@ bool ScApiTypeConversion::ConvertAnyToDouble( double & o_fVal,
     return bRet;
 }
 
-ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const css::uno::Any & rAny )
+ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const cpo::uno::Any & rAny )
 {
     ScMatrixRef xMatrix;
-    uno::Sequence< uno::Sequence< uno::Any > > aSequence;
+    uno::Sequence< uno::Sequence< cpo::uno::Any > > aSequence;
     if ( rAny >>= aSequence )
     {
         sal_Int32 nRowCount = aSequence.getLength();
@@ -365,13 +365,13 @@ ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const css::uno::Any & rAny )
         if (nRowCount)
         {
             auto pRow = std::max_element(std::cbegin(aSequence), std::cend(aSequence),
-                [](const uno::Sequence<uno::Any>& a, const uno::Sequence<uno::Any>& b) {
+                [](const uno::Sequence<cpo::uno::Any>& a, const uno::Sequence<cpo::uno::Any>& b) {
                     return a.getLength() < b.getLength(); });
             nMaxColCount = pRow->getLength();
         }
         if ( nMaxColCount && nRowCount )
         {
-            const uno::Sequence<uno::Any>* pRowArr = aSequence.getConstArray();
+            const uno::Sequence<cpo::uno::Any>* pRowArr = aSequence.getConstArray();
             OUString aUStr;
             xMatrix = new ScMatrix(
                     static_cast<SCSIZE>(nMaxColCount),
@@ -386,7 +386,7 @@ ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const css::uno::Any & rAny )
             for (sal_Int32 nRow=0; nRow<nRowCount; nRow++)
             {
                 sal_Int32 nColCount = pRowArr[nRow].getLength();
-                const uno::Any* pColArr = pRowArr[nRow].getConstArray();
+                const cpo::uno::Any* pColArr = pRowArr[nRow].getConstArray();
                 for (sal_Int32 nCol=0; nCol<nColCount; nCol++)
                 {
                     double fVal;
@@ -429,7 +429,7 @@ ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const css::uno::Any & rAny )
     return xMatrix;
 }
 
-bool ScByteSequenceToString::GetString( OUString& rString, const uno::Any& rAny )
+bool ScByteSequenceToString::GetString( OUString& rString, const cpo::uno::Any& rAny )
 {
     bool bResult = false;
     if (rAny >>= rString)

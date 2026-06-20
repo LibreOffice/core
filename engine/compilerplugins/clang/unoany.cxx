@@ -42,14 +42,14 @@ bool UnoAny::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const * expr)
     }
     StringRef aFileName = getFilenameOfLocation(
             compiler.getSourceManager().getSpellingLoc(expr->getBeginLoc()));
-    if (loplugin::isSamePathname(aFileName, SRCDIR "/include/com/sun/star/uno/Any.hxx")) {
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/include/cpo/uno/Any.hxx")) {
         return true;
     }
     if (expr->getOperator() != OO_Equal) {
         return true;
     }
     if (!loplugin::TypeCheck(expr->getArg(0)->getType()).Class("Any").
-         Namespace("uno").Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace())
+         Namespace("uno").Namespace("cpo").GlobalNamespace())
     {
         return true;
     }
@@ -57,7 +57,7 @@ bool UnoAny::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const * expr)
         if (auto expr3 = dyn_cast<CXXBindTemporaryExpr>(expr2->getSubExpr())) {
             if (auto expr4 = dyn_cast<CallExpr>(expr3->getSubExpr())) {
                 if (loplugin::DeclCheck(expr4->getDirectCallee()).Function("makeAny").
-                    Namespace("uno").Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace()) {
+                    Namespace("uno").Namespace("cpo").GlobalNamespace()) {
                     report(
                             DiagnosticsEngine::Warning,
                             ("unnecessary copy, rather use <<= operator directly with the 'makeAny'"

@@ -63,7 +63,7 @@ public:
     virtual void SAL_CALL Delete() override;
     virtual css::uno::Reference< ov::excel::XComment > SAL_CALL Next() override;
     virtual css::uno::Reference< ov::excel::XComment > SAL_CALL Previous() override;
-    virtual OUString SAL_CALL Text( const css::uno::Any& Text, const css::uno::Any& Start, const css::uno::Any& Overwrite ) override;
+    virtual OUString SAL_CALL Text( const cpo::uno::Any& Text, const cpo::uno::Any& Start, const cpo::uno::Any& Overwrite ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

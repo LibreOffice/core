@@ -456,6 +456,7 @@ bool Plugin::isInUnoIncludeFile(SourceLocation spellingLocation) const
            || isSamePathname(name, SRCDIR "/cppuhelper/source/compat.cxx")
            || isSamePathname(name, SRCDIR "/sal/osl/all/compat.cxx"))
         : (hasPathnamePrefix(name, SRCDIR "/include/com/")
+           || hasPathnamePrefix(name, SRCDIR "/include/cpo/")
            || hasPathnamePrefix(name, SRCDIR "/include/cppu/")
            || hasPathnamePrefix(name, SRCDIR "/include/cppuhelper/")
            || hasPathnamePrefix(name, SRCDIR "/include/osl/")

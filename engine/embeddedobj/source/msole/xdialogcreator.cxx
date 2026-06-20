@@ -253,8 +253,8 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
                     "Image WMF",
                     cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
 
-                aObjectInfo.Options = { { "Icon", css::uno::Any(aMetafile) },
-                                        { "IconFormat", css::uno::Any(aFlavor) } };
+                aObjectInfo.Options = { { "Icon", cpo::uno::Any(aMetafile) },
+                                        { "IconFormat", cpo::uno::Any(aFlavor) } };
             }
 
             GlobalUnlock( io.hMetaPict );
@@ -335,7 +335,7 @@ uno::Sequence< OUString > SAL_CALL MSOLEDialogObjectCreator::getSupportedService
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 embeddedobj_MSOLEDialogObjectCreator_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new MSOLEDialogObjectCreator(context));
 }

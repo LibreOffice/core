@@ -202,7 +202,7 @@ bool DocPasswordHelper::IsModifyPasswordCorrect( std::u16string_view aPassword, 
     if ( !aPassword.empty() && aInfo.hasElements() )
     {
         OUString sAlgorithm;
-        uno::Any aSalt, aHash;
+        cpo::uno::Any aSalt, aHash;
         sal_Int32 nCount = 0;
 
         for ( const auto & prop : aInfo )
@@ -649,9 +649,9 @@ OUString DocPasswordHelper::GetOoxHashAsBase64(
             // 2. Add MS binary and OOXML encryption data to result
             aEncData = comphelper::concatSequences(
                 aEncData, std::initializer_list<beans::NamedValue>{
-                              { u"STD97EncryptionKey"_ustr, css::uno::Any(aEnc97Key) },
-                              { u"STD97UniqueID"_ustr, css::uno::Any(aUniqueID) },
-                              { u"OOXPassword"_ustr, css::uno::Any(aPassword) },
+                              { u"STD97EncryptionKey"_ustr, cpo::uno::Any(aEnc97Key) },
+                              { u"STD97UniqueID"_ustr, cpo::uno::Any(aUniqueID) },
+                              { u"OOXPassword"_ustr, cpo::uno::Any(aPassword) },
                           });
         }
     }
@@ -719,7 +719,7 @@ OUString DocPasswordHelper::GetOoxHashAsBase64(
 
             SAL_INFO("comphelper.crypto", "Extracted gpg session key of length: " << len);
 
-            aEncryptionData = { { PACKAGE_ENCRYPTIONDATA_SHA256UTF8, uno::Any(aKeyValue) } };
+            aEncryptionData = { { PACKAGE_ENCRYPTIONDATA_SHA256UTF8, cpo::uno::Any(aKeyValue) } };
             break;
         }
     }
@@ -727,7 +727,7 @@ OUString DocPasswordHelper::GetOoxHashAsBase64(
     if ( aEncryptionData.hasElements() )
     {
         uno::Sequence< beans::NamedValue > aContainer{
-            { u"GpgInfos"_ustr, uno::Any(rGpgProperties) }, { u"EncryptionKey"_ustr, uno::Any(aEncryptionData) }
+            { u"GpgInfos"_ustr, cpo::uno::Any(rGpgProperties) }, { u"EncryptionKey"_ustr, cpo::uno::Any(aEncryptionData) }
         };
 
         return aContainer;

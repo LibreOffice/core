@@ -36,6 +36,7 @@
 namespace dbaui
 {
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::util;
 using namespace com::sun::star::beans;
@@ -60,7 +61,7 @@ enum
 
 // ODbTypeWizDialog
 ODbTypeWizDialog::ODbTypeWizDialog(weld::Window* _pParent, SfxItemSet const * _pItems,
-                                   const Reference< XComponentContext >& _rxORB, const css::uno::Any& _aDataSourceName)
+                                   const Reference< XComponentContext >& _rxORB, const cpo::uno::Any& _aDataSourceName)
     : WizardMachine(_pParent, WizardButtonFlags::NEXT | WizardButtonFlags::PREVIOUS | WizardButtonFlags::FINISH | WizardButtonFlags::CANCEL | WizardButtonFlags::HELP )
 {
     m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxORB, m_xAssistant.get(), _pParent, this));

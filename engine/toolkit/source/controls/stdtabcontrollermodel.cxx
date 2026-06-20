@@ -202,9 +202,9 @@ static css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > Impl
 
 
 // css::uno::XInterface
-css::uno::Any StdTabControllerModel::queryAggregation( const css::uno::Type & rType )
+cpo::uno::Any StdTabControllerModel::queryAggregation( const css::uno::Type & rType )
 {
-    css::uno::Any aRet = ::cppu::queryInterface( rType,
+    cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                         static_cast< css::awt::XTabControllerModel* >(this),
                                         static_cast< css::lang::XServiceInfo* >(this),
                                         static_cast< css::io::XPersistObject* >(this),
@@ -430,7 +430,7 @@ css::uno::Sequence<OUString> StdTabControllerModel::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_StdTabControllerModel_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new StdTabControllerModel());
 }

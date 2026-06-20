@@ -45,7 +45,7 @@ using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::PropertyValues;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::container::XIndexReplace;
 
 XMLIndexTemplateContext::XMLIndexTemplateContext(
@@ -159,7 +159,7 @@ void XMLIndexTemplateContext::endFastElement(sal_Int32 )
         rStyles->hasByName( sDisplayStyleName ) )
     {
         rPropertySet->setPropertyValue(
-            pStyleProperty, css::uno::Any(sDisplayStyleName));
+            pStyleProperty, cpo::uno::Any(sDisplayStyleName));
     }
 }
 

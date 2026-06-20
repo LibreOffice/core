@@ -27,6 +27,7 @@
 
 using namespace css::lang;
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::xml::dom;
 using namespace css::xml::sax;
 
@@ -336,7 +337,7 @@ namespace DOM
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 unoxml_CSAXDocumentBuilder_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new DOM::CSAXDocumentBuilder(context));
 }

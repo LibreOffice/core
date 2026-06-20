@@ -110,7 +110,7 @@ public:
 
     bool SAL_CALL hasMoreElements() override { return (mnIndex < mxIndexAccess->getCount()); }
 
-    uno::Any SAL_CALL nextElement() override
+    cpo::uno::Any SAL_CALL nextElement() override
     {
         if (mnIndex < mxIndexAccess->getCount())
         {
@@ -155,13 +155,13 @@ public:
         return nCount == SAL_MAX_INT32 || nCount < 0 ? 0 : nCount;
     }
 
-    uno::Any SAL_CALL getByIndex(sal_Int32 Index) override
+    cpo::uno::Any SAL_CALL getByIndex(sal_Int32 Index) override
     {
         m_pCache = lcl_getContentControl(u"", m_sTag, m_sTitle, Index, mxTextDocument);
         if (!m_pCache)
             throw lang::IndexOutOfBoundsException();
 
-        return uno::Any(uno::Reference<word::XContentControl>(
+        return cpo::uno::Any(uno::Reference<word::XContentControl>(
             new SwVbaContentControl(mxParent, mxContext, mxTextDocument, m_pCache)));
     }
 
@@ -174,12 +174,12 @@ public:
         return aSeq;
     }
 
-    uno::Any SAL_CALL getByName(const OUString& aName) override
+    cpo::uno::Any SAL_CALL getByName(const OUString& aName) override
     {
         if (!hasByName(aName))
             throw container::NoSuchElementException();
 
-        return uno::Any(uno::Reference<word::XContentControl>(
+        return cpo::uno::Any(uno::Reference<word::XContentControl>(
             new SwVbaContentControl(mxParent, mxContext, mxTextDocument, m_pCache)));
     }
 
@@ -227,7 +227,7 @@ SwVbaContentControls::SwVbaContentControls(const uno::Reference<XHelperInterface
 {
 }
 
-// uno::Reference<ooo::vba::word::XContentControl> SwVbaContentControls::Add(const uno::Any& Range,
+// uno::Reference<ooo::vba::word::XContentControl> SwVbaContentControls::Add(const cpo::uno::Any& Range,
 //                                                                 sal_Int32 Type)
 // {
 //     sw::mark::Fieldmark* pFieldmark = nullptr;
@@ -256,7 +256,10 @@ uno::Reference<container::XEnumeration> SwVbaContentControls::createEnumeration(
     return new ContentControlsEnumWrapper(m_xIndexAccess);
 }
 
-uno::Any SwVbaContentControls::createCollectionObject(const uno::Any& aSource) { return aSource; }
+cpo::uno::Any SwVbaContentControls::createCollectionObject(const cpo::uno::Any& aSource)
+{
+    return aSource;
+}
 
 OUString SwVbaContentControls::getServiceImplName() { return u"SwVbaContentControls"_ustr; }
 

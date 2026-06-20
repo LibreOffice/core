@@ -18,7 +18,7 @@
  */
 
 #include "kernihdl.hxx"
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <rtl/ustrbuf.hxx>
 
 
@@ -26,6 +26,7 @@
 #include <xmloff/xmluconv.hxx>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::xmloff::token;
 
 

@@ -50,7 +50,7 @@
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::XInterface;
-using com::sun::star::uno::Any;
+using cpo::uno::Any;
 using com::sun::star::uno::TypeDescription;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Type;
@@ -807,7 +807,7 @@ Any Runtime::pyObject2Any(const PyRef & source) const
             }
             catch( const css::uno::Exception & e )
             {
-                css::uno::Any anyEx = cppu::getCaughtException();
+                cpo::uno::Any anyEx = cppu::getCaughtException();
                 throw WrappedTargetRuntimeException(
                         e.Message, e.Context, anyEx);
             }

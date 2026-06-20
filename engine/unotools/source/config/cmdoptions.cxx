@@ -23,7 +23,7 @@
 #include <unotools/cmdoptions.hxx>
 #include <unotools/configitem.hxx>
 #include <tools/debug.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <cppuhelper/weakref.hxx>
@@ -36,6 +36,7 @@
 using namespace ::utl;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 
 #define PATHDELIMITER                                   "/"

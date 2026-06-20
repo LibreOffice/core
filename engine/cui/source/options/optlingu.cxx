@@ -71,6 +71,7 @@ using namespace ::ucbhelper;
 using namespace ::com::sun::star;
 using namespace css::lang;
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::linguistic2;
 using namespace css::beans;
 

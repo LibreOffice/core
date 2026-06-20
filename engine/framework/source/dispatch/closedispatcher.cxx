@@ -150,7 +150,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
         implts_notifyResultListener(
             xListener,
             css::frame::DispatchResultState::DONTKNOW,
-            css::uno::Any());
+            cpo::uno::Any());
         return;
     }
 
@@ -172,7 +172,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
         implts_notifyResultListener(
             xListener,
             css::frame::DispatchResultState::FAILURE,
-            css::uno::Any());
+            cpo::uno::Any());
         return;
     }
 
@@ -187,7 +187,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
         implts_notifyResultListener(
             xListener,
             css::frame::DispatchResultState::SUCCESS,
-            css::uno::Any());
+            cpo::uno::Any());
 
         return;
     }
@@ -388,7 +388,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
         try
         {
             css::uno::Reference< css::beans::XFastPropertySet > xSet( xContext->getServiceManager()->createInstanceWithContext(IMPLEMENTATIONNAME_QUICKLAUNCHER, xContext), css::uno::UNO_QUERY_THROW );
-            css::uno::Any aVal( xSet->getFastPropertyValue( 0 ) );
+            cpo::uno::Any aVal( xSet->getFastPropertyValue( 0 ) );
             bool bState = false;
             if( aVal >>= bState )
                 bQuickstarterRunning = bState;
@@ -415,7 +415,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
     sal_Int16 nState = css::frame::DispatchResultState::FAILURE;
     if (bSuccess)
         nState = css::frame::DispatchResultState::SUCCESS;
-    implts_notifyResultListener(xListener, nState, css::uno::Any());
+    implts_notifyResultListener(xListener, nState, cpo::uno::Any());
 
     SolarMutexGuard g;
     // This method was called asynchronous from our main thread by using a pointer.
@@ -553,7 +553,7 @@ bool CloseDispatcher::implts_terminateApplication()
 
 void CloseDispatcher::implts_notifyResultListener(const css::uno::Reference< css::frame::XDispatchResultListener >& xListener,
                                                         sal_Int16                                                   nState   ,
-                                                  const css::uno::Any&                                              aResult  )
+                                                  const cpo::uno::Any&                                              aResult  )
 {
     if (!xListener.is())
         return;

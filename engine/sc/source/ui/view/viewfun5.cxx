@@ -182,7 +182,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
         {
             // transport the whole ODataAccessDescriptor as slot parameter
             svx::ODataAccessDescriptor aDesc = svx::ODataAccessObjectTransferable::extractObjectDescriptor(aDataHelper);
-            uno::Any aDescAny;
+            cpo::uno::Any aDescAny;
             uno::Sequence<beans::PropertyValue> aProperties = aDesc.createPropertyValueSequence();
             aDescAny <<= aProperties;
             SfxUnoAnyItem aDataDesc(SID_SBA_IMPORT, aDescAny);
@@ -341,7 +341,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                 SCTAB nSrcTab = 0;
                 pClipShell->GetDocument().ResetClip(&aTmpClipSrc, nSrcTab);
                 auto pMed = std::make_unique<SfxMedium>();
-                pMed->GetItemSet().Put(SfxUnoAnyItem(SID_INPUTSTREAM, uno::Any(xStm)));
+                pMed->GetItemSet().Put(SfxUnoAnyItem(SID_INPUTSTREAM, cpo::uno::Any(xStm)));
                 pMed->SetFilter(pFilter);
 
                 if (pClipShell->DoLoad(pMed.release()))
@@ -366,7 +366,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             aInsDoc.ResetClip( &rDoc, nSrcTab );
 
             SfxMedium aMed;
-            aMed.GetItemSet().Put( SfxUnoAnyItem( SID_INPUTSTREAM, uno::Any( xStm ) ) );
+            aMed.GetItemSet().Put( SfxUnoAnyItem( SID_INPUTSTREAM, cpo::uno::Any( xStm ) ) );
             ErrCode eErr = ScFormatFilter::Get().ScImportExcel( aMed, &aInsDoc, EIF_AUTO );
             if ( eErr == ERRCODE_NONE )
             {

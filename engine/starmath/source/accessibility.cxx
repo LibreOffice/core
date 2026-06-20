@@ -48,6 +48,7 @@
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::accessibility;
 
 SmGraphicAccessible::SmGraphicAccessible(SmGraphicWidget* pGraphicWin)
@@ -85,8 +86,8 @@ void SAL_CALL SmGraphicAccessible::disposing()
 
 void SmGraphicAccessible::LaunchEvent(
         const sal_Int16 nAccessibleEventId,
-        const uno::Any &rOldVal,
-        const uno::Any &rNewVal)
+        const cpo::uno::Any &rOldVal,
+        const cpo::uno::Any &rNewVal)
 {
     NotifyAccessibleEvent(nAccessibleEventId, rOldVal, rNewVal);
 }

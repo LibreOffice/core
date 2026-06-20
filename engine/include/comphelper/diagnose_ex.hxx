@@ -29,11 +29,11 @@
 #include <comphelper/comphelperdllapi.h>
 #include <cppuhelper/exc_hlp.hxx>
 
-COMPHELPER_DLLPUBLIC void DbgUnhandledException(const css::uno::Any& caughtException,
+COMPHELPER_DLLPUBLIC void DbgUnhandledException(const cpo::uno::Any& caughtException,
         const char* currentFunction, const char* fileAndLineNo,
         const char* area, const char* explanatory = nullptr);
 
-inline css::uno::Any DbgGetCaughtException()
+inline cpo::uno::Any DbgGetCaughtException()
 {
     return ::cppu::getCaughtException();
 }
@@ -123,7 +123,7 @@ inline css::uno::Any DbgGetCaughtException()
 
 /** Convert a caught exception to a string suitable for logging.
 */
-COMPHELPER_DLLPUBLIC OString exceptionToString(css::uno::Any const & caughtEx);
+COMPHELPER_DLLPUBLIC OString exceptionToString(cpo::uno::Any const & caughtEx);
 
 /**
    Logs an message along with a nicely formatted version of the current exception.
@@ -132,7 +132,7 @@ COMPHELPER_DLLPUBLIC OString exceptionToString(css::uno::Any const & caughtEx);
 #if defined SAL_LOG_WARN
 #define TOOLS_WARN_EXCEPTION(area, stream) \
     do { \
-        css::uno::Any tools_warn_exception( DbgGetCaughtException() ); \
+        cpo::uno::Any tools_warn_exception( DbgGetCaughtException() ); \
         SAL_WARN(area, stream << " " << exceptionToString(tools_warn_exception)); \
     } while (false)
 #else
@@ -149,7 +149,7 @@ COMPHELPER_DLLPUBLIC OString exceptionToString(css::uno::Any const & caughtEx);
 #if defined SAL_LOG_WARN
 #define TOOLS_WARN_EXCEPTION_IF(cond, area, stream) \
     do { \
-        css::uno::Any tools_warn_exception( DbgGetCaughtException() ); \
+        cpo::uno::Any tools_warn_exception( DbgGetCaughtException() ); \
         SAL_WARN_IF(cond, area, stream << " " << exceptionToString(tools_warn_exception)); \
     } while (false)
 #else
@@ -166,7 +166,7 @@ COMPHELPER_DLLPUBLIC OString exceptionToString(css::uno::Any const & caughtEx);
 #if defined SAL_LOG_INFO
 #define TOOLS_INFO_EXCEPTION(area, stream) \
     do { \
-        css::uno::Any tools_warn_exception( DbgGetCaughtException() ); \
+        cpo::uno::Any tools_warn_exception( DbgGetCaughtException() ); \
         SAL_INFO(area, stream << " " << exceptionToString(tools_warn_exception)); \
     } while (false)
 #else

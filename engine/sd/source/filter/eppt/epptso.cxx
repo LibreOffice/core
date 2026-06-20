@@ -537,7 +537,7 @@ bool PPTWriter::ImplCloseDocument()
 }
 
 bool PropValue::GetPropertyValue(
-    css::uno::Any& rAny,
+    cpo::uno::Any& rAny,
     const css::uno::Reference< css::beans::XPropertySet > & rXPropSet,
     const OUString& rString,
     bool bTestPropertyAvailability )
@@ -732,7 +732,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
             if ( nBulletColor == sal_uInt32(COL_AUTO) )
             {
                 bool bIsDark = false;
-                css::uno::Any aAny;
+                cpo::uno::Any aAny;
                 if ( PropValue::GetPropertyValue( aAny, mXPagePropSet, u"IsBackgroundDark"_ustr, true ) )
                     aAny >>= bIsDark;
                 nBulletColor = bIsDark ? 0xffffff : 0x000000;
@@ -785,7 +785,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
             if ( nCharColor == sal_uInt32(COL_AUTO) )   // nCharColor depends to the background color
             {
                 bool bIsDark = false;
-                css::uno::Any aAny;
+                cpo::uno::Any aAny;
                 if ( PropValue::GetPropertyValue( aAny, mXPagePropSet, u"IsBackgroundDark"_ustr, true ) )
                     aAny >>= bIsDark;
                 nCharColor = bIsDark ? 0xffffff : 0x000000;
@@ -802,7 +802,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                 if ( !nCharColor )          // special treatment for
                     nCharColor = 0xffffff;  // black fontcolor
 
-                css::uno::Any aAny;
+                cpo::uno::Any aAny;
                 css::drawing::FillStyle aFS( css::drawing::FillStyle_NONE );
                 if ( PropValue::GetPropertyValue( aAny, mXPropSet, u"FillStyle"_ustr ) )
                     aAny >>= aFS;
@@ -824,7 +824,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                     break;
                     case css::drawing::FillStyle_NONE :
                     {
-                        css::uno::Any aBackAny;
+                        cpo::uno::Any aBackAny;
                         css::drawing::FillStyle aBackFS( css::drawing::FillStyle_NONE );
                         if ( PropValue::GetPropertyValue( aBackAny, mXBackgroundPropSet, u"FillStyle"_ustr ) )
                             aBackAny >>= aBackFS;
@@ -956,7 +956,7 @@ bool PPTWriter::ImplGetText()
     if ( mXText.is() )
     {
         mnTextSize = mXText->getString().getLength();
-        css::uno::Any aAny;
+        cpo::uno::Any aAny;
         if ( GetPropertyValue( aAny, mXPropSet, u"FontIndependentLineSpacing"_ustr, true ) )
             aAny >>= mbFontIndependentLineSpacing;
     }
@@ -1506,7 +1506,7 @@ bool PPTWriter::ImplGetEffect( const css::uno::Reference< css::beans::XPropertyS
                                 css::presentation::AnimationEffect& eTextEffect,
                                 bool& bIsSound )
 {
-    css::uno::Any aAny;
+    cpo::uno::Any aAny;
     if ( GetPropertyValue( aAny, rPropSet, u"Effect"_ustr ) )
         aAny >>= eEffect;
     else
@@ -1696,7 +1696,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             {
                 bool bIsFontwork = false;
                 bool bIsHatching = false;
-                css::uno::Any aAny;
+                cpo::uno::Any aAny;
                 if ( GetPropertyValue( aAny, mXPropSet, u"IsFontwork"_ustr, true ) )
                     aAny >>= bIsFontwork;
                 if ( GetPropertyValue( aAny, mXPropSet, u"FillStyle"_ustr, true ) )
@@ -1742,7 +1742,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 ShapeFlag nMirrorFlags;
                 OUString sCustomShapeType;
                 bool bOOXML = false;
-                css::uno::Any aAny;
+                cpo::uno::Any aAny;
                 if (GetPropertyValue(aAny, mXPropSet, u"CustomShapeGeometry"_ustr, true))
                 {
                     uno::Sequence<beans::PropertyValue> aGeoPropSeq;
@@ -2651,7 +2651,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                  aSolverContainer );
                 if ( aPropOpt.CreateMediaGraphicProperties( mXShape ) )
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
-                css::uno::Any aAny;
+                cpo::uno::Any aAny;
                 if ( PropValue::GetPropertyValue( aAny, mXPropSet, u"MediaURL"_ustr, true ) )
                 {
                     OUString aMediaURL;
@@ -2907,7 +2907,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
         {
             bAdditionalText = false;
 
-            css::uno::Any  aAny;
+            cpo::uno::Any  aAny;
             EscherPropertyContainer     aPropOpt;
             mnAngle = ( PropValue::GetPropertyValue( aAny,
                 mXPropSet, u"RotateAngle"_ustr, true ) )
@@ -3183,7 +3183,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXSha
                         mXText.set( xCell, uno::UNO_QUERY_THROW );
                         mnTextSize = mXText->getString().getLength();
 
-                        css::uno::Any aAny;
+                        cpo::uno::Any aAny;
                         if ( GetPropertyValue( aAny, mXPropSet, u"FontIndependentLineSpacing"_ustr, true ) )
                             aAny >>= mbFontIndependentLineSpacing;
 

@@ -50,6 +50,7 @@ namespace oox::xls {
 
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 using ::oox::core::Relation;
 using ::oox::core::Relations;

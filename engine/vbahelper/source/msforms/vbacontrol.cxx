@@ -182,7 +182,7 @@ void ScVbaControl::removeResource()
 //In design model has different behavior
 bool SAL_CALL ScVbaControl::getEnabled()
 {
-    uno::Any aValue = m_xProps->getPropertyValue ( u"Enabled"_ustr );
+    cpo::uno::Any aValue = m_xProps->getPropertyValue ( u"Enabled"_ustr );
     bool bRet = false;
     aValue >>= bRet;
     return bRet;
@@ -190,7 +190,7 @@ bool SAL_CALL ScVbaControl::getEnabled()
 
 void SAL_CALL ScVbaControl::setEnabled( bool bVisible )
 {
-    uno::Any aValue( bVisible );
+    cpo::uno::Any aValue( bVisible );
     m_xProps->setPropertyValue(  u"Enabled"_ustr , aValue);
 
 }
@@ -214,7 +214,7 @@ bool SAL_CALL ScVbaControl::getVisible()
 
 void SAL_CALL ScVbaControl::setVisible( bool bVisible )
 {
-    uno::Any aValue( bVisible );
+    cpo::uno::Any aValue( bVisible );
     m_xProps->setPropertyValue( u"EnableVisible"_ustr , aValue);
     uno::Reference< drawing::XControlShape > xControlShape( m_xControl, uno::UNO_QUERY );
     if ( xControlShape.is() )
@@ -278,7 +278,7 @@ void SAL_CALL ScVbaControl::SetFocus()
     xWin->setFocus();
 }
 
-void SAL_CALL ScVbaControl::Move( double Left, double Top, const uno::Any& Width, const uno::Any& Height )
+void SAL_CALL ScVbaControl::Move( double Left, double Top, const cpo::uno::Any& Width, const cpo::uno::Any& Height )
 {
     double nWidth = 0.0;
     double nHeight = 0.0;
@@ -314,7 +314,7 @@ ScVbaControl::getControlSource()
             return sControlSource;
         table::CellAddress aAddress;
         xProps->getPropertyValue( u"BoundCell"_ustr ) >>= aAddress;
-        xConvertor->setPropertyValue( u"Address"_ustr , uno::Any( aAddress ) );
+        xConvertor->setPropertyValue( u"Address"_ustr , cpo::uno::Any( aAddress ) );
         xConvertor->getPropertyValue( u"XLA1Representation"_ustr ) >>= sControlSource;
     }
     catch(const uno::Exception&)
@@ -381,7 +381,7 @@ ScVbaControl::getRowSource()
             return sRowSource;
         table::CellRangeAddress aAddress;
         xProps->getPropertyValue( u"CellRange"_ustr ) >>= aAddress;
-        xConvertor->setPropertyValue( u"Address"_ustr , uno::Any( aAddress ) );
+        xConvertor->setPropertyValue( u"Address"_ustr , cpo::uno::Any( aAddress ) );
         xConvertor->getPropertyValue( u"XLA1Representation"_ustr ) >>= sRowSource;
     }
     catch(const uno::Exception&)
@@ -408,7 +408,7 @@ ScVbaControl::getName()
 void SAL_CALL
 ScVbaControl::setName( const OUString& _name )
 {
-    m_xProps->setPropertyValue( u"Name"_ustr , uno::Any( _name ) );
+    m_xProps->setPropertyValue( u"Name"_ustr , cpo::uno::Any( _name ) );
     }
 
 OUString SAL_CALL
@@ -422,7 +422,7 @@ ScVbaControl::getControlTipText()
 void SAL_CALL
 ScVbaControl::setControlTipText( const OUString& rsToolTip )
 {
-    m_xProps->setPropertyValue( u"HelpText"_ustr , uno::Any( rsToolTip ) );
+    m_xProps->setPropertyValue( u"HelpText"_ustr , cpo::uno::Any( rsToolTip ) );
 }
 
 OUString SAL_CALL ScVbaControl::getTag()
@@ -520,7 +520,7 @@ void SAL_CALL ScVbaControl::fireEvent( const script::ScriptEvent& rEvt )
     uno::Reference< script::XScriptListener > xScriptListener( xServiceManager->createInstanceWithContext( u"ooo.vba.EventListener"_ustr , mxContext ), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySet > xProps( xScriptListener, uno::UNO_QUERY_THROW );
-    xProps->setPropertyValue( u"Model"_ustr , uno::Any( m_xModel ) );
+    xProps->setPropertyValue( u"Model"_ustr , cpo::uno::Any( m_xModel ) );
 
     // handling for sheet control
     uno::Reference< msforms::XControl > xThisControl( this );
@@ -726,7 +726,7 @@ void ScVbaControl::setBackColor( sal_Int32 nBackColor )
     {
         nBackColor = nSysCols[ col & 0x0FF];
     }
-    m_xProps->setPropertyValue( u"BackgroundColor"_ustr , uno::Any( XLRGBToOORGB( nBackColor ) ) );
+    m_xProps->setPropertyValue( u"BackgroundColor"_ustr , cpo::uno::Any( XLRGBToOORGB( nBackColor ) ) );
 }
 
 bool ScVbaControl::getAutoSize() const
@@ -757,7 +757,7 @@ bool ScVbaControl::getLocked()
 
 void ScVbaControl::setLocked( bool bLocked )
 {
-    m_xProps->setPropertyValue( u"ReadOnly"_ustr , uno::Any( bLocked ) );
+    m_xProps->setPropertyValue( u"ReadOnly"_ustr , cpo::uno::Any( bLocked ) );
 }
 
 namespace {
@@ -803,7 +803,7 @@ ControlProviderImpl::createControl( const uno::Reference< drawing::XControlShape
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ControlProviderImpl_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ControlProviderImpl(context));
 }

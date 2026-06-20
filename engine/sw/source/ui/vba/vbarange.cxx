@@ -188,7 +188,7 @@ SwVbaRange::setText( const OUString& rText )
 }
 
 // FIXME: test is not pass
-void SAL_CALL SwVbaRange::InsertBreak(const uno::Any& _breakType)
+void SAL_CALL SwVbaRange::InsertBreak(const cpo::uno::Any& _breakType)
 {
     // default type is wdPageBreak;
     sal_Int32 nBreakType = word::WdBreakType::wdPageBreak;
@@ -227,7 +227,7 @@ void SAL_CALL SwVbaRange::InsertBreak(const uno::Any& _breakType)
         }
 
         uno::Reference< beans::XPropertySet > xProp( mxTextCursor, uno::UNO_QUERY_THROW );
-        xProp->setPropertyValue(u"BreakType"_ustr, uno::Any( eBreakType ) );
+        xProp->setPropertyValue(u"BreakType"_ustr, cpo::uno::Any( eBreakType ) );
     }
 }
 
@@ -291,7 +291,7 @@ void SwVbaRange::GetStyleInfo(OUString& aStyleName, OUString& aStyleType )
     }
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwVbaRange::getStyle()
 {
     OUString aStyleName;
@@ -299,11 +299,11 @@ SwVbaRange::getStyle()
     GetStyleInfo( aStyleName, aStyleType );
     uno::Reference< container::XNameAccess > xStylesAccess( mxTextDocument->getStyleFamilies()->getByName( aStyleType ), uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xStyleProps( xStylesAccess->getByName( aStyleName ), uno::UNO_QUERY_THROW );
-    return uno::Any( uno::Reference< word::XStyle >( new SwVbaStyle( this, mxContext, mxTextDocument, xStyleProps ) ) );
+    return cpo::uno::Any( uno::Reference< word::XStyle >( new SwVbaStyle( this, mxContext, mxTextDocument, xStyleProps ) ) );
 }
 
 void SAL_CALL
-SwVbaRange::setStyle( const uno::Any& rStyle )
+SwVbaRange::setStyle( const cpo::uno::Any& rStyle )
 {
     uno::Reference< beans::XPropertySet > xParaProps( mxTextCursor, uno::UNO_QUERY_THROW );
     SwVbaStyle::setStyle( xParaProps, rStyle );
@@ -341,7 +341,7 @@ void SAL_CALL SwVbaRange::setLanguageID( ::sal_Int32 _languageid )
     SwVbaStyle::setLanguageID( xParaProps, LanguageType(_languageid) );
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwVbaRange::PageSetup( )
 {
     uno::Reference< beans::XPropertySet > xParaProps( mxTextCursor, uno::UNO_QUERY_THROW );
@@ -350,7 +350,7 @@ SwVbaRange::PageSetup( )
     rtl::Reference< SwXStyleFamilies > xSytleFamNames( mxTextDocument->getSwStyleFamilies() );
     uno::Reference< container::XNameAccess > xPageStyles( xSytleFamNames->getByName(u"PageStyles"_ustr), uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xPageProps( xPageStyles->getByName( aPageStyleName ), uno::UNO_QUERY_THROW );
-    return uno::Any( uno::Reference< word::XPageSetup >( new SwVbaPageSetup( this, mxContext, mxTextDocument, xPageProps ) ) );
+    return cpo::uno::Any( uno::Reference< word::XPageSetup >( new SwVbaPageSetup( this, mxContext, mxTextDocument, xPageProps ) ) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaRange::getStart()
@@ -396,34 +396,34 @@ bool SAL_CALL SwVbaRange::InRange( const uno::Reference< ::ooo::vba::word::XRang
     return false;
 }
 
-uno::Any SAL_CALL
-SwVbaRange::Revisions( const uno::Any& index )
+cpo::uno::Any SAL_CALL
+SwVbaRange::Revisions( const cpo::uno::Any& index )
 {
     uno::Reference< text::XTextRange > xTextRange = getXTextRange();
     uno::Reference< XCollection > xCol( new SwVbaRevisions( mxParent, mxContext, mxTextDocument, xTextRange ) );
     if ( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-    return uno::Any( xCol );
+        return xCol->Item( index, cpo::uno::Any() );
+    return cpo::uno::Any( xCol );
 }
 
-uno::Any SAL_CALL
-SwVbaRange::Sections( const uno::Any& index )
+cpo::uno::Any SAL_CALL
+SwVbaRange::Sections( const cpo::uno::Any& index )
 {
     uno::Reference< text::XTextRange > xTextRange = getXTextRange();
     uno::Reference< XCollection > xCol( new SwVbaSections( mxParent, mxContext, mxTextDocument, xTextRange ) );
     if ( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-    return uno::Any( xCol );
+        return xCol->Item( index, cpo::uno::Any() );
+    return cpo::uno::Any( xCol );
 }
 
-uno::Any SAL_CALL
-SwVbaRange::Fields( const uno::Any& index )
+cpo::uno::Any SAL_CALL
+SwVbaRange::Fields( const cpo::uno::Any& index )
 {
     //FIXME: should be get the field in current range
     uno::Reference< XCollection > xCol( new SwVbaFields( mxParent, mxContext, mxTextDocument ) );
     if ( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-    return uno::Any( xCol );
+        return xCol->Item( index, cpo::uno::Any() );
+    return cpo::uno::Any( xCol );
 }
 
 OUString

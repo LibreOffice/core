@@ -45,11 +45,11 @@ namespace dbaccess
         virtual void construct(const css::uno::Reference< css::sdbc::XResultSet>& _xDriverSet,const OUString& i_sRowSetFilter) override;
         virtual void reset(const css::uno::Reference< css::sdbc::XResultSet>& _xDriverSet) override;
         // css::sdbcx::XRowLocate
-        virtual css::uno::Any getBookmark() override;
-        virtual bool moveToBookmark( const css::uno::Any& bookmark ) override;
-        virtual sal_Int32 compareBookmarks( const css::uno::Any& first, const css::uno::Any& second ) override;
+        virtual cpo::uno::Any getBookmark() override;
+        virtual bool moveToBookmark( const cpo::uno::Any& bookmark ) override;
+        virtual sal_Int32 compareBookmarks( const cpo::uno::Any& first, const cpo::uno::Any& second ) override;
         virtual bool hasOrderedBookmarks(  ) override;
-        virtual sal_Int32 hashBookmark( const css::uno::Any& bookmark ) override;
+        virtual sal_Int32 hashBookmark( const cpo::uno::Any& bookmark ) override;
         // css::sdbc::XResultSetUpdate
         virtual void insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) override;
         virtual void updateRow(const ORowSetRow& _rInsertRow,const ORowSetRow& _rOriginalRow,const connectivity::OSQLTable& _xTable   ) override;

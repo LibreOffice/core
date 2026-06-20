@@ -107,7 +107,7 @@ CPPUNIT_TEST_FIXTURE(XOutdevTest, testFillColorThemeUnoApi)
         aComplexColor.addTransformation({ model::TransformationType::LumMod, 2000 });
         aComplexColor.addTransformation({ model::TransformationType::LumOff, 8000 });
         xShape->setPropertyValue(u"FillComplexColor"_ustr,
-                                 uno::Any(model::color::createXComplexColor(aComplexColor)));
+                                 cpo::uno::Any(model::color::createXComplexColor(aComplexColor)));
     }
 
     // Then make sure the value we read back is the expected one:

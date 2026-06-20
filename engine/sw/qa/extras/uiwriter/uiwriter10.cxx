@@ -1719,7 +1719,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf129655)
     assertXPath(pXmlDoc, "//anchored/fly/txt[@WritingMode='Vertical']", 1);
 }
 
-static uno::Reference<text::XTextRange> getAssociatedTextRange(uno::Any object)
+static uno::Reference<text::XTextRange> getAssociatedTextRange(cpo::uno::Any object)
 {
     // possible cases:
     // 1. a container of other objects - e.g. selection of 0 to n text portions, or 1 to n drawing objects
@@ -1784,14 +1784,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf123218)
     uno::Reference<beans::XPropertySet> xShapeProps(
         xMSF->createInstance(u"com.sun.star.text.TextEmbeddedObject"_ustr), uno::UNO_QUERY);
     xShapeProps->setPropertyValue(u"CLSID"_ustr,
-                                  uno::Any(u"12dcae26-281f-416f-a234-c3086127382e"_ustr));
+                                  cpo::uno::Any(u"12dcae26-281f-416f-a234-c3086127382e"_ustr));
     uno::Reference<drawing::XShape> xShape(xShapeProps, uno::UNO_QUERY_THROW);
     xShape->setSize(awt::Size(16000, 9000));
     uno::Reference<text::XTextContent> chartTextContent(xShapeProps, uno::UNO_QUERY_THROW);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<view::XSelectionSupplier> xSelSupplier(xModel->getCurrentController(),
                                                           uno::UNO_QUERY_THROW);
-    uno::Any aSelection = xSelSupplier->getSelection();
+    cpo::uno::Any aSelection = xSelSupplier->getSelection();
     uno::Reference<text::XTextRange> xTextRange = getAssociatedTextRange(aSelection);
     CPPUNIT_ASSERT(xTextRange);
     xTextRange->getText()->insertTextContent(xTextRange, chartTextContent, false);
@@ -1835,7 +1835,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf93747)
     SwWrtShell* pWrtSh = getSwDocShell()->GetWrtShell();
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Rows", uno::Any(sal_Int32(2)) }, { "Columns", uno::Any(sal_Int32(2)) } }));
+        { { "Rows", cpo::uno::Any(sal_Int32(2)) }, { "Columns", cpo::uno::Any(sal_Int32(2)) } }));
 
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
 
@@ -1867,8 +1867,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf93747)
     pWrtSh->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
 
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "Style", uno::Any(u"Heading 1"_ustr) },
-        { "FamilyName", uno::Any(u"ParagraphStyles"_ustr) },
+        { "Style", cpo::uno::Any(u"Heading 1"_ustr) },
+        { "FamilyName", cpo::uno::Any(u"ParagraphStyles"_ustr) },
     });
     dispatchCommand(mxComponent, u".uno:StyleApply"_ustr, aPropertyValues);
 
@@ -1923,7 +1923,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145151)
     SwWrtShell* pWrtSh = getSwDocShell()->GetWrtShell();
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Rows", uno::Any(sal_Int32(2)) }, { "Columns", uno::Any(sal_Int32(2)) } }));
+        { { "Rows", cpo::uno::Any(sal_Int32(2)) }, { "Columns", cpo::uno::Any(sal_Int32(2)) } }));
 
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
 
@@ -2031,7 +2031,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf126735)
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<view::XSelectionSupplier> xSelSupplier(xModel->getCurrentController(),
                                                           uno::UNO_QUERY_THROW);
-    uno::Any aSelection = xSelSupplier->getSelection();
+    cpo::uno::Any aSelection = xSelSupplier->getSelection();
     uno::Reference<text::XTextRange> xTextRange = getAssociatedTextRange(aSelection);
     CPPUNIT_ASSERT(xTextRange);
     CPPUNIT_ASSERT_EQUAL(u" ipsu"_ustr, xTextRange->getString());

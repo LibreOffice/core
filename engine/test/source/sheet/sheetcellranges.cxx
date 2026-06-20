@@ -13,7 +13,7 @@
 #include <com/sun/star/sheet/ValidationType.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntry.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -22,6 +22,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace apitest
 {
@@ -29,7 +30,7 @@ void SheetCellRanges::testSheetCellRangesProperties()
 {
     uno::Reference<beans::XPropertySet> xSheetCellRanges(init(), UNO_QUERY_THROW);
     OUString propName;
-    uno::Any aNewValue;
+    cpo::uno::Any aNewValue;
 
     uno::Sequence<beans::PropertyValue> aPropValue{ comphelper::makePropertyValue(
         u"StyleName"_ustr, u"Result2"_ustr) };
@@ -95,7 +96,7 @@ void SheetCellRanges::testSheetCellRangesProperties()
                            xSheetCellRanges->getPropertyValue(propName) >>= aValidationGet);
 
     uno::Reference<beans::XPropertySet> aValidationNew(aValidationGet, UNO_SET_THROW);
-    uno::Any aValidationType;
+    cpo::uno::Any aValidationType;
     aValidationType <<= sheet::ValidationType_WHOLE;
     aValidationNew->setPropertyValue(u"Type"_ustr, aValidationType);
 

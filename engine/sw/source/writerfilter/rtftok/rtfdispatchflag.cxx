@@ -1125,7 +1125,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 {
                     // set default VertOrient before inserting
                     m_aStates.top().getDrawingObject().getPropertySet()->setPropertyValue(
-                        u"VertOrient"_ustr, uno::Any(text::VertOrientation::NONE));
+                        u"VertOrient"_ustr, cpo::uno::Any(text::VertOrientation::NONE));
                     xShapes->add(m_aStates.top().getDrawingObject().getShape());
                 }
             }
@@ -1243,7 +1243,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             if (m_aStates.top().getDrawingObject().getPropertySet().is())
                 // Seems this old syntax has no way to specify a custom radius, and this is the default
                 m_aStates.top().getDrawingObject().getPropertySet()->setPropertyValue(
-                    u"CornerRadius"_ustr, uno::Any(sal_Int32(83)));
+                    u"CornerRadius"_ustr, cpo::uno::Any(sal_Int32(83)));
             break;
         case RTFKeyword::NOWRAP:
             m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_wrap,

@@ -54,6 +54,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::graphic;
@@ -284,7 +285,7 @@ bool SdGRFFilter::Export()
                             pDrawViewShell->GetViewShellBase().GetDrawController();
                         if ( pDrawController )
                         {
-                            uno::Any aSelection( pDrawController->getSelection() );
+                            cpo::uno::Any aSelection( pDrawController->getSelection() );
                             uno::Reference< lang::XComponent > xSelection;
                             if ( aSelection >>= xSelection )
                                 xSource = std::move(xSelection);

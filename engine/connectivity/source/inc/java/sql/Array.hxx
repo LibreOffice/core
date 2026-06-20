@@ -43,8 +43,8 @@ namespace connectivity
         // XArray
         virtual OUString SAL_CALL getBaseTypeName(  ) override;
         virtual sal_Int32 SAL_CALL getBaseType(  ) override;
-        virtual css::uno::Sequence< css::uno::Any > SAL_CALL getArray( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
-        virtual css::uno::Sequence< css::uno::Any > SAL_CALL getArrayAtIndex( sal_Int32 index, sal_Int32 count, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL getArray( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL getArrayAtIndex( sal_Int32 index, sal_Int32 count, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
         virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getResultSet( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
         virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getResultSetAtIndex( sal_Int32 index, sal_Int32 count, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
 

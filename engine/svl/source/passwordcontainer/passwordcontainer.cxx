@@ -46,6 +46,7 @@
 using namespace utl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::task;
 using namespace com::sun::star::ucb;
@@ -238,7 +239,7 @@ PasswordMap StorageItem::getInfo()
 void StorageItem::setUseStorage( bool bUse )
 {
     ConfigItem::SetModified();
-    ConfigItem::PutProperties( { u"UseStorage"_ustr }, { uno::Any(bUse) } );
+    ConfigItem::PutProperties( { u"UseStorage"_ustr }, { cpo::uno::Any(bUse) } );
 }
 
 
@@ -315,8 +316,8 @@ void StorageItem::setEncodedMasterPassword( const OUString& aEncoded, const OUSt
 
     ConfigItem::SetModified();
     ConfigItem::PutProperties( { u"HasMaster"_ustr, u"Master"_ustr, u"MasterInitializationVector"_ustr, u"StorageVersion"_ustr },
-                               { uno::Any(bHasMaster), uno::Any(aEncoded),
-                                 uno::Any(aEncodedIV), uno::Any(nCurrentStorageVersion) } );
+                               { cpo::uno::Any(bHasMaster), cpo::uno::Any(aEncoded),
+                                 cpo::uno::Any(aEncodedIV), cpo::uno::Any(nCurrentStorageVersion) } );
 
     hasEncoded = bHasMaster;
     mEncoded = aEncoded;
@@ -1392,7 +1393,7 @@ Sequence< OUString > SAL_CALL PasswordContainer::getSupportedServiceNames(  )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 svl_PasswordContainer_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new PasswordContainer(context));
 }

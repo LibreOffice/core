@@ -23,7 +23,7 @@
 #include <Python.h>
 #endif // #ifdef Py_PYTHON_H
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::uno { template <typename > class Reference; }
@@ -165,7 +165,7 @@ class LO_DLLPUBLIC_PYUNO Runtime
         Safely unpacks a Python iterator into a sequence, then
         stores it in an Any. Used internally by pyObject2Any
     */
-    bool pyIterUnpack( PyObject *const, css::uno::Any & ) const;
+    bool pyIterUnpack( PyObject *const, cpo::uno::Any & ) const;
 public:
     ~Runtime( );
 
@@ -216,7 +216,7 @@ public:
         @throws css::lang::IllegalArgumentException
         @throws css::uno::RuntimeException
     */
-    PyRef any2PyObject (const css::uno::Any &source ) const;
+    PyRef any2PyObject (const cpo::uno::Any &source ) const;
 
     /** converts a Python object to a UNO any
 
@@ -226,11 +226,11 @@ public:
 
         @throws css::uno::RuntimeException
     */
-    css::uno::Any pyObject2Any ( const PyRef & source ) const;
+    cpo::uno::Any pyObject2Any ( const PyRef & source ) const;
 
     /** extracts a proper uno exception from a given python exception
      */
-    css::uno::Any extractUnoException(
+    cpo::uno::Any extractUnoException(
         const PyRef & excType, const PyRef & excValue, const PyRef & excTraceback) const;
 
     /** Returns the internal handle. Should only be used by the module implementation

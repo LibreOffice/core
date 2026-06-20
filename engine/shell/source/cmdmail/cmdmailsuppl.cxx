@@ -46,6 +46,7 @@ using osl::FileBase;
 using namespace cppu;
 using namespace com::sun::star::system::SimpleMailClientFlags;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::configuration;
 
@@ -279,7 +280,7 @@ Sequence< OUString > SAL_CALL CmdMailSuppl::getSupportedServiceNames(    )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 shell_CmdMailSuppl_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new CmdMailSuppl(context));
 }

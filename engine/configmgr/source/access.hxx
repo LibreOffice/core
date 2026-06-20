@@ -147,7 +147,7 @@ public:
 
     virtual bool SAL_CALL hasElements() override;
 
-    virtual css::uno::Any SAL_CALL getByName(
+    virtual cpo::uno::Any SAL_CALL getByName(
         OUString const & aName) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
@@ -155,7 +155,7 @@ public:
 
     virtual bool SAL_CALL hasByName(OUString const & aName) override;
 
-    virtual css::uno::Any SAL_CALL getByHierarchicalName(
+    virtual cpo::uno::Any SAL_CALL getByHierarchicalName(
         OUString const & aName) override;
 
     virtual OUString SAL_CALL getDescriptionByHierarchicalName(
@@ -170,7 +170,7 @@ public:
     virtual bool SAL_CALL hasByHierarchicalName(OUString const & aName) override;
 
     virtual void SAL_CALL replaceByHierarchicalName(
-        OUString const & aName, css::uno::Any const & aElement) override;
+        OUString const & aName, cpo::uno::Any const & aElement) override;
 
     virtual void SAL_CALL addContainerListener(
         css::uno::Reference<
@@ -208,9 +208,9 @@ public:
 
     virtual void SAL_CALL setPropertyValue(
         OUString const & aPropertyName,
-        css::uno::Any const & aValue) override;
+        cpo::uno::Any const & aValue) override;
 
-    virtual css::uno::Any SAL_CALL getPropertyValue(
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(
         OUString const & PropertyName) override;
 
     virtual void SAL_CALL addPropertyChangeListener(
@@ -235,10 +235,10 @@ public:
 
     virtual void SAL_CALL setPropertyValues(
         css::uno::Sequence< OUString > const & aPropertyNames,
-        css::uno::Sequence< css::uno::Any > const &
+        css::uno::Sequence< cpo::uno::Any > const &
             aValues) override;
 
-    virtual css::uno::Sequence< css::uno::Any > SAL_CALL
+    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL
     getPropertyValues(
         css::uno::Sequence< OUString > const & aPropertyNames) override;
 
@@ -266,18 +266,18 @@ public:
 
     virtual void SAL_CALL setHierarchicalPropertyValue(
         OUString const & aHierarchicalPropertyName,
-        css::uno::Any const & aValue) override;
+        cpo::uno::Any const & aValue) override;
 
-    virtual css::uno::Any SAL_CALL getHierarchicalPropertyValue(
+    virtual cpo::uno::Any SAL_CALL getHierarchicalPropertyValue(
         OUString const & aHierarchicalPropertyName) override;
 
     virtual void SAL_CALL setHierarchicalPropertyValues(
         css::uno::Sequence< OUString > const &
             aHierarchicalPropertyNames,
-        css::uno::Sequence< css::uno::Any > const &
+        css::uno::Sequence< cpo::uno::Any > const &
             Values) override;
 
-    virtual css::uno::Sequence< css::uno::Any > SAL_CALL
+    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL
     getHierarchicalPropertyValues(
         css::uno::Sequence< OUString > const &
             aHierarchicalPropertyNames) override;
@@ -289,10 +289,10 @@ public:
         OUString const & aHierarchicalName) override;
 
     virtual void SAL_CALL replaceByName(
-        OUString const & aName, css::uno::Any const & aElement) override;
+        OUString const & aName, cpo::uno::Any const & aElement) override;
 
     virtual void SAL_CALL insertByName(
-        OUString const & aName, css::uno::Any const & aElement) override;
+        OUString const & aName, cpo::uno::Any const & aElement) override;
 
     virtual void SAL_CALL removeByName(OUString const & aName) override;
 
@@ -301,7 +301,7 @@ public:
 
     virtual css::uno::Reference< css::uno::XInterface >
     SAL_CALL createInstanceWithArguments(
-        css::uno::Sequence< css::uno::Any > const &
+        css::uno::Sequence< cpo::uno::Any > const &
             aArguments) override;
 
 protected:
@@ -322,7 +322,7 @@ protected:
     virtual void initDisposeBroadcaster(Broadcaster * broadcaster);
     virtual void clearListeners() noexcept;
 
-    virtual css::uno::Any SAL_CALL queryInterface(
+    virtual cpo::uno::Any SAL_CALL queryInterface(
         css::uno::Type const & aType) override;
 
     Components & getComponents() const { return components_;}
@@ -335,10 +335,10 @@ protected:
     bool isAllChildrenEmpty();
 
     void checkValue(
-        css::uno::Any const & value, Type type, bool nillable);
+        cpo::uno::Any const & value, Type type, bool nillable);
 
     void insertLocalizedValueChild(
-        OUString const & name, css::uno::Any const & value,
+        OUString const & name, cpo::uno::Any const & value,
         Modifications * localModifications);
 
     void reportChildChanges(
@@ -378,12 +378,12 @@ private:
     rtl::Reference< ChildAccess > getSubChild(OUString const & path);
 
     bool setChildProperty(
-        OUString const & name, css::uno::Any const & value,
+        OUString const & name, cpo::uno::Any const & value,
         Modifications * localModifications);
 
     css::beans::Property asProperty();
 
-    bool getByNameFast(const OUString & name, css::uno::Any & value);
+    bool getByNameFast(const OUString & name, cpo::uno::Any & value);
     rtl::Reference< ChildAccess > createUnmodifiedChild(const OUString &name,
                                                         const rtl::Reference< Node > &node);
 
@@ -391,7 +391,7 @@ private:
 
     void checkKnownProperty(OUString const & descriptor);
 
-    rtl::Reference< ChildAccess > getFreeSetMember( css::uno::Any const & value);
+    rtl::Reference< ChildAccess > getFreeSetMember( cpo::uno::Any const & value);
 
     rtl::Reference< Access > getNotificationRoot();
 

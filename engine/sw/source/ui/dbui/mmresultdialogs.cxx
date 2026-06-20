@@ -79,6 +79,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 #define MM_DOCTYPE_OOO              1
 #define MM_DOCTYPE_PDF              2
@@ -693,7 +694,7 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
                 pTempView->GetDocShell()->GetBaseModel());
             uno::Sequence<beans::PropertyValue> aInteropGrabBag;
             xThisSet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aInteropGrabBag;
-            xRetSet->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(aInteropGrabBag));
+            xRetSet->setPropertyValue(u"InteropGrabBag"_ustr, cpo::uno::Any(aInteropGrabBag));
 
             pTargetView->GetWrtShell().PastePages(
                 pTempView->GetWrtShell(), documentStartPageNumber(xConfigItem.get(), nDoc, false),

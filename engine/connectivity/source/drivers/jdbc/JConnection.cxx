@@ -50,6 +50,7 @@
 using namespace connectivity;
 using namespace connectivity::jdbc;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
@@ -669,7 +670,7 @@ void java_sql_Connection::loadDriverFromProperties( const OUString& _sDriverClas
     }
     catch( const SQLException& )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw SQLException(
             lcl_getDriverLoadErrorMessage( getResources(),_sDriverClass, _sDriverClassPath ),
             *this,
@@ -679,7 +680,7 @@ void java_sql_Connection::loadDriverFromProperties( const OUString& _sDriverClas
     }
     catch( Exception& )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         ::dbtools::throwGenericSQLException(
             lcl_getDriverLoadErrorMessage( getResources(),_sDriverClass, _sDriverClassPath ),
             *this,

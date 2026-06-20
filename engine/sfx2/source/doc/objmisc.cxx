@@ -48,7 +48,7 @@
 #include <com/sun/star/util/XModifiable.hpp>
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 #include <com/sun/star/task/ErrorCodeRequest2.hpp>
 
 #include <comphelper/kit.hxx>
@@ -115,6 +115,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::frame;
@@ -1059,7 +1060,7 @@ void SfxObjectShell::CheckEncryption_Impl( const uno::Reference< task::XInteract
         css::task::ErrorCodeRequest aErrorCode;
         aErrorCode.ErrCode = sal_uInt32(ERRCODE_SFX_INCOMPLETE_ENCRYPTION);
 
-        SfxMedium::CallApproveHandler( xHandler, uno::Any( aErrorCode ), false );
+        SfxMedium::CallApproveHandler( xHandler, cpo::uno::Any( aErrorCode ), false );
         pImpl->m_bIncomplEncrWarnShown = true;
     }
 
@@ -1515,7 +1516,7 @@ bool SfxObjectShell::UnTrustedScript(const OUString& rScriptURL)
 }
 
 ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptContext, const OUString& _rScriptURL,
-    const Sequence< Any >& aParams, Any& aRet, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam, bool bRaiseError, const css::uno::Any* pCaller )
+    const Sequence< Any >& aParams, Any& aRet, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam, bool bRaiseError, const cpo::uno::Any* pCaller )
 {
     SAL_INFO("sfx", "in CallXScript" );
     ErrCode nErr = ERRCODE_NONE;
@@ -1553,8 +1554,8 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
             Reference< beans::XPropertySet > xProps( xScript, uno::UNO_QUERY );
             if ( xProps.is() )
             {
-                Sequence< uno::Any > aArgs{ *pCaller };
-                xProps->setPropertyValue(u"Caller"_ustr, uno::Any( aArgs ) );
+                Sequence< cpo::uno::Any > aArgs{ *pCaller };
+                xProps->setPropertyValue(u"Caller"_ustr, cpo::uno::Any( aArgs ) );
             }
         }
         aRet = xScript->invoke( aParams, aOutParamIndex, aOutParam );
@@ -1579,12 +1580,12 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
 // perhaps rename to CallScript once we get rid of the existing CallScript
 // and Call, CallBasic, CallStarBasic methods
 ErrCode SfxObjectShell::CallXScript( const OUString& rScriptURL,
-        const css::uno::Sequence< css::uno::Any >& aParams,
-        css::uno::Any& aRet,
+        const css::uno::Sequence< cpo::uno::Any >& aParams,
+        cpo::uno::Any& aRet,
         css::uno::Sequence< sal_Int16 >& aOutParamIndex,
-        css::uno::Sequence< css::uno::Any >& aOutParam,
+        css::uno::Sequence< cpo::uno::Any >& aOutParam,
         bool bRaiseError,
-        const css::uno::Any* pCaller )
+        const cpo::uno::Any* pCaller )
 {
     return CallXScript( GetModel(), rScriptURL, aParams, aRet, aOutParamIndex, aOutParam, bRaiseError, pCaller );
 }
@@ -1822,7 +1823,7 @@ bool SfxObjectShell::UseInteractionToHandleError(
     {
         try
         {
-            uno::Any aInteraction;
+            cpo::uno::Any aInteraction;
             rtl::Reference<::comphelper::OInteractionAbort> pAbort = new ::comphelper::OInteractionAbort();
             rtl::Reference<::comphelper::OInteractionApprove> pApprove = new ::comphelper::OInteractionApprove();
             uno::Sequence< uno::Reference< task::XInteractionContinuation > > lContinuations{
@@ -1964,7 +1965,7 @@ bool SfxObjectShell_Impl::hasTrustedScriptingSignature(
                         aRequest.DocumentSignatureInformation = std::move(aInfo);
                         aRequest.DocumentVersion = aVersion;
                         aRequest.Classification = task::InteractionClassification_QUERY;
-                        bResult = SfxMedium::CallApproveHandler( _rxInteraction, uno::Any( aRequest ), true );
+                        bResult = SfxMedium::CallApproveHandler( _rxInteraction, cpo::uno::Any( aRequest ), true );
                     }
                 }
             }

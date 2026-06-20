@@ -41,6 +41,7 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::util;
 using namespace cppu;
 
@@ -293,7 +294,7 @@ OUString const & CachedContentResultSet::CCRS_Cache
     }
     catch(const SQLException& ex)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException( ex.Message,
                         css::uno::Reference< css::uno::XInterface >(),
                         anyEx );
@@ -317,7 +318,7 @@ Reference< XContentIdentifier > CachedContentResultSet::CCRS_Cache
     }
     catch(const SQLException& ex)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException( ex.Message,
                         css::uno::Reference< css::uno::XInterface >(),
                         anyEx );
@@ -341,7 +342,7 @@ Reference< XContent > CachedContentResultSet::CCRS_Cache
     }
     catch (const SQLException& ex)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException( ex.Message,
                         css::uno::Reference< css::uno::XInterface >(),
                         anyEx );
@@ -384,7 +385,7 @@ public:
             XPropertySetInfo > const & xPropertySetInfoOrigin );
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         noexcept override;
     virtual void SAL_CALL release()
@@ -491,9 +492,9 @@ void SAL_CALL CCRS_PropertySetInfo::release()
     OWeakObject::release();
 }
 
-css::uno::Any SAL_CALL CCRS_PropertySetInfo::queryInterface( const css::uno::Type & rType )
+cpo::uno::Any SAL_CALL CCRS_PropertySetInfo::queryInterface( const css::uno::Type & rType )
 {
-    css::uno::Any aRet = cppu::queryInterface( rType,
+    cpo::uno::Any aRet = cppu::queryInterface( rType,
                                                static_cast< XTypeProvider* >(this),
                                                static_cast< XPropertySetInfo* >(this)
                                                );
@@ -2007,7 +2008,7 @@ css::uno::Sequence< OUString > SAL_CALL CachedContentResultSetFactory::getSuppor
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_CachedContentResultSetFactory_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new CachedContentResultSetFactory(context));
 }

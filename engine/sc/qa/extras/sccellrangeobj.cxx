@@ -39,7 +39,7 @@
 #include <com/sun/star/util/SortField.hpp>
 #include <com/sun/star/util/XSortable.hpp>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -236,7 +236,7 @@ void ScCellRangeObj::testSortOOB()
     pSort[0].SortAscending = true;
 
     uno::Sequence<beans::PropertyValue> aProps(
-        comphelper::InitPropertySequence({ { "SortFields", uno::Any(aSort) } }));
+        comphelper::InitPropertySequence({ { "SortFields", cpo::uno::Any(aSort) } }));
 
     xSortable->sort(aProps);
 }

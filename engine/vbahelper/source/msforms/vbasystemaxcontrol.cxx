@@ -35,19 +35,19 @@ uno::Reference< beans::XIntrospectionAccess > SAL_CALL VbaSystemAXControl::getIn
 }
 
 
-uno::Any SAL_CALL VbaSystemAXControl::invoke( const OUString& aFunctionName, const uno::Sequence< uno::Any >& aParams, uno::Sequence< ::sal_Int16 >& aOutParamIndex, uno::Sequence< uno::Any >& aOutParam )
+cpo::uno::Any SAL_CALL VbaSystemAXControl::invoke( const OUString& aFunctionName, const uno::Sequence< cpo::uno::Any >& aParams, uno::Sequence< ::sal_Int16 >& aOutParamIndex, uno::Sequence< cpo::uno::Any >& aOutParam )
 {
     return m_xControlInvocation->invoke( aFunctionName, aParams, aOutParamIndex, aOutParam );
 }
 
 
-void SAL_CALL VbaSystemAXControl::setValue( const OUString& aPropertyName, const uno::Any& aValue )
+void SAL_CALL VbaSystemAXControl::setValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     m_xControlInvocation->setValue( aPropertyName, aValue );
 }
 
 
-uno::Any SAL_CALL VbaSystemAXControl::getValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL VbaSystemAXControl::getValue( const OUString& aPropertyName )
 {
     return m_xControlInvocation->getValue( aPropertyName );
 }

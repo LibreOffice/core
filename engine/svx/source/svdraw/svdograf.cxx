@@ -80,7 +80,7 @@ public:
     virtual void        Closed() override;
 
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const OUString& rMimeType, const uno::Any & rValue ) override;
+        const OUString& rMimeType, const cpo::uno::Any & rValue ) override;
 
     void                Connect() { GetRealObject(); }
 };
@@ -93,7 +93,7 @@ SdrGraphicLink::SdrGraphicLink(SdrGrafObj& rObj)
 }
 
 ::sfx2::SvBaseLink::UpdateResult SdrGraphicLink::DataChanged(
-    const OUString& rMimeType, const uno::Any & rValue )
+    const OUString& rMimeType, const cpo::uno::Any & rValue )
 {
     SdrModel& rModel(rGrafObj.getSdrModelFromSdrObject());
     sfx2::LinkManager* pLinkManager(rModel.GetLinkManager());

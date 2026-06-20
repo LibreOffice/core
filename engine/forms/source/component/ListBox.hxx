@@ -103,7 +103,7 @@ class OListBoxModel final :public OBoundControlModel
 
     // <properties>
     css::form::ListSourceType                   m_eListSourceType;      // type of list source
-    css::uno::Any                               m_aBoundColumn;
+    cpo::uno::Any                               m_aBoundColumn;
     ValueList                                   m_aListSourceValues;
     ValueList                                   m_aBoundValues;         // do not write directly; use setBoundValues()
     mutable ValueList                           m_aConvertedBoundValues;
@@ -137,23 +137,23 @@ public:
 
 // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(OListBoxModel, OBoundControlModel)
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
 
 // OComponentHelper
     virtual void SAL_CALL disposing() override;
 
 // OPropertySetHelper
-    virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle) const override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
     virtual bool SAL_CALL convertFastPropertyValue(
-                css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
+                cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
 
 private:
     static const ::connectivity::ORowSetValue s_aEmptyValue;
     static const ::connectivity::ORowSetValue s_aEmptyStringValue;
 
     // XMultiPropertySet
-    virtual void SAL_CALL   setPropertyValues(const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Sequence< css::uno::Any >& Values) override;
+    virtual void SAL_CALL   setPropertyValues(const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Sequence< cpo::uno::Any >& Values) override;
 
     // XPersistObject
     virtual OUString SAL_CALL    getServiceName() override;
@@ -181,21 +181,21 @@ private:
     using OBoundControlModel::setPropertyValues;
 
     // OBoundControlModel overridables
-    virtual css::uno::Any   translateDbColumnToControlValue( ) override;
+    virtual cpo::uno::Any   translateDbColumnToControlValue( ) override;
     virtual css::uno::Sequence< css::uno::Type >
                             getSupportedBindingTypes() override;
-    virtual css::uno::Any   translateExternalValueToControlValue( const css::uno::Any& _rExternalValue ) const override;
-    virtual css::uno::Any   translateControlValueToExternalValue( ) const override;
-    virtual css::uno::Any   translateControlValueToValidatableValue( ) const override;
+    virtual cpo::uno::Any   translateExternalValueToControlValue( const cpo::uno::Any& _rExternalValue ) const override;
+    virtual cpo::uno::Any   translateControlValueToExternalValue( ) const override;
+    virtual cpo::uno::Any   translateControlValueToValidatableValue( ) const override;
     virtual bool            commitControlValueToDbColumn( bool _bPostReset ) override;
 
     virtual void            onConnectedDbColumn( const css::uno::Reference< css::uno::XInterface >& _rxForm ) override;
     virtual void            onDisconnectedDbColumn() override;
 
-    virtual css::uno::Any   getDefaultForReset() const override;
+    virtual cpo::uno::Any   getDefaultForReset() const override;
     virtual void            resetNoBroadcast() override;
 
-    virtual css::uno::Any   getCurrentFormComponentValue() const override;
+    virtual cpo::uno::Any   getCurrentFormComponentValue() const override;
 
     // OEntryListHelper overridables
     virtual void    stringItemListChanged( ControlModelLock& _rInstanceLock ) override;
@@ -204,10 +204,10 @@ private:
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
 
     void init();
-    css::uno::Any getCurrentSingleValue() const;
-    css::uno::Sequence<css::uno::Any> getCurrentMultiValue() const;
+    cpo::uno::Any getCurrentSingleValue() const;
+    css::uno::Sequence<cpo::uno::Any> getCurrentMultiValue() const;
     css::uno::Sequence< sal_Int16 > translateBindingValuesToControlValue(
-        const css::uno::Sequence< const css::uno::Any > &i_aValues)
+        const css::uno::Sequence< const cpo::uno::Any > &i_aValues)
         const;
     css::uno::Sequence< sal_Int16 > translateDbValueToControlValue(
         const ::connectivity::ORowSetValue &aValue)
@@ -247,7 +247,7 @@ private:
     ::comphelper::OInterfaceContainerHelper3<css::form::XChangeListener> m_aChangeListeners;
     ::comphelper::OInterfaceContainerHelper3<css::awt::XItemListener> m_aItemListeners;
 
-    css::uno::Any                           m_aCurrentSelection;
+    cpo::uno::Any                           m_aCurrentSelection;
     Idle                                    m_aChangeIdle;
 
     css::uno::Reference< css::awt::XListBox >
@@ -266,7 +266,7 @@ public:
 
     // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(OListBoxControl, OBoundControl)
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
 
 // XServiceInfo
     OUString SAL_CALL getImplementationName() override

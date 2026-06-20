@@ -154,7 +154,7 @@ ScAutoFormatsObj::~ScAutoFormatsObj()
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-ScAutoFormatsObj_get_implementation(css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const &)
+ScAutoFormatsObj_get_implementation(css::uno::XComponentContext*, css::uno::Sequence<cpo::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
     ScDLL::Init();
@@ -182,7 +182,7 @@ rtl::Reference<ScAutoFormatObj> ScAutoFormatsObj::GetObjectByName_Impl(std::u16s
 
 // container::XNameContainer
 
-void SAL_CALL ScAutoFormatsObj::insertByName( const OUString& aName, const uno::Any& aElement )
+void SAL_CALL ScAutoFormatsObj::insertByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
     SolarMutexGuard aGuard;
     bool bDone = false;
@@ -231,7 +231,7 @@ void SAL_CALL ScAutoFormatsObj::insertByName( const OUString& aName, const uno::
     }
 }
 
-void SAL_CALL ScAutoFormatsObj::replaceByName( const OUString& aName, const uno::Any& aElement )
+void SAL_CALL ScAutoFormatsObj::replaceByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
     SolarMutexGuard aGuard;
     //! combine?
@@ -272,13 +272,13 @@ sal_Int32 SAL_CALL ScAutoFormatsObj::getCount()
     return ScGlobal::GetOrCreateAutoFormat()->size();
 }
 
-uno::Any SAL_CALL ScAutoFormatsObj::getByIndex( sal_Int32 nIndex )
+cpo::uno::Any SAL_CALL ScAutoFormatsObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     rtl::Reference< ScAutoFormatObj > xFormat(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nIndex)));
     if (!xFormat.is())
         throw lang::IndexOutOfBoundsException();
-    return uno::Any(uno::Reference< container::XNamed >(xFormat));
+    return cpo::uno::Any(uno::Reference< container::XNamed >(xFormat));
 }
 
 uno::Type SAL_CALL ScAutoFormatsObj::getElementType()
@@ -294,13 +294,13 @@ bool SAL_CALL ScAutoFormatsObj::hasElements()
 
 // container::XNameAccess
 
-uno::Any SAL_CALL ScAutoFormatsObj::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL ScAutoFormatsObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     rtl::Reference< ScAutoFormatObj > xFormat(GetObjectByName_Impl(aName));
     if (!xFormat.is())
         throw container::NoSuchElementException();
-    return uno::Any(uno::Reference< container::XNamed >(xFormat));
+    return cpo::uno::Any(uno::Reference< container::XNamed >(xFormat));
 }
 
 uno::Sequence<OUString> SAL_CALL ScAutoFormatsObj::getElementNames()
@@ -382,7 +382,7 @@ sal_Int32 SAL_CALL ScAutoFormatObj::getCount()
         return 0;
 }
 
-uno::Any SAL_CALL ScAutoFormatObj::getByIndex( sal_Int32 nIndex )
+cpo::uno::Any SAL_CALL ScAutoFormatObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -390,8 +390,8 @@ uno::Any SAL_CALL ScAutoFormatObj::getByIndex( sal_Int32 nIndex )
         throw lang::IndexOutOfBoundsException();
 
     if (IsInserted())
-        return uno::Any(uno::Reference< beans::XPropertySet >(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nIndex))));
-    return uno::Any();
+        return cpo::uno::Any(uno::Reference< beans::XPropertySet >(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nIndex))));
+    return cpo::uno::Any();
 }
 
 uno::Type SAL_CALL ScAutoFormatObj::getElementType()
@@ -465,7 +465,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAutoFormatObj::getPropertySet
 }
 
 void SAL_CALL ScAutoFormatObj::setPropertyValue(
-                        const OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
@@ -495,10 +495,10 @@ void SAL_CALL ScAutoFormatObj::setPropertyValue(
     pFormats->SetSaveLater(true);
 }
 
-uno::Any SAL_CALL ScAutoFormatObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ScAutoFormatObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
     if (IsInserted() && nFormatIndex < pFormats->size())
@@ -554,7 +554,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAutoFormatFieldObj::getProper
 }
 
 void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
-                        const OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
@@ -654,10 +654,10 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
     }
 }
 
-uno::Any SAL_CALL ScAutoFormatFieldObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ScAutoFormatFieldObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
-    uno::Any aVal;
+    cpo::uno::Any aVal;
 
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
     const SfxItemPropertyMapEntry* pEntry =

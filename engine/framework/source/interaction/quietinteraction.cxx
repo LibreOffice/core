@@ -40,7 +40,7 @@ QuietInteraction::QuietInteraction()
 void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XInteractionRequest >& xRequest )
 {
     // safe the request for outside analyzing every time!
-    css::uno::Any aRequest = xRequest->getRequest();
+    cpo::uno::Any aRequest = xRequest->getRequest();
     {
         SolarMutexGuard g;
         m_aRequest = aRequest;
@@ -112,7 +112,7 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
         xAbort->select();
 }
 
-css::uno::Any QuietInteraction::getRequest() const
+cpo::uno::Any QuietInteraction::getRequest() const
 {
     SolarMutexGuard g;
     return m_aRequest;

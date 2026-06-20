@@ -12,7 +12,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 #include <rtl/ustring.hxx>
 
 #include <iterator>
@@ -37,7 +37,7 @@ private:
 
 void CommonFunctorsTest::testAnyToString()
 {
-    std::vector<css::uno::Any> aInput;
+    std::vector<cpo::uno::Any> aInput;
     aInput.emplace_back(2.0);
     aInput.emplace_back(10.0);
     aInput.emplace_back(12.0);

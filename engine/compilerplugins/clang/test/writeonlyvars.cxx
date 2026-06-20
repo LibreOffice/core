@@ -13,7 +13,7 @@
 
 #include <vector>
 #include <ostream>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 // See 1d0bc2139759f087d50432f8a2116060676f34e1 "use std::experimental::source_location in
@@ -82,7 +82,7 @@ void test()
     // expected-error@+1 {{write m_bar9 [loplugin:writeonlyvars]}}
     sal_Int32 m_bar9;
     // expected-error@+1 {{read any [loplugin:writeonlyvars]}}
-    css::uno::Any any;
+    cpo::uno::Any any;
     any >>= m_bar9;
 
     // check that we don't see writes when calling operator<<=
@@ -90,7 +90,7 @@ void test()
     sal_Int32 m_bar10 = 0;
     // expected-error@+2 {{write any2 [loplugin:writeonlyvars]}}
     // expected-error@+1 {{read any2 [loplugin:writeonlyvars]}}
-    css::uno::Any any2;
+    cpo::uno::Any any2;
     any2 <<= m_bar10;
     (void)any2;
 };

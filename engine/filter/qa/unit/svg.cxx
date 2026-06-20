@@ -165,8 +165,10 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentMultiParaText)
                                        /*bAbsorb=*/false);
     xShapeText->insertString(xCursor, u"bar"_ustr, /*bAbsorb=*/false);
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    xShapeProps->setPropertyValue(u"CharColor"_ustr, uno::Any(static_cast<sal_Int32>(0xff0000)));
-    xShapeProps->setPropertyValue(u"CharTransparence"_ustr, uno::Any(static_cast<sal_Int16>(20)));
+    xShapeProps->setPropertyValue(u"CharColor"_ustr,
+                                  cpo::uno::Any(static_cast<sal_Int32>(0xff0000)));
+    xShapeProps->setPropertyValue(u"CharTransparence"_ustr,
+                                  cpo::uno::Any(static_cast<sal_Int16>(20)));
 
     // When exporting to SVG:
     save(TestFilter::SVG_DRAW);

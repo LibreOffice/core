@@ -305,7 +305,7 @@ int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >
 
     for (auto& aLink : xLinks->getElementNames())
     {
-        uno::Any aAny;
+        cpo::uno::Any aAny;
 
         try
         {
@@ -508,8 +508,8 @@ IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl, weld::Button&, void)
 
         uno::Sequence< beans::NamedValue > aSettings
         {
-            { TG_SETTING_LASTMARK, css::uno::Any(sLastSelectedMark) },
-            { TG_SETTING_LASTPATH, css::uno::Any(comphelper::containerToSequence(aLastSelectedPath)) }
+            { TG_SETTING_LASTMARK, cpo::uno::Any(sLastSelectedMark) },
+            { TG_SETTING_LASTPATH, cpo::uno::Any(comphelper::containerToSequence(aLastSelectedPath)) }
         };
 
         // write

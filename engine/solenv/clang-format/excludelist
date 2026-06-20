@@ -4427,8 +4427,6 @@ include/codemaker/global.hxx
 include/codemaker/options.hxx
 include/codemaker/typemanager.hxx
 include/codemaker/unotype.hxx
-include/com/sun/star/uno/Any.h
-include/com/sun/star/uno/Any.hxx
 include/com/sun/star/uno/Reference.h
 include/com/sun/star/uno/Reference.hxx
 include/com/sun/star/uno/Sequence.h
@@ -4571,6 +4569,8 @@ include/cppcanvas/renderer.hxx
 include/cppcanvas/sprite.hxx
 include/cppcanvas/spritecanvas.hxx
 include/cppcanvas/vclfactory.hxx
+include/cpo/uno/Any.h
+include/cpo/uno/Any.hxx
 include/cppu/Enterable.hxx
 include/cppu/EnvGuards.hxx
 include/cppu/Map.hxx

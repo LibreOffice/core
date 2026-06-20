@@ -222,9 +222,9 @@ protected:
 
     void gotoCell(std::u16string_view aCellAddress)
     {
-        dispatchCommand(
-            mxComponent, u".uno:GoToCell"_ustr,
-            comphelper::InitPropertySequence({ { "ToPoint", uno::Any(OUString(aCellAddress)) } }));
+        dispatchCommand(mxComponent, u".uno:GoToCell"_ustr,
+                        comphelper::InitPropertySequence(
+                            { { "ToPoint", cpo::uno::Any(OUString(aCellAddress)) } }));
     }
 
     void createNewSheetViewInCurrentView()
@@ -235,8 +235,8 @@ protected:
     void insertSheet(OUString const& rName, sal_Int16 nIndex)
     {
         dispatchCommand(mxComponent, u".uno:Insert"_ustr,
-                        comphelper::InitPropertySequence(
-                            { { "Name", uno::Any(rName) }, { "Index", uno::Any(nIndex) } }));
+                        comphelper::InitPropertySequence({ { "Name", cpo::uno::Any(rName) },
+                                                           { "Index", cpo::uno::Any(nIndex) } }));
     }
 
     void removeSheetViewInCurrentView()
@@ -782,7 +782,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveTableWithSheetViews)
 
     // Insert a new sheet - "NewTab"
     uno::Sequence<beans::PropertyValue> aArgsInsert(comphelper::InitPropertySequence(
-        { { "Name", uno::Any(u"NewTab"_ustr) }, { "Index", uno::Any(sal_Int16(1)) } }));
+        { { "Name", cpo::uno::Any(u"NewTab"_ustr) }, { "Index", cpo::uno::Any(sal_Int16(1)) } }));
 
     dispatchCommand(mxComponent, u".uno:Insert"_ustr, aArgsInsert);
 
@@ -846,7 +846,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveTableWithSheetViews)
 
     // Delete the table - index 0
     uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "Index", uno::Any(sal_uInt16(0)) } }));
+        comphelper::InitPropertySequence({ { "Index", cpo::uno::Any(sal_uInt16(0)) } }));
 
     dispatchCommand(mxComponent, u".uno:Remove"_ustr, aArgs);
 
@@ -1606,19 +1606,19 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetViewHolderTable)
     // Unhide the sheet view holder tables (or they won't be deleted)
     {
         uno::Sequence<beans::PropertyValue> aArgs(
-            comphelper::InitPropertySequence({ { "aTableName", uno::Any(u"Hoja1_3"_ustr) } }));
+            comphelper::InitPropertySequence({ { "aTableName", cpo::uno::Any(u"Hoja1_3"_ustr) } }));
         dispatchCommand(mxComponent, u".uno:Show"_ustr, aArgs);
     }
     {
         uno::Sequence<beans::PropertyValue> aArgs(
-            comphelper::InitPropertySequence({ { "aTableName", uno::Any(u"Hoja1_2"_ustr) } }));
+            comphelper::InitPropertySequence({ { "aTableName", cpo::uno::Any(u"Hoja1_2"_ustr) } }));
         dispatchCommand(mxComponent, u".uno:Show"_ustr, aArgs);
     }
 
     // Delete the table
     {
         uno::Sequence<beans::PropertyValue> aArgs(
-            comphelper::InitPropertySequence({ { "Index", uno::Any(sal_uInt16(2)) } }));
+            comphelper::InitPropertySequence({ { "Index", cpo::uno::Any(sal_uInt16(2)) } }));
 
         dispatchCommand(mxComponent, u".uno:Remove"_ustr, aArgs);
     }
@@ -2408,7 +2408,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetViewAndSwitchTab)
 
     // Insert a second sheet
     uno::Sequence<beans::PropertyValue> aArgsInsert(comphelper::InitPropertySequence(
-        { { "Name", uno::Any(u"Sheet2"_ustr) }, { "Index", uno::Any(sal_Int16(2)) } }));
+        { { "Name", cpo::uno::Any(u"Sheet2"_ustr) }, { "Index", cpo::uno::Any(sal_Int16(2)) } }));
     dispatchCommand(mxComponent, u".uno:Insert"_ustr, aArgsInsert);
 
     CPPUNIT_ASSERT_EQUAL(SCTAB(2), rDocument.GetTableCount());

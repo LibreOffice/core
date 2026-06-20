@@ -104,10 +104,10 @@ namespace pcr
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
         // XPropertyHandler overridables
-        virtual css::uno::Any                          SAL_CALL getPropertyValue( const OUString& _rPropertyName ) override;
-        virtual void                                   SAL_CALL setPropertyValue( const OUString& _rPropertyName, const css::uno::Any& _rValue ) override;
-        virtual css::uno::Any                          SAL_CALL convertToPropertyValue( const OUString& _rPropertyName, const css::uno::Any& _rControlValue ) override;
-        virtual css::uno::Any                          SAL_CALL convertToControlValue( const OUString& _rPropertyName, const css::uno::Any& _rPropertyValue, const css::uno::Type& _rControlValueType ) override;
+        virtual cpo::uno::Any                          SAL_CALL getPropertyValue( const OUString& _rPropertyName ) override;
+        virtual void                                   SAL_CALL setPropertyValue( const OUString& _rPropertyName, const cpo::uno::Any& _rValue ) override;
+        virtual cpo::uno::Any                          SAL_CALL convertToPropertyValue( const OUString& _rPropertyName, const cpo::uno::Any& _rControlValue ) override;
+        virtual cpo::uno::Any                          SAL_CALL convertToControlValue( const OUString& _rPropertyName, const cpo::uno::Any& _rPropertyValue, const css::uno::Type& _rControlValueType ) override;
         virtual css::beans::PropertyState              SAL_CALL getPropertyState( const OUString& _rPropertyName ) override;
         virtual void                                   SAL_CALL addPropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
         virtual void                                   SAL_CALL removePropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
@@ -115,8 +115,8 @@ namespace pcr
         virtual css::uno::Sequence< OUString >         SAL_CALL getActuatingProperties() override;
         virtual css::inspection::LineDescriptor        SAL_CALL describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;
         virtual css::inspection::InteractiveSelectionResult
-                                                       SAL_CALL onInteractivePropertySelection( const OUString& _rPropertyName, bool _bPrimary, css::uno::Any& _rData, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) override;
-        virtual void                                   SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const css::uno::Any& _rNewValue, const css::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit ) override;
+                                                       SAL_CALL onInteractivePropertySelection( const OUString& _rPropertyName, bool _bPrimary, cpo::uno::Any& _rData, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) override;
+        virtual void                                   SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const cpo::uno::Any& _rNewValue, const cpo::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit ) override;
         virtual bool                               SAL_CALL suspend( bool _bSuspend ) override;
 
         // PropertyHandler
@@ -133,10 +133,10 @@ namespace pcr
 
         /** const-version of ->getPropertyValue
         */
-        css::uno::Any impl_getPropertyValue_throw( const OUString& _rPropertyName ) const;
+        cpo::uno::Any impl_getPropertyValue_throw( const OUString& _rPropertyName ) const;
 
         // some property values are faked, and not used in the way they're provided by our component
-        void impl_normalizePropertyValue_nothrow( css::uno::Any& _rValue, PropertyId _nPropId ) const;
+        void impl_normalizePropertyValue_nothrow( cpo::uno::Any& _rValue, PropertyId _nPropId ) const;
 
         /** determines whether we should exclude a given property from our "supported properties"
         */
@@ -266,7 +266,7 @@ namespace pcr
                 <TRUE/> if and only if a new formatting has been chosen by the user.
                 In this case, ->_out_rNewValue is filled with the new property value
         */
-        bool impl_dialogFormatting_nothrow( css::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
+        bool impl_dialogFormatting_nothrow( cpo::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 
         /** executes a dialog which allows to the user to change the ImageURL property
             of our component by browsing for an image file.
@@ -278,7 +278,7 @@ namespace pcr
                 <TRUE/> if and only if a new image URL has been chosen by the user.
                 In this case, ->_out_rNewValue is filled with the new property value
         */
-        bool impl_browseForImage_nothrow( css::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
+        bool impl_browseForImage_nothrow( cpo::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 
         /** executes a dialog which allows the user to change the TargetURL property of
             our component
@@ -290,7 +290,7 @@ namespace pcr
                 <TRUE/> if and only if a new TargetURL has been chosen by the user.
                 In this case, ->_out_rNewValue is filled with the new property value
         */
-        bool impl_browseForTargetURL_nothrow( css::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
+        bool impl_browseForTargetURL_nothrow( cpo::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 
         /** executes a dialog which allows the user to change the font, plus related properties,
             of our component
@@ -301,7 +301,7 @@ namespace pcr
             @return
                 <TRUE/> if and only if the user successfully changed the font of our component
         */
-        bool impl_executeFontDialog_nothrow( css::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
+        bool impl_executeFontDialog_nothrow( cpo::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 
         /** allows the user browsing for a database document
             @precond
@@ -312,7 +312,7 @@ namespace pcr
                 <TRUE/> if and only if a new DataSource has been chosen by the user.
                 In this case, ->_out_rNewValue is filled with the new property value
         */
-        bool impl_browseForDatabaseDocument_throw( css::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
+        bool impl_browseForDatabaseDocument_throw( cpo::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 
         /** raises a dialog which allows the user to choose a color
             @param  _nColorPropertyId
@@ -322,7 +322,7 @@ namespace pcr
             @return
                 <TRUE/> if and only if a color was chosen by the user
         */
-        bool impl_dialogColorChooser_throw( sal_Int32 _nColorPropertyId, css::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
+        bool impl_dialogColorChooser_throw( sal_Int32 _nColorPropertyId, cpo::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 
         /** raises a dialog which allows the user to choose a label control for our component
             @param  _out_rNewValue
@@ -330,7 +330,7 @@ namespace pcr
             @return
                 <TRUE/> if and only if a label control was chosen by the user
         */
-        bool impl_dialogChooseLabelControl_nothrow( css::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
+        bool impl_dialogChooseLabelControl_nothrow( cpo::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 
         /** raises a dialog that lets the user choose the tab order of controls on a form
             @precond

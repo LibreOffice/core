@@ -137,18 +137,18 @@ bool MediaItem::GetPresentation( SfxItemPresentation,
     return false;
 }
 
-bool MediaItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
+bool MediaItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 ) const
 {
-    uno::Sequence< uno::Any > aSeq{ uno::Any(m_pImpl->m_URL),
-                                    uno::Any(static_cast<sal_uInt32>(m_pImpl->m_nMaskSet)),
-                                    uno::Any(static_cast< sal_Int32 >( m_pImpl->m_eState )),
-                                    uno::Any(m_pImpl->m_fTime),
-                                    uno::Any(m_pImpl->m_fDuration),
-                                    uno::Any(m_pImpl->m_nVolumeDB),
-                                    uno::Any(m_pImpl->m_bLoop),
-                                    uno::Any(m_pImpl->m_bMute),
-                                    uno::Any(m_pImpl->m_eZoom),
-                                    uno::Any(m_pImpl->m_sMimeType) };
+    uno::Sequence< cpo::uno::Any > aSeq{ cpo::uno::Any(m_pImpl->m_URL),
+                                    cpo::uno::Any(static_cast<sal_uInt32>(m_pImpl->m_nMaskSet)),
+                                    cpo::uno::Any(static_cast< sal_Int32 >( m_pImpl->m_eState )),
+                                    cpo::uno::Any(m_pImpl->m_fTime),
+                                    cpo::uno::Any(m_pImpl->m_fDuration),
+                                    cpo::uno::Any(m_pImpl->m_nVolumeDB),
+                                    cpo::uno::Any(m_pImpl->m_bLoop),
+                                    cpo::uno::Any(m_pImpl->m_bMute),
+                                    cpo::uno::Any(m_pImpl->m_eZoom),
+                                    cpo::uno::Any(m_pImpl->m_sMimeType) };
 
     rVal <<= aSeq;
 
@@ -156,9 +156,9 @@ bool MediaItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
 }
 
 
-bool MediaItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
+bool MediaItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 )
 {
-    uno::Sequence< uno::Any >   aSeq;
+    uno::Sequence< cpo::uno::Any >   aSeq;
     bool                        bRet = false;
 
     if( ( rVal >>= aSeq ) && ( aSeq.getLength() == 10 ) )
@@ -471,9 +471,9 @@ CreateStream(uno::Reference<embed::XStorage> const& xStorage,
     if (xStreamProps.is()) { // this is NOT supported in FileSystemStorage
         OUString const guessed(::comphelper::GuessMediaMimeType(filename));
         xStreamProps->setPropertyValue(u"MediaType"_ustr,
-            uno::Any(guessed.isEmpty() ? AVMEDIA_MIMETYPE_COMMON : guessed));
+            cpo::uno::Any(guessed.isEmpty() ? AVMEDIA_MIMETYPE_COMMON : guessed));
         xStreamProps->setPropertyValue( // turn off compression
-            u"Compressed"_ustr, uno::Any(false));
+            u"Compressed"_ustr, cpo::uno::Any(false));
     }
     return xStream;
 }

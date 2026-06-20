@@ -36,6 +36,7 @@ namespace oox::xls {
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::chart2::data;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 using ::oox::drawingml::chart::DataSequenceModel;
 

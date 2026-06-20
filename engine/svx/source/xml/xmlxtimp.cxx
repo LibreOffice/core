@@ -54,6 +54,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::container;
 using namespace com::sun::star::document;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::awt;
 using namespace com::sun::star::xml::sax;
 using namespace ::xmloff::token;
@@ -103,7 +104,7 @@ namespace
     {
     private:
         uno::Reference< XNameContainer > mxTable;
-        css::uno::Any          maAny;
+        cpo::uno::Any          maAny;
         OUString               maStrName;
         std::vector<css::awt::ColorStop> maColorStopVec;
 
@@ -355,7 +356,7 @@ void SvxXMLTableImportContext::importBitmap( const uno::Reference< XFastAttribut
 {
     try
     {
-        uno::Any aGraphicAny;
+        cpo::uno::Any aGraphicAny;
         XMLImageStyle::importXML(xAttrList, aGraphicAny, rName, GetImport());
         if (aGraphicAny.has<uno::Reference<graphic::XGraphic>>())
         {

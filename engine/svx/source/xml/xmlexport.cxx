@@ -36,6 +36,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputStream>& xOut, const Reference< lang::XComponent >& xComponent )
 {
@@ -89,7 +90,7 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
             // doc export
             xWriter->setOutputStream( xOut );
 
-            uno::Sequence< uno::Any > aArgs( xObjectResolver.is() ? 3 : 2 );
+            uno::Sequence< cpo::uno::Any > aArgs( xObjectResolver.is() ? 3 : 2 );
             auto pArgs = aArgs.getArray();
             pArgs[0] <<= xHandler;
             pArgs[1] <<= xGraphicStorageHandler;

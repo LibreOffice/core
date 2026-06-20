@@ -18,13 +18,14 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <cppunit/TestAssert.h>
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace apitest
 {
@@ -110,9 +111,9 @@ void XSheetAuditing::testShowInvalid()
     xCell->setValue(2.5);
 
     uno::Reference<beans::XPropertySet> xPropSet(xCell, UNO_QUERY_THROW);
-    uno::Any aValidation = xPropSet->getPropertyValue(u"Validation"_ustr);
+    cpo::uno::Any aValidation = xPropSet->getPropertyValue(u"Validation"_ustr);
     uno::Reference<beans::XPropertySet> xValidation(aValidation, UNO_QUERY_THROW);
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     aAny <<= sheet::ValidationType_WHOLE;
     xValidation->setPropertyValue(u"Type"_ustr, aAny);

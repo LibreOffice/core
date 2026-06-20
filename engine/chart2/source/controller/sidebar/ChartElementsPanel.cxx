@@ -37,6 +37,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace chart::sidebar {
 
@@ -138,7 +139,7 @@ void setLegendOverlay(const css::uno::Reference<css::frame::XModel>& xModel, boo
     if (!xLegendProp.is())
         return;
 
-    xLegendProp->setPropertyValue(u"Overlay"_ustr, css::uno::Any(bOverlay));
+    xLegendProp->setPropertyValue(u"Overlay"_ustr, cpo::uno::Any(bOverlay));
 }
 
 bool isTitleVisible(const rtl::Reference<::chart::ChartModel>& xModel, TitleHelper::eTitleType eTitle)
@@ -147,7 +148,7 @@ bool isTitleVisible(const rtl::Reference<::chart::ChartModel>& xModel, TitleHelp
     if (!xTitle.is())
         return false;
 
-    css::uno::Any aAny = xTitle->getPropertyValue(u"Visible"_ustr);
+    cpo::uno::Any aAny = xTitle->getPropertyValue(u"Visible"_ustr);
     bool bVisible = aAny.get<bool>();
     return bVisible;
 }
@@ -287,9 +288,9 @@ void setLegendPos(const css::uno::Reference<css::frame::XModel>& xModel, sal_Int
             assert(false);
     }
 
-    xLegendProp->setPropertyValue(u"AnchorPosition"_ustr, css::uno::Any(eLegendPos));
-    xLegendProp->setPropertyValue(u"Expansion"_ustr, css::uno::Any(eExpansion));
-    xLegendProp->setPropertyValue(u"RelativePosition"_ustr, uno::Any());
+    xLegendProp->setPropertyValue(u"AnchorPosition"_ustr, cpo::uno::Any(eLegendPos));
+    xLegendProp->setPropertyValue(u"Expansion"_ustr, cpo::uno::Any(eExpansion));
+    xLegendProp->setPropertyValue(u"RelativePosition"_ustr, cpo::uno::Any());
 }
 
 }

@@ -43,21 +43,21 @@ class RootActionTriggerContainer final : public cppu::ImplInheritanceHelper<Prop
 
         // XMultiServiceFactory
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments ) override;
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const css::uno::Sequence< cpo::uno::Any >& Arguments ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
 
         // XIndexContainer
-        virtual void SAL_CALL insertByIndex( sal_Int32 Index, const css::uno::Any& Element ) override;
+        virtual void SAL_CALL insertByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
 
         virtual void SAL_CALL removeByIndex( sal_Int32 Index ) override;
 
         // XIndexReplace
-        virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const css::uno::Any& Element ) override;
+        virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
 
         // XIndexAccess
         virtual sal_Int32 SAL_CALL getCount() override;
 
-        virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+        virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
         // XElementAccess
         virtual css::uno::Type SAL_CALL getElementType() override;

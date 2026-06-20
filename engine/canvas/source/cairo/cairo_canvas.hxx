@@ -96,7 +96,7 @@ namespace cairocanvas
                    public RepaintTarget
     {
     public:
-        Canvas( const css::uno::Sequence< css::uno::Any >&               aArguments,
+        Canvas( const css::uno::Sequence< cpo::uno::Any >&               aArguments,
                 const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
         void initialize();
@@ -135,7 +135,7 @@ namespace cairocanvas
         virtual OutputDevice* getOutputDevice() override;
 
      private:
-        css::uno::Sequence< css::uno::Any >                maArguments;
+        css::uno::Sequence< cpo::uno::Any >                maArguments;
     };
 }
 

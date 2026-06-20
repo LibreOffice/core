@@ -22,7 +22,7 @@
 #include <csvtablebox.hxx>
 #include <tools/json_writer.hxx>
 #include <optutil.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
@@ -94,6 +94,7 @@ std::optional<boost::property_tree::ptree> parseEventJson(std::u16string_view rD
 }
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 constexpr OUString SEP_PATH = u"Office.Calc/Dialogs/CSVImport"_ustr;
 constexpr OUString FIXED_WIDTH_LIST = u"FixedWidthList"_ustr;

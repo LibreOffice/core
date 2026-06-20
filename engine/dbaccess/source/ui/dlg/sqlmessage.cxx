@@ -37,6 +37,7 @@
 
 using namespace dbtools;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::sdb;
 using namespace com::sun::star::sdbc;
 
@@ -571,7 +572,7 @@ OSQLMessageBox::OSQLMessageBox(weld::Window* pParent, const SQLExceptionInfo& rE
 
 OSQLMessageBox::OSQLMessageBox(weld::Window* pParent, const OUString& rTitle, const OUString& rMessage, MessBoxStyle nStyle, MessageType eType, const ::dbtools::SQLExceptionInfo* pAdditionalErrorInfo )
 {
-    css::uno::Any next;
+    cpo::uno::Any next;
     if (pAdditionalErrorInfo)
         next = pAdditionalErrorInfo->get();
     SQLContext aError(rTitle, {}, {}, 0, next, rMessage);

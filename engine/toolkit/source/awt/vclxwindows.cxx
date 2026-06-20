@@ -64,7 +64,7 @@
 #include "vclxwindows_internal.hxx"
 #include <svl/numformat.hxx>
 
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::lang::EventObject;
@@ -97,7 +97,7 @@ namespace toolkit
 {
     /** sets the "face color" for button like controls (scroll bar, spin button)
     */
-    void setButtonLikeFaceColor( vcl::Window* _pWindow, const css::uno::Any& _rColorValue )
+    void setButtonLikeFaceColor( vcl::Window* _pWindow, const cpo::uno::Any& _rColorValue )
     {
         AllSettings aSettings = _pWindow->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
@@ -231,7 +231,7 @@ void VCLXGraphicControl::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, 
     }
 }
 
-void VCLXGraphicControl::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
+void VCLXGraphicControl::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -284,11 +284,11 @@ void VCLXGraphicControl::setProperty( const OUString& PropertyName, const css::u
     }
 }
 
-css::uno::Any VCLXGraphicControl::getProperty( const OUString& PropertyName )
+cpo::uno::Any VCLXGraphicControl::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Any aProp;
+    cpo::uno::Any aProp;
     if ( !GetWindow() )
         return aProp;
 
@@ -478,7 +478,7 @@ css::awt::Size VCLXButton::calcAdjustedSize( const css::awt::Size& rNewSize )
     return vcl::unohelper::ConvertToAWTSize(aSz);
 }
 
-void VCLXButton::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
+void VCLXButton::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -523,11 +523,11 @@ void VCLXButton::setProperty( const OUString& PropertyName, const css::uno::Any&
     }
 }
 
-css::uno::Any VCLXButton::getProperty( const OUString& PropertyName )
+cpo::uno::Any VCLXButton::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Any aProp;
+    cpo::uno::Any aProp;
     VclPtr< Button > pButton = GetAs< Button >();
     if ( pButton )
     {
@@ -679,7 +679,7 @@ css::awt::Size VCLXImageControl::calcAdjustedSize( const css::awt::Size& rNewSiz
     return aSz;
 }
 
-void VCLXImageControl::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
+void VCLXImageControl::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -715,11 +715,11 @@ void VCLXImageControl::setProperty( const OUString& PropertyName, const css::uno
     }
 }
 
-css::uno::Any VCLXImageControl::getProperty( const OUString& PropertyName )
+cpo::uno::Any VCLXImageControl::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Any aProp;
+    cpo::uno::Any aProp;
     VclPtr< ImageControl > pImageControl = GetAs< ImageControl >();
     sal_uInt16 nPropType = GetPropertyId( PropertyName );
 
@@ -915,7 +915,7 @@ css::awt::Size VCLXCheckBox::calcAdjustedSize( const css::awt::Size& rNewSize )
     return vcl::unohelper::ConvertToAWTSize(aSz);
 }
 
-void VCLXCheckBox::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
+void VCLXCheckBox::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -951,11 +951,11 @@ void VCLXCheckBox::setProperty( const OUString& PropertyName, const css::uno::An
     }
 }
 
-css::uno::Any VCLXCheckBox::getProperty( const OUString& PropertyName )
+cpo::uno::Any VCLXCheckBox::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Any aProp;
+    cpo::uno::Any aProp;
     VclPtr< CheckBox > pCheckBox = GetAs< CheckBox >();
     if ( pCheckBox )
     {
@@ -1065,7 +1065,7 @@ void VCLXRadioButton::dispose()
     VCLXGraphicControl::dispose();
 }
 
-void VCLXRadioButton::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
+void VCLXRadioButton::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -1107,11 +1107,11 @@ void VCLXRadioButton::setProperty( const OUString& PropertyName, const css::uno:
     }
 }
 
-css::uno::Any VCLXRadioButton::getProperty( const OUString& PropertyName )
+cpo::uno::Any VCLXRadioButton::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Any aProp;
+    cpo::uno::Any aProp;
     VclPtr< RadioButton > pButton = GetAs< RadioButton >();
     if ( pButton )
     {
@@ -1775,7 +1775,7 @@ void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     }
 }
 
-void VCLXListBox::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
+void VCLXListBox::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
     VclPtr< ListBox > pListBox = GetAs< ListBox >();
@@ -1883,10 +1883,10 @@ void VCLXListBox::setProperty( const OUString& PropertyName, const css::uno::Any
     }
 }
 
-css::uno::Any VCLXListBox::getProperty( const OUString& PropertyName )
+cpo::uno::Any VCLXListBox::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
-    css::uno::Any aProp;
+    cpo::uno::Any aProp;
     VclPtr< ListBox > pListBox = GetAs< ListBox >();
     if ( pListBox )
     {
@@ -2306,7 +2306,7 @@ css::awt::DeviceInfo VCLXDialog::getInfo()
 
 void SAL_CALL VCLXDialog::setProperty(
     const OUString& PropertyName,
-    const css::uno::Any& Value )
+    const cpo::uno::Any& Value )
 {
     SolarMutexGuard aGuard;
     VclPtr< Dialog > pDialog = GetAs< Dialog >();
@@ -2406,11 +2406,11 @@ void SAL_CALL VCLXMultiPage::draw( sal_Int32 nX, sal_Int32 nY )
     }
 }
 
-uno::Any SAL_CALL VCLXMultiPage::getProperty( const OUString& PropertyName )
+cpo::uno::Any SAL_CALL VCLXMultiPage::getProperty( const OUString& PropertyName )
 {
     SAL_INFO("toolkit", " **** VCLXMultiPage::getProperty " << PropertyName );
     SolarMutexGuard aGuard;
-    css::uno::Any aProp;
+    cpo::uno::Any aProp;
     sal_uInt16 nPropType = GetPropertyId( PropertyName );
     switch ( nPropType )
     {
@@ -2428,7 +2428,7 @@ uno::Any SAL_CALL VCLXMultiPage::getProperty( const OUString& PropertyName )
 
 void SAL_CALL VCLXMultiPage::setProperty(
     const OUString& PropertyName,
-    const css::uno::Any& Value )
+    const cpo::uno::Any& Value )
 {
     SAL_INFO("toolkit", " **** VCLXMultiPage::setProperty " << PropertyName );
     SolarMutexGuard aGuard;
@@ -2553,7 +2553,7 @@ void SAL_CALL VCLXMultiPage::setTabProps( sal_Int32 ID, const uno::Sequence< bea
     for (const auto& rProp : Properties)
     {
         const OUString &name = rProp.Name;
-        const uno::Any &value = rProp.Value;
+        const cpo::uno::Any &value = rProp.Value;
 
         if (name == "Title")
         {
@@ -2572,8 +2572,8 @@ uno::Sequence< beans::NamedValue > SAL_CALL VCLXMultiPage::getTabProps( sal_Int3
 
     uno::Sequence< beans::NamedValue > props
     {
-        { u"Title"_ustr,    css::uno::Any(pTabControl->GetPageText( sal::static_int_cast< sal_uInt16 >( ID ) )) },
-        { u"Position"_ustr, css::uno::Any(pTabControl->GetPagePos( sal::static_int_cast< sal_uInt16 >( ID ) )) }
+        { u"Title"_ustr,    cpo::uno::Any(pTabControl->GetPageText( sal::static_int_cast< sal_uInt16 >( ID ) )) },
+        { u"Position"_ustr, cpo::uno::Any(pTabControl->GetPagePos( sal::static_int_cast< sal_uInt16 >( ID ) )) }
     };
     return props;
 }
@@ -2651,7 +2651,7 @@ void SAL_CALL VCLXTabPage::draw( sal_Int32 nX, sal_Int32 nY )
 
 void SAL_CALL VCLXTabPage::setProperty(
     const OUString& PropertyName,
-    const css::uno::Any& Value )
+    const cpo::uno::Any& Value )
 {
     SolarMutexGuard aGuard;
     VclPtr< TabPage > pTabPage = GetAs< TabPage >();
@@ -2876,7 +2876,7 @@ css::awt::Size VCLXFixedHyperlink::calcAdjustedSize( const css::awt::Size& rNewS
     return vcl::unohelper::ConvertToAWTSize(aSz);
 }
 
-void VCLXFixedHyperlink::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
+void VCLXFixedHyperlink::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -2910,11 +2910,11 @@ void VCLXFixedHyperlink::setProperty( const OUString& PropertyName, const css::u
     }
 }
 
-css::uno::Any VCLXFixedHyperlink::getProperty( const OUString& PropertyName )
+cpo::uno::Any VCLXFixedHyperlink::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Any aProp;
+    cpo::uno::Any aProp;
     VclPtr< FixedHyperlink > pBase = GetAs< FixedHyperlink >();
     if ( pBase )
     {
@@ -3299,7 +3299,7 @@ sal_Int32 VCLXScrollBar::getOrientation()
 }
 
 // css::awt::VclWindowPeer
-void VCLXScrollBar::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
+void VCLXScrollBar::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -3414,11 +3414,11 @@ void VCLXScrollBar::setProperty( const OUString& PropertyName, const css::uno::A
     }
 }
 
-css::uno::Any VCLXScrollBar::getProperty( const OUString& PropertyName )
+cpo::uno::Any VCLXScrollBar::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Any aProp;
+    cpo::uno::Any aProp;
     VclPtr< ScrollBar > pScrollBar = GetAs< ScrollBar >();
     if ( pScrollBar )
     {
@@ -3731,7 +3731,7 @@ void VCLXEdit::setEchoChar( sal_Unicode cEcho )
         pEdit->SetEchoChar( cEcho );
 }
 
-void VCLXEdit::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
+void VCLXEdit::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -3776,11 +3776,11 @@ void VCLXEdit::setProperty( const OUString& PropertyName, const css::uno::Any& V
     }
 }
 
-css::uno::Any VCLXEdit::getProperty( const OUString& PropertyName )
+cpo::uno::Any VCLXEdit::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Any aProp;
+    cpo::uno::Any aProp;
     VclPtr< Edit > pEdit = GetAs< Edit >();
     if ( pEdit )
     {
@@ -4084,7 +4084,7 @@ sal_Int16 VCLXComboBox::getDropDownLineCount()
     return nLines;
 }
 
-void VCLXComboBox::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
+void VCLXComboBox::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -4171,11 +4171,11 @@ void VCLXComboBox::setProperty( const OUString& PropertyName, const css::uno::An
     }
 }
 
-css::uno::Any VCLXComboBox::getProperty( const OUString& PropertyName )
+cpo::uno::Any VCLXComboBox::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Any aProp;
+    cpo::uno::Any aProp;
     VclPtr< ComboBox > pComboBox = GetAs< ComboBox >();
     if ( pComboBox )
     {
@@ -4450,7 +4450,7 @@ bool VCLXFormattedSpinField::isStrictFormat() const
 }
 
 
-void VCLXFormattedSpinField::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
+void VCLXFormattedSpinField::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -4489,11 +4489,11 @@ void VCLXFormattedSpinField::setProperty( const OUString& PropertyName, const cs
     }
 }
 
-css::uno::Any VCLXFormattedSpinField::getProperty( const OUString& PropertyName )
+cpo::uno::Any VCLXFormattedSpinField::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Any aProp;
+    cpo::uno::Any aProp;
     FormatterBase* pFormatter = GetFormatter();
     if ( pFormatter )
     {
@@ -4569,7 +4569,7 @@ VCLXDateField::~VCLXDateField()
 {
 }
 
-void VCLXDateField::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
+void VCLXDateField::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -4638,11 +4638,11 @@ void VCLXDateField::setProperty( const OUString& PropertyName, const css::uno::A
     }
 }
 
-css::uno::Any VCLXDateField::getProperty( const OUString& PropertyName )
+cpo::uno::Any VCLXDateField::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Any aProp;
+    cpo::uno::Any aProp;
     FormatterBase* pFormatter = GetFormatter();
     if ( pFormatter )
     {
@@ -5028,7 +5028,7 @@ bool VCLXTimeField::isStrictFormat()
 }
 
 
-void VCLXTimeField::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
+void VCLXTimeField::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -5090,11 +5090,11 @@ void VCLXTimeField::setProperty( const OUString& PropertyName, const css::uno::A
     }
 }
 
-css::uno::Any VCLXTimeField::getProperty( const OUString& PropertyName )
+cpo::uno::Any VCLXTimeField::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Any aProp;
+    cpo::uno::Any aProp;
     if ( GetWindow() )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -5344,7 +5344,7 @@ sal_Int16 VCLXNumericField::getDecimalDigits()
     return pNumericFormatter ? pNumericFormatter->GetDecimalDigits() : 0;
 }
 
-void VCLXNumericField::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
+void VCLXNumericField::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -5421,11 +5421,11 @@ void VCLXNumericField::setProperty( const OUString& PropertyName, const css::uno
     }
 }
 
-css::uno::Any VCLXNumericField::getProperty( const OUString& PropertyName )
+cpo::uno::Any VCLXNumericField::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Any aProp;
+    cpo::uno::Any aProp;
     FormatterBase* pFormatter = GetFormatter();
     if ( pFormatter )
     {
@@ -5626,7 +5626,7 @@ sal_Int16 VCLXMetricField::getDecimalDigits()
     return pNumericFormatter ? pNumericFormatter->GetDecimalDigits() : 0;
 }
 
-void VCLXMetricField::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
+void VCLXMetricField::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -5677,11 +5677,11 @@ void VCLXMetricField::setProperty( const OUString& PropertyName, const css::uno:
     }
 }
 
-css::uno::Any VCLXMetricField::getProperty( const OUString& PropertyName )
+cpo::uno::Any VCLXMetricField::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Any aProp;
+    cpo::uno::Any aProp;
     FormatterBase* pFormatter = GetFormatter();
     if ( pFormatter )
     {
@@ -5802,7 +5802,7 @@ bool VCLXPatternField::isStrictFormat()
     return VCLXFormattedSpinField::isStrictFormat();
 }
 
-void VCLXPatternField::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
+void VCLXPatternField::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -5835,11 +5835,11 @@ void VCLXPatternField::setProperty( const OUString& PropertyName, const css::uno
     }
 }
 
-css::uno::Any VCLXPatternField::getProperty( const OUString& PropertyName )
+cpo::uno::Any VCLXPatternField::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Any aProp;
+    cpo::uno::Any aProp;
     if ( GetWindow() )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -5909,7 +5909,7 @@ void SAL_CALL VCLXFrame::draw( sal_Int32 nX, sal_Int32 nY )
 
 void SAL_CALL VCLXFrame::setProperty(
     const OUString& PropertyName,
-    const css::uno::Any& Value )
+    const cpo::uno::Any& Value )
 {
     SolarMutexGuard aGuard;
 
@@ -6046,7 +6046,7 @@ sal_Int32 VCLXProgressBar::getValue()
 }
 
 // css::awt::VclWindowPeer
-void VCLXProgressBar::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
+void VCLXProgressBar::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -6101,11 +6101,11 @@ void VCLXProgressBar::setProperty( const OUString& PropertyName, const css::uno:
     }
 }
 
-css::uno::Any VCLXProgressBar::getProperty( const OUString& PropertyName )
+cpo::uno::Any VCLXProgressBar::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Any aProp;
+    cpo::uno::Any aProp;
     VclPtr< ProgressBar > pProgressBar = GetAs< ProgressBar >();
     if ( pProgressBar )
     {
@@ -6170,7 +6170,7 @@ namespace
     }
 }
 
-void SAL_CALL VCLXFileControl::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
+void SAL_CALL VCLXFileControl::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -6428,7 +6428,7 @@ void SVTXFormattedField::SetWindow( const VclPtr< vcl::Window > &_pWindow )
         GetAs< FormattedField >()->GetFormatter().SetAutoColor(true);
 }
 
-void SVTXFormattedField::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
+void SVTXFormattedField::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -6504,7 +6504,7 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const css::u
                             sal_Int32 nValue = 0;
                             if (!(Value >>= nValue))
                                 throw css::lang::IllegalArgumentException();
-                            SetValue(css::uno::Any(static_cast<double>(nValue)));
+                            SetValue(cpo::uno::Any(static_cast<double>(nValue)));
                             break;
                         }
 
@@ -6553,11 +6553,11 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const css::u
         VCLXSpinField::setProperty( PropertyName, Value );
 }
 
-css::uno::Any SVTXFormattedField::getProperty( const OUString& PropertyName )
+cpo::uno::Any SVTXFormattedField::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Any aReturn;
+    cpo::uno::Any aReturn;
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
@@ -6620,9 +6620,9 @@ css::uno::Any SVTXFormattedField::getProperty( const OUString& PropertyName )
     return aReturn;
 }
 
-css::uno::Any SVTXFormattedField::convertEffectiveValue(const css::uno::Any& rValue) const
+cpo::uno::Any SVTXFormattedField::convertEffectiveValue(const cpo::uno::Any& rValue) const
 {
-    css::uno::Any aReturn;
+    cpo::uno::Any aReturn;
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (!pField)
@@ -6680,7 +6680,7 @@ css::uno::Any SVTXFormattedField::convertEffectiveValue(const css::uno::Any& rVa
     return aReturn;
 }
 
-void SVTXFormattedField::SetMinValue(const css::uno::Any& rValue)
+void SVTXFormattedField::SetMinValue(const cpo::uno::Any& rValue)
 {
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (!pField)
@@ -6709,21 +6709,21 @@ void SVTXFormattedField::SetMinValue(const css::uno::Any& rValue)
     }
 }
 
-css::uno::Any SVTXFormattedField::GetMinValue() const
+cpo::uno::Any SVTXFormattedField::GetMinValue() const
 {
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (!pField)
-        return css::uno::Any();
+        return cpo::uno::Any();
     Formatter& rFormatter = pField->GetFormatter();
     if (!rFormatter.HasMinValue())
-        return css::uno::Any();
+        return cpo::uno::Any();
 
-    css::uno::Any aReturn;
+    cpo::uno::Any aReturn;
     aReturn <<= rFormatter.GetMinValue();
     return aReturn;
 }
 
-void SVTXFormattedField::SetMaxValue(const css::uno::Any& rValue)
+void SVTXFormattedField::SetMaxValue(const cpo::uno::Any& rValue)
 {
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (!pField)
@@ -6750,27 +6750,27 @@ void SVTXFormattedField::SetMaxValue(const css::uno::Any& rValue)
     }
 }
 
-css::uno::Any SVTXFormattedField::GetMaxValue() const
+cpo::uno::Any SVTXFormattedField::GetMaxValue() const
 {
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (!pField)
-        return css::uno::Any();
+        return cpo::uno::Any();
     Formatter& rFormatter = pField->GetFormatter();
     if (!rFormatter.HasMaxValue())
-        return css::uno::Any();
+        return cpo::uno::Any();
 
-    css::uno::Any aReturn;
+    cpo::uno::Any aReturn;
     aReturn <<= rFormatter.GetMaxValue();
     return aReturn;
 }
 
-void SVTXFormattedField::SetDefaultValue(const css::uno::Any& rValue)
+void SVTXFormattedField::SetDefaultValue(const cpo::uno::Any& rValue)
 {
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (!pField)
         return;
 
-    css::uno::Any aConverted = convertEffectiveValue(rValue);
+    cpo::uno::Any aConverted = convertEffectiveValue(rValue);
 
     Formatter& rFormatter = pField->GetFormatter();
     switch (aConverted.getValueTypeClass())
@@ -6796,16 +6796,16 @@ void SVTXFormattedField::SetDefaultValue(const css::uno::Any& rValue)
     }
 }
 
-css::uno::Any SVTXFormattedField::GetDefaultValue() const
+cpo::uno::Any SVTXFormattedField::GetDefaultValue() const
 {
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (!pField)
-        return css::uno::Any();
+        return cpo::uno::Any();
     Formatter& rFormatter = pField->GetFormatter();
     if (rFormatter.IsEmptyFieldEnabled())
-        return css::uno::Any();
+        return cpo::uno::Any();
 
-    css::uno::Any aReturn;
+    cpo::uno::Any aReturn;
     if (rFormatter.TreatingAsNumber())
         aReturn <<= rFormatter.GetDefaultValue();
     else
@@ -6829,14 +6829,14 @@ void SVTXFormattedField::SetTreatAsNumber(bool bSet)
         pField->GetFormatter().TreatAsNumber(bSet);
 }
 
-css::uno::Any SVTXFormattedField::GetValue() const
+cpo::uno::Any SVTXFormattedField::GetValue() const
 {
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (!pField)
-        return css::uno::Any();
+        return cpo::uno::Any();
 
     Formatter& rFormatter = pField->GetFormatter();
-    css::uno::Any aReturn;
+    cpo::uno::Any aReturn;
     if (!rFormatter.TreatingAsNumber())
     {
         OUString sText = rFormatter.GetTextValue();
@@ -6851,7 +6851,7 @@ css::uno::Any SVTXFormattedField::GetValue() const
     return aReturn;
 }
 
-void SVTXFormattedField::SetValue(const css::uno::Any& rValue)
+void SVTXFormattedField::SetValue(const cpo::uno::Any& rValue)
 {
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (!pField)
@@ -6913,7 +6913,7 @@ void SVTXFormattedField::setFormatsSupplier(const css::uno::Reference< css::util
         return;
 
     // save the actual value
-    css::uno::Any aCurrent = GetValue();
+    cpo::uno::Any aCurrent = GetValue();
     Formatter& rFormatter = pField->GetFormatter();
     rFormatter.SetFormatter(m_xCurrentSupplier->GetNumberFormatter(), false);
     if (nKeyToSetDelayed != -1)
@@ -7128,7 +7128,7 @@ bool SVTXCurrencyField::isStrictFormat()
     return pField && pField->GetFormatter().IsStrictFormat();
 }
 
-void SVTXCurrencyField::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
+void SVTXCurrencyField::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -7161,11 +7161,11 @@ void SVTXCurrencyField::setProperty( const OUString& PropertyName, const css::un
         SVTXFormattedField::setProperty(PropertyName, Value);
 }
 
-css::uno::Any SVTXCurrencyField::getProperty( const OUString& PropertyName )
+cpo::uno::Any SVTXCurrencyField::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Any aReturn;
+    cpo::uno::Any aReturn;
 
     VclPtr< DoubleCurrencyField > pField = GetAs< DoubleCurrencyField >();
     if ( pField )
@@ -7387,7 +7387,7 @@ SVTXDateField::~SVTXDateField()
 {
 }
 
-void SAL_CALL SVTXDateField::setProperty( const OUString& PropertyName, const css::uno::Any& Value )
+void SAL_CALL SVTXDateField::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value )
 {
     VCLXDateField::setProperty( PropertyName, Value );
 
@@ -7638,7 +7638,7 @@ void VCLXMultiLineEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEven
     }
 }
 
-void VCLXMultiLineEdit::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
+void VCLXMultiLineEdit::setProperty( const OUString& PropertyName, const cpo::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -7694,11 +7694,11 @@ void VCLXMultiLineEdit::setProperty( const OUString& PropertyName, const css::un
     }
 }
 
-css::uno::Any VCLXMultiLineEdit::getProperty( const OUString& PropertyName )
+cpo::uno::Any VCLXMultiLineEdit::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Any aProp;
+    cpo::uno::Any aProp;
     VclPtr< MultiLineEdit > pMultiLineEdit = GetAs< MultiLineEdit >();
     if ( pMultiLineEdit )
     {

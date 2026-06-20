@@ -67,7 +67,7 @@ void TestParsing::testSimpleRectangle()
     uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
     const uno::Reference<graphic::XSvgParser> xSvgParser = graphic::SvgTools::create(xContext);
 
-    uno::Any aAny = xSvgParser->getDrawCommands(xStream, aPath);
+    cpo::uno::Any aAny = xSvgParser->getDrawCommands(xStream, aPath);
     CPPUNIT_ASSERT(aAny.has<sal_uInt64>());
     auto* pDrawRoot = reinterpret_cast<gfx::DrawRoot*>(aAny.get<sal_uInt64>());
 
@@ -100,7 +100,7 @@ void TestParsing::testPath()
     uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
     const uno::Reference<graphic::XSvgParser> xSvgParser = graphic::SvgTools::create(xContext);
 
-    uno::Any aAny = xSvgParser->getDrawCommands(xStream, aPath);
+    cpo::uno::Any aAny = xSvgParser->getDrawCommands(xStream, aPath);
     CPPUNIT_ASSERT(aAny.has<sal_uInt64>());
     auto* pDrawRoot = reinterpret_cast<gfx::DrawRoot*>(aAny.get<sal_uInt64>());
 

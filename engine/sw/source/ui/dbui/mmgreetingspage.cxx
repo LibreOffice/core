@@ -32,6 +32,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 static void lcl_FillGreetingsBox(weld::ComboBox& rBox,
                         SwMailMergeConfigItem const & rConfig,

@@ -48,7 +48,7 @@ public:
 
     virtual void Closed() override;
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const OUString& rMimeType, const css::uno::Any & rValue ) override;
+        const OUString& rMimeType, const cpo::uno::Any & rValue ) override;
 
     virtual void    Edit(weld::Window*, const Link<SvBaseLink&,void>& rEndEditHdl) override;
 

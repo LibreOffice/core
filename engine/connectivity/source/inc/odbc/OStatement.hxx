@@ -141,16 +141,16 @@ namespace connectivity::odbc
         // OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
         virtual bool SAL_CALL convertFastPropertyValue(
-                            css::uno::Any & rConvertedValue,
-                            css::uno::Any & rOldValue,
+                            cpo::uno::Any & rConvertedValue,
+                            cpo::uno::Any & rOldValue,
                             sal_Int32 nHandle,
-                            const css::uno::Any& rValue ) override;
+                            const cpo::uno::Any& rValue ) override;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
-                                const css::uno::Any& rValue
+                                const cpo::uno::Any& rValue
                                                  ) override;
         virtual void SAL_CALL getFastPropertyValue(
-                                css::uno::Any& rValue,
+                                cpo::uno::Any& rValue,
                                 sal_Int32 nHandle
                                      ) const override;
         virtual ~OStatement_Base() override;
@@ -166,7 +166,7 @@ namespace connectivity::odbc
         virtual void SAL_CALL release() noexcept override;
         virtual void SAL_CALL acquire() noexcept override;
         // XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
         //XTypeProvider
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
@@ -178,7 +178,7 @@ namespace connectivity::odbc
         virtual bool SAL_CALL execute( const OUString& sql ) override ;
         virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(  ) override ;
         // XWarningsSupplier
-        virtual css::uno::Any SAL_CALL getWarnings(  ) override;
+        virtual cpo::uno::Any SAL_CALL getWarnings(  ) override;
         virtual void SAL_CALL clearWarnings(  ) override;
         // XCancellable
         virtual void SAL_CALL cancel(  ) override;
@@ -228,7 +228,7 @@ namespace connectivity::odbc
         OStatement( OConnection* _pConnection) : OStatement_BASE2( _pConnection){}
         DECLARE_SERVICE_INFO();
 
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
         virtual void SAL_CALL acquire() noexcept override;
         virtual void SAL_CALL release() noexcept override;
         // XBatchExecution

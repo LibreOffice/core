@@ -40,14 +40,14 @@ public:
     NamedPropertyValuesContainer() noexcept;
 
     // XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement ) override;
+    virtual void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
     virtual void SAL_CALL removeByName( const OUString& Name ) override;
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement ) override;
+    virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
 
     // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
@@ -71,7 +71,7 @@ NamedPropertyValuesContainer::NamedPropertyValuesContainer() noexcept
 }
 
 // XNameContainer
-void SAL_CALL NamedPropertyValuesContainer::insertByName( const OUString& aName, const uno::Any& aElement )
+void SAL_CALL NamedPropertyValuesContainer::insertByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
     if( maProperties.find( aName ) != maProperties.end() )
         throw container::ElementExistException();
@@ -93,7 +93,7 @@ void SAL_CALL NamedPropertyValuesContainer::removeByName( const OUString& Name )
 }
 
 // XNameReplace
-void SAL_CALL NamedPropertyValuesContainer::replaceByName( const OUString& aName, const css::uno::Any& aElement )
+void SAL_CALL NamedPropertyValuesContainer::replaceByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
     NamedPropertyValues::iterator aIter = maProperties.find( aName );
     if( aIter == maProperties.end() )
@@ -106,13 +106,13 @@ void SAL_CALL NamedPropertyValuesContainer::replaceByName( const OUString& aName
 }
 
 // XNameAccess
-css::uno::Any SAL_CALL NamedPropertyValuesContainer::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL NamedPropertyValuesContainer::getByName( const OUString& aName )
 {
     NamedPropertyValues::iterator aIter = maProperties.find( aName );
     if( aIter == maProperties.end() )
         throw container::NoSuchElementException();
 
-    uno::Any aElement;
+    cpo::uno::Any aElement;
 
     aElement <<= (*aIter).second;
 
@@ -160,7 +160,7 @@ css::uno::Sequence< OUString > SAL_CALL NamedPropertyValuesContainer::getSupport
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 NamedPropertyValuesContainer_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new NamedPropertyValuesContainer());
 }

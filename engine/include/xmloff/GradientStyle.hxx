@@ -30,9 +30,9 @@ class SvXMLExport;
 namespace com::sun::star {
     namespace uno { template<class A> class Reference; }
     namespace xml::sax { class XFastAttributeList; }
-    namespace uno { class Any; }
     namespace awt { struct ColorStop; }
 }
+namespace cpo::uno { class Any; }
 
 
 class XMLOFF_DLLPUBLIC XMLGradientStyleImport
@@ -44,7 +44,7 @@ public:
 
     void importXML(
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
-        css::uno::Any& rValue,
+        cpo::uno::Any& rValue,
         OUString& rStrName );
 };
 
@@ -67,7 +67,7 @@ public:
 
     void exportXML(
         const OUString& rStrName,
-        const css::uno::Any& rValue );
+        const cpo::uno::Any& rValue );
 };
 
 #endif // INCLUDED_XMLOFF_GRADIENTSTYLE_HXX

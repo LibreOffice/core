@@ -40,7 +40,7 @@ namespace comphelper
     class SAL_NO_VTABLE IKeyPredicateLess
     {
     public:
-        virtual bool isLess( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const = 0;
+        virtual bool isLess( cpo::uno::Any const & _lhs, cpo::uno::Any const & _rhs ) const = 0;
         virtual ~IKeyPredicateLess() {}
     };
 
@@ -54,7 +54,7 @@ namespace comphelper
         {
         }
 
-        bool operator()( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const
+        bool operator()( cpo::uno::Any const & _lhs, cpo::uno::Any const & _rhs ) const
         {
             return m_predicate.isLess( _lhs, _rhs );
         }
@@ -70,7 +70,7 @@ namespace comphelper
     class ScalarPredicateLess final : public IKeyPredicateLess
     {
     public:
-        virtual bool isLess( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const override
+        virtual bool isLess( cpo::uno::Any const & _lhs, cpo::uno::Any const & _rhs ) const override
         {
             SCALAR lhs(0), rhs(0);
             if  (   !( _lhs >>= lhs )
@@ -87,7 +87,7 @@ namespace comphelper
     class StringPredicateLess final : public IKeyPredicateLess
     {
     public:
-        virtual bool isLess( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const override
+        virtual bool isLess( cpo::uno::Any const & _lhs, cpo::uno::Any const & _rhs ) const override
         {
             OUString lhs, rhs;
             if  (   !( _lhs >>= lhs )
@@ -109,7 +109,7 @@ namespace comphelper
         {
         }
 
-        virtual bool isLess( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const override
+        virtual bool isLess( cpo::uno::Any const & _lhs, cpo::uno::Any const & _rhs ) const override
         {
             OUString lhs, rhs;
             if  (   !( _lhs >>= lhs )
@@ -129,7 +129,7 @@ namespace comphelper
     class TypePredicateLess final : public IKeyPredicateLess
     {
     public:
-        virtual bool isLess( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const override
+        virtual bool isLess( cpo::uno::Any const & _lhs, cpo::uno::Any const & _rhs ) const override
         {
             css::uno::Type lhs, rhs;
             if  (   !( _lhs >>= lhs )
@@ -151,7 +151,7 @@ namespace comphelper
         {
         }
 
-        virtual bool isLess( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const override
+        virtual bool isLess( cpo::uno::Any const & _lhs, cpo::uno::Any const & _rhs ) const override
         {
             sal_Int32 lhs(0), rhs(0);
             if  (   !::cppu::enum2int( lhs, _lhs )
@@ -173,7 +173,7 @@ namespace comphelper
     class InterfacePredicateLess final : public IKeyPredicateLess
     {
     public:
-        virtual bool isLess( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const override
+        virtual bool isLess( cpo::uno::Any const & _lhs, cpo::uno::Any const & _rhs ) const override
         {
             if  (   ( _lhs.getValueTypeClass() != css::uno::TypeClass_INTERFACE )
                 ||  ( _rhs.getValueTypeClass() != css::uno::TypeClass_INTERFACE )
@@ -209,7 +209,7 @@ namespace comphelper
     /**
         Compare two Anys.
     */
-    bool COMPHELPER_DLLPUBLIC anyLess( css::uno::Any const & lhs, css::uno::Any const & rhs);
+    bool COMPHELPER_DLLPUBLIC anyLess( cpo::uno::Any const & lhs, cpo::uno::Any const & rhs);
 
 } // namespace comphelper
 

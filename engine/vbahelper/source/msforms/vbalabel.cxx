@@ -40,16 +40,16 @@ ScVbaLabel::getCaption()
 void SAL_CALL
 ScVbaLabel::setCaption( const OUString& _caption )
 {
-    m_xProps->setPropertyValue( u"Label"_ustr, uno::Any( _caption ) );
+    m_xProps->setPropertyValue( u"Label"_ustr, cpo::uno::Any( _caption ) );
 }
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaLabel::getValue()
 {
-    return uno::Any( getCaption() );
+    return cpo::uno::Any( getCaption() );
 }
 
 void SAL_CALL
-ScVbaLabel::setValue( const uno::Any& _value )
+ScVbaLabel::setValue( const cpo::uno::Any& _value )
 {
     OUString sCaption;
     _value >>= sCaption;

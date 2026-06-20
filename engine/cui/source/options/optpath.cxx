@@ -47,6 +47,7 @@ using namespace css;
 using namespace css::beans;
 using namespace css::ui::dialogs;
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace svx;
 
 // define ----------------------------------------------------------------

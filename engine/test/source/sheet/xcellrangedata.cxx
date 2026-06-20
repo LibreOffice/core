@@ -10,7 +10,7 @@
 #include <test/sheet/xcellrangedata.hxx>
 
 #include <com/sun/star/sheet/XCellRangeData.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -19,6 +19,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace apitest {
 

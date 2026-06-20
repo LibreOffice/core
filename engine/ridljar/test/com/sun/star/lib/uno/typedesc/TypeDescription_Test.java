@@ -20,7 +20,7 @@ package com.sun.star.lib.uno.typedesc;
 
 import com.sun.star.lib.uno.typeinfo.MethodTypeInfo;
 import com.sun.star.lib.uno.typeinfo.TypeInfo;
-import com.sun.star.uno.Any;
+import cpo.uno.Any;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.XInterface;

@@ -60,7 +60,7 @@ struct FmSearchProgress
     bool        bOverflow;
 
     // the position of the search cursor - valid in case of STATE_SUCCESSFUL, STATE_CANCELED and STATE_NOTHING_FOUND
-    css::uno::Any  aBookmark;
+    cpo::uno::Any  aBookmark;
     // the field, in which the text was found - valid in case of STATE_SUCCESSFUL
     sal_Int32   nFieldIndex;
 };
@@ -183,7 +183,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FmSearchEngine final
     CursorWrapper           m_xClonedIterator;
 
     // Data for the decision in which field a "Found" is accepted
-    css::uno::Any  m_aPreviousLocBookmark;     // position of the last finding
+    cpo::uno::Any  m_aPreviousLocBookmark;     // position of the last finding
     FieldCollection::iterator   m_iterPreviousLocField;     // field of the last finding
 
     // Communication with the thread that does the actual searching

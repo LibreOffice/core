@@ -52,7 +52,7 @@ namespace dbaccess
     using css::uno::UNO_QUERY_THROW;
     using css::uno::UNO_SET_THROW;
     using css::uno::Exception;
-    using css::uno::Any;
+    using cpo::uno::Any;
     using css::uno::Sequence;
     using css::uno::XComponentContext;
     using css::embed::XStorage;

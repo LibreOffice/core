@@ -28,7 +28,7 @@
 #include <svx/svxdllapi.h>
 #include <unordered_map>
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 class Any;
 }
@@ -88,14 +88,14 @@ public:
     SAL_DLLPRIVATE virtual SdrCustomShapeGeometryItem* Clone(SfxItemPool* pPool
                                                              = nullptr) const override;
 
-    SAL_DLLPRIVATE virtual bool QueryValue(css::uno::Any& rVal,
+    SAL_DLLPRIVATE virtual bool QueryValue(cpo::uno::Any& rVal,
                                            sal_uInt8 nMemberId = 0) const override;
-    SAL_DLLPRIVATE virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
+    SAL_DLLPRIVATE virtual bool PutValue(const cpo::uno::Any& rVal, sal_uInt8 nMemberId) override;
 
-    css::uno::Any* GetPropertyValueByName(const OUString& rPropName);
-    const css::uno::Any* GetPropertyValueByName(const OUString& rPropName) const;
-    css::uno::Any* GetPropertyValueByName(const OUString& rPropName, const OUString& rPropName2);
-    const css::uno::Any* GetPropertyValueByName(const OUString& rPropName,
+    cpo::uno::Any* GetPropertyValueByName(const OUString& rPropName);
+    const cpo::uno::Any* GetPropertyValueByName(const OUString& rPropName) const;
+    cpo::uno::Any* GetPropertyValueByName(const OUString& rPropName, const OUString& rPropName2);
+    const cpo::uno::Any* GetPropertyValueByName(const OUString& rPropName,
                                                 const OUString& rPropName2) const;
 
     void SetPropertyValue(const css::beans::PropertyValue& rPropVal);

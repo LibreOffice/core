@@ -95,7 +95,7 @@ void lcl_addStorageToMediaDescriptor(
 {
     rOutMD.realloc( rOutMD.getLength() + 1 );
     rOutMD.getArray()[rOutMD.getLength() - 1] = beans::PropertyValue(
-        u"Storage"_ustr, -1, uno::Any( xStorage ), beans::PropertyState_DIRECT_VALUE );
+        u"Storage"_ustr, -1, cpo::uno::Any( xStorage ), beans::PropertyState_DIRECT_VALUE );
 }
 
 Reference< embed::XStorage > lcl_createStorage(
@@ -115,9 +115,9 @@ Reference< embed::XStorage > lcl_createStorage(
             uno::UNO_QUERY );
 
         Reference< lang::XSingleServiceFactory > xStorageFact( embed::StorageFactory::create( xContext ) );
-        Sequence< uno::Any > aStorageArgs{ uno::Any(xStream),
-                                           uno::Any(embed::ElementModes::READWRITE),
-                                           uno::Any(rMediaDescriptor) };
+        Sequence< cpo::uno::Any > aStorageArgs{ cpo::uno::Any(xStream),
+                                           cpo::uno::Any(embed::ElementModes::READWRITE),
+                                           cpo::uno::Any(rMediaDescriptor) };
         xStorage.set(
             xStorageFact->createInstanceWithArguments( aStorageArgs ), uno::UNO_QUERY_THROW );
     }
@@ -156,7 +156,7 @@ Reference< document::XFilter > ChartModel::impl_createFilter(
                 m_xContext->getServiceManager()->createInstanceWithContext(
                     u"com.sun.star.document.FilterFactory"_ustr, m_xContext ),
                 uno::UNO_QUERY_THROW );
-            uno::Any aFilterProps( xFilterFact->getByName( aFilterName ));
+            cpo::uno::Any aFilterProps( xFilterFact->getByName( aFilterName ));
             Sequence< beans::PropertyValue > aProps;
 
             if( aFilterProps.hasValue() &&
@@ -355,7 +355,7 @@ void ChartModel::impl_store(
     {
         xPropSet->setPropertyValue(
             u"SavedObject"_ustr,
-            uno::Any( aMDHelper.HierarchicalDocumentName ) );
+            cpo::uno::Any( aMDHelper.HierarchicalDocumentName ) );
     }
     catch ( const uno::Exception& )
     {
@@ -380,7 +380,7 @@ void ChartModel::insertDefaultChart()
                 bool bSupportsCategories = xTemplate->supportsCategories();
                 if( bSupportsCategories )
                 {
-                    aParam = { beans::PropertyValue( u"HasCategories"_ustr, -1, uno::Any( true ),
+                    aParam = { beans::PropertyValue( u"HasCategories"_ustr, -1, cpo::uno::Any( true ),
                                                      beans::PropertyState_DIRECT_VALUE ) };
                 }
 
@@ -395,38 +395,38 @@ void ChartModel::insertDefaultChart()
 
                 // create and attach legend
                 rtl::Reference< Legend > xLegend = new Legend();
-                xLegend->setPropertyValue( u"FillStyle"_ustr, uno::Any( drawing::FillStyle_NONE ));
-                xLegend->setPropertyValue( u"LineStyle"_ustr, uno::Any( drawing::LineStyle_NONE ));
-                xLegend->setPropertyValue( u"LineColor"_ustr, uno::Any( static_cast< sal_Int32 >( 0xb3b3b3 ) ));  // gray30
-                xLegend->setPropertyValue( u"FillColor"_ustr, uno::Any( static_cast< sal_Int32 >( 0xe6e6e6 ) ) ); // gray10
+                xLegend->setPropertyValue( u"FillStyle"_ustr, cpo::uno::Any( drawing::FillStyle_NONE ));
+                xLegend->setPropertyValue( u"LineStyle"_ustr, cpo::uno::Any( drawing::LineStyle_NONE ));
+                xLegend->setPropertyValue( u"LineColor"_ustr, cpo::uno::Any( static_cast< sal_Int32 >( 0xb3b3b3 ) ));  // gray30
+                xLegend->setPropertyValue( u"FillColor"_ustr, cpo::uno::Any( static_cast< sal_Int32 >( 0xe6e6e6 ) ) ); // gray10
 
                 if( bIsRTL )
-                    xLegend->setPropertyValue( u"AnchorPosition"_ustr, uno::Any( chart2::LegendPosition_LINE_START ));
+                    xLegend->setPropertyValue( u"AnchorPosition"_ustr, cpo::uno::Any( chart2::LegendPosition_LINE_START ));
                 if(xDiagram.is())
                 {
                     xDiagram->setLegend( xLegend );
 
                     // set simple 3D look
-                    xDiagram->setPropertyValue( u"RightAngledAxes"_ustr, uno::Any( true ));
-                    xDiagram->setPropertyValue( u"D3DScenePerspective"_ustr, uno::Any( drawing::ProjectionMode_PARALLEL ));
+                    xDiagram->setPropertyValue( u"RightAngledAxes"_ustr, cpo::uno::Any( true ));
+                    xDiagram->setPropertyValue( u"D3DScenePerspective"_ustr, cpo::uno::Any( drawing::ProjectionMode_PARALLEL ));
                     xDiagram->setScheme( ThreeDLookScheme::ThreeDLookScheme_Realistic );
 
                     //set some new 'defaults' for wall and floor
                     Reference< beans::XPropertySet > xWall( xDiagram->getWall() );
                     if( xWall.is() )
                     {
-                        xWall->setPropertyValue( u"LineStyle"_ustr, uno::Any( drawing::LineStyle_SOLID ) );
-                        xWall->setPropertyValue( u"FillStyle"_ustr, uno::Any( drawing::FillStyle_NONE ) );
-                        xWall->setPropertyValue( u"LineColor"_ustr, uno::Any( static_cast< sal_Int32 >( 0xb3b3b3 ) ) ); // gray30
-                        xWall->setPropertyValue( u"FillColor"_ustr, uno::Any( static_cast< sal_Int32 >( 0xe6e6e6 ) ) ); // gray10
+                        xWall->setPropertyValue( u"LineStyle"_ustr, cpo::uno::Any( drawing::LineStyle_SOLID ) );
+                        xWall->setPropertyValue( u"FillStyle"_ustr, cpo::uno::Any( drawing::FillStyle_NONE ) );
+                        xWall->setPropertyValue( u"LineColor"_ustr, cpo::uno::Any( static_cast< sal_Int32 >( 0xb3b3b3 ) ) ); // gray30
+                        xWall->setPropertyValue( u"FillColor"_ustr, cpo::uno::Any( static_cast< sal_Int32 >( 0xe6e6e6 ) ) ); // gray10
                     }
                     Reference< beans::XPropertySet > xFloor( xDiagram->getFloor() );
                     if( xFloor.is() )
                     {
-                        xFloor->setPropertyValue( u"LineStyle"_ustr, uno::Any( drawing::LineStyle_NONE ) );
-                        xFloor->setPropertyValue( u"FillStyle"_ustr, uno::Any( drawing::FillStyle_SOLID ) );
-                        xFloor->setPropertyValue( u"LineColor"_ustr, uno::Any( static_cast< sal_Int32 >( 0xb3b3b3 ) ) ); // gray30
-                        xFloor->setPropertyValue( u"FillColor"_ustr, uno::Any( static_cast< sal_Int32 >( 0xcccccc ) ) ); // gray20
+                        xFloor->setPropertyValue( u"LineStyle"_ustr, cpo::uno::Any( drawing::LineStyle_NONE ) );
+                        xFloor->setPropertyValue( u"FillStyle"_ustr, cpo::uno::Any( drawing::FillStyle_SOLID ) );
+                        xFloor->setPropertyValue( u"LineColor"_ustr, cpo::uno::Any( static_cast< sal_Int32 >( 0xb3b3b3 ) ) ); // gray30
+                        xFloor->setPropertyValue( u"FillColor"_ustr, cpo::uno::Any( static_cast< sal_Int32 >( 0xcccccc ) ) ); // gray20
                     }
 
                 }
@@ -482,9 +482,9 @@ void SAL_CALL ChartModel::load(
             if( aMDHelper.ISSET_Stream )
             {
                 // convert XStream to XStorage via the storage factory
-                Sequence< uno::Any > aStorageArgs{ uno::Any(aMDHelper.Stream),
+                Sequence< cpo::uno::Any > aStorageArgs{ cpo::uno::Any(aMDHelper.Stream),
                                                    // todo: check if stream is read-only
-                                                   uno::Any(embed::ElementModes::READ) }; //WRITE | embed::ElementModes::NOCREATE);
+                                                   cpo::uno::Any(embed::ElementModes::READ) }; //WRITE | embed::ElementModes::NOCREATE);
 
                 xStorage.set( xStorageFact->createInstanceWithArguments( aStorageArgs ),
                     uno::UNO_QUERY_THROW );
@@ -493,8 +493,8 @@ void SAL_CALL ChartModel::load(
             {
                 OSL_ASSERT( aMDHelper.ISSET_InputStream );
                 // convert XInputStream to XStorage via the storage factory
-                Sequence< uno::Any > aStorageArgs{ uno::Any(aMDHelper.InputStream),
-                                                   uno::Any(embed::ElementModes::READ) };
+                Sequence< cpo::uno::Any > aStorageArgs{ cpo::uno::Any(aMDHelper.InputStream),
+                                                   cpo::uno::Any(embed::ElementModes::READ) };
 
                 xStorage.set( xStorageFact->createInstanceWithArguments( aStorageArgs ),
                     uno::UNO_QUERY_THROW );

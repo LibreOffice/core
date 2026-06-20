@@ -36,7 +36,7 @@ namespace dbaccess
         css::uno::Reference < css::sdbc::XResultSetMetaData > m_xMetaData;
         css::uno::Reference< css::sdbc::XDatabaseMetaData >   m_xDBMetaData;
         sal_Int32                             m_nPos;
-        css::uno::Any                         m_aIsRowVersion;
+        cpo::uno::Any                         m_aIsRowVersion;
         mutable ::std::optional< bool > m_isSigned;
         mutable ::std::optional< bool > m_isCurrency;
         mutable ::std::optional< bool > m_bSearchable;
@@ -74,7 +74,7 @@ namespace dbaccess
 
     // cppu::OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
-        virtual void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const override;
+        virtual void SAL_CALL getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
     private:
         void    impl_determineIsRowVersion_nothrow();

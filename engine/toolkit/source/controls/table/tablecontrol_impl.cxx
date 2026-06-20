@@ -51,7 +51,7 @@ namespace svt::table
 
 
     using ::com::sun::star::accessibility::AccessibleTableModelChange;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::accessibility::XAccessible;
     using ::com::sun::star::uno::Reference;
 
@@ -200,11 +200,11 @@ namespace svt::table
         {
             return true;
         }
-        virtual void getCellContent( ColPos const, RowPos const, css::uno::Any& o_cellContent ) override
+        virtual void getCellContent( ColPos const, RowPos const, cpo::uno::Any& o_cellContent ) override
         {
             o_cellContent.clear();
         }
-        virtual void getCellToolTip( ColPos const, RowPos const, css::uno::Any& ) override
+        virtual void getCellToolTip( ColPos const, RowPos const, cpo::uno::Any& ) override
         {
         }
         virtual Any getRowHeading( RowPos const ) const override
@@ -2363,7 +2363,7 @@ namespace svt::table
     void TableControl_Impl::impl_commitAccessibleEvent( sal_Int16 const i_eventID, Any const & i_newValue )
     {
         if (m_xAccessibleTable.is())
-            m_xAccessibleTable->commitEvent(i_eventID, i_newValue, css::uno::Any());
+            m_xAccessibleTable->commitEvent(i_eventID, i_newValue, cpo::uno::Any());
     }
 
 

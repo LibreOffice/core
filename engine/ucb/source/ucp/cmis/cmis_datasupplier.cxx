@@ -123,7 +123,7 @@ namespace cmis
             aCmd.Name = u"getPropertyValues"_ustr;
             aCmd.Handle = -1;
             aCmd.Argument <<= getResultSet()->getProperties();
-            uno::Any aResult( xCmdProc->execute(
+            cpo::uno::Any aResult( xCmdProc->execute(
                 aCmd, nCmdId, getResultSet()->getEnvironment() ) );
             uno::Reference< sdbc::XRow > xRow;
             if ( aResult >>= xRow )

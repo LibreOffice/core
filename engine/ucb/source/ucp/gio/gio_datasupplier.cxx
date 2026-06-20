@@ -224,7 +224,7 @@ css::uno::Reference< css::sdbc::XRow > DataSupplier::queryPropertyValues( std::u
         aCmd.Name = u"getPropertyValues"_ustr;
         aCmd.Handle = -1;
         aCmd.Argument <<= getResultSet()->getProperties();
-        css::uno::Any aResult( xCmdProc->execute(
+        cpo::uno::Any aResult( xCmdProc->execute(
             aCmd, nCmdId, getResultSet()->getEnvironment() ) );
         css::uno::Reference< css::sdbc::XRow > xRow;
         if ( aResult >>= xRow )

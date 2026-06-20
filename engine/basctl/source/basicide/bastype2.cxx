@@ -52,6 +52,7 @@ namespace basctl
 {
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star;
 
 void ModuleInfoHelper::getObjectName( const uno::Reference< container::XNameContainer >& rLib, const OUString& rModName, OUString& rObjName )
@@ -62,7 +63,7 @@ void ModuleInfoHelper::getObjectName( const uno::Reference< container::XNameCont
         if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo( rModName ) )
         {
             script::ModuleInfo aModuleInfo = xVBAModuleInfo->getModuleInfo( rModName );
-            uno::Any aObject( aModuleInfo.ModuleObject );
+            cpo::uno::Any aObject( aModuleInfo.ModuleObject );
             uno::Reference< lang::XServiceInfo > xServiceInfo( aObject, uno::UNO_QUERY );
             if( xServiceInfo.is() && xServiceInfo->supportsService( u"ooo.vba.excel.Worksheet"_ustr ) )
             {

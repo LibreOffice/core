@@ -65,14 +65,14 @@ namespace toolkit
         return s;
     }
 
-    uno::Any UnoControlScrollBarModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+    cpo::uno::Any UnoControlScrollBarModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     {
         switch ( nPropId )
         {
         case BASEPROPERTY_LIVE_SCROLL:
-            return uno::Any( false );
+            return cpo::uno::Any( false );
         case BASEPROPERTY_DEFAULTCONTROL:
-            return uno::Any( u"stardiv.vcl.control.ScrollBar"_ustr );
+            return cpo::uno::Any( u"stardiv.vcl.control.ScrollBar"_ustr );
 
         default:
             return UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -107,9 +107,9 @@ namespace toolkit
     }
 
     // css::uno::XInterface
-    uno::Any UnoScrollBarControl::queryAggregation( const uno::Type & rType )
+    cpo::uno::Any UnoScrollBarControl::queryAggregation( const uno::Type & rType )
     {
-        uno::Any aRet = ::cppu::queryInterface( rType,
+        cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                             static_cast< awt::XAdjustmentListener* >(this),
                                             static_cast< awt::XScrollBar* >(this) );
         return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
@@ -158,7 +158,7 @@ namespace toolkit
 
                 if ( xScrollBar.is() )
                 {
-                    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLVALUE ), uno::Any(xScrollBar->getValue()), false );
+                    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLVALUE ), cpo::uno::Any(xScrollBar->getValue()), false );
                 }
             }
             break;
@@ -186,14 +186,14 @@ namespace toolkit
 
     void UnoScrollBarControl::setValue( sal_Int32 n )
     {
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLVALUE ), uno::Any( n ), true );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLVALUE ), cpo::uno::Any( n ), true );
     }
 
     void UnoScrollBarControl::setValues( sal_Int32 nValue, sal_Int32 nVisible, sal_Int32 nMax )
     {
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLVALUE ), uno::Any(nValue), true );
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VISIBLESIZE ), uno::Any(nVisible), true );
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLVALUE_MAX ), uno::Any(nMax), true );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLVALUE ), cpo::uno::Any(nValue), true );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VISIBLESIZE ), cpo::uno::Any(nVisible), true );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLVALUE_MAX ), cpo::uno::Any(nMax), true );
     }
 
     sal_Int32 UnoScrollBarControl::getValue()
@@ -209,7 +209,7 @@ namespace toolkit
 
     void UnoScrollBarControl::setMaximum( sal_Int32 n )
     {
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLVALUE_MAX ), uno::Any( n ), true );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLVALUE_MAX ), cpo::uno::Any( n ), true );
     }
 
     sal_Int32 UnoScrollBarControl::getMaximum()
@@ -225,7 +225,7 @@ namespace toolkit
 
     void UnoScrollBarControl::setLineIncrement( sal_Int32 n )
     {
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LINEINCREMENT ), uno::Any( n ), true );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LINEINCREMENT ), cpo::uno::Any( n ), true );
     }
 
     sal_Int32 UnoScrollBarControl::getLineIncrement()
@@ -241,7 +241,7 @@ namespace toolkit
 
     void UnoScrollBarControl::setBlockIncrement( sal_Int32 n )
     {
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_BLOCKINCREMENT ), uno::Any( n ), true );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_BLOCKINCREMENT ), cpo::uno::Any( n ), true );
     }
 
     sal_Int32 UnoScrollBarControl::getBlockIncrement()
@@ -257,7 +257,7 @@ namespace toolkit
 
     void UnoScrollBarControl::setVisibleSize( sal_Int32 n )
     {
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VISIBLESIZE ), uno::Any( n ), true );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VISIBLESIZE ), cpo::uno::Any( n ), true );
     }
 
     sal_Int32 UnoScrollBarControl::getVisibleSize()
@@ -273,7 +273,7 @@ namespace toolkit
 
     void UnoScrollBarControl::setOrientation( sal_Int32 n )
     {
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ORIENTATION ), uno::Any( n ), true );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ORIENTATION ), cpo::uno::Any( n ), true );
     }
 
     sal_Int32 UnoScrollBarControl::getOrientation()
@@ -308,7 +308,7 @@ namespace toolkit
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlScrollBarModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new toolkit::UnoControlScrollBarModel(context));
 }
@@ -316,7 +316,7 @@ stardiv_Toolkit_UnoControlScrollBarModel_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoScrollBarControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new toolkit::UnoScrollBarControl());
 }

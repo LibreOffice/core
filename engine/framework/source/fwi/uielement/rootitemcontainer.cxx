@@ -30,6 +30,7 @@
 
 using namespace cppu;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
@@ -225,7 +226,7 @@ bool SAL_CALL RootItemContainer::convertFastPropertyValue( Any&       aConverted
     {
         case PROPHANDLE_UINAME:
             bReturn = PropHelper::willPropertyBeChanged(
-                        css::uno::Any(m_aUIName),
+                        cpo::uno::Any(m_aUIName),
                         aValue,
                         aOldValue,
                         aConvertedValue);
@@ -237,7 +238,7 @@ bool SAL_CALL RootItemContainer::convertFastPropertyValue( Any&       aConverted
 }
 
 void SAL_CALL RootItemContainer::setFastPropertyValue_NoBroadcast( sal_Int32               nHandle ,
-                                                                   const css::uno::Any&    aValue  )
+                                                                   const cpo::uno::Any&    aValue  )
 {
     switch( nHandle )
     {
@@ -247,7 +248,7 @@ void SAL_CALL RootItemContainer::setFastPropertyValue_NoBroadcast( sal_Int32    
     }
 }
 
-void SAL_CALL RootItemContainer::getFastPropertyValue( css::uno::Any& aValue  ,
+void SAL_CALL RootItemContainer::getFastPropertyValue( cpo::uno::Any& aValue  ,
                                                        sal_Int32                 nHandle                ) const
 {
     switch( nHandle )

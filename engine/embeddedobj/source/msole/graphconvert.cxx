@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/embed/Aspects.hpp>
@@ -45,7 +45,7 @@ using namespace ::com::sun::star;
 bool ConvertBufferToFormat( void* pBuf,
                                 sal_uInt32 nBufSize,
                                 const OUString& aMimeType,
-                                uno::Any& aResult )
+                                cpo::uno::Any& aResult )
 {
     // produces sequence with data in requested format and returns it in aResult
     if ( pBuf )
@@ -100,7 +100,7 @@ MainThreadNotificationRequest::MainThreadNotificationRequest( const ::rtl::Refer
 , m_nAspect( nAspect )
 {}
 
-void SAL_CALL MainThreadNotificationRequest::notify (const uno::Any& )
+void SAL_CALL MainThreadNotificationRequest::notify (const cpo::uno::Any& )
 {
     if ( m_pObject )
     {

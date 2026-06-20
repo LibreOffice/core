@@ -363,7 +363,7 @@ private:
 
     /// Resets the current slide transition sound object with a new one:
     SoundPlayerSharedPtr resetSlideTransitionSound(
-        uno::Any const& url, bool bLoopSound );
+        cpo::uno::Any const& url, bool bLoopSound );
 
     /// stops the current slide transition sound
     void stopSlideTransitionSound();
@@ -719,7 +719,7 @@ void SlideShowImpl::stopSlideTransitionSound()
     }
  }
 
-SoundPlayerSharedPtr SlideShowImpl::resetSlideTransitionSound( const uno::Any& rSound, bool bLoopSound )
+SoundPlayerSharedPtr SlideShowImpl::resetSlideTransitionSound( const cpo::uno::Any& rSound, bool bLoopSound )
 {
     bool bStopSound = false;
     OUString url;
@@ -819,7 +819,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
 
     const RGBColor aTransitionFadeColor( unoColor2RGBColor( aUnoColor ));
 
-    uno::Any aSound;
+    cpo::uno::Any aSound;
     bool bLoopSound = false;
 
     if( !getPropertyValue( aSound, xPropSet, u"Sound"_ustr) )
@@ -1038,7 +1038,7 @@ public:
     void operator()( beans::PropertyValue const& rProperty ) const {
         if (rProperty.Name == "Prefetch" )
         {
-            uno::Sequence<uno::Any> seq;
+            uno::Sequence<cpo::uno::Any> seq;
             if ((rProperty.Value >>= seq) && seq.getLength() == 2)
             {
                 seq[0] >>= mpSlideShowImpl->mxPrefetchSlide;
@@ -1434,32 +1434,32 @@ void lcl_setPropertiesToShape(const drawing::PointSequenceSequence& rPoints,
 {
     uno::Reference< beans::XPropertySet > aXPropSet(rPolyShape, uno::UNO_QUERY);
     //Give the built PointSequenceSequence.
-    uno::Any aParam;
+    cpo::uno::Any aParam;
     aParam <<= rPoints;
     aXPropSet->setPropertyValue(u"PolyPolygon"_ustr, aParam);
 
     //LineStyle : SOLID by default
     drawing::LineStyle eLS;
     eLS = drawing::LineStyle_SOLID;
-    aXPropSet->setPropertyValue(u"LineStyle"_ustr, uno::Any(eLS));
+    aXPropSet->setPropertyValue(u"LineStyle"_ustr, cpo::uno::Any(eLS));
 
     //LineCap : ROUND by default, same as in show mode
     drawing::LineCap eLC;
     eLC = drawing::LineCap_ROUND;
-    aXPropSet->setPropertyValue(u"LineCap"_ustr, uno::Any(eLC));
+    aXPropSet->setPropertyValue(u"LineCap"_ustr, cpo::uno::Any(eLC));
 
     //LineColor
     sal_uInt32 nLineColor = 0;
     if (pCanvasPolyPoly)
         nLineColor = pCanvasPolyPoly->getRGBALineColor();
     //Transform polygon color from RRGGBBAA to AARRGGBB
-    aXPropSet->setPropertyValue(u"LineColor"_ustr, uno::Any(RGBAColor2UnoColor(nLineColor)));
+    aXPropSet->setPropertyValue(u"LineColor"_ustr, cpo::uno::Any(RGBAColor2UnoColor(nLineColor)));
 
     //LineWidth
     double  fLineWidth = 0;
     if (pCanvasPolyPoly)
         fLineWidth = pCanvasPolyPoly->getStrokeWidth();
-    aXPropSet->setPropertyValue(u"LineWidth"_ustr, uno::Any(static_cast<sal_Int32>(fLineWidth)));
+    aXPropSet->setPropertyValue(u"LineWidth"_ustr, cpo::uno::Any(static_cast<sal_Int32>(fLineWidth)));
 }
 
 void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMultiServiceFactory >& xDocFactory )
@@ -1481,7 +1481,7 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
 
     // create layer
     uno::Reference< drawing::XLayer > xDrawnInSlideshow;
-    uno::Any aPropLayer;
+    cpo::uno::Any aPropLayer;
     OUString sLayerName = u"DrawnInSlideshow"_ustr;
     if (xNameAccess->hasByName(sLayerName))
     {
@@ -1923,7 +1923,7 @@ bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
 
     if ( rProperty.Name == "IsSoundEnabled" )
     {
-        uno::Sequence<uno::Any> aValues;
+        uno::Sequence<cpo::uno::Any> aValues;
         uno::Reference<presentation::XSlideShowView> xView;
         bool bValue (false);
         if ((rProperty.Value >>= aValues)
@@ -2434,10 +2434,10 @@ void SlideShowImpl::notifySlideEnded (const bool bReverse)
             {
                 xPropSet->setPropertyValue(
                     u"Change"_ustr,
-                    uno::Any( static_cast<sal_Int32>(1) ) );
+                    cpo::uno::Any( static_cast<sal_Int32>(1) ) );
                 xPropSet->setPropertyValue(
                     u"Duration"_ustr,
-                    uno::Any( static_cast<sal_Int32>(time) ) );
+                    cpo::uno::Any( static_cast<sal_Int32>(time) ) );
             }
         }
     }
@@ -2586,7 +2586,7 @@ void FrameSynchronization::Deactivate()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 slideshow_SlideShowImpl_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SlideShowImpl(context));
 }

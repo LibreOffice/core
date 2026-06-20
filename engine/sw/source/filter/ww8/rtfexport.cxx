@@ -644,7 +644,7 @@ void RtfExport::WriteUserProps()
                 double fValue;
                 bool bValue;
                 util::DateTime aDate;
-                uno::Any aAny = xPropertySet->getPropertyValue(rProperty.Name);
+                cpo::uno::Any aAny = xPropertySet->getPropertyValue(rProperty.Name);
                 if (aAny >>= bValue)
                 {
                     WriteUserPropType(11);

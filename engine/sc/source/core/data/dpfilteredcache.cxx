@@ -29,7 +29,7 @@
 #include <algorithm>
 
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 
 ScDPFilteredCache::SingleFilter::SingleFilter(const ScDPItemData& rItem) :
     maItem(rItem) {}

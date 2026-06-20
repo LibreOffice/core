@@ -78,7 +78,7 @@ bool SvxColorValueSetData::GetData( const css::datatransfer::DataFlavor& rFlavor
 
     if( SotExchange::GetFormat( rFlavor ) == SotClipboardFormatId::XFA )
     {
-        SetAny(uno::Any(m_Data));
+        SetAny(cpo::uno::Any(m_Data));
         bRet = true;
     }
 
@@ -163,7 +163,7 @@ bool SvxColorValueSet_docking::StartDrag()
 
     XFillColorItem const color(sItemText, aItemColor);
     XFillStyleItem const style(eStyle);
-    uno::Any c, s;
+    cpo::uno::Any c, s;
     color.QueryValue(c, 0);
     style.QueryValue(s, 0);
 

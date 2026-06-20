@@ -110,7 +110,7 @@ void ToolboxButtonColorUpdaterBase::Init(sal_uInt16 nSlotId)
         SvtViewOptions aViewOpt(EViewType::Dialog, u"ToolboxButtonColor"_ustr);
         if (aViewOpt.Exists())
         {
-            css::uno::Any aUserItem = aViewOpt.GetUserItem(OUString::number(nSlotId));
+            cpo::uno::Any aUserItem = aViewOpt.GetUserItem(OUString::number(nSlotId));
             OUString aUserData;
             if (aUserItem >>= aUserData)
             {
@@ -144,7 +144,7 @@ void ToolboxButtonColorUpdaterBase::Notify(SfxBroadcaster& rBC, const SfxHint& r
                 = oColor->m_aName + ";"
                   + OUString::number(static_cast<sal_uInt32>(oColor->m_aColor));
             SvtViewOptions(EViewType::Dialog, u"ToolboxButtonColor"_ustr)
-                .SetUserItem(OUString::number(mnSlotId), css::uno::Any(aUserData));
+                .SetUserItem(OUString::number(mnSlotId), cpo::uno::Any(aUserData));
         }
     }
 }

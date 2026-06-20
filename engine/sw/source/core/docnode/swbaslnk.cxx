@@ -49,7 +49,7 @@ static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size &rO
 
 
 ::sfx2::SvBaseLink::UpdateResult SwBaseLink::DataChanged(
-    const OUString& rMimeType, const uno::Any & rValue )
+    const OUString& rMimeType, const cpo::uno::Any & rValue )
 {
     if( !m_pContentNode )
     {
@@ -236,7 +236,7 @@ bool SwBaseLink::SwapIn( bool bWaitForData, bool bNativFormat )
     if( GetObj() )
     {
         OUString aMimeType( SotExchange::GetFormatMimeType( GetContentType() ));
-        uno::Any aValue;
+        cpo::uno::Any aValue;
         (void)GetObj()->GetData( aValue, aMimeType, !IsSynchron() && bWaitForData );
 
         if( bWaitForData && !GetObj() )

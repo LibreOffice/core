@@ -18,6 +18,7 @@
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace
 {
@@ -202,7 +203,7 @@ void SAL_CALL SyncDbusSessionHelper::IsInstalled( const OUString& sPackagename, 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 shell_sessioninstall_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SyncDbusSessionHelper(context));
 }

@@ -50,8 +50,8 @@ class FmUndoPropertyAction final : public SdrUndoAction
 {
     css::uno::Reference< css::beans::XPropertySet> xObj;
     OUString               aPropertyName;
-    css::uno::Any          aNewValue;
-    css::uno::Any          aOldValue;
+    cpo::uno::Any          aNewValue;
+    cpo::uno::Any          aOldValue;
 
 public:
     FmUndoPropertyAction(FmFormModel& rMod, const css::beans::PropertyChangeEvent& evt);

@@ -66,7 +66,7 @@ private:
 public:
                            ScMyValidationsContainer();
                            ~ScMyValidationsContainer();
-    void                   AddValidation(const css::uno::Any& aAny,
+    void                   AddValidation(const cpo::uno::Any& aAny,
                                     sal_Int32& nValidationIndex);
     static OUString        GetCondition(const ScDocument& rDoc, const ScXMLExport& rExport, const ScMyValidation& aValidation);
     static OUString        GetBaseCellAddress(const ScDocument* pDoc, const ScAddress& aCell);

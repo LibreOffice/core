@@ -66,14 +66,14 @@ private:
     virtual void SAL_CALL setDateCategories( const css::uno::Sequence< double >& rDates ) override;
 
     // ____ XAnyDescriptionAccess ____
-    virtual css::uno::Sequence< css::uno::Sequence< css::uno::Any > > SAL_CALL
+    virtual css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > > SAL_CALL
         getAnyRowDescriptions() override;
     virtual void SAL_CALL setAnyRowDescriptions(
-        const css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& aRowDescriptions ) override;
-    virtual css::uno::Sequence< css::uno::Sequence< css::uno::Any > > SAL_CALL
+        const css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > >& aRowDescriptions ) override;
+    virtual css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > > SAL_CALL
         getAnyColumnDescriptions() override;
     virtual void SAL_CALL setAnyColumnDescriptions(
-        const css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& aColumnDescriptions ) override;
+        const css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > >& aColumnDescriptions ) override;
 
     // ____ XComplexDescriptionAccess (base of XAnyDescriptionAccess) ____
     virtual css::uno::Sequence< css::uno::Sequence< OUString > > SAL_CALL

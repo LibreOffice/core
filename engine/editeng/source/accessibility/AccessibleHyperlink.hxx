@@ -51,8 +51,8 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessibleKeyBinding > SAL_CALL getAccessibleActionKeyBinding( sal_Int32 nIndex ) override;
 
     // XAccessibleHyperlink
-    virtual css::uno::Any SAL_CALL getAccessibleActionAnchor( sal_Int32 nIndex ) override;
-    virtual css::uno::Any SAL_CALL getAccessibleActionObject( sal_Int32 nIndex ) override;
+    virtual cpo::uno::Any SAL_CALL getAccessibleActionAnchor( sal_Int32 nIndex ) override;
+    virtual cpo::uno::Any SAL_CALL getAccessibleActionObject( sal_Int32 nIndex ) override;
     virtual sal_Int32 SAL_CALL getStartIndex() override;
     virtual sal_Int32 SAL_CALL getEndIndex() override;
     virtual bool SAL_CALL isValid() override;

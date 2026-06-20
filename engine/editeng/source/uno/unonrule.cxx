@@ -51,6 +51,7 @@ using ::com::sun::star::ucb::XAnyCompare;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
@@ -99,7 +100,7 @@ SvxUnoNumberingRules::~SvxUnoNumberingRules() noexcept
 }
 
 //XIndexReplace
-void SAL_CALL SvxUnoNumberingRules::replaceByIndex( sal_Int32 Index, const uno::Any& Element )
+void SAL_CALL SvxUnoNumberingRules::replaceByIndex( sal_Int32 Index, const cpo::uno::Any& Element )
 {
     SolarMutexGuard aGuard;
 

@@ -631,7 +631,7 @@ QtInstance::createFolderPicker(const css::uno::Reference<css::uno::XComponentCon
 }
 
 css::uno::Reference<css::datatransfer::clipboard::XClipboard>
-QtInstance::CreateClipboard(const css::uno::Sequence<css::uno::Any>& arguments)
+QtInstance::CreateClipboard(const css::uno::Sequence<cpo::uno::Any>& arguments)
 {
     OUString sel;
     if (arguments.getLength() == 0)

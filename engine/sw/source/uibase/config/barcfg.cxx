@@ -24,6 +24,7 @@
 
 using namespace utl;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 #define SEL_TYPE_TABLE_TEXT     0
 #define SEL_TYPE_LIST_TEXT      1

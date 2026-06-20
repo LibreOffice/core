@@ -424,7 +424,7 @@ uno::Reference< css::frame::XLayoutManager > SAL_CALL SdrLightEmbeddedClient_Imp
     }
     catch ( uno::Exception& ex )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException( ex.Message,
                         nullptr, anyEx );
     }
@@ -542,7 +542,7 @@ SdrEmbedObjectLink::~SdrEmbedObjectLink()
 }
 
 ::sfx2::SvBaseLink::UpdateResult SdrEmbedObjectLink::DataChanged(
-    const OUString& /*rMimeType*/, const css::uno::Any & /*rValue*/ )
+    const OUString& /*rMimeType*/, const cpo::uno::Any & /*rValue*/ )
 {
     // Deferred link: the object was not created during import because link
     // updates were not yet allowed, complete the creation now.
@@ -599,7 +599,7 @@ SdrIFrameLink::SdrIFrameLink(SdrOle2Obj* pObject)
 }
 
 ::sfx2::SvBaseLink::UpdateResult SdrIFrameLink::DataChanged(
-    const OUString&, const uno::Any& )
+    const OUString&, const cpo::uno::Any& )
 {
     uno::Reference<embed::XEmbeddedObject> xObject = m_pObject->GetObjRef();
     uno::Reference<embed::XCommonEmbedPersist> xPersObj(xObject, uno::UNO_QUERY);
@@ -1185,7 +1185,7 @@ void SdrOle2Obj::Connect_Impl(SvxOle2Shape* pCreator)
             {
                 uno::Reference<beans::XPropertySet> xSet(mpImpl->mxObjRef->getComponent(), uno::UNO_QUERY);
                 if (xSet.is())
-                    xSet->setPropertyValue(u"FrameURL"_ustr, uno::Any(sFrameURL));
+                    xSet->setPropertyValue(u"FrameURL"_ustr, cpo::uno::Any(sFrameURL));
             }
         }
 

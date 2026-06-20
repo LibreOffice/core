@@ -67,7 +67,7 @@ class UCBHELPER_DLLPUBLIC InteractionRequest :
     std::unique_ptr<InteractionRequest_Impl> m_pImpl;
 
 protected:
-    void setRequest( const css::uno::Any & rRequest );
+    void setRequest( const cpo::uno::Any & rRequest );
 
     InteractionRequest();
     virtual ~InteractionRequest() override;
@@ -78,7 +78,7 @@ public:
       *
       * @param rRequest is the exception describing the error.
       */
-    InteractionRequest( const css::uno::Any & rRequest );
+    InteractionRequest( const cpo::uno::Any & rRequest );
 
     /**
       * This method sets the continuations for the request.
@@ -89,7 +89,7 @@ public:
         const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > & rContinuations );
 
     // XInteractionRequest
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
     getRequest() override;
     virtual css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL
     getContinuations() override;

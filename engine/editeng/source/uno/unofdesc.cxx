@@ -19,7 +19,7 @@
 
 
 #include <editeng/eeitem.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 
 #include <editeng/fontitem.hxx>
@@ -77,7 +77,7 @@ void SvxUnoFontDescriptor::ConvertFromFont( const vcl::Font& rFont, awt::FontDes
 
 void SvxUnoFontDescriptor::FillItemSet( const awt::FontDescriptor& rDesc, SfxItemSet& rSet )
 {
-    uno::Any aTemp;
+    cpo::uno::Any aTemp;
 
     {
         SvxFontItem aFontItem( EE_CHAR_FONTINFO );
@@ -145,31 +145,31 @@ void SvxUnoFontDescriptor::FillFromItemSet( const SfxItemSet& rSet, awt::FontDes
     }
     {
         pItem = &rSet.Get( EE_CHAR_FONTHEIGHT );
-        uno::Any aHeight;
+        cpo::uno::Any aHeight;
         if( pItem->QueryValue( aHeight, MID_FONTHEIGHT ) )
             aHeight >>= rDesc.Height;
     }
     {
         pItem = &rSet.Get( EE_CHAR_ITALIC );
-        uno::Any aFontSlant;
+        cpo::uno::Any aFontSlant;
         if(pItem->QueryValue( aFontSlant, MID_POSTURE ))
             aFontSlant >>= rDesc.Slant;
     }
     {
         pItem = &rSet.Get( EE_CHAR_UNDERLINE );
-        uno::Any aUnderline;
+        cpo::uno::Any aUnderline;
         if(pItem->QueryValue( aUnderline, MID_TL_STYLE ))
             aUnderline >>= rDesc.Underline;
     }
     {
         pItem = &rSet.Get( EE_CHAR_WEIGHT );
-        uno::Any aWeight;
+        cpo::uno::Any aWeight;
         if(pItem->QueryValue( aWeight, MID_WEIGHT ))
             aWeight >>= rDesc.Weight;
     }
     {
         pItem = &rSet.Get( EE_CHAR_STRIKEOUT );
-        uno::Any aStrikeOut;
+        cpo::uno::Any aStrikeOut;
         if(pItem->QueryValue( aStrikeOut, MID_CROSS_OUT ))
             aStrikeOut >>= rDesc.Strikeout;
     }
@@ -190,14 +190,14 @@ void SvxUnoFontDescriptor::setPropertyToDefault( SfxItemSet& rSet )
     rSet.InvalidateItem( EE_CHAR_WLM );
 }
 
-uno::Any SvxUnoFontDescriptor::getPropertyDefault( SfxItemPool* pPool )
+cpo::uno::Any SvxUnoFontDescriptor::getPropertyDefault( SfxItemPool* pPool )
 {
     SfxItemSetFixed<
             EE_CHAR_FONTINFO, EE_CHAR_FONTHEIGHT,
             EE_CHAR_WEIGHT, EE_CHAR_ITALIC,
             EE_CHAR_WLM, EE_CHAR_WLM>  aSet(*pPool);
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     if(!SfxItemPool::IsWhich(EE_CHAR_FONTINFO)||
         !SfxItemPool::IsWhich(EE_CHAR_FONTHEIGHT)||

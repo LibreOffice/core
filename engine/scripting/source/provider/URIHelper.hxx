@@ -61,7 +61,7 @@ public:
     virtual ~ScriptingFrameworkURIHelper() override;
 
     virtual void SAL_CALL
-        initialize( const css::uno::Sequence < css::uno::Any > & args ) override;
+        initialize( const css::uno::Sequence < cpo::uno::Any > & args ) override;
 
     virtual OUString SAL_CALL
         getRootStorageURI() override;

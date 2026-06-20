@@ -86,7 +86,7 @@ protected:
      */
     void fireStatusEventForURL(
         const OUString & rURL,
-        const css::uno::Any & rState,
+        const cpo::uno::Any & rState,
         bool bEnabled,
         const css::uno::Reference< css::frame::XStatusListener > & xSingleListener );
 

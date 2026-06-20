@@ -58,7 +58,7 @@ XMLGradientStyleImport::XMLGradientStyleImport(
 
 void XMLGradientStyleImport::importXML(
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
-    uno::Any& rValue,
+    cpo::uno::Any& rValue,
     OUString& rStrName )
 {
     OUString aDisplayName;
@@ -228,7 +228,7 @@ XMLGradientStyleExport::XMLGradientStyleExport(
 
 void XMLGradientStyleExport::exportXML(
     const OUString& rStrName,
-    const uno::Any& rValue )
+    const cpo::uno::Any& rValue )
 {
     if( rStrName.isEmpty() )
         return;

@@ -97,7 +97,7 @@ using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::task::InteractionHandler;
 using ::com::sun::star::task::XInteractionHandler2;
 using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::task::XInteractionRequest;
 
 using namespace ::com::sun::star;
@@ -370,7 +370,7 @@ UUIInteractionHelper::handleRequest_impl(
         if (!rRequest.is())
             return false;
 
-        uno::Any aAnyRequest(rRequest->getRequest());
+        cpo::uno::Any aAnyRequest(rRequest->getRequest());
 
         script::ModuleSizeExceededRequest aModSizeException;
         if (aAnyRequest >>= aModSizeException )

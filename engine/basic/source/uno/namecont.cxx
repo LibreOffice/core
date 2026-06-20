@@ -76,6 +76,7 @@ namespace basic
 using namespace com::sun::star::document;
 using namespace com::sun::star::container;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::io;
 using namespace com::sun::star::ucb;
@@ -1390,10 +1391,10 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
 
                 if ( xProps.is() )
                 {
-                    xProps->setPropertyValue(u"MediaType"_ustr, uno::Any( u"text/xml"_ustr ) );
+                    xProps->setPropertyValue(u"MediaType"_ustr, cpo::uno::Any( u"text/xml"_ustr ) );
 
                     // #87671 Allow encryption
-                    xProps->setPropertyValue(u"UseCommonStoragePasswordEncryption"_ustr, uno::Any( true ) );
+                    xProps->setPropertyValue(u"UseCommonStoragePasswordEncryption"_ustr, cpo::uno::Any( true ) );
 
                     Reference< XOutputStream > xOutput = xElementStream->getOutputStream();
                     Reference< XNameContainer > xLib( pLib );
@@ -1525,10 +1526,10 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
 
             if ( xProps.is() )
             {
-                xProps->setPropertyValue(u"MediaType"_ustr, uno::Any( u"text/xml"_ustr ) );
+                xProps->setPropertyValue(u"MediaType"_ustr, cpo::uno::Any( u"text/xml"_ustr ) );
 
                 // #87671 Allow encryption
-                xProps->setPropertyValue(u"UseCommonStoragePasswordEncryption"_ustr, uno::Any( true ) );
+                xProps->setPropertyValue(u"UseCommonStoragePasswordEncryption"_ustr, cpo::uno::Any( true ) );
 
                 xOut = xInfoStream->getOutputStream();
             }
@@ -2018,10 +2019,10 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         {
             xInfoStream = xTargetLibrariesStor->openStreamElement( aStreamName, embed::ElementModes::READWRITE );
             uno::Reference< beans::XPropertySet > xProps( xInfoStream, uno::UNO_QUERY_THROW );
-            xProps->setPropertyValue(u"MediaType"_ustr, uno::Any( u"text/xml"_ustr ) );
+            xProps->setPropertyValue(u"MediaType"_ustr, cpo::uno::Any( u"text/xml"_ustr ) );
 
             // #87671 Allow encryption
-            xProps->setPropertyValue(u"UseCommonStoragePasswordEncryption"_ustr, uno::Any( true ) );
+            xProps->setPropertyValue(u"UseCommonStoragePasswordEncryption"_ustr, cpo::uno::Any( true ) );
 
             xOut = xInfoStream->getOutputStream();
         }
@@ -2873,17 +2874,17 @@ css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL SfxLibraryContainer::
 }
 
 void SAL_CALL SfxLibraryContainer::setPropertyValue(const OUString& aPropertyName,
-                                                    const uno::Any& aValue)
+                                                    const cpo::uno::Any& aValue)
 {
     if (aPropertyName != sVBATextEncodingPropName)
         throw UnknownPropertyException(aPropertyName, getXWeak());
     aValue >>= meVBATextEncoding;
 }
 
-css::uno::Any SAL_CALL SfxLibraryContainer::getPropertyValue(const OUString& aPropertyName)
+cpo::uno::Any SAL_CALL SfxLibraryContainer::getPropertyValue(const OUString& aPropertyName)
 {
     if (aPropertyName == sVBATextEncodingPropName)
-        return uno::Any(meVBATextEncoding);
+        return cpo::uno::Any(meVBATextEncoding);
     throw UnknownPropertyException(aPropertyName, getXWeak());
 }
 

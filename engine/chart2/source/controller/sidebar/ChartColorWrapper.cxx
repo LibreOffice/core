@@ -47,7 +47,7 @@ OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
     if (!xSelectionSupplier.is())
         return OUString();
 
-    css::uno::Any aAny = xSelectionSupplier->getSelection();
+    cpo::uno::Any aAny = xSelectionSupplier->getSelection();
     if (!aAny.hasValue())
         return OUString();
 
@@ -100,7 +100,7 @@ void ChartColorWrapper::operator()([[maybe_unused]] const OUString& , const Name
         return;
     }
 
-    xPropSet->setPropertyValue(maPropertyName, css::uno::Any(rColor.m_aColor));
+    xPropSet->setPropertyValue(maPropertyName, cpo::uno::Any(rColor.m_aColor));
 
     OUString aCID = getCID(mxModel);
     ObjectType eType = ObjectIdentifier::getObjectType(aCID);
@@ -157,7 +157,7 @@ void ChartLineStyleWrapper::updateModel(const rtl::Reference<::chart::ChartModel
 
 namespace
 {
-    css::uno::Any getLineDash(
+    cpo::uno::Any getLineDash(
             const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rDashName)
     {
         css::uno::Reference<css::lang::XMultiServiceFactory> xFact(xModel, css::uno::UNO_QUERY);
@@ -167,12 +167,12 @@ namespace
         if(xNameAccess.is())
         {
             if (!xNameAccess->hasByName(rDashName))
-                return css::uno::Any();
+                return cpo::uno::Any();
 
             return xNameAccess->getByName(rDashName);
         }
 
-        return css::uno::Any();
+        return cpo::uno::Any();
     }
 }
 
@@ -197,7 +197,7 @@ void ChartLineStyleWrapper::updateData()
     auto aLineDashName = xPropSet->getPropertyValue(u"LineDashName"_ustr);
     OUString aDashName;
     aLineDashName >>= aDashName;
-    css::uno::Any aLineDash = getLineDash(mxModel, aDashName);
+    cpo::uno::Any aLineDash = getLineDash(mxModel, aDashName);
     XLineDashItem aDashItem;
     aDashItem.PutValue(aLineDash, MID_LINEDASH);
 
@@ -206,7 +206,7 @@ void ChartLineStyleWrapper::updateData()
     mpControl->statusChanged(aEvent);
 }
 
-bool ChartLineStyleWrapper::operator()(std::u16string_view rCommand, const css::uno::Any& rValue)
+bool ChartLineStyleWrapper::operator()(std::u16string_view rCommand, const cpo::uno::Any& rValue)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
 
@@ -225,13 +225,13 @@ bool ChartLineStyleWrapper::operator()(std::u16string_view rCommand, const css::
     {
         XLineDashItem aDashItem;
         aDashItem.PutValue(rValue, 0);
-        css::uno::Any aAny;
+        cpo::uno::Any aAny;
         aDashItem.QueryValue(aAny, MID_LINEDASH);
         OUString aDashName = PropertyHelper::addLineDashUniqueNameToTable(aAny,
                 mxModel,
                 u""_ustr);
         xPropSet->setPropertyValue(u"LineDash"_ustr, aAny);
-        xPropSet->setPropertyValue(u"LineDashName"_ustr, css::uno::Any(aDashName));
+        xPropSet->setPropertyValue(u"LineDashName"_ustr, cpo::uno::Any(aDashName));
         return true;
     }
     return false;

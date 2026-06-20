@@ -160,7 +160,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf120852_readOnlyUnProtected)
         {
             CPPUNIT_ASSERT_MESSAGE("Section is not protected", !getProperty<bool>(xSect, u"IsProtected"_ustr));
             // Enable section protection. The round-trip should have forms protection enabled.
-            xSect->setPropertyValue(u"IsProtected"_ustr, uno::Any(true));
+            xSect->setPropertyValue(u"IsProtected"_ustr, cpo::uno::Any(true));
         }
         else
         {

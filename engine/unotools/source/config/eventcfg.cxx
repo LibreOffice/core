@@ -24,7 +24,7 @@
 #include <unotools/eventcfg.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <o3tl/enumarray.hxx>
@@ -39,6 +39,7 @@
 
 using namespace ::utl;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star;
 
 #define PATHDELIMITER "/"
@@ -106,7 +107,7 @@ public:
     /// @throws css::container::NoSuchElementException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    void replaceByName( const OUString& aName, const css::uno::Any& aElement );
+    void replaceByName( const OUString& aName, const cpo::uno::Any& aElement );
     /// @throws css::container::NoSuchElementException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException

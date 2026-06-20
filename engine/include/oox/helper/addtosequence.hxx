@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_HELPER_ADDTOSEQUENCE_HXX
 #define INCLUDED_OOX_HELPER_ADDTOSEQUENCE_HXX
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <oox/dllapi.h>
 
 namespace oox
@@ -32,7 +32,7 @@ namespace oox
     if rOldValue contains a value, a sequence with rOldValue and rNewValue is returned.
     if rOldValue contains a sequence, a new sequence with the old sequence and rNewValue is returned.
 */
-OOX_DLLPUBLIC css::uno::Any addToSequence( const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
+OOX_DLLPUBLIC cpo::uno::Any addToSequence( const cpo::uno::Any& rOldValue, const cpo::uno::Any& rNewValue );
 
 } // namespace oox
 

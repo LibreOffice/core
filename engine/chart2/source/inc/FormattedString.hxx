@@ -59,9 +59,9 @@ public:
     /// merge XTypeProvider implementations
     DECLARE_XTYPEPROVIDER()
 
-    virtual void SAL_CALL setPropertyValue(const OUString& p1, const css::uno::Any& p2) override
+    virtual void SAL_CALL setPropertyValue(const OUString& p1, const cpo::uno::Any& p2) override
         { ::property::OPropertySet::setPropertyValue(p1, p2); }
-    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& p1) override
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(const OUString& p1) override
         { return ::property::OPropertySet::getPropertyValue(p1); }
     virtual void SAL_CALL addPropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
         { ::property::OPropertySet::addPropertyChangeListener(p1, p2); }
@@ -90,7 +90,7 @@ public:
     virtual void SAL_CALL setCellRange( const OUString& cellRange ) override;
 
     // ____ OPropertySet ____
-    virtual void GetDefaultValue( sal_Int32 nHandle, css::uno::Any& rAny ) const override;
+    virtual void GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const override;
 
     // ____ OPropertySet ____
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;

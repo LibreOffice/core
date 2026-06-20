@@ -44,7 +44,7 @@ public:
 
     // XCollection
     virtual ::sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index ) override;
+    virtual cpo::uno::Any SAL_CALL Item( const cpo::uno::Any& Index ) override;
 };
 
 #endif // INCLUDED_VBAHELPER_VBADIALOGSBASE_HXX

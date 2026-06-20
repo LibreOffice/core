@@ -40,7 +40,7 @@ namespace pcr
     using ::com::sun::star::inspection::XPropertyControl;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::inspection::XObjectInspectorUI;
     using ::com::sun::star::uno::XInterface;
@@ -174,7 +174,7 @@ namespace pcr
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 extensions_propctrlr_DefaultHelpProvider_get_implementation(
-    css::uno::XComponentContext*  , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext*  , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new pcr::DefaultHelpProvider());
 }

@@ -85,12 +85,12 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL Annotation::getPropertySetInfo(
     return ::cppu::PropertySetMixin<office::XAnnotation>::getPropertySetInfo();
 }
 
-void SAL_CALL Annotation::setPropertyValue(const OUString & aPropertyName, const uno::Any & aValue)
+void SAL_CALL Annotation::setPropertyValue(const OUString & aPropertyName, const cpo::uno::Any & aValue)
 {
     ::cppu::PropertySetMixin<office::XAnnotation>::setPropertyValue(aPropertyName, aValue);
 }
 
-uno::Any SAL_CALL Annotation::getPropertyValue(const OUString & aPropertyName)
+cpo::uno::Any SAL_CALL Annotation::getPropertyValue(const OUString & aPropertyName)
 {
     return ::cppu::PropertySetMixin<office::XAnnotation>::getPropertyValue(aPropertyName);
 }
@@ -115,10 +115,10 @@ void SAL_CALL Annotation::removeVetoableChangeListener(const OUString & aPropert
     ::cppu::PropertySetMixin<office::XAnnotation>::removeVetoableChangeListener(aPropertyName, xListener);
 }
 
-uno::Any SAL_CALL Annotation::getAnchor()
+cpo::uno::Any SAL_CALL Annotation::getAnchor()
 {
     std::unique_lock g(m_aMutex);
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if( mpPage )
     {
         uno::Reference<drawing::XDrawPage> xPage( mpPage->getUnoPage() );
@@ -136,7 +136,7 @@ geometry::RealPoint2D SAL_CALL Annotation::getPosition()
 
 void SAL_CALL Annotation::setPosition(const geometry::RealPoint2D & the_value)
 {
-    prepareSet(u"Position"_ustr, uno::Any(), uno::Any(), nullptr);
+    prepareSet(u"Position"_ustr, cpo::uno::Any(), cpo::uno::Any(), nullptr);
     {
         std::unique_lock g(m_aMutex);
         createChangeUndoImpl(g);
@@ -153,7 +153,7 @@ geometry::RealSize2D SAL_CALL Annotation::getSize()
 
 void SAL_CALL Annotation::setSize(const geometry::RealSize2D & the_value)
 {
-    prepareSet(u"Size"_ustr, uno::Any(), uno::Any(), nullptr);
+    prepareSet(u"Size"_ustr, cpo::uno::Any(), cpo::uno::Any(), nullptr);
     {
         std::unique_lock g(m_aMutex);
         createChangeUndoImpl(g);
@@ -169,7 +169,7 @@ OUString SAL_CALL Annotation::getAuthor()
 
 void SAL_CALL Annotation::setAuthor(const OUString & the_value)
 {
-    prepareSet(u"Author"_ustr, uno::Any(), uno::Any(), nullptr);
+    prepareSet(u"Author"_ustr, cpo::uno::Any(), cpo::uno::Any(), nullptr);
     {
         std::unique_lock g(m_aMutex);
         createChangeUndoImpl(g);
@@ -185,7 +185,7 @@ OUString SAL_CALL Annotation::getInitials()
 
 void SAL_CALL Annotation::setInitials(const OUString & the_value)
 {
-    prepareSet(u"Initials"_ustr, uno::Any(), uno::Any(), nullptr);
+    prepareSet(u"Initials"_ustr, cpo::uno::Any(), cpo::uno::Any(), nullptr);
     {
         std::unique_lock g(m_aMutex);
         createChangeUndoImpl(g);
@@ -201,7 +201,7 @@ util::DateTime SAL_CALL Annotation::getDateTime()
 
 void SAL_CALL Annotation::setDateTime(const util::DateTime & the_value)
 {
-    prepareSet(u"DateTime"_ustr, uno::Any(), uno::Any(), nullptr);
+    prepareSet(u"DateTime"_ustr, cpo::uno::Any(), cpo::uno::Any(), nullptr);
     {
         std::unique_lock g(m_aMutex);
         createChangeUndoImpl(g);

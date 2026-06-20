@@ -34,6 +34,7 @@ using namespace connectivity;
 using namespace connectivity::dbase;
 using namespace connectivity::file;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
@@ -76,7 +77,7 @@ css::uno::Reference< css::beans::XPropertySet > ODbaseTables::appendObject( cons
         }
         catch(Exception& ex)
         {
-            css::uno::Any anyEx = cppu::getCaughtException();
+            cpo::uno::Any anyEx = cppu::getCaughtException();
             throw SQLException( ex.Message, nullptr, u""_ustr, 0, anyEx );
         }
     }

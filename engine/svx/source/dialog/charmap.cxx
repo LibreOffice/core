@@ -51,6 +51,7 @@
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star;
 
 sal_uInt32& SvxShowCharSet::getSelectedChar()
@@ -823,7 +824,7 @@ IMPL_LINK_NOARG(SvxShowCharSet, VscrollHdl, weld::ScrolledWindow&, void)
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
         if( m_xAccessible.is() )
         {
-            css::uno::Any aOldAny, aNewAny;
+            cpo::uno::Any aOldAny, aNewAny;
             int nLast = LastInView();
             for ( ; nLast != mnSelectedIndex; ++nLast)
             {

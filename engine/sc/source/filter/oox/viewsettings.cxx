@@ -54,6 +54,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 using ::oox::core::FilterBase;
 

@@ -129,7 +129,7 @@ void ConvertAttrCharToGen(SfxItemSet& rSet, bool bIsPara)
     // tdf#126684: We use RES_PARATR_GRABBAG, because RES_CHRATR_GRABBAG may be overwritten later in
     // SwDocStyleSheet::GetItemSet when applying attributes from char format
     assert(SfxItemState::SET != rSet.GetItemState(RES_PARATR_GRABBAG, false));
-    std::map<OUString, css::uno::Any> aGrabBagMap;
+    std::map<OUString, cpo::uno::Any> aGrabBagMap;
     aGrabBagMap[u"DialogUseCharAttr"_ustr] <<= true;
     // Store initial ranges to allow restoring later
     uno::Sequence<sal_uInt16> aOrigRanges(rSet.GetRanges().size() * 2 + 1);
@@ -159,7 +159,7 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet, bool bIs
         {
             if( pGrabBagItem->GetGrabBag().count(u"CharShadingMarker"_ustr) )
             {
-                std::map<OUString, css::uno::Any> aGrabBagMap = pGrabBagItem->GetGrabBag();
+                std::map<OUString, cpo::uno::Any> aGrabBagMap = pGrabBagItem->GetGrabBag();
                 aGrabBagMap[u"CharShadingMarker"_ustr] <<= false;
                 rSet.Put( SfxGrabBagItem(RES_CHRATR_GRABBAG, std::move(aGrabBagMap)) );
             }
@@ -173,7 +173,7 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet, bool bIs
 
     if (const SfxGrabBagItem* pGrabBagItem = rOrigSet.GetItemIfSet(RES_PARATR_GRABBAG, false))
     {
-        const std::map<OUString, css::uno::Any>& rMap = pGrabBagItem->GetGrabBag();
+        const std::map<OUString, cpo::uno::Any>& rMap = pGrabBagItem->GetGrabBag();
         auto aIterator = rMap.find(u"OrigItemSetRanges"_ustr);
         if (aIterator != rMap.end())
         {
@@ -214,7 +214,7 @@ void ApplyCharBackground(Color const& rBackgroundColor, model::ComplexColor cons
     {
         if (pGrabBagItem->GetGrabBag().count(u"CharShadingMarker"_ustr))
         {
-            std::map<OUString, css::uno::Any> aGrabBagMap = pGrabBagItem->GetGrabBag();
+            std::map<OUString, cpo::uno::Any> aGrabBagMap = pGrabBagItem->GetGrabBag();
             aGrabBagMap[u"CharShadingMarker"_ustr] <<= false;
             rShell.SetAttrItem(SfxGrabBagItem(RES_CHRATR_GRABBAG, std::move(aGrabBagMap)));
         }
@@ -673,7 +673,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     if(pCol)
         rSet.Put(SfxStringItem(SID_SWREGISTER_COLLECTION, pCol->GetName().toString()));
 
-    std::map<OUString, css::uno::Any> aGrabBagMap;
+    std::map<OUString, cpo::uno::Any> aGrabBagMap;
     if (SfxGrabBagItem const* pItem = rSet.GetItemIfSet(SID_ATTR_CHAR_GRABBAG))
         aGrabBagMap = pItem->GetGrabBag();
     aGrabBagMap[u"BackgroundFullSize"_ustr] <<=

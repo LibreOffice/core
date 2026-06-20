@@ -22,7 +22,7 @@ struct Cond
     css::uno::Reference<css::drawing::XShape> mxShape;
     css::uno::Reference<css::animations::XAnimationNode> mxNode;
 
-    Cond(const css::uno::Any& rAny, bool bIsMainSeqChild);
+    Cond(const cpo::uno::Any& rAny, bool bIsMainSeqChild);
 
     bool isValid() const { return msDelay.getLength() || mpEvent; }
     const char* getDelay() const { return msDelay.getLength() ? msDelay.getStr() : nullptr; }

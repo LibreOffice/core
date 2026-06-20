@@ -210,7 +210,7 @@ void VistaFilePicker::ensureInit()
         }
         else
         {
-            initialize( { css::uno::Any(css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE) });
+            initialize( { cpo::uno::Any(css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE) });
         }
     }
 }
@@ -238,7 +238,7 @@ void VistaFilePicker::ensureInit()
 
 void SAL_CALL VistaFilePicker::setValue(      ::sal_Int16    nControlId    ,
                                               ::sal_Int16    nControlAction,
-                                        const css::uno::Any& aValue        )
+                                        const cpo::uno::Any& aValue        )
 {
     Request rRequest;
     rRequest.setRequest (VistaFilePickerImpl::E_SET_CONTROL_VALUE);
@@ -249,7 +249,7 @@ void SAL_CALL VistaFilePicker::setValue(      ::sal_Int16    nControlId    ,
     m_rDialog.doRequest(rRequest);
 }
 
-css::uno::Any SAL_CALL VistaFilePicker::getValue(::sal_Int16 nControlId    ,
+cpo::uno::Any SAL_CALL VistaFilePicker::getValue(::sal_Int16 nControlId    ,
                                                  ::sal_Int16 nControlAction)
 {
     Request rRequest;
@@ -315,7 +315,7 @@ sal_Int32 SAL_CALL VistaFilePicker::getAvailableHeight()
 }
 
 void SAL_CALL VistaFilePicker::setImage(      sal_Int16      /*nImageFormat*/,
-                                         const css::uno::Any& /*aImage      */)
+                                         const cpo::uno::Any& /*aImage      */)
 {
 }
 
@@ -329,7 +329,7 @@ bool SAL_CALL VistaFilePicker::getShowState()
     return false;
 }
 
-void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
+void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< cpo::uno::Any >& lArguments)
 {
     if (lArguments.getLength() < 1)
         throw css::lang::IllegalArgumentException(
@@ -540,14 +540,14 @@ css::uno::Sequence< OUString > SAL_CALL VistaFilePicker::getSupportedServiceName
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 fpicker_win32_FilePicker_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ::fpicker::win32::vista::VistaFilePicker(false));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 fpicker_win32_FolderPicker_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ::fpicker::win32::vista::VistaFilePicker(true));
 }

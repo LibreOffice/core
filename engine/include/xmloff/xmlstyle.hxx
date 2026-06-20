@@ -40,7 +40,7 @@ class XMLOFF_DLLPUBLIC SvXMLStyleContext : public SvXMLImportContext
 {
     OUString     maName;
     OUString     maDisplayName;
-    css::uno::Any maAutoName;
+    cpo::uno::Any maAutoName;
     OUString     maParentName;// Will be moved to XMLPropStyle soon!!!!
     OUString     maFollow;    // Will be moved to XMLPropStyle soon!!!!
     OUString     maLinked;
@@ -60,7 +60,7 @@ protected:
     virtual void SetAttribute( sal_Int32 nElement, const OUString& rValue );
 
     void SetFamily( XmlStyleFamily nSet ) { mnFamily = nSet; }
-    void SetAutoName( const css::uno::Any& rName ) { maAutoName = rName; }
+    void SetAutoName( const cpo::uno::Any& rName ) { maAutoName = rName; }
 
 public:
 
@@ -76,7 +76,7 @@ public:
 
     const OUString&  GetName() const { return maName; }
     const OUString&  GetDisplayName() const { return maDisplayName.getLength() ? maDisplayName : maName; }
-    const css::uno::Any& GetAutoName() const { return maAutoName; }
+    const cpo::uno::Any& GetAutoName() const { return maAutoName; }
     const OUString&  GetParentName() const { return maParentName; }
     const OUString&  GetFollow() const { return maFollow; }
     const OUString&  GetLinked() const { return maLinked; }

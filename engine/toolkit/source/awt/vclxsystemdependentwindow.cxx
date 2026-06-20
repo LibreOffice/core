@@ -45,12 +45,12 @@ VCLXSystemDependentWindow::~VCLXSystemDependentWindow()
 {
 }
 
-css::uno::Any VCLXSystemDependentWindow::getWindowHandle( const css::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType )
+cpo::uno::Any VCLXSystemDependentWindow::getWindowHandle( const css::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType )
 {
     SolarMutexGuard aGuard;
 
     // TODO, check the process id
-    css::uno::Any aRet;
+    cpo::uno::Any aRet;
     VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {

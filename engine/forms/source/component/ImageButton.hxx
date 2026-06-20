@@ -78,7 +78,7 @@ public:
 
     // UNO Binding
     DECLARE_UNO3_AGG_DEFAULTS(OImageButtonControl, OClickableImageBaseControl)
-    virtual css::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
 
     // XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource) override

@@ -31,7 +31,7 @@ XMLTabStopPropHdl::~XMLTabStopPropHdl()
     // Nothing to do
 }
 
-bool XMLTabStopPropHdl::equals( const uno::Any& r1, const uno::Any& r2 ) const
+bool XMLTabStopPropHdl::equals( const cpo::uno::Any& r1, const cpo::uno::Any& r2 ) const
 {
     uno::Sequence< style::TabStop> aSeq1;
     if( r1 >>= aSeq1 )
@@ -52,12 +52,12 @@ bool XMLTabStopPropHdl::equals( const uno::Any& r1, const uno::Any& r2 ) const
     return false;
 }
 
-bool XMLTabStopPropHdl::importXML( const OUString&, css::uno::Any&, const SvXMLUnitConverter& ) const
+bool XMLTabStopPropHdl::importXML( const OUString&, cpo::uno::Any&, const SvXMLUnitConverter& ) const
 {
     return false;
 }
 
-bool XMLTabStopPropHdl::exportXML( OUString&, const css::uno::Any&, const SvXMLUnitConverter& ) const
+bool XMLTabStopPropHdl::exportXML( OUString&, const cpo::uno::Any&, const SvXMLUnitConverter& ) const
 {
     return false;
 }

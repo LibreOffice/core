@@ -114,18 +114,18 @@ void SAL_CALL ScXMLCalculationSettingsContext::endFastElement( sal_Int32 /*nElem
     if (!xPropertySet)
         return;
 
-    xPropertySet->setPropertyValue( SC_UNO_CALCASSHOWN, uno::Any(bCalcAsShown) );
-    xPropertySet->setPropertyValue( SC_UNO_IGNORECASE, uno::Any(bIgnoreCase) );
-    xPropertySet->setPropertyValue( SC_UNO_LOOKUPLABELS, uno::Any(bLookUpLabels) );
-    xPropertySet->setPropertyValue( SC_UNO_MATCHWHOLE, uno::Any(bMatchWholeCell) );
+    xPropertySet->setPropertyValue( SC_UNO_CALCASSHOWN, cpo::uno::Any(bCalcAsShown) );
+    xPropertySet->setPropertyValue( SC_UNO_IGNORECASE, cpo::uno::Any(bIgnoreCase) );
+    xPropertySet->setPropertyValue( SC_UNO_LOOKUPLABELS, cpo::uno::Any(bLookUpLabels) );
+    xPropertySet->setPropertyValue( SC_UNO_MATCHWHOLE, cpo::uno::Any(bMatchWholeCell) );
     bool bWildcards, bRegex;
     utl::SearchParam::ConvertToBool( eSearchType, bWildcards, bRegex);
-    xPropertySet->setPropertyValue( SC_UNO_REGEXENABLED, uno::Any(bRegex) );
-    xPropertySet->setPropertyValue( SC_UNO_WILDCARDSENABLED, uno::Any(bWildcards) );
-    xPropertySet->setPropertyValue( SC_UNO_ITERENABLED, uno::Any(bIsIterationEnabled) );
-    xPropertySet->setPropertyValue( SC_UNO_ITERCOUNT, uno::Any(nIterationCount) );
-    xPropertySet->setPropertyValue( SC_UNO_ITEREPSILON, uno::Any(fIterationEpsilon) );
-    xPropertySet->setPropertyValue( SC_UNO_NULLDATE, uno::Any(aNullDate) );
+    xPropertySet->setPropertyValue( SC_UNO_REGEXENABLED, cpo::uno::Any(bRegex) );
+    xPropertySet->setPropertyValue( SC_UNO_WILDCARDSENABLED, cpo::uno::Any(bWildcards) );
+    xPropertySet->setPropertyValue( SC_UNO_ITERENABLED, cpo::uno::Any(bIsIterationEnabled) );
+    xPropertySet->setPropertyValue( SC_UNO_ITERCOUNT, cpo::uno::Any(nIterationCount) );
+    xPropertySet->setPropertyValue( SC_UNO_ITEREPSILON, cpo::uno::Any(fIterationEpsilon) );
+    xPropertySet->setPropertyValue( SC_UNO_NULLDATE, cpo::uno::Any(aNullDate) );
     if (ScDocument* pDoc = GetScImport().GetDocument())
     {
         ScXMLImport::MutexGuard aGuard(GetScImport());

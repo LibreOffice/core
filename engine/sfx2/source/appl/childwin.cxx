@@ -293,7 +293,7 @@ void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
     aWinOpt.SetWindowState(rInfo.aWinState);
 
     css::uno::Sequence < css::beans::NamedValue > aSeq
-        { { u"Data"_ustr, css::uno::Any(aWinData) } };
+        { { u"Data"_ustr, cpo::uno::Any(aWinData) } };
     aWinOpt.SetUserData( aSeq );
 
     // ... but save status at runtime!

@@ -43,8 +43,8 @@ public:
     virtual ~SwVbaRow() override;
 
     // Attributes
-    virtual css::uno::Any SAL_CALL getHeight() override;
-    virtual void SAL_CALL setHeight( const css::uno::Any& _height ) override;
+    virtual cpo::uno::Any SAL_CALL getHeight() override;
+    virtual void SAL_CALL setHeight( const cpo::uno::Any& _height ) override;
     virtual ::sal_Int32 SAL_CALL getHeightRule() override;
     virtual void SAL_CALL setHeightRule( ::sal_Int32 _heightrule ) override;
 

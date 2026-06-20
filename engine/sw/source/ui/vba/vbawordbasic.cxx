@@ -54,20 +54,22 @@ void SAL_CALL SwWordBasic::setMailMergeMainDocumentType(sal_Int32 _mailmergemain
         ->setMainDocumentType(_mailmergemaindocumenttype);
 }
 
-void SAL_CALL SwWordBasic::FileOpen(const OUString& Name, const uno::Any& ConfirmConversions,
-                                    const uno::Any& ReadOnly, const uno::Any& AddToMru,
-                                    const uno::Any& PasswordDoc, const uno::Any& PasswordDot,
-                                    const uno::Any& Revert, const uno::Any& WritePasswordDoc,
-                                    const uno::Any& WritePasswordDot)
+void SAL_CALL SwWordBasic::FileOpen(const OUString& Name, const cpo::uno::Any& ConfirmConversions,
+                                    const cpo::uno::Any& ReadOnly, const cpo::uno::Any& AddToMru,
+                                    const cpo::uno::Any& PasswordDoc,
+                                    const cpo::uno::Any& PasswordDot, const cpo::uno::Any& Revert,
+                                    const cpo::uno::Any& WritePasswordDoc,
+                                    const cpo::uno::Any& WritePasswordDot)
 {
-    uno::Any aDocuments = mpApp->Documents(uno::Any());
+    cpo::uno::Any aDocuments = mpApp->Documents(cpo::uno::Any());
 
     uno::Reference<word::XDocuments> rDocuments;
 
     if (aDocuments >>= rDocuments)
         rDocuments->Open(Name, ConfirmConversions, ReadOnly, AddToMru, PasswordDoc, PasswordDot,
-                         Revert, WritePasswordDoc, WritePasswordDot, uno::Any(), uno::Any(),
-                         uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any());
+                         Revert, WritePasswordDoc, WritePasswordDot, cpo::uno::Any(),
+                         cpo::uno::Any(), cpo::uno::Any(), cpo::uno::Any(), cpo::uno::Any(),
+                         cpo::uno::Any(), cpo::uno::Any());
 }
 
 void SAL_CALL SwWordBasic::FileSave()
@@ -77,11 +79,11 @@ void SAL_CALL SwWordBasic::FileSave()
 }
 
 void SAL_CALL SwWordBasic::FileSaveAs(
-    const css::uno::Any& Name, const css::uno::Any& Format, const css::uno::Any& /*LockAnnot*/,
-    const css::uno::Any& /*Password*/, const css::uno::Any& /*AddToMru*/,
-    const css::uno::Any& /*WritePassword*/, const css::uno::Any& /*RecommendReadOnly*/,
-    const css::uno::Any& /*EmbedFonts*/, const css::uno::Any& /*NativePictureFormat*/,
-    const css::uno::Any& /*FormsData*/, const css::uno::Any& /*SaveAsAOCELetter*/)
+    const cpo::uno::Any& Name, const cpo::uno::Any& Format, const cpo::uno::Any& /*LockAnnot*/,
+    const cpo::uno::Any& /*Password*/, const cpo::uno::Any& /*AddToMru*/,
+    const cpo::uno::Any& /*WritePassword*/, const cpo::uno::Any& /*RecommendReadOnly*/,
+    const cpo::uno::Any& /*EmbedFonts*/, const cpo::uno::Any& /*NativePictureFormat*/,
+    const cpo::uno::Any& /*FormsData*/, const cpo::uno::Any& /*SaveAsAOCELetter*/)
 {
     SAL_INFO("sw.vba", "WordBasic.FileSaveAs(Name:=" << Name << ",Format:=" << Format << ")");
 
@@ -132,7 +134,7 @@ void SAL_CALL SwWordBasic::FileSaveAs(
     sal_Int32 nFileFormat = word::WdSaveFormat::wdFormatDocument;
     Format >>= nFileFormat;
 
-    uno::Sequence aProps{ comphelper::makePropertyValue(u"FilterName"_ustr, css::uno::Any()),
+    uno::Sequence aProps{ comphelper::makePropertyValue(u"FilterName"_ustr, cpo::uno::Any()),
                           comphelper::makePropertyValue(u"FileName"_ustr, sURL) };
 
     setFilterPropsFromFormat(nFileFormat, aProps);
@@ -140,7 +142,7 @@ void SAL_CALL SwWordBasic::FileSaveAs(
     dispatchRequests(xModel, u".uno:SaveAs"_ustr, aProps);
 }
 
-void SAL_CALL SwWordBasic::FileClose(const css::uno::Any& Save)
+void SAL_CALL SwWordBasic::FileClose(const cpo::uno::Any& Save)
 {
     uno::Reference<frame::XModel> xModel(mpApp->getCurrentDocument(), uno::UNO_SET_THROW);
 
@@ -159,15 +161,15 @@ void SAL_CALL SwWordBasic::FileClose(const css::uno::Any& Save)
 }
 
 void SAL_CALL SwWordBasic::ToolsOptionsView(
-    const css::uno::Any& DraftFont, const css::uno::Any& WrapToWindow,
-    const css::uno::Any& PicturePlaceHolders, const css::uno::Any& FieldCodes,
-    const css::uno::Any& BookMarks, const css::uno::Any& FieldShading,
-    const css::uno::Any& StatusBar, const css::uno::Any& HScroll, const css::uno::Any& VScroll,
-    const css::uno::Any& StyleAreaWidth, const css::uno::Any& Tabs, const css::uno::Any& Spaces,
-    const css::uno::Any& Paras, const css::uno::Any& Hyphens, const css::uno::Any& Hidden,
-    const css::uno::Any& ShowAll, const css::uno::Any& Drawings, const css::uno::Any& Anchors,
-    const css::uno::Any& TextBoundaries, const css::uno::Any& VRuler,
-    const css::uno::Any& Highlight)
+    const cpo::uno::Any& DraftFont, const cpo::uno::Any& WrapToWindow,
+    const cpo::uno::Any& PicturePlaceHolders, const cpo::uno::Any& FieldCodes,
+    const cpo::uno::Any& BookMarks, const cpo::uno::Any& FieldShading,
+    const cpo::uno::Any& StatusBar, const cpo::uno::Any& HScroll, const cpo::uno::Any& VScroll,
+    const cpo::uno::Any& StyleAreaWidth, const cpo::uno::Any& Tabs, const cpo::uno::Any& Spaces,
+    const cpo::uno::Any& Paras, const cpo::uno::Any& Hyphens, const cpo::uno::Any& Hidden,
+    const cpo::uno::Any& ShowAll, const cpo::uno::Any& Drawings, const cpo::uno::Any& Anchors,
+    const cpo::uno::Any& TextBoundaries, const cpo::uno::Any& VRuler,
+    const cpo::uno::Any& Highlight)
 {
     SAL_INFO("sw.vba", "WordBasic.ToolsOptionsView("
                        "DraftFont:="
@@ -184,27 +186,27 @@ void SAL_CALL SwWordBasic::ToolsOptionsView(
                            << ", VRuler:=" << VRuler << ", Highlight:=" << Highlight << ")");
 }
 
-css::uno::Any SAL_CALL SwWordBasic::WindowName(const css::uno::Any& /*Number*/)
+cpo::uno::Any SAL_CALL SwWordBasic::WindowName(const cpo::uno::Any& /*Number*/)
 {
-    return css::uno::Any(mpApp->getActiveSwVbaWindow()->getCaption());
+    return cpo::uno::Any(mpApp->getActiveSwVbaWindow()->getCaption());
 }
 
-css::uno::Any SAL_CALL SwWordBasic::ExistingBookmark(const OUString& Name)
+cpo::uno::Any SAL_CALL SwWordBasic::ExistingBookmark(const OUString& Name)
 {
-    uno::Reference<word::XBookmarks> xBookmarks(mpApp->getActiveDocument()->Bookmarks(uno::Any()),
-                                                uno::UNO_QUERY);
-    return css::uno::Any(xBookmarks.is() && xBookmarks->Exists(Name));
+    uno::Reference<word::XBookmarks> xBookmarks(
+        mpApp->getActiveDocument()->Bookmarks(cpo::uno::Any()), uno::UNO_QUERY);
+    return cpo::uno::Any(xBookmarks.is() && xBookmarks->Exists(Name));
 }
 
 void SAL_CALL SwWordBasic::MailMergeOpenDataSource(
-    const OUString& Name, const css::uno::Any& Format, const css::uno::Any& ConfirmConversions,
-    const css::uno::Any& ReadOnly, const css::uno::Any& LinkToSource,
-    const css::uno::Any& AddToRecentFiles, const css::uno::Any& PasswordDocument,
-    const css::uno::Any& PasswordTemplate, const css::uno::Any& Revert,
-    const css::uno::Any& WritePasswordDocument, const css::uno::Any& WritePasswordTemplate,
-    const css::uno::Any& Connection, const css::uno::Any& SQLStatement,
-    const css::uno::Any& SQLStatement1, const css::uno::Any& OpenExclusive,
-    const css::uno::Any& SubType)
+    const OUString& Name, const cpo::uno::Any& Format, const cpo::uno::Any& ConfirmConversions,
+    const cpo::uno::Any& ReadOnly, const cpo::uno::Any& LinkToSource,
+    const cpo::uno::Any& AddToRecentFiles, const cpo::uno::Any& PasswordDocument,
+    const cpo::uno::Any& PasswordTemplate, const cpo::uno::Any& Revert,
+    const cpo::uno::Any& WritePasswordDocument, const cpo::uno::Any& WritePasswordTemplate,
+    const cpo::uno::Any& Connection, const cpo::uno::Any& SQLStatement,
+    const cpo::uno::Any& SQLStatement1, const cpo::uno::Any& OpenExclusive,
+    const cpo::uno::Any& SubType)
 {
     mpApp->getActiveDocument()->getMailMerge()->OpenDataSource(
         Name, Format, ConfirmConversions, ReadOnly, LinkToSource, AddToRecentFiles,
@@ -212,36 +214,36 @@ void SAL_CALL SwWordBasic::MailMergeOpenDataSource(
         Connection, SQLStatement, SQLStatement1, OpenExclusive, SubType);
 }
 
-css::uno::Any SAL_CALL SwWordBasic::AppMaximize(const css::uno::Any& WindowName,
-                                                const css::uno::Any& State)
+cpo::uno::Any SAL_CALL SwWordBasic::AppMaximize(const cpo::uno::Any& WindowName,
+                                                const cpo::uno::Any& State)
 {
     SAL_INFO("sw.vba", "WordBasic.AppMaximize( WindowName:=" << WindowName << ", State:=" << State);
 
     // FIXME: Implement if necessary
-    return css::uno::Any(sal_Int32(0));
+    return cpo::uno::Any(sal_Int32(0));
 }
 
-css::uno::Any SAL_CALL SwWordBasic::DocMaximize(const css::uno::Any& State)
+cpo::uno::Any SAL_CALL SwWordBasic::DocMaximize(const cpo::uno::Any& State)
 {
     SAL_INFO("sw.vba", "WordBasic.DocMaximize(State:=" << State << ")");
 
     // FIXME: Implement if necessary
-    return css::uno::Any(sal_Int32(0));
+    return cpo::uno::Any(sal_Int32(0));
 }
 
-void SAL_CALL SwWordBasic::AppShow(const css::uno::Any& WindowName)
+void SAL_CALL SwWordBasic::AppShow(const cpo::uno::Any& WindowName)
 {
     SAL_INFO("sw.vba", "WordBasic.AppShow(WindowName:=" << WindowName << ")");
 
     // FIXME: Implement if necessary
 }
 
-css::uno::Any SAL_CALL SwWordBasic::AppCount()
+cpo::uno::Any SAL_CALL SwWordBasic::AppCount()
 {
     SAL_INFO("sw.vba", "WordBasic.AppCount()");
 
     // FIXME: Implement if necessary. Return a random number for now.
-    return css::uno::Any(sal_Int32(2));
+    return cpo::uno::Any(sal_Int32(2));
 }
 
 void SAL_CALL SwWordBasic::MsgBox(const OUString& sPrompt)
@@ -255,7 +257,7 @@ void SAL_CALL SwWordBasic::MsgBox(const OUString& sPrompt)
         SAL_WARN("sw.vba", "failed to execute runtime library function MsgBox (" << sPrompt << ")");
 }
 
-void SAL_CALL SwWordBasic::ScreenUpdating(const uno::Any& On)
+void SAL_CALL SwWordBasic::ScreenUpdating(const cpo::uno::Any& On)
 {
     sal_Int32 nOn;
     if (On >>= nOn)

@@ -58,6 +58,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::reflection;
+using namespace cpo::uno;
 
 
 #define JSCRIPT_ID_PROPERTY L"_environment"
@@ -162,7 +163,7 @@ Any SAL_CALL IUnknownWrapper::invokeGetProperty( const OUString& aPropertyName, 
     }
     catch ( const Exception& e )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException("[automation bridge] unexpected exception in "
                 "IUnknownWrapper::invokeGetProperty ! Message : \n " +
                 e.Message,
@@ -192,7 +193,7 @@ Any SAL_CALL IUnknownWrapper::invokePutProperty( const OUString& aPropertyName, 
     }
     catch ( const Exception& e )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException("[automation bridge] unexpected exception in "
                 "IUnknownWrapper::invokePutProperty ! Message : \n" +
                 e.Message,
@@ -249,7 +250,7 @@ Any SAL_CALL IUnknownWrapper::invoke( const OUString& aFunctionName,
     }
     catch (const Exception & e)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException("[automation bridge] unexpected exception in "
                 "IUnknownWrapper::invoke ! Message : \n" +
                 e.Message,
@@ -418,7 +419,7 @@ void SAL_CALL IUnknownWrapper::setValue( const OUString& aPropertyName,
     }
     catch (const Exception & e)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException("[automation bridge] unexpected exception in "
                 "IUnknownWrapper::setValue ! Message : \n" +
                 e.Message,
@@ -564,7 +565,7 @@ Any SAL_CALL IUnknownWrapper::getValue( const OUString& aPropertyName )
     }
     catch (const Exception & e)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException("[automation bridge] unexpected exception in "
                 "IUnknownWrapper::getValue ! Message : \n" +
                 e.Message,
@@ -615,7 +616,7 @@ bool SAL_CALL IUnknownWrapper::hasMethod( const OUString& aName )
     }
     catch (const Exception & e)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException("[automation bridge] unexpected exception in "
                 "IUnknownWrapper::hasMethod ! Message : \n" +
                 e.Message,
@@ -666,7 +667,7 @@ bool SAL_CALL IUnknownWrapper::hasProperty( const OUString& aName )
     }
     catch (const Exception & e)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException("[automation bridge] unexpected exception in "
                 "IUnknownWrapper::hasProperty ! Message : \n" +
                 e.Message,
@@ -1234,7 +1235,7 @@ void SAL_CALL IUnknownWrapper::initialize( const Sequence< Any >& aArguments )
         }
         catch( const Exception& e )
         {
-            css::uno::Any anyEx = cppu::getCaughtException();
+            cpo::uno::Any anyEx = cppu::getCaughtException();
             throw css::lang::WrappedTargetRuntimeException(
                     "[automation bridge] unexpected exception in IUnknownWrapper::initialize() error message: \n" + e.Message,
                     nullptr, anyEx );
@@ -1244,7 +1245,7 @@ void SAL_CALL IUnknownWrapper::initialize( const Sequence< Any >& aArguments )
 
 
 // XDirectInvocation
-uno::Any SAL_CALL IUnknownWrapper::directInvoke( const OUString& aName, const uno::Sequence< uno::Any >& aParams )
+cpo::uno::Any SAL_CALL IUnknownWrapper::directInvoke( const OUString& aName, const uno::Sequence< cpo::uno::Any >& aParams )
 {
     Any aResult;
 
@@ -1283,7 +1284,7 @@ uno::Any SAL_CALL IUnknownWrapper::directInvoke( const OUString& aName, const un
         dispparams.cArgs = aParams.getLength();
 
         // Determine the number of named arguments
-        for ( uno::Any const & any : aParams )
+        for ( cpo::uno::Any const & any : aParams )
             if ( any.getValueType() == cppu::UnoType<NamedArgument>::get() )
                 dispparams.cNamedArgs ++;
 

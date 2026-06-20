@@ -913,7 +913,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                         uno::Reference<sheet::XCellRangeData> xCellRangeData(xSheetRange,
                                 uno::UNO_QUERY);
-                        uno::Sequence<uno::Sequence<uno::Any>> aDataArray
+                        uno::Sequence<uno::Sequence<cpo::uno::Any>> aDataArray
                             = xCellRangeData->getDataArray();
 
                         ScDuplicateRecordsDlg aDlg(GetFrameWeld(), aDataArray, GetViewData(), aRange);

@@ -110,7 +110,7 @@ public:
     void  IncreaseState(css::accessibility::XAccessible* pXAcc, sal_Int64 nState);
     void  UpdateState( css::accessibility::XAccessible* pXAcc );
 
-    void  SetValue( css::accessibility::XAccessible* pXAcc, css::uno::Any pAny );
+    void  SetValue( css::accessibility::XAccessible* pXAcc, cpo::uno::Any pAny );
     void  UpdateValue( css::accessibility::XAccessible* pXAcc );
 
     void  UpdateAccFocus( css::accessibility::XAccessible* newFocus );

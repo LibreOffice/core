@@ -30,7 +30,7 @@ class XMLCodeNameProvider : public ::cppu::WeakImplHelper< css::container::XName
 {
     ScDocument* mpDoc;
 
-    static bool _getCodeName( const css::uno::Any& aAny,
+    static bool _getCodeName( const cpo::uno::Any& aAny,
                            OUString& rCodeName );
 
 public:
@@ -39,7 +39,7 @@ public:
 
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
 

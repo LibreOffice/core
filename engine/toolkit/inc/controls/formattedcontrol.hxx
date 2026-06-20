@@ -63,36 +63,36 @@ namespace toolkit
         void SAL_CALL dispose() override;
 
         // XPropertySet
-        void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Sequence< css::uno::Any >& Values ) override;
+        void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Sequence< cpo::uno::Any >& Values ) override;
 
         // UnoControlModel
         virtual void ImplNormalizePropertySequence(
                         const sal_Int32                 _nCount,        /// the number of entries in the arrays
                         sal_Int32*                      _pHandles,      /// the handles of the properties to set
-                        css::uno::Any*     _pValues,       /// the values of the properties to set
+                        cpo::uno::Any*     _pValues,       /// the values of the properties to set
                         sal_Int32*                      _pValidHandles  /// pointer to the valid handles, allowed to be adjusted
                     )   const override;
         void    impl_updateTextFromValue_nothrow(std::unique_lock<std::mutex>& rGuard);
         void    impl_updateCachedFormatter_nothrow(std::unique_lock<std::mutex>& rGuard);
         void    impl_updateCachedFormatKey_nothrow(std::unique_lock<std::mutex>& rGuard);
 
-        css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+        cpo::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
         ::cppu::IPropertyArrayHelper& getInfoHelper() override;
         bool convertFastPropertyValue(
                     std::unique_lock<std::mutex>& rGuard,
-                    css::uno::Any& rConvertedValue,
-                    css::uno::Any& rOldValue,
+                    cpo::uno::Any& rConvertedValue,
+                    cpo::uno::Any& rOldValue,
                     sal_Int32 nPropId,
-                    const css::uno::Any& rValue
+                    const cpo::uno::Any& rValue
                 ) override;
 
         void setFastPropertyValue_NoBroadcast(
                     std::unique_lock<std::mutex>& rGuard,
                     sal_Int32 nHandle,
-                    const css::uno::Any& rValue
+                    const cpo::uno::Any& rValue
                 ) override;
 
-        css::uno::Any      m_aCachedFormat;
+        cpo::uno::Any      m_aCachedFormat;
         bool               m_bRevokedAsClient;
         bool               m_bSettingValueAndText;
         css::uno::Reference< css::util::XNumberFormatter >

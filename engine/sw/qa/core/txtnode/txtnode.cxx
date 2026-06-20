@@ -263,10 +263,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testSplitNodeSuperscriptCopy)
  *    createSwDoc();
  *
  *    uno::Sequence<css::beans::PropertyValue> aArgs = {
- *        comphelper::makePropertyValue("TypeName", uno::Any(OUString("SetRef"))),
+ *        comphelper::makePropertyValue("TypeName", cpo::uno::Any(OUString("SetRef"))),
  *        comphelper::makePropertyValue(
- *            "Name", uno::Any(OUString("ZOTERO_ITEM CSL_CITATION {} RNDpyJknp173F"))),
- *        comphelper::makePropertyValue("Content", uno::Any(OUString("foo"))),
+ *            "Name", cpo::uno::Any(OUString("ZOTERO_ITEM CSL_CITATION {} RNDpyJknp173F"))),
+ *        comphelper::makePropertyValue("Content", cpo::uno::Any(OUString("foo"))),
  *    };
  *    dispatchCommand(mxComponent, ".uno:InsertField", aArgs);
  *

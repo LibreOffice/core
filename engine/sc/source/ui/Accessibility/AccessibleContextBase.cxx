@@ -172,8 +172,8 @@ OUString SAL_CALL
             const OUString sOldDescription = msDescription;
             msDescription = sDescription;
 
-            CommitChange(AccessibleEventId::DESCRIPTION_CHANGED, uno::Any(sOldDescription),
-                         uno::Any(sDescription));
+            CommitChange(AccessibleEventId::DESCRIPTION_CHANGED, cpo::uno::Any(sOldDescription),
+                         cpo::uno::Any(sDescription));
         }
     }
     return msDescription;
@@ -194,7 +194,7 @@ OUString SAL_CALL
             const OUString sOldName = msName;
             msName = sName;
 
-            CommitChange(AccessibleEventId::NAME_CHANGED, uno::Any(sOldName), uno::Any(sName));
+            CommitChange(AccessibleEventId::NAME_CHANGED, cpo::uno::Any(sOldName), cpo::uno::Any(sName));
         }
     }
     return msName;
@@ -242,22 +242,22 @@ OUString ScAccessibleContextBase::createAccessibleName()
     return OUString();
 }
 
-void ScAccessibleContextBase::CommitChange(const sal_Int16 nEventId, const css::uno::Any& rOldValue,
-                                           const css::uno::Any& rNewValue, sal_Int32 nIndexHint)
+void ScAccessibleContextBase::CommitChange(const sal_Int16 nEventId, const cpo::uno::Any& rOldValue,
+                                           const cpo::uno::Any& rNewValue, sal_Int32 nIndexHint)
 {
     NotifyAccessibleEvent(nEventId, rOldValue, rNewValue, nIndexHint);
 }
 
 void ScAccessibleContextBase::CommitFocusGained()
 {
-    CommitChange(AccessibleEventId::STATE_CHANGED, uno::Any(),
-                 uno::Any(AccessibleStateType::FOCUSED));
+    CommitChange(AccessibleEventId::STATE_CHANGED, cpo::uno::Any(),
+                 cpo::uno::Any(AccessibleStateType::FOCUSED));
 }
 
 void ScAccessibleContextBase::CommitFocusLost()
 {
-    CommitChange(AccessibleEventId::STATE_CHANGED, uno::Any(AccessibleStateType::FOCUSED),
-                 uno::Any());
+    CommitChange(AccessibleEventId::STATE_CHANGED, cpo::uno::Any(AccessibleStateType::FOCUSED),
+                 cpo::uno::Any());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

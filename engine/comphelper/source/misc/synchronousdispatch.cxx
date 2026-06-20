@@ -56,7 +56,7 @@ uno::Reference< lang::XComponent > SynchronousDispatch::dispatch(
     {
         try
         {
-            uno::Any aRet;
+            cpo::uno::Any aRet;
             uno::Reference < frame::XSynchronousDispatch > xSyncDisp( xDispatcher, uno::UNO_QUERY_THROW );
 
             aRet = xSyncDisp->dispatchWithReturnValue( aURL, lArguments );

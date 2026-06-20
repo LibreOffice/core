@@ -33,7 +33,7 @@ namespace comphelper
 {
 
 
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::beans::NamedValue;
@@ -68,7 +68,7 @@ namespace comphelper
     }
 
 
-    bool NamedValueCollection::canExtractFrom( css::uno::Any const & i_value )
+    bool NamedValueCollection::canExtractFrom( cpo::uno::Any const & i_value )
     {
         Type const & aValueType = i_value.getValueType();
         return aValueType.equals( ::cppu::UnoType< PropertyValue >::get() )
@@ -232,7 +232,7 @@ namespace comphelper
     }
 
     // static
-    const css::uno::Any& NamedValueCollection::get( const css::uno::Sequence<css::beans::PropertyValue>& rPropSeq,
+    const cpo::uno::Any& NamedValueCollection::get( const css::uno::Sequence<css::beans::PropertyValue>& rPropSeq,
             std::u16string_view _rValueName )
     {
         static const Any theEmptyDefault;
@@ -286,7 +286,7 @@ namespace comphelper
     {
         _out_rValues.realloc( maValues.size() );
         std::transform( maValues.begin(), maValues.end(), _out_rValues.getArray(),
-                [](const std::pair< OUString, css::uno::Any >& _rValue)
+                [](const std::pair< OUString, cpo::uno::Any >& _rValue)
                     { return PropertyValue( _rValue.first, 0, _rValue.second, PropertyState_DIRECT_VALUE ); } );
         return _out_rValues.getLength();
     }
@@ -296,7 +296,7 @@ namespace comphelper
     {
         _out_rValues.realloc( maValues.size() );
         std::transform( maValues.begin(), maValues.end(), _out_rValues.getArray(),
-                [](const std::pair< OUString, css::uno::Any >& _rValue)
+                [](const std::pair< OUString, cpo::uno::Any >& _rValue)
                     { return NamedValue( _rValue.first, _rValue.second ); } );
         return _out_rValues.getLength();
     }

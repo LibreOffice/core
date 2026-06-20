@@ -20,10 +20,11 @@
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 XMLConstantsPropertyHandler::~XMLConstantsPropertyHandler()
 {

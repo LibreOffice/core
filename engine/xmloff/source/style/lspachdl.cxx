@@ -22,7 +22,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <sax/tools/converter.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 
@@ -38,7 +38,7 @@ XMLLineHeightHdl::~XMLLineHeightHdl()
     // nothing to do
 }
 
-bool XMLLineHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLLineHeightHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     style::LineSpacing aLSp;
     sal_Int32 nTemp = 0;
@@ -68,7 +68,7 @@ bool XMLLineHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
     return true;
 }
 
-bool XMLLineHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLLineHeightHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     OUStringBuffer aOut;
 
@@ -100,7 +100,7 @@ XMLLineHeightAtLeastHdl::~XMLLineHeightAtLeastHdl()
     // nothing to do
 }
 
-bool XMLLineHeightAtLeastHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLLineHeightAtLeastHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     style::LineSpacing aLSp;
 
@@ -114,7 +114,7 @@ bool XMLLineHeightAtLeastHdl::importXML( const OUString& rStrImpValue, uno::Any&
     return true;
 }
 
-bool XMLLineHeightAtLeastHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLLineHeightAtLeastHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     OUStringBuffer aOut;
 
@@ -139,7 +139,7 @@ XMLLineSpacingHdl::~XMLLineSpacingHdl()
     // nothing to do
 }
 
-bool XMLLineSpacingHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLLineSpacingHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     style::LineSpacing aLSp;
     sal_Int32 nTemp;
@@ -153,7 +153,7 @@ bool XMLLineSpacingHdl::importXML( const OUString& rStrImpValue, uno::Any& rValu
     return true;
 }
 
-bool XMLLineSpacingHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLLineSpacingHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     OUStringBuffer aOut;
 

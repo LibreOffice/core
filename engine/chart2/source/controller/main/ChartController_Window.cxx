@@ -265,12 +265,12 @@ void SAL_CALL ChartController::setPosSize(
         Fraction aScaleXFrac(fScaleX);
         Fraction aScaleYFrac(fScaleY);
         auto aZoomFactors(::comphelper::InitPropertySequence({
-            { "ScaleXNumerator", uno::Any( aScaleXFrac.GetNumerator() ) },
-            { "ScaleXDenominator", uno::Any( aScaleXFrac.GetDenominator() ) },
-            { "ScaleYNumerator", uno::Any( aScaleYFrac.GetNumerator() ) },
-            { "ScaleYDenominator", uno::Any( aScaleYFrac.GetDenominator() ) }
+            { "ScaleXNumerator", cpo::uno::Any( aScaleXFrac.GetNumerator() ) },
+            { "ScaleXDenominator", cpo::uno::Any( aScaleXFrac.GetDenominator() ) },
+            { "ScaleYNumerator", cpo::uno::Any( aScaleYFrac.GetNumerator() ) },
+            { "ScaleYDenominator", cpo::uno::Any( aScaleYFrac.GetDenominator() ) }
         }));
-        m_xChartView->setPropertyValue( u"ZoomFactors"_ustr, uno::Any( aZoomFactors ));
+        m_xChartView->setPropertyValue( u"ZoomFactors"_ustr, cpo::uno::Any( aZoomFactors ));
     }
 
     //a correct work area is at least necessary for correct values in the position and  size dialog and for dragging area
@@ -428,7 +428,7 @@ void ChartController::execute_Paint(vcl::RenderContext& rRenderContext, const to
                     aResolution.Height = pChartWindow->GetSizePixel().Height();
                 }
             }
-            m_xChartView->setPropertyValue( u"Resolution"_ustr, uno::Any( aResolution ));
+            m_xChartView->setPropertyValue( u"Resolution"_ustr, cpo::uno::Any( aResolution ));
         }
 
         if (m_xChartView.is())
@@ -1220,10 +1220,10 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                 lcl_insertMenuCommand( xPopupMenu, nUniqueId++, u".uno:ManageThemes"_ustr);
         }
 
-        css::uno::Sequence< css::uno::Any > aArgs{
-            css::uno::Any(comphelper::makePropertyValue( u"IsContextMenu"_ustr, true )),
-            css::uno::Any(comphelper::makePropertyValue( u"Frame"_ustr, m_xFrame )),
-            css::uno::Any(comphelper::makePropertyValue( u"Value"_ustr, aMenuName ))
+        css::uno::Sequence< cpo::uno::Any > aArgs{
+            cpo::uno::Any(comphelper::makePropertyValue( u"IsContextMenu"_ustr, true )),
+            cpo::uno::Any(comphelper::makePropertyValue( u"Frame"_ustr, m_xFrame )),
+            cpo::uno::Any(comphelper::makePropertyValue( u"Value"_ustr, aMenuName ))
         };
 
         css::uno::Reference< css::frame::XPopupMenuController > xPopupController(
@@ -1340,7 +1340,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
         if( bReturn )
         {
             const ObjectIdentifier& aNewOID = aObjNav.getCurrentSelection();
-            uno::Any aNewSelection;
+            cpo::uno::Any aNewSelection;
             if ( aNewOID.isValid() && !ObjectHierarchy::isRootNode( aNewOID ) )
             {
                 aNewSelection = aNewOID.getAny();
@@ -1608,7 +1608,7 @@ bool ChartController::requestQuickHelp(
 }
 
 // XSelectionSupplier (optional interface)
-bool SAL_CALL ChartController::select( const uno::Any& rSelection )
+bool SAL_CALL ChartController::select( const cpo::uno::Any& rSelection )
 {
     bool bSuccess = false;
 
@@ -1658,9 +1658,9 @@ bool SAL_CALL ChartController::select( const uno::Any& rSelection )
     return false;
 }
 
-uno::Any SAL_CALL ChartController::getSelection()
+cpo::uno::Any SAL_CALL ChartController::getSelection()
 {
-    uno::Any aReturn;
+    cpo::uno::Any aReturn;
     if ( m_aSelection.hasSelection() )
     {
         OUString aCID( m_aSelection.getSelectedCID() );
@@ -1795,9 +1795,9 @@ bool ChartController::impl_moveOrResizeObject(
                     eActionType, ObjectNameProvider::getName( eObjectType )), m_xUndoManager );
             {
                 ControllerLockGuardUNO aCLGuard( xChartModel );
-                xObjProp->setPropertyValue( u"RelativePosition"_ustr, uno::Any( aRelPos ));
+                xObjProp->setPropertyValue( u"RelativePosition"_ustr, cpo::uno::Any( aRelPos ));
                 if( bNeedResize || (eObjectType == OBJECTTYPE_DIAGRAM) )//Also set an explicit size at the diagram when an explicit position is set
-                    xObjProp->setPropertyValue( u"RelativeSize"_ustr, uno::Any( aRelSize ));
+                    xObjProp->setPropertyValue( u"RelativeSize"_ustr, cpo::uno::Any( aRelSize ));
             }
             aUndoGuard.commit();
         }
@@ -1829,7 +1829,7 @@ bool ChartController::impl_DragDataPoint( std::u16string_view rCID, double fAddi
                     fOffset = 1.0;
                 else if( fOffset < 0.0 )
                     fOffset = 0.0;
-                xPointProp->setPropertyValue( u"Offset"_ustr, uno::Any( fOffset ));
+                xPointProp->setPropertyValue( u"Offset"_ustr, cpo::uno::Any( fOffset ));
                 bResult = true;
             }
         }
@@ -2049,12 +2049,12 @@ void ChartController::sendPopupRequest(std::u16string_view rCID, tools::Rectangl
 
     uno::Sequence<beans::PropertyValue> aCallbackData = comphelper::InitPropertySequence(
     {
-        {"Rectangle",      uno::Any(xRectangle)},
-        {"DimensionIndex", uno::Any(sal_Int32(nDimensionIndex))},
-        {"PivotTableName", uno::Any(sPivotTableName)},
+        {"Rectangle",      cpo::uno::Any(xRectangle)},
+        {"DimensionIndex", cpo::uno::Any(sal_Int32(nDimensionIndex))},
+        {"PivotTableName", cpo::uno::Any(sPivotTableName)},
     });
 
-    pPopupRequest->getCallback()->notify(uno::Any(aCallbackData));
+    pPopupRequest->getCallback()->notify(cpo::uno::Any(aCallbackData));
 }
 
 } //namespace chart

@@ -633,7 +633,7 @@ IMPL_LINK_NOARG( ScFunctionWin, SetRowActivatedHdl, weld::TreeView&, bool )
     return true;
 }
 
-void EnglishFunctionNameChange::setProperty(const css::uno::Any &rProperty)
+void EnglishFunctionNameChange::setProperty(const cpo::uno::Any &rProperty)
 {
     ConfigurationListenerProperty::setProperty(rProperty);
     m_pFunctionWin->InitLRUList();

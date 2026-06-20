@@ -54,8 +54,8 @@ CPPUNIT_TEST_FIXTURE(Test, testShiftClickOnImage)
     uno::Reference<beans::XPropertySet> xTextGraphic(
         xMSF->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
     xTextGraphic->setPropertyValue(u"AnchorType"_ustr,
-                                   uno::Any(text::TextContentAnchorType_AS_CHARACTER));
-    xTextGraphic->setPropertyValue(u"Size"_ustr, uno::Any(awt::Size(5000, 5000)));
+                                   cpo::uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+    xTextGraphic->setPropertyValue(u"Size"_ustr, cpo::uno::Any(awt::Size(5000, 5000)));
     uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
     xText->insertTextContent(xCursor, xTextContent, false);
     pWrtShell->SttEndDoc(/*bStt=*/false);
@@ -164,8 +164,8 @@ CPPUNIT_TEST_FIXTURE(Test, testShiftDoubleClickOnImage)
     uno::Reference<beans::XPropertySet> xTextGraphic(
         xMSF->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
     xTextGraphic->setPropertyValue(u"AnchorType"_ustr,
-                                   uno::Any(text::TextContentAnchorType_AS_CHARACTER));
-    xTextGraphic->setPropertyValue(u"Size"_ustr, uno::Any(awt::Size(5000, 5000)));
+                                   cpo::uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+    xTextGraphic->setPropertyValue(u"Size"_ustr, cpo::uno::Any(awt::Size(5000, 5000)));
     uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
     xText->insertTextContent(xCursor, xTextContent, false);
     pWrtShell->SttEndDoc(/*bStt=*/false);

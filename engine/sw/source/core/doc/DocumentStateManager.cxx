@@ -1715,7 +1715,7 @@ void DocumentStateManager::YrsInitAcceptor()
     }
 }
 
-void DocumentStateManager::YrsInitConnector(uno::Any const& raConnection)
+void DocumentStateManager::YrsInitConnector(cpo::uno::Any const& raConnection)
 {
     assert(!m_pYrsReader);
     uno::Reference<connection::XConnection> xConnection;

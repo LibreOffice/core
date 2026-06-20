@@ -36,6 +36,7 @@ using ::cppu::OWeakObject;
 using ::cppu::WeakImplHelper;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 
 namespace comphelper
@@ -212,7 +213,7 @@ void SAL_CALL UNOMemoryStream::truncate()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_MemoryStream(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::comphelper::UNOMemoryStream());
 }

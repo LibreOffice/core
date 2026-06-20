@@ -59,7 +59,7 @@ void Theme::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-void Theme::ToAny(uno::Any& rVal) const
+void Theme::ToAny(cpo::uno::Any& rVal) const
 {
     comphelper::SequenceAsHashMap aMap;
     aMap[u"Name"_ustr] <<= maName;
@@ -95,7 +95,7 @@ static std::shared_ptr<model::ColorSet> makeColorSet(const OUString& name,
     return colorset;
 }
 
-std::shared_ptr<Theme> Theme::FromAny(const uno::Any& rVal)
+std::shared_ptr<Theme> Theme::FromAny(const cpo::uno::Any& rVal)
 {
     if (!rVal.hasValue())
         return {};

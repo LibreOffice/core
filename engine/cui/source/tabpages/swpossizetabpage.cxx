@@ -1001,7 +1001,7 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
     const SfxGrabBagItem* pGrabBag = GetItem(*rSet, SID_ATTR_CHAR_GRABBAG);
     if (pGrabBag)
     {
-        const std::map<OUString, css::uno::Any>& rMap = pGrabBag->GetGrabBag();
+        const std::map<OUString, cpo::uno::Any>& rMap = pGrabBag->GetGrabBag();
         auto it = rMap.find(u"DoNotMirrorRtlDrawObjs"_ustr);
         if (it != rMap.end())
         {

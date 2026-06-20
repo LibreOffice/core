@@ -32,7 +32,7 @@
 #include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include "sdxmlexp_impl.hxx"
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
@@ -76,6 +76,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::container;
@@ -1605,7 +1606,7 @@ void SdXMLExport::ImpWritePresentationStyles()
 
 void SdXMLExport::ExportMeta_()
 {
-    uno::Sequence<beans::NamedValue> stats { { u"ObjectCount"_ustr, uno::Any(mnObjectCount) } };
+    uno::Sequence<beans::NamedValue> stats { { u"ObjectCount"_ustr, cpo::uno::Any(mnObjectCount) } };
 
     // update document statistics at the model
     uno::Reference<document::XDocumentPropertiesSupplier> xPropSup(GetModel(),
@@ -2699,7 +2700,7 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Impress_XMLOasisExporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SdXMLExport(
         pCtx, u"XMLImpressExportOasis"_ustr, false,
@@ -2711,7 +2712,7 @@ com_sun_star_comp_Impress_XMLOasisExporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Impress_XMLOasisStylesExporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SdXMLExport(
         pCtx, u"XMLImpressStylesExportOasis"_ustr, false,
@@ -2721,7 +2722,7 @@ com_sun_star_comp_Impress_XMLOasisStylesExporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Impress_XMLOasisContentExporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SdXMLExport(pCtx, u"XMLImpressContentExportOasis"_ustr, false,
                                          SvXMLExportFlags::OASIS | SvXMLExportFlags::AUTOSTYLES
@@ -2731,7 +2732,7 @@ com_sun_star_comp_Impress_XMLOasisContentExporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Impress_XMLOasisMetaExporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SdXMLExport(pCtx, u"XMLImpressMetaExportOasis"_ustr, false,
                                          SvXMLExportFlags::OASIS | SvXMLExportFlags::META));
@@ -2739,7 +2740,7 @@ com_sun_star_comp_Impress_XMLOasisMetaExporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Impress_XMLOasisSettingsExporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SdXMLExport(pCtx, u"XMLImpressSettingsExportOasis"_ustr, false,
                                          SvXMLExportFlags::OASIS | SvXMLExportFlags::SETTINGS));
@@ -2747,7 +2748,7 @@ com_sun_star_comp_Impress_XMLOasisSettingsExporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Impress_XMLExporter_get_implementation(uno::XComponentContext* pCtx,
-                                                         uno::Sequence<uno::Any> const& /*rSeq*/)
+                                                         uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SdXMLExport(
         pCtx, u"XMLImpressExportOOO"_ustr, false,
@@ -2759,7 +2760,7 @@ com_sun_star_comp_Impress_XMLExporter_get_implementation(uno::XComponentContext*
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Draw_XMLExporter_get_implementation(uno::XComponentContext* pCtx,
-                                                      uno::Sequence<uno::Any> const& /*rSeq*/)
+                                                      uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SdXMLExport(
         pCtx, u"XMLDrawExportOOO"_ustr, true,
@@ -2771,7 +2772,7 @@ com_sun_star_comp_Draw_XMLExporter_get_implementation(uno::XComponentContext* pC
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Draw_XMLOasisSettingsExporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SdXMLExport(pCtx, u"XMLDrawSettingsExportOasis"_ustr, true,
                                          SvXMLExportFlags::OASIS | SvXMLExportFlags::SETTINGS));
@@ -2779,7 +2780,7 @@ com_sun_star_comp_Draw_XMLOasisSettingsExporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Draw_XMLOasisMetaExporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SdXMLExport(pCtx, u"XMLDrawMetaExportOasis"_ustr, true,
                                          SvXMLExportFlags::OASIS | SvXMLExportFlags::META));
@@ -2787,7 +2788,7 @@ com_sun_star_comp_Draw_XMLOasisMetaExporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Draw_XMLOasisContentExporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SdXMLExport(pCtx, u"XMLDrawContentExportOasis"_ustr, true,
                                          SvXMLExportFlags::OASIS | SvXMLExportFlags::AUTOSTYLES
@@ -2797,7 +2798,7 @@ com_sun_star_comp_Draw_XMLOasisContentExporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Draw_XMLOasisStylesExporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SdXMLExport(
         pCtx, u"XMLDrawStylesExportOasis"_ustr, true,
@@ -2807,7 +2808,7 @@ com_sun_star_comp_Draw_XMLOasisStylesExporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Draw_XMLOasisExporter_get_implementation(uno::XComponentContext* pCtx,
-                                                           uno::Sequence<uno::Any> const& /*rSeq*/)
+                                                           uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SdXMLExport(
         pCtx, u"XMLDrawExportOasis"_ustr, true,
@@ -2819,7 +2820,7 @@ com_sun_star_comp_Draw_XMLOasisExporter_get_implementation(uno::XComponentContex
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_DrawingLayer_XMLExporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(
         new SdXMLExport(pCtx, u"XMLDrawingLayerExport"_ustr, true,
@@ -2830,7 +2831,7 @@ com_sun_star_comp_DrawingLayer_XMLExporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Impress_XMLClipboardExporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(
         new SdXMLExport(pCtx, u"XMLImpressClipboardExport"_ustr, /*bIsDraw=*/false,

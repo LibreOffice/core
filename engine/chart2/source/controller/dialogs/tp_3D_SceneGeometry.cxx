@@ -189,8 +189,8 @@ void ThreeD_SceneGeometry_TabPage::applyPerspectiveToModel()
 
     try
     {
-        m_xDiagram->setPropertyValue( u"D3DScenePerspective"_ustr , uno::Any( aMode ));
-        m_xDiagram->setPropertyValue( u"Perspective"_ustr , uno::Any( static_cast<sal_Int32>(m_xMFPerspective->get_value(FieldUnit::PERCENT)) ));
+        m_xDiagram->setPropertyValue( u"D3DScenePerspective"_ustr , cpo::uno::Any( aMode ));
+        m_xDiagram->setPropertyValue( u"Perspective"_ustr , cpo::uno::Any( static_cast<sal_Int32>(m_xMFPerspective->get_value(FieldUnit::PERCENT)) ));
     }
     catch( const uno::Exception & )
     {

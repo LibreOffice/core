@@ -34,8 +34,8 @@ public:
     explicit XMLNumberPropHdl( sal_Int8 nB ) : nBytes( nB ) {}
     virtual ~XMLNumberPropHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 /**
@@ -50,8 +50,8 @@ public:
     XMLNumberNonePropHdl( enum ::xmloff::token::XMLTokenEnum eZeroString, sal_Int8 nB );
     virtual ~XMLNumberNonePropHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 /**
@@ -64,8 +64,8 @@ public:
     explicit XMLMeasurePropHdl( sal_Int8 nB ) : nBytes( nB ) {}
     virtual ~XMLMeasurePropHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 /**
@@ -74,8 +74,8 @@ public:
 class XMLUnitMeasurePropHdl final : public XMLPropertyHandler
 {
 public:
-    bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 /**
@@ -88,8 +88,8 @@ public:
     explicit XMLPercentPropHdl( sal_Int8 nB ) : nBytes( nB ) {}
     virtual ~XMLPercentPropHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 /**
@@ -98,16 +98,16 @@ public:
 */
 class XMLDoublePercentPropHdl final : public XMLPropertyHandler
 {
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 /// Maps between XML percentage and our 100th percent ints.
 class XML100thPercentPropHdl final : public XMLPropertyHandler
 {
-    virtual bool importXML(const OUString& rStrImpValue, css::uno::Any& rValue,
+    virtual bool importXML(const OUString& rStrImpValue, cpo::uno::Any& rValue,
                            const SvXMLUnitConverter& rUnitConverter) const override;
-    virtual bool exportXML(OUString& rStrExpValue, const css::uno::Any& rValue,
+    virtual bool exportXML(OUString& rStrExpValue, const cpo::uno::Any& rValue,
                            const SvXMLUnitConverter& rUnitConverter) const override;
 };
 
@@ -121,8 +121,8 @@ public:
     explicit XMLNegPercentPropHdl( sal_Int8 nB ) : nBytes( nB ) {}
     virtual ~XMLNegPercentPropHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 /**
@@ -135,8 +135,8 @@ public:
     explicit XMLMeasurePxPropHdl( sal_Int8 nB ) : nBytes( nB ) {}
     virtual ~XMLMeasurePxPropHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 /**
@@ -147,8 +147,8 @@ class XMLBoolPropHdl : public XMLPropertyHandler
 public:
     virtual ~XMLBoolPropHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 class XMLBoolFalsePropHdl final : public XMLBoolPropHdl
@@ -156,8 +156,8 @@ class XMLBoolFalsePropHdl final : public XMLBoolPropHdl
 public:
     virtual ~XMLBoolFalsePropHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 
 };
 
@@ -169,8 +169,8 @@ class XMLColorPropHdl final : public XMLPropertyHandler
 public:
     virtual ~XMLColorPropHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 /**
@@ -181,8 +181,8 @@ class XMLHexPropHdl final : public XMLPropertyHandler
 public:
     virtual ~XMLHexPropHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 /**
@@ -193,8 +193,8 @@ class XMLStringPropHdl : public XMLPropertyHandler
 public:
     virtual ~XMLStringPropHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 /**
@@ -205,7 +205,7 @@ class XMLStyleNamePropHdl final : public XMLStringPropHdl
 public:
     virtual ~XMLStyleNamePropHdl() override;
 
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 
@@ -217,8 +217,8 @@ class XMLDoublePropHdl : public XMLPropertyHandler
 public:
     virtual ~XMLDoublePropHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 /**
@@ -229,8 +229,8 @@ class XMLNBoolPropHdl final : public XMLPropertyHandler
 public:
     virtual ~XMLNBoolPropHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 /**
@@ -244,8 +244,8 @@ public:
     explicit XMLColorTransparentPropHdl( enum ::xmloff::token::XMLTokenEnum eTransparent = xmloff::token::XML_TOKEN_INVALID );
     virtual ~XMLColorTransparentPropHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 /**
@@ -261,8 +261,8 @@ public:
                              bool bTransPropValue = true );
     virtual ~XMLIsTransparentPropHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 /**
@@ -274,8 +274,8 @@ public:
     XMLColorAutoPropHdl();
     virtual ~XMLColorAutoPropHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 /**
@@ -287,8 +287,8 @@ public:
     XMLIsAutoColorPropHdl();
     virtual ~XMLIsAutoColorPropHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 
@@ -301,8 +301,8 @@ class XMLCompareOnlyPropHdl final : public XMLPropertyHandler
 public:
     virtual ~XMLCompareOnlyPropHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 /**
@@ -317,8 +317,8 @@ public:
     explicit XMLNumberWithoutZeroPropHdl( sal_Int8 nB );
     virtual ~XMLNumberWithoutZeroPropHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

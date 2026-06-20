@@ -521,7 +521,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135709)
     uno::Reference<beans::XPropertySet> xPropertySet(xTextFramesSupplier->getTextFrames()->getByName(u"Frame1"_ustr) , uno::UNO_QUERY);
 
     xPropertySet->setPropertyValue(u"AnchorType"_ustr,
-                                       uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+                                       cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
 
     text::WrapTextMode eValue;
     xPropertySet->getPropertyValue(u"Surround"_ustr) >>= eValue;
@@ -543,7 +543,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135710)
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xTextFramesSupplier->getTextFrames()->getByName(u"Frame1"_ustr) , uno::UNO_QUERY);
     xPropertySet->setPropertyValue(u"AnchorType"_ustr,
-                                       uno::Any(text::TextContentAnchorType_AT_PARAGRAPH));
+                                       cpo::uno::Any(text::TextContentAnchorType_AT_PARAGRAPH));
     pXmlDoc = parseLayoutDump();
 
     sal_Int32 nFlyLeftAfter = getXPath(pXmlDoc, "(//anchored)[1]/fly/infos/bounds", "left").toInt32();
@@ -837,7 +837,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167583)
         auto xFactory = mxComponent.queryThrow<lang::XMultiServiceFactory>();
         uno::Reference<beans::XPropertySet> xSettings(
             xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
-        xSettings->setPropertyValue(u"AdjustTableLineHeightsToGridHeight"_ustr, uno::Any(false));
+        xSettings->setPropertyValue(u"AdjustTableLineHeightsToGridHeight"_ustr, cpo::uno::Any(false));
     }
 
     fnVerify(false);

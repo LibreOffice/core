@@ -590,13 +590,13 @@ DECLARE_OOXMLEXPORT_TEST(testN779941, "n779941.docx")
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTableProperties(xTables->getByIndex(0), uno::UNO_QUERY);
     {
-        uno::Any aValue = xTableProperties->getPropertyValue(u"TopMargin"_ustr);
+        cpo::uno::Any aValue = xTableProperties->getPropertyValue(u"TopMargin"_ustr);
         sal_Int32 nTopMargin;
         aValue >>= nTopMargin;
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nTopMargin);
     }
     {
-        uno::Any aValue = xTableProperties->getPropertyValue(u"BottomMargin"_ustr);
+        cpo::uno::Any aValue = xTableProperties->getPropertyValue(u"BottomMargin"_ustr);
         sal_Int32 nBottomMargin;
         aValue >>= nBottomMargin;
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nBottomMargin);
@@ -718,7 +718,7 @@ CPPUNIT_TEST_FIXTURE(Test, testN779642)
         // Second problem: check that the outer table is in a frame, at the bottom of the page
         uno::Reference<text::XTextTable> xTextTable(xTextTablesSupplier->getTextTables()->getByName(u"Table2"_ustr), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xAnchor(xTextTable->getAnchor(), uno::UNO_QUERY);
-        uno::Any aFrame = xAnchor->getPropertyValue(u"TextFrame"_ustr);
+        cpo::uno::Any aFrame = xAnchor->getPropertyValue(u"TextFrame"_ustr);
         uno::Reference<beans::XPropertySet> xFrame;
         aFrame >>= xFrame;
         CPPUNIT_ASSERT(xFrame.is());

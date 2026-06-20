@@ -132,7 +132,7 @@ static void lcl_computeCellBorders( const PropertyMapPtr& pTableBorders, const P
     std::optional<PropertyMap::Property> pHorizontalVal = pCellProps->getProperty(META_PROP_HORIZONTAL_BORDER);
 
     // Handle the vertical and horizontal borders
-    uno::Any aVertProp;
+    cpo::uno::Any aVertProp;
     if ( !pVerticalVal)
     {
         pVerticalVal = pTableBorders->getProperty(META_PROP_VERTICAL_BORDER);
@@ -145,7 +145,7 @@ static void lcl_computeCellBorders( const PropertyMapPtr& pTableBorders, const P
         pCellProps->Erase( pVerticalVal->first );
     }
 
-    uno::Any aHorizProp;
+    cpo::uno::Any aHorizProp;
     if ( !pHorizontalVal )
     {
         pHorizontalVal = pTableBorders->getProperty(META_PROP_HORIZONTAL_BORDER);
@@ -275,7 +275,7 @@ bool lcl_extractTableBorderProperty(const PropertyMapPtr& pTableProperties, cons
     {
         OSL_VERIFY(aTblBorder->second >>= rLine);
 
-        rInfo.pTableBorders->Insert( nId, uno::Any( rLine ) );
+        rInfo.pTableBorders->Insert( nId, cpo::uno::Any( rLine ) );
         rInfo.pTableDefaults->Erase( nId );
 
         return true;
@@ -367,7 +367,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         if (bConvertToFloatingInFootnote)
         {
             // define empty "TablePosition" to avoid export temporary floating
-            aGrabBag[u"TablePosition"_ustr] = uno::Any();
+            aGrabBag[u"TablePosition"_ustr] = cpo::uno::Any();
         }
 
         // This one is simply preserving all the table look attributes for a round-trip.
@@ -462,7 +462,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
                     // apply (without overwriting) tblHeader setting of the table style
                     PropertyMapPtr pHeaderStyleProps = pTableStyle->GetProperties(CNF_FIRST_ROW);
                     if ( pHeaderStyleProps->getProperty(PROP_HEADER_ROW_COUNT) )
-                        m_aTableProperties->Insert(PROP_HEADER_ROW_COUNT, uno::Any( sal_Int32(1)), false);
+                        m_aTableProperties->Insert(PROP_HEADER_ROW_COUNT, cpo::uno::Any( sal_Int32(1)), false);
                 }
             }
         }
@@ -504,7 +504,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
         if (!aGrabBag.empty())
         {
-            m_aTableProperties->Insert( PROP_TABLE_INTEROP_GRAB_BAG, uno::Any( aGrabBag.getAsConstPropertyValueList() ) );
+            m_aTableProperties->Insert( PROP_TABLE_INTEROP_GRAB_BAG, cpo::uno::Any( aGrabBag.getAsConstPropertyValueList() ) );
         }
 
         bool bLeftMarginProvided = false;
@@ -537,15 +537,15 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         aDistances.LeftDistance = static_cast<sal_Int16>( rInfo.nLeftBorderDistance );
         aDistances.RightDistance = static_cast<sal_Int16>( rInfo.nRightBorderDistance );
 
-        m_aTableProperties->Insert( PROP_TABLE_BORDER_DISTANCES, uno::Any( aDistances ) );
+        m_aTableProperties->Insert( PROP_TABLE_BORDER_DISTANCES, cpo::uno::Any( aDistances ) );
 
         sal_Int32 nMode = m_rDMapper_Impl.GetSettingsTable()->GetWordCompatibilityMode();
         if (!rFrameProperties.empty() && nMode < 15)
             lcl_DecrementHoriOrientPosition(rFrameProperties, rInfo.nLeftBorderDistance);
 
         // Set table above/bottom spacing to 0.
-        m_aTableProperties->Insert( PROP_TOP_MARGIN, uno::Any( sal_Int32( 0 ) ) );
-        m_aTableProperties->Insert( PROP_BOTTOM_MARGIN, uno::Any( sal_Int32( 0 ) ) );
+        m_aTableProperties->Insert( PROP_TOP_MARGIN, cpo::uno::Any( sal_Int32( 0 ) ) );
+        m_aTableProperties->Insert( PROP_BOTTOM_MARGIN, cpo::uno::Any( sal_Int32( 0 ) ) );
 
         //table border settings
         table::TableBorder aTableBorder;
@@ -586,7 +586,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         aTableBorder.Distance = 0;
         aTableBorder.IsDistanceValid = false;
 
-        m_aTableProperties->Insert( PROP_TABLE_BORDER, uno::Any( aTableBorder ) );
+        m_aTableProperties->Insert( PROP_TABLE_BORDER, cpo::uno::Any( aTableBorder ) );
 
 #ifdef DBG_UTIL
         lcl_debug_TableBorder(aTableBorder);
@@ -640,7 +640,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             }
             nLeftBorderDistance = std::max(nMinLeftBorderDistance, nLeftBorderDistance);
             const sal_Int32 nAdjustedMargin = nLeftMargin - nLeftBorderDistance;
-            m_aTableProperties->Insert( PROP_LEFT_MARGIN, uno::Any( nAdjustedMargin ) );
+            m_aTableProperties->Insert( PROP_LEFT_MARGIN, cpo::uno::Any( nAdjustedMargin ) );
         }
         else
         {
@@ -650,7 +650,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             if ( rInfo.nNestLevel > 1 && nLeftMargin < 0 )
                 nLeftMargin = 0;
             const sal_Int32 nAdjustedMargin = nLeftMargin + (aLeftBorder.LineWidth / 2);
-            m_aTableProperties->Insert( PROP_LEFT_MARGIN, uno::Any( nAdjustedMargin ) );
+            m_aTableProperties->Insert( PROP_LEFT_MARGIN, cpo::uno::Any( nAdjustedMargin ) );
         }
 
         sal_Int32 nTableWidth = 0;
@@ -660,7 +660,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         if( nTableWidthType == text::SizeType::FIX )
         {
             if( nTableWidth > 0 )
-                m_aTableProperties->Insert( PROP_WIDTH, uno::Any( nTableWidth ));
+                m_aTableProperties->Insert( PROP_WIDTH, cpo::uno::Any( nTableWidth ));
             else
             {
                 // tdf#109524: If there is no width for the table, make it simply 100% by default.
@@ -671,15 +671,15 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         }
         if (nTableWidthType != text::SizeType::FIX)
         {
-            m_aTableProperties->Insert( PROP_RELATIVE_WIDTH, uno::Any( sal_Int16( nTableWidth ) ) );
-            m_aTableProperties->Insert( PROP_IS_WIDTH_RELATIVE, uno::Any( true ) );
+            m_aTableProperties->Insert( PROP_RELATIVE_WIDTH, cpo::uno::Any( sal_Int16( nTableWidth ) ) );
+            m_aTableProperties->Insert( PROP_IS_WIDTH_RELATIVE, cpo::uno::Any( true ) );
         }
 
         sal_Int32 nHoriOrient = text::HoriOrientation::LEFT_AND_WIDTH;
         // Fetch Horizontal Orientation in rFrameProperties if not set in m_aTableProperties
         if ( !m_aTableProperties->getValue( TablePropertyMap::HORI_ORIENT, nHoriOrient ) )
             lcl_extractHoriOrient( rFrameProperties, nHoriOrient );
-        m_aTableProperties->Insert( PROP_HORI_ORIENT, uno::Any( sal_Int16(nHoriOrient) ) );
+        m_aTableProperties->Insert( PROP_HORI_ORIENT, cpo::uno::Any( sal_Int16(nHoriOrient) ) );
 
         // tdf#88496/tdf#138020: If all rows are considered as to-be-repeated headers, then emulate
         // by just disabling the header, since MS Word doesn't repeat any rows in that case.
@@ -697,13 +697,13 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             {
                 // side effect in MS Word: table moves to empty page if all rows are header rows,
                 // and since we are turning off header rows, emulate by preventing a table split.
-                m_aTableProperties->Insert(PROP_SPLIT, uno::Any(false));
+                m_aTableProperties->Insert(PROP_SPLIT, cpo::uno::Any(false));
             }
         }
         //fill default value - if not available
-        m_aTableProperties->Insert( PROP_HEADER_ROW_COUNT, uno::Any( sal_Int32(0)), bForceNoHeader);
+        m_aTableProperties->Insert( PROP_HEADER_ROW_COUNT, cpo::uno::Any( sal_Int32(0)), bForceNoHeader);
         m_aTableProperties->Insert(PROP_WRITING_MODE,
-                                   uno::Any(sal_Int16(text::WritingMode2::CONTEXT)),
+                                   cpo::uno::Any(sal_Int16(text::WritingMode2::CONTEXT)),
                                    /*bOverWrite=*/false);
 
         // if table is only a single row, and row is set as don't split, set the same value for the whole table.
@@ -715,7 +715,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
                 bool bRowCanSplit = true;
                 oSplitAllowed->second >>= bRowCanSplit;
                 if( !bRowCanSplit )
-                    m_aTableProperties->Insert( PROP_SPLIT, uno::Any(bRowCanSplit) );
+                    m_aTableProperties->Insert( PROP_SPLIT, cpo::uno::Any(bRowCanSplit) );
             }
         }
 
@@ -976,13 +976,13 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
 
                 //now set the default left+right border distance TODO: there's an sprm containing the default distance!
                 aCellIterator->get()->Insert( PROP_LEFT_BORDER_DISTANCE,
-                                                 uno::Any(rInfo.nLeftBorderDistance ), false);
+                                                 cpo::uno::Any(rInfo.nLeftBorderDistance ), false);
                 aCellIterator->get()->Insert( PROP_RIGHT_BORDER_DISTANCE,
-                                                 uno::Any(rInfo.nRightBorderDistance ), false);
+                                                 cpo::uno::Any(rInfo.nRightBorderDistance ), false);
                 aCellIterator->get()->Insert( PROP_TOP_BORDER_DISTANCE,
-                                                 uno::Any(rInfo.nTopBorderDistance ), false);
+                                                 cpo::uno::Any(rInfo.nTopBorderDistance ), false);
                 aCellIterator->get()->Insert( PROP_BOTTOM_BORDER_DISTANCE,
-                                                 uno::Any(rInfo.nBottomBorderDistance ), false);
+                                                 cpo::uno::Any(rInfo.nBottomBorderDistance ), false);
 
                 // Horizontal merge is not a UNO property, extract that info here to rMerges, and then remove it from the map.
                 const std::optional<PropertyMap::Property> aHorizontalMergeVal = (*aCellIterator)->getProperty(PROP_HORIZONTAL_MERGE);
@@ -1150,7 +1150,7 @@ css::uno::Sequence<css::beans::PropertyValues> DomainMapperTableHandler::endTabl
         if (rRow)
         {
             //set default to 'break across pages"
-            rRow->Insert( PROP_IS_SPLIT_ALLOWED, uno::Any(true ), false );
+            rRow->Insert( PROP_IS_SPLIT_ALLOWED, cpo::uno::Any(true ), false );
             // tblHeader is only our property, remove before the property map hits UNO
             rRow->Erase(PROP_TBL_HEADER);
 
@@ -1158,7 +1158,7 @@ css::uno::Sequence<css::beans::PropertyValues> DomainMapperTableHandler::endTabl
             {
                 // We have CellHideMark on all cells, and also all cells are empty:
                 // Force the row height to be exactly as specified, and not just as the minimum suggestion.
-                rRow->Insert(PROP_SIZE_TYPE, uno::Any(text::SizeType::FIX));
+                rRow->Insert(PROP_SIZE_TYPE, cpo::uno::Any(text::SizeType::FIX));
             }
 
             aRowPropertiesRange[nRow] = comphelper::containerToSequence(rRow->GetPropertyValues());
@@ -1290,7 +1290,7 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                     auto pFillStyleProp = std::find_if(rCellProperties.begin(), rCellProperties.end(),
                         [](const beans::PropertyValue& rProp) { return rProp.Name == "FillStyle"; });
                     if ( pFillStyleProp == rCellProperties.end() ||
-                         pFillStyleProp->Value != uno::Any(drawing::FillStyle_SOLID) )
+                         pFillStyleProp->Value != cpo::uno::Any(drawing::FillStyle_SOLID) )
                     {
                         // FillStyle_NONE, skip table style usage for paragraph background color
                         continue;
@@ -1299,7 +1299,7 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                 OUString sParaStyleName;
                 rParaProp.m_rPropertySet->getPropertyValue(u"ParaStyleName"_ustr) >>= sParaStyleName;
                 bool bDocDefault;
-                uno::Any aParaStyle = m_rDMapper_Impl.GetPropertyFromStyleSheet(eId,
+                cpo::uno::Any aParaStyle = m_rDMapper_Impl.GetPropertyFromStyleSheet(eId,
                         m_rDMapper_Impl.GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(sParaStyleName),
                         true, true, &bDocDefault);
                 // A very strange compatibility rule says that the DEFAULT style's specified fontsize of 11 or 12
@@ -1309,7 +1309,7 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                 if ( (eId == PROP_CHAR_HEIGHT || eId == PROP_PARA_ADJUST) && sParaStyleName == m_rDMapper_Impl.GetDefaultParaStyleName() )
                 {
                     if ( eId == PROP_CHAR_HEIGHT )
-                        bCompatOverride = aParaStyle == uno::Any(double(11)) || aParaStyle == uno::Any(double(12));
+                        bCompatOverride = aParaStyle == cpo::uno::Any(double(11)) || aParaStyle == cpo::uno::Any(double(12));
                     else if ( eId == PROP_PARA_ADJUST )
                     {
                         style::ParagraphAdjust eAdjust(style::ParagraphAdjust_CENTER);
@@ -1332,7 +1332,7 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                     if (eId == PROP_FILL_COLOR)
                     {
                         // we need this for complete import of table-style based paragraph background color
-                        aProps.push_back(comphelper::makePropertyValue(u"FillStyle"_ustr,  uno::Any(drawing::FillStyle_SOLID)));
+                        aProps.push_back(comphelper::makePropertyValue(u"FillStyle"_ustr,  cpo::uno::Any(drawing::FillStyle_SOLID)));
                     }
                 }
                 catch ( const uno::Exception & )
@@ -1375,7 +1375,7 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                 static_cast<text::XSentenceCursor*>(rParaProp.m_rEndParagraph.get())),
             uno::UNO_QUERY_THROW);
         xCursorProps->setPropertyValue(u"ParaAutoStyleDef"_ustr,
-                                       uno::Any(comphelper::containerToSequence(aProps)));
+                                       cpo::uno::Any(comphelper::containerToSequence(aProps)));
     }
 }
 
@@ -1486,21 +1486,21 @@ static void lcl_convertFormulaRanges(const rtl::Reference<SwXTextTable> & xTable
                             {
                                 uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
                                 uno::Reference< beans::XPropertySet > xRunProperties( xRun, uno::UNO_QUERY_THROW );
-                                if ( xRunProperties->getPropertyValue(u"TextPortionType"_ustr) == uno::Any(u"TextField"_ustr) )
+                                if ( xRunProperties->getPropertyValue(u"TextPortionType"_ustr) == cpo::uno::Any(u"TextField"_ustr) )
                                 {
                                     uno::Reference<text::XTextField> const xField(xRunProperties->getPropertyValue(u"TextField"_ustr).get<uno::Reference<text::XTextField>>());
                                     uno::Reference< beans::XPropertySet > xFieldProperties( xField, uno::UNO_QUERY_THROW );
                                     // cell can contain multiple text fields, but only one is handled now (~formula cell)
                                     if ( rProp.Value != xFieldProperties->getPropertyValue(u"Content"_ustr) )
                                         continue;
-                                    xFieldProperties->setPropertyValue(u"Content"_ustr, uno::Any(sFormula));
+                                    xFieldProperties->setPropertyValue(u"Content"_ustr, cpo::uno::Any(sFormula));
                                     // update grab bag
                                     auto aGrabBag = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aCellGrabBag);
                                     beans::PropertyValue aValue;
                                     aValue.Name = u"CellFormulaConverted"_ustr;
                                     aValue.Value <<= sFormula;
                                     aGrabBag.push_back(aValue);
-                                    xCellProperties->setPropertyValue(u"CellInteropGrabBag"_ustr, uno::Any(comphelper::containerToSequence(aGrabBag)));
+                                    xCellProperties->setPropertyValue(u"CellInteropGrabBag"_ustr, cpo::uno::Any(comphelper::containerToSequence(aGrabBag)));
                                 }
                             }
                         }
@@ -1675,7 +1675,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                                 {
                                     if (aBorderValues[i].LineStyle != table::BorderLineStyle::NONE)
                                         xFirstCell->setPropertyValue(
-                                            OUString(aBorderNames[i]), uno::Any(aBorderValues[i]));
+                                            OUString(aBorderNames[i]), cpo::uno::Any(aBorderValues[i]));
                                 }
                             }
                         }
@@ -1718,11 +1718,11 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                 aFrameProperties.push_back(aValue);
 
                 // Applying the relative width to the frame, needs to have the table width to be 100% of the frame width
-                xTable->setPropertyValue(u"RelativeWidth"_ustr, uno::Any(sal_Int16(100)));
+                xTable->setPropertyValue(u"RelativeWidth"_ustr, cpo::uno::Any(sal_Int16(100)));
             }
 
             // A non-zero left margin would move the table out of the frame, move the frame itself instead.
-            xTable->setPropertyValue(u"LeftMargin"_ustr, uno::Any(sal_Int32(0)));
+            xTable->setPropertyValue(u"LeftMargin"_ustr, cpo::uno::Any(sal_Int32(0)));
 
             style::BreakType eBreakType{};
             xTable->getPropertyValue(u"BreakType"_ustr) >>= eBreakType;
@@ -1730,7 +1730,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
             {
                 // A break before the table was requested. Reset that break here, since the table
                 // will be at the start of the fly frame, not in the body frame.
-                xTable->setPropertyValue(u"BreakType"_ustr, uno::Any(style::BreakType_NONE));
+                xTable->setPropertyValue(u"BreakType"_ustr, cpo::uno::Any(style::BreakType_NONE));
             }
 
             if (nestedTableLevel >= 2 || m_rDMapper_Impl.IsInHeaderFooter())
@@ -1807,9 +1807,9 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                 if ( bConvertToFloatingInFootnote && xFrameAnchor )
                 {
                     xFrameAnchor->setPropertyValue(u"ParaTopMargin"_ustr,
-                                uno::Any(static_cast<sal_Int32>(0)));
+                                cpo::uno::Any(static_cast<sal_Int32>(0)));
                     xFrameAnchor->setPropertyValue(u"ParaBottomMargin"_ustr,
-                                uno::Any(static_cast<sal_Int32>(0)));
+                                cpo::uno::Any(static_cast<sal_Int32>(0)));
                 }
 
                 if (xFrameAnchor)
@@ -1821,7 +1821,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                     xFrameAnchor->getPropertyValue(u"CharHidden"_ustr) >>= bCharHidden;
                     if (bCharHidden)
                     {
-                        xFrameAnchor->setPropertyValue(u"CharHidden"_ustr, uno::Any(false));
+                        xFrameAnchor->setPropertyValue(u"CharHidden"_ustr, cpo::uno::Any(false));
                     }
                 }
 
@@ -1834,7 +1834,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
             if (xFrameAnchor.is() && eBreakType != style::BreakType_NONE)
             {
                 // A break before the table was requested. Restore that on the anchor.
-                xFrameAnchor->setPropertyValue(u"BreakType"_ustr, uno::Any(eBreakType));
+                xFrameAnchor->setPropertyValue(u"BreakType"_ustr, cpo::uno::Any(eBreakType));
             }
         }
     }

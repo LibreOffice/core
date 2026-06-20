@@ -45,6 +45,7 @@ using namespace connectivity::file;
 using namespace dbtools;
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
@@ -411,7 +412,7 @@ const Sequence< sal_Int8 > & OConnection::getUnoTunnelId()
 void OConnection::throwUrlNotValid(const OUString & _rsUrl,const OUString & _rsMessage)
 {
     XConnection* context = this;
-    css::uno::Any next;
+    cpo::uno::Any next;
     if (!_rsMessage.isEmpty())
         next <<= SQLException(_rsMessage, context, OUString(), 0, Any());
     SQLException aError(

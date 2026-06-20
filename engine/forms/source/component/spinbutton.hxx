@@ -55,7 +55,7 @@ namespace frm
         virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
 
         // XPropertyState
-        virtual css::uno::Any getPropertyDefaultByHandle( sal_Int32 _nHandle ) const override;
+        virtual cpo::uno::Any getPropertyDefaultByHandle( sal_Int32 _nHandle ) const override;
 
         // OControlModel's property handling
         virtual void describeFixedProperties(
@@ -63,19 +63,19 @@ namespace frm
         ) const override;
 
         // OPropertySetHelper
-        virtual void SAL_CALL getFastPropertyValue( css::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
-        virtual bool SAL_CALL convertFastPropertyValue( css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
+        virtual void SAL_CALL getFastPropertyValue( cpo::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
+        virtual bool SAL_CALL convertFastPropertyValue( cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
 
         // OBoundControlModel
-        virtual css::uno::Any   translateDbColumnToControlValue( ) override;
+        virtual cpo::uno::Any   translateDbColumnToControlValue( ) override;
         virtual bool            commitControlValueToDbColumn( bool _bPostReset ) override;
-        virtual css::uno::Any   getDefaultForReset() const override;
+        virtual cpo::uno::Any   getDefaultForReset() const override;
 
         virtual css::uno::Sequence< css::uno::Type >
                                 getSupportedBindingTypes() override;
-        virtual css::uno::Any   translateExternalValueToControlValue( const css::uno::Any& _rExternalValue ) const override;
-        virtual css::uno::Any   translateControlValueToExternalValue( ) const override;
+        virtual cpo::uno::Any   translateExternalValueToControlValue( const cpo::uno::Any& _rExternalValue ) const override;
+        virtual cpo::uno::Any   translateControlValueToExternalValue( ) const override;
 
         // prevent method hiding
         using OBoundControlModel::disposing;

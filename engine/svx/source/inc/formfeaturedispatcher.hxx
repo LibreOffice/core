@@ -96,7 +96,7 @@ namespace svx
         css::uno::Reference< css::form::runtime::XFormOperations >
                                             m_xFormOperations;
         const css::util::URL                m_aFeatureURL;
-        css::uno::Any                       m_aLastKnownState;
+        cpo::uno::Any                       m_aLastKnownState;
         const sal_Int16                     m_nFormFeature;
         bool                                m_bLastKnownEnabled;
 

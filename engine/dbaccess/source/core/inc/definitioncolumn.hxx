@@ -95,7 +95,7 @@ namespace dbaccess
 
         // ::cppu::OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
 
     private:
         void    impl_registerProperties();
@@ -163,7 +163,7 @@ namespace dbaccess
         // *Property*
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
-        virtual void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const override;
+        virtual void SAL_CALL getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
     private:
         css::uno::Reference< css::beans::XPropertySet >
@@ -194,17 +194,17 @@ namespace dbaccess
 
     public:
         virtual void SAL_CALL getFastPropertyValue(
-                                css::uno::Any& rValue,
+                                cpo::uno::Any& rValue,
                                 sal_Int32 nHandle
                                  ) const override;
         virtual bool SAL_CALL convertFastPropertyValue(
-                                css::uno::Any & rConvertedValue,
-                                css::uno::Any & rOldValue,
+                                cpo::uno::Any & rConvertedValue,
+                                cpo::uno::Any & rOldValue,
                                 sal_Int32 nHandle,
-                                const css::uno::Any& rValue ) override;
+                                const cpo::uno::Any& rValue ) override;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                     sal_Int32 nHandle,
-                                    const css::uno::Any& rValue
+                                    const cpo::uno::Any& rValue
                                                      ) override;
 
     protected:
@@ -242,17 +242,17 @@ namespace dbaccess
     // cppu::OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
         virtual void SAL_CALL getFastPropertyValue(
-                                    css::uno::Any& rValue,
+                                    cpo::uno::Any& rValue,
                                     sal_Int32 nHandle
                                          ) const override;
         virtual bool SAL_CALL convertFastPropertyValue(
-                                css::uno::Any & rConvertedValue,
-                                css::uno::Any & rOldValue,
+                                cpo::uno::Any & rConvertedValue,
+                                cpo::uno::Any & rOldValue,
                                 sal_Int32 nHandle,
-                                const css::uno::Any& rValue ) override;
+                                const cpo::uno::Any& rValue ) override;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                     sal_Int32 nHandle,
-                                    const css::uno::Any& rValue
+                                    const cpo::uno::Any& rValue
                                                      ) override;
 
     protected:

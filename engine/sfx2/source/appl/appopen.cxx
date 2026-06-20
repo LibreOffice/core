@@ -99,6 +99,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::container;
@@ -256,7 +257,7 @@ ErrCode CheckPasswd_Impl
                         {
                             aEncryptionData = comphelper::concatSequences(
                                 aEncryptionData, std::initializer_list<beans::NamedValue>{
-                                                     { u"ForSalvage"_ustr, css::uno::Any(true) } });
+                                                     { u"ForSalvage"_ustr, cpo::uno::Any(true) } });
                         }
 
                         SfxDocPasswordVerifier aVerifier(*pFile);
@@ -268,7 +269,7 @@ ErrCode CheckPasswd_Impl
 
                         if ( aEncryptionData.hasElements() )
                         {
-                            rSet.Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData ) ) );
+                            rSet.Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, cpo::uno::Any( aEncryptionData ) ) );
 
                             try
                             {
@@ -690,7 +691,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 pHandler->setHandler(xWrappedHandler);
             else
                 pHandler->useDefaultUUIHandler();
-            rReq.AppendItem( SfxUnoAnyItem(SID_INTERACTIONHANDLER,css::uno::Any(uno::Reference<task::XInteractionHandler>(pHandler))) );
+            rReq.AppendItem( SfxUnoAnyItem(SID_INTERACTIONHANDLER,cpo::uno::Any(uno::Reference<task::XInteractionHandler>(pHandler))) );
 
             // define rules for this handler
             css::uno::Type aInteraction = ::cppu::UnoType<css::task::ErrorCodeRequest>::get();
@@ -1018,7 +1019,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         if (!pInteractionItem)
         {
             Reference < task::XInteractionHandler2 > xHdl = task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr );
-            rReq.AppendItem( SfxUnoAnyItem(SID_INTERACTIONHANDLER,css::uno::Any(xHdl)) );
+            rReq.AppendItem( SfxUnoAnyItem(SID_INTERACTIONHANDLER,cpo::uno::Any(xHdl)) );
         }
         if (!pMacroExecItem)
             rReq.AppendItem( SfxUInt16Item(SID_MACROEXECMODE,css::document::MacroExecMode::USE_CONFIG) );

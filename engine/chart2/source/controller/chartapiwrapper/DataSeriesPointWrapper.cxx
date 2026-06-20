@@ -63,7 +63,7 @@ using namespace ::chart::DataSeriesProperties;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::Property;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 
 namespace
 {
@@ -368,7 +368,7 @@ public:
 
     virtual void setPropertyToDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
-    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 protected:
     DataSeriesPointWrapper* m_pDataSeriesPointWrapper;
@@ -379,7 +379,7 @@ WrappedLineColorProperty::WrappedLineColorProperty(
                 DataSeriesPointWrapper* pDataSeriesPointWrapper )
                 : WrappedSeriesAreaOrLineProperty(u"LineColor"_ustr,u"BorderColor"_ustr,u"Color"_ustr, pDataSeriesPointWrapper )
                 , m_pDataSeriesPointWrapper( pDataSeriesPointWrapper )
-                , m_aDefaultValue(uno::Any(sal_Int32( 0x0099ccff )))  // blue 8
+                , m_aDefaultValue(cpo::uno::Any(sal_Int32( 0x0099ccff )))  // blue 8
 {
 }
 
@@ -454,7 +454,7 @@ DataSeriesPointWrapper::DataSeriesPointWrapper( std::shared_ptr<Chart2ModelConta
     //need initialize call afterwards
 }
 
-void SAL_CALL DataSeriesPointWrapper::initialize( const uno::Sequence< uno::Any >& aArguments )
+void SAL_CALL DataSeriesPointWrapper::initialize( const uno::Sequence< cpo::uno::Any >& aArguments )
 {
     OSL_PRECOND(aArguments.hasElements(),"need at least 1 argument to initialize the DataSeriesPointWrapper: series reference + optional datapoint index");
 
@@ -576,7 +576,7 @@ void DataSeriesPointWrapper::updateReferenceSize()
     if( xProp.is() )
     {
         if( xProp->getPropertyValue(u"ReferencePageSize"_ustr).hasValue() )
-            xProp->setPropertyValue(u"ReferencePageSize"_ustr, uno::Any(
+            xProp->setPropertyValue(u"ReferencePageSize"_ustr, cpo::uno::Any(
                 m_spChart2ModelContact->GetPageSize() ));
     }
 }
@@ -603,7 +603,7 @@ beans::PropertyState SAL_CALL DataSeriesPointWrapper::getPropertyState( const OU
     {
         if (rPropertyName == "SymbolBitmap" || rPropertyName == "SymbolBitmapURL")
         {
-            uno::Any aAny = WrappedPropertySet::getPropertyValue(u"SymbolType"_ustr);
+            cpo::uno::Any aAny = WrappedPropertySet::getPropertyValue(u"SymbolType"_ustr);
             sal_Int32 nVal = css::chart::ChartSymbolType::NONE;
             if (aAny >>= nVal)
             {
@@ -630,8 +630,8 @@ beans::PropertyState SAL_CALL DataSeriesPointWrapper::getPropertyState( const OU
                 ||  rPropertyName == "SymbolSize" )
                 return WrappedPropertySet::getPropertyState( rPropertyName );
 
-            uno::Any aDefault( getPropertyDefault( rPropertyName ) );
-            uno::Any aValue( getPropertyValue( rPropertyName ) );
+            cpo::uno::Any aDefault( getPropertyDefault( rPropertyName ) );
+            cpo::uno::Any aValue( getPropertyValue( rPropertyName ) );
             if( aDefault==aValue )
                 aState = beans::PropertyState_DEFAULT_VALUE;
         }
@@ -646,14 +646,14 @@ beans::PropertyState SAL_CALL DataSeriesPointWrapper::getPropertyState( const OU
     }
     catch( const lang::WrappedTargetException& e )
     {
-        css::uno::Any a(e.TargetException);
+        cpo::uno::Any a(e.TargetException);
         throw css::lang::WrappedTargetRuntimeException(
             "wrapped Exception " + e.Message,
             css::uno::Reference<css::uno::XInterface>(), a);
     }
     catch( const uno::Exception& e )
     {
-        css::uno::Any a(cppu::getCaughtException());
+        cpo::uno::Any a(cppu::getCaughtException());
         throw css::lang::WrappedTargetRuntimeException(
             "wrapped Exception " + e.Message,
             css::uno::Reference<css::uno::XInterface>(), a);
@@ -745,7 +745,7 @@ std::vector< std::unique_ptr<WrappedProperty> > DataSeriesPointWrapper::createWr
     aWrappedProperties.emplace_back( new WrappedProperty(u"FillStyle"_ustr,u"FillStyle"_ustr ) );
     aWrappedProperties.emplace_back( new WrappedProperty(u"FillTransparence"_ustr,u"Transparency"_ustr) );
 
-    aWrappedProperties.emplace_back( new WrappedIgnoreProperty(u"LineJoint"_ustr, uno::Any( drawing::LineJoint_ROUND ) ) );
+    aWrappedProperties.emplace_back( new WrappedIgnoreProperty(u"LineJoint"_ustr, cpo::uno::Any( drawing::LineJoint_ROUND ) ) );
     aWrappedProperties.emplace_back( new WrappedProperty(u"FillTransparenceGradientName"_ustr,u"TransparencyGradientName"_ustr) );
     aWrappedProperties.emplace_back( new WrappedProperty(u"FillGradientName"_ustr,u"GradientName"_ustr) );
     aWrappedProperties.emplace_back( new WrappedProperty(u"FillGradientStepCount"_ustr,u"GradientStepCount"_ustr) );
@@ -860,7 +860,7 @@ Any SAL_CALL DataSeriesPointWrapper::getPropertyValue( const OUString& rProperty
                     {
                         Reference< chart2::XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme() );
                         if( xColorScheme.is() )
-                            return uno::Any( xColorScheme->getColorByIndex( m_nPointIndex ) );
+                            return cpo::uno::Any( xColorScheme->getColorByIndex( m_nPointIndex ) );
                     }
                 }
             }

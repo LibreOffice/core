@@ -226,7 +226,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testExternalStrRefsXLSX)
 
     Reference<chart2::XAxis> xAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
     chart2::ScaleData aScaleData = xAxis->getScaleData();
-    css::uno::Sequence<css::uno::Any> aValues = aScaleData.Categories->getValues()->getData();
+    css::uno::Sequence<cpo::uno::Any> aValues = aScaleData.Categories->getValues()->getData();
     CPPUNIT_ASSERT_EQUAL(u"test1"_ustr, aValues[0].get<OUString>());
     CPPUNIT_ASSERT_EQUAL(u"test2"_ustr, aValues[1].get<OUString>());
 }
@@ -308,12 +308,12 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testXaxisValues)
 
     const uno::Reference<chart2::data::XDataSequence> xDataSeq
         = getDataSequenceFromDocByRole(xChartDoc, u"values-x");
-    Sequence<uno::Any> xSequence = xDataSeq->getData();
+    Sequence<cpo::uno::Any> xSequence = xDataSeq->getData();
     // test X values
-    CPPUNIT_ASSERT_EQUAL(uno::Any(0.04), xSequence[0]);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(0.04), xSequence[0]);
     CPPUNIT_ASSERT(std::isnan(*static_cast<const double*>(xSequence[1].getValue())));
-    CPPUNIT_ASSERT_EQUAL(uno::Any(0.16), xSequence[2]);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(0.11), xSequence[3]);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(0.16), xSequence[2]);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(0.11), xSequence[3]);
     CPPUNIT_ASSERT(std::isnan(*static_cast<const double*>(xSequence[4].getValue())));
 }
 
@@ -687,7 +687,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf137734)
     Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xDataSeries.is());
     Reference<beans::XPropertySet> xPropSet(xDataSeries, uno::UNO_QUERY_THROW);
-    uno::Any aAny = xPropSet->getPropertyValue(u"VaryColorsByPoint"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"VaryColorsByPoint"_ustr);
     bool bVaryColor = true;
     CPPUNIT_ASSERT(aAny >>= bVaryColor);
     CPPUNIT_ASSERT(!bVaryColor);
@@ -699,7 +699,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf137734)
     Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
     CPPUNIT_ASSERT(xTitle.is());
     Reference<beans::XPropertySet> xTitlePropSet(xTitle, uno::UNO_QUERY_THROW);
-    uno::Any aAny2 = xTitlePropSet->getPropertyValue(u"TextRotation"_ustr);
+    cpo::uno::Any aAny2 = xTitlePropSet->getPropertyValue(u"TextRotation"_ustr);
     double nRotation = -1;
     CPPUNIT_ASSERT(aAny2 >>= nRotation);
     CPPUNIT_ASSERT_EQUAL(0.0, nRotation);
@@ -1010,8 +1010,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramODSRoundtrip)
 
     // Round trip 2: non-default binning parameters survive
     Reference<beans::XPropertySet> xProps(xChartType, uno::UNO_QUERY_THROW);
-    xProps->setPropertyValue(u"FrequencyType"_ustr, uno::Any(sal_Int32(1)));
-    xProps->setPropertyValue(u"BinWidth"_ustr, uno::Any(3.5));
+    xProps->setPropertyValue(u"FrequencyType"_ustr, cpo::uno::Any(sal_Int32(1)));
+    xProps->setPropertyValue(u"BinWidth"_ustr, cpo::uno::Any(3.5));
 
     saveAndReload(TestFilter::ODS);
 
@@ -1094,8 +1094,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramXLSXRoundtrip)
 
     // Round trip 2: non-default binning parameters survive save + reload.
     Reference<beans::XPropertySet> xProperties(xChartType, uno::UNO_QUERY_THROW);
-    xProperties->setPropertyValue(u"FrequencyType"_ustr, uno::Any(sal_Int32(1)));
-    xProperties->setPropertyValue(u"BinWidth"_ustr, uno::Any(2.5));
+    xProperties->setPropertyValue(u"FrequencyType"_ustr, cpo::uno::Any(sal_Int32(1)));
+    xProperties->setPropertyValue(u"BinWidth"_ustr, cpo::uno::Any(2.5));
 
     saveAndReload(TestFilter::XLSX);
 
@@ -1131,8 +1131,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramBinCountRoundtrip)
     CPPUNIT_ASSERT(xChartType.is());
 
     Reference<beans::XPropertySet> xProps(xChartType, uno::UNO_QUERY_THROW);
-    xProps->setPropertyValue(u"FrequencyType"_ustr, uno::Any(sal_Int32(2)));
-    xProps->setPropertyValue(u"BinCount"_ustr, uno::Any(sal_Int32(3)));
+    xProps->setPropertyValue(u"FrequencyType"_ustr, cpo::uno::Any(sal_Int32(2)));
+    xProps->setPropertyValue(u"BinCount"_ustr, cpo::uno::Any(sal_Int32(3)));
 
     saveAndReload(TestFilter::ODS);
 
@@ -1171,8 +1171,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramBinCountRoundtrip)
     CPPUNIT_ASSERT(xChartType.is());
 
     Reference<beans::XPropertySet> xXlsxProps(xChartType, uno::UNO_QUERY_THROW);
-    xXlsxProps->setPropertyValue(u"FrequencyType"_ustr, uno::Any(sal_Int32(2)));
-    xXlsxProps->setPropertyValue(u"BinCount"_ustr, uno::Any(sal_Int32(3)));
+    xXlsxProps->setPropertyValue(u"FrequencyType"_ustr, cpo::uno::Any(sal_Int32(2)));
+    xXlsxProps->setPropertyValue(u"BinCount"_ustr, cpo::uno::Any(sal_Int32(3)));
 
     saveAndReload(TestFilter::XLSX);
 
@@ -1376,7 +1376,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, TestParetoDefaultColor)
     Reference<beans::XPropertySet> xPropSet(xDataSeries, uno::UNO_QUERY_THROW);
 
     // Fill should be the second theme color
-    uno::Any aAny = xPropSet->getPropertyValue(u"FillStyle"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"FillStyle"_ustr);
     com::sun::star::drawing::FillStyle aFillStyle(com::sun::star::drawing::FillStyle_NONE);
     CPPUNIT_ASSERT(aAny >>= aFillStyle);
     CPPUNIT_ASSERT_EQUAL(com::sun::star::drawing::FillStyle_SOLID, aFillStyle);

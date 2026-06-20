@@ -58,8 +58,8 @@ public:
 
     void                LaunchEvent(
                             const sal_Int16 nAccessibleEventId,
-                            const css::uno::Any &rOldVal,
-                            const css::uno::Any &rNewVal);
+                            const cpo::uno::Any &rOldVal,
+                            const cpo::uno::Any &rNewVal);
 
     void SAL_CALL disposing() override;
 

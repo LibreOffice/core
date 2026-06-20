@@ -1812,7 +1812,7 @@ void DocxExport::WriteGlossary()
         gId = gId.copy(3); //"rId" only save the numeric value
 
         PropertySet aProps(xOutputStream);
-        aProps.setAnyProperty( PROP_RelId, uno::Any( gId.toInt32() ));
+        aProps.setAnyProperty( PROP_RelId, cpo::uno::Any( gId.toInt32() ));
         m_rFilter.addRelation(xOutputStream, gType, gTarget, bExternal);
         if (!xDom)
             continue; // External relation, no stream to write
@@ -1842,7 +1842,7 @@ namespace {
         virtual void SAL_CALL started() noexcept override {}
         virtual void SAL_CALL closed() noexcept override { notifyDone(); }
         virtual void SAL_CALL terminated() noexcept override { notifyDone(); }
-        virtual void SAL_CALL error(const uno::Any& e) override
+        virtual void SAL_CALL error(const cpo::uno::Any& e) override
         {
             notifyDone(); // set on error too, otherwise main thread waits forever
             SAL_WARN("sw.ww8", e);
@@ -1858,11 +1858,11 @@ namespace {
 
 static void lcl_UpdateXmlValues(const SdtData& sdtData, const uno::Reference<css::io::XInputStream>& xInputStream, const uno::Reference<css::io::XOutputStream>& xOutputStream)
 {
-    uno::Sequence<uno::Any> aArgs{
+    uno::Sequence<cpo::uno::Any> aArgs{
     // XSLT transformation stylesheet:
     //  - write all elements as is
     //  - but if element matches sdtData.xpath, replace its text content by sdtData.xpath
-    uno::Any(beans::NamedValue(u"StylesheetText"_ustr, uno::Any(OUString("<?xml version=\"1.0\" encoding=\"UTF-8\"?> \
+    cpo::uno::Any(beans::NamedValue(u"StylesheetText"_ustr, cpo::uno::Any(OUString("<?xml version=\"1.0\" encoding=\"UTF-8\"?> \
 <xsl:stylesheet\
     xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"\
     " + sdtData.namespaces + "\
@@ -2065,7 +2065,7 @@ void DocxExport::WriteEmbeddings()
         {
             try
             {
-                const css::uno::Any val = xProps->getPropertyValue(u"MediaType"_ustr);
+                const cpo::uno::Any val = xProps->getPropertyValue(u"MediaType"_ustr);
                 val >>= contentType;
             }
             catch (const css::beans::UnknownPropertyException&)

@@ -82,7 +82,7 @@ typedef std::map< OUString,
 struct FeatureState
 {
     bool bEnabled;
-    css::uno::Any aState;
+    cpo::uno::Any aState;
 
     FeatureState() : bEnabled( false ) { }
 };

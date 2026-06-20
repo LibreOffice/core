@@ -51,7 +51,7 @@ using com::sun::star::xforms::XDataTypeRepository;
 using com::sun::star::xforms::Model;
 using com::sun::star::xforms::XModel2;
 using com::sun::star::container::XNameContainer;
-using com::sun::star::uno::Any;
+using cpo::uno::Any;
 using com::sun::star::uno::Exception;
 
 using namespace com::sun::star;

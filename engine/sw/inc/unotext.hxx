@@ -96,7 +96,7 @@ public:
     virtual void SAL_CALL release() override = 0;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface(
+    virtual cpo::uno::Any SAL_CALL queryInterface(
             const css::uno::Type& rType) override;
 
     // XTypeProvider
@@ -108,8 +108,8 @@ public:
         getPropertySetInfo() override;
     virtual void SAL_CALL setPropertyValue(
             const OUString& rPropertyName,
-            const css::uno::Any& rValue) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue(
+            const cpo::uno::Any& rValue) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(
             const OUString& rPropertyName) override;
     virtual void SAL_CALL addPropertyChangeListener(
             const OUString& rPropertyName,

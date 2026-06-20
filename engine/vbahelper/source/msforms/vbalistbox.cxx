@@ -34,25 +34,25 @@ ScVbaListBox::ScVbaListBox( const uno::Reference< XHelperInterface >& xParent, c
 
 // Attributes
 void SAL_CALL
-ScVbaListBox::setListIndex( const uno::Any& _value )
+ScVbaListBox::setListIndex( const cpo::uno::Any& _value )
 {
     sal_Int32 nIndex = 0;
     _value >>= nIndex;
     uno::Reference< XPropValue > xPropVal( Selected( nIndex ), uno::UNO_QUERY_THROW );
-    xPropVal->setValue( uno::Any( true ) );
+    xPropVal->setValue( cpo::uno::Any( true ) );
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaListBox::getListIndex()
 {
     uno::Sequence< sal_Int16 > sSelection;
     m_xProps->getPropertyValue( u"SelectedItems"_ustr ) >>= sSelection;
     if ( !sSelection.hasElements() )
-        return uno::Any( sal_Int32( -1 ) );
-    return uno::Any( sSelection[ 0 ] );
+        return cpo::uno::Any( sal_Int32( -1 ) );
+    return cpo::uno::Any( sSelection[ 0 ] );
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaListBox::getValue()
 {
     uno::Sequence< sal_Int16 > sSelection;
@@ -61,14 +61,14 @@ ScVbaListBox::getValue()
     m_xProps->getPropertyValue( u"StringItemList"_ustr ) >>= sItems;
     if( getMultiSelect() )
         throw uno::RuntimeException( u"Attribute use invalid."_ustr );
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if ( sSelection.hasElements() )
         aRet <<= sItems[ sSelection[ 0 ] ];
     return aRet;
 }
 
 void SAL_CALL
-ScVbaListBox::setValue( const uno::Any& _value )
+ScVbaListBox::setValue( const cpo::uno::Any& _value )
 {
     if( getMultiSelect() )
     {
@@ -84,7 +84,7 @@ ScVbaListBox::setValue( const uno::Any& _value )
     uno::Sequence< sal_Int16 > nSelectedIndices { nValue };
     uno::Sequence< sal_Int16 > nOldSelectedIndices;
     m_xProps->getPropertyValue( u"SelectedItems"_ustr ) >>= nOldSelectedIndices;
-    m_xProps->setPropertyValue( u"SelectedItems"_ustr, uno::Any( nSelectedIndices ) );
+    m_xProps->setPropertyValue( u"SelectedItems"_ustr, cpo::uno::Any( nSelectedIndices ) );
     if ( nSelectedIndices != nOldSelectedIndices )
         fireClickEvent();
 }
@@ -100,7 +100,7 @@ ScVbaListBox::getText()
 void SAL_CALL
 ScVbaListBox::setText( const OUString& _text )
 {
-    setValue( uno::Any( _text ) ); // seems the same
+    setValue( cpo::uno::Any( _text ) ); // seems the same
 }
 
 sal_Int32 SAL_CALL
@@ -129,11 +129,11 @@ ScVbaListBox::setMultiSelect( sal_Int32 _multiselect )
             throw lang::IllegalArgumentException();
             break;
     }
-    m_xProps->setPropertyValue( u"MultiSelection"_ustr , uno::Any( bBoolVal ) );
+    m_xProps->setPropertyValue( u"MultiSelection"_ustr , cpo::uno::Any( bBoolVal ) );
 }
 
 
-css::uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaListBox::Selected( sal_Int32 index )
 {
     uno::Sequence< OUString > sList;
@@ -145,18 +145,18 @@ ScVbaListBox::Selected( sal_Int32 index )
     if( nIndex < 0 || nIndex >= nLength )
         throw uno::RuntimeException( u"Error Number."_ustr );
     m_nIndex = nIndex;
-    return uno::Any( uno::Reference< XPropValue > ( new ScVbaPropValue( this ) ) );
+    return cpo::uno::Any( uno::Reference< XPropValue > ( new ScVbaPropValue( this ) ) );
 }
 
 // Methods
 void SAL_CALL
-ScVbaListBox::AddItem( const uno::Any& pvargItem, const uno::Any& pvargIndex )
+ScVbaListBox::AddItem( const cpo::uno::Any& pvargItem, const cpo::uno::Any& pvargIndex )
 {
     maListHelper.AddItem( pvargItem, pvargIndex );
 }
 
 void SAL_CALL
-ScVbaListBox::removeItem( const uno::Any& index )
+ScVbaListBox::removeItem( const cpo::uno::Any& index )
 {
     maListHelper.removeItem( index );
 }
@@ -172,7 +172,7 @@ ScVbaListBox::Clear(  )
 // ListBox1.Selected( 3 ) = false
 //PropListener
 void
-ScVbaListBox::setValueEvent( const uno::Any& value )
+ScVbaListBox::setValueEvent( const cpo::uno::Any& value )
 {
     bool bValue = false;
     if( !(value >>= bValue) )
@@ -195,7 +195,7 @@ ScVbaListBox::setValueEvent( const uno::Any& value )
                 nList.realloc( nLength - 1 );
                 //m_xProps->setPropertyValue( sSourceName, uno::makeAny( nList ) );
                 fireClickEvent();
-                m_xProps->setPropertyValue( u"SelectedItems"_ustr, uno::Any( nList ) );
+                m_xProps->setPropertyValue( u"SelectedItems"_ustr, cpo::uno::Any( nList ) );
             }
             return;
         }
@@ -214,14 +214,14 @@ ScVbaListBox::setValueEvent( const uno::Any& value )
     }
     //m_xProps->setPropertyValue( sSourceName, uno::makeAny( nList ) );
     fireClickEvent();
-    m_xProps->setPropertyValue( u"SelectedItems"_ustr, uno::Any( nList ) );
+    m_xProps->setPropertyValue( u"SelectedItems"_ustr, cpo::uno::Any( nList ) );
 }
 
 // this is called when something like the following vba code is used
 // to determine the selected state of particular entries in the Listbox
 // msgbox ListBox1.Selected( 3 )
 
-css::uno::Any
+cpo::uno::Any
 ScVbaListBox::getValueEvent()
 {
     uno::Sequence< sal_Int16 > nList;
@@ -229,7 +229,7 @@ ScVbaListBox::getValueEvent()
     sal_Int32 nIndex = m_nIndex;
     bool bRet = std::find(std::cbegin(nList), std::cend(nList), nIndex) != std::cend(nList);
 
-    return uno::Any( bRet );
+    return cpo::uno::Any( bRet );
 }
 
 void SAL_CALL
@@ -245,8 +245,8 @@ ScVbaListBox::getListCount()
     return maListHelper.getListCount();
 }
 
-uno::Any SAL_CALL
-ScVbaListBox::List( const ::uno::Any& pvargIndex, const uno::Any& pvarColumn )
+cpo::uno::Any SAL_CALL
+ScVbaListBox::List( const ::cpo::uno::Any& pvargIndex, const cpo::uno::Any& pvarColumn )
 {
     return maListHelper.List( pvargIndex, pvarColumn );
 }

@@ -119,10 +119,10 @@ sal_Int32 SAL_CALL GalleryTheme::getCount()
 }
 
 
-uno::Any SAL_CALL GalleryTheme::getByIndex( ::sal_Int32 nIndex )
+cpo::uno::Any SAL_CALL GalleryTheme::getByIndex( ::sal_Int32 nIndex )
 {
     const SolarMutexGuard aGuard;
-    uno::Any            aRet;
+    cpo::uno::Any            aRet;
 
     if( mpTheme )
     {

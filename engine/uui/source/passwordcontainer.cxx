@@ -330,7 +330,7 @@ PasswordContainerInteractionHandler::handleInteractionRequest(
     if ( !rRequest.is() )
         return false;
 
-    uno::Any aAnyRequest( rRequest->getRequest() );
+    cpo::uno::Any aAnyRequest( rRequest->getRequest() );
 
     ucb::AuthenticationRequest aAuthenticationRequest;
     if ( !( aAnyRequest >>= aAuthenticationRequest ) )
@@ -380,7 +380,7 @@ PasswordContainerInteractionHandler::handleInteractionRequest(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_uui_PasswordContainerInteractionHandler_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new uui::PasswordContainerInteractionHandler(context));
 }

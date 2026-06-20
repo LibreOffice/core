@@ -57,6 +57,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 SFX_IMPL_INTERFACE(SwDrawShell, SwDrawBaseShell)
 
@@ -500,7 +501,7 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
                         if (SdrObjCustomShape* pCustomShape = dynamic_cast<SdrObjCustomShape*>( pObj) )
                         {
                             const SdrCustomShapeGeometryItem& rGeometryItem = pCustomShape->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
-                            if (const uno::Any* pAny = rGeometryItem.GetPropertyValueByName(u"Type"_ustr))
+                            if (const cpo::uno::Any* pAny = rGeometryItem.GetPropertyValueByName(u"Type"_ustr))
                                 // But still disallow fontwork shapes.
                                 bDisable = pAny->get<OUString>().startsWith("fontwork-");
                         }

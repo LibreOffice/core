@@ -34,8 +34,8 @@ public:
    // Attributes
     virtual OUString SAL_CALL getCaption() override;
     virtual void SAL_CALL setCaption( const OUString& _caption ) override;
-    virtual css::uno::Any SAL_CALL getValue() override;
-    virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+    virtual cpo::uno::Any SAL_CALL getValue() override;
+    virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
     virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() override;
     virtual sal_Int32 SAL_CALL getBackColor() override;
     virtual void SAL_CALL setBackColor( sal_Int32 nBackColor ) override;

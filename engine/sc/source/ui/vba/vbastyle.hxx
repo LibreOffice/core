@@ -54,8 +54,8 @@ public:
     virtual OUString SAL_CALL getNameLocal() override;
     virtual void SAL_CALL Delete() override;
     // XFormat
-    virtual void SAL_CALL setMergeCells( const css::uno::Any& MergeCells ) override;
-    virtual css::uno::Any SAL_CALL getMergeCells(  ) override;
+    virtual void SAL_CALL setMergeCells( const cpo::uno::Any& MergeCells ) override;
+    virtual cpo::uno::Any SAL_CALL getMergeCells(  ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

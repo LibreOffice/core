@@ -40,7 +40,7 @@ public:
     // XTextRange
     virtual css::uno::Reference<css::text::XText> SAL_CALL getText() override;
 
-    virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
     virtual void SAL_CALL acquire() noexcept override;
     virtual void SAL_CALL release() noexcept override;
 

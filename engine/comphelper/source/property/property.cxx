@@ -44,7 +44,7 @@ namespace comphelper
     using ::com::sun::star::beans::Property;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::uno::cpp_queryInterface;
     using ::com::sun::star::uno::cpp_acquire;

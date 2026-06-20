@@ -28,6 +28,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 SvxShapeCollection::SvxShapeCollection() noexcept
 {
@@ -147,14 +148,14 @@ sal_Int32 SAL_CALL SvxShapeCollection::getCount()
     return maShapeContainer.size();
 }
 
-uno::Any SAL_CALL SvxShapeCollection::getByIndex( sal_Int32 Index )
+cpo::uno::Any SAL_CALL SvxShapeCollection::getByIndex( sal_Int32 Index )
 {
     if( Index < 0 || Index >= getCount() )
         throw lang::IndexOutOfBoundsException();
 
     std::unique_lock g(m_aMutex);
     Reference<drawing::XShape> xShape = maShapeContainer[Index];
-    return uno::Any( xShape );
+    return cpo::uno::Any( xShape );
 }
 
 std::vector<css::uno::Reference<css::drawing::XShape>> SvxShapeCollection::getAllShapes() const
@@ -193,7 +194,7 @@ uno::Sequence< OUString > SAL_CALL SvxShapeCollection::getSupportedServiceNames(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_drawing_SvxShapeCollection_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SvxShapeCollection);
 }

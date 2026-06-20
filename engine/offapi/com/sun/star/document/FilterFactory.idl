@@ -56,7 +56,7 @@ published service FilterFactory
             aFilterProp.Name  = "FilterName";
             aFilterProp.Value = sInternalFilterName;
 
-            com.sun.star.uno.Any[] lProps = new com.sun.star.uno.Any[1];
+            cpo.uno.Any[] lProps = new cpo.uno.Any[1];
             lProps[0] = aFilterProp;
 
             java.lang.Object aFilter = xFilterFactory.createInstanceWithArguments("", lProps);

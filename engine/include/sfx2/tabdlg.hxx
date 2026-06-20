@@ -216,7 +216,7 @@ private:
     OUString maUserString;
     bool mbHasExchangeSupport;
     bool mbCancel;
-    std::unordered_map<OUString, css::uno::Any> maAdditionalProperties;
+    std::unordered_map<OUString, cpo::uno::Any> maAdditionalProperties;
 
     std::unique_ptr<TabPageImpl> mpImpl;
 
@@ -305,7 +305,7 @@ public:
 
     weld::Window*   GetFrameWeld() const;
 
-    std::unordered_map<OUString, css::uno::Any>& getAdditionalProperties()
+    std::unordered_map<OUString, cpo::uno::Any>& getAdditionalProperties()
     {
         return maAdditionalProperties;
     }

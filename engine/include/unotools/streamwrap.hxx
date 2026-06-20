@@ -142,7 +142,7 @@ private:
     virtual ~OSeekableOutputStreamWrapper() override;
 
     // disambiguate XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) override;
     virtual void SAL_CALL acquire(  ) noexcept override
     { OOutputStreamWrapper::acquire(); }
     virtual void SAL_CALL release(  ) noexcept override

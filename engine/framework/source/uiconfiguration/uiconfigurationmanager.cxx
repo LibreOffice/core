@@ -61,6 +61,7 @@
 #include <unordered_map>
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::io;
 using namespace com::sun::star::embed;
 using namespace com::sun::star::lang;
@@ -1395,7 +1396,7 @@ void UIConfigurationManager::implts_notifyContainerListener( const Configuration
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_UIConfigurationManager_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UIConfigurationManager(context));
 }

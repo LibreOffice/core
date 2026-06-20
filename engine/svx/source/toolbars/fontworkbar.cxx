@@ -51,6 +51,7 @@ using namespace ::svx;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 static void SetAlignmentState( SdrView const * pSdrView, SfxItemSet& rSet )
 {
@@ -241,7 +242,7 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
     {
         case SID_FONTWORK_SAME_LETTER_HEIGHTS:
         {
-            css::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( u"TextPath"_ustr, u"SameLetterHeights"_ustr );
+            cpo::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( u"TextPath"_ustr, u"SameLetterHeights"_ustr );
 
             bool bOn = false;
             if( pAny )
@@ -353,7 +354,7 @@ static void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem
                 {
                     PropertyValue aPropVal_;
                     const SdrCustomShapeGeometryItem& rSourceGeometry = pSourceObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-                    const css::uno::Any* pAny = rSourceGeometry.GetPropertyValueByName( sType );
+                    const cpo::uno::Any* pAny = rSourceGeometry.GetPropertyValueByName( sType );
                     if ( pAny )
                     {
                         aPropVal_.Name = sType;

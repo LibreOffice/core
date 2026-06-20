@@ -40,6 +40,7 @@
 #include <UAccCOM_i.c>
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::accessibility;
 
 constexpr DWORD MSAA_NO_STATE = 0x00000000;

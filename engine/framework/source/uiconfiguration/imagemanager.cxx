@@ -26,7 +26,7 @@
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::XInterface;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::graphic::XGraphic;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::io;
@@ -163,7 +163,7 @@ bool SAL_CALL ImageManager::isReadOnly()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_ImageManager_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new framework::ImageManager(context, /*bForModule*/false));
 }

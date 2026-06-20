@@ -48,9 +48,9 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText,
                                   const IntlWrapper& rIntl ) const override;
-    virtual bool QueryValue( css::uno::Any& rVal,
+    virtual bool QueryValue( cpo::uno::Any& rVal,
                              sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool PutValue( const css::uno::Any& rVal,
+    virtual bool PutValue( const cpo::uno::Any& rVal,
                            sal_uInt8 nMemberId ) override;
 
     void SetLeft( sal_Int32 nVal )      { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nLeft = nVal; }

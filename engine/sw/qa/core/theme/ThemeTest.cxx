@@ -525,7 +525,7 @@ class TestSimpleFileTransferable : public cppu::WeakImplHelper<css::datatransfer
 {
 public:
     TestSimpleFileTransferable(const OUString& fileURL);
-    css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& flavor) override;
+    cpo::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& flavor) override;
     css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
     bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& flavor) override;
 
@@ -538,7 +538,7 @@ TestSimpleFileTransferable::TestSimpleFileTransferable(const OUString& fileURL)
 {
 }
 
-css::uno::Any
+cpo::uno::Any
 TestSimpleFileTransferable::getTransferData(const css::datatransfer::DataFlavor& flavor)
 {
     if (flavor.MimeType == SotExchange::GetFormatMimeType(SotClipboardFormatId::EMBED_SOURCE))
@@ -548,7 +548,7 @@ TestSimpleFileTransferable::getTransferData(const css::datatransfer::DataFlavor&
         sal_Int32 bytes = xInputStream->available();
         css::uno::Sequence<sal_Int8> data;
         CPPUNIT_ASSERT_EQUAL(bytes, xInputStream->readBytes(data, bytes));
-        return css::uno::Any(data);
+        return cpo::uno::Any(data);
     }
     if (flavor.MimeType == SotExchange::GetFormatMimeType(SotClipboardFormatId::OBJECTDESCRIPTOR))
     {
@@ -558,7 +558,7 @@ TestSimpleFileTransferable::getTransferData(const css::datatransfer::DataFlavor&
         WriteTransferableObjectDescriptor(aMemStm, aDesc);
         css::uno::Sequence<sal_Int8> data(static_cast<const sal_Int8*>(aMemStm.GetData()),
                                           aMemStm.GetSize());
-        return css::uno::Any(data);
+        return cpo::uno::Any(data);
     }
     return {};
 }

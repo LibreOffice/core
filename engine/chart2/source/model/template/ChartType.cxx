@@ -234,7 +234,7 @@ void ChartType::createCalculatedDataSeries()
 }
 
 // ____ OPropertySet ____
-void ChartType::GetDefaultValue( sal_Int32 /* nHandle */, uno::Any& rAny ) const
+void ChartType::GetDefaultValue( sal_Int32 /* nHandle */, cpo::uno::Any& rAny ) const
 {
     rAny.clear();
 }

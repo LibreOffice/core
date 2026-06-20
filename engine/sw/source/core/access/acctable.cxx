@@ -491,7 +491,7 @@ void SwAccessibleTable::FireTableChangeEvent(
     aModelChange.FirstColumn = 0;
     aModelChange.LastColumn = rTableData.GetColumnCount() - 1;
 
-    FireAccessibleEvent(AccessibleEventId::TABLE_MODEL_CHANGED, uno::Any(), uno::Any(aModelChange));
+    FireAccessibleEvent(AccessibleEventId::TABLE_MODEL_CHANGED, cpo::uno::Any(), cpo::uno::Any(aModelChange));
 }
 
 const SwTableBox* SwAccessibleTable::GetTableBox( sal_Int64 nChildIndex ) const
@@ -608,8 +608,8 @@ void SwAccessibleTable::Notify(const SfxHint& rHint)
 
         if( sOldName != GetName() )
         {
-            FireAccessibleEvent(AccessibleEventId::NAME_CHANGED, uno::Any(sOldName),
-                                uno::Any(GetName()));
+            FireAccessibleEvent(AccessibleEventId::NAME_CHANGED, cpo::uno::Any(sOldName),
+                                cpo::uno::Any(GetName()));
         }
 
         const OUString sOldDesc( m_sDesc );
@@ -618,8 +618,8 @@ void SwAccessibleTable::Notify(const SfxHint& rHint)
         m_sDesc = GetResource( STR_ACCESS_TABLE_DESC, &sNewTabName.toString(), &sArg2 );
         if( m_sDesc != sOldDesc )
         {
-            FireAccessibleEvent(AccessibleEventId::DESCRIPTION_CHANGED, uno::Any(sOldDesc),
-                                uno::Any(m_sDesc));
+            FireAccessibleEvent(AccessibleEventId::DESCRIPTION_CHANGED, cpo::uno::Any(sOldDesc),
+                                cpo::uno::Any(m_sDesc));
         }
     }
 }
@@ -1142,7 +1142,7 @@ void SwAccessibleTable::InvalidateChildPosOrSize( const SwAccessibleChild& rChil
                         aModelChange.LastColumn = mpTableData->GetColumnCount() - 1;
 
                         FireAccessibleEvent(AccessibleEventId::TABLE_COLUMN_HEADER_CHANGED,
-                                            uno::Any(), uno::Any(aModelChange));
+                                            cpo::uno::Any(), cpo::uno::Any(aModelChange));
                     }
                 }
                 else
@@ -1395,8 +1395,8 @@ void SwAccessibleTable::FireSelectionEvent( )
         rtl::Reference<SwAccessibleContext> const pAccCell(rxCell);
         if (pAccCell)
         {
-            FireAccessibleEvent(AccessibleEventId::SELECTION_CHANGED_REMOVE, uno::Any(),
-                                uno::Any(uno::Reference<XAccessible>(pAccCell)));
+            FireAccessibleEvent(AccessibleEventId::SELECTION_CHANGED_REMOVE, cpo::uno::Any(),
+                                cpo::uno::Any(uno::Reference<XAccessible>(pAccCell)));
         }
     }
 
@@ -1408,14 +1408,14 @@ void SwAccessibleTable::FireSelectionEvent( )
             rtl::Reference<SwAccessibleContext> const pAccCell(rxCell);
             if (pAccCell)
             {
-                FireAccessibleEvent(AccessibleEventId::SELECTION_CHANGED_ADD, uno::Any(),
-                                    uno::Any(uno::Reference<XAccessible>(pAccCell)));
+                FireAccessibleEvent(AccessibleEventId::SELECTION_CHANGED_ADD, cpo::uno::Any(),
+                                    cpo::uno::Any(uno::Reference<XAccessible>(pAccCell)));
             }
         }
     }
     else
     {
-        FireAccessibleEvent(AccessibleEventId::SELECTION_CHANGED_WITHIN, uno::Any(), uno::Any());
+        FireAccessibleEvent(AccessibleEventId::SELECTION_CHANGED_WITHIN, cpo::uno::Any(), cpo::uno::Any());
     }
 
     m_vecCellRemove.clear();

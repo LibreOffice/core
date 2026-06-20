@@ -23,7 +23,7 @@
 
 #include <svtools/inettbc.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -65,6 +65,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 class SvtURLBox_Impl
 {
@@ -472,7 +473,7 @@ void SvtMatchContext_Impl::doExecute()
                                   /* Type       */ cppu::UnoType< bool >::get(),
                                   /* Attributes */ {} }
                             };
-                            css::uno::Any res;
+                            cpo::uno::Any res;
                             css::uno::Reference< css::ucb::XCommandProcessor >
                                 proc(
                                     ucb->queryContent(
@@ -490,7 +491,7 @@ void SvtMatchContext_Impl::doExecute()
                                 res = proc->execute(
                                     css::ucb::Command(
                                         u"getPropertyValues"_ustr, -1,
-                                        css::uno::Any(prop)),
+                                        cpo::uno::Any(prop)),
                                     id,
                                     css::uno::Reference<
                                         css::ucb::XCommandEnvironment >());

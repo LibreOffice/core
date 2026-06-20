@@ -33,7 +33,7 @@ public:
    // Attributes
     virtual OUString SAL_CALL getText() override;
     virtual void SAL_CALL setText( const OUString& _text ) override;
-    virtual css::uno::Reference< ov::excel::XCharacters > SAL_CALL characters( const css::uno::Any& Start, const css::uno::Any& Length ) override;
+    virtual css::uno::Reference< ov::excel::XCharacters > SAL_CALL characters( const cpo::uno::Any& Start, const cpo::uno::Any& Length ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

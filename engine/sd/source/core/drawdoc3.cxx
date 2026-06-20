@@ -548,7 +548,7 @@ void SdDrawDocument::transferLayoutStyles(const SlideLayoutNameList& aLayoutsToT
                 uno::Reference<beans::XPropertySet> xPropSet(xOldPage, uno::UNO_QUERY_THROW);
                 if (xPropSet.is())
                 {
-                    uno::Any aLayoutID = xPropSet->getPropertyValue(u"SlideLayout"_ustr);
+                    cpo::uno::Any aLayoutID = xPropSet->getPropertyValue(u"SlideLayout"_ustr);
                     if (aLayoutID.hasValue()) {
                         aLayoutID >>= nLayout;
                     }
@@ -1007,7 +1007,7 @@ void SdDrawDocument::updateInsertedPages(PageInsertionParams& rParams,
                 {
                     nLayout = it->second;
                 }
-                xNewPropSet->setPropertyValue(u"SlideLayout"_ustr, uno::Any(nLayout));
+                xNewPropSet->setPropertyValue(u"SlideLayout"_ustr, cpo::uno::Any(nLayout));
             }
         }
         else // Can only be notes

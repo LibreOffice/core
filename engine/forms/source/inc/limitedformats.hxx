@@ -66,13 +66,13 @@ namespace frm
         );
 
     protected:
-        void        getFormatKeyPropertyValue( css::uno::Any& _rValue ) const;
+        void        getFormatKeyPropertyValue( cpo::uno::Any& _rValue ) const;
         bool    convertFormatKeyPropertyValue(
-                        css::uno::Any& _rConvertedValue,
-                        css::uno::Any& _rOldValue,
-                const   css::uno::Any& _rNewValue
+                        cpo::uno::Any& _rConvertedValue,
+                        cpo::uno::Any& _rOldValue,
+                const   cpo::uno::Any& _rNewValue
             );
-        void        setFormatKeyPropertyValue( const css::uno::Any& _rNewValue );
+        void        setFormatKeyPropertyValue( const cpo::uno::Any& _rNewValue );
         // setFormatKeyPropertyValue should only be called with a value got from convertFormatKeyPropertyValue!
 
         const css::uno::Reference< css::util::XNumberFormatsSupplier >&

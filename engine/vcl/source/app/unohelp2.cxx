@@ -78,21 +78,21 @@ namespace vcl::unohelper {
     }
 
     // css::uno::XInterface
-    uno::Any TextDataObject::queryInterface( const uno::Type & rType )
+    cpo::uno::Any TextDataObject::queryInterface( const uno::Type & rType )
     {
-        uno::Any aRet = ::cppu::queryInterface( rType, static_cast< datatransfer::XTransferable* >(this) );
+        cpo::uno::Any aRet = ::cppu::queryInterface( rType, static_cast< datatransfer::XTransferable* >(this) );
         return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
     }
 
     // css::datatransfer::XTransferable
-    uno::Any TextDataObject::getTransferData( const datatransfer::DataFlavor& rFlavor )
+    cpo::uno::Any TextDataObject::getTransferData( const datatransfer::DataFlavor& rFlavor )
     {
         SotClipboardFormatId nT = SotExchange::GetFormat( rFlavor );
         if ( nT != SotClipboardFormatId::STRING )
         {
             throw datatransfer::UnsupportedFlavorException();
         }
-        return uno::Any(maText);
+        return cpo::uno::Any(maText);
     }
 
     uno::Sequence< datatransfer::DataFlavor > TextDataObject::getTransferDataFlavors(  )

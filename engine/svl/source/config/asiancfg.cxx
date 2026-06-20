@@ -28,7 +28,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/configuration.hxx>
@@ -112,7 +112,7 @@ bool SvxAsianConfig::GetStartEndChars(
 {
     css::uno::Reference< css::container::XNameAccess > set(
         officecfg::Office::Common::AsianLayout::StartEndCharacters::get());
-    css::uno::Any v;
+    cpo::uno::Any v;
     try {
         v = set->getByName(toString(locale));
     } catch (css::container::NoSuchElementException &) {
@@ -141,7 +141,7 @@ void SvxAsianConfig::SetStartEndChars(
         } catch (css::container::NoSuchElementException &) {}
     } else {
         bool found;
-        css::uno::Any v;
+        cpo::uno::Any v;
         try {
             v = set->getByName(name);
             found = true;
@@ -152,17 +152,17 @@ void SvxAsianConfig::SetStartEndChars(
             css::uno::Reference< css::beans::XPropertySet > el(
                 v.get< css::uno::Reference< css::beans::XPropertySet > >(),
                 css::uno::UNO_SET_THROW);
-            el->setPropertyValue(u"StartCharacters"_ustr, css::uno::Any(*startChars));
-            el->setPropertyValue(u"EndCharacters"_ustr, css::uno::Any(*endChars));
+            el->setPropertyValue(u"StartCharacters"_ustr, cpo::uno::Any(*startChars));
+            el->setPropertyValue(u"EndCharacters"_ustr, cpo::uno::Any(*endChars));
         } else {
             css::uno::Reference< css::beans::XPropertySet > el(
                 (css::uno::Reference< css::lang::XSingleServiceFactory >(
                     set, css::uno::UNO_QUERY_THROW)->
                  createInstance()),
                 css::uno::UNO_QUERY_THROW);
-            el->setPropertyValue(u"StartCharacters"_ustr, css::uno::Any(*startChars));
-            el->setPropertyValue(u"EndCharacters"_ustr, css::uno::Any(*endChars));
-            css::uno::Any v2(el);
+            el->setPropertyValue(u"StartCharacters"_ustr, cpo::uno::Any(*startChars));
+            el->setPropertyValue(u"EndCharacters"_ustr, cpo::uno::Any(*endChars));
+            cpo::uno::Any v2(el);
             try {
                 set->insertByName(name, v2);
             } catch (css::container::ElementExistException &) {

@@ -53,21 +53,21 @@ SwVbaWindow::Activate()
 }
 
 void
-SwVbaWindow::Close( const uno::Any& SaveChanges, const uno::Any& RouteDocument )
+SwVbaWindow::Close( const cpo::uno::Any& SaveChanges, const cpo::uno::Any& RouteDocument )
 {
     // FIXME: it is incorrect when there are more than 1 windows
     rtl::Reference<SwVbaDocument> document( new SwVbaDocument(uno::Reference< XHelperInterface >( Application(), uno::UNO_QUERY_THROW ), mxContext, m_xModel) );
-    uno::Any FileName;
+    cpo::uno::Any FileName;
     document->Close(SaveChanges, FileName, RouteDocument );
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwVbaWindow::getView()
 {
-    return uno::Any( uno::Reference< word::XView >( new SwVbaView( this,  mxContext, m_xModel ) ) );
+    return cpo::uno::Any( uno::Reference< word::XView >( new SwVbaView( this,  mxContext, m_xModel ) ) );
 }
 
-void SAL_CALL SwVbaWindow::setView( const uno::Any& _view )
+void SAL_CALL SwVbaWindow::setView( const cpo::uno::Any& _view )
 {
     sal_Int32 nType = 0;
     if( _view >>= nType )
@@ -77,7 +77,7 @@ void SAL_CALL SwVbaWindow::setView( const uno::Any& _view )
     }
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwVbaWindow::getWindowState()
 {
     sal_Int32 nwindowState = word::WdWindowState::wdWindowStateNormal;
@@ -91,11 +91,11 @@ SwVbaWindow::getWindowState()
         else if (pWork -> IsMinimized())
             nwindowState = word::WdWindowState::wdWindowStateMinimize;
     }
-    return uno::Any( nwindowState );
+    return cpo::uno::Any( nwindowState );
 }
 
 void SAL_CALL
-SwVbaWindow::setWindowState( const uno::Any& _windowstate )
+SwVbaWindow::setWindowState( const cpo::uno::Any& _windowstate )
 {
     sal_Int32 nwindowState = word::WdWindowState::wdWindowStateMaximize;
     _windowstate >>= nwindowState;
@@ -143,23 +143,23 @@ SwVbaWindow::setCaption( const OUString& _caption )
     if( !xFrameProps.is() )
         return;
 
-    xFrameProps->setPropertyValue( u"Title"_ustr, uno::Any( _caption ) );
+    xFrameProps->setPropertyValue( u"Title"_ustr, cpo::uno::Any( _caption ) );
 }
 
-uno::Any SAL_CALL
-SwVbaWindow::Panes( const uno::Any& aIndex )
+cpo::uno::Any SAL_CALL
+SwVbaWindow::Panes( const cpo::uno::Any& aIndex )
 {
     uno::Reference< XCollection > xPanes( new SwVbaPanes( this,  mxContext, m_xModel ) );
     if(  aIndex.getValueTypeClass() == uno::TypeClass_VOID )
-        return uno::Any( xPanes );
+        return cpo::uno::Any( xPanes );
 
-    return xPanes->Item( aIndex, uno::Any() );
+    return xPanes->Item( aIndex, cpo::uno::Any() );
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwVbaWindow::ActivePane()
 {
-    return uno::Any( uno::Reference< word::XPane >( new SwVbaPane( this,  mxContext, m_xModel ) ) );
+    return cpo::uno::Any( uno::Reference< word::XPane >( new SwVbaPane( this,  mxContext, m_xModel ) ) );
 }
 
 OUString

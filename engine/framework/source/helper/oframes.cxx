@@ -31,6 +31,7 @@ namespace framework{
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::cppu;
 
 //  constructor

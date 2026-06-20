@@ -170,21 +170,21 @@ namespace dxcanvas
         return uno::Reference< rendering::XVolatileBitmap >();
     }
 
-    uno::Any DeviceHelper::isAccelerated() const
+    cpo::uno::Any DeviceHelper::isAccelerated() const
     {
-        return css::uno::Any(false);
+        return cpo::uno::Any(false);
     }
 
-    uno::Any DeviceHelper::getDeviceHandle() const
+    cpo::uno::Any DeviceHelper::getDeviceHandle() const
     {
-        return uno::Any( reinterpret_cast< sal_Int64 >(mpOutDev.get()) );
+        return cpo::uno::Any( reinterpret_cast< sal_Int64 >(mpOutDev.get()) );
     }
 
-    uno::Any DeviceHelper::getSurfaceHandle() const
+    cpo::uno::Any DeviceHelper::getSurfaceHandle() const
     {
         // TODO(F1): expose DirectDraw object
         //return mpBackBuffer->getBitmap().get();
-        return uno::Any();
+        return cpo::uno::Any();
     }
 
     uno::Reference<rendering::XColorSpace> DeviceHelper::getColorSpace() const

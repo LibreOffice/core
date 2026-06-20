@@ -264,7 +264,7 @@
 17 lucene::util::ScorerDocQueue
 17 lucene::search::spans::SpanNearQuery
 17 lucene::search::MultiPhraseQuery
-17 com::sun::star::uno::Any SwXStyle
+17 cpo::uno::Any SwXStyle
 17 canvas::ParametricPolyPolygon
 17 basegfx::B3DPolyPolygon
 17 UnoButtonControl

@@ -22,7 +22,7 @@
 #include <com/sun/star/util/XRefreshable.hpp>
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using namespace ::com::sun::star;
 
 namespace chart::wrapper
@@ -48,7 +48,7 @@ void WrappedAddInProperty::setPropertyValue( const Any& rOuterValue, const Refer
 
 Any WrappedAddInProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
 {
-    return uno::Any( m_rChartDocumentWrapper.getAddIn() );
+    return cpo::uno::Any( m_rChartDocumentWrapper.getAddIn() );
 }
 
 WrappedBaseDiagramProperty::WrappedBaseDiagramProperty( ChartDocumentWrapper& rChartDocumentWrapper )
@@ -71,7 +71,7 @@ void WrappedBaseDiagramProperty::setPropertyValue( const Any& rOuterValue, const
 
 Any WrappedBaseDiagramProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
 {
-    return uno::Any( m_rChartDocumentWrapper.getBaseDiagram() );
+    return cpo::uno::Any( m_rChartDocumentWrapper.getBaseDiagram() );
 }
 
 WrappedAdditionalShapesProperty::WrappedAdditionalShapesProperty( ChartDocumentWrapper& rChartDocumentWrapper )
@@ -90,7 +90,7 @@ void WrappedAdditionalShapesProperty::setPropertyValue( const Any& /*rOuterValue
 
 Any WrappedAdditionalShapesProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
 {
-    return uno::Any( m_rChartDocumentWrapper.getAdditionalShapes() );
+    return cpo::uno::Any( m_rChartDocumentWrapper.getAdditionalShapes() );
 }
 
 WrappedRefreshAddInAllowedProperty::WrappedRefreshAddInAllowedProperty( ChartDocumentWrapper& rChartDocumentWrapper )
@@ -113,7 +113,7 @@ void WrappedRefreshAddInAllowedProperty::setPropertyValue( const Any& rOuterValu
 
 Any WrappedRefreshAddInAllowedProperty::getPropertyValue( const Reference< beans::XPropertySet >& /* xInnerPropertySet */ ) const
 {
-    return uno::Any( m_rChartDocumentWrapper.getUpdateAddIn() );
+    return cpo::uno::Any( m_rChartDocumentWrapper.getUpdateAddIn() );
 }
 
 } //namespace chart::wrapper

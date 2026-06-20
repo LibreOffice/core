@@ -35,6 +35,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -60,14 +61,14 @@ OUString UnoControlTabPageContainerModel::getServiceName()
     return u"com.sun.star.awt.tab.UnoControlTabPageContainerModel"_ustr;
 }
 
-uno::Any UnoControlTabPageContainerModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+cpo::uno::Any UnoControlTabPageContainerModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     switch(nPropId)
     {
         case BASEPROPERTY_DEFAULTCONTROL:
-            return uno::Any( u"com.sun.star.awt.tab.UnoControlTabPageContainer"_ustr );
+            return cpo::uno::Any( u"com.sun.star.awt.tab.UnoControlTabPageContainer"_ustr );
         case BASEPROPERTY_BORDER:
-            return uno::Any(sal_Int16(0));              // No Border
+            return cpo::uno::Any(sal_Int16(0));              // No Border
         default:
             return UnoControlModel::ImplGetDefaultValue( nPropId );
     }
@@ -130,7 +131,7 @@ Reference< XTabPageModel > SAL_CALL UnoControlTabPageContainerModel::loadTabPage
     return lcl_createTabPageModel( m_xContext, aInitArgs, this );
 }
 
-void SAL_CALL UnoControlTabPageContainerModel::insertByIndex( ::sal_Int32 nIndex, const css::uno::Any& aElement)
+void SAL_CALL UnoControlTabPageContainerModel::insertByIndex( ::sal_Int32 nIndex, const cpo::uno::Any& aElement)
 {
     SolarMutexGuard aSolarGuard;
     uno::Reference < XTabPageModel > xTabPageModel;
@@ -159,7 +160,7 @@ void SAL_CALL UnoControlTabPageContainerModel::removeByIndex( ::sal_Int32 /*Inde
 {
 }
 // XIndexReplace
-void SAL_CALL UnoControlTabPageContainerModel::replaceByIndex( ::sal_Int32 /*Index*/, const uno::Any& /*Element*/ )
+void SAL_CALL UnoControlTabPageContainerModel::replaceByIndex( ::sal_Int32 /*Index*/, const cpo::uno::Any& /*Element*/ )
 {
 }
 
@@ -170,12 +171,12 @@ void SAL_CALL UnoControlTabPageContainerModel::replaceByIndex( ::sal_Int32 /*Ind
     return sal_Int32( m_aTabPageVector.size());
 }
 
-uno::Any SAL_CALL UnoControlTabPageContainerModel::getByIndex( ::sal_Int32 nIndex )
+cpo::uno::Any SAL_CALL UnoControlTabPageContainerModel::getByIndex( ::sal_Int32 nIndex )
 {
     std::unique_lock aGuard( m_aMutex );
     if ( nIndex < 0 || o3tl::make_unsigned(nIndex) > m_aTabPageVector.size() )
         throw lang::IndexOutOfBoundsException();
-    return uno::Any(m_aTabPageVector[nIndex]);
+    return cpo::uno::Any(m_aTabPageVector[nIndex]);
 }
 
 // XElementAccess
@@ -331,7 +332,7 @@ void SAL_CALL UnoControlTabPageContainer::addControl( const OUString& Name, cons
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlTabPageContainerModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlTabPageContainerModel(context));
 }
@@ -339,7 +340,7 @@ stardiv_Toolkit_UnoControlTabPageContainerModel_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlTabPageContainer_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlTabPageContainer(context));
 }

@@ -51,7 +51,7 @@ MainThreadExecutor_Impl::MainThreadExecutor_Impl( const uno::Reference< task::XJ
 }
 
 
-uno::Any SAL_CALL UNOMainThreadExecutor::execute( const uno::Sequence< beans::NamedValue >& aArguments )
+cpo::uno::Any SAL_CALL UNOMainThreadExecutor::execute( const uno::Sequence< beans::NamedValue >& aArguments )
     throw ( lang::IllegalArgumentException,
             uno::Exception,
             uno::RuntimeException )
@@ -77,7 +77,7 @@ uno::Any SAL_CALL UNOMainThreadExecutor::execute( const uno::Sequence< beans::Na
 
     // TODO: implement transferring of the return values and exceptions
 
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 

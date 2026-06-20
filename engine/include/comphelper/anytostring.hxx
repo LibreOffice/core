@@ -23,7 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <comphelper/comphelperdllapi.h>
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 class Any;
 }
@@ -37,7 +37,7 @@ namespace comphelper
     @return
            STRING representation of given ANY value
 */
-COMPHELPER_DLLPUBLIC OUString anyToString(css::uno::Any const& value);
+COMPHELPER_DLLPUBLIC OUString anyToString(cpo::uno::Any const& value);
 }
 
 #endif

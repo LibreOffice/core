@@ -13,7 +13,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/DataImportMode.hpp>
 #include <com/sun/star/util/XImportable.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -21,6 +21,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace apitest
 {
@@ -32,7 +33,7 @@ void DatabaseImportDescriptor::testDatabaseImportDescriptorProperties()
 
     for (auto& rPropValue : asNonConstRange(aPropValues))
     {
-        uno::Any aOldValue;
+        cpo::uno::Any aOldValue;
         if (rPropValue.Name == "DatabaseName" || rPropValue.Name == "SourceObject"
             || rPropValue.Name == "ConnectionResource")
         {

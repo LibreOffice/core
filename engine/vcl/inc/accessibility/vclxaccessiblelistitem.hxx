@@ -62,7 +62,7 @@ public:
     VCLXAccessibleListItem(sal_Int32 _nIndexInParent,
                            rtl::Reference< VCLXAccessibleList > _xParent);
 
-    void                    NotifyAccessibleEvent(  sal_Int16 _nEventId, const css::uno::Any& _aOldValue, const css::uno::Any& _aNewValue );
+    void                    NotifyAccessibleEvent(  sal_Int16 _nEventId, const cpo::uno::Any& _aOldValue, const cpo::uno::Any& _aNewValue );
 
     bool         IsSelected() const { return m_bSelected; }
     void                    SetSelected( bool _bSelected );

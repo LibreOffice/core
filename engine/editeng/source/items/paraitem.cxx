@@ -112,7 +112,7 @@ size_t SvxLineSpacingItem::hashCode() const
       - a sal_uInt16 for the mode
       - a sal_uInt32 for all values (distance, height, rel. detail)
 */
-bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxLineSpacingItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -157,7 +157,7 @@ bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxLineSpacingItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
@@ -165,7 +165,7 @@ bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
     // fill with current data
     style::LineSpacing aLSp;
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     bool bRet = QueryValue( aAny, bConvert ? CONVERT_TWIPS : 0 ) && ( aAny >>= aLSp );
 
     // get new data
@@ -362,7 +362,7 @@ size_t SvxAdjustItem::hashCode() const
     return seed;
 }
 
-bool SvxAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxAdjustItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
@@ -386,7 +386,7 @@ bool SvxAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-bool SvxAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxAdjustItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
     nMemberId &= ~CONVERT_TWIPS;
@@ -622,7 +622,7 @@ SvxHyphenZoneItem::SvxHyphenZoneItem( const bool bHyph, const sal_uInt16 nId ) :
 }
 
 
-bool    SvxHyphenZoneItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool    SvxHyphenZoneItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
@@ -679,7 +679,7 @@ bool    SvxHyphenZoneItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) con
     return true;
 }
 
-bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxHyphenZoneItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     sal_Int32 nNewVal = 0; // sal_Int32 needs for MID_HYPHEN_KEEP_TYPE
@@ -1005,7 +1005,7 @@ sal_Int32 SvxTabStopItem::GetDefaultDistance() const
     return mnDefaultDistance;
 }
 
-bool SvxTabStopItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxTabStopItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1051,7 +1051,7 @@ bool SvxTabStopItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxTabStopItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
@@ -1063,7 +1063,7 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             uno::Sequence< style::TabStop> aSeq;
             if(!(rVal >>= aSeq))
             {
-                uno::Sequence < uno::Sequence < uno::Any >  > aAnySeq;
+                uno::Sequence < uno::Sequence < cpo::uno::Any >  > aAnySeq;
                 if (!(rVal >>= aAnySeq))
                     return false;
                 auto aAnySeqRange = asNonConstRange(aAnySeq);
@@ -1072,7 +1072,7 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 auto pSeq = aSeq.getArray();
                 for ( sal_Int32 n=0; n<nLength; n++ )
                 {
-                    uno::Sequence < uno::Any >& rAnySeq = aAnySeqRange[n];
+                    uno::Sequence < cpo::uno::Any >& rAnySeq = aAnySeqRange[n];
                     if ( rAnySeq.getLength() == 4 )
                     {
                         if (!(rAnySeq[0] >>= pSeq[n].Position)) return false;
@@ -1291,7 +1291,7 @@ SvxPageModelItem* SvxPageModelItem::Clone( SfxItemPool* ) const
     return new SvxPageModelItem( *this );
 }
 
-bool SvxPageModelItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxPageModelItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -1305,7 +1305,7 @@ bool SvxPageModelItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) co
     return true;
 }
 
-bool SvxPageModelItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxPageModelItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     bool bRet;
@@ -1456,14 +1456,14 @@ bool SvxParaVertAlignItem::GetPresentation(
     return true;
 }
 
-bool SvxParaVertAlignItem::QueryValue( css::uno::Any& rVal,
+bool SvxParaVertAlignItem::QueryValue( cpo::uno::Any& rVal,
                                            sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= static_cast<sal_Int16>(GetValue());
     return true;
 }
 
-bool SvxParaVertAlignItem::PutValue( const css::uno::Any& rVal,
+bool SvxParaVertAlignItem::PutValue( const cpo::uno::Any& rVal,
                                          sal_uInt8 /*nMemberId*/ )
 {
     sal_Int16 nVal = sal_Int16();

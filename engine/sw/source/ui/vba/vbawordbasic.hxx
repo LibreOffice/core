@@ -46,48 +46,48 @@ public:
     virtual void SAL_CALL
     setMailMergeMainDocumentType(sal_Int32 _mailmergemaindocumenttype) override;
 
-    virtual void SAL_CALL FileOpen(const OUString& Name, const css::uno::Any& ConfirmConversions,
-                                   const css::uno::Any& ReadOnly, const css::uno::Any& AddToMru,
-                                   const css::uno::Any& PasswordDoc,
-                                   const css::uno::Any& PasswordDot, const css::uno::Any& Revert,
-                                   const css::uno::Any& WritePasswordDoc,
-                                   const css::uno::Any& WritePasswordDot) override;
+    virtual void SAL_CALL FileOpen(const OUString& Name, const cpo::uno::Any& ConfirmConversions,
+                                   const cpo::uno::Any& ReadOnly, const cpo::uno::Any& AddToMru,
+                                   const cpo::uno::Any& PasswordDoc,
+                                   const cpo::uno::Any& PasswordDot, const cpo::uno::Any& Revert,
+                                   const cpo::uno::Any& WritePasswordDoc,
+                                   const cpo::uno::Any& WritePasswordDot) override;
     virtual void SAL_CALL FileSave() override;
     virtual void SAL_CALL FileSaveAs(
-        const css::uno::Any& Name, const css::uno::Any& Format, const css::uno::Any& LockAnnot,
-        const css::uno::Any& Password, const css::uno::Any& AddToMru,
-        const css::uno::Any& WritePassword, const css::uno::Any& RecommendReadOnly,
-        const css::uno::Any& EmbedFonts, const css::uno::Any& NativePictureFormat,
-        const css::uno::Any& FormsData, const css::uno::Any& SaveAsAOCELetter) override;
-    virtual void SAL_CALL FileClose(const css::uno::Any& Save) override;
+        const cpo::uno::Any& Name, const cpo::uno::Any& Format, const cpo::uno::Any& LockAnnot,
+        const cpo::uno::Any& Password, const cpo::uno::Any& AddToMru,
+        const cpo::uno::Any& WritePassword, const cpo::uno::Any& RecommendReadOnly,
+        const cpo::uno::Any& EmbedFonts, const cpo::uno::Any& NativePictureFormat,
+        const cpo::uno::Any& FormsData, const cpo::uno::Any& SaveAsAOCELetter) override;
+    virtual void SAL_CALL FileClose(const cpo::uno::Any& Save) override;
     virtual void SAL_CALL ToolsOptionsView(
-        const css::uno::Any& DraftFont, const css::uno::Any& WrapToWindow,
-        const css::uno::Any& PicturePlaceHolders, const css::uno::Any& FieldCodes,
-        const css::uno::Any& BookMarks, const css::uno::Any& FieldShading,
-        const css::uno::Any& StatusBar, const css::uno::Any& HScroll, const css::uno::Any& VScroll,
-        const css::uno::Any& StyleAreaWidth, const css::uno::Any& Tabs, const css::uno::Any& Spaces,
-        const css::uno::Any& Paras, const css::uno::Any& Hyphens, const css::uno::Any& Hidden,
-        const css::uno::Any& ShowAll, const css::uno::Any& Drawings, const css::uno::Any& Anchors,
-        const css::uno::Any& TextBoundaries, const css::uno::Any& VRuler,
-        const css::uno::Any& Highlight) override;
-    virtual css::uno::Any SAL_CALL WindowName(const css::uno::Any& Number) override;
-    virtual css::uno::Any SAL_CALL ExistingBookmark(const OUString& Name) override;
+        const cpo::uno::Any& DraftFont, const cpo::uno::Any& WrapToWindow,
+        const cpo::uno::Any& PicturePlaceHolders, const cpo::uno::Any& FieldCodes,
+        const cpo::uno::Any& BookMarks, const cpo::uno::Any& FieldShading,
+        const cpo::uno::Any& StatusBar, const cpo::uno::Any& HScroll, const cpo::uno::Any& VScroll,
+        const cpo::uno::Any& StyleAreaWidth, const cpo::uno::Any& Tabs, const cpo::uno::Any& Spaces,
+        const cpo::uno::Any& Paras, const cpo::uno::Any& Hyphens, const cpo::uno::Any& Hidden,
+        const cpo::uno::Any& ShowAll, const cpo::uno::Any& Drawings, const cpo::uno::Any& Anchors,
+        const cpo::uno::Any& TextBoundaries, const cpo::uno::Any& VRuler,
+        const cpo::uno::Any& Highlight) override;
+    virtual cpo::uno::Any SAL_CALL WindowName(const cpo::uno::Any& Number) override;
+    virtual cpo::uno::Any SAL_CALL ExistingBookmark(const OUString& Name) override;
     virtual void SAL_CALL MailMergeOpenDataSource(
-        const OUString& Name, const css::uno::Any& Format, const css::uno::Any& ConfirmConversions,
-        const css::uno::Any& ReadOnly, const css::uno::Any& LinkToSource,
-        const css::uno::Any& AddToRecentFiles, const css::uno::Any& PasswordDocument,
-        const css::uno::Any& PasswordTemplate, const css::uno::Any& Revert,
-        const css::uno::Any& WritePasswordDocument, const css::uno::Any& WritePasswordTemplate,
-        const css::uno::Any& Connection, const css::uno::Any& SQLStatement,
-        const css::uno::Any& SQLStatement1, const css::uno::Any& OpenExclusive,
-        const css::uno::Any& SubType) override;
-    virtual css::uno::Any SAL_CALL AppMaximize(const css::uno::Any& WindowName,
-                                               const css::uno::Any& State) override;
-    virtual css::uno::Any SAL_CALL DocMaximize(const css::uno::Any& State) override;
-    virtual void SAL_CALL AppShow(const css::uno::Any& WindowName) override;
-    virtual css::uno::Any SAL_CALL AppCount() override;
+        const OUString& Name, const cpo::uno::Any& Format, const cpo::uno::Any& ConfirmConversions,
+        const cpo::uno::Any& ReadOnly, const cpo::uno::Any& LinkToSource,
+        const cpo::uno::Any& AddToRecentFiles, const cpo::uno::Any& PasswordDocument,
+        const cpo::uno::Any& PasswordTemplate, const cpo::uno::Any& Revert,
+        const cpo::uno::Any& WritePasswordDocument, const cpo::uno::Any& WritePasswordTemplate,
+        const cpo::uno::Any& Connection, const cpo::uno::Any& SQLStatement,
+        const cpo::uno::Any& SQLStatement1, const cpo::uno::Any& OpenExclusive,
+        const cpo::uno::Any& SubType) override;
+    virtual cpo::uno::Any SAL_CALL AppMaximize(const cpo::uno::Any& WindowName,
+                                               const cpo::uno::Any& State) override;
+    virtual cpo::uno::Any SAL_CALL DocMaximize(const cpo::uno::Any& State) override;
+    virtual void SAL_CALL AppShow(const cpo::uno::Any& WindowName) override;
+    virtual cpo::uno::Any SAL_CALL AppCount() override;
     virtual void SAL_CALL MsgBox(const OUString& sPrompt) override;
-    virtual void SAL_CALL ScreenUpdating(const css::uno::Any& On) override;
+    virtual void SAL_CALL ScreenUpdating(const cpo::uno::Any& On) override;
 };
 
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBAWORDBASIC_HXX

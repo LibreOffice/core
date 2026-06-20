@@ -30,11 +30,11 @@ public:
     {
         return m_lContinuations;
     }
-    css::uno::Any SAL_CALL getRequest() override { return m_aRequest; }
+    cpo::uno::Any SAL_CALL getRequest() override { return m_aRequest; }
 
     // member
 private:
-    css::uno::Any m_aRequest;
+    cpo::uno::Any m_aRequest;
     rtl::Reference<comphelper::OInteractionAbort> m_xAbort;
     rtl::Reference<comphelper::OInteractionApprove> m_xApprove;
     css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> m_lContinuations;

@@ -135,7 +135,7 @@ namespace dbaui
         virtual bool Construct(vcl::Window* pParent) override;
 
         // UNO
-        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+        virtual cpo::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
 
         // XTypeProvider
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;

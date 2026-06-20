@@ -22,7 +22,7 @@
 #include <string_view>
 
 #include <svtools/colorcfg.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/kit.hxx>
@@ -161,7 +161,7 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
     {
         //detect current scheme name
         uno::Sequence < OUString > aCurrent { u"CurrentColorScheme"_ustr };
-        uno::Sequence< uno::Any > aCurrentVal = GetProperties( aCurrent );
+        uno::Sequence< cpo::uno::Any > aCurrentVal = GetProperties( aCurrent );
         aCurrentVal.getConstArray()[0] >>= sScheme;
     }
     m_sLoadedScheme = sScheme;
@@ -178,8 +178,8 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
     }
 
     uno::Sequence < OUString > aColorNames = GetPropertyNames(sScheme);
-    uno::Sequence< uno::Any > aColors = GetProperties( aColorNames );
-    const uno::Any* pColors = aColors.getConstArray();
+    uno::Sequence< cpo::uno::Any > aColors = GetProperties( aColorNames );
+    const cpo::uno::Any* pColors = aColors.getConstArray();
     const OUString* pColorNames = aColorNames.getConstArray();
     sal_Int32 nIndex = 0;
     for(int i = 0; i < ColorConfigEntryCount && aColors.getLength() > nIndex; ++i)
@@ -296,7 +296,7 @@ void ColorConfig_Impl::CommitCurrentSchemeName()
 {
     //save current scheme name
     uno::Sequence < OUString > aCurrent { u"CurrentColorScheme"_ustr };
-    uno::Sequence< uno::Any > aCurrentVal(1);
+    uno::Sequence< cpo::uno::Any > aCurrentVal(1);
     aCurrentVal.getArray()[0] <<= m_sLoadedScheme;
     PutProperties(aCurrent, aCurrentVal);
     ThemeColors::GetThemeColors().SetThemeName(m_sLoadedScheme);

@@ -23,7 +23,7 @@
 namespace dbaccess
 {
 
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
 
     // Veto
     Veto::Veto( Any _aDetails )

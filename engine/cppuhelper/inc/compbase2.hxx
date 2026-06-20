@@ -47,7 +47,7 @@ public:
     virtual void SAL_CALL
     removeEventListener(css::uno::Reference<css::lang::XEventListener> const& rxListener) override;
 
-    virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const& rType) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface(css::uno::Type const& rType) override;
 
     /**
         Called by dispose for subclasses to do dispose() work.
@@ -66,7 +66,7 @@ protected:
 
 /** WeakComponentImplHelper
 */
-CPPUHELPER_DLLPUBLIC css::uno::Any
+CPPUHELPER_DLLPUBLIC cpo::uno::Any
 WeakComponentImplHelper_query(css::uno::Type const& rType, cppu::class_data* cd,
                               WeakComponentImplHelperBase2* pBase);
 
@@ -96,7 +96,7 @@ public:
         WeakComponentImplHelperBase2::removeEventListener(rxListener);
     }
 
-    virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const& rType) override
+    virtual cpo::uno::Any SAL_CALL queryInterface(css::uno::Type const& rType) override
     {
         return WeakComponentImplHelper_query(rType, class_data_get(), this);
     }

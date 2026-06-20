@@ -40,7 +40,7 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 #include <SwStyleNameMapper.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
@@ -122,7 +122,7 @@ void SwFormatCharFormat::Notify(const SfxHint& rHint)
     }
 }
 
-bool SwFormatCharFormat::QueryValue( uno::Any& rVal, sal_uInt8 ) const
+bool SwFormatCharFormat::QueryValue( cpo::uno::Any& rVal, sal_uInt8 ) const
 {
     ProgName sCharFormatName;
     if(m_pCharFormat)
@@ -130,7 +130,7 @@ bool SwFormatCharFormat::QueryValue( uno::Any& rVal, sal_uInt8 ) const
     rVal <<= sCharFormatName.toString();
     return true;
 }
-bool SwFormatCharFormat::PutValue( const uno::Any& , sal_uInt8   )
+bool SwFormatCharFormat::PutValue( const cpo::uno::Any& , sal_uInt8   )
 {
     OSL_FAIL("format cannot be set with PutValue!");
     return false;
@@ -164,13 +164,13 @@ SwFormatAutoFormat* SwFormatAutoFormat::Clone( SfxItemPool* ) const
     return new SwFormatAutoFormat( *this );
 }
 
-bool SwFormatAutoFormat::QueryValue( uno::Any& rVal, sal_uInt8 ) const
+bool SwFormatAutoFormat::QueryValue( cpo::uno::Any& rVal, sal_uInt8 ) const
 {
     rVal <<= StylePool::nameOf( mpHandle );
     return true;
 }
 
-bool SwFormatAutoFormat::PutValue( const uno::Any& , sal_uInt8 )
+bool SwFormatAutoFormat::PutValue( const cpo::uno::Any& , sal_uInt8 )
 {
     //the format is not renameable via API
     return false;
@@ -302,7 +302,7 @@ const SvxMacro* SwFormatINetFormat::GetMacro( SvMacroItemId nEvent ) const
     return pRet;
 }
 
-bool SwFormatINetFormat::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFormatINetFormat::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
@@ -357,7 +357,7 @@ bool SwFormatINetFormat::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     }
     return true;
 }
-bool SwFormatINetFormat::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwFormatINetFormat::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bRet = true;
     nMemberId &= ~CONVERT_TWIPS;
@@ -498,7 +498,7 @@ SwFormatRuby* SwFormatRuby::Clone( SfxItemPool* ) const
     return new SwFormatRuby( *this );
 }
 
-bool SwFormatRuby::QueryValue( uno::Any& rVal,
+bool SwFormatRuby::QueryValue( cpo::uno::Any& rVal,
                             sal_uInt8 nMemberId ) const
 {
     bool bRet = true;
@@ -529,7 +529,7 @@ bool SwFormatRuby::QueryValue( uno::Any& rVal,
     }
     return bRet;
 }
-bool SwFormatRuby::PutValue( const uno::Any& rVal,
+bool SwFormatRuby::PutValue( const cpo::uno::Any& rVal,
                             sal_uInt8 nMemberId )
 {
     bool bRet = true;

@@ -157,7 +157,7 @@ bool OZipFileAccess::StringGoodForPattern_Impl( std::u16string_view aString,
 }
 
 // XInitialization
-void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArguments )
+void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< cpo::uno::Any >& aArguments )
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
@@ -242,7 +242,7 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
 }
 
 // XNameAccess
-uno::Any SAL_CALL OZipFileAccess::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL OZipFileAccess::getByName( const OUString& aName )
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
@@ -278,7 +278,7 @@ uno::Any SAL_CALL OZipFileAccess::getByName( const OUString& aName )
     }
     catch (const uno::Exception&)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetException( u"This package is unusable!"_ustr,
                   getXWeak(), anyEx);
     }
@@ -286,7 +286,7 @@ uno::Any SAL_CALL OZipFileAccess::getByName( const OUString& aName )
     if ( !xEntryStream.is() )
         throw uno::RuntimeException();
 
-    return uno::Any ( xEntryStream );
+    return cpo::uno::Any ( xEntryStream );
 }
 
 uno::Sequence< OUString > SAL_CALL OZipFileAccess::getElementNames()
@@ -464,7 +464,7 @@ uno::Sequence< OUString > SAL_CALL OZipFileAccess::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 package_OZipFileAccess_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new OZipFileAccess(context));
 }

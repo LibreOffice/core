@@ -100,11 +100,11 @@ uno::Reference<uno::XInterface> CheckDataPilotField::init()
 
     // Per default there's now just one sheet, make sure we have at least two, then
     xSpreadsheets->insertNewByName(u"Some Sheet"_ustr, 0);
-    uno::Any aAny = oIndexAccess->getByIndex(0);
+    cpo::uno::Any aAny = oIndexAccess->getByIndex(0);
     uno::Reference<sheet::XSpreadsheet> oSheet;
     CPPUNIT_ASSERT(aAny >>= oSheet);
 
-    uno::Any aAny2 = oIndexAccess->getByIndex(1);
+    cpo::uno::Any aAny2 = oIndexAccess->getByIndex(1);
     uno::Reference<sheet::XSpreadsheet> oSheet2;
     CPPUNIT_ASSERT(aAny2 >>= oSheet2);
 
@@ -128,12 +128,12 @@ uno::Reference<uno::XInterface> CheckDataPilotField::init()
 
     // change a value of a cell and check the change in the data pilot
     // cell of data
-    uno::Any oChangeCell;
+    cpo::uno::Any oChangeCell;
     oChangeCell <<= oSheet->getCellByPosition(1, 5);
     int x = sCellAddress.Column;
     int y = sCellAddress.Row + 3;
     // cell of the data pilot output
-    uno::Any oCheckCell;
+    cpo::uno::Any oCheckCell;
     oCheckCell <<= oSheet->getCellByPosition(x, y);
     // create the test objects
     uno::Reference<sheet::XDataPilotTablesSupplier> DPTS(oSheet, uno::UNO_QUERY_THROW);
@@ -141,14 +141,14 @@ uno::Reference<uno::XInterface> CheckDataPilotField::init()
     uno::Reference<sheet::XDataPilotDescriptor> DPDsc = DPT->createDataPilotDescriptor();
     DPDsc->setSourceRange(sCellRangeAddress);
 
-    uno::Any oDataPilotField = DPDsc->getDataPilotFields()->getByIndex(0);
+    cpo::uno::Any oDataPilotField = DPDsc->getDataPilotFields()->getByIndex(0);
     uno::Reference<beans::XPropertySet> fieldPropSet(oDataPilotField, uno::UNO_QUERY_THROW);
 
-    uno::Any sum;
+    cpo::uno::Any sum;
     sum <<= sheet::GeneralFunction_SUM;
     fieldPropSet->setPropertyValue(u"Function"_ustr, sum);
 
-    uno::Any data;
+    cpo::uno::Any data;
     data <<= sheet::DataPilotFieldOrientation_DATA;
     fieldPropSet->setPropertyValue(u"Orientation"_ustr, data);
 

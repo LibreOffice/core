@@ -65,14 +65,14 @@ void PivotTableDataSequence::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHin
     }
 }
 
-uno::Sequence<uno::Any> SAL_CALL PivotTableDataSequence::getData()
+uno::Sequence<cpo::uno::Any> SAL_CALL PivotTableDataSequence::getData()
 {
     SolarMutexGuard aGuard;
 
     if (!m_pDocument)
         throw uno::RuntimeException();
 
-    uno::Sequence<uno::Any> aSeq(m_aData.size());
+    uno::Sequence<cpo::uno::Any> aSeq(m_aData.size());
     auto pSeq = aSeq.getArray();
 
     size_t i = 0;
@@ -203,7 +203,7 @@ uno::Reference< beans::XPropertySetInfo> SAL_CALL PivotTableDataSequence::getPro
     return aRef;
 }
 
-void SAL_CALL PivotTableDataSequence::setPropertyValue(const OUString& rPropertyName, const uno::Any& rValue)
+void SAL_CALL PivotTableDataSequence::setPropertyValue(const OUString& rPropertyName, const cpo::uno::Any& rValue)
 {
     if (rPropertyName == SC_UNONAME_ROLE)
     {
@@ -219,9 +219,9 @@ void SAL_CALL PivotTableDataSequence::setPropertyValue(const OUString& rProperty
         throw beans::UnknownPropertyException(rPropertyName);
 }
 
-uno::Any SAL_CALL PivotTableDataSequence::getPropertyValue(const OUString& rPropertyName)
+cpo::uno::Any SAL_CALL PivotTableDataSequence::getPropertyValue(const OUString& rPropertyName)
 {
-    uno::Any aReturn;
+    cpo::uno::Any aReturn;
     if (rPropertyName == SC_UNONAME_ROLE)
         aReturn <<= m_aRole;
     else if (rPropertyName == SC_UNONAME_INCLUDEHIDDENCELLS)

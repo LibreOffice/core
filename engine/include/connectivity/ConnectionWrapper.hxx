@@ -61,7 +61,7 @@ namespace connectivity
 
         // XServiceInfo
         DECLARE_SERVICE_INFO();
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) override;
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
         // css::lang::XUnoTunnel

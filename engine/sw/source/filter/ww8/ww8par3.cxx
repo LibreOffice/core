@@ -2287,7 +2287,7 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo =
         rPropSet->getPropertySetInfo();
 
-    uno::Any aTmp;
+    cpo::uno::Any aTmp;
     for (const CtrlFontMapEntry* pMap = aMapTable; pMap->nWhichId; ++pMap)
     {
         bool bSet = true;
@@ -2411,7 +2411,7 @@ bool WW8FormulaListBox::Import(const uno::Reference <
 
     uno::Reference<beans::XPropertySet> xPropSet(xCreate, uno::UNO_QUERY);
 
-    uno::Any aTmp;
+    cpo::uno::Any aTmp;
     if (!msTitle.isEmpty())
         aTmp <<= msTitle;
     else
@@ -2424,7 +2424,7 @@ bool WW8FormulaListBox::Import(const uno::Reference <
         xPropSet->setPropertyValue(u"HelpText"_ustr, aTmp );
     }
 
-    xPropSet->setPropertyValue(u"Dropdown"_ustr, css::uno::Any(true));
+    xPropSet->setPropertyValue(u"Dropdown"_ustr, cpo::uno::Any(true));
 
     if (!maListEntries.empty())
     {
@@ -2473,7 +2473,7 @@ static void lcl_AddToPropertyContainer
     {
         uno::Reference<beans::XPropertyContainer>
             xPropContainer(xPropSet, uno::UNO_QUERY);
-        uno::Any aAny((OUString()));
+        cpo::uno::Any aAny((OUString()));
         xPropContainer->addProperty
             (rPropertyName,
              static_cast<sal_Int16>(beans::PropertyAttribute::BOUND |
@@ -2481,7 +2481,7 @@ static void lcl_AddToPropertyContainer
              aAny);
     }
 
-    uno::Any aAnyValue(rValue);
+    cpo::uno::Any aAnyValue(rValue);
     xPropSet->setPropertyValue(rPropertyName, aAnyValue );
 }
 
@@ -2502,7 +2502,7 @@ bool WW8FormulaCheckBox::Import(const uno::Reference <
     rSz.Width = 16 * mhpsCheckBox;
     rSz.Height = 16 * mhpsCheckBox;
 
-    uno::Any aTmp;
+    cpo::uno::Any aTmp;
     if (!msTitle.isEmpty())
         aTmp <<= msTitle;
     else
@@ -2533,7 +2533,7 @@ bool SwMSConvertControls::InsertControl(
     bool bFloatingCtrl)
 {
     const uno::Reference< container::XIndexContainer > &rComps = GetFormComps();
-    uno::Any aTmp( &rFComp, cppu::UnoType<form::XFormComponent>::get());
+    cpo::uno::Any aTmp( &rFComp, cppu::UnoType<form::XFormComponent>::get());
     rComps->insertByIndex( rComps->getCount(), aTmp );
 
     const uno::Reference< lang::XMultiServiceFactory > &rServiceFactory =
@@ -2562,9 +2562,9 @@ bool SwMSConvertControls::InsertControl(
     else
         nTemp = text::TextContentAnchorType_AS_CHARACTER;
 
-    xShapePropSet->setPropertyValue(u"AnchorType"_ustr, uno::Any(static_cast<sal_Int16>(nTemp)) );
+    xShapePropSet->setPropertyValue(u"AnchorType"_ustr, cpo::uno::Any(static_cast<sal_Int16>(nTemp)) );
 
-    xShapePropSet->setPropertyValue(u"VertOrient"_ustr, uno::Any(sal_Int16(text::VertOrientation::TOP)) );
+    xShapePropSet->setPropertyValue(u"VertOrient"_ustr, cpo::uno::Any(sal_Int16(text::VertOrientation::TOP)) );
 
     uno::Reference< text::XText >  xDummyTextRef;
     uno::Reference< text::XTextRange >  xTextRg =

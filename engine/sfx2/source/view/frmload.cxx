@@ -82,7 +82,7 @@ using ::com::sun::star::frame::XFrame;
 using ::com::sun::star::frame::XLoadable;
 using ::com::sun::star::task::XInteractionHandler;
 using ::com::sun::star::task::XInteractionHandler2;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;
@@ -159,7 +159,7 @@ private:
                         );
 
     static void         impl_handleCaughtError_nothrow(
-                            const css::uno::Any& i_rCaughtError,
+                            const cpo::uno::Any& i_rCaughtError,
                             const ::comphelper::NamedValueCollection& i_rDescriptor
                         );
 
@@ -676,10 +676,10 @@ bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rArgs,
             assert(xInStream.is());
 
             aDescriptor.put(u"URL"_ustr, u"private:stream"_ustr);
-            aDescriptor.put(u"InputStream"_ustr, uno::Any(xInStream));
+            aDescriptor.put(u"InputStream"_ustr, cpo::uno::Any(xInStream));
         }
-        aDescriptor.put(u"ReadOnly"_ustr, uno::Any(true));
-        aDescriptor.put(u"YrsConnect"_ustr, uno::Any(xConnection));
+        aDescriptor.put(u"ReadOnly"_ustr, cpo::uno::Any(true));
+        aDescriptor.put(u"YrsConnect"_ustr, cpo::uno::Any(xConnection));
     }
 #endif
 
@@ -825,7 +825,7 @@ bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rArgs,
         Reference<lang::XInitialization> xInit(xController, UNO_QUERY);
         if (xInit.is())
         {
-            uno::Sequence<uno::Any> aArgs; // empty for now.
+            uno::Sequence<cpo::uno::Any> aArgs; // empty for now.
             xInit->initialize(aArgs);
         }
 
@@ -882,7 +882,7 @@ Sequence< OUString > SAL_CALL SfxFrameLoader_Impl::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_office_FrameLoader_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SfxFrameLoader_Impl(context));
 }

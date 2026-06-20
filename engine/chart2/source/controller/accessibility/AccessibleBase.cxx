@@ -52,7 +52,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Reference;
 using ::osl::MutexGuard;
 using ::osl::ClearableMutexGuard;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 
 namespace chart
 {
@@ -89,8 +89,8 @@ bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId
     {
         // event is addressed to this object
 
-        css::uno::Any aEmpty;
-        css::uno::Any aSelected;
+        cpo::uno::Any aEmpty;
+        cpo::uno::Any aSelected;
         aSelected <<= AccessibleStateType::SELECTED;
         switch( eEventType )
         {
@@ -339,7 +339,7 @@ void AccessibleBase::SetInfo( const AccessibleElementInfo & rNewInfo )
     {
         KillAllChildren();
     }
-    NotifyAccessibleEvent(AccessibleEventId::INVALIDATE_ALL_CHILDREN, uno::Any(), uno::Any());
+    NotifyAccessibleEvent(AccessibleEventId::INVALIDATE_ALL_CHILDREN, cpo::uno::Any(), cpo::uno::Any());
 }
 
 // ________ (XComponent::dispose) ________

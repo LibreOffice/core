@@ -23,7 +23,7 @@ import lib.MultiMethodTest;
 import com.sun.star.container.XSet;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.script.XTypeConverter;
-import com.sun.star.uno.Any;
+import cpo.uno.Any;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
 

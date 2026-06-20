@@ -503,7 +503,7 @@ EscherPersistTable::PtReplace(unsigned int, unsigned int)
 EscherPersistTable::~EscherPersistTable()
 EscherPropertyContainer::CreateGraphicProperties(com::sun::star::uno::Reference<com::sun::star::drawing::XShape> const&, GraphicObject const&)
 EscherPropertyContainer::GetGradientColor(com::sun::star::awt::Gradient const*, unsigned int)
-EscherPropertyContainer::GetPolyPolygon(com::sun::star::uno::Any const&)
+EscherPropertyContainer::GetPolyPolygon(cpo::uno::Any const&)
 EscherPropertyContainer::GetValueForEnhancedCustomShapeParameter(com::sun::star::drawing::EnhancedCustomShapeParameter const&, std::__debug::vector<int, std::allocator<int> > const&, bool)
 EscherPropertyContainer::ImplCreateEmbeddedBmp(GraphicObject const&)
 EscherPropertyContainer::ImplCreateGraphicAttributes(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&, unsigned int, bool)
@@ -529,7 +529,7 @@ FillPathWithPaint(SkPath const&, SkPaint const&, SkPath*, SkRect const*, float)
 FilterConfigItem::GetPropertyValue(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&, rtl::OUString const&)
 FilterConfigItem::GetStatusIndicator() const
 FilterConfigItem::ImpInitTree(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
-FilterConfigItem::ImplGetPropertyValue(com::sun::star::uno::Any&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&, rtl::OUString const&)
+FilterConfigItem::ImplGetPropertyValue(cpo::uno::Any&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&, rtl::OUString const&)
 FilterConfigItem::WritePropertyValue(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>&, com::sun::star::beans::PropertyValue const&)
 FixedBitmap::SetBitmap(BitmapEx const&)
 FixedHyperlink::GetFocus()
@@ -614,7 +614,7 @@ FmGridControl::isColumnSelected(DbGridColumn const*) const
 FmGridControl::markColumn(unsigned short)
 FmGridControl::positioned()
 FmGridControl::propertyChange(com::sun::star::beans::PropertyChangeEvent const&)
-FmGridControl::selectBookmarks(com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&)
+FmGridControl::selectBookmarks(com::sun::star::uno::Sequence<cpo::uno::Any> const&)
 FmGridHeader::GetModelColumnPos(unsigned short) const
 FmGridHeader::triggerColumnContextMenu(Point const&)
 FmSearchEngine::FormatField(int)
@@ -745,7 +745,7 @@ GlobalEventConfig::getByName(rtl::OUString const&)
 GlobalEventConfig::getElementType()
 GlobalEventConfig::getEvents()
 GlobalEventConfig::hasElements()
-GlobalEventConfig::replaceByName(rtl::OUString const&, com::sun::star::uno::Any const&)
+GlobalEventConfig::replaceByName(rtl::OUString const&, cpo::uno::Any const&)
 GlobalEventConfig::~GlobalEventConfig()
 GrBackendFormat::GrBackendFormat(GrBackendFormat const&)
 GrBackendFormat::GrBackendFormat(GrColorType, SkTextureCompressionType, bool)
@@ -1559,7 +1559,7 @@ QtFilePicker::getImplementationName()
 QtFilePicker::getResString(TranslateId)
 QtFilePicker::getSupportedServiceNames()
 QtFilePicker::handleGetListValue(QComboBox const*, short)
-QtFilePicker::handleSetListValue(QComboBox*, short, com::sun::star::uno::Any const&)
+QtFilePicker::handleSetListValue(QComboBox*, short, cpo::uno::Any const&)
 QtFilePicker::metaObject() const
 QtFilePicker::prepareExecute()
 QtFilePicker::supportsService(rtl::OUString const&)
@@ -1749,7 +1749,7 @@ SbMethod::GetStatics()
 SbMethod::LoadData(SvStream&, unsigned short)
 SbMethod::StoreData(SvStream&) const
 SbMethod::~SbMethod()
-SbModule::createCOMWrapperForIface(com::sun::star::uno::Any&, SbClassModuleObject*)
+SbModule::createCOMWrapperForIface(cpo::uno::Any&, SbClassModuleObject*)
 SbModule::~SbModule()
 SbxArray::Clear()
 SbxArray::GetAlias(unsigned int)
@@ -1798,7 +1798,7 @@ ScAppOptions::SetDefaults()
 ScAppOptions::SetLRUFuncList(unsigned short const*, unsigned short)
 ScAppOptions::operator=(ScAppOptions const&)
 ScAreaLink::Closed()
-ScAreaLink::DataChanged(rtl::OUString const&, com::sun::star::uno::Any const&)
+ScAreaLink::DataChanged(rtl::OUString const&, cpo::uno::Any const&)
 ScAreaLink::Edit(weld::Window*, Link<sfx2::SvBaseLink&, void> const&)
 ScAreaLink::FindExtRange(ScRange&, ScDocument const&, rtl::OUString const&)
 ScAreaLink::IsEqual(std::basic_string_view<char16_t, std::char_traits<char16_t> >, std::basic_string_view<char16_t, std::char_traits<char16_t> >, std::basic_string_view<char16_t, std::char_traits<char16_t> >, std::basic_string_view<char16_t, std::char_traits<char16_t> >, ScRange const&) const
@@ -1832,9 +1832,9 @@ ScCalcConfig::setOpenCLConfigToDefault()
 ScCellFormat::GetInputString(ScRefCellValue const&, unsigned int, ScInterpreterContext*, ScDocument const&, svl::SharedString const**, bool, bool)
 ScCellFormat::GetOutputString(ScDocument&, ScAddress const&, ScRefCellValue const&)
 ScCellRangesBase::GetItemPropertyMap()
-ScCellRangesBase::GetOnePropertyValue(SfxItemPropertyMapEntry const*, com::sun::star::uno::Any&)
+ScCellRangesBase::GetOnePropertyValue(SfxItemPropertyMapEntry const*, cpo::uno::Any&)
 ScCellRangesBase::Notify(SfxBroadcaster&, SfxHint const&)
-ScCellRangesBase::SetOnePropertyValue(SfxItemPropertyMapEntry const*, com::sun::star::uno::Any const&)
+ScCellRangesBase::SetOnePropertyValue(SfxItemPropertyMapEntry const*, cpo::uno::Any const&)
 ScCellRangesObj::GetObjectByIndex_Impl(int) const
 ScCellRangesObj::RefChanged()
 ScCellRangesObj::acquire()
@@ -1855,13 +1855,13 @@ ScCellRangesObj::getSupportedServiceNames()
 ScCellRangesObj::getTypes()
 ScCellRangesObj::hasByName(rtl::OUString const&)
 ScCellRangesObj::hasElements()
-ScCellRangesObj::insertByName(rtl::OUString const&, com::sun::star::uno::Any const&)
+ScCellRangesObj::insertByName(rtl::OUString const&, cpo::uno::Any const&)
 ScCellRangesObj::queryInterface(com::sun::star::uno::Type const&)
 ScCellRangesObj::release()
 ScCellRangesObj::removeByName(rtl::OUString const&)
 ScCellRangesObj::removeRangeAddress(com::sun::star::table::CellRangeAddress const&)
 ScCellRangesObj::removeRangeAddresses(com::sun::star::uno::Sequence<com::sun::star::table::CellRangeAddress> const&)
-ScCellRangesObj::replaceByName(rtl::OUString const&, com::sun::star::uno::Any const&)
+ScCellRangesObj::replaceByName(rtl::OUString const&, cpo::uno::Any const&)
 ScCellRangesObj::supportsService(rtl::OUString const&)
 ScCellRangesObj::~ScCellRangesObj()
 ScChangeTrack::AppendDeleteRange(ScRange const&, ScDocument*, short, unsigned long)
@@ -2155,7 +2155,7 @@ ScImportExport::Doc2Sylk(SvStream&)
 ScImportExport::Doc2Text(SvStream&)
 ScImportExport::EndPaste(bool)
 ScImportExport::ExportByteString(rtl::OString&, unsigned short, SotClipboardFormatId)
-ScImportExport::ExportData(std::basic_string_view<char16_t, std::char_traits<char16_t> >, com::sun::star::uno::Any&)
+ScImportExport::ExportData(std::basic_string_view<char16_t, std::char_traits<char16_t> >, cpo::uno::Any&)
 ScImportExport::ExportString(rtl::OUString&, SotClipboardFormatId)
 ScImportExport::ExtText2Doc(SvStream&)
 ScImportExport::HTML2Doc(SvStream&, rtl::OUString const&)
@@ -2199,7 +2199,7 @@ ScMergeFlagAttr::HasPivotToggle() const
 ScMergeFlagAttr::ScMergeFlagAttr()
 ScMergeFlagAttr::dumpAsXml(_xmlTextWriter*) const
 ScModelTestBase::loadFile(rtl::OUString const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)
-ScModule::CallAutomationApplicationEventSinks(rtl::OUString const&, com::sun::star::uno::Sequence<com::sun::star::uno::Any>&)
+ScModule::CallAutomationApplicationEventSinks(rtl::OUString const&, com::sun::star::uno::Sequence<cpo::uno::Any>&)
 ScModule::Find1RefWindow(unsigned short, weld::Window const*)
 ScModule::InputEnterHandler(ScEnterMode, bool)
 ScModule::RegisterRefController(unsigned short, std::shared_ptr<SfxDialogController>&, weld::Window*)
@@ -2226,15 +2226,15 @@ ScNoteUtil::CreateNoteFromGenerator(ScDocument&, ScAddress const&, std::unique_p
 ScNoteUtil::CreateTempCaption(ScDocument&, ScAddress const&, SdrPage&, std::basic_string_view<char16_t, std::char_traits<char16_t> >, tools::Rectangle const&, bool)
 ScNoteUtil::InsertNote(ScDocument&, ScAddress const&, ScNoteData&&, bool, unsigned int)
 ScPageHFItem::Clone(SfxItemPool*) const
-ScPageHFItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-ScPageHFItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+ScPageHFItem::PutValue(cpo::uno::Any const&, unsigned char)
+ScPageHFItem::QueryValue(cpo::uno::Any&, unsigned char) const
 ScPageHFItem::ScPageHFItem(ScPageHFItem const&)
 ScPageHFItem::dumpAsXml(_xmlTextWriter*) const
 ScPageHFItem::operator==(SfxPoolItem const&) const
 ScPageScaleToItem::Clone(SfxItemPool*) const
 ScPageScaleToItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-ScPageScaleToItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-ScPageScaleToItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+ScPageScaleToItem::PutValue(cpo::uno::Any const&, unsigned char)
+ScPageScaleToItem::QueryValue(cpo::uno::Any&, unsigned char) const
 ScPageScaleToItem::dumpAsXml(_xmlTextWriter*) const
 ScPageScaleToItem::operator==(SfxPoolItem const&) const
 ScPaintHint::ScPaintHint(ScRange const&, PaintPartFlags, long)
@@ -2289,8 +2289,8 @@ ScProtectionAttr::Clone(SfxItemPool*) const
 ScProtectionAttr::CreateDefault()
 ScProtectionAttr::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 ScProtectionAttr::GetValueText() const
-ScProtectionAttr::PutValue(com::sun::star::uno::Any const&, unsigned char)
-ScProtectionAttr::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+ScProtectionAttr::PutValue(cpo::uno::Any const&, unsigned char)
+ScProtectionAttr::QueryValue(cpo::uno::Any&, unsigned char) const
 ScProtectionAttr::ScProtectionAttr(ScProtectionAttr const&)
 ScProtectionAttr::dumpAsXml(_xmlTextWriter*) const
 ScQueryEntry::Clear()
@@ -2405,7 +2405,7 @@ ScSheetDPData::Dump() const
 ScSheetDPData::FilterCacheTable(std::__debug::vector<ScDPFilteredCache::Criterion, std::allocator<ScDPFilteredCache::Criterion> >&&, std::__debug::unordered_set<int, std::hash<int>, std::equal_to<int>, std::allocator<int> >&&)
 ScSheetDPData::GetCacheTable() const
 ScSheetDPData::GetColumnCount()
-ScSheetDPData::GetDrillDownData(std::__debug::vector<ScDPFilteredCache::Criterion, std::allocator<ScDPFilteredCache::Criterion> >&&, std::__debug::unordered_set<int, std::hash<int>, std::equal_to<int>, std::allocator<int> >&&, com::sun::star::uno::Sequence<com::sun::star::uno::Sequence<com::sun::star::uno::Any> >&)
+ScSheetDPData::GetDrillDownData(std::__debug::vector<ScDPFilteredCache::Criterion, std::allocator<ScDPFilteredCache::Criterion> >&&, std::__debug::unordered_set<int, std::hash<int>, std::equal_to<int>, std::allocator<int> >&&, com::sun::star::uno::Sequence<com::sun::star::uno::Sequence<cpo::uno::Any> >&)
 ScSheetDPData::GetNumberFormat(int)
 ScSheetDPData::IsDateDimension(int)
 ScSheetDPData::IsRepeatIfEmpty()
@@ -2443,7 +2443,7 @@ ScSingleRefData::operator!=(ScSingleRefData const&) const
 ScSingleRefData::operator==(ScSingleRefData const&) const
 ScSingleRefData::toAbs(ScSheetLimits const&, ScAddress const&) const
 ScSortItem::Clone(SfxItemPool*) const
-ScSortItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+ScSortItem::QueryValue(cpo::uno::Any&, unsigned char) const
 ScSortItem::operator==(SfxPoolItem const&) const
 ScSortParam::Clear()
 ScSortParam::MoveToDest()
@@ -2463,7 +2463,7 @@ ScStyleSheetPool::SetDocument(ScDocument*)
 ScStyleSheetPool::setAllParaStandard()
 ScStyleSheetPool::~ScStyleSheetPool()
 ScSubTotalItem::Clone(SfxItemPool*) const
-ScSubTotalItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+ScSubTotalItem::QueryValue(cpo::uno::Any&, unsigned char) const
 ScSubTotalItem::operator==(SfxPoolItem const&) const
 ScSubTotalParam::Clear()
 ScSubTotalParam::ScSubTotalParam(ScSubTotalParam const&)
@@ -2540,7 +2540,7 @@ ScUserListItem::Clone(SfxItemPool*) const
 ScUserListItem::ScUserListItem(ScUserListItem const&)
 ScUserListItem::operator==(SfxPoolItem const&) const
 ScVbaPropValue::getValue()
-ScVbaPropValue::setValue(com::sun::star::uno::Any const&)
+ScVbaPropValue::setValue(cpo::uno::Any const&)
 ScVbaShape::addListeners()
 ScVbaShape::removeShapeListener()
 ScVbaShape::removeShapesListener()
@@ -2552,7 +2552,7 @@ ScVbaShapeRange::Select()
 ScVbaShapeRange::TextFrame()
 ScVbaShapeRange::WrapFormat()
 ScVbaShapeRange::ZOrder(int)
-ScVbaShapeRange::createCollectionObject(com::sun::star::uno::Any const&)
+ScVbaShapeRange::createCollectionObject(cpo::uno::Any const&)
 ScVbaShapeRange::createEnumeration()
 ScVbaShapeRange::getElementType()
 ScVbaShapeRange::getFill()
@@ -2584,16 +2584,16 @@ ScVbaShapes::AddRectangle(int, int, int, int)
 ScVbaShapes::AddShape(int, int, int, int, int)
 ScVbaShapes::AddTextbox(int, int, int, int, int)
 ScVbaShapes::AddTextboxInWriter(int, int, int, int)
-ScVbaShapes::Range(com::sun::star::uno::Any const&)
+ScVbaShapes::Range(cpo::uno::Any const&)
 ScVbaShapes::SelectAll()
-ScVbaShapes::createCollectionObject(com::sun::star::uno::Any const&)
+ScVbaShapes::createCollectionObject(cpo::uno::Any const&)
 ScVbaShapes::createEnumeration()
 ScVbaShapes::createName(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
 ScVbaShapes::createShape(rtl::OUString const&)
 ScVbaShapes::getElementType()
 ScVbaShapes::getServiceImplName()
 ScVbaShapes::getServiceNames()
-ScVbaShapes::getShapesByArrayIndices(com::sun::star::uno::Any const&)
+ScVbaShapes::getShapesByArrayIndices(cpo::uno::Any const&)
 ScVbaShapes::initBaseCollection()
 ScVbaShapes::setDefaultShapeProperties(com::sun::star::uno::Reference<com::sun::star::drawing::XShape> const&)
 ScVbaShapes::setShape_NameProperty(com::sun::star::uno::Reference<com::sun::star::drawing::XShape> const&, rtl::OUString const&)
@@ -2704,40 +2704,40 @@ SdOptionsGeneric::operator=(SdOptionsGeneric const&)
 SdOptionsItem::GetProperties(com::sun::star::uno::Sequence<rtl::OUString> const&)
 SdOptionsItem::ImplCommit()
 SdOptionsItem::Notify(com::sun::star::uno::Sequence<rtl::OUString> const&)
-SdOptionsItem::PutProperties(com::sun::star::uno::Sequence<rtl::OUString> const&, com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&)
+SdOptionsItem::PutProperties(com::sun::star::uno::Sequence<rtl::OUString> const&, com::sun::star::uno::Sequence<cpo::uno::Any> const&)
 SdOptionsItem::SdOptionsItem(SdOptionsGeneric const&, rtl::OUString const&)
 SdOptionsItem::~SdOptionsItem()
 SdOptionsLayout::GetPropNameArray(char const**&, unsigned long&) const
-SdOptionsLayout::ReadData(com::sun::star::uno::Any const*)
+SdOptionsLayout::ReadData(cpo::uno::Any const*)
 SdOptionsLayout::SdOptionsLayout(bool, bool)
-SdOptionsLayout::WriteData(com::sun::star::uno::Any*) const
+SdOptionsLayout::WriteData(cpo::uno::Any*) const
 SdOptionsLayout::operator==(SdOptionsLayout const&) const
 SdOptionsMisc::GetDisplay() const
 SdOptionsMisc::GetDragThresholdPixels() const
 SdOptionsMisc::GetPropNameArray(char const**&, unsigned long&) const
-SdOptionsMisc::ReadData(com::sun::star::uno::Any const*)
+SdOptionsMisc::ReadData(cpo::uno::Any const*)
 SdOptionsMisc::SdOptionsMisc(bool, bool)
 SdOptionsMisc::SetDisplay(int)
 SdOptionsMisc::SetDragThreshold(int)
-SdOptionsMisc::WriteData(com::sun::star::uno::Any*) const
+SdOptionsMisc::WriteData(cpo::uno::Any*) const
 SdOptionsMisc::operator==(SdOptionsMisc const&) const
 SdOptionsMiscItem::Clone(SfxItemPool*) const
 SdOptionsMiscItem::SdOptionsMiscItem(SdOptions const*, sd::FrameView const*)
 SdOptionsMiscItem::SetOptions(SdOptions*) const
 SdOptionsMiscItem::operator==(SfxPoolItem const&) const
 SdOptionsPrint::GetPropNameArray(char const**&, unsigned long&) const
-SdOptionsPrint::ReadData(com::sun::star::uno::Any const*)
+SdOptionsPrint::ReadData(cpo::uno::Any const*)
 SdOptionsPrint::SdOptionsPrint(bool, bool)
-SdOptionsPrint::WriteData(com::sun::star::uno::Any*) const
+SdOptionsPrint::WriteData(cpo::uno::Any*) const
 SdOptionsPrint::operator==(SdOptionsPrint const&) const
 SdOptionsPrintItem::Clone(SfxItemPool*) const
 SdOptionsPrintItem::SdOptionsPrintItem(SdOptions const*)
 SdOptionsPrintItem::SetOptions(SdOptions*) const
 SdOptionsPrintItem::operator==(SfxPoolItem const&) const
 SdOptionsSnap::GetPropNameArray(char const**&, unsigned long&) const
-SdOptionsSnap::ReadData(com::sun::star::uno::Any const*)
+SdOptionsSnap::ReadData(cpo::uno::Any const*)
 SdOptionsSnap::SdOptionsSnap(bool, bool)
-SdOptionsSnap::WriteData(com::sun::star::uno::Any*) const
+SdOptionsSnap::WriteData(cpo::uno::Any*) const
 SdOptionsSnap::operator==(SdOptionsSnap const&) const
 SdOptionsSnapItem::Clone(SfxItemPool*) const
 SdOptionsSnapItem::SdOptionsSnapItem(SdOptions const*, sd::FrameView const*)
@@ -2793,7 +2793,7 @@ SdPage::cloneAnimations(SdPage&) const
 SdPage::createAnnotation(rtl::Reference<sdr::annotation::Annotation>&)
 SdPage::createUnoPage()
 SdPage::dumpAsXml(_xmlTextWriter*) const
-SdPage::getAlienAttributes(com::sun::star::uno::Any&)
+SdPage::getAlienAttributes(cpo::uno::Any&)
 SdPage::getAnimationNode()
 SdPage::getGraphicsForPrefetch(std::__debug::vector<Graphic*, std::allocator<Graphic*> >&) const
 SdPage::getImplementation(com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> const&)
@@ -2809,7 +2809,7 @@ SdPage::onParagraphRemoving(Outliner const*, Paragraph const*, SdrObject*)
 SdPage::onRemoveObject(SdrObject*)
 SdPage::removeAnimations(SdrObject const*)
 SdPage::removeAnnotation(rtl::Reference<sdr::annotation::Annotation> const&)
-SdPage::setAlienAttributes(com::sun::star::uno::Any const&)
+SdPage::setAlienAttributes(cpo::uno::Any const&)
 SdPage::setAnimationNode(com::sun::star::uno::Reference<com::sun::star::animations::XAnimationNode> const&)
 SdPage::setTransitionDirection(bool)
 SdPage::setTransitionDuration(double)
@@ -2838,7 +2838,7 @@ SdXImpressDocument::addVetoableChangeListener(rtl::OUString const&, com::sun::st
 SdXImpressDocument::create(rtl::OUString const&, rtl::OUString const&)
 SdXImpressDocument::createAnyCompareByName(rtl::OUString const&)
 SdXImpressDocument::createInstance(rtl::OUString const&)
-SdXImpressDocument::createInstanceWithArguments(rtl::OUString const&, com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&)
+SdXImpressDocument::createInstanceWithArguments(rtl::OUString const&, com::sun::star::uno::Sequence<cpo::uno::Any> const&)
 SdXImpressDocument::dispose()
 SdXImpressDocument::duplicate(com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> const&)
 SdXImpressDocument::getAvailableServiceNames()
@@ -2858,8 +2858,8 @@ SdXImpressDocument::getPostIts(tools::JsonWriter&)
 SdXImpressDocument::getPresentation()
 SdXImpressDocument::getPropertySetInfo()
 SdXImpressDocument::getPropertyValue(rtl::OUString const&)
-SdXImpressDocument::getRenderer(int, com::sun::star::uno::Any const&, com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&)
-SdXImpressDocument::getRendererCount(com::sun::star::uno::Any const&, com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&)
+SdXImpressDocument::getRenderer(int, cpo::uno::Any const&, com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&)
+SdXImpressDocument::getRendererCount(cpo::uno::Any const&, com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&)
 SdXImpressDocument::getSdrModelFromUnoModel() const
 SdXImpressDocument::getSomething(com::sun::star::uno::Sequence<signed char> const&)
 SdXImpressDocument::getStyleFamilies()
@@ -2877,13 +2877,13 @@ SdXImpressDocument::queryInterface(com::sun::star::uno::Type const&)
 SdXImpressDocument::release()
 SdXImpressDocument::removePropertyChangeListener(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> const&)
 SdXImpressDocument::removeVetoableChangeListener(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> const&)
-SdXImpressDocument::render(int, com::sun::star::uno::Any const&, com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&)
+SdXImpressDocument::render(int, cpo::uno::Any const&, com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&)
 SdXImpressDocument::selectPart(int, int)
 SdXImpressDocument::setClientVisibleArea(tools::Rectangle const&)
 SdXImpressDocument::setClipboard(com::sun::star::uno::Reference<com::sun::star::datatransfer::clipboard::XClipboard> const&)
 SdXImpressDocument::setEditMode(int)
 SdXImpressDocument::setPartMode(int)
-SdXImpressDocument::setPropertyValue(rtl::OUString const&, com::sun::star::uno::Any const&)
+SdXImpressDocument::setPropertyValue(rtl::OUString const&, cpo::uno::Any const&)
 SdXImpressDocument::setViewData(com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> const&)
 SdXImpressDocument::supportsService(rtl::OUString const&)
 SdXImpressDocument::unlockControllers()
@@ -2925,7 +2925,7 @@ SdrGrafRedItem::Clone(SfxItemPool*) const
 SdrGrafTransparenceItem::Clone(SfxItemPool*) const
 SdrHelpLineList::HitTest(Point const&, unsigned short, OutputDevice const&) const
 SdrHint::SdrHint(SdrHintKind, SdrObject const&, SdrPage const*)
-SdrIFrameLink::DataChanged(rtl::OUString const&, com::sun::star::uno::Any const&)
+SdrIFrameLink::DataChanged(rtl::OUString const&, cpo::uno::Any const&)
 SdrIFrameLink::SdrIFrameLink(SdrOle2Obj*)
 SdrLayer::SdrLayer(o3tl::strong_int<short, SdrLayerIDTag>, rtl::OUString)
 SdrLayer::operator==(SdrLayer const&) const
@@ -3029,7 +3029,7 @@ SdrObjGroup::Rotate(Point const&, o3tl::strong_int<int, FractionTag<100> >, doub
 SdrObjGroup::SdrObjGroup(SdrModel&, SdrObjGroup const&)
 SdrObjGroup::SetAnchorPos(Point const&)
 SdrObjGroup::SetBoundRectDirty()
-SdrObjGroup::SetGrabBagItem(com::sun::star::uno::Any const&)
+SdrObjGroup::SetGrabBagItem(cpo::uno::Any const&)
 SdrObjGroup::SetLogicRect(tools::Rectangle const&)
 SdrObjGroup::SetRelativePos(Point const&)
 SdrObjGroup::SetSnapRect(tools::Rectangle const&)
@@ -3321,14 +3321,14 @@ SdrTextAniDirectionItem::Clone(SfxItemPool*) const
 SdrTextAniDirectionItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SdrTextAniDirectionItem::GetValueCount() const
 SdrTextAniDirectionItem::GetValueTextByPos(unsigned short)
-SdrTextAniDirectionItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SdrTextAniDirectionItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SdrTextAniDirectionItem::PutValue(cpo::uno::Any const&, unsigned char)
+SdrTextAniDirectionItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SdrTextAniKindItem::Clone(SfxItemPool*) const
 SdrTextAniKindItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SdrTextAniKindItem::GetValueCount() const
 SdrTextAniKindItem::GetValueTextByPos(unsigned short)
-SdrTextAniKindItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SdrTextAniKindItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SdrTextAniKindItem::PutValue(cpo::uno::Any const&, unsigned char)
+SdrTextAniKindItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SdrTextAniStartInsideItem::Clone(SfxItemPool*) const
 SdrTextAniStopInsideItem::Clone(SfxItemPool*) const
 SdrTextFitToSizeTypeItem::Clone(SfxItemPool*) const
@@ -3337,16 +3337,16 @@ SdrTextFitToSizeTypeItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit,
 SdrTextFitToSizeTypeItem::GetValueCount() const
 SdrTextFitToSizeTypeItem::GetValueTextByPos(unsigned short)
 SdrTextFitToSizeTypeItem::HasBoolValue() const
-SdrTextFitToSizeTypeItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SdrTextFitToSizeTypeItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SdrTextFitToSizeTypeItem::PutValue(cpo::uno::Any const&, unsigned char)
+SdrTextFitToSizeTypeItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SdrTextFitToSizeTypeItem::SetBoolValue(bool)
 SdrTextFitToSizeTypeItem::operator==(SfxPoolItem const&) const
 SdrTextHorzAdjustItem::Clone(SfxItemPool*) const
 SdrTextHorzAdjustItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SdrTextHorzAdjustItem::GetValueCount() const
 SdrTextHorzAdjustItem::GetValueTextByPos(unsigned short)
-SdrTextHorzAdjustItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SdrTextHorzAdjustItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SdrTextHorzAdjustItem::PutValue(cpo::uno::Any const&, unsigned char)
+SdrTextHorzAdjustItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SdrTextObj::AddToHdlList(SdrHdlList&) const
 SdrTextObj::AdjustRectToTextDistance(tools::Rectangle&) const
 SdrTextObj::CloneSdrObject(SdrModel&) const
@@ -3436,7 +3436,7 @@ SdrTextVertAdjustItem::Clone(SfxItemPool*) const
 SdrTextVertAdjustItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SdrTextVertAdjustItem::GetValueCount() const
 SdrTextVertAdjustItem::GetValueTextByPos(unsigned short)
-SdrTextVertAdjustItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SdrTextVertAdjustItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SdrTextVertAdjustItem::dumpAsXml(_xmlTextWriter*) const
 SdrUndoAttrObj::ensureStyleSheetInStyleSheetPool(SfxStyleSheetBasePool&, SfxStyleSheet&)
 SdrUndoDelPage::CanSdrRepeat(SdrView&) const
@@ -3592,12 +3592,12 @@ SfxDispatcher::PostMsgHandler(std::unique_ptr<SfxRequest, std::default_delete<Sf
 SfxDispatcher::SfxDispatcher()
 SfxDockingWindow::CalcAlignment(Point const&, tools::Rectangle&)
 SfxDocumentInfoDialog::PageCreated(rtl::OUString const&, SfxTabPage&)
-SfxDocumentInfoItem::AddCustomProperty(rtl::OUString const&, com::sun::star::uno::Any const&)
+SfxDocumentInfoItem::AddCustomProperty(rtl::OUString const&, cpo::uno::Any const&)
 SfxDocumentInfoItem::ClearCustomProperties()
 SfxDocumentInfoItem::Clone(SfxItemPool*) const
 SfxDocumentInfoItem::GetCustomProperties() const
-SfxDocumentInfoItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SfxDocumentInfoItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SfxDocumentInfoItem::PutValue(cpo::uno::Any const&, unsigned char)
+SfxDocumentInfoItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SfxDocumentInfoItem::SetCmisProperties(com::sun::star::uno::Sequence<com::sun::star::document::CmisProperty> const&)
 SfxDocumentInfoItem::SetDeleteUserData(bool)
 SfxDocumentInfoItem::SetUseThumbnailSave(bool)
@@ -3653,12 +3653,12 @@ SfxFrameDescriptor::GetArgs()
 SfxFrameDescriptor::SetActualURL()
 SfxFrameDescriptor::SetURL(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
 SfxFrameItem::Clone(SfxItemPool*) const
-SfxFrameItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SfxFrameItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SfxFrameItem::PutValue(cpo::uno::Any const&, unsigned char)
+SfxFrameItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SfxFrameItem::operator==(SfxPoolItem const&) const
 SfxGlobalNameItem::Clone(SfxItemPool*) const
-SfxGlobalNameItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SfxGlobalNameItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SfxGlobalNameItem::PutValue(cpo::uno::Any const&, unsigned char)
+SfxGlobalNameItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SfxGlobalNameItem::SfxGlobalNameItem()
 SfxGlobalNameItem::operator==(SfxPoolItem const&) const
 SfxHelp::CreateHelpURL(rtl::OUString const&, rtl::OUString const&)
@@ -3672,7 +3672,7 @@ SfxHyphenRegionItem::Clone(SfxItemPool*) const
 SfxHyphenRegionItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SfxHyphenRegionItem::operator==(SfxPoolItem const&) const
 SfxImageItem::Clone(SfxItemPool*) const
-SfxImageItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SfxImageItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SfxImageItem::SfxImageItem(SfxImageItem const&)
 SfxImageItem::operator==(SfxPoolItem const&) const
 SfxInPlaceClient::GetObjectMiscStatus() const
@@ -3698,12 +3698,12 @@ SfxInfoBarWindow::dispose()
 SfxInfoBarWindow::~SfxInfoBarWindow()
 SfxInt64Item::Clone(SfxItemPool*) const
 SfxInt64Item::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SfxInt64Item::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SfxInt64Item::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SfxInt64Item::PutValue(cpo::uno::Any const&, unsigned char)
+SfxInt64Item::QueryValue(cpo::uno::Any&, unsigned char) const
 SfxInt64Item::operator==(SfxPoolItem const&) const
 SfxIntegerListItem::Clone(SfxItemPool*) const
-SfxIntegerListItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SfxIntegerListItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SfxIntegerListItem::PutValue(cpo::uno::Any const&, unsigned char)
+SfxIntegerListItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SfxIntegerListItem::SfxIntegerListItem()
 SfxIntegerListItem::operator==(SfxPoolItem const&) const
 SfxInterface::GetChildWindowCount() const
@@ -3760,8 +3760,8 @@ SfxListUndoAction::dumpAsXml(_xmlTextWriter*) const
 SfxListUndoAction::~SfxListUndoAction()
 SfxListener::RemoveBroadcaster_Impl(SfxBroadcaster&)
 SfxLockBytesItem::Clone(SfxItemPool*) const
-SfxLockBytesItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SfxLockBytesItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SfxLockBytesItem::PutValue(cpo::uno::Any const&, unsigned char)
+SfxLockBytesItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SfxLockBytesItem::SfxLockBytesItem()
 SfxLockBytesItem::operator==(SfxPoolItem const&) const
 SfxLockBytesItem::~SfxLockBytesItem()
@@ -3840,8 +3840,8 @@ SfxObjectFactory::GetModule() const
 SfxObjectFactory::GetViewFactoryByViewName(std::basic_string_view<char16_t, std::char_traits<char16_t> >) const
 SfxObjectFactory::SetSystemTemplate(rtl::OUString const&, rtl::OUString const&)
 SfxObjectItem::Clone(SfxItemPool*) const
-SfxObjectItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SfxObjectItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SfxObjectItem::PutValue(cpo::uno::Any const&, unsigned char)
+SfxObjectItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SfxObjectItem::operator==(SfxPoolItem const&) const
 SfxObjectShell::AcceptStateUpdate() const
 SfxObjectShell::AddToRecentlyUsedList()
@@ -3897,15 +3897,15 @@ SfxObjectShell::isPrintLocked() const
 SfxObjectShell::isSaveLocked() const
 SfxObjectShell::isScriptAccessAllowed(com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&)
 SfxObjectShellItem::Clone(SfxItemPool*) const
-SfxObjectShellItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SfxObjectShellItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SfxObjectShellItem::PutValue(cpo::uno::Any const&, unsigned char)
+SfxObjectShellItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SfxObjectShellItem::operator==(SfxPoolItem const&) const
 SfxPasswordDialog::ModifyHdl()
 SfxPasswordDialog::SetPasswdText()
 SfxPointItem::Clone(SfxItemPool*) const
 SfxPointItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SfxPointItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SfxPointItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SfxPointItem::PutValue(cpo::uno::Any const&, unsigned char)
+SfxPointItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SfxPointItem::SfxPointItem()
 SfxPointItem::operator==(SfxPoolItem const&) const
 SfxPoolItemHolder::operator==(SfxPoolItemHolder const&) const
@@ -3919,8 +3919,8 @@ SfxRangeItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUStri
 SfxRangeItem::operator==(SfxPoolItem const&) const
 SfxRectangleItem::Clone(SfxItemPool*) const
 SfxRectangleItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SfxRectangleItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SfxRectangleItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SfxRectangleItem::PutValue(cpo::uno::Any const&, unsigned char)
+SfxRectangleItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SfxRectangleItem::SfxRectangleItem()
 SfxRectangleItem::operator==(SfxPoolItem const&) const
 SfxRequest::AllowRecording(bool)
@@ -3956,8 +3956,8 @@ SfxStatusListener::StateChangedAtStatusListener(SfxItemState, SfxPoolItem const*
 SfxStringItem::Clone(SfxItemPool*) const
 SfxStringListItem::Clone(SfxItemPool*) const
 SfxStringListItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SfxStringListItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SfxStringListItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SfxStringListItem::PutValue(cpo::uno::Any const&, unsigned char)
+SfxStringListItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SfxStringListItem::SfxStringListItem()
 SfxStringListItem::operator==(SfxPoolItem const&) const
 SfxStyleSheetBasePool::Add(SfxStyleSheetBase const&)
@@ -3978,8 +3978,8 @@ SfxTabDialogItem::Clone(SfxItemPool*) const
 SfxTabDialogItem::SfxTabDialogItem(SfxTabDialogItem const&, SfxItemPool*)
 SfxTemplateItem::Clone(SfxItemPool*) const
 SfxTemplateItem::GetFlagCount() const
-SfxTemplateItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SfxTemplateItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SfxTemplateItem::PutValue(cpo::uno::Any const&, unsigned char)
+SfxTemplateItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SfxTemplateItem::SfxTemplateItem()
 SfxTemplateItem::operator==(SfxPoolItem const&) const
 SfxTemplatePanelControl::NotifyItemUpdate(unsigned short, SfxItemState, SfxPoolItem const*)
@@ -3990,12 +3990,12 @@ SfxUndoAction::GetDateTime() const
 SfxUndoArray::Remove(unsigned long, unsigned long)
 SfxUndoArray::~SfxUndoArray()
 SfxUnoAnyItem::Clone(SfxItemPool*) const
-SfxUnoAnyItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SfxUnoAnyItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SfxUnoAnyItem::PutValue(cpo::uno::Any const&, unsigned char)
+SfxUnoAnyItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SfxUnoAnyItem::operator==(SfxPoolItem const&) const
 SfxUnoFrameItem::Clone(SfxItemPool*) const
-SfxUnoFrameItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SfxUnoFrameItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SfxUnoFrameItem::PutValue(cpo::uno::Any const&, unsigned char)
+SfxUnoFrameItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SfxUnoFrameItem::SfxUnoFrameItem()
 SfxUnoFrameItem::operator==(SfxPoolItem const&) const
 SfxViewFactory::CreateInstance(SfxViewFrame&, SfxViewShell*)
@@ -4024,8 +4024,8 @@ SfxViewShell::isBlockedCommand(rtl::OUString) const
 SfxViewShell::setBlockedCommandList(char const*)
 SfxVisibilityItem::Clone(SfxItemPool*) const
 SfxVisibilityItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SfxVisibilityItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SfxVisibilityItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SfxVisibilityItem::PutValue(cpo::uno::Any const&, unsigned char)
+SfxVisibilityItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SfxVisibilityItem::operator==(SfxPoolItem const&) const
 SfxVoidItem::Clone(SfxItemPool*) const
 SfxVoidItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
@@ -4034,8 +4034,8 @@ SfxVoidItem::SfxVoidItem(SfxVoidItem&&)
 SfxVoidItem::dumpAsXml(_xmlTextWriter*) const
 SfxVoidItem::operator==(SfxPoolItem const&) const
 SfxWatermarkItem::Clone(SfxItemPool*) const
-SfxWatermarkItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SfxWatermarkItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SfxWatermarkItem::PutValue(cpo::uno::Any const&, unsigned char)
+SfxWatermarkItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SfxWatermarkItem::operator==(SfxPoolItem const&) const
 SgaObject::CreateThumb(Graphic const&)
 SgaObject::ReadData(SvStream&, unsigned short&)
@@ -5917,7 +5917,7 @@ StarBASIC::FatalError(ErrCode, rtl::OUString const&)
 StarBASIC::GetErl()
 StarBASIC::GetErrorMsg()
 StarBASIC::GetSfxFromVBError(unsigned short)
-StarBASIC::GetUNOConstant(rtl::OUString const&, com::sun::star::uno::Any&)
+StarBASIC::GetUNOConstant(rtl::OUString const&, cpo::uno::Any&)
 StarBASIC::GetVBErrorCode(ErrCode)
 StarBASIC::InitAllModules(StarBASIC const*)
 StarBASIC::Insert(SbxVariable*)
@@ -6334,9 +6334,9 @@ SvUnoAttributeContainer::getImplementationName()
 SvUnoAttributeContainer::getSupportedServiceNames()
 SvUnoAttributeContainer::hasByName(rtl::OUString const&)
 SvUnoAttributeContainer::hasElements()
-SvUnoAttributeContainer::insertByName(rtl::OUString const&, com::sun::star::uno::Any const&)
+SvUnoAttributeContainer::insertByName(rtl::OUString const&, cpo::uno::Any const&)
 SvUnoAttributeContainer::removeByName(rtl::OUString const&)
-SvUnoAttributeContainer::replaceByName(rtl::OUString const&, com::sun::star::uno::Any const&)
+SvUnoAttributeContainer::replaceByName(rtl::OUString const&, cpo::uno::Any const&)
 SvUnoAttributeContainer::supportsService(rtl::OUString const&)
 SvXMLAttrContainerData::Remove(unsigned long)
 SvXMLAttrContainerData::SetAt(unsigned long, rtl::OUString const&, rtl::OUString const&)
@@ -6441,7 +6441,7 @@ SvXMLImportPropertyMapper::FillPropertySequence(std::__debug::vector<XMLProperty
 SvXMLImportPropertyMapper::FillPropertySet(std::__debug::vector<XMLPropertyState, std::allocator<XMLPropertyState> > const&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&, ContextID_Index_Pair*) const
 SvXMLImportPropertyMapper::FillPropertySet_(std::__debug::vector<XMLPropertyState, std::allocator<XMLPropertyState> > const&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo> const&, rtl::Reference<XMLPropertySetMapper> const&, SvXMLImport&, ContextID_Index_Pair*)
 SvXMLImportPropertyMapper::FillTolerantMultiPropertySet_(std::__debug::vector<XMLPropertyState, std::allocator<XMLPropertyState> > const&, com::sun::star::uno::Reference<com::sun::star::beans::XTolerantMultiPropertySet> const&, rtl::Reference<XMLPropertySetMapper> const&, SvXMLImport&, ContextID_Index_Pair*)
-SvXMLImportPropertyMapper::PrepareForMultiPropertySet_(std::__debug::vector<XMLPropertyState, std::allocator<XMLPropertyState> > const&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo> const&, rtl::Reference<XMLPropertySetMapper> const&, ContextID_Index_Pair*, com::sun::star::uno::Sequence<rtl::OUString>&, com::sun::star::uno::Sequence<com::sun::star::uno::Any>&)
+SvXMLImportPropertyMapper::PrepareForMultiPropertySet_(std::__debug::vector<XMLPropertyState, std::allocator<XMLPropertyState> > const&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo> const&, rtl::Reference<XMLPropertySetMapper> const&, ContextID_Index_Pair*, com::sun::star::uno::Sequence<rtl::OUString>&, com::sun::star::uno::Sequence<cpo::uno::Any>&)
 SvXMLImportPropertyMapper::importXML(std::__debug::vector<XMLPropertyState, std::allocator<XMLPropertyState> >&, com::sun::star::uno::Reference<com::sun::star::xml::sax::XFastAttributeList> const&, SvXMLUnitConverter const&, SvXMLNamespaceMap const&, unsigned int, int, int) const
 SvXMLImportPropertyMapper::importXMLAttribute(std::__debug::vector<XMLPropertyState, std::allocator<XMLPropertyState> >&, SvXMLUnitConverter const&, SvXMLNamespaceMap const&, unsigned int, int, int, com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>&, rtl::OUString const&, rtl::OUString const&, rtl::OUString const&) const
 SvXMLLegacyToFastDocHandler::characters(rtl::OUString const&)
@@ -6617,8 +6617,8 @@ Svx3DPreviewControl::SetDrawingArea(weld::DrawingArea*)
 Svx3DPreviewControl::SetObjectType(SvxPreviewObjectType)
 Svx3DPreviewControl::Svx3DPreviewControl()
 Svx3DTextureProjectionYItem::Clone(SfxItemPool*) const
-Svx3DTextureProjectionYItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-Svx3DTextureProjectionYItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+Svx3DTextureProjectionYItem::PutValue(cpo::uno::Any const&, unsigned char)
+Svx3DTextureProjectionYItem::QueryValue(cpo::uno::Any&, unsigned char) const
 Svx3DWin::ClickLight(LightButton const&)
 Svx3DWin::Resize()
 Svx3DWin::Svx3DWin(SfxBindings*, SfxChildWindow*, vcl::Window*)
@@ -6677,15 +6677,15 @@ SvxAutocorrWordList::WordMatches(SvxAutocorrWord const*, std::basic_string_view<
 SvxAutocorrWordList::empty() const
 SvxAutocorrWordList::~SvxAutocorrWordList()
 SvxB3DVectorItem::Clone(SfxItemPool*) const
-SvxB3DVectorItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxB3DVectorItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxB3DVectorItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxB3DVectorItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxB3DVectorItem::SvxB3DVectorItem(SvxB3DVectorItem const&)
 SvxB3DVectorItem::dumpAsXml(_xmlTextWriter*) const
 SvxB3DVectorItem::operator==(SfxPoolItem const&) const
 SvxBitmapListItem::Clone(SfxItemPool*) const
 SvxBitmapListItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SvxBitmapListItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxBitmapListItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxBitmapListItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxBitmapListItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxBitmapListItem::SvxBitmapListItem()
 SvxBitmapListItem::SvxBitmapListItem(SvxBitmapListItem const&)
 SvxBitmapListItem::operator==(SfxPoolItem const&) const
@@ -6711,7 +6711,7 @@ SvxBmpMaskChildWindow::SvxBmpMaskChildWindow(vcl::Window*, unsigned short, SfxBi
 SvxBmpNumValueSet::UserDraw(UserDrawEvent const&)
 SvxBoxInfoItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxBoxInfoItem::HasMetrics() const
-SvxBoxInfoItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
+SvxBoxInfoItem::PutValue(cpo::uno::Any const&, unsigned char)
 SvxBoxInfoItem::ScaleMetrics(long, long)
 SvxBoxInfoItem::dumpAsJSON[abi:cxx11]() const
 SvxBoxItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
@@ -6735,25 +6735,25 @@ SvxCaseMapItem::Clone(SfxItemPool*) const
 SvxCaseMapItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxCaseMapItem::GetValueCount() const
 SvxCaseMapItem::GetValueTextByPos(unsigned short)
-SvxCaseMapItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxCaseMapItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxCaseMapItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxCaseMapItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxCharHiddenItem::Clone(SfxItemPool*) const
 SvxCharHiddenItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxCharReliefItem::Clone(SfxItemPool*) const
 SvxCharReliefItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxCharReliefItem::GetValueCount() const
 SvxCharReliefItem::GetValueTextByPos(unsigned short)
-SvxCharReliefItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
+SvxCharReliefItem::PutValue(cpo::uno::Any const&, unsigned char)
 SvxCharReliefItem::getItemInstanceManager() const
 SvxCharRotateItem::Clone(SfxItemPool*) const
 SvxCharRotateItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SvxCharRotateItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxCharRotateItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxCharRotateItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxCharRotateItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxCharRotateItem::dumpAsXml(_xmlTextWriter*) const
 SvxCharRotateItem::operator==(SfxPoolItem const&) const
 SvxCharScaleWidthItem::Clone(SfxItemPool*) const
 SvxCharScaleWidthItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SvxCharScaleWidthItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
+SvxCharScaleWidthItem::PutValue(cpo::uno::Any const&, unsigned char)
 SvxCharacterMap::fillAllSubsets(weld::ComboBox&)
 SvxCharacterMap::init()
 SvxCharacterMap::insertCharToDoc(rtl::OUString const&)
@@ -6766,16 +6766,16 @@ SvxChartIndicateItem::Clone(SfxItemPool*) const
 SvxChartKindErrorItem::Clone(SfxItemPool*) const
 SvxChartRegressItem::Clone(SfxItemPool*) const
 SvxChartTextOrderItem::Clone(SfxItemPool*) const
-SvxChartTextOrderItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxChartTextOrderItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxChartTextOrderItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxChartTextOrderItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxClipBoardControl::CreateImpl(unsigned short, o3tl::strong_int<unsigned short, ToolBoxItemIdTag>, ToolBox&)
 SvxClipBoardControl::CreatePopupWindow()
 SvxClipBoardControl::StateChangedAtToolBoxControl(unsigned short, SfxItemState, SfxPoolItem const*)
 SvxClipBoardControl::SvxClipBoardControl(unsigned short, o3tl::strong_int<unsigned short, ToolBoxItemIdTag>, ToolBox&)
 SvxClipBoardControl::~SvxClipBoardControl()
 SvxClipboardFormatItem::Clone(SfxItemPool*) const
-SvxClipboardFormatItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxClipboardFormatItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxClipboardFormatItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxClipboardFormatItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxClipboardFormatItem::SvxClipboardFormatItem(SvxClipboardFormatItem const&)
 SvxClipboardFormatItem::operator==(SfxPoolItem const&) const
 SvxColorChildWindow::CreateImpl(vcl::Window*, unsigned short, SfxBindings*, SfxChildWinInfo*)
@@ -6785,8 +6785,8 @@ SvxColorItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUStri
 SvxColorItem::dumpAsXml(_xmlTextWriter*) const
 SvxColorListItem::Clone(SfxItemPool*) const
 SvxColorListItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SvxColorListItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxColorListItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxColorListItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxColorListItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxColorListItem::SvxColorListItem()
 SvxColorListItem::SvxColorListItem(SvxColorListItem const&)
 SvxColorListItem::operator==(SfxPoolItem const&) const
@@ -6799,7 +6799,7 @@ SvxColorToolBoxControl::functionSelected(rtl::OUString const&)
 SvxColorToolBoxControl::getImplementationName()
 SvxColorToolBoxControl::getSubToolbarName()
 SvxColorToolBoxControl::getSupportedServiceNames()
-SvxColorToolBoxControl::initialize(com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&)
+SvxColorToolBoxControl::initialize(com::sun::star::uno::Sequence<cpo::uno::Any> const&)
 SvxColorToolBoxControl::opensSubToolbar()
 SvxColorToolBoxControl::update()
 SvxColorToolBoxControl::updateImage()
@@ -6817,8 +6817,8 @@ SvxColumnItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUStr
 SvxColumnItem::IsConsistent() const
 SvxColumnItem::IsFirstAct() const
 SvxColumnItem::IsLastAct() const
-SvxColumnItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxColumnItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxColumnItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxColumnItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxColumnItem::operator==(SfxPoolItem const&) const
 SvxContourDlg::SvxContourDlg(SfxBindings*, SfxChildWindow*, weld::Window*)
 SvxContourDlg::~SvxContourDlg()
@@ -6838,21 +6838,21 @@ SvxCurrencyToolBoxControl::createVclPopupWindow(vcl::Window*)
 SvxCurrencyToolBoxControl::execute(short)
 SvxCurrencyToolBoxControl::getImplementationName()
 SvxCurrencyToolBoxControl::getSupportedServiceNames()
-SvxCurrencyToolBoxControl::initialize(com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&)
+SvxCurrencyToolBoxControl::initialize(com::sun::star::uno::Sequence<cpo::uno::Any> const&)
 SvxCurrencyToolBoxControl::weldPopupWindow()
 SvxCurrencyToolBoxControl::~SvxCurrencyToolBoxControl()
 SvxCustomShape::createCustomShapeDefaults(rtl::OUString const&)
 SvxCustomShape::getImplementationId()
 SvxCustomShape::getPosition()
-SvxCustomShape::getPropertyValueImpl(rtl::OUString const&, SfxItemPropertyMapEntry const*, com::sun::star::uno::Any&)
+SvxCustomShape::getPropertyValueImpl(rtl::OUString const&, SfxItemPropertyMapEntry const*, cpo::uno::Any&)
 SvxCustomShape::queryAggregation(com::sun::star::uno::Type const&)
 SvxCustomShape::queryInterface(com::sun::star::uno::Type const&)
-SvxCustomShape::setPropertyValue(rtl::OUString const&, com::sun::star::uno::Any const&)
+SvxCustomShape::setPropertyValue(rtl::OUString const&, cpo::uno::Any const&)
 SvxCustomShape::~SvxCustomShape()
 SvxDashListItem::Clone(SfxItemPool*) const
 SvxDashListItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SvxDashListItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxDashListItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxDashListItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxDashListItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxDashListItem::SvxDashListItem()
 SvxDashListItem::SvxDashListItem(SvxDashListItem const&)
 SvxDashListItem::operator==(SfxPoolItem const&) const
@@ -6863,8 +6863,8 @@ SvxDateTimeField::Clone() const
 SvxDateTimeField::operator==(SvxFieldData const&) const
 SvxDoubleItem::Clone(SfxItemPool*) const
 SvxDoubleItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SvxDoubleItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxDoubleItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxDoubleItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxDoubleItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxDoubleItem::SvxDoubleItem(SvxDoubleItem const&)
 SvxDoubleItem::operator==(SfxPoolItem const&) const
 SvxDrawOutlinerViewForwarder::Copy()
@@ -6930,14 +6930,14 @@ SvxEditSourceHelper::EEToUserSpace(tools::Rectangle const&, Size const&, bool)
 SvxEditSourceHelper::UserSpaceToEE(Point const&, Size const&, bool)
 SvxEmphasisMarkItem::Clone(SfxItemPool*) const
 SvxEmphasisMarkItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SvxEmphasisMarkItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
+SvxEmphasisMarkItem::PutValue(cpo::uno::Any const&, unsigned char)
 SvxEmphasisMarkItem::getItemInstanceManager() const
 SvxErrorHandler::SvxErrorHandler()
 SvxEscapementItem::Clone(SfxItemPool*) const
 SvxEscapementItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxEscapementItem::GetValueCount() const
 SvxEscapementItem::GetValueTextByPos(unsigned short)
-SvxEscapementItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
+SvxEscapementItem::PutValue(cpo::uno::Any const&, unsigned char)
 SvxEscapementItem::SetEnumValue(unsigned short)
 SvxEscapementItem::operator==(SfxPoolItem const&) const
 SvxExtFileField::Clone() const
@@ -6963,8 +6963,8 @@ SvxFillToolBoxControl::Update()
 SvxFillToolBoxControl::~SvxFillToolBoxControl()
 SvxFirstLineIndentItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxFirstLineIndentItem::HasMetrics() const
-SvxFirstLineIndentItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxFirstLineIndentItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxFirstLineIndentItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxFirstLineIndentItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxFirstLineIndentItem::ScaleMetrics(long, long)
 SvxFirstLineIndentItem::dumpAsJSON[abi:cxx11]() const
 SvxFirstLineIndentItem::dumpAsXml(_xmlTextWriter*) const
@@ -6986,7 +6986,7 @@ SvxFontItem::dumpAsXml(_xmlTextWriter*) const
 SvxFontItem::getItemInstanceManager() const
 SvxFontListItem::Clone(SfxItemPool*) const
 SvxFontListItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SvxFontListItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxFontListItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxFontListItem::operator==(SfxPoolItem const&) const
 SvxFontPrevWindow::GetFont() const
 SvxFontPrevWindow::IsTwoLines() const
@@ -7004,8 +7004,8 @@ SvxForbiddenRuleItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl
 SvxFormatBreakItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxFormatBreakItem::GetValueCount() const
 SvxFormatBreakItem::GetValueTextByPos(unsigned short)
-SvxFormatBreakItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxFormatBreakItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxFormatBreakItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxFormatBreakItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxFormatKeepItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxFormatKeepItem::dumpAsXml(_xmlTextWriter*) const
 SvxFormatSplitItem::Clone(SfxItemPool*) const
@@ -7014,16 +7014,16 @@ SvxFrameDirectionItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rt
 SvxFrameDirectionItem::dumpAsXml(_xmlTextWriter*) const
 SvxFrameDirectionItem::getItemInstanceManager() const
 SvxGalleryItem::Clone(SfxItemPool*) const
-SvxGalleryItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxGalleryItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxGalleryItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxGalleryItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxGalleryItem::SvxGalleryItem()
 SvxGalleryItem::SvxGalleryItem(SvxGalleryItem const&)
 SvxGalleryItem::operator==(SfxPoolItem const&) const
 SvxGalleryItem::~SvxGalleryItem()
 SvxGradientListItem::Clone(SfxItemPool*) const
 SvxGradientListItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SvxGradientListItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxGradientListItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxGradientListItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxGradientListItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxGradientListItem::SvxGradientListItem()
 SvxGradientListItem::SvxGradientListItem(SvxGradientListItem const&)
 SvxGradientListItem::operator==(SfxPoolItem const&) const
@@ -7052,8 +7052,8 @@ SvxGridTabPage::LinkStubClickRotateHdl_Impl(void*, weld::Toggleable&)
 SvxGutterLeftMarginItem::Clone(SfxItemPool*) const
 SvxGutterLeftMarginItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxGutterLeftMarginItem::HasMetrics() const
-SvxGutterLeftMarginItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxGutterLeftMarginItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxGutterLeftMarginItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxGutterLeftMarginItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxGutterLeftMarginItem::ScaleMetrics(long, long)
 SvxGutterLeftMarginItem::dumpAsJSON[abi:cxx11]() const
 SvxGutterLeftMarginItem::dumpAsXml(_xmlTextWriter*) const
@@ -7061,8 +7061,8 @@ SvxGutterLeftMarginItem::operator==(SfxPoolItem const&) const
 SvxGutterRightMarginItem::Clone(SfxItemPool*) const
 SvxGutterRightMarginItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxGutterRightMarginItem::HasMetrics() const
-SvxGutterRightMarginItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxGutterRightMarginItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxGutterRightMarginItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxGutterRightMarginItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxGutterRightMarginItem::ScaleMetrics(long, long)
 SvxGutterRightMarginItem::dumpAsJSON[abi:cxx11]() const
 SvxGutterRightMarginItem::dumpAsXml(_xmlTextWriter*) const
@@ -7075,8 +7075,8 @@ SvxHFPage::UpdateExample()
 SvxHangingPunctuationItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxHatchListItem::Clone(SfxItemPool*) const
 SvxHatchListItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SvxHatchListItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxHatchListItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxHatchListItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxHatchListItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxHatchListItem::SvxHatchListItem()
 SvxHatchListItem::SvxHatchListItem(SvxHatchListItem const&)
 SvxHatchListItem::operator==(SfxPoolItem const&) const
@@ -7091,14 +7091,14 @@ SvxHorJustifyItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::O
 SvxHorJustifyItem::GetValueCount() const
 SvxHorJustifyItem::GetValueText(SvxCellHorJustify)
 SvxHyperlinkItem::Clone(SfxItemPool*) const
-SvxHyperlinkItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxHyperlinkItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxHyperlinkItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxHyperlinkItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxHyperlinkItem::SvxHyperlinkItem(SvxHyperlinkItem const&)
 SvxHyperlinkItem::operator==(SfxPoolItem const&) const
 SvxHyphenZoneItem::Clone(SfxItemPool*) const
 SvxHyphenZoneItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SvxHyphenZoneItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxHyphenZoneItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxHyphenZoneItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxHyphenZoneItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxIMapDlg::DoOpen()
 SvxIMapDlg::DoSave()
 SvxIMapDlg::SetActiveTool(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
@@ -7117,17 +7117,17 @@ SvxInsertStatusBarControl::Paint(UserDrawEvent const&)
 SvxInsertStatusBarControl::StateChangedAtStatusBarControl(unsigned short, SfxItemState, SfxPoolItem const*)
 SvxInsertStatusBarControl::SvxInsertStatusBarControl(unsigned short, unsigned short, StatusBar&)
 SvxInsertStatusBarControl::~SvxInsertStatusBarControl()
-SvxItemPropertySetUsrAnys::AddUsrAnyForID(com::sun::star::uno::Any const&, SfxItemPropertyMapEntry const&)
+SvxItemPropertySetUsrAnys::AddUsrAnyForID(cpo::uno::Any const&, SfxItemPropertyMapEntry const&)
 SvxJustifyMethodItem::Clone(SfxItemPool*) const
 SvxJustifyMethodItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxJustifyMethodItem::GetValueCount() const
 SvxJustifyMethodItem::GetValueText(SvxCellJustifyMethod)
-SvxJustifyMethodItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxJustifyMethodItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxJustifyMethodItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxJustifyMethodItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxKerningItem::Clone(SfxItemPool*) const
 SvxKerningItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxKerningItem::HasMetrics() const
-SvxKerningItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
+SvxKerningItem::PutValue(cpo::uno::Any const&, unsigned char)
 SvxKerningItem::ScaleMetrics(long, long)
 SvxLRSpaceItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxLRSpaceItem::HasMetrics() const
@@ -7137,13 +7137,13 @@ SvxLRSpaceItem::dumpAsXml(_xmlTextWriter*) const
 SvxLanguageItem::Clone(SfxItemPool*) const
 SvxLanguageItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxLanguageItem::GetValueCount() const
-SvxLanguageItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
+SvxLanguageItem::PutValue(cpo::uno::Any const&, unsigned char)
 SvxLanguageItem::getItemInstanceManager() const
 SvxLeftMarginItem::Clone(SfxItemPool*) const
 SvxLeftMarginItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxLeftMarginItem::HasMetrics() const
-SvxLeftMarginItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxLeftMarginItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxLeftMarginItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxLeftMarginItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxLeftMarginItem::ScaleMetrics(long, long)
 SvxLeftMarginItem::SetLeft(long, unsigned short)
 SvxLeftMarginItem::SvxLeftMarginItem(long, unsigned short)
@@ -7154,20 +7154,20 @@ SvxLightCtl3D::Init()
 SvxLightCtl3D::move(double, double)
 SvxLineEndListItem::Clone(SfxItemPool*) const
 SvxLineEndListItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SvxLineEndListItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxLineEndListItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxLineEndListItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxLineEndListItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxLineEndListItem::SvxLineEndListItem()
 SvxLineEndListItem::SvxLineEndListItem(SvxLineEndListItem const&)
 SvxLineEndListItem::operator==(SfxPoolItem const&) const
 SvxLineItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxLineItem::HasMetrics() const
-SvxLineItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
+SvxLineItem::PutValue(cpo::uno::Any const&, unsigned char)
 SvxLineSpacingItem::Clone(SfxItemPool*) const
 SvxLineSpacingItem::GetEnumValue() const
 SvxLineSpacingItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxLineSpacingItem::GetValueCount() const
-SvxLineSpacingItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxLineSpacingItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxLineSpacingItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxLineSpacingItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxLineSpacingItem::SetEnumValue(unsigned short)
 SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 SvxLineStyleToolBoxControl::createVclPopupWindow(vcl::Window*)
@@ -7175,7 +7175,7 @@ SvxLineStyleToolBoxControl::dispatchLineStyleCommand(rtl::OUString const&, com::
 SvxLineStyleToolBoxControl::execute(short)
 SvxLineStyleToolBoxControl::getImplementationName()
 SvxLineStyleToolBoxControl::getSupportedServiceNames()
-SvxLineStyleToolBoxControl::initialize(com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&)
+SvxLineStyleToolBoxControl::initialize(com::sun::star::uno::Sequence<cpo::uno::Any> const&)
 SvxLineStyleToolBoxControl::weldPopupWindow()
 SvxLineStyleToolBoxControl::~SvxLineStyleToolBoxControl()
 SvxLineWidthToolBoxControl::CreateImpl(unsigned short, o3tl::strong_int<unsigned short, ToolBoxItemIdTag>, ToolBox&)
@@ -7185,13 +7185,13 @@ SvxLineWidthToolBoxControl::StateChangedAtToolBoxControl(unsigned short, SfxItem
 SvxLineWidthToolBoxControl::SvxLineWidthToolBoxControl(unsigned short, o3tl::strong_int<unsigned short, ToolBoxItemIdTag>, ToolBox&)
 SvxLineWidthToolBoxControl::~SvxLineWidthToolBoxControl()
 SvxLongLRSpaceItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SvxLongLRSpaceItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxLongLRSpaceItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxLongLRSpaceItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxLongLRSpaceItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxLongLRSpaceItem::SvxLongLRSpaceItem()
 SvxLongLRSpaceItem::operator==(SfxPoolItem const&) const
 SvxLongULSpaceItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SvxLongULSpaceItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxLongULSpaceItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxLongULSpaceItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxLongULSpaceItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxLongULSpaceItem::SvxLongULSpaceItem()
 SvxLongULSpaceItem::operator==(SfxPoolItem const&) const
 SvxMSDffImportData::NotifyFreeObj(SdrObject*)
@@ -7223,7 +7223,7 @@ SvxMSDffManager::ScalePoint(int) const
 SvxMSDffManager::ScalePt(unsigned int) const
 SvxMSDffManager::SeekToRec2(unsigned short, unsigned short, unsigned long) const
 SvxMSDffManager::SetDgContainer(SvStream&)
-SvxMSDffManager::SetPropValue(com::sun::star::uno::Any const&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&, rtl::OUString const&)
+SvxMSDffManager::SetPropValue(cpo::uno::Any const&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&, rtl::OUString const&)
 SvxMSDffManager::SvxMSDffManager(SvStream&, rtl::OUString)
 SvxMSDffManager::insertShapeId(int, SdrObject*)
 SvxMSDffManager::removeShapeId(SdrObject const*)
@@ -7231,8 +7231,8 @@ SvxMacroItem::Clone(SfxItemPool*) const
 SvxMacroItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxMarginItem::Clone(SfxItemPool*) const
 SvxMarginItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SvxMarginItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxMarginItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxMarginItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxMarginItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxModifyControl::Click()
 SvxModifyControl::CreateImpl(unsigned short, unsigned short, StatusBar&)
 SvxModifyControl::Paint(UserDrawEvent const&)
@@ -7242,8 +7242,8 @@ SvxModifyControl::_repaint()
 SvxNoHyphenItem::Clone(SfxItemPool*) const
 SvxNoHyphenItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxNumBulletItem::Clone(SfxItemPool*) const
-SvxNumBulletItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxNumBulletItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxNumBulletItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxNumBulletItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxNumBulletItem::dumpAsXml(_xmlTextWriter*) const
 SvxNumBulletItem::operator==(SfxPoolItem const&) const
 SvxNumRule::SetLevel(unsigned short, SvxNumberFormat const*)
@@ -7266,8 +7266,8 @@ SvxNumberInfoItem::operator==(SfxPoolItem const&) const
 SvxNumberingPreview::Paint(OutputDevice&, tools::Rectangle const&)
 SvxObjectItem::Clone(SfxItemPool*) const
 SvxObjectItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SvxObjectItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxObjectItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxObjectItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxObjectItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxObjectItem::SetEndX(long)
 SvxObjectItem::SetEndY(long)
 SvxObjectItem::SetStartX(long)
@@ -7278,9 +7278,9 @@ SvxOle2Shape::GetClassName_Impl(rtl::OUString&)
 SvxOle2Shape::SvxOle2Shape(SdrObject*, rtl::OUString, std::span<SfxItemPropertyMapEntry const, 18446744073709551615ul>, SvxItemPropertySet const*)
 SvxOle2Shape::createLink(rtl::OUString const&)
 SvxOle2Shape::createObject(SvGlobalName const&)
-SvxOle2Shape::getPropertyValueImpl(rtl::OUString const&, SfxItemPropertyMapEntry const*, com::sun::star::uno::Any&)
+SvxOle2Shape::getPropertyValueImpl(rtl::OUString const&, SfxItemPropertyMapEntry const*, cpo::uno::Any&)
 SvxOle2Shape::resetModifiedState()
-SvxOle2Shape::setPropertyValueImpl(rtl::OUString const&, SfxItemPropertyMapEntry const*, com::sun::star::uno::Any const&)
+SvxOle2Shape::setPropertyValueImpl(rtl::OUString const&, SfxItemPropertyMapEntry const*, cpo::uno::Any const&)
 SvxOle2Shape::~SvxOle2Shape()
 SvxOpaqueItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxOpenGraphicDialog::GetCurrentFilter() const
@@ -7293,7 +7293,7 @@ SvxOrientationItem::GetRotation(o3tl::strong_int<int, FractionTag<100> >) const
 SvxOrientationItem::GetValueCount() const
 SvxOrientationItem::GetValueText(SvxCellOrientation)
 SvxOrientationItem::IsStacked() const
-SvxOrientationItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
+SvxOrientationItem::PutValue(cpo::uno::Any const&, unsigned char)
 SvxOrphansItem::Clone(SfxItemPool*) const
 SvxOrphansItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxOverlineItem::GetValueTextByPos(unsigned short) const
@@ -7304,13 +7304,13 @@ SvxPageField::operator==(SvxFieldData const&) const
 SvxPageItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxPageModelItem::Clone(SfxItemPool*) const
 SvxPageModelItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SvxPageModelItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxPageModelItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxPageModelItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxPageModelItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxPageModelItem::operator==(SfxPoolItem const&) const
 SvxPagePosSizeItem::Clone(SfxItemPool*) const
 SvxPagePosSizeItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SvxPagePosSizeItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxPagePosSizeItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxPagePosSizeItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxPagePosSizeItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxPagePosSizeItem::SvxPagePosSizeItem()
 SvxPagePosSizeItem::operator==(SfxPoolItem const&) const
 SvxPageTitleField::Clone() const
@@ -7327,12 +7327,12 @@ SvxParaPrevWindow::Paint(OutputDevice&, tools::Rectangle const&)
 SvxParaPrevWindow::SetDrawingArea(weld::DrawingArea*)
 SvxParaVertAlignItem::Clone(SfxItemPool*) const
 SvxParaVertAlignItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SvxParaVertAlignItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxParaVertAlignItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxParaVertAlignItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxParaVertAlignItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxPatternListItem::Clone(SfxItemPool*) const
 SvxPatternListItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SvxPatternListItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxPatternListItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxPatternListItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxPatternListItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxPatternListItem::SvxPatternListItem()
 SvxPatternListItem::SvxPatternListItem(SvxPatternListItem const&)
 SvxPatternListItem::operator==(SfxPoolItem const&) const
@@ -7369,7 +7369,7 @@ SvxPresetListBox::SetDrawingArea(weld::DrawingArea*)
 SvxPrintItem::Clone(SfxItemPool*) const
 SvxPrintItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxProtectItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SvxProtectItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxProtectItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxProtectItem::dumpAsXml(_xmlTextWriter*) const
 SvxRTFParser::AttrGroupEnd()
 SvxRTFParser::BuildWhichTable()
@@ -7416,8 +7416,8 @@ SvxRedlinTable::ColCompare(weld::TreeIter const&, weld::TreeIter const&)
 SvxRedlinTable::LinkStubHeaderBarClick(void*, int)
 SvxRightMarginItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxRightMarginItem::HasMetrics() const
-SvxRightMarginItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxRightMarginItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxRightMarginItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxRightMarginItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxRightMarginItem::ScaleMetrics(long, long)
 SvxRightMarginItem::dumpAsJSON[abi:cxx11]() const
 SvxRightMarginItem::dumpAsXml(_xmlTextWriter*) const
@@ -7425,13 +7425,13 @@ SvxRotateModeItem::Clone(SfxItemPool*) const
 SvxRotateModeItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxRotateModeItem::GetValueCount() const
 SvxRotateModeItem::GetValueText(SvxRotateMode)
-SvxRotateModeItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxRotateModeItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxRotateModeItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxRotateModeItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxRotateModeItem::SvxRotateModeItem(SvxRotateModeItem const&)
 SvxRsidItem::Clone(SfxItemPool*) const
 SvxRsidItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SvxRsidItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxRsidItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxRsidItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxRsidItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxRsidItem::dumpAsXml(_xmlTextWriter*) const
 SvxRubyChildWindow::CreateImpl(vcl::Window*, unsigned short, SfxBindings*, SfxChildWinInfo*)
 SvxRubyChildWindow::GetInfo() const
@@ -7533,8 +7533,8 @@ SvxSearchDialogWrapper::~SvxSearchDialogWrapper()
 SvxSearchItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxSearchItem::ImplCommit()
 SvxSearchItem::Notify(com::sun::star::uno::Sequence<rtl::OUString> const&)
-SvxSearchItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxSearchItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxSearchItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxSearchItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxSearchItem::operator==(SfxPoolItem const&) const
 SvxSelectionModeControl::Click()
 SvxSelectionModeControl::CreateImpl(unsigned short, unsigned short, StatusBar&)
@@ -7547,7 +7547,7 @@ SvxShadowItem::GetEnumValue() const
 SvxShadowItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxShadowItem::GetValueCount() const
 SvxShadowItem::HasMetrics() const
-SvxShadowItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxShadowItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxShadowItem::ScaleMetrics(long, long)
 SvxShadowItem::SetEnumValue(unsigned short)
 SvxShadowItem::dumpAsXml(_xmlTextWriter*) const
@@ -7587,7 +7587,7 @@ SvxShape::getPropertySetInfo()
 SvxShape::getPropertyState(rtl::OUString const&)
 SvxShape::getPropertyStateImpl(SfxItemPropertyMapEntry const*, com::sun::star::beans::PropertyState&)
 SvxShape::getPropertyStates(com::sun::star::uno::Sequence<rtl::OUString> const&)
-SvxShape::getPropertyValueImpl(rtl::OUString const&, SfxItemPropertyMapEntry const*, com::sun::star::uno::Any&)
+SvxShape::getPropertyValueImpl(rtl::OUString const&, SfxItemPropertyMapEntry const*, cpo::uno::Any&)
 SvxShape::getPropertyValues(com::sun::star::uno::Sequence<rtl::OUString> const&)
 SvxShape::getShapeType()
 SvxShape::getSize()
@@ -7611,7 +7611,7 @@ SvxShape::setParent(com::sun::star::uno::Reference<com::sun::star::uno::XInterfa
 SvxShape::setPropertiesToDefault(com::sun::star::uno::Sequence<rtl::OUString> const&)
 SvxShape::setPropertyToDefault(rtl::OUString const&)
 SvxShape::setPropertyToDefaultImpl(SfxItemPropertyMapEntry const*)
-SvxShape::setPropertyValueImpl(rtl::OUString const&, SfxItemPropertyMapEntry const*, com::sun::star::uno::Any const&)
+SvxShape::setPropertyValueImpl(rtl::OUString const&, SfxItemPropertyMapEntry const*, cpo::uno::Any const&)
 SvxShape::supportsService(rtl::OUString const&)
 SvxShape::unlock()
 SvxShape::updateShapeKind()
@@ -7630,7 +7630,7 @@ SvxShapeControl::queryInterface(com::sun::star::uno::Type const&)
 SvxShapeControl::setControl(com::sun::star::uno::Reference<com::sun::star::awt::XControlModel> const&)
 SvxShapeControl::setPosition(com::sun::star::awt::Point const&)
 SvxShapeControl::setPropertyToDefault(rtl::OUString const&)
-SvxShapeControl::setPropertyValue(rtl::OUString const&, com::sun::star::uno::Any const&)
+SvxShapeControl::setPropertyValue(rtl::OUString const&, cpo::uno::Any const&)
 SvxShapeControl::setSize(com::sun::star::awt::Size const&)
 SvxShapeControl::~SvxShapeControl()
 SvxShapeGroup::Create(SdrObject*, SvxDrawPage*)
@@ -7660,7 +7660,7 @@ SvxShapeText::getEnd()
 SvxShapeText::getImplementationId()
 SvxShapeText::getImplementationName()
 SvxShapeText::getPropertyStateImpl(SfxItemPropertyMapEntry const*, com::sun::star::beans::PropertyState&)
-SvxShapeText::getPropertyValueImpl(rtl::OUString const&, SfxItemPropertyMapEntry const*, com::sun::star::uno::Any&)
+SvxShapeText::getPropertyValueImpl(rtl::OUString const&, SfxItemPropertyMapEntry const*, cpo::uno::Any&)
 SvxShapeText::getSomething(com::sun::star::uno::Sequence<signed char> const&)
 SvxShapeText::getStart()
 SvxShapeText::getString()
@@ -7670,7 +7670,7 @@ SvxShapeText::lock()
 SvxShapeText::queryAggregation(com::sun::star::uno::Type const&)
 SvxShapeText::queryInterface(com::sun::star::uno::Type const&)
 SvxShapeText::setPropertyToDefaultImpl(SfxItemPropertyMapEntry const*)
-SvxShapeText::setPropertyValueImpl(rtl::OUString const&, SfxItemPropertyMapEntry const*, com::sun::star::uno::Any const&)
+SvxShapeText::setPropertyValueImpl(rtl::OUString const&, SfxItemPropertyMapEntry const*, cpo::uno::Any const&)
 SvxShapeText::setString(rtl::OUString const&)
 SvxShapeText::supportsService(rtl::OUString const&)
 SvxShapeText::unlock()
@@ -7684,12 +7684,12 @@ SvxShowText::SvxShowText(VclPtr<VirtualDevice> const&)
 SvxSizeItem::Clone(SfxItemPool*) const
 SvxSizeItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxSizeItem::HasMetrics() const
-SvxSizeItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxSizeItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxSizeItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxSizeItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxSizeItem::ScaleMetrics(long, long)
 SvxSmartTagItem::Clone(SfxItemPool*) const
-SvxSmartTagItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxSmartTagItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxSmartTagItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxSmartTagItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxSmartTagItem::operator==(SfxPoolItem const&) const
 SvxSpellWrapper::GetAllRightDic()
 SvxSpellWrapper::InsertHyphen(int)
@@ -7699,8 +7699,8 @@ SvxSpellWrapper::SpellMore()
 SvxSpellWrapper::SpellStart(SvxSpellArea)
 SvxSpellWrapper::SvxSpellWrapper(weld::Widget*, bool, bool)
 SvxStatusItem::Clone(SfxItemPool*) const
-SvxStatusItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxStatusItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxStatusItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxStatusItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxStatusItem::operator==(SfxPoolItem const&) const
 SvxTPFilter::DeactivatePage()
 SvxTPFilter::EnableDateLine1(bool)
@@ -7717,22 +7717,22 @@ SvxTPage::~SvxTPage()
 SvxTabStop::dumpAsXml(_xmlTextWriter*) const
 SvxTabStopItem::GetPos(SvxTabStop const&) const
 SvxTabStopItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SvxTabStopItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxTabStopItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxTabStopItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxTabStopItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxTabStopItem::SetDefaultDistance(int)
 SvxTabStopItem::dumpAsXml(_xmlTextWriter*) const
 SvxTableField::Clone() const
 SvxTableField::operator==(SvxFieldData const&) const
-SvxTableShape::getPropertyValueImpl(rtl::OUString const&, SfxItemPropertyMapEntry const*, com::sun::star::uno::Any&)
+SvxTableShape::getPropertyValueImpl(rtl::OUString const&, SfxItemPropertyMapEntry const*, cpo::uno::Any&)
 SvxTableShape::lock()
-SvxTableShape::setPropertyValueImpl(rtl::OUString const&, SfxItemPropertyMapEntry const*, com::sun::star::uno::Any const&)
+SvxTableShape::setPropertyValueImpl(rtl::OUString const&, SfxItemPropertyMapEntry const*, cpo::uno::Any const&)
 SvxTableShape::unlock()
 SvxTableShape::~SvxTableShape()
 SvxTbxCtlDraw::CreateImpl(unsigned short, o3tl::strong_int<unsigned short, ToolBoxItemIdTag>, ToolBox&)
 SvxTbxCtlDraw::Select(unsigned short)
 SvxTbxCtlDraw::StateChangedAtToolBoxControl(unsigned short, SfxItemState, SfxPoolItem const*)
 SvxTbxCtlDraw::SvxTbxCtlDraw(unsigned short, o3tl::strong_int<unsigned short, ToolBoxItemIdTag>, ToolBox&)
-SvxTbxCtlDraw::initialize(com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&)
+SvxTbxCtlDraw::initialize(com::sun::star::uno::Sequence<cpo::uno::Any> const&)
 SvxTbxCtlDraw::toggleToolbox()
 SvxTextEditSource::IsValid() const
 SvxTextEditSource::LogicToPixel(Point const&, MapMode const&) const
@@ -7748,8 +7748,8 @@ SvxTextEncodingTreeView::InsertTextEncoding(unsigned short)
 SvxTextEncodingTreeView::InsertTextEncoding(unsigned short, rtl::OUString const&)
 SvxTextLeftMarginItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxTextLeftMarginItem::HasMetrics() const
-SvxTextLeftMarginItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxTextLeftMarginItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxTextLeftMarginItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxTextLeftMarginItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxTextLeftMarginItem::ScaleMetrics(long, long)
 SvxTextLeftMarginItem::dumpAsJSON[abi:cxx11]() const
 SvxTextLeftMarginItem::dumpAsXml(_xmlTextWriter*) const
@@ -7763,20 +7763,20 @@ SvxTextLineItem::SetBoolValue(bool)
 SvxTextLineItem::SvxTextLineItem(FontLineStyle, unsigned short)
 SvxTextRotateItem::Clone(SfxItemPool*) const
 SvxTextRotateItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SvxTextRotateItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxTextRotateItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxTextRotateItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxTextRotateItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxTextRotateItem::dumpAsXml(_xmlTextWriter*) const
 SvxTimeField::Clone() const
 SvxTimeField::createBeginComment() const
 SvxTimeField::operator==(SvxFieldData const&) const
 SvxTwoLinesItem::Clone(SfxItemPool*) const
 SvxTwoLinesItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SvxTwoLinesItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxTwoLinesItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxTwoLinesItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxTwoLinesItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxTwoLinesItem::operator==(SfxPoolItem const&) const
 SvxULSpaceItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxULSpaceItem::HasMetrics() const
-SvxULSpaceItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxULSpaceItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxULSpaceItem::ScaleMetrics(long, long)
 SvxULSpaceItem::dumpAsJSON[abi:cxx11]() const
 SvxULSpaceItem::dumpAsXml(_xmlTextWriter*) const
@@ -7785,7 +7785,7 @@ SvxURLField::operator==(SvxFieldData const&) const
 SvxUnderlineItem::GetValueTextByPos(unsigned short) const
 SvxUnderlineItem::getItemInstanceManager() const
 SvxUnoDrawMSFactory::createTextField(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
-SvxUnoDrawPool::getAny(SfxItemPool const*, comphelper::PropertyMapEntry const*, com::sun::star::uno::Any&)
+SvxUnoDrawPool::getAny(SfxItemPool const*, comphelper::PropertyMapEntry const*, cpo::uno::Any&)
 SvxUnoDrawPool::init()
 SvxUnoFontDescriptor::FillFromItemSet(SfxItemSet const&, com::sun::star::awt::FontDescriptor&)
 SvxUnoFontDescriptor::FillItemSet(com::sun::star::awt::FontDescriptor const&, SfxItemSet&)
@@ -7823,7 +7823,7 @@ SvxUnoTextField::queryInterface(com::sun::star::uno::Type const&)
 SvxUnoTextField::removeEventListener(com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> const&)
 SvxUnoTextField::removePropertyChangeListener(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> const&)
 SvxUnoTextField::removeVetoableChangeListener(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> const&)
-SvxUnoTextField::setPropertyValue(rtl::OUString const&, com::sun::star::uno::Any const&)
+SvxUnoTextField::setPropertyValue(rtl::OUString const&, cpo::uno::Any const&)
 SvxUnoTextField::supportsService(rtl::OUString const&)
 SvxUnoTextField::~SvxUnoTextField()
 SvxUnoTextRange::getImplementationId()
@@ -7837,7 +7837,7 @@ SvxVerJustifyItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::O
 SvxVerJustifyItem::GetValueCount() const
 SvxVerJustifyItem::GetValueText(SvxCellVerJustify)
 SvxViewLayoutItem::Clone(SfxItemPool*) const
-SvxViewLayoutItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
+SvxViewLayoutItem::PutValue(cpo::uno::Any const&, unsigned char)
 SvxViewLayoutItem::SvxViewLayoutItem(SvxViewLayoutItem const&)
 SvxViewLayoutItem::operator==(SfxPoolItem const&) const
 SvxWeightItem::GetBoolValue() const
@@ -7854,8 +7854,8 @@ SvxWordLineModeItem::Clone(SfxItemPool*) const
 SvxWordLineModeItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxWritingModeItem::Clone(SfxItemPool*) const
 SvxWritingModeItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SvxWritingModeItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SvxWritingModeItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SvxWritingModeItem::PutValue(cpo::uno::Any const&, unsigned char)
+SvxWritingModeItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SvxXConnectionPreview::MouseButtonDown(MouseEvent const&)
 SvxXConnectionPreview::Paint(OutputDevice&, tools::Rectangle const&)
 SvxXConnectionPreview::Resize()
@@ -7887,7 +7887,7 @@ SvxZoomPageStatusBarControl::CreateImpl(unsigned short, unsigned short, StatusBa
 SvxZoomPageStatusBarControl::MouseButtonDown(MouseEvent const&)
 SvxZoomPageStatusBarControl::Paint(UserDrawEvent const&)
 SvxZoomPageStatusBarControl::SvxZoomPageStatusBarControl(unsigned short, unsigned short, StatusBar&)
-SvxZoomPageStatusBarControl::initialize(com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&)
+SvxZoomPageStatusBarControl::initialize(com::sun::star::uno::Sequence<cpo::uno::Any> const&)
 SvxZoomSliderControl::CreateImpl(unsigned short, unsigned short, StatusBar&)
 SvxZoomSliderControl::MouseButtonDown(MouseEvent const&)
 SvxZoomSliderControl::MouseButtonUp(MouseEvent const&)
@@ -7948,8 +7948,8 @@ SwChapterField::Copy() const
 SwChapterField::ExpandImpl(SwRootFrame const*) const
 SwChapterField::GetNumber(SwRootFrame const*) const
 SwChapterField::GetTitle(SwRootFrame const*) const
-SwChapterField::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwChapterField::QueryValue(com::sun::star::uno::Any&, unsigned short) const
+SwChapterField::PutValue(cpo::uno::Any const&, unsigned short)
+SwChapterField::QueryValue(cpo::uno::Any&, unsigned short) const
 SwChapterNumRules::CreateEmptyNumRule(unsigned short)
 SwChapterNumRules::Init()
 SwChapterNumRules::Save()
@@ -7986,8 +7986,8 @@ SwColumnOnlyExample::SetDrawingArea(weld::DrawingArea*)
 SwCombinedCharField::Copy() const
 SwCombinedCharField::ExpandImpl(SwRootFrame const*) const
 SwCombinedCharField::GetPar1() const
-SwCombinedCharField::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwCombinedCharField::QueryValue(com::sun::star::uno::Any&, unsigned short) const
+SwCombinedCharField::PutValue(cpo::uno::Any const&, unsigned short)
+SwCombinedCharField::QueryValue(cpo::uno::Any&, unsigned short) const
 SwCombinedCharField::SetPar1(rtl::OUString const&)
 SwCondCollItem::Clone(SfxItemPool*) const
 SwCondCollItem::GetStyle(unsigned short) const
@@ -8011,8 +8011,8 @@ SwContentControl::SwClientNotify(SwModify const&, SfxHint const&)
 SwContentControl::SwContentControl(SwFormatContentControl*)
 SwContentControl::dumpAsXml(_xmlTextWriter*) const
 SwContentControl::~SwContentControl()
-SwContentControlListItem::ItemsFromAny(com::sun::star::uno::Any const&)
-SwContentControlListItem::ItemsToAny(std::__debug::vector<SwContentControlListItem, std::allocator<SwContentControlListItem> > const&, com::sun::star::uno::Any&)
+SwContentControlListItem::ItemsFromAny(cpo::uno::Any const&)
+SwContentControlListItem::ItemsToAny(std::__debug::vector<SwContentControlListItem, std::allocator<SwContentControlListItem> > const&, cpo::uno::Any&)
 SwContentControlListItem::dumpAsXml(_xmlTextWriter*) const
 SwContentControlManager::Erase(SwTextContentControl*)
 SwContentControlManager::Insert(SwTextContentControl*)
@@ -8049,37 +8049,37 @@ SwDBField::GetFieldName() const
 SwDBField::GetPar1() const
 SwDBField::GetSubType() const
 SwDBField::InitContent()
-SwDBField::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwDBField::QueryValue(com::sun::star::uno::Any&, unsigned short) const
+SwDBField::PutValue(cpo::uno::Any const&, unsigned short)
+SwDBField::QueryValue(cpo::uno::Any&, unsigned short) const
 SwDBField::SetSubType(unsigned short)
 SwDBFieldType::Copy() const
 SwDBFieldType::GetName() const
-SwDBFieldType::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwDBFieldType::QueryValue(com::sun::star::uno::Any&, unsigned short) const
+SwDBFieldType::PutValue(cpo::uno::Any const&, unsigned short)
+SwDBFieldType::QueryValue(cpo::uno::Any&, unsigned short) const
 SwDBFieldType::ReleaseRef()
 SwDBNameInfField::GetFieldName() const
 SwDBNameInfField::GetSubType() const
-SwDBNameInfField::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwDBNameInfField::QueryValue(com::sun::star::uno::Any&, unsigned short) const
+SwDBNameInfField::PutValue(cpo::uno::Any const&, unsigned short)
+SwDBNameInfField::QueryValue(cpo::uno::Any&, unsigned short) const
 SwDBNameInfField::SetSubType(unsigned short)
 SwDBNameInfField::SwDBNameInfField(SwFieldType*, SwDBData, unsigned int)
 SwDBNextSetField::Copy() const
 SwDBNextSetField::Evaluate(SwDoc const&)
 SwDBNextSetField::ExpandImpl(SwRootFrame const*) const
 SwDBNextSetField::GetPar1() const
-SwDBNextSetField::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwDBNextSetField::QueryValue(com::sun::star::uno::Any&, unsigned short) const
+SwDBNextSetField::PutValue(cpo::uno::Any const&, unsigned short)
+SwDBNextSetField::QueryValue(cpo::uno::Any&, unsigned short) const
 SwDBNextSetField::SetPar1(rtl::OUString const&)
 SwDBNextSetFieldType::Copy() const
 SwDBSetNumberField::Copy() const
 SwDBSetNumberField::Evaluate(SwDoc const&)
 SwDBSetNumberField::ExpandImpl(SwRootFrame const*) const
-SwDBSetNumberField::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwDBSetNumberField::QueryValue(com::sun::star::uno::Any&, unsigned short) const
+SwDBSetNumberField::PutValue(cpo::uno::Any const&, unsigned short)
+SwDBSetNumberField::QueryValue(cpo::uno::Any&, unsigned short) const
 SwDBSetNumberFieldType::Copy() const
 SwDDEFieldType::Copy() const
-SwDDEFieldType::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwDDEFieldType::QueryValue(com::sun::star::uno::Any&, unsigned short) const
+SwDDEFieldType::PutValue(cpo::uno::Any const&, unsigned short)
+SwDDEFieldType::QueryValue(cpo::uno::Any&, unsigned short) const
 SwDDEFieldType::SetDoc(SwDoc*)
 SwDDEFieldType::UpdateDDE(bool)
 SwDateTimeField::Copy() const
@@ -8089,8 +8089,8 @@ SwDateTimeField::GetDateTime(SwDoc&, DateTime const&)
 SwDateTimeField::GetPar2() const
 SwDateTimeField::GetTime() const
 SwDateTimeField::GetValue() const
-SwDateTimeField::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwDateTimeField::QueryValue(com::sun::star::uno::Any&, unsigned short) const
+SwDateTimeField::PutValue(cpo::uno::Any const&, unsigned short)
+SwDateTimeField::QueryValue(cpo::uno::Any&, unsigned short) const
 SwDateTimeField::SetPar2(rtl::OUString const&)
 SwDoc::MakeCharFormat_(rtl::OUString const&, SwFormat*, bool, bool)
 SwDocDisplayItem::Clone(SfxItemPool*) const
@@ -8101,8 +8101,8 @@ SwDocFac::SwDocFac(SwDoc*)
 SwDocInfoField::Copy() const
 SwDocInfoField::ExpandImpl(SwRootFrame const*) const
 SwDocInfoField::GetFieldName() const
-SwDocInfoField::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwDocInfoField::QueryValue(com::sun::star::uno::Any&, unsigned short) const
+SwDocInfoField::PutValue(cpo::uno::Any const&, unsigned short)
+SwDocInfoField::QueryValue(cpo::uno::Any&, unsigned short) const
 SwDocInfoField::SetLanguage(o3tl::strong_int<unsigned short, LanguageTypeTag>)
 SwDocInfoField::SetSubType(unsigned short)
 SwDocStat::Reset()
@@ -8110,8 +8110,8 @@ SwDocStatField::ChangeExpansion(SwFrame const*)
 SwDocStatField::Copy() const
 SwDocStatField::ExpandImpl(SwRootFrame const*) const
 SwDocStatField::GetSubType() const
-SwDocStatField::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwDocStatField::QueryValue(com::sun::star::uno::Any&, unsigned short) const
+SwDocStatField::PutValue(cpo::uno::Any const&, unsigned short)
+SwDocStatField::QueryValue(cpo::uno::Any&, unsigned short) const
 SwDocStatField::SetSubType(unsigned short)
 SwDrawFrameFormat::DelFrames()
 SwDrawFrameFormat::GetDescription() const
@@ -8125,13 +8125,13 @@ SwDrawFrameFormat::~SwDrawFrameFormat()
 SwDrawModeGrf::Clone(SfxItemPool*) const
 SwDrawModeGrf::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SwDrawModeGrf::GetValueCount() const
-SwDrawModeGrf::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SwDrawModeGrf::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SwDrawModeGrf::PutValue(cpo::uno::Any const&, unsigned char)
+SwDrawModeGrf::QueryValue(cpo::uno::Any&, unsigned char) const
 SwDrawTextInfo::Shift(o3tl::strong_int<short, FractionTag<10> >)
 SwDropDownField::Copy() const
 SwDropDownField::ExpandImpl(SwRootFrame const*) const
-SwDropDownField::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwDropDownField::QueryValue(com::sun::star::uno::Any&, unsigned short) const
+SwDropDownField::PutValue(cpo::uno::Any const&, unsigned short)
+SwDropDownField::QueryValue(cpo::uno::Any&, unsigned short) const
 SwDropDownField::SetItems(com::sun::star::uno::Sequence<rtl::OUString> const&)
 SwDropDownField::SetPar2(rtl::OUString const&)
 SwDropDownField::SwDropDownField(SwDropDownField const&)
@@ -8146,8 +8146,8 @@ SwEndNoteInfo::UpdateFormatOrAttr()
 SwEndNoteInfo::operator=(SwEndNoteInfo const&)
 SwEnvItem::Clone(SfxItemPool*) const
 SwEnvItem::CreateDefault()
-SwEnvItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SwEnvItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SwEnvItem::PutValue(cpo::uno::Any const&, unsigned char)
+SwEnvItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SwEnvItem::operator=(SwEnvItem const&)
 SwEnvItem::operator==(SfxPoolItem const&) const
 SwExtraRedline::~SwExtraRedline()
@@ -8158,8 +8158,8 @@ SwField::GetFormula() const
 SwField::GetPar1() const
 SwField::GetPar2() const
 SwField::GetSubType() const
-SwField::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwField::QueryValue(com::sun::star::uno::Any&, unsigned short) const
+SwField::PutValue(cpo::uno::Any const&, unsigned short)
+SwField::QueryValue(cpo::uno::Any&, unsigned short) const
 SwField::SetLanguage(o3tl::strong_int<unsigned short, LanguageTypeTag>)
 SwField::SetPar1(rtl::OUString const&)
 SwField::SetPar2(rtl::OUString const&)
@@ -8175,16 +8175,16 @@ SwFieldType::GetFieldName_()
 SwFieldType::GetName() const
 SwFieldType::HasHiddenInformationNotes() const
 SwFieldType::PrintHiddenPara()
-SwFieldType::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwFieldType::QueryValue(com::sun::star::uno::Any&, unsigned short) const
+SwFieldType::PutValue(cpo::uno::Any const&, unsigned short)
+SwFieldType::QueryValue(cpo::uno::Any&, unsigned short) const
 SwFieldType::SetXObject(rtl::Reference<SwXFieldMaster> const&)
 SwFieldType::SwFieldType(SwFieldIds)
 SwFieldType::UpdateDocPos(long)
 SwFieldType::dumpAsXml(_xmlTextWriter*) const
 SwFileNameField::Copy() const
 SwFileNameField::ExpandImpl(SwRootFrame const*) const
-SwFileNameField::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwFileNameField::QueryValue(com::sun::star::uno::Any&, unsigned short) const
+SwFileNameField::PutValue(cpo::uno::Any const&, unsigned short)
+SwFileNameField::QueryValue(cpo::uno::Any&, unsigned short) const
 SwFltAnchor::Clone(SfxItemPool*) const
 SwFltAnchor::SetFrameFormat(SwFrameFormat*)
 SwFltAnchor::SwFltAnchor(SwFltAnchor const&)
@@ -8228,42 +8228,42 @@ SwForm::GetFormMaxLevel(TOXTypes)
 SwForm::GetFormText()
 SwFormatAnchor::Clone(SfxItemPool*) const
 SwFormatAnchor::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SwFormatAnchor::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SwFormatAnchor::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SwFormatAnchor::PutValue(cpo::uno::Any const&, unsigned char)
+SwFormatAnchor::QueryValue(cpo::uno::Any&, unsigned char) const
 SwFormatAnchor::dumpAsXml(_xmlTextWriter*) const
 SwFormatAnchor::operator=(SwFormatAnchor const&)
 SwFormatAnchor::operator==(SfxPoolItem const&) const
 SwFormatAutoFormat::Clone(SfxItemPool*) const
 SwFormatAutoFormat::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SwFormatAutoFormat::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SwFormatAutoFormat::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SwFormatAutoFormat::PutValue(cpo::uno::Any const&, unsigned char)
+SwFormatAutoFormat::QueryValue(cpo::uno::Any&, unsigned char) const
 SwFormatAutoFormat::dumpAsXml(_xmlTextWriter*) const
 SwFormatAutoFormat::operator==(SfxPoolItem const&) const
 SwFormatChain::Clone(SfxItemPool*) const
 SwFormatChain::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SwFormatChain::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SwFormatChain::QueryValue(cpo::uno::Any&, unsigned char) const
 SwFormatChain::SwFormatChain(SwFormatChain const&)
 SwFormatChain::operator==(SfxPoolItem const&) const
 SwFormatCharFormat::Clone(SfxItemPool*) const
 SwFormatCharFormat::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SwFormatCharFormat::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SwFormatCharFormat::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SwFormatCharFormat::PutValue(cpo::uno::Any const&, unsigned char)
+SwFormatCharFormat::QueryValue(cpo::uno::Any&, unsigned char) const
 SwFormatCharFormat::SwClientNotify(SwModify const&, SfxHint const&)
 SwFormatCharFormat::SwFormatCharFormat(SwFormatCharFormat const&)
 SwFormatCharFormat::dumpAsXml(_xmlTextWriter*) const
 SwFormatCharFormat::operator==(SfxPoolItem const&) const
 SwFormatCol::Clone(SfxItemPool*) const
 SwFormatCol::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SwFormatCol::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SwFormatCol::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SwFormatCol::PutValue(cpo::uno::Any const&, unsigned char)
+SwFormatCol::QueryValue(cpo::uno::Any&, unsigned char) const
 SwFormatCol::SetGutterWidth(unsigned short, unsigned short)
 SwFormatCol::dumpAsXml(_xmlTextWriter*) const
 SwFormatDrop::Clone(SfxItemPool*) const
 SwFormatDrop::CreateDefault()
 SwFormatDrop::GetInfo(SfxPoolItem&) const
 SwFormatDrop::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SwFormatDrop::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SwFormatDrop::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SwFormatDrop::PutValue(cpo::uno::Any const&, unsigned char)
+SwFormatDrop::QueryValue(cpo::uno::Any&, unsigned char) const
 SwFormatEditInReadonly::Clone(SfxItemPool*) const
 SwFormatEditInReadonly::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SwFormatEditInReadonly::dumpAsXml(_xmlTextWriter*) const
@@ -8291,13 +8291,13 @@ SwFormatFootnote::operator==(SfxPoolItem const&) const
 SwFormatFootnoteAtTextEnd::Clone(SfxItemPool*) const
 SwFormatFootnoteEndAtTextEnd::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SwFormatFootnoteEndAtTextEnd::GetValueCount() const
-SwFormatFootnoteEndAtTextEnd::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SwFormatFootnoteEndAtTextEnd::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SwFormatFootnoteEndAtTextEnd::PutValue(cpo::uno::Any const&, unsigned char)
+SwFormatFootnoteEndAtTextEnd::QueryValue(cpo::uno::Any&, unsigned char) const
 SwFormatFrameSize::Clone(SfxItemPool*) const
 SwFormatFrameSize::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SwFormatFrameSize::HasMetrics() const
-SwFormatFrameSize::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SwFormatFrameSize::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SwFormatFrameSize::PutValue(cpo::uno::Any const&, unsigned char)
+SwFormatFrameSize::QueryValue(cpo::uno::Any&, unsigned char) const
 SwFormatFrameSize::ScaleMetrics(long, long)
 SwFormatFrameSize::dumpAsXml(_xmlTextWriter*) const
 SwFormatHeader::Clone(SfxItemPool*) const
@@ -8308,15 +8308,15 @@ SwFormatHeader::SwFormatHeader(SwFrameFormat*)
 SwFormatHeader::operator==(SfxPoolItem const&) const
 SwFormatHoriOrient::Clone(SfxItemPool*) const
 SwFormatHoriOrient::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SwFormatHoriOrient::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SwFormatHoriOrient::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SwFormatHoriOrient::PutValue(cpo::uno::Any const&, unsigned char)
+SwFormatHoriOrient::QueryValue(cpo::uno::Any&, unsigned char) const
 SwFormatHoriOrient::dumpAsXml(_xmlTextWriter*) const
 SwFormatINetFormat::Clone(SfxItemPool*) const
 SwFormatINetFormat::CreateDefault()
 SwFormatINetFormat::GetMacro(SvMacroItemId) const
 SwFormatINetFormat::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SwFormatINetFormat::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SwFormatINetFormat::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SwFormatINetFormat::PutValue(cpo::uno::Any const&, unsigned char)
+SwFormatINetFormat::QueryValue(cpo::uno::Any&, unsigned char) const
 SwFormatINetFormat::SetMacro(SvMacroItemId, SvxMacro const&)
 SwFormatINetFormat::SetMacroTable(SvxMacroTableDtor const*)
 SwFormatINetFormat::SwFormatINetFormat()
@@ -8334,14 +8334,14 @@ SwFormatLineBreak::operator==(SfxPoolItem const&) const
 SwFormatLineNumber::Clone(SfxItemPool*) const
 SwFormatLineNumber::CreateDefault()
 SwFormatLineNumber::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SwFormatLineNumber::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SwFormatLineNumber::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SwFormatLineNumber::PutValue(cpo::uno::Any const&, unsigned char)
+SwFormatLineNumber::QueryValue(cpo::uno::Any&, unsigned char) const
 SwFormatLineNumber::operator==(SfxPoolItem const&) const
 SwFormatNoBalancedColumns::Clone(SfxItemPool*) const
 SwFormatNoBalancedColumns::dumpAsXml(_xmlTextWriter*) const
 SwFormatPageDesc::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SwFormatPageDesc::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SwFormatPageDesc::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SwFormatPageDesc::PutValue(cpo::uno::Any const&, unsigned char)
+SwFormatPageDesc::QueryValue(cpo::uno::Any&, unsigned char) const
 SwFormatPageDesc::RegisterToPageDesc(SwPageDesc&)
 SwFormatPageDesc::SwClientNotify(SwModify const&, SfxHint const&)
 SwFormatPageDesc::SwFormatPageDesc(SwFormatPageDesc const&)
@@ -8352,8 +8352,8 @@ SwFormatRowSplit::Clone(SfxItemPool*) const
 SwFormatRowSplit::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SwFormatRuby::Clone(SfxItemPool*) const
 SwFormatRuby::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SwFormatRuby::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SwFormatRuby::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SwFormatRuby::PutValue(cpo::uno::Any const&, unsigned char)
+SwFormatRuby::QueryValue(cpo::uno::Any&, unsigned char) const
 SwFormatRuby::SwFormatRuby(SwFormatRuby const&)
 SwFormatRuby::dumpAsXml(_xmlTextWriter*) const
 SwFormatRuby::operator=(SwFormatRuby const&)
@@ -8361,24 +8361,24 @@ SwFormatRuby::operator==(SfxPoolItem const&) const
 SwFormatSurround::Clone(SfxItemPool*) const
 SwFormatSurround::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SwFormatSurround::GetValueCount() const
-SwFormatSurround::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SwFormatSurround::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SwFormatSurround::PutValue(cpo::uno::Any const&, unsigned char)
+SwFormatSurround::QueryValue(cpo::uno::Any&, unsigned char) const
 SwFormatSurround::dumpAsXml(_xmlTextWriter*) const
 SwFormatURL::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SwFormatURL::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SwFormatURL::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SwFormatURL::PutValue(cpo::uno::Any const&, unsigned char)
+SwFormatURL::QueryValue(cpo::uno::Any&, unsigned char) const
 SwFormatURL::SwFormatURL(SwFormatURL const&)
 SwFormatURL::operator==(SfxPoolItem const&) const
 SwFormatVertOrient::Clone(SfxItemPool*) const
 SwFormatVertOrient::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SwFormatVertOrient::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SwFormatVertOrient::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SwFormatVertOrient::PutValue(cpo::uno::Any const&, unsigned char)
+SwFormatVertOrient::QueryValue(cpo::uno::Any&, unsigned char) const
 SwFormatVertOrient::dumpAsXml(_xmlTextWriter*) const
 SwFormatWrapInfluenceOnObjPos::Clone(SfxItemPool*) const
 SwFormatWrapInfluenceOnObjPos::GetOverlapVertOffset() const
 SwFormatWrapInfluenceOnObjPos::GetWrapInfluenceOnObjPos(bool) const
-SwFormatWrapInfluenceOnObjPos::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SwFormatWrapInfluenceOnObjPos::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SwFormatWrapInfluenceOnObjPos::PutValue(cpo::uno::Any const&, unsigned char)
+SwFormatWrapInfluenceOnObjPos::QueryValue(cpo::uno::Any&, unsigned char) const
 SwFormatWrapInfluenceOnObjPos::SetOverlapVertOffset(long)
 SwFormatWrapInfluenceOnObjPos::SetWrapInfluenceOnObjPos(short)
 SwFormatWrapInfluenceOnObjPos::dumpAsXml(_xmlTextWriter*) const
@@ -8397,8 +8397,8 @@ SwFrameExample::SetDrawingArea(weld::DrawingArea*)
 SwFrameExample::StyleUpdated()
 SwGammaGrf::Clone(SfxItemPool*) const
 SwGammaGrf::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SwGammaGrf::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SwGammaGrf::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SwGammaGrf::PutValue(cpo::uno::Any const&, unsigned char)
+SwGammaGrf::QueryValue(cpo::uno::Any&, unsigned char) const
 SwGammaGrf::operator==(SfxPoolItem const&) const
 SwGlossaries::DelGroupDoc(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
 SwGlossaries::EditGroupDoc(rtl::OUString const&, rtl::OUString const&, bool)
@@ -8441,8 +8441,8 @@ SwHiddenTextField::GetFieldName() const
 SwHiddenTextField::GetPar1() const
 SwHiddenTextField::GetPar2() const
 SwHiddenTextField::GetSubType() const
-SwHiddenTextField::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwHiddenTextField::QueryValue(com::sun::star::uno::Any&, unsigned short) const
+SwHiddenTextField::PutValue(cpo::uno::Any const&, unsigned short)
+SwHiddenTextField::QueryValue(cpo::uno::Any&, unsigned short) const
 SwHiddenTextField::SetPar1(rtl::OUString const&)
 SwHiddenTextField::SetPar2(rtl::OUString const&)
 SwHiddenTextField::SwHiddenTextField(SwHiddenTextFieldType*, bool, rtl::OUString, rtl::OUString const&, bool, SwFieldTypesEnum)
@@ -8454,8 +8454,8 @@ SwHyphWrapper::SpellStart(SvxSpellArea)
 SwInputField::Copy() const
 SwInputField::ExpandImpl(SwRootFrame const*) const
 SwInputField::GetFieldName() const
-SwInputField::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwInputField::QueryValue(com::sun::star::uno::Any&, unsigned short) const
+SwInputField::PutValue(cpo::uno::Any const&, unsigned short)
+SwInputField::QueryValue(cpo::uno::Any&, unsigned short) const
 SwInputField::SetFormatField(SwFormatField&)
 SwInputField::SetPar2(rtl::OUString const&)
 SwInputField::SetSubType(unsigned short)
@@ -8477,8 +8477,8 @@ SwMacroField::GetMacroName() const
 SwMacroField::GetPar1() const
 SwMacroField::GetPar2() const
 SwMacroField::GetSvxMacro() const
-SwMacroField::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwMacroField::QueryValue(com::sun::star::uno::Any&, unsigned short) const
+SwMacroField::PutValue(cpo::uno::Any const&, unsigned short)
+SwMacroField::QueryValue(cpo::uno::Any&, unsigned short) const
 SwMacroField::SetPar1(rtl::OUString const&)
 SwMacroField::SetPar2(rtl::OUString const&)
 SwMacroField::isScriptURL(rtl::OUString const&)
@@ -8503,13 +8503,13 @@ SwMailTransferable::getTransferDataFlavors()
 SwMailTransferable::isDataFlavorSupported(com::sun::star::datatransfer::DataFlavor const&)
 SwMailTransferable::removePropertyChangeListener(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> const&)
 SwMailTransferable::removeVetoableChangeListener(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> const&)
-SwMailTransferable::setPropertyValue(rtl::OUString const&, com::sun::star::uno::Any const&)
+SwMailTransferable::setPropertyValue(rtl::OUString const&, cpo::uno::Any const&)
 SwMailTransferable::~SwMailTransferable()
 SwMirrorGrf::Clone(SfxItemPool*) const
 SwMirrorGrf::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SwMirrorGrf::GetValueCount() const
-SwMirrorGrf::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SwMirrorGrf::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SwMirrorGrf::PutValue(cpo::uno::Any const&, unsigned char)
+SwMirrorGrf::QueryValue(cpo::uno::Any&, unsigned char) const
 SwMirrorGrf::operator==(SfxPoolItem const&) const
 SwModify::CallSwClientNotify(SfxHint const&) const
 SwModify::GetInfo(SfxPoolItem&) const
@@ -8530,8 +8530,8 @@ SwNumFormatTreeView::Init()
 SwNumRuleItem::Clone(SfxItemPool*) const
 SwNumRuleItem::CreateDefault()
 SwNumRuleItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SwNumRuleItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SwNumRuleItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SwNumRuleItem::PutValue(cpo::uno::Any const&, unsigned char)
+SwNumRuleItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SwNumRuleItem::dumpAsXml(_xmlTextWriter*) const
 SwNumRuleItem::operator==(SfxPoolItem const&) const
 SwNumRulesWithName::GetNumFormat(unsigned long, SwNumFormat const*&, rtl::OUString const*&) const
@@ -8566,8 +8566,8 @@ SwPageFootnoteInfo::operator=(SwPageFootnoteInfo const&)
 SwPageFootnoteInfo::operator==(SwPageFootnoteInfo const&) const
 SwPageFootnoteInfoItem::Clone(SfxItemPool*) const
 SwPageFootnoteInfoItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SwPageFootnoteInfoItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SwPageFootnoteInfoItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SwPageFootnoteInfoItem::PutValue(cpo::uno::Any const&, unsigned char)
+SwPageFootnoteInfoItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SwPageFootnoteInfoItem::SwPageFootnoteInfoItem(SwPageFootnoteInfo const&)
 SwPageGridExample::DrawPage(OutputDevice&, Point const&, bool, bool)
 SwPageNumberField::ChangeExpansion(unsigned short, unsigned short)
@@ -8575,8 +8575,8 @@ SwPageNumberField::Copy() const
 SwPageNumberField::ExpandImpl(SwRootFrame const*) const
 SwPageNumberField::GetPar2() const
 SwPageNumberField::GetSubType() const
-SwPageNumberField::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwPageNumberField::QueryValue(com::sun::star::uno::Any&, unsigned short) const
+SwPageNumberField::PutValue(cpo::uno::Any const&, unsigned short)
+SwPageNumberField::QueryValue(cpo::uno::Any&, unsigned short) const
 SwPageNumberField::SetPar2(rtl::OUString const&)
 SwPosition::Assign(SwNode const&, o3tl::strong_int<int, Tag_SwNodeOffset>, int)
 SwPosition::AssignEndIndex(SwContentNode const&)
@@ -8629,8 +8629,8 @@ SwRootFrame::dumpAsXml(_xmlTextWriter*) const
 SwScriptField::Copy() const
 SwScriptField::ExpandImpl(SwRootFrame const*) const
 SwScriptField::GetDescription() const
-SwScriptField::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwScriptField::QueryValue(com::sun::star::uno::Any&, unsigned short) const
+SwScriptField::PutValue(cpo::uno::Any const&, unsigned short)
+SwScriptField::QueryValue(cpo::uno::Any&, unsigned short) const
 SwScriptField::SetPar1(rtl::OUString const&)
 SwScriptField::SetPar2(rtl::OUString const&)
 SwScriptField::SwScriptField(SwScriptFieldType*, rtl::OUString, rtl::OUString, bool)
@@ -8643,13 +8643,13 @@ SwSetExpField::Copy() const
 SwSetExpField::ExpandImpl(SwRootFrame const*) const
 SwSetExpField::GetExpStr(SwRootFrame const*) const
 SwSetExpField::GetValue(SwRootFrame const*) const
-SwSetExpField::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwSetExpField::QueryValue(com::sun::star::uno::Any&, unsigned short) const
+SwSetExpField::PutValue(cpo::uno::Any const&, unsigned short)
+SwSetExpField::QueryValue(cpo::uno::Any&, unsigned short) const
 SwSetExpField::SetFormatField(SwFormatField&)
 SwSetExpField::SetValue(double const&)
 SwSetExpFieldType::Copy() const
-SwSetExpFieldType::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwSetExpFieldType::QueryValue(com::sun::star::uno::Any&, unsigned short) const
+SwSetExpFieldType::PutValue(cpo::uno::Any const&, unsigned short)
+SwSetExpFieldType::QueryValue(cpo::uno::Any&, unsigned short) const
 SwSetExpFieldType::SetChapter(SwSetExpField&, SwNode const&, SwRootFrame const*)
 SwSetExpFieldType::SetSeqFormat(unsigned long)
 SwSetExpFieldType::SetSeqRefNo(SwSetExpField&)
@@ -8755,8 +8755,8 @@ SwTableRowRedline::SwTableRowRedline(SwRedlineData const&, SwTableLine const&)
 SwTableRowRedline::~SwTableRowRedline()
 SwTemplNameField::Copy() const
 SwTemplNameField::ExpandImpl(SwRootFrame const*) const
-SwTemplNameField::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwTemplNameField::QueryValue(com::sun::star::uno::Any&, unsigned short) const
+SwTemplNameField::PutValue(cpo::uno::Any const&, unsigned short)
+SwTemplNameField::QueryValue(cpo::uno::Any&, unsigned short) const
 SwTestItem::Clone(SfxItemPool*) const
 SwTestItem::operator==(SfxPoolItem const&) const
 SwTextAttr::Destroy(SwTextAttr*)
@@ -8793,8 +8793,8 @@ SwTextContentControl::~SwTextContentControl()
 SwTextGridItem::Clone(SfxItemPool*) const
 SwTextGridItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SwTextGridItem::Init()
-SwTextGridItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SwTextGridItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SwTextGridItem::PutValue(cpo::uno::Any const&, unsigned char)
+SwTextGridItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SwTextGridItem::SwitchPaperMode(bool)
 SwTextGridItem::operator==(SfxPoolItem const&) const
 SwTextINetFormat::IsProtect() const
@@ -8813,8 +8813,8 @@ SwTranslateHelper::ExportPaMToHTML(SwPaM*)
 SwTranslateHelper::PasteHTMLToPaM(SwWrtShell&, SwPaM*, rtl::OString const&)
 SwTranslateHelper::TranslateDocument(SwWrtShell&, SwTranslateHelper::TranslateAPIConfig const&)
 SwUINumRuleItem::Clone(SfxItemPool*) const
-SwUINumRuleItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SwUINumRuleItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+SwUINumRuleItem::PutValue(cpo::uno::Any const&, unsigned char)
+SwUINumRuleItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SwUINumRuleItem::SwUINumRuleItem(SwUINumRuleItem const&)
 SwUINumRuleItem::operator==(SfxPoolItem const&) const
 SwUnoCursorHelper::GetSelectableFromAny(com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&, SwDoc&, SwPaM*&, std::pair<rtl::OUString, FlyCntType>&, rtl::OUString&, SwUnoTableCursor const*&, sw::mark::IMark const*&, std::__debug::vector<SdrObject*, std::allocator<SdrObject*> >&)
@@ -8826,8 +8826,8 @@ SwUserField::GetPar1() const
 SwUserField::GetPar2() const
 SwUserField::GetSubType() const
 SwUserField::GetValue() const
-SwUserField::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwUserField::QueryValue(com::sun::star::uno::Any&, unsigned short) const
+SwUserField::PutValue(cpo::uno::Any const&, unsigned short)
+SwUserField::QueryValue(cpo::uno::Any&, unsigned short) const
 SwUserField::SetPar2(rtl::OUString const&)
 SwUserField::SetSubType(unsigned short)
 SwUserField::SetValue(double const&)
@@ -8836,8 +8836,8 @@ SwUserFieldType::Copy() const
 SwUserFieldType::EnsureValid()
 SwUserFieldType::Expand(unsigned int, unsigned short, o3tl::strong_int<unsigned short, LanguageTypeTag>)
 SwUserFieldType::GetValue(SwCalc&)
-SwUserFieldType::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwUserFieldType::QueryValue(com::sun::star::uno::Any&, unsigned short) const
+SwUserFieldType::PutValue(cpo::uno::Any const&, unsigned short)
+SwUserFieldType::QueryValue(cpo::uno::Any&, unsigned short) const
 SwUserFieldType::SwClientNotify(SwModify const&, SfxHint const&)
 SwUserFieldType::dumpAsXml(_xmlTextWriter*) const
 SwValueField::ChgTyp(SwFieldType*)
@@ -8908,7 +8908,7 @@ SwXTextTableCursor::mergeRange()
 SwXTextTableCursor::release()
 SwXTextTableCursor::removePropertyChangeListener(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> const&)
 SwXTextTableCursor::removeVetoableChangeListener(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> const&)
-SwXTextTableCursor::setPropertyValue(rtl::OUString const&, com::sun::star::uno::Any const&)
+SwXTextTableCursor::setPropertyValue(rtl::OUString const&, cpo::uno::Any const&)
 SwXTextTableCursor::splitRange(short, unsigned char)
 SwXTextTableCursor::supportsService(rtl::OUString const&)
 SwpHints::Resort() const
@@ -9330,7 +9330,7 @@ VCLXCheckBox::removeActionListener(com::sun::star::uno::Reference<com::sun::star
 VCLXCheckBox::removeItemListener(com::sun::star::uno::Reference<com::sun::star::awt::XItemListener> const&)
 VCLXCheckBox::setActionCommand(rtl::OUString const&)
 VCLXCheckBox::setLabel(rtl::OUString const&)
-VCLXCheckBox::setProperty(rtl::OUString const&, com::sun::star::uno::Any const&)
+VCLXCheckBox::setProperty(rtl::OUString const&, cpo::uno::Any const&)
 VCLXDevice::~VCLXDevice()
 VCLXFont::ImplAssertValidFontMetric()
 VCLXFont::getCharWidth(char16_t)
@@ -9388,7 +9388,7 @@ VCLXRadioButton::removeActionListener(com::sun::star::uno::Reference<com::sun::s
 VCLXRadioButton::removeItemListener(com::sun::star::uno::Reference<com::sun::star::awt::XItemListener> const&)
 VCLXRadioButton::setActionCommand(rtl::OUString const&)
 VCLXRadioButton::setLabel(rtl::OUString const&)
-VCLXRadioButton::setProperty(rtl::OUString const&, com::sun::star::uno::Any const&)
+VCLXRadioButton::setProperty(rtl::OUString const&, cpo::uno::Any const&)
 VCLXScrollBar::CreateAccessibleContext()
 VCLXScrollBar::ImplGetPropertyIds(std::__debug::vector<unsigned short, std::allocator<unsigned short> >&)
 VCLXScrollBar::ProcessWindowEvent(VclWindowEvent const&)
@@ -9408,7 +9408,7 @@ VCLXScrollBar::setLineIncrement(int)
 VCLXScrollBar::setMaximum(int)
 VCLXScrollBar::setMinimum(int)
 VCLXScrollBar::setOrientation(int)
-VCLXScrollBar::setProperty(rtl::OUString const&, com::sun::star::uno::Any const&)
+VCLXScrollBar::setProperty(rtl::OUString const&, cpo::uno::Any const&)
 VCLXScrollBar::setValues(int, int, int)
 VCLXScrollBar::setVisibleSize(int)
 VCLXWindow::GetContainerListeners()
@@ -9421,7 +9421,7 @@ VCLXWindow::IsDisposed() const
 VCLXWindow::IsSynthesizingVCLEvent() const
 VCLXWindow::PushPropertyIds(std::__debug::vector<unsigned short, std::allocator<unsigned short> >&, int, ...)
 VCLXWindow::SetSynthesizingVCLEvent(bool)
-VCLXWindow::SetSystemParent_Impl(com::sun::star::uno::Any const&)
+VCLXWindow::SetSystemParent_Impl(cpo::uno::Any const&)
 VCLXWindow::notifyWindowRemoved(vcl::Window const&)
 VCLXWindow::resumeVclEventListening()
 VCLXWindow::suspendVclEventListening()
@@ -9434,7 +9434,7 @@ ValueSet::GetLargestItemSize()
 VbaDocumentBase::getNameFromModel(com::sun::star::uno::Reference<com::sun::star::frame::XModel> const&)
 VbaEventsHelperBase::ensureVBALibrary()
 VbaEventsHelperBase::getEventHandlerInfo(int) const
-VbaEventsHelperBase::getEventHandlerPath(VbaEventsHelperBase::EventHandlerInfo const&, com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&)
+VbaEventsHelperBase::getEventHandlerPath(VbaEventsHelperBase::EventHandlerInfo const&, com::sun::star::uno::Sequence<cpo::uno::Any> const&)
 VbaEventsHelperBase::getModuleType(rtl::OUString const&)
 VbaEventsHelperBase::startListening()
 VbaEventsHelperBase::stopListening()
@@ -9689,7 +9689,7 @@ XBitmapList::Create()
 XBitmapList::CreateBitmap(long, Size const&) const
 XBitmapList::CreateBitmapForUI(long)
 XColorItem::Clone(SfxItemPool*) const
-XColorItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+XColorItem::QueryValue(cpo::uno::Any&, unsigned char) const
 XColorItem::XColorItem(TypedWhichId<XColorItem>, int, Color const&)
 XColorItem::dumpAsXml(_xmlTextWriter*) const
 XColorList::Create()
@@ -9730,7 +9730,7 @@ XFillFloatTransparenceItem::dumpAsJSON[abi:cxx11]() const
 XFillGradientItem::Clone(SfxItemPool*) const
 XFillGradientItem::CompareValueFunc(NameOrIndex const*, NameOrIndex const*)
 XFillGradientItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-XFillGradientItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+XFillGradientItem::QueryValue(cpo::uno::Any&, unsigned char) const
 XFillGradientItem::XFillGradientItem(int, basegfx::BGradient const&)
 XFillGradientItem::dumpAsJSON[abi:cxx11]() const
 XFillGradientItem::operator==(SfxPoolItem const&) const
@@ -9751,8 +9751,8 @@ XFillUseSlideBackgroundItem::GetPresentation(SfxItemPresentation, MapUnit, MapUn
 XFillUseSlideBackgroundItem::dumpAsXml(_xmlTextWriter*) const
 XFormTextAdjustItem::Clone(SfxItemPool*) const
 XFormTextAdjustItem::GetValueCount() const
-XFormTextAdjustItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-XFormTextAdjustItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+XFormTextAdjustItem::PutValue(cpo::uno::Any const&, unsigned char)
+XFormTextAdjustItem::QueryValue(cpo::uno::Any&, unsigned char) const
 XFormTextDistanceItem::Clone(SfxItemPool*) const
 XFormTextHideFormItem::Clone(SfxItemPool*) const
 XFormTextMirrorItem::Clone(SfxItemPool*) const
@@ -9760,15 +9760,15 @@ XFormTextOutlineItem::Clone(SfxItemPool*) const
 XFormTextShadowColorItem::Clone(SfxItemPool*) const
 XFormTextShadowItem::Clone(SfxItemPool*) const
 XFormTextShadowItem::GetValueCount() const
-XFormTextShadowItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-XFormTextShadowItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+XFormTextShadowItem::PutValue(cpo::uno::Any const&, unsigned char)
+XFormTextShadowItem::QueryValue(cpo::uno::Any&, unsigned char) const
 XFormTextShadowXValItem::Clone(SfxItemPool*) const
 XFormTextShadowYValItem::Clone(SfxItemPool*) const
 XFormTextStartItem::Clone(SfxItemPool*) const
 XFormTextStyleItem::Clone(SfxItemPool*) const
 XFormTextStyleItem::GetValueCount() const
-XFormTextStyleItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-XFormTextStyleItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+XFormTextStyleItem::PutValue(cpo::uno::Any const&, unsigned char)
+XFormTextStyleItem::QueryValue(cpo::uno::Any&, unsigned char) const
 XGradientEntry::XGradientEntry(XGradientEntry const&)
 XGradientList::Create()
 XGradientList::CreateBitmap(long, Size const&) const
@@ -9791,11 +9791,11 @@ XLineAttrSetItem::XLineAttrSetItem(XLineAttrSetItem const&, SfxItemPool*)
 XLineCapItem::Clone(SfxItemPool*) const
 XLineCapItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 XLineCapItem::GetValueCount() const
-XLineCapItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-XLineCapItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+XLineCapItem::PutValue(cpo::uno::Any const&, unsigned char)
+XLineCapItem::QueryValue(cpo::uno::Any&, unsigned char) const
 XLineColorItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-XLineColorItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-XLineColorItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+XLineColorItem::PutValue(cpo::uno::Any const&, unsigned char)
+XLineColorItem::QueryValue(cpo::uno::Any&, unsigned char) const
 XLineDashItem::Clone(SfxItemPool*) const
 XLineDashItem::CompareValueFunc(NameOrIndex const*, NameOrIndex const*)
 XLineDashItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
@@ -9804,13 +9804,13 @@ XLineDashItem::ScaleMetrics(long, long)
 XLineDashItem::XLineDashItem(XLineDashItem const&)
 XLineEndCenterItem::Clone(SfxItemPool*) const
 XLineEndCenterItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-XLineEndCenterItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-XLineEndCenterItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+XLineEndCenterItem::PutValue(cpo::uno::Any const&, unsigned char)
+XLineEndCenterItem::QueryValue(cpo::uno::Any&, unsigned char) const
 XLineEndEntry::XLineEndEntry(XLineEndEntry const&)
 XLineEndItem::Clone(SfxItemPool*) const
 XLineEndItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-XLineEndItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-XLineEndItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+XLineEndItem::PutValue(cpo::uno::Any const&, unsigned char)
+XLineEndItem::QueryValue(cpo::uno::Any&, unsigned char) const
 XLineEndItem::XLineEndItem(XLineEndItem const&)
 XLineEndList::Create()
 XLineEndList::CreateBitmapForUI(long)
@@ -9819,37 +9819,37 @@ XLineEndList::createInstance()
 XLineEndList::~XLineEndList()
 XLineEndWidthItem::Clone(SfxItemPool*) const
 XLineEndWidthItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-XLineEndWidthItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-XLineEndWidthItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+XLineEndWidthItem::PutValue(cpo::uno::Any const&, unsigned char)
+XLineEndWidthItem::QueryValue(cpo::uno::Any&, unsigned char) const
 XLineJointItem::Clone(SfxItemPool*) const
 XLineJointItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 XLineJointItem::GetValueCount() const
-XLineJointItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-XLineJointItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+XLineJointItem::PutValue(cpo::uno::Any const&, unsigned char)
+XLineJointItem::QueryValue(cpo::uno::Any&, unsigned char) const
 XLineStartCenterItem::Clone(SfxItemPool*) const
 XLineStartCenterItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-XLineStartCenterItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-XLineStartCenterItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+XLineStartCenterItem::PutValue(cpo::uno::Any const&, unsigned char)
+XLineStartCenterItem::QueryValue(cpo::uno::Any&, unsigned char) const
 XLineStartItem::Clone(SfxItemPool*) const
 XLineStartItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-XLineStartItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-XLineStartItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+XLineStartItem::PutValue(cpo::uno::Any const&, unsigned char)
+XLineStartItem::QueryValue(cpo::uno::Any&, unsigned char) const
 XLineStartItem::XLineStartItem(XLineStartItem const&)
 XLineStartItem::operator==(SfxPoolItem const&) const
 XLineStartWidthItem::Clone(SfxItemPool*) const
 XLineStartWidthItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-XLineStartWidthItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-XLineStartWidthItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+XLineStartWidthItem::PutValue(cpo::uno::Any const&, unsigned char)
+XLineStartWidthItem::QueryValue(cpo::uno::Any&, unsigned char) const
 XLineStyleItem::Clone(SfxItemPool*) const
 XLineStyleItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 XLineStyleItem::GetValueCount() const
-XLineStyleItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-XLineStyleItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+XLineStyleItem::PutValue(cpo::uno::Any const&, unsigned char)
+XLineStyleItem::QueryValue(cpo::uno::Any&, unsigned char) const
 XLineTransparenceItem::Clone(SfxItemPool*) const
 XLineTransparenceItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 XLineWidthItem::Clone(SfxItemPool*) const
 XLineWidthItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-XLineWidthItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
+XLineWidthItem::PutValue(cpo::uno::Any const&, unsigned char)
 XMLBase64ImportContext::characters(rtl::OUString const&)
 XMLBase64ImportContext::endFastElement(int)
 XMLBase64ImportContext::~XMLBase64ImportContext()
@@ -9862,15 +9862,15 @@ XMLComplexColorExport::doExport(model::ComplexColor const&, unsigned short, rtl:
 XMLComplexColorImport::XMLComplexColorImport(model::ComplexColor&)
 XMLComplexColorImport::fillAttributes(com::sun::star::uno::Reference<com::sun::star::xml::sax::XFastAttributeList> const&)
 XMLComplexColorImport::handleTransformContext(int, com::sun::star::uno::Reference<com::sun::star::xml::sax::XFastAttributeList> const&)
-XMLConstantsPropertyHandler::exportXML(rtl::OUString&, com::sun::star::uno::Any const&, SvXMLUnitConverter const&) const
-XMLConstantsPropertyHandler::importXML(rtl::OUString const&, com::sun::star::uno::Any&, SvXMLUnitConverter const&) const
+XMLConstantsPropertyHandler::exportXML(rtl::OUString&, cpo::uno::Any const&, SvXMLUnitConverter const&) const
+XMLConstantsPropertyHandler::importXML(rtl::OUString const&, cpo::uno::Any&, SvXMLUnitConverter const&) const
 XMLConstantsPropertyHandler::~XMLConstantsPropertyHandler()
 XMLDocumentSettingsContext::createFastChildContext(int, com::sun::star::uno::Reference<com::sun::star::xml::sax::XFastAttributeList> const&)
 XMLDocumentSettingsContext::endFastElement(int)
 XMLDocumentSettingsContext::~XMLDocumentSettingsContext()
 XMLDrawingPageStyleContext::FillPropertySet(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&)
-XMLEnumPropertyHdl::exportXML(rtl::OUString&, com::sun::star::uno::Any const&, SvXMLUnitConverter const&) const
-XMLEnumPropertyHdl::importXML(rtl::OUString const&, com::sun::star::uno::Any&, SvXMLUnitConverter const&) const
+XMLEnumPropertyHdl::exportXML(rtl::OUString&, cpo::uno::Any const&, SvXMLUnitConverter const&) const
+XMLEnumPropertyHdl::importXML(rtl::OUString const&, cpo::uno::Any&, SvXMLUnitConverter const&) const
 XMLEnumPropertyHdl::~XMLEnumPropertyHdl()
 XMLEventExport::AddHandler(rtl::OUString const&, std::unique_ptr<XMLEventExportHandler, std::default_delete<XMLEventExportHandler> >)
 XMLEventExport::AddTranslationTable(XMLEventNameTranslation const*)
@@ -9895,8 +9895,8 @@ XMLGradientStopContext::~XMLGradientStopContext()
 XMLGraphicsDefaultStyle::SetDefaults()
 XMLGraphicsDefaultStyle::createFastChildContext(int, com::sun::star::uno::Reference<com::sun::star::xml::sax::XFastAttributeList> const&)
 XMLGraphicsDefaultStyle::~XMLGraphicsDefaultStyle()
-XMLNamedBoolPropertyHdl::exportXML(rtl::OUString&, com::sun::star::uno::Any const&, SvXMLUnitConverter const&) const
-XMLNamedBoolPropertyHdl::importXML(rtl::OUString const&, com::sun::star::uno::Any&, SvXMLUnitConverter const&) const
+XMLNamedBoolPropertyHdl::exportXML(rtl::OUString&, cpo::uno::Any const&, SvXMLUnitConverter const&) const
+XMLNamedBoolPropertyHdl::importXML(rtl::OUString const&, cpo::uno::Any&, SvXMLUnitConverter const&) const
 XMLNumberFormatAttributesExportHelper::GetCellType(int, bool&, com::sun::star::uno::Reference<com::sun::star::util::XNumberFormatsSupplier> const&)
 XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(int, rtl::OUString&)
 XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(int, rtl::OUString&, com::sun::star::uno::Reference<com::sun::star::util::XNumberFormatsSupplier> const&)
@@ -9916,7 +9916,7 @@ XMLPropStyleContext::getStandardSet()
 XMLPropStyleContext::translateNameBasedDrawingLayerFillStyleDefinitionsToStyleDisplayNames()
 XMLPropertyComplexColorContext::createFastChildContext(int, com::sun::star::uno::Reference<com::sun::star::xml::sax::XFastAttributeList> const&)
 XMLPropertyComplexColorContext::endFastElement(int)
-XMLPropertyHandler::equals(com::sun::star::uno::Any const&, com::sun::star::uno::Any const&) const
+XMLPropertyHandler::equals(cpo::uno::Any const&, cpo::uno::Any const&) const
 XMLPropertyHandlerFactory::GetHdlCache(int) const
 XMLPropertySetMapper::GetEarliestODFVersionForExport(int) const
 XMLPropertySetMapper::GetEntryFlags(int) const
@@ -9929,17 +9929,17 @@ XMLPropertySetMapper::importXML(rtl::OUString const&, XMLPropertyState&, SvXMLUn
 XMLPropertySetMapper::~XMLPropertySetMapper()
 XMLScriptContext::createFastChildContext(int, com::sun::star::uno::Reference<com::sun::star::xml::sax::XFastAttributeList> const&)
 XMLScriptContext::~XMLScriptContext()
-XMLSettingsExportHelper::CallTypeFunction(com::sun::star::uno::Any const&, rtl::OUString const&) const
-XMLSettingsExportHelper::ManipulateSetting(com::sun::star::uno::Any&, std::basic_string_view<char16_t, std::char_traits<char16_t> >) const
+XMLSettingsExportHelper::CallTypeFunction(cpo::uno::Any const&, rtl::OUString const&) const
+XMLSettingsExportHelper::ManipulateSetting(cpo::uno::Any&, std::basic_string_view<char16_t, std::char_traits<char16_t> >) const
 XMLSettingsExportHelper::exportBool(bool, rtl::OUString const&) const
 XMLSettingsExportHelper::exportByte()
 XMLSettingsExportHelper::exportDateTime(com::sun::star::util::DateTime const&, rtl::OUString const&) const
 XMLSettingsExportHelper::exportDouble(double, rtl::OUString const&) const
-XMLSettingsExportHelper::exportForbiddenCharacters(com::sun::star::uno::Any const&, rtl::OUString const&) const
+XMLSettingsExportHelper::exportForbiddenCharacters(cpo::uno::Any const&, rtl::OUString const&) const
 XMLSettingsExportHelper::exportIndexAccess(com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> const&, rtl::OUString const&) const
 XMLSettingsExportHelper::exportInt(int, rtl::OUString const&) const
 XMLSettingsExportHelper::exportLong(long, rtl::OUString const&) const
-XMLSettingsExportHelper::exportMapEntry(com::sun::star::uno::Any const&, rtl::OUString const&, bool) const
+XMLSettingsExportHelper::exportMapEntry(cpo::uno::Any const&, rtl::OUString const&, bool) const
 XMLSettingsExportHelper::exportNameAccess(com::sun::star::uno::Reference<com::sun::star::container::XNameAccess> const&, rtl::OUString const&) const
 XMLSettingsExportHelper::exportSequencePropertyValue(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&, rtl::OUString const&) const
 XMLSettingsExportHelper::exportShort(short, rtl::OUString const&) const
@@ -10394,8 +10394,8 @@ avmedia::MediaFloater::dispose()
 avmedia::MediaFloater::~MediaFloater()
 avmedia::MediaItem::Clone(SfxItemPool*) const
 avmedia::MediaItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-avmedia::MediaItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-avmedia::MediaItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
+avmedia::MediaItem::PutValue(cpo::uno::Any const&, unsigned char)
+avmedia::MediaItem::QueryValue(cpo::uno::Any&, unsigned char) const
 avmedia::MediaItem::merge(avmedia::MediaItem const&)
 avmedia::MediaItem::operator==(SfxPoolItem const&) const
 avmedia::MediaItem::setDuration(double)
@@ -10562,7 +10562,7 @@ chart::AddPointToPoly(std::__debug::vector<std::__debug::vector<com::sun::star::
 chart::Axis::AllocateSubGrids()
 chart::Axis::Axis()
 chart::Axis::Axis(chart::Axis const&)
-chart::Axis::GetDefaultValue(int, com::sun::star::uno::Any&) const
+chart::Axis::GetDefaultValue(int, cpo::uno::Any&) const
 chart::Axis::Init()
 chart::Axis::addModifyListener(com::sun::star::uno::Reference<com::sun::star::util::XModifyListener> const&)
 chart::Axis::createClone()
@@ -10606,12 +10606,12 @@ chart::BaseGFXHelper::makeRectangle(com::sun::star::awt::Point const&, com::sun:
 chart::BaseGFXHelper::makeRectangle(com::sun::star::awt::Rectangle const&)
 chart::BaseGFXHelper::toAwtRectangle(basegfx::B2IRange const&)
 chart::BezierToPoly(com::sun::star::drawing::PolyPolygonBezierCoords const&)
-chart::CharacterProperties::AddDefaultsToMap(std::__debug::unordered_map<int, com::sun::star::uno::Any, std::hash<int>, std::equal_to<int>, std::allocator<std::pair<int const, com::sun::star::uno::Any> > >&)
+chart::CharacterProperties::AddDefaultsToMap(std::__debug::unordered_map<int, cpo::uno::Any, std::hash<int>, std::equal_to<int>, std::allocator<std::pair<int const, cpo::uno::Any> > >&)
 chart::ChartModel::addStorageChangeListener(com::sun::star::uno::Reference<com::sun::star::document::XStorageChangeListener> const&)
 chart::ChartModel::attachNumberFormatsSupplier(com::sun::star::uno::Reference<com::sun::star::util::XNumberFormatsSupplier> const&)
 chart::ChartModel::createClone()
 chart::ChartModel::createDefaultChart()
-chart::ChartModel::createInstanceWithArguments(rtl::OUString const&, com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&)
+chart::ChartModel::createInstanceWithArguments(rtl::OUString const&, com::sun::star::uno::Sequence<cpo::uno::Any> const&)
 chart::ChartModel::dispose()
 chart::ChartModel::disposing(com::sun::star::lang::EventObject const&)
 chart::ChartModel::dumpAsXml(_xmlTextWriter*) const
@@ -10649,7 +10649,7 @@ chart::ChartModel::impl_notifyModifiedListeners()
 chart::ChartModel::impl_notifyStorageChangeListeners()
 chart::ChartModel::impl_store(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&, com::sun::star::uno::Reference<com::sun::star::embed::XStorage> const&)
 chart::ChartModel::initNew()
-chart::ChartModel::initialize(com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&)
+chart::ChartModel::initialize(com::sun::star::uno::Sequence<cpo::uno::Any> const&)
 chart::ChartModel::insertDefaultChart()
 chart::ChartModel::isDataFlavorSupported(com::sun::star::datatransfer::DataFlavor const&)
 chart::ChartModel::load(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&)
@@ -10674,7 +10674,7 @@ chart::ChartModel::~ChartModel()
 chart::ChartModelHelper::getDefaultPageSize()
 chart::ChartType::ChartType()
 chart::ChartType::ChartType(chart::ChartType const&)
-chart::ChartType::GetDefaultValue(int, com::sun::star::uno::Any&) const
+chart::ChartType::GetDefaultValue(int, cpo::uno::Any&) const
 chart::ChartType::acquire()
 chart::ChartType::addDataSeries(com::sun::star::uno::Reference<com::sun::star::chart2::XDataSeries> const&)
 chart::ChartType::addDataSeries(rtl::Reference<chart::DataSeries> const&)
@@ -10709,7 +10709,7 @@ chart::ChartTypeHelper::isSupportingOnlyDeepStackingFor3D(rtl::Reference<chart::
 chart::ChartTypeHelper::shiftCategoryPosAtXAxisPerDefault(rtl::Reference<chart::ChartType> const&)
 chart::ChartTypeManager::ChartTypeManager(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>)
 chart::ChartTypeManager::createInstance(rtl::OUString const&)
-chart::ChartTypeManager::createInstanceWithArguments(rtl::OUString const&, com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&)
+chart::ChartTypeManager::createInstanceWithArguments(rtl::OUString const&, com::sun::star::uno::Sequence<cpo::uno::Any> const&)
 chart::ChartTypeManager::getAvailableServiceNames()
 chart::ChartTypeManager::getImplementationName()
 chart::ChartTypeManager::getSupportedServiceNames()
@@ -10753,7 +10753,7 @@ chart::ChartView::addPropertyChangeListener(rtl::OUString const&, com::sun::star
 chart::ChartView::addVetoableChangeListener(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> const&)
 chart::ChartView::createAxisTitleShapes2D(chart::CreateShapeParam2D&, com::sun::star::awt::Size const&, bool)
 chart::ChartView::createInstance(rtl::OUString const&)
-chart::ChartView::createInstanceWithArguments(rtl::OUString const&, com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&)
+chart::ChartView::createInstanceWithArguments(rtl::OUString const&, com::sun::star::uno::Sequence<cpo::uno::Any> const&)
 chart::ChartView::createShapes()
 chart::ChartView::createShapes2D(com::sun::star::awt::Size const&)
 chart::ChartView::disposing(com::sun::star::lang::EventObject const&)
@@ -10789,7 +10789,7 @@ chart::ChartView::updateSoft()
 chart::ChartView::~ChartView()
 chart::DataSequenceToStringSequence(com::sun::star::uno::Reference<com::sun::star::chart2::data::XDataSequence> const&)
 chart::DataSeries::DataSeries(chart::DataSeries const&)
-chart::DataSeries::GetDefaultValue(int, com::sun::star::uno::Any&) const
+chart::DataSeries::GetDefaultValue(int, cpo::uno::Any&) const
 chart::DataSeries::Init(chart::DataSeries const&)
 chart::DataSeries::addModifyListener(com::sun::star::uno::Reference<com::sun::star::util::XModifyListener> const&)
 chart::DataSeries::addRegressionCurve(com::sun::star::uno::Reference<com::sun::star::chart2::XRegressionCurve> const&)
@@ -10798,7 +10798,7 @@ chart::DataSeries::disposing(com::sun::star::lang::EventObject const&)
 chart::DataSeries::fireModifyEvent()
 chart::DataSeries::firePropertyChangeEvent()
 chart::DataSeries::getDataSequences()
-chart::DataSeries::getFastPropertyValue(com::sun::star::uno::Any&, int) const
+chart::DataSeries::getFastPropertyValue(cpo::uno::Any&, int) const
 chart::DataSeries::getImplementationId()
 chart::DataSeries::getImplementationName()
 chart::DataSeries::getInfoHelper()
@@ -10812,7 +10812,7 @@ chart::DataSeries::queryInterface(com::sun::star::uno::Type const&)
 chart::DataSeries::removeModifyListener(com::sun::star::uno::Reference<com::sun::star::util::XModifyListener> const&)
 chart::DataSeries::removeRegressionCurve(com::sun::star::uno::Reference<com::sun::star::chart2::XRegressionCurve> const&)
 chart::DataSeries::setData(com::sun::star::uno::Sequence<com::sun::star::uno::Reference<com::sun::star::chart2::data::XLabeledDataSequence> > const&)
-chart::DataSeries::setFastPropertyValue_NoBroadcast(int, com::sun::star::uno::Any const&)
+chart::DataSeries::setFastPropertyValue_NoBroadcast(int, cpo::uno::Any const&)
 chart::DataSeries::setRegressionCurves(com::sun::star::uno::Sequence<com::sun::star::uno::Reference<com::sun::star::chart2::XRegressionCurve> > const&)
 chart::DataSeries::supportsService(rtl::OUString const&)
 chart::DataSeries::~DataSeries()
@@ -10834,7 +10834,7 @@ chart::DataSource::supportsService(rtl::OUString const&)
 chart::DataSource::~DataSource()
 chart::DataSourceHelper::getUsedDataRanges(rtl::Reference<chart::ChartModel> const&)
 chart::DataTable::DataTable(chart::DataTable const&)
-chart::DataTable::GetDefaultValue(int, com::sun::star::uno::Any&) const
+chart::DataTable::GetDefaultValue(int, cpo::uno::Any&) const
 chart::DataTable::acquire()
 chart::DataTable::addModifyListener(com::sun::star::uno::Reference<com::sun::star::util::XModifyListener> const&)
 chart::DataTable::createClone()
@@ -10854,7 +10854,7 @@ chart::DataTable::supportsService(rtl::OUString const&)
 chart::DataTable::~DataTable()
 chart::Diagram::Diagram(chart::Diagram const&)
 chart::Diagram::Diagram(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>)
-chart::Diagram::GetDefaultValue(int, com::sun::star::uno::Any&) const
+chart::Diagram::GetDefaultValue(int, cpo::uno::Any&) const
 chart::Diagram::addCoordinateSystem(com::sun::star::uno::Reference<com::sun::star::chart2::XCoordinateSystem> const&)
 chart::Diagram::addModifyListener(com::sun::star::uno::Reference<com::sun::star::util::XModifyListener> const&)
 chart::Diagram::createClone()
@@ -10865,7 +10865,7 @@ chart::Diagram::getCameraDistance()
 chart::Diagram::getCoordinateSystems()
 chart::Diagram::getDataSeriesGroups()
 chart::Diagram::getDataTableRef() const
-chart::Diagram::getFastPropertyValue(com::sun::star::uno::Any&, int) const
+chart::Diagram::getFastPropertyValue(cpo::uno::Any&, int) const
 chart::Diagram::getImplementationId()
 chart::Diagram::getImplementationName()
 chart::Diagram::getInfoHelper()
@@ -10883,7 +10883,7 @@ chart::Diagram::setCoordinateSystems(std::__debug::vector<rtl::Reference<chart::
 chart::Diagram::setDataTable(rtl::Reference<chart::DataTable> const&)
 chart::Diagram::setDefaultColorScheme(com::sun::star::uno::Reference<com::sun::star::chart2::XColorScheme> const&)
 chart::Diagram::setDefaultRotation(bool)
-chart::Diagram::setFastPropertyValue_NoBroadcast(int, com::sun::star::uno::Any const&)
+chart::Diagram::setFastPropertyValue_NoBroadcast(int, cpo::uno::Any const&)
 chart::Diagram::setLegend(com::sun::star::uno::Reference<com::sun::star::chart2::XLegend> const&)
 chart::Diagram::setLegend(rtl::Reference<chart::Legend> const&)
 chart::Diagram::setTitleObject(com::sun::star::uno::Reference<com::sun::star::chart2::XTitle> const&)
@@ -10896,7 +10896,7 @@ chart::DiagramHelper::isDateNumberFormat(int, com::sun::star::uno::Reference<com
 chart::Direction3DToAWTSize(com::sun::star::drawing::Direction3D const&)
 chart::DrawModelWrapper::dumpAsXml(_xmlTextWriter*) const
 chart::DrawModelWrapper::removeShape(rtl::Reference<SvxShape> const&)
-chart::ExplicitCategoriesProvider::convertCategoryAnysToText(com::sun::star::uno::Sequence<rtl::OUString>&, com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&, chart::ChartModel&)
+chart::ExplicitCategoriesProvider::convertCategoryAnysToText(com::sun::star::uno::Sequence<rtl::OUString>&, com::sun::star::uno::Sequence<cpo::uno::Any> const&, chart::ChartModel&)
 chart::ExplicitCategoriesProvider::getCategoriesByLevel(int)
 chart::ExplicitCategoriesProvider::getCategoryLevelCount() const
 chart::ExplicitCategoriesProvider::getDateCategories()
@@ -10905,7 +10905,7 @@ chart::ExplicitCategoriesProvider::getOriginalCategories()
 chart::ExplicitCategoriesProvider::getSimpleCategories()
 chart::ExplicitCategoriesProvider::init()
 chart::ExplicitCategoriesProvider::isDateAxis()
-chart::GridProperties::GetDefaultValue(int, com::sun::star::uno::Any&) const
+chart::GridProperties::GetDefaultValue(int, cpo::uno::Any&) const
 chart::GridProperties::GridProperties()
 chart::GridProperties::GridProperties(chart::GridProperties const&)
 chart::GridProperties::acquire()
@@ -10941,7 +10941,7 @@ chart::LabeledDataSequence::setLabel(com::sun::star::uno::Reference<com::sun::st
 chart::LabeledDataSequence::setValues(com::sun::star::uno::Reference<com::sun::star::chart2::data::XDataSequence> const&)
 chart::LabeledDataSequence::supportsService(rtl::OUString const&)
 chart::LabeledDataSequence::~LabeledDataSequence()
-chart::Legend::GetDefaultValue(int, com::sun::star::uno::Any&) const
+chart::Legend::GetDefaultValue(int, cpo::uno::Any&) const
 chart::Legend::Legend()
 chart::Legend::Legend(chart::Legend const&)
 chart::Legend::acquire()
@@ -10973,13 +10973,13 @@ chart::PolyToB2DPolyPolygon(std::__debug::vector<std::__debug::vector<com::sun::
 chart::PolyToPointSequence(com::sun::star::drawing::PolyPolygonShape3D const&)
 chart::PolyToPointSequence(std::__debug::vector<std::__debug::vector<com::sun::star::drawing::Position3D, std::allocator<com::sun::star::drawing::Position3D> >, std::allocator<std::__debug::vector<com::sun::star::drawing::Position3D, std::allocator<com::sun::star::drawing::Position3D> > > > const&)
 chart::PopupRequest::PopupRequest()
-chart::PopupRequest::addCallback(com::sun::star::uno::Reference<com::sun::star::awt::XCallback> const&, com::sun::star::uno::Any const&)
+chart::PopupRequest::addCallback(com::sun::star::uno::Reference<com::sun::star::awt::XCallback> const&, cpo::uno::Any const&)
 chart::PopupRequest::~PopupRequest()
 chart::Position3DToAWTPoint(com::sun::star::drawing::Position3D const&)
 chart::Position3DToB3DPoint(com::sun::star::drawing::Position3D const&)
-chart::PropertyHelper::setEmptyPropertyValueDefault(std::__debug::unordered_map<int, com::sun::star::uno::Any, std::hash<int>, std::equal_to<int>, std::allocator<std::pair<int const, com::sun::star::uno::Any> > >&, int)
-chart::PropertyHelper::setPropertyValueAny(std::__debug::unordered_map<int, com::sun::star::uno::Any, std::hash<int>, std::equal_to<int>, std::allocator<std::pair<int const, com::sun::star::uno::Any> > >&, int, com::sun::star::uno::Any const&)
-chart::PropertyHelper::setPropertyValueDefaultAny(std::__debug::unordered_map<int, com::sun::star::uno::Any, std::hash<int>, std::equal_to<int>, std::allocator<std::pair<int const, com::sun::star::uno::Any> > >&, int, com::sun::star::uno::Any const&)
+chart::PropertyHelper::setEmptyPropertyValueDefault(std::__debug::unordered_map<int, cpo::uno::Any, std::hash<int>, std::equal_to<int>, std::allocator<std::pair<int const, cpo::uno::Any> > >&, int)
+chart::PropertyHelper::setPropertyValueAny(std::__debug::unordered_map<int, cpo::uno::Any, std::hash<int>, std::equal_to<int>, std::allocator<std::pair<int const, cpo::uno::Any> > >&, int, cpo::uno::Any const&)
+chart::PropertyHelper::setPropertyValueDefaultAny(std::__debug::unordered_map<int, cpo::uno::Any, std::hash<int>, std::equal_to<int>, std::allocator<std::pair<int const, cpo::uno::Any> > >&, int, cpo::uno::Any const&)
 chart::RegressionCurveHelper::addRegressionCurve(SvxChartRegress, com::sun::star::uno::Reference<com::sun::star::chart2::XRegressionCurveContainer> const&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&)
 chart::RegressionCurveHelper::createRegressionCurveCalculatorByServiceName(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
 chart::RegressionCurveHelper::getRegressionCurveGenericName(com::sun::star::uno::Reference<com::sun::star::chart2::XRegressionCurve> const&)
@@ -10990,7 +10990,7 @@ chart::RelativePositionHelper::getCenterOfAnchoredObject(com::sun::star::awt::Po
 chart::RelativePositionHelper::getUpperLeftCornerOfAnchoredObject(com::sun::star::awt::Point, com::sun::star::awt::Size, com::sun::star::drawing::Alignment)
 chart::RelativeSizeHelper::adaptFontSizes(SvxShapeText&, com::sun::star::awt::Size const&, com::sun::star::awt::Size const&)
 chart::RelativeSizeHelper::adaptFontSizes(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&, com::sun::star::awt::Size const&, com::sun::star::awt::Size const&)
-chart::SceneProperties::AddDefaultsToMap(std::__debug::unordered_map<int, com::sun::star::uno::Any, std::hash<int>, std::equal_to<int>, std::allocator<std::pair<int const, com::sun::star::uno::Any> > >&)
+chart::SceneProperties::AddDefaultsToMap(std::__debug::unordered_map<int, cpo::uno::Any, std::hash<int>, std::equal_to<int>, std::allocator<std::pair<int const, cpo::uno::Any> > >&)
 chart::SequenceToPosition3D(com::sun::star::uno::Sequence<double> const&)
 chart::StaticAxisDefaults()
 chart::StaticDataSeriesDefaults()
@@ -11006,7 +11006,7 @@ chart::ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBackWall(rtl::Ref
 chart::ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBottom(rtl::Reference<chart::Diagram> const&)
 chart::ThreeDHelper::getAutomaticCuboidPlanePositionForStandardLeftWall(rtl::Reference<chart::Diagram> const&)
 chart::ThreeDHelper::getDefaultCameraGeometry(bool)
-chart::Title::GetDefaultValue(int, com::sun::star::uno::Any&) const
+chart::Title::GetDefaultValue(int, cpo::uno::Any&) const
 chart::Title::Title()
 chart::Title::Title(chart::Title const&)
 chart::Title::addModifyListener(com::sun::star::uno::Reference<com::sun::star::util::XModifyListener> const&)
@@ -11154,7 +11154,7 @@ comphelper::IndexedPropertyValuesContainer::getImplementationName()
 comphelper::IndexedPropertyValuesContainer::getSupportedServiceNames()
 comphelper::IndexedPropertyValuesContainer::hasElements()
 comphelper::IndexedPropertyValuesContainer::removeByIndex(int)
-comphelper::IndexedPropertyValuesContainer::replaceByIndex(int, com::sun::star::uno::Any const&)
+comphelper::IndexedPropertyValuesContainer::replaceByIndex(int, cpo::uno::Any const&)
 comphelper::IndexedPropertyValuesContainer::supportsService(rtl::OUString const&)
 comphelper::COKit::isForkedChild()
 comphelper::COKit::isLocalRendering()
@@ -11172,9 +11172,9 @@ comphelper::MimeConfigurationHelper::GetObjPropsFromConfigEntry(com::sun::star::
 comphelper::MimeConfigurationHelper::GetObjectPropsByStringClassID(rtl::OUString const&)
 comphelper::MimeConfigurationHelper::GetVerbByShortcut(rtl::OUString const&, com::sun::star::embed::VerbDescriptor&)
 comphelper::MimeConfigurationHelper::GetVerbsConfiguration()
-comphelper::NamedValueCollection::impl_assign(com::sun::star::uno::Any const&)
+comphelper::NamedValueCollection::impl_assign(cpo::uno::Any const&)
 comphelper::NamedValueCollection::impl_assign(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&)
-comphelper::NamedValueCollection::impl_assign(com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&)
+comphelper::NamedValueCollection::impl_assign(com::sun::star::uno::Sequence<cpo::uno::Any> const&)
 comphelper::NumberedCollection::getUntitledPrefix()
 comphelper::NumberedCollection::impl_cleanUpDeadItems(std::__debug::unordered_map<long, comphelper::NumberedCollection::TNumberedItem, std::hash<long>, std::equal_to<long>, std::allocator<std::pair<long const, comphelper::NumberedCollection::TNumberedItem> > >&, std::__debug::vector<long, std::allocator<long> > const&)
 comphelper::NumberedCollection::impl_searchFreeNumber()
@@ -11257,7 +11257,7 @@ comphelper::OPropertySetAggregationHelper::startListening()
 comphelper::OPropertySetHelper::OPropertySetHelper(bool)
 comphelper::OPropertySetHelper::firePropertyChangeListeners(std::unique_lock<std::mutex>&, comphelper::OInterfaceContainerHelper4<com::sun::star::beans::XPropertyChangeListener>*, com::sun::star::beans::PropertyChangeEvent const&)
 comphelper::OPropertySetHelper::fireVetoableChangeListeners(std::unique_lock<std::mutex>&, comphelper::OInterfaceContainerHelper4<com::sun::star::beans::XVetoableChangeListener>*, com::sun::star::beans::PropertyChangeEvent const&)
-comphelper::OPropertySetHelper::impl_fireAll(std::unique_lock<std::mutex>&, int*, com::sun::star::uno::Any const*, com::sun::star::uno::Any const*, int)
+comphelper::OPropertySetHelper::impl_fireAll(std::unique_lock<std::mutex>&, int*, cpo::uno::Any const*, cpo::uno::Any const*, int)
 comphelper::OPropertyStateContainer::getHandleForName(rtl::OUString const&)
 comphelper::OPropertyStateContainer::getPropertyStateByHandle(int) const
 comphelper::OPropertyStateContainer::setPropertyToDefaultByHandle(int)
@@ -11284,7 +11284,7 @@ comphelper::OSequenceOutputStream::writeBytes(com::sun::star::uno::Sequence<sign
 comphelper::OStorageHelper::GetFileSystemStorageFactory(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 comphelper::OWeakEventListenerAdapter::disposing(std::unique_lock<std::mutex>&)
 comphelper::OWrappedAccessibleChildrenManager::disposing(com::sun::star::lang::EventObject const&)
-comphelper::OWrappedAccessibleChildrenManager::implTranslateChildEventValue(com::sun::star::uno::Any const&, com::sun::star::uno::Any&)
+comphelper::OWrappedAccessibleChildrenManager::implTranslateChildEventValue(cpo::uno::Any const&, cpo::uno::Any&)
 comphelper::OWrappedAccessibleChildrenManager::invalidateAll()
 comphelper::OWrappedAccessibleChildrenManager::removeFromCache(com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> const&)
 comphelper::OWrappedAccessibleChildrenManager::~OWrappedAccessibleChildrenManager()
@@ -11309,7 +11309,7 @@ comphelper::ThreadPool::shutdownLocked(std::unique_lock<std::mutex>&)
 comphelper::ThreadTask::exec()
 comphelper::detail::ConfigurationWrapper::createChanges() const
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(std::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&)
-comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(std::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&)
+comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(std::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, cpo::uno::Any const&)
 comphelper::operator<<(com::sun::star::uno::Reference<com::sun::star::io::XObjectOutputStream> const&, unsigned int)
 comphelper::operator>>(com::sun::star::uno::Reference<com::sun::star::io::XObjectInputStream> const&, unsigned int&)
 comphelper::string::stripEnd(std::basic_string_view<char, std::char_traits<char> >, char)
@@ -11331,7 +11331,7 @@ connectivity::DriversConfig::impl_get(std::basic_string_view<char16_t, std::char
 connectivity::DriversConfig::operator=(connectivity::DriversConfig const&)
 connectivity::OColumnsHelper::createDescriptor()
 connectivity::OConnectionWrapper::getUnoTunnelId()
-connectivity::ODatabaseMetaDataBase::getTablePrivileges(com::sun::star::uno::Any const&, rtl::OUString const&, rtl::OUString const&)
+connectivity::ODatabaseMetaDataBase::getTablePrivileges(cpo::uno::Any const&, rtl::OUString const&, rtl::OUString const&)
 connectivity::ODatabaseMetaDataResultSet::acquire()
 connectivity::ODatabaseMetaDataResultSet::createArrayHelper() const
 connectivity::ODatabaseMetaDataResultSet::getInfoHelper()
@@ -11355,7 +11355,7 @@ connectivity::OSQLParseNode::convertDateString(connectivity::SQLParseNodeParamet
 connectivity::OSQLParseNode::convertDateTimeString(connectivity::SQLParseNodeParameter const&, rtl::OUString const&)
 connectivity::OSQLParseNode::convertTimeString(connectivity::SQLParseNodeParameter const&, std::basic_string_view<char16_t, std::char_traits<char16_t> >)
 connectivity::OSQLParseNode::eraseBraces(connectivity::OSQLParseNode*&)
-connectivity::OSQLParseNode::getTableComponents(connectivity::OSQLParseNode const*, com::sun::star::uno::Any&, rtl::OUString&, rtl::OUString&, com::sun::star::uno::Reference<com::sun::star::sdbc::XDatabaseMetaData> const&)
+connectivity::OSQLParseNode::getTableComponents(connectivity::OSQLParseNode const*, cpo::uno::Any&, rtl::OUString&, rtl::OUString&, com::sun::star::uno::Reference<com::sun::star::sdbc::XDatabaseMetaData> const&)
 connectivity::OSQLParseNode::impl_parseLikeNodeToString_throw(rtl::OUStringBuffer&, connectivity::SQLParseNodeParameter const&, bool) const
 connectivity::OSQLParseNode::impl_parseNodeToString_throw(rtl::OUStringBuffer&, connectivity::SQLParseNodeParameter const&, bool) const
 connectivity::OSQLParseNode::impl_parseTableNameNodeToString_throw(rtl::OUStringBuffer&, connectivity::SQLParseNodeParameter const&) const
@@ -11423,7 +11423,7 @@ connectivity::file::OConnection::prepareCall(rtl::OUString const&)
 connectivity::file::OConnection::prepareStatement(rtl::OUString const&)
 connectivity::file::OConnection::supportsService(rtl::OUString const&)
 connectivity::file::OConnection::throwUrlNotValid(rtl::OUString const&, rtl::OUString const&)
-connectivity::file::ODatabaseMetaData::getColumns(com::sun::star::uno::Any const&, rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
+connectivity::file::ODatabaseMetaData::getColumns(cpo::uno::Any const&, rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
 connectivity::file::ODatabaseMetaData::getURL()
 connectivity::file::ODatabaseMetaData::impl_getTypeInfo_throw()
 connectivity::file::OFileCatalog::refreshTables()
@@ -11675,7 +11675,7 @@ dbaui::OGenericUnoController::isUserDefinedFeature(rtl::OUString const&) const
 dbaui::OGenericUnoController::isUserDefinedFeature(unsigned short)
 dbaui::OGenericUnoController::onLoadedMenu(com::sun::star::uno::Reference<com::sun::star::frame::XLayoutManager> const&)
 dbaui::OGenericUnoController::releaseNumberForComponent()
-dbaui::OGenericUnoController::restoreViewData(com::sun::star::uno::Any const&)
+dbaui::OGenericUnoController::restoreViewData(cpo::uno::Any const&)
 dbaui::OGenericUnoController::startConnectionListening(com::sun::star::uno::Reference<com::sun::star::sdbc::XConnection> const&)
 dbaui::OGenericUnoController::stopConnectionListening(com::sun::star::uno::Reference<com::sun::star::sdbc::XConnection> const&)
 dbaui::OGenericUnoController::~OGenericUnoController()
@@ -11745,9 +11745,9 @@ dbtools::isDataSourcePropertyEnabled(com::sun::star::uno::Reference<com::sun::st
 dbtools::param::ParameterWrapper::ParameterWrapper(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&)
 dbtools::param::ParameterWrapper::ParameterWrapper(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&, com::sun::star::uno::Reference<com::sun::star::sdbc::XParameters> const&, std::__debug::vector<int, std::allocator<int> >&&)
 dbtools::param::ParameterWrapper::acquire()
-dbtools::param::ParameterWrapper::convertFastPropertyValue(com::sun::star::uno::Any&, com::sun::star::uno::Any&, int, com::sun::star::uno::Any const&)
+dbtools::param::ParameterWrapper::convertFastPropertyValue(cpo::uno::Any&, cpo::uno::Any&, int, cpo::uno::Any const&)
 dbtools::param::ParameterWrapper::dispose()
-dbtools::param::ParameterWrapper::getFastPropertyValue(com::sun::star::uno::Any&, int) const
+dbtools::param::ParameterWrapper::getFastPropertyValue(cpo::uno::Any&, int) const
 dbtools::param::ParameterWrapper::getImplementationId()
 dbtools::param::ParameterWrapper::getInfoHelper()
 dbtools::param::ParameterWrapper::getPropertySetInfo()
@@ -11755,7 +11755,7 @@ dbtools::param::ParameterWrapper::getTypes()
 dbtools::param::ParameterWrapper::impl_getPseudoAggregatePropertyName(int) const
 dbtools::param::ParameterWrapper::queryInterface(com::sun::star::uno::Type const&)
 dbtools::param::ParameterWrapper::release()
-dbtools::param::ParameterWrapper::setFastPropertyValue_NoBroadcast(int, com::sun::star::uno::Any const&)
+dbtools::param::ParameterWrapper::setFastPropertyValue_NoBroadcast(int, cpo::uno::Any const&)
 dbtools::param::ParameterWrapper::~ParameterWrapper()
 dbtools::param::ParameterWrapperContainer::ParameterWrapperContainer()
 dbtools::param::ParameterWrapperContainer::createEnumeration()
@@ -12334,7 +12334,7 @@ editeng::FieldUpdater::FieldUpdater(editeng::FieldUpdater const&)
 editeng::HangulHanjaConversion::IsUseSavedConversionDirectionState()
 editeng::SvxBorderLine::GetValueString(MapUnit, MapUnit, IntlWrapper const*, bool) const
 editeng::SvxBorderLine::ScaleMetrics(long, long)
-editeng::SvxBorderLine::setComplexColorFromAny(com::sun::star::uno::Any const&)
+editeng::SvxBorderLine::setComplexColorFromAny(cpo::uno::Any const&)
 eliminate_artificials
 endlu(SvStream&)
 enlargePQExpBuffer
@@ -12528,7 +12528,7 @@ framework::Desktop::addFrameActionListener(com::sun::star::uno::Reference<com::s
 framework::Desktop::addTerminateListener(com::sun::star::uno::Reference<com::sun::star::frame::XTerminateListener> const&)
 framework::Desktop::constructorInit()
 framework::Desktop::contextChanged()
-framework::Desktop::convertFastPropertyValue(com::sun::star::uno::Any&, com::sun::star::uno::Any&, int, com::sun::star::uno::Any const&)
+framework::Desktop::convertFastPropertyValue(cpo::uno::Any&, cpo::uno::Any&, int, cpo::uno::Any const&)
 framework::Desktop::deactivate()
 framework::Desktop::dispatchFinished(com::sun::star::frame::DispatchResultEvent const&)
 framework::Desktop::disposing()
@@ -12543,7 +12543,7 @@ framework::Desktop::getController()
 framework::Desktop::getCreator()
 framework::Desktop::getCurrentComponent()
 framework::Desktop::getCurrentFrame()
-framework::Desktop::getFastPropertyValue(com::sun::star::uno::Any&, int) const
+framework::Desktop::getFastPropertyValue(cpo::uno::Any&, int) const
 framework::Desktop::getFrames()
 framework::Desktop::getImplementationName()
 framework::Desktop::getInfoHelper()
@@ -12578,7 +12578,7 @@ framework::Desktop::removeTerminateListener(com::sun::star::uno::Reference<com::
 framework::Desktop::setActiveFrame(com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const&)
 framework::Desktop::setComponent(com::sun::star::uno::Reference<com::sun::star::awt::XWindow> const&, com::sun::star::uno::Reference<com::sun::star::frame::XController> const&)
 framework::Desktop::setCreator(com::sun::star::uno::Reference<com::sun::star::frame::XFramesSupplier> const&)
-framework::Desktop::setFastPropertyValue_NoBroadcast(int, com::sun::star::uno::Any const&)
+framework::Desktop::setFastPropertyValue_NoBroadcast(int, cpo::uno::Any const&)
 framework::Desktop::setName(rtl::OUString const&)
 framework::Desktop::supportsService(rtl::OUString const&)
 framework::Desktop::terminate()
@@ -13430,7 +13430,7 @@ ooo::vba::UserFormGeometryHelper::setInnerWidth(double)
 ooo::vba::UserFormGeometryHelper::setLeft(double)
 ooo::vba::UserFormGeometryHelper::setTop(double)
 ooo::vba::UserFormGeometryHelper::setWidth(double)
-ooo::vba::setPropertyValue(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>&, rtl::OUString const&, com::sun::star::uno::Any const&)
+ooo::vba::setPropertyValue(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>&, rtl::OUString const&, cpo::uno::Any const&)
 oox::AttributeConversion::decodeHyper(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
 oox::AttributeConversion::decodeInteger(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
 oox::AttributeConversion::decodeIntegerHex(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
@@ -13488,7 +13488,7 @@ oox::ObjectContainer::ObjectContainer(com::sun::star::uno::Reference<com::sun::s
 oox::ObjectContainer::createContainer() const
 oox::ObjectContainer::getObject(rtl::OUString const&) const
 oox::ObjectContainer::hasObject(rtl::OUString const&) const
-oox::ObjectContainer::insertObject(rtl::OUString const&, com::sun::star::uno::Any const&, bool)
+oox::ObjectContainer::insertObject(rtl::OUString const&, cpo::uno::Any const&, bool)
 oox::ProgressBar::ProgressBar(com::sun::star::uno::Reference<com::sun::star::task::XStatusIndicator> const&, rtl::OUString const&)
 oox::ProgressBar::getPosition() const
 oox::ProgressBar::setPosition(double)
@@ -13499,17 +13499,17 @@ oox::PropertyMap::dumpCode(com::sun::star::uno::Reference<com::sun::star::beans:
 oox::PropertyMap::dumpData(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&)
 oox::PropertyMap::empty() const
 oox::PropertyMap::erase(int)
-oox::PropertyMap::fillPropertyNameMap(std::__debug::map<rtl::OUString, com::sun::star::uno::Any, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, com::sun::star::uno::Any> > >&) const
+oox::PropertyMap::fillPropertyNameMap(std::__debug::map<rtl::OUString, cpo::uno::Any, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, cpo::uno::Any> > >&) const
 oox::PropertyMap::getPropertyId(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
 oox::PropertyMap::getPropertyName(int)
 oox::PropertyMap::hasProperty(int) const
 oox::PropertyMap::makePropertySet() const
-oox::PropertyMap::setAnyProperty(int, com::sun::star::uno::Any const&)
+oox::PropertyMap::setAnyProperty(int, cpo::uno::Any const&)
 oox::PropertySet::dump()
 oox::PropertySet::hasProperty(int) const
-oox::PropertySet::implGetPropertyValue(com::sun::star::uno::Any&, rtl::OUString const&) const
-oox::PropertySet::implSetPropertyValue(rtl::OUString const&, com::sun::star::uno::Any const&)
-oox::PropertySet::setProperties(com::sun::star::uno::Sequence<rtl::OUString> const&, com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&)
+oox::PropertySet::implGetPropertyValue(cpo::uno::Any&, rtl::OUString const&) const
+oox::PropertySet::implSetPropertyValue(rtl::OUString const&, cpo::uno::Any const&)
+oox::PropertySet::setProperties(com::sun::star::uno::Sequence<rtl::OUString> const&, com::sun::star::uno::Sequence<cpo::uno::Any> const&)
 oox::SegmentProgressBar::getPosition() const
 oox::SegmentProgressBar::setPosition(double)
 oox::SequenceInputStream::SequenceInputStream(com::sun::star::uno::Sequence<signed char> const&)
@@ -13644,7 +13644,7 @@ oox::crypto::Standard2007Engine::checkDataIntegrity()
 oox::crypto::Standard2007Engine::generateEncryptionKey(rtl::OUString const&)
 oox::crypto::Standard2007Engine::generateVerifier()
 oox::crypto::Standard2007Engine::readEncryptionInfo(com::sun::star::uno::Reference<com::sun::star::io::XInputStream>&)
-oox::drawingml::ClrScheme::ToAny(com::sun::star::uno::Any&) const
+oox::drawingml::ClrScheme::ToAny(cpo::uno::Any&) const
 oox::drawingml::ClrScheme::fill(model::ColorSet&) const
 oox::drawingml::ClrScheme::setColor(int, Color)
 oox::drawingml::Color::addChartTintTransformation(double)
@@ -13709,14 +13709,14 @@ oox::drawingml::ShapeExport::WriteTableShape(com::sun::star::uno::Reference<com:
 oox::drawingml::ShapeExport::WriteUnknownShape(com::sun::star::uno::Reference<com::sun::star::drawing::XShape> const&)
 oox::drawingml::ShapePropertyInfo::ShapePropertyInfo(o3tl::enumarray<oox::drawingml::ShapeProperty, int> const&, bool, bool, bool, bool, bool)
 oox::drawingml::ShapePropertyMap::hasNamedLineMarkerInTable(rtl::OUString const&) const
-oox::drawingml::ShapePropertyMap::setAnyProperty(oox::drawingml::ShapeProperty, com::sun::star::uno::Any const&)
-oox::drawingml::ShapePropertyMap::setFillBitmap(int, com::sun::star::uno::Any const&)
-oox::drawingml::ShapePropertyMap::setFillBitmapName(com::sun::star::uno::Any const&)
-oox::drawingml::ShapePropertyMap::setFillGradient(int, com::sun::star::uno::Any const&)
-oox::drawingml::ShapePropertyMap::setFillHatch(int, com::sun::star::uno::Any const&)
-oox::drawingml::ShapePropertyMap::setGradientTrans(int, com::sun::star::uno::Any const&)
-oox::drawingml::ShapePropertyMap::setLineDash(int, com::sun::star::uno::Any const&)
-oox::drawingml::ShapePropertyMap::setLineMarker(int, com::sun::star::uno::Any const&)
+oox::drawingml::ShapePropertyMap::setAnyProperty(oox::drawingml::ShapeProperty, cpo::uno::Any const&)
+oox::drawingml::ShapePropertyMap::setFillBitmap(int, cpo::uno::Any const&)
+oox::drawingml::ShapePropertyMap::setFillBitmapName(cpo::uno::Any const&)
+oox::drawingml::ShapePropertyMap::setFillGradient(int, cpo::uno::Any const&)
+oox::drawingml::ShapePropertyMap::setFillHatch(int, cpo::uno::Any const&)
+oox::drawingml::ShapePropertyMap::setGradientTrans(int, cpo::uno::Any const&)
+oox::drawingml::ShapePropertyMap::setLineDash(int, cpo::uno::Any const&)
+oox::drawingml::ShapePropertyMap::setLineMarker(int, cpo::uno::Any const&)
 oox::drawingml::ShapePropertyMap::supportsProperty(oox::drawingml::ShapeProperty) const
 oox::drawingml::Theme::getEffectStyle(int) const
 oox::drawingml::Theme::getFillStyle(int) const
@@ -14058,18 +14058,18 @@ prod_xA
 prod_xA2
 property::OPropertySet::GetPropertyStateByHandle(int) const
 property::OPropertySet::GetPropertyStatesByHandle(std::__debug::vector<int, std::allocator<int> > const&) const
-property::OPropertySet::GetPropertyValueByHandle(com::sun::star::uno::Any&, int) const
+property::OPropertySet::GetPropertyValueByHandle(cpo::uno::Any&, int) const
 property::OPropertySet::OPropertySet()
 property::OPropertySet::OPropertySet(property::OPropertySet const&)
 property::OPropertySet::SetAllPropertiesToDefault()
 property::OPropertySet::SetNewValuesExplicitlyEvenIfTheyEqualDefault()
 property::OPropertySet::SetPropertiesToDefault(std::__debug::vector<int, std::allocator<int> > const&)
 property::OPropertySet::SetPropertyToDefault(int)
-property::OPropertySet::SetPropertyValueByHandle(int, com::sun::star::uno::Any const&)
+property::OPropertySet::SetPropertyValueByHandle(int, cpo::uno::Any const&)
 property::OPropertySet::SetStyle(com::sun::star::uno::Reference<com::sun::star::style::XStyle> const&)
-property::OPropertySet::convertFastPropertyValue(com::sun::star::uno::Any&, com::sun::star::uno::Any&, int, com::sun::star::uno::Any const&)
+property::OPropertySet::convertFastPropertyValue(cpo::uno::Any&, cpo::uno::Any&, int, cpo::uno::Any const&)
 property::OPropertySet::firePropertyChangeEvent()
-property::OPropertySet::getFastPropertyValue(com::sun::star::uno::Any&, int) const
+property::OPropertySet::getFastPropertyValue(cpo::uno::Any&, int) const
 property::OPropertySet::getImplementationId()
 property::OPropertySet::getPropertyDefault(rtl::OUString const&)
 property::OPropertySet::getPropertyDefaults(com::sun::star::uno::Sequence<rtl::OUString> const&)
@@ -14079,9 +14079,9 @@ property::OPropertySet::getStyle()
 property::OPropertySet::getTypes()
 property::OPropertySet::queryInterface(com::sun::star::uno::Type const&)
 property::OPropertySet::setAllPropertiesToDefault()
-property::OPropertySet::setFastPropertyValue_NoBroadcast(int, com::sun::star::uno::Any const&)
+property::OPropertySet::setFastPropertyValue_NoBroadcast(int, cpo::uno::Any const&)
 property::OPropertySet::setPropertiesToDefault(com::sun::star::uno::Sequence<rtl::OUString> const&)
-property::OPropertySet::setPropertyValues(com::sun::star::uno::Sequence<rtl::OUString> const&, com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&)
+property::OPropertySet::setPropertyValues(com::sun::star::uno::Sequence<rtl::OUString> const&, com::sun::star::uno::Sequence<cpo::uno::Any> const&)
 property::OPropertySet::setStyle(com::sun::star::uno::Reference<com::sun::star::style::XStyle> const&)
 property::OPropertySet::~OPropertySet()
 psp::JobData::constructFromStreamBuffer(void const*, unsigned int, psp::JobData&)
@@ -14127,7 +14127,7 @@ put_msgfunc
 puthash
 pyuno::Runtime::Runtime(pyuno::Runtime const&)
 pyuno::Runtime::operator=(pyuno::Runtime const&)
-pyuno::Runtime::pyIterUnpack(_object*, com::sun::star::uno::Any&) const
+pyuno::Runtime::pyIterUnpack(_object*, cpo::uno::Any&) const
 rand_uniform
 randomdens
 randomseed
@@ -14200,7 +14200,7 @@ sax_fastparser::FastAttributeList::~FastAttributeList()
 sax_fastparser::FastSaxParser::getImplementationName()
 sax_fastparser::FastSaxParser::getNamespaceURL(rtl::OUString const&)
 sax_fastparser::FastSaxParser::getSupportedServiceNames()
-sax_fastparser::FastSaxParser::initialize(com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&)
+sax_fastparser::FastSaxParser::initialize(com::sun::star::uno::Sequence<cpo::uno::Any> const&)
 sax_fastparser::FastSaxParser::setCustomEntityNames(com::sun::star::uno::Sequence<com::sun::star::beans::Pair<rtl::OUString, rtl::OUString> > const&)
 sax_fastparser::FastSaxParser::setEntityResolver(com::sun::star::uno::Reference<com::sun::star::xml::sax::XEntityResolver> const&)
 sax_fastparser::FastSaxParser::setErrorHandler(com::sun::star::uno::Reference<com::sun::star::xml::sax::XErrorHandler> const&)
@@ -14335,7 +14335,7 @@ sd::DrawController::DrawController(sd::ViewShellBase&)
 sd::DrawController::FillPropertyTable(std::__debug::vector<com::sun::star::beans::Property, std::allocator<com::sun::star::beans::Property> >&)
 sd::DrawController::FireChangeEditMode(bool)
 sd::DrawController::FireChangeLayerMode(bool)
-sd::DrawController::FirePropertyChange(int, com::sun::star::uno::Any const&, com::sun::star::uno::Any const&)
+sd::DrawController::FirePropertyChange(int, cpo::uno::Any const&, cpo::uno::Any const&)
 sd::DrawController::FireSelectionChangeListener()
 sd::DrawController::FireSwitchCurrentPage(SdPage*)
 sd::DrawController::FireVisAreaChanged(tools::Rectangle const&)
@@ -14346,14 +14346,14 @@ sd::DrawController::SetSubController(com::sun::star::uno::Reference<com::sun::st
 sd::DrawController::ThrowIfDisposed() const
 sd::DrawController::addEventListener(com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> const&)
 sd::DrawController::addSelectionChangeListener(com::sun::star::uno::Reference<com::sun::star::view::XSelectionChangeListener> const&)
-sd::DrawController::convertFastPropertyValue(com::sun::star::uno::Any&, com::sun::star::uno::Any&, int, com::sun::star::uno::Any const&)
+sd::DrawController::convertFastPropertyValue(cpo::uno::Any&, cpo::uno::Any&, int, cpo::uno::Any const&)
 sd::DrawController::dispose()
 sd::DrawController::disposing(com::sun::star::lang::EventObject const&)
 sd::DrawController::fireChangeLayer(com::sun::star::uno::Reference<com::sun::star::drawing::XLayer>*)
 sd::DrawController::fireSwitchCurrentPage(int)
 sd::DrawController::getControl(com::sun::star::uno::Reference<com::sun::star::awt::XControlModel> const&)
 sd::DrawController::getCurrentPage()
-sd::DrawController::getFastPropertyValue(com::sun::star::uno::Any&, int) const
+sd::DrawController::getFastPropertyValue(cpo::uno::Any&, int) const
 sd::DrawController::getFormController(com::sun::star::uno::Reference<com::sun::star::form::XForm> const&)
 sd::DrawController::getImplementationId()
 sd::DrawController::getImplementationName()
@@ -14367,10 +14367,10 @@ sd::DrawController::isFormDesignMode()
 sd::DrawController::queryInterface(com::sun::star::uno::Type const&)
 sd::DrawController::removeEventListener(com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> const&)
 sd::DrawController::removeSelectionChangeListener(com::sun::star::uno::Reference<com::sun::star::view::XSelectionChangeListener> const&)
-sd::DrawController::select(com::sun::star::uno::Any const&)
+sd::DrawController::select(cpo::uno::Any const&)
 sd::DrawController::selectionChanged(com::sun::star::lang::EventObject const&)
 sd::DrawController::setCurrentPage(com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> const&)
-sd::DrawController::setFastPropertyValue_NoBroadcast(int, com::sun::star::uno::Any const&)
+sd::DrawController::setFastPropertyValue_NoBroadcast(int, cpo::uno::Any const&)
 sd::DrawController::setFormDesignMode(unsigned char)
 sd::DrawController::supportsService(rtl::OUString const&)
 sd::DrawController::suspend(unsigned char)
@@ -14823,14 +14823,14 @@ sfx2::SfxNotebookBar::ShowMenubar(SfxViewFrame const*, bool)
 sfx2::SfxNotebookBar::ShowMenubar(bool)
 sfx2::SfxNotebookBar::StateMethod(SystemWindow*, com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const&, std::basic_string_view<char16_t, std::char_traits<char16_t> >, bool)
 sfx2::SfxNotebookBar::ToggleMenubar()
-sfx2::SvBaseLink::DataChanged(rtl::OUString const&, com::sun::star::uno::Any const&)
+sfx2::SvBaseLink::DataChanged(rtl::OUString const&, cpo::uno::Any const&)
 sfx2::SvBaseLink::ExecuteEdit(rtl::OUString const&)
 sfx2::SvBaseLink::GetInsertFileDialog(rtl::OUString const&)
 sfx2::SvBaseLink::GetLinkManager() const
 sfx2::SvBaseLink::SetLinkManager(sfx2::LinkManager*)
 sfx2::SvBaseLink::SetObj(sfx2::SvLinkSource*)
-sfx2::SvLinkSource::DataChanged(rtl::OUString const&, com::sun::star::uno::Any const&)
-sfx2::SvLinkSource::GetData(com::sun::star::uno::Any&, rtl::OUString const&, bool)
+sfx2::SvLinkSource::DataChanged(rtl::OUString const&, cpo::uno::Any const&)
+sfx2::SvLinkSource::GetData(cpo::uno::Any&, rtl::OUString const&, bool)
 sfx2::SvLinkSource::clearStreamToLoadFrom()
 sfx2::SvLinkSource::getStreamToLoadFrom()
 sfx2::SvLinkSource::setStreamToLoadFrom(com::sun::star::uno::Reference<com::sun::star::io::XInputStream> const&, bool)
@@ -14956,7 +14956,7 @@ sfx2::sidebar::Theme::GetVetoableListeners(sfx2::sidebar::Theme::ThemeItem, bool
 sfx2::sidebar::Theme::HandleDataChange()
 sfx2::sidebar::Theme::InitializeTheme()
 sfx2::sidebar::Theme::IsHighContrastMode()
-sfx2::sidebar::Theme::ProcessNewValue(com::sun::star::uno::Any const&, sfx2::sidebar::Theme::ThemeItem, sfx2::sidebar::Theme::PropertyType)
+sfx2::sidebar::Theme::ProcessNewValue(cpo::uno::Any const&, sfx2::sidebar::Theme::ThemeItem, sfx2::sidebar::Theme::PropertyType)
 sfx2::sidebar::Theme::SetupPropertyMaps()
 sfx2::sidebar::Theme::Theme()
 sfx2::sidebar::Theme::UpdateTheme()
@@ -14970,7 +14970,7 @@ sfx2::sidebar::Theme::getPropertyValue(rtl::OUString const&)
 sfx2::sidebar::Theme::hasPropertyByName(rtl::OUString const&)
 sfx2::sidebar::Theme::removePropertyChangeListener(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> const&)
 sfx2::sidebar::Theme::removeVetoableChangeListener(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> const&)
-sfx2::sidebar::Theme::setPropertyValue(rtl::OUString const&, com::sun::star::uno::Any const&)
+sfx2::sidebar::Theme::setPropertyValue(rtl::OUString const&, cpo::uno::Any const&)
 sfx2::sidebar::Theme::~Theme()
 shift_basis
 shift_coldata
@@ -15380,7 +15380,7 @@ ucbhelper::CommandEnvironment::~CommandEnvironment()
 ucbhelper::Content::Content(ucbhelper::Content&&)
 ucbhelper::Content::createCursorAny(com::sun::star::uno::Sequence<rtl::OUString> const&, ucbhelper::ResultSetInclude)
 ucbhelper::Content::getPropertyValuesInterface(com::sun::star::uno::Sequence<rtl::OUString> const&)
-ucbhelper::Content::setPropertyValues(com::sun::star::uno::Sequence<rtl::OUString> const&, com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&)
+ucbhelper::Content::setPropertyValues(com::sun::star::uno::Sequence<rtl::OUString> const&, com::sun::star::uno::Sequence<cpo::uno::Any> const&)
 ucbhelper::ContentIdentifier::getContentIdentifier()
 ucbhelper::ContentIdentifier::getContentProviderScheme()
 ucbhelper::ContentIdentifier::~ContentIdentifier()
@@ -15465,8 +15465,8 @@ utl::ConfigItem::CallNotify(com::sun::star::uno::Sequence<rtl::OUString> const&)
 utl::ConfigItem::GetTree()
 utl::ConfigItem::RemoveChangesListener()
 utl::ConfigItem::SetSetProperties(com::sun::star::uno::Reference<com::sun::star::container::XHierarchicalNameAccess> const&, rtl::OUString const&, com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&)
-utl::ConfigItem::impl_packLocalizedProperties(com::sun::star::uno::Sequence<rtl::OUString> const&, com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&, com::sun::star::uno::Sequence<com::sun::star::uno::Any>&)
-utl::ConfigItem::impl_unpackLocalizedProperties(com::sun::star::uno::Sequence<rtl::OUString> const&, com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&, com::sun::star::uno::Sequence<rtl::OUString>&, com::sun::star::uno::Sequence<com::sun::star::uno::Any>&)
+utl::ConfigItem::impl_packLocalizedProperties(com::sun::star::uno::Sequence<rtl::OUString> const&, com::sun::star::uno::Sequence<cpo::uno::Any> const&, com::sun::star::uno::Sequence<cpo::uno::Any>&)
+utl::ConfigItem::impl_unpackLocalizedProperties(com::sun::star::uno::Sequence<rtl::OUString> const&, com::sun::star::uno::Sequence<cpo::uno::Any> const&, com::sun::star::uno::Sequence<rtl::OUString>&, com::sun::star::uno::Sequence<cpo::uno::Any>&)
 utl::ConfigManager::doStoreConfigItems()
 utl::ConfigurationBroadcaster::ConfigurationBroadcaster()
 utl::ConfigurationBroadcaster::operator=(utl::ConfigurationBroadcaster const&)
@@ -15513,8 +15513,8 @@ utl::OStreamWrapper::truncate()
 utl::OStreamWrapper::writeBytes(com::sun::star::uno::Sequence<signed char> const&)
 utl::OStreamWrapper::~OStreamWrapper()
 utl::ProgressHandlerWrap::pop()
-utl::ProgressHandlerWrap::push(com::sun::star::uno::Any const&)
-utl::ProgressHandlerWrap::update(com::sun::star::uno::Any const&)
+utl::ProgressHandlerWrap::push(cpo::uno::Any const&)
+utl::ProgressHandlerWrap::update(cpo::uno::Any const&)
 utl::SearchParam::SearchParam(utl::SearchParam const&)
 utl::TempFileNamed::TempFileNamed(utl::TempFileNamed&&)
 utl::TextSearch::Init(utl::SearchParam const&, com::sun::star::lang::Locale const&)

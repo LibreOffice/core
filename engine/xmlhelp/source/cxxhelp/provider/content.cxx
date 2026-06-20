@@ -67,9 +67,9 @@ Content::~Content()
 }
 
 // virtual
-uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface( rType );
 }
 
@@ -203,12 +203,12 @@ public:
 }
 
 // virtual
-uno::Any SAL_CALL Content::execute(
+cpo::uno::Any SAL_CALL Content::execute(
         const ucb::Command& aCommand,
         sal_Int32,
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
 
     if ( aCommand.Name == "getPropertyValues" )
     {
@@ -230,15 +230,15 @@ uno::Any SAL_CALL Content::execute(
             ucbhelper::cancelCommandExecution(aRet,Environment);
         }
 
-        uno::Sequence< uno::Any > ret(propertyValues.getLength());
+        uno::Sequence< cpo::uno::Any > ret(propertyValues.getLength());
         const uno::Sequence< beans::Property > props(getProperties(Environment));
         // No properties can be set
         std::transform(std::cbegin(propertyValues), std::cend(propertyValues), ret.getArray(),
             [&props](const beans::PropertyValue& rPropVal) {
                 if (std::any_of(props.begin(), props.end(),
                                 [&rPropVal](const beans::Property& rProp) { return rProp.Name == rPropVal.Name; }))
-                    return css::uno::toAny(lang::IllegalAccessException());
-                return css::uno::toAny(beans::UnknownPropertyException());
+                    return cpo::uno::toAny(lang::IllegalAccessException());
+                return cpo::uno::toAny(beans::UnknownPropertyException());
             });
 
         aRet <<= ret;
@@ -370,7 +370,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     m_pDatabases->getKeyword( m_aURLParameter.get_module(),
                                               m_aURLParameter.get_language() );
 
-                uno::Any aAny;
+                cpo::uno::Any aAny;
                 if( inf )
                     aAny <<= inf->getKeywordList();
                 xRow->appendObject( rProp,aAny );
@@ -381,7 +381,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     m_pDatabases->getKeyword( m_aURLParameter.get_module(),
                                               m_aURLParameter.get_language() );
 
-                uno::Any aAny;
+                cpo::uno::Any aAny;
                 if( inf )
                     aAny <<= inf->getIdList();
                 xRow->appendObject( rProp,aAny );
@@ -392,7 +392,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     m_pDatabases->getKeyword( m_aURLParameter.get_module(),
                                               m_aURLParameter.get_language() );
 
-                uno::Any aAny;
+                cpo::uno::Any aAny;
                 if( inf )
                     aAny <<= inf->getAnchorList();
                 xRow->appendObject( rProp,aAny );
@@ -403,7 +403,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     m_pDatabases->getKeyword( m_aURLParameter.get_module(),
                                               m_aURLParameter.get_language() );
 
-                uno::Any aAny;
+                cpo::uno::Any aAny;
                 if( inf )
                     aAny <<= inf->getTitleList();
                 xRow->appendObject( rProp,aAny );
@@ -411,7 +411,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             else if ( rProp.Name == "SearchScopes" )
             {
                 uno::Sequence< OUString > seq{ u"Heading"_ustr, u"FullText"_ustr };
-                xRow->appendObject( rProp, uno::Any(seq) );
+                xRow->appendObject( rProp, cpo::uno::Any(seq) );
             }
             else if ( rProp.Name == "Order" )
             {
@@ -420,7 +420,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                         m_aURLParameter.get_module(),
                         m_aURLParameter.get_language() );
 
-                uno::Any aAny;
+                cpo::uno::Any aAny;
                 if( inf )
                     aAny <<= sal_Int32( inf->get_order() );
                 xRow->appendObject( rProp,aAny );

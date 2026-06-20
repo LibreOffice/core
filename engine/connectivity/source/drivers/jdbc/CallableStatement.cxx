@@ -32,6 +32,7 @@
 
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 

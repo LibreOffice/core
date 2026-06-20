@@ -44,12 +44,12 @@ namespace pcr
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XObjectInspectorModel
-        virtual css::uno::Sequence< css::uno::Any > SAL_CALL getHandlerFactories() override;
+        virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL getHandlerFactories() override;
         virtual css::uno::Sequence< css::inspection::PropertyCategoryDescriptor > SAL_CALL describeCategories(  ) override;
         virtual ::sal_Int32 SAL_CALL getPropertyOrderIndex( const OUString& PropertyName ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     public:
         explicit DefaultFormComponentInspectorModel( bool _bUseFormFormComponentHandlers = true );

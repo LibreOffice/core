@@ -167,7 +167,7 @@ tools::Time SwDateTimeField::GetTime() const
     return static_cast<tools::Time>(aDT);
 }
 
-bool SwDateTimeField::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
+bool SwDateTimeField::QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -195,7 +195,7 @@ bool SwDateTimeField::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
     return true;
 }
 
-bool SwDateTimeField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
+bool SwDateTimeField::PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhichId )
 {
     sal_Int32 nTmp = 0;
     switch( nWhichId )

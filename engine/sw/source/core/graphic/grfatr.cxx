@@ -54,7 +54,7 @@ static bool lcl_IsHoriOnOddPages(MirrorGraph nEnum)
     return bEnum;
 }
 
-bool SwMirrorGrf::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwMirrorGrf::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bRet = true;
     bool bVal = false;
@@ -80,7 +80,7 @@ bool SwMirrorGrf::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return bRet;
 }
 
-bool SwMirrorGrf::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwMirrorGrf::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bRet = true;
     bool bVal = *o3tl::doAccess<bool>(rVal);
@@ -177,7 +177,7 @@ bool SwRotationGrf::operator==( const SfxPoolItem& rCmp ) const
         GetUnrotatedSize() == static_cast<const SwRotationGrf&>(rCmp).GetUnrotatedSize();
 }
 
-bool SwRotationGrf::QueryValue( uno::Any& rVal, sal_uInt8 ) const
+bool SwRotationGrf::QueryValue( cpo::uno::Any& rVal, sal_uInt8 ) const
 {
     // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
     // where we still want this to be a sal_Int16
@@ -185,7 +185,7 @@ bool SwRotationGrf::QueryValue( uno::Any& rVal, sal_uInt8 ) const
     return true;
 }
 
-bool SwRotationGrf::PutValue( const uno::Any& rVal, sal_uInt8 )
+bool SwRotationGrf::PutValue( const cpo::uno::Any& rVal, sal_uInt8 )
 {
     // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
     // where we still want this to be a sal_Int16
@@ -242,13 +242,13 @@ bool SwGammaGrf::operator==( const SfxPoolItem& rCmp ) const
         m_nValue == static_cast<const SwGammaGrf&>(rCmp).GetValue();
 }
 
-bool SwGammaGrf::QueryValue( uno::Any& rVal, sal_uInt8 ) const
+bool SwGammaGrf::QueryValue( cpo::uno::Any& rVal, sal_uInt8 ) const
 {
     rVal <<= m_nValue;
     return true;
 }
 
-bool SwGammaGrf::PutValue( const uno::Any& rVal, sal_uInt8 )
+bool SwGammaGrf::PutValue( const cpo::uno::Any& rVal, sal_uInt8 )
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
     return rVal >>= m_nValue;
@@ -268,7 +268,7 @@ SwTransparencyGrf* SwTransparencyGrf::Clone( SfxItemPool * ) const
 
 // SwTransparencyGrf
 
-bool SwTransparencyGrf::QueryValue( uno::Any& rVal,
+bool SwTransparencyGrf::QueryValue( cpo::uno::Any& rVal,
                                         sal_uInt8 ) const
 {
     sal_Int16 nRet = GetValue();
@@ -277,7 +277,7 @@ bool SwTransparencyGrf::QueryValue( uno::Any& rVal,
     return true;
 }
 
-bool SwTransparencyGrf::PutValue( const uno::Any& rVal,
+bool SwTransparencyGrf::PutValue( const cpo::uno::Any& rVal,
                                         sal_uInt8 )
 {
     sal_Int16 nVal = 0;
@@ -304,7 +304,7 @@ SwDrawModeGrf* SwDrawModeGrf::Clone( SfxItemPool * ) const
 
 // SwDrawModeGrf
 
-bool SwDrawModeGrf::QueryValue( uno::Any& rVal,
+bool SwDrawModeGrf::QueryValue( cpo::uno::Any& rVal,
                                 sal_uInt8 ) const
 {
     drawing::ColorMode eRet = static_cast<drawing::ColorMode>(GetValue());
@@ -312,7 +312,7 @@ bool SwDrawModeGrf::QueryValue( uno::Any& rVal,
     return true;
 }
 
-bool SwDrawModeGrf::PutValue( const uno::Any& rVal,
+bool SwDrawModeGrf::PutValue( const cpo::uno::Any& rVal,
                                 sal_uInt8 )
 {
     sal_Int32 eVal = SWUnoHelper::GetEnumAsInt32( rVal );

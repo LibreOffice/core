@@ -49,7 +49,7 @@ using ::com::sun::star::text::WritingMode;
 #include <sal/log.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/propertynames.hxx>
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::Property;
@@ -66,6 +66,7 @@ using ::com::sun::star::container::XIndexReplace;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using ::com::sun::star::style::LineSpacing;
 using ::com::sun::star::text::WritingMode;
 using ::com::sun::star::drawing::TextHorizontalAdjust;
@@ -78,6 +79,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace {
 

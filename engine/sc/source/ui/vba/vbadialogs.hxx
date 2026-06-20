@@ -33,7 +33,7 @@ public:
     ScVbaDialogs( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > &xContext, const css::uno::Reference< css::frame::XModel >& xModel ): ScVbaDialogs_BASE( xParent, xContext ), m_xModel(xModel) {}
 
     // XCollection
-    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index ) override;
+    virtual cpo::uno::Any SAL_CALL Item( const cpo::uno::Any& Index ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

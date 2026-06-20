@@ -74,8 +74,8 @@ public:
     virtual UIName GetName() const override;
     virtual void SetName(const UIName& newName) override;
 
-    virtual void QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual void PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual void QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual void PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
 
     OUString const & GetCmd() const;
     void SetCmd( const OUString& aStr );

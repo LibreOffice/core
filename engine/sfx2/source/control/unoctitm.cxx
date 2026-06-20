@@ -83,6 +83,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 
 namespace {
@@ -801,7 +802,7 @@ void SfxDispatchController_Impl::addStatusListener(const css::uno::Reference< cs
         return;
 
     // Use alternative QueryState call to have a valid UNO representation of the state.
-    css::uno::Any aState;
+    cpo::uno::Any aState;
     if ( !pDispatcher && pBindings )
         pDispatcher = GetBindings().GetDispatcher_Impl();
     SfxItemState eState = pDispatcher ? pDispatcher->QueryState( GetId(), aState ) : SfxItemState::INVALID;
@@ -876,7 +877,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     if (!bNotify)
         return;
 
-    css::uno::Any aState;
+    cpo::uno::Any aState;
     if ( ( eState >= SfxItemState::DEFAULT ) && pState && !IsInvalidItem( pState ) && !IsDisabledItem(pState) )
     {
         // Retrieve metric from pool to have correct sub ID when calling QueryValue

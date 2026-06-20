@@ -127,9 +127,9 @@ ScShapeObj::~ScShapeObj()
 
 // XInterface
 
-uno::Any SAL_CALL ScShapeObj::queryInterface( const uno::Type& rType )
+cpo::uno::Any SAL_CALL ScShapeObj::queryInterface( const uno::Type& rType )
 {
-    uno::Any aRet = ScShapeObj_Base::queryInterface( rType );
+    cpo::uno::Any aRet = ScShapeObj_Base::queryInterface( rType );
 
     if ( !aRet.hasValue() && bIsTextShape )
         aRet = ScShapeObj_TextBase::queryInterface( rType );
@@ -371,7 +371,7 @@ static awt::Point lcl_GetRelativePos( const uno::Reference< drawing::XShape >& x
     return aUnoPoint;
 }
 
-void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const uno::Any& aValue)
+void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const cpo::uno::Any& aValue)
 {
     SolarMutexGuard aGuard;
 
@@ -738,11 +738,11 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
     }
 }
 
-uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     if ( aPropertyName == SC_UNONAME_ANCHOR )
     {
         SdrObject *pObj = GetSdrObject();
@@ -1063,11 +1063,11 @@ void SAL_CALL ScShapeObj::setPropertyToDefault( const OUString& aPropertyName )
     }
 }
 
-uno::Any SAL_CALL ScShapeObj::getPropertyDefault( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ScShapeObj::getPropertyDefault( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     if ( aPropertyName == SC_UNONAME_IMAGEMAP )
     {
         //  default: empty ImageMap
@@ -1419,7 +1419,7 @@ public:
     }
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement ) override
+    virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override
     {
         if ( !hasByName( aName ) )
             throw container::NoSuchElementException();
@@ -1449,7 +1449,7 @@ public:
     }
 
     // XNameAccess
-    virtual uno::Any SAL_CALL getByName( const OUString& aName ) override
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override
     {
         uno::Sequence< beans::PropertyValue > aProperties;
         ScMacroInfo* pInfo = getInfo(false);
@@ -1466,7 +1466,7 @@ public:
                             comphelper::makePropertyValue(SC_EVENTACC_SCRIPT, pInfo->GetMacro()) };
         }
 
-        return uno::Any( aProperties );
+        return cpo::uno::Any( aProperties );
     }
 
     virtual uno::Sequence< OUString > SAL_CALL getElementNames() override

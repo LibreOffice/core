@@ -34,7 +34,7 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 namespace com::sun::star::uno
 {
@@ -219,7 +219,7 @@ void HistogramChartType::createCalculatedDataSeries()
         uno::Reference<beans::XPropertySet> xCatProp(xCatDataSeq, uno::UNO_QUERY);
         if (xCatProp.is())
         {
-            xCatProp->setPropertyValue(u"Role"_ustr, uno::Any(u"categories"_ustr));
+            xCatProp->setPropertyValue(u"Role"_ustr, cpo::uno::Any(u"categories"_ustr));
         }
 
         uno::Reference<chart2::data::XLabeledDataSequence> xLabeledCat
@@ -269,7 +269,7 @@ uno::Sequence<OUString> HistogramChartType::getSupportedPropertyRoles()
 }
 
 // ____ OPropertySet ____
-void HistogramChartType::GetDefaultValue(sal_Int32 nHandle, uno::Any& rAny) const
+void HistogramChartType::GetDefaultValue(sal_Int32 nHandle, cpo::uno::Any& rAny) const
 {
     static const ::chart::tPropertyValueMap aStaticDefaults = []() {
         ::chart::tPropertyValueMap aTmp;
@@ -323,7 +323,7 @@ css::uno::Sequence<OUString> SAL_CALL HistogramChartType::getSupportedServiceNam
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_chart_HistogramChartType_get_implementation(
-    css::uno::XComponentContext* /*context*/, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* /*context*/, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ::chart::HistogramChartType());
 }

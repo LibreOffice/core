@@ -51,6 +51,7 @@
 
 using namespace cppu;
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::registry;
 using namespace css::java;

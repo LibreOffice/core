@@ -70,16 +70,16 @@ TETextDataObject::TETextDataObject( OUString aText ) : maText(std::move( aText )
 }
 
 // css::uno::XInterface
-css::uno::Any TETextDataObject::queryInterface( const css::uno::Type & rType )
+cpo::uno::Any TETextDataObject::queryInterface( const css::uno::Type & rType )
 {
-    css::uno::Any aRet = ::cppu::queryInterface( rType, static_cast< css::datatransfer::XTransferable* >(this) );
+    cpo::uno::Any aRet = ::cppu::queryInterface( rType, static_cast< css::datatransfer::XTransferable* >(this) );
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 
 // css::datatransfer::XTransferable
-css::uno::Any TETextDataObject::getTransferData( const css::datatransfer::DataFlavor& rFlavor )
+cpo::uno::Any TETextDataObject::getTransferData( const css::datatransfer::DataFlavor& rFlavor )
 {
-    css::uno::Any aAny;
+    cpo::uno::Any aAny;
 
     SotClipboardFormatId nT = SotExchange::GetFormat( rFlavor );
     if ( nT == SotClipboardFormatId::STRING )
@@ -918,7 +918,7 @@ void TextView::Paste( css::uno::Reference< css::datatransfer::clipboard::XClipbo
 
     try
     {
-        css::uno::Any aData = xDataObj->getTransferData( aFlavor );
+        cpo::uno::Any aData = xDataObj->getTransferData( aFlavor );
         OUString aText;
         aData >>= aText;
         bool bWasTruncated = false;
@@ -1807,7 +1807,7 @@ void TextView::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE )
             SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
             if ( xDataObj->isDataFlavorSupported( aFlavor ) )
             {
-                css::uno::Any aData = xDataObj->getTransferData( aFlavor );
+                cpo::uno::Any aData = xDataObj->getTransferData( aFlavor );
                 OUString aOUString;
                 aData >>= aOUString;
                 aText = convertLineEnd(aOUString, LINEEND_LF);

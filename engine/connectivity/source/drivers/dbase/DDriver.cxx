@@ -26,6 +26,7 @@
 using namespace connectivity::dbase;
 using namespace connectivity::file;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
@@ -42,7 +43,7 @@ OUString SAL_CALL ODriver::getImplementationName(  )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 connectivity_dbase_ODriver(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     rtl::Reference<ODriver> ret;
     try {

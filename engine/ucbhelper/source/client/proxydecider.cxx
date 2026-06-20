@@ -263,7 +263,7 @@ static bool getConfigInt32Value(
 {
     try
     {
-        uno::Any aValue = xNameAccess->getByName( key );
+        cpo::uno::Any aValue = xNameAccess->getByName( key );
         if ( aValue.hasValue() && !( aValue >>= value ) )
         {
             OSL_FAIL( "InternetProxyDecider - "
@@ -300,7 +300,7 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
         uno::Reference< lang::XMultiServiceFactory > xConfigProv =
                 configuration::theDefaultProvider::get( rxContext );
 
-        uno::Sequence< uno::Any > aArguments{ uno::Any(CONFIG_ROOT_KEY) };
+        uno::Sequence< cpo::uno::Any > aArguments{ cpo::uno::Any(CONFIG_ROOT_KEY) };
         uno::Reference< uno::XInterface > xInterface(
                     xConfigProv->createInstanceWithArguments(
                         u"com.sun.star.configuration.ConfigurationAccess"_ustr,

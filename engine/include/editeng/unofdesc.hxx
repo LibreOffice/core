@@ -42,7 +42,7 @@ public:
     static void FillFromItemSet(const SfxItemSet& rSet, css::awt::FontDescriptor& rDesc);
 
     static void setPropertyToDefault(SfxItemSet& rSet);
-    static css::uno::Any getPropertyDefault(SfxItemPool* pPool);
+    static cpo::uno::Any getPropertyDefault(SfxItemPool* pPool);
 };
 
 #endif

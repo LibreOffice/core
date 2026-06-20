@@ -78,7 +78,7 @@ void Stripe::InvertNormal( bool bInvertNormal )
     m_bInvertNormal = bInvertNormal;
 }
 
-uno::Any Stripe::getPolyPolygonShape3D() const
+cpo::uno::Any Stripe::getPolyPolygonShape3D() const
 {
     drawing::PolyPolygonShape3D aPP;
 
@@ -114,7 +114,7 @@ uno::Any Stripe::getPolyPolygonShape3D() const
     *pInnerSequenceY++ = m_aPoint4.PositionY;
     *pInnerSequenceZ++ = m_aPoint4.PositionZ;
 
-    return uno::Any( &aPP, cppu::UnoType<drawing::PolyPolygonShape3D>::get());
+    return cpo::uno::Any( &aPP, cppu::UnoType<drawing::PolyPolygonShape3D>::get());
 }
 
 drawing::Direction3D Stripe::getNormal() const
@@ -143,7 +143,7 @@ drawing::Direction3D Stripe::getNormal() const
     return aRet;
 }
 
-uno::Any Stripe::getNormalsPolygon() const
+cpo::uno::Any Stripe::getNormalsPolygon() const
 {
     drawing::PolyPolygonShape3D aPP;
 
@@ -171,10 +171,10 @@ uno::Any Stripe::getNormalsPolygon() const
         *pInnerSequenceY++ = aNormal.DirectionY;
         *pInnerSequenceZ++ = aNormal.DirectionZ;
     }
-    return uno::Any( &aPP, cppu::UnoType<drawing::PolyPolygonShape3D>::get());
+    return cpo::uno::Any( &aPP, cppu::UnoType<drawing::PolyPolygonShape3D>::get());
 }
 
-uno::Any Stripe::getTexturePolygon( short nRotatedTexture )
+cpo::uno::Any Stripe::getTexturePolygon( short nRotatedTexture )
 {
     drawing::PolyPolygonShape3D aPP;
 
@@ -339,7 +339,7 @@ uno::Any Stripe::getTexturePolygon( short nRotatedTexture )
         *pInnerSequenceZ++ = 0.0;
     }
 
-    return uno::Any( &aPP, cppu::UnoType<drawing::PolyPolygonShape3D>::get());
+    return cpo::uno::Any( &aPP, cppu::UnoType<drawing::PolyPolygonShape3D>::get());
 }
 
 } //namespace chart

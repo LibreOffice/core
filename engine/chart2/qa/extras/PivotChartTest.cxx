@@ -77,7 +77,7 @@ void lclModifyOrientation(uno::Reference<sheet::XDataPilotDescriptor> const & xD
         OUString aName = xNamed->getName();
         uno::Reference<beans::XPropertySet> xPropSet(xNamed, UNO_QUERY_THROW);
         if (aName == sFieldName)
-            xPropSet->setPropertyValue(u"Orientation"_ustr, uno::Any(eOrientation));
+            xPropSet->setPropertyValue(u"Orientation"_ustr, cpo::uno::Any(eOrientation));
     }
 }
 
@@ -93,7 +93,7 @@ void lclModifyFunction(uno::Reference<sheet::XDataPilotDescriptor> const & xDesc
         OUString aName = xNamed->getName();
         uno::Reference<beans::XPropertySet> xPropSet(xNamed, UNO_QUERY_THROW);
         if (aName == sFieldName)
-            xPropSet->setPropertyValue(u"Function"_ustr, uno::Any(eFunction));
+            xPropSet->setPropertyValue(u"Function"_ustr, cpo::uno::Any(eFunction));
     }
 }
 
@@ -110,7 +110,7 @@ void lclModifyLayoutInfo(uno::Reference<sheet::XDataPilotDescriptor> const & xDe
         uno::Reference<beans::XPropertySet> xPropSet(xNamed, UNO_QUERY_THROW);
         if (aName == sFieldName)
         {
-            uno::Any aValue;
+            cpo::uno::Any aValue;
             aValue <<= aLayoutInfo;
             xPropSet->setPropertyValue(u"LayoutInfo"_ustr, aValue);
         }
@@ -130,7 +130,7 @@ void lclModifySubtotals(uno::Reference<sheet::XDataPilotDescriptor> const & xDes
         uno::Reference<beans::XPropertySet> xPropSet(xNamed, UNO_QUERY_THROW);
         if (aName == sFieldName)
         {
-            uno::Any aValue;
+            cpo::uno::Any aValue;
             aValue <<= rSubtotalFunctions;
             xPropSet->setPropertyValue(u"Subtotals"_ustr, aValue);
         }
@@ -140,17 +140,17 @@ void lclModifySubtotals(uno::Reference<sheet::XDataPilotDescriptor> const & xDes
 void lclModifyColumnGrandTotal(uno::Reference<sheet::XDataPilotDescriptor> const & xDataPilotDescriptor, bool bTotal)
 {
         uno::Reference<beans::XPropertySet> xProperties(xDataPilotDescriptor, uno::UNO_QUERY_THROW);
-        xProperties->setPropertyValue(u"ColumnGrand"_ustr, uno::Any(bTotal));
+        xProperties->setPropertyValue(u"ColumnGrand"_ustr, cpo::uno::Any(bTotal));
 }
 
 void lclModifyRowGrandTotal(uno::Reference<sheet::XDataPilotDescriptor> const & xDataPilotDescriptor, bool bTotal)
 {
         uno::Reference<beans::XPropertySet> xProperties(xDataPilotDescriptor, uno::UNO_QUERY_THROW);
-        xProperties->setPropertyValue(u"RowGrand"_ustr, uno::Any(bTotal));
+        xProperties->setPropertyValue(u"RowGrand"_ustr, cpo::uno::Any(bTotal));
 }
 
 void lclCheckSequence(std::vector<double> const & reference,
-                      uno::Sequence<uno::Any> const & values,
+                      uno::Sequence<cpo::uno::Any> const & values,
                       double delta)
 {
     CPPUNIT_ASSERT_EQUAL(reference.size(), size_t(values.getLength()));
@@ -178,7 +178,7 @@ uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence>>
     lclGetCategories(Reference<chart2::XChartDocument> const & xChartDoc)
 {
     uno::Sequence<beans::PropertyValue> aArguments( comphelper::InitPropertySequence(
-            {{"CellRangeRepresentation", uno::Any(u"PT@categories"_ustr)}} ));
+            {{"CellRangeRepresentation", cpo::uno::Any(u"PT@categories"_ustr)}} ));
 
     uno::Reference<chart2::data::XDataProvider> xDataProvider(xChartDoc->getDataProvider(), uno::UNO_SET_THROW);
     return xDataProvider->createDataSource(aArguments)->getDataSequences();
@@ -280,7 +280,7 @@ table::CellRangeAddress lclCreateTestData(uno::Reference<sheet::XSpreadsheetDocu
     sal_Int32 nDateKey = xNumberFormatTypes->getStandardFormat(util::NumberFormat::DATE, aLocale);
     uno::Reference<table::XCellRange> xCellRange = xSheet->getCellRangeByPosition(nEndCol, 1, nEndCol, nEndRow);
     uno::Reference<beans::XPropertySet> xCellProp(xCellRange, UNO_QUERY_THROW);
-    xCellProp->setPropertyValue(u"NumberFormat"_ustr, uno::Any(nDateKey));
+    xCellProp->setPropertyValue(u"NumberFormat"_ustr, cpo::uno::Any(nDateKey));
 
     table::CellRangeAddress sCellRangeAddress;
     sCellRangeAddress.Sheet = 0;
@@ -298,7 +298,7 @@ uno::Reference<sheet::XDataPilotTable> PivotChartTest::getPivotTableByName(sal_I
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xSheetIndexAccess(xDoc->getSheets(), UNO_QUERY_THROW);
-    uno::Any aAny = xSheetIndexAccess->getByIndex(nIndex);
+    cpo::uno::Any aAny = xSheetIndexAccess->getByIndex(nIndex);
     uno::Reference<sheet::XSpreadsheet> xSheet;
     CPPUNIT_ASSERT(aAny >>= xSheet);
     uno::Reference<sheet::XDataPilotTablesSupplier> xDataPilotTablesSupplier(xSheet, uno::UNO_QUERY_THROW);
@@ -308,7 +308,7 @@ uno::Reference<sheet::XDataPilotTable> PivotChartTest::getPivotTableByName(sal_I
 
 void PivotChartTest::testRoundtrip()
 {
-    uno::Sequence<uno::Any> xSequence;
+    uno::Sequence<cpo::uno::Any> xSequence;
     Reference<chart2::XChartDocument> xChartDoc;
 
     std::vector<double> aReference1 { 10162.033139, 16614.523063, 27944.146101 };
@@ -371,7 +371,7 @@ void PivotChartTest::testRoundtrip()
 
 void PivotChartTest::testChangePivotTable()
 {
-    uno::Sequence<uno::Any> xSequence;
+    uno::Sequence<cpo::uno::Any> xSequence;
     Reference<chart2::XChartDocument> xChartDoc;
 
     loadFromFile(u"ods/PivotTableExample.ods");
@@ -504,7 +504,7 @@ void PivotChartTest::testChangePivotTable()
     // Enable column totals and check the data is still unchanged
     {
         uno::Reference<beans::XPropertySet> xProperties(xDataPilotTable, uno::UNO_QUERY_THROW);
-        xProperties->setPropertyValue(u"ColumnGrand"_ustr, uno::Any(true));
+        xProperties->setPropertyValue(u"ColumnGrand"_ustr, cpo::uno::Any(true));
     }
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getNumberOfDataSeries(xChartDoc));
@@ -563,7 +563,7 @@ void PivotChartTest::testPivotChartWithOneColumnField()
 
     // TEST
 
-    uno::Sequence<uno::Any> xSequence;
+    uno::Sequence<cpo::uno::Any> xSequence;
     Reference<chart2::XChartDocument> xChartDoc;
 
     // Check we have the Pivot Table
@@ -647,7 +647,7 @@ void PivotChartTest::testPivotChartWithOneRowField()
 
     // TEST
 
-    uno::Sequence<uno::Any> xSequence;
+    uno::Sequence<cpo::uno::Any> xSequence;
     Reference<chart2::XChartDocument> xChartDoc;
 
     // Check we have the Pivot Table
@@ -813,7 +813,7 @@ void PivotChartTest::testPivotChartRowFieldInOutlineMode()
     xDataPilotTables->insertNewByName(sPivotTableName, table::CellAddress{1, 0, 0}, xDataPilotDescriptor);
 
     // TEST
-    uno::Sequence<uno::Any> xSequence;
+    uno::Sequence<cpo::uno::Any> xSequence;
     Reference<chart2::XChartDocument> xChartDoc;
 
     // Check we have the Pivot Table

@@ -36,7 +36,7 @@ using namespace ::com::sun::star;
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 
 namespace
 {
@@ -78,7 +78,7 @@ namespace chart::wrapper
 
 MinMaxLineWrapper::MinMaxLineWrapper(std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
         : m_spChart2ModelContact(std::move( spChart2ModelContact ))
-        , m_aWrappedLineJointProperty( u"LineJoint"_ustr, uno::Any( drawing::LineJoint_NONE ))
+        , m_aWrappedLineJointProperty( u"LineJoint"_ustr, cpo::uno::Any( drawing::LineJoint_NONE ))
 {
 }
 
@@ -114,7 +114,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL MinMaxLineWrapper::getPropert
     return StaticMinMaxLineWrapperInfo();
 }
 
-void SAL_CALL MinMaxLineWrapper::setPropertyValue( const OUString& rPropertyName, const uno::Any& rValue )
+void SAL_CALL MinMaxLineWrapper::setPropertyValue( const OUString& rPropertyName, const cpo::uno::Any& rValue )
 {
     rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     const std::vector< rtl::Reference< ChartType > > aTypes = xDiagram->getChartTypes();
@@ -141,7 +141,7 @@ void SAL_CALL MinMaxLineWrapper::setPropertyValue( const OUString& rPropertyName
         }
     }
 }
-uno::Any SAL_CALL MinMaxLineWrapper::getPropertyValue( const OUString& rPropertyName )
+cpo::uno::Any SAL_CALL MinMaxLineWrapper::getPropertyValue( const OUString& rPropertyName )
 {
     Any aRet;
 
@@ -195,7 +195,7 @@ void SAL_CALL MinMaxLineWrapper::removeVetoableChangeListener( const OUString& /
 
 //XMultiPropertySet
 //getPropertySetInfo() already declared in XPropertySet
-void SAL_CALL MinMaxLineWrapper::setPropertyValues( const uno::Sequence< OUString >& rNameSeq, const uno::Sequence< uno::Any >& rValueSeq )
+void SAL_CALL MinMaxLineWrapper::setPropertyValues( const uno::Sequence< OUString >& rNameSeq, const uno::Sequence< cpo::uno::Any >& rValueSeq )
 {
     sal_Int32 nMinCount = std::min( rValueSeq.getLength(), rNameSeq.getLength() );
     for(sal_Int32 nN=0; nN<nMinCount; nN++)
@@ -212,7 +212,7 @@ void SAL_CALL MinMaxLineWrapper::setPropertyValues( const uno::Sequence< OUStrin
     }
     //todo: store unknown properties elsewhere
 }
-uno::Sequence< uno::Any > SAL_CALL MinMaxLineWrapper::getPropertyValues( const uno::Sequence< OUString >& rNameSeq )
+uno::Sequence< cpo::uno::Any > SAL_CALL MinMaxLineWrapper::getPropertyValues( const uno::Sequence< OUString >& rNameSeq )
 {
     Sequence< Any > aRetSeq;
     if( rNameSeq.hasElements() )
@@ -251,8 +251,8 @@ beans::PropertyState SAL_CALL MinMaxLineWrapper::getPropertyState( const OUStrin
     if( rPropertyName == m_aWrappedLineJointProperty.getOuterName() )
         return beans::PropertyState_DEFAULT_VALUE;
 
-    uno::Any aDefault( getPropertyDefault( rPropertyName ) );
-    uno::Any aValue( getPropertyValue( rPropertyName ) );
+    cpo::uno::Any aDefault( getPropertyDefault( rPropertyName ) );
+    cpo::uno::Any aValue( getPropertyValue( rPropertyName ) );
 
     if( aDefault == aValue )
         return beans::PropertyState_DEFAULT_VALUE;
@@ -279,7 +279,7 @@ void SAL_CALL MinMaxLineWrapper::setPropertyToDefault( const OUString& rProperty
     setPropertyValue( rPropertyName, getPropertyDefault(rPropertyName) );
 }
 
-uno::Any SAL_CALL MinMaxLineWrapper::getPropertyDefault( const OUString& rPropertyName )
+cpo::uno::Any SAL_CALL MinMaxLineWrapper::getPropertyDefault( const OUString& rPropertyName )
 {
     static const ::chart::tPropertyValueMap aStaticDefaults = []
         {
@@ -289,7 +289,7 @@ uno::Any SAL_CALL MinMaxLineWrapper::getPropertyDefault( const OUString& rProper
         }();
     tPropertyValueMap::const_iterator aFound( aStaticDefaults.find( StaticMinMaxLineWrapperInfoHelper().getHandleByName( rPropertyName ) ) );
     if( aFound == aStaticDefaults.end() )
-        return uno::Any();
+        return cpo::uno::Any();
     return (*aFound).second;
 }
 
@@ -310,7 +310,7 @@ void SAL_CALL MinMaxLineWrapper::setPropertiesToDefault( const uno::Sequence< OU
         setPropertyToDefault( s );
     }
 }
-uno::Sequence< uno::Any > SAL_CALL MinMaxLineWrapper::getPropertyDefaults( const uno::Sequence< OUString >& rNameSeq )
+uno::Sequence< cpo::uno::Any > SAL_CALL MinMaxLineWrapper::getPropertyDefaults( const uno::Sequence< OUString >& rNameSeq )
 {
     Sequence< Any > aRetSeq;
     if( rNameSeq.hasElements() )

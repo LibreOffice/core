@@ -33,6 +33,7 @@
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::test::performance;
@@ -72,7 +73,7 @@ public:
         {}
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw(css::uno::RuntimeException)
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw(css::uno::RuntimeException)
     {
         // execution time remains appr. constant any time
         Any aRet;
@@ -168,7 +169,7 @@ public:
         {}
     virtual Any SAL_CALL getAny() throw(css::uno::RuntimeException)
         { return _aDummyAny; }
-    virtual void SAL_CALL setAny( const css::uno::Any& _any ) throw(css::uno::RuntimeException)
+    virtual void SAL_CALL setAny( const cpo::uno::Any& _any ) throw(css::uno::RuntimeException)
         {}
     virtual Sequence< Reference< XInterface > > SAL_CALL getSequence() throw(css::uno::RuntimeException)
         { return _aDummySequence; }

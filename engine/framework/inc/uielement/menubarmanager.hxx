@@ -92,7 +92,7 @@ class MenuBarManager final :
         virtual void SAL_CALL elementReplaced( const css::ui::ConfigurationEvent& Event ) override;
 
         // XSystemDependentMenuPeer
-        virtual css::uno::Any SAL_CALL getMenuHandle( const css::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) override;
+        virtual cpo::uno::Any SAL_CALL getMenuHandle( const css::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) override;
 
         DECL_LINK( Select, Menu *, bool );
 

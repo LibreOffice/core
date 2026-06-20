@@ -825,10 +825,10 @@ bool DataSourceTabPage::updateModelFromControl(const weld::Entry* pField)
                                     // "$Sheet1.$A$1"
                                     aRange = xNewSeq->getSourceRangeRepresentation();
                                     Reference< beans::XPropertySet > xProp( xNewSeq, uno::UNO_QUERY_THROW );
-                                    xProp->setPropertyValue( u"Role"_ustr , uno::Any( lcl_aLabelRole ));
+                                    xProp->setPropertyValue( u"Role"_ustr , cpo::uno::Any( lcl_aLabelRole ));
 
                                     //Labels should always include hidden cells, regardless of the setting chosen
-                                    xProp->setPropertyValue( u"IncludeHiddenCells"_ustr, uno::Any(true));
+                                    xProp->setPropertyValue( u"IncludeHiddenCells"_ustr, cpo::uno::Any(true));
                                     xLabeledSeq->setLabel( xNewSeq );
                                 }
                             }
@@ -860,7 +860,7 @@ bool DataSourceTabPage::updateModelFromControl(const weld::Entry* pField)
                                 aRange = xNewSeq->getSourceRangeRepresentation();
 
                                 Reference< beans::XPropertySet > xProp( xNewSeq, uno::UNO_QUERY_THROW );
-                                xProp->setPropertyValue( u"Role"_ustr , uno::Any( aSelectedRole ));
+                                xProp->setPropertyValue( u"Role"_ustr , cpo::uno::Any( aSelectedRole ));
                                 if( !xLabeledSeq.is())
                                 {
                                     if( aSelectedRole == aSequenceNameForLabel )

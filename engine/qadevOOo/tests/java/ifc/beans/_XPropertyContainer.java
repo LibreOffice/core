@@ -21,7 +21,7 @@ package ifc.beans;
 import com.sun.star.beans.IllegalTypeException;
 import com.sun.star.beans.NotRemoveableException;
 import com.sun.star.beans.PropertyExistException;
-import com.sun.star.uno.Any;
+import cpo.uno.Any;
 import lib.MultiMethodTest;
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertyContainer;

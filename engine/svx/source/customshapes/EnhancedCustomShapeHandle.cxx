@@ -81,7 +81,7 @@ void SAL_CALL EnhancedCustomShapeHandle::setControllerPosition( const css::awt::
 }
 
 // XInitialization
-void SAL_CALL EnhancedCustomShapeHandle::initialize( const css::uno::Sequence< css::uno::Any >& /* aArguments */ )
+void SAL_CALL EnhancedCustomShapeHandle::initialize( const css::uno::Sequence< cpo::uno::Any >& /* aArguments */ )
 {
 }
 

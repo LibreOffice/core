@@ -37,7 +37,7 @@ namespace xmloff
     {
     public:
         template<typename EnumT>
-        static css::uno::Any convertString(
+        static cpo::uno::Any convertString(
             const css::uno::Type& _rExpectedType,
             const OUString& _rReadCharacters,
             const SvXMLEnumMapEntry<EnumT>* _pEnumMap = nullptr
@@ -46,7 +46,7 @@ namespace xmloff
             return convertString(_rExpectedType, _rReadCharacters,
                     reinterpret_cast<const SvXMLEnumMapEntry<sal_uInt16>*>(_pEnumMap), /*_bInvertBoolean*/false);
         }
-        static css::uno::Any convertString(
+        static cpo::uno::Any convertString(
             const css::uno::Type& _rExpectedType,
             const OUString& _rReadCharacters,
             const SvXMLEnumMapEntry<sal_uInt16>* _pEnumMap = nullptr,
@@ -130,7 +130,7 @@ namespace xmloff
             m_aValues.push_back(_rProp);
         }
 
-        void implPushBackPropertyValue( const OUString& _rName, const css::uno::Any& _rValue )
+        void implPushBackPropertyValue( const OUString& _rName, const cpo::uno::Any& _rValue )
         {
             m_aValues.push_back( css::beans::PropertyValue(
                 _rName, -1, _rValue, css::beans::PropertyState_DIRECT_VALUE ) );

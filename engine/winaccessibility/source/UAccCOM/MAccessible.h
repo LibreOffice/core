@@ -214,7 +214,7 @@ public:
     }
 
     // Helper function for data conversion.
-    static void ConvertAnyToVariant(const css::uno::Any &rAnyVal,
+    static void ConvertAnyToVariant(const cpo::uno::Any &rAnyVal,
             VARIANT *pvData);
 };
 

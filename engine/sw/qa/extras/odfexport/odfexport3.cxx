@@ -539,7 +539,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBtlrFrame)
             return;
 
         // Make sure that btlr -> tbrl transition clears the "BT" flag.
-        xTextFrame->setPropertyValue(u"WritingMode"_ustr, uno::Any(text::WritingMode2::TB_LR));
+        xTextFrame->setPropertyValue(u"WritingMode"_ustr, cpo::uno::Any(text::WritingMode2::TB_LR));
         pFlyFrame = dynamic_cast<SwFlyFrame*>(rAnchored[0]);
         CPPUNIT_ASSERT(pFlyFrame);
         CPPUNIT_ASSERT(!pFlyFrame->IsVertLRBT());
@@ -611,7 +611,7 @@ DECLARE_ODFEXPORT_TEST(testOdtBorderTypes, "border_types.odt")
                     uno::Reference<table::XCell> xCell = xCellRange->getCellByPosition(1, row);
                     uno::Reference<beans::XPropertySet> xPropSet(xCell, uno::UNO_QUERY_THROW);
 
-                    uno::Any aTopBorder = xPropSet->getPropertyValue(u"TopBorder"_ustr);
+                    cpo::uno::Any aTopBorder = xPropSet->getPropertyValue(u"TopBorder"_ustr);
                     table::BorderLine2 aTopBorderLine;
                     if (aTopBorder >>= aTopBorderLine)
                     {
@@ -1218,9 +1218,9 @@ DECLARE_ODFEXPORT_TEST(testCellUserDefineAttr, "userdefattr-tablecell.odt")
                                                uno::UNO_SET_THROW);
     uno::Reference<table::XCell> const xCellC1(xTable->getCellByName(u"C1"_ustr),
                                                uno::UNO_SET_THROW);
-    getUserDefineAttribute(uno::Any(xCellA1), u"proName"_ustr, u"v1"_ustr);
-    getUserDefineAttribute(uno::Any(xCellB1), u"proName"_ustr, u"v2"_ustr);
-    getUserDefineAttribute(uno::Any(xCellC1), u"proName"_ustr, u"v3"_ustr);
+    getUserDefineAttribute(cpo::uno::Any(xCellA1), u"proName"_ustr, u"v1"_ustr);
+    getUserDefineAttribute(cpo::uno::Any(xCellB1), u"proName"_ustr, u"v2"_ustr);
+    getUserDefineAttribute(cpo::uno::Any(xCellC1), u"proName"_ustr, u"v3"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testEmbeddedPdf)
@@ -1252,7 +1252,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEmbeddedPdf)
     saveAndReload(TestFilter::ODT);
     verify();
 
-    uno::Sequence<uno::Any> aArgs{ uno::Any(maTempFile.GetURL()) };
+    uno::Sequence<cpo::uno::Any> aArgs{ cpo::uno::Any(maTempFile.GetURL()) };
     uno::Reference<container::XNameAccess> xNameAccess(
         m_xSFactory->createInstanceWithArguments(u"com.sun.star.packages.zip.ZipFileAccess"_ustr,
                                                  aArgs),
@@ -1284,7 +1284,7 @@ CPPUNIT_TEST_FIXTURE(Test, testWebpImageRoundtrip)
 
     saveAndReload(TestFilter::ODT);
 
-    uno::Sequence<uno::Any> aZipArgs{ uno::Any(maTempFile.GetURL()) };
+    uno::Sequence<cpo::uno::Any> aZipArgs{ cpo::uno::Any(maTempFile.GetURL()) };
     uno::Reference<container::XNameAccess> xNameAccess(
         m_xSFactory->createInstanceWithArguments(u"com.sun.star.packages.zip.ZipFileAccess"_ustr,
                                                  aZipArgs),
@@ -1895,7 +1895,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf164712)
     Color nColor;
     // without the fix in place, this test would have failed here
     CPPUNIT_ASSERT(
-        !css::uno::fromAny(xPropertySet->getPropertyValue(u"CharBackColor"_ustr), &nColor));
+        !cpo::uno::fromAny(xPropertySet->getPropertyValue(u"CharBackColor"_ustr), &nColor));
 }
 
 DECLARE_ODFEXPORT_TEST(testTdf132642_keepWithNextTable, "tdf132642_keepWithNextTable.odt")

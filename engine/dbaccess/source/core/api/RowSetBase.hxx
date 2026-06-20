@@ -68,7 +68,7 @@ namespace dbaccess
                                                 // for a row
                                                 m_aColumnsMutex;
 
-        css::uno::Any                           m_aBookmark;
+        cpo::uno::Any                           m_aBookmark;
         ORowSetCacheIterator                    m_aCurrentRow;      // contains the actual fetched row
         TORowSetOldRowHelperRef                 m_aOldRow;
         TDataColumns                            m_aDataColumns;     // holds the columns as m_pColumns but know the implementation class
@@ -131,8 +131,8 @@ namespace dbaccess
         void fireProperty( sal_Int32 _nProperty, bool _bNew, bool _bOld );
 
     // OPropertyStateContainer
-        virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, css::uno::Any& _rDefault ) const override;
-        virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue,sal_Int32 nHandle) const override;
+        virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, cpo::uno::Any& _rDefault ) const override;
+        virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue,sal_Int32 nHandle) const override;
 
         enum class CursorMoveDirection
         {
@@ -239,10 +239,10 @@ namespace dbaccess
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
     // css::uno::XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
 
     // css::sdbc::XWarningsSupplier
-        virtual css::uno::Any SAL_CALL getWarnings(  ) override;
+        virtual cpo::uno::Any SAL_CALL getWarnings(  ) override;
         virtual void SAL_CALL clearWarnings(  ) override;
 
     // css::sdbc::XResultSetMetaDataSupplier
@@ -270,19 +270,19 @@ namespace dbaccess
         virtual css::util::DateTime SAL_CALL getTimestamp( sal_Int32 columnIndex ) override;
         virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getBinaryStream( sal_Int32 columnIndex ) override;
         virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getCharacterStream( sal_Int32 columnIndex ) override;
-        virtual css::uno::Any SAL_CALL getObject( sal_Int32 columnIndex, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual cpo::uno::Any SAL_CALL getObject( sal_Int32 columnIndex, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
         virtual css::uno::Reference< css::sdbc::XRef > SAL_CALL getRef( sal_Int32 columnIndex ) override;
         virtual css::uno::Reference< css::sdbc::XBlob > SAL_CALL getBlob( sal_Int32 columnIndex ) override;
         virtual css::uno::Reference< css::sdbc::XClob > SAL_CALL getClob( sal_Int32 columnIndex ) override;
         virtual css::uno::Reference< css::sdbc::XArray > SAL_CALL getArray( sal_Int32 columnIndex ) override;
 
     // css::sdbcx::XRowLocate
-        virtual css::uno::Any SAL_CALL getBookmark(  ) override;
-        virtual bool SAL_CALL moveToBookmark( const css::uno::Any& bookmark ) override;
-        virtual bool SAL_CALL moveRelativeToBookmark( const css::uno::Any& bookmark, sal_Int32 rows ) override;
-        virtual sal_Int32 SAL_CALL compareBookmarks( const css::uno::Any& first, const css::uno::Any& second ) override;
+        virtual cpo::uno::Any SAL_CALL getBookmark(  ) override;
+        virtual bool SAL_CALL moveToBookmark( const cpo::uno::Any& bookmark ) override;
+        virtual bool SAL_CALL moveRelativeToBookmark( const cpo::uno::Any& bookmark, sal_Int32 rows ) override;
+        virtual sal_Int32 SAL_CALL compareBookmarks( const cpo::uno::Any& first, const cpo::uno::Any& second ) override;
         virtual bool SAL_CALL hasOrderedBookmarks(  ) override;
-        virtual sal_Int32 SAL_CALL hashBookmark( const css::uno::Any& bookmark ) override;
+        virtual sal_Int32 SAL_CALL hashBookmark( const cpo::uno::Any& bookmark ) override;
 
     // css::sdbc::XResultSet
         virtual bool SAL_CALL next(  ) override;
@@ -310,9 +310,9 @@ namespace dbaccess
         virtual void SAL_CALL removeRowSetListener( const css::uno::Reference< css::sdbc::XRowSetListener >& listener ) override = 0;
 
         // is called when the rowset is going to delete this bookmark _rBookmark
-        void onDeleteRow( const css::uno::Any& _rBookmark );
+        void onDeleteRow( const cpo::uno::Any& _rBookmark );
         // is called when the rowset has deleted this bookmark _rBookmark
-        void onDeletedRow( const css::uno::Any& _rBookmark, sal_Int32 _nPos );
+        void onDeletedRow( const cpo::uno::Any& _rBookmark, sal_Int32 _nPos );
 
         // granular access control
         struct GrantNotifierAccess { friend class ORowSetNotifier; private: GrantNotifierAccess () { } };

@@ -22,7 +22,7 @@
 
 #include <map>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <oox/drawingml/chart/modelbase.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -34,7 +34,7 @@ namespace oox::drawingml::chart {
 
 struct DataSequenceModel
 {
-    typedef ::std::map< sal_Int32, css::uno::Any > AnyMap;
+    typedef ::std::map< sal_Int32, cpo::uno::Any > AnyMap;
 
     AnyMap              maData;             /// Map of values, indexed by point identifier.
     OUString            maFormula;          /// Formula reference, e.g. into a spreadsheet.

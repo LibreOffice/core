@@ -20,7 +20,7 @@
 
 #include <svl/slstitm.hxx>
 #include <svl/poolitem.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <osl/diagnose.h>
@@ -141,7 +141,7 @@ void SfxStringListItem::GetStringList( css::uno::Sequence< OUString >& rList ) c
 }
 
 // virtual
-bool SfxStringListItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
+bool SfxStringListItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 )
 {
     css::uno::Sequence< OUString > aValue;
     if ( rVal >>= aValue )
@@ -155,7 +155,7 @@ bool SfxStringListItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
 }
 
 // virtual
-bool SfxStringListItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
+bool SfxStringListItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 ) const
 {
     css::uno::Sequence< OUString > aStringList;
     GetStringList( aStringList );

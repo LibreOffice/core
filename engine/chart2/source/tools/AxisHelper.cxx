@@ -82,7 +82,7 @@ ScaleData AxisHelper::createDefaultScale()
 
 void AxisHelper::removeExplicitScaling( ScaleData& rScaleData )
 {
-    rScaleData.Minimum = rScaleData.Maximum = rScaleData.Origin = uno::Any();
+    rScaleData.Minimum = rScaleData.Maximum = rScaleData.Origin = cpo::uno::Any();
     rScaleData.Scaling = nullptr;
     ScaleData aDefaultScale( createDefaultScale() );
     rScaleData.IncrementData = aDefaultScale.IncrementData;
@@ -202,7 +202,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                                 {
                                     bool bHasValidDoubles = false;
                                     double fTest=0.0;
-                                    Sequence< uno::Any > aCats( xSeq->getData() );
+                                    Sequence< cpo::uno::Any > aCats( xSeq->getData() );
                                     sal_Int32 nCount = aCats.getLength();
                                     for( sal_Int32 i = 0; i < nCount; ++i )
                                     {
@@ -353,7 +353,7 @@ rtl::Reference< Axis > AxisHelper::createAxis(
                 eNewAxisPos = css::chart::ChartAxisPosition_START;
         }
 
-        xAxis->setPropertyValue(u"CrossoverPosition"_ustr, uno::Any(eNewAxisPos) );
+        xAxis->setPropertyValue(u"CrossoverPosition"_ustr, cpo::uno::Any(eNewAxisPos) );
     }
 
     try
@@ -439,9 +439,9 @@ void AxisHelper::makeAxisVisible( const rtl::Reference< Axis >& xAxis )
 {
     if( xAxis.is() )
     {
-        xAxis->setPropertyValue( u"Show"_ustr, uno::Any( true ) );
+        xAxis->setPropertyValue( u"Show"_ustr, cpo::uno::Any( true ) );
         LinePropertiesHelper::SetLineVisible( xAxis );
-        xAxis->setPropertyValue( u"DisplayLabels"_ustr, uno::Any( true ) );
+        xAxis->setPropertyValue( u"DisplayLabels"_ustr, cpo::uno::Any( true ) );
     }
 }
 
@@ -449,7 +449,7 @@ void AxisHelper::makeGridVisible( const rtl::Reference< GridProperties >& xGridP
 {
     if( xGridProperties.is() )
     {
-        xGridProperties->setPropertyValue( u"Show"_ustr, uno::Any( true ) );
+        xGridProperties->setPropertyValue( u"Show"_ustr, cpo::uno::Any( true ) );
         LinePropertiesHelper::SetLineVisible( xGridProperties );
     }
 }
@@ -464,7 +464,7 @@ void AxisHelper::makeAxisInvisible( const rtl::Reference< Axis >& xAxis )
 {
     if( xAxis.is() )
     {
-        xAxis->setPropertyValue( u"Show"_ustr, uno::Any( false ) );
+        xAxis->setPropertyValue( u"Show"_ustr, cpo::uno::Any( false ) );
     }
 }
 
@@ -514,7 +514,7 @@ void AxisHelper::makeGridInvisible( const rtl::Reference< ::chart::GridPropertie
 {
     if( xGridProperties.is() )
     {
-        xGridProperties->setPropertyValue( u"Show"_ustr, uno::Any( false ) );
+        xGridProperties->setPropertyValue( u"Show"_ustr, cpo::uno::Any( false ) );
     }
 }
 

@@ -41,7 +41,7 @@ namespace fileaccess {
         virtual ~XCommandInfo_impl() override;
 
         // XInterface
-        virtual css::uno::Any SAL_CALL
+        virtual cpo::uno::Any SAL_CALL
         queryInterface( const css::uno::Type& aType ) override;
 
         virtual void SAL_CALL

@@ -79,12 +79,12 @@ class SwXPrintSettings final : public comphelper::ChainablePropertySet
     SwDoc *mpDoc;
 
     virtual void _preSetValues () override;
-    virtual void _setSingleValue( const comphelper::PropertyInfo & rInfo, const css::uno::Any &rValue ) override;
+    virtual void _setSingleValue( const comphelper::PropertyInfo & rInfo, const cpo::uno::Any &rValue ) override;
     virtual void _postSetValues () override;
 
     virtual void _preGetValues () override;
 
-    virtual void _getSingleValue( const comphelper::PropertyInfo & rInfo, css::uno::Any & rValue ) override;
+    virtual void _getSingleValue( const comphelper::PropertyInfo & rInfo, cpo::uno::Any & rValue ) override;
     virtual void _postGetValues () override;
 
     virtual ~SwXPrintSettings()
@@ -117,11 +117,11 @@ class SwXViewSettings final : public comphelper::ChainablePropertySet
     bool    mbApplyVRulerMetric;
 
     virtual void _preSetValues () override;
-    virtual void _setSingleValue( const comphelper::PropertyInfo & rInfo, const css::uno::Any &rValue ) override;
+    virtual void _setSingleValue( const comphelper::PropertyInfo & rInfo, const cpo::uno::Any &rValue ) override;
     virtual void _postSetValues() override;
 
     virtual void _preGetValues () override;
-    virtual void _getSingleValue( const comphelper::PropertyInfo & rInfo, css::uno::Any & rValue ) override;
+    virtual void _getSingleValue( const comphelper::PropertyInfo & rInfo, cpo::uno::Any & rValue ) override;
     virtual void _postGetValues () override;
 
     virtual ~SwXViewSettings()

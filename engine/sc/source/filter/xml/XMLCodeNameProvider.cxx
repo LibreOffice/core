@@ -26,7 +26,7 @@
 
 using namespace com::sun::star;
 
-bool XMLCodeNameProvider::_getCodeName( const uno::Any& aAny, OUString& rCodeName )
+bool XMLCodeNameProvider::_getCodeName( const cpo::uno::Any& aAny, OUString& rCodeName )
 {
     uno::Sequence<beans::PropertyValue> aProps;
     if( !(aAny >>= aProps) )
@@ -79,9 +79,9 @@ bool SAL_CALL XMLCodeNameProvider::hasByName( const OUString& aName )
     return false;
 }
 
-uno::Any SAL_CALL XMLCodeNameProvider::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL XMLCodeNameProvider::getByName( const OUString& aName )
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if( aName == gsDocName )
     {
         OUString sUCodeName( mpDoc->GetCodeName() );
@@ -151,7 +151,7 @@ bool SAL_CALL XMLCodeNameProvider::hasElements()
 
 void XMLCodeNameProvider::set( const uno::Reference< container::XNameAccess>& xNameAccess, ScDocument *pDoc )
 {
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     OUString sDocName(u"*doc*"_ustr);
     OUString sCodeName;
     if( xNameAccess->hasByName( sDocName ) )

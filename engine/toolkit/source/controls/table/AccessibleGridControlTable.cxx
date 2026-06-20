@@ -29,7 +29,7 @@
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -291,8 +291,8 @@ void AccessibleGridControlTable::dispose()
     AccessibleGridControlTableBase::dispose();
 }
 
-void AccessibleGridControlTable::commitEvent(sal_Int16 nEventId, const css::uno::Any& rNewValue,
-                                             const css::uno::Any& rOldValue)
+void AccessibleGridControlTable::commitEvent(sal_Int16 nEventId, const cpo::uno::Any& rNewValue,
+                                             const cpo::uno::Any& rOldValue)
 {
     if (nEventId == AccessibleEventId::TABLE_MODEL_CHANGED)
     {

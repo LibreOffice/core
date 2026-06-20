@@ -95,7 +95,7 @@ Sequence<OUString> SAL_CALL StarOfficePresentationImportFilter::getSupportedServ
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_libreoffice_comp_Presentation_StarOfficePresentationImportFilter_get_implementation(
-    css::uno::XComponentContext* const context, const css::uno::Sequence<css::uno::Any>&)
+    css::uno::XComponentContext* const context, const css::uno::Sequence<cpo::uno::Any>&)
 {
     return cppu::acquire(new StarOfficePresentationImportFilter(context));
 }

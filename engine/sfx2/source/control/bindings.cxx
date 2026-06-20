@@ -61,6 +61,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 
 #define TIMEOUT_FIRST       300
@@ -1553,7 +1554,7 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, std::unique_ptr<SfxPoolI
                 }
                 else
                 {
-                    css::uno::Any aAny = xBind->GetStatus().State;
+                    cpo::uno::Any aAny = xBind->GetStatus().State;
                     const css::uno::Type& aType = aAny.getValueType();
 
                     if ( aType == cppu::UnoType<bool>::get() )

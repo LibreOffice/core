@@ -32,7 +32,7 @@ public:
     {
         return m_xEnumeration->hasMoreElements();
     }
-    virtual uno::Any SAL_CALL nextElement() override
+    virtual cpo::uno::Any SAL_CALL nextElement() override
     {
         // FIXME: should be add menubar
         if( !hasMoreElements() )
@@ -40,7 +40,7 @@ public:
 
         uno::Reference< XCommandBar > xCommandBar( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
         uno::Reference< excel::XMenuBar > xMenuBar( new ScVbaMenuBar( m_xParent, m_xContext, xCommandBar ) );
-        return uno::Any( xMenuBar );
+        return cpo::uno::Any( xMenuBar );
     }
 };
 
@@ -68,8 +68,8 @@ ScVbaMenuBars::createEnumeration()
     return uno::Reference< container::XEnumeration >( new MenuBarEnumeration( this, mxContext, xEnumAccess->createEnumeration() ) );
 }
 
-uno::Any
-ScVbaMenuBars::createCollectionObject( const uno::Any& aSource )
+cpo::uno::Any
+ScVbaMenuBars::createCollectionObject( const cpo::uno::Any& aSource )
 {
     // make no sense
     return aSource;
@@ -82,18 +82,18 @@ ScVbaMenuBars::getCount()
 }
 
 // ScVbaCollectionBaseImpl
-uno::Any SAL_CALL
-ScVbaMenuBars::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ )
+cpo::uno::Any SAL_CALL
+ScVbaMenuBars::Item( const cpo::uno::Any& aIndex, const cpo::uno::Any& /*aIndex2*/ )
 {
     sal_Int16 nIndex = 0;
     aIndex >>= nIndex;
     if( nIndex == excel::XlSheetType::xlWorksheet )
     {
-        uno::Any aSource;
+        cpo::uno::Any aSource;
         aSource <<= u"Worksheet Menu Bar"_ustr;
-        uno::Reference< XCommandBar > xCommandBar( m_xCommandBars->Item( aSource, uno::Any() ), uno::UNO_QUERY_THROW );
+        uno::Reference< XCommandBar > xCommandBar( m_xCommandBars->Item( aSource, cpo::uno::Any() ), uno::UNO_QUERY_THROW );
         uno::Reference< excel::XMenuBar > xMenuBar( new ScVbaMenuBar( this, mxContext, xCommandBar ) );
-        return uno::Any( xMenuBar );
+        return cpo::uno::Any( xMenuBar );
     }
 
     throw uno::RuntimeException(u"Not implemented"_ustr );

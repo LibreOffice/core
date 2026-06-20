@@ -29,34 +29,34 @@ namespace unocontrols {
 
 struct IMPL_ControlInfo
 {
-    cpo::uno::Reference< cpo::awt::XControl > xControl;
+    css::uno::Reference< css::awt::XControl > xControl;
     OUString                                  sName;
 };
 
 using BaseContainerControl_BASE = cppu::ImplInheritanceHelper<BaseControl,
-                                                              cpo::awt::XControlModel,
-                                                              cpo::awt::XControlContainer>;
+                                                              css::awt::XControlModel,
+                                                              css::awt::XControlContainer>;
 
 class BaseContainerControl : public BaseContainerControl_BASE
 {
 public:
 
-    BaseContainerControl( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    BaseContainerControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     virtual ~BaseContainerControl() override;
 
     //  XControl
 
     virtual void SAL_CALL createPeer(
-        const cpo::uno::Reference< cpo::awt::XToolkit >&      xToolkit ,
-        const cpo::uno::Reference< cpo::awt::XWindowPeer >&   xParent
+        const css::uno::Reference< css::awt::XToolkit >&      xToolkit ,
+        const css::uno::Reference< css::awt::XWindowPeer >&   xParent
     ) override;
 
     virtual bool SAL_CALL setModel(
-        const cpo::uno::Reference< cpo::awt::XControlModel >& xModel
+        const css::uno::Reference< css::awt::XControlModel >& xModel
     ) override;
 
-    virtual cpo::uno::Reference< cpo::awt::XControlModel > SAL_CALL getModel() override;
+    virtual css::uno::Reference< css::awt::XControlModel > SAL_CALL getModel() override;
 
     //  XComponent
 
@@ -64,28 +64,28 @@ public:
 
     //  XEventListener
 
-    virtual void SAL_CALL disposing( const cpo::lang::EventObject& rEvent ) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& rEvent ) override;
 
     //  XControlContainer
 
     virtual void SAL_CALL addControl(
         const OUString&                                     sName    ,
-        const cpo::uno::Reference< cpo::awt::XControl >&    xControl
+        const css::uno::Reference< css::awt::XControl >&    xControl
     ) override;
 
     virtual void SAL_CALL removeControl(
-        const cpo::uno::Reference< cpo::awt::XControl >& xControl
+        const css::uno::Reference< css::awt::XControl >& xControl
     ) override;
 
     virtual void SAL_CALL setStatusText(
         const OUString& sStatusText
     ) override;
 
-    virtual cpo::uno::Reference< cpo::awt::XControl > SAL_CALL getControl(
+    virtual css::uno::Reference< css::awt::XControl > SAL_CALL getControl(
         const OUString& sName
     ) override;
 
-    virtual cpo::uno::Sequence< cpo::uno::Reference< cpo::awt::XControl > > SAL_CALL getControls() override;
+    virtual css::uno::Sequence< css::uno::Reference< css::awt::XControl > > SAL_CALL getControls() override;
 
     //  XWindow
 
@@ -94,15 +94,15 @@ public:
 protected:
     using WeakComponentImplHelperBase::disposing;
 
-    virtual cpo::awt::WindowDescriptor impl_getWindowDescriptor(
-        const cpo::uno::Reference< cpo::awt::XWindowPeer >& xParentPeer
+    virtual css::awt::WindowDescriptor impl_getWindowDescriptor(
+        const css::uno::Reference< css::awt::XWindowPeer >& xParentPeer
     ) override;
 
 
     virtual void impl_paint(
         sal_Int32                                           nX ,
         sal_Int32                                           nY ,
-        const   cpo::uno::Reference< cpo::awt::XGraphics >&   xGraphics
+        const   css::uno::Reference< css::awt::XGraphics >&   xGraphics
     ) override;
 
 private:

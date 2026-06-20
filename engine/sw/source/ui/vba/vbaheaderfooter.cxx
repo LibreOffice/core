@@ -80,16 +80,16 @@ uno::Reference< word::XRange > SAL_CALL SwVbaHeaderFooter::getRange()
     return uno::Reference< word::XRange >( new SwVbaRange( this, mxContext, mxModel, xText->getStart(), xText->getEnd(), xText ) );
 }
 
-uno::Any SAL_CALL
-SwVbaHeaderFooter::Shapes( const uno::Any& index )
+cpo::uno::Any SAL_CALL
+SwVbaHeaderFooter::Shapes( const cpo::uno::Any& index )
 {
     // #FIXME: only get the shapes in the current header/footer
     //uno::Reference< drawing::XShapes > xShapes( xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
     rtl::Reference< SwFmDrawPage > xIndexAccess( mxModel->getSwDrawPage() );
     uno::Reference< XCollection > xCol( new ScVbaShapes( this, mxContext, xIndexAccess, static_cast<SfxBaseModel*>(mxModel.get()) ) );
     if ( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-    return uno::Any( xCol );
+        return xCol->Item( index, cpo::uno::Any() );
+    return cpo::uno::Any( xCol );
 }
 
 OUString

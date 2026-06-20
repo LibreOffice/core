@@ -71,6 +71,7 @@ using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::ppt;
 using namespace oox::drawingml;
 using namespace oox::core;

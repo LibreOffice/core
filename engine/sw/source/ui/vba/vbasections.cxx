@@ -46,10 +46,10 @@ public:
         return ( mIt != mxSections.end() );
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         if ( hasMoreElements() )
-            return uno::Any( *mIt++ );
+            return cpo::uno::Any( *mIt++ );
         throw container::NoSuchElementException();
     }
 };
@@ -108,13 +108,13 @@ public:
     {
         return mxSections.size();
     }
-    virtual uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override
     {
         if ( Index < 0 || Index >= getCount() )
             throw css::lang::IndexOutOfBoundsException();
 
         uno::Reference< beans::XPropertySet > xPageProps( mxSections[ Index ], uno::UNO_SET_THROW );
-        return uno::Any( uno::Reference< word::XSection >( new SwVbaSection( mxParent,  mxContext, mxModel, xPageProps ) ) );
+        return cpo::uno::Any( uno::Reference< word::XSection >( new SwVbaSection( mxParent,  mxContext, mxModel, xPageProps ) ) );
     }
     virtual uno::Type SAL_CALL getElementType(  ) override
     {
@@ -143,10 +143,10 @@ public:
     : EnumerationHelperImpl( xParent, xContext, xEnumeration ),
       mxModel(std::move( xModel )){}
 
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         uno::Reference< beans::XPropertySet > xPageProps( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
-        return uno::Any( uno::Reference< word::XSection > ( new SwVbaSection( m_xParent, m_xContext, mxModel, xPageProps ) ) );
+        return cpo::uno::Any( uno::Reference< word::XSection > ( new SwVbaSection( m_xParent, m_xContext, mxModel, xPageProps ) ) );
     }
 };
 
@@ -169,7 +169,7 @@ SwVbaSections::SwVbaSections( const uno::Reference< XHelperInterface >& xParent,
 {
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwVbaSections::PageSetup( )
 {
     if( m_xIndexAccess->getCount() )
@@ -195,8 +195,8 @@ SwVbaSections::createEnumeration()
     return new SectionsEnumWrapper( this, mxContext, xEnumAccess->createEnumeration(), mxModel );
 }
 
-uno::Any
-SwVbaSections::createCollectionObject( const css::uno::Any& aSource )
+cpo::uno::Any
+SwVbaSections::createCollectionObject( const cpo::uno::Any& aSource )
 {
     return aSource;
 }

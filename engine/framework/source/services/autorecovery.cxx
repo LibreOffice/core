@@ -104,6 +104,7 @@
 #include <officecfg/Setup.hxx>
 
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::document;
 using namespace css::frame;
 using namespace css::lang;
@@ -515,7 +516,7 @@ public:
         { OWeakObject::acquire(); }
     virtual void SAL_CALL release() noexcept override
         { OWeakObject::release(); }
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) override;
 
     /// Initialization function after having acquire()'d.
     void initListeners();
@@ -558,15 +559,15 @@ protected:
 
     // OPropertySetHelper
 
-    virtual bool SAL_CALL convertFastPropertyValue(      css::uno::Any& aConvertedValue,
-                                                             css::uno::Any& aOldValue      ,
+    virtual bool SAL_CALL convertFastPropertyValue(      cpo::uno::Any& aConvertedValue,
+                                                             cpo::uno::Any& aOldValue      ,
                                                              sal_Int32      nHandle        ,
-                                                       const css::uno::Any& aValue         ) override;
+                                                       const cpo::uno::Any& aValue         ) override;
 
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(      sal_Int32      nHandle,
-                                                           const css::uno::Any& aValue ) override;
+                                                           const cpo::uno::Any& aValue ) override;
     using cppu::OPropertySetHelper::getFastPropertyValue;
-    virtual void SAL_CALL getFastPropertyValue(css::uno::Any& aValue ,
+    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& aValue ,
                                                sal_Int32      nHandle) const override;
 
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
@@ -1726,13 +1727,13 @@ void AutoRecovery::implts_openConfig()
     css::uno::Reference<css::lang::XMultiServiceFactory> xConfigProvider(
             css::configuration::theDefaultProvider::get(m_xContext));
 
-    std::vector<css::uno::Any> lParams;
+    std::vector<cpo::uno::Any> lParams;
     css::beans::PropertyValue aParam;
 
     // set root path
     aParam.Name = u"nodepath"_ustr;
     aParam.Value <<= u"/org.openoffice.Office.Recovery"_ustr;
-    lParams.push_back(css::uno::Any(aParam));
+    lParams.push_back(cpo::uno::Any(aParam));
 
     // throws a RuntimeException if an error occurs!
     css::uno::Reference<css::container::XNameAccess> xCFG(
@@ -2049,17 +2050,17 @@ void AutoRecovery::implts_flushConfigItem(AutoRecovery::TDocumentInfo& rInfo, bo
             else
                 xCheck->getByName(sID) >>= xSet;
 
-            xSet->setPropertyValue(CFG_ENTRY_PROP_ORIGINALURL, css::uno::Any(rInfo.OrgURL       ));
-            xSet->setPropertyValue(CFG_ENTRY_PROP_TEMPURL, css::uno::Any(rInfo.OldTempURL   ));
-            xSet->setPropertyValue(CFG_ENTRY_PROP_TEMPLATEURL, css::uno::Any(rInfo.TemplateURL  ));
-            xSet->setPropertyValue(CFG_ENTRY_PROP_FILTER, css::uno::Any(rInfo.RealFilter));
-            xSet->setPropertyValue(CFG_ENTRY_PROP_DOCUMENTSTATE, css::uno::Any(sal_Int32(rInfo.DocumentState)));
-            xSet->setPropertyValue(CFG_ENTRY_PROP_MODULE, css::uno::Any(rInfo.AppModule));
-            xSet->setPropertyValue(CFG_ENTRY_PROP_TITLE, css::uno::Any(rInfo.Title));
-            xSet->setPropertyValue(CFG_ENTRY_PROP_VIEWNAMES, css::uno::Any(rInfo.ViewNames));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_ORIGINALURL, cpo::uno::Any(rInfo.OrgURL       ));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_TEMPURL, cpo::uno::Any(rInfo.OldTempURL   ));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_TEMPLATEURL, cpo::uno::Any(rInfo.TemplateURL  ));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_FILTER, cpo::uno::Any(rInfo.RealFilter));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_DOCUMENTSTATE, cpo::uno::Any(sal_Int32(rInfo.DocumentState)));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_MODULE, cpo::uno::Any(rInfo.AppModule));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_TITLE, cpo::uno::Any(rInfo.Title));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_VIEWNAMES, cpo::uno::Any(rInfo.ViewNames));
 
             if (bNew)
-                xModify->insertByName(sID, css::uno::Any(xSet));
+                xModify->insertByName(sID, cpo::uno::Any(xSet));
         }
     }
     catch(const css::uno::RuntimeException&)
@@ -3956,22 +3957,22 @@ AutoRecovery::EFailureSafeResult AutoRecovery::implts_copyFile(const OUString& s
     return AutoRecovery::E_COPIED;
 }
 
-bool SAL_CALL AutoRecovery::convertFastPropertyValue(      css::uno::Any& /*aConvertedValue*/,
-                                                               css::uno::Any& /*aOldValue*/      ,
+bool SAL_CALL AutoRecovery::convertFastPropertyValue(      cpo::uno::Any& /*aConvertedValue*/,
+                                                               cpo::uno::Any& /*aOldValue*/      ,
                                                                sal_Int32      /*nHandle*/        ,
-                                                         const css::uno::Any& /*aValue*/         )
+                                                         const cpo::uno::Any& /*aValue*/         )
 {
     // not needed currently
     return false;
 }
 
 void SAL_CALL AutoRecovery::setFastPropertyValue_NoBroadcast(      sal_Int32      /*nHandle*/,
-                                                             const css::uno::Any& /*aValue*/ )
+                                                             const cpo::uno::Any& /*aValue*/ )
 {
     // not needed currently
 }
 
-void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
+void SAL_CALL AutoRecovery::getFastPropertyValue(cpo::uno::Any& aValue ,
                                                  sal_Int32      nHandle) const
 {
     switch(nHandle)
@@ -4202,7 +4203,7 @@ void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&    
     {
         css::uno::Reference< css::beans::XPropertySet > xFrameProps(xFrame, css::uno::UNO_QUERY);
         if (xFrameProps.is())
-            xFrameProps->setPropertyValue(FramePropNames[FramePropHandle::IndicatorInterception], css::uno::Any(xExternalProgress));
+            xFrameProps->setPropertyValue(FramePropNames[FramePropHandle::IndicatorInterception], cpo::uno::Any(xExternalProgress));
     }
 
     // But inside the MediaDescriptor we must set our own create progress ...
@@ -4234,7 +4235,7 @@ void AutoRecovery::impl_forgetProgress(const AutoRecovery::TDocumentInfo&       
     // stop progress interception on corresponding frame.
     css::uno::Reference< css::beans::XPropertySet > xFrameProps(xFrame, css::uno::UNO_QUERY);
     if (xFrameProps.is())
-        xFrameProps->setPropertyValue(FramePropNames[FramePropHandle::IndicatorInterception], css::uno::Any(css::uno::Reference< css::task::XStatusIndicator >()));
+        xFrameProps->setPropertyValue(FramePropNames[FramePropHandle::IndicatorInterception], cpo::uno::Any(css::uno::Reference< css::task::XStatusIndicator >()));
 
     // forget progress inside list of arguments.
     auto pArg = rArgs.find(utl::MediaDescriptor::PROP_STATUSINDICATOR);
@@ -4267,7 +4268,7 @@ void AutoRecovery::st_impl_removeFile(const OUString& sURL)
     try
     {
         ::ucbhelper::Content aContent(sURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), m_xContext);
-        aContent.executeCommand(u"delete"_ustr, css::uno::Any(true));
+        aContent.executeCommand(u"delete"_ustr, cpo::uno::Any(true));
     }
     catch(const css::uno::Exception&)
     {
@@ -4294,7 +4295,7 @@ void AutoRecovery::st_impl_removeLockFile()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_AutoRecovery_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     rtl::Reference<AutoRecovery> xAutoRecovery = new AutoRecovery(context);
     // 2nd phase initialization needed

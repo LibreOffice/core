@@ -83,7 +83,7 @@ public:
 
     // XInitialization
     virtual void SAL_CALL
-    initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // Non-Interface methods
     css::uno::Reference< css::lang::XMultiServiceFactory >

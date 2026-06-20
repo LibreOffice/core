@@ -480,7 +480,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
                     try
                     {
                         // but do it only, if all context information is OK
-                        css::uno::Sequence< css::uno::Any > lContext{ css::uno::Any(xOwner) };
+                        css::uno::Sequence< cpo::uno::Any > lContext{ cpo::uno::Any(xOwner) };
                         xInit->initialize(lContext);
                     }
                     catch(const css::uno::Exception&) {}

@@ -55,6 +55,7 @@ namespace basctl
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::resource;
 
 IMPL_LINK(ObjectPage, EditingEntryHdl, const weld::TreeIter&, rEntry, bool)

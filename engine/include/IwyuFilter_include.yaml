@@ -92,7 +92,7 @@ excludelist:
     - cppuhelper/implbase12.hxx
     include/cppuhelper/exc_hlp.hxx:
     #Needed for implicit destructor
-    - com/sun/star/uno/Any.hxx
+    - cpo/uno/Any.hxx
     include/cppuhelper/propertysetmixin.hxx:
     #Needed for implicit destructor
     - com/sun/star/uno/Sequence.hxx

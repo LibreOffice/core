@@ -55,6 +55,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace {
 
@@ -103,7 +104,7 @@ static bool InitializeFontWorkData(
         nTextAreaCount >>= 1;
 
     const SdrCustomShapeGeometryItem& rGeometryItem( rSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-    const css::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( u"TextPath"_ustr, u"ScaleX"_ustr );
+    const cpo::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( u"TextPath"_ustr, u"ScaleX"_ustr );
     if (pAny)
         *pAny >>= rFWData.bScaleX;
     else
@@ -517,7 +518,7 @@ static bool GetFontWorkOutline(
 
     bool bSameLetterHeights = false;
     const SdrCustomShapeGeometryItem& rGeometryItem(rSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
-    const css::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( u"TextPath"_ustr, u"SameLetterHeights"_ustr );
+    const cpo::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( u"TextPath"_ustr, u"SameLetterHeights"_ustr );
     if ( pAny )
         *pAny >>= bSameLetterHeights;
 

@@ -99,12 +99,12 @@ namespace connectivity::odbc
         virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
         virtual bool SAL_CALL convertFastPropertyValue(
-                                                            css::uno::Any & rConvertedValue,
-                                                            css::uno::Any & rOldValue,
+                                                            cpo::uno::Any & rConvertedValue,
+                                                            cpo::uno::Any & rOldValue,
                                                             sal_Int32 nHandle,
-                                                            const css::uno::Any& rValue ) override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
-        virtual void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const override;
+                                                            const cpo::uno::Any& rValue ) override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+        virtual void SAL_CALL getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
         virtual ~ODatabaseMetaDataResultSet() override;
         template < typename T, SQLSMALLINT sqlTypeId > T getInteger ( sal_Int32 columnIndex );
 
@@ -117,7 +117,7 @@ namespace connectivity::odbc
         // ::cppu::OComponentHelper
         virtual void SAL_CALL disposing() override;
         // XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
         virtual void SAL_CALL acquire() noexcept override;
         virtual void SAL_CALL release() noexcept override;
         //XTypeProvider
@@ -163,7 +163,7 @@ namespace connectivity::odbc
         virtual css::util::DateTime SAL_CALL getTimestamp( sal_Int32 columnIndex ) override;
         virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getBinaryStream( sal_Int32 columnIndex ) override;
         virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getCharacterStream( sal_Int32 columnIndex ) override;
-        virtual css::uno::Any SAL_CALL getObject( sal_Int32 columnIndex, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual cpo::uno::Any SAL_CALL getObject( sal_Int32 columnIndex, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
         virtual css::uno::Reference< css::sdbc::XRef > SAL_CALL getRef( sal_Int32 columnIndex ) override;
         virtual css::uno::Reference< css::sdbc::XBlob > SAL_CALL getBlob( sal_Int32 columnIndex ) override;
         virtual css::uno::Reference< css::sdbc::XClob > SAL_CALL getClob( sal_Int32 columnIndex ) override;
@@ -175,7 +175,7 @@ namespace connectivity::odbc
         // XCloseable
         virtual void SAL_CALL close(  ) override;
         // XWarningsSupplier
-        virtual css::uno::Any SAL_CALL getWarnings(  ) override;
+        virtual cpo::uno::Any SAL_CALL getWarnings(  ) override;
         virtual void SAL_CALL clearWarnings(  ) override;
         // XColumnLocate
         virtual sal_Int32 SAL_CALL findColumn( const OUString& columnName ) override;
@@ -194,56 +194,56 @@ namespace connectivity::odbc
         void openSchemas();
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
-        void openTables(const css::uno::Any& catalog, const OUString& schemaPattern,
+        void openTables(const cpo::uno::Any& catalog, const OUString& schemaPattern,
                                         const OUString& tableNamePattern, const css::uno::Sequence< OUString >& types );
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
-        void openColumnPrivileges(      const css::uno::Any& catalog,    const OUString& schema,
+        void openColumnPrivileges(      const cpo::uno::Any& catalog,    const OUString& schema,
                                                                 const OUString& table,   const OUString& columnNamePattern );
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
-        void openColumns(       const css::uno::Any& catalog,                            const OUString& schemaPattern,
+        void openColumns(       const cpo::uno::Any& catalog,                            const OUString& schemaPattern,
                                                 const OUString& tableNamePattern,        const OUString& columnNamePattern );
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
-        void openProcedureColumns(      const css::uno::Any& catalog,            const OUString& schemaPattern,
+        void openProcedureColumns(      const cpo::uno::Any& catalog,            const OUString& schemaPattern,
                                                         const OUString& procedureNamePattern,const OUString& columnNamePattern );
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
-        void openProcedures(    const css::uno::Any& catalog,            const OUString& schemaPattern,
+        void openProcedures(    const cpo::uno::Any& catalog,            const OUString& schemaPattern,
                                                         const OUString& procedureNamePattern);
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
-        void openVersionColumns(const css::uno::Any& catalog, const OUString& schema,
+        void openVersionColumns(const cpo::uno::Any& catalog, const OUString& schema,
                                                         const OUString& table);
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
-        void openBestRowIdentifier( const css::uno::Any& catalog, const OUString& schema,
+        void openBestRowIdentifier( const cpo::uno::Any& catalog, const OUString& schema,
                                                                 const OUString& table,sal_Int32 scope, bool nullable );
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
-        void openForeignKeys( const css::uno::Any& catalog, const OUString* schema,const OUString* table,
-                                                          const css::uno::Any& catalog2, const OUString* schema2,const OUString* table2);
+        void openForeignKeys( const cpo::uno::Any& catalog, const OUString* schema,const OUString* table,
+                                                          const cpo::uno::Any& catalog2, const OUString* schema2,const OUString* table2);
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
-        void openExportedKeys(const css::uno::Any& catalog, const OUString& schema,const OUString& table);
+        void openExportedKeys(const cpo::uno::Any& catalog, const OUString& schema,const OUString& table);
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
-        void openImportedKeys(const css::uno::Any& catalog, const OUString& schema,const OUString& table);
+        void openImportedKeys(const cpo::uno::Any& catalog, const OUString& schema,const OUString& table);
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
-        void openPrimaryKeys(const css::uno::Any& catalog, const OUString& schema,const OUString& table);
+        void openPrimaryKeys(const cpo::uno::Any& catalog, const OUString& schema,const OUString& table);
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
-        void openTablePrivileges(const css::uno::Any& catalog, const OUString& schemaPattern,
+        void openTablePrivileges(const cpo::uno::Any& catalog, const OUString& schemaPattern,
                                                           const OUString& tableNamePattern);
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
-        void openSpecialColumns(bool _bRowVer,const css::uno::Any& catalog, const OUString& schema,
+        void openSpecialColumns(bool _bRowVer,const cpo::uno::Any& catalog, const OUString& schema,
                                                                 const OUString& table,sal_Int32 scope,   bool nullable );
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
-        void openIndexInfo( const css::uno::Any& catalog, const OUString& schema,
+        void openIndexInfo( const cpo::uno::Any& catalog, const OUString& schema,
                                                 const OUString& table,bool unique,bool approximate );
 
     protected:

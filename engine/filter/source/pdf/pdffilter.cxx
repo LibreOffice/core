@@ -267,7 +267,7 @@ void SAL_CALL PDFFilter::setSourceDocument( const Reference< XComponent >& xDoc 
 }
 
 
-void SAL_CALL PDFFilter::initialize( const css::uno::Sequence< css::uno::Any >& )
+void SAL_CALL PDFFilter::initialize( const css::uno::Sequence< cpo::uno::Any >& )
 {
 }
 
@@ -292,7 +292,7 @@ css::uno::Sequence< OUString > SAL_CALL PDFFilter::getSupportedServiceNames(  )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_PDFFilter_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new PDFFilter(context));
 }

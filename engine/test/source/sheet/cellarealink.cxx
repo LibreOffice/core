@@ -28,7 +28,7 @@ void CellAreaLink::testUrl()
     CPPUNIT_ASSERT(xCellAreaLink->getPropertyValue(propName) >>= aUrl);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Default Url already changed", m_aFileURL, aUrl);
 
-    uno::Any aNewUrl;
+    cpo::uno::Any aNewUrl;
     aNewUrl <<= u"file:///tmp"_ustr;
     xCellAreaLink->setPropertyValue(propName, aNewUrl);
     CPPUNIT_ASSERT(xCellAreaLink->getPropertyValue(propName) >>= aUrl);
@@ -45,7 +45,7 @@ void CellAreaLink::testFilter()
     CPPUNIT_ASSERT(xCellAreaLink->getPropertyValue(propName) >>= aFilter);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Default Filter already changed", u"calc8"_ustr, aFilter);
 
-    uno::Any aNewFilter;
+    cpo::uno::Any aNewFilter;
     aNewFilter <<= u"UnitTest"_ustr;
     xCellAreaLink->setPropertyValue(propName, aNewFilter);
     CPPUNIT_ASSERT(xCellAreaLink->getPropertyValue(propName) >>= aFilter);
@@ -62,7 +62,7 @@ void CellAreaLink::testFilterOptions()
     CPPUNIT_ASSERT(xCellAreaLink->getPropertyValue(propName) >>= aFilterOptions);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Default FilterOptions already changed", u""_ustr, aFilterOptions);
 
-    uno::Any aNewFilterOptions;
+    cpo::uno::Any aNewFilterOptions;
     aNewFilterOptions <<= u"UnitTest"_ustr;
     xCellAreaLink->setPropertyValue(propName, aNewFilterOptions);
     CPPUNIT_ASSERT(xCellAreaLink->getPropertyValue(propName) >>= aFilterOptions);
@@ -81,7 +81,7 @@ void CellAreaLink::testRefreshDelay()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Default RefreshDelay already changed", sal_Int32(0),
                                  aRefreshDelay);
 
-    uno::Any aNewRefreshDelay;
+    cpo::uno::Any aNewRefreshDelay;
     aNewRefreshDelay <<= static_cast<sal_Int32>(42);
     xCellAreaLink->setPropertyValue(propName, aNewRefreshDelay);
     CPPUNIT_ASSERT(xCellAreaLink->getPropertyValue(propName) >>= aRefreshDelay);
@@ -100,7 +100,7 @@ void CellAreaLink::testRefreshPeriod()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Default RefreshPeriod already changed", sal_Int32(0),
                                  aRefreshPeriod);
 
-    uno::Any aNewRefreshPeriod;
+    cpo::uno::Any aNewRefreshPeriod;
     aNewRefreshPeriod <<= static_cast<sal_Int32>(42);
     xCellAreaLink->setPropertyValue(propName, aNewRefreshPeriod);
     CPPUNIT_ASSERT(xCellAreaLink->getPropertyValue(propName) >>= aRefreshPeriod);

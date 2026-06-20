@@ -19,7 +19,7 @@
 
 #include <embeddoc.hxx>
 
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 
@@ -54,7 +54,7 @@ sal_uInt64 EmbedDocument_Impl::getMetaFileHandle_Impl( bool isEnhMeta )
 
         aFlavor.DataType = cppu::UnoType<sal_uInt64>::get();
 
-        uno::Any aAny = xTransferable->getTransferData( aFlavor );
+        cpo::uno::Any aAny = xTransferable->getTransferData( aFlavor );
         aAny >>= pResult;
     }
 

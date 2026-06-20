@@ -75,7 +75,7 @@ namespace sw {
     css::uno::Reference< SwXText >
         CreateParentXText(SwDoc & rDoc, const SwPosition& rPos);
 
-    bool GetDefaultTextContentValue(css::uno::Any& rAny,
+    bool GetDefaultTextContentValue(cpo::uno::Any& rAny,
         std::u16string_view rPropertyName, sal_uInt16 nWID = 0);
 
 } // namespace sw
@@ -153,8 +153,8 @@ public:
         getPropertySetInfo() override;
     virtual void SAL_CALL setPropertyValue(
             const OUString& rPropertyName,
-            const css::uno::Any& rValue) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue(
+            const cpo::uno::Any& rValue) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(
             const OUString& rPropertyName) override;
     virtual void SAL_CALL addPropertyChangeListener(
             const OUString& rPropertyName,
@@ -177,7 +177,7 @@ public:
             const css::uno::Sequence< OUString >& rPropertyNames) override;
     virtual void SAL_CALL setPropertyToDefault(
             const OUString& rPropertyName) override;
-    virtual css::uno::Any SAL_CALL getPropertyDefault(
+    virtual cpo::uno::Any SAL_CALL getPropertyDefault(
             const OUString& rPropertyName) override;
 
     // XElementAccess

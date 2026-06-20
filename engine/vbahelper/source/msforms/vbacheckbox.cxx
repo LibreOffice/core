@@ -40,10 +40,10 @@ ScVbaCheckbox::getCaption()
 void SAL_CALL
 ScVbaCheckbox::setCaption( const OUString& _caption )
 {
-    m_xProps->setPropertyValue( u"Label"_ustr, uno::Any( _caption ) );
+    m_xProps->setPropertyValue( u"Label"_ustr, cpo::uno::Any( _caption ) );
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaCheckbox::getValue()
 {
     sal_Int16 nValue = -1;
@@ -53,11 +53,11 @@ ScVbaCheckbox::getValue()
 //    return uno::makeAny( nValue );
 // I must be missing something MSO says value should be -1 if selected, 0 if not
 // selected
-    return uno::Any( nValue == -1 );
+    return cpo::uno::Any( nValue == -1 );
 }
 
 void SAL_CALL
-ScVbaCheckbox::setValue( const uno::Any& _value )
+ScVbaCheckbox::setValue( const cpo::uno::Any& _value )
 {
     sal_Int16 nValue = 0;
     sal_Int16 nOldValue = 0;
@@ -72,7 +72,7 @@ ScVbaCheckbox::setValue( const uno::Any& _value )
 
     if( nValue == -1)
         nValue = 1;
-    m_xProps->setPropertyValue( u"State"_ustr, uno::Any( nValue ) );
+    m_xProps->setPropertyValue( u"State"_ustr, cpo::uno::Any( nValue ) );
     if ( nValue != nOldValue )
         fireClickEvent();
 }

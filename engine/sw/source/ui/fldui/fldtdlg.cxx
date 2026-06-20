@@ -144,7 +144,7 @@ SfxItemSet* SwFieldDlg::CreateInputItemSet(const OUString& rID)
         uno::Reference< beans::XPropertySet > xUDProps(
             xDocProps->getUserDefinedProperties(),
             uno::UNO_QUERY_THROW);
-        mxInputItemSet->Put( SfxUnoAnyItem( FN_FIELD_DIALOG_DOC_PROPS, uno::Any(xUDProps) ) );
+        mxInputItemSet->Put( SfxUnoAnyItem( FN_FIELD_DIALOG_DOC_PROPS, cpo::uno::Any(xUDProps) ) );
         return mxInputItemSet.get();
     }
     else

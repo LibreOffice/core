@@ -61,6 +61,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
@@ -584,7 +585,7 @@ ErrCode SmMLImportWrapper::ReadThroughComponentMS(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 Math_MLImporter_get_implementation(uno::XComponentContext* pCtx,
-                                   uno::Sequence<uno::Any> const& /*rSeq*/)
+                                   uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(
         new SmMLImport(pCtx, u"com.sun.star.comp.Math.XMLImporter"_ustr, SvXMLImportFlags::ALL));
@@ -592,7 +593,7 @@ Math_MLImporter_get_implementation(uno::XComponentContext* pCtx,
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 Math_MLOasisMetaImporter_get_implementation(uno::XComponentContext* pCtx,
-                                            uno::Sequence<uno::Any> const& /*rSeq*/)
+                                            uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SmMLImport(pCtx, u"com.sun.star.comp.Math.XMLOasisMetaImporter"_ustr,
                                         SvXMLImportFlags::META));
@@ -600,7 +601,7 @@ Math_MLOasisMetaImporter_get_implementation(uno::XComponentContext* pCtx,
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 Math_MLOasisSettingsImporter_get_implementation(uno::XComponentContext* pCtx,
-                                                uno::Sequence<uno::Any> const& /*rSeq*/)
+                                                uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SmMLImport(
         pCtx, u"com.sun.star.comp.Math.XMLOasisSettingsImporter"_ustr, SvXMLImportFlags::SETTINGS));

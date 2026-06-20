@@ -232,7 +232,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHideAllSections)
     uno::Reference<container::XNameAccess> xMasters = xTextFieldsSupplier->getTextFieldMasters();
     // Set _CS_Allgemein to 0
     uno::Reference<beans::XPropertySet> xMaster(xMasters->getByName(u"com.sun.star.text.fieldmaster.User._CS_Allgemein"_ustr), uno::UNO_QUERY);
-    xMaster->setPropertyValue(u"Content"_ustr, uno::Any(u"0"_ustr));
+    xMaster->setPropertyValue(u"Content"_ustr, cpo::uno::Any(u"0"_ustr));
     // This used to crash
     uno::Reference<util::XRefreshable>(xTextFieldsSupplier->getTextFields(), uno::UNO_QUERY_THROW)->refresh();
 }
@@ -352,7 +352,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOdtBorders)
                         uno::Reference< beans::XPropertySet > xPropSet(xCell, uno::UNO_QUERY_THROW);
                         it = map.find(cells[i]);
 
-                        uno::Any aLeftBorder = xPropSet->getPropertyValue(u"LeftBorder"_ustr);
+                        cpo::uno::Any aLeftBorder = xPropSet->getPropertyValue(u"LeftBorder"_ustr);
                         table::BorderLine aLeftBorderLine;
                         if (aLeftBorder >>= aLeftBorderLine)
                         {
@@ -368,7 +368,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOdtBorders)
                             CPPUNIT_ASSERT_EQUAL(perfectDistance, lineDistance);
                         }
 
-                        uno::Any aRightBorder = xPropSet->getPropertyValue(u"RightBorder"_ustr);
+                        cpo::uno::Any aRightBorder = xPropSet->getPropertyValue(u"RightBorder"_ustr);
                         table::BorderLine aRightBorderLine;
                         if (aRightBorder >>= aRightBorderLine)
                         {
@@ -384,7 +384,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOdtBorders)
                             CPPUNIT_ASSERT_EQUAL(perfectDistance, lineDistance);
                         }
 
-                        uno::Any aTopBorder = xPropSet->getPropertyValue(u"TopBorder"_ustr);
+                        cpo::uno::Any aTopBorder = xPropSet->getPropertyValue(u"TopBorder"_ustr);
                         table::BorderLine aTopBorderLine;
                         if (aTopBorder >>= aTopBorderLine)
                         {
@@ -400,7 +400,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOdtBorders)
                             CPPUNIT_ASSERT_EQUAL(perfectDistance, lineDistance);
                         }
 
-                        uno::Any aBottomBorder = xPropSet->getPropertyValue(u"BottomBorder"_ustr);
+                        cpo::uno::Any aBottomBorder = xPropSet->getPropertyValue(u"BottomBorder"_ustr);
                         table::BorderLine aBottomBorderLine;
                         if (aBottomBorder >>= aBottomBorderLine)
                         {
@@ -457,7 +457,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTimeFormFormats)
     CPPUNIT_ASSERT(xForm.is());
     uno::Reference<container::XNameContainer> xFormNC(xForm, uno::UNO_QUERY);
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     uno::Reference<awt::XControlModel> xControlModel;
     uno::Reference<view::XControlAccess> xController;
     uno::Reference<awt::XControl> xControl;
@@ -499,7 +499,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDateFormFormats)
     CPPUNIT_ASSERT(xForm.is());
     uno::Reference<container::XNameContainer> xFormNC(xForm, uno::UNO_QUERY);
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     uno::Reference<awt::XControlModel> xControlModel;
     uno::Reference<view::XControlAccess> xController;
     uno::Reference<awt::XControl> xControl;
@@ -621,20 +621,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf74524)
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
-    uno::Any aField1 = xFields->nextElement();
+    cpo::uno::Any aField1 = xFields->nextElement();
     uno::Reference<lang::XServiceInfo> xServiceInfo1(aField1, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xServiceInfo1->supportsService(u"com.sun.star.text.textfield.PageNumber"_ustr));
     uno::Reference<beans::XPropertySet> xPropertySet(aField1, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(style::NumberingType::PAGE_DESCRIPTOR)), xPropertySet->getPropertyValue(u"NumberingType"_ustr));
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(0)), xPropertySet->getPropertyValue(u"Offset"_ustr));
-    CPPUNIT_ASSERT_EQUAL(uno::Any(text::PageNumberType_CURRENT), xPropertySet->getPropertyValue(u"SubType"_ustr));
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int16(style::NumberingType::PAGE_DESCRIPTOR)), xPropertySet->getPropertyValue(u"NumberingType"_ustr));
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int16(0)), xPropertySet->getPropertyValue(u"Offset"_ustr));
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(text::PageNumberType_CURRENT), xPropertySet->getPropertyValue(u"SubType"_ustr));
     uno::Reference<text::XTextContent> xField1(aField1, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"1"_ustr, xField1->getAnchor()->getString());
-    uno::Any aField2 = xFields->nextElement();
+    cpo::uno::Any aField2 = xFields->nextElement();
     uno::Reference<lang::XServiceInfo> xServiceInfo2(aField2, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xServiceInfo2->supportsService(u"com.sun.star.text.textfield.Annotation"_ustr));
     uno::Reference<beans::XPropertySet> xPropertySet2(aField2, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Comment 1"_ustr), xPropertySet2->getPropertyValue(u"Content"_ustr));
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Comment 1"_ustr), xPropertySet2->getPropertyValue(u"Content"_ustr));
     uno::Reference<text::XTextContent> xField2(aField2, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"Hello 1World"_ustr, xField2->getAnchor()->getString());
     CPPUNIT_ASSERT(!xFields->hasMoreElements());
@@ -645,17 +645,17 @@ CPPUNIT_TEST_FIXTURE(Test, testPageStyleLayoutRight)
     createSwDoc("hello.odt");
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     // This caused a crash.
-    xPropertySet->setPropertyValue(u"PageStyleLayout"_ustr, uno::Any(style::PageStyleLayout_RIGHT));
+    xPropertySet->setPropertyValue(u"PageStyleLayout"_ustr, cpo::uno::Any(style::PageStyleLayout_RIGHT));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo61952)
 {
     createSwDoc("hello.odt");
     uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
-    xPara->setPropertyValue(u"PageDescName"_ustr, uno::Any(u"Left Page"_ustr));
-    xPara->setPropertyValue(u"PageDescName"_ustr, uno::Any(u"Right Page"_ustr));
-    xPara->setPropertyValue(u"PageDescName"_ustr, uno::Any(u"Left Page"_ustr));
-    xPara->setPropertyValue(u"PageDescName"_ustr, uno::Any(u"Right Page"_ustr));
+    xPara->setPropertyValue(u"PageDescName"_ustr, cpo::uno::Any(u"Left Page"_ustr));
+    xPara->setPropertyValue(u"PageDescName"_ustr, cpo::uno::Any(u"Right Page"_ustr));
+    xPara->setPropertyValue(u"PageDescName"_ustr, cpo::uno::Any(u"Left Page"_ustr));
+    xPara->setPropertyValue(u"PageDescName"_ustr, cpo::uno::Any(u"Right Page"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo60842)
@@ -800,7 +800,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo55814)
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
     uno::Reference<beans::XPropertySet> xField(xFields->nextElement(), uno::UNO_QUERY);
-    xField->setPropertyValue(u"Content"_ustr, uno::Any(u"Yes"_ustr));
+    xField->setPropertyValue(u"Content"_ustr, cpo::uno::Any(u"Yes"_ustr));
     uno::Reference<util::XRefreshable>(xTextFieldsSupplier->getTextFields(), uno::UNO_QUERY_THROW)->refresh();
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
@@ -1042,7 +1042,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBnc800714)
 CPPUNIT_TEST_FIXTURE(Test, testTdf92586)
 {
     createSwDoc("tdf92586.odt");
-    uno::Any aPageStyle = getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr);
+    cpo::uno::Any aPageStyle = getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr);
     // This was BitmapMode_NO_REPEAT.
     CPPUNIT_ASSERT_EQUAL(drawing::BitmapMode_STRETCH, getProperty<drawing::BitmapMode>(aPageStyle, u"FillBitmapMode"_ustr));
 }
@@ -1263,7 +1263,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123829)
 CPPUNIT_TEST_FIXTURE(Test, testTdf113289)
 {
     createSwDoc("tdf113289.odt");
-    uno::Any aPageStyle = getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr);
+    cpo::uno::Any aPageStyle = getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int8>(style::FootnoteLineStyle::SOLID),
                          getProperty<sal_Int8>(aPageStyle, u"FootnoteLineStyle"_ustr));
 }
@@ -1353,8 +1353,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134971)
     // _not_ touch pool defaults
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
     {
-        {"Name", uno::Any(createFileURL(u"tdf134971b.odt"))},
-        {"Filter", uno::Any(u"writer8"_ustr)},
+        {"Name", cpo::uno::Any(createFileURL(u"tdf134971b.odt"))},
+        {"Filter", cpo::uno::Any(u"writer8"_ustr)},
     });
     dispatchCommand(mxComponent, u".uno:InsertDoc"_ustr, aPropertyValues);
 
@@ -1390,8 +1390,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf138879)
 
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
     {
-        {"Name", uno::Any(createFileURL(u"tdf138879.odt"))},
-        {"Filter", uno::Any(u"writer8"_ustr)},
+        {"Name", cpo::uno::Any(createFileURL(u"tdf138879.odt"))},
+        {"Filter", cpo::uno::Any(u"writer8"_ustr)},
     });
     dispatchCommand(mxComponent, u".uno:InsertDoc"_ustr, aPropertyValues);
 
@@ -1409,7 +1409,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteFirstParaDirectFormat)
         // Set some direct formatting on the first paragraph, but leave paragraph adjust at its
         // default (left).
         uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
-        xParagraph->setPropertyValue(u"PageNumberOffset"_ustr, uno::Any(static_cast<sal_Int16>(0)));
+        xParagraph->setPropertyValue(u"PageNumberOffset"_ustr, cpo::uno::Any(static_cast<sal_Int16>(0)));
     }
 
     // Paste from ODT.

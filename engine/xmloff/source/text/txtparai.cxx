@@ -61,6 +61,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
@@ -1000,7 +1001,7 @@ void XMLIndexMarkImportContext_Impl::ProcessAttribute(
         case XML_ELEMENT(TEXT, XML_ALPHABETICAL_INDEX_MARK):
             if ( aIter.getToken() == XML_ELEMENT(TEXT, XML_STRING_VALUE) )
             {
-                rPropSet->setPropertyValue(u"AlternativeText"_ustr, uno::Any(aIter.toString()));
+                rPropSet->setPropertyValue(u"AlternativeText"_ustr, cpo::uno::Any(aIter.toString()));
             }
             // else: ignore!
             break;
@@ -1126,7 +1127,7 @@ void XMLTOCMarkImportContext_Impl::ProcessAttribute(
                 && nTmp < GetImport().GetTextImport()->
                                 GetChapterNumbering()->getCount() )
             {
-                rPropSet->setPropertyValue(u"Level"_ustr, uno::Any(static_cast<sal_Int16>(nTmp - 1)));
+                rPropSet->setPropertyValue(u"Level"_ustr, cpo::uno::Any(static_cast<sal_Int16>(nTmp - 1)));
             }
             // else: value out of range -> ignore
             break;
@@ -1172,7 +1173,7 @@ void XMLUserIndexMarkImportContext_Impl::ProcessAttribute(
     switch (aIter.getToken())
     {
         case XML_ELEMENT(TEXT, XML_INDEX_NAME):
-            rPropSet->setPropertyValue(u"UserIndexName"_ustr, uno::Any(aIter.toString()));
+            rPropSet->setPropertyValue(u"UserIndexName"_ustr, cpo::uno::Any(aIter.toString()));
             break;
         case XML_ELEMENT(TEXT, XML_OUTLINE_LEVEL):
         {
@@ -1182,7 +1183,7 @@ void XMLUserIndexMarkImportContext_Impl::ProcessAttribute(
                 nTmp, aIter.toView(), 0,
                GetImport().GetTextImport()->GetChapterNumbering()->getCount()))
             {
-                rPropSet->setPropertyValue(u"Level"_ustr, uno::Any(static_cast<sal_Int16>(nTmp - 1)));
+                rPropSet->setPropertyValue(u"Level"_ustr, cpo::uno::Any(static_cast<sal_Int16>(nTmp - 1)));
             }
             // else: value out of range -> ignore
             break;
@@ -1228,19 +1229,19 @@ void XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute(
     switch (aIter.getToken())
     {
         case XML_ELEMENT(TEXT, XML_KEY1):
-            rPropSet->setPropertyValue(u"PrimaryKey"_ustr, uno::Any(aIter.toString()));
+            rPropSet->setPropertyValue(u"PrimaryKey"_ustr, cpo::uno::Any(aIter.toString()));
             break;
         case XML_ELEMENT(TEXT, XML_KEY2):
-            rPropSet->setPropertyValue(u"SecondaryKey"_ustr, uno::Any(aIter.toString()));
+            rPropSet->setPropertyValue(u"SecondaryKey"_ustr, cpo::uno::Any(aIter.toString()));
             break;
         case XML_ELEMENT(TEXT, XML_KEY1_PHONETIC):
-            rPropSet->setPropertyValue(u"PrimaryKeyReading"_ustr, uno::Any(aIter.toString()));
+            rPropSet->setPropertyValue(u"PrimaryKeyReading"_ustr, cpo::uno::Any(aIter.toString()));
             break;
         case XML_ELEMENT(TEXT, XML_KEY2_PHONETIC):
-            rPropSet->setPropertyValue(u"SecondaryKeyReading"_ustr, uno::Any(aIter.toString()));
+            rPropSet->setPropertyValue(u"SecondaryKeyReading"_ustr, cpo::uno::Any(aIter.toString()));
             break;
         case XML_ELEMENT(TEXT, XML_STRING_VALUE_PHONETIC):
-            rPropSet->setPropertyValue(u"TextReading"_ustr, uno::Any(aIter.toString()));
+            rPropSet->setPropertyValue(u"TextReading"_ustr, cpo::uno::Any(aIter.toString()));
             break;
         case XML_ELEMENT(TEXT, XML_MAIN_ENTRY):
         {
@@ -1250,7 +1251,7 @@ void XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute(
             if (::sax::Converter::convertBool(bTmp, aIter.toView()))
                 bMainEntry = bTmp;
 
-            rPropSet->setPropertyValue(u"IsMainEntry"_ustr, uno::Any(bMainEntry));
+            rPropSet->setPropertyValue(u"IsMainEntry"_ustr, cpo::uno::Any(bMainEntry));
             break;
         }
         default:
@@ -1850,7 +1851,7 @@ void XMLParaContext::endFastElement(sal_Int32 )
         }
         if (bSetNoFormatAttr)
         {
-            xCursorProps->setPropertyValue(u"NoFormatAttr"_ustr, uno::Any(true));
+            xCursorProps->setPropertyValue(u"NoFormatAttr"_ustr, cpo::uno::Any(true));
         }
         for (const auto & i : m_oHints->GetHints())
         {
@@ -1993,7 +1994,7 @@ void XMLParaContext::endFastElement(sal_Int32 )
         }
         if (bSetNoFormatAttr)
         {
-            xCursorProps->setPropertyValue(u"NoFormatAttr"_ustr, uno::Any(false));
+            xCursorProps->setPropertyValue(u"NoFormatAttr"_ustr, cpo::uno::Any(false));
         }
     }
     m_oHints.reset();

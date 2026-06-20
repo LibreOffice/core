@@ -83,7 +83,7 @@ namespace {
 
         virtual void Closed() override;
         virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-            const OUString& rMimeType, const css::uno::Any & rValue ) override;
+            const OUString& rMimeType, const cpo::uno::Any & rValue ) override;
 
         virtual const SwNode* GetAnchor() const override;
         virtual bool IsInRange( SwNodeOffset nSttNd, SwNodeOffset nEndNd ) const override;
@@ -1066,7 +1066,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
 
     const OUString sName( pDShell->GetMedium()->GetName() );
     const OUString sMimeType( SotExchange::GetFormatMimeType( SotClipboardFormatId::SIMPLE_FILE ));
-    uno::Any aValue;
+    cpo::uno::Any aValue;
     aValue <<= sName; // Arbitrary name
 
     const ::sfx2::SvBaseLinks& rLnks = rDoc.getIDocumentLinksAdministration().GetLinkManager().GetLinks();
@@ -1105,7 +1105,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
 }
 
 ::sfx2::SvBaseLink::UpdateResult SwIntrnlSectRefLink::DataChanged(
-    const OUString& rMimeType, const uno::Any & rValue )
+    const OUString& rMimeType, const cpo::uno::Any & rValue )
 {
     SwSectionNode* pSectNd = m_rSectFormat.GetSectionNode();
     SwDoc& rDoc = m_rSectFormat.GetDoc();

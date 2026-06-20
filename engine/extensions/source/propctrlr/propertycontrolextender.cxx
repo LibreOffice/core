@@ -32,7 +32,7 @@ namespace pcr
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::awt::KeyEvent;
     using ::com::sun::star::inspection::XPropertyControl;
     using ::com::sun::star::lang::EventObject;

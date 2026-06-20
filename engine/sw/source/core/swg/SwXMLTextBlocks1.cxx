@@ -50,6 +50,7 @@ constexpr OUString XMLN_BLOCKLIST = u"BlockList.xml"_ustr;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::container;
 using namespace css::xml::sax;
 using namespace xmloff::token;

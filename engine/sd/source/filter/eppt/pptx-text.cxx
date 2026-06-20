@@ -497,7 +497,7 @@ sal_uInt32 PortionObj::ImplGetTextField( css::uno::Reference< css::text::XTextRa
 {
     sal_uInt32 nRetValue = 0;
     sal_Int32 nFormat;
-    css::uno::Any aAny;
+    cpo::uno::Any aAny;
     if ( GetPropertyValue( aAny, rXPropSet, u"TextPortionType"_ustr, true ) )
     {
         auto aTextFieldType = o3tl::doAccess<OUString>(aAny);
@@ -718,7 +718,7 @@ ParagraphObj::ParagraphObj(css::uno::Reference< css::text::XTextContent > const 
             while ( aXTextPortionE->hasMoreElements() )
             {
                 css::uno::Reference< css::text::XTextRange > aXCursorText;
-                css::uno::Any aAny( aXTextPortionE->nextElement() );
+                cpo::uno::Any aAny( aXTextPortionE->nextElement() );
                 if ( aAny >>= aXCursorText )
                 {
                     std::unique_ptr<PortionObj> pPortionObj(new PortionObj( aXCursorText, !aXTextPortionE->hasMoreElements(), rFontCollection ));
@@ -767,7 +767,7 @@ void ParagraphObj::CalculateGraphicBulletSize( sal_uInt16 nFontHeight )
 
 void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int16 nNumberingDepth, bool bIsBullet, bool bGetPropStateValue )
 {
-    css::uno::Any aAny;
+    cpo::uno::Any aAny;
     if ( GetPropertyValue( aAny, mXPropSet, u"ParaLeftMargin"_ustr ) )
     {
         sal_Int32 nVal(0);
@@ -1065,7 +1065,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
 
 void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider* pBuProv, bool bGetPropStateValue )
 {
-    css::uno::Any aAny;
+    cpo::uno::Any aAny;
     if ( GetPropertyValue( aAny, mXPropSet, u"NumberingLevel"_ustr, true ) )
     {
         if ( bGetPropStateValue )
@@ -1275,7 +1275,7 @@ TextObj::TextObj( css::uno::Reference< css::text::XSimpleText > const & rXTextRe
             while ( aXTextParagraphE->hasMoreElements() )
             {
                 css::uno::Reference< css::text::XTextContent > aXParagraph;
-                css::uno::Any aAny( aXTextParagraphE->nextElement() );
+                cpo::uno::Any aAny( aXTextParagraphE->nextElement() );
                 if ( aAny >>= aXParagraph )
                 {
                     if ( !aXTextParagraphE->hasMoreElements() )

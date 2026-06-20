@@ -54,7 +54,7 @@ public:
     ODbTypeWizDialog(weld::Window* pParent
         ,SfxItemSet const * _pItems
         ,const css::uno::Reference< css::uno::XComponentContext >& _rxORB
-        ,const css::uno::Any& _aDataSourceName
+        ,const cpo::uno::Any& _aDataSourceName
         );
     virtual ~ODbTypeWizDialog() override;
 

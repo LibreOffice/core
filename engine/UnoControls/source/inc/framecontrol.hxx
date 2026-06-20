@@ -31,8 +31,8 @@ namespace unocontrols { class OConnectionPointContainerHelper; }
 
 namespace unocontrols {
 
-using FrameControl_BASE = cppu::ImplInheritanceHelper<BaseControl, cpo::awt::XControlModel,
-                                                      cpo::lang::XConnectionPointContainer>;
+using FrameControl_BASE = cppu::ImplInheritanceHelper<BaseControl, css::awt::XControlModel,
+                                                      css::lang::XConnectionPointContainer>;
 
 class FrameControl final : public FrameControl_BASE     // This order is necessary for right initialization of m_aMutex!
                     , public ::cppu::OBroadcastHelper
@@ -40,14 +40,14 @@ class FrameControl final : public FrameControl_BASE     // This order is necessa
 {
 public:
 
-    FrameControl( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    FrameControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     virtual ~FrameControl() override;
 
     //  XInterface
 
     virtual cpo::uno::Any SAL_CALL queryInterface(
-        const cpo::uno::Type& aType
+        const css::uno::Type& aType
     ) override;
 
     /**
@@ -70,24 +70,24 @@ public:
 
     //  XTypeProvider
 
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
     OUString SAL_CALL getImplementationName() override;
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     //  XControl
 
     virtual void SAL_CALL createPeer(
-        const cpo::uno::Reference< cpo::awt::XToolkit >&      xToolkit ,
-        const cpo::uno::Reference< cpo::awt::XWindowPeer >&   xParent
+        const css::uno::Reference< css::awt::XToolkit >&      xToolkit ,
+        const css::uno::Reference< css::awt::XWindowPeer >&   xParent
     ) override;
 
     virtual bool SAL_CALL setModel(
-        const cpo::uno::Reference< cpo::awt::XControlModel >& xModel
+        const css::uno::Reference< css::awt::XControlModel >& xModel
     ) override;
 
-    virtual cpo::uno::Reference< cpo::awt::XControlModel > SAL_CALL getModel() override;
+    virtual css::uno::Reference< css::awt::XControlModel > SAL_CALL getModel() override;
 
     //  XComponent
 
@@ -96,27 +96,27 @@ public:
     //  XView
 
     virtual bool SAL_CALL setGraphics(
-        const cpo::uno::Reference< cpo::awt::XGraphics >& xDevice
+        const css::uno::Reference< css::awt::XGraphics >& xDevice
     ) override;
 
-    virtual cpo::uno::Reference< cpo::awt::XGraphics > SAL_CALL getGraphics() override;
+    virtual css::uno::Reference< css::awt::XGraphics > SAL_CALL getGraphics() override;
 
     //  XConnectionPointContainer
 
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getConnectionPointTypes() override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getConnectionPointTypes() override;
 
-    virtual cpo::uno::Reference< cpo::lang::XConnectionPoint > SAL_CALL queryConnectionPoint(
-        const cpo::uno::Type& aType
+    virtual css::uno::Reference< css::lang::XConnectionPoint > SAL_CALL queryConnectionPoint(
+        const css::uno::Type& aType
     ) override;
 
     virtual void SAL_CALL advise(
-        const cpo::uno::Type&                                aType       ,
-        const cpo::uno::Reference< cpo::uno::XInterface >&    xListener
+        const css::uno::Type&                                aType       ,
+        const css::uno::Reference< css::uno::XInterface >&    xListener
     ) override;
 
     virtual void SAL_CALL unadvise(
-        const cpo::uno::Type&                                aType ,
-        const cpo::uno::Reference< cpo::uno::XInterface >&    xListener
+        const css::uno::Type&                                aType ,
+        const css::uno::Reference< css::uno::XInterface >&    xListener
     ) override;
 
 private:
@@ -144,21 +144,21 @@ private:
 
     //  XPropertySet
 
-    cpo::uno::Reference< cpo::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
+    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
 
     //  BaseControl
 
-    virtual cpo::awt::WindowDescriptor impl_getWindowDescriptor(
-        const cpo::uno::Reference< cpo::awt::XWindowPeer >& xParentPeer
+    virtual css::awt::WindowDescriptor impl_getWindowDescriptor(
+        const css::uno::Reference< css::awt::XWindowPeer >& xParentPeer
     ) override;
 
-    void impl_createFrame(  const cpo::uno::Reference< cpo::awt::XWindowPeer >&       xPeer           ,
+    void impl_createFrame(  const css::uno::Reference< css::awt::XWindowPeer >&       xPeer           ,
                             const OUString&                                         sURL            ,
-                            const cpo::uno::Sequence< cpo::beans::PropertyValue >&    seqArguments    );
+                            const css::uno::Sequence< css::beans::PropertyValue >&    seqArguments    );
 
-    cpo::uno::Reference< cpo::frame::XFrame2 >              m_xFrame;
+    css::uno::Reference< css::frame::XFrame2 >              m_xFrame;
     OUString                                                m_sComponentURL;
-    cpo::uno::Sequence< cpo::beans::PropertyValue >         m_seqLoaderArguments;
+    css::uno::Sequence< css::beans::PropertyValue >         m_seqLoaderArguments;
     rtl::Reference<OConnectionPointContainerHelper>         m_aConnectionPointContainer;
 
 };

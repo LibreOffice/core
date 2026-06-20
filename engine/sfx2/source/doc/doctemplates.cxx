@@ -113,6 +113,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 
@@ -415,7 +416,7 @@ void SfxDocTplService::init_Impl()
     const OUString aTemplVers( u"2"_ustr  );
     if ( Content::create( maRootURL, maCmdEnv, comphelper::getProcessComponentContext(), maRootContent ) )
     {
-        uno::Any aValue;
+        cpo::uno::Any aValue;
         OUString aPropValue;
         if ( getProperty( maRootContent, aTemplVersPropName, aValue )
           && ( aValue >>= aPropValue )
@@ -430,7 +431,7 @@ void SfxDocTplService::init_Impl()
     if ( !bIsInitialized )
     {
         if ( createFolder( maRootURL, true, false, maRootContent )
-          && setProperty( maRootContent, aTemplVersPropName, uno::Any( aTemplVers ) ) )
+          && setProperty( maRootContent, aTemplVersPropName, cpo::uno::Any( aTemplVers ) ) )
             bIsInitialized = true;
 
         bNeedsUpdate = true;
@@ -1538,7 +1539,7 @@ bool SfxDocTplService::removeGroup( const OUString& rGroupName )
                       || !::utl::UCBContentHelper::Exists( aGroupTargetURL ) )
                     {
                         RemoveUINamesForTemplateDir_Impl( aGeneralTempPath, rGroupName );
-                        setProperty( aGroup, aPropName, uno::Any( OUString() ) );
+                        setProperty( aGroup, aPropName, cpo::uno::Any( OUString() ) );
                     }
                 }
             }
@@ -1717,9 +1718,9 @@ bool SfxDocTplService::storeTemplate( const OUString& rGroupName,
         uno::Reference< lang::XMultiServiceFactory > xConfigProvider =
                 configuration::theDefaultProvider::get( xContext );
 
-        uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+        uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", uno::Any(u"/org.openoffice.Setup/Office/Factories/"_ustr)}
+            {"nodepath", cpo::uno::Any(u"/org.openoffice.Setup/Office/Factories/"_ustr)}
         }));
         uno::Reference< container::XNameAccess > xSOFConfig(
             xConfigProvider->createInstanceWithArguments(
@@ -1942,10 +1943,10 @@ bool SfxDocTplService::addTemplate( const OUString& rGroupName,
         if ( Content::create( aNewTemplateTargetURL, xEnv, comphelper::getProcessComponentContext(), aResultContent ) )
         {
             static constexpr OUString aPropertyName( u"IsReadOnly"_ustr );
-            uno::Any aProperty;
+            cpo::uno::Any aProperty;
             bool bReadOnly = false;
             if ( getProperty( aResultContent, aPropertyName, aProperty ) && ( aProperty >>= bReadOnly ) && bReadOnly )
-                setProperty( aResultContent, aPropertyName, uno::Any( false ) );
+                setProperty( aResultContent, aPropertyName, cpo::uno::Any( false ) );
         }
     }
     catch ( ContentCreationException& )
@@ -2610,7 +2611,7 @@ void SfxURLRelocator_Impl::makeAbsoluteURL( OUString & rURL )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_sfx2_DocumentTemplates_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SfxDocTplService(context));
 }

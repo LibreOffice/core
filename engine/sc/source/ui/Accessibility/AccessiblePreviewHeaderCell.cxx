@@ -106,7 +106,7 @@ void ScAccessiblePreviewHeaderCell::Notify( SfxBroadcaster& rBC, const SfxHint& 
 
 //=====  XAccessibleValue  ================================================
 
-uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getCurrentValue()
+cpo::uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getCurrentValue()
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -117,16 +117,16 @@ uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getCurrentValue()
     else
         fValue = maCellPos.Row();
 
-    return uno::Any(fValue);
+    return cpo::uno::Any(fValue);
 }
 
-bool SAL_CALL ScAccessiblePreviewHeaderCell::setCurrentValue( const uno::Any& /* aNumber */ )
+bool SAL_CALL ScAccessiblePreviewHeaderCell::setCurrentValue( const cpo::uno::Any& /* aNumber */ )
 {
     //  it is not possible to set a value
     return false;
 }
 
-uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMaximumValue()
+cpo::uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMaximumValue()
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -137,18 +137,18 @@ uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMaximumValue()
         fValue = rDoc.MaxCol();
     else
         fValue = rDoc.MaxRow();
-    return uno::Any(fValue);
+    return cpo::uno::Any(fValue);
 }
 
-uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMinimumValue()
+cpo::uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMinimumValue()
 {
-    return uno::Any(0.0);
+    return cpo::uno::Any(0.0);
 }
 
-uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMinimumIncrement()
+cpo::uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMinimumIncrement()
 {
     // value can't be changed, s. 'setCurrentValue'
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 //=====  XAccessibleComponent  ============================================

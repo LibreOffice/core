@@ -27,6 +27,7 @@
 namespace com::sun::star::beans { class XPropertySet; }
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using ::com::sun::star::beans::XPropertySet;
 using namespace ::xmloff::token;
 

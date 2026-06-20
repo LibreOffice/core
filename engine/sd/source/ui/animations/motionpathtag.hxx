@@ -85,7 +85,7 @@ public:
     // XChangesListener
     virtual void SAL_CALL changesOccurred( const css::util::ChangesEvent& Event ) override;
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
     virtual void SAL_CALL acquire(  ) noexcept override;
     virtual void SAL_CALL release(  ) noexcept override;
 

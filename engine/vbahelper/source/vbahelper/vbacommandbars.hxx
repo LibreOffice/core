@@ -37,14 +37,14 @@ public:
     virtual ~ScVbaCommandBars() override;
 
     // XCommandBars
-    virtual css::uno::Reference< ov::XCommandBar > SAL_CALL Add( const css::uno::Any& Name, const css::uno::Any& Position, const css::uno::Any& MenuBar, const css::uno::Any& Temporary ) override;
+    virtual css::uno::Reference< ov::XCommandBar > SAL_CALL Add( const cpo::uno::Any& Name, const cpo::uno::Any& Position, const cpo::uno::Any& MenuBar, const cpo::uno::Any& Temporary ) override;
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& aIndex, const css::uno::Any& /*aIndex2*/ ) override;
+    virtual cpo::uno::Any SAL_CALL Item( const cpo::uno::Any& aIndex, const cpo::uno::Any& /*aIndex2*/ ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

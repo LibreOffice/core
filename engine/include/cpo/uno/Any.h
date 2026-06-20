@@ -32,12 +32,15 @@
 #include "com/sun/star/uno/TypeClass.hdl"
 #include "rtl/alloc.h"
 
-
 namespace com::sun::star::uno
 {
+    class BaseReference;
+    class Type;
+    template<class interface_type> class Reference;
+}
 
-class Type;
-template<class interface_type> class Reference;
+namespace cpo::uno
+{
 
 /** C++ class representing an IDL any.
     This class is used to transport any type defined in IDL. The class inherits from the
@@ -60,9 +63,9 @@ public:
     */
     template <typename T>
         // Disallow things like
-        // Reference<XInterface> x(...);
+        // Reference<css::uno::XInterface> x(...);
         // Any a(*x);
-        requires (!std::is_base_of_v<XInterface, T>)
+        requires (!std::is_base_of_v<css::uno::XInterface, T>)
     explicit inline Any( T const & value );
     /// Ctor support for C++ bool.
     explicit inline Any( bool value );
@@ -86,7 +89,7 @@ public:
         @param pData_ value
         @param rType type of value
     */
-    inline Any( const void * pData_, const Type & rType );
+    inline Any( const void * pData_, const css::uno::Type & rType );
 
     /** Constructor: Sets a copy of the given data.
 
@@ -102,10 +105,10 @@ public:
     */
     inline Any( const void * pData_, typelib_TypeDescriptionReference * pType_ );
 
-    Any(bool const *, Type const &) = delete;
+    Any(bool const *, css::uno::Type const &) = delete;
     Any(bool const *, typelib_TypeDescription *) = delete;
     Any(bool const *, typelib_TypeDescriptionReference *) = delete;
-    Any(std::nullptr_t, Type const & type):
+    Any(std::nullptr_t, css::uno::Type const & type):
         Any(static_cast<void *>(nullptr), type) {}
     Any(std::nullptr_t, typelib_TypeDescription * type):
         Any(static_cast<void *>(nullptr), type) {}
@@ -132,8 +135,8 @@ public:
 
         @return a Type object of the set value
      */
-    const Type & SAL_CALL getValueType() const
-        { return * reinterpret_cast< const Type * >( &pType ); }
+    const css::uno::Type & SAL_CALL getValueType() const
+        { return * reinterpret_cast< const css::uno::Type * >( &pType ); }
     /** Gets the type of the set value.
 
         @return the unacquired type description reference of the set value
@@ -153,8 +156,8 @@ public:
 
         @return the type class of the set value
      */
-    TypeClass SAL_CALL getValueTypeClass() const
-        { return static_cast<TypeClass>(pType->eTypeClass); }
+    css::uno::TypeClass SAL_CALL getValueTypeClass() const
+        { return static_cast<css::uno::TypeClass>(pType->eTypeClass); }
 
     /** Gets the type name of the set value.
 
@@ -197,7 +200,7 @@ public:
         @param pData_ pointer to value
         @param rType type of value
     */
-    inline void SAL_CALL setValue( const void * pData_, const Type & rType );
+    inline void SAL_CALL setValue( const void * pData_, const css::uno::Type & rType );
     /** Sets a value. If the any already contains a value, that value will be destructed
         and its memory freed.
 
@@ -213,10 +216,10 @@ public:
     */
     inline void SAL_CALL setValue( const void * pData_, typelib_TypeDescription * pTypeDescr );
 
-    void setValue(bool const *, Type const &) = delete;
+    void setValue(bool const *, css::uno::Type const &) = delete;
     void setValue(bool const *, typelib_TypeDescriptionReference *) = delete;
     void setValue(bool const *, typelib_TypeDescription *) = delete;
-    void setValue(std::nullptr_t, Type const & type)
+    void setValue(std::nullptr_t, css::uno::Type const & type)
     { setValue(static_cast<void *>(nullptr), type); }
     void setValue(std::nullptr_t, typelib_TypeDescriptionReference * type)
     { setValue(static_cast<void *>(nullptr), type); }
@@ -234,7 +237,7 @@ public:
         @param rType destination type
         @return true if this any is extractable to value of given type (e.g. using >>= operator)
     */
-    inline bool SAL_CALL isExtractableTo( const Type & rType ) const;
+    inline bool SAL_CALL isExtractableTo( const css::uno::Type & rType ) const;
 
     /** Tests whether this any can provide a value of specified type.
         Widening conversion without data loss is taken into account.
@@ -263,8 +266,8 @@ public:
     // Similar to Reference::query/queryThrow, these allow to simplify calling constructors of
     // Reference taking Any. queryThrow is functionally similar to get(), but doesn't require
     // to specify the full Reference type explicitly, only the interface type.
-    template<class interface_type> inline Reference<interface_type> query() const;
-    template<class interface_type> inline Reference<interface_type> queryThrow() const;
+    template<class interface_type> inline css::uno::Reference<interface_type> query() const;
+    template<class interface_type> inline css::uno::Reference<interface_type> queryThrow() const;
 };
 
 /** Wrap a value in an Any, if necessary.
@@ -294,8 +297,6 @@ template<> inline Any toAny(Any const & value);
 template<typename T> inline bool fromAny(Any const & any, T * value);
 
 template<> inline bool fromAny(Any const & any, Any * value);
-
-class BaseReference;
 
 /** Template binary <<= operator to set the value of an any.
 
@@ -382,12 +383,12 @@ template<std::size_t N>
 inline bool SAL_CALL operator == (const Any& rAny, const rtl::OUStringLiteral<N>& value);
 // type
 template<>
-inline bool SAL_CALL operator >>= ( const Any & rAny, Type & value );
+inline bool SAL_CALL operator >>= ( const Any & rAny, css::uno::Type & value );
 template<>
-inline bool SAL_CALL operator == ( const Any & rAny, const Type & value );
+inline bool SAL_CALL operator == ( const Any & rAny, const css::uno::Type & value );
 // interface
 template<>
-inline bool SAL_CALL operator == ( const Any & rAny, const BaseReference & value );
+inline bool SAL_CALL operator == ( const Any & rAny, const css::uno::BaseReference & value );
 
 }
 

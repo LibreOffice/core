@@ -38,6 +38,7 @@ namespace oox::xls {
 
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 TableStyleInfo::TableStyleInfo():
     mbShowFirstColumn( false ),
@@ -127,14 +128,14 @@ void Table::finalizeImport()
             SAL_WARN_IF( maModel.mnHeaderRows > 1, "sc.filter",
                     "Table HeaderRows > 1 not supported: " << maModel.mnHeaderRows);
             if (maModel.mnHeaderRows == 0)
-                xDatabaseRange->setPropertyValue( u"ContainsHeader"_ustr, css::uno::Any(false));
+                xDatabaseRange->setPropertyValue( u"ContainsHeader"_ustr, cpo::uno::Any(false));
         }
 
         if (maModel.mnTotalsRows > 0)
         {
             SAL_WARN_IF( maModel.mnTotalsRows > 1, "sc.filter",
                     "Table TotalsRows > 1 not supported: " << maModel.mnTotalsRows);
-            xDatabaseRange->setPropertyValue( u"TotalsRow"_ustr, css::uno::Any(true));
+            xDatabaseRange->setPropertyValue( u"TotalsRow"_ustr, cpo::uno::Any(true));
         }
 
         // import tableType attribute of <table> node
@@ -156,17 +157,17 @@ void Table::finalizeImport()
                 sValue = OUString();
                 break;
         }
-        xDatabaseRange->setPropertyValue(u"TableType"_ustr, css::uno::Any(sValue));
+        xDatabaseRange->setPropertyValue(u"TableType"_ustr, cpo::uno::Any(sValue));
 
         // get formula token index of the database range
         if( !(xDatabaseRange->getPropertyValue(u"TokenIndex"_ustr) >>= mnTokenIndex))
             mnTokenIndex = -1;
 
-        xDatabaseRange->setPropertyValue( u"TableStyleName"_ustr, css::uno::Any(maStyleInfo.maStyleName));
-        xDatabaseRange->setPropertyValue( u"UseRowStripes"_ustr, css::uno::Any(maStyleInfo.mbShowRowStripes));
-        xDatabaseRange->setPropertyValue( u"UseColStripes"_ustr, css::uno::Any(maStyleInfo.mbShowColStripes));
-        xDatabaseRange->setPropertyValue( u"UseFirstColumnFormatting"_ustr, css::uno::Any(maStyleInfo.mbShowFirstColumn));
-        xDatabaseRange->setPropertyValue( u"UseLastColumnFormatting"_ustr, css::uno::Any(maStyleInfo.mbShowLastColumn));
+        xDatabaseRange->setPropertyValue( u"TableStyleName"_ustr, cpo::uno::Any(maStyleInfo.maStyleName));
+        xDatabaseRange->setPropertyValue( u"UseRowStripes"_ustr, cpo::uno::Any(maStyleInfo.mbShowRowStripes));
+        xDatabaseRange->setPropertyValue( u"UseColStripes"_ustr, cpo::uno::Any(maStyleInfo.mbShowColStripes));
+        xDatabaseRange->setPropertyValue( u"UseFirstColumnFormatting"_ustr, cpo::uno::Any(maStyleInfo.mbShowFirstColumn));
+        xDatabaseRange->setPropertyValue( u"UseLastColumnFormatting"_ustr, cpo::uno::Any(maStyleInfo.mbShowLastColumn));
     }
     catch( Exception& )
     {

@@ -92,7 +92,7 @@ class FWK_DLLPUBLIC InteractionRequest
 {
 public:
     static css::uno::Reference<css::task::XInteractionRequest> CreateRequest(
-        const css::uno::Any& aRequest,
+        const cpo::uno::Any& aRequest,
         const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>>&
             lContinuations);
 };

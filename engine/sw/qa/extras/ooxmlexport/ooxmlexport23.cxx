@@ -67,7 +67,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHighlightEdit_numbering)
     aMap[u"CharInteropGrabBag"_ustr] <<= aGrabBag;
 
     aMap >> aListAutoFormat;
-    properties->setPropertyValue(u"ListAutoFormat"_ustr, uno::Any(aListAutoFormat));
+    properties->setPropertyValue(u"ListAutoFormat"_ustr, cpo::uno::Any(aListAutoFormat));
 
     // Export to docx.
     save(TestFilter::DOCX);

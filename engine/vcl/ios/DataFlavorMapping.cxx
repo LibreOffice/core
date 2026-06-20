@@ -42,6 +42,7 @@
 
 using namespace css::datatransfer;
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::lang;
 using namespace cppu;
 

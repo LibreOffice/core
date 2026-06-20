@@ -44,7 +44,7 @@ class QuietInteraction final : public  ::cppu::WeakImplHelper<
     private:
 
         /// in case an unknown interaction was aborted - we save it for our external user!
-        css::uno::Any m_aRequest;
+        cpo::uno::Any m_aRequest;
 
     // uno interface
     public:
@@ -84,13 +84,13 @@ class QuietInteraction final : public  ::cppu::WeakImplHelper<
                         on that. Especially we got an unknown interaction
                         and aborted it hard.
 
-            @return     [com.sun.star.uno.Any]
+            @return     [cpo.uno.Any]
                             the packed interaction request
                             Can be empty if no interaction was used!
 
             @threadsafe yes
         */
-        css::uno::Any getRequest() const;
+        cpo::uno::Any getRequest() const;
 
         /**
             @short      returns information if interaction was used
@@ -106,7 +106,7 @@ class QuietInteraction final : public  ::cppu::WeakImplHelper<
 
         /* This needs to be cleared to avoid this class leaking, since the Any may contain a data structure
            which in turn has a reference to this instance, which results in a circular ref-counting memory leak. */
-        void dispose() { m_aRequest = css::uno::Any(); }
+        void dispose() { m_aRequest = cpo::uno::Any(); }
 };
 
 } // namespace framework

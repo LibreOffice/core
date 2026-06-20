@@ -43,7 +43,7 @@ using namespace ::com::sun::star;
 
 namespace dxcanvas
 {
-    SpriteCanvas::SpriteCanvas( const uno::Sequence< uno::Any >&                aArguments,
+    SpriteCanvas::SpriteCanvas( const uno::Sequence< cpo::uno::Any >&                aArguments,
                                 const uno::Reference< uno::XComponentContext >& rxContext ) :
         maArguments(aArguments),
         mxComponentContext( rxContext )
@@ -179,7 +179,7 @@ namespace dxcanvas
 
     extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
     canvas_directx9_SpriteCanvas_get_implementation(
-       css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+       css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& args)
     {
         rtl::Reference<SpriteCanvas> xCanvas(new SpriteCanvas(args, context));
         xCanvas->initialize();

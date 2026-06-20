@@ -18,7 +18,7 @@
 package com.sun.star.comp.helper;
 
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.Any;
+import cpo.uno.Any;
 
 import com.sun.star.uno.DeploymentException;
 import com.sun.star.uno.XComponentContext;

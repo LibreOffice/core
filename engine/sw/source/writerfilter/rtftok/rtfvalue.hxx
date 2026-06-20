@@ -58,7 +58,7 @@ public:
     void setString(const OUString& sValue);
     int getInt() const override;
     OUString getString() const override;
-    css::uno::Any getAny() const override;
+    cpo::uno::Any getAny() const override;
     writerfilter::Reference<Properties>::Pointer_t getProperties() const override;
     writerfilter::Reference<BinaryObj>::Pointer_t getBinary() const override;
 #ifdef DBG_UTIL

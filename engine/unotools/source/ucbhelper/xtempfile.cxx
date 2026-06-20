@@ -349,7 +349,7 @@ void SAL_CALL OTempFileService::truncate()
         ::cppu::OPropertySetHelper::createPropertySetInfo( ourPropertyInfo ) );
     return xInfo;
 }
-void OTempFileService::setPropertyValue( const ::rtl::OUString& aPropertyName, const ::css::uno::Any& aValue )
+void OTempFileService::setPropertyValue( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Any& aValue )
 {
     if ( aPropertyName == "RemoveFile" )
         setRemoveFile( aValue.get<bool>() );
@@ -359,14 +359,14 @@ void OTempFileService::setPropertyValue( const ::rtl::OUString& aPropertyName, c
         throw css::beans::UnknownPropertyException(aPropertyName);
     }
 }
-::css::uno::Any OTempFileService::getPropertyValue( const ::rtl::OUString& aPropertyName )
+::cpo::uno::Any OTempFileService::getPropertyValue( const ::rtl::OUString& aPropertyName )
 {
     if ( aPropertyName == "RemoveFile" )
-        return css::uno::Any(getRemoveFile());
+        return cpo::uno::Any(getRemoveFile());
     else if ( aPropertyName == "ResourceName" )
-        return css::uno::Any(getResourceName());
+        return cpo::uno::Any(getResourceName());
     else if ( aPropertyName == "Uri" )
-        return css::uno::Any(getUri());
+        return cpo::uno::Any(getUri());
     else
     {
         assert(false);
@@ -390,7 +390,7 @@ void OTempFileService::removeVetoableChangeListener( const ::rtl::OUString& /*aP
     assert(false);
 }
 // XFastPropertySet
-void OTempFileService::setFastPropertyValue( ::sal_Int32 nHandle, const ::css::uno::Any& aValue )
+void OTempFileService::setFastPropertyValue( ::sal_Int32 nHandle, const ::cpo::uno::Any& aValue )
 {
     switch (nHandle)
     {
@@ -399,13 +399,13 @@ void OTempFileService::setFastPropertyValue( ::sal_Int32 nHandle, const ::css::u
     assert(false);
     throw css::beans::UnknownPropertyException(OUString::number(nHandle));
 }
-::css::uno::Any OTempFileService::getFastPropertyValue( ::sal_Int32 nHandle )
+::cpo::uno::Any OTempFileService::getFastPropertyValue( ::sal_Int32 nHandle )
 {
     switch (nHandle)
     {
-        case PROPERTY_HANDLE_REMOVE_FILE: return css::uno::Any(getRemoveFile());
-        case PROPERTY_HANDLE_RESOURCE_NAME: return css::uno::Any(getResourceName());
-        case PROPERTY_HANDLE_URI: return css::uno::Any(getUri());
+        case PROPERTY_HANDLE_REMOVE_FILE: return cpo::uno::Any(getRemoveFile());
+        case PROPERTY_HANDLE_RESOURCE_NAME: return cpo::uno::Any(getResourceName());
+        case PROPERTY_HANDLE_URI: return cpo::uno::Any(getUri());
     }
     assert(false);
     throw css::beans::UnknownPropertyException(OUString::number(nHandle));
@@ -414,9 +414,9 @@ void OTempFileService::setFastPropertyValue( ::sal_Int32 nHandle, const ::css::u
 ::css::uno::Sequence< ::css::beans::PropertyValue > OTempFileService::getPropertyValues()
 {
     return {
-        css::beans::PropertyValue(u"Uri"_ustr, PROPERTY_HANDLE_URI, css::uno::Any(getUri()), css::beans::PropertyState_DEFAULT_VALUE),
-        css::beans::PropertyValue(u"RemoveFile"_ustr, PROPERTY_HANDLE_REMOVE_FILE, css::uno::Any(getRemoveFile()), css::beans::PropertyState_DEFAULT_VALUE),
-        css::beans::PropertyValue(u"ResourceName"_ustr, PROPERTY_HANDLE_RESOURCE_NAME, css::uno::Any(getResourceName()), css::beans::PropertyState_DEFAULT_VALUE)
+        css::beans::PropertyValue(u"Uri"_ustr, PROPERTY_HANDLE_URI, cpo::uno::Any(getUri()), css::beans::PropertyState_DEFAULT_VALUE),
+        css::beans::PropertyValue(u"RemoveFile"_ustr, PROPERTY_HANDLE_REMOVE_FILE, cpo::uno::Any(getRemoveFile()), css::beans::PropertyState_DEFAULT_VALUE),
+        css::beans::PropertyValue(u"ResourceName"_ustr, PROPERTY_HANDLE_RESOURCE_NAME, cpo::uno::Any(getResourceName()), css::beans::PropertyState_DEFAULT_VALUE)
     };
 }
 void OTempFileService::setPropertyValues( const ::css::uno::Sequence< ::css::beans::PropertyValue >& aProps )
@@ -441,7 +441,7 @@ css::uno::Sequence< OUString > OTempFileService::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 unotools_OTempFileService_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new OTempFileService(context));
 }

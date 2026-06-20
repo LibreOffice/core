@@ -26,6 +26,7 @@
 #include <rtl/ustrbuf.hxx>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 
 #define ELEMENT_IMAGECONTAINER      "imagescontainer"

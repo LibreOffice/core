@@ -68,7 +68,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
@@ -462,7 +462,7 @@ SwSpellPopup::SwSpellPopup(
     {
         if ( rProp.Name == "FullCommentURL" )
         {
-            uno::Any aValue = rProp.Value;
+            cpo::uno::Any aValue = rProp.Value;
             aValue >>= m_sExplanationLink;
 
             if ( !m_sExplanationLink.isEmpty( ) )
@@ -577,7 +577,7 @@ SwSpellPopup::SwSpellPopup(
     checkRedline();
     m_xPopupMenu->RemoveDisabledEntries(true);
 
-    SvtLinguConfig().SetProperty( UPN_IS_GRAMMAR_INTERACTIVE, uno::Any( true ));
+    SvtLinguConfig().SetProperty( UPN_IS_GRAMMAR_INTERACTIVE, cpo::uno::Any( true ));
 
     InitItemCommands(rSuggestions);
 }
@@ -824,7 +824,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         }
         catch (const uno::Exception&)
         {
-            uno::Any exc( ::cppu::getCaughtException() );
+            cpo::uno::Any exc( ::cppu::getCaughtException() );
             OUString msg( ::comphelper::anyToString( exc ) );
             const SolarMutexGuard guard;
             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_pSh->GetView().GetFrameWeld(),

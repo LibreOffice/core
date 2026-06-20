@@ -71,7 +71,7 @@ public:
     }
 
     // XMaterialHolder
-    virtual css::uno::Any SAL_CALL getMaterial() override { return css::uno::Any(sal_Int64(maID)); }
+    virtual cpo::uno::Any SAL_CALL getMaterial() override { return cpo::uno::Any(sal_Int64(maID)); }
 
     static EncryptionHashTransporter*
     getEncHashTransporter(const css::uno::Reference<css::beans::XMaterialHolder>& xReference);

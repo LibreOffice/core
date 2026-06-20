@@ -89,6 +89,7 @@ using namespace ucbhelper;
 using namespace com::sun::star;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::util;
 using namespace com::sun::star::lang;
@@ -236,8 +237,8 @@ void ZipPackage::parseManifest()
                     {
                         OUString sPath, sMediaType, sVersion;
                         const Any *pSalt = nullptr, *pVector = nullptr, *pCount = nullptr, *pSize = nullptr, *pDigest = nullptr, *pDigestAlg = nullptr, *pEncryptionAlg = nullptr, *pStartKeyAlg = nullptr, *pDerivedKeySize = nullptr;
-                        uno::Any const* pKDF = nullptr;
-                        uno::Any const* pArgon2Args = nullptr;
+                        cpo::uno::Any const* pKDF = nullptr;
+                        cpo::uno::Any const* pArgon2Args = nullptr;
                         for ( const PropertyValue& rValue : rSequence )
                         {
                             if ( rValue.Name == u"FullPath" )
@@ -567,7 +568,7 @@ void ZipPackage::parseContentType()
             throw io::IOException( u"Wrong format!"_ustr );
 
         uno::Reference < io::XActiveDataSink > xSink;
-        uno::Any aAny = m_xRootFolder->getByName( aContentTypes );
+        cpo::uno::Any aAny = m_xRootFolder->getByName( aContentTypes );
         aAny >>= xSink;
         if ( xSink.is() )
         {
@@ -596,7 +597,7 @@ void ZipPackage::parseContentType()
 
                     if ( !aPath.isEmpty() && hasByHierarchicalName( aPath ) )
                     {
-                        uno::Any aIterAny = getByHierarchicalName( aPath );
+                        cpo::uno::Any aIterAny = getByHierarchicalName( aPath );
                         uno::Reference < XInterface > xIterTmp;
                         aIterAny >>= xIterTmp;
                         if (auto pStream = dynamic_cast<ZipPackageStream*>(xIterTmp.get()))
@@ -1094,7 +1095,7 @@ bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
     }
     catch (const uno::Exception&)
     {
-        uno::Any e(::cppu::getCaughtException());
+        cpo::uno::Any e(::cppu::getCaughtException());
         throw lang::WrappedTargetRuntimeException(u"ZipPackage::hasByHierarchicalName"_ustr, nullptr, e);
     }
     return false;
@@ -1150,7 +1151,7 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
     }
     catch ( const css::io::IOException & )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw WrappedTargetException(
                 u"Error adding mimetype to the ZipOutputStream!"_ustr,
                 getXWeak(),
@@ -1448,7 +1449,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
         if( bUseTemp )
         {
             // no information loss appears, thus no special handling is required
-            uno::Any aCaught( ::cppu::getCaughtException() );
+            cpo::uno::Any aCaught( ::cppu::getCaughtException() );
 
             // it is allowed to throw WrappedTargetException
             WrappedTargetException aException;
@@ -1547,7 +1548,7 @@ void SAL_CALL ZipPackage::commitChanges()
     }
     catch (const ucb::ContentCreationException&)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw WrappedTargetException(u"Temporary file should be creatable!"_ustr,
                     getXWeak(), anyEx );
     }
@@ -1561,7 +1562,7 @@ void SAL_CALL ZipPackage::commitChanges()
         }
         catch( const uno::Exception& )
         {
-            css::uno::Any anyEx = cppu::getCaughtException();
+            cpo::uno::Any anyEx = cppu::getCaughtException();
             throw WrappedTargetException(u"Temporary file should be seekable!"_ustr,
                     getXWeak(), anyEx );
         }
@@ -1573,7 +1574,7 @@ void SAL_CALL ZipPackage::commitChanges()
         }
         catch( const io::IOException& )
         {
-            css::uno::Any anyEx = cppu::getCaughtException();
+            cpo::uno::Any anyEx = cppu::getCaughtException();
             throw WrappedTargetException(u"Temporary file should be connectable!"_ustr,
                     getXWeak(), anyEx );
         }
@@ -1602,7 +1603,7 @@ void SAL_CALL ZipPackage::commitChanges()
             }
             catch( const uno::Exception& )
             {
-                css::uno::Any anyEx = cppu::getCaughtException();
+                cpo::uno::Any anyEx = cppu::getCaughtException();
                 throw WrappedTargetException(u"This package is read only!"_ustr,
                         getXWeak(), anyEx );
             }
@@ -1701,7 +1702,7 @@ void SAL_CALL ZipPackage::commitChanges()
                     if ( bCanBeCorrupted )
                         DisconnectFromTargetAndThrowException_Impl( xTempInStream );
 
-                    css::uno::Any anyEx = cppu::getCaughtException();
+                    cpo::uno::Any anyEx = cppu::getCaughtException();
                     throw WrappedTargetException(
                                                 u"This package may be read only!"_ustr,
                                                 getXWeak(),
@@ -1726,10 +1727,10 @@ void ZipPackage::DisconnectFromTargetAndThrowException_Impl( const uno::Referenc
     OUString aTempURL;
     try {
         uno::Reference< beans::XPropertySet > xTempFile( xTempStream, uno::UNO_QUERY_THROW );
-        uno::Any aUrl = xTempFile->getPropertyValue(u"Uri"_ustr);
+        cpo::uno::Any aUrl = xTempFile->getPropertyValue(u"Uri"_ustr);
         aUrl >>= aTempURL;
         xTempFile->setPropertyValue(u"RemoveFile"_ustr,
-                                     uno::Any( false ) );
+                                     cpo::uno::Any( false ) );
     }
     catch ( uno::Exception& )
     {
@@ -1992,7 +1993,7 @@ void SAL_CALL ZipPackage::removeVetoableChangeListener( const OUString& /*Proper
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 package_ZipPackage_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ZipPackage(context));
 }

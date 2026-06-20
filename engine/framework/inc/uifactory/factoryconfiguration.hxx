@@ -75,7 +75,7 @@ private:
         ControllerInfo(){}
     };
 
-    bool impl_getElementProps( const css::uno::Any& aElement, OUString& aCommand, OUString& aModule, OUString& aServiceSpecifier,OUString& aValue ) const;
+    bool impl_getElementProps( const cpo::uno::Any& aElement, OUString& aCommand, OUString& aModule, OUString& aServiceSpecifier,OUString& aValue ) const;
 
     mutable std::mutex           m_mutex;
     OUString                     m_aPropCommand;

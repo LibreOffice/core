@@ -65,13 +65,13 @@ public:
     virtual bool SAL_CALL hasChildNodes() override;
     virtual sal_Int16 SAL_CALL getType() override;
     // XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement ) override;
+    virtual void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
     virtual void SAL_CALL removeByName( const OUString& Name ) override;
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement ) override;
+    virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
     // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
@@ -91,7 +91,7 @@ public:
      * @param args expected to contain a single OUString
      * containing the URI
      */
-    virtual void SAL_CALL initialize( const css::uno::Sequence < css::uno::Any > & args ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence < cpo::uno::Any > & args ) override;
 
     // returns context string for this provider, eg
     const OUString& getContextString() const { return m_sCtxString; }
@@ -106,7 +106,7 @@ private:
     css::uno::Reference< css::lang::XMultiComponentFactory >        m_xMgr;
     css::uno::Reference< css::frame::XModel >                       m_xModel;
     css::uno::Reference< css::document::XScriptInvocationContext >  m_xInvocationContext;
-    css::uno::Sequence< css::uno::Any >                             m_sAargs;
+    css::uno::Sequence< cpo::uno::Any >                             m_sAargs;
     OUString                                                 m_sNodeName;
 
     // This component supports XInitialization, it can be created

@@ -38,7 +38,7 @@ namespace dbaccess
     {
     protected:
         const std::function<const ::connectivity::ORowSetValue& (sal_Int32)> m_pGetValue;
-        css::uno::Any        m_aOldValue;
+        cpo::uno::Any        m_aOldValue;
         OUString             m_sLabel;
         OUString             m_aDescription;     // description
 
@@ -62,12 +62,12 @@ namespace dbaccess
         // cppu::OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
-        virtual bool SAL_CALL convertFastPropertyValue( css::uno::Any & rConvertedValue,
-                                                            css::uno::Any & rOldValue,
+        virtual bool SAL_CALL convertFastPropertyValue( cpo::uno::Any & rConvertedValue,
+                                                            cpo::uno::Any & rOldValue,
                                                             sal_Int32 nHandle,
-                                                            const css::uno::Any& rValue ) override;
-        virtual void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue ) override;
+                                                            const cpo::uno::Any& rValue ) override;
+        virtual void SAL_CALL getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const cpo::uno::Any& rValue ) override;
 
         void fireValueChange(const ::connectivity::ORowSetValue& _rOldValue);
     protected:

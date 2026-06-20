@@ -104,7 +104,7 @@ public:
     }
 
     // Xinitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& lArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& lArguments ) override;
 
     // XDispatchProvider
     virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL                       queryDispatch  ( const css::util::URL&                                       aURL             ,
@@ -158,7 +158,7 @@ JobDispatch::~JobDispatch()
                 the list of initialization arguments
                 First parameter should be the frame reference we need.
 */
-void SAL_CALL JobDispatch::initialize( const css::uno::Sequence< css::uno::Any >& lArguments )
+void SAL_CALL JobDispatch::initialize( const css::uno::Sequence< cpo::uno::Any >& lArguments )
 {
     SolarMutexGuard g;
 
@@ -466,7 +466,7 @@ void SAL_CALL JobDispatch::removeStatusListener( /*IN*/ const css::uno::Referenc
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_jobs_JobDispatch_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new JobDispatch(context));
 }

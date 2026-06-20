@@ -152,9 +152,9 @@ namespace canvas
             }
         }
 
-        css::uno::Any getXWindow() const
+        cpo::uno::Any getXWindow() const
         {
-            return css::uno::Any(mxWindow);
+            return cpo::uno::Any(mxWindow);
         }
 
         virtual void disposeThis() override

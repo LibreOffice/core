@@ -37,6 +37,7 @@ using namespace utl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::util;
 
 constexpr OUString CFG_ROOT_NODE = u"Office.Common/SearchOptions"_ustr;
@@ -392,7 +393,7 @@ void SvxSearchItem::SetTransliterationFlags( TransliterationFlags nFlags )
     m_aSearchOpt.transliterateFlags = nFlags;
 }
 
-bool SvxSearchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxSearchItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -482,10 +483,10 @@ bool SvxSearchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 }
 
 
-bool SvxSearchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxSearchItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
-    auto ExtractNumericAny = [](const css::uno::Any& a, auto& target)
+    auto ExtractNumericAny = [](const cpo::uno::Any& a, auto& target)
     {
         sal_Int32 nInt;
         if (!(a >>= nInt))

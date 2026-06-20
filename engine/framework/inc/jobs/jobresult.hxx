@@ -87,7 +87,7 @@ class JobResult final
 
     public:
 
-                 JobResult( const css::uno::Any& aResult );
+                 JobResult( const cpo::uno::Any& aResult );
                  JobResult( const JobResult&                rCopy   );
                  ~JobResult(                                         );
 

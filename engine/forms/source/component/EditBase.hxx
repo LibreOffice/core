@@ -41,7 +41,7 @@ class OEditBaseModel :  public OBoundControlModel
 
 protected:
 // [properties]         for all EditingFields
-    css::uno::Any           m_aDefault;
+    cpo::uno::Any           m_aDefault;
     OUString                m_aDefaultText;             // default value
     bool                    m_bEmptyIsNull : 1;         // empty string will be interpreted as NULL when committing
     bool                    m_bFilterProposal : 1;      // use a list of possible value in filtermode
@@ -70,14 +70,14 @@ public:
     virtual void SAL_CALL read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
     // XPropertySet
-    virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle ) const override;
-    virtual bool SAL_CALL convertFastPropertyValue(css::uno::Any& rConvertedValue, css::uno::Any& rOldValue,
-                                          sal_Int32 nHandle, const css::uno::Any& rValue ) override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const css::uno::Any& rValue) override;
+    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
+    virtual bool SAL_CALL convertFastPropertyValue(cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue,
+                                          sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
     // XPropertyState
-    virtual css::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const override;
+    virtual cpo::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const override;
 
 protected:
     // new properties common to all edit models should be handled with the following two methods

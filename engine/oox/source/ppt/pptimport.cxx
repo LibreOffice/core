@@ -49,6 +49,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace oox::core;
 
@@ -217,11 +218,11 @@ bool SAL_CALL PowerPointImport::filter( const Sequence< PropertyValue >& rDescri
 
     if (isExportFilter())
     {
-        uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+        uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
         {
-            {"IsPPTM", uno::Any(exportVBA())},
-            {"IsTemplate", uno::Any(isExportTemplate())},
-            {"IsSlideShow", uno::Any(isExportSlideShow())},
+            {"IsPPTM", cpo::uno::Any(exportVBA())},
+            {"IsTemplate", cpo::uno::Any(isExportTemplate())},
+            {"IsSlideShow", cpo::uno::Any(isExportSlideShow())},
         }));
 
         Reference<css::lang::XMultiServiceFactory> aFactory(getComponentContext()->getServiceManager(), UNO_QUERY_THROW);
@@ -331,7 +332,7 @@ OUString PowerPointImport::getImplementationName()
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_oox_ppt_PowerPointImport_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new oox::ppt::PowerPointImport(pCtx));
 }

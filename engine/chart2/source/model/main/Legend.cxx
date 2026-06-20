@@ -41,7 +41,7 @@ using namespace ::com::sun::star::beans::PropertyAttribute;
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::beans::Property;
 
 namespace
@@ -211,7 +211,7 @@ void Legend::firePropertyChangeEvent()
 }
 
 // ____ OPropertySet ____
-void Legend::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
+void Legend::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = StaticLegendDefaults();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
@@ -267,7 +267,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( Legend, Legend_Base, ::property::OPropertySet 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_Legend_get_implementation(css::uno::XComponentContext *,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::Legend);
 }

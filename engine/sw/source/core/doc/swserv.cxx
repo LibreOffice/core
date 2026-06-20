@@ -37,7 +37,7 @@ SwServerObject::~SwServerObject()
 {
 }
 
-bool SwServerObject::GetData( uno::Any & rData,
+bool SwServerObject::GetData( cpo::uno::Any & rData,
                                 const OUString & rMimeType, bool )
 {
     bool bRet = false;

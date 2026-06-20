@@ -55,7 +55,7 @@ namespace dbaui
 
         // UNO
         DECLARE_UNO3_AGG_DEFAULTS(SbaXGridControl, FmXGridControl)
-        virtual css::uno::Any  SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
+        virtual cpo::uno::Any  SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
 
         // XTypeProvider
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
@@ -95,7 +95,7 @@ namespace dbaui
         // UNO
         virtual void SAL_CALL  acquire() noexcept override { FmXGridPeer::acquire(); }
         virtual void SAL_CALL release() noexcept override { FmXGridPeer::release(); }
-        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+        virtual cpo::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
 
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 

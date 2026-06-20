@@ -140,7 +140,7 @@ void SotStorageStream::Commit()
     SetError( pOwnStm->GetError() );
 }
 
-bool SotStorageStream::SetProperty( const OUString& rName, const css::uno::Any& rValue )
+bool SotStorageStream::SetProperty( const OUString& rName, const cpo::uno::Any& rValue )
 {
     UCBStorageStream* pStg =  dynamic_cast<UCBStorageStream*>( pOwnStm );
     if ( pStg )
@@ -634,7 +634,7 @@ rtl::Reference<SotStorage> SotStorage::OpenOLEStorage( const css::uno::Reference
         {
             uno::Reference < beans::XPropertySet > xStreamProps( xStream, uno::UNO_QUERY_THROW );
             xStreamProps->setPropertyValue( u"MediaType"_ustr,
-                                            uno::Any( u"application/vnd.sun.star.oleobject"_ustr ) );
+                                            cpo::uno::Any( u"application/vnd.sun.star.oleobject"_ustr ) );
         }
 
         pStream = utl::UcbStreamHelper::CreateStream( xStream );

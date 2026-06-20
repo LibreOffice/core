@@ -54,7 +54,7 @@ https://www.loc.gov/preservation/digital/formats/fdd/fdd000512.shtml
 struct WebPrModel
 {
     // <tables>
-    typedef ::std::vector< css::uno::Any > TablesVector;
+    typedef ::std::vector< cpo::uno::Any > TablesVector;
     TablesVector        maTables;           /// Names or indexes of the web query tables.
     sal_Int32           mnCount;            /// Number of tables to pull data from when refreshing from a web query.
 
@@ -79,9 +79,9 @@ struct WebPrModel
 /** Special properties for <textPr> (Text Import Settings) and its child elements */
 struct TextPrModel
 {
-    css::uno::Sequence<css::uno::Any> maTextPrSequenceAny; // <textPr> attributes.
-    css::uno::Sequence<css::uno::Any> maTextFieldsSequenceAny; // <textFields> attributes.
-    std::vector<css::uno::Sequence<css::uno::Any>>
+    css::uno::Sequence<cpo::uno::Any> maTextPrSequenceAny; // <textPr> attributes.
+    css::uno::Sequence<cpo::uno::Any> maTextFieldsSequenceAny; // <textFields> attributes.
+    std::vector<css::uno::Sequence<cpo::uno::Any>>
         vTextField; // Field settings for text import, <textField>.
 };
 
@@ -90,7 +90,7 @@ struct ParametersModel
 {
     // <parameters> has only a single attribute.
     sal_Int32                                       mnCount;    // The number of parameters used.
-    std::vector<css::uno::Sequence<css::uno::Any>>  vParameter; // holds <parameter> attributes.
+    std::vector<css::uno::Sequence<cpo::uno::Any>>  vParameter; // holds <parameter> attributes.
 };
 
 /** Special properties for <extLst> (Future Feature Data Storage Area) and its child elements. */
@@ -102,9 +102,9 @@ struct ExtensionListModel
     std::vector<OUString> vExtension; // holds uri (URI) attribute of <ext> (Extension) element.
 
     // <x15:connection> attributes. A child element of <ext>.
-    css::uno::Sequence<css::uno::Any> maXFifteenConnectionSequenceAny;
+    css::uno::Sequence<cpo::uno::Any> maXFifteenConnectionSequenceAny;
     // <x15:rangePr> attributes. A child element of <x15:connection>.
-    css::uno::Sequence<css::uno::Any> maXFifteenRangePrSequenceAny;
+    css::uno::Sequence<cpo::uno::Any> maXFifteenRangePrSequenceAny;
 
 };
 
@@ -118,8 +118,8 @@ struct ConnectionModel
     std::unique_ptr<ParametersModel> mxParameters;  /// Query Parameters settings.
     std::unique_ptr<ExtensionListModel> mxExtensionList;  /// Extension List settings.
 
-    css::uno::Sequence<css::uno::Any> maDbPrSequenceAny;
-    css::uno::Sequence<css::uno::Any> maOlapPrSequenceAny;
+    css::uno::Sequence<cpo::uno::Any> maDbPrSequenceAny;
+    css::uno::Sequence<cpo::uno::Any> maOlapPrSequenceAny;
 
     OUString     maName;             /// Unique name of this connection.
     OUString     maDescription;      /// User description of this connection.
@@ -197,7 +197,7 @@ public:
     /** Imports a web query table identifier from the PCITEM_MISSING, PCITEM_STRING, or PCITEM_INDEX record. */
     void                importWebPrTable( SequenceInputStream& rStrm, sal_Int32 nRecId );
 
-    static css::uno::Sequence<css::uno::Any>
+    static css::uno::Sequence<cpo::uno::Any>
     getSequenceOfAny(const css::uno::Reference<css::xml::sax::XFastAttributeList>& xFastAttributeList);
     /** Returns the unique connection identifier. */
     sal_Int32    getConnectionId() const { return maModel.mnId; }
@@ -206,11 +206,11 @@ public:
     /** Returns read-only access to the connection model data. */
     const ConnectionModel& getModel() const { return maModel; }
 
-    const css::uno::Sequence<css::uno::Any> & getDbPrSequenceAny() const
+    const css::uno::Sequence<cpo::uno::Any> & getDbPrSequenceAny() const
     {
         return maModel.maDbPrSequenceAny;
     }
-    const css::uno::Sequence<css::uno::Any> & getOlapPrSequenceAny() const
+    const css::uno::Sequence<cpo::uno::Any> & getOlapPrSequenceAny() const
     {
         return maModel.maOlapPrSequenceAny;
     }

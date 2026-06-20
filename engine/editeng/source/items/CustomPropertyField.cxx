@@ -54,7 +54,7 @@ const OUString & CustomPropertyField::GetFormatted(uno::Reference<document::XDoc
     uno::Reference<beans::XPropertySet> xPropertySet(xPropertyContainer, uno::UNO_QUERY);
     if (!xPropertySet.is())
         return EMPTY_OUSTRING;
-    uno::Any aAny = xPropertySet->getPropertyValue(msName);
+    cpo::uno::Any aAny = xPropertySet->getPropertyValue(msName);
     if (!aAny.has<OUString>())
         return EMPTY_OUSTRING;
     msCurrentPresentation = aAny.get<OUString>();

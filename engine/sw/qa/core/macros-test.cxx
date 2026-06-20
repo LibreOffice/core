@@ -55,6 +55,7 @@ typedef rtl::Reference<SwDocShell> SwDocShellRef;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 /* Implementation of Macros test */
 
@@ -146,7 +147,7 @@ void SwMacrosTest::testVba()
         OUString sFileName("docm/" + sFileBaseName);
         loadFromFile(sFileName);
 
-        uno::Any aRet = executeMacro(sMacroUrl);
+        cpo::uno::Any aRet = executeMacro(sMacroUrl);
         OUString aStringRes;
         CPPUNIT_ASSERT_MESSAGE(sFileName.toUtf8().getStr(), aRet >>= aStringRes);
         CPPUNIT_ASSERT_EQUAL(u"OK"_ustr, aStringRes);
@@ -169,7 +170,7 @@ void SwMacrosTest::testModernVBADelete()
     pDoc->GetIDocumentUndoRedo().DoUndo(true);
     CPPUNIT_ASSERT(!pDoc->GetIDocumentUndoRedo().GetUndoActionCount());
 
-    uno::Any aRet = executeMacro(testInfo.sMacroUrl);
+    cpo::uno::Any aRet = executeMacro(testInfo.sMacroUrl);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDoc->GetIDocumentUndoRedo().GetUndoActionCount());
 
     OUString aStringRes;
@@ -367,7 +368,7 @@ void SwMacrosTest::testTdf155780_filename_display_format()
 {
     loadFromFile(u"odt/tdf155780_filename_display_format.odt");
 
-    uno::Any aRet = executeMacro(
+    cpo::uno::Any aRet = executeMacro(
         u"vnd.sun.Star.script:Standard.Module1.testFilenameDisplayFormat?language=Basic&location=document"_ustr);
 
     OUString aStringRes;
@@ -379,7 +380,7 @@ void SwMacrosTest::testTdf162431()
 {
     loadFromFile(u"odt/tdf162431.odt");
 
-    uno::Any aRet = executeMacro(
+    cpo::uno::Any aRet = executeMacro(
         u"vnd.sun.Star.script:Standard.Module1.TestIsMissingUnoParameter?language=Basic&location=document"_ustr);
 
     OUString aStringRes;
@@ -463,7 +464,7 @@ void SwMacrosTest::testFdo87530()
         Reference<script::XLibraryContainerPassword> xBasLibPwd(xStorBasLib, UNO_QUERY_THROW);
         Reference<container::XNameContainer> xLibrary(xBasLib->createLibrary(u"BarLibrary"_ustr));
         xLibrary->insertByName(u"BarModule"_ustr,
-                uno::Any(u"Sub Main\nEnd Sub\n"_ustr));
+                cpo::uno::Any(u"Sub Main\nEnd Sub\n"_ustr));
         xBasLibPwd->changeLibraryPassword(u"BarLibrary"_ustr, u""_ustr, u"foo"_ustr);
     }
 
@@ -489,7 +490,7 @@ void SwMacrosTest::testFdo87530()
         // add a second module now - tdf#87530 happened here
         Reference<container::XNameContainer> xFooLib(xBasLib->createLibrary(u"FooLibrary"_ustr));
         xFooLib->insertByName(u"FooModule"_ustr,
-                uno::Any(u"Sub Main\nEnd Sub\n"_ustr));
+                cpo::uno::Any(u"Sub Main\nEnd Sub\n"_ustr));
         xBasLibPwd->changeLibraryPassword(u"FooLibrary"_ustr, u""_ustr, u"foo"_ustr);
     }
 

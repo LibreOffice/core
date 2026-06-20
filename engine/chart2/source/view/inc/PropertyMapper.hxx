@@ -33,9 +33,9 @@ namespace chart
 {
 
 typedef std::unordered_map<OUString, OUString> tPropertyNameMap;
-typedef std::unordered_map<OUString, css::uno::Any> tPropertyNameValueMap;
+typedef std::unordered_map<OUString, cpo::uno::Any> tPropertyNameValueMap;
 typedef css::uno::Sequence< OUString >                   tNameSequence;
-typedef css::uno::Sequence< css::uno::Any > tAnySequence;
+typedef css::uno::Sequence< cpo::uno::Any > tAnySequence;
 
 /**
  * PropertyMapper provides easy mapping of the property names of various
@@ -87,12 +87,12 @@ public:
                 , const tPropertyNameValueMap& rValueMap
                 );
 
-    static css::uno::Any*
+    static cpo::uno::Any*
                 getValuePointer( tAnySequence& rPropValues
                          , const tNameSequence& rPropNames
                          , std::u16string_view rPropName );
 
-    static css::uno::Any*
+    static cpo::uno::Any*
                 getValuePointerForLimitedSpace( tAnySequence& rPropValues
                          , const tNameSequence& rPropNames
                          , bool bLimitedHeight );

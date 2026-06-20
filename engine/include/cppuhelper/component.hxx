@@ -60,9 +60,9 @@ public:
     virtual ~OComponentHelper() SAL_OVERRIDE;
 
     // XAggregation
-    virtual css::uno::Any SAL_CALL queryInterface(
+    virtual cpo::uno::Any SAL_CALL queryInterface(
         css::uno::Type const & rType ) SAL_OVERRIDE;
-    virtual css::uno::Any SAL_CALL queryAggregation(
+    virtual cpo::uno::Any SAL_CALL queryAggregation(
         css::uno::Type const & rType ) SAL_OVERRIDE;
     virtual void SAL_CALL acquire()
         SAL_NOEXCEPT SAL_OVERRIDE;

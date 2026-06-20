@@ -66,7 +66,7 @@ class FrameLoaderFactory : public ::cppu::ImplInheritanceHelper< BaseContainer  
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(const OUString& sLoader) override;
 
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments(const OUString&                     sLoader   ,
-                                                                                                 const css::uno::Sequence< css::uno::Any >& lArguments) override;
+                                                                                                 const css::uno::Sequence< cpo::uno::Any >& lArguments) override;
 
         virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
 
@@ -74,7 +74,7 @@ class FrameLoaderFactory : public ::cppu::ImplInheritanceHelper< BaseContainer  
     public:
 
       // Overrides to resolve ambiguity
-      virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override
+      virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override
         { return BaseContainer::getByName(aName); }
       virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override
         { return BaseContainer::getElementNames(); }

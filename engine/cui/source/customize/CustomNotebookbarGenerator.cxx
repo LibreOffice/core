@@ -226,7 +226,7 @@ void CustomNotebookbarGenerator::getFileNameAndAppName(OUString& sAppName,
         = vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(xFrame));
     OUString sActiveAppName(lcl_activeAppName(eApp));
     sAppName = lcl_getAppName(eApp);
-    const Any aValue = aRoot.getNodeValue(sActiveAppName);
+    const cpo::uno::Any aValue = aRoot.getNodeValue(sActiveAppName);
     aValue >>= sNotebookbarUIFileName;
 }
 
@@ -261,7 +261,7 @@ CustomNotebookbarGenerator::getCustomizedUIItem(const OUString& sNotebookbarConf
 
     const utl::OConfigurationNode aModesNode = aAppNode.openNode(u"Modes"_ustr);
     const utl::OConfigurationNode aModeNode(aModesNode.openNode(sNotebookbarConfigType));
-    const Any aValue = aModeNode.getNodeValue(u"UIItemProperties"_ustr);
+    const cpo::uno::Any aValue = aModeNode.getNodeValue(u"UIItemProperties"_ustr);
     Sequence<OUString> aValues;
     aValue >>= aValues;
     return aValues;
@@ -276,7 +276,7 @@ void CustomNotebookbarGenerator::setCustomizedUIItem(const Sequence<OUString>& r
     const utl::OConfigurationNode aModesNode = aAppNode.openNode(u"Modes"_ustr);
     const utl::OConfigurationNode aModeNode(aModesNode.openNode(rNotebookbarConfigType));
 
-    css::uno::Any aUIItemProperties(rUIItemProperties);
+    cpo::uno::Any aUIItemProperties(rUIItemProperties);
     aModeNode.setNodeValue(u"UIItemProperties"_ustr, aUIItemProperties);
     aAppNode.commit();
 }

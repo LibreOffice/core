@@ -80,7 +80,7 @@ void lcl_NumberFormatStyleToProperty( const OUString& rStyleName, const OUString
         if( pStyle )
         {
             sal_Int32 nNumberFormat = const_cast<SvXMLNumFormatContext*>(pStyle)->GetKey();
-            rPropSet->setPropertyValue( rPropertyName, uno::Any(nNumberFormat) );
+            rPropSet->setPropertyValue( rPropertyName, cpo::uno::Any(nNumberFormat) );
         }
     }
 }

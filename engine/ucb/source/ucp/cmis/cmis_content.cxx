@@ -94,9 +94,9 @@ namespace
         return unoTime;
     }
 
-    uno::Any lcl_cmisPropertyToUno( const libcmis::PropertyPtr& pProperty )
+    cpo::uno::Any lcl_cmisPropertyToUno( const libcmis::PropertyPtr& pProperty )
     {
-        uno::Any aValue;
+        cpo::uno::Any aValue;
         switch ( pProperty->getPropertyType( )->getType( ) )
         {
             default:
@@ -173,7 +173,7 @@ namespace
         bool bRequired = prop.Required;
         bool bMultiValued = prop.MultiValued;
         bool bOpenChoice = prop.OpenChoice;
-        uno::Any value = prop.Value;
+        cpo::uno::Any value = prop.Value;
         std::vector< std::string > values;
 
         libcmis::PropertyType::Type type = libcmis::PropertyType::String;
@@ -236,22 +236,22 @@ namespace
         return property;
     }
 
-    uno::Sequence< uno::Any > generateErrorArguments( const cmis::URL & rURL )
+    uno::Sequence< cpo::uno::Any > generateErrorArguments( const cmis::URL & rURL )
     {
-        uno::Sequence< uno::Any > aArguments{ uno::Any(beans::PropertyValue(
+        uno::Sequence< cpo::uno::Any > aArguments{ cpo::uno::Any(beans::PropertyValue(
                                                            u"Binding URL"_ustr,
                                                            - 1,
-                                                           uno::Any( rURL.getBindingUrl() ),
+                                                           cpo::uno::Any( rURL.getBindingUrl() ),
                                                            beans::PropertyState_DIRECT_VALUE )),
-                                              uno::Any(beans::PropertyValue(
+                                              cpo::uno::Any(beans::PropertyValue(
                                                            u"Username"_ustr,
                                                            -1,
-                                                           uno::Any( rURL.getUsername() ),
+                                                           cpo::uno::Any( rURL.getUsername() ),
                                                            beans::PropertyState_DIRECT_VALUE )),
-                                              uno::Any(beans::PropertyValue(
+                                              cpo::uno::Any(beans::PropertyValue(
                                                            u"Repository Id"_ustr,
                                                            -1,
-                                                           uno::Any( rURL.getRepositoryId() ),
+                                                           cpo::uno::Any( rURL.getRepositoryId() ),
                                                            beans::PropertyState_DIRECT_VALUE )) };
 
         return aArguments;
@@ -425,7 +425,7 @@ namespace cmis
                 {
                     if (e.getType() == "dnsFailed")
                     {
-                        uno::Any ex;
+                        cpo::uno::Any ex;
                         ex <<= ucb::InteractiveNetworkResolveNameException(
                                 OStringToOUString(e.what(), RTL_TEXTENCODING_UTF8),
                                 xContext,
@@ -435,7 +435,7 @@ namespace cmis
                     }
                     else if (e.getType() == "connectFailed" || e.getType() == "connectTimeout")
                     {
-                        uno::Any ex;
+                        cpo::uno::Any ex;
                         ex <<= ucb::InteractiveNetworkConnectException(
                                 OStringToOUString(e.what(), RTL_TEXTENCODING_UTF8),
                                 xContext,
@@ -445,7 +445,7 @@ namespace cmis
                     }
                     else if (e.getType() == "transferFailed")
                     {
-                        uno::Any ex;
+                        cpo::uno::Any ex;
                         ex <<= ucb::InteractiveNetworkReadException(
                                 OStringToOUString(e.what(), RTL_TEXTENCODING_UTF8),
                                 xContext,
@@ -473,7 +473,7 @@ namespace cmis
                 // Silently fail as the user cancelled the authentication
                 ucbhelper::cancelCommandExecution(
                                     ucb::IOErrorCode_ABORT,
-                                    uno::Sequence< uno::Any >( 0 ),
+                                    uno::Sequence< cpo::uno::Any >( 0 ),
                                     xEnv );
                 throw uno::RuntimeException( );
             }
@@ -620,7 +620,7 @@ namespace cmis
 
             ucbhelper::cancelCommandExecution(
                             ucb::IOErrorCode_GENERAL,
-                            uno::Sequence< uno::Any >( 0 ),
+                            uno::Sequence< cpo::uno::Any >( 0 ),
                             xEnv,
                             OUString::createFromAscii( e.what( ) ) );
 
@@ -628,15 +628,15 @@ namespace cmis
         return bIsFolder;
     }
 
-    uno::Any Content::getBadArgExcept()
+    cpo::uno::Any Content::getBadArgExcept()
     {
-        return uno::Any( lang::IllegalArgumentException(
+        return cpo::uno::Any( lang::IllegalArgumentException(
             u"Wrong argument type!"_ustr,
             getXWeak(), -1) );
     }
 
     libcmis::ObjectPtr Content::updateProperties(
-         const uno::Any& iCmisProps,
+         const cpo::uno::Any& iCmisProps,
          const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {
         // Convert iCmisProps to Cmis Properties;
@@ -815,7 +815,7 @@ namespace cmis
                 }
                 else if ( rProp.Name == "CreatableContentsInfo" )
                 {
-                    xRow->appendObject( rProp, uno::Any( queryCreatableContentsInfo( xEnv ) ) );
+                    xRow->appendObject( rProp, cpo::uno::Any( queryCreatableContentsInfo( xEnv ) ) );
                 }
                 else if ( rProp.Name == "MediaType" )
                 {
@@ -909,7 +909,7 @@ namespace cmis
                             }
                             ++i;
                         }
-                        xRow->appendObject( rProp.Name, uno::Any( aCmisProperties ) );
+                        xRow->appendObject( rProp.Name, cpo::uno::Any( aCmisProperties ) );
                     }
                     catch ( const libcmis::Exception& )
                     {
@@ -995,7 +995,7 @@ namespace cmis
         return xRow;
     }
 
-    uno::Any Content::open(const ucb::OpenCommandArgument2 & rOpenCommand,
+    cpo::uno::Any Content::open(const ucb::OpenCommandArgument2 & rOpenCommand,
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
     {
         bool bIsFolder = isFolder( xEnv );
@@ -1003,8 +1003,8 @@ namespace cmis
         // Handle the case of the non-existing file
         if ( !getObject( xEnv ) )
         {
-            uno::Sequence< uno::Any > aArgs{ uno::Any(m_xIdentifier->getContentIdentifier()) };
-            uno::Any aErr(
+            uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(m_xIdentifier->getContentIdentifier()) };
+            cpo::uno::Any aErr(
                 ucb::InteractiveAugmentedIOException(OUString(), getXWeak(),
                     task::InteractionClassification_ERROR,
                     bIsFolder ? ucb::IOErrorCode_NOT_EXISTING_PATH : ucb::IOErrorCode_NOT_EXISTING, aArgs)
@@ -1013,7 +1013,7 @@ namespace cmis
             ucbhelper::cancelCommandExecution(aErr, xEnv);
         }
 
-        uno::Any aRet;
+        cpo::uno::Any aRet;
 
         bool bOpenFolder = (
             ( rOpenCommand.Mode == ucb::OpenMode::ALL ) ||
@@ -1035,7 +1035,7 @@ namespace cmis
                )
             {
                 ucbhelper::cancelCommandExecution(
-                    uno::Any ( ucb::UnsupportedOpenModeException
+                    cpo::uno::Any ( ucb::UnsupportedOpenModeException
                         ( OUString(), getXWeak(),
                           sal_Int16( rOpenCommand.Mode ) ) ),
                         xEnv );
@@ -1049,7 +1049,7 @@ namespace cmis
                 SAL_INFO( "ucb.ucp.cmis", "Failed to copy data to sink" );
 
                 ucbhelper::cancelCommandExecution(
-                    uno::Any (ucb::UnsupportedDataSinkException
+                    cpo::uno::Any (ucb::UnsupportedDataSinkException
                         ( OUString(), getXWeak(),
                           rOpenCommand.Sink ) ),
                         xEnv );
@@ -1077,7 +1077,7 @@ namespace cmis
             SAL_INFO( "ucb.ucp.cmis", "Unexpected libcmis exception: " << e.what( ) );
             ucbhelper::cancelCommandExecution(
                                 ucb::IOErrorCode_GENERAL,
-                                uno::Sequence< uno::Any >( 0 ),
+                                uno::Sequence< cpo::uno::Any >( 0 ),
                                 xEnv,
                                 OUString::createFromAscii( e.what() ) );
         }
@@ -1087,7 +1087,7 @@ namespace cmis
         {
             ucbhelper::cancelCommandExecution(
                                 ucb::IOErrorCode_GENERAL,
-                                uno::Sequence< uno::Any >( 0 ),
+                                uno::Sequence< cpo::uno::Any >( 0 ),
                                 xEnv,
                                 u"Checkin only supported by documents"_ustr );
         }
@@ -1109,7 +1109,7 @@ namespace cmis
             SAL_INFO( "ucb.ucp.cmis", "Unexpected libcmis exception: " << e.what( ) );
             ucbhelper::cancelCommandExecution(
                                 ucb::IOErrorCode_GENERAL,
-                                uno::Sequence< uno::Any >( 0 ),
+                                uno::Sequence< cpo::uno::Any >( 0 ),
                                 xEnv,
                                 OUString::createFromAscii( e.what() ) );
         }
@@ -1141,7 +1141,7 @@ namespace cmis
             {
                 ucbhelper::cancelCommandExecution(
                                     ucb::IOErrorCode_GENERAL,
-                                    uno::Sequence< uno::Any >( 0 ),
+                                    uno::Sequence< cpo::uno::Any >( 0 ),
                                     xEnv,
                                     u"Checkout only supported by documents"_ustr );
             }
@@ -1168,7 +1168,7 @@ namespace cmis
             SAL_INFO( "ucb.ucp.cmis", "Unexpected libcmis exception: " << e.what( ) );
             ucbhelper::cancelCommandExecution(
                                 ucb::IOErrorCode_GENERAL,
-                                uno::Sequence< uno::Any >( 0 ),
+                                uno::Sequence< cpo::uno::Any >( 0 ),
                                 xEnv,
                                 o3tl::runtimeToOUString(e.what()));
         }
@@ -1185,7 +1185,7 @@ namespace cmis
             {
                 ucbhelper::cancelCommandExecution(
                                     ucb::IOErrorCode_GENERAL,
-                                    uno::Sequence< uno::Any >( 0 ),
+                                    uno::Sequence< cpo::uno::Any >( 0 ),
                                     xEnv,
                                     u"CancelCheckout only supported by documents"_ustr );
             }
@@ -1230,7 +1230,7 @@ namespace cmis
             SAL_INFO( "ucb.ucp.cmis", "Unexpected libcmis exception: " << e.what( ) );
             ucbhelper::cancelCommandExecution(
                                 ucb::IOErrorCode_GENERAL,
-                                uno::Sequence< uno::Any >( 0 ),
+                                uno::Sequence< cpo::uno::Any >( 0 ),
                                 xEnv,
                                 o3tl::runtimeToOUString(e.what()));
         }
@@ -1247,7 +1247,7 @@ namespace cmis
             {
                 ucbhelper::cancelCommandExecution(
                                     ucb::IOErrorCode_GENERAL,
-                                    uno::Sequence< uno::Any >( 0 ),
+                                    uno::Sequence< cpo::uno::Any >( 0 ),
                                     xEnv,
                                     u"Can not get the document"_ustr );
             }
@@ -1271,7 +1271,7 @@ namespace cmis
             SAL_INFO( "ucb.ucp.cmis", "Unexpected libcmis exception: " << e.what( ) );
             ucbhelper::cancelCommandExecution(
                     ucb::IOErrorCode_GENERAL,
-                    uno::Sequence< uno::Any >( 0 ),
+                    uno::Sequence< cpo::uno::Any >( 0 ),
                     xEnv,
                     o3tl::runtimeToOUString(e.what()));
         }
@@ -1289,7 +1289,7 @@ namespace cmis
             if ( sSrcBindingUrl != m_aURL.getBindingUrl( ) )
             {
                 ucbhelper::cancelCommandExecution(
-                    uno::Any(
+                    cpo::uno::Any(
                         ucb::InteractiveBadTransferURLException(
                             u"Unsupported URL scheme!"_ustr,
                             getXWeak() ) ),
@@ -1306,7 +1306,7 @@ namespace cmis
     {
         if ( !xInputStream.is() )
         {
-            ucbhelper::cancelCommandExecution( uno::Any
+            ucbhelper::cancelCommandExecution( cpo::uno::Any
                 ( ucb::MissingInputStreamException
                   ( OUString(), getXWeak() ) ),
                 xEnv );
@@ -1335,7 +1335,7 @@ namespace cmis
         std::map< std::string, libcmis::PropertyPtr >::iterator it = m_pObjectProps.find( "cmis:name" );
         if ( it == m_pObjectProps.end( ) )
         {
-            ucbhelper::cancelCommandExecution( uno::Any
+            ucbhelper::cancelCommandExecution( cpo::uno::Any
                 ( uno::RuntimeException( u"Missing name property"_ustr,
                     getXWeak() ) ),
                 xEnv );
@@ -1362,7 +1362,7 @@ namespace cmis
             // Are the base type matching?
             if ( object->getBaseType( ) != m_pObjectType->getBaseType( )->getId() )
             {
-                ucbhelper::cancelCommandExecution( uno::Any
+                ucbhelper::cancelCommandExecution( cpo::uno::Any
                     ( uno::RuntimeException( u"Can't change a folder into a document and vice-versa."_ustr,
                         getXWeak() ) ),
                     xEnv );
@@ -1381,7 +1381,7 @@ namespace cmis
                 }
                 catch ( const libcmis::Exception& )
                 {
-                    ucbhelper::cancelCommandExecution( uno::Any
+                    ucbhelper::cancelCommandExecution( cpo::uno::Any
                         ( uno::RuntimeException( u"Error when setting document content"_ustr,
                             getXWeak() ) ),
                         xEnv );
@@ -1403,7 +1403,7 @@ namespace cmis
                 }
                 catch ( const libcmis::Exception& )
                 {
-                    ucbhelper::cancelCommandExecution( uno::Any
+                    ucbhelper::cancelCommandExecution( cpo::uno::Any
                         ( uno::RuntimeException( u"Error when creating folder"_ustr,
                             getXWeak() ) ),
                         xEnv );
@@ -1421,7 +1421,7 @@ namespace cmis
                 }
                 catch ( const libcmis::Exception& )
                 {
-                    ucbhelper::cancelCommandExecution( uno::Any
+                    ucbhelper::cancelCommandExecution( cpo::uno::Any
                         ( uno::RuntimeException( u"Error when creating document"_ustr,
                             getXWeak() ) ),
                         xEnv );
@@ -1459,7 +1459,7 @@ namespace cmis
         xOut->closeOutput();
     }
 
-    uno::Sequence< uno::Any > Content::setPropertyValues(
+    uno::Sequence< cpo::uno::Any > Content::setPropertyValues(
             const uno::Sequence< beans::PropertyValue >& rValues,
             const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {
@@ -1477,13 +1477,13 @@ namespace cmis
             SAL_INFO( "ucb.ucp.cmis", "Unexpected libcmis exception: " << e.what( ) );
             ucbhelper::cancelCommandExecution(
                                 ucb::IOErrorCode_GENERAL,
-                                uno::Sequence< uno::Any >( 0 ),
+                                uno::Sequence< cpo::uno::Any >( 0 ),
                                 xEnv,
                                 o3tl::runtimeToOUString(e.what()));
         }
 
         sal_Int32 nCount = rValues.getLength();
-        uno::Sequence< uno::Any > aRet( nCount );
+        uno::Sequence< cpo::uno::Any > aRet( nCount );
         auto aRetRange = asNonConstRange(aRet);
         bool bChanged = false;
         const beans::PropertyValue* pValues = rValues.getConstArray();
@@ -1545,7 +1545,7 @@ namespace cmis
             SAL_INFO( "ucb.ucp.cmis", "Unexpected libcmis exception: " << e.what( ) );
             ucbhelper::cancelCommandExecution(
                                 ucb::IOErrorCode_GENERAL,
-                                uno::Sequence< uno::Any >( 0 ),
+                                uno::Sequence< cpo::uno::Any >( 0 ),
                                 xEnv,
                                 o3tl::runtimeToOUString(e.what()));
         }
@@ -1590,7 +1590,7 @@ namespace cmis
             SAL_INFO( "ucb.ucp.cmis", "Unexpected libcmis exception: " << e.what( ) );
             ucbhelper::cancelCommandExecution(
                                 ucb::IOErrorCode_GENERAL,
-                                uno::Sequence< uno::Any >( 0 ),
+                                uno::Sequence< cpo::uno::Any >( 0 ),
                                 xEnv,
                                 o3tl::runtimeToOUString(e.what()));
         }
@@ -1743,9 +1743,9 @@ namespace cmis
         ContentImplHelper::release();
     }
 
-    uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
+    cpo::uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
     {
-        uno::Any aRet = cppu::queryInterface( rType, static_cast< ucb::XContentCreator * >( this ) );
+        cpo::uno::Any aRet = cppu::queryInterface( rType, static_cast< ucb::XContentCreator * >( this ) );
         return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface(rType);
     }
 
@@ -1776,7 +1776,7 @@ namespace cmis
         }
         catch (const uno::Exception& e)
         {
-            uno::Any a(cppu::getCaughtException());
+            cpo::uno::Any a(cppu::getCaughtException());
             throw lang::WrappedTargetRuntimeException(
                 "wrapped Exception " + e.Message,
                 uno::Reference<uno::XInterface>(), a);
@@ -1784,13 +1784,13 @@ namespace cmis
         return sRet;
     }
 
-    uno::Any SAL_CALL Content::execute(
+    cpo::uno::Any SAL_CALL Content::execute(
         const ucb::Command& aCommand,
         sal_Int32 /*CommandId*/,
         const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {
         SAL_INFO( "ucb.ucp.cmis", "Content::execute( ) - " << aCommand.Name );
-        uno::Any aRet;
+        cpo::uno::Any aRet;
 
         if ( aCommand.Name == "getPropertyValues" )
         {
@@ -1868,7 +1868,7 @@ namespace cmis
                 SAL_INFO( "ucb.ucp.cmis", "Unexpected libcmis exception: " << e.what( ) );
                 ucbhelper::cancelCommandExecution(
                                     ucb::IOErrorCode_GENERAL,
-                                    uno::Sequence< uno::Any >( 0 ),
+                                    uno::Sequence< cpo::uno::Any >( 0 ),
                                     xEnv,
                                     o3tl::runtimeToOUString(e.what()));
             }
@@ -1903,7 +1903,7 @@ namespace cmis
             SAL_INFO( "ucb.ucp.cmis", "Unknown command to execute" );
 
             ucbhelper::cancelCommandExecution
-                ( uno::Any( ucb::UnsupportedCommandException
+                ( cpo::uno::Any( ucb::UnsupportedCommandException
                   ( OUString(),
                     getXWeak() ) ),
                   xEnv );
@@ -1980,7 +1980,7 @@ namespace cmis
         }
         catch (const uno::Exception& e)
         {
-            uno::Any a(cppu::getCaughtException());
+            cpo::uno::Any a(cppu::getCaughtException());
             throw lang::WrappedTargetRuntimeException(
                 "wrapped Exception " + e.Message,
                 uno::Reference<uno::XInterface>(), a);
@@ -2042,7 +2042,7 @@ namespace cmis
         }
         catch (const uno::Exception& e)
         {
-            uno::Any a(cppu::getCaughtException());
+            cpo::uno::Any a(cppu::getCaughtException());
             throw lang::WrappedTargetRuntimeException(
                 "wrapped Exception " + e.Message,
                 uno::Reference<uno::XInterface>(), a);

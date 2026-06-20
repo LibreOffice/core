@@ -75,7 +75,7 @@ public:
 
     ScTabViewShell*         GetViewShell() const    { return pViewShell; }
 
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -119,7 +119,7 @@ public:
                             ScViewPaneObj(ScTabViewShell* pViewSh, sal_uInt16 nP);
     virtual                 ~ScViewPaneObj() override;
 
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL   acquire() noexcept override;
     virtual void SAL_CALL   release() noexcept override;
 };
@@ -176,7 +176,7 @@ public:
                             ScTabViewObj() = delete;
     virtual                 ~ScTabViewObj() override;
 
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL   acquire() noexcept override;
     virtual void SAL_CALL   release() noexcept override;
 
@@ -195,13 +195,13 @@ public:
     void                    RangeSelChanged( const OUString& rText );
 
                             // XSelectionSupplier
-    virtual bool SAL_CALL select( const css::uno::Any& aSelection ) override;
-    virtual css::uno::Any SAL_CALL getSelection() override;
+    virtual bool SAL_CALL select( const cpo::uno::Any& aSelection ) override;
+    virtual cpo::uno::Any SAL_CALL getSelection() override;
     virtual void SAL_CALL   addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
     virtual void SAL_CALL   removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 
                             // XSheetRange
-    virtual css::uno::Any SAL_CALL getSelectionFromString( const OUString& aStrRange ) override;
+    virtual cpo::uno::Any SAL_CALL getSelectionFromString( const OUString& aStrRange ) override;
 
     //! XPrintable?
 
@@ -209,8 +209,8 @@ public:
     virtual css::uno::Reference< css::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo() override;
     virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
-                                    const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+                                    const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
     virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
                                     const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
     virtual void SAL_CALL   removePropertyChangeListener( const OUString& aPropertyName,
@@ -227,7 +227,7 @@ public:
 
                             // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
                             // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
@@ -297,7 +297,7 @@ public:
     ScPreviewObj(ScPreviewShell* pViewSh);
     virtual ~ScPreviewObj() override;
 
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType) override;
 
     virtual void SAL_CALL acquire() noexcept override;
     virtual void SAL_CALL release() noexcept override;

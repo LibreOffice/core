@@ -100,7 +100,7 @@ bool SAL_CALL SvxUnoNameItemTable::supportsService( const  OUString& ServiceName
     return cppu::supportsService(this, ServiceName);
 }
 
-void SvxUnoNameItemTable::ImplInsertByName( const OUString& aName, const uno::Any& aElement )
+void SvxUnoNameItemTable::ImplInsertByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
     maItemSetVector.push_back( std::make_unique< SfxItemSet >( *mpModelPool, mnWhich, mnWhich ) );
 
@@ -112,7 +112,7 @@ void SvxUnoNameItemTable::ImplInsertByName( const OUString& aName, const uno::An
 }
 
 // XNameContainer
-void SAL_CALL SvxUnoNameItemTable::insertByName( const OUString& aApiName, const uno::Any& aElement )
+void SAL_CALL SvxUnoNameItemTable::insertByName( const OUString& aApiName, const cpo::uno::Any& aElement )
 {
     SolarMutexGuard aGuard;
     comphelper::ProfileZone aZone("SvxUnoNameItemTable::insertByName");
@@ -156,7 +156,7 @@ void SAL_CALL SvxUnoNameItemTable::removeByName( const OUString& aApiName )
 }
 
 // XNameReplace
-void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, const uno::Any& aElement )
+void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, const cpo::uno::Any& aElement )
 {
     SolarMutexGuard aGuard;
 
@@ -203,7 +203,7 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
 }
 
 // XNameAccess
-uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const OUString& aApiName )
+cpo::uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const OUString& aApiName )
 {
     SolarMutexGuard aGuard;
     comphelper::ProfileZone aZone("SvxUnoNameItemTable::getByName");
@@ -218,7 +218,7 @@ uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const OUString& aApiName )
             if (aSample == *pFindItem)
                 if (isValid(static_cast<const NameOrIndex*>(pFindItem)))
                 {
-                    uno::Any aAny;
+                    cpo::uno::Any aAny;
                     pFindItem->QueryValue( aAny, mnMemberId );
                     return aAny;
                 }

@@ -85,12 +85,12 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testVertPosFromBottomBoundingBox)
     xShape->setSize(awt::Size(10000, 10000));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     xShapeProps->setPropertyValue(u"AnchorType"_ustr,
-                                  uno::Any(text::TextContentAnchorType_AT_CHARACTER));
-    xShapeProps->setPropertyValue(u"VertOrient"_ustr, uno::Any(text::VertOrientation::NONE));
+                                  cpo::uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+    xShapeProps->setPropertyValue(u"VertOrient"_ustr, cpo::uno::Any(text::VertOrientation::NONE));
     xShapeProps->setPropertyValue(u"VertOrientRelation"_ustr,
-                                  uno::Any(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
+                                  cpo::uno::Any(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
     xShapeProps->setPropertyValue(u"VertOrientPosition"_ustr,
-                                  uno::Any(static_cast<sal_Int32>(-11000)));
+                                  cpo::uno::Any(static_cast<sal_Int32>(-11000)));
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     xDrawPageSupplier->getDrawPage()->add(xShape);
 

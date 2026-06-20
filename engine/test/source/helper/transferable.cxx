@@ -43,7 +43,7 @@ OString OOO_DLLPUBLIC_TEST getTextSelection(
     if (!xTransferable.is() || !xTransferable->isDataFlavorSupported(aFlavor))
         return OString();
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     try
     {
         aAny = xTransferable->getTransferData(aFlavor);

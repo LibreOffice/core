@@ -251,7 +251,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
                           ? u"TransparencyGradientName"_ustr
                           : u"FillTransparenceGradientName"_ustr;
 
-                    uno::Any aValue( GetPropertySet()->getPropertyValue( aPropName ));
+                    cpo::uno::Any aValue( GetPropertySet()->getPropertyValue( aPropName ));
                     if( aValue.hasValue())
                     {
                         XFillFloatTransparenceItem aItem;
@@ -286,7 +286,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
                     ? u"GradientStepCount"_ustr
                     : u"FillGradientStepCount"_ustr;
 
-                uno::Any aValue( GetPropertySet()->getPropertyValue( aPropName ) );
+                cpo::uno::Any aValue( GetPropertySet()->getPropertyValue( aPropName ) );
                 if( hasLongOrShortValue(aValue) )
                 {
                     sal_Int16 nStepCount = getShortForLongAlso(aValue);
@@ -434,7 +434,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
     sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
 {
     bool bChanged = false;
-    uno::Any aValue;
+    cpo::uno::Any aValue;
 
     switch( nWhichId )
     {
@@ -495,7 +495,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                     if( rItem.IsEnabled() &&
                         rItem.QueryValue( aValue, MID_NAME ))
                     {
-                        uno::Any aGradient;
+                        cpo::uno::Any aGradient;
                         rItem.QueryValue( aGradient, MID_FILLGRADIENT );
 
                         // add TransparencyGradient to list if it does not already exist
@@ -568,7 +568,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                 if( aValue != GetPropertySet()->getPropertyValue( aPropName ))
                 {
                     // add LineDash to list
-                    uno::Any aLineDash;
+                    cpo::uno::Any aLineDash;
                     rItem.QueryValue( aLineDash, MID_LINEDASH );
                     OUString aPreferredName;
                     aValue >>= aPreferredName;
@@ -600,7 +600,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                     if( aValue != GetPropertySet()->getPropertyValue( aPropName ))
                     {
                         // add Gradient to list
-                        uno::Any aGradient;
+                        cpo::uno::Any aGradient;
                         rItem.QueryValue( aGradient, MID_FILLGRADIENT );
                         OUString aPreferredName;
                         aValue >>= aPreferredName;
@@ -633,7 +633,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                     if( aValue != GetPropertySet()->getPropertyValue( aPropName ))
                     {
                         // add Hatch to list
-                        uno::Any aHatch;
+                        cpo::uno::Any aHatch;
                         rItem.QueryValue( aHatch, MID_FILLHATCH );
                         OUString aPreferredName;
                         aValue >>= aPreferredName;
@@ -661,7 +661,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                     if( aValue != GetPropertySet()->getPropertyValue( u"FillBitmapName"_ustr ))
                     {
                         // add Bitmap to list
-                        uno::Any aBitmap;
+                        cpo::uno::Any aBitmap;
                         rItem.QueryValue(aBitmap, MID_BITMAP);
                         OUString aPreferredName;
                         aValue >>= aPreferredName;
@@ -747,7 +747,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                               ? u"TransparencyGradientName"_ustr
                               : u"FillTransparenceGradientName"_ustr;
                         GetPropertySet()->setPropertyValue(
-                            aTransGradPropName, uno::Any( OUString() ));
+                            aTransGradPropName, cpo::uno::Any( OUString() ));
 
                         bChanged = true;
                     }

@@ -79,7 +79,8 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeExport)
         pColorSet->add(model::ThemeColorType::FollowedHyperlink, 0xcccccc);
         pTheme->setColorSet(pColorSet);
 
-        xMasterPage->setPropertyValue(u"Theme"_ustr, uno::Any(model::theme::createXTheme(pTheme)));
+        xMasterPage->setPropertyValue(u"Theme"_ustr,
+                                      cpo::uno::Any(model::theme::createXTheme(pTheme)));
     }
 
     // Export to PPTX and load again:

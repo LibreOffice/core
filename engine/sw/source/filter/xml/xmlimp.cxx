@@ -87,6 +87,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
@@ -1581,7 +1582,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         // filters and Word defaults to our new default as well.
         xProps->setPropertyValue(
             u"PrinterIndependentLayout"_ustr,
-            uno::Any(document::PrinterIndependentLayout::HIGH_RESOLUTION));
+            cpo::uno::Any(document::PrinterIndependentLayout::HIGH_RESOLUTION));
 
     if (!bPropLineSpacingShrinksFirstLine)
         xProps->setPropertyValue(u"PropLineSpacingShrinksFirstLine"_ustr, Any(false));
@@ -1731,7 +1732,7 @@ const SwDoc* SwXMLImport::getDoc() const
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Writer_XMLOasisImporter_get_implementation(css::uno::XComponentContext* context,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLImport(context, u"com.sun.star.comp.Writer.XMLOasisImporter"_ustr,
                 SvXMLImportFlags::ALL));
@@ -1740,7 +1741,7 @@ com_sun_star_comp_Writer_XMLOasisImporter_get_implementation(css::uno::XComponen
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Writer_XMLOasisStylesImporter_get_implementation(css::uno::XComponentContext* context,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLImport(context, u"com.sun.star.comp.Writer.XMLOasisStylesImporter"_ustr,
                 SvXMLImportFlags::STYLES | SvXMLImportFlags::MASTERSTYLES | SvXMLImportFlags::AUTOSTYLES |
@@ -1750,7 +1751,7 @@ com_sun_star_comp_Writer_XMLOasisStylesImporter_get_implementation(css::uno::XCo
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Writer_XMLOasisContentImporter_get_implementation(css::uno::XComponentContext* context,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLImport(context, u"com.sun.star.comp.Writer.XMLOasisContentImporter"_ustr,
                 SvXMLImportFlags::CONTENT | SvXMLImportFlags::SCRIPTS | SvXMLImportFlags::AUTOSTYLES |
@@ -1759,7 +1760,7 @@ com_sun_star_comp_Writer_XMLOasisContentImporter_get_implementation(css::uno::XC
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Writer_XMLOasisMetaImporter_get_implementation(css::uno::XComponentContext* context,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLImport(context, u"com.sun.star.comp.Writer.XMLOasisMetaImporter"_ustr,
                 SvXMLImportFlags::META));
@@ -1768,7 +1769,7 @@ com_sun_star_comp_Writer_XMLOasisMetaImporter_get_implementation(css::uno::XComp
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Writer_XMLOasisSettingsImporter_get_implementation(css::uno::XComponentContext* context,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLImport(context, u"com.sun.star.comp.Writer.XMLOasisSettingsImporter"_ustr,
                 SvXMLImportFlags::SETTINGS));
@@ -1798,9 +1799,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODT(SvStream &rStream)
     };
     uno::Sequence<beans::PropertyValue> aAdaptorArgs(comphelper::InitPropertySequence(
     {
-        { "UserData", uno::Any(aUserData) },
+        { "UserData", cpo::uno::Any(aUserData) },
     }));
-    css::uno::Sequence<uno::Any> aOuterArgs{ uno::Any(aAdaptorArgs) };
+    css::uno::Sequence<cpo::uno::Any> aOuterArgs{ cpo::uno::Any(aAdaptorArgs) };
 
     uno::Reference<lang::XInitialization> xInit(xInterface, uno::UNO_QUERY_THROW);
     xInit->initialize(aOuterArgs);
@@ -1808,8 +1809,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODT(SvStream &rStream)
     uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
-        { "InputStream", uno::Any(xStream) },
-        { "URL", uno::Any(u"private:stream"_ustr) },
+        { "InputStream", cpo::uno::Any(xStream) },
+        { "URL", cpo::uno::Any(u"private:stream"_ustr) },
     }));
     xImporter->setTargetDocument(xModel);
 
@@ -1888,9 +1889,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
     };
     uno::Sequence<beans::PropertyValue> aAdaptorArgs(comphelper::InitPropertySequence(
     {
-        { "UserData", uno::Any(aUserData) },
+        { "UserData", cpo::uno::Any(aUserData) },
     }));
-    css::uno::Sequence<uno::Any> aOuterArgs{ uno::Any(aAdaptorArgs) };
+    css::uno::Sequence<cpo::uno::Any> aOuterArgs{ cpo::uno::Any(aAdaptorArgs) };
 
     uno::Reference<lang::XInitialization> xInit(xInterface, uno::UNO_QUERY_THROW);
     xInit->initialize(aOuterArgs);
@@ -1898,8 +1899,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
     uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
-        { "InputStream", uno::Any(xStream) },
-        { "URL", uno::Any(u"private:stream"_ustr) },
+        { "InputStream", cpo::uno::Any(xStream) },
+        { "URL", cpo::uno::Any(u"private:stream"_ustr) },
     }));
     xImporter->setTargetDocument(xModel);
 
@@ -1981,12 +1982,12 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
         // ofz#60533 fuzzer learned to use fo:font-size="842pt" which generate timeouts trying
         // to export thousands of pages from minimal input size
         uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
-            { "PageRange", uno::Any(u"1-100"_ustr) }
+            { "PageRange", cpo::uno::Any(u"1-100"_ustr) }
         }));
         uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
-            { "FilterName", uno::Any(u"writer_pdf_Export"_ustr) },
-            { "OutputStream", uno::Any(xOutputStream) },
-            { "FilterData", uno::Any(aFilterData) }
+            { "FilterName", cpo::uno::Any(u"writer_pdf_Export"_ustr) },
+            { "OutputStream", cpo::uno::Any(xOutputStream) },
+            { "FilterData", cpo::uno::Any(aFilterData) }
         }));
         xPDFFilter->filter(aDescriptor);
     }
@@ -2013,8 +2014,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportDOCX(SvStream &rStream)
     uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
-        { "InputStream", uno::Any(xStream) },
-        { "InputMode", uno::Any(true) },
+        { "InputStream", cpo::uno::Any(xStream) },
+        { "InputMode", cpo::uno::Any(true) },
     }));
     xImporter->setTargetDocument(xModel);
 

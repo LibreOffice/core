@@ -178,8 +178,8 @@ public:
     virtual void        SetPar1(const OUString& rStr) override;
 
     SW_DLLPUBLIC virtual OUString GetPar2() const override;
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhichId ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhichId ) override;
 
     void                ConvertProgrammaticToUIName();
 

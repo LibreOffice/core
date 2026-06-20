@@ -49,12 +49,12 @@ public:
         return m_bHasElements;
     }
 
-    virtual css::uno::Any SAL_CALL nextElement() override
+    virtual cpo::uno::Any SAL_CALL nextElement() override
     {
         if (m_bHasElements)
         {
             m_bHasElements = false;
-            return css::uno::Any(m_sText);
+            return cpo::uno::Any(m_sText);
         }
 
         throw css::container::NoSuchElementException();
@@ -129,7 +129,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL SIDEModel::getCurrentSelect
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_basic_BasicID_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     SolarMutexGuard aGuard;
     basctl::EnsureIde();

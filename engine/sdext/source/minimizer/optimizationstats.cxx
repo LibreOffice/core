@@ -30,6 +30,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
@@ -40,15 +41,15 @@ OptimizationStats::OptimizationStats()
 }
 
 
-void OptimizationStats::SetStatusValue( const PPPOptimizerTokenEnum eStat, const uno::Any& rStatValue )
+void OptimizationStats::SetStatusValue( const PPPOptimizerTokenEnum eStat, const cpo::uno::Any& rStatValue )
 {
     maStats[ eStat ] = rStatValue;
 }
 
 
-const uno::Any* OptimizationStats::GetStatusValue( const PPPOptimizerTokenEnum eStat ) const
+const cpo::uno::Any* OptimizationStats::GetStatusValue( const PPPOptimizerTokenEnum eStat ) const
 {
-    std::map< PPPOptimizerTokenEnum, uno::Any >::const_iterator aIter( maStats.find( eStat ) );
+    std::map< PPPOptimizerTokenEnum, cpo::uno::Any >::const_iterator aIter( maStats.find( eStat ) );
     return aIter != maStats.end() ? &((*aIter).second) : nullptr;
 }
 

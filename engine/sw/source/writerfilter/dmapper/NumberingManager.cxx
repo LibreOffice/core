@@ -260,11 +260,11 @@ uno::Sequence<beans::PropertyValue> ListLevel::GetLevelProperties(bool bDefaults
             aNumberingProperties.emplace_back( getPropertyName(aProp->first), 0, aProp->second, beans::PropertyState_DIRECT_VALUE );
         else if (rReadId == PROP_FIRST_LINE_INDENT && bDefaults)
             // Writer default is -360 twips, Word default seems to be 0.
-            aNumberingProperties.emplace_back("FirstLineIndent", 0, uno::Any(static_cast<sal_Int32>(0)), beans::PropertyState_DIRECT_VALUE);
+            aNumberingProperties.emplace_back("FirstLineIndent", 0, cpo::uno::Any(static_cast<sal_Int32>(0)), beans::PropertyState_DIRECT_VALUE);
         else if (rReadId == PROP_INDENT_AT && bDefaults)
             // Writer default is 720 twips, Word default seems to be 0.
             aNumberingProperties.emplace_back("IndentAt", 0,
-                                              uno::Any(static_cast<sal_Int32>(0)),
+                                              cpo::uno::Any(static_cast<sal_Int32>(0)),
                                               beans::PropertyState_DIRECT_VALUE);
     }
 
@@ -566,7 +566,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
         rtl::Reference<SwXBaseStyle> xStyle = xStyles->getStyleByName(GetStyleName());
 
         // Get the default OOo Numbering style rules
-        uno::Any aRules = xStyle->getPropertyValue( getPropertyName( PROP_NUMBERING_RULES ) );
+        cpo::uno::Any aRules = xStyle->getPropertyValue( getPropertyName( PROP_NUMBERING_RULES ) );
         aRules >>= m_xNumRules;
         if (!bUpdate)
         {
@@ -622,7 +622,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
             aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_POSITION_AND_SPACE_MODE), sal_Int16(text::PositionAndSpaceMode::LABEL_ALIGNMENT)));
 
             // Replace the numbering rules for the level
-            m_xNumRules->replaceByIndex(nLevel, uno::Any(comphelper::containerToSequence(aLvlProps)));
+            m_xNumRules->replaceByIndex(nLevel, cpo::uno::Any(comphelper::containerToSequence(aLvlProps)));
 
             // Handle the outline level here
             if (GetId() == nOutline && pAbsLevel && pAbsLevel->GetParaStyle())
@@ -634,7 +634,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                 pParaStyle->m_bAssignedAsChapterNumbering = true;
                 aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HEADING_STYLE_NAME), pParaStyle->m_sConvertedStyleName));
 
-                xOutlineRules->replaceByIndex(nLevel, uno::Any(comphelper::containerToSequence(aLvlProps)));
+                xOutlineRules->replaceByIndex(nLevel, cpo::uno::Any(comphelper::containerToSequence(aLvlProps)));
             }
 
             nLevel++;
@@ -642,7 +642,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
 
         // Create the numbering style for these rules
         const OUString sNumRulesName = getPropertyName( PROP_NUMBERING_RULES );
-        xStyle->setPropertyValue( sNumRulesName, uno::Any( m_xNumRules ) );
+        xStyle->setPropertyValue( sNumRulesName, cpo::uno::Any( m_xNumRules ) );
     }
     catch( const lang::IllegalArgumentException& )
     {
@@ -776,17 +776,17 @@ void ListsManager::lcl_attribute( Id nName, const Value& rVal )
         case NS_ooxml::LN_CT_Ind_left:
             if ( pCurrentLvl )
                 pCurrentLvl->Insert(
-                    PROP_INDENT_AT, uno::Any( ConversionHelper::convertTwipToMm100_Limited( nIntValue ) ));
+                    PROP_INDENT_AT, cpo::uno::Any( ConversionHelper::convertTwipToMm100_Limited( nIntValue ) ));
             break;
         case NS_ooxml::LN_CT_Ind_hanging:
             if ( pCurrentLvl )
                 pCurrentLvl->Insert(
-                    PROP_FIRST_LINE_INDENT, uno::Any( - ConversionHelper::convertTwipToMm100_Limited( nIntValue ) ));
+                    PROP_FIRST_LINE_INDENT, cpo::uno::Any( - ConversionHelper::convertTwipToMm100_Limited( nIntValue ) ));
         break;
         case NS_ooxml::LN_CT_Ind_firstLine:
             if ( pCurrentLvl )
                 pCurrentLvl->Insert(
-                    PROP_FIRST_LINE_INDENT, uno::Any( ConversionHelper::convertTwipToMm100_Limited( nIntValue ) ));
+                    PROP_FIRST_LINE_INDENT, cpo::uno::Any( ConversionHelper::convertTwipToMm100_Limited( nIntValue ) ));
         break;
         case NS_ooxml::LN_CT_Lvl_tplc: //template code - unsupported
         case NS_ooxml::LN_CT_Lvl_tentative: //marks level as unused in the document - unsupported
@@ -898,7 +898,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                 uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
                 try
                 {
-                    uno::Any aAny = xPropertySet->getPropertyValue(u"Graphic"_ustr);
+                    cpo::uno::Any aAny = xPropertySet->getPropertyValue(u"Graphic"_ustr);
                     if (aAny.has<uno::Reference<graphic::XGraphic>>() && pCurrentLevel)
                     {
                         auto xGraphic = aAny.get<uno::Reference<graphic::XGraphic>>();
@@ -1042,7 +1042,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                 if (ListLevel::Pointer pLevel = m_pCurrentDefinition->GetCurrentLevel())
                 {
                     pLevel->Insert(
-                        PROP_ADJUST, uno::Any( nValue ) );
+                        PROP_ADJUST, cpo::uno::Any( nValue ) );
                 }
             }
         }

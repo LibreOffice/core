@@ -23,7 +23,7 @@
 #include "sal/config.h"
 
 #include "com/sun/star/lang/XTypeProvider.hpp"
-#include "com/sun/star/uno/Any.h"
+#include "cpo/uno/Any.h"
 #include "com/sun/star/uno/Reference.h"
 #include "com/sun/star/uno/Sequence.h"
 #include "com/sun/star/uno/Type.h"
@@ -74,7 +74,7 @@ public:
     PartialWeakComponentImplHelper(osl::Mutex & mutex) SAL_NOEXCEPT:
         WeakComponentImplHelperBase(mutex) {}
 
-    css::uno::Any SAL_CALL queryInterface(css::uno::Type const & aType) SAL_OVERRIDE
+    cpo::uno::Any SAL_CALL queryInterface(css::uno::Type const & aType) SAL_OVERRIDE
     { return WeakComponentImplHelper_query(aType, cd::get(), this, this); }
 
     void SAL_CALL acquire() SAL_NOEXCEPT SAL_OVERRIDE

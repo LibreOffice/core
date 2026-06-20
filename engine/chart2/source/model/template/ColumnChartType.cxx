@@ -108,7 +108,7 @@ uno::Sequence< OUString > ColumnChartType::getSupportedPropertyRoles()
 }
 
 // ____ OPropertySet ____
-void ColumnChartType::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
+void ColumnChartType::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const
 {
     static const ::chart::tPropertyValueMap aStaticDefaults = []()
         {
@@ -160,7 +160,7 @@ css::uno::Sequence< OUString > SAL_CALL ColumnChartType::getSupportedServiceName
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart_ColumnChartType_get_implementation(css::uno::XComponentContext * /*context*/,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::ColumnChartType());
 }

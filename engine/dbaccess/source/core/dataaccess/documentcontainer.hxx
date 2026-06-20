@@ -73,18 +73,18 @@ public:
 
     // css::lang::XMultiServiceFactory
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments ) override;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const css::uno::Sequence< cpo::uno::Any >& Arguments ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
 
     // XCommandProcessor
-    virtual css::uno::Any SAL_CALL execute( const css::ucb::Command& aCommand, sal_Int32 CommandId, const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override ;
+    virtual cpo::uno::Any SAL_CALL execute( const css::ucb::Command& aCommand, sal_Int32 CommandId, const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override ;
 
     // XHierarchicalNameAccess
-    virtual css::uno::Any SAL_CALL getByHierarchicalName( const OUString& _sName ) override;
+    virtual cpo::uno::Any SAL_CALL getByHierarchicalName( const OUString& _sName ) override;
     virtual bool SAL_CALL hasByHierarchicalName( const OUString& _sName ) override;
 
     // XHierarchicalNameContainer
-    virtual void SAL_CALL insertByHierarchicalName( const OUString& aName, const css::uno::Any& aElement ) override;
+    virtual void SAL_CALL insertByHierarchicalName( const OUString& aName, const cpo::uno::Any& aElement ) override;
     virtual void SAL_CALL removeByHierarchicalName( const OUString& Name ) override;
 
     // XHierarchicalName
@@ -95,7 +95,7 @@ public:
     virtual void SAL_CALL removeByName( const OUString& _rName ) override;
 
     // XHierarchicalNameReplace
-    virtual void SAL_CALL replaceByHierarchicalName( const OUString& aName, const css::uno::Any& aElement ) override;
+    virtual void SAL_CALL replaceByHierarchicalName( const OUString& aName, const cpo::uno::Any& aElement ) override;
 
     // css::beans::XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
@@ -126,7 +126,7 @@ protected:
         const OUString& _rName
     ) override;
 
-    virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, css::uno::Any& _rDefault ) const override;
+    virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, cpo::uno::Any& _rDefault ) const override;
 
     // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;

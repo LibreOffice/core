@@ -6153,7 +6153,7 @@ void AttributeOutputBase::CharBackgroundBase( const SvxBrushItem& rBrush )
     if( pItem )
     {
         const SfxGrabBagItem aGrabBag = static_cast< const SfxGrabBagItem& >(*pItem);
-        const std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
+        const std::map<OUString, cpo::uno::Any>& rMap = aGrabBag.GetGrabBag();
         auto aIterator = rMap.find(u"CharShadingMarker"_ustr);
         if( aIterator != rMap.end() )
         {

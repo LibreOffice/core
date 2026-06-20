@@ -26,7 +26,7 @@
 #include <utility>
 
 #include "com/sun/star/lang/XTypeProvider.hpp"
-#include "com/sun/star/uno/Any.h"
+#include "cpo/uno/Any.h"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/Type.h"
 #include "cppuhelper/implbase_ex.hxx"
@@ -105,7 +105,7 @@ public:
     WeakImplHelper & operator =(WeakImplHelper const &) = default;
     WeakImplHelper & operator =(WeakImplHelper &&) = default;
 
-    css::uno::Any SAL_CALL queryInterface(css::uno::Type const & aType) override
+    cpo::uno::Any SAL_CALL queryInterface(css::uno::Type const & aType) override
     { return WeakImplHelper_query(aType, cd::get(), this, this); }
 
     void SAL_CALL acquire() SAL_NOEXCEPT override { OWeakObject::acquire(); }
@@ -158,9 +158,9 @@ public:
     ImplInheritanceHelper & operator =(ImplInheritanceHelper const &) = default;
     ImplInheritanceHelper & operator =(ImplInheritanceHelper &&) = default;
 
-    css::uno::Any SAL_CALL queryInterface(css::uno::Type const & aType) override
+    cpo::uno::Any SAL_CALL queryInterface(css::uno::Type const & aType) override
     {
-        css::uno::Any ret(ImplHelper_queryNoXInterface(aType, cd::get(), this));
+        cpo::uno::Any ret(ImplHelper_queryNoXInterface(aType, cd::get(), this));
         return ret.hasValue() ? ret : BaseClass::queryInterface(aType);
     }
 

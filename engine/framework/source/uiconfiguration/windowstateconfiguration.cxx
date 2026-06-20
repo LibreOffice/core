@@ -52,6 +52,7 @@
 #include <vector>
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
@@ -111,7 +112,7 @@ class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper< XNameCon
         virtual                   ~ConfigurationAccess_WindowState() override;
 
         // XNameAccess
-        virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+        virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
 
         virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
 
@@ -120,10 +121,10 @@ class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper< XNameCon
         // XNameContainer
         virtual void SAL_CALL removeByName( const OUString& sName ) override;
 
-        virtual void SAL_CALL insertByName( const OUString& sName, const css::uno::Any&   aPropertySet ) override;
+        virtual void SAL_CALL insertByName( const OUString& sName, const cpo::uno::Any&   aPropertySet ) override;
 
         // XNameReplace
-        virtual void SAL_CALL replaceByName( const OUString& sName, const css::uno::Any& aPropertySet ) override;
+        virtual void SAL_CALL replaceByName( const OUString& sName, const cpo::uno::Any& aPropertySet ) override;
 
         // XElementAccess
         virtual css::uno::Type SAL_CALL getElementType() override;
@@ -349,7 +350,7 @@ void SAL_CALL ConfigurationAccess_WindowState::removeByName( const OUString& rRe
     }
 }
 
-void SAL_CALL ConfigurationAccess_WindowState::insertByName( const OUString& rResourceURL, const css::uno::Any& aPropertySet )
+void SAL_CALL ConfigurationAccess_WindowState::insertByName( const OUString& rResourceURL, const cpo::uno::Any& aPropertySet )
 {
     // SAFE
     std::unique_lock g(m_aMutex);
@@ -407,7 +408,7 @@ void SAL_CALL ConfigurationAccess_WindowState::insertByName( const OUString& rRe
 }
 
 // XNameReplace
-void SAL_CALL ConfigurationAccess_WindowState::replaceByName( const OUString& rResourceURL, const css::uno::Any& aPropertySet )
+void SAL_CALL ConfigurationAccess_WindowState::replaceByName( const OUString& rResourceURL, const cpo::uno::Any& aPropertySet )
 {
     // SAFE
     std::unique_lock g(m_aMutex);
@@ -1250,7 +1251,7 @@ public:
     }
 
     // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
 
@@ -1384,7 +1385,7 @@ bool SAL_CALL WindowStateConfiguration::hasElements()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_WindowStateConfiguration_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new WindowStateConfiguration(context));
 }

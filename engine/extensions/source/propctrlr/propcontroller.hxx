@@ -130,8 +130,8 @@ namespace pcr
         virtual void SAL_CALL attachFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) override;
         virtual bool SAL_CALL attachModel( const css::uno::Reference< css::frame::XModel >& xModel ) override;
         virtual bool SAL_CALL suspend( bool bSuspend ) override;
-        virtual css::uno::Any SAL_CALL getViewData(  ) override;
-        virtual void SAL_CALL restoreViewData( const css::uno::Any& Data ) override;
+        virtual cpo::uno::Any SAL_CALL getViewData(  ) override;
+        virtual void SAL_CALL restoreViewData( const cpo::uno::Any& Data ) override;
         virtual css::uno::Reference< css::frame::XModel > SAL_CALL getModel(  ) override;
         virtual css::uno::Reference< css::frame::XFrame > SAL_CALL getFrame(  ) override;
 
@@ -168,7 +168,7 @@ namespace pcr
 
         // IPropertyLineListener
         virtual void    Clicked(    const OUString& _rName, bool _bPrimary ) override;
-        virtual void    Commit(     const OUString& _rName, const css::uno::Any& _rVal ) override;
+        virtual void    Commit(     const OUString& _rName, const cpo::uno::Any& _rVal ) override;
 
         // IPropertyControlObserver
         virtual void    focusGained( const css::uno::Reference< css::inspection::XPropertyControl >& Control ) override;
@@ -200,7 +200,7 @@ namespace pcr
         virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& Requests ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     private:
         void UpdateUI();
@@ -231,7 +231,7 @@ namespace pcr
                 if set to <FALSE/>, this is a real change in the property value, not just a call
                 for purposes of initialization.
         */
-        void    impl_broadcastPropertyChange_nothrow( const OUString& _rPropertyName, const css::uno::Any& _rNewValue, const css::uno::Any& _rOldValue, bool _bFirstTimeInit ) const;
+        void    impl_broadcastPropertyChange_nothrow( const OUString& _rPropertyName, const cpo::uno::Any& _rNewValue, const cpo::uno::Any& _rOldValue, bool _bFirstTimeInit ) const;
 
         /** determines whether the given property is an actuating property, that is, at least one
             handler expressed interest in changes to this property's value.
@@ -250,7 +250,7 @@ namespace pcr
             @return
                 the value of this property
         */
-        css::uno::Any
+        cpo::uno::Any
                         impl_getPropertyValue_throw( const OUString& _rPropertyName );
 
         /// calls XPropertyHandler::suspend for all our property handlers

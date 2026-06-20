@@ -64,7 +64,7 @@ public:
     virtual ~ViewShellWrapper() override;
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
 
     /** This method is typically used
         to obtain a pointer to the wrapped ViewShell object for a given
@@ -81,8 +81,8 @@ public:
 
     // XSelectionSupplier
 
-    virtual bool SAL_CALL select( const css::uno::Any& aSelection ) override;
-    virtual css::uno::Any SAL_CALL getSelection() override;
+    virtual bool SAL_CALL select( const cpo::uno::Any& aSelection ) override;
+    virtual cpo::uno::Any SAL_CALL getSelection() override;
     virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
     virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 

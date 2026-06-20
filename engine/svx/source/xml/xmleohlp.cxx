@@ -57,6 +57,7 @@ using namespace ::utl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
@@ -337,7 +338,7 @@ void SvXMLEmbeddedObjectHelper::ImplReadObject(
                 {
                     xProps->setPropertyValue(
                         u"MediaType"_ustr,
-                        uno::Any( u"application/vnd.sun.star.oleobject"_ustr ) );
+                        cpo::uno::Any( u"application/vnd.sun.star.oleobject"_ustr ) );
 
 
                     xStm->getOutputStream()->closeOutput();
@@ -519,7 +520,7 @@ OUString SAL_CALL SvXMLEmbeddedObjectHelper::resolveEmbeddedObjectURL(const OUSt
     }
     catch (const Exception&)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw WrappedTargetRuntimeException(
             u"SvXMLEmbeddedObjectHelper::resolveEmbeddedObjectURL non-RuntimeException"_ustr,
             getXWeak(), anyEx);

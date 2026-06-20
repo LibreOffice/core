@@ -118,7 +118,7 @@ void SwUserField::SetSubType(SwUserType nSub)
     m_nSubType = nSub & SwUserType::UpperMask;
 }
 
-bool SwUserField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwUserField::QueryValue( cpo::uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -137,7 +137,7 @@ bool SwUserField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     return true;
 }
 
-bool SwUserField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwUserField::PutValue( const cpo::uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -351,7 +351,7 @@ void SwUserFieldType::SetContent( const OUString& rStr, sal_uInt32 nFormat )
     }
 }
 
-void SwUserFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+void SwUserFieldType::QueryValue( cpo::uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -369,7 +369,7 @@ void SwUserFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     }
 }
 
-void SwUserFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+void SwUserFieldType::PutValue( const cpo::uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {

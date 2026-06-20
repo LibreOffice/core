@@ -18,7 +18,7 @@
  */
 
 #include <XMLClipPropertyHandler.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/text/GraphicCrop.hpp>
@@ -27,6 +27,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 
@@ -57,7 +58,7 @@ bool XMLClipPropertyHandler::equals(
            aCrop1.Right == aCrop2.Right;
 }
 
-bool XMLClipPropertyHandler::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLClipPropertyHandler::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     bool bRet = false;
     sal_Int32 nLen = rStrImpValue.getLength();
@@ -106,7 +107,7 @@ bool XMLClipPropertyHandler::importXML( const OUString& rStrImpValue, uno::Any& 
     return bRet;
 }
 
-bool XMLClipPropertyHandler::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLClipPropertyHandler::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     bool bRet = false;
     OUStringBuffer aOut(30);

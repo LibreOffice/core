@@ -57,6 +57,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::xmloff::token;
 
 namespace {
@@ -334,7 +335,7 @@ SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
 
         try
         {
-            xPropSet->setPropertyValue(UNO_NAME_PARA_STYLE_CONDITIONS, uno::Any(aSeq));
+            xPropSet->setPropertyValue(UNO_NAME_PARA_STYLE_CONDITIONS, cpo::uno::Any(aSeq));
         }
         catch (uno::Exception const&)
         {

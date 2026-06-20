@@ -18,14 +18,14 @@
  */
 
 #include <xmloff/xmlprhdl.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 XMLPropertyHandler::~XMLPropertyHandler()
 {
     // does nothing
 }
 
-bool XMLPropertyHandler::equals(const css::uno::Any& r1, const css::uno::Any& r2) const
+bool XMLPropertyHandler::equals(const cpo::uno::Any& r1, const cpo::uno::Any& r2) const
 {
     return (r1 == r2);
 }

@@ -169,7 +169,7 @@ bool impl_openStreamWithURL(comphelper::SequenceAsHashMap& rMediaDescriptor, con
         }
         catch (const css::uno::Exception&)
         {
-            css::uno::Any ex(cppu::getCaughtException());
+            cpo::uno::Any ex(cppu::getCaughtException());
             // ignore exception, if reason was problem reasoned on
             // open it in WRITABLE mode! Then we try it READONLY
             // later a second time.
@@ -327,7 +327,7 @@ bool impl_openStreamWithPostData(comphelper::SequenceAsHashMap& rMediaDescriptor
         aPostArgument.Referer
             = rMediaDescriptor.getUnpackedValueOrDefault(PROP_REFERRER, OUString());
 
-        aContent.executeCommand(u"post"_ustr, css::uno::Any(aPostArgument));
+        aContent.executeCommand(u"post"_ustr, cpo::uno::Any(aPostArgument));
 
         // get result
         xResultStream = xSink->getInputStream();
@@ -377,7 +377,7 @@ bool impl_addInputStream(comphelper::SequenceAsHashMap& rMediaDescriptor, bool b
         pIt = rMediaDescriptor.find(PROP_POSTDATA);
         if (pIt != rMediaDescriptor.end())
         {
-            const css::uno::Any& rPostData = pIt->second;
+            const cpo::uno::Any& rPostData = pIt->second;
             css::uno::Reference<css::io::XInputStream> xPostData;
             rPostData >>= xPostData;
 
@@ -456,22 +456,22 @@ bool isStreamReadOnly(const comphelper::SequenceAsHashMap& rMediaDescriptor)
     return bReadOnly;
 }
 
-css::uno::Any getComponentDataEntry(const comphelper::SequenceAsHashMap& rMediaDescriptor,
+cpo::uno::Any getComponentDataEntry(const comphelper::SequenceAsHashMap& rMediaDescriptor,
                                                      const OUString& rName)
 {
     auto aPropertyIter = rMediaDescriptor.find(PROP_COMPONENTDATA);
     if( aPropertyIter != rMediaDescriptor.end() )
         return comphelper::NamedValueCollection( aPropertyIter->second ).get( rName );
-    return css::uno::Any();
+    return cpo::uno::Any();
 }
 
 void setComponentDataEntry(comphelper::SequenceAsHashMap& rMediaDescriptor,
-                                            const OUString& rName, const css::uno::Any& rValue)
+                                            const OUString& rName, const cpo::uno::Any& rValue)
 {
     if( rValue.hasValue() )
     {
         // get or create the 'ComponentData' property entry
-        css::uno::Any& rCompDataAny = rMediaDescriptor[PROP_COMPONENTDATA];
+        cpo::uno::Any& rCompDataAny = rMediaDescriptor[PROP_COMPONENTDATA];
         // insert the value (retain sequence type, create NamedValue elements by default)
         bool bHasNamedValues = !rCompDataAny.hasValue() || rCompDataAny.has< css::uno::Sequence< css::beans::NamedValue > >();
         bool bHasPropValues = rCompDataAny.has< css::uno::Sequence< css::beans::PropertyValue > >();
@@ -499,7 +499,7 @@ void clearComponentDataEntry(comphelper::SequenceAsHashMap& rMediaDescriptor,
     if( aPropertyIter == rMediaDescriptor.end() )
         return;
 
-    css::uno::Any& rCompDataAny = aPropertyIter->second;
+    cpo::uno::Any& rCompDataAny = aPropertyIter->second;
     bool bHasNamedValues = rCompDataAny.has< css::uno::Sequence< css::beans::NamedValue > >();
     bool bHasPropValues = rCompDataAny.has< css::uno::Sequence< css::beans::PropertyValue > >();
     OSL_ENSURE( bHasNamedValues || bHasPropValues, "MediaDescriptor::clearComponentDataEntry - incompatible 'ComponentData' property in media descriptor" );

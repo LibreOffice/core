@@ -99,8 +99,8 @@ public:
     // XPropertySet
     uno::Reference<beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
     void SAL_CALL setPropertyValue(const OUString& rPropertyName,
-            const uno::Any& rValue) override;
-    uno::Any SAL_CALL getPropertyValue(const OUString& rPropertyName) override;
+            const cpo::uno::Any& rValue) override;
+    cpo::uno::Any SAL_CALL getPropertyValue(const OUString& rPropertyName) override;
     void SAL_CALL addPropertyChangeListener(
         const OUString& rPropertyName,
         const uno::Reference<beans::XPropertyChangeListener>& xListener) override;
@@ -119,7 +119,7 @@ public:
     uno::Sequence<beans::PropertyState>
         SAL_CALL getPropertyStates(const uno::Sequence<OUString>& aPropertyName) override;
     void SAL_CALL setPropertyToDefault(const OUString& PropertyName) override;
-    uno::Any SAL_CALL getPropertyDefault(const OUString& aPropertyName) override;
+    cpo::uno::Any SAL_CALL getPropertyDefault(const OUString& aPropertyName) override;
 };
 
 SwXRedlineAutoStyle::SwXRedlineAutoStyle(const std::shared_ptr<SfxItemSet>& pItemSet)
@@ -139,7 +139,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL SwXRedlineAutoStyle::getPropert
 }
 
 void SAL_CALL SwXRedlineAutoStyle::setPropertyValue(const OUString& rPropertyName,
-        const uno::Any& rValue)
+        const cpo::uno::Any& rValue)
 {
     SolarMutexGuard aGuard;
 
@@ -147,7 +147,7 @@ void SAL_CALL SwXRedlineAutoStyle::setPropertyValue(const OUString& rPropertyNam
     pPropertySet->setPropertyValue(rPropertyName, rValue, *m_pItemSet);
 }
 
-uno::Any SAL_CALL SwXRedlineAutoStyle::getPropertyValue(const OUString& rPropertyName)
+cpo::uno::Any SAL_CALL SwXRedlineAutoStyle::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
 
@@ -219,10 +219,10 @@ void SwXRedlineAutoStyle::setPropertyToDefault(const OUString& /*rPropertyName*/
     SAL_WARN("sw.uno", "SwXRedlineAutoStyle::setPropertyToDefault: not implemented");
 }
 
-uno::Any SwXRedlineAutoStyle::getPropertyDefault(const OUString& /*rPropertyName*/)
+cpo::uno::Any SwXRedlineAutoStyle::getPropertyDefault(const OUString& /*rPropertyName*/)
 {
     SAL_WARN("sw.uno", "SwXRedlineAutoStyle::getPropertyDefault: not implemented");
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 /// If this format redline has old direct formatting, return it as an autostyle.
@@ -250,10 +250,10 @@ uno::Reference<beans::XPropertySet> GetRedlineAutoFormat(const SwRangeRedline& r
     return xAutoStyle;
 }
 
-std::optional<uno::Any> GetRedlinePortionPropertyValue(std::u16string_view rPropertyName,
+std::optional<cpo::uno::Any> GetRedlinePortionPropertyValue(std::u16string_view rPropertyName,
                                                        const SwRangeRedline& rRedline)
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if (rPropertyName == UNO_NAME_REDLINE_AUTHOR)
     {
         aRet <<= rRedline.GetAuthorString();
@@ -318,9 +318,9 @@ const SwStartNode* SwXRedlineText::GetStartNode() const
     return m_aNodeIndex.GetNode().GetStartNode();
 }
 
-uno::Any SwXRedlineText::queryInterface( const uno::Type& rType )
+cpo::uno::Any SwXRedlineText::queryInterface( const uno::Type& rType )
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
 
     if (cppu::UnoType<container::XEnumerationAccess>::get()== rType)
     {
@@ -432,14 +432,14 @@ SwXRedlinePortion::~SwXRedlinePortion()
 {
 }
 
-uno::Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
+cpo::uno::Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
 {
     SolarMutexGuard aGuard;
     if (!Validate())
     {
-        return uno::Any();
+        return cpo::uno::Any();
     }
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if(rPropertyName == UNO_NAME_REDLINE_TEXT)
     {
         const SwNodeIndex* pNodeIdx = m_rRedline.GetContentIdx();
@@ -560,7 +560,7 @@ uno::Reference< beans::XPropertySetInfo > SwXRedline::getPropertySetInfo(  )
     return xRef;
 }
 
-void SwXRedline::setPropertyValue( const OUString& rPropertyName, const uno::Any& aValue )
+void SwXRedline::setPropertyValue( const OUString& rPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
     if (!GetDoc())
@@ -599,12 +599,12 @@ void SwXRedline::setPropertyValue( const OUString& rPropertyName, const uno::Any
     }
 }
 
-uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
+cpo::uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
 {
     SolarMutexGuard aGuard;
     if (!GetDoc())
         throw uno::RuntimeException();
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     bool bStart = rPropertyName == UNO_NAME_REDLINE_START;
     if(bStart ||
         rPropertyName == UNO_NAME_REDLINE_END)
@@ -762,9 +762,9 @@ rtl::Reference< SwXTextCursor > SwXRedline::createXTextCursorByRange(
     throw uno::RuntimeException();
 }
 
-uno::Any SwXRedline::queryInterface( const uno::Type& rType )
+cpo::uno::Any SwXRedline::queryInterface( const uno::Type& rType )
 {
-    uno::Any aRet = SwXText::queryInterface(rType);
+    cpo::uno::Any aRet = SwXText::queryInterface(rType);
     if(!aRet.hasValue())
     {
         aRet = SwXRedlineBaseClass::queryInterface(rType);

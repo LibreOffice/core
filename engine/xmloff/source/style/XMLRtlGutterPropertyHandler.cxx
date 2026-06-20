@@ -21,7 +21,7 @@
 #include <frozen/bits/defines.h>
 #include <frozen/bits/elsa_std.h>
 #include <frozen/unordered_set.h>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <xmloff/xmluconv.hxx>
 
 using namespace com::sun::star;
@@ -37,7 +37,7 @@ constexpr auto constRtlModes
 
 } // end anonymous ns
 
-bool XMLRtlGutterPropertyHandler::importXML(const OUString& rStrImpValue, uno::Any& rValue,
+bool XMLRtlGutterPropertyHandler::importXML(const OUString& rStrImpValue, cpo::uno::Any& rValue,
                                             const SvXMLUnitConverter&) const
 {
     // Infer RtlGutter from WritingMode.
@@ -46,7 +46,7 @@ bool XMLRtlGutterPropertyHandler::importXML(const OUString& rStrImpValue, uno::A
     return true;
 }
 
-bool XMLRtlGutterPropertyHandler::exportXML(OUString&, const uno::Any&,
+bool XMLRtlGutterPropertyHandler::exportXML(OUString&, const cpo::uno::Any&,
                                             const SvXMLUnitConverter&) const
 {
     // No need to export RtlGutter.

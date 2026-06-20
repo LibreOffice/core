@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/util/XNumberFormatter.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <unordered_map>
 #include <memory>
 
@@ -34,7 +34,7 @@ public:
     CellValueConversion();
     ~CellValueConversion();
 
-    OUString convertToString(const css::uno::Any& i_cellValue);
+    OUString convertToString(const cpo::uno::Any& i_cellValue);
 
 private:
     bool ensureNumberFormatter();

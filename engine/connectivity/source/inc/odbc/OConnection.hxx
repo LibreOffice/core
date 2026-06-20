@@ -105,7 +105,7 @@ namespace connectivity::odbc
         // XCloseable
         virtual void SAL_CALL close(  ) override;
         // XWarningsSupplier
-        virtual css::uno::Any SAL_CALL getWarnings(  ) override;
+        virtual cpo::uno::Any SAL_CALL getWarnings(  ) override;
         virtual void SAL_CALL clearWarnings(  ) override;
 
         SQLHANDLE       getConnection() { return m_aConnectionHandle; }

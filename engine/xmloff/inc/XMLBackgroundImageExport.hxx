@@ -22,9 +22,7 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
-namespace com::sun::star::uno {
-    class Any;
-}
+namespace cpo::uno { class Any; }
 
 class SvXMLExport;
 
@@ -38,10 +36,10 @@ public:
 
     XMLBackgroundImageExport( SvXMLExport& rExport );
 
-    void exportXML( const css::uno::Any& rURL,
-                    const css::uno::Any *pPos,
-                    const css::uno::Any *pFilter,
-                    const css::uno::Any *pTransparency,
+    void exportXML( const cpo::uno::Any& rURL,
+                    const cpo::uno::Any *pPos,
+                    const cpo::uno::Any *pFilter,
+                    const cpo::uno::Any *pTransparency,
                     sal_uInt16 nPrefix,
                     const OUString& rLocalName );
 };

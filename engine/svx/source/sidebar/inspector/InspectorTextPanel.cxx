@@ -66,7 +66,7 @@ InspectorTextPanel::InspectorTextPanel(weld::Widget* pParent, SfxBindings* pBind
     pBindings->Update(SID_SPOTLIGHT_CHAR_DF);
 }
 
-static bool GetPropertyValues(std::u16string_view rPropName, const uno::Any& rAny,
+static bool GetPropertyValues(std::u16string_view rPropName, const cpo::uno::Any& rAny,
                               OUString& rString)
 {
     if (bool bValue; rAny >>= bValue)

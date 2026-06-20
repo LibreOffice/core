@@ -23,7 +23,7 @@
 #include <xmloff/xmlement.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/style/BreakType.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -46,7 +46,7 @@ XMLFmtBreakBeforePropHdl::~XMLFmtBreakBeforePropHdl()
     // Nothing to do
 }
 
-bool XMLFmtBreakBeforePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLFmtBreakBeforePropHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_uInt16 nEnum;
     bool bRet = SvXMLUnitConverter::convertEnum( nEnum, rStrImpValue, pXML_BreakTypes );
@@ -71,7 +71,7 @@ bool XMLFmtBreakBeforePropHdl::importXML( const OUString& rStrImpValue, uno::Any
     return bRet;
 }
 
-bool XMLFmtBreakBeforePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLFmtBreakBeforePropHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     style::BreakType eBreak;
 
@@ -115,7 +115,7 @@ XMLFmtBreakAfterPropHdl::~XMLFmtBreakAfterPropHdl()
     // Nothing to do
 }
 
-bool XMLFmtBreakAfterPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLFmtBreakAfterPropHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_uInt16 nEnum;
     bool bRet = SvXMLUnitConverter::convertEnum( nEnum, rStrImpValue, pXML_BreakTypes );
@@ -140,7 +140,7 @@ bool XMLFmtBreakAfterPropHdl::importXML( const OUString& rStrImpValue, uno::Any&
     return bRet;
 }
 
-bool XMLFmtBreakAfterPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLFmtBreakAfterPropHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     style::BreakType eBreak;
 

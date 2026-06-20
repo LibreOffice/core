@@ -402,7 +402,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVba)
     osl::FileBase::getSystemPathFromFileURL(sTempDirURL, sTempDir);
     sTempDir += OUStringChar(SAL_PATHDELIMITER);
     OUString sTestFileName(u"My Test WorkBook.xls"_ustr);
-    uno::Sequence<uno::Any> aParams;
+    uno::Sequence<cpo::uno::Any> aParams;
     for (const auto& rTestInfo : testInfo)
     {
         OUString aFileName = loadFromFile(rTestInfo.sFileBaseName);
@@ -416,13 +416,13 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVba)
 
         if (bWorkbooksHandling)
         {
-            aParams = { uno::Any(sTempDir), uno::Any(sTestFileName) };
+            aParams = { cpo::uno::Any(sTempDir), cpo::uno::Any(sTestFileName) };
         }
 
         SAL_INFO("sc.qa", "about to invoke vba test in " << aFileName << " with url "
                                                          << rTestInfo.sMacroUrl);
 
-        uno::Any aRet = executeMacro(rTestInfo.sMacroUrl, aParams);
+        cpo::uno::Any aRet = executeMacro(rTestInfo.sMacroUrl, aParams);
         OUString aStringRes;
         aRet >>= aStringRes;
 
@@ -452,10 +452,11 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf149579)
     css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, uno::UNO_QUERY_THROW);
     auto xLibs = xDocScr->getBasicLibraries();
     auto xLibrary = xLibs->createLibrary(u"TestLibrary"_ustr);
-    xLibrary->insertByName(u"TestModule"_ustr, uno::Any(u"Option VBASupport 1\n"
-                                                        "Sub TestTdf149579\n"
-                                                        "Range(\"A1\").Sort Key1:=Range(\"A1\")\n"
-                                                        "End Sub\n"_ustr));
+    xLibrary->insertByName(u"TestModule"_ustr,
+                           cpo::uno::Any(u"Option VBASupport 1\n"
+                                         "Sub TestTdf149579\n"
+                                         "Range(\"A1\").Sort Key1:=Range(\"A1\")\n"
+                                         "End Sub\n"_ustr));
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
@@ -486,11 +487,11 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVbaRangeSort)
     auto xLibs = xDocScr->getBasicLibraries();
     auto xLibrary = xLibs->createLibrary(u"TestLibrary"_ustr);
     xLibrary->insertByName(u"TestModule"_ustr,
-                           uno::Any(u"Option VBASupport 1\n"
-                                    "Sub TestRangeSort\n"
-                                    "  Range(Cells(1, 1), Cells(3, 1)).Select\n"
-                                    "  Selection.Sort Key1:=Range(\"A1\"), Header:=False\n"
-                                    "End Sub\n"_ustr));
+                           cpo::uno::Any(u"Option VBASupport 1\n"
+                                         "Sub TestRangeSort\n"
+                                         "  Range(Cells(1, 1), Cells(3, 1)).Select\n"
+                                         "  Selection.Sort Key1:=Range(\"A1\"), Header:=False\n"
+                                         "End Sub\n"_ustr));
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
@@ -626,7 +627,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf90278)
 
     // Without the fix in place, changing the border weight
     // would cause a Basic exception/error in the following script.
-    uno::Any aRet = executeMacro(
+    cpo::uno::Any aRet = executeMacro(
         u"vnd.sun.Star.script:VBAProject.Module1.BorderWeight?language=Basic&location=document"_ustr);
 
     // Check the border weight of the corresponding cell in the test document
@@ -662,7 +663,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf118247)
 {
     loadFromFile(u"tdf118247.xlsm");
 
-    uno::Any aRet = executeMacro(
+    cpo::uno::Any aRet = executeMacro(
         u"vnd.sun.Star.script:VBAProject.Module1.testXlSpecialCellsValuesConstantsEmpty?"
         "language=Basic&location=document"_ustr);
 
@@ -678,7 +679,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf118247)
 
     for (auto & [ nXlSpecialCellsValue, sRange ] : aTestParams)
     {
-        uno::Sequence<uno::Any> aParams = { uno::Any(nXlSpecialCellsValue) };
+        uno::Sequence<cpo::uno::Any> aParams = { cpo::uno::Any(nXlSpecialCellsValue) };
         aRet = executeMacro(
             u"vnd.sun.Star.script:VBAProject.Module1.testXlSpecialCellsValuesConstants?"
             "language=Basic&location=document"_ustr,
@@ -697,7 +698,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf126457)
     utl::TempFileNamed aTempFile(u"testWindowsActivate", true, u".ods");
     aTempFile.EnableKillingFile();
     uno::Sequence<beans::PropertyValue> descSaveAs(
-        comphelper::InitPropertySequence({ { "FilterName", uno::Any(u"calc8"_ustr) } }));
+        comphelper::InitPropertySequence({ { "FilterName", cpo::uno::Any(u"calc8"_ustr) } }));
     xDocStorable->storeAsURL(aTempFile.GetURL(), descSaveAs);
 
     // Insert initial library
@@ -706,30 +707,30 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf126457)
     auto xLibrary = xLibs->createLibrary(u"TestLibrary"_ustr);
     xLibrary->insertByName(
         u"TestModule"_ustr,
-        uno::Any(u"Option VBASupport 1\n"
-                 "Function TestWindowsActivate\n"
-                 "  dirName = Workbooks(1).Path\n"
-                 "  workbookName = Workbooks(1).Name\n"
-                 "  fileName = dirName + Application.PathSeparator + workbookName\n"
-                 "  Workbooks.Open Filename := fileName\n"
-                 "  On Error Goto handler\n"
-                 // activate window using its URL
-                 "  Windows(fileName).Activate\n"
-                 // activate window using its caption name
-                 "  Windows(workbookName).Activate\n"
-                 // activate window using a newly generated window caption
-                 "  newCaption = \"New Window Caption\"\n"
-                 "  Windows(fileName).Caption = newCaption\n"
-                 "  Windows(newCaption).Activate\n"
-                 "  TestWindowsActivate = 0\n"
-                 "  Exit Function\n"
-                 "handler:\n"
-                 "  TestWindowsActivate = 1\n"
-                 "End Function\n"_ustr));
+        cpo::uno::Any(u"Option VBASupport 1\n"
+                      "Function TestWindowsActivate\n"
+                      "  dirName = Workbooks(1).Path\n"
+                      "  workbookName = Workbooks(1).Name\n"
+                      "  fileName = dirName + Application.PathSeparator + workbookName\n"
+                      "  Workbooks.Open Filename := fileName\n"
+                      "  On Error Goto handler\n"
+                      // activate window using its URL
+                      "  Windows(fileName).Activate\n"
+                      // activate window using its caption name
+                      "  Windows(workbookName).Activate\n"
+                      // activate window using a newly generated window caption
+                      "  newCaption = \"New Window Caption\"\n"
+                      "  Windows(fileName).Caption = newCaption\n"
+                      "  Windows(newCaption).Activate\n"
+                      "  TestWindowsActivate = 0\n"
+                      "  Exit Function\n"
+                      "handler:\n"
+                      "  TestWindowsActivate = 1\n"
+                      "End Function\n"_ustr));
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     uno::Sequence<sal_Int16> aOutParamIndex;
-    uno::Sequence<uno::Any> aOutParam;
+    uno::Sequence<cpo::uno::Any> aOutParam;
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
@@ -757,7 +758,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVbaPDFExport)
     utl::TempFileNamed aTempFile(u"testVBA_PDF_Export", true, u".ods");
     aTempFile.EnableKillingFile();
     uno::Sequence<beans::PropertyValue> descSaveAs(
-        comphelper::InitPropertySequence({ { "FilterName", uno::Any(u"calc8"_ustr) } }));
+        comphelper::InitPropertySequence({ { "FilterName", cpo::uno::Any(u"calc8"_ustr) } }));
     xDocStorable->storeAsURL(aTempFile.GetURL(), descSaveAs);
 
     utl::TempFileNamed aTempPdfFile(u"exportedfile", true, u".pdf");
@@ -774,7 +775,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVbaPDFExport)
                         "FileName:=fileName, Quality:=xlQualityStandard, "
                         "IncludeDocProperties:=True, OpenAfterPublish:=False\n"
                         "End Sub\n";
-    xLibrary->insertByName(u"TestModule"_ustr, uno::Any(sMacro));
+    xLibrary->insertByName(u"TestModule"_ustr, cpo::uno::Any(sMacro));
 
     executeMacro(u"vnd.sun.Star.script:TestLibrary.TestModule.ExportAsPDF?language=Basic&location="
                  "document"_ustr);
@@ -857,7 +858,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf167378)
               Cells(1, 1).Value = d
             End Sub
         )vba"_ustr;
-    xLibrary->insertByName(u"TestModule"_ustr, uno::Any(sMacro));
+    xLibrary->insertByName(u"TestModule"_ustr, cpo::uno::Any(sMacro));
 
     executeMacro(u"vnd.sun.Star.script:TestLibrary.TestModule.TestSetDate?language=Basic&location="
                  "document"_ustr);

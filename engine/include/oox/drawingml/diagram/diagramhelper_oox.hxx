@@ -98,8 +98,8 @@ public:
         const rtl::Reference< oox::shape::ShapeFilterBase>& rxFilter ) const;
 
     // access to get/set PropertyValues
-    void setOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag, const css::uno::Any& rValue);
-    virtual css::uno::Any getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const override;
+    void setOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag, const cpo::uno::Any& rValue);
+    virtual cpo::uno::Any getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const override;
 
     // check if mandatory DiagramDomS exist and/or were not touched
     virtual bool checkMinimalDataDoms() const override;

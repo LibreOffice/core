@@ -308,9 +308,9 @@ namespace canvastools
 
             @return A reference to the resulting sequence of parameters
         */
-        CANVASTOOLS_DLLPUBLIC css::uno::Sequence< css::uno::Any >& getDeviceInfo(
+        CANVASTOOLS_DLLPUBLIC css::uno::Sequence< cpo::uno::Any >& getDeviceInfo(
             const css::uno::Reference< css::rendering::XCanvas >& i_rxCanvas,
-            css::uno::Sequence< css::uno::Any >& o_rxParams );
+            css::uno::Sequence< cpo::uno::Any >& o_rxParams );
 
         /** Return a color space for a default RGBA integer format
 

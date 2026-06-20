@@ -28,10 +28,7 @@
 #include <tools/link.hxx>
 #include <memory>
 
-namespace com::sun::star::uno
-{
-    class Any;
-}
+namespace cpo::uno { class Any; }
 
 namespace com::sun::star::io { class XInputStream; }
 
@@ -138,7 +135,7 @@ public:
     };
 
     virtual UpdateResult DataChanged(
-        const OUString & rMimeType, const css::uno::Any & rValue );
+        const OUString & rMimeType, const cpo::uno::Any & rValue );
 
     void                 SetUpdateMode( SfxLinkUpdateMode );
     SfxLinkUpdateMode    GetUpdateMode() const;

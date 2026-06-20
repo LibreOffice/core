@@ -53,7 +53,7 @@ SfxTemplateItem* SfxTemplateItem::Clone( SfxItemPool *) const
     return new SfxTemplateItem(*this);
 }
 
-bool SfxTemplateItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SfxTemplateItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     css::frame::status::Template aTemplate;
 
@@ -66,7 +66,7 @@ bool SfxTemplateItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 }
 
 
-bool SfxTemplateItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SfxTemplateItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     css::frame::status::Template aTemplate;
 

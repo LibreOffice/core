@@ -35,6 +35,7 @@
 #include <memory>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 static std::optional<Sequence<Any>> lcl_docbasic_convertArgs( SbxArray& rArgs )
 {

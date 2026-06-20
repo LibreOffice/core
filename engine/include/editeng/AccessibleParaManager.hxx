@@ -127,8 +127,8 @@ public:
     void FireEvent( sal_Int32 nStartPara,
                     sal_Int32 nEndPara,
                     const sal_Int16 nEventId,
-                    const css::uno::Any& rNewValue = css::uno::Any(),
-                    const css::uno::Any& rOldValue = css::uno::Any() ) const;
+                    const cpo::uno::Any& rNewValue = cpo::uno::Any(),
+                    const cpo::uno::Any& rOldValue = cpo::uno::Any() ) const;
 
     /** Functor adapter for ForEach template
 

@@ -481,7 +481,7 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& Macro
 }
 
 // Treat the args as possible inputs (conversion at bottom of method)
-bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, uno::Sequence< uno::Any >& aArgs, uno::Any& aRet, const uno::Any& /*aCaller*/)
+bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, uno::Sequence< cpo::uno::Any >& aArgs, cpo::uno::Any& aRet, const cpo::uno::Any& /*aCaller*/)
 {
 #if !HAVE_FEATURE_SCRIPTING
     (void) pShell;
@@ -497,7 +497,7 @@ bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, uno::Sequ
     OUString sUrl = makeMacroURL( sMacroName );
 
     uno::Sequence< sal_Int16 > aOutArgsIndex;
-    uno::Sequence< uno::Any > aOutArgs;
+    uno::Sequence< cpo::uno::Any > aOutArgs;
 
     try
     {
@@ -553,7 +553,7 @@ uno::Sequence< OUString > SAL_CALL VBAMacroResolver::getSupportedServiceNames()
 
 // com.sun.star.lang.XInitialization interface --------------------------------
 
-void SAL_CALL VBAMacroResolver::initialize( const uno::Sequence< uno::Any >& rArgs )
+void SAL_CALL VBAMacroResolver::initialize( const uno::Sequence< cpo::uno::Any >& rArgs )
 {
     OSL_ENSURE( rArgs.getLength() > 1, "VBAMacroResolver::initialize - missing arguments" );
     if( rArgs.getLength() < 2 )
@@ -771,7 +771,7 @@ void applyShortCutKeyBinding ( const uno::Reference< frame::XModel >& rxModel, c
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_VBAMacroResolver_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ooo::vba::VBAMacroResolver());
 }

@@ -70,7 +70,6 @@ namespace com::sun::star {
         class XWindow;
     }
     namespace uno {
-        class Any;
         class XInterface;
     }
     namespace datatransfer {
@@ -85,6 +84,7 @@ namespace com::sun::star {
         }
     }
 }
+namespace cpo::uno { class Any; }
 
 VCL_DLLPUBLIC Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize);
 

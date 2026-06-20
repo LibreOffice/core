@@ -146,6 +146,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::document::CmisProperty;
 using ::com::sun::star::frame::XFrame;
@@ -2636,12 +2637,12 @@ void SAL_CALL SfxBaseModel::updateCmisProperties( const Sequence< document::Cmis
             Reference<ucb::XCommandEnvironment>(),
             comphelper::getProcessComponentContext() );
 
-        aContent.executeCommand( u"updateProperties"_ustr, uno::Any( aProperties ) );
+        aContent.executeCommand( u"updateProperties"_ustr, cpo::uno::Any( aProperties ) );
         loadCmisProperties( );
     }
     catch (const Exception & e)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException( e.Message,
                         e.Context, anyEx );
     }
@@ -2675,7 +2676,7 @@ void SAL_CALL SfxBaseModel::checkOut(  )
     }
     catch ( const Exception & e )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException( e.Message,
                         e.Context, anyEx );
     }
@@ -2701,7 +2702,7 @@ void SAL_CALL SfxBaseModel::cancelCheckOut(  )
     }
     catch ( const Exception & e )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException( e.Message,
                         e.Context, anyEx );
     }
@@ -2741,7 +2742,7 @@ void SAL_CALL SfxBaseModel::checkIn( bool bIsMajor, const OUString& rMessage )
     }
     catch ( const Exception & e )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException( e.Message,
                         e.Context, anyEx );
     }
@@ -2766,7 +2767,7 @@ uno::Sequence< document::CmisVersion > SAL_CALL SfxBaseModel::getAllVersions( )
         }
         catch ( const Exception & e )
         {
-            css::uno::Any anyEx = cppu::getCaughtException();
+            cpo::uno::Any anyEx = cppu::getCaughtException();
             throw lang::WrappedTargetRuntimeException( e.Message,
                             e.Context, anyEx );
         }
@@ -3632,7 +3633,7 @@ bool SfxBaseModel::hasValidSignatures() const
     return false;
 }
 
-void SfxBaseModel::getGrabBagItem(css::uno::Any& rVal) const
+void SfxBaseModel::getGrabBagItem(cpo::uno::Any& rVal) const
 {
     if (m_pData->m_xGrabBagItem)
         m_pData->m_xGrabBagItem->QueryValue(rVal);
@@ -3640,7 +3641,7 @@ void SfxBaseModel::getGrabBagItem(css::uno::Any& rVal) const
         rVal <<= uno::Sequence<beans::PropertyValue>();
 }
 
-void SfxBaseModel::setGrabBagItem(const css::uno::Any& rVal)
+void SfxBaseModel::setGrabBagItem(const cpo::uno::Any& rVal)
 {
     if (!m_pData->m_xGrabBagItem)
         m_pData->m_xGrabBagItem = std::make_shared<SfxGrabBagItem>();
@@ -4195,7 +4196,7 @@ Reference< container::XEnumeration > SAL_CALL SfxBaseModel::getControllers()
     sal_Int32 c = m_pData->m_seqControllers.size();
     Sequence< Any > lEnum(c);
     std::transform(m_pData->m_seqControllers.begin(), m_pData->m_seqControllers.end(),
-                   lEnum.getArray(), [](const auto& x) { return css::uno::Any(x); });
+                   lEnum.getArray(), [](const auto& x) { return cpo::uno::Any(x); });
 
     return new ::comphelper::OAnyEnumeration(lEnum);
 }

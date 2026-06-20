@@ -308,7 +308,7 @@ void BubbleChart::createShapes()
                             double nPropVal = pSeries->getValueByProperty(nIndex, u"FillColor"_ustr);
                             if(!std::isnan(nPropVal))
                             {
-                                xShape->SvxShape::setPropertyValue(u"FillColor"_ustr, uno::Any(static_cast<sal_Int32>(nPropVal)));
+                                xShape->SvxShape::setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(static_cast<sal_Int32>(nPropVal)));
                             }
                         }
                         if(bHasBorderColorMapping)
@@ -316,7 +316,7 @@ void BubbleChart::createShapes()
                             double nPropVal = pSeries->getValueByProperty(nIndex, u"LineColor"_ustr);
                             if(!std::isnan(nPropVal))
                             {
-                                xShape->SvxShape::setPropertyValue(u"LineColor"_ustr, uno::Any(static_cast<sal_Int32>(nPropVal)));
+                                xShape->SvxShape::setPropertyValue(u"LineColor"_ustr, cpo::uno::Any(static_cast<sal_Int32>(nPropVal)));
                             }
                         }
 

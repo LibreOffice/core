@@ -52,7 +52,7 @@ namespace framework
 
         private:
             // XInitialization
-            virtual void initializeImpl( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+            virtual void initializeImpl( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
             virtual void impl_setPopupMenu(std::unique_lock<std::mutex>& rGuard) override;
             enum Mode

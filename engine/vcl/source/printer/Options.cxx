@@ -57,7 +57,7 @@ void Options::ReadFromConfig(bool i_bFile)
                 aVal.Value <<= u"/org.openoffice.Office.Common/Print/Option/Printer"_ustr;
             xConfigAccess.set(xConfigProvider->createInstanceWithArguments(
                                   u"com.sun.star.configuration.ConfigurationAccess"_ustr,
-                                  { css::uno::Any(aVal) }),
+                                  { cpo::uno::Any(aVal) }),
                               css::uno::UNO_QUERY);
             if (xConfigAccess.is())
             {

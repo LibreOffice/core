@@ -77,11 +77,11 @@ public:
     sal_Int16       getNodeType() const { return mnNodeType; }
     void                           setNodeType( sal_Int16 nNodeType );
 
-    css::uno::Any   getRepeatCount() const;
-    void            setRepeatCount( const css::uno::Any& rRepeatCount );
+    cpo::uno::Any   getRepeatCount() const;
+    void            setRepeatCount( const cpo::uno::Any& rRepeatCount );
 
-    css::uno::Any   getEnd() const;
-    void            setEnd( const css::uno::Any& rEnd );
+    cpo::uno::Any   getEnd() const;
+    void            setEnd( const cpo::uno::Any& rEnd );
 
     sal_Int16       getFill() const { return mnFill; }
     void            setFill( sal_Int16 nFill );
@@ -100,14 +100,14 @@ public:
     double          getIterateInterval() const { return mfIterateInterval; }
     void                           setIterateInterval( double fIterateInterval );
 
-    const css::uno::Any& getTarget() const { return maTarget; }
-    void                          setTarget( const css::uno::Any& rTarget );
+    const cpo::uno::Any& getTarget() const { return maTarget; }
+    void                          setTarget( const cpo::uno::Any& rTarget );
 
     bool             hasAfterEffect() const { return mbHasAfterEffect; }
     void            setHasAfterEffect( bool bHasAfterEffect ) { mbHasAfterEffect = bHasAfterEffect; }
 
-    const css::uno::Any& getDimColor() const { return maDimColor; }
-    void            setDimColor( const css::uno::Any& rDimColor ) { maDimColor = rDimColor; }
+    const cpo::uno::Any& getDimColor() const { return maDimColor; }
+    void            setDimColor( const cpo::uno::Any& rDimColor ) { maDimColor = rDimColor; }
 
     bool            IsAfterEffectOnNext() const { return mbAfterEffectOnNextEffect; }
     void            setAfterEffectOnNext( bool bOnNextEffect ) { mbAfterEffectOnNextEffect = bOnNextEffect; }
@@ -127,14 +127,14 @@ public:
     bool            getAutoReverse() const { return mbAutoReverse; }
     void            setAutoReverse( bool bAutoReverse );
 
-    css::uno::Any  getProperty( sal_Int32 nNodeType, std::u16string_view rAttributeName, EValue eValue );
-    bool           setProperty( sal_Int32 nNodeType, std::u16string_view rAttributeName, EValue eValue, const css::uno::Any& rValue );
+    cpo::uno::Any  getProperty( sal_Int32 nNodeType, std::u16string_view rAttributeName, EValue eValue );
+    bool           setProperty( sal_Int32 nNodeType, std::u16string_view rAttributeName, EValue eValue, const cpo::uno::Any& rValue );
 
-    css::uno::Any  getTransformationProperty( sal_Int32 nTransformType, EValue eValue );
-    bool           setTransformationProperty( sal_Int32 nTransformType, EValue eValue, const css::uno::Any& rValue );
+    cpo::uno::Any  getTransformationProperty( sal_Int32 nTransformType, EValue eValue );
+    bool           setTransformationProperty( sal_Int32 nTransformType, EValue eValue, const cpo::uno::Any& rValue );
 
-    css::uno::Any  getColor( sal_Int32 nIndex );
-    void            setColor( sal_Int32 nIndex, const css::uno::Any& rColor );
+    cpo::uno::Any  getColor( sal_Int32 nIndex );
+    void            setColor( sal_Int32 nIndex, const cpo::uno::Any& rColor );
 
     sal_Int32       getGroupId() const { return mnGroupId; }
     void            setGroupId( sal_Int32 nGroupId );
@@ -151,7 +151,7 @@ public:
     void setAudio( const css::uno::Reference< css::animations::XAudio >& xAudio );
     bool getStopAudio() const;
     void setStopAudio();
-    void createAudio( const css::uno::Any& rSource );
+    void createAudio( const cpo::uno::Any& rSource );
     void removeAudio();
     const css::uno::Reference< css::animations::XAudio >& getAudio() const { return mxAudio; }
 
@@ -164,7 +164,7 @@ public:
 
     // static helpers
     static sal_Int32 get_node_type( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    static sal_Int32 getNumberOfSubitems( const css::uno::Any& aTarget, sal_Int16 nIterateType );
+    static sal_Int32 getNumberOfSubitems( const cpo::uno::Any& aTarget, sal_Int16 nIterateType );
 
     rtl::Reference<SdrPathObj> createSdrPathObjFromPath(SdrModel& rTargetModel);
     void updateSdrPathObjFromPath( SdrPathObj& rPathObj );
@@ -197,10 +197,10 @@ private:
 
     css::uno::Reference< css::animations::XAnimationNode > mxNode;
     css::uno::Reference< css::animations::XAudio > mxAudio;
-    css::uno::Any maTarget;
+    cpo::uno::Any maTarget;
 
     bool        mbHasAfterEffect;
-    css::uno::Any maDimColor;
+    cpo::uno::Any maDimColor;
     bool        mbAfterEffectOnNextEffect;
 };
 
@@ -271,8 +271,8 @@ public:
 
     SAL_DLLPRIVATE virtual css::uno::Reference< css::animations::XAnimationNode > getRootNode();
 
-    SAL_DLLPRIVATE CustomAnimationEffectPtr append( const CustomAnimationPresetPtr& pDescriptor, const css::uno::Any& rTarget, double fDuration );
-    SAL_DLLPRIVATE CustomAnimationEffectPtr append( const SdrPathObj& rPathObj, const css::uno::Any& rTarget, double fDuration, const OUString& rPresetId );
+    SAL_DLLPRIVATE CustomAnimationEffectPtr append( const CustomAnimationPresetPtr& pDescriptor, const cpo::uno::Any& rTarget, double fDuration );
+    SAL_DLLPRIVATE CustomAnimationEffectPtr append( const SdrPathObj& rPathObj, const cpo::uno::Any& rTarget, double fDuration, const OUString& rPresetId );
     void append( const CustomAnimationEffectPtr& pEffect );
     SAL_DLLPRIVATE void replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pDescriptor, double fDuration );
     SAL_DLLPRIVATE void replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pDescriptor, const OUString& rPresetSubType, double fDuration );
@@ -289,8 +289,8 @@ public:
     SAL_DLLPRIVATE virtual CustomAnimationEffectPtr findEffect( const css::uno::Reference< css::animations::XAnimationNode >& xNode ) const;
 
     SAL_DLLPRIVATE virtual bool disposeShape( const css::uno::Reference< css::drawing::XShape >& xShape );
-    SAL_DLLPRIVATE virtual void insertTextRange( const css::uno::Any& aTarget );
-    SAL_DLLPRIVATE virtual void disposeTextRange( const css::uno::Any& aTarget, bool bPreviousParagraphEmpty );
+    SAL_DLLPRIVATE virtual void insertTextRange( const cpo::uno::Any& aTarget );
+    SAL_DLLPRIVATE virtual void disposeTextRange( const cpo::uno::Any& aTarget, bool bPreviousParagraphEmpty );
     SAL_DLLPRIVATE virtual bool hasEffect( const css::uno::Reference< css::drawing::XShape >& xShape );
     SAL_DLLPRIVATE virtual void onTextChanged( const css::uno::Reference< css::drawing::XShape >& xShape );
 
@@ -388,8 +388,8 @@ public:
     virtual CustomAnimationEffectPtr findEffect( const css::uno::Reference< css::animations::XAnimationNode >& xNode ) const override;
 
     virtual bool disposeShape( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
-    virtual void insertTextRange( const css::uno::Any& aTarget ) override;
-    virtual void disposeTextRange( const css::uno::Any& aTarget, bool bPreviousParagraphEmpty ) override;
+    virtual void insertTextRange( const cpo::uno::Any& aTarget ) override;
+    virtual void disposeTextRange( const cpo::uno::Any& aTarget, bool bPreviousParagraphEmpty ) override;
     virtual bool hasEffect( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
     virtual void onTextChanged( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
 

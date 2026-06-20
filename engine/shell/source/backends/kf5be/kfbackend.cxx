@@ -31,7 +31,7 @@
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -82,9 +82,9 @@ private:
         return css::uno::Reference<css::beans::XPropertySetInfo>();
     }
 
-    virtual void SAL_CALL setPropertyValue(OUString const&, css::uno::Any const&) override;
+    virtual void SAL_CALL setPropertyValue(OUString const&, cpo::uno::Any const&) override;
 
-    virtual css::uno::Any SAL_CALL getPropertyValue(OUString const& PropertyName) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(OUString const& PropertyName) override;
 
     virtual void SAL_CALL addPropertyChangeListener(
         OUString const&, css::uno::Reference<css::beans::XPropertyChangeListener> const&) override
@@ -106,7 +106,7 @@ private:
     {
     }
 
-    std::map<OUString, css::beans::Optional<css::uno::Any>> m_KDESettings;
+    std::map<OUString, css::beans::Optional<cpo::uno::Any>> m_KDESettings;
 };
 
 OString getDisplayArg()
@@ -134,7 +134,7 @@ OString getExecutable()
     return OUStringToOString(aBin, osl_getThreadTextEncoding());
 }
 
-void readKDESettings(std::map<OUString, css::beans::Optional<css::uno::Any>>& rSettings)
+void readKDESettings(std::map<OUString, css::beans::Optional<cpo::uno::Any>>& rSettings)
 {
     const std::vector<OUString> aKeys
         = { u"ExternalMailer"_ustr,       u"SourceViewFontHeight"_ustr, u"SourceViewFontName"_ustr,
@@ -144,8 +144,8 @@ void readKDESettings(std::map<OUString, css::beans::Optional<css::uno::Any>>& rS
 
     for (const OUString& aKey : aKeys)
     {
-        css::beans::Optional<css::uno::Any> aValue = kfaccess::getValue(aKey);
-        std::pair<OUString, css::beans::Optional<css::uno::Any>> elem
+        css::beans::Optional<cpo::uno::Any> aValue = kfaccess::getValue(aKey);
+        std::pair<OUString, css::beans::Optional<cpo::uno::Any>> elem
             = std::make_pair(aKey, aValue);
         rSettings.insert(elem);
     }
@@ -154,7 +154,7 @@ void readKDESettings(std::map<OUString, css::beans::Optional<css::uno::Any>>& rS
 // init the QApplication when we load the kfbackend into a non-Qt vclplug (e.g. gtk3_kde5)
 // TODO: use a helper process to read these values without linking to Qt directly?
 // TODO: share this code somehow with Qt5Instance.cxx?
-void initQApp(std::map<OUString, css::beans::Optional<css::uno::Any>>& rSettings)
+void initQApp(std::map<OUString, css::beans::Optional<cpo::uno::Any>>& rSettings)
 {
     const auto aDisplay = getDisplayArg();
     int nFakeArgc = aDisplay.isEmpty() ? 2 : 3;
@@ -210,13 +210,13 @@ Service::Service()
     }
 }
 
-void Service::setPropertyValue(OUString const&, css::uno::Any const&)
+void Service::setPropertyValue(OUString const&, cpo::uno::Any const&)
 {
     throw css::lang::IllegalArgumentException(u"setPropertyValue not supported"_ustr, getXWeak(),
                                               -1);
 }
 
-css::uno::Any Service::getPropertyValue(OUString const& PropertyName)
+cpo::uno::Any Service::getPropertyValue(OUString const& PropertyName)
 {
     if (PropertyName == "ExternalMailer" || PropertyName == "SourceViewFontHeight"
         || PropertyName == "SourceViewFontName" || PropertyName == "WorkPathVariable"
@@ -224,17 +224,17 @@ css::uno::Any Service::getPropertyValue(OUString const& PropertyName)
         || PropertyName == "ooInetHTTPSProxyName" || PropertyName == "ooInetHTTPSProxyPort"
         || PropertyName == "ooInetNoProxy" || PropertyName == "ooInetProxyType")
     {
-        std::map<OUString, css::beans::Optional<css::uno::Any>>::iterator it
+        std::map<OUString, css::beans::Optional<cpo::uno::Any>>::iterator it
             = m_KDESettings.find(PropertyName);
         if (it != m_KDESettings.end())
-            return css::uno::Any(it->second);
+            return cpo::uno::Any(it->second);
         else
-            return css::uno::Any(css::beans::Optional<css::uno::Any>());
+            return cpo::uno::Any(css::beans::Optional<cpo::uno::Any>());
     }
     else if (PropertyName == "givenname" || PropertyName == "sn"
              || PropertyName == "TemplatePathVariable")
     {
-        return css::uno::Any(css::beans::Optional<css::uno::Any>());
+        return cpo::uno::Any(css::beans::Optional<cpo::uno::Any>());
         //TODO: obtain values from KDE?
     }
     throw css::beans::UnknownPropertyException(PropertyName, getXWeak());
@@ -242,7 +242,7 @@ css::uno::Any Service::getPropertyValue(OUString const& PropertyName)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 shell_kf5desktop_get_implementation(css::uno::XComponentContext*,
-                                    css::uno::Sequence<css::uno::Any> const&)
+                                    css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new Service());
 }

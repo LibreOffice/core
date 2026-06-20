@@ -248,15 +248,15 @@ void SwAccessibleParagraph::InvalidateContent_( bool bVisibleDataFired )
     {
         // The text is changed
         // determine exact changes between sOldText and sText
-        uno::Any aOldValue;
-        uno::Any aNewValue;
+        cpo::uno::Any aOldValue;
+        cpo::uno::Any aNewValue;
         (void)comphelper::OCommonAccessibleText::implInitTextChangedEvent(sOldText, sText,
                                                                           aOldValue, aNewValue);
 
         FireAccessibleEvent(AccessibleEventId::TEXT_CHANGED, aOldValue, aNewValue);
         rtl::Reference<SwAccessibleContext> xParent = getAccessibleParentImpl();
         if (xParent.is() && xParent->getAccessibleRole() == AccessibleRole::TABLE_CELL)
-            xParent->FireAccessibleEvent(AccessibleEventId::VALUE_CHANGED, uno::Any(), uno::Any());
+            xParent->FireAccessibleEvent(AccessibleEventId::VALUE_CHANGED, cpo::uno::Any(), cpo::uno::Any());
     }
     else if( !bVisibleDataFired )
     {
@@ -281,7 +281,7 @@ void SwAccessibleParagraph::InvalidateContent_( bool bVisibleDataFired )
     if (bNewIsBlockQuote != bOldIsBlockQuote || bNewIsHeading != bOldIsHeading)
     {
         // The role has changed
-        FireAccessibleEvent(AccessibleEventId::ROLE_CHANGED, uno::Any(), uno::Any());
+        FireAccessibleEvent(AccessibleEventId::ROLE_CHANGED, cpo::uno::Any(), cpo::uno::Any());
     }
 }
 
@@ -310,7 +310,7 @@ void SwAccessibleParagraph::InvalidateCursorPos_()
     if( pWin && pWin->HasFocus() && -1 == nOld )
         FireStateChangedEvent( AccessibleStateType::FOCUSED, true );
 
-    FireAccessibleEvent(AccessibleEventId::CARET_CHANGED, uno::Any(nOld), uno::Any(nNew));
+    FireAccessibleEvent(AccessibleEventId::CARET_CHANGED, cpo::uno::Any(nOld), cpo::uno::Any(nNew));
 
     if( pWin && pWin->HasFocus() && -1 == nNew )
         FireStateChangedEvent( AccessibleStateType::FOCUSED, false );
@@ -320,7 +320,7 @@ void SwAccessibleParagraph::InvalidateCursorPos_()
     bool bCurSelection = GetSelection(nStart,nEnd);
     if(m_bLastHasSelection || bCurSelection )
     {
-        FireAccessibleEvent(AccessibleEventId::TEXT_SELECTION_CHANGED, uno::Any(), uno::Any());
+        FireAccessibleEvent(AccessibleEventId::TEXT_SELECTION_CHANGED, cpo::uno::Any(), cpo::uno::Any());
     }
     m_bLastHasSelection =bCurSelection;
 
@@ -1325,7 +1325,7 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
             const SfxPoolItem* pItem = pSet->GetItem( pEntry->nWID );
             if ( pItem )
             {
-                uno::Any aVal;
+                cpo::uno::Any aVal;
                 pItem->QueryValue( aVal, pEntry->nMemberId );
 
                 PropertyValue rPropVal;
@@ -1514,7 +1514,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
                 // the corresponding default character attributes, are excluded.
                 if ( aSet.GetItemState( pEntry->nWID, true, &pItem ) == SfxItemState::SET )
                 {
-                    uno::Any aVal;
+                    cpo::uno::Any aVal;
                     pItem->QueryValue( aVal, pEntry->nMemberId );
 
                     PropertyValue rPropVal;
@@ -1618,7 +1618,7 @@ void SwAccessibleParagraph::_getSupplementalAttributesImpl(
             const SfxPoolItem* pItem = aSet.GetItem( rEntry.nWID );
             if ( pItem )
             {
-                uno::Any aVal;
+                cpo::uno::Any aVal;
                 pItem->QueryValue( aVal, rEntry.nMemberId );
 
                 PropertyValue rPropVal;
@@ -1743,7 +1743,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         //back color
         if (rValue.Name == UNO_NAME_CHAR_BACK_COLOR)
         {
-            uno::Any &anyChar = rValue.Value;
+            cpo::uno::Any &anyChar = rValue.Value;
             Color backColor;
             anyChar >>= backColor;
             if (COL_AUTO == backColor)
@@ -1763,7 +1763,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         {
             if( GetPortionData().IsInGrayPortion( nIndex ) )
                 rValue.Value <<= GetCursorShell()->GetViewOptions()->GetFieldShadingsColor();
-            uno::Any &anyChar = rValue.Value;
+            cpo::uno::Any &anyChar = rValue.Value;
             Color charColor;
             anyChar >>= charColor;
 
@@ -1783,7 +1783,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         // UnderLineColor
         if (rValue.Name == UNO_NAME_CHAR_UNDERLINE_COLOR)
         {
-            uno::Any &anyChar = rValue.Value;
+            cpo::uno::Any &anyChar = rValue.Value;
             Color underlineColor;
             anyChar >>= underlineColor;
             if ( COL_AUTO == underlineColor )
@@ -2459,8 +2459,8 @@ bool SwAccessibleParagraph::setAttributes(
     // create sorted sequences according to index array
     uno::Sequence< OUString > aNames( nLength );
     OUString* pNames = aNames.getArray();
-    uno::Sequence< uno::Any > aValues( nLength );
-    uno::Any* pValues = aValues.getArray();
+    uno::Sequence< cpo::uno::Any > aValues( nLength );
+    cpo::uno::Any* pValues = aValues.getArray();
     for (sal_Int32 i = 0; i < nLength; ++i)
     {
         const PropertyValue& rVal = pPairs[aIndices[i]];
@@ -3277,7 +3277,7 @@ sal_Int16 SAL_CALL SwAccessibleParagraph::getAccessibleRole()
 sal_Int32 SwAccessibleParagraph::GetRealHeadingLevel()
 {
     rtl::Reference< SwXTextPortion > xPortion = CreateUnoPortion( 0, 0 );
-    uno::Any styleAny = xPortion->getPropertyValue( u"ParaStyleName"_ustr );
+    cpo::uno::Any styleAny = xPortion->getPropertyValue( u"ParaStyleName"_ustr );
     OUString sValue;
     if (styleAny >>= sValue)
     {
@@ -3298,7 +3298,7 @@ sal_Int32 SwAccessibleParagraph::GetRealHeadingLevel()
 bool SwAccessibleParagraph::IsBlockQuote()
 {
     rtl::Reference<SwXTextPortion> xPortion = CreateUnoPortion(0, 0);
-    uno::Any aStyleAny = xPortion->getPropertyValue(u"ParaStyleName"_ustr);
+    cpo::uno::Any aStyleAny = xPortion->getPropertyValue(u"ParaStyleName"_ustr);
     OUString sValue;
     if (aStyleAny >>= sValue)
         return sValue == "Quotations";

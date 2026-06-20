@@ -93,13 +93,13 @@ void ScLinkTargetTypesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // container::XNameAccess
 
-uno::Any SAL_CALL ScLinkTargetTypesObj::getByName(const OUString& aName)
+cpo::uno::Any SAL_CALL ScLinkTargetTypesObj::getByName(const OUString& aName)
 {
     if (pDocShell)
     {
         for (sal_uInt16 i=0; i<SC_LINKTARGETTYPE_COUNT; i++)
             if ( aNames[i] == aName )
-                return uno::Any(uno::Reference< beans::XPropertySet >(new ScLinkTargetTypeObj( pDocShell, i )));
+                return cpo::uno::Any(uno::Reference< beans::XPropertySet >(new ScLinkTargetTypeObj( pDocShell, i )));
     }
 
     throw container::NoSuchElementException();
@@ -193,7 +193,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL  ScLinkTargetTypeObj::getProp
 }
 
 void SAL_CALL ScLinkTargetTypeObj::setPropertyValue(const OUString& /* aPropertyName */,
-            const uno::Any& /* aValue */)
+            const cpo::uno::Any& /* aValue */)
 {
     //  everything is read-only
     //! exception?
@@ -211,7 +211,7 @@ constexpr OUString aContentBmps[]=
     RID_BMP_CONTENT_DRAWING
 };
 
-void ScLinkTargetTypeObj::SetLinkTargetBitmap( uno::Any& rRet, sal_uInt16 nType )
+void ScLinkTargetTypeObj::SetLinkTargetBitmap( cpo::uno::Any& rRet, sal_uInt16 nType )
 {
     ScContentId nImgId = ScContentId::ROOT;
     switch ( nType )
@@ -233,9 +233,9 @@ void ScLinkTargetTypeObj::SetLinkTargetBitmap( uno::Any& rRet, sal_uInt16 nType 
     }
 }
 
-uno::Any SAL_CALL ScLinkTargetTypeObj::getPropertyValue(const OUString& PropertyName)
+cpo::uno::Any SAL_CALL ScLinkTargetTypeObj::getPropertyValue(const OUString& PropertyName)
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if ( PropertyName == SC_UNO_LINKDISPBIT )
         SetLinkTargetBitmap( aRet, nType );
     else if ( PropertyName == SC_UNO_LINKDISPNAME )
@@ -258,11 +258,11 @@ ScLinkTargetsObj::~ScLinkTargetsObj()
 
 // container::XNameAccess
 
-uno::Any SAL_CALL ScLinkTargetsObj::getByName(const OUString& aName)
+cpo::uno::Any SAL_CALL ScLinkTargetsObj::getByName(const OUString& aName)
 {
     uno::Reference<beans::XPropertySet> xProp(xCollection->getByName(aName), uno::UNO_QUERY);
     if (xProp.is())
-        return uno::Any(xProp);
+        return cpo::uno::Any(xProp);
 
     throw container::NoSuchElementException();
 }

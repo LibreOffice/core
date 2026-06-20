@@ -98,7 +98,7 @@ namespace xmloff
         void examinePersistence();
 
         template< typename T > void exportRemainingPropertiesSequence(
-            css::uno::Any const & value,
+            cpo::uno::Any const & value,
             token::XMLTokenEnum eValueAttName);
 
         void exportRemainingProperties();
@@ -335,7 +335,7 @@ namespace xmloff
                 the value to convert
         */
         OUString implConvertAny(
-            const css::uno::Any& _rValue);
+            const cpo::uno::Any& _rValue);
 
         /**
             @return

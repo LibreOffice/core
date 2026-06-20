@@ -32,7 +32,7 @@ namespace dbaccess
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::frame::DoubleInitializationException;
     using ::com::sun::star::document::XDocumentEventListener;
     using ::com::sun::star::document::DocumentEvent;

@@ -53,14 +53,14 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XNameContainer
-    virtual void SAL_CALL insertByName( const  OUString& aName, const  css::uno::Any& aElement ) override;
+    virtual void SAL_CALL insertByName( const  OUString& aName, const  cpo::uno::Any& aElement ) override;
     virtual void SAL_CALL removeByName( const  OUString& Name ) override;
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const  OUString& aName, const  css::uno::Any& aElement ) override;
+    virtual void SAL_CALL replaceByName( const  OUString& aName, const  cpo::uno::Any& aElement ) override;
 
     // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const  OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const  OUString& aName ) override;
     virtual css::uno::Sequence<  OUString > SAL_CALL getElementNames(  ) override;
     virtual bool SAL_CALL hasByName( const  OUString& aName ) override;
 
@@ -73,7 +73,7 @@ public:
 
 private: //member
 
-    typedef std::map< OUString, css::uno::Any > tContentMap;
+    typedef std::map< OUString, cpo::uno::Any > tContentMap;
     tContentMap m_aMap;
 };
 

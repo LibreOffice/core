@@ -19,7 +19,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
@@ -34,7 +34,7 @@
 
 namespace
 {
-OString render(css::uno::Any const& any)
+OString render(cpo::uno::Any const& any)
 {
     OStringBuffer buf;
     appendUnoAsJson(buf, any.getValueType(), any.getValue());
@@ -47,31 +47,31 @@ public:
     void testAppendScalars()
     {
         CPPUNIT_ASSERT_EQUAL("null"_ostr, render({}));
-        CPPUNIT_ASSERT_EQUAL("true"_ostr, render(css::uno::Any(true)));
-        CPPUNIT_ASSERT_EQUAL("false"_ostr, render(css::uno::Any(false)));
-        CPPUNIT_ASSERT_EQUAL("42"_ostr, render(css::uno::Any(static_cast<sal_Int8>(42))));
-        CPPUNIT_ASSERT_EQUAL("-1"_ostr, render(css::uno::Any(static_cast<sal_Int16>(-1))));
-        CPPUNIT_ASSERT_EQUAL("65535"_ostr, render(css::uno::Any(static_cast<sal_uInt16>(65535))));
+        CPPUNIT_ASSERT_EQUAL("true"_ostr, render(cpo::uno::Any(true)));
+        CPPUNIT_ASSERT_EQUAL("false"_ostr, render(cpo::uno::Any(false)));
+        CPPUNIT_ASSERT_EQUAL("42"_ostr, render(cpo::uno::Any(static_cast<sal_Int8>(42))));
+        CPPUNIT_ASSERT_EQUAL("-1"_ostr, render(cpo::uno::Any(static_cast<sal_Int16>(-1))));
+        CPPUNIT_ASSERT_EQUAL("65535"_ostr, render(cpo::uno::Any(static_cast<sal_uInt16>(65535))));
         CPPUNIT_ASSERT_EQUAL("1234567"_ostr,
-                             render(css::uno::Any(static_cast<sal_Int32>(1234567))));
+                             render(cpo::uno::Any(static_cast<sal_Int32>(1234567))));
         CPPUNIT_ASSERT_EQUAL("9999999999"_ostr,
-                             render(css::uno::Any(static_cast<sal_Int64>(9999999999LL))));
-        CPPUNIT_ASSERT_EQUAL("18446744073709551615"_ostr, render(css::uno::Any(SAL_MAX_UINT64)));
-        CPPUNIT_ASSERT_EQUAL("3.14"_ostr, render(css::uno::Any(3.14)));
+                             render(cpo::uno::Any(static_cast<sal_Int64>(9999999999LL))));
+        CPPUNIT_ASSERT_EQUAL("18446744073709551615"_ostr, render(cpo::uno::Any(SAL_MAX_UINT64)));
+        CPPUNIT_ASSERT_EQUAL("3.14"_ostr, render(cpo::uno::Any(3.14)));
     }
 
     void testAppendString()
     {
-        CPPUNIT_ASSERT_EQUAL("\"hello\""_ostr, render(css::uno::Any(u"hello"_ustr)));
-        CPPUNIT_ASSERT_EQUAL("\"\""_ostr, render(css::uno::Any(u""_ustr)));
+        CPPUNIT_ASSERT_EQUAL("\"hello\""_ostr, render(cpo::uno::Any(u"hello"_ustr)));
+        CPPUNIT_ASSERT_EQUAL("\"\""_ostr, render(cpo::uno::Any(u""_ustr)));
         CPPUNIT_ASSERT_EQUAL("\"a\\\"b\\\\c\\nd\\te\""_ostr,
-                             render(css::uno::Any(u"a\"b\\c\nd\te"_ustr)));
-        CPPUNIT_ASSERT_EQUAL("\"\\u0001\""_ostr, render(css::uno::Any(u"\x01"_ustr)));
+                             render(cpo::uno::Any(u"a\"b\\c\nd\te"_ustr)));
+        CPPUNIT_ASSERT_EQUAL("\"\\u0001\""_ostr, render(cpo::uno::Any(u"\x01"_ustr)));
     }
 
     void testAppendChar()
     {
-        css::uno::Any any;
+        cpo::uno::Any any;
         sal_Unicode c = 'A';
         any.setValue(&c, cppu::UnoType<cppu::UnoCharType>::get());
         CPPUNIT_ASSERT_EQUAL("\"A\""_ostr, render(any));
@@ -80,19 +80,19 @@ public:
     void testAppendType()
     {
         CPPUNIT_ASSERT_EQUAL("\"long\""_ostr,
-                             render(css::uno::Any(cppu::UnoType<sal_Int32>::get())));
+                             render(cpo::uno::Any(cppu::UnoType<sal_Int32>::get())));
     }
 
     void testAppendEnum()
     {
-        css::uno::Any any(css::beans::PropertyState_DIRECT_VALUE);
+        cpo::uno::Any any(css::beans::PropertyState_DIRECT_VALUE);
         CPPUNIT_ASSERT_EQUAL("\"DIRECT_VALUE\""_ostr, render(any));
     }
 
     void testAppendEnumInvalid()
     {
         sal_Int32 badVal = 9999;
-        css::uno::Any any;
+        cpo::uno::Any any;
         any.setValue(&badVal, cppu::UnoType<css::beans::PropertyState>::get());
         CPPUNIT_ASSERT_THROW(render(any), css::uno::RuntimeException);
     }
@@ -100,9 +100,9 @@ public:
     void testAppendSequence()
     {
         css::uno::Sequence<sal_Int32> s{ 1, 2, 3 };
-        CPPUNIT_ASSERT_EQUAL("[1,2,3]"_ostr, render(css::uno::Any(s)));
+        CPPUNIT_ASSERT_EQUAL("[1,2,3]"_ostr, render(cpo::uno::Any(s)));
         css::uno::Sequence<sal_Int32> empty;
-        CPPUNIT_ASSERT_EQUAL("[]"_ostr, render(css::uno::Any(empty)));
+        CPPUNIT_ASSERT_EQUAL("[]"_ostr, render(cpo::uno::Any(empty)));
     }
 
     void testAppendStruct()
@@ -114,13 +114,13 @@ public:
         pv.State = css::beans::PropertyState_DIRECT_VALUE;
         CPPUNIT_ASSERT_EQUAL(
             "{\"Name\":\"foo\",\"Handle\":7,\"Value\":42,\"State\":\"DIRECT_VALUE\"}"_ostr,
-            render(css::uno::Any(pv)));
+            render(cpo::uno::Any(pv)));
     }
 
     void testAppendInterfaceNull()
     {
         css::uno::Reference<css::uno::XInterface> ref;
-        CPPUNIT_ASSERT_EQUAL("null"_ostr, render(css::uno::Any(ref)));
+        CPPUNIT_ASSERT_EQUAL("null"_ostr, render(cpo::uno::Any(ref)));
     }
 
     void testAppendInterfaceNonNullIsNull()
@@ -128,22 +128,22 @@ public:
         //TODO:
         auto const xCtx = comphelper::getProcessComponentContext();
         CPPUNIT_ASSERT(xCtx.is());
-        CPPUNIT_ASSERT_EQUAL("null"_ostr, render(css::uno::Any(xCtx)));
+        CPPUNIT_ASSERT_EQUAL("null"_ostr, render(cpo::uno::Any(xCtx)));
     }
 
     void testAppendNonFiniteThrows()
     {
         // JSON has no representation for NaN and +/-Inf, so emitting them should throw rather than
         // producing malformed JSON:
-        CPPUNIT_ASSERT_THROW(render(css::uno::Any(std::numeric_limits<double>::quiet_NaN())),
+        CPPUNIT_ASSERT_THROW(render(cpo::uno::Any(std::numeric_limits<double>::quiet_NaN())),
                              css::uno::RuntimeException);
-        CPPUNIT_ASSERT_THROW(render(css::uno::Any(std::numeric_limits<double>::infinity())),
+        CPPUNIT_ASSERT_THROW(render(cpo::uno::Any(std::numeric_limits<double>::infinity())),
                              css::uno::RuntimeException);
-        CPPUNIT_ASSERT_THROW(render(css::uno::Any(-std::numeric_limits<double>::infinity())),
+        CPPUNIT_ASSERT_THROW(render(cpo::uno::Any(-std::numeric_limits<double>::infinity())),
                              css::uno::RuntimeException);
-        CPPUNIT_ASSERT_THROW(render(css::uno::Any(std::numeric_limits<float>::quiet_NaN())),
+        CPPUNIT_ASSERT_THROW(render(cpo::uno::Any(std::numeric_limits<float>::quiet_NaN())),
                              css::uno::RuntimeException);
-        CPPUNIT_ASSERT_THROW(render(css::uno::Any(std::numeric_limits<float>::infinity())),
+        CPPUNIT_ASSERT_THROW(render(cpo::uno::Any(std::numeric_limits<float>::infinity())),
                              css::uno::RuntimeException);
     }
 
@@ -298,11 +298,11 @@ public:
     void testParseAny()
     {
         // {type, val} envelope:
-        css::uno::Any const nested = parseJsonToAny(u"{\"type\":\"long\",\"val\":42}"_ustr,
-                                                    cppu::UnoType<css::uno::Any>::get());
+        cpo::uno::Any const nested = parseJsonToAny(u"{\"type\":\"long\",\"val\":42}"_ustr,
+                                                    cppu::UnoType<cpo::uno::Any>::get());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(42), nested.get<sal_Int32>());
         // Bare value (not the envelope) should fail:
-        CPPUNIT_ASSERT_THROW(parseJsonToAny(u"42"_ustr, cppu::UnoType<css::uno::Any>::get()),
+        CPPUNIT_ASSERT_THROW(parseJsonToAny(u"42"_ustr, cppu::UnoType<cpo::uno::Any>::get()),
                              css::uno::RuntimeException);
     }
 

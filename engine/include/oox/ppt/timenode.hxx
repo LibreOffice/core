@@ -25,7 +25,7 @@
 #include <map>
 #include <memory>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <oox/ppt/slidetransition.hxx>
 #include <oox/ppt/slidepersist.hxx>
@@ -49,7 +49,7 @@ namespace oox::ppt {
     class TimeNode final
     {
     public:
-        typedef ::std::map< OUString, css::uno::Any > UserDataMap;
+        typedef ::std::map< OUString, cpo::uno::Any > UserDataMap;
 
         TimeNode( sal_Int16 nNodeType );
         ~TimeNode();
@@ -66,9 +66,9 @@ namespace oox::ppt {
             const css::uno::Reference< css::animations::XAnimationNode >& rxNode,
             const SlidePersistPtr & slide);
         // data setters
-        void setTo( const css::uno::Any & aTo );
-        void setFrom( const css::uno::Any & aFrom );
-        void setBy( const css::uno::Any & aBy );
+        void setTo( const cpo::uno::Any & aTo );
+        void setFrom( const cpo::uno::Any & aFrom );
+        void setBy( const cpo::uno::Any & aBy );
         void setTransitionFilter( const SlideTransition & aTransition)
             { maTransitionFilter = aTransition; }
 

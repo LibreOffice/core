@@ -95,7 +95,7 @@ OUString getNodeValue(
     try {
         return node->getNodeValue();
     } catch (const css::xml::dom::DOMException & e) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
             "com.sun.star.xml.dom.DOMException: " + e.Message,
             nullptr, anyEx );
@@ -237,7 +237,7 @@ ExtensionDescription::ExtensionDescription(
     } catch (const css::deployment::DeploymentException &) {
         throw;
     } catch (const css::uno::Exception & e) {
-        css::uno::Any a(cppu::getCaughtException());
+        cpo::uno::Any a(cppu::getCaughtException());
         throw css::deployment::DeploymentException(
             e.Message, Reference< css::uno::XInterface >(), a);
     }
@@ -269,7 +269,7 @@ Reference<css::ucb::XProgressHandler >
 void  FileDoesNotExistFilter::handle(
         Reference<css::task::XInteractionRequest > const & xRequest )
 {
-    css::uno::Any request( xRequest->getRequest() );
+    cpo::uno::Any request( xRequest->getRequest() );
 
     css::ucb::InteractiveIOException ioexc;
     if ((request>>= ioexc)
@@ -305,7 +305,7 @@ DescriptionInfoset getDescriptionInfoset(std::u16string_view sExtensionFolderURL
             getRootElement();
     } catch (const NoDescriptionException &) {
     } catch (const css::deployment::DeploymentException & e) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
             "com.sun.star.deployment.DeploymentException: " + e.Message,
             nullptr, anyEx );
@@ -357,9 +357,9 @@ void DescriptionInfoset::checkDenylist() const
     if (currentversion.getLength() == 0)
         return;  // nothing to check
 
-    css::uno::Sequence<css::uno::Any> args(comphelper::InitAnyPropertySequence(
+    css::uno::Sequence<cpo::uno::Any> args(comphelper::InitAnyPropertySequence(
     {
-        {"nodepath", css::uno::Any(u"/org.openoffice.Office.ExtensionDependencies/Extensions"_ustr)}
+        {"nodepath", cpo::uno::Any(u"/org.openoffice.Office.ExtensionDependencies/Extensions"_ustr)}
     }));
     css::uno::Reference< css::container::XNameAccess > denylist(
         (css::configuration::theDefaultProvider::get(m_context)
@@ -373,7 +373,7 @@ void DescriptionInfoset::checkDenylist() const
     css::uno::Reference< css::beans::XPropertySet > extProps(
         denylist->getByName(*id), css::uno::UNO_QUERY_THROW);
 
-    css::uno::Any anyValue = extProps->getPropertyValue(u"Versions"_ustr);
+    cpo::uno::Any anyValue = extProps->getPropertyValue(u"Versions"_ustr);
 
     css::uno::Sequence< OUString > blversions;
     anyValue >>= blversions;

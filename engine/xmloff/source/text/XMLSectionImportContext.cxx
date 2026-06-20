@@ -46,6 +46,7 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::container::XNamed;
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 

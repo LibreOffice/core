@@ -37,23 +37,23 @@ namespace unocontrols {
 template <class Listener> extern int Add; // dummy
 template <class Listener> extern int Remove; // dummy
 
-template <> constexpr inline auto Add<cpo::awt::XFocusListener> = &cpo::awt::XWindow::addFocusListener;
-template <> constexpr inline auto Remove<cpo::awt::XFocusListener> = &cpo::awt::XWindow::removeFocusListener;
+template <> constexpr inline auto Add<css::awt::XFocusListener> = &css::awt::XWindow::addFocusListener;
+template <> constexpr inline auto Remove<css::awt::XFocusListener> = &css::awt::XWindow::removeFocusListener;
 
-template <> constexpr inline auto Add<cpo::awt::XWindowListener> = &cpo::awt::XWindow::addWindowListener;
-template <> constexpr inline auto Remove<cpo::awt::XWindowListener> = &cpo::awt::XWindow::removeWindowListener;
+template <> constexpr inline auto Add<css::awt::XWindowListener> = &css::awt::XWindow::addWindowListener;
+template <> constexpr inline auto Remove<css::awt::XWindowListener> = &css::awt::XWindow::removeWindowListener;
 
-template <> constexpr inline auto Add<cpo::awt::XKeyListener> = &cpo::awt::XWindow::addKeyListener;
-template <> constexpr inline auto Remove<cpo::awt::XKeyListener> = &cpo::awt::XWindow::removeKeyListener;
+template <> constexpr inline auto Add<css::awt::XKeyListener> = &css::awt::XWindow::addKeyListener;
+template <> constexpr inline auto Remove<css::awt::XKeyListener> = &css::awt::XWindow::removeKeyListener;
 
-template <> constexpr inline auto Add<cpo::awt::XMouseListener> = &cpo::awt::XWindow::addMouseListener;
-template <> constexpr inline auto Remove<cpo::awt::XMouseListener> = &cpo::awt::XWindow::removeMouseListener;
+template <> constexpr inline auto Add<css::awt::XMouseListener> = &css::awt::XWindow::addMouseListener;
+template <> constexpr inline auto Remove<css::awt::XMouseListener> = &css::awt::XWindow::removeMouseListener;
 
-template <> constexpr inline auto Add<cpo::awt::XMouseMotionListener> = &cpo::awt::XWindow::addMouseMotionListener;
-template <> constexpr inline auto Remove<cpo::awt::XMouseMotionListener> = &cpo::awt::XWindow::removeMouseMotionListener;
+template <> constexpr inline auto Add<css::awt::XMouseMotionListener> = &css::awt::XWindow::addMouseMotionListener;
+template <> constexpr inline auto Remove<css::awt::XMouseMotionListener> = &css::awt::XWindow::removeMouseMotionListener;
 
-template <> constexpr inline auto Add<cpo::awt::XPaintListener> = &cpo::awt::XWindow::addPaintListener;
-template <> constexpr inline auto Remove<cpo::awt::XPaintListener> = &cpo::awt::XWindow::removePaintListener;
+template <> constexpr inline auto Add<css::awt::XPaintListener> = &css::awt::XWindow::addPaintListener;
+template <> constexpr inline auto Remove<css::awt::XPaintListener> = &css::awt::XWindow::removePaintListener;
 
 template <class Ifc> class Listeners
 {
@@ -68,16 +68,16 @@ protected:
     template <typename F> void for_each_container(F f) { (..., f(Listeners<Ifc>::list)); }
 
     template <class Ifc1>
-    void notifyPeer(const cpo::uno::Reference<cpo::awt::XWindow>& peer,
-                    void (SAL_CALL cpo::awt::XWindow::*func)(const cpo::uno::Reference<Ifc1>&))
+    void notifyPeer(const css::uno::Reference<css::awt::XWindow>& peer,
+                    void (SAL_CALL css::awt::XWindow::*func)(const css::uno::Reference<Ifc1>&))
     {
         if (peer)
             (peer.get()->*func)(this);
     }
 
     template <class Ifc1>
-    void add(std::unique_lock<std::mutex>& guard, const cpo::uno::Reference<Ifc1>& listener,
-             const cpo::uno::Reference<cpo::awt::XWindow>& peer)
+    void add(std::unique_lock<std::mutex>& guard, const css::uno::Reference<Ifc1>& listener,
+             const css::uno::Reference<css::awt::XWindow>& peer)
     {
         assert(listener);
         if (Listeners<Ifc1>::list.addInterface(guard, listener) == 1)
@@ -88,8 +88,8 @@ protected:
     }
 
     template <class Ifc1>
-    void remove(std::unique_lock<std::mutex>& guard, const cpo::uno::Reference<Ifc1>& listener,
-                const cpo::uno::Reference<cpo::awt::XWindow>& peer)
+    void remove(std::unique_lock<std::mutex>& guard, const css::uno::Reference<Ifc1>& listener,
+                const css::uno::Reference<css::awt::XWindow>& peer)
     {
         if (Listeners<Ifc1>::list.removeInterface(guard, listener) == 0)
         {
@@ -99,12 +99,12 @@ protected:
     }
 };
 
-class OMRCListenerMultiplexerHelper final : public ContainersHolder< cpo::awt::XFocusListener
-                                                                   , cpo::awt::XWindowListener
-                                                                   , cpo::awt::XKeyListener
-                                                                   , cpo::awt::XMouseListener
-                                                                   , cpo::awt::XMouseMotionListener
-                                                                   , cpo::awt::XPaintListener >
+class OMRCListenerMultiplexerHelper final : public ContainersHolder< css::awt::XFocusListener
+                                                                   , css::awt::XWindowListener
+                                                                   , css::awt::XKeyListener
+                                                                   , css::awt::XMouseListener
+                                                                   , css::awt::XMouseMotionListener
+                                                                   , css::awt::XPaintListener >
 {
 public:
 
@@ -115,8 +115,8 @@ public:
         @param      rPeer       The peer from which the original events are dispatched. Null is allowed.
     */
 
-    OMRCListenerMultiplexerHelper(  const   cpo::uno::Reference< cpo::awt::XWindow >& xControl    ,
-                                    const   cpo::uno::Reference< cpo::awt::XWindow >& xPeer       );
+    OMRCListenerMultiplexerHelper(  const   css::uno::Reference< css::awt::XWindow >& xControl    ,
+                                    const   css::uno::Reference< css::awt::XWindow >& xPeer       );
 
     virtual ~OMRCListenerMultiplexerHelper() override;
 
@@ -129,7 +129,7 @@ public:
         @param      rPeer       The peer from which the original events are dispatched. Null is allowed.
     */
 
-    void setPeer( const cpo::uno::Reference< cpo::awt::XWindow >& xPeer );
+    void setPeer( const css::uno::Reference< css::awt::XWindow >& xPeer );
 
     /**
         @short      Remove all listeners and send a disposing message.
@@ -141,7 +141,7 @@ public:
         @short      Add the specified listener to the source.
     */
 
-    template <class Interface> void advise(const cpo::uno::Reference<Interface>& xListener)
+    template <class Interface> void advise(const css::uno::Reference<Interface>& xListener)
     {
         std::unique_lock aGuard(m_aMutex);
         add(aGuard, xListener, m_xPeer);
@@ -151,7 +151,7 @@ public:
         @short      Remove the specified listener from the source.
     */
 
-    template <class Interface> void unadvise(const cpo::uno::Reference<Interface>& xListener)
+    template <class Interface> void unadvise(const css::uno::Reference<Interface>& xListener)
     {
         std::unique_lock aGuard(m_aMutex);
         remove(aGuard, xListener, m_xPeer);
@@ -159,49 +159,49 @@ public:
 
     //  XEventListener
 
-    virtual void SAL_CALL disposing(const cpo::lang::EventObject& aSource) override;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& aSource) override;
 
     //  XFocusListener
 
-    virtual void SAL_CALL focusGained(const cpo::awt::FocusEvent& aEvent ) override;
+    virtual void SAL_CALL focusGained(const css::awt::FocusEvent& aEvent ) override;
 
-    virtual void SAL_CALL focusLost(const cpo::awt::FocusEvent& aEvent ) override;
+    virtual void SAL_CALL focusLost(const css::awt::FocusEvent& aEvent ) override;
 
     //  XWindowListener
 
-    virtual void SAL_CALL windowResized(const cpo::awt::WindowEvent& aEvent ) override;
+    virtual void SAL_CALL windowResized(const css::awt::WindowEvent& aEvent ) override;
 
-    virtual void SAL_CALL windowMoved(const cpo::awt::WindowEvent& aEvent ) override;
+    virtual void SAL_CALL windowMoved(const css::awt::WindowEvent& aEvent ) override;
 
-    virtual void SAL_CALL windowShown(const cpo::lang::EventObject& aEvent ) override;
+    virtual void SAL_CALL windowShown(const css::lang::EventObject& aEvent ) override;
 
-    virtual void SAL_CALL windowHidden(const cpo::lang::EventObject& aEvent ) override;
+    virtual void SAL_CALL windowHidden(const css::lang::EventObject& aEvent ) override;
 
     //  XKeyListener
 
-    virtual void SAL_CALL keyPressed( const cpo::awt::KeyEvent& aEvent ) override;
+    virtual void SAL_CALL keyPressed( const css::awt::KeyEvent& aEvent ) override;
 
-    virtual void SAL_CALL keyReleased( const cpo::awt::KeyEvent& aEvent ) override;
+    virtual void SAL_CALL keyReleased( const css::awt::KeyEvent& aEvent ) override;
 
     //  XMouseListener
 
-    virtual void SAL_CALL mousePressed(const cpo::awt::MouseEvent& aEvent ) override;
+    virtual void SAL_CALL mousePressed(const css::awt::MouseEvent& aEvent ) override;
 
-    virtual void SAL_CALL mouseReleased(const cpo::awt::MouseEvent& aEvent ) override;
+    virtual void SAL_CALL mouseReleased(const css::awt::MouseEvent& aEvent ) override;
 
-    virtual void SAL_CALL mouseEntered(const cpo::awt::MouseEvent& aEvent ) override;
+    virtual void SAL_CALL mouseEntered(const css::awt::MouseEvent& aEvent ) override;
 
-    virtual void SAL_CALL mouseExited(const cpo::awt::MouseEvent& aEvent ) override;
+    virtual void SAL_CALL mouseExited(const css::awt::MouseEvent& aEvent ) override;
 
     //  XMouseMotionListener
 
-    virtual void SAL_CALL mouseDragged(const cpo::awt::MouseEvent& aEvent ) override;
+    virtual void SAL_CALL mouseDragged(const css::awt::MouseEvent& aEvent ) override;
 
-    virtual void SAL_CALL mouseMoved(const cpo::awt::MouseEvent& aEvent ) override;
+    virtual void SAL_CALL mouseMoved(const css::awt::MouseEvent& aEvent ) override;
 
     //  XPaintListener
 
-    virtual void SAL_CALL windowPaint(const cpo::awt::PaintEvent& aEvent ) override;
+    virtual void SAL_CALL windowPaint(const css::awt::PaintEvent& aEvent ) override;
 
 private:
     template <class Interface, typename Event>
@@ -210,8 +210,8 @@ private:
 //  private variables
 
 private:
-    cpo::uno::Reference< cpo::awt::XWindow >      m_xPeer;   /// The source of the events. Normally this is the peer object.
-    cpo::uno::WeakReference< cpo::awt::XWindow >  m_xControl;
+    css::uno::Reference< css::awt::XWindow >      m_xPeer;   /// The source of the events. Normally this is the peer object.
+    css::uno::WeakReference< css::awt::XWindow >  m_xControl;
 };
 
 }

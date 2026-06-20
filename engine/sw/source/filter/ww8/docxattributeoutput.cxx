@@ -455,7 +455,7 @@ bool lcl_hasParaSdtEndBefore(const SwNode& rNode)
     if (!pParaGrabBag)
         return false;
 
-    const std::map<OUString, css::uno::Any>& rMap = pParaGrabBag->GetGrabBag();
+    const std::map<OUString, cpo::uno::Any>& rMap = pParaGrabBag->GetGrabBag();
     return rMap.contains(u"ParaSdtEndBefore"_ustr);
 }
 
@@ -463,7 +463,7 @@ bool lcl_HasTblHeaderFromStyle(const SwFrameFormat* pTableFormat,
                                const DocxTableStyleExport& rTableStyleExport)
 {
     // does the table actually apply a table style, and does it use the firstRow style?
-    const std::map<OUString, css::uno::Any>& rGrabBag
+    const std::map<OUString, cpo::uno::Any>& rGrabBag
         = pTableFormat->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG)->GetGrabBag();
     bool bIsUsingFirstRow = false;
     OUString sStyleId;
@@ -568,7 +568,7 @@ void DocxAttributeOutput::CheckAndWriteFloatingTables(const SwNode& rNode)
         SwTable& rTable = pTableNode->GetTable();
         SwFrameFormat* pTableFormat = rTable.GetFrameFormat();
         const SfxGrabBagItem* pTableGrabBag = pTableFormat->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG);
-        const std::map<OUString, css::uno::Any> & rTableGrabBag = pTableGrabBag->GetGrabBag();
+        const std::map<OUString, cpo::uno::Any> & rTableGrabBag = pTableGrabBag->GetGrabBag();
         // no grabbag?
         if (rTableGrabBag.find(u"TablePosition"_ustr) == rTableGrabBag.end() && !pFrameFormat->GetFlySplit().GetValue())
         {
@@ -3141,8 +3141,8 @@ void DocxAttributeOutput::CmdField_Impl( const SwTextNode* pNode, sal_Int32 nPos
                 if ( const SfxGrabBagItem* pItem = pNode->GetTableBox()->GetFrameFormat()->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG) )
                 {
                     OUString sActualFormula = sToken.trim();
-                    const std::map<OUString, uno::Any>& rGrabBag = pItem->GetGrabBag();
-                    std::map<OUString, uno::Any>::const_iterator aStoredFormula = rGrabBag.find(u"CellFormulaConverted"_ustr);
+                    const std::map<OUString, cpo::uno::Any>& rGrabBag = pItem->GetGrabBag();
+                    std::map<OUString, cpo::uno::Any>::const_iterator aStoredFormula = rGrabBag.find(u"CellFormulaConverted"_ustr);
                     if ( aStoredFormula != rGrabBag.end() && sActualFormula.indexOf('=') == 0 &&
                                     o3tl::trim(sActualFormula.subView(1)) == o3tl::trim(aStoredFormula->second.get<OUString>()) )
                     {
@@ -3622,7 +3622,7 @@ void lclProcessRecursiveGrabBag(sal_Int32 aElementId, const css::uno::Sequence<c
 
     for (const auto& rAttribute : aAttributes)
     {
-        uno::Any aAny = rAttribute.Value;
+        cpo::uno::Any aAny = rAttribute.Value;
         OString aValue;
 
         if(aAny.getValueType() == cppu::UnoType<sal_Int32>::get())
@@ -3879,7 +3879,7 @@ std::optional<sal_Int32> DocxAttributeOutput::GetGrabBagParaSdtPrToken()
     const SfxGrabBagItem* pParaGrabBag = pSet->GetItem(RES_PARATR_GRABBAG);
     if (!pParaGrabBag)
         return std::nullopt;
-    std::map<OUString, css::uno::Any> rMap = pParaGrabBag->GetGrabBag();
+    std::map<OUString, cpo::uno::Any> rMap = pParaGrabBag->GetGrabBag();
     if (!rMap.contains(u"SdtPr"_ustr))
         return std::nullopt;
 
@@ -4957,8 +4957,8 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
 
     if (const SfxGrabBagItem* pItem = pTableBox->GetFrameFormat()->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG))
     {
-        const std::map<OUString, uno::Any>& rGrabBag = pItem->GetGrabBag();
-        std::map<OUString, uno::Any>::const_iterator it = rGrabBag.find(u"CellCnfStyle"_ustr);
+        const std::map<OUString, cpo::uno::Any>& rGrabBag = pItem->GetGrabBag();
+        std::map<OUString, cpo::uno::Any>::const_iterator it = rGrabBag.find(u"CellCnfStyle"_ustr);
         if (it != rGrabBag.end())
         {
             uno::Sequence<beans::PropertyValue> aAttributes = it->second.get< uno::Sequence<beans::PropertyValue> >();
@@ -5119,8 +5119,8 @@ void DocxAttributeOutput::StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t c
     const SwTableLine* pTableLine = pTableBox->GetUpper();
     if (const SfxGrabBagItem* pItem = pTableLine->GetFrameFormat()->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG))
     {
-        const std::map<OUString, uno::Any>& rGrabBag = pItem->GetGrabBag();
-        std::map<OUString, uno::Any>::const_iterator it = rGrabBag.find(u"RowCnfStyle"_ustr);
+        const std::map<OUString, cpo::uno::Any>& rGrabBag = pItem->GetGrabBag();
+        std::map<OUString, cpo::uno::Any>::const_iterator it = rGrabBag.find(u"RowCnfStyle"_ustr);
         if (it != rGrabBag.end())
         {
             uno::Sequence<beans::PropertyValue> aAttributes = it->second.get< uno::Sequence<beans::PropertyValue> >();
@@ -7172,7 +7172,7 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
 
     OUString aRsid, aUiPriority;
     rtl::Reference<FastAttributeList> pStyleAttributeList = FastSerializerHelper::createAttrList();
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     if (eType == STYLE_TYPE_PARA || eType == STYLE_TYPE_CHAR)
     {
         const SwFormat* pFormat = m_rExport.m_pStyles->GetSwFormat(nSlot);
@@ -10724,7 +10724,7 @@ void DocxAttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDi
 
 void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
 {
-    const std::map<OUString, css::uno::Any>& rMap = rItem.GetGrabBag();
+    const std::map<OUString, cpo::uno::Any>& rMap = rItem.GetGrabBag();
     for ( const auto & rGrabBagElement : rMap )
     {
         if (rGrabBagElement.first == "MirrorIndents")
@@ -10813,7 +10813,7 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
     if (m_bPreventDoubleFieldsHandling)
         return;
 
-    const std::map< OUString, css::uno::Any >& rMap = rItem.GetGrabBag();
+    const std::map< OUString, cpo::uno::Any >& rMap = rItem.GetGrabBag();
 
     // get original values of theme-derived properties to check if they have changed during the edition
     bool bWriteCSTheme = true;

@@ -36,6 +36,7 @@
 using namespace ::cppu;
 using namespace css::awt;
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::util;
 using namespace css::beans;
 using namespace css::lang;
@@ -303,7 +304,7 @@ void SAL_CALL StatusbarController::command(
     const css::awt::Point&,
     ::sal_Int32,
     bool,
-    const css::uno::Any& )
+    const cpo::uno::Any& )
 {
 }
 

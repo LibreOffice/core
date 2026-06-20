@@ -133,7 +133,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                     uno::UNO_QUERY);
 
                 Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                xProps->setPropertyValue(u"Graphic"_ustr, ::uno::Any(xGraphic));
+                xProps->setPropertyValue(u"Graphic"_ustr, ::cpo::uno::Any(xGraphic));
 
                 ::awt::Size aPageSize;
 
@@ -206,7 +206,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                         uno::UNO_QUERY);
 
                     Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    xProps->setPropertyValue(u"Graphic"_ustr, ::uno::Any(xGraphic));
+                    xProps->setPropertyValue(u"Graphic"_ustr, ::cpo::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
@@ -250,7 +250,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                         uno::UNO_QUERY);
 
                     Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    xProps->setPropertyValue(u"Graphic"_ustr, ::uno::Any(xGraphic));
+                    xProps->setPropertyValue(u"Graphic"_ustr, ::cpo::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
@@ -325,7 +325,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                         uno::UNO_QUERY);
 
                     Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    xProps->setPropertyValue(u"Graphic"_ustr, ::uno::Any(xGraphic));
+                    xProps->setPropertyValue(u"Graphic"_ustr, ::cpo::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
@@ -368,7 +368,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                         uno::UNO_QUERY);
 
                     Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    xProps->setPropertyValue(u"Graphic"_ustr, ::uno::Any(xGraphic));
+                    xProps->setPropertyValue(u"Graphic"_ustr, ::cpo::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
@@ -411,7 +411,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                         uno::UNO_QUERY);
 
                     Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    xProps->setPropertyValue(u"Graphic"_ustr, ::uno::Any(xGraphic));
+                    xProps->setPropertyValue(u"Graphic"_ustr, ::cpo::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
@@ -454,7 +454,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                         uno::UNO_QUERY);
 
                     Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    xProps->setPropertyValue(u"Graphic"_ustr, ::uno::Any(xGraphic));
+                    xProps->setPropertyValue(u"Graphic"_ustr, ::cpo::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 

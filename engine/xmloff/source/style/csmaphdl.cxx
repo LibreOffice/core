@@ -23,7 +23,7 @@
 #include <xmloff/xmlement.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/style/CaseMap.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -43,7 +43,7 @@ XMLCaseMapPropHdl::~XMLCaseMapPropHdl()
     // nothing to do
 }
 
-bool XMLCaseMapPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCaseMapPropHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_uInt16 nVal;
     bool bRet = SvXMLUnitConverter::convertEnum(
@@ -54,7 +54,7 @@ bool XMLCaseMapPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValu
     return bRet;
 }
 
-bool XMLCaseMapPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCaseMapPropHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
     sal_uInt16 nValue = sal_uInt16();
@@ -77,7 +77,7 @@ XMLCaseMapVariantHdl::~XMLCaseMapVariantHdl()
     // nothing to do
 }
 
-bool XMLCaseMapVariantHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCaseMapVariantHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
 
@@ -95,7 +95,7 @@ bool XMLCaseMapVariantHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
     return bRet;
 }
 
-bool XMLCaseMapVariantHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCaseMapVariantHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_uInt16 nValue = sal_uInt16();
     OUStringBuffer aOut;

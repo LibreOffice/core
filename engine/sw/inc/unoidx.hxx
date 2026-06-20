@@ -95,8 +95,8 @@ public:
         getPropertySetInfo() override;
     virtual void SAL_CALL setPropertyValue(
             const OUString& rPropertyName,
-            const css::uno::Any& rValue) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue(
+            const cpo::uno::Any& rValue) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(
             const OUString& rPropertyName) override;
     virtual void SAL_CALL addPropertyChangeListener(
             const OUString& rPropertyName,
@@ -181,8 +181,8 @@ public:
         getPropertySetInfo() override;
     virtual void SAL_CALL setPropertyValue(
             const OUString& rPropertyName,
-            const css::uno::Any& rValue) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue(
+            const cpo::uno::Any& rValue) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(
             const OUString& rPropertyName) override;
     virtual void SAL_CALL addPropertyChangeListener(
             const OUString& rPropertyName,

@@ -131,7 +131,7 @@ public:
     SAL_DLLPRIVATE void AddVarName( const OUString& aName );
     SAL_DLLPRIVATE void RemoveVars();
     css::uno::Reference< css::script::XInvocation > const & GetUnoModule();
-    bool     createCOMWrapperForIface( css::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
+    bool     createCOMWrapperForIface( cpo::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
     void     GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache);
     const SbxArrayRef& GetMethods() const { return pMethods;}
     SbMethod*       FindMethod( const OUString&, SbxClassType );

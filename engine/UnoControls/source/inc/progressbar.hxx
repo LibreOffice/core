@@ -42,14 +42,14 @@ constexpr sal_Int32 PROGRESSBAR_LINECOLOR_BRIGHT = sal_Int32(COL_WHITE);
 constexpr sal_Int32 PROGRESSBAR_LINECOLOR_SHADOW = sal_Int32(COL_BLACK);
 
 using ProgressBar_BASE = cppu::ImplInheritanceHelper<BaseControl,
-                                                     cpo::awt::XControlModel,
-                                                     cpo::awt::XProgressBar>;
+                                                     css::awt::XControlModel,
+                                                     css::awt::XProgressBar>;
 
 class ProgressBar final : public ProgressBar_BASE
 {
 public:
 
-    ProgressBar( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    ProgressBar( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     virtual ~ProgressBar() override;
 
@@ -81,22 +81,22 @@ public:
     //  XControl
 
     virtual bool SAL_CALL setModel(
-        const cpo::uno::Reference< cpo::awt::XControlModel >& xModel
+        const css::uno::Reference< css::awt::XControlModel >& xModel
     ) override;
 
-    virtual cpo::uno::Reference< cpo::awt::XControlModel > SAL_CALL getModel() override;
+    virtual css::uno::Reference< css::awt::XControlModel > SAL_CALL getModel() override;
 
 private:
     virtual void impl_paint(
         sal_Int32 nX ,
         sal_Int32 nY ,
-        const cpo::uno::Reference< cpo::awt::XGraphics >& xGraphics
+        const css::uno::Reference< css::awt::XGraphics >& xGraphics
     ) override;
 
     void impl_recalcRange();
 
     bool            m_bHorizontal;   // orientation for steps            [true=horizontal/false=vertical]
-    cpo::awt::Size  m_aBlockSize;   // width and height of a block      [>=0,0]
+    css::awt::Size  m_aBlockSize;   // width and height of a block      [>=0,0]
     Color           m_nForegroundColor;   //                                  (alpha,r,g,b)
     Color           m_nBackgroundColor;   //                                  (alpha,r,g,b)
     sal_Int32       m_nMinRange;   // lowest value  =   0%             [long, <_nMaxRange]

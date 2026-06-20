@@ -34,6 +34,7 @@
 using namespace dbaui;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 
@@ -484,7 +485,7 @@ OUString             OFieldDescription::GetHelpText()            const
         return m_sHelpText;
 }
 
-css::uno::Any  OFieldDescription::GetControlDefault()      const
+cpo::uno::Any  OFieldDescription::GetControlDefault()      const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT) )
         return m_xDest->getPropertyValue(PROPERTY_CONTROLDEFAULT);

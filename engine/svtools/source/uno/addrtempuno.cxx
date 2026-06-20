@@ -34,6 +34,7 @@ namespace {
 #define UNODIALOG_PROPERTY_ID_ALIASES       100
 
     using namespace css::uno;
+using namespace cpo::uno;
     using namespace css::util;
     using namespace css::beans;
     using namespace css::sdbc;
@@ -71,7 +72,7 @@ namespace {
     // OGenericUnoDialog overridables
         virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
 
-        virtual void implInitialize(const css::uno::Any& _rValue) override;
+        virtual void implInitialize(const cpo::uno::Any& _rValue) override;
 
         virtual void executedDialog(sal_Int16 _nExecutionResult) override;
     };
@@ -161,7 +162,7 @@ namespace {
         OGenericUnoDialog::initialize(rArguments);
     }
 
-    void OAddressBookSourceDialogUno::implInitialize(const css::uno::Any& _rValue)
+    void OAddressBookSourceDialogUno::implInitialize(const cpo::uno::Any& _rValue)
     {
         PropertyValue aVal;
         if (_rValue >>= aVal)
@@ -203,7 +204,7 @@ namespace {
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svtools_OAddressBookSourceDialogUno_get_implementation(
     css::uno::XComponentContext * context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new OAddressBookSourceDialogUno(context));
 }

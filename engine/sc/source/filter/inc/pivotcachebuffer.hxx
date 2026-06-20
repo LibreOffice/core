@@ -75,7 +75,7 @@ public:
     /** Returns the type of the item. */
     sal_Int32    getType() const { return mnType; }
     /** Returns the value of the item. */
-    const css::uno::Any& getValue() const { return maValue; }
+    const cpo::uno::Any& getValue() const { return maValue; }
     /** Returns the string representation of the item. */
     OUString     getName() const;
 
@@ -88,7 +88,7 @@ private:
 friend class PivotCacheItemList;
     // #FIXME hack Sets the value of this item to the given string ( and overwrites type if necessary
     void                setStringValue( const OUString& sName );
-    css::uno::Any       maValue;     /// Value of the item.
+    cpo::uno::Any       maValue;     /// Value of the item.
     sal_Int32           mnType;             /// Value type (OOXML token identifier).
     bool                mbUnused;
 };

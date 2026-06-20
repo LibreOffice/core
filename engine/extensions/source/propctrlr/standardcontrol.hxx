@@ -46,8 +46,8 @@ namespace pcr
         }
 
         // XPropertyControl
-        virtual css::uno::Any SAL_CALL getValue() override;
-        virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+        virtual cpo::uno::Any SAL_CALL getValue() override;
+        virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
         virtual css::uno::Type SAL_CALL getValueType() override;
 
         virtual void SetModifyHandler() override
@@ -74,8 +74,8 @@ namespace pcr
         ODateControl(std::unique_ptr<weld::Container> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
         // XPropertyControl
-        virtual css::uno::Any SAL_CALL getValue() override;
-        virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+        virtual cpo::uno::Any SAL_CALL getValue() override;
+        virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
         virtual css::uno::Type SAL_CALL getValueType() override;
 
         virtual void SetModifyHandler() override
@@ -105,8 +105,8 @@ namespace pcr
         OEditControl(std::unique_ptr<weld::Entry> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bPassWord, bool bReadOnly);
 
         // XPropertyControl
-        virtual css::uno::Any SAL_CALL getValue() override;
-        virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+        virtual cpo::uno::Any SAL_CALL getValue() override;
+        virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
         virtual css::uno::Type SAL_CALL getValueType() override;
 
         virtual void SetModifyHandler() override
@@ -153,8 +153,8 @@ namespace pcr
         }
 
         // XPropertyControl
-        virtual css::uno::Any SAL_CALL getValue() override;
-        virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+        virtual cpo::uno::Any SAL_CALL getValue() override;
+        virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
         virtual css::uno::Type SAL_CALL getValueType() override;
 
         virtual weld::Widget* getWidget() override { return getTypedControlWindow(); }
@@ -174,8 +174,8 @@ namespace pcr
         OHyperlinkControl(std::unique_ptr<weld::Container> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
         // XPropertyControl
-        virtual css::uno::Any SAL_CALL getValue() override;
-        virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+        virtual cpo::uno::Any SAL_CALL getValue() override;
+        virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
         virtual css::uno::Type SAL_CALL getValueType() override;
 
         virtual void SetModifyHandler() override
@@ -213,8 +213,8 @@ namespace pcr
         ONumericControl(std::unique_ptr<weld::MetricSpinButton> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
         // XPropertyControl
-        virtual css::uno::Any SAL_CALL getValue() override;
-        virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+        virtual cpo::uno::Any SAL_CALL getValue() override;
+        virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
         virtual css::uno::Type SAL_CALL getValueType() override;
 
         // XNumericControl
@@ -261,8 +261,8 @@ namespace pcr
         OColorControl(std::unique_ptr<ColorListBox> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
         // XPropertyControl
-        virtual css::uno::Any SAL_CALL getValue() override;
-        virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+        virtual cpo::uno::Any SAL_CALL getValue() override;
+        virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
         virtual css::uno::Type SAL_CALL getValueType() override;
 
         virtual void SetModifyHandler() override
@@ -287,8 +287,8 @@ namespace pcr
         OListboxControl(std::unique_ptr<weld::ComboBox> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
         // XPropertyControl
-        virtual css::uno::Any SAL_CALL getValue() override;
-        virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+        virtual cpo::uno::Any SAL_CALL getValue() override;
+        virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
         virtual css::uno::Type SAL_CALL getValueType() override;
 
         // XStringListControl
@@ -317,8 +317,8 @@ namespace pcr
         OComboboxControl(std::unique_ptr<weld::ComboBox> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
         // XPropertyControl
-        virtual css::uno::Any SAL_CALL getValue() override;
-        virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+        virtual cpo::uno::Any SAL_CALL getValue() override;
+        virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
         virtual css::uno::Type SAL_CALL getValueType() override;
 
         // XStringListControl
@@ -377,8 +377,8 @@ namespace pcr
         OMultilineEditControl(std::unique_ptr<weld::Container> xWidget, std::unique_ptr<weld::Builder> xBuilder, MultiLineOperationMode eMode, bool bReadOnly);
 
         // XPropertyControl
-        virtual css::uno::Any SAL_CALL getValue() override;
-        virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+        virtual cpo::uno::Any SAL_CALL getValue() override;
+        virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
         virtual css::uno::Type SAL_CALL getValueType() override;
         virtual weld::Widget* getWidget() override { return getTypedControlWindow(); }
 

@@ -33,13 +33,14 @@ namespace sdbtools
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::sdb::tools::XTableName;
     using ::com::sun::star::sdb::tools::XObjectNames;
     using ::com::sun::star::sdb::tools::XDataSourceMetaData;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::uno::XComponentContext;
@@ -126,7 +127,7 @@ namespace sdbtools
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_dbaccess_ConnectionTools_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new sdbtools::ConnectionTools(context));
 }

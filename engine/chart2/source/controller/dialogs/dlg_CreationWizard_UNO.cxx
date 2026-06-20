@@ -70,7 +70,7 @@ css::uno::Sequence< OUString > SAL_CALL CreationWizardUnoDlg::getSupportedServic
 }
 
 // XInterface
-uno::Any SAL_CALL CreationWizardUnoDlg::queryInterface( const uno::Type& aType )
+cpo::uno::Any SAL_CALL CreationWizardUnoDlg::queryInterface( const uno::Type& aType )
 {
     return OComponentHelper::queryInterface( aType );
 }
@@ -82,32 +82,32 @@ void SAL_CALL CreationWizardUnoDlg::release() noexcept
 {
     OComponentHelper::release();
 }
-uno::Any SAL_CALL CreationWizardUnoDlg::queryAggregation( uno::Type const & rType )
+cpo::uno::Any SAL_CALL CreationWizardUnoDlg::queryAggregation( uno::Type const & rType )
 {
     if (rType == cppu::UnoType<ui::dialogs::XAsynchronousExecutableDialog>::get())
     {
         void * p = static_cast< ui::dialogs::XAsynchronousExecutableDialog * >( this );
-        return uno::Any( &p, rType );
+        return cpo::uno::Any( &p, rType );
     }
     else if (rType == cppu::UnoType<lang::XServiceInfo>::get())
     {
         void * p = static_cast< lang::XServiceInfo * >( this );
-        return uno::Any( &p, rType );
+        return cpo::uno::Any( &p, rType );
     }
     else if (rType == cppu::UnoType<lang::XInitialization>::get())
     {
         void * p = static_cast< lang::XInitialization * >( this );
-        return uno::Any( &p, rType );
+        return cpo::uno::Any( &p, rType );
     }
     else if (rType == cppu::UnoType<frame::XTerminateListener>::get())
     {
         void * p = static_cast< frame::XTerminateListener * >( this );
-        return uno::Any( &p, rType );
+        return cpo::uno::Any( &p, rType );
     }
     else if (rType == cppu::UnoType<beans::XPropertySet>::get())
     {
         void * p = static_cast< beans::XPropertySet * >( this );
-        return uno::Any( &p, rType );
+        return cpo::uno::Any( &p, rType );
     }
     return OComponentHelper::queryAggregation( rType );
 }
@@ -216,9 +216,9 @@ void SAL_CALL CreationWizardUnoDlg::startExecuteModal( const css::uno::Reference
         });
 }
 
-void SAL_CALL CreationWizardUnoDlg::initialize( const uno::Sequence< uno::Any >& aArguments )
+void SAL_CALL CreationWizardUnoDlg::initialize( const uno::Sequence< cpo::uno::Any >& aArguments )
 {
-    for(const uno::Any& rArgument : aArguments)
+    for(const cpo::uno::Any& rArgument : aArguments)
     {
         beans::PropertyValue aProperty;
         if(rArgument >>= aProperty)
@@ -268,7 +268,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL CreationWizardUnoDlg::getProp
 }
 
 void SAL_CALL CreationWizardUnoDlg::setPropertyValue(const OUString& rPropertyName,
-                                                     const uno::Any& rValue)
+                                                     const cpo::uno::Any& rValue)
 {
     if( rPropertyName == "Position" )
     {
@@ -290,9 +290,9 @@ void SAL_CALL CreationWizardUnoDlg::setPropertyValue(const OUString& rPropertyNa
         throw beans::UnknownPropertyException( u"unknown property was tried to set to chart wizard"_ustr , nullptr );
 }
 
-uno::Any SAL_CALL CreationWizardUnoDlg::getPropertyValue( const OUString& rPropertyName )
+cpo::uno::Any SAL_CALL CreationWizardUnoDlg::getPropertyValue( const OUString& rPropertyName )
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if( rPropertyName == "Position" )
     {
         //get left upper outer corner relative to screen
@@ -353,7 +353,7 @@ void SAL_CALL CreationWizardUnoDlg::removeVetoableChangeListener( const OUString
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_WizardDialog_get_implementation(css::uno::XComponentContext *context,
-                                                         css::uno::Sequence<css::uno::Any> const &)
+                                                         css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new chart::CreationWizardUnoDlg(context));
 }

@@ -61,7 +61,7 @@ public:
         const css::uno::Reference< css::chart2::data::XDataSequence > & xSeq,
         const OUString & rRole );
 
-    static css::uno::Any GetProperty(
+    static cpo::uno::Any GetProperty(
         const css::uno::Sequence<css::beans::PropertyValue > & aArguments,
         std::u16string_view rName );
 
@@ -143,7 +143,7 @@ public:
         @return
             The value requested, or nothing if not present.
     */
-    virtual css::uno::Any getChartTypeSpecificData(
+    virtual cpo::uno::Any getChartTypeSpecificData(
         const OUString& sKey );
 };
 

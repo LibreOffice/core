@@ -82,12 +82,12 @@ bool AccessibleContextBase::SetState (sal_Int64 aState)
         // Send event for all states except the DEFUNC state.
         if (aState != AccessibleStateType::DEFUNC)
         {
-            uno::Any aNewValue;
+            cpo::uno::Any aNewValue;
             aNewValue <<= aState;
             CommitChange(
                 AccessibleEventId::STATE_CHANGED,
                 aNewValue,
-                uno::Any(), -1);
+                cpo::uno::Any(), -1);
         }
         return true;
     }
@@ -105,11 +105,11 @@ bool AccessibleContextBase::ResetState (sal_Int64 aState)
         // Clear the mutex guard so that it is not locked during calls to listeners.
         aGuard.clear();
 
-        uno::Any aOldValue;
+        cpo::uno::Any aOldValue;
         aOldValue <<= aState;
         CommitChange(
             AccessibleEventId::STATE_CHANGED,
-            uno::Any(),
+            cpo::uno::Any(),
             aOldValue, -1);
         return true;
     }
@@ -141,7 +141,7 @@ void AccessibleContextBase::SetRelationSet (
     {
         if (mxRelationSet->containsRelation(rPair.first)
             != rxNewRelationSet->containsRelation(rPair.first))
-            CommitChange(rPair.second, uno::Any(), uno::Any(), -1);
+            CommitChange(rPair.second, cpo::uno::Any(), cpo::uno::Any(), -1);
     }
 
     mxRelationSet = rxNewRelationSet;
@@ -340,7 +340,7 @@ void AccessibleContextBase::SetAccessibleDescription (
         || (eDescriptionOrigin == meDescriptionOrigin && msDescription != rDescription)))
         return;
 
-    uno::Any aOldValue, aNewValue;
+    cpo::uno::Any aOldValue, aNewValue;
     aOldValue <<= msDescription;
     aNewValue <<= rDescription;
 
@@ -362,7 +362,7 @@ void AccessibleContextBase::SetAccessibleName (
         || (eNameOrigin == meNameOrigin && msName != rName)))
         return;
 
-    uno::Any aOldValue, aNewValue;
+    cpo::uno::Any aOldValue, aNewValue;
     aOldValue <<= msName;
     aNewValue <<= rName;
 
@@ -384,8 +384,8 @@ OUString AccessibleContextBase::CreateAccessibleName()
 
 void AccessibleContextBase::CommitChange (
     sal_Int16 nEventId,
-    const uno::Any& rNewValue,
-    const uno::Any& rOldValue,
+    const cpo::uno::Any& rNewValue,
+    const cpo::uno::Any& rOldValue,
     sal_Int32 nValueIndex)
 {
     NotifyAccessibleEvent(nEventId, rOldValue, rNewValue, nValueIndex);

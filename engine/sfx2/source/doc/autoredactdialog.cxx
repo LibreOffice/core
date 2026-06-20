@@ -582,7 +582,7 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
 
     if (aDlgOpt.Exists())
     {
-        css::uno::Any aUserItem = aDlgOpt.GetUserItem(u"UserItem"_ustr);
+        cpo::uno::Any aUserItem = aDlgOpt.GetUserItem(u"UserItem"_ustr);
         aUserItem >>= sExtraData;
     }
 
@@ -655,7 +655,7 @@ void SfxAutoRedactDialog::ImplDestroy()
 
         // Store the dialog data
         SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
-        aDlgOpt.SetUserItem(u"UserItem"_ustr, css::uno::Any(sUserDataStr));
+        aDlgOpt.SetUserItem(u"UserItem"_ustr, cpo::uno::Any(sUserDataStr));
 
         if (!m_bTargetsCopied)
             clearTargets();

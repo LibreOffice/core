@@ -30,14 +30,14 @@ bool SfxInt64Item::GetPresentation(
 }
 
 bool SfxInt64Item::QueryValue(
-    css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+    cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= mnValue;
     return true;
 }
 
 bool SfxInt64Item::PutValue(
-    const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+    const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     sal_Int64 nVal;
 

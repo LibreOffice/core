@@ -17,7 +17,7 @@ excludelist:
     - o3tl/cppunittraitshelper.hxx
     cppu/source/cppu/cppu_opt.cxx:
     # Unit test fails without uno/Any.hxx
-    - com/sun/star/uno/Any.hxx
+    - cpo/uno/Any.hxx
     cppu/source/helper/purpenv/helper_purpenv_Environment.cxx:
     # Needed by the implementation of Environment_initWithEnterable
     - cppu/helper/purpenv/Environment.hxx

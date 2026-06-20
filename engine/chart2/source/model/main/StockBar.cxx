@@ -78,10 +78,10 @@ StockBar::StockBar( bool bRisingCourse ) :
     {
         setFastPropertyValue_NoBroadcast(
             ::chart::FillProperties::PROP_FILL_COLOR,
-            uno::Any( sal_Int32( 0x000000 ))); // black
+            cpo::uno::Any( sal_Int32( 0x000000 ))); // black
         setFastPropertyValue_NoBroadcast(
             ::chart::LinePropertiesHelper::PROP_LINE_COLOR,
-            uno::Any( sal_Int32( 0xb3b3b3 ))); // gray30
+            cpo::uno::Any( sal_Int32( 0xb3b3b3 ))); // gray30
     }
 }
 
@@ -109,7 +109,7 @@ uno::Reference< util::XCloneable > SAL_CALL StockBar::createClone()
 }
 
 // ____ OPropertySet ____
-void StockBar::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
+void StockBar::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = StaticStockBarDefaults();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );

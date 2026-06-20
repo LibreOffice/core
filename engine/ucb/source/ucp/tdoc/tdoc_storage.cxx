@@ -385,7 +385,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
                     "No XPropertySet interface!" );
         try
         {
-            uno::Any aPropValue = xPropSet->getPropertyValue(u"OpenMode"_ustr);
+            cpo::uno::Any aPropValue = xPropSet->getPropertyValue(u"OpenMode"_ustr);
 
             sal_Int32 nOpenMode = 0;
             if ( aPropValue >>= nOpenMode )
@@ -425,7 +425,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
         }
         catch ( beans::UnknownPropertyException const & )
         {
-            css::uno::Any anyEx = cppu::getCaughtException();
+            cpo::uno::Any anyEx = cppu::getCaughtException();
             OSL_FAIL( "Property OpenMode not supported!" );
 
             throw embed::StorageWrappedTargetException(
@@ -435,7 +435,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
         }
         catch ( lang::WrappedTargetException const & )
         {
-            css::uno::Any anyEx = cppu::getCaughtException();
+            cpo::uno::Any anyEx = cppu::getCaughtException();
             OSL_FAIL( "Caught WrappedTargetException!" );
 
             throw embed::StorageWrappedTargetException(

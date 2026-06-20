@@ -36,6 +36,7 @@ using namespace com::sun::star::ucb;
 using namespace connectivity::file;
 using namespace connectivity;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;

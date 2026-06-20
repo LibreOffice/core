@@ -69,8 +69,8 @@ public:
     bool                    IsDeleted() const       { return m_bDeleted; }
     void                    SetDeleted( bool b )    { m_bDeleted = b; }
 
-    virtual void QueryValue( css::uno::Any& rVal, sal_uInt16 nMId ) const override;
-    virtual void PutValue( const css::uno::Any& rVal, sal_uInt16 nMId ) override;
+    virtual void QueryValue( cpo::uno::Any& rVal, sal_uInt16 nMId ) const override;
+    virtual void PutValue( const cpo::uno::Any& rVal, sal_uInt16 nMId ) override;
     virtual void UpdateFields() override;
     void EnsureValid();
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
@@ -127,8 +127,8 @@ public:
     // Content.
     virtual OUString        GetPar2() const override;
     virtual void            SetPar2(const OUString& rStr) override;
-    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
-    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt16 nWhichId ) override;
+    virtual bool            QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
+    virtual bool            PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhichId ) override;
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 

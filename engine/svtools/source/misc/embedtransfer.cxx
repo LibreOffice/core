@@ -111,8 +111,8 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                             bool bDeleteStream = false;
                             uno::Sequence < beans::PropertyValue > aEmpty;
                             uno::Sequence<beans::PropertyValue> aObjArgs( comphelper::InitPropertySequence({
-                                    { "SourceShellID", uno::Any(maParentShellID) },
-                                    { "DestinationShellID", uno::Any(rDestDoc) }
+                                    { "SourceShellID", cpo::uno::Any(maParentShellID) },
+                                    { "DestinationShellID", cpo::uno::Any(rDestDoc) }
                                 }));
                             xPers->storeToEntry(xStg, aName, aEmpty, aObjArgs);
                             if ( xStg->isStreamElement( aName ) )
@@ -139,7 +139,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                             bRet = aSeq.hasElements();
                             if( bRet )
                             {
-                                SetAny( uno::Any(aSeq) );
+                                SetAny( cpo::uno::Any(aSeq) );
                             }
                         }
                         else
@@ -159,7 +159,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                     const GDIMetaFile& aMetaFile = m_oGraphic->GetGDIMetaFile();
                     SvmWriter aWriter( aMemStm );
                     aWriter.Write( aMetaFile );
-                    uno::Any aAny;
+                    cpo::uno::Any aAny;
                     aAny <<= uno::Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ),
                                                     aMemStm.TellEnd() );
                     SetAny( aAny );
@@ -174,7 +174,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                     uno::Reference< datatransfer::XTransferable > xTransferable( m_xObj->getComponent(), uno::UNO_QUERY );
                     if ( xTransferable.is() )
                     {
-                        uno::Any aAny = xTransferable->getTransferData( rFlavor );
+                        cpo::uno::Any aAny = xTransferable->getTransferData( rFlavor );
                         SetAny( aAny );
                         bRet = true;
                     }

@@ -320,9 +320,9 @@ public:
 
     virtual bool SAL_CALL supportsType( const css::uno::Type& aType ) override;
 
-    virtual css::uno::Any SAL_CALL getValue( const css::uno::Type& aType ) override;
+    virtual cpo::uno::Any SAL_CALL getValue( const css::uno::Type& aType ) override;
 
-    virtual void SAL_CALL setValue( const css::uno::Any& aValue ) override;
+    virtual void SAL_CALL setValue( const cpo::uno::Any& aValue ) override;
 
 
     // XListEntrySource
@@ -343,10 +343,10 @@ public:
 
 
     virtual bool SAL_CALL isValid(
-        const css::uno::Any& ) override;
+        const cpo::uno::Any& ) override;
 
     virtual OUString SAL_CALL explainInvalid(
-        const css::uno::Any& ) override;
+        const cpo::uno::Any& ) override;
 
     virtual void SAL_CALL addValidityConstraintListener(
         const css::uno::Reference<css::form::validation::XValidityConstraintListener>& xListener ) override;

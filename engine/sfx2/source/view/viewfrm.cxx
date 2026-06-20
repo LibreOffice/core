@@ -139,6 +139,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
@@ -771,7 +772,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 {
                     Reference < task::XInteractionHandler2 > xHdl = task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr );
                     if (xHdl.is())
-                        pNewSet->Put( SfxUnoAnyItem(SID_INTERACTIONHANDLER,css::uno::Any(xHdl)) );
+                        pNewSet->Put( SfxUnoAnyItem(SID_INTERACTIONHANDLER,cpo::uno::Any(xHdl)) );
                 }
 
                 if (!pMacroExecItem)
@@ -2974,7 +2975,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
         }
 
         // get LibraryContainer
-        css::uno::Any aTemp;
+        cpo::uno::Any aTemp;
 
         css::uno::Reference< css::container::XNameAccess > xLib;
         if(xLibCont->hasByName(aLibName))
@@ -3071,7 +3072,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                     GetFrame().GetFrameInterface();
 
             css::uno::Reference< css::beans::XPropertySet > xSet(xFrame,css::uno::UNO_QUERY);
-            css::uno::Any aProp = xSet->getPropertyValue(sProperty);
+            cpo::uno::Any aProp = xSet->getPropertyValue(sProperty);
             css::uno::Reference< css::frame::XDispatchRecorderSupplier > xSupplier;
             aProp >>= xSupplier;
             css::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
@@ -3243,7 +3244,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                             GetFrame().GetFrameInterface(),
                             css::uno::UNO_QUERY);
 
-                    css::uno::Any aProp = xSet->getPropertyValue(u"DispatchRecorderSupplier"_ustr);
+                    cpo::uno::Any aProp = xSet->getPropertyValue(u"DispatchRecorderSupplier"_ustr);
                     css::uno::Reference< css::frame::XDispatchRecorderSupplier > xSupplier;
                     if ( aProp >>= xSupplier )
                         rSet.Put( SfxBoolItem( nWhich, xSupplier.is() ) );
@@ -3266,7 +3267,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                             GetFrame().GetFrameInterface(),
                             css::uno::UNO_QUERY);
 
-                    css::uno::Any aProp = xSet->getPropertyValue(u"DispatchRecorderSupplier"_ustr);
+                    cpo::uno::Any aProp = xSet->getPropertyValue(u"DispatchRecorderSupplier"_ustr);
                     css::uno::Reference< css::frame::XDispatchRecorderSupplier > xSupplier;
                     if ( !(aProp >>= xSupplier) || !xSupplier.is() )
                         rSet.DisableItem( nWhich );
@@ -3279,7 +3280,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                     css::uno::Reference< css::beans::XPropertySet > xSet(
                             GetFrame().GetFrameInterface(),
                             css::uno::UNO_QUERY);
-                    css::uno::Any aProp = xSet->getPropertyValue( u"LayoutManager"_ustr );
+                    cpo::uno::Any aProp = xSet->getPropertyValue( u"LayoutManager"_ustr );
 
                     if ( !( aProp >>= xLayoutManager ))
                         rSet.Put( SfxBoolItem( nWhich, false ));

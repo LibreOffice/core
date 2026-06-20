@@ -321,31 +321,31 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( const sax_fastparser::
 /** this sets the scene attributes at this propertyset */
 void SdXML3DSceneAttributesHelper::setSceneAttributes( const css::uno::Reference< css::beans::XPropertySet >& xPropSet )
 {
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     // world transformation
     if(mbSetTransform)
     {
-        xPropSet->setPropertyValue(u"D3DTransformMatrix"_ustr, uno::Any(mxHomMat));
+        xPropSet->setPropertyValue(u"D3DTransformMatrix"_ustr, cpo::uno::Any(mxHomMat));
     }
 
     // distance
-    xPropSet->setPropertyValue(u"D3DSceneDistance"_ustr, uno::Any(mnDistance));
+    xPropSet->setPropertyValue(u"D3DSceneDistance"_ustr, cpo::uno::Any(mnDistance));
     // focalLength
-    xPropSet->setPropertyValue(u"D3DSceneFocalLength"_ustr, uno::Any(mnFocalLength));
+    xPropSet->setPropertyValue(u"D3DSceneFocalLength"_ustr, cpo::uno::Any(mnFocalLength));
     // shadowSlant
-    xPropSet->setPropertyValue(u"D3DSceneShadowSlant"_ustr, uno::Any(static_cast<sal_Int16>(mnShadowSlant)));
+    xPropSet->setPropertyValue(u"D3DSceneShadowSlant"_ustr, cpo::uno::Any(static_cast<sal_Int16>(mnShadowSlant)));
     // shadeMode
-    xPropSet->setPropertyValue(u"D3DSceneShadeMode"_ustr, uno::Any(mxShadeMode));
+    xPropSet->setPropertyValue(u"D3DSceneShadeMode"_ustr, cpo::uno::Any(mxShadeMode));
     // ambientColor
-    xPropSet->setPropertyValue(u"D3DSceneAmbientColor"_ustr, uno::Any(maAmbientColor));
+    xPropSet->setPropertyValue(u"D3DSceneAmbientColor"_ustr, cpo::uno::Any(maAmbientColor));
     // lightingMode
-    xPropSet->setPropertyValue(u"D3DSceneTwoSidedLighting"_ustr, uno::Any(mbLightingMode));
+    xPropSet->setPropertyValue(u"D3DSceneTwoSidedLighting"_ustr, cpo::uno::Any(mbLightingMode));
 
     if( !maList.empty() )
     {
-        uno::Any aAny2;
-        uno::Any aAny3;
+        cpo::uno::Any aAny2;
+        cpo::uno::Any aAny3;
 
         // set lights
         for( size_t a = 0; a < maList.size(); a++)
@@ -434,11 +434,11 @@ void SdXML3DSceneAttributesHelper::setSceneAttributes( const css::uno::Reference
     aCamGeo.vup.DirectionX = maVUP.getX();
     aCamGeo.vup.DirectionY = maVUP.getY();
     aCamGeo.vup.DirectionZ = maVUP.getZ();
-    xPropSet->setPropertyValue(u"D3DCameraGeometry"_ustr, uno::Any(aCamGeo));
+    xPropSet->setPropertyValue(u"D3DCameraGeometry"_ustr, cpo::uno::Any(aCamGeo));
 
     // #91047# set drawing::ProjectionMode AFTER camera geometry is set
     // projection "D3DScenePerspective" drawing::ProjectionMode
-    xPropSet->setPropertyValue(u"D3DScenePerspective"_ustr, uno::Any(mxPrjMode));
+    xPropSet->setPropertyValue(u"D3DScenePerspective"_ustr, cpo::uno::Any(mxPrjMode));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

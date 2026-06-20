@@ -403,7 +403,7 @@ rtl::Reference<SvxShapeText> VSeriesPlotter::createDataLabel( const rtl::Referen
             rDataSeries.getPropertiesOfPoint( nPointIndex ) );
         if( xPropertySet.is() )
         {
-            uno::Any aAny = xPropertySet->getPropertyValue( CHART_UNONAME_CUSTOM_LABEL_FIELDS );
+            cpo::uno::Any aAny = xPropertySet->getPropertyValue( CHART_UNONAME_CUSTOM_LABEL_FIELDS );
             if( aAny.hasValue() )
             {
                 aAny >>= aCustomLabels;
@@ -678,7 +678,7 @@ rtl::Reference<SvxShapeText> VSeriesPlotter::createDataLabel( const rtl::Referen
             sal_Int32 aTextLineHeight =  aTextSize.Height / nLineCountForSymbolsize;
 
             // set maximum text width
-            uno::Any aTextMaximumFrameWidth( nTextWidth );
+            cpo::uno::Any aTextMaximumFrameWidth( nTextWidth );
             xTextShape->SvxShape::setPropertyValue( u"TextMaximumFrameWidth"_ustr, aTextMaximumFrameWidth );
 
             // compute the total lines of text
@@ -2581,9 +2581,9 @@ awt::Size VSeriesPlotter::getPreferredLegendKeyAspectRatio()
     return aRet;
 }
 
-uno::Any VSeriesPlotter::getExplicitSymbol( const VDataSeries& /*rSeries*/, sal_Int32 /*nPointIndex*/ )
+cpo::uno::Any VSeriesPlotter::getExplicitSymbol( const VDataSeries& /*rSeries*/, sal_Int32 /*nPointIndex*/ )
 {
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 rtl::Reference<SvxShapeGroup> VSeriesPlotter::createLegendSymbolForSeries(
@@ -2593,7 +2593,7 @@ rtl::Reference<SvxShapeGroup> VSeriesPlotter::createLegendSymbolForSeries(
 {
 
     LegendSymbolStyle eLegendSymbolStyle = getLegendSymbolStyle();
-    uno::Any aExplicitSymbol( getExplicitSymbol( rSeries, -1 ) );
+    cpo::uno::Any aExplicitSymbol( getExplicitSymbol( rSeries, -1 ) );
 
     VLegendSymbolFactory::PropertyType ePropType =
         VLegendSymbolFactory::PropertyType::FilledSeries;
@@ -2623,7 +2623,7 @@ rtl::Reference< SvxShapeGroup > VSeriesPlotter::createLegendSymbolForPoint(
 {
 
     LegendSymbolStyle eLegendSymbolStyle = getLegendSymbolStyle();
-    uno::Any aExplicitSymbol( getExplicitSymbol(rSeries,nPointIndex) );
+    cpo::uno::Any aExplicitSymbol( getExplicitSymbol(rSeries,nPointIndex) );
 
     VLegendSymbolFactory::PropertyType ePropType =
         VLegendSymbolFactory::PropertyType::FilledSeries;
@@ -2659,7 +2659,7 @@ rtl::Reference< SvxShapeGroup > VSeriesPlotter::createLegendSymbolForPoint(
 
             OSL_ASSERT( xPointSet.is());
             xPointSet->setPropertyValue(
-                u"Color"_ustr, uno::Any( m_xColorScheme->getColorByIndex( nPointIndex )));
+                u"Color"_ustr, cpo::uno::Any( m_xColorScheme->getColorByIndex( nPointIndex )));
         }
     }
 
@@ -2808,7 +2808,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
                 rtl::Reference<SvxShapeGroup> xShape = VLegendSymbolFactory::createSymbol( rEntryKeyAspectRatio,
                     xSymbolGroup, LegendSymbolStyle::Line,
                     aCurves[i],
-                    VLegendSymbolFactory::PropertyType::Line, uno::Any() );
+                    VLegendSymbolFactory::PropertyType::Line, cpo::uno::Any() );
 
                 // set CID to symbol for selection
                 if( xShape.is())

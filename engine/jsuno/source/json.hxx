@@ -31,6 +31,6 @@ void appendUnoAsJson(OStringBuffer& buf, css::uno::Type const& type, void const*
 
 // Decode the JSON value `json` into an `Any` of type `type`; throws css::uno::RuntimeException
 // on malformed input or on a type whose decoder is not implemented yet:
-css::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type);
+cpo::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

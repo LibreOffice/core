@@ -61,6 +61,7 @@ namespace xmloff
     using namespace ::xmloff::token;
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::beans;
@@ -592,7 +593,7 @@ namespace xmloff
             {
                 try {
                     props->setPropertyValue(
-                        u"Referer"_ustr, css::uno::Any(m_rFormImport.getGlobalContext().GetBaseURL()));
+                        u"Referer"_ustr, cpo::uno::Any(m_rFormImport.getGlobalContext().GetBaseURL()));
                 } catch (css::uno::Exception &) {
                     TOOLS_INFO_EXCEPTION("xmloff.forms", "setPropertyValue Referer failed");
                 }

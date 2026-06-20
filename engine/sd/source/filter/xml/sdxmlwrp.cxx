@@ -83,6 +83,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::document;
 using namespace comphelper;
@@ -234,7 +235,7 @@ ErrCodeMsg ReadThroughComponent(
     }
     catch (const xml::sax::SAXParseException& r)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
+        cpo::uno::Any ex( cppu::getCaughtException() );
         // sax parser sends wrapped exceptions,
         // try to find the original one
         xml::sax::SAXException aSaxEx = *static_cast<xml::sax::SAXException const *>(&r);
@@ -278,7 +279,7 @@ ErrCodeMsg ReadThroughComponent(
     }
     catch (const xml::sax::SAXException& r)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
+        cpo::uno::Any ex( cppu::getCaughtException() );
         packages::zip::ZipIOException aBrokenPackage;
         if ( r.WrappedException >>= aBrokenPackage )
             return ERRCODE_IO_BROKENPACKAGE;
@@ -481,7 +482,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
     };
 
     uno::Reference< beans::XPropertySet > xInfoSet( GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
-    xInfoSet->setPropertyValue( u"Preview"_ustr , uno::Any( mrDocShell.GetDoc()->IsStarDrawPreviewMode() ) );
+    xInfoSet->setPropertyValue( u"Preview"_ustr , cpo::uno::Any( mrDocShell.GetDoc()->IsStarDrawPreviewMode() ) );
 
     // ---- get BuildId from parent container if available
 
@@ -522,12 +523,12 @@ bool SdXMLFilter::Import( ErrCode& nError )
             mxStatusIndicator->start(aMsg, nProgressRange);
 
             // set ProgressRange
-            uno::Any aProgRange;
+            cpo::uno::Any aProgRange;
             aProgRange <<= nProgressRange;
             xInfoSet->setPropertyValue( u"ProgressRange"_ustr , aProgRange);
 
             // set ProgressCurrent
-            uno::Any aProgCurrent;
+            cpo::uno::Any aProgCurrent;
             aProgCurrent <<= sal_Int32(0);
             xInfoSet->setPropertyValue( u"ProgressCurrent"_ustr , aProgCurrent);
         }
@@ -574,7 +575,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
     }
 
     if (SdXMLFilterMode::Organizer == meFilterMode)
-        xInfoSet->setPropertyValue(u"OrganizerMode"_ustr, uno::Any(true));
+        xInfoSet->setPropertyValue(u"OrganizerMode"_ustr, cpo::uno::Any(true));
 
     if( ERRCODE_NONE == nRet )
     {
@@ -744,7 +745,7 @@ bool IsSlideSorterPaste(const ::sd::DrawDocShell& rDocSh)
     {
         if (rProp.Name != "slidesorter")
             continue;
-        uno::Any aFromSlideSorter = xSourcePropertySet->getPropertyValue(u"slidesorter"_ustr);
+        cpo::uno::Any aFromSlideSorter = xSourcePropertySet->getPropertyValue(u"slidesorter"_ustr);
         bool bFromSlideSorter(false);
         aFromSlideSorter >>= bFromSlideSorter;
         return bFromSlideSorter;
@@ -858,12 +859,12 @@ bool SdXMLFilter::Export()
                 mxStatusIndicator->start(aMsg, nProgressRange);
 
                 // set ProgressRange
-                uno::Any aProgRange;
+                cpo::uno::Any aProgRange;
                 aProgRange <<= nProgressRange;
                 xInfoSet->setPropertyValue( u"ProgressRange"_ustr , aProgRange);
 
                 // set ProgressCurrent
-                uno::Any aProgCurrent;
+                cpo::uno::Any aProgCurrent;
                 aProgCurrent <<= sal_Int32(0);
                 xInfoSet->setPropertyValue( u"ProgressCurrent"_ustr , aProgCurrent);
             }
@@ -925,15 +926,15 @@ bool SdXMLFilter::Export()
 
                     // encrypt all streams
                     xProps->setPropertyValue( u"UseCommonStoragePasswordEncryption"_ustr,
-                                              uno::Any( true ) );
+                                              cpo::uno::Any( true ) );
 
                     xInfoSet->setPropertyValue( u"StreamName"_ustr, Any( sDocName ) );
                 }
 
                 xWriter->setOutputStream( xDocOut );
 
-                uno::Sequence< uno::Any > aArgs( 2 + ( mxStatusIndicator.is() ? 1 : 0 ) + ( xGraphicStorageHandler.is() ? 1 : 0 ) + ( xObjectResolver.is() ? 1 : 0 ) );
-                uno::Any* pArgs = aArgs.getArray();
+                uno::Sequence< cpo::uno::Any > aArgs( 2 + ( mxStatusIndicator.is() ? 1 : 0 ) + ( xGraphicStorageHandler.is() ? 1 : 0 ) + ( xObjectResolver.is() ? 1 : 0 ) );
+                cpo::uno::Any* pArgs = aArgs.getArray();
                 *pArgs++ <<= xInfoSet;
                 if (xGraphicStorageHandler.is())
                     *pArgs++ <<= xGraphicStorageHandler;
@@ -1018,9 +1019,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODP(SvStream &rStream)
     };
     uno::Sequence<beans::PropertyValue> aAdaptorArgs(comphelper::InitPropertySequence(
     {
-        { "UserData", uno::Any(aUserData) },
+        { "UserData", cpo::uno::Any(aUserData) },
     }));
-    css::uno::Sequence<uno::Any> aOuterArgs{ uno::Any(aAdaptorArgs) };
+    css::uno::Sequence<cpo::uno::Any> aOuterArgs{ cpo::uno::Any(aAdaptorArgs) };
 
     uno::Reference<lang::XInitialization> xInit(xInterface, uno::UNO_QUERY_THROW);
     xInit->initialize(aOuterArgs);
@@ -1028,8 +1029,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODP(SvStream &rStream)
     uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
-        { "InputStream", uno::Any(xStream) },
-        { "URL", uno::Any(u"private:stream"_ustr) },
+        { "InputStream", cpo::uno::Any(xStream) },
+        { "URL", cpo::uno::Any(u"private:stream"_ustr) },
     }));
     xImporter->setTargetDocument(xModel);
 
@@ -1063,8 +1064,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportPPTX(SvStream &rStream)
     uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
-        { "InputStream", uno::Any(xStream) },
-        { "InputMode", uno::Any(true) },
+        { "InputStream", cpo::uno::Any(xStream) },
+        { "InputMode", cpo::uno::Any(true) },
     }));
     xImporter->setTargetDocument(xModel);
 

@@ -180,7 +180,7 @@ class GraphicImport : public LoggedProperties, public LoggedTable
             createGraphicObject(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
                                 css::uno::Reference<css::beans::XPropertySet> const & xShapeProps);
 
-    void putPropertyToFrameGrabBag( const OUString& sPropertyName, const css::uno::Any& aPropertyValue );
+    void putPropertyToFrameGrabBag( const OUString& sPropertyName, const cpo::uno::Any& aPropertyValue );
 
 public:
     explicit GraphicImport( css::uno::Reference<css::uno::XComponentContext>  xComponentContext,

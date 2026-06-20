@@ -37,7 +37,7 @@ public:
 
     // XEnumeration
     virtual bool SAL_CALL hasMoreElements() override;
-    virtual css::uno::Any SAL_CALL nextElement() override;
+    virtual cpo::uno::Any SAL_CALL nextElement() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

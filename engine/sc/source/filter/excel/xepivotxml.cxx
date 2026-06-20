@@ -1642,7 +1642,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
                 {
                     css::uno::Reference<css::beans::XPropertySet> xDimProps(
                         xDimsByName->getByName(rDim.GetName()), uno::UNO_QUERY_THROW);
-                    css::uno::Any aVal = xDimProps->getPropertyValue(SC_UNONAME_NUMFMT);
+                    cpo::uno::Any aVal = xDimProps->getPropertyValue(SC_UNONAME_NUMFMT);
                     sal_uInt32 nScNumFmt = aVal.get<sal_uInt32>();
                     sal_uInt16 nXclNumFmt = GetRoot().GetNumFmtBuffer().Insert(nScNumFmt);
                     pItemAttList->add(XML_numFmtId, OString::number(nXclNumFmt));

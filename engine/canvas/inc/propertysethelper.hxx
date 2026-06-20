@@ -51,8 +51,8 @@ namespace canvas
     class CANVASTOOLS_DLLPUBLIC PropertySetHelper
     {
     public:
-        typedef std::function<css::uno::Any ()> GetterType;
-        typedef std::function<void (const css::uno::Any&)> SetterType;
+        typedef std::function<cpo::uno::Any ()> GetterType;
+        typedef std::function<void (const cpo::uno::Any&)> SetterType;
         struct Callbacks
         {
             GetterType getter;
@@ -117,8 +117,8 @@ namespace canvas
         // XPropertySet implementation
         css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() const;
         void setPropertyValue( const OUString&      aPropertyName,
-                               const css::uno::Any& aValue );
-        css::uno::Any getPropertyValue( const OUString& PropertyName ) const;
+                               const cpo::uno::Any& aValue );
+        cpo::uno::Any getPropertyValue( const OUString& PropertyName ) const;
         void addPropertyChangeListener( const OUString& aPropertyName,
                                         const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener );
         void addVetoableChangeListener( const OUString& aPropertyName,

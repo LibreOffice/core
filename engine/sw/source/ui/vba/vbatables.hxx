@@ -36,12 +36,12 @@ public:
                  const css::uno::Reference< css::uno::XComponentContext > & xContext,
                  const rtl::Reference< SwXTextDocument >& xDocument );
     // XTables
-    virtual css::uno::Reference< ov::word::XTable > SAL_CALL Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, const css::uno::Any& NumRows, const css::uno::Any& NumColumns, const css::uno::Any& DefaultTableBehavior, const css::uno::Any& AutoFitBehavior ) override;
+    virtual css::uno::Reference< ov::word::XTable > SAL_CALL Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, const cpo::uno::Any& NumRows, const cpo::uno::Any& NumColumns, const cpo::uno::Any& DefaultTableBehavior, const cpo::uno::Any& AutoFitBehavior ) override;
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
     // ScVbaCollectionBaseImpl
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

@@ -95,6 +95,7 @@ using namespace ::dbtools;
 using namespace ::comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
@@ -616,10 +617,10 @@ void setColumnProperties(const Reference<XPropertySet>& _rxColumn,const OFieldDe
     _rxColumn->setPropertyValue(PROPERTY_PRECISION,Any(_pFieldDesc->GetPrecision()));
     _rxColumn->setPropertyValue(PROPERTY_SCALE,Any(_pFieldDesc->GetScale()));
     _rxColumn->setPropertyValue(PROPERTY_ISNULLABLE, Any(_pFieldDesc->GetIsNullable()));
-    _rxColumn->setPropertyValue(PROPERTY_ISAUTOINCREMENT, css::uno::Any(_pFieldDesc->IsAutoIncrement()));
+    _rxColumn->setPropertyValue(PROPERTY_ISAUTOINCREMENT, cpo::uno::Any(_pFieldDesc->IsAutoIncrement()));
     _rxColumn->setPropertyValue(PROPERTY_DESCRIPTION,Any(_pFieldDesc->GetDescription()));
     if ( _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ISCURRENCY) && _pFieldDesc->IsCurrency() )
-        _rxColumn->setPropertyValue(PROPERTY_ISCURRENCY, css::uno::Any(_pFieldDesc->IsCurrency()));
+        _rxColumn->setPropertyValue(PROPERTY_ISCURRENCY, cpo::uno::Any(_pFieldDesc->IsCurrency()));
     // set autoincrement value when available
     // and only set when the entry is not empty, that lets the value in the column untouched
     if ( _pFieldDesc->IsAutoIncrement() && !_pFieldDesc->GetAutoIncrementValue().isEmpty() && _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_AUTOINCREMENTCREATION) )
@@ -1180,11 +1181,11 @@ bool insertHierarchyElement(weld::Window* pParent, const Reference< XComponentCo
     try
     {
         Reference<XMultiServiceFactory> xORB( xNameAccess, UNO_QUERY_THROW );
-        uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+        uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
         {
-            {"Name", uno::Any(sNewName)}, // set as folder
-            {"Parent", uno::Any(xNameAccess)},
-            {PROPERTY_EMBEDDEDOBJECT, uno::Any(_xContent)},
+            {"Name", cpo::uno::Any(sNewName)}, // set as folder
+            {"Parent", cpo::uno::Any(xNameAccess)},
+            {PROPERTY_EMBEDDEDOBJECT, cpo::uno::Any(_xContent)},
         }));
         OUString sServiceName(_bCollection ? (_bForm ? SERVICE_NAME_FORM_COLLECTION : SERVICE_NAME_REPORT_COLLECTION) : SERVICE_SDB_DOCUMENTDEFINITION);
 

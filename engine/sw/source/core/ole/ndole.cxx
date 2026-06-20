@@ -68,6 +68,7 @@
 
 using namespace utl;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star;
 
 namespace {
@@ -167,7 +168,7 @@ public:
 
     virtual void        Closed() override;
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const OUString& rMimeType, const css::uno::Any & rValue ) override;
+        const OUString& rMimeType, const cpo::uno::Any & rValue ) override;
 
     void            Connect() { GetRealObject(); }
 };
@@ -180,7 +181,7 @@ SwEmbedObjectLink::SwEmbedObjectLink(SwOLENode* pNode)
 }
 
 ::sfx2::SvBaseLink::UpdateResult SwEmbedObjectLink::DataChanged(
-    const OUString&, const uno::Any& )
+    const OUString&, const cpo::uno::Any& )
 {
     // deferred link: the object was not created during import, complete the
     // creation now
@@ -242,7 +243,7 @@ public:
     }
 
     ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const OUString&, const uno::Any& )
+        const OUString&, const cpo::uno::Any& )
     {
         uno::Reference<embed::XEmbeddedObject> xObject = m_pOleNode->GetOLEObj().GetOleRef();
         uno::Reference<embed::XCommonEmbedPersist> xPersObj(xObject, uno::UNO_QUERY);

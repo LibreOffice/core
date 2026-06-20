@@ -468,34 +468,34 @@ void OCommonEmbeddedObject::handleLinkedOLE( CopyBackToOLELink eState )
 }
 
 
-uno::Any SAL_CALL OCommonEmbeddedObject::queryInterface( const uno::Type& rType )
+cpo::uno::Any SAL_CALL OCommonEmbeddedObject::queryInterface( const uno::Type& rType )
 {
-    uno::Any aReturn;
+    cpo::uno::Any aReturn;
 
     if ( rType == cppu::UnoType<embed::XEmbeddedObject>::get() )
     {
         void * p = static_cast< embed::XEmbeddedObject * >( this );
-        return uno::Any( &p, rType );
+        return cpo::uno::Any( &p, rType );
     }
     else if (rType == cppu::UnoType<embed::XEmbedPersist2>::get())
     {
         void* p = static_cast<embed::XEmbedPersist2*>(this);
-        return uno::Any(&p, rType);
+        return cpo::uno::Any(&p, rType);
     }
     else if (rType == cppu::UnoType<lang::XServiceInfo>::get())
     {
         void* p = static_cast<lang::XServiceInfo*>(this);
-        return uno::Any(&p, rType);
+        return cpo::uno::Any(&p, rType);
     }
     else if (rType == cppu::UnoType<lang::XInitialization>::get())
     {
         void* p = static_cast<lang::XInitialization*>(this);
-        return uno::Any(&p, rType);
+        return cpo::uno::Any(&p, rType);
     }
     else if (rType == cppu::UnoType<lang::XTypeProvider>::get())
     {
         void* p = static_cast<lang::XTypeProvider*>(this);
-        return uno::Any(&p, rType);
+        return cpo::uno::Any(&p, rType);
     }
     else
         aReturn = ::cppu::queryInterface(
@@ -776,7 +776,7 @@ uno::Sequence<sal_Int8> SAL_CALL OCommonEmbeddedObject::getImplementationId()
     return uno::Sequence<sal_Int8>();
 }
 
-void SAL_CALL OCommonEmbeddedObject::initialize(const uno::Sequence<uno::Any>& rArguments)
+void SAL_CALL OCommonEmbeddedObject::initialize(const uno::Sequence<cpo::uno::Any>& rArguments)
 {
     if (!rArguments.hasElements())
     {

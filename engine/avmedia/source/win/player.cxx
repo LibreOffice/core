@@ -642,7 +642,7 @@ awt::Size SAL_CALL Player::getPreferredPlayerWindowSize(  )
     return awt::Size(mnFrameWidth, mnFrameHeight);
 }
 
-uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( const uno::Sequence< uno::Any >& aArguments )
+uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( const uno::Sequence< cpo::uno::Any >& aArguments )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 

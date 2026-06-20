@@ -66,6 +66,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::container;
@@ -1221,7 +1222,7 @@ Reference< XOfficeDatabaseDocument > SAL_CALL ODatabaseSource::getDatabaseDocume
     return Reference< XOfficeDatabaseDocument >( static_cast<cppu::OWeakObject*>(xModel.get()), UNO_QUERY_THROW );
 }
 
-void SAL_CALL ODatabaseSource::initialize( css::uno::Sequence< css::uno::Any > const & rArguments)
+void SAL_CALL ODatabaseSource::initialize( css::uno::Sequence< cpo::uno::Any > const & rArguments)
 {
     ::comphelper::NamedValueCollection aProperties( rArguments );
     if (aProperties.has(u"ParentWindow"_ustr))
@@ -1237,7 +1238,7 @@ Reference< XInterface > ODatabaseSource::getThis() const
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_dba_ODatabaseSource(css::uno::XComponentContext* context,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     css::uno::Reference<XInterface> inst(
         DatabaseContext::create(context)->createInstance());

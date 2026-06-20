@@ -375,7 +375,7 @@ public class CellBinding extends complexlib.ComplexTestCase
             m_document.getSheet( 0 ).getCellByPosition( col, row )
         );
         Object cellContent = cell.getDataArray()[0][0];
-        if ( ((com.sun.star.uno.Any)cellContent).getType().getTypeClass() != com.sun.star.uno.TypeClass.VOID )
+        if ( ((cpo.uno.Any)cellContent).getType().getTypeClass() != com.sun.star.uno.TypeClass.VOID )
         {
             failed( failErrorMessage );
             return false;

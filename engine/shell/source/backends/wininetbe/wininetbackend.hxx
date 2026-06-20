@@ -50,9 +50,9 @@ class WinInetBackend : public ::cppu::WeakImplHelper <
         { return css::uno::Reference< css::beans::XPropertySetInfo >(); }
 
         virtual void SAL_CALL setPropertyValue(
-            OUString const &, css::uno::Any const &) override;
+            OUString const &, cpo::uno::Any const &) override;
 
-        virtual css::uno::Any SAL_CALL getPropertyValue(
+        virtual cpo::uno::Any SAL_CALL getPropertyValue(
             OUString const & PropertyName) override;
 
         virtual void SAL_CALL addPropertyChangeListener(
@@ -86,21 +86,21 @@ class WinInetBackend : public ::cppu::WeakImplHelper <
         ~WinInetBackend() override;
 
     private:
-        css::beans::Optional< css::uno::Any >
+        css::beans::Optional< cpo::uno::Any >
             valueProxyType_;
-        css::beans::Optional< css::uno::Any >
+        css::beans::Optional< cpo::uno::Any >
             valueNoProxy_;
-        css::beans::Optional< css::uno::Any >
+        css::beans::Optional< cpo::uno::Any >
             valueHttpProxyName_;
-        css::beans::Optional< css::uno::Any >
+        css::beans::Optional< cpo::uno::Any >
             valueHttpProxyPort_;
-        css::beans::Optional< css::uno::Any >
+        css::beans::Optional< cpo::uno::Any >
             valueHttpsProxyName_;
-        css::beans::Optional< css::uno::Any >
+        css::beans::Optional< cpo::uno::Any >
             valueHttpsProxyPort_;
-        css::beans::Optional< css::uno::Any >
+        css::beans::Optional< cpo::uno::Any >
             valueFtpProxyName_;
-        css::beans::Optional< css::uno::Any >
+        css::beans::Optional< cpo::uno::Any >
             valueFtpProxyPort_;
 } ;
 

@@ -259,7 +259,7 @@ private:
                                 */
     void                        InsertHolidayList(
                                     const ScaAnyConverter& rAnyConv,
-                                    const css::uno::Any& rHolAny,
+                                    const cpo::uno::Any& rHolAny,
                                     sal_Int32 nNullDate,
                                     bool bInsertOnWeekend );
 
@@ -285,7 +285,7 @@ public:
     void                        InsertHolidayList(
                                     ScaAnyConverter& rAnyConv,
                                     const css::uno::Reference< css::beans::XPropertySet >& xOptions,
-                                    const css::uno::Any& rHolAny,
+                                    const cpo::uno::Any& rHolAny,
                                     sal_Int32 nNullDate);
 };
 
@@ -309,7 +309,7 @@ protected:
                                 */
     void                        Append(
                                     const ScaAnyConverter& rAnyConv,
-                                    const css::uno::Any& rAny,
+                                    const cpo::uno::Any& rAny,
                                     bool bIgnoreEmpty );
 
                                 /** @param rAnyConv  must be an initialized ScaAnyConmverter
@@ -319,7 +319,7 @@ protected:
                                 */
     void                        Append(
                                     const ScaAnyConverter& rAnyConv,
-                                    const css::uno::Sequence< css::uno::Any >& rAnySeq,
+                                    const css::uno::Sequence< cpo::uno::Any >& rAnySeq,
                                     bool bIgnoreEmpty );
 
                                 /** @param rAnyConv  must be an initialized ScaAnyConmverter
@@ -329,7 +329,7 @@ protected:
                                 */
     void                        Append(
                                     const ScaAnyConverter& rAnyConv,
-                                    const css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& rAnySeq,
+                                    const css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > >& rAnySeq,
                                     bool bIgnoreEmpty );
 
 public:
@@ -355,7 +355,7 @@ public:
     void                        Append(
                                     ScaAnyConverter& rAnyConv,
                                     const css::uno::Reference< css::beans::XPropertySet >& xOpt,
-                                    const css::uno::Sequence< css::uno::Any >& rAnySeq );
+                                    const css::uno::Sequence< cpo::uno::Any >& rAnySeq );
 
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
@@ -481,7 +481,7 @@ public:
     void                    Append( const css::uno::Sequence< css::uno::Sequence< OUString > >& rComplexNumList );
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
-    void                    Append( const css::uno::Sequence< css::uno::Any >& aMultPars );
+    void                    Append( const css::uno::Sequence< cpo::uno::Any >& aMultPars );
 };
 
 
@@ -839,7 +839,7 @@ public:
                                              false if the Any is empty or the string is empty */
     bool                        getDouble(
                                     double& rfResult,
-                                    const css::uno::Any& rAny ) const;
+                                    const cpo::uno::Any& rAny ) const;
 
                                 /** Converts an Any to double (with initialization).
                                     The Any can be empty or contain a double or string.
@@ -850,7 +850,7 @@ public:
     bool                        getDouble(
                                     double& rfResult,
                                     const css::uno::Reference< css::beans::XPropertySet >& xPropSet,
-                                    const css::uno::Any& rAny );
+                                    const cpo::uno::Any& rAny );
 
                                 /** Converts an Any to double (with initialization).
                                     The Any can be empty or contain a double or string.
@@ -859,7 +859,7 @@ public:
                                     @return  the value of the double or string or fDefault if the Any or string is empty */
     double                      getDouble(
                                     const css::uno::Reference< css::beans::XPropertySet >& xPropSet,
-                                    const css::uno::Any& rAny,
+                                    const cpo::uno::Any& rAny,
                                     double fDefault );
 
                                 /** Converts an Any to sal_Int32 (with initialization).
@@ -871,7 +871,7 @@ public:
     bool                        getInt32(
                                     sal_Int32& rnResult,
                                     const css::uno::Reference< css::beans::XPropertySet >& xPropSet,
-                                    const css::uno::Any& rAny );
+                                    const cpo::uno::Any& rAny );
 
                                 /** Converts an Any to sal_Int32 (with initialization).
                                     The Any can be empty or contain a double or string.
@@ -880,7 +880,7 @@ public:
                                     @return  the truncated value of the double or string or nDefault if the Any or string is empty */
     sal_Int32                   getInt32(
                                     const css::uno::Reference< css::beans::XPropertySet >& xPropSet,
-                                    const css::uno::Any& rAny,
+                                    const cpo::uno::Any& rAny,
                                     sal_Int32 nDefault );
 };
 

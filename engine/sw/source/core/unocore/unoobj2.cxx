@@ -320,7 +320,7 @@ void SwUnoCursorHelper::GetCursorAttr(SwPaM & rPam,
         if (nEndNd - nSttNd >= SwNodeOffset(nMaxLookup))
         {
             rSet.ClearItem();
-            return;// uno::Any();
+            return;// cpo::uno::Any();
         }
 
         // the first node inserts the values into the get set
@@ -438,7 +438,7 @@ struct SwXParagraphEnumerationImpl final : public SwXParagraphEnumeration
 
     // XEnumeration
     virtual bool SAL_CALL hasMoreElements() override;
-    virtual css::uno::Any SAL_CALL nextElement() override;
+    virtual cpo::uno::Any SAL_CALL nextElement() override;
 
     SwUnoCursor& GetCursor()
         { return *m_pCursor; }
@@ -651,7 +651,7 @@ SwXParagraphEnumerationImpl::NextElement_Impl()
     return xRef;
 }
 
-uno::Any SAL_CALL SwXParagraphEnumerationImpl::nextElement()
+cpo::uno::Any SAL_CALL SwXParagraphEnumerationImpl::nextElement()
 {
     SolarMutexGuard aGuard;
     if (m_bFirstParagraph)
@@ -666,7 +666,7 @@ uno::Any SAL_CALL SwXParagraphEnumerationImpl::nextElement()
     }
     m_xNextPara = NextElement_Impl();
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     aRet <<= xRef;
     return aRet;
 }
@@ -1474,7 +1474,7 @@ SwXTextRange::getPropertySetInfo()
 
 void SAL_CALL
 SwXTextRange::setPropertyValue(
-        const OUString& rPropertyName, const uno::Any& rValue)
+        const OUString& rPropertyName, const cpo::uno::Any& rValue)
 {
     SolarMutexGuard aGuard;
 
@@ -1488,7 +1488,7 @@ SwXTextRange::setPropertyValue(
             rPropertyName, rValue);
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwXTextRange::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
@@ -1579,7 +1579,7 @@ void SAL_CALL SwXTextRange::setPropertyToDefault(const OUString& rPropertyName)
             rPropertyName);
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwXTextRange::getPropertyDefault(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
@@ -1630,7 +1630,7 @@ struct SwXTextRangesImpl final : public SwXTextRanges
         { return getCount() > 0; };
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
 
     explicit SwXTextRangesImpl(SwPaM *const pPaM)
     {
@@ -1688,12 +1688,12 @@ sal_Int32 SAL_CALL SwXTextRangesImpl::getCount()
     return static_cast<sal_Int32>(m_Ranges.size());
 }
 
-uno::Any SAL_CALL SwXTextRangesImpl::getByIndex(sal_Int32 nIndex)
+cpo::uno::Any SAL_CALL SwXTextRangesImpl::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
     if ((nIndex < 0) || (o3tl::make_unsigned(nIndex) >= m_Ranges.size()))
         throw lang::IndexOutOfBoundsException();
-    uno::Any ret(uno::Reference<text::XTextRange>(m_Ranges.at(nIndex)));
+    cpo::uno::Any ret(uno::Reference<text::XTextRange>(m_Ranges.at(nIndex)));
     return ret;
 }
 
@@ -1732,7 +1732,7 @@ struct SwXParaFrameEnumerationImpl final : public SwXParaFrameEnumeration
 
     // XEnumeration
     virtual bool SAL_CALL hasMoreElements() override;
-    virtual css::uno::Any SAL_CALL nextElement() override;
+    virtual cpo::uno::Any SAL_CALL nextElement() override;
 
     SwXParaFrameEnumerationImpl(const SwPaM& rPaM, const enum ParaFrameMode eParaFrameMode, SwFrameFormat* const pFormat);
     virtual void SAL_CALL release() noexcept override
@@ -1882,7 +1882,7 @@ SwXParaFrameEnumerationImpl::hasMoreElements()
     return m_xNextObject.is() || CreateNextObject();
 }
 
-uno::Any SAL_CALL SwXParaFrameEnumerationImpl::nextElement()
+cpo::uno::Any SAL_CALL SwXParaFrameEnumerationImpl::nextElement()
 {
     SolarMutexGuard aGuard;
     PurgeFrameClients();
@@ -1890,7 +1890,7 @@ uno::Any SAL_CALL SwXParaFrameEnumerationImpl::nextElement()
         CreateNextObject();
     if (!m_xNextObject.is())
         throw container::NoSuchElementException();
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     aRet <<= m_xNextObject;
     m_xNextObject = nullptr;
     return aRet;

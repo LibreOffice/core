@@ -82,11 +82,11 @@ void log( RuntimeCargo *cargo, sal_Int32 level, std::u16string_view logString );
 void log( RuntimeCargo *cargo, sal_Int32 level, const char *str );
 void logCall( RuntimeCargo *cargo, const char *intro,
               void * ptr, std::u16string_view aFunctionName,
-              const css::uno::Sequence< css::uno::Any > & args );
+              const css::uno::Sequence< cpo::uno::Any > & args );
 void logReply( RuntimeCargo *cargo, const char *intro,
               void * ptr, std::u16string_view aFunctionName,
-              const css::uno::Any &returnValue,
-              const css::uno::Sequence< css::uno::Any > & args );
+              const cpo::uno::Any &returnValue,
+              const css::uno::Sequence< cpo::uno::Any > & args );
 void logException( RuntimeCargo *cargo, const char *intro,
                    void * ptr, std::u16string_view aFunctionName,
                    const void * data, const css::uno::Type & type );
@@ -121,17 +121,17 @@ int PyUNO_initType();
 int PyUNOStruct_initType();
 
 PyRef PyUNO_new (
-    const css::uno::Any & targetInterface,
+    const cpo::uno::Any & targetInterface,
     const css::uno::Reference<css::lang::XSingleServiceFactory> & ssf );
 
 PyRef PyUNOStruct_new (
-    const css::uno::Any &targetInterface,
+    const cpo::uno::Any &targetInterface,
     const  css::uno::Reference<css::lang::XSingleServiceFactory> &ssf );
 
 struct PyUNOInternals
 {
     css::uno::Reference <css::script::XInvocation2> xInvocation;
-    css::uno::Any wrappedObject;
+    cpo::uno::Any wrappedObject;
 };
 
 typedef struct
@@ -201,13 +201,13 @@ PyRef getAnyClass( const Runtime &);
 PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args );
 
 /// @throws css::uno::RuntimeException
-css::uno::Any PyEnum2Enum( PyObject *obj );
+cpo::uno::Any PyEnum2Enum( PyObject *obj );
 /// @throws css::uno::RuntimeException
 sal_Unicode PyChar2Unicode( PyObject *o );
 /// @throws css::uno::RuntimeException
 css::uno::Type PyType2Type( PyObject * o );
 
-void raisePyExceptionWithAny( const css::uno::Any &a );
+void raisePyExceptionWithAny( const cpo::uno::Any &a );
 const char *typeClassToString( css::uno::TypeClass t );
 
 /// @throws css::uno::RuntimeException
@@ -275,17 +275,17 @@ public:
     // XInvocation
     virtual css::uno::Reference< css::beans::XIntrospectionAccess >
            SAL_CALL getIntrospection(  ) override;
-    virtual css::uno::Any SAL_CALL invoke(
+    virtual cpo::uno::Any SAL_CALL invoke(
         const OUString& aFunctionName,
-        const css::uno::Sequence< css::uno::Any >& aParams,
+        const css::uno::Sequence< cpo::uno::Any >& aParams,
         css::uno::Sequence< sal_Int16 >& aOutParamIndex,
-        css::uno::Sequence< css::uno::Any >& aOutParam ) override;
+        css::uno::Sequence< cpo::uno::Any >& aOutParam ) override;
 
     virtual void SAL_CALL setValue(
         const OUString& aPropertyName,
-        const css::uno::Any& aValue ) override;
+        const cpo::uno::Any& aValue ) override;
 
-    virtual css::uno::Any SAL_CALL getValue( const OUString& aPropertyName ) override;
+    virtual cpo::uno::Any SAL_CALL getValue( const OUString& aPropertyName ) override;
     virtual bool SAL_CALL hasMethod( const OUString& aName ) override;
     virtual bool SAL_CALL hasProperty( const OUString& aName ) override;
 

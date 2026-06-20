@@ -47,7 +47,7 @@ namespace chelp
         virtual ~Content() override;
 
         // XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
 
         // XTypeProvider
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
@@ -65,7 +65,7 @@ namespace chelp
         getContentType() override;
 
         // XCommandProcessor
-        virtual css::uno::Any SAL_CALL
+        virtual cpo::uno::Any SAL_CALL
         execute( const css::ucb::Command& aCommand,
                  sal_Int32 CommandId,
                  const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override;

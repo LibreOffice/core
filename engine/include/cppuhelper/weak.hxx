@@ -109,7 +109,7 @@ public:
         @param rType demanded type
         @return demanded type or empty any
     */
-    virtual css::uno::Any SAL_CALL queryInterface(
+    virtual cpo::uno::Any SAL_CALL queryInterface(
         const css::uno::Type & rType ) SAL_OVERRIDE;
     /** increasing m_refCount
     */

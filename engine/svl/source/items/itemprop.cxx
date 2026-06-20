@@ -34,6 +34,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 SfxItemPropertyMap::SfxItemPropertyMap( std::span<const SfxItemPropertyMapEntry> pEntries )
 {
@@ -122,7 +123,7 @@ void SfxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntry& rEntry
     SfxItemState eState = rSet.GetItemState( rEntry.nWID, true, &pItem );
     if (SfxItemState::SET != eState && SfxItemPool::IsWhich(rEntry.nWID) )
         pItem = &rSet.GetPool()->GetUserOrPoolDefaultItem(rEntry.nWID);
-    // return item values as uno::Any
+    // return item values as cpo::uno::Any
     if(eState >= SfxItemState::DEFAULT && pItem)
     {
         pItem->QueryValue( rAny, rEntry.nMemberId );

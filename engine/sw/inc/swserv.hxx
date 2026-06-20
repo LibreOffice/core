@@ -57,7 +57,7 @@ public:
     }
     virtual ~SwServerObject() override;
 
-    virtual bool GetData( css::uno::Any & rData,
+    virtual bool GetData( cpo::uno::Any & rData,
                             const OUString & rMimeType,
                             bool bSynchron = false ) override;
 

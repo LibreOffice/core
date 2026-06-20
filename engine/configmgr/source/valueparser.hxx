@@ -68,7 +68,7 @@ private:
     ValueParser(const ValueParser&) = delete;
     ValueParser& operator=(const ValueParser&) = delete;
 
-    template< typename T > css::uno::Any convertItems();
+    template< typename T > cpo::uno::Any convertItems();
 
     enum class State { Text, TextUnicode, IT, ITUnicode };
 
@@ -77,7 +77,7 @@ private:
     OUString localizedName_;
     State state_;
     xmlreader::Pad pad_;
-    std::vector< css::uno::Any > items_;
+    std::vector< cpo::uno::Any > items_;
 };
 
 }

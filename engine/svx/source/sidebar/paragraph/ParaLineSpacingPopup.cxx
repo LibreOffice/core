@@ -32,7 +32,7 @@ SvxLineSpacingToolBoxControl::SvxLineSpacingToolBoxControl(
 
 SvxLineSpacingToolBoxControl::~SvxLineSpacingToolBoxControl() {}
 
-void SvxLineSpacingToolBoxControl::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
+void SvxLineSpacingToolBoxControl::initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     PopupWindowController::initialize(rArguments);
 
@@ -91,7 +91,7 @@ css::uno::Sequence<OUString> SvxLineSpacingToolBoxControl::getSupportedServiceNa
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_svx_LineSpacingToolBoxControl_get_implementation(
-    css::uno::XComponentContext* rContext, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* rContext, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SvxLineSpacingToolBoxControl(rContext));
 }

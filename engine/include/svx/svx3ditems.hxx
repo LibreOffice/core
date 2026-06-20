@@ -74,8 +74,8 @@ public:
     Svx3DNormalsKindItem(sal_uInt16 nVal = 0);
 
     // use drawing::NormalsKind
-    SVX_DLLPRIVATE virtual  bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    SVX_DLLPRIVATE virtual  bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    SVX_DLLPRIVATE virtual  bool QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    SVX_DLLPRIVATE virtual  bool PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
     SVX_DLLPRIVATE virtual Svx3DNormalsKindItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };
 
@@ -89,8 +89,8 @@ public:
     Svx3DTextureProjectionXItem(sal_uInt16 nVal = 0);
 
     // use drawing::TextureProjectionMode
-    SVX_DLLPRIVATE virtual  bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    SVX_DLLPRIVATE virtual  bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    SVX_DLLPRIVATE virtual  bool QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    SVX_DLLPRIVATE virtual  bool PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
     SVX_DLLPRIVATE virtual Svx3DTextureProjectionXItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };
 
@@ -100,8 +100,8 @@ public:
     Svx3DTextureProjectionYItem(sal_uInt16 nVal = 0);
 
     // use drawing::TextureProjectionMode
-    virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
     virtual Svx3DTextureProjectionYItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };
 
@@ -127,8 +127,8 @@ public:
     Svx3DTextureKindItem(sal_uInt16 nVal = 2);
 
     // use drawing::TextureKind2
-    SVX_DLLPRIVATE virtual  bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    SVX_DLLPRIVATE virtual  bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    SVX_DLLPRIVATE virtual  bool QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    SVX_DLLPRIVATE virtual  bool PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
     SVX_DLLPRIVATE virtual Svx3DTextureKindItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };
 
@@ -138,8 +138,8 @@ public:
     Svx3DTextureModeItem(sal_uInt16 nVal = 2);
 
     // use drawing:TextureMode
-    SVX_DLLPRIVATE virtual  bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    SVX_DLLPRIVATE virtual  bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    SVX_DLLPRIVATE virtual  bool QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    SVX_DLLPRIVATE virtual  bool PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
     SVX_DLLPRIVATE virtual Svx3DTextureModeItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };
 
@@ -154,8 +154,8 @@ public:
     Svx3DPerspectiveItem(ProjectionType nVal = ProjectionType::Perspective);
 
     // use drawing::ProjectionMode
-    SVX_DLLPRIVATE virtual  bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    SVX_DLLPRIVATE virtual  bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    SVX_DLLPRIVATE virtual  bool QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    SVX_DLLPRIVATE virtual  bool PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
     SVX_DLLPRIVATE virtual Svx3DPerspectiveItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };
 
@@ -281,8 +281,8 @@ public:
     Svx3DShadeModeItem(sal_uInt16 nVal = 2);
 
     // use drawing::ShadeMode
-    SVX_DLLPRIVATE virtual  bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    SVX_DLLPRIVATE virtual  bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    SVX_DLLPRIVATE virtual  bool QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    SVX_DLLPRIVATE virtual  bool PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
     SVX_DLLPRIVATE virtual Svx3DShadeModeItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };
 

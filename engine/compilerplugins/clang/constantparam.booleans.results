@@ -523,7 +523,7 @@ filter/source/svg/svgwriter.hxx:258
     _Bool bExportY
     1
 forms/source/component/DatabaseForm.hxx:233
-    void frm::ODatabaseForm::fire(int *,const class com::sun::star::uno::Any *,const class com::sun::star::uno::Any *,int)
+    void frm::ODatabaseForm::fire(int *,const class cpo::uno::Any *,const class cpo::uno::Any *,int)
     int nCount
     1
 forms/source/component/GroupManager.hxx:143
@@ -531,7 +531,7 @@ forms/source/component/GroupManager.hxx:143
     unsigned short nP
     0
 forms/source/inc/featuredispatcher.hxx:50
-    void frm::IFeatureDispatcher::dispatchWithArgument(short,const class rtl::OUString &,const class com::sun::star::uno::Any &) const
+    void frm::IFeatureDispatcher::dispatchWithArgument(short,const class rtl::OUString &,const class cpo::uno::Any &) const
     short _nFeatureId
     1
 formula/source/core/api/FormulaCompiler.cxx:160
@@ -687,11 +687,11 @@ include/basic/sbxobj.hxx:73
     enum SbxClassType 
     1
 include/comphelper/configurationhelper.hxx:211
-    class com::sun::star::uno::Any comphelper::ConfigurationHelper::readDirectKey(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,enum comphelper::EConfigurationModes)
+    class cpo::uno::Any comphelper::ConfigurationHelper::readDirectKey(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,enum comphelper::EConfigurationModes)
     enum comphelper::EConfigurationModes eMode
     1
 include/comphelper/configurationhelper.hxx:227
-    void comphelper::ConfigurationHelper::writeDirectKey(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class com::sun::star::uno::Any &,enum comphelper::EConfigurationModes)
+    void comphelper::ConfigurationHelper::writeDirectKey(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class cpo::uno::Any &,enum comphelper::EConfigurationModes)
     enum comphelper::EConfigurationModes eMode
     0
 include/comphelper/errcode.hxx:73
@@ -1159,7 +1159,7 @@ include/sfx2/sfxdlg.hxx:142
     class weld::Window * pParent
     0
 include/sfx2/sfxdlg.hxx:158
-    void SfxAbstractDialogFactory::ShowAsyncScriptErrorDialog(class weld::Window *,const class com::sun::star::uno::Any &)
+    void SfxAbstractDialogFactory::ShowAsyncScriptErrorDialog(class weld::Window *,const class cpo::uno::Any &)
     class weld::Window * pParent
     0
 include/sfx2/thumbnailview.hxx:211
@@ -1691,11 +1691,11 @@ include/unotools/ucbstreamhelper.hxx:47
     _Bool bUseSimpleFileAccessInteraction
     1
 include/vbahelper/vbaeventshelperbase.hxx:89
-    void VbaEventsHelperBase::checkArgumentType(const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,int)
+    void VbaEventsHelperBase::checkArgumentType(const class com::sun::star::uno::Sequence<class cpo::uno::Any> &,int)
     int nIndex
     0
 include/vbahelper/vbahelper.hxx:118
-    class rtl::OUString extractStringFromAny(const class com::sun::star::uno::Any &,const class rtl::OUString &,_Bool)
+    class rtl::OUString extractStringFromAny(const class cpo::uno::Any &,const class rtl::OUString &,_Bool)
     _Bool bUppercaseBool
     1
 include/vcl/abstdlg.hxx:107
@@ -3279,23 +3279,23 @@ sc/source/ui/vba/vbacondition.hxx:43
     _Bool _bIncludeFormulaValue
     1
 sc/source/ui/vba/vbaeventshelper.hxx:53
-    _Bool ScVbaEventsHelper::isSelectionChanged(const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,int)
+    _Bool ScVbaEventsHelper::isSelectionChanged(const class com::sun::star::uno::Sequence<class cpo::uno::Any> &,int)
     int nIndex
     0
 sc/source/ui/vba/vbaeventshelper.hxx:59
-    class com::sun::star::uno::Any ScVbaEventsHelper::createWorksheet(const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,int) const
+    class cpo::uno::Any ScVbaEventsHelper::createWorksheet(const class com::sun::star::uno::Sequence<class cpo::uno::Any> &,int) const
     int nIndex
     0
 sc/source/ui/vba/vbaeventshelper.hxx:64
-    class com::sun::star::uno::Any ScVbaEventsHelper::createRange(const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,int) const
+    class cpo::uno::Any ScVbaEventsHelper::createRange(const class com::sun::star::uno::Sequence<class cpo::uno::Any> &,int) const
     int nIndex
     0
 sc/source/ui/vba/vbaeventshelper.hxx:69
-    class com::sun::star::uno::Any ScVbaEventsHelper::createHyperlink(const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,int) const
+    class cpo::uno::Any ScVbaEventsHelper::createHyperlink(const class com::sun::star::uno::Sequence<class cpo::uno::Any> &,int) const
     int nIndex
     0
 sc/source/ui/vba/vbaeventshelper.hxx:74
-    class com::sun::star::uno::Any ScVbaEventsHelper::createWindow(const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,int) const
+    class cpo::uno::Any ScVbaEventsHelper::createWindow(const class com::sun::star::uno::Sequence<class cpo::uno::Any> &,int) const
     int nIndex
     0
 sc/source/ui/vba/vbarange.hxx:112
@@ -3327,27 +3327,27 @@ scaddins/source/analysis/analysishelper.hxx:81
     int nDate
     0
 scaddins/source/analysis/analysishelper.hxx:260
-    void sca::analysis::SortedIndividualInt32List::InsertHolidayList(const class sca::analysis::ScaAnyConverter &,const class com::sun::star::uno::Any &,int,_Bool)
+    void sca::analysis::SortedIndividualInt32List::InsertHolidayList(const class sca::analysis::ScaAnyConverter &,const class cpo::uno::Any &,int,_Bool)
     _Bool bInsertOnWeekend
     0
 scaddins/source/analysis/analysishelper.hxx:881
-    int sca::analysis::ScaAnyConverter::getInt32(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Any &,int)
+    int sca::analysis::ScaAnyConverter::getInt32(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class cpo::uno::Any &,int)
     int nDefault
     0
 sd/inc/CustomAnimationEffect.hxx:130
-    class com::sun::star::uno::Any sd::CustomAnimationEffect::getProperty(int,class std::basic_string_view<char16_t>,enum sd::EValue)
+    class cpo::uno::Any sd::CustomAnimationEffect::getProperty(int,class std::basic_string_view<char16_t>,enum sd::EValue)
     enum sd::EValue eValue
     0
 sd/inc/CustomAnimationEffect.hxx:131
-    _Bool sd::CustomAnimationEffect::setProperty(int,class std::basic_string_view<char16_t>,enum sd::EValue,const class com::sun::star::uno::Any &)
+    _Bool sd::CustomAnimationEffect::setProperty(int,class std::basic_string_view<char16_t>,enum sd::EValue,const class cpo::uno::Any &)
     enum sd::EValue eValue
     0
 sd/inc/CustomAnimationEffect.hxx:133
-    class com::sun::star::uno::Any sd::CustomAnimationEffect::getTransformationProperty(int,enum sd::EValue)
+    class cpo::uno::Any sd::CustomAnimationEffect::getTransformationProperty(int,enum sd::EValue)
     enum sd::EValue eValue
     1
 sd/inc/CustomAnimationEffect.hxx:134
-    _Bool sd::CustomAnimationEffect::setTransformationProperty(int,enum sd::EValue,const class com::sun::star::uno::Any &)
+    _Bool sd::CustomAnimationEffect::setTransformationProperty(int,enum sd::EValue,const class cpo::uno::Any &)
     enum sd::EValue eValue
     1
 sd/inc/shapelist.hxx:57
@@ -3567,7 +3567,7 @@ svl/source/passwordcontainer/passwordcontainer.hxx:170
     signed char nStatus
     1
 svtools/source/control/valueimp.hxx:204
-    void ValueItemAcc::FireAccessibleEvent(short,const class com::sun::star::uno::Any &,const class com::sun::star::uno::Any &)
+    void ValueItemAcc::FireAccessibleEvent(short,const class cpo::uno::Any &,const class cpo::uno::Any &)
     short nEventId
     1
 svx/inc/sdginitm.hxx:33
@@ -4223,19 +4223,19 @@ ucb/source/ucp/webdav-curl/DAVTypes.hxx:171
     _Bool HeadAllowed
     0
 vbahelper/source/vbahelper/vbacommandbarcontrols.hxx:36
-    class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> ScVbaCommandBarControls::CreateMenuItemData(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,unsigned short,const class com::sun::star::uno::Any &,_Bool,_Bool)
+    class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> ScVbaCommandBarControls::CreateMenuItemData(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,unsigned short,const class cpo::uno::Any &,_Bool,_Bool)
     _Bool isVisible
     1
 vbahelper/source/vbahelper/vbacommandbarcontrols.hxx:36
-    class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> ScVbaCommandBarControls::CreateMenuItemData(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,unsigned short,const class com::sun::star::uno::Any &,_Bool,_Bool)
+    class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> ScVbaCommandBarControls::CreateMenuItemData(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,unsigned short,const class cpo::uno::Any &,_Bool,_Bool)
     _Bool isEnabled
     1
 vbahelper/source/vbahelper/vbacommandbarcontrols.hxx:43
-    class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> ScVbaCommandBarControls::CreateToolbarItemData(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,unsigned short,const class com::sun::star::uno::Any &,_Bool,int)
+    class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> ScVbaCommandBarControls::CreateToolbarItemData(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,unsigned short,const class cpo::uno::Any &,_Bool,int)
     _Bool isVisible
     1
 vbahelper/source/vbahelper/vbacommandbarcontrols.hxx:43
-    class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> ScVbaCommandBarControls::CreateToolbarItemData(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,unsigned short,const class com::sun::star::uno::Any &,_Bool,int)
+    class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> ScVbaCommandBarControls::CreateToolbarItemData(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,unsigned short,const class cpo::uno::Any &,_Bool,int)
     int nStyle
     0
 vcl/backendtest/outputdevice/common.cxx:59

@@ -98,7 +98,7 @@ void GetSignatureLineShape(const uno::Reference<frame::XModel>& xModel, sal_Int3
     uno::Reference<io::XOutputStream> xStream(new utl::OStreamWrapper(aStream));
     aMediaDescriptor[u"OutputStream"_ustr] <<= xStream;
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "Selection", uno::Any(xShapes) } }));
+        comphelper::InitPropertySequence({ { "Selection", cpo::uno::Any(xShapes) } }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     xStorable->storeToURL(u"private:stream"_ustr, aMediaDescriptor.getAsConstPropertyValueList());
     xStream->flush();

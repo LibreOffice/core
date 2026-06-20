@@ -28,15 +28,15 @@ public:
     IndexedPropertyValuesContainer() noexcept;
 
     // XIndexContainer
-    virtual void SAL_CALL insertByIndex(sal_Int32 nIndex, const css::uno::Any& aElement) override;
+    virtual void SAL_CALL insertByIndex(sal_Int32 nIndex, const cpo::uno::Any& aElement) override;
     virtual void SAL_CALL removeByIndex(sal_Int32 nIndex) override;
 
     // XIndexReplace
-    virtual void SAL_CALL replaceByIndex(sal_Int32 nIndex, const css::uno::Any& aElement) override;
+    virtual void SAL_CALL replaceByIndex(sal_Int32 nIndex, const cpo::uno::Any& aElement) override;
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;

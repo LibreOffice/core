@@ -487,7 +487,7 @@ awt::Rectangle AccessibleShape::implGetBounds()
                 {
                     try
                     {
-                        uno::Any aValue = xSet->getPropertyValue (sBoundRectName);
+                        cpo::uno::Any aValue = xSet->getPropertyValue (sBoundRectName);
                         aValue >>= aBoundingBox;
                         bFoundBoundRect = true;
                     }
@@ -517,7 +517,7 @@ awt::Rectangle AccessibleShape::implGetBounds()
             {
                 if (xSetInfo->hasPropertyByName (sAnchorPositionName))
                 {
-                    uno::Any aPos = xSet->getPropertyValue (sAnchorPositionName);
+                    cpo::uno::Any aPos = xSet->getPropertyValue (sAnchorPositionName);
                     awt::Point aAnchorPosition;
                     aPos >>= aAnchorPosition;
                     aBoundingBox.X += aAnchorPosition.X;
@@ -580,7 +580,7 @@ sal_Int32 SAL_CALL AccessibleShape::getForeground()
         uno::Reference<beans::XPropertySet> aSet (mxShape, uno::UNO_QUERY);
         if (aSet.is())
         {
-            uno::Any aColor;
+            cpo::uno::Any aColor;
             aColor = aSet->getPropertyValue (u"LineColor"_ustr);
             aColor >>= nColor;
         }
@@ -603,7 +603,7 @@ sal_Int32 SAL_CALL AccessibleShape::getBackground()
         uno::Reference<beans::XPropertySet> aSet (mxShape, uno::UNO_QUERY);
         if (aSet.is())
         {
-            uno::Any aColor;
+            cpo::uno::Any aColor;
             aColor = aSet->getPropertyValue (u"FillColor"_ustr);
             aColor >>= nColor;
             aColor = aSet->getPropertyValue (u"FillTransparence"_ustr);
@@ -653,10 +653,10 @@ void SAL_CALL AccessibleShape::removeAccessibleEventListener (
 }
 
 // XInterface
-css::uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
     AccessibleShape::queryInterface (const css::uno::Type & rType)
 {
-    css::uno::Any aReturn = AccessibleContextBase::queryInterface (rType);
+    cpo::uno::Any aReturn = AccessibleContextBase::queryInterface (rType);
     if ( ! aReturn.hasValue())
         aReturn = ::cppu::queryInterface (rType,
             static_cast<XAccessibleComponent*>(this),
@@ -857,8 +857,8 @@ void SAL_CALL
     // that indicates a change of the visible data to all listeners.
     CommitChange (
         AccessibleEventId::VISIBLE_DATA_CHANGED,
-        uno::Any(),
-        uno::Any(), -1);
+        cpo::uno::Any(),
+        cpo::uno::Any(), -1);
 
     // Name and Description may have changed.  Update the local
     // values accordingly.
@@ -874,8 +874,8 @@ void AccessibleShape::ViewForwarderChanged()
     // Inform all listeners that the graphical representation (i.e. size
     // and/or position) of the shape has changed.
     CommitChange (AccessibleEventId::VISIBLE_DATA_CHANGED,
-        uno::Any(),
-        uno::Any(), -1);
+        cpo::uno::Any(),
+        cpo::uno::Any(), -1);
 
     // Tell children manager of the modified view forwarder.
     if (mpChildrenManager != nullptr)
@@ -922,7 +922,7 @@ OUString AccessibleShape::GetFullAccessibleName (AccessibleShape *shape)
     //Event
     if (m_aAccName != sName && !m_aAccName.isEmpty())
     {
-        uno::Any aOldValue, aNewValue;
+        cpo::uno::Any aOldValue, aNewValue;
         aOldValue <<= m_aAccName;
         aNewValue <<= sName;
         CommitChange(
@@ -1052,7 +1052,7 @@ struct XShapePosCompareHelper
 
 // XAccessibleGroupPosition
 uno::Sequence< sal_Int32 > SAL_CALL
-AccessibleShape::getGroupPosition( const uno::Any& )
+AccessibleShape::getGroupPosition( const cpo::uno::Any& )
 {
     // we will return the:
     // [0] group level
@@ -1091,7 +1091,7 @@ AccessibleShape::getGroupPosition( const uno::Any& )
         Reference< XAccessibleGroupPosition > xGroupPosition( xParent,uno::UNO_QUERY );
         if ( xGroupPosition.is() )
         {
-            aRet = xGroupPosition->getGroupPosition( uno::Any( getAccessibleContext() ) );
+            aRet = xGroupPosition->getGroupPosition( cpo::uno::Any( getAccessibleContext() ) );
         }
         return aRet;
     }
@@ -1142,7 +1142,7 @@ AccessibleShape::getGroupPosition( const uno::Any& )
     return aRet;
 }
 
-OUString AccessibleShape::getObjectLink( const uno::Any& )
+OUString AccessibleShape::getObjectLink( const cpo::uno::Any& )
 {
     OUString aRet;
 
@@ -1156,7 +1156,7 @@ OUString AccessibleShape::getObjectLink( const uno::Any& )
         Reference< XAccessibleGroupPosition > xGroupPosition( maShapeTreeInfo.GetDocumentWindow(), uno::UNO_QUERY );
         if (xGroupPosition.is())
         {
-            aRet = xGroupPosition->getObjectLink( uno::Any( getAccessibleContext() ) );
+            aRet = xGroupPosition->getObjectLink( cpo::uno::Any( getAccessibleContext() ) );
         }
     }
     return aRet;

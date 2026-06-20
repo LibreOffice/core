@@ -33,6 +33,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::xml;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
@@ -64,7 +65,7 @@ SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport, const Reference< XFa
         return;
 
     bool bAll = true;
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     // Per ODF this is default, but we did it wrong before LO 6.0 (tdf#108824)
     bool bIsMouseVisible = true;
     if (rImport.getGeneratorVersion() < SvXMLImport::LO_6x)
@@ -167,7 +168,7 @@ SdXMLShowsContext::~SdXMLShowsContext()
 {
     if( !maCustomShowName.isEmpty() )
     {
-        uno::Any aAny;
+        cpo::uno::Any aAny;
         aAny <<= maCustomShowName;
         mxPresProps->setPropertyValue(u"CustomShow"_ustr, aAny );
     }

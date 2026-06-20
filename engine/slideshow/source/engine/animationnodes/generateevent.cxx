@@ -37,7 +37,7 @@ namespace slideshow::internal {
 using namespace com::sun::star;
 
 EventSharedPtr generateEvent(
-    uno::Any const& rEventDescription,
+    cpo::uno::Any const& rEventDescription,
     Delay::FunctorT const& rFunctor,
     SlideShowContext const& rContext,
     double nAdditionalDelay )
@@ -49,7 +49,7 @@ EventSharedPtr generateEvent(
 
     animations::Timing eTiming;
     animations::Event aEvent;
-    uno::Sequence<uno::Any> aSequence;
+    uno::Sequence<cpo::uno::Any> aSequence;
     double nDelay1 = 0;
 
     if (rEventDescription >>= eTiming) {

@@ -45,7 +45,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // css::lang::XInitialization:
-    virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any > & aArguments) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence< cpo::uno::Any > & aArguments) override;
 
     // css::rdf::XNode:
     virtual OUString SAL_CALL getStringValue() override;
@@ -77,7 +77,7 @@ css::uno::Sequence< OUString > SAL_CALL CBlankNode::getSupportedServiceNames()
 }
 
 // css::lang::XInitialization:
-void SAL_CALL CBlankNode::initialize(const css::uno::Sequence< css::uno::Any > & aArguments)
+void SAL_CALL CBlankNode::initialize(const css::uno::Sequence< cpo::uno::Any > & aArguments)
 {
     if (aArguments.getLength() != 1) {
         throw css::lang::IllegalArgumentException(
@@ -109,7 +109,7 @@ OUString SAL_CALL CBlankNode::getStringValue()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 unoxml_CBlankNode_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new CBlankNode());
 }

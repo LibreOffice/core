@@ -79,7 +79,7 @@ MacrosTest::loadFromDesktop(const OUString& rURL, const OUString& rDocService,
     return xComponent;
 }
 
-css::uno::Any
+cpo::uno::Any
 MacrosTest::dispatchCommand(const uno::Reference<lang::XComponent>& xComponent,
                             const OUString& rCommand,
                             const uno::Sequence<beans::PropertyValue>& rPropertyValues)
@@ -106,9 +106,9 @@ namespace
 class StateGetter : public ::cppu::WeakImplHelper<frame::XStatusListener>
 {
 public:
-    uno::Any& m_rOldValue;
+    cpo::uno::Any& m_rOldValue;
     bool m_Received{ false };
-    StateGetter(uno::Any& rOldValue)
+    StateGetter(cpo::uno::Any& rOldValue)
         : m_rOldValue(rOldValue)
     {
     }
@@ -129,11 +129,12 @@ public:
 
 } // namespace
 
-uno::Any MacrosTest::queryDispatchStatus(uno::Reference<lang::XComponent> const& xComponent,
-                                         uno::Reference<uno::XComponentContext> const& xContext,
-                                         OUString const& rURL)
+cpo::uno::Any
+MacrosTest::queryDispatchStatus(uno::Reference<lang::XComponent> const& xComponent,
+                                uno::Reference<uno::XComponentContext> const& xContext,
+                                OUString const& rURL)
 {
-    uno::Any ret;
+    cpo::uno::Any ret;
 
     util::URL url;
     url.Complete = rURL;

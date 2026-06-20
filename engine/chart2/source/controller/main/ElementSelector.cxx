@@ -38,7 +38,8 @@ namespace chart
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
-using ::com::sun::star::uno::Any;
+using namespace cpo::uno;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
@@ -303,7 +304,7 @@ uno::Reference< awt::XWindow > SAL_CALL ElementSelectorToolbarController::create
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart_ElementSelectorToolbarController_get_implementation(css::uno::XComponentContext *,
-                                                                            css::uno::Sequence<css::uno::Any> const &)
+                                                                            css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new chart::ElementSelectorToolbarController );
 }

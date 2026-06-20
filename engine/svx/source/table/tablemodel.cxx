@@ -422,14 +422,14 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL TableModel::getPropertySetInfo(
 }
 
 
-void SAL_CALL TableModel::setPropertyValue( const OUString& /*aPropertyName*/, const uno::Any& /*aValue*/ )
+void SAL_CALL TableModel::setPropertyValue( const OUString& /*aPropertyName*/, const cpo::uno::Any& /*aValue*/ )
 {
 }
 
 
-uno::Any SAL_CALL TableModel::getPropertyValue( const OUString& /*PropertyName*/ )
+cpo::uno::Any SAL_CALL TableModel::getPropertyValue( const OUString& /*PropertyName*/ )
 {
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 
@@ -456,14 +456,14 @@ void SAL_CALL TableModel::removeVetoableChangeListener( const OUString& /*aPrope
 // XFastPropertySet
 
 
-void SAL_CALL TableModel::setFastPropertyValue( ::sal_Int32 /*nHandle*/, const uno::Any& /*aValue*/ )
+void SAL_CALL TableModel::setFastPropertyValue( ::sal_Int32 /*nHandle*/, const cpo::uno::Any& /*aValue*/ )
 {
 }
 
 
-uno::Any SAL_CALL TableModel::getFastPropertyValue( ::sal_Int32 /*nHandle*/ )
+cpo::uno::Any SAL_CALL TableModel::getFastPropertyValue( ::sal_Int32 /*nHandle*/ )
 {
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     return aAny;
 }
 
@@ -984,7 +984,7 @@ void TableModel::optimize()
                     xSet1->getPropertyValue( sWidth ) >>= nWidth1;
                     xSet2->getPropertyValue( sWidth ) >>= nWidth2;
                     nWidth1 = o3tl::saturating_add(nWidth1, nWidth2);
-                    xSet2->setPropertyValue( sWidth, uno::Any( nWidth1 ) );
+                    xSet2->setPropertyValue( sWidth, cpo::uno::Any( nWidth1 ) );
                 }
                 catch( uno::Exception& )
                 {
@@ -1021,7 +1021,7 @@ void TableModel::optimize()
                     xSet1->getPropertyValue( sHeight ) >>= nHeight1;
                     xSet2->getPropertyValue( sHeight ) >>= nHeight2;
                     nHeight1 = o3tl::saturating_add(nHeight1, nHeight2);
-                    xSet2->setPropertyValue( sHeight, uno::Any( nHeight1 ) );
+                    xSet2->setPropertyValue( sHeight, cpo::uno::Any( nHeight1 ) );
                 }
                 catch( uno::Exception& )
                 {

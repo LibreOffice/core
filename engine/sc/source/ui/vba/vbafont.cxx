@@ -52,7 +52,7 @@ ScVbaFont::~ScVbaFont()
 {
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaFont::getSize()
 {
     if ( GetDataSet() )
@@ -62,7 +62,7 @@ ScVbaFont::getSize()
 }
 
 void SAL_CALL
-ScVbaFont::setColorIndex( const uno::Any& _colorindex )
+ScVbaFont::setColorIndex( const cpo::uno::Any& _colorindex )
 {
     if(mbFormControl)
         return;
@@ -75,17 +75,17 @@ ScVbaFont::setColorIndex( const uno::Any& _colorindex )
     if ( !nIndex || ( nIndex == excel::XlColorIndex::xlColorIndexAutomatic ) )
     {
         nIndex = 1;  // check default ( assume black )
-        ScVbaFont_BASE::setColorIndex( uno::Any( nIndex ) );
+        ScVbaFont_BASE::setColorIndex( cpo::uno::Any( nIndex ) );
     }
     else
         ScVbaFont_BASE::setColorIndex( _colorindex );
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaFont::getColorIndex()
 {
     if(mbFormControl)
-        return uno::Any( sal_Int32(0) );
+        return cpo::uno::Any( sal_Int32(0) );
     if ( GetDataSet() )
         if (  GetDataSet()->GetItemState( ATTR_FONT_COLOR) == SfxItemState::INVALID )
             return aNULL();
@@ -93,39 +93,39 @@ ScVbaFont::getColorIndex()
 }
 
 void  SAL_CALL
-ScVbaFont::setStandardFontSize( const uno::Any& /*aValue*/ )
+ScVbaFont::setStandardFontSize( const cpo::uno::Any& /*aValue*/ )
 {
 //XXX #TODO# #FIXME#
-    //mxFont->setPropertyValue("CharSize", ( uno::Any )fValue );
+    //mxFont->setPropertyValue("CharSize", ( cpo::uno::Any )fValue );
     throw uno::RuntimeException(
         u"setStandardFontSize not supported"_ustr );
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaFont::getStandardFontSize()
 {
 //XXX #TODO# #FIXME#
     throw uno::RuntimeException( u"getStandardFontSize not supported"_ustr );
-    // return uno::Any();
+    // return cpo::uno::Any();
 }
 
 void  SAL_CALL
-ScVbaFont::setStandardFont( const uno::Any& /*aValue*/ )
+ScVbaFont::setStandardFont( const cpo::uno::Any& /*aValue*/ )
 {
 //XXX #TODO# #FIXME#
     throw uno::RuntimeException(u"setStandardFont not supported"_ustr );
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaFont::getStandardFont()
 {
 //XXX #TODO# #FIXME#
     throw uno::RuntimeException(u"getStandardFont not supported"_ustr);
-    // return uno::Any();
+    // return cpo::uno::Any();
 }
 
 void SAL_CALL
-ScVbaFont::setFontStyle( const uno::Any& aValue )
+ScVbaFont::setFontStyle( const cpo::uno::Any& aValue )
 {
     bool bBold = false;
     bool bItalic = false;
@@ -150,11 +150,11 @@ ScVbaFont::setFontStyle( const uno::Any& aValue )
         }
     }
 
-    setBold( uno::Any( bBold ) );
-    setItalic( uno::Any( bItalic ) );
+    setBold( cpo::uno::Any( bBold ) );
+    setItalic( cpo::uno::Any( bItalic ) );
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaFont::getFontStyle()
 {
     OUStringBuffer aStyles;
@@ -170,10 +170,10 @@ ScVbaFont::getFontStyle()
             aStyles.append(" ");
         aStyles.append("Italic");
     }
-    return uno::Any( aStyles.makeStringAndClear() );
+    return cpo::uno::Any( aStyles.makeStringAndClear() );
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaFont::getBold()
 {
     if ( GetDataSet() )
@@ -183,7 +183,7 @@ ScVbaFont::getBold()
 }
 
 void SAL_CALL
-ScVbaFont::setUnderline( const uno::Any& aValue )
+ScVbaFont::setUnderline( const cpo::uno::Any& aValue )
 {
     if(mbFormControl)
         return;
@@ -215,11 +215,11 @@ ScVbaFont::setUnderline( const uno::Any& aValue )
             throw uno::RuntimeException(u"Unknown value for Underline"_ustr );
     }
 
-    mxFont->setPropertyValue(u"CharUnderline"_ustr, uno::Any(nValue) );
+    mxFont->setPropertyValue(u"CharUnderline"_ustr, cpo::uno::Any(nValue) );
 
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaFont::getUnderline()
 {
     if ( GetDataSet() )
@@ -229,7 +229,7 @@ ScVbaFont::getUnderline()
     sal_Int32 nValue = awt::FontUnderline::NONE;
 
     if(mbFormControl)
-        return uno::Any( nValue );
+        return cpo::uno::Any( nValue );
 
     mxFont->getPropertyValue(u"CharUnderline"_ustr) >>= nValue;
     switch ( nValue )
@@ -247,10 +247,10 @@ ScVbaFont::getUnderline()
             throw uno::RuntimeException(u"Unknown value retrieved for Underline"_ustr );
 
     }
-    return uno::Any( nValue );
+    return cpo::uno::Any( nValue );
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaFont::getStrikethrough()
 {
     if ( GetDataSet() )
@@ -259,7 +259,7 @@ ScVbaFont::getStrikethrough()
     return ScVbaFont_BASE::getStrikethrough();
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaFont::getShadow()
 {
     if ( GetDataSet() )
@@ -268,7 +268,7 @@ ScVbaFont::getShadow()
     return ScVbaFont_BASE::getShadow();
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaFont::getItalic()
 {
     if ( GetDataSet() )
@@ -278,7 +278,7 @@ ScVbaFont::getItalic()
     return ScVbaFont_BASE::getItalic();
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaFont::getName()
 {
     if ( GetDataSet() )
@@ -286,28 +286,28 @@ ScVbaFont::getName()
             return aNULL();
     return ScVbaFont_BASE::getName();
 }
-uno::Any
+cpo::uno::Any
 ScVbaFont::getColor()
 {
     // #TODO #FIXME - behave like getXXX above ( wrt. GetDataSet )
-    uno::Any aAny = OORGBToXLRGB( mxFont->getPropertyValue(u"CharColor"_ustr) );
+    cpo::uno::Any aAny = OORGBToXLRGB( mxFont->getPropertyValue(u"CharColor"_ustr) );
     return aAny;
 }
 
 void  SAL_CALL
-ScVbaFont::setOutlineFont( const uno::Any& aValue )
+ScVbaFont::setOutlineFont( const cpo::uno::Any& aValue )
 {
     if(!mbFormControl)
         mxFont->setPropertyValue(u"CharContoured"_ustr, aValue );
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaFont::getOutlineFont()
 {
     if ( GetDataSet() )
         if (  GetDataSet()->GetItemState( ATTR_FONT_CONTOUR) == SfxItemState::INVALID )
             return aNULL();
-    return mbFormControl ? uno::Any( false ) : mxFont->getPropertyValue(u"CharContoured"_ustr);
+    return mbFormControl ? cpo::uno::Any( false ) : mxFont->getPropertyValue(u"CharContoured"_ustr);
 }
 
 OUString

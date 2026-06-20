@@ -22,7 +22,7 @@
 #include <string_view>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <basic/sbxvar.hxx>
@@ -56,7 +56,7 @@ namespace ooo::vba
     {
         /// @throws css::lang::IllegalArgumentException
         template < class T >
-        css::uno::Reference< T > getXSomethingFromArgs( css::uno::Sequence< css::uno::Any > const & args, sal_Int32 nPos, bool bCanBeNull = true )
+        css::uno::Reference< T > getXSomethingFromArgs( css::uno::Sequence< cpo::uno::Any > const & args, sal_Int32 nPos, bool bCanBeNull = true )
         {
             if ( args.getLength() < ( nPos + 1) )
                 throw css::lang::IllegalArgumentException();
@@ -85,7 +85,7 @@ namespace ooo::vba
         VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getCurrentDocCtx( const OUString& ctxName, const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
         /// @throws css::uno::RuntimeException
-        VBAHELPER_DLLPUBLIC css::uno::Reference< css::beans::XIntrospectionAccess > getIntrospectionAccess( const css::uno::Any& aObject );
+        VBAHELPER_DLLPUBLIC css::uno::Reference< css::beans::XIntrospectionAccess > getIntrospectionAccess( const cpo::uno::Any& aObject );
         /// @throws css::uno::RuntimeException
         VBAHELPER_DLLPUBLIC css::uno::Reference< css::script::XTypeConverter > const & getTypeConverter( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
@@ -95,40 +95,40 @@ namespace ooo::vba
         VBAHELPER_DLLPUBLIC sal_Int32 OORGBToXLRGB( sal_Int32 );
         inline sal_Int32 OORGBToXLRGB( ::Color n ) { return OORGBToXLRGB(sal_Int32(n)); }
         VBAHELPER_DLLPUBLIC sal_Int32 XLRGBToOORGB( sal_Int32 );
-        VBAHELPER_DLLPUBLIC css::uno::Any OORGBToXLRGB( const css::uno::Any& );
-        VBAHELPER_DLLPUBLIC css::uno::Any XLRGBToOORGB( const css::uno::Any& );
+        VBAHELPER_DLLPUBLIC cpo::uno::Any OORGBToXLRGB( const cpo::uno::Any& );
+        VBAHELPER_DLLPUBLIC cpo::uno::Any XLRGBToOORGB( const cpo::uno::Any& );
         // provide a NULL object that can be passed as variant so that
         // the object when passed to IsNull will return true. aNULL
         // contains an empty object reference
-        VBAHELPER_DLLPUBLIC const css::uno::Any& aNULL();
-        VBAHELPER_DLLPUBLIC void PrintOutHelper( SfxViewShell const * pViewShell, const css::uno::Any& From, const css::uno::Any& To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName, bool bSelection  );
-        VBAHELPER_DLLPUBLIC void PrintPreviewHelper( const css::uno::Any& EnableChanges, SfxViewShell const * );
+        VBAHELPER_DLLPUBLIC const cpo::uno::Any& aNULL();
+        VBAHELPER_DLLPUBLIC void PrintOutHelper( SfxViewShell const * pViewShell, const cpo::uno::Any& From, const cpo::uno::Any& To, const cpo::uno::Any& Copies, const cpo::uno::Any& Preview, const cpo::uno::Any& ActivePrinter, const cpo::uno::Any& PrintToFile, const cpo::uno::Any& Collate, const cpo::uno::Any& PrToFileName, bool bSelection  );
+        VBAHELPER_DLLPUBLIC void PrintPreviewHelper( const cpo::uno::Any& EnableChanges, SfxViewShell const * );
         VBAHELPER_DLLPUBLIC void WaitUntilPreviewIsClosed( SfxViewFrame* );
 
         /** Extracts a boolean value from the passed Any, which may contain a Boolean or an integer or floating-point value.
             @throws css::uno::RuntimeException if the Any is empty or contains an incompatible type. */
-        VBAHELPER_DLLPUBLIC bool extractBoolFromAny( const css::uno::Any& rAny );
+        VBAHELPER_DLLPUBLIC bool extractBoolFromAny( const cpo::uno::Any& rAny );
 
         /** Extracts a string from the passed Any, which may contain a Boolean, a value, or a string.
             @throws css::uno::RuntimeException if the Any is empty or contains an incompatible type. */
-        VBAHELPER_DLLPUBLIC OUString extractStringFromAny( const css::uno::Any& rAny, bool bUppercaseBool = false );
+        VBAHELPER_DLLPUBLIC OUString extractStringFromAny( const cpo::uno::Any& rAny, bool bUppercaseBool = false );
         /** Extracts a string from the passed Any, which may contain a Boolean, a value, or a string.
             Returns rDefault, if rAny is empty.
             @throws css::uno::RuntimeException if the Any contains an incompatible type. */
-        VBAHELPER_DLLPUBLIC OUString extractStringFromAny( const css::uno::Any& rAny, const OUString& rDefault, bool bUppercaseBool );
+        VBAHELPER_DLLPUBLIC OUString extractStringFromAny( const cpo::uno::Any& rAny, const OUString& rDefault, bool bUppercaseBool );
 
         /// @throws css::uno::RuntimeException
-        VBAHELPER_DLLPUBLIC OUString getAnyAsString( const css::uno::Any& pvargItem );
+        VBAHELPER_DLLPUBLIC OUString getAnyAsString( const cpo::uno::Any& pvargItem );
         VBAHELPER_DLLPUBLIC OUString VBAToRegexp(const OUString &rIn); // needs to be in a uno service ( already this code is duplicated in basic )
         VBAHELPER_DLLPUBLIC double PointsToPixels( const css::uno::Reference< css::awt::XDevice >& xDevice, double fPoints, bool bVertical);
         VBAHELPER_DLLPUBLIC double PixelsToPoints( const css::uno::Reference< css::awt::XDevice >& xDevice, double fPixels, bool bVertical);
         VBAHELPER_DLLPUBLIC PointerStyle getPointerStyle( const css::uno::Reference< css::frame::XModel >& );
         VBAHELPER_DLLPUBLIC void setCursorHelper( const css::uno::Reference< css::frame::XModel >& xModel, PointerStyle nPointer, bool bOverWrite );
         /// @throws css::uno::RuntimeException
-        VBAHELPER_DLLPUBLIC void setDefaultPropByIntrospection( const css::uno::Any& aObj, const css::uno::Any& aValue  );
-        VBAHELPER_DLLPUBLIC css::uno::Any getPropertyValue( const css::uno::Sequence< css::beans::PropertyValue >& aProp, const OUString& aName );
-        VBAHELPER_DLLPUBLIC bool setPropertyValue( css::uno::Sequence< css::beans::PropertyValue >& aProp, const OUString& aName, const css::uno::Any& aValue );
-        VBAHELPER_DLLPUBLIC void setOrAppendPropertyValue( css::uno::Sequence< css::beans::PropertyValue >& aProp, const OUString& aName, const css::uno::Any& aValue );
+        VBAHELPER_DLLPUBLIC void setDefaultPropByIntrospection( const cpo::uno::Any& aObj, const cpo::uno::Any& aValue  );
+        VBAHELPER_DLLPUBLIC cpo::uno::Any getPropertyValue( const css::uno::Sequence< css::beans::PropertyValue >& aProp, const OUString& aName );
+        VBAHELPER_DLLPUBLIC bool setPropertyValue( css::uno::Sequence< css::beans::PropertyValue >& aProp, const OUString& aName, const cpo::uno::Any& aValue );
+        VBAHELPER_DLLPUBLIC void setOrAppendPropertyValue( css::uno::Sequence< css::beans::PropertyValue >& aProp, const OUString& aName, const cpo::uno::Any& aValue );
 
         VBAHELPER_DLLPUBLIC bool executeRunTimeLibrary(std::u16string_view rSbRtl_command,
                                                        SbxArray* pParameters);

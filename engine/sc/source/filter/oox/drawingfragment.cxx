@@ -65,6 +65,7 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::oox::core;
 using namespace ::oox::drawingml;
 using namespace ::oox::ole;

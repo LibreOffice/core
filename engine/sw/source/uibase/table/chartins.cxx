@@ -51,6 +51,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 Point SwGetChartDialogPos( const vcl::Window *pParentWin, const Size& rDialogSize, const tools::Rectangle& rLogicChart )
 {
@@ -182,10 +183,10 @@ SwInsertChart::SwInsertChart( const Link<css::ui::dialogs::DialogClosedEvent*, v
             xParent = new weld::TransportAsXWindow(pWin->GetFrameWeld());
         }
         //  initialize dialog
-        uno::Sequence<uno::Any> aSeq(comphelper::InitAnyPropertySequence(
+        uno::Sequence<cpo::uno::Any> aSeq(comphelper::InitAnyPropertySequence(
         {
-            {"ParentWindow", uno::Any(xParent)},
-            {"ChartModel", uno::Any(xChartModel)}
+            {"ParentWindow", cpo::uno::Any(xParent)},
+            {"ChartModel", cpo::uno::Any(xChartModel)}
         }));
         xInit->initialize( aSeq );
 
@@ -210,7 +211,7 @@ SwInsertChart::SwInsertChart( const Link<css::ui::dialogs::DialogClosedEvent*, v
                         tools::Rectangle aRect( aSwRect.SVRect() );
                         Point aDialogPos = SwGetChartDialogPos( &rWrtShell.GetView().GetEditWin(), aDialogSize, aRect );
                         xDialogProps->setPropertyValue(u"Position"_ustr,
-                            uno::Any( awt::Point(aDialogPos.getX(),aDialogPos.getY()) ) );
+                            cpo::uno::Any( awt::Point(aDialogPos.getX(),aDialogPos.getY()) ) );
                     }
                 }
             }

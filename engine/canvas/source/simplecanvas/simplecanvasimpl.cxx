@@ -124,7 +124,7 @@ namespace
                                           rendering::CompositeOperation::OVER);
         }
 
-        static uno::Reference<rendering::XCanvas> grabCanvas( uno::Sequence<uno::Any> const& rArgs )
+        static uno::Reference<rendering::XCanvas> grabCanvas( uno::Sequence<cpo::uno::Any> const& rArgs )
         {
             uno::Reference<rendering::XCanvas> xRet;
 
@@ -142,7 +142,7 @@ namespace
         }
 
     public:
-        SimpleCanvasImpl( const uno::Sequence< uno::Any >&                aArguments,
+        SimpleCanvasImpl( const uno::Sequence< cpo::uno::Any >&                aArguments,
                           const uno::Reference< uno::XComponentContext >&  ) :
             mxCanvas( grabCanvas(aArguments) ),
             maFont([this](rendering::FontRequest const& rFontRequest) {
@@ -357,7 +357,7 @@ namespace
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_rendering_SimpleCanvas(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new SimpleCanvasImpl(args, context));
 }

@@ -76,6 +76,7 @@ namespace xmloff
     using namespace ::xmloff::token;
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::form;

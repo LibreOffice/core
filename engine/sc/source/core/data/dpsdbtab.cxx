@@ -30,7 +30,7 @@
 using namespace com::sun::star;
 
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 
 sal_Int32 ScImportSourceDesc::GetCommandType() const
 {

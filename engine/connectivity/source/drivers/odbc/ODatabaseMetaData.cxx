@@ -32,6 +32,7 @@
 
 using namespace connectivity::odbc;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::sdbc;
 
 ODatabaseMetaData::ODatabaseMetaData(const SQLHANDLE _pHandle,OConnection* _pCon)

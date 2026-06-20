@@ -51,8 +51,8 @@ public:
                                   OUString &rText,
                                   const IntlWrapper& ) const override;
 
-    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool            QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
         // SfxPoolItem copy function dichotomy
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;

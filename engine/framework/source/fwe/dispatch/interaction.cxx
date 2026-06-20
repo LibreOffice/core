@@ -96,11 +96,11 @@ public:
     OUString getFilter() const;
 
 public:
-    virtual css::uno::Any SAL_CALL getRequest() override;
+    virtual cpo::uno::Any SAL_CALL getRequest() override;
     virtual css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL getContinuations() override;
 
 private:
-    css::uno::Any                                                                       m_aRequest;
+    cpo::uno::Any                                                                       m_aRequest;
     rtl::Reference<comphelper::OInteractionAbort>                                       m_xAbort;
     rtl::Reference<ContinuationFilterSelect>                                            m_xFilter;
 };
@@ -139,7 +139,7 @@ OUString RequestFilterSelect_Impl::getFilter() const
 // handler call it to get type of request
 // Is hard coded to "please select filter" here. see ctor for further information.
 
-css::uno::Any SAL_CALL RequestFilterSelect_Impl::getRequest()
+cpo::uno::Any SAL_CALL RequestFilterSelect_Impl::getRequest()
 {
     return m_aRequest;
 }
@@ -188,23 +188,23 @@ namespace {
 
 class InteractionRequest_Impl : public ::cppu::WeakImplHelper< css::task::XInteractionRequest >
 {
-    uno::Any m_aRequest;
+    cpo::uno::Any m_aRequest;
     uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > m_lContinuations;
 
 public:
-    InteractionRequest_Impl( css::uno::Any  aRequest,
+    InteractionRequest_Impl( cpo::uno::Any  aRequest,
         const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& lContinuations )
         : m_aRequest(std::move(aRequest)), m_lContinuations(lContinuations)
     {
     }
 
-    virtual uno::Any SAL_CALL getRequest() override;
+    virtual cpo::uno::Any SAL_CALL getRequest() override;
     virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations() override;
 };
 
 }
 
-uno::Any SAL_CALL InteractionRequest_Impl::getRequest()
+cpo::uno::Any SAL_CALL InteractionRequest_Impl::getRequest()
 {
     return m_aRequest;
 }
@@ -215,7 +215,7 @@ uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL Inter
 }
 
 uno::Reference < task::XInteractionRequest > InteractionRequest::CreateRequest(
-    const uno::Any& aRequest, const uno::Sequence< uno::Reference< task::XInteractionContinuation > >& lContinuations )
+    const cpo::uno::Any& aRequest, const uno::Sequence< uno::Reference< task::XInteractionContinuation > >& lContinuations )
 {
     return new InteractionRequest_Impl( aRequest, lContinuations );
 }

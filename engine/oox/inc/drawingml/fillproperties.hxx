@@ -25,7 +25,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <oox/drawingml/color.hxx>
 #include <oox/helper/helper.hxx>
@@ -75,7 +75,7 @@ struct PatternFillProperties
 struct ArtisticEffectProperties
 {
     OUString            msName;
-    std::map< OUString, css::uno::Any >
+    std::map< OUString, cpo::uno::Any >
                         maAttribs;
     ::oox::ole::OleObjectInfo mrOleObjectInfo;  /// The original graphic as embedded object.
 

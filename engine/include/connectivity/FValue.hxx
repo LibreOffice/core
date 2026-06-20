@@ -30,7 +30,7 @@
 
 namespace com::sun::star::sdb { class XColumn; }
 namespace com::sun::star::sdbc { class XRow; }
-namespace com::sun::star::uno { class Any; }
+namespace cpo::uno { class Any; }
 namespace com::sun::star::uno { template <class E> class Sequence; }
 namespace com::sun::star::util { struct Date; }
 namespace com::sun::star::util { struct DateTime; }
@@ -307,7 +307,7 @@ namespace connectivity
         // the type isn't set it will be set to VARCHAR if the type is different change it
         ORowSetValue& operator=(const css::uno::Sequence<sal_Int8>& _rRH);
         // with the possibility to save an any for bookmarks
-        ORowSetValue& operator=(const css::uno::Any& _rAny);
+        ORowSetValue& operator=(const cpo::uno::Any& _rAny);
 
         bool operator==(const ORowSetValue& _rRH) const;
         bool operator!=(const ORowSetValue& _rRH) const
@@ -361,8 +361,8 @@ namespace connectivity
         css::util::DateTime            getDateTime()   const;
         css::uno::Sequence<sal_Int8>   getSequence()   const;
         // only use for anys
-        const css::uno::Any&           getAny()        const { return *static_cast<css::uno::Any*>(m_aValue.m_pValue); }
-        css::uno::Any                  makeAny()       const;
+        const cpo::uno::Any&           getAny()        const { return *static_cast<cpo::uno::Any*>(m_aValue.m_pValue); }
+        cpo::uno::Any                  makeAny()       const;
 
         /**
             fetches a single value out of the row
@@ -386,7 +386,7 @@ namespace connectivity
                   bool      _bNullable,
                   const css::uno::Reference< css::sdbc::XRow>& _xRow);
 
-        void fill(const css::uno::Any& _rValue);
+        void fill(const cpo::uno::Any& _rValue);
 
         void fill( const sal_Int32 _nType,
                    const css::uno::Reference< css::sdb::XColumn >& _rxColumn );

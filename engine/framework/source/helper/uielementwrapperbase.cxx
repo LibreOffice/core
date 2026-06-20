@@ -33,6 +33,7 @@ constexpr OUString UIELEMENT_PROPNAME_TYPE = u"Type"_ustr;
 constexpr OUString UIELEMENT_PROPNAME_FRAME = u"Frame"_ustr;
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 
@@ -140,11 +141,11 @@ bool SAL_CALL UIElementWrapperBase::convertFastPropertyValue( Any&       /*aConv
 }
 
 void SAL_CALL UIElementWrapperBase::setFastPropertyValue_NoBroadcast(   sal_Int32               /*nHandle*/ ,
-                                                                        const css::uno::Any&    /*aValue*/  )
+                                                                        const cpo::uno::Any&    /*aValue*/  )
 {
 }
 
-void SAL_CALL UIElementWrapperBase::getFastPropertyValue( css::uno::Any& aValue  ,
+void SAL_CALL UIElementWrapperBase::getFastPropertyValue( cpo::uno::Any& aValue  ,
                                                           sal_Int32      nHandle                ) const
 {
     switch( nHandle )

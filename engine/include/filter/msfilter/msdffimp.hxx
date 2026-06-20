@@ -28,7 +28,7 @@
 #include <vector>
 #include <unordered_map>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <comphelper/stl_types.hxx>
@@ -736,7 +736,7 @@ public:
     static void SolveSolver( const SvxMSDffSolverContainer& rSolver );
 
     static bool SetPropValue(
-        const css::uno::Any& rAny,
+        const cpo::uno::Any& rAny,
         const css::uno::Reference< css::beans::XPropertySet > & rXPropSet,
         const OUString& rPropertyName
     );

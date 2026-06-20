@@ -57,8 +57,8 @@ protected:
     SvxMacroTabPage_(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OUString& rID, const SfxItemSet& rItemSet);
 
     void                        EnableButtons();
-    static css::uno::Any  GetPropsByName( const OUString& eventName, EventsHash& eventsHash );
-    static EventPair GetPairFromAny(const css::uno::Any& aAny);
+    static cpo::uno::Any  GetPropsByName( const OUString& eventName, EventsHash& eventsHash );
+    static EventPair GetPairFromAny(const cpo::uno::Any& aAny);
 
 public:
 

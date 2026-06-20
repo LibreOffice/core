@@ -28,13 +28,13 @@ namespace dbaxml
     class OXMLDataSourceSetting : public SvXMLImportContext
     {
         css::beans::PropertyValue          m_aSetting;
-        css::uno::Sequence< css::uno::Any> m_aInfoSequence;
+        css::uno::Sequence< cpo::uno::Any> m_aInfoSequence;
         OXMLDataSourceSetting*             m_pContainer;
         css::uno::Type                     m_aPropType;    // the type of the property the instance imports currently
         bool                               m_bIsList;
 
         ODBFilter& GetOwnImport();
-        static css::uno::Any convertString(const css::uno::Type& _rExpectedType, const OUString& _rReadCharacters);
+        static cpo::uno::Any convertString(const css::uno::Type& _rExpectedType, const OUString& _rReadCharacters);
     public:
 
         OXMLDataSourceSetting( ODBFilter& rImport

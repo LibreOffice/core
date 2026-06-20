@@ -100,7 +100,7 @@ public:
         sal_Int32 nProps );
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         noexcept override;
     virtual void SAL_CALL release()
@@ -1040,7 +1040,7 @@ ResultSet::getCharacterStream( sal_Int32 columnIndex )
 
 
 // virtual
-uno::Any SAL_CALL ResultSet::getObject(
+cpo::uno::Any SAL_CALL ResultSet::getObject(
         sal_Int32 columnIndex,
         const uno::Reference< container::XNameAccess >& typeMap )
 {
@@ -1061,7 +1061,7 @@ uno::Any SAL_CALL ResultSet::getObject(
 
     m_pImpl->m_bWasNull = true;
     m_pImpl->m_xDataSupplier->validate();
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 
@@ -1238,7 +1238,7 @@ ResultSet::getPropertySetInfo()
 
 // virtual
 void SAL_CALL ResultSet::setPropertyValue( const OUString& aPropertyName,
-                                           const uno::Any& )
+                                           const cpo::uno::Any& )
 {
     if ( aPropertyName == "RowCount" )
     {
@@ -1258,10 +1258,10 @@ void SAL_CALL ResultSet::setPropertyValue( const OUString& aPropertyName,
 
 
 // virtual
-uno::Any SAL_CALL ResultSet::getPropertyValue(
+cpo::uno::Any SAL_CALL ResultSet::getPropertyValue(
         const OUString& PropertyName )
 {
-    uno::Any aValue;
+    cpo::uno::Any aValue;
 
     if ( PropertyName == "RowCount" )
     {
@@ -1379,8 +1379,8 @@ void ResultSet::rowCountChanged( std::unique_lock<std::mutex>& rGuard, sal_uInt3
             u"RowCount"_ustr,
             false,
             1001,
-            uno::Any( nOld ),     // old value
-            uno::Any( nNew ) ) ); // new value
+            cpo::uno::Any( nOld ),     // old value
+            cpo::uno::Any( nNew ) ) ); // new value
 }
 
 
@@ -1395,8 +1395,8 @@ void ResultSet::rowCountFinal(std::unique_lock<std::mutex>& rGuard)
             u"IsRowCountFinal"_ustr,
             false,
             1000,
-            uno:: Any( false ),   // old value
-            uno::Any( true ) ) ); // new value
+            cpo::uno::Any( false ),   // old value
+            cpo::uno::Any( true ) ) ); // new value
 }
 
 
@@ -1460,10 +1460,10 @@ void SAL_CALL PropertySetInfo::release()
     OWeakObject::release();
 }
 
-css::uno::Any SAL_CALL PropertySetInfo::queryInterface(
+cpo::uno::Any SAL_CALL PropertySetInfo::queryInterface(
                                 const css::uno::Type & rType )
 {
-    css::uno::Any aRet = cppu::queryInterface( rType,
+    cpo::uno::Any aRet = cppu::queryInterface( rType,
                                                static_cast< lang::XTypeProvider* >(this),
                                                static_cast< beans::XPropertySetInfo* >(this)
                                                );

@@ -28,7 +28,7 @@
 #include <vector>
 
 #include <com/sun/star/beans/PropertyState.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
@@ -309,7 +309,7 @@ private:
     static constexpr const sal_Int32 mconstDefaultTopBottomInset = 127;
 
 protected:
-    css::uno::Any                             mAny;
+    cpo::uno::Any                             mAny;
     ::sax_fastparser::FSHelperPtr             mpFS;
     ::oox::core::XmlFilterBase*               mpFB;
     /// If set, this is the parent of the currently handled shape.
@@ -543,9 +543,9 @@ public:
     // Diagram helpers
     OOX_DLLPUBLIC void WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape,
                                     sal_Int32 nDiagramId, sal_Int32 nShapeId = -1);
-    void writeDiagramImageRels(const css::uno::Sequence<css::uno::Sequence<css::uno::Any>>& xRelSeq,
+    void writeDiagramImageRels(const css::uno::Sequence<css::uno::Sequence<cpo::uno::Any>>& xRelSeq,
                                const css::uno::Reference<css::io::XOutputStream>& xOutStream);
-    void writeDiagramHlinkRels(const css::uno::Sequence<css::uno::Sequence<css::uno::Any>>& xRelSeq,
+    void writeDiagramHlinkRels(const css::uno::Sequence<css::uno::Sequence<cpo::uno::Any>>& xRelSeq,
                                const css::uno::Reference<css::io::XOutputStream>& xOutStream);
 
     static void WriteFromTo(const css::uno::Reference<css::drawing::XShape>& rXShape, const css::awt::Size& aPageSize,

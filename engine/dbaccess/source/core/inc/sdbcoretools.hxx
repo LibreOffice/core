@@ -32,7 +32,7 @@ namespace dbaccess
 
     /** retrieves a to-be-displayed string for a given caught exception;
     */
-    OUString extractExceptionMessage( const css::uno::Reference< css::uno::XComponentContext >& _rContext, const css::uno::Any& _rError );
+    OUString extractExceptionMessage( const css::uno::Reference< css::uno::XComponentContext >& _rContext, const cpo::uno::Any& _rError );
 
 }   // namespace dbaccess
 

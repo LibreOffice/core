@@ -84,6 +84,7 @@ using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::text;
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::drawing;
 using ::com::sun::star::view::XSelectionSupplier;
 using ::com::sun::star::beans::XPropertySet;
@@ -94,7 +95,7 @@ using ::com::sun::star::text::XText;
 using ::sd::framework::FrameworkHelper;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
 
@@ -668,10 +669,10 @@ void CustomAnimationPane::updateControls()
             // for COKit destroy old widgets first
             mxLBSubControl.reset(nullptr);
             // then create new control, to keep correct pointers for actions
-            mxLBSubControl = SdPropertySubControl::create(nPropertyTypeDirection, mxFTProperty.get(), mxPlaceholderBox.get(), GetFrameWeld(), uno::Any(), OUString(), LINK(this, CustomAnimationPane, implPropertyHdl));
+            mxLBSubControl = SdPropertySubControl::create(nPropertyTypeDirection, mxFTProperty.get(), mxPlaceholderBox.get(), GetFrameWeld(), cpo::uno::Any(), OUString(), LINK(this, CustomAnimationPane, implPropertyHdl));
         }
         else
-            mxLBSubControl->setValue(uno::Any(), OUString());
+            mxLBSubControl->setValue(cpo::uno::Any(), OUString());
 
         mxPlaceholderBox->set_sensitive(false);
         mxFTProperty->set_sensitive(false);
@@ -2469,7 +2470,7 @@ void CustomAnimationPane::preview( const Reference< XAnimationNode >& xAnimation
 {
     Reference< XParallelTimeContainer > xRoot = ParallelTimeContainer::create( ::comphelper::getProcessComponentContext() );
     Sequence< css::beans::NamedValue > aUserData
-        { { u"node-type"_ustr, css::uno::Any(css::presentation::EffectNodeType::TIMING_ROOT) } };
+        { { u"node-type"_ustr, cpo::uno::Any(css::presentation::EffectNodeType::TIMING_ROOT) } };
     xRoot->setUserData( aUserData );
     xRoot->appendChild( xAnimationNode );
 

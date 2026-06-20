@@ -745,7 +745,7 @@ sw/source/uibase/dbui/mmconfigitem.cxx:115
 sw/source/uibase/dbui/mmconfigitem.cxx:117
     SwMailMergeConfigItem_Impl m_aNeutralGreetingLines std::vector<OUString>
 sw/source/uibase/inc/fldmgr.hxx:75
-    SwInsertField_Data m_aDBDataSource css::uno::Any
+    SwInsertField_Data m_aDBDataSource cpo::uno::Any
 sw/source/writerfilter/dmapper/StyleSheetTable.hxx:157
     writerfilter::dmapper::StyleSheetTable m_ClonedTOCStylesMap std::map<OUString, OUString>
 sw/source/writerfilter/ooxml/OOXMLFactory.hxx:60
@@ -1007,18 +1007,18 @@ vcl/unx/gtk3/a11y/atkwrapper.hxx:80
 vcl/unx/gtk3/glomenu.cxx:16
     GLOMenu parent_instance const GMenuModel
 xmloff/inc/MultiPropertySetHelper.hxx:83
-    MultiPropertySetHelper aEmptyAny css::uno::Any
+    MultiPropertySetHelper aEmptyAny cpo::uno::Any
 xmloff/source/chart/SchXMLChartContext.cxx:463
     (anonymous namespace)::NewDonutSeries msStyleName OUString
 xmloff/source/chart/SchXMLChartContext.hxx:46
-    SeriesDefaultsAndStyles maErrorIndicatorDefault css::uno::Any
+    SeriesDefaultsAndStyles maErrorIndicatorDefault cpo::uno::Any
 xmloff/source/chart/SchXMLChartContext.hxx:47
-    SeriesDefaultsAndStyles maErrorCategoryDefault css::uno::Any
+    SeriesDefaultsAndStyles maErrorCategoryDefault cpo::uno::Any
 xmloff/source/chart/SchXMLChartContext.hxx:48
-    SeriesDefaultsAndStyles maConstantErrorLowDefault css::uno::Any
+    SeriesDefaultsAndStyles maConstantErrorLowDefault cpo::uno::Any
 xmloff/source/chart/SchXMLChartContext.hxx:49
-    SeriesDefaultsAndStyles maConstantErrorHighDefault css::uno::Any
+    SeriesDefaultsAndStyles maConstantErrorHighDefault cpo::uno::Any
 xmloff/source/chart/SchXMLChartContext.hxx:50
-    SeriesDefaultsAndStyles maPercentageErrorDefault css::uno::Any
+    SeriesDefaultsAndStyles maPercentageErrorDefault cpo::uno::Any
 xmloff/source/chart/SchXMLChartContext.hxx:51
-    SeriesDefaultsAndStyles maErrorMarginDefault css::uno::Any
+    SeriesDefaultsAndStyles maErrorMarginDefault cpo::uno::Any

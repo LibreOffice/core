@@ -109,21 +109,21 @@ void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 {
                     // child gone - event
                     CommitChange(AccessibleEventId::CHILD,
-                                 uno::Any(uno::Reference<XAccessible>(aOldAreas[i])), uno::Any());
+                                 cpo::uno::Any(uno::Reference<XAccessible>(aOldAreas[i])), cpo::uno::Any());
                     aOldAreas[i]->dispose();
                 }
                 if (maAreas[i].is() && maAreas[i]->GetEditTextObject())
                 {
                     // new child - event
-                    CommitChange(AccessibleEventId::CHILD, uno::Any(),
-                                 uno::Any(uno::Reference<XAccessible>(maAreas[i])));
+                    CommitChange(AccessibleEventId::CHILD, cpo::uno::Any(),
+                                 cpo::uno::Any(uno::Reference<XAccessible>(maAreas[i])));
                 }
             }
         }
     }
     else if (rHint.GetId() == SfxHintId::ScAccVisAreaChanged)
     {
-        CommitChange(AccessibleEventId::VISIBLE_DATA_CHANGED, uno::Any(), uno::Any());
+        CommitChange(AccessibleEventId::VISIBLE_DATA_CHANGED, cpo::uno::Any(), cpo::uno::Any());
     }
 
     ScAccessibleContextBase::Notify(rBC, rHint);

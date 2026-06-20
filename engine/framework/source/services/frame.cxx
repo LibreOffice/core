@@ -272,9 +272,9 @@ public:
     // XPropertySet
     virtual css::uno::Reference < css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
 
-    virtual void SAL_CALL setPropertyValue(const OUString & sProperty, const css::uno::Any & aValue) override;
+    virtual void SAL_CALL setPropertyValue(const OUString & sProperty, const cpo::uno::Any & aValue) override;
 
-    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString & sProperty) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(const OUString & sProperty) override;
 
     virtual void SAL_CALL addPropertyChangeListener(
             const OUString & sProperty,
@@ -303,9 +303,9 @@ public:
 private:
 
     void impl_setPropertyValue(sal_Int32 nHandle,
-                                        const css::uno::Any& aValue);
+                                        const cpo::uno::Any& aValue);
 
-    css::uno::Any impl_getPropertyValue(sal_Int32 nHandle);
+    cpo::uno::Any impl_getPropertyValue(sal_Int32 nHandle);
 
     /** set a new owner for this helper.
      *
@@ -1859,7 +1859,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL XFrameImpl::getProp
 }
 
 void SAL_CALL XFrameImpl::setPropertyValue(const OUString& sProperty,
-                                           const css::uno::Any& rValue)
+                                           const cpo::uno::Any& rValue)
 {
     // TODO look for e.g. readonly props and reject setProp() call!
 
@@ -1874,7 +1874,7 @@ void SAL_CALL XFrameImpl::setPropertyValue(const OUString& sProperty,
 
     css::beans::Property aPropInfo = pIt->second;
 
-    css::uno::Any aCurrentValue = impl_getPropertyValue(aPropInfo.Handle);
+    cpo::uno::Any aCurrentValue = impl_getPropertyValue(aPropInfo.Handle);
 
     bool bWillBeChanged = (aCurrentValue != rValue);
     if (! bWillBeChanged)
@@ -1896,7 +1896,7 @@ void SAL_CALL XFrameImpl::setPropertyValue(const OUString& sProperty,
     impl_notifyChangeListener(aEvent);
 }
 
-css::uno::Any SAL_CALL XFrameImpl::getPropertyValue(const OUString& sProperty)
+cpo::uno::Any SAL_CALL XFrameImpl::getPropertyValue(const OUString& sProperty)
 {
     checkDisposed();
 
@@ -2720,7 +2720,7 @@ sal_Int16 SAL_CALL XFrameImpl::resetActionLocks()
 }
 
 void XFrameImpl::impl_setPropertyValue(sal_Int32 nHandle,
-                                           const css::uno::Any& aValue)
+                                           const cpo::uno::Any& aValue)
 
 {
     /* There is no need to lock any mutex here. Because we share the
@@ -2781,7 +2781,7 @@ void XFrameImpl::impl_setPropertyValue(sal_Int32 nHandle,
     }
 }
 
-css::uno::Any XFrameImpl::impl_getPropertyValue(sal_Int32 nHandle)
+cpo::uno::Any XFrameImpl::impl_getPropertyValue(sal_Int32 nHandle)
 {
     /* There is no need to lock any mutex here. Because we share the
        solar mutex with our base class. And we said to our base class: "don't release it on calling us" .-)
@@ -2791,7 +2791,7 @@ css::uno::Any XFrameImpl::impl_getPropertyValue(sal_Int32 nHandle)
                   properties have a unique handle. That must be guaranteed
                   inside method initListeners()!
     */
-    css::uno::Any aValue;
+    cpo::uno::Any aValue;
     switch (static_cast<FramePropHandle>(nHandle))
     {
         case FramePropHandle::Title :
@@ -3222,7 +3222,7 @@ void XFrameImpl::impl_setCloser( /*IN*/ const css::uno::Reference< css::frame::X
         css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
         xFrameProps->getPropertyValue(FramePropNames[FramePropHandle::LayoutManager]) >>= xLayoutManager;
         css::uno::Reference< css::beans::XPropertySet > xLayoutProps(xLayoutManager, css::uno::UNO_QUERY_THROW);
-        xLayoutProps->setPropertyValue(LAYOUTMANAGER_PROPNAME_MENUBARCLOSER, css::uno::Any(bState));
+        xLayoutProps->setPropertyValue(LAYOUTMANAGER_PROPNAME_MENUBARCLOSER, cpo::uno::Any(bState));
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
@@ -3321,7 +3321,7 @@ void XFrameImpl::impl_checkMenuCloser()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_Frame_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     rtl::Reference<XFrameImpl> inst = new XFrameImpl(context);
     css::uno::XInterface *acquired_inst = cppu::acquire(inst.get());

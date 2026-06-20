@@ -105,15 +105,15 @@ namespace vclcanvas
         return maCanvasHelper.repaint( rGrf, viewState, renderState, rPt, rSz, rAttr );
     }
 
-    uno::Any SAL_CALL CanvasBitmap::getFastPropertyValue( sal_Int32 nHandle )
+    cpo::uno::Any SAL_CALL CanvasBitmap::getFastPropertyValue( sal_Int32 nHandle )
     {
         if( nHandle == 0 ) {
             Bitmap* pBitmap = new Bitmap( getBitmap() );
 
-            return uno::Any( reinterpret_cast<sal_Int64>( pBitmap ) );
+            return cpo::uno::Any( reinterpret_cast<sal_Int64>( pBitmap ) );
         }
 
-        return uno::Any( sal_Int64(0) );
+        return cpo::uno::Any( sal_Int64(0) );
     }
 }
 

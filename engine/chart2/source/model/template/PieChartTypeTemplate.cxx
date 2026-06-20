@@ -145,18 +145,18 @@ PieChartTypeTemplate::PieChartTypeTemplate(
     sal_Int32 nDim         /* = 2 */    ) :
         ChartTypeTemplate( xContext, rServiceName )
 {
-    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_OFFSET_MODE,    uno::Any( eMode ));
-    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_DIMENSION,      uno::Any( nDim ));
-    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_USE_RINGS,      uno::Any( bRings ));
-    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_SUB_PIE_TYPE,   uno::Any( eSubType ));
-    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_SPLIT_POS,      uno::Any( nCompositeSize ));
+    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_OFFSET_MODE,    cpo::uno::Any( eMode ));
+    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_DIMENSION,      cpo::uno::Any( nDim ));
+    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_USE_RINGS,      cpo::uno::Any( bRings ));
+    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_SUB_PIE_TYPE,   cpo::uno::Any( eSubType ));
+    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_SPLIT_POS,      cpo::uno::Any( nCompositeSize ));
 }
 
 PieChartTypeTemplate::~PieChartTypeTemplate()
 {}
 
 // ____ OPropertySet ____
-void PieChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
+void PieChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = StaticPieChartTypeTemplateDefaults();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
@@ -360,7 +360,7 @@ bool PieChartTypeTemplate::matchesTemplate2(
             {
                 eOffsetMode = chart2::PieChartOffsetMode_ALL_EXPLODED;
                 if( bAdaptProperties )
-                    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_DEFAULT_OFFSET, uno::Any( fOffset ));
+                    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_DEFAULT_OFFSET, cpo::uno::Any( fOffset ));
             }
 
             bResult = ( eOffsetMode == ePieOffsetMode );
@@ -506,7 +506,7 @@ void PieChartTypeTemplate::applyStyle2(
             if( bSetOffset )
             {
                 // set the offset to the series and to the attributed data points
-                xSeries->setPropertyValue( aOffsetPropName, uno::Any( fOffsetToSet ));
+                xSeries->setPropertyValue( aOffsetPropName, cpo::uno::Any( fOffsetToSet ));
 
                 // remove hard attributes from data points
                 for (auto const& pointIndex : aAttributedDataPointIndexList)
@@ -520,10 +520,10 @@ void PieChartTypeTemplate::applyStyle2(
         }
 
         // line style
-        xSeries->setPropertyAlsoToAllAttributedDataPoints( u"BorderStyle"_ustr, uno::Any( drawing::LineStyle_NONE ) );
+        xSeries->setPropertyAlsoToAllAttributedDataPoints( u"BorderStyle"_ustr, cpo::uno::Any( drawing::LineStyle_NONE ) );
 
         // vary colors by point
-        xSeries->setFastPropertyValue( PROP_DATASERIES_VARY_COLORS_BY_POINT, uno::Any( true )); // "VaryColorsByPoint"
+        xSeries->setFastPropertyValue( PROP_DATASERIES_VARY_COLORS_BY_POINT, cpo::uno::Any( true )); // "VaryColorsByPoint"
     }
     catch( const uno::Exception & )
     {
@@ -574,7 +574,7 @@ void PieChartTypeTemplate::resetStyles2( const rtl::Reference< ::chart::Diagram 
     // line style
     std::vector< rtl::Reference< DataSeries > > aSeriesVec =
         xDiagram->getDataSeries();
-    uno::Any aLineStyleAny( drawing::LineStyle_NONE );
+    cpo::uno::Any aLineStyleAny( drawing::LineStyle_NONE );
     for (auto const& series : aSeriesVec)
     {
         series->setPropertyToDefault( u"VaryColorsByPoint"_ustr);

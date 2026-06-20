@@ -205,8 +205,8 @@ protected:
     */
     void prepareSet(
         rtl::OUString const & propertyName,
-        css::uno::Any const & oldValue,
-        css::uno::Any const & newValue,
+        cpo::uno::Any const & oldValue,
+        cpo::uno::Any const & newValue,
         BoundListeners * boundListeners);
 
     /**
@@ -238,7 +238,7 @@ protected:
        <code>css::uno::XInterface::queryInterface</code> of this UNO
        object.
     */
-    virtual css::uno::Any SAL_CALL queryInterface(
+    virtual cpo::uno::Any SAL_CALL queryInterface(
         css::uno::Type const & type) SAL_OVERRIDE;
 
     // @see css::beans::XPropertySet::getPropertySetInfo
@@ -247,10 +247,10 @@ protected:
     // @see css::beans::XPropertySet::setPropertyValue
     virtual void SAL_CALL setPropertyValue(
         rtl::OUString const & propertyName,
-        css::uno::Any const & value) SAL_OVERRIDE;
+        cpo::uno::Any const & value) SAL_OVERRIDE;
 
     // @see css::beans::XPropertySet::getPropertyValue
-    virtual css::uno::Any SAL_CALL getPropertyValue(
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(
         rtl::OUString const & propertyName) SAL_OVERRIDE;
 
     /**
@@ -295,10 +295,10 @@ protected:
 
     // @see css::beans::XFastPropertySet::setFastPropertyValue
     virtual void SAL_CALL setFastPropertyValue(
-        sal_Int32 handle, css::uno::Any const & value) SAL_OVERRIDE;
+        sal_Int32 handle, cpo::uno::Any const & value) SAL_OVERRIDE;
 
     // @see css::beans::XFastPropertySet::getFastPropertyValue
-    virtual css::uno::Any SAL_CALL getFastPropertyValue(
+    virtual cpo::uno::Any SAL_CALL getFastPropertyValue(
         sal_Int32 handle) SAL_OVERRIDE;
 
     // @see css::beans::XPropertyAccess::getPropertyValues

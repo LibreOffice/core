@@ -38,8 +38,8 @@ namespace frm
         css::awt::FontDescriptor                m_aFont;
         sal_Int16                               m_nFontRelief;
         sal_Int16                               m_nFontEmphasis;
-        css::uno::Any                           m_aTextLineColor;
-        css::uno::Any                           m_aTextColor;
+        cpo::uno::Any                           m_aTextLineColor;
+        cpo::uno::Any                           m_aTextColor;
         // </properties>
 
         bool                                    m_bToolkitCompatibleDefaults;
@@ -70,16 +70,16 @@ namespace frm
         static void describeFontRelatedProperties(
             css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps );
 
-        void     getFastPropertyValue            ( css::uno::Any& _rValue, sal_Int32 _nHandle ) const;
+        void     getFastPropertyValue            ( cpo::uno::Any& _rValue, sal_Int32 _nHandle ) const;
         /// @throws css::lang::IllegalArgumentException
         /// @throws css::uno::RuntimeException
-        bool     convertFastPropertyValue        ( css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue );
+        bool     convertFastPropertyValue        ( cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, sal_Int32 _nHandle, const cpo::uno::Any& _rValue );
         /// @throws css::uno::Exception
         void     setFastPropertyValue_NoBroadcast_impl(
                      ::cppu::OPropertySetHelper & rBase,
-                     void (::cppu::OPropertySetHelper::*pSet)( sal_Int32, css::uno::Any const&),
-                     sal_Int32 nHandle, const css::uno::Any& rValue);
-        css::uno::Any
+                     void (::cppu::OPropertySetHelper::*pSet)( sal_Int32, cpo::uno::Any const&),
+                     sal_Int32 nHandle, const cpo::uno::Any& rValue);
+        cpo::uno::Any
                  getPropertyDefaultByHandle      ( sal_Int32 _nHandle ) const;
 
     private:

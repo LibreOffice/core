@@ -24,6 +24,7 @@
 
 using namespace utl;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 const Sequence<OUString>& SwDBConfig::GetPropertyNames()
 {

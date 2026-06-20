@@ -141,7 +141,7 @@ std::vector< std::unique_ptr<WrappedProperty> > GridWrapper::createWrappedProper
 {
     std::vector< std::unique_ptr<WrappedProperty> > aWrappedProperties;
 
-    aWrappedProperties.emplace_back( new WrappedDefaultProperty( u"LineColor"_ustr, u"LineColor"_ustr, uno::Any( sal_Int32( 0x000000) ) ) ); // black
+    aWrappedProperties.emplace_back( new WrappedDefaultProperty( u"LineColor"_ustr, u"LineColor"_ustr, cpo::uno::Any( sal_Int32( 0x000000) ) ) ); // black
 
     return aWrappedProperties;
 }

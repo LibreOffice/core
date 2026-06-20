@@ -49,15 +49,16 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 class SdrObject;
 class SdrObjCustomShape;
 
-EnhancedCustomShapeEngine::EnhancedCustomShapeEngine(const css::uno::Sequence< css::uno::Any >& aArguments)
+EnhancedCustomShapeEngine::EnhancedCustomShapeEngine(const css::uno::Sequence< cpo::uno::Any >& aArguments)
     : mpCustomShape(nullptr)
     , mbForceGroupWithText(false)
 {
-    for (const css::uno::Any& rArg : aArguments)
+    for (const cpo::uno::Any& rArg : aArguments)
     {
         beans::PropertyValue aProp;
         if (rArg >>= aProp)
@@ -233,7 +234,7 @@ rtl::Reference<SdrObject> EnhancedCustomShapeEngine::render2() const
     // retrieving the TextPath property to check if feature is enabled
     const SdrCustomShapeGeometryItem& rGeometryItem(mpCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
     bool bTextPathOn = false;
-    const uno::Any* pAny = rGeometryItem.GetPropertyValueByName( u"TextPath"_ustr, u"TextPath"_ustr );
+    const cpo::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( u"TextPath"_ustr, u"TextPath"_ustr );
     if ( pAny )
         *pAny >>= bTextPathOn;
 
@@ -418,7 +419,7 @@ std::vector< Reference< drawing::XCustomShapeHandle > > EnhancedCustomShapeEngin
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_drawing_EnhancedCustomShapeEngine_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const & args)
+    css::uno::Sequence<cpo::uno::Any> const & args)
 {
     return cppu::acquire(new EnhancedCustomShapeEngine(args));
 }

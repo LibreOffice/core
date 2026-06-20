@@ -294,7 +294,7 @@ private:
     sal_Int32   mnDelta2;
     sal_Int32   mnDelta3;
 
-    css::uno::Any maPath;
+    cpo::uno::Any maPath;
 
     // Guess from the svg:d attribute whether the shape was rendered using OOXML definition. The
     // default value is true to cover files exported to ODF by MS Office, which does not write a

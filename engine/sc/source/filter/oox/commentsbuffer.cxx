@@ -46,6 +46,7 @@ namespace oox::xls {
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 static sal_Int32 lcl_ToHorizAlign( sal_Int32 nAlign )
 {
@@ -152,7 +153,7 @@ namespace
     struct OOXGenerateNoteCaption : public GenerateNoteCaption
     {
         css::uno::Sequence<OUString> maPropertyNames;  /// import filter Caption object formatting property names
-        css::uno::Sequence<css::uno::Any> maPropertyValues; /// import filter Caption object formatting property values
+        css::uno::Sequence<cpo::uno::Any> maPropertyValues; /// import filter Caption object formatting property values
         std::shared_ptr<RichString> mxText;
         OUString msAuthorName;
 
@@ -209,7 +210,7 @@ void Comment::finalizeImport(const VmlDrawing::NoteShapesMap& rNoteShapesMap)
         xGenerator->maPropertyNames =
             css::uno::Sequence<OUString>{ u"TextFitToSize"_ustr, u"MoveProtect"_ustr, u"TextHorizontalAdjust"_ustr, u"TextVerticalAdjust"_ustr };
         xGenerator->maPropertyValues =
-            css::uno::Sequence<css::uno::Any>{ Any(maModel.mbAutoScale), Any(maModel.mbLocked),
+            css::uno::Sequence<cpo::uno::Any>{ Any(maModel.mbAutoScale), Any(maModel.mbLocked),
                                                Any(lcl_ToHorizAlign( maModel.mnTHA )), Any(lcl_ToVertAlign( maModel.mnTVA )) };
 
         tools::Rectangle aCaptionRect;

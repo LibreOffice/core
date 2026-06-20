@@ -28,6 +28,7 @@
 #include <o3tl/any.hxx>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdb;
@@ -200,11 +201,11 @@ void    BibConfig::ImplCommit()
 {
     PutProperties(
         GetPropertyNames(),
-        {css::uno::Any(sDataSource), css::uno::Any(sTableOrQuery),
-         css::uno::Any(nTblOrQuery), css::uno::Any(nBeamerSize),
-         css::uno::Any(nViewSize), css::uno::Any(sQueryText),
-         css::uno::Any(sQueryField),
-         css::uno::Any(bShowColumnAssignmentWarning)});
+        {cpo::uno::Any(sDataSource), cpo::uno::Any(sTableOrQuery),
+         cpo::uno::Any(nTblOrQuery), cpo::uno::Any(nBeamerSize),
+         cpo::uno::Any(nViewSize), cpo::uno::Any(sQueryText),
+         cpo::uno::Any(sQueryField),
+         cpo::uno::Any(bShowColumnAssignmentWarning)});
     ClearNodeSet(cDataSourceHistory);
     Sequence< PropertyValue > aNodeValues(mvMappings.size() * 3);
     PropertyValue* pNodeValues = aNodeValues.getArray();

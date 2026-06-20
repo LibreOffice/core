@@ -112,10 +112,10 @@ CPPUNIT_TEST_FIXTURE(Test, testSvmImageExport)
     uno::Reference<beans::XPropertySet> xTextGraphic(
         xFactory->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
     xTextGraphic->setPropertyValue(u"AnchorType"_ustr,
-                                   uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+                                   cpo::uno::Any(text::TextContentAnchorType_AS_CHARACTER));
     GDIMetaFile aMetafile;
     Graphic aGraphic(aMetafile);
-    xTextGraphic->setPropertyValue(u"Graphic"_ustr, uno::Any(aGraphic.GetXGraphic()));
+    xTextGraphic->setPropertyValue(u"Graphic"_ustr, cpo::uno::Any(aGraphic.GetXGraphic()));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xBodyText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor(xBodyText->createTextCursor());
@@ -276,9 +276,9 @@ CPPUNIT_TEST_FIXTURE(Test, testMailmergeCopy)
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFieldMaster(
         xMSF->createInstance(u"com.sun.star.text.FieldMaster.Database"_ustr), uno::UNO_QUERY);
-    xFieldMaster->setPropertyValue(u"DataBaseName"_ustr, uno::Any(u"Address Book File"_ustr));
-    xFieldMaster->setPropertyValue(u"DataTableName"_ustr, uno::Any(u"address"_ustr));
-    xFieldMaster->setPropertyValue(u"DataColumnName"_ustr, uno::Any(u"FIRSTNAME"_ustr));
+    xFieldMaster->setPropertyValue(u"DataBaseName"_ustr, cpo::uno::Any(u"Address Book File"_ustr));
+    xFieldMaster->setPropertyValue(u"DataTableName"_ustr, cpo::uno::Any(u"address"_ustr));
+    xFieldMaster->setPropertyValue(u"DataColumnName"_ustr, cpo::uno::Any(u"FIRSTNAME"_ustr));
     uno::Reference<text::XDependentTextField> xField(
         xMSF->createInstance(u"com.sun.star.text.TextField.Database"_ustr), uno::UNO_QUERY);
     xField->attachTextFieldMaster(xFieldMaster);
@@ -286,7 +286,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMailmergeCopy)
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
     uno::Reference<beans::XPropertySet> xFieldProps(xField, uno::UNO_QUERY);
-    xFieldProps->setPropertyValue(u"Content"_ustr, uno::Any(u"content"_ustr));
+    xFieldProps->setPropertyValue(u"Content"_ustr, cpo::uno::Any(u"content"_ustr));
     xText->insertTextContent(xCursor, xField, false);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SelAll();
@@ -297,7 +297,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMailmergeCopy)
     datatransfer::DataFlavor aFlavor;
     aFlavor.MimeType = u"text/html"_ustr;
     aFlavor.DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
-    uno::Any aData = xTransferable->getTransferData(aFlavor);
+    cpo::uno::Any aData = xTransferable->getTransferData(aFlavor);
 
     // Then make sure the field value is part of the HTML produced from the clipboard document:
     uno::Sequence<sal_Int8> aBytes;

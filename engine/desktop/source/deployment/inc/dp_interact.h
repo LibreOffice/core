@@ -38,7 +38,7 @@ inline void progressUpdate(
         css::uno::Reference<css::ucb::XProgressHandler> xProgressHandler(
             xCmdEnv->getProgressHandler() );
         if (xProgressHandler.is()) {
-            xProgressHandler->update( css::uno::Any(status) );
+            xProgressHandler->update( cpo::uno::Any(status) );
         }
     }
 }
@@ -55,7 +55,7 @@ public:
         OUString const & status );
 
     inline void update( OUString const & status ) const;
-    inline void update( css::uno::Any const & status ) const;
+    inline void update( cpo::uno::Any const & status ) const;
 };
 
 
@@ -66,7 +66,7 @@ inline ProgressLevel::ProgressLevel(
     if (xCmdEnv.is())
         m_xProgressHandler = xCmdEnv->getProgressHandler();
     if (m_xProgressHandler.is())
-        m_xProgressHandler->push( css::uno::Any(status) );
+        m_xProgressHandler->push( cpo::uno::Any(status) );
 }
 
 
@@ -80,11 +80,11 @@ inline ProgressLevel::~ProgressLevel()
 inline void ProgressLevel::update( OUString const & status ) const
 {
     if (m_xProgressHandler.is())
-        m_xProgressHandler->update( css::uno::Any(status) );
+        m_xProgressHandler->update( cpo::uno::Any(status) );
 }
 
 
-inline void ProgressLevel::update( css::uno::Any const & status ) const
+inline void ProgressLevel::update( cpo::uno::Any const & status ) const
 {
     if (m_xProgressHandler.is())
         m_xProgressHandler->update( status );
@@ -95,7 +95,7 @@ inline void ProgressLevel::update( css::uno::Any const & status ) const
 /** @return true if ia handler is present and any selection has been chosen
  */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool interactContinuation(
-    css::uno::Any const & request,
+    cpo::uno::Any const & request,
     css::uno::Type const & continuation,
     css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
     bool * pcont, bool * pabort );

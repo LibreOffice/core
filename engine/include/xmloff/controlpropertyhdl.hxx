@@ -42,8 +42,8 @@ namespace xmloff
     public:
         SAL_DLLPRIVATE ORotationAngleHandler();
 
-        SAL_DLLPRIVATE virtual bool importXML( const OUString& _rStrImpValue, css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
-        SAL_DLLPRIVATE virtual bool exportXML( OUString& _rStrExpValue, const css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
+        SAL_DLLPRIVATE virtual bool importXML( const OUString& _rStrImpValue, cpo::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
+        SAL_DLLPRIVATE virtual bool exportXML( OUString& _rStrExpValue, const cpo::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
     };
 
 
@@ -54,8 +54,8 @@ namespace xmloff
     public:
         SAL_DLLPRIVATE OFontWidthHandler();
 
-        SAL_DLLPRIVATE virtual bool importXML( const OUString& _rStrImpValue, css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
-        SAL_DLLPRIVATE virtual bool exportXML( OUString& _rStrExpValue, const css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
+        SAL_DLLPRIVATE virtual bool importXML( const OUString& _rStrImpValue, cpo::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
+        SAL_DLLPRIVATE virtual bool exportXML( OUString& _rStrExpValue, const cpo::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
     };
 
 
@@ -72,8 +72,8 @@ namespace xmloff
 
         SAL_DLLPRIVATE OControlBorderHandler( const BorderFacet _eFacet );
 
-        SAL_DLLPRIVATE virtual bool importXML( const OUString& _rStrImpValue, css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
-        SAL_DLLPRIVATE virtual bool exportXML( OUString& _rStrExpValue, const css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
+        SAL_DLLPRIVATE virtual bool importXML( const OUString& _rStrImpValue, cpo::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
+        SAL_DLLPRIVATE virtual bool exportXML( OUString& _rStrExpValue, const cpo::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
 
     private:
         BorderFacet m_eFacet;
@@ -87,8 +87,8 @@ namespace xmloff
     public:
         OControlTextEmphasisHandler();
 
-        virtual bool importXML( const OUString& _rStrImpValue, css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
-        virtual bool exportXML( OUString& _rStrExpValue, const css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
+        virtual bool importXML( const OUString& _rStrImpValue, cpo::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
+        virtual bool exportXML( OUString& _rStrExpValue, const cpo::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
     };
 
 

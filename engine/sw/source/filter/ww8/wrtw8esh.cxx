@@ -374,7 +374,7 @@ void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> const & xPropSet)
     xPropSet->getPropertyValue(u"StringItemList"_ustr) >>= aListItems;
     if (aListItems.hasElements())
     {
-        uno::Any aTmp = xPropSet->getPropertyValue(u"DefaultText"_ustr);
+        cpo::uno::Any aTmp = xPropSet->getPropertyValue(u"DefaultText"_ustr);
         auto pStr = o3tl::tryAccess<OUString>(aTmp);
         if (pStr)
             sSelected = *pStr;
@@ -382,7 +382,7 @@ void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> const & xPropSet)
 
     OUString sName;
     {
-        uno::Any aTmp = xPropSet->getPropertyValue(u"Name"_ustr);
+        cpo::uno::Any aTmp = xPropSet->getPropertyValue(u"Name"_ustr);
         auto pStr = o3tl::tryAccess<OUString>(aTmp);
         if (pStr)
             sName = *pStr;
@@ -393,7 +393,7 @@ void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> const & xPropSet)
         // property "Help" does not exist and due to the no-existence an exception is thrown.
         try
         {
-            uno::Any aTmp = xPropSet->getPropertyValue(u"HelpText"_ustr);
+            cpo::uno::Any aTmp = xPropSet->getPropertyValue(u"HelpText"_ustr);
             auto pStr = o3tl::tryAccess<OUString>(aTmp);
             if (pStr)
                 sHelp = *pStr;
@@ -404,7 +404,7 @@ void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> const & xPropSet)
 
     OUString sToolTip;
     {
-        uno::Any aTmp = xPropSet->getPropertyValue(u"Name"_ustr);
+        cpo::uno::Any aTmp = xPropSet->getPropertyValue(u"Name"_ustr);
         auto pStr = o3tl::tryAccess<OUString>(aTmp);
         if (pStr)
             sToolTip = *pStr;

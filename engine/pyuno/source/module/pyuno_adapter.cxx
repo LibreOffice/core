@@ -33,7 +33,7 @@
 
 
 using com::sun::star::beans::XIntrospectionAccess;
-using com::sun::star::uno::Any;
+using cpo::uno::Any;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::RuntimeException;
@@ -171,7 +171,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
     {
         Sequence< sal_Int8 > id;
         if( aParams[0] >>= id )
-            return css::uno::Any( getSomething( id ) );
+            return cpo::uno::Any( getSomething( id ) );
 
     }
 
@@ -360,7 +360,7 @@ void Adapter::setValue( const OUString & aPropertyName, const Any & value )
     }
     catch( const IllegalArgumentException & exc )
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw InvocationTargetException( exc.Message, *this, anyEx );
     }
 }

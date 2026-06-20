@@ -262,7 +262,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testDataLabelDefaultValuesXLSX)
     Reference< chart2::XChartDocument> xDoc = getChartDocFromSheet(0);
     Reference<chart2::XDataSeries> xSeries = getDataSeriesFromDoc(xDoc, 0);
     Reference<beans::XPropertySet> xPropSet(xSeries, uno::UNO_QUERY_THROW);
-    uno::Any aAny = xPropSet->getPropertyValue(u"Label"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"Label"_ustr);
     chart2::DataPointLabel aLabel;
     CPPUNIT_ASSERT(aAny >>= aLabel);
     CPPUNIT_ASSERT(aLabel.ShowNumber);
@@ -280,7 +280,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testDataLabelFillColor)
     Reference< chart2::XChartDocument> xDoc = getChartDocFromSheet(0);
     Reference<chart2::XDataSeries> xSeries = getDataSeriesFromDoc(xDoc, 0);
     Reference<beans::XPropertySet> xPropSet(xSeries, uno::UNO_QUERY_THROW);
-    uno::Any aAny = xPropSet->getPropertyValue(u"LabelFillColor"_ustr);
+    cpo::uno::Any aAny = xPropSet->getPropertyValue(u"LabelFillColor"_ustr);
     sal_Int32 nLabelFillColor;
     CPPUNIT_ASSERT(aAny >>= nLabelFillColor);
 
@@ -859,81 +859,81 @@ void checkCharacterProps(Reference<beans::XPropertySet> const & xTitleProp)
         CPPUNIT_ASSERT_EQUAL(aValues[i], aText);
         Reference< beans::XPropertySet > xRunPropSet(xFormattedSubTitle[i], uno::UNO_QUERY);
         // common props
-        uno::Any aAny = xRunPropSet->getPropertyValue(u"CharFontName"_ustr);
-        CPPUNIT_ASSERT_EQUAL(uno::Any(u"Aptos Narrow"_ustr), aAny);
+        cpo::uno::Any aAny = xRunPropSet->getPropertyValue(u"CharFontName"_ustr);
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Aptos Narrow"_ustr), aAny);
         // unique props
         if (aText == aValues[0])
         {
             aAny = xRunPropSet->getPropertyValue(u"CharWeight"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(awt::FontWeight::BOLD), aAny);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(awt::FontWeight::BOLD), aAny);
             aAny = xRunPropSet->getPropertyValue(u"CharHeight"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(14.0f), aAny);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(14.0f), aAny);
             aAny = xRunPropSet->getPropertyValue(u"CharColor"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(Color(0xff0000)), aAny);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(Color(0xff0000)), aAny);
             aAny = xRunPropSet->getPropertyValue(u"CharEscapement"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(short(0)), aAny);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(short(0)), aAny);
             aAny = xRunPropSet->getPropertyValue(u"CharEscapementHeight"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(short(100)), aAny);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(short(100)), aAny);
         }
         else if (aText == aValues[1] || aText == aValues[3] || aText == aValues[5] ||
             aText == aValues[6] || aText == aValues[8])
         {
             aAny = xRunPropSet->getPropertyValue(u"CharWeight"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(awt::FontWeight::NORMAL), aAny);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(awt::FontWeight::NORMAL), aAny);
             aAny = xRunPropSet->getPropertyValue(u"CharHeight"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(14.0f), aAny);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(14.0f), aAny);
             aAny = xRunPropSet->getPropertyValue(u"CharColor"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(Color(0x595959)), aAny);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(Color(0x595959)), aAny);
         }
         else if (aText == aValues[2])
         {
             aAny = xRunPropSet->getPropertyValue(u"CharWeight"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(awt::FontWeight::NORMAL), aAny);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(awt::FontWeight::NORMAL), aAny);
             aAny = xRunPropSet->getPropertyValue(u"CharHeight"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(14.0f), aAny);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(14.0f), aAny);
             aAny = xRunPropSet->getPropertyValue(u"CharColor"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(Color(0x595959)), aAny);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(Color(0x595959)), aAny);
             aAny = xRunPropSet->getPropertyValue(u"CharEscapement"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(short(30)), aAny);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(short(30)), aAny);
             aAny = xRunPropSet->getPropertyValue(u"CharEscapementHeight"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(short(58)), aAny);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(short(58)), aAny);
         }
         else if (aText == aValues[4])
         {
             aAny = xRunPropSet->getPropertyValue(u"CharWeight"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(awt::FontWeight::NORMAL), aAny);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(awt::FontWeight::NORMAL), aAny);
             aAny = xRunPropSet->getPropertyValue(u"CharHeight"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(20.0f), aAny);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(20.0f), aAny);
             aAny = xRunPropSet->getPropertyValue(u"CharColor"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(Color(0x4ea72e)), aAny);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(Color(0x4ea72e)), aAny);
             aAny = xRunPropSet->getPropertyValue(u"CharPosture"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(awt::FontSlant_ITALIC), aAny);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(awt::FontSlant_ITALIC), aAny);
             aAny = xRunPropSet->getPropertyValue(u"CharUnderline"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(awt::FontUnderline::SINGLE), aAny);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(awt::FontUnderline::SINGLE), aAny);
         }
         else if (aText == aValues[7])
         {
             aAny = xRunPropSet->getPropertyValue(u"CharWeight"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(awt::FontWeight::BOLD), aAny);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(awt::FontWeight::BOLD), aAny);
             aAny = xRunPropSet->getPropertyValue(u"CharHeight"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(14.0f), aAny);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(14.0f), aAny);
             aAny = xRunPropSet->getPropertyValue(u"CharColor"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(Color(0x595959)), aAny);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(Color(0x595959)), aAny);
             aAny = xRunPropSet->getPropertyValue(u"CharPosture"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(awt::FontSlant_NONE), aAny);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(awt::FontSlant_NONE), aAny);
         }
         else // aText == aValues[9]
         {
             aAny = xRunPropSet->getPropertyValue(u"CharWeight"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(awt::FontWeight::NORMAL), aAny);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(awt::FontWeight::NORMAL), aAny);
             aAny = xRunPropSet->getPropertyValue(u"CharHeight"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(14.0f), aAny);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(14.0f), aAny);
             aAny = xRunPropSet->getPropertyValue(u"CharColor"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(Color(0x595959)), aAny);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(Color(0x595959)), aAny);
             aAny = xRunPropSet->getPropertyValue(u"CharPosture"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(awt::FontSlant_ITALIC), aAny);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(awt::FontSlant_ITALIC), aAny);
             aAny = xRunPropSet->getPropertyValue(u"CharOverline"_ustr);
-            CPPUNIT_ASSERT_EQUAL(uno::Any(awt::FontUnderline::NONE), aAny);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(awt::FontUnderline::NONE), aAny);
         }
     }
 }

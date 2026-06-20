@@ -190,7 +190,7 @@ static bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSv
 /// @throws uno::RuntimeException
 static void lcl_SetSpecialProperty(SwFrameFormat* pFormat,
                                    const SfxItemPropertyMapEntry* pEntry,
-                                   const uno::Any& aValue)
+                                   const cpo::uno::Any& aValue)
 {
     // special treatment for "non-items"
     switch(pEntry->nWID)
@@ -267,7 +267,7 @@ static void lcl_SetSpecialProperty(SwFrameFormat* pFormat,
     }
 }
 
-static uno::Any lcl_GetSpecialProperty(SwFrameFormat* pFormat, const SfxItemPropertyMapEntry* pEntry )
+static cpo::uno::Any lcl_GetSpecialProperty(SwFrameFormat* pFormat, const SfxItemPropertyMapEntry* pEntry )
 {
     switch(pEntry->nWID)
     {
@@ -277,15 +277,15 @@ static uno::Any lcl_GetSpecialProperty(SwFrameFormat* pFormat, const SfxItemProp
             SwTable* pTable = SwTable::FindTable( pFormat );
             const sal_uInt16 nRepeat = pTable->GetRowsToRepeat();
             if(pEntry->nWID == FN_TABLE_HEADLINE_REPEAT)
-                return uno::Any(nRepeat > 0);
-            return uno::Any(sal_Int32(nRepeat));
+                return cpo::uno::Any(nRepeat > 0);
+            return cpo::uno::Any(sal_Int32(nRepeat));
         }
 
         case  FN_TABLE_WIDTH:
         case  FN_TABLE_IS_RELATIVE_WIDTH:
         case  FN_TABLE_RELATIVE_WIDTH:
         {
-            uno::Any aRet;
+            cpo::uno::Any aRet;
             const SwFormatFrameSize& rSz = pFormat->GetFrameSize();
             if(FN_TABLE_WIDTH == pEntry->nWID)
                 rSz.QueryValue(aRet, MID_FRMSIZE_WIDTH|CONVERT_TWIPS);
@@ -303,25 +303,25 @@ static uno::Any lcl_GetSpecialProperty(SwFrameFormat* pFormat, const SfxItemProp
             {
                 const SwPageDesc* pDsc = pItem->GetPageDesc();
                 if(pDsc)
-                    return uno::Any(SwStyleNameMapper::GetProgName(pDsc->GetName(), SwGetPoolIdFromName::PageDesc ).toString());
+                    return cpo::uno::Any(SwStyleNameMapper::GetProgName(pDsc->GetName(), SwGetPoolIdFromName::PageDesc ).toString());
             }
-            return uno::Any(OUString());
+            return cpo::uno::Any(OUString());
         }
 
         case RES_ANCHOR:
-            return uno::Any(text::TextContentAnchorType_AT_PARAGRAPH);
+            return cpo::uno::Any(text::TextContentAnchorType_AT_PARAGRAPH);
 
         case FN_UNO_ANCHOR_TYPES:
         {
             uno::Sequence<text::TextContentAnchorType> aTypes{text::TextContentAnchorType_AT_PARAGRAPH};
-            return uno::Any(aTypes);
+            return cpo::uno::Any(aTypes);
         }
 
         case FN_UNO_WRAP :
-            return uno::Any(text::WrapTextMode_NONE);
+            return cpo::uno::Any(text::WrapTextMode_NONE);
 
         case FN_PARAM_LINK_DISPLAY_NAME :
-            return uno::Any(pFormat->GetName().toString());
+            return cpo::uno::Any(pFormat->GetName().toString());
 
         case FN_UNO_REDLINE_NODE_START:
         case FN_UNO_REDLINE_NODE_END:
@@ -339,12 +339,12 @@ static uno::Any lcl_GetSpecialProperty(SwFrameFormat* pFormat, const SfxItemProp
                     const SwNode& rStartOfRedline = SwNodeIndex(rRedPointNode) <= SwNodeIndex(rRedMarkNode) ?
                         rRedPointNode : rRedMarkNode;
                     bool bIsStart = &rStartOfRedline == pTableNode;
-                    return uno::Any(SwXRedlinePortion::CreateRedlineProperties(*pRedline, bIsStart));
+                    return cpo::uno::Any(SwXRedlinePortion::CreateRedlineProperties(*pRedline, bIsStart));
                 }
             }
         }
     }
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 /** get position of a cell with a given name
@@ -611,7 +611,7 @@ static void lcl_CursorSelect(SwPaM& rCursor, bool bExpand)
         rCursor.DeleteMark();
 }
 
-static void lcl_GetTableSeparators(uno::Any& rRet, SwTable const * pTable, SwTableBox const * pBox, bool bRow)
+static void lcl_GetTableSeparators(cpo::uno::Any& rRet, SwTable const * pTable, SwTableBox const * pBox, bool bRow)
 {
     SwTabCols aCols;
     aCols.SetLeftMin ( 0 );
@@ -640,7 +640,7 @@ static void lcl_GetTableSeparators(uno::Any& rRet, SwTable const * pTable, SwTab
 
 }
 
-static void lcl_SetTableSeparators(const uno::Any& rVal, SwTable* pTable, SwTableBox const * pBox, bool bRow, SwDoc& rDoc)
+static void lcl_SetTableSeparators(const cpo::uno::Any& rVal, SwTable* pTable, SwTableBox const * pBox, bool bRow, SwDoc& rDoc)
 {
     SwTabCols aOldCols;
 
@@ -779,9 +779,9 @@ void SAL_CALL SwXCell::release(  ) noexcept
     SwXCellBaseClass::release();
 }
 
-uno::Any SAL_CALL SwXCell::queryInterface( const uno::Type& aType )
+cpo::uno::Any SAL_CALL SwXCell::queryInterface( const uno::Type& aType )
 {
-    uno::Any aRet = SwXText::queryInterface(aType);
+    cpo::uno::Any aRet = SwXText::queryInterface(aType);
     if(aRet.getValueType() == cppu::UnoType<void>::get())
         aRet = SwXCellBaseClass::queryInterface(aType);
     return aRet;
@@ -950,7 +950,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXCell::getPropertySetInfo()
     return xRef;
 }
 
-void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
+void SwXCell::setPropertyValue(const OUString& rPropertyName, const cpo::uno::Any& aValue)
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -1016,18 +1016,18 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
     }
 }
 
-uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
+cpo::uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        return uno::Any();
+        return cpo::uno::Any();
     auto pEntry(m_pPropSet->getPropertyMap().getByName(rPropertyName));
     if(!pEntry)
         throw beans::UnknownPropertyException(rPropertyName, getXWeak());
     switch(pEntry->nWID)
     {
         case FN_UNO_CELL_ROW_SPAN:
-            return uno::Any(m_pBox->getRowSpan());
+            return cpo::uno::Any(m_pBox->getRowSpan());
         case FN_UNO_TEXT_SECTION:
         {
             SwFrameFormat* pTableFormat = GetFrameFormat();
@@ -1035,14 +1035,14 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
             SwTableNode* pTableNode = pTable->GetTableNode();
             SwSectionNode* pSectionNode = pTableNode->FindSectionNode();
             if(!pSectionNode)
-                return uno::Any();
+                return cpo::uno::Any();
             SwSection& rSect = pSectionNode->GetSection();
             rtl::Reference<SwXTextSection> xSect = SwXTextSection::CreateXTextSection(rSect.GetFormat());
-            return uno::Any(uno::Reference< text::XTextSection >(xSect));
+            return cpo::uno::Any(uno::Reference< text::XTextSection >(xSect));
         }
         break;
         case FN_UNO_CELL_NAME:
-            return uno::Any(m_pBox->GetName());
+            return cpo::uno::Any(m_pBox->GetName());
         case FN_UNO_REDLINE_NODE_START:
         case FN_UNO_REDLINE_NODE_END:
         {
@@ -1056,24 +1056,24 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
             {
                 const SwStartNode* pSttNd = m_pBox->GetSttNd();
                 if (!pSttNd)
-                    return uno::Any();
+                    return cpo::uno::Any();
 
                 const SwTableNode* pTableNode = pSttNd->FindTableNode();
                 if (!pTableNode)
-                    return uno::Any();
+                    return cpo::uno::Any();
 
                 SwPosition aPos(*pTableNode);
                 SwDoc& rDoc = aPos.GetDoc();
                 m_xParentText = sw::CreateParentXText(rDoc, aPos);
             }
 
-            return uno::Any(uno::Reference<text::XText>(m_xParentText));
+            return cpo::uno::Any(uno::Reference<text::XText>(m_xParentText));
         }
         break;
         default:
         {
             const SwAttrSet& rSet = m_pBox->GetFrameFormat()->GetAttrSet();
-            uno::Any aResult;
+            cpo::uno::Any aResult;
             m_pPropSet->getPropertyValue(rPropertyName, rSet, aResult);
             return aResult;
         }
@@ -1217,14 +1217,14 @@ double SwXCell::GetForcedNumericalValue() const
     return fTmp;
 }
 
-uno::Any SwXCell::GetAny() const
+cpo::uno::Any SwXCell::GetAny() const
 {
     if(!m_pBox)
         throw uno::RuntimeException();
     // check if table box value item is set
     auto pBoxFormat(m_pBox->GetFrameFormat());
     const bool bIsNum = pBoxFormat->GetItemState(RES_BOXATR_VALUE, false) == SfxItemState::SET;
-    return bIsNum ? uno::Any(getValue()) : uno::Any(const_cast<SwXCell*>(this)->getString());
+    return bIsNum ? cpo::uno::Any(getValue()) : cpo::uno::Any(const_cast<SwXCell*>(this)->getString());
 }
 
 OUString SwXCell::getImplementationName()
@@ -1266,7 +1266,7 @@ uno::Reference< beans::XPropertySetInfo > SwXTextTableRow::getPropertySetInfo()
     return xRef;
 }
 
-void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
+void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName, const cpo::uno::Any& aValue)
 {
     SolarMutexGuard aGuard;
     SwFrameFormat* pFormat = lcl_EnsureCoreConnected(GetFrameFormat(), this);
@@ -1343,10 +1343,10 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName, const uno:
     }
 }
 
-uno::Any SwXTextTableRow::getPropertyValue(const OUString& rPropertyName)
+cpo::uno::Any SwXTextTableRow::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     SwFrameFormat* pFormat = lcl_EnsureCoreConnected(GetFrameFormat(), this);
     SwTable* pTable = SwTable::FindTable( pFormat );
     SwTableLine* pLn = SwXTextTableRow::FindLine(pTable, m_pLine);
@@ -1632,7 +1632,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXTextTableCursor::getPropertySetInf
     return xRef;
 }
 
-void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
+void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName, const cpo::uno::Any& aValue)
 {
     SolarMutexGuard aGuard;
     SwUnoCursor& rUnoCursor = GetCursor();
@@ -1687,7 +1687,7 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName, const u
     }
 }
 
-uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
+cpo::uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
     SwUnoCursor& rUnoCursor = GetCursor();
@@ -1701,7 +1701,7 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
     if(!pEntry)
         throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, getXWeak());
     rTableCursor.MakeBoxSels();
-    uno::Any aResult;
+    cpo::uno::Any aResult;
     switch(pEntry->nWID)
     {
         case FN_UNO_TABLE_CELL_BACKGROUND:
@@ -1769,8 +1769,8 @@ class SwTableProperties_Impl
 public:
     SwTableProperties_Impl();
 
-    void SetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any& aVal);
-    const uno::Any* GetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId);
+    void SetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const cpo::uno::Any& aVal);
+    const cpo::uno::Any* GetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId);
     void AddItemToSet(SfxItemSet& rSet, std::function<std::unique_ptr<SfxPoolItem>()> aItemFactory,
                         sal_uInt16 nWhich, std::initializer_list<sal_uInt16> vMember, bool bAddTwips = false);
     void ApplyTableAttr(const SwTable& rTable, SwDoc& rDoc);
@@ -1781,14 +1781,14 @@ public:
 SwTableProperties_Impl::SwTableProperties_Impl()
     { }
 
-void SwTableProperties_Impl::SetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any& rVal)
+void SwTableProperties_Impl::SetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const cpo::uno::Any& rVal)
     {
         m_aAnyMap.SetValue(nWhichId, nMemberId, rVal);
     }
 
-const uno::Any* SwTableProperties_Impl::GetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId)
+const cpo::uno::Any* SwTableProperties_Impl::GetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId)
     {
-        const uno::Any* pAny = nullptr;
+        const cpo::uno::Any* pAny = nullptr;
         m_aAnyMap.FillValue(nWhichId, nMemberId, pAny);
         return pAny;
     }
@@ -1797,10 +1797,10 @@ void SwTableProperties_Impl::AddItemToSet(SfxItemSet& rSet,
         std::function<std::unique_ptr<SfxPoolItem>()> aItemFactory,
         sal_uInt16 nWhich, std::initializer_list<sal_uInt16> vMember, bool bAddTwips)
 {
-    std::vector< std::pair<sal_uInt16, const uno::Any* > > vMemberAndAny;
+    std::vector< std::pair<sal_uInt16, const cpo::uno::Any* > > vMemberAndAny;
     for(sal_uInt16 nMember : vMember)
     {
-        if (const uno::Any* pAny = GetProperty(nWhich, nMember))
+        if (const cpo::uno::Any* pAny = GetProperty(nWhich, nMember))
             vMemberAndAny.emplace_back(nMember, pAny);
     }
     if(!vMemberAndAny.empty())
@@ -1822,7 +1822,7 @@ void SwTableProperties_Impl::ApplyTableAttr(const SwTable& rTable, SwDoc& rDoc)
             RES_LAYOUT_SPLIT, RES_LAYOUT_SPLIT>
         aSet(rDoc.GetAttrPool());
     const SwFrameFormat &rFrameFormat = *rTable.GetFrameFormat();
-    if (const uno::Any* pRepHead = GetProperty(FN_TABLE_HEADLINE_REPEAT, 0xff))
+    if (const cpo::uno::Any* pRepHead = GetProperty(FN_TABLE_HEADLINE_REPEAT, 0xff))
     {
         bool bVal(pRepHead->get<bool>());
         const_cast<SwTable&>(rTable).SetRowsToRepeat( bVal ? 1 : 0 );  // TODO: MULTIHEADER
@@ -1836,7 +1836,7 @@ void SwTableProperties_Impl::ApplyTableAttr(const SwTable& rTable, SwDoc& rDoc)
         MID_GRAPHIC_FILTER });
 
     bool bPutBreak = true;
-    const uno::Any* pPage = GetProperty(FN_UNO_PAGE_STYLE, 0);
+    const cpo::uno::Any* pPage = GetProperty(FN_UNO_PAGE_STYLE, 0);
     if (!pPage)
         pPage = GetProperty(RES_PAGEDESC, 0xff);
     if (pPage)
@@ -1850,7 +1850,7 @@ void SwTableProperties_Impl::ApplyTableAttr(const SwTable& rTable, SwDoc& rDoc)
             if(pDesc)
             {
                 SwFormatPageDesc aDesc(pDesc);
-                if (const uno::Any* pPgNo = GetProperty(RES_PAGEDESC, MID_PAGEDESC_PAGENUMOFFSET))
+                if (const cpo::uno::Any* pPgNo = GetProperty(RES_PAGEDESC, MID_PAGEDESC_PAGENUMOFFSET))
                 {
                     aDesc.SetNumOffset(pPgNo->get<sal_Int16>());
                 }
@@ -1867,12 +1867,12 @@ void SwTableProperties_Impl::ApplyTableAttr(const SwTable& rTable, SwDoc& rDoc)
     AddItemToSet(aSet, [&rFrameFormat]() { return std::unique_ptr<SfxPoolItem>(rFrameFormat.GetKeep().Clone()); }, RES_KEEP, {0});
     AddItemToSet(aSet, [&rFrameFormat]() { return std::unique_ptr<SfxPoolItem>(rFrameFormat.GetHoriOrient().Clone()); }, RES_HORI_ORIENT, {MID_HORIORIENT_ORIENT}, true);
 
-    const uno::Any* pSzRel = GetProperty(FN_TABLE_IS_RELATIVE_WIDTH, 0xff);
-    const uno::Any* pRelWidth = GetProperty(FN_TABLE_RELATIVE_WIDTH, 0xff);
+    const cpo::uno::Any* pSzRel = GetProperty(FN_TABLE_IS_RELATIVE_WIDTH, 0xff);
+    const cpo::uno::Any* pRelWidth = GetProperty(FN_TABLE_RELATIVE_WIDTH, 0xff);
 
     bool bPutSize = false;
     SwFormatFrameSize aSz(SwFrameSize::Variable);
-    if (const uno::Any* pWidth = GetProperty(FN_TABLE_WIDTH, 0xff))
+    if (const cpo::uno::Any* pWidth = GetProperty(FN_TABLE_WIDTH, 0xff))
     {
         aSz.PutValue(*pWidth, MID_FRMSIZE_WIDTH);
         bPutSize = true;
@@ -1894,7 +1894,7 @@ void SwTableProperties_Impl::ApplyTableAttr(const SwTable& rTable, SwDoc& rDoc)
     AddItemToSet(aSet, [&rFrameFormat]() { return std::unique_ptr<SfxPoolItem>(rFrameFormat.GetULSpace().Clone()); }, RES_UL_SPACE, {
         MID_UP_MARGIN|CONVERT_TWIPS,
         MID_LO_MARGIN|CONVERT_TWIPS });
-    if (const ::uno::Any* pSplit = GetProperty(RES_LAYOUT_SPLIT, 0))
+    if (const ::cpo::uno::Any* pSplit = GetProperty(RES_LAYOUT_SPLIT, 0))
     {
         SwFormatLayoutSplit aSp(pSplit->get<bool>());
         aSet.Put(aSp);
@@ -2132,7 +2132,7 @@ SwXTextTable::attach(const uno::Reference<text::XTextRange> & xTextRange)
         }
 
         OUString tableName;
-        if (const uno::Any* pName = m_pImpl->m_pTableProps->GetProperty(FN_UNO_TABLE_NAME, 0))
+        if (const cpo::uno::Any* pName = m_pImpl->m_pTableProps->GetProperty(FN_UNO_TABLE_NAME, 0))
         {
             tableName = pName->get<OUString>();
         }
@@ -2301,7 +2301,7 @@ uno::Reference<table::XCellRange> SwXTextTable::getCellRangeByName(const OUStrin
     return GetRangeByName(pFormat, pTable, sTLName, sBRName, aDesc);
 }
 
-uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXTextTable::getDataArray()
+uno::Sequence< uno::Sequence< cpo::uno::Any > > SAL_CALL SwXTextTable::getDataArray()
 {
     SolarMutexGuard aGuard;
     std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(SwXTextTable::Impl::ThrowIfComplex(*this));
@@ -2311,7 +2311,7 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXTextTable::getDataArray()
     return xAllRange->getDataArray();
 }
 
-void SAL_CALL SwXTextTable::setDataArray(const uno::Sequence< uno::Sequence< uno::Any > >& rArray)
+void SAL_CALL SwXTextTable::setDataArray(const uno::Sequence< uno::Sequence< cpo::uno::Any > >& rArray)
 {
     SolarMutexGuard aGuard;
     std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(SwXTextTable::Impl::ThrowIfComplex(*this));
@@ -2481,7 +2481,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXTextTable::getPropertySetInfo()
     return xRef;
 }
 
-void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
+void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const cpo::uno::Any& aValue)
 {
     SolarMutexGuard aGuard;
     SwFrameFormat* pFormat = GetFrameFormat();
@@ -2738,10 +2738,10 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
         throw uno::RuntimeException();
 }
 
-uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
+cpo::uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     SwFrameFormat* pFormat = GetFrameFormat();
     const SfxItemPropertyMapEntry* pEntry =
             m_pImpl->m_pPropSet->getPropertyMap().getByName(rPropertyName);
@@ -2973,7 +2973,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
     }
     else if (m_pImpl->IsDescriptor())
     {
-        if (const uno::Any* pAny = m_pImpl->m_pTableProps->GetProperty(pEntry->nWID, pEntry->nMemberId))
+        if (const cpo::uno::Any* pAny = m_pImpl->m_pTableProps->GetProperty(pEntry->nWID, pEntry->nMemberId))
             aRet = *pAny;
         else
             throw lang::IllegalArgumentException();
@@ -3307,7 +3307,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXCellRange::getPropertySetInfo()
 }
 
 void SAL_CALL
-SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
+SwXCellRange::setPropertyValue(const OUString& rPropertyName, const cpo::uno::Any& aValue)
 {
     SolarMutexGuard aGuard;
     SwFrameFormat *const pFormat = m_pImpl->GetFrameFormat();
@@ -3425,10 +3425,10 @@ SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
     }
 }
 
-uno::Any SAL_CALL SwXCellRange::getPropertyValue(const OUString& rPropertyName)
+cpo::uno::Any SAL_CALL SwXCellRange::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     SwFrameFormat *const pFormat = m_pImpl->GetFrameFormat();
     if(pFormat)
     {
@@ -3522,7 +3522,7 @@ void SwXCellRange::removeVetoableChangeListener(const OUString& /*PropertyName*/
     { throw uno::RuntimeException(u"Not implemented"_ustr, getXWeak()); }
 
 ///@see SwXCellRange::getData
-uno::Sequence<uno::Sequence<uno::Any>> SAL_CALL SwXCellRange::getDataArray()
+uno::Sequence<uno::Sequence<cpo::uno::Any>> SAL_CALL SwXCellRange::getDataArray()
 {
     SolarMutexGuard aGuard;
     const sal_Int32 nRowCount = m_pImpl->GetRowCount();
@@ -3530,12 +3530,12 @@ uno::Sequence<uno::Sequence<uno::Any>> SAL_CALL SwXCellRange::getDataArray()
     if(!nRowCount || !nColCount)
         throw uno::RuntimeException(u"Table too complex"_ustr, getXWeak());
     lcl_EnsureCoreConnected(m_pImpl->GetFrameFormat(), this);
-    uno::Sequence< uno::Sequence< uno::Any > > aRowSeq(nRowCount);
+    uno::Sequence< uno::Sequence< cpo::uno::Any > > aRowSeq(nRowCount);
     auto vCells(GetCells());
     auto pCurrentCell(vCells.begin());
     for(auto& rRow : asNonConstRange(aRowSeq))
     {
-        rRow = uno::Sequence< uno::Any >(nColCount);
+        rRow = uno::Sequence< cpo::uno::Any >(nColCount);
         for(auto& rCellAny : asNonConstRange(rRow))
         {
             auto pCell(static_cast<SwXCell*>(pCurrentCell->get()));
@@ -3549,7 +3549,7 @@ uno::Sequence<uno::Sequence<uno::Any>> SAL_CALL SwXCellRange::getDataArray()
 }
 
 ///@see SwXCellRange::setData
-void SAL_CALL SwXCellRange::setDataArray(const uno::Sequence< uno::Sequence< uno::Any > >& rArray)
+void SAL_CALL SwXCellRange::setDataArray(const uno::Sequence< uno::Sequence< cpo::uno::Any > >& rArray)
 {
     SolarMutexGuard aGuard;
     const sal_Int32 nRowCount = m_pImpl->GetRowCount();
@@ -3860,7 +3860,7 @@ sal_Int32 SwXTableRows::getCount()
 }
 
 ///@see SwXCell::CreateXCell (TODO: seems to be copy and paste programming here)
-uno::Any SwXTableRows::getByIndex(sal_Int32 nIndex)
+cpo::uno::Any SwXTableRows::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
     SwFrameFormat* pFrameFormat(lcl_EnsureCoreConnected(GetFrameFormat(), this));
@@ -3875,7 +3875,7 @@ uno::Any SwXTableRows::getByIndex(sal_Int32 nIndex)
     if(!aHint.m_pResult)
         aHint.m_pResult = new SwXTextTableRow(pFrameFormat, pLine);
     uno::Reference<beans::XPropertySet> xRet = static_cast<beans::XPropertySet*>(aHint.m_pResult.get());
-    return uno::Any(xRet);
+    return cpo::uno::Any(xRet);
 }
 
 uno::Type SAL_CALL SwXTableRows::getElementType()
@@ -4029,12 +4029,12 @@ sal_Int32 SwXTableColumns::getCount()
     return pLine->GetTabBoxes().size();
 }
 
-uno::Any SwXTableColumns::getByIndex(sal_Int32 nIndex)
+cpo::uno::Any SwXTableColumns::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
     if(nIndex < 0 || getCount() <= nIndex)
         throw lang::IndexOutOfBoundsException();
-    return uno::Any(uno::Reference<uno::XInterface>()); // i#21699 not supported
+    return cpo::uno::Any(uno::Reference<uno::XInterface>()); // i#21699 not supported
 }
 
 uno::Type SAL_CALL SwXTableColumns::getElementType()

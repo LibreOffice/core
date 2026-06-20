@@ -28,6 +28,7 @@
 namespace com::sun::star::xml::wrapper { class XXMLElementWrapper; }
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 SignatureCreatorImpl::SignatureCreatorImpl()
     :  m_nIdOfBlocker(-1)
@@ -130,7 +131,7 @@ void SAL_CALL SignatureCreatorImpl::removeSignatureCreationResultListener(
 }
 
 /* XInitialization */
-void SAL_CALL SignatureCreatorImpl::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+void SAL_CALL SignatureCreatorImpl::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     OSL_ASSERT(aArguments.getLength() == 5);
 

@@ -45,9 +45,9 @@ class OGridColumn   :public ::cppu::BaseMutex
                     ,public OCloneableAggregation
 {
 // [properties]
-    css::uno::Any  m_aWidth;  // column width
-    css::uno::Any  m_aAlign;  // column alignment
-    css::uno::Any  m_aHidden; // column hidden?
+    cpo::uno::Any  m_aWidth;  // column width
+    cpo::uno::Any  m_aAlign;  // column alignment
+    cpo::uno::Any  m_aHidden; // column hidden?
 // [properties]
 
     OUString       m_aModelName;
@@ -63,7 +63,7 @@ public:
 
     // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(OGridControlModel, OGridColumn_BASE)
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
 
     static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
     // XUnoTunnel
@@ -85,15 +85,15 @@ public:
 
     // XPropertySet
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override = 0;
-    virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle ) const override;
-    virtual bool SAL_CALL convertFastPropertyValue(css::uno::Any& rConvertedValue, css::uno::Any& rOldValue,
-                                          sal_Int32 nHandle, const css::uno::Any& rValue ) override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const css::uno::Any& rValue) override;
+    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
+    virtual bool SAL_CALL convertFastPropertyValue(cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue,
+                                          sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
 
     using OPropertySetAggregationHelper::getFastPropertyValue;
 
     // css::beans::XPropertyState
-    virtual css::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const override;
+    virtual cpo::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const override;
 
     // XCloneable
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;

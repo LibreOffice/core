@@ -106,7 +106,7 @@ ScVbaComment::getCommentByIndex( sal_Int32 Index )
     // parent is sheet ( parent of the range which is the parent of the comment )
     uno::Reference< XCollection > xColl(  new ScVbaComments( getParent()->getParent(), mxContext, mxModel, xIndexAccess ) );
 
-    return uno::Reference< excel::XComment > ( xColl->Item( uno::Any( Index ), uno::Any() ), uno::UNO_QUERY_THROW );
+    return uno::Reference< excel::XComment > ( xColl->Item( cpo::uno::Any( Index ), cpo::uno::Any() ), uno::UNO_QUERY_THROW );
  }
 
 // public vba functions
@@ -167,7 +167,7 @@ ScVbaComment::Previous()
 }
 
 OUString SAL_CALL
-ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::Any& Overwrite )
+ScVbaComment::Text( const cpo::uno::Any& aText, const cpo::uno::Any& aStart, const cpo::uno::Any& Overwrite )
 {
     OUString sText;
     aText >>= sText;

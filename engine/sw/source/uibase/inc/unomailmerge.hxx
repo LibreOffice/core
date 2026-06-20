@@ -86,7 +86,7 @@ class SwXMailMerge final :
     OUString        m_aTmpFileName;
 
     // properties of mail merge service
-    css::uno::Sequence< css::uno::Any >           m_aSelection;
+    css::uno::Sequence< cpo::uno::Any >           m_aSelection;
     css::uno::Reference< css::sdbc::XResultSet >  m_xResultSet;
     css::uno::Reference< css::sdbc::XConnection > m_xConnection;
     css::uno::Reference< css::frame::XModel >     m_xModel;
@@ -135,15 +135,15 @@ public:
     void LaunchMailMergeEvent( const css::text::MailMergeEvent &rData ) const;
 
     // XJob
-    virtual css::uno::Any SAL_CALL execute( const css::uno::Sequence< css::beans::NamedValue >& Arguments ) override;
+    virtual cpo::uno::Any SAL_CALL execute( const css::uno::Sequence< css::beans::NamedValue >& Arguments ) override;
 
     // XCancellable
     virtual void SAL_CALL cancel() override;
 
     // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
     virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
     virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
     virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;

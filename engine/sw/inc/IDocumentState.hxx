@@ -22,7 +22,7 @@
 #include <config_collab.h>
 
 #if ENABLE_YRS
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 #include <editeng/yrstransactionsupplier.hxx>
 #include <optional>
 class SfxUndoAction;
@@ -60,7 +60,7 @@ public:
 
 #if ENABLE_YRS
     virtual void YrsInitAcceptor() = 0;
-    virtual void YrsInitConnector(css::uno::Any const& raConnector) = 0;
+    virtual void YrsInitConnector(cpo::uno::Any const& raConnector) = 0;
     virtual IYrsTransactionSupplier::Mode SetYrsMode(IYrsTransactionSupplier::Mode mode) = 0;
     virtual void YrsCommitModified(bool isUnfinishedUndo) = 0;
 

@@ -20,6 +20,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace apitest {
 
@@ -86,35 +87,35 @@ void XDataPilotDescriptor::testGetDataPilotFields_Impl( uno::Reference< sheet::X
         {
             case 0:
                 {
-                    uno::Any aAny;
+                    cpo::uno::Any aAny;
                     aAny<<= sheet::DataPilotFieldOrientation_COLUMN;
                     xPropSet->setPropertyValue(aOrientation, aAny);
                 }
                 break;
             case 1:
                 {
-                    uno::Any aAny;
+                    cpo::uno::Any aAny;
                     aAny<<= sheet::DataPilotFieldOrientation_ROW;
                     xPropSet->setPropertyValue(aOrientation, aAny);
                 }
                 break;
             case 2:
                 {
-                    uno::Any aAny;
+                    cpo::uno::Any aAny;
                     aAny<<= sheet::DataPilotFieldOrientation_DATA;
                     xPropSet->setPropertyValue(aOrientation, aAny);
                 }
                 break;
             case 3:
                 {
-                    uno::Any aAny;
+                    cpo::uno::Any aAny;
                     aAny<<= sheet::DataPilotFieldOrientation_HIDDEN;
                     xPropSet->setPropertyValue(aOrientation, aAny);
                 }
                 break;
             case 4:
                 {
-                    uno::Any aAny;
+                    cpo::uno::Any aAny;
                     aAny<<= sheet::DataPilotFieldOrientation_PAGE;
                     xPropSet->setPropertyValue(aOrientation, aAny);
                 }

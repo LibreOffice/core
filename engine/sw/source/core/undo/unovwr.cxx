@@ -38,6 +38,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 SwUndoOverwrite::SwUndoOverwrite( SwDoc& rDoc, SwPosition& rPos,
                                     sal_Unicode cIns )

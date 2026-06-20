@@ -96,7 +96,7 @@ ScDatabaseSettingItem::~ScDatabaseSettingItem()
 {
 }
 
-bool ScDatabaseSettingItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool ScDatabaseSettingItem::QueryValue(cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch (nMemberId)
@@ -145,7 +145,7 @@ bool ScDatabaseSettingItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId ) con
     return true;
 }
 
-bool ScDatabaseSettingItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
+bool ScDatabaseSettingItem::PutValue(const cpo::uno::Any& rVal, sal_uInt8 nMemberId)
 {
     bool bVal = false;
     bool bRet = false;

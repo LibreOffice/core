@@ -57,7 +57,7 @@ public:
     virtual sal_Int32 SAL_CALL getType() override;
     // Methods
     virtual void SAL_CALL Delete(  ) override;
-    virtual void SAL_CALL Add( const css::uno::Any& Type, const css::uno::Any& AlertStyle, const css::uno::Any& Operator, const css::uno::Any& Formula1, const css::uno::Any& Formula2 ) override;
+    virtual void SAL_CALL Add( const cpo::uno::Any& Type, const cpo::uno::Any& AlertStyle, const cpo::uno::Any& Operator, const cpo::uno::Any& Formula1, const cpo::uno::Any& Formula2 ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

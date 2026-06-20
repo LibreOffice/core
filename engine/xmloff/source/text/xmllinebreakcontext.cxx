@@ -51,7 +51,7 @@ void SvXMLLineBreakContext::startFastElement(
     if (SvXMLUnitConverter::convertEnum(eClear, aClear, pXML_LineBreakClear_Enum))
     {
         uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
-        xLineBreakProps->setPropertyValue(u"Clear"_ustr, uno::Any(eClear));
+        xLineBreakProps->setPropertyValue(u"Clear"_ustr, cpo::uno::Any(eClear));
     }
 
     m_rHelper.InsertTextContent(xLineBreak);

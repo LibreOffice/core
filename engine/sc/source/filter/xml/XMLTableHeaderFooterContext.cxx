@@ -32,6 +32,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
@@ -68,19 +69,19 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
         {
             if( ::cppu::any2bool(xPropSet->getPropertyValue( sShare )) )
                 // Don't share headers any longer
-                xPropSet->setPropertyValue( sShare, uno::Any(false) );
+                xPropSet->setPropertyValue( sShare, cpo::uno::Any(false) );
         }
         else
         {
             if( !::cppu::any2bool(xPropSet->getPropertyValue( sShare )) )
                 // share headers
-                xPropSet->setPropertyValue( sShare, uno::Any(true) );
+                xPropSet->setPropertyValue( sShare, cpo::uno::Any(true) );
         }
     }
     else
     {
         if ( bOn != bDisplay )
-            xPropSet->setPropertyValue( sOn, uno::Any(bDisplay) );
+            xPropSet->setPropertyValue( sOn, cpo::uno::Any(bDisplay) );
     }
     if (bLeft)
     {
@@ -89,7 +90,7 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
     else if (bFirst)
     {
         sCont = bFooter ? SC_UNO_PAGE_FIRSTFTRCONT : SC_UNO_PAGE_FIRSTHDRCONT;
-        xPropSet->setPropertyValue( sShareFirstContent, uno::Any(!bDisplay) );
+        xPropSet->setPropertyValue( sShareFirstContent, cpo::uno::Any(!bDisplay) );
     }
     else
     {
@@ -190,7 +191,7 @@ void XMLTableHeaderFooterContext::endFastElement(sal_Int32 )
         checkHeaderFooter(xHeaderFooterContent->getLeftText(), bContainsLeft);
         checkHeaderFooter(xHeaderFooterContent->getCenterText(), bContainsCenter);
         checkHeaderFooter(xHeaderFooterContent->getRightText(), bContainsRight);
-        xPropSet->setPropertyValue( sCont, uno::Any(xHeaderFooterContent) );
+        xPropSet->setPropertyValue( sCont, cpo::uno::Any(xHeaderFooterContent) );
     }
 }
 

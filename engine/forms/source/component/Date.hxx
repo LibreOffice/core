@@ -30,7 +30,7 @@ class ODateModel
                 :public OEditBaseModel
                 ,public OLimitedFormats
 {
-    css::uno::Any      m_aSaveValue;
+    cpo::uno::Any      m_aSaveValue;
     bool               m_bDateTimeField;
 
 protected:
@@ -51,10 +51,10 @@ public:
     virtual OUString SAL_CALL getServiceName() override;
 
     // css::beans::XPropertySet
-    virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle ) const override;
-    virtual bool SAL_CALL convertFastPropertyValue(css::uno::Any& rConvertedValue, css::uno::Any& rOldValue,
-                                          sal_Int32 nHandle, const css::uno::Any& rValue ) override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const css::uno::Any& rValue) override;
+    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
+    virtual bool SAL_CALL convertFastPropertyValue(cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue,
+                                          sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override
@@ -72,19 +72,19 @@ public:
 
 protected:
     // OBoundControlModel overridables
-    virtual css::uno::Any
+    virtual cpo::uno::Any
                             translateDbColumnToControlValue( ) override;
     virtual bool            commitControlValueToDbColumn( bool _bPostReset ) override;
 
-    virtual css::uno::Any
+    virtual cpo::uno::Any
                             translateControlValueToExternalValue( ) const override;
     virtual css::uno::Sequence< css::uno::Type >
                             getSupportedBindingTypes() override;
-    virtual css::uno::Any   translateExternalValueToControlValue( const css::uno::Any& _rExternalValue ) const override;
+    virtual cpo::uno::Any   translateExternalValueToControlValue( const cpo::uno::Any& _rExternalValue ) const override;
 
-    virtual css::uno::Any   translateControlValueToValidatableValue( ) const override;
+    virtual cpo::uno::Any   translateControlValueToValidatableValue( ) const override;
 
-    virtual css::uno::Any   getDefaultForReset() const override;
+    virtual cpo::uno::Any   getDefaultForReset() const override;
 
     virtual void            resetNoBroadcast() override;
 

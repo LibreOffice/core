@@ -63,7 +63,7 @@ void Bridge::call_net_func(IntPtr pNetI, const typelib_TypeDescription* pMethodT
     if (error)
     {
         map_net_value_to_uno(*pExc, &pArgsRetExc[nParams + 1],
-                             cppu::UnoType<css::uno::Any>::get().getTypeLibType(), false);
+                             cppu::UnoType<cpo::uno::Any>::get().getTypeLibType(), false);
     }
     else
     {
@@ -240,7 +240,7 @@ bool Bridge::call_uno_func(uno_Interface* pUnoI, const typelib_TypeDescription* 
             }
         }
 
-        map_uno_to_net_value(uno_exc, pExc, cppu::UnoType<css::uno::Any>::get().getTypeLibType());
+        map_uno_to_net_value(uno_exc, pExc, cppu::UnoType<cpo::uno::Any>::get().getTypeLibType());
 
         return false;
     }

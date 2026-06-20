@@ -60,6 +60,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::script::vba;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 using ::comphelper::ConfigurationHelper;
 
@@ -418,7 +419,7 @@ void VbaProject::readVbaModules( StorageBase& rVbaPrjStrg )
             xVBACompat->setProjectName( maPrjName );
 
             uno::Reference<beans::XPropertySet> xProps(xVBACompat, uno::UNO_QUERY_THROW);
-            xProps->setPropertyValue(u"VBATextEncoding"_ustr, uno::Any(eTextEnc));
+            xProps->setPropertyValue(u"VBATextEncoding"_ustr, cpo::uno::Any(eTextEnc));
         }
         catch(const Exception& )
         {

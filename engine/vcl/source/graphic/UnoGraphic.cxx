@@ -49,9 +49,9 @@ Graphic::~Graphic() noexcept
 {
 }
 
-uno::Any SAL_CALL Graphic::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL Graphic::queryInterface( const uno::Type & rType )
 {
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     if( rType == cppu::UnoType<graphic::XGraphic>::get())
         aAny <<= uno::Reference< graphic::XGraphic >( this );
     else if( rType == cppu::UnoType<awt::XBitmap>::get())

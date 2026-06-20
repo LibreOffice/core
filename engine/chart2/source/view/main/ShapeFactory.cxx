@@ -42,7 +42,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 #include <editeng/unoprnms.hxx>
 #include <rtl/math.hxx>
@@ -71,8 +71,8 @@ namespace chart
 namespace
 {
 
-void lcl_addProperty(uno::Sequence<OUString> & rPropertyNames, uno::Sequence<uno::Any> & rPropertyValues,
-                 OUString const & rName, uno::Any const & rAny)
+void lcl_addProperty(uno::Sequence<OUString> & rPropertyNames, uno::Sequence<cpo::uno::Any> & rPropertyValues,
+                 OUString const & rName, cpo::uno::Any const & rAny)
 {
     rPropertyNames.realloc(rPropertyNames.getLength() + 1);
     rPropertyNames.getArray()[rPropertyNames.getLength() - 1] = rName;
@@ -135,7 +135,7 @@ void ShapeFactory::setPageSize(const rtl::Reference<SvxShapeGroupAnyD>&, const a
 
 //  diverse tools::PolyPolygon create methods
 
-static uno::Any createPolyPolygon_Cube(
+static cpo::uno::Any createPolyPolygon_Cube(
             const drawing::Direction3D& rSize, double fRoundedEdge, bool bRounded )
 {
     OSL_PRECOND(fRoundedEdge>=0, "fRoundedEdge needs to be >= 0");
@@ -221,10 +221,10 @@ static uno::Any createPolyPolygon_Cube(
         *pInnerSequenceX++ = -fWidthH;
         *pInnerSequenceX++ = -fWidthH + fOffset;
     }
-    return uno::Any( &aPP, cppu::UnoType<drawing::PolyPolygonShape3D>::get());
+    return cpo::uno::Any( &aPP, cppu::UnoType<drawing::PolyPolygonShape3D>::get());
 }
 
-static uno::Any createPolyPolygon_Cylinder(
+static cpo::uno::Any createPolyPolygon_Cylinder(
              double fHeight
            , double fRadius
            , sal_Int32& nVerticalSegmentCount )
@@ -303,10 +303,10 @@ static uno::Any createPolyPolygon_Cylinder(
     *pInnerSequenceX++ = 0.0;
     *pInnerSequenceY++ = fY2;
 
-    return uno::Any( &aPP, cppu::UnoType<drawing::PolyPolygonShape3D>::get());
+    return cpo::uno::Any( &aPP, cppu::UnoType<drawing::PolyPolygonShape3D>::get());
 }
 
-static uno::Any createPolyPolygon_Cone( double fHeight, double fRadius, double fTopHeight
+static cpo::uno::Any createPolyPolygon_Cone( double fHeight, double fRadius, double fTopHeight
             , sal_Int32& nVerticalSegmentCount )
 {
     OSL_PRECOND(fRadius>0, "The radius of a cone needs to be > 0");
@@ -380,7 +380,7 @@ static uno::Any createPolyPolygon_Cone( double fHeight, double fRadius, double f
     *pInnerSequenceY++ = fY3;
     *pInnerSequenceX++ = fX3;
 
-    return uno::Any( &aPP, cppu::UnoType<drawing::PolyPolygonShape3D>::get());
+    return cpo::uno::Any( &aPP, cppu::UnoType<drawing::PolyPolygonShape3D>::get());
 }
 
 //  methods for 3D shape creation
@@ -459,11 +459,11 @@ rtl::Reference<Svx3DExtrudeObject>
             UNO_NAME_3D_TRANSFORM_MATRIX,
         };
 
-        uno::Sequence<uno::Any> aPropertyValues {
-            uno::Any(sal_Int32(fDepth)), // Depth
-            uno::Any(nPercentDiagonal),  // PercentDiagonal
+        uno::Sequence<cpo::uno::Any> aPropertyValues {
+            cpo::uno::Any(sal_Int32(fDepth)), // Depth
+            cpo::uno::Any(nPercentDiagonal),  // PercentDiagonal
             createPolyPolygon_Cube(rSize, double(nPercentDiagonal) / 200.0, bRounded),
-            uno::Any(B3DHomMatrixToHomogenMatrix(aHomMatrix))
+            cpo::uno::Any(B3DHomMatrixToHomogenMatrix(aHomMatrix))
         };
 
         xShape->setPropertyValues(aPropertyNames, aPropertyValues);
@@ -678,7 +678,7 @@ rtl::Reference<Svx3DLatheObject>
     {
         //Polygon
         sal_Int32 nVerticalSegmentCount = 0;
-        uno::Any aPPolygon = bCylinder
+        cpo::uno::Any aPPolygon = bCylinder
             ? createPolyPolygon_Cylinder(fHeight, fRadius, nVerticalSegmentCount)
             : createPolyPolygon_Cone(fHeight, fRadius, fTopHeight, nVerticalSegmentCount);
 
@@ -699,13 +699,13 @@ rtl::Reference<Svx3DLatheObject>
             UNO_NAME_3D_REDUCED_LINE_GEOMETRY
         };
 
-        uno::Sequence<uno::Any> aPropertyValues {
-            uno::Any(sal_Int16(5)),  // PercentDiagonal
+        uno::Sequence<cpo::uno::Any> aPropertyValues {
+            cpo::uno::Any(sal_Int16(5)),  // PercentDiagonal
             aPPolygon,               // Polygon
-            uno::Any(B3DHomMatrixToHomogenMatrix(aHomMatrix)), // Matrix
-            uno::Any(CHART_3DOBJECT_SEGMENTCOUNT), // Horizontal Segments
-            uno::Any(nVerticalSegmentCount),       // Vertical Segments
-            uno::Any(true)                         // Reduced lines
+            cpo::uno::Any(B3DHomMatrixToHomogenMatrix(aHomMatrix)), // Matrix
+            cpo::uno::Any(CHART_3DOBJECT_SEGMENTCOUNT), // Horizontal Segments
+            cpo::uno::Any(nVerticalSegmentCount),       // Vertical Segments
+            cpo::uno::Any(true)                         // Reduced lines
         };
 
         xShape->setPropertyValues(aPropertyNames, aPropertyValues);
@@ -919,7 +919,7 @@ rtl::Reference<SvxShapePolyPolygon>
                                   basegfx::deg2rad(fUnitCircleWidthAngleDegree),
                                   aTransformationFromUnitCircle, fAngleSubdivisionRadian);
 
-        xShape->SvxShape::setPropertyValue( u"PolyPolygonBezier"_ustr, uno::Any( aCoords ) );
+        xShape->SvxShape::setPropertyValue( u"PolyPolygonBezier"_ustr, cpo::uno::Any( aCoords ) );
     }
     catch( const uno::Exception& )
     {
@@ -971,35 +971,35 @@ rtl::Reference<Svx3DExtrudeObject>
 
         //depth
         xShape->setPropertyValue( UNO_NAME_3D_EXTRUDE_DEPTH
-            , uno::Any(static_cast<sal_Int32>(fDepth)) );
+            , cpo::uno::Any(static_cast<sal_Int32>(fDepth)) );
 
         //PercentDiagonal
         xShape->setPropertyValue( UNO_NAME_3D_PERCENT_DIAGONAL
-            , uno::Any( sal_Int16(0) ) );
+            , cpo::uno::Any( sal_Int16(0) ) );
 
         //Polygon
         drawing::PolyPolygonShape3D aPoly( BezierToPoly(aCoords) );
         ShapeFactory::closePolygon( aPoly );
         xShape->setPropertyValue( UNO_NAME_3D_POLYPOLYGON3D
-            , uno::Any( aPoly ) );
+            , cpo::uno::Any( aPoly ) );
 
         //DoubleSided
         xShape->setPropertyValue( UNO_NAME_3D_DOUBLE_SIDED
-            , uno::Any( true ) );
+            , cpo::uno::Any( true ) );
 
         //Reduced lines
         xShape->setPropertyValue( UNO_NAME_3D_REDUCED_LINE_GEOMETRY
-            , uno::Any( true ) );
+            , cpo::uno::Any( true ) );
 
         //TextureProjectionMode
         xShape->setPropertyValue( UNO_NAME_3D_TEXTURE_PROJ_Y
-            , uno::Any( drawing::TextureProjectionMode_OBJECTSPECIFIC ) );
+            , cpo::uno::Any( drawing::TextureProjectionMode_OBJECTSPECIFIC ) );
 
         //TextureProjectionMode
         xShape->setPropertyValue( UNO_NAME_3D_TEXTURE_PROJ_X
-            , uno::Any( drawing::TextureProjectionMode_PARALLEL ) );
+            , cpo::uno::Any( drawing::TextureProjectionMode_PARALLEL ) );
         xShape->setPropertyValue( UNO_NAME_3D_TEXTURE_PROJ_Y
-            , uno::Any( drawing::TextureProjectionMode_OBJECTSPECIFIC ) );
+            , cpo::uno::Any( drawing::TextureProjectionMode_OBJECTSPECIFIC ) );
     }
     catch( const uno::Exception& )
     {
@@ -1036,18 +1036,18 @@ rtl::Reference<Svx3DPolygonObject>
             UNO_NAME_3D_DOUBLE_SIDED
         };
 
-        uno::Sequence<uno::Any> aPropertyValues {
+        uno::Sequence<cpo::uno::Any> aPropertyValues {
             rStripe.getPolyPolygonShape3D(),            // Polygon
             Stripe::getTexturePolygon(nRotatedTexture), // TexturePolygon
             rStripe.getNormalsPolygon(),                // Normals Polygon
-            uno::Any(false),        // LineOnly
-            uno::Any(bDoubleSided)  // DoubleSided
+            cpo::uno::Any(false),        // LineOnly
+            cpo::uno::Any(bDoubleSided)  // DoubleSided
         };
 
         //NormalsKind
         if (bFlatNormals)
             lcl_addProperty(aPropertyNames, aPropertyValues,
-                            UNO_NAME_3D_NORMALS_KIND, uno::Any(drawing::NormalsKind_FLAT));
+                            UNO_NAME_3D_NORMALS_KIND, cpo::uno::Any(drawing::NormalsKind_FLAT));
 
         xShape->setPropertyValues(aPropertyNames, aPropertyValues);
 
@@ -1091,11 +1091,11 @@ rtl::Reference<Svx3DExtrudeObject>
             UNO_NAME_3D_DOUBLE_SIDED,
         };
 
-        uno::Sequence<uno::Any> aPropertyValues {
-            uno::Any(sal_Int32(fDepth)), // depth
-            uno::Any(sal_Int16(0)),      // PercentDiagonal
-            uno::Any(aUnoPolyPolygon),      // Polygon
-            uno::Any(true)               // DoubleSided
+        uno::Sequence<cpo::uno::Any> aPropertyValues {
+            cpo::uno::Any(sal_Int32(fDepth)), // depth
+            cpo::uno::Any(sal_Int16(0)),      // PercentDiagonal
+            cpo::uno::Any(aUnoPolyPolygon),      // Polygon
+            cpo::uno::Any(true)               // DoubleSided
         };
 
         //the z component of the polygon is now ignored by the drawing layer,
@@ -1107,7 +1107,7 @@ rtl::Reference<Svx3DExtrudeObject>
             basegfx::B3DHomMatrix aM;
             aM.translate(0, 0, rPolyPolygon[0][0].PositionZ);
             drawing::HomogenMatrix aHM = B3DHomMatrixToHomogenMatrix(aM);
-            lcl_addProperty(aPropertyNames, aPropertyValues, UNO_NAME_3D_TRANSFORM_MATRIX, uno::Any(aHM));
+            lcl_addProperty(aPropertyNames, aPropertyValues, UNO_NAME_3D_TRANSFORM_MATRIX, cpo::uno::Any(aHM));
         }
         xShape->setPropertyValues(aPropertyNames, aPropertyValues);
     }
@@ -1557,15 +1557,15 @@ rtl::Reference<SvxShapePolyPolygon>
 
         //Polygon
         xShape->SvxShape::setPropertyValue( UNO_NAME_POLYPOLYGON
-            , uno::Any( aPoints ) );
+            , cpo::uno::Any( aPoints ) );
 
         //LineColor
         xShape->SvxShape::setPropertyValue( UNO_NAME_LINECOLOR
-            , uno::Any( nBorderColor ) );
+            , cpo::uno::Any( nBorderColor ) );
 
         //FillColor
         xShape->SvxShape::setPropertyValue( UNO_NAME_FILLCOLOR
-            , uno::Any( nFillColor ) );
+            , cpo::uno::Any( nFillColor ) );
     }
     catch( const uno::Exception& )
     {
@@ -1608,7 +1608,7 @@ rtl::Reference<SvxGraphicObject>
     }
     try
     {
-        xShape->SvxShape::setPropertyValue( u"Graphic"_ustr, uno::Any( xGraphic ));
+        xShape->SvxShape::setPropertyValue( u"Graphic"_ustr, cpo::uno::Any( xGraphic ));
     }
     catch( const uno::Exception& )
     {
@@ -1702,7 +1702,7 @@ rtl::Reference<Svx3DSceneObject>
         {
             ::basegfx::B3DHomMatrix aM;
             xShape->SvxShape::setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX
-                , uno::Any(B3DHomMatrixToHomogenMatrix(aM)) );
+                , cpo::uno::Any(B3DHomMatrixToHomogenMatrix(aM)) );
         }
         catch( const uno::Exception& )
         {
@@ -1753,7 +1753,7 @@ rtl::Reference<SvxShapeCircle>
     //set properties
     try
     {
-        xShape->SvxShape::setPropertyValue( UNO_NAME_CIRCKIND, uno::Any( drawing::CircleKind_FULL ) );
+        xShape->SvxShape::setPropertyValue( UNO_NAME_CIRCKIND, cpo::uno::Any( drawing::CircleKind_FULL ) );
     }
     catch( const uno::Exception& )
     {
@@ -1806,9 +1806,9 @@ rtl::Reference<Svx3DPolygonObject>
             UNO_NAME_3D_LINEONLY
         };
 
-        uno::Sequence<uno::Any> aPropertyValues {
-            uno::Any(aUnoPoly),  // Polygon
-            uno::Any(true)      // LineOnly
+        uno::Sequence<cpo::uno::Any> aPropertyValues {
+            cpo::uno::Any(aUnoPoly),  // Polygon
+            cpo::uno::Any(true)      // LineOnly
         };
 
         //Transparency
@@ -1872,7 +1872,7 @@ rtl::Reference<SvxShapePolyPolygon>
     {
         //Polygon
         xShape->SvxShape::setPropertyValue( UNO_NAME_POLYPOLYGON
-            , uno::Any( rPoints ) );
+            , cpo::uno::Any( rPoints ) );
 
         if(pLineProperties)
         {
@@ -1937,7 +1937,7 @@ rtl::Reference<SvxShapePolyPolygon>
     {
         //Polygon
         xShape->SvxShape::setPropertyValue( UNO_NAME_POLYPOLYGON
-            , uno::Any( aAnyPoints ) );
+            , cpo::uno::Any( aAnyPoints ) );
 
         if(pLineProperties)
         {
@@ -2059,7 +2059,7 @@ rtl::Reference<SvxShapeText>
                     , const OUString& rText
                     , const tNameSequence& rPropNames
                     , const tAnySequence& rPropValues
-                    , const uno::Any& rATransformation )
+                    , const cpo::uno::Any& rATransformation )
 {
     if( !xTarget.is() )
         return nullptr;
@@ -2100,7 +2100,7 @@ rtl::Reference<SvxShapeText>
                 , const uno::Sequence< uno::Reference< chart2::XFormattedString > >& xFormattedString
                 , const tNameSequence& rPropNames
                 , const tAnySequence& rPropValues
-                , const uno::Any& rATransformation )
+                , const cpo::uno::Any& rATransformation )
 {
     if( !xTarget.is() )
         return nullptr;
@@ -2214,15 +2214,15 @@ rtl::Reference<SvxShapeText>
 
         //fill some more shape properties into the ValueMap
         {
-            aValueMap.insert( { u"TextHorizontalAdjust"_ustr, uno::Any(drawing::TextHorizontalAdjust_CENTER) } ); // drawing::TextHorizontalAdjust
-            aValueMap.insert( { u"TextVerticalAdjust"_ustr, uno::Any(drawing::TextVerticalAdjust_CENTER) } ); //drawing::TextVerticalAdjust
-            aValueMap.insert( { u"TextAutoGrowHeight"_ustr, uno::Any(true) } ); // bool
-            aValueMap.insert( { u"TextAutoGrowWidth"_ustr, uno::Any(true) } ); // bool
-            aValueMap.insert( { u"TextMaximumFrameWidth"_ustr, uno::Any(nTextMaxWidth) } ); // sal_Int32
+            aValueMap.insert( { u"TextHorizontalAdjust"_ustr, cpo::uno::Any(drawing::TextHorizontalAdjust_CENTER) } ); // drawing::TextHorizontalAdjust
+            aValueMap.insert( { u"TextVerticalAdjust"_ustr, cpo::uno::Any(drawing::TextVerticalAdjust_CENTER) } ); //drawing::TextVerticalAdjust
+            aValueMap.insert( { u"TextAutoGrowHeight"_ustr, cpo::uno::Any(true) } ); // bool
+            aValueMap.insert( { u"TextAutoGrowWidth"_ustr, cpo::uno::Any(true) } ); // bool
+            aValueMap.insert( { u"TextMaximumFrameWidth"_ustr, cpo::uno::Any(nTextMaxWidth) } ); // sal_Int32
 
             //set name/classified ObjectID (CID)
             if( !aName.isEmpty() )
-                aValueMap.emplace( u"Name"_ustr, uno::Any( aName ) ); //CID OUString
+                aValueMap.emplace( u"Name"_ustr, cpo::uno::Any( aName ) ); //CID OUString
         }
 
         //set global title properties
@@ -2305,11 +2305,11 @@ rtl::Reference<SvxShapeText>
                 u"TextUpperDistance"_ustr,
                 u"TextLowerDistance"_ustr,
             };
-            uno::Sequence<uno::Any> aPropVals {
-                uno::Any( nXDistance ),
-                uno::Any( nXDistance ),
-                uno::Any( nYDistance ),
-                uno::Any( nYDistance ),
+            uno::Sequence<cpo::uno::Any> aPropVals {
+                cpo::uno::Any( nXDistance ),
+                cpo::uno::Any( nXDistance ),
+                cpo::uno::Any( nYDistance ),
+                cpo::uno::Any( nYDistance ),
             };
             xShape->SvxShape::setPropertyValues( aPropNames, aPropVals );
         }
@@ -2325,9 +2325,9 @@ rtl::Reference<SvxShapeText>
              u"Transformation"_ustr,
              u"ParaAdjust"_ustr
         };
-        uno::Sequence<uno::Any> aPropVals {
-            uno::Any( B2DHomMatrixToHomogenMatrix3(aM) ),
-            uno::Any( style::ParagraphAdjust_CENTER )
+        uno::Sequence<cpo::uno::Any> aPropVals {
+            cpo::uno::Any( B2DHomMatrixToHomogenMatrix3(aM) ),
+            cpo::uno::Any( style::ParagraphAdjust_CENTER )
         };
         xShape->SvxShape::setPropertyValues( aPropNames, aPropVals );
     }
@@ -2366,8 +2366,8 @@ void ShapeFactory::makeShapeInvisible( const rtl::Reference< SvxShape >& xShape 
 {
     try
     {
-        xShape->setPropertyValue( u"LineStyle"_ustr, uno::Any( drawing::LineStyle_NONE ));
-        xShape->setPropertyValue( u"FillStyle"_ustr, uno::Any( drawing::FillStyle_NONE ));
+        xShape->setPropertyValue( u"LineStyle"_ustr, cpo::uno::Any( drawing::LineStyle_NONE ));
+        xShape->setPropertyValue( u"FillStyle"_ustr, cpo::uno::Any( drawing::FillStyle_NONE ));
     }
     catch( const uno::Exception& )
     {
@@ -2385,7 +2385,7 @@ void ShapeFactory::setShapeName( const rtl::Reference< SvxShape >& xShape
     try
     {
         xShape->setPropertyValue( UNO_NAME_MISC_OBJ_NAME
-            , uno::Any( rName ) );
+            , cpo::uno::Any( rName ) );
     }
     catch( const uno::Exception& )
     {
@@ -2414,7 +2414,7 @@ OUString ShapeFactory::getShapeName( const uno::Reference< drawing::XShape >& xS
     return aRet;
 }
 
-uno::Any ShapeFactory::makeTransformation( const awt::Point& rScreenPosition2D, double fRotationAnglePi )
+cpo::uno::Any ShapeFactory::makeTransformation( const awt::Point& rScreenPosition2D, double fRotationAnglePi )
 {
     ::basegfx::B2DHomMatrix aM;
     //As autogrow is active the rectangle is automatically expanded to that side
@@ -2422,7 +2422,7 @@ uno::Any ShapeFactory::makeTransformation( const awt::Point& rScreenPosition2D, 
     // aM.scale( 1, 1 ); Oops? A scale with this parameters is neutral, line commented out
     aM.rotate( fRotationAnglePi );
     aM.translate( rScreenPosition2D.X, rScreenPosition2D.Y );
-    uno::Any aATransformation( B2DHomMatrixToHomogenMatrix3(aM) );
+    cpo::uno::Any aATransformation( B2DHomMatrixToHomogenMatrix3(aM) );
     return aATransformation;
 }
 

@@ -182,7 +182,7 @@ void SvxZoomStatusBarControl::Command( const CommandEvent& rCEvt )
             else if (sIdent == "page")
                 aZoom.SetType(SvxZoomType::WHOLEPAGE);
 
-            css::uno::Any a;
+            cpo::uno::Any a;
             aZoom.QueryValue( a );
             INetURLObject aObj( m_aCommandURL );
 
@@ -205,7 +205,7 @@ SvxZoomPageStatusBarControl::SvxZoomPageStatusBarControl(sal_uInt16 _nSlotId,
     GetStatusBar().SetQuickHelpText(GetId(), SvxResId(RID_SVXSTR_FIT_SLIDE));
 }
 
-void SAL_CALL SvxZoomPageStatusBarControl::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+void SAL_CALL SvxZoomPageStatusBarControl::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     // Call inherited initialize
     StatusbarController::initialize(aArguments);
@@ -237,7 +237,7 @@ bool SvxZoomPageStatusBarControl::MouseButtonDown(const MouseEvent&)
 {
     SvxZoomItem aZoom( SvxZoomType::WHOLEPAGE, 0, TypedWhichId<SvxZoomItem>(GetId()) );
 
-    css::uno::Any a;
+    cpo::uno::Any a;
     aZoom.QueryValue( a );
     INetURLObject aObj( m_aCommandURL );
 

@@ -60,23 +60,23 @@ class RootItemContainer final : private cppu::BaseMutex,
             { OWeakObject::acquire(); }
         virtual void SAL_CALL release() noexcept override
             { OWeakObject::release(); }
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) override;
 
         // XTypeProvider
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
         // XIndexContainer
-        virtual void SAL_CALL insertByIndex( sal_Int32 Index, const css::uno::Any& Element ) override;
+        virtual void SAL_CALL insertByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
 
         virtual void SAL_CALL removeByIndex( sal_Int32 Index ) override;
 
         // XIndexReplace
-        virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const css::uno::Any& Element ) override;
+        virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
 
         // XIndexAccess
         virtual sal_Int32 SAL_CALL getCount() override;
 
-        virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+        virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
         // XElementAccess
         virtual css::uno::Type SAL_CALL getElementType() override
@@ -88,18 +88,18 @@ class RootItemContainer final : private cppu::BaseMutex,
 
         // XSingleComponentFactory
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithContext( const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext( const css::uno::Sequence< css::uno::Any >& Arguments, const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext( const css::uno::Sequence< cpo::uno::Any >& Arguments, const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
 
     private:
         //  OPropertySetHelper
-        virtual bool                                            SAL_CALL convertFastPropertyValue        ( css::uno::Any&        aConvertedValue ,
-                                                                                                               css::uno::Any&        aOldValue       ,
+        virtual bool                                            SAL_CALL convertFastPropertyValue        ( cpo::uno::Any&        aConvertedValue ,
+                                                                                                               cpo::uno::Any&        aOldValue       ,
                                                                                                                sal_Int32                        nHandle         ,
-                                                                                                               const css::uno::Any&  aValue          ) override;
+                                                                                                               const cpo::uno::Any&  aValue          ) override;
         virtual void                                                SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32                        nHandle         ,
-                                                                                                               const css::uno::Any&  aValue          ) override;
+                                                                                                               const cpo::uno::Any&  aValue          ) override;
         using cppu::OPropertySetHelper::getFastPropertyValue;
-        virtual void                                                SAL_CALL getFastPropertyValue( css::uno::Any&    aValue          ,
+        virtual void                                                SAL_CALL getFastPropertyValue( cpo::uno::Any&    aValue          ,
                                                                                                    sal_Int32                    nHandle         ) const override;
         virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper() override;
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;

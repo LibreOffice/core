@@ -151,21 +151,21 @@ namespace vclcanvas
         mpOutDev.reset();
     }
 
-    uno::Any DeviceHelper::isAccelerated() const
+    cpo::uno::Any DeviceHelper::isAccelerated() const
     {
-        return css::uno::Any(false);
+        return cpo::uno::Any(false);
     }
 
-    uno::Any DeviceHelper::getDeviceHandle() const
+    cpo::uno::Any DeviceHelper::getDeviceHandle() const
     {
         if( !mpOutDev )
-            return uno::Any();
+            return cpo::uno::Any();
 
-        return uno::Any(
+        return cpo::uno::Any(
             reinterpret_cast< sal_Int64 >(&mpOutDev->getOutDev()) );
     }
 
-    uno::Any DeviceHelper::getSurfaceHandle() const
+    cpo::uno::Any DeviceHelper::getSurfaceHandle() const
     {
         return getDeviceHandle();
     }

@@ -30,8 +30,8 @@ ScVbaCharacters::ScVbaCharacters( const uno::Reference< XHelperInterface >& xPar
                                   const uno::Reference< uno::XComponentContext >& xContext,
                                   const ScVbaPalette& dPalette,
                                   uno::Reference< text::XSimpleText> xRange,
-                                  const css::uno::Any& Start,
-                                  const css::uno::Any& Length,
+                                  const cpo::uno::Any& Start,
+                                  const cpo::uno::Any& Length,
                                   bool Replace  )
     : ScVbaCharacters_BASE( xParent, xContext ),
       m_xSimpleText(std::move(xRange)), m_aPalette( dPalette), bReplace( Replace )

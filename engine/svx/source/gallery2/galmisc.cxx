@@ -234,7 +234,7 @@ bool CreateDir( const INetURLObject& rURL )
             aParentURL.removeSegment();
             ::ucbhelper::Content                    aParent( aParentURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aCmdEnv, comphelper::getProcessComponentContext() );
             uno::Sequence< OUString >               aProps{ u"Title"_ustr };
-            uno::Sequence< uno::Any >               aValues{ uno::Any(rURL.GetLastName()) };
+            uno::Sequence< cpo::uno::Any >               aValues{ cpo::uno::Any(rURL.GetLastName()) };
 
             ::ucbhelper::Content aContent( rURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aCmdEnv, comphelper::getProcessComponentContext() );
             bRet = aParent.insertNewContent( u"application/vnd.sun.staroffice.fsys-folder"_ustr, aProps, aValues, aContent );
@@ -262,7 +262,7 @@ bool CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL )
         ::ucbhelper::Content aDestPath( rDstURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
 
         aDestPath.executeCommand( u"transfer"_ustr,
-                                  uno::Any( ucb::TransferInfo( false, rSrcURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
+                                  cpo::uno::Any( ucb::TransferInfo( false, rSrcURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                                                 rDstURL.GetLastName(), ucb::NameClash::OVERWRITE ) ) );
         bRet = true;
     }
@@ -288,7 +288,7 @@ bool KillFile( const INetURLObject& rURL )
         try
         {
             ::ucbhelper::Content aCnt( rURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-            aCnt.executeCommand( u"delete"_ustr, uno::Any( true ) );
+            aCnt.executeCommand( u"delete"_ustr, cpo::uno::Any( true ) );
         }
         catch( const ucb::ContentCreationException& )
         {

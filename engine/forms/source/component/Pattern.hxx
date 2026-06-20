@@ -33,7 +33,7 @@ class OPatternModel
                 :public OEditBaseModel
 {
 private:
-    css::uno::Any               m_aLastKnownValue;
+    cpo::uno::Any               m_aLastKnownValue;
     ::std::unique_ptr< ::dbtools::FormattedColumnValue >
                                 m_pFormattedValue;
 
@@ -63,12 +63,12 @@ public:
 
 protected:
     // OBoundControlModel overridables
-    virtual css::uno::Any   translateDbColumnToControlValue( ) override;
+    virtual cpo::uno::Any   translateDbColumnToControlValue( ) override;
     virtual bool            commitControlValueToDbColumn( bool _bPostReset ) override;
     virtual void            onConnectedDbColumn( const css::uno::Reference< css::uno::XInterface >& _rxForm ) override;
     virtual void            onDisconnectedDbColumn() override;
 
-    virtual css::uno::Any   getDefaultForReset() const override;
+    virtual cpo::uno::Any   getDefaultForReset() const override;
     virtual void            resetNoBroadcast() override;
 
 protected:

@@ -26,6 +26,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace sfx2::sidebar {
 
@@ -180,7 +181,7 @@ Reference<beans::XPropertySetInfo> SAL_CALL Theme::getPropertySetInfo()
 
 void SAL_CALL Theme::setPropertyValue (
     const OUString& rsPropertyName,
-    const css::uno::Any& rValue)
+    const cpo::uno::Any& rValue)
 {
     SolarMutexGuard aGuard;
 

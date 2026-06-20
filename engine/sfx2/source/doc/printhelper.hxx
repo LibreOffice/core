@@ -29,7 +29,7 @@
 #include <com/sun/star/view/XPrintJobBroadcaster.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/implbase.hxx>
 
@@ -47,7 +47,7 @@ public:
     SfxPrintHelper() ;
     virtual ~SfxPrintHelper() override ;
 
-    void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
     virtual void SAL_CALL addPrintJobListener( const css::uno::Reference< css::view::XPrintJobListener >& xListener ) override;
     virtual void SAL_CALL removePrintJobListener( const css::uno::Reference< css::view::XPrintJobListener >& xListener ) override;
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPrinter() override;

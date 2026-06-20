@@ -38,8 +38,9 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertSection)
     // When inserting a section with text:
     uno::Sequence<css::beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(
-            u"RegionName"_ustr, uno::Any(u"ZOTERO_BIBL {} CSL_BIBLIOGRAPHY RNDRfiit6mXBc"_ustr)),
-        comphelper::makePropertyValue(u"Content"_ustr, uno::Any(u"<p>aaa</p><p>bbb</p>"_ustr)),
+            u"RegionName"_ustr,
+            cpo::uno::Any(u"ZOTERO_BIBL {} CSL_BIBLIOGRAPHY RNDRfiit6mXBc"_ustr)),
+        comphelper::makePropertyValue(u"Content"_ustr, cpo::uno::Any(u"<p>aaa</p><p>bbb</p>"_ustr)),
     };
     dispatchCommand(mxComponent, u".uno:InsertSection"_ustr, aArgs);
 

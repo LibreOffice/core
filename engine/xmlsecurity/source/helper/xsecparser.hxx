@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 
@@ -154,7 +154,7 @@ public:
      * XInitialization
      */
     virtual void SAL_CALL initialize(
-        const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+        const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 };
 
 

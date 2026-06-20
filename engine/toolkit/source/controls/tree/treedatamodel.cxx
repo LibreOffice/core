@@ -32,6 +32,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::awt::tree;
 using namespace ::com::sun::star::lang;
@@ -53,7 +54,7 @@ public:
     void broadcast( broadcast_type eType, const Reference< XTreeNode >& xParentNode, const Reference< XTreeNode >& rNode );
 
     // XMutableTreeDataModel
-    virtual css::uno::Reference< css::awt::tree::XMutableTreeNode > SAL_CALL createNode( const css::uno::Any& DisplayValue, bool ChildrenOnDemand ) override;
+    virtual css::uno::Reference< css::awt::tree::XMutableTreeNode > SAL_CALL createNode( const cpo::uno::Any& DisplayValue, bool ChildrenOnDemand ) override;
     virtual void SAL_CALL setRoot( const css::uno::Reference< css::awt::tree::XMutableTreeNode >& RootNode ) override;
 
     // XTreeDataModel
@@ -95,13 +96,13 @@ public:
             const Reference< XTreeNode >& xNode, bool bNew);
 
     // XMutableTreeNode
-    virtual css::uno::Any SAL_CALL getDataValue() override;
-    virtual void SAL_CALL setDataValue( const css::uno::Any& _datavalue ) override;
+    virtual cpo::uno::Any SAL_CALL getDataValue() override;
+    virtual void SAL_CALL setDataValue( const cpo::uno::Any& _datavalue ) override;
     virtual void SAL_CALL appendChild( const css::uno::Reference< css::awt::tree::XMutableTreeNode >& ChildNode ) override;
     virtual void SAL_CALL insertChildByIndex( ::sal_Int32 Index, const css::uno::Reference< css::awt::tree::XMutableTreeNode >& ChildNode ) override;
     virtual void SAL_CALL removeChildByIndex( ::sal_Int32 Index ) override;
     virtual void SAL_CALL setHasChildrenOnDemand( bool ChildrenOnDemand ) override;
-    virtual void SAL_CALL setDisplayValue( const css::uno::Any& Value ) override;
+    virtual void SAL_CALL setDisplayValue( const cpo::uno::Any& Value ) override;
     virtual void SAL_CALL setNodeGraphicURL( const OUString& URL ) override;
     virtual void SAL_CALL setExpandedGraphicURL( const OUString& URL ) override;
     virtual void SAL_CALL setCollapsedGraphicURL( const OUString& URL ) override;
@@ -112,7 +113,7 @@ public:
     virtual css::uno::Reference< css::awt::tree::XTreeNode > SAL_CALL getParent(  ) override;
     virtual ::sal_Int32 SAL_CALL getIndex( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
     virtual bool SAL_CALL hasChildrenOnDemand(  ) override;
-    virtual css::uno::Any SAL_CALL getDisplayValue(  ) override;
+    virtual cpo::uno::Any SAL_CALL getDisplayValue(  ) override;
     virtual OUString SAL_CALL getNodeGraphicURL(  ) override;
     virtual OUString SAL_CALL getExpandedGraphicURL(  ) override;
     virtual OUString SAL_CALL getCollapsedGraphicURL(  ) override;
@@ -527,7 +528,7 @@ Sequence< OUString > SAL_CALL MutableTreeNode::getSupportedServiceNames(  )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_MutableTreeDataModel_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new MutableTreeDataModel());
 }

@@ -67,7 +67,7 @@ namespace svt
             virtual void SAL_CALL updatePopupMenu() override;
 
             // XInitialization
-            virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override final;
+            virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override final;
 
             // XStatusListener
             virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override = 0;
@@ -93,7 +93,7 @@ namespace svt
             void dispatchCommand( const OUString& sCommandURL, const css::uno::Sequence< css::beans::PropertyValue >& rArgs, const OUString& sTarget = OUString() );
 
     protected:
-            virtual void initializeImpl( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< css::uno::Any >& aArguments );
+            virtual void initializeImpl( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< cpo::uno::Any >& aArguments );
 
             void dispatchCommandImpl( std::unique_lock<std::mutex>& rGuard, const OUString& sCommandURL, const css::uno::Sequence< css::beans::PropertyValue >& rArgs, const OUString& sTarget );
 

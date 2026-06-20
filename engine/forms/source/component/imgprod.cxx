@@ -49,9 +49,9 @@ ImageProducer::~ImageProducer()
 
 
 // XInterface
-css::uno::Any ImageProducer::queryInterface( const css::uno::Type & rType )
+cpo::uno::Any ImageProducer::queryInterface( const css::uno::Type & rType )
 {
-    css::uno::Any aRet = ::cppu::queryInterface( rType,
+    cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                         static_cast< css::lang::XInitialization* >(this),
                                         static_cast< css::lang::XServiceInfo* >(this),
                                         static_cast< css::awt::XImageProducer* >(this) );
@@ -320,7 +320,7 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
 }
 
 
-void ImageProducer::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+void ImageProducer::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     if ( aArguments.getLength() == 1 )
     {
@@ -347,7 +347,7 @@ css::uno::Sequence<OUString> ImageProducer::getSupportedServiceNames() {
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_ImageProducer_get_implementation(css::uno::XComponentContext*,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ImageProducer());
 }

@@ -9,7 +9,7 @@ excludelist:
     - com/sun/star/uno/XInterface.hpp
     test/source/container/xnamereplace.cxx:
     # Actually used
-    - com/sun/star/uno/Any.hxx
+    - cpo/uno/Any.hxx
     test/source/drawing/xshape.cxx:
     # Needed for template
     - test/cppunitasserthelper.hxx

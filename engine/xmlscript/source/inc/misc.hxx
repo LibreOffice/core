@@ -19,13 +19,13 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 namespace xmlscript
 {
 
 template< typename T >
-inline void extract_throw( T * p, css::uno::Any const & a )
+inline void extract_throw( T * p, cpo::uno::Any const & a )
 {
     if (! (a >>= *p))
     {
@@ -37,7 +37,7 @@ inline void extract_throw( T * p, css::uno::Any const & a )
 }
 
 template< typename T >
-inline T extract_throw( css::uno::Any const & a )
+inline T extract_throw( cpo::uno::Any const & a )
 {
     T v = T();
     extract_throw<T>( &v, a );

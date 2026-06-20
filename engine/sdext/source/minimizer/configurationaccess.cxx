@@ -32,6 +32,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
@@ -246,9 +247,9 @@ Reference< XInterface > ConfigurationAccess::OpenConfiguration( bool bReadOnly )
     try
     {
         Reference< lang::XMultiServiceFactory > xProvider = configuration::theDefaultProvider::get( mxContext );
-        uno::Sequence<uno::Any> aCreationArguments(comphelper::InitAnyPropertySequence(
+        uno::Sequence<cpo::uno::Any> aCreationArguments(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath",  uno::Any(GetPathToConfigurationRoot())}
+            {"nodepath",  cpo::uno::Any(GetPathToConfigurationRoot())}
         }));
         OUString sAccessService;
         if ( bReadOnly )
@@ -292,7 +293,7 @@ Reference< XInterface > ConfigurationAccess::GetConfigurationNode(
     return xNode;
 }
 
-css::uno::Any ConfigurationAccess::GetConfigProperty( const PPPOptimizerTokenEnum ePropertyToken ) const
+cpo::uno::Any ConfigurationAccess::GetConfigProperty( const PPPOptimizerTokenEnum ePropertyToken ) const
 {
     Any aRetValue;
     const OptimizerSettings& rSettings( maSettings.front() );
@@ -326,7 +327,7 @@ css::uno::Any ConfigurationAccess::GetConfigProperty( const PPPOptimizerTokenEnu
     return aRetValue;
 }
 
-void ConfigurationAccess::SetConfigProperty( const PPPOptimizerTokenEnum ePropertyToken, const css::uno::Any& rValue )
+void ConfigurationAccess::SetConfigProperty( const PPPOptimizerTokenEnum ePropertyToken, const cpo::uno::Any& rValue )
 {
     OptimizerSettings& rSettings( maSettings.front() );
     try

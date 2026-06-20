@@ -406,7 +406,7 @@ namespace dbaui
 
         void removeColumnNameFromNameMap(const OUString& _sName);
         void showError(const OUString& _sErrorMessage);
-        void showError(const css::uno::Any& _aError);
+        void showError(const cpo::uno::Any& _aError);
     };
 }
 

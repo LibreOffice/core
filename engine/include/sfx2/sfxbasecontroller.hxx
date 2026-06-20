@@ -107,9 +107,9 @@ public:
 
     virtual bool SAL_CALL suspend( bool bSuspend ) override ;
 
-    css::uno::Any SAL_CALL getViewData() override ;
+    cpo::uno::Any SAL_CALL getViewData() override ;
 
-    void SAL_CALL restoreViewData( const css::uno::Any& aValue ) override ;
+    void SAL_CALL restoreViewData( const cpo::uno::Any& aValue ) override ;
 
     css::uno::Reference< css::frame::XFrame > SAL_CALL getFrame() override ;
 
@@ -165,7 +165,7 @@ public:
     virtual void SAL_CALL removeTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener ) override;
 
     // css::lang::XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XInfobarProvider
     virtual void SAL_CALL

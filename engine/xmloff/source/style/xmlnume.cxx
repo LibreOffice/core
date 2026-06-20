@@ -53,6 +53,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::container;
@@ -65,7 +66,7 @@ void SvxXMLNumRuleExport::exportLevelStyles( const uno::Reference< css::containe
     sal_Int32 nCount = xNumRule ->getCount();
     for( sal_Int32 i=0; i<nCount; i++ )
     {
-        uno::Any aEntry( xNumRule->getByIndex( i ) );
+        cpo::uno::Any aEntry( xNumRule->getByIndex( i ) );
         uno::Sequence<beans::PropertyValue> aSeq;
         if( aEntry >>= aSeq )
         {

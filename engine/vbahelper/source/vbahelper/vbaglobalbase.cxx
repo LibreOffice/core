@@ -52,9 +52,9 @@ const uno::Reference< uno::XComponentContext >& xContext, const OUString& sDocCt
 
     ::cppu::ContextEntry_Init aHandlerContextInfo[] =
     {
-        ::cppu::ContextEntry_Init( gsApplication, uno::Any() ),
-        ::cppu::ContextEntry_Init( sDocCtxName, uno::Any() ),
-        ::cppu::ContextEntry_Init( u"/singletons/com.sun.star.lang.theServiceManager"_ustr , uno::Any( aSrvMgr ) )
+        ::cppu::ContextEntry_Init( gsApplication, cpo::uno::Any() ),
+        ::cppu::ContextEntry_Init( sDocCtxName, cpo::uno::Any() ),
+        ::cppu::ContextEntry_Init( u"/singletons/com.sun.star.lang.theServiceManager"_ustr , cpo::uno::Any( aSrvMgr ) )
     };
     // don't pass a delegate, this seems to introduce yet another cyclic dependency ( and
     // some strange behavior
@@ -68,7 +68,7 @@ const uno::Reference< uno::XComponentContext >& xContext, const OUString& sDocCt
     {
         uno::Reference< beans::XPropertySet >(
             aSrvMgr, uno::UNO_QUERY_THROW )->
-            setPropertyValue( u"DefaultContext"_ustr, uno::Any( mxContext ) );
+            setPropertyValue( u"DefaultContext"_ustr, cpo::uno::Any( mxContext ) );
     }
     catch ( uno::RuntimeException & )
     {
@@ -76,7 +76,7 @@ const uno::Reference< uno::XComponentContext >& xContext, const OUString& sDocCt
     }
     catch ( uno::Exception & )
     {
-        uno::Any e(cppu::getCaughtException());
+        cpo::uno::Any e(cppu::getCaughtException());
         throw lang::WrappedTargetRuntimeException(
             (u"VbaGlobalsBase ctor, setting OServiceManagerWrapper"
              " DefaultContext failed"_ustr),
@@ -138,7 +138,7 @@ VbaGlobalsBase::createInstance( const OUString& aServiceSpecifier )
 }
 
 uno::Reference< uno::XInterface > SAL_CALL
-VbaGlobalsBase::createInstanceWithArguments( const OUString& aServiceSpecifier, const uno::Sequence< uno::Any >& Arguments )
+VbaGlobalsBase::createInstanceWithArguments( const OUString& aServiceSpecifier, const uno::Sequence< cpo::uno::Any >& Arguments )
 {
 
     uno::Reference< uno::XInterface > xReturn;

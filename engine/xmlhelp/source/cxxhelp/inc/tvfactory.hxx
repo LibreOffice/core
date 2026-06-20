@@ -59,7 +59,7 @@ class TVFactory final : public cppu::WeakImplHelper <
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
         createInstanceWithArguments(
             const OUString& ServiceSpecifier,
-            const css::uno::Sequence< css::uno::Any >& Arguments ) override;
+            const css::uno::Sequence< cpo::uno::Any >& Arguments ) override;
 
         virtual css::uno::Sequence< OUString > SAL_CALL
         getAvailableServiceNames( ) override;

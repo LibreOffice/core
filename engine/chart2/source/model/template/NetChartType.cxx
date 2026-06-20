@@ -82,7 +82,7 @@ rtl::Reference< ::chart::BaseCoordinateSystem >
 }
 
 // ____ OPropertySet ____
-void NetChartType_Base::GetDefaultValue( sal_Int32 /*nHandle*/, uno::Any& rAny ) const
+void NetChartType_Base::GetDefaultValue( sal_Int32 /*nHandle*/, cpo::uno::Any& rAny ) const
 {
     rAny.clear();
 }
@@ -167,7 +167,7 @@ css::uno::Sequence< OUString > SAL_CALL NetChartType::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart_NetChartType_get_implementation(css::uno::XComponentContext * /*context*/,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::NetChartType);
 }

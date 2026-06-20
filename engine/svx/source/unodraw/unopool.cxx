@@ -74,7 +74,7 @@ SfxItemPool* SvxUnoDrawPool::getModelPool( bool bReadOnly ) noexcept
     }
 }
 
-void SvxUnoDrawPool::getAny( SfxItemPool const * pPool, const comphelper::PropertyMapEntry* pEntry, uno::Any& rValue )
+void SvxUnoDrawPool::getAny( SfxItemPool const * pPool, const comphelper::PropertyMapEntry* pEntry, cpo::uno::Any& rValue )
 {
     switch( pEntry->mnHandle )
     {
@@ -125,9 +125,9 @@ void SvxUnoDrawPool::getAny( SfxItemPool const * pPool, const comphelper::Proper
     }
 }
 
-void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, const uno::Any& rValue )
+void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, const cpo::uno::Any& rValue )
 {
-    uno::Any aValue( rValue );
+    cpo::uno::Any aValue( rValue );
 
     const MapUnit eMapUnit = pPool->GetMetric(static_cast<sal_uInt16>(pEntry->mnHandle));
     if(pEntry->mnMoreFlags & PropertyMoreFlags::METRIC_ITEM && eMapUnit != MapUnit::Map100thMM)
@@ -174,7 +174,7 @@ void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
     }
 }
 
-void SvxUnoDrawPool::_setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const uno::Any* pValues )
+void SvxUnoDrawPool::_setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const cpo::uno::Any* pValues )
 {
     SolarMutexGuard aGuard;
 
@@ -188,7 +188,7 @@ void SvxUnoDrawPool::_setPropertyValues( const comphelper::PropertyMapEntry** pp
         putAny( pPool, *ppEntries++, *pValues++ );
 }
 
-void SvxUnoDrawPool::_getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, uno::Any* pValue )
+void SvxUnoDrawPool::_getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, cpo::uno::Any* pValue )
 {
     SolarMutexGuard aGuard;
 
@@ -286,12 +286,12 @@ void SvxUnoDrawPool::_setPropertyToDefault( const comphelper::PropertyMapEntry* 
     }
 }
 
-uno::Any SvxUnoDrawPool::_getPropertyDefault( const comphelper::PropertyMapEntry* pEntry )
+cpo::uno::Any SvxUnoDrawPool::_getPropertyDefault( const comphelper::PropertyMapEntry* pEntry )
 {
     SolarMutexGuard aGuard;
     //#i18732# - use method <GetUserDefaultItem(..)> instead of
     // using probably incompatible item pool <mpDefaultsPool>
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     SfxItemPool* pPool = getModelPool( true );
     const sal_uInt16 nWhich = pPool->GetWhichIDFromSlotID( static_cast<sal_uInt16>(pEntry->mnHandle) );
     const SfxPoolItem *pItem = pPool->GetUserDefaultItem ( nWhich );
@@ -305,9 +305,9 @@ uno::Any SvxUnoDrawPool::_getPropertyDefault( const comphelper::PropertyMapEntry
 
 // XInterface
 
-uno::Any SAL_CALL SvxUnoDrawPool::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxUnoDrawPool::queryInterface( const uno::Type & rType )
 {
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     if( rType == cppu::UnoType<lang::XServiceInfo>::get())
         aAny <<= uno::Reference< lang::XServiceInfo >(this);

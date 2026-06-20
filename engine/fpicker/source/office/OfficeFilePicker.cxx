@@ -28,7 +28,7 @@
 #include <algorithm>
 #include <sal/log.hxx>
 #include <tools/urlobj.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/ui/dialogs/FilePickerEvent.hpp>
 #include <com/sun/star/ui/dialogs/FilePreviewImageFormats.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
@@ -43,6 +43,7 @@ using namespace     ::com::sun::star::container;
 using namespace     ::com::sun::star::lang;
 using namespace     ::com::sun::star::ui::dialogs;
 using namespace     ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace     ::com::sun::star::beans;
 using namespace     ::com::sun::star::awt;
 
@@ -976,7 +977,7 @@ Sequence< OUString > SAL_CALL SvtFilePicker::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 fpicker_SvtFilePicker_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SvtFilePicker());
 }
@@ -1022,7 +1023,7 @@ Sequence< OUString > SAL_CALL SvtRemoteFilePicker::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 fpicker_SvtRemoteFilePicker_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SvtRemoteFilePicker());
 }

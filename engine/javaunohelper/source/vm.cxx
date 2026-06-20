@@ -53,7 +53,7 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithContext(
         css::uno::Reference< css::uno::XComponentContext > const & xContext ) override;
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext(
-        css::uno::Sequence< css::uno::Any > const & args, css::uno::Reference< css::uno::XComponentContext > const & xContext ) override;
+        css::uno::Sequence< cpo::uno::Any > const & args, css::uno::Reference< css::uno::XComponentContext > const & xContext ) override;
 };
 
 void SingletonFactory::disposing()
@@ -65,14 +65,14 @@ css::uno::Reference< css::uno::XInterface > SingletonFactory::createInstanceWith
     css::uno::Reference< css::uno::XComponentContext > const & xContext )
 {
     sal_Int64 handle = reinterpret_cast< sal_Int64 >( m_vm_access.get() );
-    css::uno::Any arg( css::beans::NamedValue( u"UnoVirtualMachine"_ustr, css::uno::Any( handle ) ) );
+    cpo::uno::Any arg( css::beans::NamedValue( u"UnoVirtualMachine"_ustr, cpo::uno::Any( handle ) ) );
     return xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
         u"com.sun.star.java.JavaVirtualMachine"_ustr,
-        css::uno::Sequence< css::uno::Any >( &arg, 1 ), xContext );
+        css::uno::Sequence< cpo::uno::Any >( &arg, 1 ), xContext );
 }
 
 css::uno::Reference< css::uno::XInterface > SingletonFactory::createInstanceWithArgumentsAndContext(
-    css::uno::Sequence< css::uno::Any > const & args, css::uno::Reference< css::uno::XComponentContext > const & xContext )
+    css::uno::Sequence< cpo::uno::Any > const & args, css::uno::Reference< css::uno::XComponentContext > const & xContext )
 {
     return xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
         u"com.sun.star.java.JavaVirtualMachine"_ustr,
@@ -105,7 +105,7 @@ css::uno::Reference< css::uno::XComponentContext > install_vm_singleton(
     css::uno::Reference< css::lang::XSingleComponentFactory > xFac( new SingletonFactory( vm_access ) );
     ::cppu::ContextEntry_Init entry(
         u"/singletons/com.sun.star.java.theJavaVirtualMachine"_ustr,
-        css::uno::Any( xFac ), true );
+        cpo::uno::Any( xFac ), true );
     return ::cppu::createComponentContext( &entry, 1, xContext );
 }
 

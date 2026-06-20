@@ -39,10 +39,10 @@ class OComboBoxModel final
             ,public OErrorBroadcaster
 {
     CachedRowSet               m_aListRowSet;          // the row set to fill the list
-    css::uno::Any              m_aBoundColumn;         // obsolete
+    cpo::uno::Any              m_aBoundColumn;         // obsolete
     OUString                   m_aListSource;
     OUString                   m_aDefaultText;         // DefaultText
-    css::uno::Any              m_aLastKnownValue;
+    cpo::uno::Any              m_aLastKnownValue;
 
     css::uno::Sequence<OUString>                          m_aDesignModeStringItems;
 
@@ -66,10 +66,10 @@ public:
     virtual void SAL_CALL disposing() override;
 
     // OPropertySetHelper
-    virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle) const override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
     virtual bool SAL_CALL convertFastPropertyValue(
-                css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
+                cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
 
     // XLoadListener
     virtual void SAL_CALL reloaded( const css::lang::EventObject& aEvent ) override;
@@ -82,7 +82,7 @@ public:
 
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS(OComboBoxModel, OBoundControlModel)
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
 
     // XPersistObject
     virtual OUString SAL_CALL    getServiceName() override;
@@ -107,13 +107,13 @@ public:
 
 private:
     // OBoundControlModel overridables
-    virtual css::uno::Any   translateDbColumnToControlValue( ) override;
+    virtual cpo::uno::Any   translateDbColumnToControlValue( ) override;
     virtual bool            commitControlValueToDbColumn( bool _bPostReset ) override;
 
     virtual void            onConnectedDbColumn( const css::uno::Reference< css::uno::XInterface >& _rxForm ) override;
     virtual void            onDisconnectedDbColumn() override;
 
-    virtual css::uno::Any   getDefaultForReset() const override;
+    virtual cpo::uno::Any   getDefaultForReset() const override;
 
     virtual void            resetNoBroadcast() override;
 

@@ -122,7 +122,7 @@ void printPropertySet(
         OUString tmp;
         sal_Int32 ival;
 
-        uno::Any a = xPropSet->getPropertyValue( aPropDetail.Name );
+        cpo::uno::Any a = xPropSet->getPropertyValue( aPropDetail.Name );
 
         if ( a >>= tmp )
         {
@@ -479,7 +479,7 @@ void SaveInData::LoadSubMenus( const uno::Reference< container::XIndexAccess >& 
 
             if ( nType == css::ui::ItemType::DEFAULT )
             {
-                uno::Any a;
+                cpo::uno::Any a;
                 try
                 {
                     a = m_xCommandToLabelMap->getByName( aCommandURL );
@@ -628,7 +628,7 @@ void MenuSaveInData::Apply(
         pPropValueSeq[nIndex].Name = m_aDescriptorContainer;
         pPropValueSeq[nIndex].Value <<= xSubMenuBar;
         rMenuBar->insertByIndex(
-            rMenuBar->getCount(), uno::Any( aPropValueSeq ));
+            rMenuBar->getCount(), cpo::uno::Any( aPropValueSeq ));
         ApplyMenu( xSubMenuBar, rFactory, entryData );
     }
 }
@@ -658,7 +658,7 @@ void SaveInData::ApplyMenu(
             pPropValueSeq[nIndex].Value <<= xSubMenuBar;
 
             rMenuBar->insertByIndex(
-                rMenuBar->getCount(), uno::Any( aPropValueSeq ));
+                rMenuBar->getCount(), cpo::uno::Any( aPropValueSeq ));
 
             ApplyMenu( xSubMenuBar, rFactory, entry );
             entry->SetModified( false );
@@ -666,14 +666,14 @@ void SaveInData::ApplyMenu(
         else if (entry->IsSeparator())
         {
             rMenuBar->insertByIndex(
-                rMenuBar->getCount(), uno::Any( m_aSeparatorSeq ));
+                rMenuBar->getCount(), cpo::uno::Any( m_aSeparatorSeq ));
         }
         else
         {
             uno::Sequence< beans::PropertyValue > aPropValueSeq =
                 SvxConfigPageHelper::ConvertSvxConfigEntry(entry);
             rMenuBar->insertByIndex(
-                rMenuBar->getCount(), uno::Any( aPropValueSeq ));
+                rMenuBar->getCount(), cpo::uno::Any( aPropValueSeq ));
         }
     }
     pMenuData->SetModified( false );
@@ -2009,7 +2009,7 @@ sal_Int32 ToolbarSaveInData::GetSystemStyle( const OUString& rResourceURL )
         try
         {
             uno::Sequence< beans::PropertyValue > aProps;
-            uno::Any a( m_xPersistentWindowState->getByName( rResourceURL ) );
+            cpo::uno::Any a( m_xPersistentWindowState->getByName( rResourceURL ) );
 
             if ( a >>= aProps )
             {
@@ -2048,7 +2048,7 @@ void ToolbarSaveInData::SetSystemStyle(
     uno::Reference< beans::XPropertySet > xPropSet( xFrame, uno::UNO_QUERY );
     if ( xPropSet.is() )
     {
-        uno::Any a = xPropSet->getPropertyValue( u"LayoutManager"_ustr );
+        cpo::uno::Any a = xPropSet->getPropertyValue( u"LayoutManager"_ustr );
         a >>= xLayoutManager;
     }
 
@@ -2099,7 +2099,7 @@ void ToolbarSaveInData::SetSystemStyle(
     {
         uno::Sequence< beans::PropertyValue > aProps;
 
-        uno::Any a( m_xPersistentWindowState->getByName( rResourceURL ) );
+        cpo::uno::Any a( m_xPersistentWindowState->getByName( rResourceURL ) );
 
         if ( a >>= aProps )
         {
@@ -2116,7 +2116,7 @@ void ToolbarSaveInData::SetSystemStyle(
         uno::Reference< container::XNameReplace >
             xNameReplace( m_xPersistentWindowState, uno::UNO_QUERY );
 
-        xNameReplace->replaceByName( rResourceURL, uno::Any( aProps ) );
+        xNameReplace->replaceByName( rResourceURL, cpo::uno::Any( aProps ) );
     }
     catch ( uno::Exception& )
     {
@@ -2136,7 +2136,7 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
         try
         {
             uno::Sequence< beans::PropertyValue > aProps;
-            uno::Any a( m_xPersistentWindowState->getByName( rResourceURL ) );
+            cpo::uno::Any a( m_xPersistentWindowState->getByName( rResourceURL ) );
 
             if ( a >>= aProps )
             {
@@ -2159,7 +2159,7 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
          m_xCommandToLabelMap.is() &&
          m_xCommandToLabelMap->hasByName( rResourceURL ) )
     {
-        uno::Any a;
+        cpo::uno::Any a;
         try
         {
             a = m_xCommandToLabelMap->getByName( rResourceURL );
@@ -2444,14 +2444,14 @@ void ToolbarSaveInData::ApplyToolbar(
             pPropValueSeq[nIndex].Name = m_aDescriptorContainer;
             pPropValueSeq[nIndex].Value <<= xSubMenuBar;
             rToolbarBar->insertByIndex(
-                rToolbarBar->getCount(), uno::Any( aPropValueSeq ));
+                rToolbarBar->getCount(), cpo::uno::Any( aPropValueSeq ));
 
             ApplyToolbar(xSubMenuBar, rFactory, entry);
         }
         else if (entry->IsSeparator())
         {
             rToolbarBar->insertByIndex(
-                rToolbarBar->getCount(), uno::Any( m_aSeparatorSeq ));
+                rToolbarBar->getCount(), cpo::uno::Any( m_aSeparatorSeq ));
         }
         else
         {
@@ -2459,7 +2459,7 @@ void ToolbarSaveInData::ApplyToolbar(
                 SvxConfigPageHelper::ConvertToolbarEntry(entry);
 
             rToolbarBar->insertByIndex(
-                rToolbarBar->getCount(), uno::Any( aPropValueSeq ));
+                rToolbarBar->getCount(), cpo::uno::Any( aPropValueSeq ));
         }
     }
 }
@@ -2485,7 +2485,7 @@ void ToolbarSaveInData::ApplyToolbar( SvxConfigEntry* pToolbar )
     {
         xProps->setPropertyValue(
             ITEM_DESCRIPTOR_UINAME,
-            uno::Any( pToolbar->GetName() ) );
+            cpo::uno::Any( pToolbar->GetName() ) );
     }
 
     try
@@ -2522,7 +2522,7 @@ void ToolbarSaveInData::CreateToolbar( SvxConfigEntry* pToolbar )
 
     xPropertySet->setPropertyValue(
             ITEM_DESCRIPTOR_UINAME,
-            uno::Any( pToolbar->GetName() ) );
+            cpo::uno::Any( pToolbar->GetName() ) );
 
     try
     {
@@ -2649,7 +2649,7 @@ void ToolbarSaveInData::LoadToolbar(
 
             if ( nType == css::ui::ItemType::DEFAULT )
             {
-                uno::Any a;
+                cpo::uno::Any a;
                 try
                 {
                     a = m_xCommandToLabelMap->getByName( aCommandURL );
@@ -2786,16 +2786,16 @@ SvxIconSelectorDialog::SvxIconSelectorDialog(weld::Window *pWindow,
     uno::Reference< lang::XSingleServiceFactory > xStorageFactory(
           css::embed::FileSystemStorageFactory::create( xComponentContext ) );
 
-    uno::Sequence< uno::Any > aArgs{ uno::Any(aDirectory),
-                                     uno::Any(css::embed::ElementModes::READWRITE) };
+    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(aDirectory),
+                                     cpo::uno::Any(css::embed::ElementModes::READWRITE) };
 
     uno::Reference< css::embed::XStorage > xStorage(
         xStorageFactory->createInstanceWithArguments( aArgs ), uno::UNO_QUERY );
 
-    uno::Sequence<uno::Any> aProp(comphelper::InitAnyPropertySequence(
+    uno::Sequence<cpo::uno::Any> aProp(comphelper::InitAnyPropertySequence(
     {
-        {"UserConfigStorage", uno::Any(xStorage)},
-        {"OpenMode", uno::Any(css::embed::ElementModes::READWRITE)}
+        {"UserConfigStorage", cpo::uno::Any(xStorage)},
+        {"OpenMode", cpo::uno::Any(css::embed::ElementModes::READWRITE)}
     }));
     m_xImportedImageManager = css::ui::ImageManager::create( xComponentContext );
     m_xImportedImageManager->initialize(aProp);
@@ -2979,7 +2979,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
 
         uno::Reference< beans::XPropertySet > props =
             m_xGraphProvider->queryGraphicDescriptor( aMediaProps );
-        uno::Any a = props->getPropertyValue( u"SizePixel"_ustr );
+        cpo::uno::Any a = props->getPropertyValue( u"SizePixel"_ustr );
         a >>= aSize;
         if (0 == aSize.Width || 0 == aSize.Height)
             return false;
@@ -3136,7 +3136,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
         uno::Reference< beans::XPropertySet > props =
             m_xGraphProvider->queryGraphicDescriptor( aMediaProps );
 
-        uno::Any a = props->getPropertyValue(u"SizePixel"_ustr);
+        cpo::uno::Any a = props->getPropertyValue(u"SizePixel"_ustr);
 
         uno::Reference< graphic::XGraphic > xGraphic = m_xGraphProvider->queryGraphic( aMediaProps );
         if ( xGraphic.is() )

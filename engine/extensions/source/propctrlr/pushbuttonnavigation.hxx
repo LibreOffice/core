@@ -48,13 +48,13 @@ namespace pcr
         /** returns the current value of the "ButtonType" property, taking into account
             the "virtual" button types such as "move-to-next-record button".
         */
-        css::uno::Any
+        cpo::uno::Any
                 getCurrentButtonType() const;
 
         /** sets the current value of the "ButtonType" property, taking into account
             the "virtual" button types such as "move-to-next-record button".
         */
-        void    setCurrentButtonType( const css::uno::Any& _rValue ) const;
+        void    setCurrentButtonType( const cpo::uno::Any& _rValue ) const;
 
         /** retrieves the current state of the "ButtonType" property, taking into account
             the "virtual" button types such as "move-to-next-record button".
@@ -65,13 +65,13 @@ namespace pcr
         /** returns the current value of the "TargetURL" property, taking into account
             that some URLs are special values caused by "virtual" ButtonTypes
         */
-        css::uno::Any
+        cpo::uno::Any
                 getCurrentTargetURL() const;
 
         /** sets the current value of the "TargetURL" property, taking into account
             that some URLs are special values caused by "virtual" ButtonTypes
         */
-        void    setCurrentTargetURL( const css::uno::Any& _rValue ) const;
+        void    setCurrentTargetURL( const cpo::uno::Any& _rValue ) const;
 
         /** retrieves the current state of the "TargetURL" property, taking into account
             that some URLs are special values caused by "virtual" ButtonTypes

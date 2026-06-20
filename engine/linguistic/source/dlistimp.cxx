@@ -50,6 +50,7 @@ using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
@@ -596,7 +597,7 @@ void SAL_CALL
         aEvtListeners.removeInterface( rxListener );
 }
 
-void SAL_CALL DicList::initialize(const css::uno::Sequence<css::uno::Any>& /*rArguments*/)
+void SAL_CALL DicList::initialize(const css::uno::Sequence<cpo::uno::Any>& /*rArguments*/)
 {
     osl::MutexGuard aGuard(GetLinguMutex());
 
@@ -820,7 +821,7 @@ static bool IsVers2OrNewer( const OUString& rFileURL, LanguageType& nLng, bool& 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 linguistic_DicList_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new DicList());
 }

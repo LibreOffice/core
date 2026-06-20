@@ -75,6 +75,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
@@ -2764,7 +2765,7 @@ void XMLDdeFieldImportContext::endFastElement(sal_Int32 )
     Any aAny = xFieldMasterNameAccess->getByName(sMasterName);
     aAny >>= xMaster;
     //apply the content to the master
-    xMaster->setPropertyValue( sPropertyContent, uno::Any( GetContent()));
+    xMaster->setPropertyValue( sPropertyContent, cpo::uno::Any( GetContent()));
     // master exists: create text field and attach
     Reference<XPropertySet> xField;
     OUString sFieldName = OUString::Concat(sAPI_textfield_prefix) + sAPI_dde;
@@ -3231,7 +3232,7 @@ void XMLAnnotationImportContext::endFastElement(sal_Int32 /*nElement*/)
             if (!xTextFieldsSupplier)
                 return;
             uno::Reference<container::XUniqueIDAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields(), UNO_QUERY_THROW);
-            uno::Any aAny = xFieldsAccess->getByUniqueID(aName);
+            cpo::uno::Any aAny = xFieldsAccess->getByUniqueID(aName);
             aAny >>= xPrevField;
         }
         if ( xPrevField.is() )

@@ -36,15 +36,15 @@ namespace unocontrols { class OMRCListenerMultiplexerHelper; }
 namespace unocontrols {
 
 class BaseControl : public cppu::BaseMutex,
-                    public cppu::WeakComponentImplHelper<cpo::lang::XServiceInfo,
-                                                         cpo::awt::XPaintListener,
-                                                         cpo::awt::XWindowListener,
-                                                         cpo::awt::XView,
-                                                         cpo::awt::XWindow,
-                                                         cpo::awt::XControl>
+                    public cppu::WeakComponentImplHelper<css::lang::XServiceInfo,
+                                                         css::awt::XPaintListener,
+                                                         css::awt::XWindowListener,
+                                                         css::awt::XView,
+                                                         css::awt::XWindow,
+                                                         css::awt::XControl>
 {
 public:
-    BaseControl( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    BaseControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     virtual ~BaseControl() override;
 
@@ -56,44 +56,44 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     //  XComponent
 
     virtual void SAL_CALL dispose() override;
 
     virtual void SAL_CALL addEventListener(
-        const cpo::uno::Reference< cpo::lang::XEventListener >& xListener
+        const css::uno::Reference< css::lang::XEventListener >& xListener
     ) override;
 
     virtual void SAL_CALL removeEventListener(
-        const cpo::uno::Reference< cpo::lang::XEventListener >& xListener
+        const css::uno::Reference< css::lang::XEventListener >& xListener
     ) override;
 
     //  XControl
 
     virtual void SAL_CALL createPeer(
-        const cpo::uno::Reference< cpo::awt::XToolkit >& xToolkit,
-        const cpo::uno::Reference< cpo::awt::XWindowPeer >& xParent
+        const css::uno::Reference< css::awt::XToolkit >& xToolkit,
+        const css::uno::Reference< css::awt::XWindowPeer >& xParent
     ) override;
 
     virtual void SAL_CALL setContext(
-        const cpo::uno::Reference< cpo::uno::XInterface >& xContext
+        const css::uno::Reference< css::uno::XInterface >& xContext
     ) override;
 
     virtual bool SAL_CALL setModel(
-        const cpo::uno::Reference< cpo::awt::XControlModel >& xModel
+        const css::uno::Reference< css::awt::XControlModel >& xModel
     ) override = 0;
 
     virtual void SAL_CALL setDesignMode( bool bOn ) override;
 
-    virtual cpo::uno::Reference< cpo::uno::XInterface > SAL_CALL getContext() override;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getContext() override;
 
-    virtual cpo::uno::Reference< cpo::awt::XControlModel > SAL_CALL getModel() override = 0;
+    virtual css::uno::Reference< css::awt::XControlModel > SAL_CALL getModel() override = 0;
 
-    virtual cpo::uno::Reference< cpo::awt::XWindowPeer > SAL_CALL getPeer() override;
+    virtual css::uno::Reference< css::awt::XWindowPeer > SAL_CALL getPeer() override;
 
-    virtual cpo::uno::Reference< cpo::awt::XView > SAL_CALL getView() override;
+    virtual css::uno::Reference< css::awt::XView > SAL_CALL getView() override;
 
     virtual bool SAL_CALL isDesignMode() override;
 
@@ -113,53 +113,53 @@ public:
 
     virtual void SAL_CALL setFocus() override;
 
-    virtual cpo::awt::Rectangle SAL_CALL getPosSize() override;
+    virtual css::awt::Rectangle SAL_CALL getPosSize() override;
 
     virtual void SAL_CALL addWindowListener(
-        const cpo::uno::Reference< cpo::awt::XWindowListener >& xListener
+        const css::uno::Reference< css::awt::XWindowListener >& xListener
     ) override;
 
     virtual void SAL_CALL addFocusListener(
-        const cpo::uno::Reference< cpo::awt::XFocusListener >& xListener
+        const css::uno::Reference< css::awt::XFocusListener >& xListener
     ) override;
 
     virtual void SAL_CALL addKeyListener(
-        const cpo::uno::Reference< cpo::awt::XKeyListener >& xListener ) override;
+        const css::uno::Reference< css::awt::XKeyListener >& xListener ) override;
 
     virtual void SAL_CALL addMouseListener(
-        const cpo::uno::Reference< cpo::awt::XMouseListener >& xListener
+        const css::uno::Reference< css::awt::XMouseListener >& xListener
     ) override;
 
     virtual void SAL_CALL addMouseMotionListener(
-        const cpo::uno::Reference< cpo::awt::XMouseMotionListener >& xListener
+        const css::uno::Reference< css::awt::XMouseMotionListener >& xListener
     ) override;
 
     virtual void SAL_CALL addPaintListener(
-        const cpo::uno::Reference< cpo::awt::XPaintListener >& xListener
+        const css::uno::Reference< css::awt::XPaintListener >& xListener
     ) override;
 
     virtual void SAL_CALL removeWindowListener(
-        const cpo::uno::Reference< cpo::awt::XWindowListener >& xListener
+        const css::uno::Reference< css::awt::XWindowListener >& xListener
     ) override;
 
     virtual void SAL_CALL removeFocusListener(
-        const cpo::uno::Reference< cpo::awt::XFocusListener >& xListener
+        const css::uno::Reference< css::awt::XFocusListener >& xListener
     ) override;
 
     virtual void SAL_CALL removeKeyListener(
-        const cpo::uno::Reference< cpo::awt::XKeyListener >& xListener
+        const css::uno::Reference< css::awt::XKeyListener >& xListener
     ) override;
 
     virtual void SAL_CALL removeMouseListener(
-        const cpo::uno::Reference< cpo::awt::XMouseListener >& xListener
+        const css::uno::Reference< css::awt::XMouseListener >& xListener
     ) override;
 
     virtual void SAL_CALL removeMouseMotionListener(
-        const cpo::uno::Reference< cpo::awt::XMouseMotionListener >& xListener
+        const css::uno::Reference< css::awt::XMouseMotionListener >& xListener
     ) override;
 
     virtual void SAL_CALL removePaintListener(
-        const cpo::uno::Reference< cpo::awt::XPaintListener >& xListener
+        const css::uno::Reference< css::awt::XPaintListener >& xListener
     ) override;
 
     //  XView
@@ -168,68 +168,68 @@ public:
                                 sal_Int32   nY  ) override;
 
     virtual bool SAL_CALL setGraphics(
-        const cpo::uno::Reference< cpo::awt::XGraphics >& xDevice
+        const css::uno::Reference< css::awt::XGraphics >& xDevice
     ) override;
 
     virtual void SAL_CALL setZoom(  float   fZoomX  ,
                                     float   fZoomY  ) override;
 
-    virtual cpo::uno::Reference< cpo::awt::XGraphics > SAL_CALL getGraphics() override;
+    virtual css::uno::Reference< css::awt::XGraphics > SAL_CALL getGraphics() override;
 
-    virtual cpo::awt::Size SAL_CALL getSize() override;
+    virtual css::awt::Size SAL_CALL getSize() override;
 
-    //  cpo::lang::XEventListener
+    //  css::lang::XEventListener
 
     virtual void SAL_CALL disposing(
-        const cpo::lang::EventObject& rSource
+        const css::lang::EventObject& rSource
     ) override;
 
     //  XPaintListener
 
     virtual void SAL_CALL windowPaint(
-        const cpo::awt::PaintEvent& rEvent
+        const css::awt::PaintEvent& rEvent
     ) override;
 
     //  XWindowListener
 
-    virtual void SAL_CALL windowResized( const cpo::awt::WindowEvent& aEvent ) override;
-    virtual void SAL_CALL windowMoved( const cpo::awt::WindowEvent& aEvent ) override;
-    virtual void SAL_CALL windowShown( const cpo::lang::EventObject& aEvent ) override;
-    virtual void SAL_CALL windowHidden( const cpo::lang::EventObject& aEvent ) override;
+    virtual void SAL_CALL windowResized( const css::awt::WindowEvent& aEvent ) override;
+    virtual void SAL_CALL windowMoved( const css::awt::WindowEvent& aEvent ) override;
+    virtual void SAL_CALL windowShown( const css::lang::EventObject& aEvent ) override;
+    virtual void SAL_CALL windowHidden( const css::lang::EventObject& aEvent ) override;
 
 protected:
     using WeakComponentImplHelperBase::disposing;
 
-    const cpo::uno::Reference< cpo::uno::XComponentContext >& impl_getComponentContext() const { return m_xComponentContext;}
+    const css::uno::Reference< css::uno::XComponentContext >& impl_getComponentContext() const { return m_xComponentContext;}
 
-    const cpo::uno::Reference< cpo::awt::XWindow >& impl_getPeerWindow() const { return m_xPeerWindow;}
+    const css::uno::Reference< css::awt::XWindow >& impl_getPeerWindow() const { return m_xPeerWindow;}
 
-    const cpo::uno::Reference< cpo::awt::XGraphics >& impl_getGraphicsPeer() const { return m_xGraphicsPeer;}
+    const css::uno::Reference< css::awt::XGraphics >& impl_getGraphicsPeer() const { return m_xGraphicsPeer;}
 
     sal_Int32 impl_getWidth() const { return m_nWidth;}
 
     sal_Int32 impl_getHeight() const { return m_nHeight;}
 
-    virtual cpo::awt::WindowDescriptor impl_getWindowDescriptor(
-        const cpo::uno::Reference< cpo::awt::XWindowPeer >& xParentPeer
+    virtual css::awt::WindowDescriptor impl_getWindowDescriptor(
+        const css::uno::Reference< css::awt::XWindowPeer >& xParentPeer
     );
 
     virtual void impl_paint(        sal_Int32               nX          ,
                                     sal_Int32               nY          ,
-                            const   cpo::uno::Reference< cpo::awt::XGraphics >&   xGraphics   );
+                            const   css::uno::Reference< css::awt::XGraphics >&   xGraphics   );
 
-    virtual void impl_recalcLayout( const cpo::awt::WindowEvent& aEvent );
+    virtual void impl_recalcLayout( const css::awt::WindowEvent& aEvent );
 
 private:
     OMRCListenerMultiplexerHelper* impl_getMultiplexer();
 
-    cpo::uno::Reference< cpo::uno::XComponentContext >        m_xComponentContext;
+    css::uno::Reference< css::uno::XComponentContext >        m_xComponentContext;
     rtl::Reference<OMRCListenerMultiplexerHelper>             m_xMultiplexer;   // multiplex events
-    cpo::uno::Reference< cpo::uno::XInterface >               m_xContext;
-    cpo::uno::Reference< cpo::awt::XWindowPeer >              m_xPeer;
-    cpo::uno::Reference< cpo::awt::XWindow >                  m_xPeerWindow;
-    cpo::uno::Reference< cpo::awt::XGraphics >                m_xGraphicsView;   // graphics for cpo::awt::XView-operations
-    cpo::uno::Reference< cpo::awt::XGraphics >                m_xGraphicsPeer;   // graphics for painting on a peer
+    css::uno::Reference< css::uno::XInterface >               m_xContext;
+    css::uno::Reference< css::awt::XWindowPeer >              m_xPeer;
+    css::uno::Reference< css::awt::XWindow >                  m_xPeerWindow;
+    css::uno::Reference< css::awt::XGraphics >                m_xGraphicsView;   // graphics for css::awt::XView-operations
+    css::uno::Reference< css::awt::XGraphics >                m_xGraphicsPeer;   // graphics for painting on a peer
     sal_Int32                                       m_nX;   // Position ...
     sal_Int32                                       m_nY;
     sal_Int32                                       m_nWidth;   // ... and size of window

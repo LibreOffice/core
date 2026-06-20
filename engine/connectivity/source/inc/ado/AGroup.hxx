@@ -36,8 +36,8 @@ namespace connectivity::ado
         static RightsEnum Map2Right(sal_Int32 _eNum);
         static ObjectTypeEnum MapObjectType(sal_Int32 ObjType);
     protected:
-        virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue,sal_Int32 nHandle) const override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue) override;
+        virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue,sal_Int32 nHandle) const override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const cpo::uno::Any& rValue) override;
 
     public:
         virtual void refreshUsers() override;

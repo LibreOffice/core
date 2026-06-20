@@ -45,6 +45,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::accessibility;
 
 namespace accessibility {
@@ -65,8 +66,8 @@ AccessibleSlideSorterObject::~AccessibleSlideSorterObject()
 
 void AccessibleSlideSorterObject::FireAccessibleEvent (
     short nEventId,
-    const uno::Any& rOldValue,
-    const uno::Any& rNewValue)
+    const cpo::uno::Any& rOldValue,
+    const cpo::uno::Any& rNewValue)
 {
     NotifyAccessibleEvent(nEventId, rOldValue, rNewValue);
 }

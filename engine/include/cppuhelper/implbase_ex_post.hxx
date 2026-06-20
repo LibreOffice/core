@@ -50,7 +50,7 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE ImplHelper##N \
 { \
     static class_data##N s_cd; \
 public: \
-    virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE \
+    virtual cpo::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE \
         { return ImplHelper_query( rType, (class_data *)&s_cd, this ); } \
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE \
         { return ImplHelper_getTypes( (class_data *)&s_cd ); } \
@@ -68,7 +68,7 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakImplHelper##N \
 { \
     static class_data##N s_cd; \
 public: \
-    virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE \
+    virtual cpo::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE \
         { return WeakImplHelper_query( rType, (class_data *)&s_cd, this, static_cast<OWeakObject *>(this) ); } \
     virtual void SAL_CALL acquire() SAL_NOEXCEPT SAL_OVERRIDE \
         { OWeakObject::acquire(); } \
@@ -90,9 +90,9 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakAggImplHelper##N \
 { \
     static class_data##N s_cd; \
 public: \
-    virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE \
+    virtual cpo::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE \
         { return OWeakAggObject::queryInterface( rType ); } \
-    virtual css::uno::Any SAL_CALL queryAggregation( css::uno::Type const & rType ) SAL_OVERRIDE \
+    virtual cpo::uno::Any SAL_CALL queryAggregation( css::uno::Type const & rType ) SAL_OVERRIDE \
         { return WeakAggImplHelper_queryAgg( rType, (class_data *)&s_cd, this, static_cast<OWeakAggObject *>(this) ); } \
     virtual void SAL_CALL acquire() SAL_NOEXCEPT SAL_OVERRIDE \
         { OWeakAggObject::acquire(); } \
@@ -113,9 +113,9 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE ImplInheritanceHelper##N \
 { \
     static class_data##N s_cd; \
 public: \
-    virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) \
+    virtual cpo::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) \
     { \
-        css::uno::Any aRet( ImplHelper_queryNoXInterface( rType, (class_data *)&s_cd, this ) ); \
+        cpo::uno::Any aRet( ImplHelper_queryNoXInterface( rType, (class_data *)&s_cd, this ) ); \
         if (aRet.hasValue()) \
             return aRet; \
         return BaseClass::queryInterface( rType ); \
@@ -139,11 +139,11 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE AggImplInheritanceHelper##N \
 { \
     static class_data##N s_cd; \
 public: \
-    virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) \
+    virtual cpo::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) \
         { return BaseClass::queryInterface( rType ); } \
-    virtual css::uno::Any SAL_CALL queryAggregation( css::uno::Type const & rType ) \
+    virtual cpo::uno::Any SAL_CALL queryAggregation( css::uno::Type const & rType ) \
     { \
-        css::uno::Any aRet( ImplHelper_queryNoXInterface( rType, (class_data *)&s_cd, this ) ); \
+        cpo::uno::Any aRet( ImplHelper_queryNoXInterface( rType, (class_data *)&s_cd, this ) ); \
         if (aRet.hasValue()) \
             return aRet; \
         return BaseClass::queryAggregation( rType ); \

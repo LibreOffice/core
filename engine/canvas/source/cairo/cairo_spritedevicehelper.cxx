@@ -71,17 +71,17 @@ namespace cairocanvas
         return false;
     }
 
-    uno::Any SpriteDeviceHelper::isAccelerated() const
+    cpo::uno::Any SpriteDeviceHelper::isAccelerated() const
     {
-        return css::uno::Any(true);
+        return cpo::uno::Any(true);
     }
 
-    uno::Any SpriteDeviceHelper::getDeviceHandle() const
+    cpo::uno::Any SpriteDeviceHelper::getDeviceHandle() const
     {
         return DeviceHelper::getDeviceHandle();
     }
 
-    uno::Any SpriteDeviceHelper::getSurfaceHandle() const
+    cpo::uno::Any SpriteDeviceHelper::getSurfaceHandle() const
     {
         return DeviceHelper::getSurfaceHandle();
     }

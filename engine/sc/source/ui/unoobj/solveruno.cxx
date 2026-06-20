@@ -236,7 +236,7 @@ void SAL_CALL ScSolverSettings::setObjectiveType(sal_Int8 aObjType)
     m_pSettings->SetObjectiveType(eType);
 }
 
-uno::Any SAL_CALL ScSolverSettings::getObjectiveCell()
+cpo::uno::Any SAL_CALL ScSolverSettings::getObjectiveCell()
 {
     // The objective cell must be a valid cell address
     OUString sValue(m_pSettings->GetParameter(sc::SolverParameter::SP_OBJ_CELL));
@@ -252,16 +252,16 @@ uno::Any SAL_CALL ScSolverSettings::getObjectiveCell()
         SCCOL nCol1, nCol2;
         aRange.GetVars(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
         table::CellAddress aAddress(nTab1, nCol1, nRow1);
-        return uno::Any(aAddress);
+        return cpo::uno::Any(aAddress);
     }
 
     // If converting to a CellAddress fails, returns the raw string
-    return uno::Any(sValue);
+    return cpo::uno::Any(sValue);
 }
 
 // The value being set must be either a string referencing a single cell or
 // a CellAddress instance
-void SAL_CALL ScSolverSettings::setObjectiveCell(const uno::Any& aValue)
+void SAL_CALL ScSolverSettings::setObjectiveCell(const cpo::uno::Any& aValue)
 {
     // Check if a string value is being used
     OUString sValue;
@@ -304,7 +304,7 @@ void SAL_CALL ScSolverSettings::setObjectiveCell(const uno::Any& aValue)
     m_pSettings->SetParameter(sc::SolverParameter::SP_OBJ_CELL, u""_ustr);
 }
 
-uno::Any SAL_CALL ScSolverSettings::getGoalValue()
+cpo::uno::Any SAL_CALL ScSolverSettings::getGoalValue()
 {
     OUString sValue(m_pSettings->GetParameter(sc::SolverParameter::SP_OBJ_VAL));
 
@@ -319,19 +319,19 @@ uno::Any SAL_CALL ScSolverSettings::getGoalValue()
         SCCOL nCol1, nCol2;
         aRange.GetVars(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
         table::CellAddress aAddress(nTab1, nCol1, nRow1);
-        return uno::Any(aAddress);
+        return cpo::uno::Any(aAddress);
     }
 
     double fValue;
     bool bValid = isValidNumber(sValue, fValue);
     if (bValid)
-        return uno::Any(fValue);
+        return cpo::uno::Any(fValue);
 
     // If the conversion was not successful, return "empty"
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
-void SAL_CALL ScSolverSettings::setGoalValue(const uno::Any& aValue)
+void SAL_CALL ScSolverSettings::setGoalValue(const cpo::uno::Any& aValue)
 {
     // Check if a numeric value is being used
     double fValue;
@@ -412,7 +412,7 @@ uno::Sequence<OUString> SAL_CALL ScSolverSettings::getAvailableEngines()
     return arrEngineNames;
 }
 
-uno::Sequence<uno::Any> SAL_CALL ScSolverSettings::getVariableCells()
+uno::Sequence<cpo::uno::Any> SAL_CALL ScSolverSettings::getVariableCells()
 {
     // Variable cells parameter is stored as a single string composed of valid ranges
     // separated using the formula separator character
@@ -420,7 +420,7 @@ uno::Sequence<uno::Any> SAL_CALL ScSolverSettings::getVariableCells()
     // Delimiter character to separate ranges
     sal_Unicode cDelimiter = ScCompiler::GetNativeSymbolChar(OpCode::ocSep);
     const formula::FormulaGrammar::AddressConvention eConv = m_rDoc.GetAddressConvention();
-    uno::Sequence<uno::Any> aRangeSeq;
+    uno::Sequence<cpo::uno::Any> aRangeSeq;
     sal_Int32 nIdx(0);
     sal_Int32 nArrPos(0);
 
@@ -444,7 +444,7 @@ uno::Sequence<uno::Any> SAL_CALL ScSolverSettings::getVariableCells()
     return aRangeSeq;
 }
 
-void SAL_CALL ScSolverSettings::setVariableCells(const uno::Sequence<uno::Any>& aRanges)
+void SAL_CALL ScSolverSettings::setVariableCells(const uno::Sequence<cpo::uno::Any>& aRanges)
 {
     OUString sVarCells;
     bool bFirst(true);
@@ -529,7 +529,7 @@ uno::Sequence<sheet::ModelConstraint> SAL_CALL ScSolverSettings::getConstraints(
             if (bValid)
                 aConstraint.Right <<= fValue;
             else
-                aConstraint.Right = uno::Any();
+                aConstraint.Right = cpo::uno::Any();
         }
 
         // Adds the constraint to the sequence

@@ -154,7 +154,7 @@ private:
 
 public:
 
-    static void ShowAsyncErrorDialog( weld::Window* pParent, css::uno::Any const & aException );
+    static void ShowAsyncErrorDialog( weld::Window* pParent, cpo::uno::Any const & aException );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

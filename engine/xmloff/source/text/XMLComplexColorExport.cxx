@@ -81,7 +81,7 @@ void XMLComplexColorExport::exportComplexColor(model::ComplexColor const& rCompl
     doExport(rComplexColor, nPrefix, GetXMLToken(nToken));
 }
 
-void XMLComplexColorExport::exportXML(const uno::Any& rAny, sal_uInt16 nPrefix,
+void XMLComplexColorExport::exportXML(const cpo::uno::Any& rAny, sal_uInt16 nPrefix,
                                       const OUString& rLocalName)
 {
     uno::Reference<util::XComplexColor> xComplexColor;

@@ -134,7 +134,7 @@ lcl_initDocumentProperties(SvXMLImport & rImport,
     uno::Reference< lang::XInitialization > const xInit(xDocProps,
         uno::UNO_QUERY_THROW);
     try {
-        xInit->initialize({ uno::Any(xDocBuilder->getDocument()) });
+        xInit->initialize({ cpo::uno::Any(xDocBuilder->getDocument()) });
         rImport.SetStatistics(xDocProps->getDocumentStatistics());
         // convert all URLs from relative to absolute
         xDocProps->setTemplateURL(rImport.GetAbsoluteReference(
@@ -146,7 +146,7 @@ lcl_initDocumentProperties(SvXMLImport & rImport,
     } catch (const uno::RuntimeException&) {
         throw;
     } catch (const uno::Exception&) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
             u"SvXMLMetaDocumentContext::initDocumentProperties: "
             "properties init exception"_ustr,
@@ -174,7 +174,7 @@ lcl_initGenerator(SvXMLImport & rImport,
     } catch (const uno::RuntimeException&) {
         throw;
     } catch (const uno::Exception&) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
             u"SvXMLMetaDocumentContext::initGenerator: exception"_ustr,
             rImport, anyEx);
@@ -309,7 +309,7 @@ void SvXMLMetaDocumentContext::setBuildId(std::u16string_view i_rBuildId, const 
             uno::Reference< beans::XPropertySetInfo > xSetInfo(
                 xImportInfo->getPropertySetInfo());
             if( xSetInfo.is() && xSetInfo->hasPropertyByName( aPropName ) )
-                xImportInfo->setPropertyValue( aPropName, uno::Any( sBuildId ) );
+                xImportInfo->setPropertyValue( aPropName, cpo::uno::Any( sBuildId ) );
         }
     }
     catch(const uno::Exception&)

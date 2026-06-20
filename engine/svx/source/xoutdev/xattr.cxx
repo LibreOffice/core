@@ -332,7 +332,7 @@ void XColorItem::SetColorValue(const Color& rNew)
     Detach();
 }
 
-bool XColorItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId) const
+bool XColorItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch (nMemberId)
@@ -357,7 +357,7 @@ bool XColorItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId) const
     return true;
 }
 
-bool XColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId)
+bool XColorItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId)
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch (nMemberId)
@@ -472,14 +472,14 @@ bool XLineStyleItem::GetPresentation
     return true;
 }
 
-bool XLineStyleItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XLineStyleItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     css::drawing::LineStyle eLS = GetValue();
     rVal <<= eLS;
     return true;
 }
 
-bool XLineStyleItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XLineStyleItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     css::drawing::LineStyle eLS;
     if(!(rVal >>= eLS ))
@@ -719,7 +719,7 @@ void XLineDashItem::ScaleMetrics(double fScale)
     m_aDash.SetDistance( BigInt::Scale( m_aDash.GetDistance(), fScale ) );
 }
 
-bool XLineDashItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool XLineDashItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -816,7 +816,7 @@ bool XLineDashItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-bool XLineDashItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
+bool XLineDashItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -1006,7 +1006,7 @@ bool XLineWidthItem::GetPresentation
     return true;
 }
 
-bool XLineWidthItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool XLineWidthItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     sal_Int32 nValue = GetValue();
     if( 0 != (nMemberId&CONVERT_TWIPS) )
@@ -1016,7 +1016,7 @@ bool XLineWidthItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
     return true;
 }
 
-bool XLineWidthItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
+bool XLineWidthItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
@@ -1056,7 +1056,7 @@ bool XLineColorItem::GetPresentation
     return true;
 }
 
-bool XLineColorItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId) const
+bool XLineColorItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch (nMemberId)
@@ -1081,7 +1081,7 @@ bool XLineColorItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId) const
     return true;
 }
 
-bool XLineColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId)
+bool XLineColorItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId)
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
@@ -1169,7 +1169,7 @@ bool XLineStartItem::GetPresentation
     return true;
 }
 
-bool XLineStartItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool XLineStartItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
@@ -1186,7 +1186,7 @@ bool XLineStartItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
     return true;
 }
 
-bool XLineStartItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
+bool XLineStartItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
@@ -1497,7 +1497,7 @@ bool XLineEndItem::GetPresentation
     return true;
 }
 
-bool XLineEndItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool XLineEndItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
@@ -1513,7 +1513,7 @@ bool XLineEndItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-bool XLineEndItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
+bool XLineEndItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
@@ -1567,13 +1567,13 @@ bool XLineStartWidthItem::GetPresentation
     return true;
 }
 
-bool XLineStartWidthItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XLineStartWidthItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= GetValue();
     return true;
 }
 
-bool XLineStartWidthItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XLineStartWidthItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
@@ -1605,13 +1605,13 @@ bool XLineEndWidthItem::GetPresentation
     return true;
 }
 
-bool XLineEndWidthItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XLineEndWidthItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= GetValue();
     return true;
 }
 
-bool XLineEndWidthItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XLineEndWidthItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
@@ -1641,14 +1641,14 @@ bool XLineStartCenterItem::GetPresentation
     return true;
 }
 
-bool XLineStartCenterItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XLineStartCenterItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     bool bValue = GetValue();
     rVal <<= bValue;
     return true;
 }
 
-bool XLineStartCenterItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XLineStartCenterItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     auto b = o3tl::tryAccess<bool>(rVal);
     if( !b.has_value() )
@@ -1680,14 +1680,14 @@ bool XLineEndCenterItem::GetPresentation
     return true;
 }
 
-bool XLineEndCenterItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XLineEndCenterItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     bool bValue = GetValue();
     rVal <<= bValue;
     return true;
 }
 
-bool XLineEndCenterItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XLineEndCenterItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     auto b = o3tl::tryAccess<bool>(rVal);
     if( !b.has_value() )
@@ -1749,7 +1749,7 @@ bool XFillStyleItem::GetPresentation
     return true;
 }
 
-bool XFillStyleItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XFillStyleItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     css::drawing::FillStyle eFS = GetValue();
 
@@ -1758,7 +1758,7 @@ bool XFillStyleItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) c
     return true;
 }
 
-bool XFillStyleItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XFillStyleItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     css::drawing::FillStyle eFS;
     if(!(rVal >>= eFS))
@@ -1853,7 +1853,7 @@ bool XFillColorItem::GetPresentation(SfxItemPresentation /*ePres*/, MapUnit /*eC
     return true;
 }
 
-bool XFillColorItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool XFillColorItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch (nMemberId)
@@ -1906,7 +1906,7 @@ bool XFillColorItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
     return true;
 }
 
-bool XFillColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
+bool XFillColorItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
@@ -2081,7 +2081,7 @@ bool XFillGradientItem::GetPresentation
     return true;
 }
 
-bool XFillGradientItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool XFillGradientItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -2143,7 +2143,7 @@ bool XFillGradientItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) c
     return true;
 }
 
-bool XFillGradientItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
+bool XFillGradientItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -2152,7 +2152,7 @@ bool XFillGradientItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
         case 0:
         {
             uno::Sequence< beans::PropertyValue >   aPropSeq;
-            css::uno::Any aGradientAny;
+            cpo::uno::Any aGradientAny;
 
             if ( rVal >>= aPropSeq )
             {
@@ -2352,7 +2352,7 @@ XFillFloatTransparenceItem* XFillFloatTransparenceItem::Clone( SfxItemPool* /*pP
     return new XFillFloatTransparenceItem( *this );
 }
 
-bool XFillFloatTransparenceItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool XFillFloatTransparenceItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     if (MID_GRADIENT_STARTINTENSITY == nMemberId
         || MID_GRADIENT_ENDINTENSITY == nMemberId
@@ -2373,7 +2373,7 @@ bool XFillFloatTransparenceItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMem
     return XFillGradientItem::QueryValue( rVal, nMemberId );
 }
 
-bool XFillFloatTransparenceItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
+bool XFillFloatTransparenceItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     if (MID_GRADIENT_STARTINTENSITY == nMemberId
         || MID_GRADIENT_ENDINTENSITY == nMemberId
@@ -2523,7 +2523,7 @@ void XFillHatchItem::ScaleMetrics(double fScale)
     m_aHatch.SetDistance( BigInt::Scale( m_aHatch.GetDistance(), fScale ) );
 }
 
-bool XFillHatchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool XFillHatchItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -2579,7 +2579,7 @@ bool XFillHatchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
     return true;
 }
 
-bool XFillHatchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
+bool XFillHatchItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -2707,13 +2707,13 @@ XFormTextStyleItem* XFormTextStyleItem::Clone(SfxItemPool* /*pPool*/) const
     return new XFormTextStyleItem( *this );
 }
 
-bool XFormTextStyleItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XFormTextStyleItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= static_cast<sal_Int32>(GetValue());
     return true;
 }
 
-bool XFormTextStyleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XFormTextStyleItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
@@ -2735,13 +2735,13 @@ XFormTextAdjustItem* XFormTextAdjustItem::Clone(SfxItemPool* /*pPool*/) const
     return new XFormTextAdjustItem( *this );
 }
 
-bool XFormTextAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XFormTextAdjustItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= static_cast<sal_Int32>(GetValue());
     return true;
 }
 
-bool XFormTextAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XFormTextAdjustItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
@@ -2811,13 +2811,13 @@ XFormTextShadowItem* XFormTextShadowItem::Clone(SfxItemPool* /*pPool*/) const
     return new XFormTextShadowItem( *this );
 }
 
-bool XFormTextShadowItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XFormTextShadowItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= static_cast<sal_Int32>(GetValue());
     return true;
 }
 
-bool XFormTextShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XFormTextShadowItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;

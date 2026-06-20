@@ -679,10 +679,10 @@ uno::Sequence<beans::PropertyValue> SAL_CALL PivotTableDataProvider::detectArgum
         return uno::Sequence<beans::PropertyValue>();
 
     return comphelper::InitPropertySequence({
-        { "CellRangeRepresentation", uno::Any(u"PivotChart"_ustr) },
-        { "DataRowSource", uno::Any(chart::ChartDataRowSource_COLUMNS) },
-        { "FirstCellAsLabel", uno::Any(false) },
-        { "HasCategories", uno::Any(true) }
+        { "CellRangeRepresentation", cpo::uno::Any(u"PivotChart"_ustr) },
+        { "DataRowSource", cpo::uno::Any(chart::ChartDataRowSource_COLUMNS) },
+        { "FirstCellAsLabel", cpo::uno::Any(false) },
+        { "HasCategories", cpo::uno::Any(true) }
     });
 }
 
@@ -841,7 +841,7 @@ uno::Reference< beans::XPropertySetInfo> SAL_CALL
     return aRef;
 }
 
-void SAL_CALL PivotTableDataProvider::setPropertyValue(const OUString& rPropertyName, const uno::Any& rValue)
+void SAL_CALL PivotTableDataProvider::setPropertyValue(const OUString& rPropertyName, const cpo::uno::Any& rValue)
 {
     if (rPropertyName != SC_UNONAME_INCLUDEHIDDENCELLS)
         throw beans::UnknownPropertyException(rPropertyName);
@@ -850,9 +850,9 @@ void SAL_CALL PivotTableDataProvider::setPropertyValue(const OUString& rProperty
         throw lang::IllegalArgumentException();
 }
 
-uno::Any SAL_CALL PivotTableDataProvider::getPropertyValue(const OUString& rPropertyName)
+cpo::uno::Any SAL_CALL PivotTableDataProvider::getPropertyValue(const OUString& rPropertyName)
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if (rPropertyName == SC_UNONAME_INCLUDEHIDDENCELLS)
         aRet <<= m_bIncludeHiddenCells;
     else if (rPropertyName == SC_UNONAME_USE_INTERNAL_DATA_PROVIDER)

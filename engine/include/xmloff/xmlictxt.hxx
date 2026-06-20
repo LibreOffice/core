@@ -99,7 +99,7 @@ public:
     virtual void SAL_CALL characters(const OUString & aChars) override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) final override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) final override;
     virtual void SAL_CALL acquire() noexcept final override
     { osl_atomic_increment(&m_nRefCount); }
     virtual void SAL_CALL release() noexcept final override

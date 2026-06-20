@@ -185,7 +185,7 @@ namespace writerfilter
         xmlFree( xmlName );
     }
 
-    void TagLogger::attribute(const std::string & name, const uno::Any& aAny)
+    void TagLogger::attribute(const std::string & name, const cpo::uno::Any& aAny)
     {
         if (!m_pWriter)
             return;

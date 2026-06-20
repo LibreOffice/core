@@ -16,6 +16,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 /* Implementation of calc Record Changes test */
 
@@ -52,7 +53,7 @@ void ScRecordChangesTest::testSetRecordChanges()
     CPPUNIT_ASSERT_MESSAGE("a new document does not protect record changes", !protectionValue);
 
     // now activate recording
-    uno::Any aValue;
+    cpo::uno::Any aValue;
     aValue <<= true;
     xDocSettingsPropSet->setPropertyValue(u"RecordChanges"_ustr, aValue);
 
@@ -81,7 +82,7 @@ void ScRecordChangesTest::testCheckRecordChangesProtection()
     CPPUNIT_ASSERT_MESSAGE("the protection should be active", protectionValue);
 
     // try to de-activate recording
-    uno::Any aValue;
+    cpo::uno::Any aValue;
     aValue <<= false;
     xDocSettingsPropSet->setPropertyValue(u"RecordChanges"_ustr, aValue);
 

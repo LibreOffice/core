@@ -126,7 +126,7 @@ void LegendPositionResources::writeToModel( const rtl::Reference<::chart::ChartM
         if( xProp.is() )
         {
             //show
-            xProp->setPropertyValue( u"Show"_ustr , uno::Any( bShowLegend ));
+            xProp->setPropertyValue( u"Show"_ustr , cpo::uno::Any( bShowLegend ));
 
             //position
             chart2::LegendPosition eNewPos;
@@ -149,9 +149,9 @@ void LegendPositionResources::writeToModel( const rtl::Reference<::chart::ChartM
                 eExp = css::chart::ChartLegendExpansion_WIDE;
             }
 
-            xProp->setPropertyValue( u"AnchorPosition"_ustr , uno::Any( eNewPos ));
-            xProp->setPropertyValue( u"Expansion"_ustr , uno::Any( eExp ));
-            xProp->setPropertyValue( u"RelativePosition"_ustr , uno::Any());
+            xProp->setPropertyValue( u"AnchorPosition"_ustr , cpo::uno::Any( eNewPos ));
+            xProp->setPropertyValue( u"Expansion"_ustr , cpo::uno::Any( eExp ));
+            xProp->setPropertyValue( u"RelativePosition"_ustr , cpo::uno::Any());
         }
     }
     catch( const uno::Exception & )

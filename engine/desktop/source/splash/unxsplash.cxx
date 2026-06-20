@@ -83,7 +83,7 @@ void SAL_CALL UnxSplashScreen::setValue( sal_Int32 nValue )
 
 // XInitialize
 void SAL_CALL
-UnxSplashScreen::initialize( const css::uno::Sequence< css::uno::Any>& )
+UnxSplashScreen::initialize( const css::uno::Sequence< cpo::uno::Any>& )
 {
     for ( sal_uInt32 i = 0; i < osl_getCommandArgCount(); i++ )
     {
@@ -120,7 +120,7 @@ css::uno::Sequence<OUString> UnxSplashScreen::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 desktop_UnxSplash_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new desktop::UnxSplashScreen());
 }

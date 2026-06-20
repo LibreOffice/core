@@ -147,9 +147,9 @@ public:
     static void FillBoxItems( SvxBoxItem& rOuter, SvxBoxInfoItem& rInner, const css::table::TableBorder2& rBorder );
     static void FillBorderLine( css::table::BorderLine& rStruct, const ::editeng::SvxBorderLine* pLine );
     static void FillBorderLine( css::table::BorderLine2& rStruct, const ::editeng::SvxBorderLine* pLine );
-    static void AssignTableBorderToAny( css::uno::Any& rAny,
+    static void AssignTableBorderToAny( cpo::uno::Any& rAny,
             const SvxBoxItem& rOuter, const SvxBoxInfoItem& rInner, bool bInvalidateHorVerDist = false );
-    static void AssignTableBorder2ToAny( css::uno::Any& rAny,
+    static void AssignTableBorder2ToAny( cpo::uno::Any& rAny,
             const SvxBoxItem& rOuter, const SvxBoxInfoItem& rInner, bool bInvalidateHorVerDist = false );
     static void ApplyBorder( ScDocShell* pDocShell, const ScRangeList& rRanges,
                         const SvxBoxItem& rOuter, const SvxBoxInfoItem& rInner );
@@ -226,11 +226,11 @@ protected:
                                 sal_uInt16 nItemWhich, const SfxItemPropertyMapEntry* pEntry );
     /// @throws css::uno::RuntimeException
     SC_DLLPUBLIC virtual void GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
-                                css::uno::Any& );
+                                cpo::uno::Any& );
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
     SC_DLLPUBLIC virtual void SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
-                                                const css::uno::Any& aValue );
+                                                const cpo::uno::Any& aValue );
 
     ScRangeList& AccessRanges() { return aRanges; }
     SC_DLLPUBLIC virtual void AdjustUpdatedRanges(UpdateRefMode mode);
@@ -269,8 +269,8 @@ public:
     virtual css::uno::Reference< css::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo() override;
     SC_DLLPUBLIC virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
-                                    const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue(
+                                    const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(
                                     const OUString& PropertyName ) override;
     virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
                                     const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
@@ -283,8 +283,8 @@ public:
 
                             // XMultiPropertySet
     virtual void SAL_CALL   setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames,
-                                    const css::uno::Sequence< css::uno::Any >& aValues ) override;
-    virtual css::uno::Sequence< css::uno::Any > SAL_CALL
+                                    const css::uno::Sequence< cpo::uno::Any >& aValues ) override;
+    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL
                             getPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     virtual void SAL_CALL addPropertiesChangeListener( const css::uno::Sequence< OUString >& aPropertyNames,
                                     const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
@@ -295,7 +295,7 @@ public:
                             // XTolerantMultiPropertySet
     virtual css::uno::Sequence< css::beans::SetPropertyTolerantFailed > SAL_CALL
         setPropertyValuesTolerant( const css::uno::Sequence< OUString >& aPropertyNames,
-                                    const css::uno::Sequence< css::uno::Any >& aValues ) override;
+                                    const css::uno::Sequence< cpo::uno::Any >& aValues ) override;
     virtual css::uno::Sequence< css::beans::GetPropertyTolerantResult > SAL_CALL
         getPropertyValuesTolerant( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     virtual css::uno::Sequence< css::beans::GetDirectPropertyTolerantResult > SAL_CALL
@@ -308,7 +308,7 @@ public:
                             getPropertyStates( const css::uno::Sequence<
                                         OUString >& aPropertyName ) override;
     virtual void SAL_CALL   setPropertyToDefault( const OUString& PropertyName ) override;
-    virtual css::uno::Any SAL_CALL getPropertyDefault(
+    virtual cpo::uno::Any SAL_CALL getPropertyDefault(
                                     const OUString& aPropertyName ) override;
 
                             // XIndent
@@ -427,21 +427,21 @@ public:
 
                             // XNameContainer
     virtual void SAL_CALL   insertByName( const OUString& aName,
-                                const css::uno::Any& aElement ) override;
+                                const cpo::uno::Any& aElement ) override;
     virtual void SAL_CALL   removeByName( const OUString& Name ) override;
 
                             // XNameReplace
     virtual void SAL_CALL   replaceByName( const OUString& aName,
-                                const css::uno::Any& aElement ) override;
+                                const cpo::uno::Any& aElement ) override;
 
                             // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
                             // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
@@ -487,9 +487,9 @@ protected:
     const ScRange&          GetRange() const    { return aRange; }
     virtual const SfxItemPropertyMap& GetItemPropertyMap() override;
     virtual void GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
-                                css::uno::Any& ) override;
+                                cpo::uno::Any& ) override;
     virtual void            SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
-                                                const css::uno::Any& aValue ) override;
+                                                const cpo::uno::Any& aValue ) override;
 
     /// @throws css::lang::IndexOutOfBoundsException
     /// @throws css::uno::RuntimeException
@@ -527,8 +527,8 @@ public:
                                     css::sheet::FormulaToken >& aTokens ) override;
 
                             // XCellRangeData
-    virtual css::uno::Sequence< css::uno::Sequence< css::uno::Any > > SAL_CALL getDataArray() override;
-    virtual void SAL_CALL   setDataArray( const css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& aArray ) override;
+    virtual css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > > SAL_CALL getDataArray() override;
+    virtual void SAL_CALL   setDataArray( const css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > >& aArray ) override;
 
                             // XCellRangeFormula
     virtual css::uno::Sequence< css::uno::Sequence<
@@ -667,9 +667,9 @@ private:
 
     virtual const SfxItemPropertyMap& GetItemPropertyMap() override;
     virtual void GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
-                                css::uno::Any& ) override;
+                                cpo::uno::Any& ) override;
     virtual void            SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
-                                                const css::uno::Any& aValue ) override;
+                                                const cpo::uno::Any& aValue ) override;
 
     SvxUnoTextRangeBase*
     getSvxUnoTextRange(const css::uno::Reference<css::text::XTextRange>& xRange);
@@ -804,9 +804,9 @@ private:
 
     virtual const SfxItemPropertyMap& GetItemPropertyMap() override;
     virtual void GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
-                                css::uno::Any& ) override;
+                                cpo::uno::Any& ) override;
     virtual void            SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
-                                                const css::uno::Any& aValue ) override;
+                                                const cpo::uno::Any& aValue ) override;
 
 public:
                             ScTableSheetObj(ScDocShell* pDocSh, SCTAB nTab);
@@ -976,9 +976,9 @@ private:
 
     virtual const SfxItemPropertyMap& GetItemPropertyMap() override;
     virtual void GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
-                                css::uno::Any& ) override;
+                                cpo::uno::Any& ) override;
     virtual void            SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
-                                                const css::uno::Any& aValue ) override;
+                                                const cpo::uno::Any& aValue ) override;
 
 public:
                             ScTableColumnObj(ScDocShell* pDocSh, SCCOL nCol, SCTAB nTab);
@@ -1008,9 +1008,9 @@ private:
 
     virtual const SfxItemPropertyMap& GetItemPropertyMap() override;
     virtual void GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
-                                css::uno::Any& ) override;
+                                cpo::uno::Any& ) override;
     virtual void            SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
-                                                const css::uno::Any& aValue ) override;
+                                                const cpo::uno::Any& aValue ) override;
 
 public:
                             ScTableRowObj(ScDocShell* pDocSh, SCROW nRow, SCTAB nTab);
@@ -1082,7 +1082,7 @@ public:
 
                             // XEnumeration
     virtual bool SAL_CALL hasMoreElements() override;
-    virtual css::uno::Any SAL_CALL nextElement() override;
+    virtual cpo::uno::Any SAL_CALL nextElement() override;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -1111,7 +1111,7 @@ public:
 
                             // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
                             // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
@@ -1152,7 +1152,7 @@ public:
 
                             // XEnumeration
     virtual bool SAL_CALL hasMoreElements() override;
-    virtual css::uno::Any SAL_CALL nextElement() override;
+    virtual cpo::uno::Any SAL_CALL nextElement() override;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -1178,7 +1178,7 @@ public:
 
                             // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
                             // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
@@ -1212,7 +1212,7 @@ public:
 
                             // XEnumeration
     virtual bool SAL_CALL hasMoreElements() override;
-    virtual css::uno::Any SAL_CALL nextElement() override;
+    virtual cpo::uno::Any SAL_CALL nextElement() override;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

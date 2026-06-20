@@ -46,8 +46,8 @@ public:
         OUString &rText,
         const IntlWrapper&) const override;
 
-    virtual bool            QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
-    virtual bool            PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
+    virtual bool            QueryValue(cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
+    virtual bool            PutValue(const cpo::uno::Any& rVal, sal_uInt8 nMemberId) override;
 
     Degree10 GetValue() const { return Degree10(SfxUInt16Item::GetValue()); }
     void SetValue(Degree10 val) { SfxUInt16Item::SetValue(val.get()); }
@@ -92,8 +92,8 @@ public:
                                     OUString &rText,
                                     const IntlWrapper& ) const override;
 
-    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool            QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
 

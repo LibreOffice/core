@@ -34,7 +34,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-ScVbaHyperlink::ScVbaHyperlink( const uno::Sequence< uno::Any >& rArgs,
+ScVbaHyperlink::ScVbaHyperlink( const uno::Sequence< cpo::uno::Any >& rArgs,
         const uno::Reference< uno::XComponentContext >& rxContext ) :
     HyperlinkImpl_BASE( getXSomethingFromArgs< XHelperInterface >( rArgs, 0 ), rxContext ),
     mxCell( getXSomethingFromArgs< table::XCell >( rArgs, 1, false ) ),
@@ -47,8 +47,8 @@ ScVbaHyperlink::ScVbaHyperlink( const uno::Sequence< uno::Any >& rArgs,
 
 ScVbaHyperlink::ScVbaHyperlink( const uno::Reference< XHelperInterface >& rxAnchor,
         const uno::Reference< uno::XComponentContext >& rxContext,
-        const uno::Any& rAddress, const uno::Any& rSubAddress,
-        const uno::Any& rScreenTip, const uno::Any& rTextToDisplay ) :
+        const cpo::uno::Any& rAddress, const cpo::uno::Any& rSubAddress,
+        const cpo::uno::Any& rScreenTip, const cpo::uno::Any& rTextToDisplay ) :
     HyperlinkImpl_BASE( rxAnchor, rxContext ) // parent of Hyperlink is the anchor object
 {
     // extract parameters, Address must not be empty
@@ -162,7 +162,7 @@ OUString ScVbaHyperlink::getTextToDisplay()
 void ScVbaHyperlink::setTextToDisplay( const OUString& rTextToDisplay )
 {
     ensureTextField();
-    mxTextField->setPropertyValue(u"Representation"_ustr, uno::Any( rTextToDisplay ) );
+    mxTextField->setPropertyValue(u"Representation"_ustr, cpo::uno::Any( rTextToDisplay ) );
 }
 
 sal_Int32 SAL_CALL ScVbaHyperlink::getType()
@@ -222,12 +222,12 @@ void ScVbaHyperlink::setUrlComponents( const UrlComponents& rUrlComp )
     OUStringBuffer aUrl( rUrlComp.first );
     if( !rUrlComp.second.isEmpty() )
         aUrl.append( "#" + rUrlComp.second );
-    mxTextField->setPropertyValue(u"URL"_ustr, uno::Any( aUrl.makeStringAndClear() ) );
+    mxTextField->setPropertyValue(u"URL"_ustr, cpo::uno::Any( aUrl.makeStringAndClear() ) );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_ScVbaHyperlink_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new ScVbaHyperlink(args, context));
 }

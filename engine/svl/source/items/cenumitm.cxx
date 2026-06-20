@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <svl/cenumitm.hxx>
 #include <svl/eitem.hxx>
 #include <unordered_map>
@@ -46,7 +46,7 @@ bool SfxEnumItemInterface::GetPresentation(SfxItemPresentation, MapUnit,
 }
 
 // virtual
-bool SfxEnumItemInterface::QueryValue(css::uno::Any& rVal, sal_uInt8)
+bool SfxEnumItemInterface::QueryValue(cpo::uno::Any& rVal, sal_uInt8)
     const
 {
     rVal <<= GetEnumValue();
@@ -54,7 +54,7 @@ bool SfxEnumItemInterface::QueryValue(css::uno::Any& rVal, sal_uInt8)
 }
 
 // virtual
-bool SfxEnumItemInterface::PutValue(const css::uno::Any& rVal,
+bool SfxEnumItemInterface::PutValue(const cpo::uno::Any& rVal,
                                     sal_uInt8)
 {
     sal_Int32 nTheValue = 0;
@@ -205,14 +205,14 @@ void SfxBoolItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 // virtual
-bool SfxBoolItem::QueryValue(css::uno::Any& rVal, sal_uInt8) const
+bool SfxBoolItem::QueryValue(cpo::uno::Any& rVal, sal_uInt8) const
 {
     rVal <<= m_bValue;
     return true;
 }
 
 // virtual
-bool SfxBoolItem::PutValue(const css::uno::Any& rVal, sal_uInt8)
+bool SfxBoolItem::PutValue(const cpo::uno::Any& rVal, sal_uInt8)
 {
     bool bTheValue = bool();
     if (rVal >>= bTheValue)

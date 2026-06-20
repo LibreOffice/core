@@ -94,7 +94,7 @@ uno::Sequence< OUString > SAL_CALL KitInteractionHandler::getSupportedServiceNam
              u"com.sun.star.uui.InteractionHandler"_ustr };
 }
 
-void SAL_CALL KitInteractionHandler::initialize(uno::Sequence<uno::Any> const & /*rArguments*/)
+void SAL_CALL KitInteractionHandler::initialize(uno::Sequence<cpo::uno::Any> const & /*rArguments*/)
 {
 }
 
@@ -147,7 +147,7 @@ void selectApproved(uno::Sequence<uno::Reference<task::XInteractionContinuation>
 
 bool ShouldFallbackToStandard(const uno::Reference<task::XInteractionRequest>& xRequest)
 {
-    uno::Any const request(xRequest->getRequest());
+    cpo::uno::Any const request(xRequest->getRequest());
 
     if (task::DocumentMacroConfirmationRequest aStruct; request >>= aStruct)
         return true;
@@ -204,7 +204,7 @@ bool KitInteractionHandler::handleIOException(
 {
     const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>>
         rContinuations = rRequest->getContinuations();
-    const css::uno::Any aRequest = rRequest->getRequest();
+    const cpo::uno::Any aRequest = rRequest->getRequest();
 
     ucb::InteractiveIOException aIoException;
     if (!(aRequest >>= aIoException))
@@ -277,7 +277,7 @@ bool KitInteractionHandler::handleIOException(
     return true;
 }
 
-bool KitInteractionHandler::handleNetworkException(const uno::Sequence<uno::Reference<task::XInteractionContinuation>> &rContinuations, const uno::Any &rRequest)
+bool KitInteractionHandler::handleNetworkException(const uno::Sequence<uno::Reference<task::XInteractionContinuation>> &rContinuations, const cpo::uno::Any &rRequest)
 {
     ucb::InteractiveNetworkException aNetworkException;
     if (!(rRequest >>= aNetworkException))
@@ -326,7 +326,7 @@ bool KitInteractionHandler::handleNetworkException(const uno::Sequence<uno::Refe
     return true;
 }
 
-bool KitInteractionHandler::handlePasswordRequest(const uno::Sequence<uno::Reference<task::XInteractionContinuation>> &rContinuations, const uno::Any &rRequest)
+bool KitInteractionHandler::handlePasswordRequest(const uno::Sequence<uno::Reference<task::XInteractionContinuation>> &rContinuations, const cpo::uno::Any &rRequest)
 {
     bool bPasswordRequestFound = false;
     bool bIsRequestPasswordToModify = false;
@@ -426,7 +426,7 @@ bool KitInteractionHandler::handlePasswordRequest(const uno::Sequence<uno::Refer
 
 bool KitInteractionHandler::handleFilterOptionsRequest(
         const uno::Sequence<uno::Reference<task::XInteractionContinuation>>& rContinuations,
-        const uno::Any& rRequest)
+        const cpo::uno::Any& rRequest)
 {
     document::FilterOptionsRequest aFilterOptionsRequest;
     if (!(rRequest >>= aFilterOptionsRequest))
@@ -456,7 +456,7 @@ bool SAL_CALL KitInteractionHandler::handleInteractionRequest(
         const uno::Reference<task::XInteractionRequest>& xRequest)
 {
     uno::Sequence<uno::Reference<task::XInteractionContinuation>> const aContinuations = xRequest->getContinuations();
-    uno::Any const request(xRequest->getRequest());
+    cpo::uno::Any const request(xRequest->getRequest());
 
     if (handleIOException(xRequest))
         return true;

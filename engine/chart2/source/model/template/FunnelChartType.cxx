@@ -91,7 +91,7 @@ uno::Sequence<OUString> FunnelChartType::getSupportedPropertyRoles()
 }
 
 // ____ OPropertySet ____
-void FunnelChartType::GetDefaultValue(sal_Int32 nHandle, uno::Any& rAny) const
+void FunnelChartType::GetDefaultValue(sal_Int32 nHandle, cpo::uno::Any& rAny) const
 {
     static const ::chart::tPropertyValueMap aStaticDefaults = []() {
         ::chart::tPropertyValueMap aTmp;
@@ -142,7 +142,7 @@ css::uno::Sequence<OUString> SAL_CALL FunnelChartType::getSupportedServiceNames(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_chart_FunnelChartType_get_implementation(css::uno::XComponentContext* /*context*/,
-                                                           css::uno::Sequence<css::uno::Any> const&)
+                                                           css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ::chart::FunnelChartType);
 }

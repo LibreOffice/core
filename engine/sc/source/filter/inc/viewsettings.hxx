@@ -159,7 +159,7 @@ public:
     /** Stores converted view settings for a specific worksheet. */
     void                setSheetViewSettings( sal_Int16 nSheet,
                             const SheetViewModelRef& rxSheetView,
-                            const css::uno::Any& rProperties );
+                            const cpo::uno::Any& rProperties );
     /** Stores the used area for a specific worksheet. */
     void                setSheetUsedArea( const ScRange& rUsedArea );
 
@@ -178,7 +178,7 @@ private:
 
     WorkbookViewModelVec maBookViews;       /// Workbook view models.
     SheetViewModelMap   maSheetViews;       /// Active view model for each sheet.
-    std::map< sal_Int16, css::uno::Any >  maSheetProps;       /// Converted property sequences for each sheet.
+    std::map< sal_Int16, cpo::uno::Any >  maSheetProps;       /// Converted property sequences for each sheet.
     std::map< sal_Int16, ScRange >        maSheetUsedAreas;   /// Used area (cell range) of every sheet.
     ScRange             maOleSize;          /// Visible area if this is an embedded OLE object.
     bool                mbValidOleSize;     /// True = imported OLE size is a valid cell range.

@@ -544,7 +544,7 @@ void OOXMLDocument::resolve(Stream & rStream)
     // note: cannot throw anything other than SAXException out of here?
     catch (uno::Exception const&)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         SAL_WARN("writerfilter.ooxml", "OOXMLDocument::resolve(): " << exceptionToString(anyEx));
         throw lang::WrappedTargetRuntimeException(u""_ustr, nullptr, anyEx);
     }

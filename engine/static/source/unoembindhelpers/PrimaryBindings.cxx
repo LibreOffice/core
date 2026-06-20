@@ -13,7 +13,7 @@
 #include <emscripten/bind.h>
 
 #include <bridges/emscriptencxxabi/cxxabi.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Type.hxx>
@@ -43,6 +43,7 @@
 
 using namespace emscripten;
 using namespace css::uno;
+using namespace cpo::uno;
 
 template <> struct emscripten::smart_ptr_trait<css::uno::Type>
 {
@@ -224,7 +225,7 @@ Any constructAny(const css::uno::Type& rUnoType, const val& rObject)
         case TypeClass_STRING:
             return Any{ OUString(rObject.as<std::u16string>()) };
         case TypeClass_TYPE:
-            return css::uno::Any(rObject.as<css::uno::Type>());
+            return cpo::uno::Any(rObject.as<css::uno::Type>());
         case TypeClass_SEQUENCE:
         case TypeClass_STRUCT:
         case TypeClass_EXCEPTION:
@@ -234,7 +235,7 @@ Any constructAny(const css::uno::Type& rUnoType, const val& rObject)
             emscripten::internal::EM_GENERIC_WIRE_TYPE result
                 = _emval_as(rObject.as_handle(), getTypeId(rUnoType), &destructors);
             emscripten::internal::DestructorsRunner dr(destructors);
-            return css::uno::Any(emscripten::internal::fromGenericWireType<void const*>(result),
+            return cpo::uno::Any(emscripten::internal::fromGenericWireType<void const*>(result),
                                  rUnoType);
         }
         case TypeClass_ENUM:
@@ -243,7 +244,7 @@ Any constructAny(const css::uno::Type& rUnoType, const val& rObject)
             emscripten::internal::EM_GENERIC_WIRE_TYPE result
                 = _emval_as(rObject.as_handle(), getTypeId(rUnoType), &destructors);
             emscripten::internal::DestructorsRunner dr(destructors);
-            return css::uno::Any(
+            return cpo::uno::Any(
                 &o3tl::temporary(emscripten::internal::fromGenericWireType<sal_Int32>(result)),
                 rUnoType);
         }
@@ -279,7 +280,7 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
         .class_function("Char", +[]() { return cppu::UnoType<sal_Unicode>::get(); })
         .class_function("String", +[]() { return cppu::UnoType<OUString>::get(); })
         .class_function("Type", +[]() { return cppu::UnoType<css::uno::Type>::get(); })
-        .class_function("Any", +[]() { return cppu::UnoType<css::uno::Any>::get(); })
+        .class_function("Any", +[]() { return cppu::UnoType<cpo::uno::Any>::get(); })
         .class_function("Sequence",
                         +[](css::uno::Type const& type) {
                             return css::uno::Type(css::uno::TypeClass_SEQUENCE,
@@ -327,8 +328,8 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
     // Any
     class_<Any>("uno_Any")
         .constructor(&constructAny)
-        .function("getType", &css::uno::Any::getValueType)
-        .function("get", +[](css::uno::Any const& self) {
+        .function("getType", &cpo::uno::Any::getValueType)
+        .function("get", +[](cpo::uno::Any const& self) {
             switch (self.getValueTypeClass())
             {
                 case css::uno::TypeClass_VOID:
@@ -427,7 +428,7 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
         // Cf. __get_exception_message in <https://github.com/emscripten-core/emscripten/>,
         // system/lib/libcxxabi/src/cxa_exception_js_utils.cpp:
         auto const header = reinterpret_cast<__cxxabiv1::__cxa_exception const*>(ptr) - 1;
-        css::uno::Any exc;
+        cpo::uno::Any exc;
         OUString unoName(emscriptencxxabi::toUnoName(header->exceptionType->name()));
         typelib_TypeDescription* td = nullptr;
         typelib_typedescription_getByName(&td, unoName.pData);

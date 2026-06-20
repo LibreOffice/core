@@ -84,6 +84,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
@@ -190,7 +191,7 @@ ErrCodeMsg ReadThroughComponent(
     }
     catch( xml::sax::SAXParseException& r)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
+        cpo::uno::Any ex( cppu::getCaughtException() );
         // sax parser sends wrapped exceptions,
         // try to find the original one
         xml::sax::SAXException aSaxEx = *static_cast<xml::sax::SAXException*>(&r);
@@ -235,7 +236,7 @@ ErrCodeMsg ReadThroughComponent(
     }
     catch(const xml::sax::SAXException& r)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
+        cpo::uno::Any ex( cppu::getCaughtException() );
         packages::zip::ZipIOException aBrokenPackage;
         if ( r.WrappedException >>= aBrokenPackage )
             return ERRCODE_IO_BROKENPACKAGE;
@@ -633,7 +634,7 @@ ErrCodeMsg XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, 
     {
         xStatusIndicator->start(SvxResId(RID_SVXSTR_DOC_LOAD), nProgressRange);
     }
-    uno::Any aProgRange;
+    cpo::uno::Any aProgRange;
     aProgRange <<= nProgressRange;
     xInfoSet->setPropertyValue(u"ProgressRange"_ustr, aProgRange);
 

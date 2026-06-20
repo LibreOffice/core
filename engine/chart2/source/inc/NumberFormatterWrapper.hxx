@@ -45,7 +45,7 @@ private: //private member
                         m_xNumberFormatsSupplier;
 
     SvNumberFormatter* m_pNumberFormatter;
-    css::uno::Any m_aNullDate;
+    cpo::uno::Any m_aNullDate;
 };
 
 class FixedNumberFormatter final

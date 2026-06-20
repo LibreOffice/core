@@ -31,7 +31,7 @@
 namespace dbaui
 {
 
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
 
     // helper
     namespace

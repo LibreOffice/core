@@ -12,7 +12,7 @@
 #include <vector>
 
 #include <com/sun/star/uno/DeploymentException.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <cppuhelper/bootstrap.hxx>
@@ -61,19 +61,19 @@ cppu::defaultBootstrap_InitialComponentContext(OUString const & iniUri)
     {
         cppu::ContextEntry_Init(
             u"/singletons/com.sun.star.lang.theServiceManager"_ustr,
-            css::uno::Any(
+            cpo::uno::Any(
                 css::uno::Reference< css::uno::XInterface >(
                     static_cast< cppu::OWeakObject * >(smgr.get()))),
             false),
         cppu::ContextEntry_Init(
             u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr,
-            css::uno::Any(
+            cpo::uno::Any(
                 css::uno::Reference< css::uno::XInterface >(
                     static_cast< cppu::OWeakObject * >(tmgr.get()))),
             false),
         cppu::ContextEntry_Init( //TODO: from services.rdb?
             u"/singletons/com.sun.star.util.theMacroExpander"_ustr,
-            css::uno::Any(
+            cpo::uno::Any(
                 cppuhelper::detail::create_bootstrap_macro_expander_factory()),
             true)
     };

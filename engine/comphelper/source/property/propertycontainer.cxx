@@ -25,6 +25,7 @@ namespace comphelper
 
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 OPropertyContainer::OPropertyContainer(::cppu::OBroadcastHelper& _rBHelper)
     :OPropertySetHelper(_rBHelper)

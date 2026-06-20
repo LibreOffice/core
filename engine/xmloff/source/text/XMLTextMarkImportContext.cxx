@@ -48,6 +48,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
@@ -410,8 +411,8 @@ void XMLTextMarkImportContext::endFastElement(sal_Int32 nElement)
                     const Reference<XPropertySet> xPropertySet(xContent, UNO_QUERY);
                     if (xPropertySet.is())
                     {
-                        xPropertySet->setPropertyValue(u"BookmarkHidden"_ustr,    uno::Any(m_rHelper.getBookmarkHidden(m_sBookmarkName)));
-                        xPropertySet->setPropertyValue(u"BookmarkCondition"_ustr, uno::Any(m_rHelper.getBookmarkCondition(m_sBookmarkName)));
+                        xPropertySet->setPropertyValue(u"BookmarkHidden"_ustr,    cpo::uno::Any(m_rHelper.getBookmarkHidden(m_sBookmarkName)));
+                        xPropertySet->setPropertyValue(u"BookmarkCondition"_ustr, cpo::uno::Any(m_rHelper.getBookmarkCondition(m_sBookmarkName)));
                     }
                     if (m_sBookmarkName.startsWith("__RefHeading__"))
                     {
@@ -502,7 +503,7 @@ Reference<XTextContent> XMLTextMarkImportContext::CreateAndInsertMark(
         if (isFieldmarkSeparatorMissing)
         {
             uno::Reference<beans::XPropertySet> const xProps(xIfc, uno::UNO_QUERY_THROW);
-            xProps->setPropertyValue(u"PrivateSeparatorAtStart"_ustr, uno::Any(true));
+            xProps->setPropertyValue(u"PrivateSeparatorAtStart"_ustr, cpo::uno::Any(true));
         }
 
         // cast to XTextContent and attach to document

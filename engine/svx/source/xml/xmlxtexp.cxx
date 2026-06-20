@@ -59,6 +59,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::container;
 using namespace com::sun::star::document;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::awt;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::sax;
@@ -174,10 +175,10 @@ static void initializeStreamMetadata( const uno::Reference< uno::XInterface > &x
 
     try
     {
-        xProps->setPropertyValue(u"MediaType"_ustr,  uno::Any( u"text/xml"_ustr ) );
+        xProps->setPropertyValue(u"MediaType"_ustr,  cpo::uno::Any( u"text/xml"_ustr ) );
 
         // use stock encryption
-        xProps->setPropertyValue(u"UseCommonStoragePasswordEncryption"_ustr, uno::Any( true ) );
+        xProps->setPropertyValue(u"UseCommonStoragePasswordEncryption"_ustr, cpo::uno::Any( true ) );
     } catch ( const uno::Exception & )
     {
         TOOLS_WARN_EXCEPTION("svx", "exception setting stream metadata");

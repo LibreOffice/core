@@ -39,7 +39,7 @@ static void
 lcl_setValidationProps( const uno::Reference< table::XCellRange >& xRange, const uno::Reference< beans::XPropertySet >& xProps )
 {
     uno::Reference< beans::XPropertySet > xRangeProps( xRange, uno::UNO_QUERY_THROW );
-    xRangeProps->setPropertyValue( SC_UNONAME_VALIDAT , uno::Any( xProps ) );
+    xRangeProps->setPropertyValue( SC_UNONAME_VALIDAT , cpo::uno::Any( xProps ) );
 }
 
 static uno::Reference< beans::XPropertySet >
@@ -64,7 +64,7 @@ void SAL_CALL
 ScVbaValidation::setIgnoreBlank( bool _ignoreblank )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
-    xProps->setPropertyValue( SC_UNONAME_IGNOREBL, uno::Any( _ignoreblank ) );
+    xProps->setPropertyValue( SC_UNONAME_IGNOREBL, cpo::uno::Any( _ignoreblank ) );
     lcl_setValidationProps( m_xRange, xProps );
 }
 
@@ -81,7 +81,7 @@ void SAL_CALL
 ScVbaValidation::setCaseSensitive( bool _bCase )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
-    xProps->setPropertyValue( SC_UNONAME_ISCASE, uno::Any( _bCase ) );
+    xProps->setPropertyValue( SC_UNONAME_ISCASE, cpo::uno::Any( _bCase ) );
     lcl_setValidationProps( m_xRange, xProps );
 }
 
@@ -101,7 +101,7 @@ ScVbaValidation::setInCellDropdown( bool  _incelldropdown  )
     if ( _incelldropdown )
         nDropDown = 1;
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps(m_xRange) );
-    xProps->setPropertyValue( SC_UNONAME_SHOWLIST, uno::Any( nDropDown ) );
+    xProps->setPropertyValue( SC_UNONAME_SHOWLIST, cpo::uno::Any( nDropDown ) );
     lcl_setValidationProps( m_xRange, xProps );
 }
 
@@ -118,7 +118,7 @@ void SAL_CALL
 ScVbaValidation:: setShowInput( bool _showinput )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps(m_xRange) );
-    xProps->setPropertyValue( SC_UNONAME_IGNOREBL, uno::Any( _showinput ) );
+    xProps->setPropertyValue( SC_UNONAME_IGNOREBL, cpo::uno::Any( _showinput ) );
     lcl_setValidationProps( m_xRange, xProps );
 }
 
@@ -135,7 +135,7 @@ void SAL_CALL
 ScVbaValidation::setShowError( bool _showerror )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
-    xProps->setPropertyValue( SC_UNONAME_SHOWERR, uno::Any( _showerror ) );
+    xProps->setPropertyValue( SC_UNONAME_SHOWERR, cpo::uno::Any( _showerror ) );
     lcl_setValidationProps( m_xRange, xProps );
 }
 
@@ -152,7 +152,7 @@ void
 ScVbaValidation::setErrorTitle( const OUString& _errormessage )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
-    xProps->setPropertyValue( SC_UNONAME_ERRTITLE, uno::Any( _errormessage ) );
+    xProps->setPropertyValue( SC_UNONAME_ERRTITLE, cpo::uno::Any( _errormessage ) );
     lcl_setValidationProps( m_xRange, xProps );
 }
 
@@ -169,7 +169,7 @@ void SAL_CALL
 ScVbaValidation::setInputMessage( const OUString& _inputmessage )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
-    xProps->setPropertyValue( SC_UNONAME_INPMESS, uno::Any( _inputmessage ) );
+    xProps->setPropertyValue( SC_UNONAME_INPMESS, cpo::uno::Any( _inputmessage ) );
     lcl_setValidationProps( m_xRange, xProps );
 }
 
@@ -186,7 +186,7 @@ void SAL_CALL
 ScVbaValidation::setInputTitle( const OUString& _inputtitle )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
-    xProps->setPropertyValue( SC_UNONAME_INPTITLE, uno::Any( _inputtitle ) );
+    xProps->setPropertyValue( SC_UNONAME_INPTITLE, cpo::uno::Any( _inputtitle ) );
     lcl_setValidationProps( m_xRange, xProps );
 }
 
@@ -203,7 +203,7 @@ void SAL_CALL
 ScVbaValidation::setErrorMessage( const OUString& _errormessage )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
-    xProps->setPropertyValue( SC_UNONAME_ERRMESS, uno::Any( _errormessage ) );
+    xProps->setPropertyValue( SC_UNONAME_ERRMESS, cpo::uno::Any( _errormessage ) );
     lcl_setValidationProps( m_xRange, xProps );
 }
 
@@ -213,14 +213,14 @@ ScVbaValidation::Delete(  )
     OUString sBlank;
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
     uno::Reference< sheet::XSheetCondition > xCond( xProps, uno::UNO_QUERY_THROW );
-    xProps->setPropertyValue( SC_UNONAME_IGNOREBL, uno::Any( true ) );
-    xProps->setPropertyValue( SC_UNONAME_ISCASE, uno::Any( false ) );
-    xProps->setPropertyValue( SC_UNONAME_SHOWINP, uno::Any( true ) );
-    xProps->setPropertyValue( SC_UNONAME_SHOWERR, uno::Any( true ) );
-    xProps->setPropertyValue( SC_UNONAME_ERRTITLE, uno::Any( sBlank ) );
-    xProps->setPropertyValue( SC_UNONAME_INPMESS, uno::Any( sBlank) );
-    xProps->setPropertyValue( SC_UNONAME_ERRALSTY, uno::Any( sheet::ValidationAlertStyle_STOP) );
-    xProps->setPropertyValue( SC_UNONAME_TYPE, uno::Any( sheet::ValidationType_ANY ) );
+    xProps->setPropertyValue( SC_UNONAME_IGNOREBL, cpo::uno::Any( true ) );
+    xProps->setPropertyValue( SC_UNONAME_ISCASE, cpo::uno::Any( false ) );
+    xProps->setPropertyValue( SC_UNONAME_SHOWINP, cpo::uno::Any( true ) );
+    xProps->setPropertyValue( SC_UNONAME_SHOWERR, cpo::uno::Any( true ) );
+    xProps->setPropertyValue( SC_UNONAME_ERRTITLE, cpo::uno::Any( sBlank ) );
+    xProps->setPropertyValue( SC_UNONAME_INPMESS, cpo::uno::Any( sBlank) );
+    xProps->setPropertyValue( SC_UNONAME_ERRALSTY, cpo::uno::Any( sheet::ValidationAlertStyle_STOP) );
+    xProps->setPropertyValue( SC_UNONAME_TYPE, cpo::uno::Any( sheet::ValidationType_ANY ) );
     xCond->setFormula1( sBlank );
     xCond->setFormula2( sBlank );
     xCond->setOperator( sheet::ConditionOperator_NONE );
@@ -230,7 +230,7 @@ ScVbaValidation::Delete(  )
 
 // Fix the defect that validation cannot work when the input should be limited between a lower bound and an upper bound
 void SAL_CALL
-ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const uno::Any& Operator, const uno::Any& Formula1, const uno::Any& Formula2 )
+ScVbaValidation::Add( const cpo::uno::Any& Type, const cpo::uno::Any& AlertStyle, const cpo::uno::Any& Operator, const cpo::uno::Any& Formula1, const cpo::uno::Any& Formula2 )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
     uno::Reference< sheet::XSheetCondition > xCond( xProps, uno::UNO_QUERY_THROW );
@@ -257,14 +257,14 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
                 if ( !Formula1.hasValue() )
                     throw uno::RuntimeException(u"missing param"_ustr );
                 nValType = sheet::ValidationType_LIST;
-                xProps->setPropertyValue( SC_UNONAME_TYPE, uno::Any(nValType ));
+                xProps->setPropertyValue( SC_UNONAME_TYPE, cpo::uno::Any(nValType ));
                 // #TODO validate required params
                 // #TODO need to correct the ';' delimited formula on get/set
                 break;
             }
         case excel::XlDVType::xlValidateWholeNumber:
             nValType = sheet::ValidationType_WHOLE;
-            xProps->setPropertyValue( SC_UNONAME_TYPE, uno::Any(nValType ));
+            xProps->setPropertyValue( SC_UNONAME_TYPE, cpo::uno::Any(nValType ));
             break;
         default:
             throw uno::RuntimeException(u"unsupported operation..."_ustr );
@@ -293,7 +293,7 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
         }
     }
 
-    xProps->setPropertyValue( SC_UNONAME_ERRALSTY, uno::Any( eStyle ) );
+    xProps->setPropertyValue( SC_UNONAME_ERRALSTY, cpo::uno::Any( eStyle ) );
 
     // i#108860: fix the defect that validation cannot work when the input
     // should be limited between a lower bound and an upper bound

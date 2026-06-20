@@ -57,7 +57,7 @@ class ImpPDFTabDialog final : public SfxTabDialogController
     FilterConfigItem maConfigItem;
     FilterConfigItem maConfigI18N;
 
-    css::uno::Any maSelection;
+    cpo::uno::Any maSelection;
 
     DECL_LINK(CancelHdl, weld::Button&, void);
     DECL_LINK(OkHdl, weld::Button&, void);

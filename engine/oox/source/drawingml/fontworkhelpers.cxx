@@ -179,9 +179,9 @@ void FontworkHelpers::putCustomShapeIntoTextPathMode(
 
     // Apply new properties
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
-        { { sTextPath, uno::Any(true) },
-          { u"TextPathMode"_ustr, uno::Any(drawing::EnhancedCustomShapeTextPathMode_PATH) },
-          { u"ScaleX"_ustr, uno::Any(bScaleX) } }));
+        { { sTextPath, cpo::uno::Any(true) },
+          { u"TextPathMode"_ustr, cpo::uno::Any(drawing::EnhancedCustomShapeTextPathMode_PATH) },
+          { u"ScaleX"_ustr, cpo::uno::Any(bScaleX) } }));
     aGeomPropVec.push_back(comphelper::makePropertyValue(sTextPath, aPropertyValues));
 
     aGeomPropVec.push_back(comphelper::makePropertyValue(sPresetTextWarp, sMSPresetType));
@@ -192,7 +192,7 @@ void FontworkHelpers::putCustomShapeIntoTextPathMode(
     }
 
     xSet->setPropertyValue(u"CustomShapeGeometry"_ustr,
-                           uno::Any(comphelper::containerToSequence(aGeomPropVec)));
+                           cpo::uno::Any(comphelper::containerToSequence(aGeomPropVec)));
 }
 
 OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
@@ -1287,7 +1287,7 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
     {
         case drawing::FillStyle_NONE:
         {
-            pGrabBagStack->appendElement(u"noFill"_ustr, uno::Any());
+            pGrabBagStack->appendElement(u"noFill"_ustr, cpo::uno::Any());
             break;
         }
         case drawing::FillStyle_GRADIENT:
@@ -1473,7 +1473,7 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
     // implemented in LO. So only 'noFill' and 'solidFill'.
     if (eLineStyle == drawing::LineStyle_NONE)
     {
-        pGrabBagStack->appendElement(u"noFill"_ustr, uno::Any());
+        pGrabBagStack->appendElement(u"noFill"_ustr, cpo::uno::Any());
     }
     else
     {
@@ -1552,9 +1552,9 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
     if (xPropSetInfo->hasPropertyByName(u"LineJoint"_ustr))
         rXPropSet->getPropertyValue(u"LineJoint"_ustr) >>= eLineJoint;
     if (eLineJoint == drawing::LineJoint_NONE || eLineJoint == drawing::LineJoint_BEVEL)
-        pGrabBagStack->appendElement(u"bevel"_ustr, uno::Any());
+        pGrabBagStack->appendElement(u"bevel"_ustr, cpo::uno::Any());
     else if (eLineJoint == drawing::LineJoint_ROUND)
-        pGrabBagStack->appendElement(u"round"_ustr, uno::Any());
+        pGrabBagStack->appendElement(u"round"_ustr, cpo::uno::Any());
     else // MITER or deprecated MIDDLE
     {
         pGrabBagStack->push(u"miter"_ustr);
@@ -1664,7 +1664,7 @@ void FontworkHelpers::applyUpdatesToCharInteropGrabBag(
                 aGrabBagMap[rProp.Name] = rProp.Value; // [] inserts if not exists
             }
             xRunPropSet->setPropertyValue(u"CharInteropGrabBag"_ustr,
-                                          uno::Any(aGrabBagMap.getAsConstPropertyValueList()));
+                                          cpo::uno::Any(aGrabBagMap.getAsConstPropertyValueList()));
         }
     }
 }

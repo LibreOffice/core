@@ -455,7 +455,7 @@ void TableManager::HandleSmallerRows()
                                                       / nMaxRowWidth);
                     it->IsVisible = true;
                     pRowData->getProperties()->Insert(PROP_TABLE_COLUMN_SEPARATORS,
-                                                      uno::Any(newSeps));
+                                                      cpo::uno::Any(newSeps));
                 }
             }
         }
@@ -684,10 +684,10 @@ void TableManager::endRow()
                     aBorderLine.InnerLineWidth = 0;
                     aBorderLine.OuterLineWidth = 0;
                     TablePropertyMapPtr pCellProperties(new TablePropertyMap);
-                    pCellProperties->Insert(PROP_TOP_BORDER, css::uno::Any(aBorderLine));
-                    pCellProperties->Insert(PROP_LEFT_BORDER, css::uno::Any(aBorderLine));
-                    pCellProperties->Insert(PROP_BOTTOM_BORDER, css::uno::Any(aBorderLine));
-                    pCellProperties->Insert(PROP_RIGHT_BORDER, css::uno::Any(aBorderLine));
+                    pCellProperties->Insert(PROP_TOP_BORDER, cpo::uno::Any(aBorderLine));
+                    pCellProperties->Insert(PROP_LEFT_BORDER, cpo::uno::Any(aBorderLine));
+                    pCellProperties->Insert(PROP_BOTTOM_BORDER, cpo::uno::Any(aBorderLine));
+                    pCellProperties->Insert(PROP_RIGHT_BORDER, cpo::uno::Any(aBorderLine));
                     pTableData->getCurrentRow()->addCell(xRowStart, pCellProperties,
                                                          /*bAddBefore=*/true);
                 }

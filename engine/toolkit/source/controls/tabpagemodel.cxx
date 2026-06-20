@@ -36,6 +36,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::awt;
 
 UnoControlTabPageModel::UnoControlTabPageModel( Reference< XComponentContext > const & i_factory )
@@ -279,7 +280,7 @@ void SAL_CALL UnoControlTabPage::windowHidden( const css::lang::EventObject& ) {
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlTabPageModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlTabPageModel(context));
 }
@@ -287,7 +288,7 @@ stardiv_Toolkit_UnoControlTabPageModel_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlTabPage_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlTabPage(context));
 }

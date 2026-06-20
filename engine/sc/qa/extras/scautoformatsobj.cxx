@@ -22,7 +22,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 using namespace css;
@@ -103,14 +103,14 @@ uno::Reference<uno::XInterface> ScAutoFormatsObj::init()
     {
         xNC->insertByName(
             u"ScAutoFormatsObj"_ustr,
-            uno::Any(xMSF->createInstance(u"com.sun.star.sheet.TableAutoFormat"_ustr)));
+            cpo::uno::Any(xMSF->createInstance(u"com.sun.star.sheet.TableAutoFormat"_ustr)));
     }
     // XNameContainer
     XNameContainer::setElement(
-        uno::Any(xMSF->createInstance(u"com.sun.star.sheet.TableAutoFormat"_ustr)));
+        cpo::uno::Any(xMSF->createInstance(u"com.sun.star.sheet.TableAutoFormat"_ustr)));
     // XNameReplace
     XNameReplace::setElement(
-        uno::Any(xMSF->createInstance(u"com.sun.star.sheet.TableAutoFormat"_ustr)));
+        cpo::uno::Any(xMSF->createInstance(u"com.sun.star.sheet.TableAutoFormat"_ustr)));
 
     return xTAF;
 }

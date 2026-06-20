@@ -41,7 +41,7 @@ import com.sun.star.script.provider.ScriptFrameworkErrorType;
 import com.sun.star.script.provider.XScript;
 import com.sun.star.script.provider.XScriptContext;
 
-import com.sun.star.uno.Any;
+import cpo.uno.Any;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.XComponentContext;
 

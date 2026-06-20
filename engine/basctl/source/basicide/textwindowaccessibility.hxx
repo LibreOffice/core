@@ -133,8 +133,8 @@ public:
     void textChanged();
 
     // Thread-safe.
-    void notifyEvent(::sal_Int16 nEventId, css::uno::Any const & rOldValue,
-                     css::uno::Any const & rNewValue);
+    void notifyEvent(::sal_Int16 nEventId, cpo::uno::Any const & rOldValue,
+                     cpo::uno::Any const & rNewValue);
 
 private:
     // OAccessible
@@ -470,13 +470,13 @@ private:
 
     void disposeParagraphs();
 
-    static css::uno::Any mapFontColor(::Color const & rColor);
+    static cpo::uno::Any mapFontColor(::Color const & rColor);
 
-    static ::Color mapFontColor(css::uno::Any const & rColor);
+    static ::Color mapFontColor(cpo::uno::Any const & rColor);
 
-    static css::uno::Any mapFontWeight(::FontWeight nWeight);
+    static cpo::uno::Any mapFontWeight(::FontWeight nWeight);
 
-    static ::FontWeight mapFontWeight(css::uno::Any const & rWeight);
+    static ::FontWeight mapFontWeight(cpo::uno::Any const & rWeight);
 
     void retrieveRunAttributesImpl(
         Paragraph const * pParagraph, ::sal_Int32 Index,

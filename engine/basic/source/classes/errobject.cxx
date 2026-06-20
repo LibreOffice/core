@@ -58,14 +58,14 @@ public:
 
     // Methods
     virtual void SAL_CALL Clear(  ) override;
-    virtual void SAL_CALL Raise( const uno::Any& Number, const uno::Any& Source, const uno::Any& Description, const uno::Any& HelpFile, const uno::Any& HelpContext ) override;
+    virtual void SAL_CALL Raise( const cpo::uno::Any& Number, const cpo::uno::Any& Source, const cpo::uno::Any& Description, const cpo::uno::Any& HelpFile, const cpo::uno::Any& HelpContext ) override;
     // XDefaultProperty
     virtual OUString SAL_CALL getDefaultPropertyName(  ) override;
 
     // Helper method
     /// @throws css::uno::RuntimeException
-    void setData( const uno::Any& Number, const uno::Any& Source, const uno::Any& Description,
-        const uno::Any& HelpFile, const uno::Any& HelpContext );
+    void setData( const cpo::uno::Any& Number, const cpo::uno::Any& Source, const cpo::uno::Any& Description,
+        const cpo::uno::Any& HelpFile, const cpo::uno::Any& HelpContext );
 };
 
 ErrObject::ErrObject() : m_nNumber(0), m_nHelpContext(0)
@@ -83,7 +83,7 @@ ErrObject::setNumber( ::sal_Int32 _number )
 {
     GetSbData()->pInst->setErrorVB( _number  );
     OUString _description = GetSbData()->pInst->GetErrorMsg();
-    setData( uno::Any( _number ), uno::Any(), uno::Any( _description ), uno::Any(), uno::Any() );
+    setData( cpo::uno::Any( _number ), cpo::uno::Any(), cpo::uno::Any( _description ), cpo::uno::Any(), cpo::uno::Any() );
 }
 
 ::sal_Int32 SAL_CALL
@@ -145,7 +145,7 @@ ErrObject::Clear(  )
 }
 
 void SAL_CALL
-ErrObject::Raise( const uno::Any& Number, const uno::Any& Source, const uno::Any& Description, const uno::Any& HelpFile, const uno::Any& HelpContext )
+ErrObject::Raise( const cpo::uno::Any& Number, const cpo::uno::Any& Source, const cpo::uno::Any& Description, const cpo::uno::Any& HelpFile, const cpo::uno::Any& HelpContext )
 {
     setData( Number, Source, Description, HelpFile, HelpContext );
     if ( m_nNumber )
@@ -159,7 +159,7 @@ ErrObject::getDefaultPropertyName(  )
     return u"Number"_ustr;
 }
 
-void ErrObject::setData( const uno::Any& Number, const uno::Any& Source, const uno::Any& Description, const uno::Any& HelpFile, const uno::Any& HelpContext )
+void ErrObject::setData( const cpo::uno::Any& Number, const cpo::uno::Any& Source, const cpo::uno::Any& Description, const cpo::uno::Any& HelpFile, const cpo::uno::Any& HelpContext )
 {
     if ( !Number.hasValue() )
         throw uno::RuntimeException(u"Missing Required Parameter"_ustr );
@@ -171,7 +171,7 @@ void ErrObject::setData( const uno::Any& Number, const uno::Any& Source, const u
 }
 
 // SbxErrObject
-SbxErrObject::SbxErrObject( const OUString& rName, const uno::Any& rUnoObj )
+SbxErrObject::SbxErrObject( const OUString& rName, const cpo::uno::Any& rUnoObj )
     : SbUnoObject( rName, rUnoObj )
     , m_pErrObject( nullptr )
 {
@@ -203,7 +203,7 @@ SbxErrObject::getErrObject()
         std::scoped_lock aGuard(aMutex);
         if (!rGlobErr)
             rGlobErr = new SbxErrObject(u"Err"_ustr,
-                                        uno::Any(uno::Reference<vba::XErrObject>(new ErrObject())));
+                                        cpo::uno::Any(uno::Reference<vba::XErrObject>(new ErrObject())));
     }
     return rGlobErr;
 }
@@ -212,7 +212,7 @@ void SbxErrObject::setNumberAndDescription( ::sal_Int32 _number, const OUString&
 {
     if( m_pErrObject != nullptr )
     {
-        m_pErrObject->setData( uno::Any( _number ), uno::Any(), uno::Any( _description ), uno::Any(), uno::Any() );
+        m_pErrObject->setData( cpo::uno::Any( _number ), cpo::uno::Any(), cpo::uno::Any( _description ), cpo::uno::Any(), cpo::uno::Any() );
     }
 }
 

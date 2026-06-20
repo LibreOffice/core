@@ -23,7 +23,7 @@
 #include <comphelper/comphelperdllapi.h>
 
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
@@ -40,7 +40,7 @@ namespace comphelper
     */
     class COMPHELPER_DLLPUBLIC NamedValueCollection
     {
-        std::unordered_map< OUString, css::uno::Any >  maValues;
+        std::unordered_map< OUString, cpo::uno::Any >  maValues;
     public:
         NamedValueCollection() = default;
 
@@ -56,13 +56,13 @@ namespace comphelper
                 property values, a sequence of named values, or directly a property value or named value.
                 All other cases are worth an assertion in non-product builds.
         */
-        NamedValueCollection( const css::uno::Any& _rElements );
+        NamedValueCollection( const cpo::uno::Any& _rElements );
 
         /** constructs a collection
             @param _rArguments
                 a sequence of Any's containing either PropertyValue's or NamedValue's.
         */
-        NamedValueCollection( const css::uno::Sequence< css::uno::Any >& _rArguments );
+        NamedValueCollection( const css::uno::Sequence< cpo::uno::Any >& _rArguments );
 
         /** constructs a collection
             @param _rArguments
@@ -76,7 +76,7 @@ namespace comphelper
         */
         NamedValueCollection( const css::uno::Sequence< css::beans::NamedValue >& _rArguments );
 
-        void assign( const css::uno::Sequence< css::uno::Any >& _rArguments )
+        void assign( const css::uno::Sequence< cpo::uno::Any >& _rArguments )
         {
             impl_assign( _rArguments );
         }
@@ -92,7 +92,7 @@ namespace comphelper
                 true if and only if the given @c Any contains a @c NamedValue, a
                 @c PropertyValue, or a sequence thereof.
         */
-        static bool canExtractFrom( css::uno::Any const & i_value );
+        static bool canExtractFrom( cpo::uno::Any const & i_value );
 
         /// returns the number of elements in the collection
         size_t  size() const;
@@ -175,7 +175,7 @@ namespace comphelper
             If the collection does not contain a value with the given name, an empty
             Any is returned.
         */
-        const css::uno::Any& get( const OUString& _rValueName ) const
+        const cpo::uno::Any& get( const OUString& _rValueName ) const
         {
             return impl_get( _rValueName );
         }
@@ -185,7 +185,7 @@ namespace comphelper
             If the collection does not contain a value with the given name, an empty
             Any is returned.
         */
-        static const css::uno::Any& get( const css::uno::Sequence<css::beans::PropertyValue>& rPropSeq, std::u16string_view _rValueName );
+        static const cpo::uno::Any& get( const css::uno::Sequence<css::beans::PropertyValue>& rPropSeq, std::u16string_view _rValueName );
 
         /// determines whether a value with a given name is present in the collection
         bool has( const OUString& _rValueName ) const
@@ -201,10 +201,10 @@ namespace comphelper
         template < typename VALUE_TYPE >
         bool put( const OUString& _rValueName, const VALUE_TYPE& _rValue )
         {
-            return impl_put( _rValueName, css::uno::Any( _rValue ) );
+            return impl_put( _rValueName, cpo::uno::Any( _rValue ) );
         }
 
-        bool put( const OUString& _rValueName, const css::uno::Any& _rValue )
+        bool put( const OUString& _rValueName, const cpo::uno::Any& _rValue )
         {
             return impl_put( _rValueName, _rValue );
         }
@@ -244,7 +244,7 @@ namespace comphelper
 
         /** returns a Sequence< Any >, containing PropertyValues
         */
-        css::uno::Sequence< css::uno::Any >
+        css::uno::Sequence< cpo::uno::Any >
                 getWrappedPropertyValues() const
         {
             return impl_wrap< css::beans::PropertyValue >();
@@ -252,7 +252,7 @@ namespace comphelper
 
         /** returns a Sequence< Any >, containing NamedValues
         */
-        css::uno::Sequence< css::uno::Any >
+        css::uno::Sequence< cpo::uno::Any >
                 getWrappedNamedValues() const
         {
             return impl_wrap< css::beans::NamedValue >();
@@ -269,8 +269,8 @@ namespace comphelper
         }
 
     private:
-        void    impl_assign( const css::uno::Any& i_rWrappedElements );
-        void    impl_assign( const css::uno::Sequence< css::uno::Any >& _rArguments );
+        void    impl_assign( const cpo::uno::Any& i_rWrappedElements );
+        void    impl_assign( const css::uno::Sequence< cpo::uno::Any >& _rArguments );
         void    impl_assign( const css::uno::Sequence< css::beans::PropertyValue >& _rArguments );
         void    impl_assign( const css::uno::Sequence< css::beans::NamedValue >& _rArguments );
 
@@ -287,23 +287,23 @@ namespace comphelper
                     const css::uno::Type& _rExpectedValueType
                 );
 
-        const css::uno::Any&
+        const cpo::uno::Any&
                 impl_get( const OUString& _rValueName ) const;
 
         bool    impl_has( const OUString& _rValueName ) const;
 
-        bool    impl_put( const OUString& _rValueName, const css::uno::Any& _rValue );
+        bool    impl_put( const OUString& _rValueName, const cpo::uno::Any& _rValue );
 
         bool    impl_remove( const OUString& _rValueName );
 
         template< class VALUE_TYPE >
-        css::uno::Sequence< css::uno::Any > impl_wrap() const
+        css::uno::Sequence< cpo::uno::Any > impl_wrap() const
         {
             css::uno::Sequence< VALUE_TYPE > aValues;
             *this >>= aValues;
-            css::uno::Sequence< css::uno::Any > aWrappedValues( aValues.getLength() );
+            css::uno::Sequence< cpo::uno::Any > aWrappedValues( aValues.getLength() );
             std::transform(aValues.begin(), aValues.end(), aWrappedValues.getArray(),
-                           [](const auto& val) { return css::uno::Any(val); });
+                           [](const auto& val) { return cpo::uno::Any(val); });
 
             return aWrappedValues;
         }

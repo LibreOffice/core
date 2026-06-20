@@ -221,7 +221,7 @@ public:
 
     // XPropertySet
 
-    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& p) override
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(const OUString& p) override
         { return PropertySetBase::getPropertyValue(p); }
 
     virtual void SAL_CALL addPropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
@@ -239,7 +239,7 @@ public:
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override
         { return PropertySetBase::getPropertySetInfo(); }
 
-   virtual void SAL_CALL setPropertyValue(const OUString& p1, const css::uno::Any& p2) override
+   virtual void SAL_CALL setPropertyValue(const OUString& p1, const cpo::uno::Any& p2) override
         { PropertySetBase::setPropertyValue(p1, p2); }
 
 

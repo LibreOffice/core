@@ -147,10 +147,10 @@ Storage::~Storage()
 
 
 // virtual
-uno::Any SAL_CALL Storage::queryInterface( const uno::Type& aType )
+cpo::uno::Any SAL_CALL Storage::queryInterface( const uno::Type& aType )
 {
     // First, try to use interfaces implemented by myself and base class(es)
-    uno::Any aRet = StorageUNOBase::queryInterface( aType );
+    cpo::uno::Any aRet = StorageUNOBase::queryInterface( aType );
 
     if ( aRet.hasValue() )
         return aRet;
@@ -247,7 +247,7 @@ bool SAL_CALL Storage::hasElements()
 
 
 // virtual
-uno::Any SAL_CALL Storage::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL Storage::getByName( const OUString& aName )
 {
     return m_xWrappedStorage->getByName( aName );
 }
@@ -516,9 +516,9 @@ OutputStream::~OutputStream()
 
 
 // virtual
-uno::Any SAL_CALL OutputStream::queryInterface( const uno::Type& aType )
+cpo::uno::Any SAL_CALL OutputStream::queryInterface( const uno::Type& aType )
 {
-    uno::Any aRet = OutputStreamUNOBase::queryInterface( aType );
+    cpo::uno::Any aRet = OutputStreamUNOBase::queryInterface( aType );
 
     if ( aRet.hasValue() )
         return aRet;
@@ -526,7 +526,7 @@ uno::Any SAL_CALL OutputStream::queryInterface( const uno::Type& aType )
     if ( m_xAggProxy.is() )
         return m_xAggProxy->queryAggregation( aType );
     else
-        return uno::Any();
+        return cpo::uno::Any();
 }
 
 
@@ -684,9 +684,9 @@ Stream::~Stream()
 
 
 // virtual
-uno::Any SAL_CALL Stream::queryInterface( const uno::Type& aType )
+cpo::uno::Any SAL_CALL Stream::queryInterface( const uno::Type& aType )
 {
-    uno::Any aRet = StreamUNOBase::queryInterface( aType );
+    cpo::uno::Any aRet = StreamUNOBase::queryInterface( aType );
 
     if ( aRet.hasValue() )
         return aRet;
@@ -694,7 +694,7 @@ uno::Any SAL_CALL Stream::queryInterface( const uno::Type& aType )
     if ( m_xAggProxy.is() )
         return m_xAggProxy->queryAggregation( aType );
     else
-        return uno::Any();
+        return cpo::uno::Any();
 }
 
 

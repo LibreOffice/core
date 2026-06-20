@@ -55,6 +55,7 @@
 using namespace ::com::sun::star;
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::animations;
@@ -583,13 +584,13 @@ void SlidePersist::createConnectorShapeConnection(const oox::drawingml::ShapePtr
                 bool bStart = aConnectorShapeProperties[j].mbStartShape;
                 if (bStart)
                 {
-                    xPropertySet->setPropertyValue(u"StartShape"_ustr, uno::Any(xShape));
-                    xPropertySet->setPropertyValue(u"StartGluePointIndex"_ustr, uno::Any(nGlueId));
+                    xPropertySet->setPropertyValue(u"StartShape"_ustr, cpo::uno::Any(xShape));
+                    xPropertySet->setPropertyValue(u"StartGluePointIndex"_ustr, cpo::uno::Any(nGlueId));
                 }
                 else
                 {
-                    xPropertySet->setPropertyValue(u"EndShape"_ustr, uno::Any(xShape));
-                    xPropertySet->setPropertyValue(u"EndGluePointIndex"_ustr, uno::Any(nGlueId));
+                    xPropertySet->setPropertyValue(u"EndShape"_ustr, cpo::uno::Any(xShape));
+                    xPropertySet->setPropertyValue(u"EndGluePointIndex"_ustr, cpo::uno::Any(nGlueId));
                 }
             }
         }

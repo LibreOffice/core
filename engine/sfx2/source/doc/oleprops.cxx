@@ -31,7 +31,7 @@
 #define STREAM_BUFFER_SIZE 2048
 
 // usings
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 
 using namespace ::com::sun::star;
 

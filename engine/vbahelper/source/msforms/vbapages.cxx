@@ -32,8 +32,8 @@ ScVbaPages::getElementType()
     return cppu::UnoType<uno::XInterface>::get();
 }
 
-uno::Any
-ScVbaPages::createCollectionObject( const css::uno::Any& aSource )
+cpo::uno::Any
+ScVbaPages::createCollectionObject( const cpo::uno::Any& aSource )
 {
     return aSource;
 }

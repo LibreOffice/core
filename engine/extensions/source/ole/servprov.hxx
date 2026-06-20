@@ -97,13 +97,13 @@ public:
 
     // XBridgeSupplier2 ---------------------------------------------------
 
-    css::uno::Any SAL_CALL createBridge(const css::uno::Any& modelDepObject,
+    cpo::uno::Any SAL_CALL createBridge(const cpo::uno::Any& modelDepObject,
                                 const css::uno::Sequence<sal_Int8>& ProcessId,
                                 sal_Int16 sourceModelType,
                                 sal_Int16 destModelType) override;
 
     // XInitialization
-    void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     OUString SAL_CALL getImplementationName() override;
 
@@ -129,7 +129,7 @@ public:
 
     // XMultiServiceFactory
     css::uno::Reference<css::uno::XInterface> SAL_CALL createInstance(const OUString& ServiceSpecifier) override;
-    css::uno::Reference<css::uno::XInterface> SAL_CALL createInstanceWithArguments(const OUString& ServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments) override;
+    css::uno::Reference<css::uno::XInterface> SAL_CALL createInstanceWithArguments(const OUString& ServiceSpecifier, const css::uno::Sequence< cpo::uno::Any >& Arguments) override;
     css::uno::Sequence< OUString >    SAL_CALL getAvailableServiceNames() override;
 
     OUString SAL_CALL getImplementationName() override;

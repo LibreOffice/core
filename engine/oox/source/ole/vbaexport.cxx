@@ -1103,7 +1103,7 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
     {
         const OUString& rModuleName = aElementNames[aLibraryMap[i]];
         rtl::Reference<SotStorageStream> pModuleStream = xVBAStream->OpenSotStream(rModuleName, StreamMode::READWRITE);
-        css::uno::Any aCode = xNameContainer->getByName(rModuleName);
+        cpo::uno::Any aCode = xNameContainer->getByName(rModuleName);
         css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(rModuleName);
         OUString aSourceCode;
         aCode >>= aSourceCode;

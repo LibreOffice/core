@@ -20,7 +20,7 @@
 #include <svl/numformat.hxx>
 #include <osl/diagnose.h>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <docoptio.hxx>
@@ -29,6 +29,7 @@
 
 using namespace utl;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 
 using sc::TwipsToEvenHMM;

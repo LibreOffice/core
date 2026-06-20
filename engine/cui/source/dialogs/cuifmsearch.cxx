@@ -34,6 +34,7 @@
 #include <o3tl/string_view.hxx>
 
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace ::svxform;
 using namespace css::sdbc;
 
@@ -556,7 +557,7 @@ void FmSearchDialog::EnableSearchForDependees(bool bEnable)
     m_pcbCase->set_sensitive(bEnable && bEnableRedundants);
 }
 
-void FmSearchDialog::OnFound(const css::uno::Any& aCursorPos, sal_Int16 nFieldPos)
+void FmSearchDialog::OnFound(const cpo::uno::Any& aCursorPos, sal_Int16 nFieldPos)
 {
     FmFoundRecordInformation friInfo;
     friInfo.nContext = m_plbForm->get_active();

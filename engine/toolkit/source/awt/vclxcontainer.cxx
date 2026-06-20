@@ -102,14 +102,14 @@ void VCLXContainer::enableDialogControl( bool bEnable )
     }
 }
 
-void VCLXContainer::setTabOrder( const css::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& Components, const css::uno::Sequence< css::uno::Any >& Tabs, bool bGroupControl )
+void VCLXContainer::setTabOrder( const css::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& Components, const css::uno::Sequence< cpo::uno::Any >& Tabs, bool bGroupControl )
 {
     SolarMutexGuard aGuard;
 
     sal_uInt32 nCount = Components.getLength();
     DBG_ASSERT( nCount == static_cast<sal_uInt32>(Tabs.getLength()), "setTabOrder: TabCount != ComponentCount" );
     const css::uno::Reference< css::awt::XWindow > * pComps = Components.getConstArray();
-    const css::uno::Any* pTabs = Tabs.getConstArray();
+    const cpo::uno::Any* pTabs = Tabs.getConstArray();
 
     vcl::Window* pPrevWin = nullptr;
     for ( sal_uInt32 n = 0; n < nCount; n++ )
@@ -206,7 +206,7 @@ void VCLXContainer::setGroup( const css::uno::Sequence< css::uno::Reference< css
 
 void SAL_CALL VCLXContainer::setProperty(
     const OUString& PropertyName,
-    const css::uno::Any& Value )
+    const cpo::uno::Any& Value )
 {
     SolarMutexGuard aGuard;
 

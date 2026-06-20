@@ -27,8 +27,8 @@ class XMLDurationPropertyHdl final : public XMLPropertyHandler
 {
 public:
     virtual ~XMLDurationPropertyHdl() override;
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 class SvXMLImport;
@@ -39,16 +39,16 @@ private:
 public:
     explicit XMLOpacityPropertyHdl( SvXMLImport* pImport );
     virtual ~XMLOpacityPropertyHdl() override;
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 class XMLTextAnimationStepPropertyHdl final : public XMLPropertyHandler
 {
 public:
     virtual ~XMLTextAnimationStepPropertyHdl() override;
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 class SvXMLExport;
@@ -60,8 +60,8 @@ private:
 public:
     explicit XMLDateTimeFormatHdl( SvXMLExport* pExport );
     virtual ~XMLDateTimeFormatHdl() override;
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

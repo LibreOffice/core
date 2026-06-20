@@ -76,7 +76,7 @@ private:
     template <class T, T ucbhelper_impl::PropertyValue::*_member_name_>
     void appendValue(const OUString& rPropName, PropsSet nTypeName, const T& rValue);
 
-    css::uno::Any getObjectImpl(const std::unique_lock<std::mutex>& rGuard, sal_Int32 columnIndex);
+    cpo::uno::Any getObjectImpl(const std::unique_lock<std::mutex>& rGuard, sal_Int32 columnIndex);
 
 public:
     UCBHELPER_DLLPUBLIC PropertyValueSet(
@@ -116,7 +116,7 @@ public:
     virtual css::uno::Reference<
                 css::io::XInputStream > SAL_CALL
     getCharacterStream( sal_Int32 columnIndex ) override;
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
     getObject( sal_Int32 columnIndex,
                const css::uno::Reference<
                    css::container::XNameAccess >& typeMap ) override;
@@ -164,8 +164,8 @@ public:
         appendTimestamp( rProp.Name, rValue );
     }
 
-    UCBHELPER_DLLPUBLIC void appendObject( const OUString& rPropName, const css::uno::Any& rValue );
-    void appendObject( const css::beans::Property& rProp, const css::uno::Any& rValue )
+    UCBHELPER_DLLPUBLIC void appendObject( const OUString& rPropName, const cpo::uno::Any& rValue );
+    void appendObject( const css::beans::Property& rProp, const cpo::uno::Any& rValue )
     {
         appendObject( rProp.Name, rValue );
     }

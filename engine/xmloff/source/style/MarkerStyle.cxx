@@ -45,7 +45,7 @@ XMLMarkerStyleImport::XMLMarkerStyleImport( SvXMLImport& rImp )
 
 void XMLMarkerStyleImport::importXML(
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
-    uno::Any& rValue,
+    cpo::uno::Any& rValue,
     OUString& rStrName )
 {
     bool bHasViewBox    = false;
@@ -139,7 +139,7 @@ XMLMarkerStyleExport::XMLMarkerStyleExport( SvXMLExport& rExp )
 
 void XMLMarkerStyleExport::exportXML(
     const OUString& rStrName,
-    const uno::Any& rValue )
+    const cpo::uno::Any& rValue )
 {
     if(rStrName.isEmpty())
         return;

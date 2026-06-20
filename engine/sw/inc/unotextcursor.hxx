@@ -120,8 +120,8 @@ public:
         getPropertySetInfo() override;
     virtual void SAL_CALL setPropertyValue(
             const OUString& rPropertyName,
-            const css::uno::Any& rValue) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue(
+            const cpo::uno::Any& rValue) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(
             const OUString& rPropertyName) override;
     virtual void SAL_CALL addPropertyChangeListener(
             const OUString& rPropertyName,
@@ -148,15 +148,15 @@ public:
             const css::uno::Sequence< OUString >& rPropertyNames) override;
     virtual void SAL_CALL setPropertyToDefault(
             const OUString& rPropertyName) override;
-    virtual css::uno::Any SAL_CALL getPropertyDefault(
+    virtual cpo::uno::Any SAL_CALL getPropertyDefault(
             const OUString& rPropertyName) override;
 
     // XMultiPropertySet
     virtual void SAL_CALL setPropertyValues(
             const css::uno::Sequence< OUString >& aPropertyNames,
-            const css::uno::Sequence< css::uno::Any >& aValues ) override;
+            const css::uno::Sequence< cpo::uno::Any >& aValues ) override;
 
-    virtual css::uno::Sequence< css::uno::Any > SAL_CALL
+    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL
         getPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 
     virtual void SAL_CALL addPropertiesChangeListener(
@@ -174,7 +174,7 @@ public:
     virtual void SAL_CALL setAllPropertiesToDefault() override;
     virtual void SAL_CALL setPropertiesToDefault(
             const css::uno::Sequence< OUString >&  rPropertyNames) override;
-    virtual css::uno::Sequence< css::uno::Any >
+    virtual css::uno::Sequence< cpo::uno::Any >
         SAL_CALL getPropertyDefaults(
             const css::uno::Sequence< OUString >&  rPropertyNames) override;
 

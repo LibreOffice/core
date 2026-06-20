@@ -39,7 +39,7 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(cons
     css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(
         css::configuration::theDefaultProvider::get( rxContext ) );
 
-    std::vector< css::uno::Any > lParams;
+    std::vector< cpo::uno::Any > lParams;
     css::beans::PropertyValue      aParam ;
 
     // set root path
@@ -72,7 +72,7 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(cons
 }
 
 
-css::uno::Any ConfigurationHelper::readRelativeKey(const css::uno::Reference< css::uno::XInterface >& xCFG    ,
+cpo::uno::Any ConfigurationHelper::readRelativeKey(const css::uno::Reference< css::uno::XInterface >& xCFG    ,
                                                    const OUString&                            sRelPath,
                                                    const OUString&                            sKey    )
 {
@@ -92,7 +92,7 @@ css::uno::Any ConfigurationHelper::readRelativeKey(const css::uno::Reference< cs
 void ConfigurationHelper::writeRelativeKey(const css::uno::Reference< css::uno::XInterface >& xCFG    ,
                                            const OUString&                            sRelPath,
                                            const OUString&                            sKey    ,
-                                           const css::uno::Any&                              aValue  )
+                                           const cpo::uno::Any&                              aValue  )
 {
     css::uno::Reference< css::container::XHierarchicalNameAccess > xAccess(xCFG, css::uno::UNO_QUERY_THROW);
 
@@ -128,14 +128,14 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::makeSureSetNode
         css::uno::Reference< css::lang::XSingleServiceFactory > xNodeFactory(xSet, css::uno::UNO_QUERY_THROW);
         xNode = xNodeFactory->createInstance();
         css::uno::Reference< css::container::XNameContainer > xSetReplace(xSet, css::uno::UNO_QUERY_THROW);
-        xSetReplace->insertByName(sSetNode, css::uno::Any(xNode));
+        xSetReplace->insertByName(sSetNode, cpo::uno::Any(xNode));
     }
 
     return xNode;
 }
 
 
-css::uno::Any ConfigurationHelper::readDirectKey(const css::uno::Reference< css::uno::XComponentContext >&    rxContext,
+cpo::uno::Any ConfigurationHelper::readDirectKey(const css::uno::Reference< css::uno::XComponentContext >&    rxContext,
                                                  const OUString&                                       sPackage,
                                                  const OUString&                                       sRelPath,
                                                  const OUString&                                       sKey    ,
@@ -150,7 +150,7 @@ void ConfigurationHelper::writeDirectKey(const css::uno::Reference< css::uno::XC
                                          const OUString&                                       sPackage,
                                          const OUString&                                       sRelPath,
                                          const OUString&                                       sKey    ,
-                                         const css::uno::Any&                                  aValue  ,
+                                         const cpo::uno::Any&                                  aValue  ,
                                                EConfigurationModes                             eMode   )
 {
     css::uno::Reference< css::uno::XInterface > xCFG = ConfigurationHelper::openConfig(rxContext, sPackage, eMode);

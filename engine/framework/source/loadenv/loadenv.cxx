@@ -164,7 +164,7 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
         LoadEnv aEnv(xContext);
         LoadEnvFeatures loadEnvFeatures = LoadEnvFeatures::WorkWithUI;
         // tdf#118238 Only disable UI interaction when loading as hidden
-        if (comphelper::NamedValueCollection::get(lArgs, u"Hidden") == uno::Any(true) || Application::IsHeadlessModeEnabled())
+        if (comphelper::NamedValueCollection::get(lArgs, u"Hidden") == cpo::uno::Any(true) || Application::IsHeadlessModeEnabled())
             loadEnvFeatures = LoadEnvFeatures::NONE;
 
         aEnv.startLoading(sURL,
@@ -209,7 +209,7 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
 
     // if AbortOnLoadFailure is set and we couldn't load the document, assert, intended for use with crashtesting to
     // detect when we export something we can't import
-    assert(xComponent.is() || comphelper::NamedValueCollection::get(lArgs, u"AbortOnLoadFailure") != uno::Any(true));
+    assert(xComponent.is() || comphelper::NamedValueCollection::get(lArgs, u"AbortOnLoadFailure") != cpo::uno::Any(true));
 
     return xComponent;
 }
@@ -638,7 +638,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     css::uno::Sequence< OUString > lTypesReg { sType };
     css::uno::Sequence< css::beans::NamedValue >           lQuery
     {
-        css::beans::NamedValue(PROP_TYPES, css::uno::Any(lTypesReg))
+        css::beans::NamedValue(PROP_TYPES, cpo::uno::Any(lTypesReg))
     };
 
     xLoaderFactory = css::frame::FrameLoaderFactory::create(xContext);
@@ -880,7 +880,7 @@ bool LoadEnv::impl_handleContent()
     // query
     css::uno::Sequence< OUString > lTypeReg { sType };
 
-    css::uno::Sequence< css::beans::NamedValue > lQuery { { PROP_TYPES, css::uno::Any(lTypeReg) } };
+    css::uno::Sequence< css::beans::NamedValue > lQuery { { PROP_TYPES, cpo::uno::Any(lTypeReg) } };
 
     css::uno::Reference< css::container::XEnumeration > xSet = xLoaderFactory->createSubSetEnumerationByProperties(lQuery);
     while(xSet->hasMoreElements())
@@ -966,7 +966,7 @@ bool LoadEnv::impl_furtherDocsAllowed()
 
         if (xInteraction.is())
         {
-            css::uno::Any                                                                    aInteraction;
+            cpo::uno::Any                                                                    aInteraction;
 
             rtl::Reference<comphelper::OInteractionAbort>   pAbort   = new comphelper::OInteractionAbort();
             rtl::Reference<comphelper::OInteractionApprove> pApprove = new comphelper::OInteractionApprove();
@@ -1127,9 +1127,9 @@ bool LoadEnv::impl_loadContent()
         if (xHandler.is())
         {
             css::uno::Reference<css::awt::XWindow> xWindow = xTargetFrame->getContainerWindow();
-            uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+            uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
             {
-                {"Parent", uno::Any(xWindow)}
+                {"Parent", cpo::uno::Any(xWindow)}
             }));
             xHandler->initialize(aArguments);
             //show the frame as early as possible to make it the parent of any message dialogs
@@ -1169,7 +1169,7 @@ bool LoadEnv::impl_loadContent()
         {
             // Set the URL on the frame itself, for the duration of the load, when it has no
             // controller.
-            xTargetFrameProps->setPropertyValue(u"URL"_ustr, uno::Any(sURL));
+            xTargetFrameProps->setPropertyValue(u"URL"_ustr, cpo::uno::Any(sURL));
         }
         bool bResult = xSyncLoader->load(lDescriptor, xTargetFrame);
         // react for the result here, so the outside waiting
@@ -1222,7 +1222,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
 
     css::uno::Sequence< OUString > lTypesReg { sType };
 
-    css::uno::Sequence< css::beans::NamedValue > lQuery { { PROP_TYPES, css::uno::Any(lTypesReg) } };
+    css::uno::Sequence< css::beans::NamedValue > lQuery { { PROP_TYPES, cpo::uno::Any(lTypesReg) } };
 
     css::uno::Reference< css::container::XEnumeration > xSet = xLoaderFactory->createSubSetEnumerationByProperties(lQuery);
     while(xSet->hasMoreElements())
@@ -1677,7 +1677,7 @@ void LoadEnv::impl_reactForLoadingState()
     // Otherwise it hold a might existing stream open!
     m_lMediaDescriptor.clear();
 
-    css::uno::Any aRequest;
+    cpo::uno::Any aRequest;
     bool bThrow = false;
     if ( !m_bLoaded && m_pQuietInteraction.is() && m_pQuietInteraction->wasUsed() )
     {

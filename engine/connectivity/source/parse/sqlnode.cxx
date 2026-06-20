@@ -67,6 +67,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;
@@ -758,7 +759,7 @@ void OSQLParseNode::impl_parseLikeNodeToString_throw( OUStringBuffer& rString, c
 
 
 bool OSQLParseNode::getTableComponents(const OSQLParseNode* _pTableNode,
-                                            css::uno::Any &_rCatalog,
+                                            cpo::uno::Any &_rCatalog,
                                             OUString &_rSchema,
                                             OUString &_rTable,
                                             const Reference< XDatabaseMetaData >& _xMetaData)

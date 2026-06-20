@@ -27,7 +27,7 @@
 #endif
 #include <windows.h>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 // converts a soffice label to a windows label

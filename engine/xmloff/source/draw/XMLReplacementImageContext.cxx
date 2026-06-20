@@ -73,7 +73,7 @@ void XMLReplacementImageContext::endFastElement(sal_Int32 )
 
     if (xGraphic.is() && xPropSetInfo->hasPropertyByName(u"Graphic"_ustr))
     {
-        m_xPropSet->setPropertyValue(u"Graphic"_ustr, uno::Any(xGraphic));
+        m_xPropSet->setPropertyValue(u"Graphic"_ustr, cpo::uno::Any(xGraphic));
     }
 }
 

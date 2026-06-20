@@ -44,6 +44,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace sfx2::sidebar {
 
@@ -332,9 +333,9 @@ void ResourceManager::SaveDeckSettings(const DeckDescriptor* pDeckDesc)
 
     utl::OConfigurationNode aDeckNode (aDeckRootNode.openNode(pDeckDesc->msNodeName));
 
-    css::uno::Any aTitle(Any(pDeckDesc->msTitle));
-    css::uno::Any aOrder(Any(pDeckDesc->mnOrderIndex));
-    css::uno::Any aContextList(sContextList);
+    cpo::uno::Any aTitle(Any(pDeckDesc->msTitle));
+    cpo::uno::Any aOrder(Any(pDeckDesc->mnOrderIndex));
+    cpo::uno::Any aContextList(sContextList);
 
     bool bChanged = false;
     if (aTitle != aDeckNode.getNodeValue(u"Title"_ustr))

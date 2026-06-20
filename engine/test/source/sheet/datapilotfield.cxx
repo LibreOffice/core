@@ -23,6 +23,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace apitest {
 
@@ -34,7 +35,7 @@ void DataPilotField::testSortInfo()
     aSortInfoValue.Field = u"Col1"_ustr;
     aSortInfoValue.IsAscending = false;
     aSortInfoValue.Mode = sheet::DataPilotFieldSortMode::MANUAL;
-    uno::Any aValue;
+    cpo::uno::Any aValue;
     aValue <<= aSortInfoValue;
     xPropSet->setPropertyValue(aSortInfo, aValue);
 
@@ -68,7 +69,7 @@ void DataPilotField::testLayoutInfo()
     OUString aLayoutInfo(u"LayoutInfo"_ustr);
     aLayoutInfoValue.AddEmptyLines = false;
     aLayoutInfoValue.LayoutMode = sheet::DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_BOTTOM;
-    uno::Any aValue;
+    cpo::uno::Any aValue;
     aValue <<= aLayoutInfoValue;
     xPropSet->setPropertyValue(aLayoutInfo, aValue);
 
@@ -101,7 +102,7 @@ void DataPilotField::testAutoShowInfo()
     aAutoShowInfoValue.DataField = u"Col1"_ustr;
     aAutoShowInfoValue.IsEnabled = true;
     OUString aAutoShowInfo(u"AutoShowInfo"_ustr);
-    uno::Any aValue;
+    cpo::uno::Any aValue;
     aValue <<= aAutoShowInfoValue;
     xPropSet->setPropertyValue(aAutoShowInfo, aValue);
 
@@ -134,7 +135,7 @@ void DataPilotField::testReference()
     aReferenceValue.ReferenceField = u"Col1"_ustr;
     aReferenceValue.ReferenceItemType = sheet::DataPilotFieldReferenceItemType::NAMED;
     OUString aReference(u"Reference"_ustr);
-    uno::Any aValue;
+    cpo::uno::Any aValue;
     aValue <<= aReferenceValue;
     xPropSet->setPropertyValue(aReference, aValue);
 
@@ -163,7 +164,7 @@ void DataPilotField::testReference()
 void DataPilotField::testIsGroupField()
 {
     uno::Reference< beans::XPropertySet > xPropSet(init(),UNO_QUERY_THROW);
-    uno::Any aValue;
+    cpo::uno::Any aValue;
     OUString aIsGroupField(u"IsGroupField"_ustr);
     bool bIsGroupField(false);
 

@@ -154,9 +154,9 @@ void SAL_CALL ContentImplHelper::release()
     OWeakObject::release();
 }
 
-uno::Any SAL_CALL ContentImplHelper::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL ContentImplHelper::queryInterface( const uno::Type & rType )
 {
-    css::uno::Any aRet = cppu::queryInterface( rType,
+    cpo::uno::Any aRet = cppu::queryInterface( rType,
             static_cast< lang::XTypeProvider * >(this),
             static_cast< lang::XServiceInfo * >(this),
             static_cast< lang::XComponent * >(this),
@@ -380,7 +380,7 @@ void SAL_CALL ContentImplHelper::removeCommandInfoChangeListener(
 void SAL_CALL ContentImplHelper::addProperty(
         const OUString& Name,
         sal_Int16 Attributes,
-        const uno::Any& DefaultValue )
+        const cpo::uno::Any& DefaultValue )
 {
     osl::MutexGuard aGuard( m_aMutex );
 

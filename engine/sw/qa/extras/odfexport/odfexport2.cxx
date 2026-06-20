@@ -55,8 +55,8 @@ DECLARE_ODFEXPORT_TEST(testTdf100492, "tdf100492.odt")
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
     uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
-            { "OutputStream", uno::Any(xOutputStream) },
-            { "FilterName", uno::Any(u"SVG"_ustr) }
+            { "OutputStream", cpo::uno::Any(xOutputStream) },
+            { "FilterName", cpo::uno::Any(u"SVG"_ustr) }
         }));
     xGraphicExporter->filter(aDescriptor);
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
@@ -323,16 +323,16 @@ DECLARE_ODFEXPORT_TEST(testReferenceLanguage, "referencelanguage.odt")
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
 
-    uno::Any aHu(u"Hu"_ustr);
-    uno::Any ahu(u"hu"_ustr);
+    cpo::uno::Any aHu(u"Hu"_ustr);
+    cpo::uno::Any ahu(u"hu"_ustr);
     for (auto const& sFieldText : aFieldTexts)
     {
-        uno::Any aField = xFields->nextElement();
+        cpo::uno::Any aField = xFields->nextElement();
         uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
         if (xServiceInfo->supportsService(u"com.sun.star.text.textfield.GetReference"_ustr))
         {
             uno::Reference<beans::XPropertySet> xPropertySet(aField, uno::UNO_QUERY);
-            uno::Any aLang = xPropertySet->getPropertyValue(u"ReferenceFieldLanguage"_ustr);
+            cpo::uno::Any aLang = xPropertySet->getPropertyValue(u"ReferenceFieldLanguage"_ustr);
             CPPUNIT_ASSERT_EQUAL(true, aLang == aHu || aLang == ahu);
             uno::Reference<text::XTextContent> xField(aField, uno::UNO_QUERY);
             CPPUNIT_ASSERT_EQUAL(sFieldText, xField->getAnchor()->getString());
@@ -437,7 +437,7 @@ DECLARE_ODFEXPORT_TEST(testSpellOutNumberingTypes, "spellout-numberingtypes.odt"
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aFieldTexts); i++)
     {
-        uno::Any aField = xFields->nextElement();
+        cpo::uno::Any aField = xFields->nextElement();
         uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
         if (xServiceInfo->supportsService(u"com.sun.star.text.textfield.PageNumber"_ustr))
         {

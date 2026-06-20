@@ -171,13 +171,13 @@ public:
             double r, double rf, double T, double strike,
             double barrier_low, double barrier_up, double rebate,
             const OUString& put_call, const OUString& in_out,
-            const OUString& continuous, const css::uno::Any& greek ) override;
+            const OUString& continuous, const cpo::uno::Any& greek ) override;
 
    virtual double SAL_CALL getOptTouch( double spot, double vol,
             double r, double rf, double T,
             double barrier_low, double barrier_up,
             const OUString& for_dom, const OUString& in_out,
-            const OUString& barriercont, const css::uno::Any& greekstr ) override;
+            const OUString& barriercont, const cpo::uno::Any& greekstr ) override;
 
    virtual double SAL_CALL getOptProbHit( double spot, double vol,
             double mu, double T,
@@ -186,7 +186,7 @@ public:
    virtual double SAL_CALL getOptProbInMoney( double spot, double vol,
             double mu, double T,
             double barrier_low, double barrier_up,
-            const css::uno::Any& strikeval, const css::uno::Any& put_call ) override;
+            const cpo::uno::Any& strikeval, const cpo::uno::Any& put_call ) override;
 
 };
 

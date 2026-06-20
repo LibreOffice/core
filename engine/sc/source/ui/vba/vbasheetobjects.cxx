@@ -60,7 +60,7 @@ bool lclGetProperty( Type& orValue, const uno::Reference< beans::XPropertySet >&
 
     @throws uno::RuntimeException
 */
-sal_Int32 lclPointsToHmm( const uno::Any& rPoints )
+sal_Int32 lclPointsToHmm( const cpo::uno::Any& rPoints )
 {
     return std::round(o3tl::convert(::rtl::math::approxFloor(rPoints.get<double>() / 0.75) * 0.75,
                                     o3tl::Length::pt, o3tl::Length::mm100));
@@ -118,16 +118,16 @@ public:
 
         @throws uno::RuntimeException
     */
-    uno::Any createCollectionObject( const uno::Any& rSource );
+    cpo::uno::Any createCollectionObject( const cpo::uno::Any& rSource );
     /** Returns the VBA implementation object with the specified name.
 
         @throws uno::RuntimeException
     */
-    uno::Any getItemByStringIndex( const OUString& rIndex );
+    cpo::uno::Any getItemByStringIndex( const OUString& rIndex );
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) override;
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() override;
@@ -217,19 +217,19 @@ sal_Int32 ScVbaObjectContainer::insertShape( const uno::Reference< drawing::XSha
     return implCreateVbaObject( rxShape );
 }
 
-uno::Any ScVbaObjectContainer::createCollectionObject( const uno::Any& rSource )
+cpo::uno::Any ScVbaObjectContainer::createCollectionObject( const cpo::uno::Any& rSource )
 {
     uno::Reference< drawing::XShape > xShape( rSource, uno::UNO_QUERY_THROW );
     rtl::Reference< ScVbaSheetObjectBase > xSheetObject( implCreateVbaObject( xShape ) );
-    return uno::Any( uno::Reference< excel::XSheetObject >(xSheetObject) );
+    return cpo::uno::Any( uno::Reference< excel::XSheetObject >(xSheetObject) );
 }
 
-uno::Any ScVbaObjectContainer::getItemByStringIndex( const OUString& rIndex )
+cpo::uno::Any ScVbaObjectContainer::getItemByStringIndex( const OUString& rIndex )
 {
     auto aIt = std::find_if(maShapes.begin(), maShapes.end(),
         [&rIndex, this](const ShapeVector::value_type& rxShape) { return rIndex == implGetShapeName( rxShape ); });
     if (aIt != maShapes.end())
-        return createCollectionObject( uno::Any( *aIt ) );
+        return createCollectionObject( cpo::uno::Any( *aIt ) );
     throw uno::RuntimeException();
 }
 
@@ -240,10 +240,10 @@ sal_Int32 SAL_CALL ScVbaObjectContainer::getCount()
     return static_cast< sal_Int32 >( maShapes.size() );
 }
 
-uno::Any SAL_CALL ScVbaObjectContainer::getByIndex( sal_Int32 nIndex )
+cpo::uno::Any SAL_CALL ScVbaObjectContainer::getByIndex( sal_Int32 nIndex )
 {
     if( (0 <= nIndex) && (nIndex < getCount()) )
-        return uno::Any( maShapes[ static_cast< size_t >( nIndex ) ] );
+        return cpo::uno::Any( maShapes[ static_cast< size_t >( nIndex ) ] );
     throw lang::IndexOutOfBoundsException();
 }
 
@@ -277,7 +277,7 @@ class ScVbaObjectEnumeration : public SimpleEnumerationBase
 {
 public:
     explicit ScVbaObjectEnumeration( const ScVbaObjectContainerRef& rxContainer );
-    virtual uno::Any createCollectionObject( const uno::Any& rSource ) override;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& rSource ) override;
 
 private:
     ScVbaObjectContainerRef mxContainer;
@@ -291,7 +291,7 @@ ScVbaObjectEnumeration::ScVbaObjectEnumeration( const ScVbaObjectContainerRef& r
 {
 }
 
-uno::Any ScVbaObjectEnumeration::createCollectionObject( const uno::Any& rSource )
+cpo::uno::Any ScVbaObjectEnumeration::createCollectionObject( const cpo::uno::Any& rSource )
 {
     return mxContainer->createCollectionObject( rSource );
 }
@@ -328,12 +328,12 @@ uno::Type SAL_CALL ScVbaSheetObjectsBase::getElementType()
 
 // ScVbaCollectionBase
 
-uno::Any ScVbaSheetObjectsBase::createCollectionObject( const uno::Any& rSource )
+cpo::uno::Any ScVbaSheetObjectsBase::createCollectionObject( const cpo::uno::Any& rSource )
 {
     return mxContainer->createCollectionObject( rSource );
 }
 
-uno::Any ScVbaSheetObjectsBase::getItemByStringIndex( const OUString& rIndex )
+cpo::uno::Any ScVbaSheetObjectsBase::getItemByStringIndex( const OUString& rIndex )
 {
     return mxContainer->getItemByStringIndex( rIndex );
 }
@@ -347,7 +347,7 @@ ScVbaGraphicObjectsBase::ScVbaGraphicObjectsBase( const ScVbaObjectContainerRef&
 
 // XGraphicObjects
 
-uno::Any SAL_CALL ScVbaGraphicObjectsBase::Add( const uno::Any& rLeft, const uno::Any& rTop, const uno::Any& rWidth, const uno::Any& rHeight )
+cpo::uno::Any SAL_CALL ScVbaGraphicObjectsBase::Add( const cpo::uno::Any& rLeft, const cpo::uno::Any& rTop, const cpo::uno::Any& rWidth, const cpo::uno::Any& rHeight )
 {
     /*  Extract double values from passed Anys (the lclPointsToHmm() helper
         function will throw a RuntimeException on any error), and convert from
@@ -365,7 +365,7 @@ uno::Any SAL_CALL ScVbaGraphicObjectsBase::Add( const uno::Any& rLeft, const uno
     // create and return the VBA object
     ::rtl::Reference< ScVbaSheetObjectBase > xVbaObject = mxContainer->createVbaObject( xShape );
     xVbaObject->setDefaultProperties( nIndex );
-    return uno::Any( uno::Reference< excel::XSheetObject >( xVbaObject ) );
+    return cpo::uno::Any( uno::Reference< excel::XSheetObject >( xVbaObject ) );
 }
 
 // Drawing controls
@@ -431,7 +431,7 @@ uno::Reference< container::XIndexContainer > const & ScVbaControlContainer::crea
         else
         {
             uno::Reference< form::XForm > xForm( mxFactory->createInstance( u"com.sun.star.form.component.Form"_ustr ), uno::UNO_QUERY_THROW );
-            xFormsNC->insertByName( aFormName, uno::Any( xForm ) );
+            xFormsNC->insertByName( aFormName, cpo::uno::Any( xForm ) );
             mxFormIC.set( xForm, uno::UNO_QUERY_THROW );
         }
     }
@@ -481,7 +481,7 @@ void ScVbaControlContainer::implOnShapeCreated( const uno::Reference< drawing::X
 
     // insert the control model into the form and the shape
     createForm();
-    mxFormIC->insertByIndex( mxFormIC->getCount(), uno::Any( xFormComponent ) );
+    mxFormIC->insertByIndex( mxFormIC->getCount(), cpo::uno::Any( xFormComponent ) );
     xControlShape->setControl( xControlModel );
 }
 

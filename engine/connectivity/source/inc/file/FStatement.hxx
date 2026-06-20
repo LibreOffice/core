@@ -142,14 +142,14 @@ namespace connectivity::file
         //      virtual void SAL_CALL release() throw(css::uno::RuntimeException) = 0;
         virtual void SAL_CALL acquire() noexcept override;
         // XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
         //XTypeProvider
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
         // XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
         // XWarningsSupplier
-        virtual css::uno::Any SAL_CALL getWarnings(  ) override;
+        virtual cpo::uno::Any SAL_CALL getWarnings(  ) override;
         virtual void SAL_CALL clearWarnings(  ) override;
         // XCancellable
         virtual void SAL_CALL cancel(  ) override;
@@ -181,7 +181,7 @@ namespace connectivity::file
         OStatement( OConnection* _pConnection) : OStatement_BASE2( _pConnection){}
         DECLARE_SERVICE_INFO();
 
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
         virtual void SAL_CALL acquire() noexcept override;
         virtual void SAL_CALL release() noexcept override;
 

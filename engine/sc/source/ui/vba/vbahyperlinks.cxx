@@ -123,7 +123,7 @@ public:
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) override;
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() override;
@@ -165,10 +165,10 @@ sal_Int32 SAL_CALL ScVbaHlinkContainer::getCount()
     return static_cast< sal_Int32 >( maHlinks.size() );
 }
 
-uno::Any SAL_CALL ScVbaHlinkContainer::getByIndex( sal_Int32 nIndex )
+cpo::uno::Any SAL_CALL ScVbaHlinkContainer::getByIndex( sal_Int32 nIndex )
 {
     if( (0 <= nIndex) && (nIndex < getCount()) )
-        return uno::Any( maHlinks[ static_cast< size_t >( nIndex ) ] );
+        return cpo::uno::Any( maHlinks[ static_cast< size_t >( nIndex ) ] );
     throw lang::IndexOutOfBoundsException();
 }
 
@@ -216,8 +216,8 @@ ScVbaHyperlinks::~ScVbaHyperlinks()
 // XHyperlinks ----------------------------------------------------------------
 
 uno::Reference< excel::XHyperlink > SAL_CALL ScVbaHyperlinks::Add(
-    const uno::Any& rAnchor, const uno::Any& rAddress, const uno::Any& rSubAddress,
-    const uno::Any& rScreenTip, const uno::Any& rTextToDisplay )
+    const cpo::uno::Any& rAnchor, const cpo::uno::Any& rAddress, const cpo::uno::Any& rSubAddress,
+    const cpo::uno::Any& rScreenTip, const cpo::uno::Any& rTextToDisplay )
 {
     /*  If this Hyperlinks object has been created from a Range object, the
         call to Add() is passed to the Hyperlinks object of the parent
@@ -264,7 +264,7 @@ uno::Type SAL_CALL ScVbaHyperlinks::getElementType()
 
 // ScVbaCollectionBase --------------------------------------------------------
 
-uno::Any ScVbaHyperlinks::createCollectionObject( const uno::Any& rSource )
+cpo::uno::Any ScVbaHyperlinks::createCollectionObject( const cpo::uno::Any& rSource )
 {
     // container stores XHyperlink objects, just return the passed object
     return rSource;

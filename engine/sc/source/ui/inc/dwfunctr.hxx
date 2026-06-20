@@ -32,7 +32,7 @@ class EnglishFunctionNameChange : public comphelper::ConfigurationListenerProper
 {
     ScFunctionWin* m_pFunctionWin;
 protected:
-    virtual void setProperty(const css::uno::Any &rProperty) override;
+    virtual void setProperty(const cpo::uno::Any &rProperty) override;
 public:
     EnglishFunctionNameChange(const rtl::Reference<comphelper::ConfigurationListener> &rListener, ScFunctionWin* pFunctionWin)
         : ConfigurationListenerProperty(rListener, u"EnglishFunctionName"_ustr)

@@ -29,6 +29,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace com::sun::star;
 
 namespace sc_apitest
@@ -100,7 +101,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_DataPilotItemsEnumeration::in
 
     xDPD->setSourceRange(aCellRangeAddress);
 
-    uno::Any aValue;
+    cpo::uno::Any aValue;
     uno::Reference<beans::XPropertySet> xPropertySet(xDPD->getDataPilotFields()->getByIndex(0),
                                                      uno::UNO_QUERY_THROW);
     aValue <<= sheet::DataPilotFieldOrientation_DATA;

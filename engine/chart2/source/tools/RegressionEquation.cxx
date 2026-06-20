@@ -191,7 +191,7 @@ uno::Reference< util::XCloneable > SAL_CALL RegressionEquation::createClone()
 }
 
 // ____ OPropertySet ____
-void RegressionEquation::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
+void RegressionEquation::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = GetStaticRegressionEquationDefaults();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
@@ -293,7 +293,7 @@ IMPLEMENT_FORWARD_XINTERFACE2( RegressionEquation, RegressionEquation_Base, ::pr
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_RegressionEquation_get_implementation(css::uno::XComponentContext *,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::RegressionEquation);
 }

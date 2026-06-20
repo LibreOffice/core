@@ -1295,9 +1295,9 @@ public:
                             OUString aServiceName, OUString aObjNameBase );
 
     /** Returns a named formatting object from the chart document. */
-    css::uno::Any GetObject( const OUString& rObjName );
+    cpo::uno::Any GetObject( const OUString& rObjName );
     /** Inserts a named formatting object into the chart document. */
-    OUString      InsertObject( const css::uno::Any& rObj );
+    OUString      InsertObject( const cpo::uno::Any& rObj );
 
 private:
     css::uno::Reference< css::lang::XMultiServiceFactory > mxFactory;              /// Factory to create the container.

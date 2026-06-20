@@ -110,7 +110,7 @@ private:
         const css::uno::Reference< css::embed::XStorage > & xStorage,
         const css::uno::Reference< css::xml::sax::XWriter >& xActiveDataSource,
         const css::uno::Reference< css::lang::XMultiServiceFactory > & xFactory,
-        const css::uno::Sequence< css::uno::Any > & rFilterProperties );
+        const css::uno::Sequence< cpo::uno::Any > & rFilterProperties );
 
     // members
     css::uno::Reference< css::uno::XComponentContext > m_xContext;

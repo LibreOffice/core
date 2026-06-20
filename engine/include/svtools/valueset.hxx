@@ -241,7 +241,7 @@ private:
     SVT_DLLPRIVATE sal_uInt16          ImplGetVisibleItemCount() const;
     SVT_DLLPRIVATE void         ImplInsertItem( std::unique_ptr<ValueSetItem> pItem, const size_t nPos );
     SVT_DLLPRIVATE tools::Rectangle    ImplGetItemRect( size_t nPos ) const;
-    SVT_DLLPRIVATE void         ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
+    SVT_DLLPRIVATE void         ImplFireAccessibleEvent( short nEventId, const cpo::uno::Any& rOldValue, const cpo::uno::Any& rNewValue );
     SVT_DLLPRIVATE bool         ImplHasAccessibleListeners() const;
     SVT_DLLPRIVATE void         ImplTracking(bool bLeaveWindow, const Point& rPos);
     SVT_DLLPRIVATE void         QueueReformat();

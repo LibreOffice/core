@@ -1967,13 +1967,13 @@ void SwWW8ImplReader::ImportDop()
             default: nZoomType = sal_Int16(SvxZoomType::PERCENT);   break;
         }
         uno::Sequence<beans::PropertyValue> aViewProps( comphelper::InitPropertySequence({
-                { "ZoomFactor", uno::Any(sal_Int16(m_xWDop->wScaleSaved)) },
-                { "VisibleBottom", uno::Any(sal_Int32(0)) },
-                { "ZoomType", uno::Any(nZoomType) }
+                { "ZoomFactor", cpo::uno::Any(sal_Int16(m_xWDop->wScaleSaved)) },
+                { "VisibleBottom", cpo::uno::Any(sal_Int32(0)) },
+                { "ZoomType", cpo::uno::Any(nZoomType) }
             }));
 
         rtl::Reference< comphelper::IndexedPropertyValuesContainer > xBox = new comphelper::IndexedPropertyValuesContainer();
-        xBox->insertByIndex(sal_Int32(0), uno::Any(aViewProps));
+        xBox->insertByIndex(sal_Int32(0), cpo::uno::Any(aViewProps));
         uno::Reference<document::XViewDataSupplier> xViewDataSupplier(m_pDocShell->GetModel(), uno::UNO_QUERY);
         xViewDataSupplier->setViewData(xBox);
     }
@@ -2050,23 +2050,23 @@ void SwWW8ImplReader::ImportDop()
         if (xInfo.is())
         {
             if (xInfo->hasPropertyByName(u"ApplyFormDesignMode"_ustr))
-                xDocProps->setPropertyValue(u"ApplyFormDesignMode"_ustr, css::uno::Any(false));
+                xDocProps->setPropertyValue(u"ApplyFormDesignMode"_ustr, cpo::uno::Any(false));
         }
 
         // for the benefit of DOCX - if this is ever saved in that format.
         comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(u"InteropGrabBag"_ustr));
         uno::Sequence<beans::PropertyValue> aCompatSetting( comphelper::InitPropertySequence({
-                { "name", uno::Any(u"compatibilityMode"_ustr) },
-                { "uri", uno::Any(u"http://schemas.microsoft.com/office/word"_ustr) },
-                { "val", uno::Any(u"11"_ustr) }  //11: Use features specified in MS-DOC.
+                { "name", cpo::uno::Any(u"compatibilityMode"_ustr) },
+                { "uri", cpo::uno::Any(u"http://schemas.microsoft.com/office/word"_ustr) },
+                { "val", cpo::uno::Any(u"11"_ustr) }  //11: Use features specified in MS-DOC.
         }));
 
         uno::Sequence< beans::PropertyValue > aValue(comphelper::InitPropertySequence({
-            { "compatSetting", uno::Any(aCompatSetting) }
+            { "compatSetting", cpo::uno::Any(aCompatSetting) }
         }));
 
         aGrabBag[u"CompatSettings"_ustr] <<= aValue;
-        xDocProps->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(aGrabBag.getAsConstPropertyValueList()));
+        xDocProps->setPropertyValue(u"InteropGrabBag"_ustr, cpo::uno::Any(aGrabBag.getAsConstPropertyValueList()));
     }
 
     // The password can force read-only, comments-only, fill-in-form-only, or require track-changes.
@@ -2079,7 +2079,7 @@ void SwWW8ImplReader::ImportDop()
     {
         comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(u"InteropGrabBag"_ustr));
         aGrabBag[u"FormPasswordHash"_ustr] <<= m_xWDop->lKeyProtDoc;
-        xDocProps->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(aGrabBag.getAsConstPropertyValueList()));
+        xDocProps->setPropertyValue(u"InteropGrabBag"_ustr, cpo::uno::Any(aGrabBag.getAsConstPropertyValueList()));
     }
 
     if (officecfg::Office::Common::Filter::Microsoft::Import::ImportWWFieldsAsEnhancedFields::get())
@@ -4668,7 +4668,7 @@ void SwWW8ImplReader::ReadDocVars()
     for(size_t i = 0; i < aDocVarStrings.size(); i++)
     {
         const OUString sName = sw::FilterControlChars(aDocVarStrings[i]);
-        uno::Any aValue;
+        cpo::uno::Any aValue;
         if (aDocValueStrings.size() > i)
         {
             OUString value = aDocValueStrings[i];
@@ -4689,7 +4689,7 @@ void SwWW8ImplReader::ReadDocVars()
         else
         {
             xMaster.set(xTextFactory->createInstance(u"com.sun.star.text.FieldMaster.User"_ustr), uno::UNO_QUERY_THROW);
-            xMaster->setPropertyValue(u"Name"_ustr, uno::Any(sName));
+            xMaster->setPropertyValue(u"Name"_ustr, cpo::uno::Any(sName));
         }
         xMaster->setPropertyValue(u"Content"_ustr, aValue);
     }
@@ -4769,7 +4769,7 @@ static void lcl_createTemplateToProjectEntry( const uno::Reference< container::X
         if ( nIndex != -1 )
         {
             OUString templateName = templateNameWithExt.copy( 0, nIndex );
-            xPrjNameCache->insertByName( templateName, uno::Any( sVBAProjName ) );
+            xPrjNameCache->insertByName( templateName, cpo::uno::Any( sVBAProjName ) );
         }
     }
     catch( const uno::Exception& )
@@ -5120,8 +5120,8 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
             ReadGlobalTemplateSettings( sCreatedFrom, xPrjNameCache );
 
             // Create and insert Word vba Globals
-            uno::Any aGlobs;
-            uno::Sequence< uno::Any > aArgs{ uno::Any(m_pDocShell->GetModel()) };
+            cpo::uno::Any aGlobs;
+            uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(m_pDocShell->GetModel()) };
             try
             {
                 aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( u"ooo.vba.word.Globals"_ustr, aArgs );
@@ -5722,7 +5722,7 @@ ErrCode SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
                         }
 
                         pMedium->GetItemSet().ClearItem( SID_PASSWORD );
-                        pMedium->GetItemSet().Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData ) ) );
+                        pMedium->GetItemSet().Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, cpo::uno::Any( aEncryptionData ) ) );
                     }
                 }
                 break;
@@ -5786,7 +5786,7 @@ ErrCode SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
                         }
 
                         pMedium->GetItemSet().ClearItem( SID_PASSWORD );
-                        pMedium->GetItemSet().Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData ) ) );
+                        pMedium->GetItemSet().Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, cpo::uno::Any( aEncryptionData ) ) );
                     }
                 }
                 break;
@@ -6260,7 +6260,7 @@ static void lcl_getListOfStreams(SotStorage * pStorage, comphelper::SequenceAsHa
 ErrCode WW8Reader::DecryptDRMPackage()
 {
     // We have DRM encrypted storage. We should try to decrypt it first, if we can
-    uno::Sequence< uno::Any > aArguments;
+    uno::Sequence< cpo::uno::Any > aArguments;
     const uno::Reference<uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
     uno::Reference< packages::XPackageEncryption > xPackageEncryption(
         xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
@@ -6307,7 +6307,7 @@ ErrCode WW8Reader::DecryptDRMPackage()
 
         // Set the media descriptor data
         uno::Sequence<beans::NamedValue> aEncryptionData = xPackageEncryption->createEncryptionData(u""_ustr);
-        m_pMedium->GetItemSet().Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, uno::Any(aEncryptionData)));
+        m_pMedium->GetItemSet().Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, cpo::uno::Any(aEncryptionData)));
     }
     catch (const std::exception&)
     {

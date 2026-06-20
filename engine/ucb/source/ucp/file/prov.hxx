@@ -69,7 +69,7 @@ namespace fileaccess {
         // XInitialization
         virtual void SAL_CALL
         initialize(
-            const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+            const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
 
         // XContentProvider
@@ -97,9 +97,9 @@ namespace fileaccess {
         virtual void SAL_CALL
         setPropertyValue(
             const OUString& aPropertyName,
-            const css::uno::Any& aValue ) override;
+            const cpo::uno::Any& aValue ) override;
 
-        virtual css::uno::Any SAL_CALL
+        virtual cpo::uno::Any SAL_CALL
         getPropertyValue(
             const OUString& PropertyName ) override;
 

@@ -24,7 +24,7 @@
 #include <basic/basmgr.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -40,7 +40,7 @@ namespace ooo::vba
 
         inline css::uno::Reference< css::lang::XMultiServiceFactory > getVBAServiceFactory( SfxObjectShell const * pShell )
         {
-            css::uno::Any aUnoVar;
+            cpo::uno::Any aUnoVar;
             if ( !pShell || ! pShell->GetBasicManager()->GetGlobalUNOConstant( u"VBAGlobals"_ustr, aUnoVar ) )
                 throw css::lang::IllegalArgumentException();
             css::uno::Reference< css::lang::XMultiServiceFactory > xVBAFactory( aUnoVar, css::uno::UNO_QUERY_THROW );
@@ -48,7 +48,7 @@ namespace ooo::vba
         }
 
         /// @throws css::uno::Exception
-        inline css::uno::Reference< css::uno::XInterface > createVBAUnoAPIServiceWithArgs( SfxObjectShell const * pShell,  const char* _pAsciiName, const css::uno::Sequence< css::uno::Any >& aArgs )
+        inline css::uno::Reference< css::uno::XInterface > createVBAUnoAPIServiceWithArgs( SfxObjectShell const * pShell,  const char* _pAsciiName, const css::uno::Sequence< cpo::uno::Any >& aArgs )
         {
             OSL_PRECOND( pShell, "createVBAUnoAPIService: no shell!" );
             OUString sVarName( OUString::createFromAscii( _pAsciiName ) );

@@ -70,7 +70,7 @@ public:
 
     //ReferenceSizePropertyProvider
     virtual void updateReferenceSize() override;
-    virtual css::uno::Any getReferenceSize() override;
+    virtual cpo::uno::Any getReferenceSize() override;
     virtual css::awt::Size getCurrentSizeForReference() override;
 
     // ____ XComponent ____

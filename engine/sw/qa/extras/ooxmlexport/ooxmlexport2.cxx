@@ -527,7 +527,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableBorders, "table-borders.docx")
 
         for (sal_Int32 j = 0; j < 4; ++j)
         {
-            uno::Any aBorder = xPropSet->getPropertyValue(borderNames[j]);
+            cpo::uno::Any aBorder = xPropSet->getPropertyValue(borderNames[j]);
             table::BorderLine aBorderLine;
             if (aBorder >>= aBorderLine)
             {

@@ -4228,7 +4228,7 @@ void SVGActionWriter::WriteMetaFile( const Point& rPos100thmm,
 }
 
 
-SVGWriter::SVGWriter( const Sequence<Any>& args, const Reference< XComponentContext >& rxCtx )
+SVGWriter::SVGWriter( const Sequence<cpo::uno::Any>& args, const Reference< XComponentContext >& rxCtx )
     : mxContext(rxCtx)
 {
     if(args.getLength()==1)
@@ -4270,7 +4270,7 @@ css::uno::Sequence< OUString > SVGWriter::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_SVGWriter_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new SVGWriter(args, context));
 }

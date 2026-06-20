@@ -113,7 +113,7 @@ IMPL_LINK_NOARG(VbaTimer, MacroCallHdl, Timer *, void)
 {
     if ( m_aTimerInfo.second.second == 0 || GetNow() < m_aTimerInfo.second.second )
     {
-        uno::Any aDummyArg;
+        cpo::uno::Any aDummyArg;
         try
         {
             m_xBase->Run( m_aTimerInfo.first, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg, aDummyArg );
@@ -125,7 +125,7 @@ IMPL_LINK_NOARG(VbaTimer, MacroCallHdl, Timer *, void)
     // must be the last call in the method since it deletes the timer
     try
     {
-        m_xBase->OnTime( uno::Any( m_aTimerInfo.second.first ), m_aTimerInfo.first, uno::Any( m_aTimerInfo.second.second ), uno::Any( false ) );
+        m_xBase->OnTime( cpo::uno::Any( m_aTimerInfo.second.first ), m_aTimerInfo.first, cpo::uno::Any( m_aTimerInfo.second.second ), cpo::uno::Any( false ) );
     } catch( uno::Exception& )
     {}
 }
@@ -291,7 +291,7 @@ void SAL_CALL VbaApplicationBase::setCaption( const OUString& sCaption )
 }
 
 void SAL_CALL
-VbaApplicationBase::OnKey( const OUString& Key, const uno::Any& Procedure )
+VbaApplicationBase::OnKey( const OUString& Key, const cpo::uno::Any& Procedure )
 {
     // parse the Key & modifiers
     awt::KeyEvent aKeyEvent = parseKeyEvent( Key );
@@ -312,13 +312,13 @@ VbaApplicationBase::OnKey( const OUString& Key, const uno::Any& Procedure )
     applyShortCutKeyBinding( xModel, aKeyEvent, MacroName );
 }
 
-uno::Any SAL_CALL
-VbaApplicationBase::CommandBars( const uno::Any& aIndex )
+cpo::uno::Any SAL_CALL
+VbaApplicationBase::CommandBars( const cpo::uno::Any& aIndex )
 {
     uno::Reference< XCommandBars > xCommandBars( new ScVbaCommandBars( this, mxContext, uno::Reference< container::XIndexAccess >(), getCurrentDocument() ) );
     if( aIndex.hasValue() )
-        return xCommandBars->Item( aIndex, uno::Any() );
-    return uno::Any( xCommandBars );
+        return xCommandBars->Item( aIndex, cpo::uno::Any() );
+    return cpo::uno::Any( xCommandBars );
 }
 
 OUString SAL_CALL
@@ -327,7 +327,7 @@ VbaApplicationBase::getVersion()
     return u"11.0"_ustr;
 }
 
-uno::Any SAL_CALL VbaApplicationBase::Run( const OUString& MacroName, const uno::Any& varg1, const uno::Any& varg2, const uno::Any& varg3, const uno::Any& varg4, const uno::Any& varg5, const uno::Any& varg6, const uno::Any& varg7, const uno::Any& varg8, const uno::Any& varg9, const uno::Any& varg10, const uno::Any& varg11, const uno::Any& varg12, const uno::Any& varg13, const uno::Any& varg14, const uno::Any& varg15, const uno::Any& varg16, const uno::Any& varg17, const uno::Any& varg18, const uno::Any& varg19, const uno::Any& varg20, const uno::Any& varg21, const uno::Any& varg22, const uno::Any& varg23, const uno::Any& varg24, const uno::Any& varg25, const uno::Any& varg26, const uno::Any& varg27, const uno::Any& varg28, const uno::Any& varg29, const uno::Any& varg30 )
+cpo::uno::Any SAL_CALL VbaApplicationBase::Run( const OUString& MacroName, const cpo::uno::Any& varg1, const cpo::uno::Any& varg2, const cpo::uno::Any& varg3, const cpo::uno::Any& varg4, const cpo::uno::Any& varg5, const cpo::uno::Any& varg6, const cpo::uno::Any& varg7, const cpo::uno::Any& varg8, const cpo::uno::Any& varg9, const cpo::uno::Any& varg10, const cpo::uno::Any& varg11, const cpo::uno::Any& varg12, const cpo::uno::Any& varg13, const cpo::uno::Any& varg14, const cpo::uno::Any& varg15, const cpo::uno::Any& varg16, const cpo::uno::Any& varg17, const cpo::uno::Any& varg18, const cpo::uno::Any& varg19, const cpo::uno::Any& varg20, const cpo::uno::Any& varg21, const cpo::uno::Any& varg22, const cpo::uno::Any& varg23, const cpo::uno::Any& varg24, const cpo::uno::Any& varg25, const cpo::uno::Any& varg26, const cpo::uno::Any& varg27, const cpo::uno::Any& varg28, const cpo::uno::Any& varg29, const cpo::uno::Any& varg30 )
 {
     OUString aMacroName = MacroName.trim();
     if( aMacroName.startsWith("!") )
@@ -352,14 +352,14 @@ uno::Any SAL_CALL VbaApplicationBase::Run( const OUString& MacroName, const uno:
     }
 
     // handle the arguments
-    const uno::Any* aArgsPtrArray[] = { &varg1, &varg2, &varg3, &varg4, &varg5, &varg6, &varg7, &varg8, &varg9, &varg10, &varg11, &varg12, &varg13, &varg14, &varg15, &varg16, &varg17, &varg18, &varg19, &varg20, &varg21, &varg22, &varg23, &varg24, &varg25, &varg26, &varg27, &varg28, &varg29, &varg30 };
+    const cpo::uno::Any* aArgsPtrArray[] = { &varg1, &varg2, &varg3, &varg4, &varg5, &varg6, &varg7, &varg8, &varg9, &varg10, &varg11, &varg12, &varg13, &varg14, &varg15, &varg16, &varg17, &varg18, &varg19, &varg20, &varg21, &varg22, &varg23, &varg24, &varg25, &varg26, &varg27, &varg28, &varg29, &varg30 };
 
     int nArg = SAL_N_ELEMENTS( aArgsPtrArray );
-    uno::Sequence< uno::Any > aArgs( nArg );
+    uno::Sequence< cpo::uno::Any > aArgs( nArg );
     auto pArgs = aArgs.getArray();
 
-    const uno::Any** pArg = aArgsPtrArray;
-    const uno::Any** pArgEnd = aArgsPtrArray + nArg;
+    const cpo::uno::Any** pArg = aArgsPtrArray;
+    const cpo::uno::Any** pArgEnd = aArgsPtrArray + nArg;
 
     sal_Int32 nArgProcessed = 0;
 
@@ -369,19 +369,19 @@ uno::Any SAL_CALL VbaApplicationBase::Run( const OUString& MacroName, const uno:
     // resize array to position of last param with value
     aArgs.realloc( nArgProcessed + 1 );
 
-    uno::Any aRet;
-    uno::Any aDummyCaller;
+    cpo::uno::Any aRet;
+    cpo::uno::Any aDummyCaller;
     executeMacro( aMacroInfo.mpDocContext, aMacroInfo.msResolvedMacro, aArgs, aRet, aDummyCaller );
 
     return aRet;
 }
 
-void SAL_CALL VbaApplicationBase::OnTime( const uno::Any& aEarliestTime, const OUString& aFunction, const uno::Any& aLatestTime, const uno::Any& aSchedule )
+void SAL_CALL VbaApplicationBase::OnTime( const cpo::uno::Any& aEarliestTime, const OUString& aFunction, const cpo::uno::Any& aLatestTime, const cpo::uno::Any& aSchedule )
 {
     if ( aFunction.isEmpty() )
         throw uno::RuntimeException( u"Unexpected function name!"_ustr );
 
-    auto getTime = [](const uno::Any& aTime)
+    auto getTime = [](const cpo::uno::Any& aTime)
     {
         if (double nTime; aTime >>= nTime)
             return nTime;
@@ -412,21 +412,21 @@ void SAL_CALL VbaApplicationBase::OnTime( const uno::Any& aEarliestTime, const O
     }
 }
 
-uno::Any SAL_CALL VbaApplicationBase::getVBE()
+cpo::uno::Any SAL_CALL VbaApplicationBase::getVBE()
 {
     try // return empty object on error
     {
         // "VBE" object does not have a parent, but pass document model to be able to determine application type
-        uno::Sequence< uno::Any > aArgs{ uno::Any(uno::Reference(getCurrentDocument())) };
+        uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(uno::Reference(getCurrentDocument())) };
         uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
         uno::Reference< uno::XInterface > xVBE = xServiceManager->createInstanceWithArgumentsAndContext(
             u"ooo.vba.vbide.VBE"_ustr , aArgs, mxContext );
-        return uno::Any( xVBE );
+        return cpo::uno::Any( xVBE );
     }
     catch( const uno::Exception& )
     {
     }
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 OUString

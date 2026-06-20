@@ -44,6 +44,7 @@ using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 Gtk3KDE5FilePicker::Gtk3KDE5FilePicker(const uno::Reference<uno::XComponentContext>&)
     : Gtk3KDE5FilePicker_Base(_helperMutex)
@@ -152,7 +153,7 @@ void SAL_CALL Gtk3KDE5FilePicker::appendFilterGroup(const OUString& /*rGroupTitl
 }
 
 void SAL_CALL Gtk3KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAction,
-                                           const uno::Any& value)
+                                           const cpo::uno::Any& value)
 {
     if (value.has<bool>())
     {
@@ -164,7 +165,7 @@ void SAL_CALL Gtk3KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nContr
     }
 }
 
-uno::Any SAL_CALL Gtk3KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction)
+cpo::uno::Any SAL_CALL Gtk3KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction)
 {
     if (CHECKBOX_AUTOEXTENSION == controlId)
         // We ignore this one and rely on QFileDialog to provide the function.
@@ -172,14 +173,14 @@ uno::Any SAL_CALL Gtk3KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nC
         // LO core would try to be smart and cut the extension in some places,
         // interfering with QFileDialog's handling of it. QFileDialog also
         // saves the value of the setting, so LO core is not needed for that either.
-        return uno::Any(false);
+        return cpo::uno::Any(false);
 
     auto id = m_ipc.sendCommand(Commands::GetValue, controlId, nControlAction);
 
     bool value = false;
     m_ipc.readResponse(id, value);
 
-    return uno::Any(value);
+    return cpo::uno::Any(value);
 }
 
 void SAL_CALL Gtk3KDE5FilePicker::enableControl(sal_Int16 controlId, bool enable)
@@ -286,10 +287,10 @@ void Gtk3KDE5FilePicker::addCustomControl(sal_Int16 controlId)
     }
 }
 
-void SAL_CALL Gtk3KDE5FilePicker::initialize(const uno::Sequence<uno::Any>& args)
+void SAL_CALL Gtk3KDE5FilePicker::initialize(const uno::Sequence<cpo::uno::Any>& args)
 {
     // parameter checking
-    uno::Any arg;
+    cpo::uno::Any arg;
     if (args.getLength() == 0)
     {
         throw lang::IllegalArgumentException(u"no arguments"_ustr, static_cast<XFilePicker2*>(this),

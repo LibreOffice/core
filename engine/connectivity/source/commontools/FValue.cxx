@@ -35,6 +35,7 @@ using namespace ::dbtools;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::io;
 
@@ -2276,11 +2277,11 @@ void ORowSetValue::impl_fill( const sal_Int32 _nType, bool _bNullable, const det
             (*this) = _rValueSource.getLong();
         break;
     case DataType::CLOB:
-        (*this) = css::uno::Any(_rValueSource.getClob());
+        (*this) = cpo::uno::Any(_rValueSource.getClob());
         setTypeKind(DataType::CLOB);
         break;
     case DataType::BLOB:
-        (*this) = css::uno::Any(_rValueSource.getBlob());
+        (*this) = cpo::uno::Any(_rValueSource.getBlob());
         setTypeKind(DataType::BLOB);
         break;
     case DataType::OTHER:

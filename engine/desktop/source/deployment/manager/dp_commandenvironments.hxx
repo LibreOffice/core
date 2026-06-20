@@ -58,8 +58,8 @@ public:
         css::uno::Reference<css::task::XInteractionRequest > const & xRequest ) override;
 
     // XProgressHandler
-    virtual void SAL_CALL push( css::uno::Any const & Status ) override;
-    virtual void SAL_CALL update( css::uno::Any const & Status ) override;
+    virtual void SAL_CALL push( cpo::uno::Any const & Status ) override;
+    virtual void SAL_CALL update( cpo::uno::Any const & Status ) override;
     virtual void SAL_CALL pop() override;
 };
 
@@ -129,9 +129,9 @@ public:
         css::uno::Reference<css::task::XInteractionRequest > const & xRequest ) override;
 
     // Set to true if a PlatformException or a DependencyException were handled.
-    css::uno::Any m_Exception;
+    cpo::uno::Any m_Exception;
     // Set to true if an unknown exception was handled.
-    css::uno::Any m_UnknownException;
+    cpo::uno::Any m_UnknownException;
 };
 
 }

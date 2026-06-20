@@ -673,7 +673,7 @@ ScDPOutput::ScDPOutput(ScDocument* pDocument, uno::Reference<sheet::XDimensionsS
 
     try
     {
-        uno::Any aAny = xSrcProp->getPropertyValue( SC_UNO_DP_DATADESC );
+        cpo::uno::Any aAny = xSrcProp->getPropertyValue( SC_UNO_DP_DATADESC );
         OUString aUStr;
         aAny >>= aUStr;
         maDataDescription = aUStr;
@@ -1432,7 +1432,7 @@ void lcl_GetTableVars( sal_Int32& rGrandTotalCols, sal_Int32& rGrandTotalRows, s
                 ScDPOutput::GetDataDimensionNames( aSourceName, aGivenName, xDim );
                 try
                 {
-                    uno::Any aValue = xDimProp->getPropertyValue( SC_UNO_DP_LAYOUTNAME );
+                    cpo::uno::Any aValue = xDimProp->getPropertyValue( SC_UNO_DP_LAYOUTNAME );
 
                     if( aValue.hasValue() )
                     {

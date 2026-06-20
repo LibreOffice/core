@@ -104,9 +104,9 @@ namespace cairocanvas
         return maCanvasHelper.repaint( pSurface, viewState, renderState );
     }
 
-    uno::Any SAL_CALL CanvasBitmap::getFastPropertyValue( sal_Int32 nHandle )
+    cpo::uno::Any SAL_CALL CanvasBitmap::getFastPropertyValue( sal_Int32 nHandle )
     {
-        uno::Any aRV( sal_Int32(0) );
+        cpo::uno::Any aRV( sal_Int32(0) );
         // 0 ... get Bitmap
         // 1 ... get Pixbuf with bitmap RGB content
         // 2 ... return nothing (empty Any)
@@ -135,7 +135,7 @@ namespace cairocanvas
             {
                 // Always return nothing - for the RGB surface support.
                 // Alpha code paths go via the above case 0.
-                aRV = uno::Any();
+                aRV = cpo::uno::Any();
                 break;
             }
         }

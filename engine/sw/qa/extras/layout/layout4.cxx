@@ -59,10 +59,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testHiddenSectionPageDescs)
         // hide these just so that the height of the section is what is expected;
         // otherwise height depends on which tests run previously
         uno::Sequence<beans::PropertyValue> argsSH(
-            comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", uno::Any(false) } }));
+            comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", cpo::uno::Any(false) } }));
         dispatchCommand(mxComponent, u".uno:ShowHiddenParagraphs"_ustr, argsSH);
         uno::Sequence<beans::PropertyValue> args(
-            comphelper::InitPropertySequence({ { "Fieldnames", uno::Any(false) } }));
+            comphelper::InitPropertySequence({ { "Fieldnames", cpo::uno::Any(false) } }));
         dispatchCommand(mxComponent, u".uno:Fieldnames"_ustr, args);
         Scheduler::ProcessEventsToIdle();
 
@@ -184,7 +184,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testSectionPageBreaksWithNestedSectionWith
                     u"Text following outer section");
     }
 
-    xSection1->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(false));
+    xSection1->setPropertyValue(u"IsVisible"_ustr, cpo::uno::Any(false));
     Scheduler::ProcessEventsToIdle();
 
     {
@@ -202,7 +202,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testSectionPageBreaksWithNestedSectionWith
                     u"Text following outer section");
     }
 
-    xSection1->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(true));
+    xSection1->setPropertyValue(u"IsVisible"_ustr, cpo::uno::Any(true));
     Scheduler::ProcessEventsToIdle();
 
     {
@@ -240,7 +240,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testSectionPageBreaksWithNestedSectionWith
                     u"Text following outer section");
     }
 
-    xSection2->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(false));
+    xSection2->setPropertyValue(u"IsVisible"_ustr, cpo::uno::Any(false));
     Scheduler::ProcessEventsToIdle();
 
     {
@@ -265,7 +265,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testSectionPageBreaksWithNestedSectionWith
                     u"Text following outer section");
     }
 
-    xSection2->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(true));
+    xSection2->setPropertyValue(u"IsVisible"_ustr, cpo::uno::Any(true));
     Scheduler::ProcessEventsToIdle();
 
     {
@@ -351,7 +351,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf145826)
     // But when run as part of the test suite, it needs the following dispatchCommand
     // in order to pass.
     uno::Sequence<beans::PropertyValue> argsSH(
-        comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", cpo::uno::Any(true) } }));
     dispatchCommand(mxComponent, u".uno:ShowHiddenParagraphs"_ustr, argsSH);
     Scheduler::ProcessEventsToIdle();
 
@@ -1305,7 +1305,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf160958_page_break)
     auto xSections = xTextSectionsSupplier->getTextSections();
     CPPUNIT_ASSERT(xSections);
     auto xSection = xSections->getByName(u"Section1"_ustr).queryThrow<css::beans::XPropertySet>();
-    xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(false));
+    xSection->setPropertyValue(u"IsVisible"_ustr, cpo::uno::Any(false));
 
     calcLayout();
     pExportDump = parseLayoutDump();
@@ -1329,7 +1329,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf160958_page_break)
     assertXPath(pExportDump, "//page/body/txt[3]/SwParaPortion", 0);
 
     // Show the section again
-    xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(true));
+    xSection->setPropertyValue(u"IsVisible"_ustr, cpo::uno::Any(true));
 
     // Check that the layout has been restored
     calcLayout();
@@ -1394,7 +1394,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf160958_orphans)
     auto xSections = xTextSectionsSupplier->getTextSections();
     CPPUNIT_ASSERT(xSections);
     auto xSection = xSections->getByName(u"Section1"_ustr).queryThrow<css::beans::XPropertySet>();
-    xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(false));
+    xSection->setPropertyValue(u"IsVisible"_ustr, cpo::uno::Any(false));
 
     calcLayout();
     pExportDump = parseLayoutDump();
@@ -1404,7 +1404,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf160958_orphans)
     assertXPath(pExportDump, "//page/body/section/infos/bounds", "height", u"0");
 
     // Show the section again
-    xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(true));
+    xSection->setPropertyValue(u"IsVisible"_ustr, cpo::uno::Any(true));
 
     // Check that the layout has been restored
     calcLayout();
@@ -1456,7 +1456,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf167326)
     auto xSections = xTextSectionsSupplier->getTextSections();
     CPPUNIT_ASSERT(xSections);
     auto xSection = xSections->getByName(u"Sect1"_ustr).queryThrow<css::beans::XPropertySet>();
-    xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(false));
+    xSection->setPropertyValue(u"IsVisible"_ustr, cpo::uno::Any(false));
 
     calcLayout();
     pExportDump = parseLayoutDump();

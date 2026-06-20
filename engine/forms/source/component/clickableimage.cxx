@@ -56,6 +56,7 @@ namespace frm
 
     using namespace comphelper;
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::beans;
@@ -419,7 +420,7 @@ namespace frm
         }
         catch( const Exception& )
         {
-            css::uno::Any anyEx = cppu::getCaughtException();
+            cpo::uno::Any anyEx = cppu::getCaughtException();
             TOOLS_WARN_EXCEPTION( "forms.component", "OClickableImageBaseControl::implSubmit: caught an unknown exception!" );
             throw WrappedTargetException( OUString(), *this, anyEx );
         }

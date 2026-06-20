@@ -220,7 +220,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                         else if( nAxisIndex >= 0 && nAxisIndex < aBarPositionSequence.getLength() )
                             aBarPositionSequence.getArray()[nAxisIndex] = rBarPosition;
 
-                        xChartType->setPropertyValue( aPropName, uno::Any(aBarPositionSequence) );
+                        xChartType->setPropertyValue( aPropName, cpo::uno::Any(aBarPositionSequence) );
                         bChanged = true;
                     }
                 }
@@ -240,7 +240,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                     (xDiagramProperties->getPropertyValue( u"ConnectBars"_ustr ) >>= bOldConnectBars) &&
                     bOldConnectBars != m_bConnectBars )
                 {
-                    xDiagramProperties->setPropertyValue( u"ConnectBars"_ustr , uno::Any(m_bConnectBars) );
+                    xDiagramProperties->setPropertyValue( u"ConnectBars"_ustr , cpo::uno::Any(m_bConnectBars) );
                     bChanged = true;
                 }
             }
@@ -259,7 +259,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                     (xDiagramProperties->getPropertyValue( u"GroupBarsPerAxis"_ustr ) >>= bOldGroupBarsPerAxis) &&
                     bOldGroupBarsPerAxis != m_bGroupBarsPerAxis )
                 {
-                    xDiagramProperties->setPropertyValue( u"GroupBarsPerAxis"_ustr , uno::Any(m_bGroupBarsPerAxis) );
+                    xDiagramProperties->setPropertyValue( u"GroupBarsPerAxis"_ustr , cpo::uno::Any(m_bGroupBarsPerAxis) );
                     bChanged = true;
                 }
             }
@@ -274,7 +274,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                 rtl::Reference< Diagram > xDiagramProperties( m_xChartModel->getFirstChartDiagram() );
                 if( xDiagramProperties.is() )
                 {
-                    xDiagramProperties->setPropertyValue( u"StartingAngle"_ustr , uno::Any(m_nStartingAngle) );
+                    xDiagramProperties->setPropertyValue( u"StartingAngle"_ustr , cpo::uno::Any(m_nStartingAngle) );
                     bChanged = true;
                 }
             }
@@ -311,7 +311,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                         rtl::Reference< Diagram > xDiagramProperties( m_xChartModel->getFirstChartDiagram() );
                         if( xDiagramProperties.is() )
                         {
-                            xDiagramProperties->setPropertyValue( u"MissingValueTreatment"_ustr , uno::Any( nNew ));
+                            xDiagramProperties->setPropertyValue( u"MissingValueTreatment"_ustr , cpo::uno::Any( nNew ));
                             bChanged = true;
                         }
                     }
@@ -341,7 +341,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
             bool bHideLegendEntry = static_cast<const SfxBoolItem &>(rItemSet.Get(nWhichId)).GetValue();
             if (bHideLegendEntry != m_bHideLegendEntry)
             {
-                GetPropertySet()->setPropertyValue(u"ShowLegendEntry"_ustr, css::uno::Any(!bHideLegendEntry));
+                GetPropertySet()->setPropertyValue(u"ShowLegendEntry"_ustr, cpo::uno::Any(!bHideLegendEntry));
             }
         }
         break;

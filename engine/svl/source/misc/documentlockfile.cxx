@@ -93,13 +93,13 @@ bool GenDocumentLockFile::CreateOwnLockFile()
         ucb::InsertCommandArgument aInsertArg;
         aInsertArg.Data = std::move(xInput);
         aInsertArg.ReplaceExisting = false;
-        uno::Any aCmdArg;
+        cpo::uno::Any aCmdArg;
         aCmdArg <<= aInsertArg;
         aTargetContent.executeCommand( u"insert"_ustr, aCmdArg );
 
         // try to let the file be hidden if possible
         try {
-            aTargetContent.setPropertyValue(u"IsHidden"_ustr, uno::Any( true ) );
+            aTargetContent.setPropertyValue(u"IsHidden"_ustr, cpo::uno::Any( true ) );
         } catch( uno::Exception& ) {}
     }
     catch( ucb::NameClashException& )
@@ -159,7 +159,7 @@ void GenDocumentLockFile::RemoveFileDirectly()
     uno::Reference < css::ucb::XCommandEnvironment > xEnv;
     ::ucbhelper::Content aCnt(GetURL(), xEnv, comphelper::getProcessComponentContext());
     aCnt.executeCommand(u"delete"_ustr,
-        uno::Any(true));
+        cpo::uno::Any(true));
 }
 
 LockFileEntry GenDocumentLockFile::GetLockData()

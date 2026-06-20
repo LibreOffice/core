@@ -237,7 +237,7 @@ bool decode(OUString * string, bool slash) {
 }
 
 bool getBoolean(
-    OString const & key, GVariantHolder const & variant, css::uno::Any * value)
+    OString const & key, GVariantHolder const & variant, cpo::uno::Any * value)
 {
     assert(value != nullptr);
     if (!g_variant_is_of_type(variant.get(), G_VARIANT_TYPE_BOOLEAN)) {
@@ -251,7 +251,7 @@ bool getBoolean(
 }
 
 bool getShort(
-    OString const & key, GVariantHolder const & variant, css::uno::Any * value)
+    OString const & key, GVariantHolder const & variant, cpo::uno::Any * value)
 {
     assert(value != nullptr);
     if (!g_variant_is_of_type(variant.get(), G_VARIANT_TYPE_INT16)) {
@@ -265,7 +265,7 @@ bool getShort(
 }
 
 bool getInt(
-    OString const & key, GVariantHolder const & variant, css::uno::Any * value)
+    OString const & key, GVariantHolder const & variant, cpo::uno::Any * value)
 {
     assert(value != nullptr);
     if (!g_variant_is_of_type(variant.get(), G_VARIANT_TYPE_INT32)) {
@@ -279,7 +279,7 @@ bool getInt(
 }
 
 bool getLong(
-    OString const & key, GVariantHolder const & variant, css::uno::Any * value)
+    OString const & key, GVariantHolder const & variant, cpo::uno::Any * value)
 {
     assert(value != nullptr);
     if (!g_variant_is_of_type(variant.get(), G_VARIANT_TYPE_INT64)) {
@@ -293,7 +293,7 @@ bool getLong(
 }
 
 bool getDouble(
-    OString const & key, GVariantHolder const & variant, css::uno::Any * value)
+    OString const & key, GVariantHolder const & variant, cpo::uno::Any * value)
 {
     assert(value != nullptr);
     if (!g_variant_is_of_type(variant.get(), G_VARIANT_TYPE_DOUBLE)) {
@@ -337,7 +337,7 @@ bool getStringValue(
 }
 
 bool getString(
-    OString const & key, GVariantHolder const & variant, css::uno::Any * value)
+    OString const & key, GVariantHolder const & variant, cpo::uno::Any * value)
 {
     assert(value != nullptr);
     OUString v;
@@ -376,7 +376,7 @@ bool getHexbinaryValue(
 }
 
 bool getHexbinary(
-    OString const & key, GVariantHolder const & variant, css::uno::Any * value)
+    OString const & key, GVariantHolder const & variant, cpo::uno::Any * value)
 {
     assert(value != nullptr);
     css::uno::Sequence<sal_Int8> v;
@@ -388,7 +388,7 @@ bool getHexbinary(
 }
 
 bool getBooleanList(
-    OString const & key, GVariantHolder const & variant, css::uno::Any * value)
+    OString const & key, GVariantHolder const & variant, cpo::uno::Any * value)
 {
     assert(value != nullptr);
     if (std::strcmp(g_variant_get_type_string(variant.get()), "ab") != 0) {
@@ -415,7 +415,7 @@ bool getBooleanList(
 }
 
 bool getShortList(
-    OString const & key, GVariantHolder const & variant, css::uno::Any * value)
+    OString const & key, GVariantHolder const & variant, cpo::uno::Any * value)
 {
     assert(value != nullptr);
     if (std::strcmp(g_variant_get_type_string(variant.get()), "an") != 0) {
@@ -442,7 +442,7 @@ bool getShortList(
 }
 
 bool getIntList(
-    OString const & key, GVariantHolder const & variant, css::uno::Any * value)
+    OString const & key, GVariantHolder const & variant, cpo::uno::Any * value)
 {
     assert(value != nullptr);
     if (std::strcmp(g_variant_get_type_string(variant.get()), "ai") != 0) {
@@ -469,7 +469,7 @@ bool getIntList(
 }
 
 bool getLongList(
-    OString const & key, GVariantHolder const & variant, css::uno::Any * value)
+    OString const & key, GVariantHolder const & variant, cpo::uno::Any * value)
 {
     assert(value != nullptr);
     if (std::strcmp(g_variant_get_type_string(variant.get()), "ax") != 0) {
@@ -496,7 +496,7 @@ bool getLongList(
 }
 
 bool getDoubleList(
-    OString const & key, GVariantHolder const & variant, css::uno::Any * value)
+    OString const & key, GVariantHolder const & variant, cpo::uno::Any * value)
 {
     assert(value != nullptr);
     if (std::strcmp(g_variant_get_type_string(variant.get()), "ad") != 0) {
@@ -523,7 +523,7 @@ bool getDoubleList(
 }
 
 bool getStringList(
-    OString const & key, GVariantHolder const & variant, css::uno::Any * value)
+    OString const & key, GVariantHolder const & variant, cpo::uno::Any * value)
 {
     assert(value != nullptr);
     if (std::strcmp(g_variant_get_type_string(variant.get()), "as") != 0) {
@@ -551,7 +551,7 @@ bool getStringList(
 }
 
 bool getHexbinaryList(
-    OString const & key, GVariantHolder const & variant, css::uno::Any * value)
+    OString const & key, GVariantHolder const & variant, cpo::uno::Any * value)
 {
     assert(value != nullptr);
     if (std::strcmp(g_variant_get_type_string(variant.get()), "aay") != 0) {
@@ -580,7 +580,7 @@ bool getHexbinaryList(
 }
 
 bool getAny(
-    OString const & key, GVariantHolder const & variant, css::uno::Any * value)
+    OString const & key, GVariantHolder const & variant, cpo::uno::Any * value)
 {
     char const * t = g_variant_get_type_string(variant.get());
     if (std::strcmp(t, "b") == 0) {
@@ -634,7 +634,7 @@ enum class ReadValue { Error, Value, Remove };
 
 ReadValue readValue(
     GObjectHolder<DConfClient> const & client, OString const & path, Type type,
-    bool nillable, bool removable, css::uno::Any * value)
+    bool nillable, bool removable, cpo::uno::Any * value)
 {
     assert(value != nullptr);
     assert(!value->hasValue());
@@ -923,7 +923,7 @@ void readDir(
                     }
                     member.set(
                         new PropertyNode(
-                            layer, TYPE_ANY, true, css::uno::Any(), true));
+                            layer, TYPE_ANY, true, cpo::uno::Any(), true));
                     break;
                 case Node::KIND_SET:
                     assert(!templ.isEmpty());
@@ -964,7 +964,7 @@ void readDir(
                     }
                     rtl::Reference<PropertyNode> prop(
                         static_cast<PropertyNode *>(member.get()));
-                    css::uno::Any value;
+                    cpo::uno::Any value;
                     switch (readValue(
                                 client, path, prop->getStaticType(),
                                 prop->isNillable(), prop->isExtension(),
@@ -996,7 +996,7 @@ void readDir(
                         && node->kind() == Node::KIND_LOCALIZED_PROPERTY);
                     rtl::Reference<LocalizedPropertyNode> locProp(
                         static_cast<LocalizedPropertyNode *>(node.get()));
-                    css::uno::Any value;
+                    cpo::uno::Any value;
                     if (readValue(
                             client, path, locProp->getStaticType(),
                             locProp->isNillable(), false, &value)
@@ -1085,7 +1085,7 @@ OString encodeString(OUString const & value) {
 
 bool addProperty(
     ChangesetHolder const & changeset, OString const & pathRepresentation,
-    Type type, bool nillable, css::uno::Any const & value)
+    Type type, bool nillable, cpo::uno::Any const & value)
 {
     Type dynType = getDynamicType(value);
     assert(dynType != TYPE_ERROR);

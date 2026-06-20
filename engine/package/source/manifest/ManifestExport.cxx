@@ -176,7 +176,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
     }
     xHandler->startElement( ELEMENT_MANIFEST, pRootAttrList );
 
-    const uno::Any *pKeyInfoProperty = nullptr;
+    const cpo::uno::Any *pKeyInfoProperty = nullptr;
     if ( pRootFolderPropSeq )
     {
         // do we have package-wide encryption info?
@@ -302,9 +302,9 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
         rtl::Reference<::comphelper::AttributeList> pAttrList = new ::comphelper::AttributeList;
         OUString fullPath;
         OUString aString;
-        const uno::Any *pVector = nullptr, *pSalt = nullptr, *pIterationCount = nullptr, *pDigest = nullptr, *pDigestAlg = nullptr, *pEncryptAlg = nullptr, *pStartKeyAlg = nullptr, *pDerivedKeySize = nullptr;
-        uno::Any const* pKDF = nullptr;
-        uno::Any const* pArgon2Args = nullptr;
+        const cpo::uno::Any *pVector = nullptr, *pSalt = nullptr, *pIterationCount = nullptr, *pDigest = nullptr, *pDigestAlg = nullptr, *pEncryptAlg = nullptr, *pStartKeyAlg = nullptr, *pDerivedKeySize = nullptr;
+        cpo::uno::Any const* pKDF = nullptr;
+        cpo::uno::Any const* pArgon2Args = nullptr;
         for (const beans::PropertyValue& rValue : rSequence)
         {
             if (rValue.Name == sMediaTypeProperty )

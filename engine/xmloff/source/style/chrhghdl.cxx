@@ -21,7 +21,7 @@
 
 #include <rtl/ustrbuf.hxx>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 #include <sax/tools/converter.hxx>
 
@@ -37,7 +37,7 @@ XMLCharHeightHdl::~XMLCharHeightHdl()
     // nothing to do
 }
 
-bool XMLCharHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharHeightHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     if( rStrImpValue.indexOf( '%' ) == -1 )
     {
@@ -56,7 +56,7 @@ bool XMLCharHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
     return false;
 }
 
-bool XMLCharHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharHeightHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     OUStringBuffer aOut;
 
@@ -81,7 +81,7 @@ XMLCharHeightPropHdl::~XMLCharHeightPropHdl()
     // nothing to do
 }
 
-bool XMLCharHeightPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharHeightPropHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     if( rStrImpValue.indexOf( '%' ) != -1 )
     {
@@ -96,7 +96,7 @@ bool XMLCharHeightPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
     return false;
 }
 
-bool XMLCharHeightPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharHeightPropHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     OUStringBuffer aOut( rStrExpValue );
 
@@ -118,7 +118,7 @@ XMLCharHeightDiffHdl::~XMLCharHeightDiffHdl()
     // nothing to do
 }
 
-bool XMLCharHeightDiffHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharHeightDiffHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int32 nRel = 0;
 
@@ -132,7 +132,7 @@ bool XMLCharHeightDiffHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
     return false;
 }
 
-bool XMLCharHeightDiffHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharHeightDiffHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     float nRel = 0;
     if( (rValue >>= nRel) && (nRel != 0) )

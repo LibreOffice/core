@@ -115,7 +115,7 @@ bool SampleAddIn::getLogicalPosition( uno::Reference< drawing::XShape >& xAxis,
             try
             {
                 double fMin(0.0), fMax(0.0);
-                uno::Any aAny = xProp->getPropertyValue( "Min" );
+                cpo::uno::Any aAny = xProp->getPropertyValue( "Min" );
                 aAny >>= fMin;
                 aAny = xProp->getPropertyValue( "Max" );
                 aAny >>= fMax;
@@ -176,7 +176,7 @@ uno::Reference< uno::XInterface > SAL_CALL SampleAddIn_CreateInstance(
 // implementation of interface methods
 
 // XInitialization
-void SAL_CALL SampleAddIn::initialize( const uno::Sequence< uno::Any >& aArguments )
+void SAL_CALL SampleAddIn::initialize( const uno::Sequence< cpo::uno::Any >& aArguments )
     throw( uno::Exception, uno::RuntimeException )
 {
     // first argument should be the XChartDocument
@@ -191,7 +191,7 @@ void SAL_CALL SampleAddIn::initialize( const uno::Sequence< uno::Any >& aArgumen
         uno::Reference< beans::XPropertySet > xDocProp( mxChartDoc, uno::UNO_QUERY );
         if( xDocProp.is())
         {
-            uno::Any aBaseType;
+            cpo::uno::Any aBaseType;
             aBaseType <<= "com.sun.star.chart.XYDiagram";
             try
             {
@@ -210,7 +210,7 @@ void SAL_CALL SampleAddIn::initialize( const uno::Sequence< uno::Any >& aArgumen
             if( xDiaProp.is() &&
                 xLegendProp.is())
             {
-                uno::Any aAny;
+                cpo::uno::Any aAny;
                 aAny <<= (sal_Int32)( 0xe0e0f0 );
                 xDiaProp->setPropertyValue( "FillColor" , aAny );
                 xLegendProp->setPropertyValue( "FillColor" , aAny );
@@ -267,7 +267,7 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
                     uno::Reference< beans::XPropertySet > xShapeProp( mxMyRedLine, uno::UNO_QUERY );
                     if( xShapeProp.is())
                     {
-                        uno::Any aColor, aWidth;
+                        cpo::uno::Any aColor, aWidth;
                         aColor <<= (sal_Int32)(0xe01010);
                         aWidth <<= (sal_Int32)(50);         // 0.5 mm
                         try
@@ -292,8 +292,8 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
                     uno::Reference< beans::XPropertySet > xTextProp( mxMyText, uno::UNO_QUERY );
                     if( xTextProp.is())
                     {
-                        uno::Any aTrueAny;
-                        aTrueAny <<= (bool)(true);
+                        cpo::uno::Any aTrueAny;
+                        aTrueAny <<= true;
                         try
                         {
                             xTextProp->setPropertyValue( "TextAutoGrowWidth" , aTrueAny );

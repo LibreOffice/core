@@ -62,7 +62,7 @@ namespace pcr
         virtual void SAL_CALL valueChanged( const css::uno::Reference< css::inspection::XPropertyControl >& Control ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // Service constructors
         void    create( const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxUI );

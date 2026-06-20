@@ -50,6 +50,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::util;
 
 
@@ -2394,7 +2395,7 @@ sal_Int16 Converter::GetUnitFromString(std::string_view rString, sal_Int16 nDefa
 
 bool Converter::convertAny(OUStringBuffer&    rsValue,
                            OUStringBuffer&    rsType ,
-                           const css::uno::Any& rValue)
+                           const cpo::uno::Any& rValue)
 {
     bool bConverted = false;
 

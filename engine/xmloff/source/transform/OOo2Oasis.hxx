@@ -51,7 +51,7 @@ public:
     virtual ~OOo2OasisTransformer() noexcept override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
 
     // XServiceInfo
@@ -68,7 +68,7 @@ public:
 
     /// @throws css::uno::Exception
     /// @throws css::uno::RuntimeException
-    void Initialize( const css::uno::Sequence< css::uno::Any >& aArguments );
+    void Initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments );
 
     // css::xml::sax::XDocumentHandler
     virtual void SAL_CALL startDocument() override;

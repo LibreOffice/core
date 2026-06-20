@@ -51,7 +51,7 @@ class ToolBarWrapper final : public cppu::ImplInheritanceHelper<UIConfigElementW
         virtual void SAL_CALL dispose() override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XUIElement
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getRealInterface() override;
@@ -73,7 +73,7 @@ class ToolBarWrapper final : public cppu::ImplInheritanceHelper<UIConfigElementW
         virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) override;
 
     private:
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any&  aValue ) override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any&  aValue ) override;
         virtual void impl_fillNewData() override;
 
         rtl::Reference< ToolBarManager >                        m_xToolBarManager;

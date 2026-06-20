@@ -27,14 +27,14 @@
 
 class OptimizationStats
 {
-    std::map < PPPOptimizerTokenEnum, css::uno::Any > maStats;
+    std::map < PPPOptimizerTokenEnum, cpo::uno::Any > maStats;
 
     public:
 
         OptimizationStats();
 
-        void SetStatusValue( const PPPOptimizerTokenEnum eStat, const css::uno::Any& rStatValue );
-        const css::uno::Any* GetStatusValue( const PPPOptimizerTokenEnum eStat ) const;
+        void SetStatusValue( const PPPOptimizerTokenEnum eStat, const cpo::uno::Any& rStatValue );
+        const cpo::uno::Any* GetStatusValue( const PPPOptimizerTokenEnum eStat ) const;
 
         void InitializeStatusValuesFromDocument( const css::uno::Reference< css::frame::XModel >& rxModel );
         void InitializeStatusValues( const css::uno::Sequence< css::beans::PropertyValue >& rOptimizationStats );

@@ -167,7 +167,7 @@ bool DocumentDecryption::readEncryptionInfo()
         sDataSpaceName = u"StrongEncryptionDataSpace"_ustr;
     }
 
-    uno::Sequence<uno::Any> aArguments;
+    uno::Sequence<cpo::uno::Any> aArguments;
     mxPackageEncryption.set(
         mxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
             "com.sun.star.comp.oox.crypto." + sDataSpaceName, aArguments, mxContext),

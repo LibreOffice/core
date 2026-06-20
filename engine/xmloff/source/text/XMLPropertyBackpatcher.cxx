@@ -28,7 +28,7 @@
 
 using ::std::map;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::beans::XPropertySet;
 
 
@@ -84,7 +84,7 @@ void XMLPropertyBackpatcher<A>::SetProperty(
     if (aIDMap.count(sName))
     {
         // we know this ID -> set property
-        xPropSet->setPropertyValue(sPropertyName, css::uno::Any(aIDMap[sName]));
+        xPropSet->setPropertyValue(sPropertyName, cpo::uno::Any(aIDMap[sName]));
     }
     else
     {

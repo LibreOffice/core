@@ -51,6 +51,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
 using ::com::sun::star::awt::FontDescriptor;
@@ -145,9 +146,9 @@ bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
     return maData.find( nPropId ) != maData.end();
 }
 
-css::uno::Any UnoControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+cpo::uno::Any UnoControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
-    css::uno::Any aDefault;
+    cpo::uno::Any aDefault;
 
     if (
         (nPropId == BASEPROPERTY_FONTDESCRIPTOR) ||
@@ -306,7 +307,7 @@ css::uno::Any UnoControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
             break;
             case BASEPROPERTY_TYPEDITEMLIST:
             {
-                css::uno::Sequence< css::uno::Any > aAnySeq;
+                css::uno::Sequence< cpo::uno::Any > aAnySeq;
                 aDefault <<= aAnySeq;
 
             }
@@ -380,7 +381,7 @@ css::uno::Any UnoControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     return aDefault;
 }
 
-void UnoControlModel::ImplRegisterProperty( sal_uInt16 nPropId, const css::uno::Any& rDefault )
+void UnoControlModel::ImplRegisterProperty( sal_uInt16 nPropId, const cpo::uno::Any& rDefault )
 {
     maData[ nPropId ] = rDefault;
 }
@@ -412,7 +413,7 @@ void UnoControlModel::ImplRegisterProperties( const std::vector< sal_uInt16 > &r
 }
 
 // css::uno::XInterface
-css::uno::Any UnoControlModel::queryAggregation( const css::uno::Type & rType )
+cpo::uno::Any UnoControlModel::queryAggregation( const css::uno::Type & rType )
 {
     Any aRet = UnoControlModel_Base::queryAggregation( rType );
     if ( !aRet.hasValue() )
@@ -472,8 +473,8 @@ css::beans::PropertyState UnoControlModel::getPropertyStateImpl( std::unique_loc
 {
     sal_uInt16 nPropId = GetPropertyId( PropertyName );
 
-    css::uno::Any aValue = getPropertyValueImpl( rGuard, PropertyName );
-    css::uno::Any aDefault = ImplGetDefaultValue( nPropId );
+    cpo::uno::Any aValue = getPropertyValueImpl( rGuard, PropertyName );
+    cpo::uno::Any aDefault = ImplGetDefaultValue( nPropId );
 
     return CompareProperties( aValue, aDefault ) ? css::beans::PropertyState_DEFAULT_VALUE : css::beans::PropertyState_DIRECT_VALUE;
 }
@@ -503,7 +504,7 @@ void UnoControlModel::setPropertyToDefault( const OUString& PropertyName )
     setPropertyValue( PropertyName, aDefaultValue );
 }
 
-css::uno::Any UnoControlModel::getPropertyDefault( const OUString& rPropertyName )
+cpo::uno::Any UnoControlModel::getPropertyDefault( const OUString& rPropertyName )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -548,7 +549,7 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
         sal_Int32 nPropDataBeginMark = xMark->createMark();
         OutStream->writeLong( 0 ); // DataLen
 
-        const css::uno::Any* pProp = &(maData[rProp]);
+        const cpo::uno::Any* pProp = &(maData[rProp]);
         OutStream->writeShort( rProp );
 
         bool bVoid = pProp->getValueTypeClass() == css::uno::TypeClass_VOID;
@@ -557,7 +558,7 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
 
         if ( !bVoid )
         {
-            const css::uno::Any& rValue = *pProp;
+            const cpo::uno::Any& rValue = *pProp;
             const css::uno::Type& rType = rValue.getValueType();
 
             if ( rType == cppu::UnoType< bool >::get() )
@@ -694,7 +695,7 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
     if ( aProps.find( BASEPROPERTY_FONTDESCRIPTOR ) == aProps.end() )
         return;
 
-    const css::uno::Any* pProp = &maData[ BASEPROPERTY_FONTDESCRIPTOR ];
+    const cpo::uno::Any* pProp = &maData[ BASEPROPERTY_FONTDESCRIPTOR ];
     // Until 5.0 export arrives, write old format...
     css::awt::FontDescriptor aFD;
     (*pProp) >>= aFD;
@@ -758,7 +759,7 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
     short nVersion = InStream->readShort();
     sal_uInt32 nProps = static_cast<sal_uInt32>(InStream->readLong());
     css::uno::Sequence< OUString> aProps( nProps );
-    css::uno::Sequence< css::uno::Any> aValues( nProps );
+    css::uno::Sequence< cpo::uno::Any> aValues( nProps );
     bool bInvalidEntries = false;
 
     // Unfortunately, there's no mark for the whole block, thus only properties may be changed.
@@ -774,7 +775,7 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
 
         sal_uInt16 nPropId = static_cast<sal_uInt16>(InStream->readShort());
 
-        css::uno::Any aValue;
+        cpo::uno::Any aValue;
         bool bIsVoid = InStream->readBoolean();
         if ( !bIsVoid )
         {
@@ -1005,7 +1006,7 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
 
     if ( pFD )
     {
-        css::uno::Any aValue;
+        cpo::uno::Any aValue;
         aValue <<= *pFD;
         setFastPropertyValueImpl( aGuard, BASEPROPERTY_FONTDESCRIPTOR, aValue );
     }
@@ -1148,22 +1149,22 @@ bool UnoControlModel::convertFastPropertyValue( std::unique_lock<std::mutex>& rG
     return !CompareProperties( rConvertedValue, rOldValue );
 }
 
-void UnoControlModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& /*rGuard*/, sal_Int32 nPropId, const css::uno::Any& rValue )
+void UnoControlModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& /*rGuard*/, sal_Int32 nPropId, const cpo::uno::Any& rValue )
 {
     // Missing: the fake solo properties of the FontDescriptor
 
     ImplPropertyTable::const_iterator it = maData.find( nPropId );
-    const css::uno::Any* pProp = it == maData.end() ? nullptr : &(it->second);
+    const cpo::uno::Any* pProp = it == maData.end() ? nullptr : &(it->second);
     ENSURE_OR_RETURN_VOID( pProp, "UnoControlModel::setFastPropertyValue_NoBroadcast: invalid property id!" );
 
     DBG_ASSERT( ( rValue.getValueTypeClass() != css::uno::TypeClass_VOID ) || ( GetPropertyAttribs( static_cast<sal_uInt16>(nPropId) ) & css::beans::PropertyAttribute::MAYBEVOID ), "Property should not be VOID!" );
     maData[ nPropId ] = rValue;
 }
 
-void UnoControlModel::getFastPropertyValue( std::unique_lock<std::mutex>& /*rGuard*/, css::uno::Any& rValue, sal_Int32 nPropId ) const
+void UnoControlModel::getFastPropertyValue( std::unique_lock<std::mutex>& /*rGuard*/, cpo::uno::Any& rValue, sal_Int32 nPropId ) const
 {
     ImplPropertyTable::const_iterator it = maData.find( nPropId );
-    const css::uno::Any* pProp = it == maData.end() ? nullptr : &(it->second);
+    const cpo::uno::Any* pProp = it == maData.end() ? nullptr : &(it->second);
 
     if ( pProp )
         rValue = *pProp;
@@ -1218,14 +1219,14 @@ void UnoControlModel::getFastPropertyValue( std::unique_lock<std::mutex>& /*rGua
 }
 
 // css::beans::XFastPropertySet
-void UnoControlModel::setFastPropertyValueImpl( std::unique_lock<std::mutex>& rGuard, sal_Int32 nPropId, const css::uno::Any& rValue )
+void UnoControlModel::setFastPropertyValueImpl( std::unique_lock<std::mutex>& rGuard, sal_Int32 nPropId, const cpo::uno::Any& rValue )
 {
     if ( ( nPropId >= BASEPROPERTY_FONTDESCRIPTORPART_START ) && ( nPropId <= BASEPROPERTY_FONTDESCRIPTORPART_END ) )
     {
         Any aOldSingleValue;
         getFastPropertyValue( rGuard, aOldSingleValue, BASEPROPERTY_FONTDESCRIPTORPART_START );
 
-        css::uno::Any* pProp = &maData[ BASEPROPERTY_FONTDESCRIPTOR ];
+        cpo::uno::Any* pProp = &maData[ BASEPROPERTY_FONTDESCRIPTOR ];
         FontDescriptor aFontDescriptor;
         (*pProp) >>= aFontDescriptor;
 
@@ -1254,13 +1255,13 @@ css::uno::Reference< css::beans::XPropertySetInfo > UnoControlModel::getProperty
     return css::uno::Reference< css::beans::XPropertySetInfo >();
 }
 
-void UnoControlModel::setPropertyValues( const css::uno::Sequence< OUString >& rPropertyNames, const css::uno::Sequence< css::uno::Any >& Values )
+void UnoControlModel::setPropertyValues( const css::uno::Sequence< OUString >& rPropertyNames, const css::uno::Sequence< cpo::uno::Any >& Values )
 {
     std::unique_lock aGuard( m_aMutex );
     setPropertyValuesImpl(aGuard, rPropertyNames, Values);
 }
 
-void UnoControlModel::setPropertyValuesImpl( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< OUString >& rPropertyNames, const css::uno::Sequence< css::uno::Any >& Values )
+void UnoControlModel::setPropertyValuesImpl( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< OUString >& rPropertyNames, const css::uno::Sequence< cpo::uno::Any >& Values )
 {
     sal_Int32 nProps = rPropertyNames.getLength();
     if (nProps != Values.getLength())
@@ -1273,8 +1274,8 @@ void UnoControlModel::setPropertyValuesImpl( std::unique_lock<std::mutex>& rGuar
     sal_Int32* pHandles = aHandles.getArray();
 
     // may need to change the order in the sequence, for this we need a non-const value sequence
-    uno::Sequence< uno::Any > aValues( Values );
-    uno::Any* pValues = aValues.getArray();
+    uno::Sequence< cpo::uno::Any > aValues( Values );
+    cpo::uno::Any* pValues = aValues.getArray();
 
     sal_Int32 nValidHandles = getInfoHelper().fillHandles( pHandles, rPropertyNames );
 
@@ -1290,7 +1291,7 @@ void UnoControlModel::setPropertyValuesImpl( std::unique_lock<std::mutex>& rGuar
         {
             if (!pFD)
             {
-                css::uno::Any* pProp = &maData[ BASEPROPERTY_FONTDESCRIPTOR ];
+                cpo::uno::Any* pProp = &maData[ BASEPROPERTY_FONTDESCRIPTOR ];
                 pFD.reset( new awt::FontDescriptor );
                 (*pProp) >>= *pFD;
             }
@@ -1309,7 +1310,7 @@ void UnoControlModel::setPropertyValuesImpl( std::unique_lock<std::mutex>& rGuar
     // Don't merge FD property into array, as it is sorted
     if (pFD)
     {
-        css::uno::Any aValue;
+        cpo::uno::Any aValue;
         aValue <<= *pFD;
         sal_Int32 nHandle = BASEPROPERTY_FONTDESCRIPTOR;
         setFastPropertyValues( rGuard, 1, &nHandle, &aValue, 1 );
@@ -1318,20 +1319,20 @@ void UnoControlModel::setPropertyValuesImpl( std::unique_lock<std::mutex>& rGuar
 
 
 void UnoControlModel::ImplNormalizePropertySequence( const sal_Int32, sal_Int32*,
-    uno::Any*, sal_Int32* ) const
+    cpo::uno::Any*, sal_Int32* ) const
 {
     // nothing to do here
 }
 
 void UnoControlModel::ImplEnsureHandleOrder( const sal_Int32 _nCount, sal_Int32* _pHandles,
-        uno::Any* _pValues, sal_Int32 _nFirstHandle, sal_Int32 _nSecondHandle )
+        cpo::uno::Any* _pValues, sal_Int32 _nFirstHandle, sal_Int32 _nSecondHandle )
 {
     for ( sal_Int32 i=0; i < _nCount; ++_pHandles, ++_pValues, ++i )
     {
         if ( _nSecondHandle  == *_pHandles )
         {
             sal_Int32* pLaterHandles = _pHandles + 1;
-            uno::Any* pLaterValues = _pValues + 1;
+            cpo::uno::Any* pLaterValues = _pValues + 1;
             for ( sal_Int32 j = i + 1; j < _nCount; ++j, ++pLaterHandles, ++pLaterValues )
             {
                 if ( _nFirstHandle == *pLaterHandles )

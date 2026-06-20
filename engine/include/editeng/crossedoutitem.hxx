@@ -49,8 +49,8 @@ public:
 
     virtual SvxCrossedOutItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     static OUString         GetValueTextByPos( sal_uInt16 nPos );
-    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool            QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     using SfxEnumItem::SetValue;
 

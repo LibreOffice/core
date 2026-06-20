@@ -26,6 +26,7 @@
 using namespace css;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace sc
 {
@@ -67,7 +68,7 @@ void SQLFetchThread::execute()
     {
         uno::Reference<sdb::XDatabaseContext> xContext
             = sdb::DatabaseContext::create(comphelper::getProcessComponentContext());
-        uno::Any aSourceAny = xContext->getByName(aDatabase);
+        cpo::uno::Any aSourceAny = xContext->getByName(aDatabase);
 
         uno::Reference<sdb::XCompletedConnection> xSource(aSourceAny, uno::UNO_QUERY);
         if (!xSource.is())

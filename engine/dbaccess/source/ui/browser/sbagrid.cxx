@@ -56,6 +56,7 @@
 
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -71,7 +72,7 @@ using namespace ::svt;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_dbu_SbaXGridControl_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new SbaXGridControl(context));
 }
@@ -775,7 +776,7 @@ void SbaGridControl::SetBrowserAttrs()
     try
     {
         Reference< XComponentContext > xContext = getContext();
-        css::uno::Sequence<css::uno::Any> aArguments{
+        css::uno::Sequence<cpo::uno::Any> aArguments{
             Any(comphelper::makePropertyValue(u"IntrospectedObject"_ustr, xGridModel)),
             Any(comphelper::makePropertyValue(u"ParentWindow"_ustr, VCLUnoHelper::GetInterface(this)))
         };

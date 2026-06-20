@@ -51,14 +51,14 @@ OUString getCID(const rtl::Reference<::chart::ChartModel>& xModel)
     if (!xSelectionSupplier.is())
         return OUString();
 
-    css::uno::Any aAny = xSelectionSupplier->getSelection();
+    cpo::uno::Any aAny = xSelectionSupplier->getSelection();
     if (!aAny.hasValue())
     {
         // if no selection, default to diagram wall so sidebar can show some editable properties
         ChartController* pController = dynamic_cast<ChartController*>(xController.get());
         if (pController)
         {
-            pController->select( css::uno::Any( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, u"" ) ) );
+            pController->select( cpo::uno::Any( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, u"" ) ) );
             xSelectionSupplier = css::uno::Reference<css::view::XSelectionSupplier>(xController, css::uno::UNO_QUERY);
             if (xSelectionSupplier.is())
                 aAny = xSelectionSupplier->getSelection();
@@ -133,7 +133,7 @@ XFillGradientItem getXGradientForName(const css::uno::Reference<css::frame::XMod
     if (!xNameAccess->hasByName(rName))
         return XFillGradientItem();
 
-    css::uno::Any aAny = xNameAccess->getByName(rName);
+    cpo::uno::Any aAny = xNameAccess->getByName(rName);
 
     XFillGradientItem aItem;
     aItem.SetName(rName);
@@ -155,7 +155,7 @@ XFillFloatTransparenceItem getXTransparencyGradientForName(const css::uno::Refer
     if (!xNameAccess->hasByName(rName))
         return XFillFloatTransparenceItem();
 
-    css::uno::Any aAny = xNameAccess->getByName(rName);
+    cpo::uno::Any aAny = xNameAccess->getByName(rName);
 
     XFillFloatTransparenceItem aItem;
     aItem.SetName(rName);
@@ -323,7 +323,7 @@ void ChartAreaPanel::setFillTransparence(const XFillTransparenceItem& rItem)
     if (!xPropSet.is())
         return;
 
-    xPropSet->setPropertyValue(u"FillTransparence"_ustr, css::uno::Any(rItem.GetValue()));
+    xPropSet->setPropertyValue(u"FillTransparence"_ustr, cpo::uno::Any(rItem.GetValue()));
 }
 
 void ChartAreaPanel::setFillFloatTransparence(
@@ -336,15 +336,15 @@ void ChartAreaPanel::setFillFloatTransparence(
 
     if (!rItem.IsEnabled())
     {
-        xPropSet->setPropertyValue(u"FillTransparenceGradientName"_ustr, css::uno::Any(OUString()));
+        xPropSet->setPropertyValue(u"FillTransparenceGradientName"_ustr, cpo::uno::Any(OUString()));
         return;
     }
 
     const OUString& aName = rItem.GetName();
-    css::uno::Any aGradientVal;
+    cpo::uno::Any aGradientVal;
     rItem.QueryValue(aGradientVal, MID_FILLGRADIENT);
     OUString aNewName = PropertyHelper::addTransparencyGradientUniqueNameToTable(aGradientVal, mxModel, aName);
-    xPropSet->setPropertyValue(u"FillTransparenceGradientName"_ustr, css::uno::Any(aNewName));
+    xPropSet->setPropertyValue(u"FillTransparenceGradientName"_ustr, cpo::uno::Any(aNewName));
 }
 
 void ChartAreaPanel::setFillStyle(const XFillStyleItem& rItem)
@@ -354,7 +354,7 @@ void ChartAreaPanel::setFillStyle(const XFillStyleItem& rItem)
     if (!xPropSet.is())
         return;
 
-    xPropSet->setPropertyValue(u"FillStyle"_ustr, css::uno::Any(rItem.GetValue()));
+    xPropSet->setPropertyValue(u"FillStyle"_ustr, cpo::uno::Any(rItem.GetValue()));
 }
 
 void ChartAreaPanel::setFillStyleAndColor(const XFillStyleItem* pStyleItem,
@@ -365,8 +365,8 @@ void ChartAreaPanel::setFillStyleAndColor(const XFillStyleItem* pStyleItem,
         return;
 
     if (pStyleItem)
-        xPropSet->setPropertyValue(u"FillStyle"_ustr, css::uno::Any(pStyleItem->GetValue()));
-    xPropSet->setPropertyValue(u"FillColor"_ustr, css::uno::Any(rColorItem.GetValue()));
+        xPropSet->setPropertyValue(u"FillStyle"_ustr, cpo::uno::Any(pStyleItem->GetValue()));
+    xPropSet->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(rColorItem.GetValue()));
     if (selectionIsDataSeries())
     {
         mxModel->clearColorPalette();
@@ -382,13 +382,13 @@ void ChartAreaPanel::setFillStyleAndGradient(const XFillStyleItem* pStyleItem,
         return;
 
     if (pStyleItem)
-        xPropSet->setPropertyValue(u"FillStyle"_ustr, css::uno::Any(pStyleItem->GetValue()));
+        xPropSet->setPropertyValue(u"FillStyle"_ustr, cpo::uno::Any(pStyleItem->GetValue()));
 
     const OUString& aName = rGradientItem.GetName();
-    css::uno::Any aGradientVal;
+    cpo::uno::Any aGradientVal;
     rGradientItem.QueryValue(aGradientVal, MID_FILLGRADIENT);
     OUString aNewName = PropertyHelper::addGradientUniqueNameToTable(aGradientVal, mxModel, aName);
-    xPropSet->setPropertyValue(u"FillGradientName"_ustr, css::uno::Any(aNewName));
+    xPropSet->setPropertyValue(u"FillGradientName"_ustr, cpo::uno::Any(aNewName));
 }
 
 void ChartAreaPanel::setFillStyleAndHatch(const XFillStyleItem* pStyleItem,
@@ -400,8 +400,8 @@ void ChartAreaPanel::setFillStyleAndHatch(const XFillStyleItem* pStyleItem,
         return;
 
     if (pStyleItem)
-        xPropSet->setPropertyValue(u"FillStyle"_ustr, css::uno::Any(pStyleItem->GetValue()));
-    xPropSet->setPropertyValue(u"FillHatchName"_ustr, css::uno::Any(rHatchItem.GetValue()));
+        xPropSet->setPropertyValue(u"FillStyle"_ustr, cpo::uno::Any(pStyleItem->GetValue()));
+    xPropSet->setPropertyValue(u"FillHatchName"_ustr, cpo::uno::Any(rHatchItem.GetValue()));
 }
 
 void ChartAreaPanel::setFillStyleAndBitmap(const XFillStyleItem* pStyleItem,
@@ -413,9 +413,9 @@ void ChartAreaPanel::setFillStyleAndBitmap(const XFillStyleItem* pStyleItem,
         return;
 
     if (pStyleItem)
-        xPropSet->setPropertyValue(u"FillStyle"_ustr, css::uno::Any(pStyleItem->GetValue()));
+        xPropSet->setPropertyValue(u"FillStyle"_ustr, cpo::uno::Any(pStyleItem->GetValue()));
 
-    css::uno::Any aBitmap;
+    cpo::uno::Any aBitmap;
     rBitmapItem.QueryValue(aBitmap, MID_BITMAP);
     const OUString& aPreferredName = rBitmapItem.GetName();
     aBitmap <<= PropertyHelper::addBitmapUniqueNameToTable(aBitmap, mxModel, aPreferredName);

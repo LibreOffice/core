@@ -28,7 +28,7 @@ namespace comphelper
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::lang::XTypeProvider;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::uno::cpp_queryInterface;
     using ::com::sun::star::uno::cpp_release;
     using ::com::sun::star::beans::PropertyState_DEFAULT_VALUE;
@@ -38,9 +38,9 @@ namespace comphelper
     // OPropertyStateHelper
 
 
-    css::uno::Any SAL_CALL OPropertyStateHelper::queryInterface(const  css::uno::Type& _rType)
+    cpo::uno::Any SAL_CALL OPropertyStateHelper::queryInterface(const  css::uno::Type& _rType)
     {
-        css::uno::Any aReturn = OPropertySetHelper2::queryInterface(_rType);
+        cpo::uno::Any aReturn = OPropertySetHelper2::queryInterface(_rType);
         // our own ifaces
         if ( !aReturn.hasValue() )
             aReturn = ::cppu::queryInterface(_rType, static_cast< css::beans::XPropertyState*>(this));
@@ -67,7 +67,7 @@ namespace comphelper
     OPropertyStateHelper::~OPropertyStateHelper() {}
 
 
-    void OPropertyStateHelper::firePropertyChange(sal_Int32 nHandle, const  css::uno::Any& aNewValue, const  css::uno::Any& aOldValue)
+    void OPropertyStateHelper::firePropertyChange(sal_Int32 nHandle, const  cpo::uno::Any& aNewValue, const  cpo::uno::Any& aOldValue)
     {
         fire(&nHandle, &aNewValue, &aOldValue, 1, false);
     }
@@ -98,7 +98,7 @@ namespace comphelper
     }
 
 
-    css::uno::Any SAL_CALL OPropertyStateHelper::getPropertyDefault(const OUString& _rsName)
+    cpo::uno::Any SAL_CALL OPropertyStateHelper::getPropertyDefault(const OUString& _rsName)
     {
         cppu::IPropertyArrayHelper& rPH = getInfoHelper();
         sal_Int32 nHandle = rPH.getHandleByName(_rsName);
@@ -160,9 +160,9 @@ namespace comphelper
     }
 
 
-    css::uno::Any OPropertyStateHelper::getPropertyDefaultByHandle( sal_Int32 ) const
+    cpo::uno::Any OPropertyStateHelper::getPropertyDefaultByHandle( sal_Int32 ) const
     {
-        return css::uno::Any();
+        return cpo::uno::Any();
     }
 
 

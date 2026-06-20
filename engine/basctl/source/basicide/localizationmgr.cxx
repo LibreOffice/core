@@ -47,6 +47,7 @@ namespace basctl
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::resource;
@@ -89,7 +90,7 @@ void LocalizationMgr::handleTranslationbar ()
         return;
 
     Reference< css::frame::XLayoutManager > xLayoutManager;
-    uno::Any a = xFrameProps->getPropertyValue( u"LayoutManager"_ustr );
+    cpo::uno::Any a = xFrameProps->getPropertyValue( u"LayoutManager"_ustr );
     a >>= xLayoutManager;
     if ( xLayoutManager.is() )
     {
@@ -766,7 +767,7 @@ void LocalizationMgr::setControlResourceIDsForNewEditorObject( DlgEditor const *
 }
 
 void LocalizationMgr::renameControlResourceIDsForEditorObject( DlgEditor const * pEditor,
-    const css::uno::Any& rControlAny, std::u16string_view aNewCtrlName )
+    const cpo::uno::Any& rControlAny, std::u16string_view aNewCtrlName )
 {
     // Get library for DlgEditor
     DialogWindow* pDlgWin = FindDialogWindowForEditor( pEditor );

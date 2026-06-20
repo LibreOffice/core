@@ -70,8 +70,8 @@ public:
         void                    SetDateTime(const DateTime& rDT);
         static double           GetDateTime(SwDoc& rDoc, const DateTime& rDT);
 
-        virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt16 nMId ) const override;
-        virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt16 nMId ) override;
+        virtual bool            QueryValue( cpo::uno::Any& rVal, sal_uInt16 nMId ) const override;
+        virtual bool            PutValue( const cpo::uno::Any& rVal, sal_uInt16 nMId ) override;
 };
 
 #endif // INCLUDED_SW_INC_FLDDAT_HXX

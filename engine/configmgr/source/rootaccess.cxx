@@ -25,7 +25,7 @@
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Type.hxx>
@@ -87,7 +87,7 @@ void RootAccess::initBroadcaster(
         broadcaster->addChangesNotification(
             changesListener,
             css::util::ChangesEvent(
-                pSource, css::uno::Any( xBase ), set), path_.empty());
+                pSource, cpo::uno::Any( xBase ), set), path_.empty());
     }
 }
 
@@ -279,12 +279,12 @@ void RootAccess::clearListeners() noexcept {
     Access::clearListeners();
 }
 
-css::uno::Any RootAccess::queryInterface(css::uno::Type const & aType)
+cpo::uno::Any RootAccess::queryInterface(css::uno::Type const & aType)
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    css::uno::Any res(Access::queryInterface(aType));
+    cpo::uno::Any res(Access::queryInterface(aType));
     if (res.hasValue()) {
         return res;
     }

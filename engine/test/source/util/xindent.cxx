@@ -12,13 +12,14 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XIndent.hpp>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <cppunit/TestAssert.h>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace apitest
 {
@@ -26,12 +27,12 @@ void XIndent::testIncrementIndent()
 {
     uno::Reference<util::XIndent> xIndent(init(), UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet(xIndent, UNO_QUERY_THROW);
-    uno::Any aAny = xPropertySet->getPropertyValue(u"ParaIndent"_ustr);
+    cpo::uno::Any aAny = xPropertySet->getPropertyValue(u"ParaIndent"_ustr);
     sal_Int32 nOldValue = aAny.get<sal_Int32>();
 
     xIndent->incrementIndent();
 
-    uno::Any aAny2 = xPropertySet->getPropertyValue(u"ParaIndent"_ustr);
+    cpo::uno::Any aAny2 = xPropertySet->getPropertyValue(u"ParaIndent"_ustr);
     sal_Int32 nNewValue = aAny2.get<sal_Int32>();
     CPPUNIT_ASSERT_MESSAGE("Successfully able to Increment Indent", nOldValue < nNewValue);
 }
@@ -40,12 +41,12 @@ void XIndent::testDecrementIndent()
     uno::Reference<util::XIndent> xIndent(init(), UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet(xIndent, UNO_QUERY_THROW);
     xIndent->incrementIndent();
-    uno::Any aAny = xPropertySet->getPropertyValue(u"ParaIndent"_ustr);
+    cpo::uno::Any aAny = xPropertySet->getPropertyValue(u"ParaIndent"_ustr);
     sal_Int32 nOldValue = aAny.get<sal_Int32>();
 
     xIndent->decrementIndent();
 
-    uno::Any aAny2 = xPropertySet->getPropertyValue(u"ParaIndent"_ustr);
+    cpo::uno::Any aAny2 = xPropertySet->getPropertyValue(u"ParaIndent"_ustr);
     sal_Int32 nNewValue = aAny2.get<sal_Int32>();
     CPPUNIT_ASSERT_MESSAGE("Successfully able to Decrement Indent", nOldValue > nNewValue);
 }

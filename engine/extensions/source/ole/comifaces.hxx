@@ -40,7 +40,7 @@ IUnoObjectWrapper: public IUnknown
 {
     STDMETHOD( getWrapperXInterface)( css::uno::Reference<css::uno::XInterface>* pInt)=0;
     STDMETHOD( getOriginalUnoObject)( css::uno::Reference<css::uno::XInterface>* pInt)=0;
-    STDMETHOD( getOriginalUnoStruct)( css::uno::Any * pStruct)=0;
+    STDMETHOD( getOriginalUnoStruct)( cpo::uno::Any * pStruct)=0;
 
 protected:
     ~IUnoObjectWrapper() {}

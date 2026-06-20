@@ -47,6 +47,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::sdb;
 
@@ -540,7 +541,7 @@ namespace
         DECL_LINK(LoseFocusHdl, weld::Widget&, void);
 
         /// Updates the UI widget(s) based on rValue.
-        void setValue(const css::uno::Any& rValue)
+        void setValue(const cpo::uno::Any& rValue)
         {
             OUString sNewName;
             rValue >>= sNewName;
@@ -649,7 +650,7 @@ namespace
 
         DECL_LINK(ChangeHdl, weld::ComboBox&, void);
 
-        void setValue(const css::uno::Any& rValue)
+        void setValue(const cpo::uno::Any& rValue)
         {
             sal_Int16 nSelection = -1;
             Sequence<sal_Int16> aSelection;

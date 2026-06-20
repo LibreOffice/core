@@ -109,7 +109,7 @@ void XmlSecStatusBarControl::Command( const CommandEvent& rCEvt )
         std::unique_ptr<weld::Menu> xPopMenu(xBuilder->weld_menu(u"menu"_ustr));
         if (!xPopMenu->popup_at_rect(pPopupParent, aRect).isEmpty())
         {
-            css::uno::Any a;
+            cpo::uno::Any a;
             SfxUInt16Item aState( GetSlotId(), 0 );
             aState.QueryValue( a );
             INetURLObject aObj( m_aCommandURL );

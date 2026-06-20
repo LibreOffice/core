@@ -38,6 +38,7 @@
 
 using namespace ::com::sun::star;
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::beans;
 using namespace css::lang;
 using namespace css::frame;
@@ -322,7 +323,7 @@ void ComplexToolbarController::notifyFocusLost()
 void ComplexToolbarController::notifyTextChanged( const OUString& aText )
 {
     // send text changed notification
-    uno::Sequence< beans::NamedValue > aInfo { { u"Text"_ustr, css::uno::Any(aText) } };
+    uno::Sequence< beans::NamedValue > aInfo { { u"Text"_ustr, cpo::uno::Any(aText) } };
     addNotifyInfo( u"TextChanged"_ustr,
                    getDispatchFromCommand( m_aCommandURL ),
                    aInfo );

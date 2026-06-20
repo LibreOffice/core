@@ -224,7 +224,7 @@ static void assign( TestElement* rData,
                     TestEnum eEnum, String* rStr,
                     Byte nByte2, Int16 nShort2,
                     Object* xTest,
-                    uno::Any rAny )
+                    cpo::uno::Any rAny )
 {
     rData->Bool = bBool;
     rData->Char = cChar;

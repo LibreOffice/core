@@ -62,7 +62,7 @@ uno::Reference< uno::XInterface > SAL_CALL VCLBitmapCreator::createInstance()
 
 
 uno::Reference< uno::XInterface > SAL_CALL VCLBitmapCreator::createInstanceWithArguments(
-                                                const uno::Sequence< uno::Any >& aArguments )
+                                                const uno::Sequence< cpo::uno::Any >& aArguments )
         throw ( uno::Exception,
                 uno::RuntimeException)
 {

@@ -216,7 +216,7 @@ XResultSet_impl::OneMore(std::unique_lock<std::mutex>& rGuard)
         }
         else  // error fetching anything
         {
-            throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
+            throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, cpo::uno::Any() );
         }
     }
 }
@@ -339,7 +339,7 @@ bool SAL_CALL
 XResultSet_impl::relative( sal_Int32 row )
 {
     if( isAfterLast() || isBeforeFirst() )
-        throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, cpo::uno::Any() );
     if( row > 0 )
         while( row-- ) next();
     else if( row < 0 )
@@ -484,7 +484,7 @@ XResultSet_impl::setListener(
     //       are a fake. This implementation will never call "notify" at the
     //       listener to propagate any changes!!!
 
-    uno::Any aInfo;
+    cpo::uno::Any aInfo;
     aInfo <<= ucb::WelcomeDynamicResultSetStruct( this, /* "old" */
                                                   this /* "new" */ );
 
@@ -586,7 +586,7 @@ XResultSet_impl::getPropertySetInfo()
 
 
 void SAL_CALL XResultSet_impl::setPropertyValue(
-    const OUString& aPropertyName, const uno::Any& )
+    const OUString& aPropertyName, const cpo::uno::Any& )
 {
     if( aPropertyName == "IsRowCountFinal" ||
         aPropertyName == "RowCount" )
@@ -595,18 +595,18 @@ void SAL_CALL XResultSet_impl::setPropertyValue(
 }
 
 
-uno::Any SAL_CALL XResultSet_impl::getPropertyValue(
+cpo::uno::Any SAL_CALL XResultSet_impl::getPropertyValue(
     const OUString& PropertyName )
 {
     std::unique_lock aGuard( m_aMutex );
     if( PropertyName == "IsRowCountFinal" )
     {
-        return uno::Any(m_bRowCountFinal);
+        return cpo::uno::Any(m_bRowCountFinal);
     }
     else if ( PropertyName == "RowCount" )
     {
         sal_Int32 count = sal::static_int_cast<sal_Int32>(m_aItems.size());
-        return uno::Any(count);
+        return cpo::uno::Any(count);
     }
     else
         throw beans::UnknownPropertyException( PropertyName );

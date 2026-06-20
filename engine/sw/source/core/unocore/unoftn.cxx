@@ -215,10 +215,10 @@ SwXFootnote::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwXFootnote::queryInterface(const uno::Type& rType)
 {
-    const uno::Any ret = SwXFootnote_Base::queryInterface(rType);
+    const cpo::uno::Any ret = SwXFootnote_Base::queryInterface(rType);
     return (ret.getValueType() == cppu::UnoType<void>::get())
         ?   SwXText::queryInterface(rType)
         :   ret;
@@ -473,18 +473,18 @@ SwXFootnote::getPropertySetInfo()
 }
 
 void SAL_CALL
-SwXFootnote::setPropertyValue(const OUString&, const uno::Any&)
+SwXFootnote::setPropertyValue(const OUString&, const cpo::uno::Any&)
 {
     //no values to be set
     throw lang::IllegalArgumentException();
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwXFootnote::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if (! ::sw::GetDefaultTextContentValue(aRet, rPropertyName))
     {
         if (rPropertyName == UNO_NAME_START_REDLINE ||

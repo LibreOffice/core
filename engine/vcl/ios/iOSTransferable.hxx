@@ -46,7 +46,7 @@ public:
 
     // XTransferable
 
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
     getTransferData(const css::datatransfer::DataFlavor& aFlavor) override;
 
     css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;

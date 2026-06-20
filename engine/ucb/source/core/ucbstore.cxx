@@ -55,6 +55,7 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::util;
 using namespace comphelper;
 using namespace cppu;
@@ -154,7 +155,7 @@ css::uno::Sequence< OUString > SAL_CALL UcbStore::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_UcbStore_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new UcbStore(context));
 }

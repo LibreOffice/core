@@ -98,6 +98,7 @@
 using namespace css;
 using namespace css::frame;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace
 {
@@ -423,7 +424,7 @@ class AbstractSwInsertDBColAutoPilot_Impl
 {
 public:
     using AbstractDialogImpl_NoSync::AbstractDialogImpl_NoSync;
-    void DataToDoc(const css::uno::Sequence<css::uno::Any>& rSelection,
+    void DataToDoc(const css::uno::Sequence<cpo::uno::Any>& rSelection,
                    css::uno::Reference<css::sdbc::XDataSource> rxSource,
                    css::uno::Reference<css::sdbc::XConnection> xConnection,
                    css::uno::Reference<css::sdbc::XResultSet> xResultSet) override
@@ -959,7 +960,7 @@ public:
     using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     DBManagerOptions GetMergeType() override { return m_pDlg->GetMergeType(); }
     const OUString& GetSaveFilter() const override { return m_pDlg->GetSaveFilter(); }
-    css::uno::Sequence<css::uno::Any> GetSelection() const override
+    css::uno::Sequence<cpo::uno::Any> GetSelection() const override
     {
         return m_pDlg->GetSelection();
     }

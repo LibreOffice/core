@@ -37,16 +37,16 @@ ScVbaMenu::Delete( )
     m_xCommandBarControl->Delete();
 }
 
-uno::Any SAL_CALL
-ScVbaMenu::MenuItems( const uno::Any& aIndex )
+cpo::uno::Any SAL_CALL
+ScVbaMenu::MenuItems( const cpo::uno::Any& aIndex )
 {
-    uno::Reference< XCommandBarControls > xCommandBarControls( m_xCommandBarControl->Controls( uno::Any() ), uno::UNO_QUERY_THROW );
+    uno::Reference< XCommandBarControls > xCommandBarControls( m_xCommandBarControl->Controls( cpo::uno::Any() ), uno::UNO_QUERY_THROW );
     uno::Reference< excel::XMenuItems > xMenuItems( new ScVbaMenuItems( this, mxContext, xCommandBarControls ) );
     if( aIndex.hasValue() )
     {
-        return xMenuItems->Item( aIndex, uno::Any() );
+        return xMenuItems->Item( aIndex, cpo::uno::Any() );
     }
-    return uno::Any( xMenuItems );
+    return cpo::uno::Any( xMenuItems );
 }
 
 OUString

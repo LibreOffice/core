@@ -46,6 +46,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdb::application;

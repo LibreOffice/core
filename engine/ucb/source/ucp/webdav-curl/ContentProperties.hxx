@@ -25,7 +25,7 @@
 #include <utility>
 #include <vector>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include "DAVResource.hxx"
 
@@ -42,20 +42,20 @@ struct DAVResource;
 class PropertyValue
 {
 private:
-    css::uno::Any   m_aValue;
+    cpo::uno::Any   m_aValue;
     bool            m_bIsCaseSensitive;
 
 public:
     PropertyValue()
     : m_bIsCaseSensitive( true ) {}
 
-    explicit PropertyValue( css::uno::Any aValue,
+    explicit PropertyValue( cpo::uno::Any aValue,
                    bool bIsCaseSensitive )
     : m_aValue(std::move( aValue)),
       m_bIsCaseSensitive( bIsCaseSensitive ) {}
 
     bool isCaseSensitive() const { return m_bIsCaseSensitive; }
-    const css::uno::Any & value() const { return m_aValue; }
+    const cpo::uno::Any & value() const { return m_aValue; }
 
 };
 
@@ -78,7 +78,7 @@ public:
 
     bool contains( const OUString & rName ) const;
 
-    const css::uno::Any& getValue( const OUString & rName ) const;
+    const cpo::uno::Any& getValue( const OUString & rName ) const;
 
     // Maps the UCB property names contained in rProps with their DAV property
     // counterparts, if possible. All unmappable properties will be included
@@ -115,7 +115,7 @@ public:
 
     // overwrites probably existing entry.
     void addProperty( const OUString & rName,
-                     const css::uno::Any & rValue,
+                     const cpo::uno::Any & rValue,
                      bool bIsCaseSensitive );
 
     // overwrites probably existing entry.
@@ -135,7 +135,7 @@ private:
     std::unique_ptr< PropertyValueMap > m_xProps;
     bool m_bTrailingSlash;
 
-    static css::uno::Any m_aEmptyAny;
+    static cpo::uno::Any m_aEmptyAny;
 
     ContentProperties & operator=( const ContentProperties & ); // n.i.
 
@@ -162,7 +162,7 @@ public:
                     std::vector< OUString > & rNamesNotContained ) const
     { return m_aProps.containsAllNames( rProps, rNamesNotContained ); }
 
-    const css::uno::Any &
+    const cpo::uno::Any &
     getValue( const OUString & rName ) const
     { return m_aProps.getValue( rName ); }
 

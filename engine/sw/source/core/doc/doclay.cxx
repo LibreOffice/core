@@ -124,7 +124,7 @@ rtl::Reference<SdrObject> SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveW
     {
         // We need to preserve the Name for Controls
         uno::Reference< awt::XControlModel >  xModel = static_cast<SdrUnoObj*>(pObj.get())->GetUnoControlModel();
-        uno::Any aVal;
+        cpo::uno::Any aVal;
         uno::Reference< beans::XPropertySet >  xSet(xModel, uno::UNO_QUERY);
         static constexpr OUString sName(u"Name"_ustr);
         if( xSet.is() )

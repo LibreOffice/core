@@ -466,7 +466,7 @@ void VistaFilePickerImpl::impl_sta_InitDialog(Request& rRequest, DWORD nOrFlags)
         if(xSysDepWin.is()) {
             css::uno::Sequence<sal_Int8> aProcessIdent(16);
             rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8*>(aProcessIdent.getArray()));
-            css::uno::Any aAny = xSysDepWin->getWindowHandle(aProcessIdent,css::lang::SystemDependent::SYSTEM_WIN32);
+            cpo::uno::Any aAny = xSysDepWin->getWindowHandle(aProcessIdent,css::lang::SystemDependent::SYSTEM_WIN32);
             sal_Int64 tmp = 0;
             aAny >>= tmp;
             if(tmp != 0)
@@ -1004,7 +1004,7 @@ void VistaFilePickerImpl::impl_sta_SetControlValue(Request& rRequest)
 {
     ::sal_Int16   nId     = rRequest.getArgumentOrDefault(PROP_CONTROL_ID    , INVALID_CONTROL_ID    );
     ::sal_Int16   nAction = rRequest.getArgumentOrDefault(PROP_CONTROL_ACTION, INVALID_CONTROL_ACTION);
-    css::uno::Any aValue  = rRequest.getValue(PROP_CONTROL_VALUE);
+    cpo::uno::Any aValue  = rRequest.getValue(PROP_CONTROL_VALUE);
 
     // don't check for right values here ...
     // most parameters are optional !
@@ -1086,7 +1086,7 @@ void VistaFilePickerImpl::impl_sta_GetControlValue(Request& rRequest)
     if ( ! iCustom.is())
         return;
 
-    css::uno::Any aValue;
+    cpo::uno::Any aValue;
     if( m_bWasExecuted )
         switch (nId)
         {

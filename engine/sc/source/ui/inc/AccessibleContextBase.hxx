@@ -127,8 +127,8 @@ protected:
 
 public:
     /// Calls all listeners to notify them about the change.
-    void CommitChange(const sal_Int16 nEventId, const css::uno::Any& rOldValue,
-                      const css::uno::Any& rNewValue, sal_Int32 nIndexHint = -1);
+    void CommitChange(const sal_Int16 nEventId, const cpo::uno::Any& rOldValue,
+                      const cpo::uno::Any& rNewValue, sal_Int32 nIndexHint = -1);
 
     /// Use this method to set initial Name without notification
     void SetName(const OUString& rName) { msName = rName; }

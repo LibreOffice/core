@@ -34,12 +34,12 @@
 
 namespace com { namespace sun { namespace star { namespace uno {
     class Type;
-    class Any;
     class Exception;
     template< typename > class Reference;
     template< typename > class Sequence;
     class XInterface;
 } } } }
+namespace cpo::uno { class Any; }
 namespace rtl { class OUString; }
 
 namespace cppu {
@@ -201,7 +201,7 @@ cppu_detail_getUnoType(SAL_UNUSED_PARAMETER css::uno::Type const *)
 }
 
 inline css::uno::Type const &
-cppu_detail_getUnoType(SAL_UNUSED_PARAMETER css::uno::Any const *)
+cppu_detail_getUnoType(SAL_UNUSED_PARAMETER cpo::uno::Any const *)
 {
     return ::cppu::detail::getTypeFromTypeClass(::typelib_TypeClass_ANY);
 }

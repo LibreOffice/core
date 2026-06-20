@@ -37,7 +37,7 @@ SidebarController* SfxUnoDecks::getSidebarController()
 
 // XNameAccess
 
-uno::Any SAL_CALL SfxUnoDecks::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL SfxUnoDecks::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 
@@ -45,7 +45,7 @@ uno::Any SAL_CALL SfxUnoDecks::getByName( const OUString& aName )
         throw container::NoSuchElementException();
 
     uno::Reference<ui::XDeck> xDeck = new SfxUnoDeck(xFrame, aName);
-    return uno::Any(xDeck);
+    return cpo::uno::Any(xDeck);
 }
 
 
@@ -111,10 +111,10 @@ sal_Int32 SAL_CALL SfxUnoDecks::getCount()
     return decks.getLength();
 }
 
-uno::Any SAL_CALL SfxUnoDecks::getByIndex( sal_Int32 Index )
+cpo::uno::Any SAL_CALL SfxUnoDecks::getByIndex( sal_Int32 Index )
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
+    cpo::uno::Any aRet;
 
     uno::Sequence< OUString > decks = getElementNames();
 

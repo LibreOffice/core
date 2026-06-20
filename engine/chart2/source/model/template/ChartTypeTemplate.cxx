@@ -67,7 +67,7 @@ void lcl_applyDefaultStyle(
         if( xColorScheme.is() )
             xSeries->setPropertyValue(
                 u"Color"_ustr,
-                uno::Any( xColorScheme->getColorByIndex( nIndex )));
+                cpo::uno::Any( xColorScheme->getColorByIndex( nIndex )));
     }
 }
 
@@ -88,7 +88,7 @@ void lcl_ensureCorrectLabelPlacement( const Reference< beans::XPropertySet >& xP
     }
     if( !bValid )
     {
-        uno::Any aNewValue;
+        cpo::uno::Any aNewValue;
         //otherwise use the first supported one
         if( rAvailablePlacements.hasElements() )
             aNewValue <<=rAvailablePlacements[0];
@@ -103,7 +103,7 @@ void lcl_resetLabelPlacementIfDefault( const Reference< beans::XPropertySet >& x
     if( xProp.is() && (xProp->getPropertyValue( u"LabelPlacement"_ustr ) >>= nLabelPlacement) )
     {
         if( nDefaultPlacement == nLabelPlacement )
-            xProp->setPropertyValue( u"LabelPlacement"_ustr, uno::Any() );
+            xProp->setPropertyValue( u"LabelPlacement"_ustr, cpo::uno::Any() );
     }
 }
 
@@ -115,9 +115,9 @@ void lcl_ensureCorrectMissingValueTreatment( const rtl::Reference< ::chart::Diag
             ::chart::ChartTypeHelper::getSupportedMissingValueTreatments( xChartType ) );
 
         if( aAvailableMissingValueTreatment.hasElements() )
-            xDiagram->setPropertyValue( u"MissingValueTreatment"_ustr, uno::Any( aAvailableMissingValueTreatment[0] ) );
+            xDiagram->setPropertyValue( u"MissingValueTreatment"_ustr, cpo::uno::Any( aAvailableMissingValueTreatment[0] ) );
         else
-            xDiagram->setPropertyValue( u"MissingValueTreatment"_ustr, uno::Any() );
+            xDiagram->setPropertyValue( u"MissingValueTreatment"_ustr, cpo::uno::Any() );
     }
 }
 
@@ -217,7 +217,7 @@ void ChartTypeTemplate::changeDiagram( const rtl::Reference< Diagram >& xDiagram
             Sequence< beans::PropertyValue > aParam;
             if( aData.Categories.is())
             {
-                aParam = { beans::PropertyValue( u"HasCategories"_ustr, -1, uno::Any( true ),
+                aParam = { beans::PropertyValue( u"HasCategories"_ustr, -1, cpo::uno::Any( true ),
                                                  beans::PropertyState_DIRECT_VALUE ) };
             }
             aData = xInterpreter->interpretDataSource( xSource, aParam, aFlatSeriesSeq );
@@ -377,7 +377,7 @@ void ChartTypeTemplate::applyStyle2(
     try
     {
         StackMode eStackMode = getStackMode( nChartTypeIndex );
-        const uno::Any aPropValue(
+        const cpo::uno::Any aPropValue(
             ( (eStackMode == StackMode::YStacked) ||
               (eStackMode == StackMode::YStackedPercent) )
             ? chart2::StackingDirection_Y_STACKING
@@ -433,8 +433,8 @@ void ChartTypeTemplate::resetStyles2( const rtl::Reference< ::chart::Diagram >& 
             if( AxisHelper::getDimensionIndexOfAxis( axis, xDiagram )== 1 )
             {
                 // set number format to source format
-                axis->setPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT, uno::Any(true));
-                axis->setPropertyValue(CHART_UNONAME_NUMFMT, uno::Any());
+                axis->setPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT, cpo::uno::Any(true));
+                axis->setPropertyValue(CHART_UNONAME_NUMFMT, cpo::uno::Any());
             }
         }
     }
@@ -699,8 +699,8 @@ void ChartTypeTemplate::adaptAxes(
                     if( bPercent && nDim == 1 )
                     {
                         // set number format to source format
-                        xAxis->setPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT, uno::Any(true));
-                        xAxis->setPropertyValue(CHART_UNONAME_NUMFMT, uno::Any());
+                        xAxis->setPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT, cpo::uno::Any(true));
+                        xAxis->setPropertyValue(CHART_UNONAME_NUMFMT, cpo::uno::Any());
                     }
                 }
             }

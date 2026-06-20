@@ -44,6 +44,7 @@ using namespace comphelper;
 using namespace cppu;
 using namespace com::sun::star;
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::container;
 using namespace css::beans;

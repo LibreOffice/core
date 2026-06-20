@@ -325,10 +325,10 @@ awt::Rectangle AccessibleDocumentViewBase::implGetBounds()
 
 //=====  XInterface  ==========================================================
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
     AccessibleDocumentViewBase::queryInterface (const uno::Type & rType)
 {
-    uno::Any aReturn = AccessibleContextBase::queryInterface (rType);
+    cpo::uno::Any aReturn = AccessibleContextBase::queryInterface (rType);
     if ( ! aReturn.hasValue())
         aReturn = ::cppu::queryInterface (rType,
             static_cast<XAccessibleComponent*>(this),
@@ -540,8 +540,8 @@ void AccessibleDocumentViewBase::SetAccessibleOLEObject (
         if (mxAccessibleOLEObject.is())
             CommitChange (
                 AccessibleEventId::CHILD,
-                uno::Any(),
-                uno::Any (mxAccessibleOLEObject), -1);
+                cpo::uno::Any(),
+                cpo::uno::Any (mxAccessibleOLEObject), -1);
 
     // Assume that the accessible OLE Object disposes itself correctly.
 
@@ -554,8 +554,8 @@ void AccessibleDocumentViewBase::SetAccessibleOLEObject (
     if (mxAccessibleOLEObject.is())
         CommitChange (
             AccessibleEventId::CHILD,
-            uno::Any (mxAccessibleOLEObject),
-            uno::Any(), -1);
+            cpo::uno::Any (mxAccessibleOLEObject),
+            cpo::uno::Any(), -1);
 }
 
 //=====  methods from AccessibleSelectionBase ==================================================

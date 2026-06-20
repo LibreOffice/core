@@ -30,6 +30,7 @@ namespace dlgprov {
 using namespace ::com::sun::star;
 using namespace lang;
 using namespace uno;
+using namespace ::cpo::uno;
 using namespace beans;
 
 
@@ -38,7 +39,7 @@ DialogModelProvider::DialogModelProvider(Reference< XComponentContext > const & 
 {}
 
 // lang::XInitialization:
-void SAL_CALL DialogModelProvider::initialize(const css::uno::Sequence< uno::Any > & aArguments)
+void SAL_CALL DialogModelProvider::initialize(const css::uno::Sequence< cpo::uno::Any > & aArguments)
 {
     if ( aArguments.getLength() != 1 )
         return;
@@ -81,7 +82,7 @@ bool SAL_CALL DialogModelProvider::hasElements()
 }
 
 // container::XNameAccess:
-uno::Any SAL_CALL DialogModelProvider::getByName(const OUString & aName)
+cpo::uno::Any SAL_CALL DialogModelProvider::getByName(const OUString & aName)
 {
     return m_xDialogModel->getByName(aName);
 }
@@ -97,13 +98,13 @@ bool SAL_CALL DialogModelProvider::hasByName(const OUString & aName)
 }
 
 // container::XNameReplace:
-void SAL_CALL DialogModelProvider::replaceByName(const OUString & aName, const uno::Any & aElement)
+void SAL_CALL DialogModelProvider::replaceByName(const OUString & aName, const cpo::uno::Any & aElement)
 {
     m_xDialogModel->replaceByName(aName,aElement);
 }
 
 // container::XNameContainer:
-void SAL_CALL DialogModelProvider::insertByName(const OUString & aName, const uno::Any & aElement)
+void SAL_CALL DialogModelProvider::insertByName(const OUString & aName, const cpo::uno::Any & aElement)
 {
     m_xDialogModel->insertByName(aName,aElement);
 }
@@ -116,10 +117,10 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL DialogModelProvider::getPrope
 {
     return m_xDialogModelProp->getPropertySetInfo();
 }
-void SAL_CALL DialogModelProvider::setPropertyValue( const OUString&, const uno::Any& )
+void SAL_CALL DialogModelProvider::setPropertyValue( const OUString&, const cpo::uno::Any& )
 {
 }
-uno::Any SAL_CALL DialogModelProvider::getPropertyValue( const OUString& PropertyName )
+cpo::uno::Any SAL_CALL DialogModelProvider::getPropertyValue( const OUString& PropertyName )
 {
     return m_xDialogModelProp->getPropertyValue(PropertyName);
 }
@@ -156,7 +157,7 @@ css::uno::Sequence< OUString > SAL_CALL DialogModelProvider::getSupportedService
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 scripting_DialogModelProvider_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new dlgprov::DialogModelProvider(context));
 }

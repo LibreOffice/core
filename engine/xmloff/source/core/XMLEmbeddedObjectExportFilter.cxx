@@ -21,6 +21,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 
 

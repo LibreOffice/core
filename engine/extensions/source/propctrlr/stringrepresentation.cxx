@@ -49,6 +49,7 @@ namespace pcr{
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace {
 
@@ -69,11 +70,11 @@ public:
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // inspection::XStringRepresentation:
-    virtual OUString SAL_CALL convertToControlValue(const uno::Any & PropertyValue) override;
-    virtual uno::Any SAL_CALL convertToPropertyValue(const OUString & ControlValue, const uno::Type & ControlValueType) override;
+    virtual OUString SAL_CALL convertToControlValue(const cpo::uno::Any & PropertyValue) override;
+    virtual cpo::uno::Any SAL_CALL convertToPropertyValue(const OUString & ControlValue, const uno::Type & ControlValueType) override;
 
     // lang::XInitialization:
-    virtual void SAL_CALL initialize(const uno::Sequence< uno::Any > & aArguments) override;
+    virtual void SAL_CALL initialize(const uno::Sequence< cpo::uno::Any > & aArguments) override;
 
 private:
     virtual ~StringRepresentation() override {}
@@ -87,7 +88,7 @@ private:
             if and only if the value could be converted
     */
     static bool     convertGenericValueToString(
-                        const uno::Any&   _rValue,
+                        const cpo::uno::Any&   _rValue,
                                 OUString&              _rStringRep
                     );
 
@@ -101,7 +102,7 @@ private:
     */
     static bool    convertStringToGenericValue(
                         const OUString&              _rStringRep,
-                                uno::Any&   _rValue,
+                                cpo::uno::Any&   _rValue,
                         const uno::Type& _rTargetType
                     );
 
@@ -110,14 +111,14 @@ private:
     * \param _rValue the value to be converted
     * \return the converted string.
     */
-    OUString convertSimpleToString( const uno::Any& _rValue );
+    OUString convertSimpleToString( const cpo::uno::Any& _rValue );
 
     /** converts a string into his constant value if it exists, otherwise the type converter is used.
     * \param _rValue the value to be converted
     * \param _ePropertyType the type of the property to be converted into
     * \return the converted value
     */
-    uno::Any convertStringToSimple( const OUString& _rValue,const uno::TypeClass& _ePropertyType );
+    cpo::uno::Any convertStringToSimple( const OUString& _rValue,const uno::TypeClass& _ePropertyType );
 
     uno::Reference< uno::XComponentContext >                                m_xContext;
     uno::Reference< script::XTypeConverter >                                m_xTypeConverter;
@@ -150,7 +151,7 @@ uno::Sequence< OUString >  SAL_CALL StringRepresentation::getSupportedServiceNam
 }
 
 // inspection::XStringRepresentation:
-OUString SAL_CALL StringRepresentation::convertToControlValue(const uno::Any & PropertyValue)
+OUString SAL_CALL StringRepresentation::convertToControlValue(const cpo::uno::Any & PropertyValue)
 {
     OUString sReturn;
     if ( !convertGenericValueToString( PropertyValue, sReturn ) )
@@ -169,9 +170,9 @@ OUString SAL_CALL StringRepresentation::convertToControlValue(const uno::Any & P
     return sReturn;
 }
 
-uno::Any SAL_CALL StringRepresentation::convertToPropertyValue(const OUString & ControlValue, const uno::Type & ControlValueType)
+cpo::uno::Any SAL_CALL StringRepresentation::convertToPropertyValue(const OUString & ControlValue, const uno::Type & ControlValueType)
 {
-    uno::Any aReturn;
+    cpo::uno::Any aReturn;
 
     uno::TypeClass ePropertyType = ControlValueType.getTypeClass();
     switch ( ePropertyType )
@@ -231,7 +232,7 @@ struct CompareConstants {
 }
 
 // lang::XInitialization:
-void SAL_CALL StringRepresentation::initialize(const uno::Sequence< uno::Any > & aArguments)
+void SAL_CALL StringRepresentation::initialize(const uno::Sequence< cpo::uno::Any > & aArguments)
 {
     sal_Int32 nLength = aArguments.getLength();
     if ( !nLength )
@@ -261,7 +262,7 @@ void SAL_CALL StringRepresentation::initialize(const uno::Sequence< uno::Any > &
     m_aConstants = std::move(cs);
 }
 
-OUString StringRepresentation::convertSimpleToString( const uno::Any& _rValue )
+OUString StringRepresentation::convertSimpleToString( const cpo::uno::Any& _rValue )
 {
     OUString sReturn;
     if ( m_xTypeConverter.is() && _rValue.hasValue() )
@@ -350,7 +351,7 @@ namespace
 }
 
 
-bool StringRepresentation::convertGenericValueToString( const uno::Any& _rValue, OUString& _rStringRep )
+bool StringRepresentation::convertGenericValueToString( const cpo::uno::Any& _rValue, OUString& _rStringRep )
 {
     bool bCanConvert = true;
 
@@ -453,9 +454,9 @@ bool StringRepresentation::convertGenericValueToString( const uno::Any& _rValue,
     return bCanConvert;
 }
 
-uno::Any StringRepresentation::convertStringToSimple( const OUString& _rValue,const uno::TypeClass& _ePropertyType )
+cpo::uno::Any StringRepresentation::convertStringToSimple( const OUString& _rValue,const uno::TypeClass& _ePropertyType )
 {
-    uno::Any aReturn;
+    cpo::uno::Any aReturn;
     if ( m_xTypeConverter.is() && !_rValue.isEmpty() )
     {
         try
@@ -482,7 +483,7 @@ uno::Any StringRepresentation::convertStringToSimple( const OUString& _rValue,co
     return aReturn;
 }
 
-bool StringRepresentation::convertStringToGenericValue( const OUString& _rStringRep, uno::Any& _rValue, const uno::Type& _rTargetType )
+bool StringRepresentation::convertStringToGenericValue( const OUString& _rStringRep, cpo::uno::Any& _rValue, const uno::Type& _rTargetType )
 {
     bool bCanConvert = true;
 
@@ -590,7 +591,7 @@ bool StringRepresentation::convertStringToGenericValue( const OUString& _rString
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 extensions_propctrlr_StringRepresentation_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new pcr::StringRepresentation(context));
 }

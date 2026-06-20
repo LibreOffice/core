@@ -1336,7 +1336,7 @@ void ImportExcel::PostDocLoad()
 
     // open forms in alive mode (has no effect, if no controls in document)
     if( ScModelObj* pDocObj = GetDocModelObj() )
-        pDocObj->setPropertyValue( SC_UNO_APPLYFMDES, uno::Any( false ) );
+        pDocObj->setPropertyValue( SC_UNO_APPLYFMDES, cpo::uno::Any( false ) );
 
     // enables extended options to be set to the view after import
     GetExtDocOptions().SetChanged( true );

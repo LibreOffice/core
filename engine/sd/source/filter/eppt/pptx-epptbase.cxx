@@ -69,7 +69,7 @@ using ::com::sun::star::style::XStyleFamiliesSupplier;
 using ::com::sun::star::style::XStyle;
 using ::com::sun::star::task::XStatusIndicator;
 using ::com::sun::star::text::XSimpleText;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
@@ -425,7 +425,7 @@ bool PPTWriterBase::CreateSlideMaster( sal_uInt32 nPageNum )
 
 sal_Int32 PPTWriterBase::GetLayoutOffset( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet )
 {
-    css::uno::Any aAny;
+    cpo::uno::Any aAny;
     sal_Int32 nLayout = 20;
     if ( GetPropertyValue( aAny, rXPropSet, u"Layout"_ustr, true ) )
         aAny >>= nLayout;

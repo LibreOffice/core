@@ -27,7 +27,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -106,7 +106,7 @@ void Broadcaster::addChangesNotification(
 }
 
 void Broadcaster::send() {
-    css::uno::Any exception;
+    cpo::uno::Any exception;
     OUStringBuffer messages;
     for (auto& rNotification : disposeNotifications_) {
         try {

@@ -244,7 +244,7 @@ void DocxAttributeOutput::TableDefinition(
     m_pSerializer->singleElementNS(XML_w, XML_tblLayout, FSNS(XML_w, XML_type), "fixed");
 
     // Look for the table style property in the table grab bag
-    const std::map<OUString, css::uno::Any>& rGrabBag
+    const std::map<OUString, cpo::uno::Any>& rGrabBag
         = pTableFormat->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG)->GetGrabBag();
 
     // We should clear the TableStyle map. In case of Table inside multiple tables it contains the
@@ -327,7 +327,7 @@ void DocxAttributeOutput::TableDefinition(
         else if (rGrabBagElement.first == "TablePosition" &&
                  // skip empty table position (tables in footnotes converted to
                  // floating tables temporarily, don't export this)
-                 rGrabBagElement.second != uno::Any())
+                 rGrabBagElement.second != cpo::uno::Any())
         {
             rtl::Reference<FastAttributeList> attrListTablePos
                 = FastSerializerHelper::createAttrList();
@@ -551,7 +551,7 @@ void DocxAttributeOutput::TableBackgrounds(
 
     const OString sColor = msfilter::util::ConvertColor(aColor);
 
-    const std::map<OUString, css::uno::Any>& rGrabBag
+    const std::map<OUString, cpo::uno::Any>& rGrabBag
         = pFormat->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG)->GetGrabBag();
 
     OString sOriginalColor;

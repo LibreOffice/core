@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -77,9 +77,9 @@ private:
     { return css::uno::Reference< css::beans::XPropertySetInfo >(); }
 
     virtual void SAL_CALL setPropertyValue(
-        OUString const &, css::uno::Any const &) override;
+        OUString const &, cpo::uno::Any const &) override;
 
-    virtual css::uno::Any SAL_CALL getPropertyValue(
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(
         OUString const & PropertyName) override;
 
     virtual void SAL_CALL addPropertyChangeListener(
@@ -103,7 +103,7 @@ private:
     {}
 };
 
-void Default::setPropertyValue(OUString const &, css::uno::Any const &)
+void Default::setPropertyValue(OUString const &, cpo::uno::Any const &)
 {
     throw css::lang::IllegalArgumentException(
         u"setPropertyValue not supported"_ustr,
@@ -213,15 +213,15 @@ OUString xdg_user_dir_lookup (const char *type, bool bAllowHomeDir)
     return aHomeDirURL + "/" + OUString::createFromAscii(type);
 }
 
-css::uno::Any xdgDirectoryIfExists(char const * type, bool bAllowHomeDir) {
+cpo::uno::Any xdgDirectoryIfExists(char const * type, bool bAllowHomeDir) {
     auto url = xdg_user_dir_lookup(type, bAllowHomeDir);
-    return css::uno::Any(
+    return cpo::uno::Any(
         osl::Directory(url).open() == osl::FileBase::E_None
-        ? css::beans::Optional<css::uno::Any>(true, css::uno::Any(url))
-        : css::beans::Optional<css::uno::Any>(false, css::uno::Any()));
+        ? css::beans::Optional<cpo::uno::Any>(true, cpo::uno::Any(url))
+        : css::beans::Optional<cpo::uno::Any>(false, cpo::uno::Any()));
 }
 
-css::uno::Any Default::getPropertyValue(OUString const & PropertyName)
+cpo::uno::Any Default::getPropertyValue(OUString const & PropertyName)
 {
     if (PropertyName == "TemplatePathVariable")
     {
@@ -246,7 +246,7 @@ css::uno::Any Default::getPropertyValue(OUString const & PropertyName)
          PropertyName == "givenname" ||
          PropertyName == "sn" )
     {
-        return css::uno::Any(css::beans::Optional< css::uno::Any >());
+        return cpo::uno::Any(css::beans::Optional< cpo::uno::Any >());
     }
 
     throw css::beans::UnknownPropertyException(
@@ -273,7 +273,7 @@ css::uno::Reference< css::uno::XInterface > createBackend(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 shell_DesktopBackend_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
 {
     // Fall back to the default if the specific backend is not available:
     css::uno::Reference< css::uno::XInterface > backend;

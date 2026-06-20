@@ -129,11 +129,11 @@ public:
         assert(xRowSetPropSet.is() && "failed to get XPropertySet interface from RowSet");
         if (xRowSetPropSet.is())
         {
-            xRowSetPropSet->setPropertyValue(u"DataSourceName"_ustr, uno::Any(aDBName));
+            xRowSetPropSet->setPropertyValue(u"DataSourceName"_ustr, cpo::uno::Any(aDBName));
             xRowSetPropSet->setPropertyValue(u"Command"_ustr,
-                                             uno::Any(OUString::createFromAscii(tablename)));
+                                             cpo::uno::Any(OUString::createFromAscii(tablename)));
             xRowSetPropSet->setPropertyValue(u"CommandType"_ustr,
-                                             uno::Any(sdb::CommandType::TABLE));
+                                             cpo::uno::Any(sdb::CommandType::TABLE));
 
             uno::Reference<sdbc::XRowSet> xRowSet(xInstance, uno::UNO_QUERY);
             if (xRowSet.is())
@@ -156,34 +156,36 @@ public:
 
         mMMargs.reserve(15);
 
-        mMMargs.emplace_back(UNO_NAME_OUTPUT_TYPE, uno::Any(filter ? text::MailMergeType::FILE
-                                                                   : text::MailMergeType::SHELL));
+        mMMargs.emplace_back(
+            UNO_NAME_OUTPUT_TYPE,
+            cpo::uno::Any(filter ? text::MailMergeType::FILE : text::MailMergeType::SHELL));
         mMMargs.emplace_back(UNO_NAME_DOCUMENT_URL,
-                             uno::Any((createFileURL(OUString::createFromAscii(filename)))));
-        mMMargs.emplace_back(UNO_NAME_DATA_SOURCE_NAME, uno::Any(aDBName));
-        mMMargs.emplace_back(UNO_NAME_OUTPUT_URL, uno::Any(aWorkDir));
+                             cpo::uno::Any((createFileURL(OUString::createFromAscii(filename)))));
+        mMMargs.emplace_back(UNO_NAME_DATA_SOURCE_NAME, cpo::uno::Any(aDBName));
+        mMMargs.emplace_back(UNO_NAME_OUTPUT_URL, cpo::uno::Any(aWorkDir));
         if (filter)
         {
-            mMMargs.emplace_back(UNO_NAME_FILE_NAME_PREFIX, uno::Any(aPrefix));
-            mMMargs.emplace_back(UNO_NAME_SAVE_FILTER, uno::Any(OUString::createFromAscii(filter)));
+            mMMargs.emplace_back(UNO_NAME_FILE_NAME_PREFIX, cpo::uno::Any(aPrefix));
+            mMMargs.emplace_back(UNO_NAME_SAVE_FILTER,
+                                 cpo::uno::Any(OUString::createFromAscii(filter)));
         }
 
         if (bPrefixIsColumn)
-            mMMargs.emplace_back(UNO_NAME_FILE_NAME_FROM_COLUMN, uno::Any(true));
+            mMMargs.emplace_back(UNO_NAME_FILE_NAME_FROM_COLUMN, cpo::uno::Any(true));
 
         if (tablename)
         {
-            mMMargs.emplace_back(UNO_NAME_DAD_COMMAND_TYPE, uno::Any(sdb::CommandType::TABLE));
+            mMMargs.emplace_back(UNO_NAME_DAD_COMMAND_TYPE, cpo::uno::Any(sdb::CommandType::TABLE));
             mMMargs.emplace_back(UNO_NAME_DAD_COMMAND,
-                                 uno::Any(OUString::createFromAscii(tablename)));
+                                 cpo::uno::Any(OUString::createFromAscii(tablename)));
         }
 
         if (nDataSets > 0)
         {
             mxCurResultSet = getXResultFromDataset(tablename, aDBName);
             uno::Reference<sdbcx::XRowLocate> xCurRowLocate(mxCurResultSet, uno::UNO_QUERY);
-            mMMargs.emplace_back(UNO_NAME_RESULT_SET, uno::Any(mxCurResultSet));
-            std::vector<uno::Any> vResult;
+            mMMargs.emplace_back(UNO_NAME_RESULT_SET, cpo::uno::Any(mxCurResultSet));
+            std::vector<cpo::uno::Any> vResult;
             vResult.reserve(nDataSets);
             sal_Int32 i;
             for (i = 0, mxCurResultSet->first(); i < nDataSets; i++, mxCurResultSet->next())
@@ -191,7 +193,7 @@ public:
                 vResult.emplace_back(xCurRowLocate->getBookmark());
             }
             mMMargs.emplace_back(UNO_NAME_SELECTION,
-                                 uno::Any(comphelper::containerToSequence(vResult)));
+                                 cpo::uno::Any(comphelper::containerToSequence(vResult)));
         }
     }
 
@@ -199,7 +201,7 @@ public:
     {
         const uno::Sequence<beans::NamedValue> aSeqMailMergeArgs
             = comphelper::containerToSequence(mMMargs);
-        uno::Any res = mxJob->execute(aSeqMailMergeArgs);
+        cpo::uno::Any res = mxJob->execute(aSeqMailMergeArgs);
 
         bool bOk = true;
         bool bMMFilenameFromColumn = false;
@@ -207,7 +209,7 @@ public:
         for (const beans::NamedValue& rArgument : aSeqMailMergeArgs)
         {
             const OUString& rName = rArgument.Name;
-            const uno::Any& rValue = rArgument.Value;
+            const cpo::uno::Any& rValue = rArgument.Value;
 
             // all error checking was already done by the MM job execution
             if (rName == UNO_NAME_OUTPUT_URL)
@@ -239,7 +241,7 @@ public:
         }
         else
         {
-            CPPUNIT_ASSERT_EQUAL(uno::Any(true), res);
+            CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(true), res);
             if (!bMMFilenameFromColumn && !bDontLoadResult)
                 loadMailMergeDocument(0);
         }

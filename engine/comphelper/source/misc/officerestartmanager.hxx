@@ -53,7 +53,7 @@ public:
     virtual bool SAL_CALL isRestartRequested( bool bInitialized ) override;
 
 // XCallback
-    virtual void SAL_CALL notify( const css::uno::Any& aData ) override;
+    virtual void SAL_CALL notify( const cpo::uno::Any& aData ) override;
 
 // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;

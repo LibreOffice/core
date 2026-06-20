@@ -31,6 +31,7 @@ namespace abp
 {
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::ui::dialogs;
 
@@ -99,7 +100,7 @@ namespace abp
         // User has one chance to accept it or not.
         // (or he can start it again by using wizard-menu!)
         // So we should deregister it on our general job execution service by using right protocol parameters.
-        css::uno::Sequence< css::beans::NamedValue > lProtocol { { u"Deactivate"_ustr, css::uno::Any( true ) } };
+        css::uno::Sequence< css::beans::NamedValue > lProtocol { { u"Deactivate"_ustr, cpo::uno::Any( true ) } };
         return Any( lProtocol );
     }
 
@@ -118,7 +119,7 @@ namespace abp
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 org_openoffice_comp_abp_OAddressBookSourcePilot(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new abp::OABSPilotUno(context));
 }

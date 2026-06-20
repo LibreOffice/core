@@ -142,7 +142,7 @@ bool GetAtPageRelOrientation(sal_Int16 & rOrientation, bool const isIgnorePrintA
 
 SfxPoolItem* SwFormatLineNumber::CreateDefault() { return new SwFormatLineNumber; }
 
-static sal_Int16 lcl_IntToRelation(const uno::Any& rVal)
+static sal_Int16 lcl_IntToRelation(const cpo::uno::Any& rVal)
 {
     sal_Int16 nVal = text::RelOrientation::FRAME;
     if (!(rVal >>= nVal))
@@ -271,7 +271,7 @@ SwFormatFrameSize* SwFormatFrameSize::Clone( SfxItemPool* ) const
     return new SwFormatFrameSize( *this );
 }
 
-bool SwFormatFrameSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFormatFrameSize::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     // here we convert always!
     nMemberId &= ~CONVERT_TWIPS;
@@ -326,7 +326,7 @@ bool SwFormatFrameSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-bool SwFormatFrameSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwFormatFrameSize::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bConvert = 0 != (nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -779,7 +779,7 @@ void SwFormatPageDesc::RegisterToPageDesc( SwPageDesc& rDesc )
     rDesc.Add(*this);
 }
 
-bool SwFormatPageDesc::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFormatPageDesc::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     // here we convert always!
     nMemberId &= ~CONVERT_TWIPS;
@@ -820,7 +820,7 @@ bool SwFormatPageDesc::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return bRet;
 }
 
-bool SwFormatPageDesc::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwFormatPageDesc::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
     // here we convert always!
@@ -1135,7 +1135,7 @@ void SwFormatCol::Calc( sal_uInt16 nGutterWidth, sal_uInt16 nAct )
     }
 }
 
-bool SwFormatCol::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFormatCol::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     // here we convert always!
     nMemberId &= ~CONVERT_TWIPS;
@@ -1158,7 +1158,7 @@ bool SwFormatCol::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                                                       : static_cast<sal_Int32>(nItemGutterWidth)
                                                 : 0;
             nAutoDistance = convertTwipToMm100(nAutoDistance);
-            xProps->setPropertyValue(UNO_NAME_AUTOMATIC_DISTANCE, uno::Any(nAutoDistance));
+            xProps->setPropertyValue(UNO_NAME_AUTOMATIC_DISTANCE, cpo::uno::Any(nAutoDistance));
 
             if (!IsOrtho())
             {
@@ -1176,7 +1176,7 @@ bool SwFormatCol::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 xCols->setColumns(aTextColumns); // sets "IsAutomatic" property to false
             }
         }
-        uno::Any aVal;
+        cpo::uno::Any aVal;
         aVal <<= o3tl::narrowing<sal_Int32>(
             o3tl::convert(GetLineWidth(), o3tl::Length::twip, o3tl::Length::mm100));
         xProps->setPropertyValue(UNO_NAME_SEPARATOR_LINE_WIDTH, aVal);
@@ -1226,7 +1226,7 @@ bool SwFormatCol::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-bool SwFormatCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwFormatCol::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     // here we convert always!
     nMemberId &= ~CONVERT_TWIPS;
@@ -1346,7 +1346,7 @@ SwFormatSurround* SwFormatSurround::Clone( SfxItemPool* ) const
     return new SwFormatSurround( *this );
 }
 
-bool SwFormatSurround::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFormatSurround::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     // here we convert always!
     nMemberId &= ~CONVERT_TWIPS;
@@ -1372,7 +1372,7 @@ bool SwFormatSurround::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return bRet;
 }
 
-bool SwFormatSurround::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwFormatSurround::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     // here we convert always!
     nMemberId &= ~CONVERT_TWIPS;
@@ -1462,7 +1462,7 @@ SwFormatVertOrient* SwFormatVertOrient::Clone( SfxItemPool* ) const
     return new SwFormatVertOrient( *this );
 }
 
-bool SwFormatVertOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFormatVertOrient::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     // here we convert always!
     nMemberId &= ~CONVERT_TWIPS;
@@ -1487,7 +1487,7 @@ bool SwFormatVertOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return bRet;
 }
 
-bool SwFormatVertOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwFormatVertOrient::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bConvert = 0 != (nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1572,7 +1572,7 @@ SwFormatHoriOrient* SwFormatHoriOrient::Clone( SfxItemPool* ) const
     return new SwFormatHoriOrient( *this );
 }
 
-bool SwFormatHoriOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFormatHoriOrient::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     // here we convert always!
     nMemberId &= ~CONVERT_TWIPS;
@@ -1600,7 +1600,7 @@ bool SwFormatHoriOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return bRet;
 }
 
-bool SwFormatHoriOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwFormatHoriOrient::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bConvert = 0 != (nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1764,7 +1764,7 @@ sal_uInt32 SwFormatAnchor::s_nOrderCounter = 0;
 
 // OD 2004-05-05 #i28701#
 
-bool SwFormatAnchor::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFormatAnchor::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     // here we convert always!
     nMemberId &= ~CONVERT_TWIPS;
@@ -1818,7 +1818,7 @@ bool SwFormatAnchor::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return bRet;
 }
 
-bool SwFormatAnchor::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwFormatAnchor::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     // here we convert always!
     nMemberId &= ~CONVERT_TWIPS;
@@ -1974,7 +1974,7 @@ void SwFormatURL::SetMap( const ImageMap *pM )
     m_pMap.reset( pM ? new ImageMap( *pM ) : nullptr);
 }
 
-bool SwFormatURL::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFormatURL::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     // here we convert always!
     nMemberId &= ~CONVERT_TWIPS;
@@ -2016,7 +2016,7 @@ bool SwFormatURL::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return bRet;
 }
 
-bool SwFormatURL::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwFormatURL::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     // here we convert always!
     nMemberId &= ~CONVERT_TWIPS;
@@ -2128,7 +2128,7 @@ bool SwFormatFootnoteEndAtTextEnd::operator==( const SfxPoolItem& rItem ) const
             m_sSuffix == rAttr.m_sSuffix;
 }
 
-bool SwFormatFootnoteEndAtTextEnd::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFormatFootnoteEndAtTextEnd::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
@@ -2151,7 +2151,7 @@ bool SwFormatFootnoteEndAtTextEnd::QueryValue( uno::Any& rVal, sal_uInt8 nMember
     return true;
 }
 
-bool SwFormatFootnoteEndAtTextEnd::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwFormatFootnoteEndAtTextEnd::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bRet = true;
     nMemberId &= ~CONVERT_TWIPS;
@@ -2280,7 +2280,7 @@ void SwFormatChain::SetNext( SwFlyFrameFormat *pFormat )
         m_aNext.EndListeningAll();
 }
 
-bool SwFormatChain::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFormatChain::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     // here we convert always!
     nMemberId &= ~CONVERT_TWIPS;
@@ -2328,7 +2328,7 @@ SwFormatLineNumber* SwFormatLineNumber::Clone( SfxItemPool* ) const
     return new SwFormatLineNumber( *this );
 }
 
-bool SwFormatLineNumber::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFormatLineNumber::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     // here we convert always!
     nMemberId &= ~CONVERT_TWIPS;
@@ -2348,7 +2348,7 @@ bool SwFormatLineNumber::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return bRet;
 }
 
-bool SwFormatLineNumber::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwFormatLineNumber::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     // here we convert always!
     nMemberId &= ~CONVERT_TWIPS;
@@ -2409,7 +2409,7 @@ SwTextGridItem* SwTextGridItem::Clone( SfxItemPool* ) const
     return new SwTextGridItem( *this );
 }
 
-bool SwTextGridItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwTextGridItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bRet = true;
 
@@ -2478,7 +2478,7 @@ bool SwTextGridItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return bRet;
 }
 
-bool SwTextGridItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwTextGridItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bRet = true;
     switch( nMemberId & ~CONVERT_TWIPS )

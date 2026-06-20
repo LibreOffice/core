@@ -36,7 +36,7 @@ using namespace css;
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Writer_WriterModule_get_implementation(uno::XComponentContext* /*pCtx*/,
-                                                         uno::Sequence<uno::Any> const& /*rSeq*/)
+                                                         uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     SolarMutexGuard aGuard;
     return cppu::acquire(new SwUnoModule);
@@ -80,7 +80,7 @@ void SAL_CALL SwUnoModule::dispatchWithNotification( const util::URL& aURL, cons
     {
         xListener->dispatchFinished(
             frame::DispatchResultEvent(
-                    xThis, aState, uno::Any()));
+                    xThis, aState, cpo::uno::Any()));
     }
 }
 

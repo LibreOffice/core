@@ -92,8 +92,8 @@ public:
 
     virtual void            SetHidden( bool bHidden ) override;
     virtual bool            IsHidden( ) const override;
-    void SetGrabBagItem(const css::uno::Any& rVal);
-    void GetGrabBagItem(css::uno::Any& rVal) const;
+    void SetGrabBagItem(const cpo::uno::Any& rVal);
+    void GetGrabBagItem(cpo::uno::Any& rVal) const;
 
     /** add optional parameter <bResetIndentAttrsAtParagraphStyle>, default value false,
      which indicates that the indent attributes at a paragraph style should

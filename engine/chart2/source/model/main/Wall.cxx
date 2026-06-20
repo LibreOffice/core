@@ -85,7 +85,7 @@ uno::Reference< util::XCloneable > SAL_CALL Wall::createClone()
 }
 
 // ____ OPropertySet ____
-void Wall::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
+void Wall::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const
 {
     static ::chart::tPropertyValueMap aStaticDefaults = []()
         {

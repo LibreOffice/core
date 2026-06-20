@@ -43,6 +43,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 class ScExportTest : public ScModelTestBase
 {
@@ -1042,7 +1043,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf162963_ODF)
         xDocPropSet->getPropertyValue(u"DatabaseRanges"_ustr), UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xDBRangePropSet(xNameAccess->getByName(u"myData"_ustr),
                                                         UNO_QUERY_THROW);
-    xDBRangePropSet->setPropertyValue(u"TotalsRow"_ustr, uno::Any(true));
+    xDBRangePropSet->setPropertyValue(u"TotalsRow"_ustr, cpo::uno::Any(true));
 
     // Save to ODF 1.3 extended.
     // Adapt to a concrete version when attribute contains-footer is available in ODF strict.

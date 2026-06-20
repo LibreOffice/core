@@ -19,6 +19,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace apitest
 {
@@ -32,7 +33,7 @@ void DatabaseRange::testMoveCells()
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= bMoveCells);
     CPPUNIT_ASSERT_MESSAGE("Default MoveCells already changed", !bMoveCells);
 
-    uno::Any aNewMoveCells;
+    cpo::uno::Any aNewMoveCells;
     aNewMoveCells <<= true;
     xDatabaseRange->setPropertyValue(propName, aNewMoveCells);
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= bMoveCells);
@@ -49,7 +50,7 @@ void DatabaseRange::testKeepFormats()
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= bKeepFormats);
     CPPUNIT_ASSERT_MESSAGE("Default KeepFormats already changed", !bKeepFormats);
 
-    uno::Any aNewKeepFormats;
+    cpo::uno::Any aNewKeepFormats;
     aNewKeepFormats <<= true;
     xDatabaseRange->setPropertyValue(propName, aNewKeepFormats);
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= bKeepFormats);
@@ -66,7 +67,7 @@ void DatabaseRange::testStripData()
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= bStripData);
     CPPUNIT_ASSERT_MESSAGE("Default StripData already changed", !bStripData);
 
-    uno::Any aNewStripData;
+    cpo::uno::Any aNewStripData;
     aNewStripData <<= true;
     xDatabaseRange->setPropertyValue(propName, aNewStripData);
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= bStripData);
@@ -83,7 +84,7 @@ void DatabaseRange::testAutoFilter()
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= bAutoFilter);
     CPPUNIT_ASSERT_MESSAGE("Default AutoFilter already changed", !bAutoFilter);
 
-    uno::Any aNewAutoFilter;
+    cpo::uno::Any aNewAutoFilter;
     aNewAutoFilter <<= true;
     xDatabaseRange->setPropertyValue(propName, aNewAutoFilter);
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= bAutoFilter);
@@ -101,7 +102,7 @@ void DatabaseRange::testUseFilterCriteriaSource()
     CPPUNIT_ASSERT_MESSAGE("Default UseFilterCriteriaSource already changed",
                            !bUseFilterCriteriaSource);
 
-    uno::Any aNewUseFilterCriteriaSource;
+    cpo::uno::Any aNewUseFilterCriteriaSource;
     aNewUseFilterCriteriaSource <<= true;
     xDatabaseRange->setPropertyValue(propName, aNewUseFilterCriteriaSource);
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= bUseFilterCriteriaSource);
@@ -120,7 +121,7 @@ void DatabaseRange::testFilterCriteriaSource()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Default RefreshPeriod already changed",
                                  table::CellRangeAddress(0, 0, 0, 0, 0), cellRangeAddress);
 
-    uno::Any aFilterCriteriaSource;
+    cpo::uno::Any aFilterCriteriaSource;
     aFilterCriteriaSource <<= table::CellRangeAddress(1, 1, 1, 1, 1);
     xDatabaseRange->setPropertyValue(propName, aFilterCriteriaSource);
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= cellRangeAddress);
@@ -139,7 +140,7 @@ void DatabaseRange::testRefreshPeriod()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Default RefreshPeriod already changed", sal_Int32(0),
                                  aRefreshPeriod);
 
-    uno::Any aNewRefreshPeriod;
+    cpo::uno::Any aNewRefreshPeriod;
     aNewRefreshPeriod <<= static_cast<sal_Int32>(42);
     xDatabaseRange->setPropertyValue(propName, aNewRefreshPeriod);
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= aRefreshPeriod);
@@ -157,7 +158,7 @@ void DatabaseRange::testFromSelection()
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= bFromSelection);
     CPPUNIT_ASSERT_MESSAGE("Default FromSelection already changed", !bFromSelection);
 
-    uno::Any aNewFromSelection;
+    cpo::uno::Any aNewFromSelection;
     aNewFromSelection <<= true;
     xDatabaseRange->setPropertyValue(propName, aNewFromSelection);
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= bFromSelection);
@@ -174,7 +175,7 @@ void DatabaseRange::testTokenIndex()
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= aTokenIndex);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Default TotalIndex already changed", sal_Int32(1), aTokenIndex);
 
-    uno::Any aNewTokenIndex;
+    cpo::uno::Any aNewTokenIndex;
     aNewTokenIndex <<= static_cast<sal_Int32>(42);
     xDatabaseRange->setPropertyValue(propName, aNewTokenIndex);
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= aTokenIndex);
@@ -191,7 +192,7 @@ void DatabaseRange::testTotalsRow()
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= bTotalsRow);
     CPPUNIT_ASSERT_MESSAGE("Default TotalsRow already changed", !bTotalsRow);
 
-    uno::Any aNewTotalsRow;
+    cpo::uno::Any aNewTotalsRow;
     aNewTotalsRow <<= true;
     xDatabaseRange->setPropertyValue(propName, aNewTotalsRow);
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= bTotalsRow);
@@ -208,7 +209,7 @@ void DatabaseRange::testContainsHeader()
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= bContainsHeader);
     CPPUNIT_ASSERT_MESSAGE("Default ContainsHeader already changed", bContainsHeader);
 
-    uno::Any aNewContainsHeader;
+    cpo::uno::Any aNewContainsHeader;
     aNewContainsHeader <<= false;
     xDatabaseRange->setPropertyValue(propName, aNewContainsHeader);
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= bContainsHeader);

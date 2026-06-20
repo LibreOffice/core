@@ -44,7 +44,7 @@ public:
     virtual PROPERTYTYPE getValueFromSeries( const css::uno::Reference< css::beans::XPropertySet >& xSeriesPropertySet ) const =0;
     virtual void setValueToSeries( const css::uno::Reference< css::beans::XPropertySet >& xSeriesPropertySet, const PROPERTYTYPE & aNewValue ) const =0;
 
-    explicit WrappedSeriesOrDiagramProperty( const OUString& rName, const css::uno::Any& rDefaulValue
+    explicit WrappedSeriesOrDiagramProperty( const OUString& rName, const cpo::uno::Any& rDefaulValue
         , std::shared_ptr<Chart2ModelContact> spChart2ModelContact
         , tSeriesOrDiagramPropertyType ePropertyType )
             : WrappedProperty(rName,OUString())
@@ -98,7 +98,7 @@ public:
             }
         }
     }
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override
     {
         PROPERTYTYPE aNewValue = PROPERTYTYPE();
         if( ! (rOuterValue >>= aNewValue) )
@@ -122,7 +122,7 @@ public:
         }
     }
 
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override
+    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override
     {
         if( m_ePropertyType == DIAGRAM )
         {
@@ -139,21 +139,21 @@ public:
         }
         else
         {
-            css::uno::Any aRet( m_aDefaultValue );
+            cpo::uno::Any aRet( m_aDefaultValue );
             aRet <<= getValueFromSeries( xInnerPropertySet );
             return aRet;
         }
     }
 
-    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& /* xInnerPropertyState */ ) const override
+    virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& /* xInnerPropertyState */ ) const override
     {
         return m_aDefaultValue;
     }
 
 protected:
     std::shared_ptr< Chart2ModelContact >  m_spChart2ModelContact;
-    mutable css::uno::Any         m_aOuterValue;
-    css::uno::Any                 m_aDefaultValue;
+    mutable cpo::uno::Any         m_aOuterValue;
+    cpo::uno::Any                 m_aDefaultValue;
     tSeriesOrDiagramPropertyType               m_ePropertyType;
 };
 

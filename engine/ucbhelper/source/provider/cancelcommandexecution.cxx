@@ -34,7 +34,7 @@ namespace ucbhelper
 {
 
 
-void cancelCommandExecution( const uno::Any & rException,
+void cancelCommandExecution( const cpo::uno::Any & rException,
                              const uno::Reference<
                                         ucb::XCommandEnvironment > & xEnv )
 {
@@ -69,7 +69,7 @@ void cancelCommandExecution( const uno::Any & rException,
 
 
 void cancelCommandExecution( const ucb::IOErrorCode eError,
-                             const uno::Sequence< uno::Any > & rArgs,
+                             const uno::Sequence< cpo::uno::Any > & rArgs,
                              const uno::Reference<
                                 ucb::XCommandEnvironment > & xEnv,
                              const OUString & rMessage,
@@ -82,7 +82,7 @@ void cancelCommandExecution( const ucb::IOErrorCode eError,
 
         ucb::InteractiveAugmentedIOException aRequest(
             rMessage, xContext, task::InteractionClassification_ERROR, eError, rArgs);
-        cppu::throwException( uno::Any( aRequest ) );
+        cppu::throwException( cpo::uno::Any( aRequest ) );
     }
     else
     {

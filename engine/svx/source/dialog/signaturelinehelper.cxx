@@ -169,7 +169,7 @@ void setShapeCertificate(SfxViewShell* pViewShell,
     aSvgImage = aSvgImage.replaceAll("[DATE]", aDate);
 
     uno::Reference<graphic::XGraphic> xGraphic = svx::SignatureLineHelper::importSVG(aSvgImage);
-    xShapeProps->setPropertyValue(u"Graphic"_ustr, uno::Any(xGraphic));
+    xShapeProps->setPropertyValue(u"Graphic"_ustr, cpo::uno::Any(xGraphic));
 }
 }
 

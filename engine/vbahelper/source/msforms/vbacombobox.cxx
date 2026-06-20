@@ -56,14 +56,14 @@ ScVbaComboBox::ScVbaComboBox( const uno::Reference< XHelperInterface >& xParent,
 
 // Value, [read] e.g. getValue returns the value of ooo Text property e.g. the value in
 // the drop down
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaComboBox::getValue()
 {
     return m_xProps->getPropertyValue( sSourceName );
 }
 
 void SAL_CALL
-ScVbaComboBox::setListIndex( const uno::Any& _value )
+ScVbaComboBox::setListIndex( const cpo::uno::Any& _value )
 {
     sal_Int16 nIndex = 0;
     if( !(_value >>= nIndex) )
@@ -76,7 +76,7 @@ ScVbaComboBox::setListIndex( const uno::Any& _value )
     if( ( nIndex >= 0 ) && ( sItems.getLength() > nIndex ) )
     {
         const OUString& sText = sItems[ nIndex ];
-        m_xProps->setPropertyValue( u"Text"_ustr, uno::Any( sText ) );
+        m_xProps->setPropertyValue( u"Text"_ustr, cpo::uno::Any( sText ) );
 
         // fire the _Change event
         if( nOldIndex != nIndex )
@@ -84,7 +84,7 @@ ScVbaComboBox::setListIndex( const uno::Any& _value )
     }
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 ScVbaComboBox::getListIndex()
 {
     uno::Sequence< OUString > sItems;
@@ -100,27 +100,27 @@ ScVbaComboBox::getListIndex()
             if (index != -1)
             {
                 SAL_INFO("vbahelper", "getListIndex returning " << index );
-                return uno::Any( index );
+                return cpo::uno::Any( index );
             }
         }
     }
     SAL_INFO("vbahelper", "getListIndex returning -1" );
-    return uno::Any( sal_Int32( -1 ) );
+    return cpo::uno::Any( sal_Int32( -1 ) );
 }
 
 // Value, [write]e.g. setValue sets the value in the drop down, and if the value is one
 // of the values in the list then the selection is also set
 void SAL_CALL
-ScVbaComboBox::setValue( const uno::Any& _value )
+ScVbaComboBox::setValue( const cpo::uno::Any& _value )
 {
     // booleans are converted to uppercase strings
     OUString oldValue = extractStringFromAny( getValue(), OUString(), true );
-    m_xProps->setPropertyValue( sSourceName, uno::Any( extractStringFromAny( _value, OUString(), true ) ) );
+    m_xProps->setPropertyValue( sSourceName, cpo::uno::Any( extractStringFromAny( _value, OUString(), true ) ) );
     OUString newValue = extractStringFromAny( getValue(), OUString(), true );
     if ( oldValue != newValue )
     {
         sal_Int32 index = 0;
-        uno::Any aIndex = getListIndex();
+        cpo::uno::Any aIndex = getListIndex();
         aIndex >>= index;
         if ( index < 0 )
             fireChangeEvent();
@@ -142,18 +142,18 @@ ScVbaComboBox::getText()
 void SAL_CALL
 ScVbaComboBox::setText( const OUString& _text )
 {
-    setValue( uno::Any( _text ) ); // seems the same
+    setValue( cpo::uno::Any( _text ) ); // seems the same
 }
 
 // Methods
 void SAL_CALL
-ScVbaComboBox::AddItem( const uno::Any& pvargItem, const uno::Any& pvargIndex )
+ScVbaComboBox::AddItem( const cpo::uno::Any& pvargItem, const cpo::uno::Any& pvargIndex )
 {
     maListHelper.AddItem( pvargItem, pvargIndex );
 }
 
 void SAL_CALL
-ScVbaComboBox::removeItem( const uno::Any& index )
+ScVbaComboBox::removeItem( const cpo::uno::Any& index )
 {
     maListHelper.removeItem( index );
 }
@@ -177,8 +177,8 @@ ScVbaComboBox::getListCount()
     return maListHelper.getListCount();
 }
 
-uno::Any SAL_CALL
-ScVbaComboBox::List( const ::uno::Any& pvargIndex, const uno::Any& pvarColumn )
+cpo::uno::Any SAL_CALL
+ScVbaComboBox::List( const ::cpo::uno::Any& pvargIndex, const cpo::uno::Any& pvarColumn )
 {
     return maListHelper.List( pvargIndex, pvarColumn );
 }

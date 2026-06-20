@@ -68,7 +68,7 @@ public:
     void SAL_CALL setSourceDocument(const uno::Reference<lang::XComponent>& xDoc) override;
 
     // XInitialization
-    void SAL_CALL initialize(const uno::Sequence<uno::Any>& rArguments) override;
+    void SAL_CALL initialize(const uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
@@ -102,13 +102,13 @@ bool RtfFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescriptor)
     uno::Reference<beans::XPropertySet> xDocProps;
     if (m_xDstDoc.is()) // not in cppunittest?
     {
-        m_xDstDoc->setPropertyValue(u"UndocumentedWriterfilterHack"_ustr, uno::Any(true));
+        m_xDstDoc->setPropertyValue(u"UndocumentedWriterfilterHack"_ustr, cpo::uno::Any(true));
     }
     comphelper::ScopeGuard g([xDocProps] {
         if (xDocProps.is()) // not in cppunittest?
         {
             // note: pStream.clear calls RemoveLastParagraph()
-            xDocProps->setPropertyValue(u"UndocumentedWriterfilterHack"_ustr, uno::Any(false));
+            xDocProps->setPropertyValue(u"UndocumentedWriterfilterHack"_ustr, cpo::uno::Any(false));
         }
     });
 
@@ -166,7 +166,7 @@ bool RtfFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescriptor)
     }
     catch (const io::WrongFormatException&)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         // cannot throw WrongFormatException directly :(
         throw lang::WrappedTargetRuntimeException(u""_ustr, getXWeak(), anyEx);
     }
@@ -193,7 +193,7 @@ void RtfFilter::setTargetDocument(const uno::Reference<lang::XComponent>& xDoc)
     assert(m_xDstDoc);
 }
 
-void RtfFilter::initialize(const uno::Sequence<uno::Any>& /*aArguments*/)
+void RtfFilter::initialize(const uno::Sequence<cpo::uno::Any>& /*aArguments*/)
 {
     // The DOCX exporter here extracts 'type' of the filter, ie 'Word' or
     // 'Word Template' but we don't need it for RTF.
@@ -214,8 +214,8 @@ uno::Sequence<OUString> RtfFilter::getSupportedServiceNames()
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
-com_sun_star_comp_Writer_RtfFilter_get_implementation(uno::XComponentContext* pComponent,
-                                                      uno::Sequence<uno::Any> const& /*rSequence*/)
+com_sun_star_comp_Writer_RtfFilter_get_implementation(
+    uno::XComponentContext* pComponent, uno::Sequence<cpo::uno::Any> const& /*rSequence*/)
 {
     return cppu::acquire(new RtfFilter(pComponent));
 }

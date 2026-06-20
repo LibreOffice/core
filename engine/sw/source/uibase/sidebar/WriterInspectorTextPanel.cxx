@@ -361,7 +361,7 @@ static OUString PropertyNametoRID(const OUString& rName)
     return rName;
 }
 
-static svx::sidebar::TreeNode SimplePropToTreeNode(const OUString& rName, const css::uno::Any& rVal)
+static svx::sidebar::TreeNode SimplePropToTreeNode(const OUString& rName, const cpo::uno::Any& rVal)
 {
     svx::sidebar::TreeNode aCurNode;
     aCurNode.sNodeName = PropertyNametoRID(rName);
@@ -370,7 +370,7 @@ static svx::sidebar::TreeNode SimplePropToTreeNode(const OUString& rName, const 
     return aCurNode;
 }
 
-static svx::sidebar::TreeNode BorderToTreeNode(const OUString& rName, const css::uno::Any& rVal)
+static svx::sidebar::TreeNode BorderToTreeNode(const OUString& rName, const cpo::uno::Any& rVal)
 {
     table::BorderLine2 aBorder;
     rVal >>= aBorder;
@@ -379,17 +379,17 @@ static svx::sidebar::TreeNode BorderToTreeNode(const OUString& rName, const css:
     aCurNode.NodeType = svx::sidebar::TreeNode::ComplexProperty;
 
     aCurNode.children = {
-        SimplePropToTreeNode(u"BorderColor"_ustr, css::uno::Any(aBorder.Color)),
-        SimplePropToTreeNode(u"BorderLineWidth"_ustr, css::uno::Any(aBorder.LineWidth)),
-        SimplePropToTreeNode(u"BorderLineStyle"_ustr, css::uno::Any(aBorder.LineStyle)),
-        SimplePropToTreeNode(u"BorderLineDistance"_ustr, css::uno::Any(aBorder.LineDistance)),
-        SimplePropToTreeNode(u"BorderInnerLineWidth"_ustr, css::uno::Any(aBorder.InnerLineWidth)),
-        SimplePropToTreeNode(u"BorderOuterLineWidth"_ustr, css::uno::Any(aBorder.OuterLineWidth))
+        SimplePropToTreeNode(u"BorderColor"_ustr, cpo::uno::Any(aBorder.Color)),
+        SimplePropToTreeNode(u"BorderLineWidth"_ustr, cpo::uno::Any(aBorder.LineWidth)),
+        SimplePropToTreeNode(u"BorderLineStyle"_ustr, cpo::uno::Any(aBorder.LineStyle)),
+        SimplePropToTreeNode(u"BorderLineDistance"_ustr, cpo::uno::Any(aBorder.LineDistance)),
+        SimplePropToTreeNode(u"BorderInnerLineWidth"_ustr, cpo::uno::Any(aBorder.InnerLineWidth)),
+        SimplePropToTreeNode(u"BorderOuterLineWidth"_ustr, cpo::uno::Any(aBorder.OuterLineWidth))
     };
     return aCurNode;
 }
 
-static svx::sidebar::TreeNode LocaleToTreeNode(const OUString& rName, const css::uno::Any& rVal)
+static svx::sidebar::TreeNode LocaleToTreeNode(const OUString& rName, const cpo::uno::Any& rVal)
 {
     svx::sidebar::TreeNode aCurNode;
     aCurNode.sNodeName = PropertyNametoRID(rName);
@@ -405,7 +405,7 @@ static svx::sidebar::TreeNode LocaleToTreeNode(const OUString& rName, const css:
 
 // Collect text of the current level of the annotated text
 // ranges (InContentMetadata) and metadata fields (MetadataField)
-static OUString NestedTextContentToText(const css::uno::Any& rVal)
+static OUString NestedTextContentToText(const cpo::uno::Any& rVal)
 {
     uno::Reference<container::XEnumerationAccess> xMeta;
     if (rVal >>= xMeta)
@@ -449,7 +449,7 @@ static void MetadataToTreeNode(const css::uno::Reference<css::uno::XInterface>& 
     aCurNode.NodeType = svx::sidebar::TreeNode::ComplexProperty;
 
     aCurNode.children.push_back(
-        SimplePropToTreeNode(u"xml:id"_ustr, uno::Any(xMeta->getMetadataReference().Second)));
+        SimplePropToTreeNode(u"xml:id"_ustr, cpo::uno::Any(xMeta->getMetadataReference().Second)));
 
     // list associated (predicate, object) pairs of the actual subject
     // under the tree node "Metadata Reference"
@@ -461,7 +461,8 @@ static void MetadataToTreeNode(const css::uno::Reference<css::uno::XInterface>& 
         std::map<OUString, OUString> xStatements
             = SwRDFHelper::getStatements(pSwXTextDocument, xRepo->getGraphNames(), xSubject);
         for (const auto& pair : xStatements)
-            aCurNode.children.push_back(SimplePropToTreeNode(pair.first, uno::Any(pair.second)));
+            aCurNode.children.push_back(
+                SimplePropToTreeNode(pair.first, cpo::uno::Any(pair.second)));
     }
 
     rNode.children.push_back(std::move(aCurNode));
@@ -473,7 +474,7 @@ PropertyToTreeNode(const css::beans::Property& rProperty,
 {
     const OUString& rPropName = rProperty.Name;
     svx::sidebar::TreeNode aCurNode;
-    const uno::Any aAny = xPropertiesSet->getPropertyValue(rPropName);
+    const cpo::uno::Any aAny = xPropertiesSet->getPropertyValue(rPropName);
     aCurNode.sNodeName = PropertyNametoRID(rPropName);
 
     // These properties are handled separately as they are stored in STRUCT and not in single data members

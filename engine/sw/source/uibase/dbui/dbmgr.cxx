@@ -189,14 +189,14 @@ static bool lcl_getCountFromResultSet( sal_Int32& rCount, const SwDSParam* pPara
         try
         {
             bool bFinal = false;
-            uno::Any aFinal = xPrSet->getPropertyValue(u"IsRowCountFinal"_ustr);
+            cpo::uno::Any aFinal = xPrSet->getPropertyValue(u"IsRowCountFinal"_ustr);
             aFinal >>= bFinal;
             if(!bFinal)
             {
                 pParam->xResultSet->last();
                 pParam->xResultSet->first();
             }
-            uno::Any aCount = xPrSet->getPropertyValue(u"RowCount"_ustr);
+            cpo::uno::Any aCount = xPrSet->getPropertyValue(u"RowCount"_ustr);
             if( aCount >>= rCount )
                 return true;
         }
@@ -337,7 +337,7 @@ static void lcl_InitNumberFormatter(SwDSParam& rParam, uno::Reference<sdbc::XDat
     if(!xSourceProps.is())
         return;
 
-    uno::Any aFormats = xSourceProps->getPropertyValue(u"NumberFormatsSupplier"_ustr);
+    cpo::uno::Any aFormats = xSourceProps->getPropertyValue(u"NumberFormatsSupplier"_ustr);
     if(!aFormats.hasValue())
         return;
 
@@ -346,7 +346,7 @@ static void lcl_InitNumberFormatter(SwDSParam& rParam, uno::Reference<sdbc::XDat
     if(xSuppl.is())
     {
         uno::Reference< beans::XPropertySet > xSettings = xSuppl->getNumberFormatSettings();
-        uno::Any aNull = xSettings->getPropertyValue(u"NullDate"_ustr);
+        cpo::uno::Any aNull = xSettings->getPropertyValue(u"NullDate"_ustr);
         aNull >>= rParam.aNullDate;
         if(rParam.xFormatter.is())
             rParam.xFormatter->attachNumberFormatsSupplier(xSuppl);
@@ -437,7 +437,7 @@ static bool lcl_GetColumnCnt(SwDSParam* pParam, const OUString& rColumnName,
     }
     if(!xCols.is() || !xCols->hasByName(rColumnName))
         return false;
-    uno::Any aCol = xCols->getByName(rColumnName);
+    cpo::uno::Any aCol = xCols->getByName(rColumnName);
     uno::Reference< beans::XPropertySet > xColumnProps;
     aCol >>= xColumnProps;
     lcl_GetColumnCnt( pParam, xColumnProps, nLanguage, rResult, pNumber );
@@ -481,7 +481,7 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
     SwDBData aData;
     aData.nCommandType = sdb::CommandType::TABLE;
     uno::Reference<sdbc::XResultSet>  xResSet;
-    uno::Sequence<uno::Any> aSelection;
+    uno::Sequence<cpo::uno::Any> aSelection;
     uno::Reference< sdbc::XConnection> xConnection;
 
     aData.sDataSource = rMergeDesc.rDescriptor.getDataSource();
@@ -619,7 +619,7 @@ void SwDBManager::ImportDBEntry(SwWrtShell* pSh)
     tools::Long nLength = aColNames.getLength();
     for(tools::Long i = 0; i < nLength; i++)
     {
-        uno::Any aCol = xCols->getByName(pColNames[i]);
+        cpo::uno::Any aCol = xCols->getByName(pColNames[i]);
         uno::Reference< beans::XPropertySet > xColumnProp;
         aCol >>= xColumnProp;
         SwDBFormatData aDBFormat;
@@ -825,7 +825,7 @@ static bool lcl_SaveDoc(
                                    *pStoreToFilterOptions));
     if( pSaveToFilterData->hasElements() )
         pDstMed->GetItemSet().Put( SfxUnoAnyItem(SID_FILTER_DATA,
-                                   uno::Any(*pSaveToFilterData)));
+                                   cpo::uno::Any(*pSaveToFilterData)));
 
     // convert fields to text if we are exporting to PDF.
     // this prevents a second merge while updating the fields
@@ -1113,7 +1113,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         uno::Reference<container::XNameAccess> xCols = xColsSupp->getColumns();
         if( !xCols->hasByName( rMergeDescriptor.sDBcolumn ) )
             return false;
-        uno::Any aCol = xCols->getByName( rMergeDescriptor.sDBcolumn );
+        cpo::uno::Any aCol = xCols->getByName( rMergeDescriptor.sDBcolumn );
         aCol >>= xColumnProp;
 
         if(bPasswordColumnName)
@@ -1740,7 +1740,7 @@ sal_uInt32 SwDBManager::GetColumnFormat( const OUString& rDBName,
             }
             if(!xCols.is() || !xCols->hasByName(rColNm))
                 return nRet;
-            uno::Any aCol = xCols->getByName(rColNm);
+            cpo::uno::Any aCol = xCols->getByName(rColNm);
             uno::Reference< beans::XPropertySet > xColumn;
             aCol >>= xColumn;
             nRet = GetColumnFormat(xSource, xConnection, xColumn, pNFormatr, nLanguage);
@@ -1789,7 +1789,7 @@ sal_uInt32 SwDBManager::GetColumnFormat( uno::Reference< sdbc::XDataSource> cons
         uno::Reference< util::XNumberFormats > xNumberFormats;
         if(xSourceProps.is())
         {
-            uno::Any aFormats = xSourceProps->getPropertyValue(u"NumberFormatsSupplier"_ustr);
+            cpo::uno::Any aFormats = xSourceProps->getPropertyValue(u"NumberFormatsSupplier"_ustr);
             if(aFormats.hasValue())
             {
                 uno::Reference<util::XNumberFormatsSupplier> xSuppl;
@@ -1803,7 +1803,7 @@ sal_uInt32 SwDBManager::GetColumnFormat( uno::Reference< sdbc::XDataSource> cons
         bool bUseDefault = true;
         try
         {
-            uno::Any aFormatKey = xColumn->getPropertyValue(u"FormatKey"_ustr);
+            cpo::uno::Any aFormatKey = xColumn->getPropertyValue(u"FormatKey"_ustr);
             if(aFormatKey.hasValue())
             {
                 sal_Int32 nFormat = 0;
@@ -1813,8 +1813,8 @@ sal_uInt32 SwDBManager::GetColumnFormat( uno::Reference< sdbc::XDataSource> cons
                     try
                     {
                         uno::Reference<beans::XPropertySet> xNumProps = xNumberFormats->getByKey( nFormat );
-                        uno::Any aFormatString = xNumProps->getPropertyValue(u"FormatString"_ustr);
-                        uno::Any aLocaleVal = xNumProps->getPropertyValue(u"Locale"_ustr);
+                        cpo::uno::Any aFormatString = xNumProps->getPropertyValue(u"FormatString"_ustr);
+                        cpo::uno::Any aLocaleVal = xNumProps->getPropertyValue(u"Locale"_ustr);
                         OUString sFormat;
                         aFormatString >>= sFormat;
                         lang::Locale aLoc;
@@ -1875,10 +1875,10 @@ sal_Int32 SwDBManager::GetColumnType( const OUString& rDBName,
         uno::Reference<container::XNameAccess> xCols = xColsSupp->getColumns();
         if(xCols->hasByName(rColNm))
         {
-            uno::Any aCol = xCols->getByName(rColNm);
+            cpo::uno::Any aCol = xCols->getByName(rColNm);
             uno::Reference<beans::XPropertySet> xCol;
             aCol >>= xCol;
-            uno::Any aType = xCol->getPropertyValue(u"Type"_ustr);
+            cpo::uno::Any aType = xCol->getPropertyValue(u"Type"_ustr);
             aType >>= nRet;
         }
         if(bDispose)
@@ -1943,11 +1943,11 @@ uno::Reference< sdbcx::XColumnsSupplier> SwDBManager::GetColumnSupplier(uno::Ref
         }
 
         uno::Reference<beans::XPropertySet> xRowProperties(xRowSet, uno::UNO_QUERY);
-        xRowProperties->setPropertyValue(u"DataSourceName"_ustr, uno::Any(sDataSource));
-        xRowProperties->setPropertyValue(u"Command"_ustr, uno::Any(rTableOrQuery));
-        xRowProperties->setPropertyValue(u"CommandType"_ustr, uno::Any(nCommandType));
-        xRowProperties->setPropertyValue(u"FetchSize"_ustr, uno::Any(sal_Int32(10)));
-        xRowProperties->setPropertyValue(u"ActiveConnection"_ustr, uno::Any(xConnection));
+        xRowProperties->setPropertyValue(u"DataSourceName"_ustr, cpo::uno::Any(sDataSource));
+        xRowProperties->setPropertyValue(u"Command"_ustr, cpo::uno::Any(rTableOrQuery));
+        xRowProperties->setPropertyValue(u"CommandType"_ustr, cpo::uno::Any(nCommandType));
+        xRowProperties->setPropertyValue(u"FetchSize"_ustr, cpo::uno::Any(sal_Int32(10)));
+        xRowProperties->setPropertyValue(u"ActiveConnection"_ustr, cpo::uno::Any(xConnection));
         xRowSet->execute();
         xRet.set( xRowSet, uno::UNO_QUERY );
     }
@@ -1969,7 +1969,7 @@ OUString SwDBManager::GetDBField(uno::Reference<beans::XPropertySet> const & xCo
     if(!xColumn.is())
         return sRet;
 
-    uno::Any aType = xColumnProps->getPropertyValue(u"Type"_ustr);
+    cpo::uno::Any aType = xColumnProps->getPropertyValue(u"Type"_ustr);
     sal_Int32 eDataType = sdbc::DataType::SQLNULL;
     aType >>= eDataType;
     switch(eDataType)
@@ -2083,7 +2083,7 @@ bool SwDBManager::GetColumnCnt(const OUString& rSourceName, const OUString& rTab
     {
         //the destination has to be an element of the selection
         bool bFound = std::any_of(std::cbegin(pFound->aSelection), std::cend(pFound->aSelection),
-            [nAbsRecordId](const uno::Any& rSelection) {
+            [nAbsRecordId](const cpo::uno::Any& rSelection) {
                 sal_Int32 nSelection = 0;
                 rSelection >>= nSelection;
                 return nSelection == static_cast<sal_Int32>(nAbsRecordId);
@@ -2157,10 +2157,10 @@ bool SwDBManager::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
         {
             // get the column type
             sal_Int32 nColumnType = sdbc::DataType::SQLNULL;
-            uno::Any aCol = xCols->getByName( rColName );
+            cpo::uno::Any aCol = xCols->getByName( rColName );
             uno::Reference<beans::XPropertySet> xColumnProps;
             aCol >>= xColumnProps;
-            uno::Any aType = xColumnProps->getPropertyValue( u"Type"_ustr );
+            cpo::uno::Any aType = xColumnProps->getPropertyValue( u"Type"_ustr );
             aType >>= nColumnType;
             double aNumber = DBL_MAX;
 
@@ -2593,9 +2593,9 @@ DBConnURIType GetDBunoType(const INetURLObject &rURL)
 
 namespace
 {
-uno::Any GetDBunoURI(const INetURLObject &rURL, DBConnURIType& rType)
+cpo::uno::Any GetDBunoURI(const INetURLObject &rURL, DBConnURIType& rType)
 {
-    uno::Any aURLAny;
+    cpo::uno::Any aURLAny;
 
     if (rType == DBConnURIType::UNKNOWN)
         rType = GetDBunoType(rURL);
@@ -2674,13 +2674,13 @@ OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference
     const INetURLObject &rURL, const OUString *pDestDir, SfxObjectShell* pDocShell)
 {
     OUString sExt(rURL.GetFileExtension());
-    uno::Any aTableFilterAny;
-    uno::Any aSuppressVersionsAny;
-    uno::Any aInfoAny;
+    cpo::uno::Any aTableFilterAny;
+    cpo::uno::Any aSuppressVersionsAny;
+    cpo::uno::Any aInfoAny;
     bool bStore = true;
     OUString sFind;
 
-    uno::Any aURLAny = GetDBunoURI(rURL, type);
+    cpo::uno::Any aURLAny = GetDBunoURI(rURL, type);
     switch (type) {
     case DBConnURIType::UNKNOWN:
     case DBConnURIType::CALC:
@@ -2722,7 +2722,7 @@ OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference
         if (!bStore)
         {
             //odb-file
-            uno::Any aDataSource = xDBContext->getByName(rURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+            cpo::uno::Any aDataSource = xDBContext->getByName(rURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
             aDataSource >>= xNewInstance;
         }
         else
@@ -2741,11 +2741,11 @@ OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference
 
             if (DBConnURIType::FLAT == type && pSettings)
             {
-                uno::Any aSettings = xDataProperties->getPropertyValue(u"Settings"_ustr);
+                cpo::uno::Any aSettings = xDataProperties->getPropertyValue(u"Settings"_ustr);
                 uno::Reference < beans::XPropertySet > xDSSettings;
                 aSettings >>= xDSSettings;
                 ::comphelper::copyProperties(*pSettings, xDSSettings);
-                xDSSettings->setPropertyValue(u"Extension"_ustr, uno::Any(sExt));
+                xDSSettings->setPropertyValue(u"Extension"_ustr, cpo::uno::Any(sExt));
             }
 
             uno::Reference<sdb::XDocumentDataSource> xDS(xNewInstance, uno::UNO_QUERY_THROW);
@@ -2768,7 +2768,7 @@ OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference
                 // we can load it again next time the file is imported.
                 uno::Reference<lang::XMultiServiceFactory> xFactory(pDocShell->GetModel(), uno::UNO_QUERY);
                 uno::Reference<beans::XPropertySet> xPropertySet(xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
-                xPropertySet->setPropertyValue(u"EmbeddedDatabaseName"_ustr, uno::Any(aStreamRelPath));
+                xPropertySet->setPropertyValue(u"EmbeddedDatabaseName"_ustr, cpo::uno::Any(aStreamRelPath));
 
                 // Store it only after setting the above property, so that only one data source gets registered.
                 SwDBManager::StoreEmbeddedDataSource(xStore, xStorage, aStreamRelPath, aOwnURL);
@@ -2855,9 +2855,9 @@ void SwDBManager::StoreEmbeddedDataSource(const uno::Reference<frame::XStorable>
 
     uno::Sequence<beans::PropertyValue> aSequence = comphelper::InitPropertySequence(
     {
-        {"TargetStorage", uno::Any(xStorage)},
-        {"StreamRelPath", uno::Any(rStreamRelPath)},
-        {"BaseURI", uno::Any(rOwnURL)}
+        {"TargetStorage", cpo::uno::Any(xStorage)},
+        {"StreamRelPath", cpo::uno::Any(rStreamRelPath)},
+        {"BaseURI", cpo::uno::Any(rOwnURL)}
     });
     if (bCopyTo)
         xStorable->storeToURL(sTmpName, aSequence);
@@ -2929,7 +2929,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
     if(m_pImpl->pMergeDialog)
         return ;
     OUString sDataSource, sDataTableOrQuery;
-    uno::Sequence<uno::Any> aSelection;
+    uno::Sequence<cpo::uno::Any> aSelection;
 
     sal_Int32 nCmdType = sdb::CommandType::TABLE;
     uno::Reference< sdbc::XConnection> xConnection;
@@ -3030,7 +3030,7 @@ void SwDBManager::InsertText(SwWrtShell& rSh,
 {
     OUString sDataSource, sDataTableOrQuery;
     uno::Reference<sdbc::XResultSet>  xResSet;
-    uno::Sequence<uno::Any> aSelection;
+    uno::Sequence<cpo::uno::Any> aSelection;
     sal_Int16 nCmdType = sdb::CommandType::TABLE;
     uno::Reference< sdbc::XConnection> xConnection;
     for(const beans::PropertyValue& rValue : rProperties)
@@ -3129,10 +3129,10 @@ uno::Reference<sdbc::XResultSet> SwDBManager::createCursor(const OUString& _sDat
             uno::Reference<beans::XPropertySet> xRowSetPropSet(xInstance, uno::UNO_QUERY);
             if(xRowSetPropSet.is())
             {
-                xRowSetPropSet->setPropertyValue(u"DataSourceName"_ustr, uno::Any(_sDataSourceName));
-                xRowSetPropSet->setPropertyValue(u"ActiveConnection"_ustr, uno::Any(_xConnection));
-                xRowSetPropSet->setPropertyValue(u"Command"_ustr, uno::Any(_sCommand));
-                xRowSetPropSet->setPropertyValue(u"CommandType"_ustr, uno::Any(_nCommandType));
+                xRowSetPropSet->setPropertyValue(u"DataSourceName"_ustr, cpo::uno::Any(_sDataSourceName));
+                xRowSetPropSet->setPropertyValue(u"ActiveConnection"_ustr, cpo::uno::Any(_xConnection));
+                xRowSetPropSet->setPropertyValue(u"Command"_ustr, cpo::uno::Any(_sCommand));
+                xRowSetPropSet->setPropertyValue(u"CommandType"_ustr, cpo::uno::Any(_nCommandType));
 
                 uno::Reference< sdb::XCompletedExecution > xRowSet(xInstance, uno::UNO_QUERY);
 

@@ -22,7 +22,7 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -30,6 +30,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace sc_apitest
 {
@@ -83,7 +84,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_TableConditionalEntryEnumerat
         xPropertySet->getPropertyValue(u"ConditionalFormat"_ustr), uno::UNO_QUERY_THROW);
     xSCE->addNew(aConditions);
 
-    uno::Any aProperty;
+    cpo::uno::Any aProperty;
     aProperty <<= xSCE;
     xPropertySet->setPropertyValue(u"ConditionalFormat"_ustr, aProperty);
 

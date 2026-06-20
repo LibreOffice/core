@@ -32,6 +32,7 @@ namespace pcr
 
 
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::xsd;
     using namespace ::com::sun::star::beans;
 

@@ -287,7 +287,7 @@ IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, weld::TreeView&, void)
                     const OUString sName = m_pTypeView->get_text(*m_xSelEntry);
                     try
                     {
-                        uno::Any aVal = m_xCustomPropertySet->getPropertyValue( sName );
+                        cpo::uno::Any aVal = m_xCustomPropertySet->getPropertyValue( sName );
                         const uno::Type& rValueType = aVal.getValueType();
                         if( rValueType == ::cppu::UnoType<util::DateTime>::get())
                         {

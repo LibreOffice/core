@@ -43,14 +43,14 @@ public:
     void removeByName(const OUString& _sChartName);
 
     // XChartObjects
-    virtual css::uno::Any SAL_CALL Add( double Left, double Top, double Width, double Height ) override;
+    virtual cpo::uno::Any SAL_CALL Add( double Left, double Top, double Width, double Height ) override;
     virtual void SAL_CALL Delete(  ) override;
     // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
     // ScVbaCollectionBaseImpl
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
     // ChartObjects_BASE
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

@@ -117,7 +117,7 @@ BaseCoordinateSystem::BaseCoordinateSystem(
         xAxis->setScaleData( aScaleData );
     }
 
-    setFastPropertyValue_NoBroadcast( PROP_COORDINATESYSTEM_SWAPXANDYAXIS, uno::Any( false ));
+    setFastPropertyValue_NoBroadcast( PROP_COORDINATESYSTEM_SWAPXANDYAXIS, cpo::uno::Any( false ));
 }
 
 // explicit
@@ -353,7 +353,7 @@ void BaseCoordinateSystem::fireModifyEvent()
 }
 
 // ____ OPropertySet ____
-void BaseCoordinateSystem::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
+void BaseCoordinateSystem::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = StaticCooSysDefaults();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );

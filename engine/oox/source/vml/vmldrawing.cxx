@@ -49,6 +49,7 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 using ::oox::core::XmlFilterBase;
 
@@ -189,7 +190,7 @@ void Drawing::convertAndInsert() const
     }
     for ( const auto& BoxItr : GroupBoxMap )
     {
-        const uno::Any aGroup( "autoGroup_" + BoxItr.first );
+        const cpo::uno::Any aGroup( "autoGroup_" + BoxItr.first );
         for ( auto RadioItr = RadioButtonMap.begin(); RadioItr != RadioButtonMap.end(); )
         {
             if ( BoxItr.second.Contains(RadioItr->second) )

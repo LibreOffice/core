@@ -43,7 +43,7 @@ enum class SwFieldIds : sal_uInt16;
 class SwRootFrame;
 class IDocumentRedlineAccess;
 
-namespace com::sun::star::uno { class Any; }
+namespace cpo::uno { class Any; }
 
  /** Document fields related interfaces
  */
@@ -82,7 +82,7 @@ namespace com::sun::star::uno { class Any; }
        @retval true            putting of value was successful
        @retval false           else
     */
-    virtual void PutValueToField(const SwPosition & rPos, const css::uno::Any& rVal, sal_uInt16 nWhich) = 0;
+    virtual void PutValueToField(const SwPosition & rPos, const cpo::uno::Any& rVal, sal_uInt16 nWhich) = 0;
 
     // Call update of expression fields. All expressions are re-evaluated.
 

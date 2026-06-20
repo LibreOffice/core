@@ -163,6 +163,7 @@ constexpr sal_uInt32 SWTRANSFER_OBJECTTYPE_MARKDOWN  = 0x00000080;
 using namespace ::svx;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::datatransfer;
 namespace {
 
@@ -200,7 +201,7 @@ public:
     SwTransferDdeLink( SwTransferable& rTrans, SwWrtShell& rSh );
 
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const OUString& rMimeType, const css::uno::Any & rValue ) override;
+        const OUString& rMimeType, const cpo::uno::Any & rValue ) override;
     virtual void Closed() override;
 
     bool WriteData( SvStream& rStrm );
@@ -580,7 +581,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         if( xObj.is() )
         {
             TransferableDataHelper aD( new SvEmbedTransferHelper( xObj, pOLEGraph, nAspect ) );
-            uno::Any aAny = aD.GetAny(rFlavor, rDestDoc);
+            cpo::uno::Any aAny = aD.GetAny(rFlavor, rDestDoc);
             if( aAny.hasValue() )
                 bOK = SetAny( aAny );
         }
@@ -4593,7 +4594,7 @@ SwTransferDdeLink::~SwTransferDdeLink()
 }
 
 ::sfx2::SvBaseLink::UpdateResult SwTransferDdeLink::DataChanged( const OUString& ,
-                                    const uno::Any& )
+                                    const cpo::uno::Any& )
 {
     // well, that's it with the link
     if( !m_bInDisconnect )

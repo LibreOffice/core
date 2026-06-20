@@ -30,15 +30,15 @@ class ListControlHelper final
 public:
     explicit ListControlHelper( css::uno::Reference< css::beans::XPropertySet > xControl ) : m_xProps(std::move( xControl )){}
     /// @throws css::uno::RuntimeException
-    void AddItem( const css::uno::Any& pvargItem, const css::uno::Any& pvargIndex );
+    void AddItem( const cpo::uno::Any& pvargItem, const cpo::uno::Any& pvargIndex );
     /// @throws css::uno::RuntimeException
-    void removeItem( const css::uno::Any& index );
+    void removeItem( const cpo::uno::Any& index );
     /// @throws css::uno::RuntimeException
         void setRowSource( std::u16string_view _rowsource );
     /// @throws css::uno::RuntimeException
     ::sal_Int32 getListCount();
     /// @throws css::uno::RuntimeException
-    css::uno::Any List( const css::uno::Any& pvargIndex, const css::uno::Any& pvarColumn );
+    cpo::uno::Any List( const cpo::uno::Any& pvargIndex, const cpo::uno::Any& pvarColumn );
     /// @throws css::uno::RuntimeException
     void Clear(  );
 };

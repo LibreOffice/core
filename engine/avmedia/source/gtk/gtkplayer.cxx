@@ -309,7 +309,7 @@ awt::Size SAL_CALL GtkPlayer::getPreferredPlayerWindowSize()
 }
 
 uno::Reference<::media::XPlayerWindow>
-    SAL_CALL GtkPlayer::createPlayerWindow(const uno::Sequence<uno::Any>& rArguments)
+    SAL_CALL GtkPlayer::createPlayerWindow(const uno::Sequence<cpo::uno::Any>& rArguments)
 {
     osl::MutexGuard aGuard(m_aMutex);
 

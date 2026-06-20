@@ -28,6 +28,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::ucb;
 
 bool FStatHelper::GetModifiedDateTimeOfFile( const OUString& rURL,
@@ -39,7 +40,7 @@ bool FStatHelper::GetModifiedDateTimeOfFile( const OUString& rURL,
         ::ucbhelper::Content aTestContent( rURL,
                                 uno::Reference< XCommandEnvironment > (),
                                 comphelper::getProcessComponentContext());
-        uno::Any aAny = aTestContent.getPropertyValue(
+        cpo::uno::Any aAny = aTestContent.getPropertyValue(
             u"DateModified"_ustr );
         if( aAny.hasValue() )
         {

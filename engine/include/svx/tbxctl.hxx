@@ -40,7 +40,7 @@ protected:
 public:
     SvxTbxCtlDraw( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx );
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     SFX_DECL_TOOLBOX_CONTROL();
 

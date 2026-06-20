@@ -185,7 +185,7 @@ rtl::Reference< Title > TitleHelper::createOrShowTitle(
     rtl::Reference< Title > xTitled( TitleHelper::getTitle( eTitleType, xModel ) );
     if( xTitled.is())
     {
-        xTitled->setPropertyValue(u"Visible"_ustr,css::uno::Any(true));
+        xTitled->setPropertyValue(u"Visible"_ustr,cpo::uno::Any(true));
         return xTitled;
     }
     else
@@ -223,7 +223,7 @@ rtl::Reference< Title > TitleHelper::createTitle(
         }
         if( xAxis.is() )
         {
-            xAxis->setPropertyValue( u"Show"_ustr, uno::Any( false ) );
+            xAxis->setPropertyValue( u"Show"_ustr, cpo::uno::Any( false ) );
             xTitled = lcl_getTitleParent( eTitleType, xModel );
         }
     }
@@ -281,7 +281,7 @@ rtl::Reference< Title > TitleHelper::createTitle(
                     || (!bIsVertical && eTitleType == TitleHelper::SECONDARY_Y_AXIS_TITLE)
                     || (bIsVertical && eTitleType == TitleHelper::SECONDARY_X_AXIS_TITLE) )
                 {
-                    xTitle->setPropertyValue( u"TextRotation"_ustr, uno::Any( 90.0 ));
+                    xTitle->setPropertyValue( u"TextRotation"_ustr, cpo::uno::Any( 90.0 ));
                 }
             }
             catch( const uno::Exception & )
@@ -400,7 +400,7 @@ void TitleHelper::setCompleteString( const OUString& rNewText
         {
             try
             {
-                uno::Any aFontSize( *pDefaultCharHeight );
+                cpo::uno::Any aFontSize( *pDefaultCharHeight );
                 xFormattedString->setPropertyValue( u"CharHeight"_ustr, aFontSize );
                 xFormattedString->setPropertyValue( u"CharHeightAsian"_ustr, aFontSize );
                 xFormattedString->setPropertyValue( u"CharHeightComplex"_ustr, aFontSize );
@@ -450,7 +450,7 @@ void TitleHelper::hideTitle( TitleHelper::eTitleType nTitleIndex
 {
     rtl::Reference< Title > xTitled( TitleHelper::getTitle( nTitleIndex, xModel ) );
     if( xTitled.is())
-        xTitled->setPropertyValue(u"Visible"_ustr,css::uno::Any(false));
+        xTitled->setPropertyValue(u"Visible"_ustr,cpo::uno::Any(false));
 }
 
 } //namespace chart

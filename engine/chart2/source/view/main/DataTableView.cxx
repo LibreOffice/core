@@ -38,17 +38,18 @@ namespace
 {
 void setTopCell(const uno::Reference<beans::XPropertySet>& xPropertySet)
 {
-    xPropertySet->setPropertyValue(u"FillColor"_ustr, uno::Any(Color(0xFFFFFF)));
+    xPropertySet->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(Color(0xFFFFFF)));
     xPropertySet->setPropertyValue(u"TextVerticalAdjust"_ustr,
-                                   uno::Any(drawing::TextVerticalAdjust_TOP));
-    xPropertySet->setPropertyValue(u"ParaAdjust"_ustr, uno::Any(style::ParagraphAdjust_CENTER));
+                                   cpo::uno::Any(drawing::TextVerticalAdjust_TOP));
+    xPropertySet->setPropertyValue(u"ParaAdjust"_ustr,
+                                   cpo::uno::Any(style::ParagraphAdjust_CENTER));
 
     table::BorderLine2 aBorderLine;
     aBorderLine.LineWidth = 0;
     aBorderLine.Color = 0x000000;
 
-    xPropertySet->setPropertyValue(u"TopBorder"_ustr, uno::Any(aBorderLine));
-    xPropertySet->setPropertyValue(u"LeftBorder"_ustr, uno::Any(aBorderLine));
+    xPropertySet->setPropertyValue(u"TopBorder"_ustr, cpo::uno::Any(aBorderLine));
+    xPropertySet->setPropertyValue(u"LeftBorder"_ustr, cpo::uno::Any(aBorderLine));
 }
 
 uno::Reference<text::XTextRange> getFirstParagraph(uno::Reference<text::XText> const& xText)
@@ -135,7 +136,7 @@ void DataTableView::setCellCharAndParagraphProperties(
         u"CharWordMode"_ustr,
     };
 
-    std::vector<css::uno::Any> aPropVals;
+    std::vector<cpo::uno::Any> aPropVals;
     for (const OUString& rPropName : PROPS)
         aPropVals.push_back(xDataTableProperties->getPropertyValue(rPropName));
 
@@ -149,24 +150,25 @@ void DataTableView::setCellCharAndParagraphProperties(
     {
         sal_Int32 aColor = 0;
         if (xDataTableProperties->getPropertyValue(u"FillColor"_ustr) >>= aColor)
-            xPropertySet->setPropertyValue(u"CharBackColor"_ustr, uno::Any(aColor));
+            xPropertySet->setPropertyValue(u"CharBackColor"_ustr, cpo::uno::Any(aColor));
     }
 
-    xPropertySet->setPropertyValue(u"ParaAdjust"_ustr, uno::Any(style::ParagraphAdjust_CENTER));
+    xPropertySet->setPropertyValue(u"ParaAdjust"_ustr,
+                                   cpo::uno::Any(style::ParagraphAdjust_CENTER));
 }
 
 void DataTableView::setCellProperties(const css::uno::Reference<beans::XPropertySet>& xPropertySet,
                                       bool bLeft, bool bTop, bool bRight, bool bBottom)
 {
     std::vector<OUString> aPropNames;
-    std::vector<css::uno::Any> aPropVals;
+    std::vector<cpo::uno::Any> aPropVals;
 
-    auto lcl_addprop = [&](const OUString& rPropName, uno::Any&& rPropVal) {
+    auto lcl_addprop = [&](const OUString& rPropName, cpo::uno::Any&& rPropVal) {
         aPropNames.push_back(rPropName);
         aPropVals.push_back(std::move(rPropVal));
     };
 
-    lcl_addprop(u"FillColor"_ustr, uno::Any(Color(0xFFFFFF)));
+    lcl_addprop(u"FillColor"_ustr, cpo::uno::Any(Color(0xFFFFFF)));
 
     float fFontHeight = 0.0;
     m_xDataTableModel->getPropertyValue(u"CharHeight"_ustr) >>= fFontHeight;
@@ -174,12 +176,12 @@ void DataTableView::setCellProperties(const css::uno::Reference<beans::XProperty
     sal_Int32 nXDistance = std::round(fFontHeight * 0.18f);
     sal_Int32 nYDistance = std::round(fFontHeight * 0.30f);
 
-    lcl_addprop(u"TextLeftDistance"_ustr, uno::Any(nXDistance));
-    lcl_addprop(u"TextRightDistance"_ustr, uno::Any(nXDistance));
-    lcl_addprop(u"TextUpperDistance"_ustr, uno::Any(nYDistance));
-    lcl_addprop(u"TextLowerDistance"_ustr, uno::Any(nYDistance));
+    lcl_addprop(u"TextLeftDistance"_ustr, cpo::uno::Any(nXDistance));
+    lcl_addprop(u"TextRightDistance"_ustr, cpo::uno::Any(nXDistance));
+    lcl_addprop(u"TextUpperDistance"_ustr, cpo::uno::Any(nYDistance));
+    lcl_addprop(u"TextLowerDistance"_ustr, cpo::uno::Any(nYDistance));
 
-    lcl_addprop(u"TextVerticalAdjust"_ustr, uno::Any(drawing::TextVerticalAdjust_TOP));
+    lcl_addprop(u"TextVerticalAdjust"_ustr, cpo::uno::Any(drawing::TextVerticalAdjust_TOP));
 
     drawing::LineStyle eStyle = drawing::LineStyle_NONE;
     m_aLineProperties.LineStyle >>= eStyle;
@@ -229,13 +231,13 @@ void DataTableView::setCellProperties(const css::uno::Reference<beans::XProperty
         }
 
         if (bLeft)
-            lcl_addprop(u"LeftBorder"_ustr, uno::Any(aBorderLine));
+            lcl_addprop(u"LeftBorder"_ustr, cpo::uno::Any(aBorderLine));
         if (bTop)
-            lcl_addprop(u"TopBorder"_ustr, uno::Any(aBorderLine));
+            lcl_addprop(u"TopBorder"_ustr, cpo::uno::Any(aBorderLine));
         if (bRight)
-            lcl_addprop(u"RightBorder"_ustr, uno::Any(aBorderLine));
+            lcl_addprop(u"RightBorder"_ustr, cpo::uno::Any(aBorderLine));
         if (bBottom)
-            lcl_addprop(u"BottomBorder"_ustr, uno::Any(aBorderLine));
+            lcl_addprop(u"BottomBorder"_ustr, cpo::uno::Any(aBorderLine));
     }
 
     uno::Reference<beans::XMultiPropertySet> xMultiPropertySet(xPropertySet, uno::UNO_QUERY_THROW);
@@ -410,12 +412,12 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
                 setCellProperties(xCellPropertySet, bOutline, bTop, bOutline, bBottom);
 
                 xCellPropertySet->setPropertyValue(u"ParaAdjust"_ustr,
-                                                   uno::Any(style::ParagraphAdjust_LEFT));
+                                                   cpo::uno::Any(style::ParagraphAdjust_LEFT));
                 if (bKeys)
                 {
                     xCellPropertySet->setPropertyValue(
                         u"ParaLeftMargin"_ustr,
-                        uno::Any(nMaxSymbolWidth + sal_Int32(2 * constSymbolMargin)));
+                        cpo::uno::Any(nMaxSymbolWidth + sal_Int32(2 * constSymbolMargin)));
                 }
             }
         }
@@ -495,7 +497,7 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
     for (sal_Int32 i = 1; i < xTableColumns->getCount(); ++i)
     {
         xPropertySet.set(xTableColumns->getByIndex(i), uno::UNO_QUERY);
-        xPropertySet->setPropertyValue(u"Width"_ustr, uno::Any(nColumnWidth));
+        xPropertySet->setPropertyValue(u"Width"_ustr, cpo::uno::Any(nColumnWidth));
     }
 
     // force recalculation of row heights in the table shape

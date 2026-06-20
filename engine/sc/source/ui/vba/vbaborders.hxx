@@ -31,7 +31,7 @@ class ScVbaPalette;
 class ScVbaBorders : public ScVbaBorders_BASE
 {
     // XEnumerationAccess
-    virtual css::uno::Any getItemByIntIndex( const sal_Int32 nIndex ) override;
+    virtual cpo::uno::Any getItemByIntIndex( const sal_Int32 nIndex ) override;
     bool bRangeIsSingleCell;
     css::uno::Reference< css::beans::XPropertySet > m_xProps;
 public:
@@ -47,18 +47,18 @@ public:
     // XBorders
 
     // ScVbaCollectionBaseImpl
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 
-    virtual css::uno::Any SAL_CALL getColor() override;
-    virtual void SAL_CALL setColor( const css::uno::Any& _color ) override;
-    virtual css::uno::Any SAL_CALL getColorIndex() override;
-    virtual void SAL_CALL setColorIndex( const css::uno::Any& _colorindex ) override;
-    virtual css::uno::Any SAL_CALL getLineStyle() override;
-    virtual void SAL_CALL setLineStyle( const css::uno::Any& _linestyle ) override;
-    virtual css::uno::Any SAL_CALL getWeight() override;
-    virtual void SAL_CALL setWeight( const  css::uno::Any& ) override;
-    virtual css::uno::Any SAL_CALL getTintAndShade() override;
-    virtual void SAL_CALL setTintAndShade( const  css::uno::Any& ) override;
+    virtual cpo::uno::Any SAL_CALL getColor() override;
+    virtual void SAL_CALL setColor( const cpo::uno::Any& _color ) override;
+    virtual cpo::uno::Any SAL_CALL getColorIndex() override;
+    virtual void SAL_CALL setColorIndex( const cpo::uno::Any& _colorindex ) override;
+    virtual cpo::uno::Any SAL_CALL getLineStyle() override;
+    virtual void SAL_CALL setLineStyle( const cpo::uno::Any& _linestyle ) override;
+    virtual cpo::uno::Any SAL_CALL getWeight() override;
+    virtual void SAL_CALL setWeight( const  cpo::uno::Any& ) override;
+    virtual cpo::uno::Any SAL_CALL getTintAndShade() override;
+    virtual void SAL_CALL setTintAndShade( const  cpo::uno::Any& ) override;
     // xxxxBASE
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

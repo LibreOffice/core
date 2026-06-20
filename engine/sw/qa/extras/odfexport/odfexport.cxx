@@ -772,8 +772,8 @@ DECLARE_ODFEXPORT_TEST(testFdo79358, "fdo79358.odt")
         getProperty< uno::Reference<container::XIndexReplace> >(xTOCProps,
             u"LevelParagraphStyles"_ustr));
     uno::Sequence<OUString> seq { u"Heading"_ustr };
-    CPPUNIT_ASSERT_EQUAL(uno::Any(seq), xLevels->getByIndex(1));
-    CPPUNIT_ASSERT_EQUAL(uno::Any(uno::Sequence<OUString>()), xLevels->getByIndex(2));
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(seq), xLevels->getByIndex(1));
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(uno::Sequence<OUString>()), xLevels->getByIndex(2));
 }
 
 DECLARE_ODFEXPORT_TEST(testTextframeGradient, "textframe-gradient.odt")
@@ -834,10 +834,10 @@ CPPUNIT_TEST_FIXTURE(Test, testDuplicateCrossRefHeadingBookmark)
 
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
-    uno::Any aField1 = xFields->nextElement();
+    cpo::uno::Any aField1 = xFields->nextElement();
     uno::Reference<text::XTextField> xField1(aField1, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"1.1"_ustr, xField1->getPresentation(false));
-    uno::Any aField2 = xFields->nextElement();
+    cpo::uno::Any aField2 = xFields->nextElement();
     uno::Reference<text::XTextField> xField2(aField2, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"1.1"_ustr, xField2->getPresentation(false));
 }
@@ -924,7 +924,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo58949)
 
     save(TestFilter::ODT);
 
-    uno::Sequence<uno::Any> aArgs{ uno::Any(maTempFile.GetURL()) };
+    uno::Sequence<cpo::uno::Any> aArgs{ cpo::uno::Any(maTempFile.GetURL()) };
     uno::Reference<container::XNameAccess> xNameAccess(m_xSFactory->createInstanceWithArguments(u"com.sun.star.packages.zip.ZipFileAccess"_ustr, aArgs), uno::UNO_QUERY);
     const css::uno::Sequence<OUString> aNames(xNameAccess->getElementNames());
     // The exported document must have three objects named ObjNNN. The names are assigned in
@@ -1017,11 +1017,11 @@ DECLARE_ODFEXPORT_TEST(testStylePageNumber, "ooo321_stylepagenumber.odt")
     // i#114163 tdf#77111: OOo < 3.3 bug, it wrote "auto" as "0" for tables
     uno::Reference<beans::XPropertySet> xTable0(getParagraphOrTable(3), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"Left Page"_ustr, getProperty<OUString>(xTable0, u"PageDescName"_ustr));
-    CPPUNIT_ASSERT_EQUAL(uno::Any(), xTable0->getPropertyValue(u"PageNumberOffset"_ustr));
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(), xTable0->getPropertyValue(u"PageNumberOffset"_ustr));
 
     uno::Reference<beans::XPropertySet> xPara0(getParagraphOrTable(4), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"Right Page"_ustr, getProperty<OUString>(xPara0, u"PageDescName"_ustr));
-    CPPUNIT_ASSERT_EQUAL(uno::Any(), xPara0->getPropertyValue(u"PageNumberOffset"_ustr));
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(), xPara0->getPropertyValue(u"PageNumberOffset"_ustr));
 
     uno::Reference<container::XNameAccess> xParaStyles = getStyles(u"ParagraphStyles"_ustr);
     uno::Reference<beans::XPropertySet> xStyle1(xParaStyles->getByName(u"stylewithbreak1"_ustr), uno::UNO_QUERY);
@@ -1030,7 +1030,7 @@ DECLARE_ODFEXPORT_TEST(testStylePageNumber, "ooo321_stylepagenumber.odt")
 
     uno::Reference<beans::XPropertySet> xStyle0(xParaStyles->getByName(u"stylewithbreak0"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"First Page"_ustr, getProperty<OUString>(xStyle0, u"PageDescName"_ustr));
-    CPPUNIT_ASSERT_EQUAL(uno::Any(), xStyle0->getPropertyValue(u"PageNumberOffset"_ustr));
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(), xStyle0->getPropertyValue(u"PageNumberOffset"_ustr));
 }
 
 DECLARE_ODFEXPORT_TEST(testCharacterBorder, "charborder.odt")
@@ -1268,61 +1268,61 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf103091)
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(28), conditions.getLength());
     CPPUNIT_ASSERT_EQUAL(u"TableHeader"_ustr, conditions[0].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Addressee"_ustr), conditions[0].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Addressee"_ustr), conditions[0].Value);
     CPPUNIT_ASSERT_EQUAL(u"Table"_ustr, conditions[1].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Bibliography 1"_ustr), conditions[1].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Bibliography 1"_ustr), conditions[1].Value);
     CPPUNIT_ASSERT_EQUAL(u"Frame"_ustr, conditions[2].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Bibliography Heading"_ustr), conditions[2].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Bibliography Heading"_ustr), conditions[2].Value);
     CPPUNIT_ASSERT_EQUAL(u"Section"_ustr, conditions[3].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Caption"_ustr), conditions[3].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Caption"_ustr), conditions[3].Value);
     CPPUNIT_ASSERT_EQUAL(u"Footnote"_ustr, conditions[4].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Salutation"_ustr), conditions[4].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Salutation"_ustr), conditions[4].Value);
     CPPUNIT_ASSERT_EQUAL(u"Endnote"_ustr, conditions[5].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Contents 1"_ustr), conditions[5].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Contents 1"_ustr), conditions[5].Value);
     CPPUNIT_ASSERT_EQUAL(u"Header"_ustr, conditions[6].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Contents 2"_ustr), conditions[6].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Contents 2"_ustr), conditions[6].Value);
     CPPUNIT_ASSERT_EQUAL(u"Footer"_ustr, conditions[7].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Contents 3"_ustr), conditions[7].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Contents 3"_ustr), conditions[7].Value);
     CPPUNIT_ASSERT_EQUAL(u"OutlineLevel1"_ustr, conditions[8].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Contents 4"_ustr), conditions[8].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Contents 4"_ustr), conditions[8].Value);
     CPPUNIT_ASSERT_EQUAL(u"OutlineLevel2"_ustr, conditions[9].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Contents 5"_ustr), conditions[9].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Contents 5"_ustr), conditions[9].Value);
     CPPUNIT_ASSERT_EQUAL(u"OutlineLevel3"_ustr, conditions[10].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Contents 6"_ustr), conditions[10].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Contents 6"_ustr), conditions[10].Value);
     CPPUNIT_ASSERT_EQUAL(u"OutlineLevel4"_ustr, conditions[11].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Contents 7"_ustr), conditions[11].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Contents 7"_ustr), conditions[11].Value);
     CPPUNIT_ASSERT_EQUAL(u"OutlineLevel5"_ustr, conditions[12].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Contents 8"_ustr), conditions[12].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Contents 8"_ustr), conditions[12].Value);
     CPPUNIT_ASSERT_EQUAL(u"OutlineLevel6"_ustr, conditions[13].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Contents 9"_ustr), conditions[13].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Contents 9"_ustr), conditions[13].Value);
     CPPUNIT_ASSERT_EQUAL(u"OutlineLevel7"_ustr, conditions[14].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Contents 10"_ustr), conditions[14].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Contents 10"_ustr), conditions[14].Value);
     CPPUNIT_ASSERT_EQUAL(u"OutlineLevel8"_ustr, conditions[15].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Contents Heading"_ustr), conditions[15].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Contents Heading"_ustr), conditions[15].Value);
     CPPUNIT_ASSERT_EQUAL(u"OutlineLevel9"_ustr, conditions[16].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Standard"_ustr), conditions[16].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Standard"_ustr), conditions[16].Value);
     CPPUNIT_ASSERT_EQUAL(u"OutlineLevel10"_ustr, conditions[17].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Drawing"_ustr), conditions[17].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Drawing"_ustr), conditions[17].Value);
     CPPUNIT_ASSERT_EQUAL(u"NumberingLevel1"_ustr, conditions[18].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Endnote"_ustr), conditions[18].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Endnote"_ustr), conditions[18].Value);
     CPPUNIT_ASSERT_EQUAL(u"NumberingLevel2"_ustr, conditions[19].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"First line indent"_ustr), conditions[19].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"First line indent"_ustr), conditions[19].Value);
     CPPUNIT_ASSERT_EQUAL(u"NumberingLevel3"_ustr, conditions[20].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Footer"_ustr), conditions[20].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Footer"_ustr), conditions[20].Value);
     CPPUNIT_ASSERT_EQUAL(u"NumberingLevel4"_ustr, conditions[21].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Footer left"_ustr), conditions[21].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Footer left"_ustr), conditions[21].Value);
     CPPUNIT_ASSERT_EQUAL(u"NumberingLevel5"_ustr, conditions[22].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Footer right"_ustr), conditions[22].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Footer right"_ustr), conditions[22].Value);
     CPPUNIT_ASSERT_EQUAL(u"NumberingLevel6"_ustr, conditions[23].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Footnote"_ustr), conditions[23].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Footnote"_ustr), conditions[23].Value);
     CPPUNIT_ASSERT_EQUAL(u"NumberingLevel7"_ustr, conditions[24].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Frame contents"_ustr), conditions[24].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Frame contents"_ustr), conditions[24].Value);
     CPPUNIT_ASSERT_EQUAL(u"NumberingLevel8"_ustr, conditions[25].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Hanging indent"_ustr), conditions[25].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Hanging indent"_ustr), conditions[25].Value);
     CPPUNIT_ASSERT_EQUAL(u"NumberingLevel9"_ustr, conditions[26].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Header"_ustr), conditions[26].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Header"_ustr), conditions[26].Value);
     CPPUNIT_ASSERT_EQUAL(u"NumberingLevel10"_ustr, conditions[27].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Header left"_ustr), conditions[27].Value);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Header left"_ustr), conditions[27].Value);
 }
 
 DECLARE_ODFEXPORT_TEST(testTextframeTransparentShadow, "textframe-transparent-shadow.odt")
@@ -1418,7 +1418,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf69500)
         uno::Reference<container::XIndexAccess> xIndexAccess(xIndexContainer, uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xProps(xIndexContainer, uno::UNO_QUERY_THROW);
 
-        xProps->setPropertyValue(u"UIName"_ustr, uno::Any(u"Custom Toolbar 1"_ustr));
+        xProps->setPropertyValue(u"UIName"_ustr, cpo::uno::Any(u"Custom Toolbar 1"_ustr));
 
         xConfigManager->insertSettings(sToolBarName, xIndexAccess);
 
@@ -1540,7 +1540,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf60700_directories)
     // to access that reference from outside the class. So, we inspect the zipfile
     // directly.
 
-    uno::Sequence<uno::Any> aArgs{ uno::Any(maTempFile.GetURL()) };
+    uno::Sequence<cpo::uno::Any> aArgs{ cpo::uno::Any(maTempFile.GetURL()) };
     uno::Reference<container::XNameAccess> xNameAccess(
         m_xSFactory->createInstanceWithArguments(u"com.sun.star.packages.zip.ZipFileAccess"_ustr,
                                                  aArgs),
@@ -1580,7 +1580,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOpticalSizing1)
     {
         // Setting it manually should set it in contents
         uno::Reference<beans::XPropertySet> xCursor(getRun(getParagraph(1), 1), uno::UNO_QUERY);
-        xCursor->setPropertyValue(u"CharOpticalSizing"_ustr, uno::Any(true));
+        xCursor->setPropertyValue(u"CharOpticalSizing"_ustr, cpo::uno::Any(true));
         save(TestFilter::ODT);
         xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
         assertXPath(pXmlDoc, "//style:style/style:text-properties[@loext:font-optical-sizing='auto']", 1);
@@ -1596,7 +1596,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOpticalSizing1)
     {
         // It can also be disabled
         uno::Reference<beans::XPropertySet> xCursor(getRun(getParagraph(1), 1), uno::UNO_QUERY);
-        xCursor->setPropertyValue(u"CharOpticalSizing"_ustr, uno::Any(false));
+        xCursor->setPropertyValue(u"CharOpticalSizing"_ustr, cpo::uno::Any(false));
         save(TestFilter::ODT);
         xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
         assertXPath(pXmlDoc, "//style:style/style:text-properties[@loext:font-optical-sizing='none']", 1);

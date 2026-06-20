@@ -41,7 +41,7 @@ namespace svx
         css::uno::Reference< css::frame::XDispatch >
                                         m_xDispatcher;
         css::util::URL                  m_aFeatureURL;
-        css::uno::Any                   m_aFeatureState;
+        cpo::uno::Any                   m_aFeatureState;
         SfxSlotId                       m_nSlotId;
         FmTextControlShell*             m_pInvalidator;
         bool                            m_bFeatureEnabled;
@@ -62,7 +62,7 @@ namespace svx
 
         /// determines whether the feature we're responsible for is currently enabled
         bool                                isFeatureEnabled( ) const { return m_bFeatureEnabled; }
-        const css::uno::Any&   getFeatureState( ) const { return m_aFeatureState; }
+        const cpo::uno::Any&   getFeatureState( ) const { return m_aFeatureState; }
 
         /** dispatches the feature URL to the dispatcher
         */

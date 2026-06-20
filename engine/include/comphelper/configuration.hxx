@@ -15,7 +15,7 @@
 #include <optional>
 #include <string_view>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/processfactory.hxx>
@@ -63,7 +63,7 @@ private:
             const & context);
 
     SAL_DLLPRIVATE void setPropertyValue(
-        OUString const & path, css::uno::Any const & value)
+        OUString const & path, cpo::uno::Any const & value)
         const;
 
     SAL_DLLPRIVATE css::uno::Reference<
@@ -90,18 +90,18 @@ public:
 
     bool isReadOnly(OUString const & path) const;
 
-    css::uno::Any getPropertyValue(std::u16string_view path) const;
+    cpo::uno::Any getPropertyValue(std::u16string_view path) const;
 
     static void setPropertyValue(
         std::shared_ptr< ConfigurationChanges > const & batch,
-        OUString const & path, css::uno::Any const & value);
+        OUString const & path, cpo::uno::Any const & value);
 
-    css::uno::Any getLocalizedPropertyValue(
+    cpo::uno::Any getLocalizedPropertyValue(
         std::u16string_view path) const;
 
     static void setLocalizedPropertyValue(
         std::shared_ptr< ConfigurationChanges > const & batch,
-        OUString const & path, css::uno::Any const & value);
+        OUString const & path, cpo::uno::Any const & value);
 
     css::uno::Reference<
         css::container::XHierarchicalNameAccess >
@@ -143,10 +143,10 @@ private:
 
 /// @internal
 template< typename T > struct Convert {
-    static css::uno::Any toAny(T const & value)
-    { return css::uno::Any(value); }
+    static cpo::uno::Any toAny(T const & value)
+    { return cpo::uno::Any(value); }
 
-    static T fromAny(css::uno::Any const & value)
+    static T fromAny(cpo::uno::Any const & value)
     { return value.get< T >(); }
 
 private:
@@ -160,13 +160,13 @@ private:
 /// @internal
 template< typename T > struct Convert< std::optional< T > >
 {
-    static css::uno::Any toAny(std::optional< T > const & value) {
+    static cpo::uno::Any toAny(std::optional< T > const & value) {
         return value
-            ? css::uno::Any(*value)
-            : css::uno::Any();
+            ? cpo::uno::Any(*value)
+            : cpo::uno::Any();
     }
 
-    static std::optional< T > fromAny(css::uno::Any const & value)
+    static std::optional< T > fromAny(cpo::uno::Any const & value)
     {
         return value.hasValue()
             ? std::optional< T >(value.get< T >()) : std::optional< T >();
@@ -219,7 +219,7 @@ template< typename T, typename U > struct ConfigurationProperty
             return U();
         // Folding this into one statement causes a bogus error at least with
         // Red Hat GCC 4.6.2-1:
-        css::uno::Any a(
+        cpo::uno::Any a(
             detail::ConfigurationWrapper::get(context).getPropertyValue(
                 T::path()));
         return detail::Convert< U >::fromAny(a);
@@ -272,7 +272,7 @@ template< typename T, typename U > struct ConfigurationLocalizedProperty
     {
         // Folding this into one statement causes a bogus error at least with
         // Red Hat GCC 4.6.2-1:
-        css::uno::Any a(
+        cpo::uno::Any a(
             detail::ConfigurationWrapper::get(context).
             getLocalizedPropertyValue(T::path()));
         return detail::Convert< U >::fromAny(a);

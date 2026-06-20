@@ -280,11 +280,11 @@ void SAL_CALL Content::release() noexcept
 
 
 // virtual
-uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
 {
     // Note: isFolder may require network activities! So call it only
     //       if it is really necessary!!!
-    uno::Any aRet = cppu::queryInterface(
+    cpo::uno::Any aRet = cppu::queryInterface(
         rType,
         static_cast< ucb::XContentCreator * >( this ) );
     if ( aRet.hasValue() )
@@ -304,7 +304,7 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
                    xIH,
                    uno::Reference< ucb::XProgressHandler >() ) );
 
-            return isFolder( xCmdEnv ) ? aRet : uno::Any();
+            return isFolder( xCmdEnv ) ? aRet : cpo::uno::Any();
         }
         catch ( uno::RuntimeException const & )
         {
@@ -312,7 +312,7 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
         }
         catch ( uno::Exception const & )
         {
-            return uno::Any();
+            return cpo::uno::Any();
         }
     }
     return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface( rType );
@@ -427,7 +427,7 @@ OUString SAL_CALL Content::getContentType()
 
 
 // virtual
-uno::Any SAL_CALL Content::execute(
+cpo::uno::Any SAL_CALL Content::execute(
         const ucb::Command& aCommand,
         sal_Int32 /*CommandId*/,
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
@@ -435,7 +435,7 @@ uno::Any SAL_CALL Content::execute(
     SAL_INFO("ucb.ucp.webdav",  ">>>>> Content::execute: start: command: " << aCommand.Name
             << ", env: " << (Environment.is() ? "present" : "missing") );
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
 
     if ( aCommand.Name == "getPropertyValues" )
     {
@@ -447,7 +447,7 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= Properties ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::Any( lang::IllegalArgumentException(
+                cpo::uno::Any( lang::IllegalArgumentException(
                                     u"Wrong argument type!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
@@ -467,7 +467,7 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= aProperties ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::Any( lang::IllegalArgumentException(
+                cpo::uno::Any( lang::IllegalArgumentException(
                                     u"Wrong argument type!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
@@ -478,7 +478,7 @@ uno::Any SAL_CALL Content::execute(
         if ( !aProperties.getLength() )
         {
             ucbhelper::cancelCommandExecution(
-                uno::Any( lang::IllegalArgumentException(
+                cpo::uno::Any( lang::IllegalArgumentException(
                                     u"No properties!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
@@ -518,7 +518,7 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= aTmp ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::Any( lang::IllegalArgumentException(
+                cpo::uno::Any( lang::IllegalArgumentException(
                                     u"Wrong argument type!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
@@ -548,7 +548,7 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= arg ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::Any( lang::IllegalArgumentException(
+                cpo::uno::Any( lang::IllegalArgumentException(
                                     u"Wrong argument type!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
@@ -612,7 +612,7 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= transferArgs ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::Any( lang::IllegalArgumentException(
+                cpo::uno::Any( lang::IllegalArgumentException(
                                   u"Wrong argument type!"_ustr,
                                   getXWeak(),
                                   -1 ) ),
@@ -632,7 +632,7 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= aArg ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::Any( lang::IllegalArgumentException(
+                cpo::uno::Any( lang::IllegalArgumentException(
                                     u"Wrong argument type!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
@@ -682,7 +682,7 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= aArg ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::Any( lang::IllegalArgumentException(
+                cpo::uno::Any( lang::IllegalArgumentException(
                                     u"Wrong argument type!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
@@ -698,7 +698,7 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= aPropArg ))
         {
             ucbhelper::cancelCommandExecution(
-                uno::Any( lang::IllegalArgumentException(
+                cpo::uno::Any( lang::IllegalArgumentException(
                                     u"Wrong argument type!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
@@ -713,15 +713,15 @@ uno::Any SAL_CALL Content::execute(
         }
         catch ( const beans::PropertyExistException &e )
         {
-            ucbhelper::cancelCommandExecution( uno::Any( e ), Environment );
+            ucbhelper::cancelCommandExecution( cpo::uno::Any( e ), Environment );
         }
         catch ( const beans::IllegalTypeException&e )
         {
-            ucbhelper::cancelCommandExecution( uno::Any( e ), Environment );
+            ucbhelper::cancelCommandExecution( cpo::uno::Any( e ), Environment );
         }
         catch ( const lang::IllegalArgumentException&e )
         {
-            ucbhelper::cancelCommandExecution( uno::Any( e ), Environment );
+            ucbhelper::cancelCommandExecution( cpo::uno::Any( e ), Environment );
         }
     }
     else if ( aCommand.Name == "removeProperty" )
@@ -730,7 +730,7 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= sPropName ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::Any( lang::IllegalArgumentException(
+                cpo::uno::Any( lang::IllegalArgumentException(
                                     u"Wrong argument type!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
@@ -745,11 +745,11 @@ uno::Any SAL_CALL Content::execute(
         }
         catch( const beans::UnknownPropertyException &e )
         {
-            ucbhelper::cancelCommandExecution( uno::Any( e ), Environment );
+            ucbhelper::cancelCommandExecution( cpo::uno::Any( e ), Environment );
         }
         catch( const beans::NotRemoveableException &e )
         {
-            ucbhelper::cancelCommandExecution( uno::Any( e ), Environment );
+            ucbhelper::cancelCommandExecution( cpo::uno::Any( e ), Environment );
         }
     }
     else
@@ -759,7 +759,7 @@ uno::Any SAL_CALL Content::execute(
 
 
         ucbhelper::cancelCommandExecution(
-            uno::Any( ucb::UnsupportedCommandException(
+            cpo::uno::Any( ucb::UnsupportedCommandException(
                               aCommand.Name,
                               getXWeak() ) ),
             Environment );
@@ -804,7 +804,7 @@ void Content::addProperty( const css::ucb::PropertyCommandArgument &aCmdArg,
 //    if ( m_bTransient )
 //   @@@ ???
     const beans::Property aProperty = aCmdArg.Property;
-    const uno::Any aDefaultValue = aCmdArg.DefaultValue;
+    const cpo::uno::Any aDefaultValue = aCmdArg.DefaultValue;
 
     // check property Name
     if ( !aProperty.Name.getLength() )
@@ -961,7 +961,7 @@ void Content::removeProperty( const OUString& Name,
     try
     {
         std::vector< ProppatchValue > aProppatchValues;
-        ProppatchValue aValue( PROPREMOVE, Name, uno::Any() );
+        ProppatchValue aValue( PROPREMOVE, Name, cpo::uno::Any() );
         aProppatchValues.push_back( aValue );
 
         // Remove property value from server.
@@ -1043,7 +1043,7 @@ void Content::removeProperty( const OUString& Name,
 // virtual
 void SAL_CALL Content::addProperty( const OUString& Name,
                                     sal_Int16 Attributes,
-                                    const uno::Any& DefaultValue )
+                                    const cpo::uno::Any& DefaultValue )
 {
     beans::Property aProperty;
     aProperty.Name = Name;
@@ -1210,7 +1210,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             const beans::Property& rProp = pProps[ n ];
 
             // Process standard UCB, DAV and HTTP properties.
-            const uno::Any & rValue = rData.getValue( rProp.Name );
+            const cpo::uno::Any & rValue = rData.getValue( rProp.Name );
             if ( rValue.hasValue() )
             {
                 xRow->appendObject( rProp, rValue );
@@ -1583,7 +1583,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             if (!xProps)
                 xProps.reset(new ContentProperties(aUnescapedTitle));
             else
-                xProps->addProperty(u"Title"_ustr, uno::Any(aUnescapedTitle), true);
+                xProps->addProperty(u"Title"_ustr, cpo::uno::Any(aUnescapedTitle), true);
         }
         else
         {
@@ -1592,20 +1592,20 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             else
                 xProps->addProperty(
                     u"Title"_ustr,
-                    uno::Any( aUnescapedTitle ),
+                    cpo::uno::Any( aUnescapedTitle ),
                     true );
 
             xProps->addProperty(
                 u"IsFolder"_ustr,
-                uno::Any( false ),
+                cpo::uno::Any( false ),
                 true );
             xProps->addProperty(
                 u"IsDocument"_ustr,
-                uno::Any( true ),
+                cpo::uno::Any( true ),
                 true );
             xProps->addProperty(
                 u"ContentType"_ustr,
-                uno::Any( WEBDAV_CONTENT_TYPE ),
+                cpo::uno::Any( WEBDAV_CONTENT_TYPE ),
                 true );
         }
     }
@@ -1620,7 +1620,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
     // Add a default for the properties requested but not found.
     // Determine still missing properties, add a default.
-    // Some client function doesn't expect a void uno::Any,
+    // Some client function doesn't expect a void cpo::uno::Any,
     // but instead wants some sort of default.
     std::vector< OUString > aMissingProps;
     if ( !xProps->containsAllNames(
@@ -1636,7 +1636,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 util::DateTime aDate;
                 xProps->addProperty(
                     (*it),
-                    uno::Any( aDate ),
+                    cpo::uno::Any( aDate ),
                     true );
             }
             else if (bNetworkAccessAllowed) // don't set these if connection failed
@@ -1647,14 +1647,14 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 {
                     xProps->addProperty(
                         (*it),
-                        uno::Any( false ),
+                        cpo::uno::Any( false ),
                         true );
                 }
                 else if ((*it) == "IsDocument")
                 {
                     xProps->addProperty(
                         (*it),
-                        uno::Any( true ),
+                        cpo::uno::Any( true ),
                         true );
                 }
             }
@@ -1670,7 +1670,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             // Add BaseURI property, if requested.
             xProps->addProperty(
                  u"BaseURI"_ustr,
-                 uno::Any( getBaseURI( xResAccess ) ),
+                 cpo::uno::Any( getBaseURI( xResAccess ) ),
                  true );
         }
         else if ( rName == "CreatableContentsInfo" )
@@ -1681,7 +1681,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     >>= bFolder;
             xProps->addProperty(
                 u"CreatableContentsInfo"_ustr,
-                uno::Any( bFolder
+                cpo::uno::Any( bFolder
                                   ? queryCreatableContentsInfo()
                                   : uno::Sequence< ucb::ContentInfo >() ),
                 true );
@@ -1711,7 +1711,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 }
 
 
-uno::Sequence< uno::Any > Content::setPropertyValues(
+uno::Sequence< cpo::uno::Any > Content::setPropertyValues(
                 const uno::Sequence< beans::PropertyValue >& rValues,
                 const uno::Reference< ucb::XCommandEnvironment >& xEnv )
 {
@@ -1729,7 +1729,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         xResAccess.reset( new DAVResourceAccess( *m_xResAccess ) );
     }
 
-    uno::Sequence< uno::Any > aRet( rValues.getLength() );
+    uno::Sequence< cpo::uno::Any > aRet( rValues.getLength() );
     auto aRetRange = asNonConstRange(aRet);
     uno::Sequence< beans::PropertyChangeEvent > aChanges( rValues.getLength() );
     sal_Int32 nChanged = 0;
@@ -1936,7 +1936,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                     {
                         try
                         {
-                            uno::Any aOldValue
+                            cpo::uno::Any aOldValue
                                 = xAdditionalPropSet->getPropertyValue( rName );
                             if ( aOldValue != rValue.Value )
                             {
@@ -1993,7 +1993,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             for ( const auto& rProppatchValue : aProppatchValues )
             {
                 aEvent.PropertyName = rProppatchValue.name;
-                aEvent.OldValue     = uno::Any(); // @@@ too expensive to obtain!
+                aEvent.OldValue     = cpo::uno::Any(); // @@@ too expensive to obtain!
                 aEvent.NewValue     = rProppatchValue.value;
 
                 aChanges.getArray()[ nChanged ] = aEvent;
@@ -2125,11 +2125,11 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 }
 
 
-uno::Any Content::open(
+cpo::uno::Any Content::open(
                 const ucb::OpenCommandArgument3 & rArg,
                 const uno::Reference< ucb::XCommandEnvironment > & xEnv )
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
 
     bool bOpenFolder = ( ( rArg.Mode == ucb::OpenMode::ALL ) ||
                              ( rArg.Mode == ucb::OpenMode::FOLDERS ) ||
@@ -2149,7 +2149,7 @@ uno::Any Content::open(
             // Error: Not a folder!
 
             ucbhelper::cancelCommandExecution(
-                uno::Any(
+                cpo::uno::Any(
                     lang::IllegalArgumentException(
                         u"Non-folder resource cannot be opened as folder! Wrong Open Mode!"_ustr,
                         getXWeak(),
@@ -2168,7 +2168,7 @@ uno::Any Content::open(
         {
             // Currently(?) unsupported.
             ucbhelper::cancelCommandExecution(
-                uno::Any(
+                cpo::uno::Any(
                     ucb::UnsupportedOpenModeException(
                             OUString(),
                             getXWeak(),
@@ -2309,7 +2309,7 @@ uno::Any Content::open(
                 //       implementation. Support for this type of
                 //       sink is optional...
                 ucbhelper::cancelCommandExecution(
-                    uno::Any(
+                    cpo::uno::Any(
                         ucb::UnsupportedDataSinkException(
                             OUString(),
                             getXWeak(),
@@ -2397,7 +2397,7 @@ void Content::post(
         else
         {
             ucbhelper::cancelCommandExecution(
-                uno::Any(
+                cpo::uno::Any(
                     ucb::UnsupportedDataSinkException(
                         OUString(),
                         getXWeak(),
@@ -2482,7 +2482,7 @@ void Content::insert(
 
         uno::Sequence<OUString> aProps { u"Title"_ustr };
         ucbhelper::cancelCommandExecution(
-            uno::Any( ucb::MissingPropertiesException(
+            cpo::uno::Any( ucb::MissingPropertiesException(
                                 OUString(),
                                 getXWeak(),
                                 aProps ) ),
@@ -2523,7 +2523,7 @@ void Content::insert(
 
             if ( xIH.is() )
             {
-                uno::Any aExAsAny( aEx );
+                cpo::uno::Any aExAsAny( aEx );
 
                 rtl::Reference< ucbhelper::SimpleInteractionRequest > xRequest
                     = new ucbhelper::SimpleInteractionRequest(
@@ -2657,7 +2657,7 @@ void Content::insert(
                         }
 
                         ucbhelper::cancelCommandExecution(
-                            uno::Any(
+                            cpo::uno::Any(
                                 ucb::NameClashException(
                                     OUString(),
                                     getXWeak(),
@@ -2691,7 +2691,7 @@ void Content::insert(
         if ( !xInputStream.is() )
         {
             ucbhelper::cancelCommandExecution(
-                uno::Any(
+                cpo::uno::Any(
                     ucb::MissingInputStreamException(
                         OUString(),
                         getXWeak() ) ),
@@ -2781,7 +2781,7 @@ void Content::transfer(
             if ( aScheme != HTTP_URL_SCHEME && aScheme != HTTPS_URL_SCHEME )
             {
                 ucbhelper::cancelCommandExecution(
-                    uno::Any(
+                    cpo::uno::Any(
                         ucb::InteractiveBadTransferURLException(
                             u"Unsupported URL scheme!"_ustr,
                             getXWeak() ) ),
@@ -2814,7 +2814,7 @@ void Content::transfer(
              ( sourceURI.GetHost() != targetURI.GetHost() ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::Any( ucb::InteractiveBadTransferURLException(
+                cpo::uno::Any( ucb::InteractiveBadTransferURLException(
                                 u"Different hosts!"_ustr,
                                 getXWeak() ) ),
                 Environment );
@@ -2938,7 +2938,7 @@ void Content::transfer(
                 case 0/*ucb::NameClash::ERROR*/:
                 {
                     ucbhelper::cancelCommandExecution(
-                        uno::Any(
+                        cpo::uno::Any(
                             ucb::NameClashException(
                                 OUString(),
                                 getXWeak(),
@@ -2958,7 +2958,7 @@ void Content::transfer(
                 default:
                 {
                     ucbhelper::cancelCommandExecution(
-                        uno::Any(
+                        cpo::uno::Any(
                             ucb::UnsupportedNameClashException(
                                 OUString(),
                                 getXWeak(),
@@ -3250,7 +3250,7 @@ void Content::lock(
             xResAccess.reset( new DAVResourceAccess( *m_xResAccess ) );
         }
 
-        uno::Any aOwnerAny;
+        cpo::uno::Any aOwnerAny;
         OUString const user(officecfg::Office::Common::Save::Document::UseUserData::get()
                 ? " - " + ::svt::LockFileCommon::GetOOOUserName()
                 : OUString());
@@ -3538,10 +3538,10 @@ bool Content::isFolder(
 }
 
 
-uno::Any Content::MapDAVException( const DAVException & e, bool bWrite )
+cpo::uno::Any Content::MapDAVException( const DAVException & e, bool bWrite )
 {
     // Map DAVException...
-    uno::Any aException;
+    cpo::uno::Any aException;
 
     OUString aURL;
     if ( m_bTransient )
@@ -3561,8 +3561,8 @@ uno::Any Content::MapDAVException( const DAVException & e, bool bWrite )
     {
         case SC_NOT_FOUND:
         {
-            uno::Sequence<uno::Any> aArgs{ uno::Any(beans::PropertyValue(
-                u"Uri"_ustr, -1, uno::Any(aURL), beans::PropertyState_DIRECT_VALUE)) };
+            uno::Sequence<cpo::uno::Any> aArgs{ cpo::uno::Any(beans::PropertyValue(
+                u"Uri"_ustr, -1, cpo::uno::Any(aURL), beans::PropertyState_DIRECT_VALUE)) };
 
             aException <<=
                 ucb::InteractiveAugmentedIOException(
@@ -3652,7 +3652,7 @@ uno::Any Content::MapDAVException( const DAVException & e, bool bWrite )
                 false ); // not SelfOwned
 #else
         {
-            uno::Sequence< uno::Any > aArgs( 1 );
+            uno::Sequence< cpo::uno::Any > aArgs( 1 );
             aArgs[ 0 ] <<= beans::PropertyValue(
                 OUString("Uri"), -1,
                 uno::makeAny(aURL),

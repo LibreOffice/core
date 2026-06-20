@@ -240,7 +240,7 @@ public:
                 {
                     OUString aLoadReadonlyString( u"LoadReadonly"_ustr );
                     m_xDocumentSettings->getPropertyValue( aLoadReadonlyString ) >>= m_bPreserveReadOnly;
-                    m_xDocumentSettings->setPropertyValue( aLoadReadonlyString, uno::Any( bReadOnly ) );
+                    m_xDocumentSettings->setPropertyValue( aLoadReadonlyString, cpo::uno::Any( bReadOnly ) );
                     m_bReadOnlySupported = true;
                 }
             }
@@ -259,7 +259,7 @@ public:
             try
             {
                 if ( m_bReadOnlySupported )
-                    m_xDocumentSettings->setPropertyValue( u"LoadReadonly"_ustr, uno::Any( m_bPreserveReadOnly ) );
+                    m_xDocumentSettings->setPropertyValue( u"LoadReadonly"_ustr, cpo::uno::Any( m_bPreserveReadOnly ) );
             }
             catch( const uno::Exception& )
             {
@@ -511,7 +511,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilter
 
 uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceAnyFilter( SfxFilterFlags nMust, SfxFilterFlags nDont )
 {
-    uno::Sequence< beans::NamedValue > aSearchRequest { { u"DocumentService"_ustr, css::uno::Any(GetDocServiceName()) } };
+    uno::Sequence< beans::NamedValue > aSearchRequest { { u"DocumentService"_ustr, cpo::uno::Any(GetDocServiceName()) } };
 
     return ::comphelper::MimeConfigurationHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
 }
@@ -532,8 +532,8 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetPreselectedFilter_Impl(
         // Preselect PDF-Filter for EXPORT
         uno::Sequence< beans::NamedValue > aSearchRequest
         {
-            { u"Type"_ustr, css::uno::Any(u"pdf_Portable_Document_Format"_ustr) },
-            { u"DocumentService"_ustr, css::uno::Any(GetDocServiceName()) }
+            { u"Type"_ustr, cpo::uno::Any(u"pdf_Portable_Document_Format"_ustr) },
+            { u"DocumentService"_ustr, cpo::uno::Any(GetDocServiceName()) }
         };
 
         aFilterProps = ::comphelper::MimeConfigurationHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
@@ -543,8 +543,8 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetPreselectedFilter_Impl(
         // Preselect EPUB filter for export.
         uno::Sequence<beans::NamedValue> aSearchRequest
         {
-            { u"Type"_ustr, css::uno::Any(u"writer_EPUB_Document"_ustr) },
-            { u"DocumentService"_ustr, css::uno::Any(GetDocServiceName()) }
+            { u"Type"_ustr, cpo::uno::Any(u"writer_EPUB_Document"_ustr) },
+            { u"DocumentService"_ustr, cpo::uno::Any(GetDocServiceName()) }
         };
 
         aFilterProps = ::comphelper::MimeConfigurationHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
@@ -570,7 +570,7 @@ bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName, bool
 
     try {
         uno::Sequence < beans::PropertyValue > aProps;
-        uno::Any aAny = m_pOwner->GetFilterConfiguration()->getByName( aFilterName );
+        cpo::uno::Any aAny = m_pOwner->GetFilterConfiguration()->getByName( aFilterName );
         if ( aAny >>= aProps )
         {
             auto pProp = std::find_if(std::cbegin(aProps), std::cend(aProps),
@@ -581,9 +581,9 @@ bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName, bool
                 pProp->Value >>= aServiceName;
                 if( !aServiceName.isEmpty() )
                 {
-                    uno::Sequence<uno::Any> aDialogArgs(comphelper::InitAnyPropertySequence(
+                    uno::Sequence<cpo::uno::Any> aDialogArgs(comphelper::InitAnyPropertySequence(
                     {
-                        {"ParentWindow", uno::Any(SfxStoringHelper::GetModelXWindow(m_xModel))},
+                        {"ParentWindow", cpo::uno::Any(SfxStoringHelper::GetModelXWindow(m_xModel))},
                     }));
 
                     uno::Reference< beans::XPropertyAccess > xFilterProperties;
@@ -869,7 +869,7 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
 
 bool ModelData_Impl::CheckFilterOptionsDialogExistence()
 {
-    uno::Sequence< beans::NamedValue > aSearchRequest { { u"DocumentService"_ustr, css::uno::Any(GetDocServiceName()) } };
+    uno::Sequence< beans::NamedValue > aSearchRequest { { u"DocumentService"_ustr, cpo::uno::Any(GetDocServiceName()) } };
 
     uno::Reference< container::XEnumeration > xFilterEnum =
                                     m_pOwner->GetFilterQuery()->createSubSetEnumerationByProperties( aSearchRequest );
@@ -1254,7 +1254,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
             {
                 // for exporters: always show dialog if format uses options
                 // for save: show dialog if format uses options and no options given or if forced by user
-                uno::Any aVal =
+                cpo::uno::Any aVal =
                         xExtFileDlg->getValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS, 0 );
 
                 aVal >>= bUseFilterOptions;
@@ -1277,7 +1277,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
     {
         uno::Sequence< beans::PropertyValue > descriptor{
             beans::PropertyValue(u"ExportDirectory"_ustr,
-                -1, uno::Any(aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE )), beans::PropertyState_DIRECT_VALUE),
+                -1, cpo::uno::Any(aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE )), beans::PropertyState_DIRECT_VALUE),
         };
         GetModel()->setArgs(descriptor);
     }
@@ -1995,7 +1995,7 @@ bool SfxStoringHelper::CheckFilterOptionsAppearance(
     {
         try {
             uno::Sequence < beans::PropertyValue > aProps;
-            uno::Any aAny = xFilterCFG->getByName( aFilterName );
+            cpo::uno::Any aAny = xFilterCFG->getByName( aFilterName );
             if ( aAny >>= aProps )
             {
                 ::comphelper::SequenceAsHashMap aPropsHM( aProps );
@@ -2039,7 +2039,7 @@ void SfxStoringHelper::SetDocInfoState(
         const uno::Sequence< beans::Property > lProps = xSetInfo->getProperties();
         for (const beans::Property& rProp : lProps)
         {
-            uno::Any aValue = xPropSet->getPropertyValue( rProp.Name );
+            cpo::uno::Any aValue = xPropSet->getPropertyValue( rProp.Name );
             if ( rProp.Attributes & css::beans::PropertyAttribute::REMOVABLE )
             {
                 try

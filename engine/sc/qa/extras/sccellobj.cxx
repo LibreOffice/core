@@ -30,6 +30,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace sc_apitest
 {
@@ -161,8 +162,8 @@ void ScCellObj::testInsertVarious_ScCellObj()
     {
         auto xField = xF->createInstance(u"com.sun.star.text.textfield.URL"_ustr)
                           .queryThrow<beans::XPropertySet>();
-        xField->setPropertyValue(u"URL"_ustr, uno::Any(u"http://www.example.org/"_ustr));
-        xField->setPropertyValue(u"Representation"_ustr, uno::Any(s));
+        xField->setPropertyValue(u"URL"_ustr, cpo::uno::Any(u"http://www.example.org/"_ustr));
+        xField->setPropertyValue(u"Representation"_ustr, cpo::uno::Any(s));
         return xField.queryThrow<text::XTextContent>();
     };
 

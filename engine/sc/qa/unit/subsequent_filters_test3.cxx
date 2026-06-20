@@ -57,6 +57,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 class ScFiltersTest3 : public ScModelTestBase
 {
@@ -1020,7 +1021,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testShapeRotationImport)
         uno::Reference<drawing::XShape> xShape(xPage->getByIndex(ind), uno::UNO_QUERY_THROW);
 
         uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
-        uno::Any nRotProp = xShapeProperties->getPropertyValue(u"RotateAngle"_ustr);
+        cpo::uno::Any nRotProp = xShapeProperties->getPropertyValue(u"RotateAngle"_ustr);
         sal_Int32 nRot = nRotProp.get<sal_Int32>();
         const OString sNote = "RotateAngle = " + OString::number(nRot);
 
@@ -1046,7 +1047,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testShapeDisplacementOnRotationImport)
     uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
 
     uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY_THROW);
-    uno::Any aRectProp = xShapeProperties->getPropertyValue(u"FrameRect"_ustr);
+    cpo::uno::Any aRectProp = xShapeProperties->getPropertyValue(u"FrameRect"_ustr);
     awt::Rectangle aRectangle = aRectProp.get<awt::Rectangle>();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aRectangle.X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aRectangle.Y);
@@ -1083,7 +1084,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTextBoxBodyUpright)
     // Check the TextPreRotateAngle has the compensation for the additional 90deg area rotation,
     // which is added in Shape::createAndInsert to get the same rendering as in MS Office.
     sal_Int32 nAngle;
-    uno::Any aGeom = xShapeProperties->getPropertyValue(u"CustomShapeGeometry"_ustr);
+    cpo::uno::Any aGeom = xShapeProperties->getPropertyValue(u"CustomShapeGeometry"_ustr);
     auto aGeomSeq = aGeom.get<Sequence<beans::PropertyValue>>();
     for (const auto& aProp : aGeomSeq)
     {
@@ -1860,7 +1861,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf128951)
     css::uno::Reference<css::sheet::XSpreadsheetDocument> xDoc(mxComponent,
                                                                css::uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_NO_THROW(
-        xDoc->getSheets()->insertByName(u"mustNotThrow"_ustr, css::uno::Any(xSheet)));
+        xDoc->getSheets()->insertByName(u"mustNotThrow"_ustr, cpo::uno::Any(xSheet)));
 }
 
 namespace

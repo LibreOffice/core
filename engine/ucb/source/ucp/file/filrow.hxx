@@ -31,7 +31,7 @@ namespace fileaccess {
         css::sdbc::XRow >
     {
     public:
-        XRow_impl( TaskManager* pShell,const css::uno::Sequence< css::uno::Any >& aValueMap );
+        XRow_impl( TaskManager* pShell,const css::uno::Sequence< cpo::uno::Any >& aValueMap );
         virtual ~XRow_impl() override;
 
         virtual bool SAL_CALL
@@ -80,7 +80,7 @@ namespace fileaccess {
         virtual css::uno::Reference< css::io::XInputStream > SAL_CALL
         getCharacterStream( sal_Int32 columnIndex ) override;
 
-        virtual css::uno::Any SAL_CALL
+        virtual cpo::uno::Any SAL_CALL
         getObject(
             sal_Int32 columnIndex,
             const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
@@ -99,7 +99,7 @@ namespace fileaccess {
 
     private:
         std::mutex                                         m_aMutex;
-        css::uno::Sequence< css::uno::Any >                m_aValueMap;
+        css::uno::Sequence< cpo::uno::Any >                m_aValueMap;
         bool                                               m_nWasNull;
         TaskManager*                                       m_pMyShell;
         css::uno::Reference< css::script::XTypeConverter > m_xTypeConverter;

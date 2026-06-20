@@ -85,6 +85,7 @@
 using namespace ::dbtools;
 using namespace ::comphelper;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
@@ -339,7 +340,7 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
         }
         catch(const Exception&)
         {
-            css::uno::Any a(cppu::getCaughtException());
+            cpo::uno::Any a(cppu::getCaughtException());
             throw WrappedTargetRuntimeException(
                 u"Could not clone the given database form."_ustr,
                 *const_cast< ODatabaseForm* >( &_cloneSource ),
@@ -1423,7 +1424,7 @@ void ODatabaseForm::fire( sal_Int32* pnHandles, const Any* pNewValues, const Any
 Any SAL_CALL ODatabaseForm::getFastPropertyValue( sal_Int32 nHandle )
 {
     if ((nHandle == PROPERTY_ID_ISMODIFIED) && (m_nResetsPending > 0))
-        return css::uno::Any(false);
+        return cpo::uno::Any(false);
         // don't allow the aggregate which is currently being reset to return a (temporary) "yes"
     else
         return OPropertySetAggregationHelper::getFastPropertyValue(nHandle);
@@ -2100,7 +2101,7 @@ void ODatabaseForm::reset_impl(bool _bApproveByListeners)
     // (do this _before_ the listeners are notified ! their reaction (maybe asynchronous) may depend
     // on the modified state of the row)
     if (bInsertRow)
-        m_xAggregateSet->setPropertyValue(PROPERTY_ISMODIFIED, css::uno::Any(false));
+        m_xAggregateSet->setPropertyValue(PROPERTY_ISMODIFIED, cpo::uno::Any(false));
 
     aResetGuard.clear();
     {
@@ -2112,7 +2113,7 @@ void ODatabaseForm::reset_impl(bool _bApproveByListeners)
     // and again : ensure the row isn't modified
     // we already did this after we (and maybe our dependents) reset the values, but the listeners may have changed the row, too
     if (bInsertRow)
-        m_xAggregateSet->setPropertyValue(PROPERTY_ISMODIFIED, css::uno::Any(false));
+        m_xAggregateSet->setPropertyValue(PROPERTY_ISMODIFIED, cpo::uno::Any(false));
 
     --m_nResetsPending;
 }
@@ -4094,7 +4095,7 @@ void SAL_CALL ODatabaseForm::setName(const OUString& aName)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_forms_ODatabaseForm_get_implementation(css::uno::XComponentContext* context,
-                                                         css::uno::Sequence<css::uno::Any> const &)
+                                                         css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::ODatabaseForm(context));
 }

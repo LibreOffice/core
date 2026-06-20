@@ -29,6 +29,7 @@ namespace oox::drawingml::chart {
 
 using namespace ::com::sun::star::chart2::data;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 DataSequenceConverter::DataSequenceConverter( const ConverterRoot& rParent, DataSequenceModel& rModel ) :
     ConverterBase< DataSequenceModel >( rParent, rModel )

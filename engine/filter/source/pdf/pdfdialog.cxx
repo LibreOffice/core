@@ -24,6 +24,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
@@ -156,7 +157,7 @@ void SAL_CALL PDFDialog::setSourceDocument( const Reference< XComponent >& xDoc 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_PDFDialog_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new PDFDialog(context));
 }

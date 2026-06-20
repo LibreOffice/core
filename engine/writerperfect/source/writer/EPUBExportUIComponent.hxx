@@ -67,7 +67,7 @@ public:
     setSourceDocument(const css::uno::Reference<css::lang::XComponent>& xDocument) override;
 
     // XInitialization
-    void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
+    void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
 private:
     /// The full set of property values.

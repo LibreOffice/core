@@ -122,7 +122,7 @@ public:
     {}
 
     // XCallback
-    virtual void SAL_CALL notify(const css::uno::Any& aData) override
+    virtual void SAL_CALL notify(const cpo::uno::Any& aData) override
     {
         uno::Sequence<beans::PropertyValue> aProperties;
         if (!(aData >>= aProperties))
@@ -250,7 +250,7 @@ void ScTabViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
                         if (xPopupRequest.is())
                         {
                             uno::Reference<awt::XCallback> xCallback(new PopupCallback(this, pObj));
-                            uno::Any aAny;
+                            cpo::uno::Any aAny;
                             xPopupRequest->addCallback(xCallback, aAny);
                         }
                     }

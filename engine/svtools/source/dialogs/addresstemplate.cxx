@@ -59,6 +59,7 @@
 namespace svt
 {
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::ui::dialogs;
     using namespace ::com::sun::star::util;
@@ -247,7 +248,7 @@ namespace svt
         StringBag       m_aStoredFields;
 
     protected:
-        css::uno::Any   getProperty(const OUString& _rLocalName) const;
+        cpo::uno::Any   getProperty(const OUString& _rLocalName) const;
 
         OUString        getStringProperty(const OUString& _rLocalName) const;
 

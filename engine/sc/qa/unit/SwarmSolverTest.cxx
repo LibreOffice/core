@@ -171,10 +171,10 @@ void SwarmSolverTest::testVariableBounded()
     uno::Sequence<sheet::SolverConstraint> aConstraints{
         { /* [0] Left     */ table::CellAddress(0, 1, 0),
           /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
-          /*     Right    */ uno::Any(100.0) },
+          /*     Right    */ cpo::uno::Any(100.0) },
         { /* [1] Left     */ table::CellAddress(0, 1, 0),
           /*     Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
-          /*     Right    */ uno::Any(-100.0) }
+          /*     Right    */ cpo::uno::Any(-100.0) }
     };
 
     // initialize solver
@@ -216,13 +216,13 @@ void SwarmSolverTest::testVariableConstrained()
     uno::Sequence<sheet::SolverConstraint> aConstraints{
         { /* [0] Left     */ table::CellAddress(0, 1, 0),
           /*     Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
-          /*     Right    */ uno::Any(-50000.0) },
+          /*     Right    */ cpo::uno::Any(-50000.0) },
         { /* [1] Left     */ table::CellAddress(0, 1, 0),
           /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
-          /*     Right    */ uno::Any(0.0) },
+          /*     Right    */ cpo::uno::Any(0.0) },
         { /* [2] Left     */ table::CellAddress(0, 1, 1),
           /*     Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
-          /*     Right    */ uno::Any(10.0) }
+          /*     Right    */ cpo::uno::Any(10.0) }
     };
 
     // initialize solver
@@ -265,16 +265,16 @@ void SwarmSolverTest::testTwoVariables()
     uno::Sequence<sheet::SolverConstraint> aConstraints{
         { /* [0] Left     */ table::CellAddress(0, 1, 2),
           /*     Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
-          /*     Right    */ uno::Any(-100.0) },
+          /*     Right    */ cpo::uno::Any(-100.0) },
         { /* [1] Left     */ table::CellAddress(0, 1, 3),
           /*     Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
-          /*     Right    */ uno::Any(-100.0) },
+          /*     Right    */ cpo::uno::Any(-100.0) },
         { /* [2] Left     */ table::CellAddress(0, 1, 2),
           /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
-          /*     Right    */ uno::Any(100.0) },
+          /*     Right    */ cpo::uno::Any(100.0) },
         { /* [3] Left     */ table::CellAddress(0, 1, 3),
           /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
-          /*     Right    */ uno::Any(100.0) }
+          /*     Right    */ cpo::uno::Any(100.0) }
     };
 
     // initialize solver
@@ -309,7 +309,7 @@ void SwarmSolverTest::testMultipleVariables()
                 uno::UNO_QUERY_THROW);
 
     uno::Reference<beans::XPropertySet> xPropSet(xSolver, uno::UNO_QUERY_THROW);
-    xPropSet->setPropertyValue(u"Integer"_ustr, uno::Any(true));
+    xPropSet->setPropertyValue(u"Integer"_ustr, cpo::uno::Any(true));
 
     table::CellAddress aObjective(0, 5, 7);
 
@@ -322,40 +322,40 @@ void SwarmSolverTest::testMultipleVariables()
     uno::Sequence<sheet::SolverConstraint> aConstraints{
         { /* [ 0] Left     */ table::CellAddress(0, 1, 5),
           /*      Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
-          /*      Right    */ uno::Any(table::CellAddress(0, 1, 6)) },
+          /*      Right    */ cpo::uno::Any(table::CellAddress(0, 1, 6)) },
         { /* [ 1] Left     */ table::CellAddress(0, 2, 5),
           /*      Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
-          /*      Right    */ uno::Any(table::CellAddress(0, 2, 6)) },
+          /*      Right    */ cpo::uno::Any(table::CellAddress(0, 2, 6)) },
         { /* [ 2] Left     */ table::CellAddress(0, 3, 5),
           /*      Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
-          /*      Right    */ uno::Any(table::CellAddress(0, 3, 6)) },
+          /*      Right    */ cpo::uno::Any(table::CellAddress(0, 3, 6)) },
         { /* [ 3] Left     */ table::CellAddress(0, 4, 5),
           /*      Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
-          /*      Right    */ uno::Any(table::CellAddress(0, 4, 6)) },
+          /*      Right    */ cpo::uno::Any(table::CellAddress(0, 4, 6)) },
         { /* [ 4] Left     */ table::CellAddress(0, 6, 1),
           /*      Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
-          /*      Right    */ uno::Any(0.0) },
+          /*      Right    */ cpo::uno::Any(0.0) },
         { /* [ 5] Left     */ table::CellAddress(0, 6, 2),
           /*      Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
-          /*      Right    */ uno::Any(0.0) },
+          /*      Right    */ cpo::uno::Any(0.0) },
         { /* [ 6] Left     */ table::CellAddress(0, 6, 3),
           /*      Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
-          /*      Right    */ uno::Any(0.0) },
+          /*      Right    */ cpo::uno::Any(0.0) },
         { /* [ 7] Left     */ table::CellAddress(0, 6, 4),
           /*      Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
-          /*      Right    */ uno::Any(0.0) },
+          /*      Right    */ cpo::uno::Any(0.0) },
         { /* [ 8] Left     */ table::CellAddress(0, 6, 1),
           /*      Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
-          /*      Right    */ uno::Any(10000.0) },
+          /*      Right    */ cpo::uno::Any(10000.0) },
         { /* [ 9] Left     */ table::CellAddress(0, 6, 2),
           /*      Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
-          /*      Right    */ uno::Any(10000.0) },
+          /*      Right    */ cpo::uno::Any(10000.0) },
         { /* [10] Left     */ table::CellAddress(0, 6, 3),
           /*      Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
-          /*      Right    */ uno::Any(10000.0) },
+          /*      Right    */ cpo::uno::Any(10000.0) },
         { /* [11] Left     */ table::CellAddress(0, 6, 4),
           /*      Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
-          /*      Right    */ uno::Any(10000.0) }
+          /*      Right    */ cpo::uno::Any(10000.0) }
     };
 
     // initialize solver
@@ -400,7 +400,7 @@ void SwarmSolverTest::testInfeasibleConstraints()
                     uno::UNO_QUERY_THROW);
 
         uno::Reference<beans::XPropertySet> xPropSet(xSolver, uno::UNO_QUERY_THROW);
-        xPropSet->setPropertyValue(u"Algorithm"_ustr, uno::Any(nAlgorithm));
+        xPropSet->setPropertyValue(u"Algorithm"_ustr, cpo::uno::Any(nAlgorithm));
 
         table::CellAddress aObjective(0, 1, 1);
         uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
@@ -408,15 +408,15 @@ void SwarmSolverTest::testInfeasibleConstraints()
         uno::Sequence<sheet::SolverConstraint> aConstraints{
             { /* [0] Left     */ table::CellAddress(0, 1, 0),
               /*     Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
-              /*     Right    */ uno::Any(-100.0) },
+              /*     Right    */ cpo::uno::Any(-100.0) },
             { /* [1] Left     */ table::CellAddress(0, 1, 0),
               /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
-              /*     Right    */ uno::Any(100.0) },
+              /*     Right    */ cpo::uno::Any(100.0) },
             // The objective B2 is 10*B1^2 - 60*B1 - 40, whose lowest value is
             // -130 at B1 = 3, so forcing it below -1000 can never be met.
             { /* [2] Left     */ table::CellAddress(0, 1, 1),
               /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
-              /*     Right    */ uno::Any(-1000.0) }
+              /*     Right    */ cpo::uno::Any(-1000.0) }
         };
 
         xSolver->setDocument(xDocument);
@@ -450,7 +450,7 @@ void SwarmSolverTest::testLargeObjectiveStillSolvable()
                     uno::UNO_QUERY_THROW);
 
         uno::Reference<beans::XPropertySet> xPropSet(xSolver, uno::UNO_QUERY_THROW);
-        xPropSet->setPropertyValue(u"Algorithm"_ustr, uno::Any(nAlgorithm));
+        xPropSet->setPropertyValue(u"Algorithm"_ustr, cpo::uno::Any(nAlgorithm));
 
         table::CellAddress aObjective(0, 1, 1);
         uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
@@ -463,13 +463,13 @@ void SwarmSolverTest::testLargeObjectiveStillSolvable()
         uno::Sequence<sheet::SolverConstraint> aConstraints{
             { /* [0] Left     */ table::CellAddress(0, 1, 0),
               /*     Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
-              /*     Right    */ uno::Any(1.0e19) },
+              /*     Right    */ cpo::uno::Any(1.0e19) },
             { /* [1] Left     */ table::CellAddress(0, 1, 0),
               /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
-              /*     Right    */ uno::Any(2.0e19) },
+              /*     Right    */ cpo::uno::Any(2.0e19) },
             { /* [2] Left     */ table::CellAddress(0, 1, 1),
               /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
-              /*     Right    */ uno::Any(2.0e39) }
+              /*     Right    */ cpo::uno::Any(2.0e39) }
         };
 
         xSolver->setDocument(xDocument);
@@ -546,11 +546,11 @@ void SwarmSolverTest::testUnreadableConstraintStillChecksOthers()
         // number
         { /* [0] Left     */ table::CellAddress(0, 1, 1),
           /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
-          /*     Right    */ uno::Any(u"not a number"_ustr) },
+          /*     Right    */ cpo::uno::Any(u"not a number"_ustr) },
         // forced below the objective's global minimum of -130, so impossible
         { /* [1] Left     */ table::CellAddress(0, 1, 1),
           /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
-          /*     Right    */ uno::Any(-1000.0) }
+          /*     Right    */ cpo::uno::Any(-1000.0) }
     };
 
     xSolver->setDocument(xDocument);
@@ -588,10 +588,10 @@ void SwarmSolverTest::testContradictoryBoundsTerminate()
     uno::Sequence<sheet::SolverConstraint> aConstraints{
         { /* [0] Left     */ table::CellAddress(0, 1, 0),
           /*     Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
-          /*     Right    */ uno::Any(10.0) },
+          /*     Right    */ cpo::uno::Any(10.0) },
         { /* [1] Left     */ table::CellAddress(0, 1, 0),
           /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
-          /*     Right    */ uno::Any(5.0) }
+          /*     Right    */ cpo::uno::Any(5.0) }
     };
 
     xSolver->setDocument(xDocument);
@@ -625,7 +625,7 @@ void SwarmSolverTest::testUnboundedIntegerVariable()
                 uno::UNO_QUERY_THROW);
 
     uno::Reference<beans::XPropertySet> xPropSet(xSolver, uno::UNO_QUERY_THROW);
-    xPropSet->setPropertyValue(u"Integer"_ustr, uno::Any(true));
+    xPropSet->setPropertyValue(u"Integer"_ustr, cpo::uno::Any(true));
 
     table::CellAddress aObjective(0, 1, 1);
     uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
@@ -678,10 +678,10 @@ void SwarmSolverTest::testRepeatedSolveResetsState()
     // objective, so it cannot be solved.
     xSolver->setConstraints({ { /* Left */ table::CellAddress(0, 1, 0),
                                 /* Op   */ sheet::SolverConstraintOperator_LESS_EQUAL,
-                                /* Right*/ uno::Any(0.0) },
+                                /* Right*/ cpo::uno::Any(0.0) },
                               { /* Left */ table::CellAddress(0, 1, 1),
                                 /* Op   */ sheet::SolverConstraintOperator_LESS_EQUAL,
-                                /* Right*/ uno::Any(-1000.0) } });
+                                /* Right*/ cpo::uno::Any(-1000.0) } });
     xSolver->solve();
     CPPUNIT_ASSERT(!xSolver->getSuccess());
 
@@ -689,10 +689,10 @@ void SwarmSolverTest::testRepeatedSolveResetsState()
     // It is bounded only by its own constraints.
     xSolver->setConstraints({ { /* Left */ table::CellAddress(0, 1, 0),
                                 /* Op   */ sheet::SolverConstraintOperator_GREATER_EQUAL,
-                                /* Right*/ uno::Any(-100.0) },
+                                /* Right*/ cpo::uno::Any(-100.0) },
                               { /* Left */ table::CellAddress(0, 1, 0),
                                 /* Op   */ sheet::SolverConstraintOperator_LESS_EQUAL,
-                                /* Right*/ uno::Any(100.0) } });
+                                /* Right*/ cpo::uno::Any(100.0) } });
     xSolver->solve();
     CPPUNIT_ASSERT_MESSAGE("The second solve must not inherit the first run's state",
                            xSolver->getSuccess());
@@ -768,15 +768,19 @@ void SwarmSolverTest::testConstrainedLinearProgram()
     uno::Sequence<sheet::SolverConstraint> aConstraints{
         // box bounds on the two variables
         { table::CellAddress(0, 0, 0), sheet::SolverConstraintOperator_GREATER_EQUAL,
-          uno::Any(0.0) },
-        { table::CellAddress(0, 0, 0), sheet::SolverConstraintOperator_LESS_EQUAL, uno::Any(10.0) },
+          cpo::uno::Any(0.0) },
+        { table::CellAddress(0, 0, 0), sheet::SolverConstraintOperator_LESS_EQUAL,
+          cpo::uno::Any(10.0) },
         { table::CellAddress(0, 0, 1), sheet::SolverConstraintOperator_GREATER_EQUAL,
-          uno::Any(0.0) },
-        { table::CellAddress(0, 0, 1), sheet::SolverConstraintOperator_LESS_EQUAL, uno::Any(10.0) },
+          cpo::uno::Any(0.0) },
+        { table::CellAddress(0, 0, 1), sheet::SolverConstraintOperator_LESS_EQUAL,
+          cpo::uno::Any(10.0) },
         // x + y <= 4 (cell B1)
-        { table::CellAddress(0, 1, 0), sheet::SolverConstraintOperator_LESS_EQUAL, uno::Any(4.0) },
+        { table::CellAddress(0, 1, 0), sheet::SolverConstraintOperator_LESS_EQUAL,
+          cpo::uno::Any(4.0) },
         // x + 3y <= 6 (cell B2)
-        { table::CellAddress(0, 1, 1), sheet::SolverConstraintOperator_LESS_EQUAL, uno::Any(6.0) }
+        { table::CellAddress(0, 1, 1), sheet::SolverConstraintOperator_LESS_EQUAL,
+          cpo::uno::Any(6.0) }
     };
 
     xSolver->setDocument(xDocument);

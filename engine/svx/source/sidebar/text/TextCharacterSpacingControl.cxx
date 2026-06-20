@@ -103,7 +103,7 @@ TextCharacterSpacingControl::~TextCharacterSpacingControl()
     {
         SvtViewOptions aWinOpt(EViewType::Window, SIDEBAR_SPACING_GLOBAL_VALUE);
         css::uno::Sequence<css::beans::NamedValue> aSeq
-            { { u"Spacing"_ustr, css::uno::Any(OUString::number(mnCustomKern)) } };
+            { { u"Spacing"_ustr, cpo::uno::Any(OUString::number(mnCustomKern)) } };
         aWinOpt.SetUserData(aSeq);
     }
 }

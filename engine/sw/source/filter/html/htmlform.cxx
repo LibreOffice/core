@@ -87,6 +87,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::form;
 
@@ -919,7 +920,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         }
         if( nUpperSpace || nLowerSpace )
         {
-            uno::Any aAny2;
+            cpo::uno::Any aAny2;
             aAny2 <<= nUpperSpace;
             xShapePropSet->setPropertyValue(u"TopMargin"_ustr, aAny2 );
 

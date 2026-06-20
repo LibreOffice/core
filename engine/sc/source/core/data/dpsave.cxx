@@ -61,7 +61,7 @@ static void lcl_SetBoolProperty( const uno::Reference<beans::XPropertySet>& xPro
 {
     //TODO: move to ScUnoHelpFunctions?
 
-    xProp->setPropertyValue( rName, uno::Any( bValue ) );
+    xProp->setPropertyValue( rName, cpo::uno::Any( bValue ) );
 }
 
 ScDPSaveMember::ScDPSaveMember(OUString _aName) :
@@ -502,20 +502,20 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
         // exceptions are caught at ScDPSaveData::WriteToSource
 
         sheet::DataPilotFieldOrientation eOrient = nOrientation;
-        xDimProp->setPropertyValue( SC_UNO_DP_ORIENTATION, uno::Any(eOrient) );
+        xDimProp->setPropertyValue( SC_UNO_DP_ORIENTATION, cpo::uno::Any(eOrient) );
 
         sal_Int16 eFunc = static_cast<sal_Int16>(nFunction);
-        xDimProp->setPropertyValue( SC_UNO_DP_FUNCTION2, uno::Any(eFunc) );
+        xDimProp->setPropertyValue( SC_UNO_DP_FUNCTION2, cpo::uno::Any(eFunc) );
 
         if ( nUsedHierarchy >= 0 )
         {
-            xDimProp->setPropertyValue( SC_UNO_DP_USEDHIERARCHY, uno::Any(static_cast<sal_Int32>(nUsedHierarchy)) );
+            xDimProp->setPropertyValue( SC_UNO_DP_USEDHIERARCHY, cpo::uno::Any(static_cast<sal_Int32>(nUsedHierarchy)) );
         }
 
         if ( pReferenceValue )
         {
             ;
-            xDimProp->setPropertyValue( SC_UNO_DP_REFVALUE, uno::Any(*pReferenceValue) );
+            xDimProp->setPropertyValue( SC_UNO_DP_REFVALUE, cpo::uno::Any(*pReferenceValue) );
         }
 
         if (mpLayoutName)
@@ -566,7 +566,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
                     uno::Sequence<sal_Int16> aSeq(maSubTotalFuncs.size());
                     for(size_t i = 0; i < maSubTotalFuncs.size(); ++i)
                         aSeq.getArray()[i] = static_cast<sal_Int16>(maSubTotalFuncs[i]);
-                    xLevProp->setPropertyValue( SC_UNO_DP_SUBTOTAL2, uno::Any(aSeq) );
+                    xLevProp->setPropertyValue( SC_UNO_DP_SUBTOTAL2, cpo::uno::Any(aSeq) );
                 }
                 if ( nShowEmptyMode != SC_DPSAVEMODE_DONTKNOW )
                     lcl_SetBoolProperty( xLevProp,
@@ -1094,7 +1094,7 @@ static void lcl_ResetOrient( const uno::Reference<sheet::XDimensionsSupplier>& x
         uno::Reference<beans::XPropertySet> xDimProp(xIntDims->getByIndex(nIntDim), uno::UNO_QUERY);
         if (xDimProp.is())
         {
-            xDimProp->setPropertyValue( SC_UNO_DP_ORIENTATION, uno::Any(sheet::DataPilotFieldOrientation_HIDDEN) );
+            xDimProp->setPropertyValue( SC_UNO_DP_ORIENTATION, cpo::uno::Any(sheet::DataPilotFieldOrientation_HIDDEN) );
         }
     }
 }

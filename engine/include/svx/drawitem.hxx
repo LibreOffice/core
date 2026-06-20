@@ -43,8 +43,8 @@ public:
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SvxColorListItem* Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool            QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     const XColorListRef&     GetColorList() const { return m_pColorList; }
 };
@@ -69,8 +69,8 @@ public:
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SvxGradientListItem* Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool            QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     const XGradientListRef& GetGradientList() const { return m_pGradientList; }
 };
@@ -94,8 +94,8 @@ public:
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SvxHatchListItem* Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool            QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     const XHatchListRef&    GetHatchList() const { return m_pHatchList; }
 };
@@ -120,8 +120,8 @@ public:
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SvxBitmapListItem* Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool            QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     const XBitmapListRef&   GetBitmapList() const { return m_pBitmapList; }
 };
@@ -145,8 +145,8 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SvxPatternListItem* Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool            QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     const XPatternListRef&  GetPatternList() const { return m_pPatternList; }
 };
@@ -171,8 +171,8 @@ public:
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SvxDashListItem* Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool            QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     const XDashListRef&     GetDashList() const { return m_pDashList; }
 };
@@ -197,8 +197,8 @@ public:
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SvxLineEndListItem* Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool            QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     const XLineEndListRef&  GetLineEndList() const { return m_pLineEndList; }
 };

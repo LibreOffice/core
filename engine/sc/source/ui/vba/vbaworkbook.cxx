@@ -63,10 +63,10 @@ ScVbaWorkbook::ResetColors(  )
             xIndexAccess->getByIndex( index )  >>= *pDest;
 }
 
-::uno::Any SAL_CALL
-ScVbaWorkbook::Colors( const ::uno::Any& Index )
+::cpo::uno::Any SAL_CALL
+ScVbaWorkbook::Colors( const ::cpo::uno::Any& Index )
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if ( Index.hasValue() )
     {
         sal_Int32 nIndex = 0;
@@ -197,7 +197,7 @@ ScVbaWorkbook::ScVbaWorkbook( const css::uno::Reference< ov::XHelperInterface >&
     init();
 }
 
-ScVbaWorkbook::ScVbaWorkbook( uno::Sequence< uno::Any> const & args,
+ScVbaWorkbook::ScVbaWorkbook( uno::Sequence< cpo::uno::Any> const & args,
                               uno::Reference< uno::XComponentContext> const & xContext )
 : ScVbaWorkbook_BASE( args, xContext ),
   mxModel(dynamic_cast<ScModelObj*>(getXSomethingFromArgs< frame::XModel >( args, 1 ).get()))
@@ -218,14 +218,14 @@ ScVbaWorkbook::getActiveSheet()
     return new ScVbaWorksheet( this, mxContext, xSheet, xModel );
 }
 
-uno::Any SAL_CALL
-ScVbaWorkbook::Sheets( const uno::Any& aIndex )
+cpo::uno::Any SAL_CALL
+ScVbaWorkbook::Sheets( const cpo::uno::Any& aIndex )
 {
     return Worksheets( aIndex );
 }
 
-uno::Any SAL_CALL
-ScVbaWorkbook::Worksheets( const uno::Any& aIndex )
+cpo::uno::Any SAL_CALL
+ScVbaWorkbook::Worksheets( const cpo::uno::Any& aIndex )
 {
     uno::Reference< frame::XModel > xModel( getModel() );
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY_THROW );
@@ -233,19 +233,19 @@ ScVbaWorkbook::Worksheets( const uno::Any& aIndex )
     uno::Reference< XCollection > xWorkSheets(  new ScVbaWorksheets( this, mxContext, xSheets, xModel ) );
     if (  aIndex.getValueTypeClass() == uno::TypeClass_VOID )
     {
-        return uno::Any( xWorkSheets );
+        return cpo::uno::Any( xWorkSheets );
     }
     // pass on to collection
-    return xWorkSheets->Item( aIndex, uno::Any() );
+    return xWorkSheets->Item( aIndex, cpo::uno::Any() );
 }
-uno::Any SAL_CALL
-ScVbaWorkbook::Windows( const uno::Any& aIndex )
+cpo::uno::Any SAL_CALL
+ScVbaWorkbook::Windows( const cpo::uno::Any& aIndex )
 {
 
     uno::Reference< excel::XWindows >  xWindows( new ScVbaWindows( getParent(), mxContext ) );
     if ( aIndex.getValueTypeClass() == uno::TypeClass_VOID )
-        return uno::Any( xWindows );
-    return xWindows->Item( aIndex, uno::Any() );
+        return cpo::uno::Any( xWindows );
+    return xWindows->Item( aIndex, cpo::uno::Any() );
 }
 
 void SAL_CALL
@@ -255,7 +255,7 @@ ScVbaWorkbook::Activate()
 }
 
 void
-ScVbaWorkbook::Protect( const uno::Any &aPassword )
+ScVbaWorkbook::Protect( const cpo::uno::Any &aPassword )
 {
     VbaDocumentBase::Protect( aPassword );
 }
@@ -317,7 +317,7 @@ ScVbaWorkbook::SaveCopyAs( const OUString& sFileName )
 }
 
 void SAL_CALL
-ScVbaWorkbook::SaveAs( const uno::Any& FileName, const uno::Any& FileFormat, const uno::Any& /*Password*/, const uno::Any& /*WriteResPassword*/, const uno::Any& /*ReadOnlyRecommended*/, const uno::Any& /*CreateBackup*/, const uno::Any& /*AccessMode*/, const uno::Any& /*ConflictResolution*/, const uno::Any& /*AddToMru*/, const uno::Any& /*TextCodepage*/, const uno::Any& /*TextVisualLayout*/, const uno::Any& /*Local*/ )
+ScVbaWorkbook::SaveAs( const cpo::uno::Any& FileName, const cpo::uno::Any& FileFormat, const cpo::uno::Any& /*Password*/, const cpo::uno::Any& /*WriteResPassword*/, const cpo::uno::Any& /*ReadOnlyRecommended*/, const cpo::uno::Any& /*CreateBackup*/, const cpo::uno::Any& /*AccessMode*/, const cpo::uno::Any& /*ConflictResolution*/, const cpo::uno::Any& /*AddToMru*/, const cpo::uno::Any& /*TextCodepage*/, const cpo::uno::Any& /*TextVisualLayout*/, const cpo::uno::Any& /*Local*/ )
 {
     OUString sFileName;
     FileName >>= sFileName;
@@ -354,7 +354,7 @@ ScVbaWorkbook::SaveAs( const uno::Any& FileName, const uno::Any& FileFormat, con
     sal_Int32 nFileFormat = excel::XlFileFormat::xlExcel9795;
     FileFormat >>= nFileFormat;
 
-    uno::Sequence storeProps{ comphelper::makePropertyValue(u"FilterName"_ustr, uno::Any()) };
+    uno::Sequence storeProps{ comphelper::makePropertyValue(u"FilterName"_ustr, cpo::uno::Any()) };
     setFilterPropsFromFormat( nFileFormat, storeProps );
 
     rtl::Reference< ScModelObj > xStor( getModel() );
@@ -362,9 +362,9 @@ ScVbaWorkbook::SaveAs( const uno::Any& FileName, const uno::Any& FileFormat, con
 }
 
 void SAL_CALL
-ScVbaWorkbook::ExportAsFixedFormat(const css::uno::Any& Type, const css::uno::Any& FileName, const css::uno::Any& Quality,
-    const css::uno::Any& IncludeDocProperties, const css::uno::Any& /*IgnorePrintAreas*/, const css::uno::Any& From,
-    const css::uno::Any& To, const css::uno::Any& OpenAfterPublish, const css::uno::Any& /*FixedFormatExtClassPtr*/)
+ScVbaWorkbook::ExportAsFixedFormat(const cpo::uno::Any& Type, const cpo::uno::Any& FileName, const cpo::uno::Any& Quality,
+    const cpo::uno::Any& IncludeDocProperties, const cpo::uno::Any& /*IgnorePrintAreas*/, const cpo::uno::Any& From,
+    const cpo::uno::Any& To, const cpo::uno::Any& OpenAfterPublish, const cpo::uno::Any& /*FixedFormatExtClassPtr*/)
 {
     uno::Reference< frame::XModel > xModel(getModel(), uno::UNO_SET_THROW);
     uno::Reference< excel::XApplication > xApplication(Application(), uno::UNO_QUERY_THROW);
@@ -373,28 +373,28 @@ ScVbaWorkbook::ExportAsFixedFormat(const css::uno::Any& Type, const css::uno::An
         IncludeDocProperties, From, To, OpenAfterPublish);
 }
 
-css::uno::Any SAL_CALL
-ScVbaWorkbook::Styles( const uno::Any& Item )
+cpo::uno::Any SAL_CALL
+ScVbaWorkbook::Styles( const cpo::uno::Any& Item )
 {
     // quick look and Styles object doesn't seem to have a valid parent
     // or a least the object browser just shows an object that has no
     // variables ( therefore... leave as NULL for now )
     uno::Reference< XCollection > dStyles = new ScVbaStyles( uno::Reference< XHelperInterface >(), mxContext, getModel() );
     if ( Item.hasValue() )
-        return dStyles->Item( Item, uno::Any() );
-    return uno::Any( dStyles );
+        return dStyles->Item( Item, cpo::uno::Any() );
+    return cpo::uno::Any( dStyles );
 }
 
-uno::Any SAL_CALL
-ScVbaWorkbook::Names( const uno::Any& aIndex )
+cpo::uno::Any SAL_CALL
+ScVbaWorkbook::Names( const cpo::uno::Any& aIndex )
 {
     uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_SET_THROW );
     uno::Reference< beans::XPropertySet > xProps( xModel, uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XNamedRanges > xNamedRanges(  xProps->getPropertyValue(u"NamedRanges"_ustr), uno::UNO_QUERY_THROW );
     uno::Reference< XCollection > xNames( new ScVbaNames( this, mxContext, xNamedRanges, xModel ) );
     if ( aIndex.hasValue() )
-        return xNames->Item( aIndex, uno::Any() );
-    return uno::Any( xNames );
+        return xNames->Item( aIndex, cpo::uno::Any() );
+    return cpo::uno::Any( xNames );
 }
 
 OUString
@@ -432,7 +432,7 @@ ScVbaWorkbook::getSomething(const uno::Sequence<sal_Int8 >& rId )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_ScVbaWorkbook_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new ScVbaWorkbook(args, context));
 }

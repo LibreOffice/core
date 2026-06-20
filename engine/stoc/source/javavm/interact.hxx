@@ -21,7 +21,7 @@
 #define INCLUDED_STOC_SOURCE_JAVAVM_INTERACT_HXX
 
 #include <com/sun/star/task/XInteractionRequest.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
@@ -36,9 +36,9 @@ class InteractionRequest:
     public cppu::WeakImplHelper< css::task::XInteractionRequest >
 {
 public:
-    explicit InteractionRequest(css::uno::Any aRequest);
+    explicit InteractionRequest(cpo::uno::Any aRequest);
 
-    virtual css::uno::Any SAL_CALL getRequest() override;
+    virtual cpo::uno::Any SAL_CALL getRequest() override;
 
     virtual css::uno::Sequence< css::uno::Reference<
         css::task::XInteractionContinuation > > SAL_CALL
@@ -54,7 +54,7 @@ private:
 
     virtual ~InteractionRequest() override;
 
-    css::uno::Any m_aRequest;
+    cpo::uno::Any m_aRequest;
     css::uno::Sequence< css::uno::Reference<
         css::task::XInteractionContinuation > > m_aContinuations;
     rtl::Reference< RetryContinuation > m_xRetryContinuation;

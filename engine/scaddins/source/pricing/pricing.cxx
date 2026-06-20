@@ -81,7 +81,7 @@ void sca::pricing::InitScaFuncDataList(ScaFuncDataList& rList)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 scaddins_ScaPricingAddIn_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ScaPricingAddIn());
 }
@@ -312,7 +312,7 @@ bool getinput_putcall(bs::types::PutCall& pc, std::u16string_view str) {
     return true;
 }
 
-bool getinput_putcall(bs::types::PutCall& pc, const uno::Any& anyval) {
+bool getinput_putcall(bs::types::PutCall& pc, const cpo::uno::Any& anyval) {
     OUString str;
     if(anyval.getValueTypeClass() == uno::TypeClass_STRING) {
         anyval >>= str;
@@ -324,7 +324,7 @@ bool getinput_putcall(bs::types::PutCall& pc, const uno::Any& anyval) {
     return getinput_putcall(pc, str);
 }
 
-bool getinput_strike(double& strike, const uno::Any& anyval) {
+bool getinput_strike(double& strike, const cpo::uno::Any& anyval) {
     if(anyval.getValueTypeClass() == uno::TypeClass_DOUBLE) {
         anyval >>= strike;
     } else if(anyval.getValueTypeClass() == uno::TypeClass_VOID) {
@@ -368,7 +368,7 @@ bool getinput_fordom(bs::types::ForDom& fd, std::u16string_view str) {
     return true;
 }
 
-bool getinput_greek(bs::types::Greeks& greek, const uno::Any& anyval) {
+bool getinput_greek(bs::types::Greeks& greek, const cpo::uno::Any& anyval) {
     OUString str;
     if(anyval.getValueTypeClass() == uno::TypeClass_STRING) {
         anyval >>= str;
@@ -409,7 +409,7 @@ double SAL_CALL ScaPricingAddIn::getOptBarrier( double spot, double vol,
             double r, double rf, double T, double strike,
             double barrier_low, double barrier_up, double rebate,
             const OUString& put_call, const OUString& in_out,
-            const OUString& barriercont, const uno::Any& greekstr )
+            const OUString& barriercont, const cpo::uno::Any& greekstr )
 {
     bs::types::PutCall pc;
     bs::types::BarrierKIO kio;
@@ -437,7 +437,7 @@ double SAL_CALL ScaPricingAddIn::getOptTouch( double spot, double vol,
             double r, double rf, double T,
             double barrier_low, double barrier_up,
             const OUString& for_dom, const OUString& in_out,
-            const OUString& barriercont, const uno::Any& greekstr )
+            const OUString& barriercont, const cpo::uno::Any& greekstr )
 {
     bs::types::ForDom fd;
     bs::types::BarrierKIO kio;
@@ -481,7 +481,7 @@ double SAL_CALL ScaPricingAddIn::getOptProbHit( double spot, double vol,
 double SAL_CALL ScaPricingAddIn::getOptProbInMoney( double spot, double vol,
             double mu, double T,
             double barrier_low, double barrier_up,
-            const uno::Any& strikeval, const uno::Any& put_call )
+            const cpo::uno::Any& strikeval, const cpo::uno::Any& put_call )
 {
     bs::types::PutCall pc=bs::types::Call;
     double  K = 0;

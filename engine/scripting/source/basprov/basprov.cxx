@@ -51,6 +51,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::document;
 using namespace ::sf_misc;
@@ -465,7 +466,7 @@ namespace basprov
 
     extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
     scripting_BasicProviderImpl_get_implementation(
-        css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+        css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
     {
         return cppu::acquire(new BasicProviderImpl(context));
     }

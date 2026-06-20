@@ -391,7 +391,7 @@ void SwParagraphNumTabPage::ExecuteEditNumStyle_Impl(
 
     // tdf#145363 we want the current dialog to be the parent of the new dialog
     weld::Window* pDialogParent = GetFrameWeld();
-    css::uno::Any aAny(pDialogParent->GetXWindow());
+    cpo::uno::Any aAny(pDialogParent->GetXWindow());
     SfxUnoAnyItem aDialogParent(SID_DIALOG_PARENT, aAny);
     const SfxPoolItem* pInternalItems[ 2 ];
     pInternalItems[ 0 ] = &aDialogParent;

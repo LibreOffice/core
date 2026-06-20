@@ -15,7 +15,7 @@
 
 #include <com/sun/star/uno/XInterface.hpp>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <utility>
 
@@ -36,7 +36,7 @@ public:
     }
 
     virtual css::uno::Reference<css::uno::XInterface> init() = 0;
-    virtual void setElement(const css::uno::Any& rElement) { m_aElement = rElement; }
+    virtual void setElement(const cpo::uno::Any& rElement) { m_aElement = rElement; }
 
     void testInsertByName();
     void testInsertByNameEmptyName();
@@ -51,7 +51,7 @@ protected:
 
 private:
     OUString m_aName;
-    css::uno::Any m_aElement;
+    cpo::uno::Any m_aElement;
 };
 
 } // namespace apitest

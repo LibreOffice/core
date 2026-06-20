@@ -94,14 +94,14 @@ Reference< XPropertySetInfo > SAL_CALL ColorPropertySet::getPropertySetInfo()
     return m_xInfo;
 }
 
-void SAL_CALL ColorPropertySet::setPropertyValue( const OUString& /* aPropertyName */, const uno::Any& aValue )
+void SAL_CALL ColorPropertySet::setPropertyValue( const OUString& /* aPropertyName */, const cpo::uno::Any& aValue )
 {
     aValue >>= m_nColor;
 }
 
-uno::Any SAL_CALL ColorPropertySet::getPropertyValue( const OUString& /* PropertyName */ )
+cpo::uno::Any SAL_CALL ColorPropertySet::getPropertyValue( const OUString& /* PropertyName */ )
 {
-    return uno::Any( m_nColor );
+    return cpo::uno::Any( m_nColor );
 }
 
 void SAL_CALL ColorPropertySet::addPropertyChangeListener( const OUString& /* aPropertyName */, const Reference< XPropertyChangeListener >& /* xListener */ )
@@ -143,11 +143,11 @@ void SAL_CALL ColorPropertySet::setPropertyToDefault( const OUString& PropertyNa
         m_nColor = m_nDefaultColor;
 }
 
-uno::Any SAL_CALL ColorPropertySet::getPropertyDefault( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ColorPropertySet::getPropertyDefault( const OUString& aPropertyName )
 {
     if( aPropertyName == g_aColorPropName )
-        return uno::Any( m_nDefaultColor );
-    return uno::Any();
+        return cpo::uno::Any( m_nDefaultColor );
+    return cpo::uno::Any();
 }
 
 } //  namespace xmloff::chart

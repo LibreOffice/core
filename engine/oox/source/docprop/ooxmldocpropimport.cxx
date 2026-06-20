@@ -44,6 +44,7 @@ using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 
 namespace {
@@ -221,7 +222,7 @@ css::uno::Sequence< css::uno::Reference< css::io::XInputStream > > SAL_CALL Docu
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_oox_docprop_DocumentPropertiesImporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new oox::docprop::DocumentPropertiesImport(pCtx));
 }

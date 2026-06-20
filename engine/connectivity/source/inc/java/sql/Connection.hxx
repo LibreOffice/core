@@ -48,8 +48,8 @@ namespace connectivity
                                 m_aLogger;
         bool                    m_bIgnoreDriverPrivileges;
         bool                    m_bIgnoreCurrency;
-        css::uno::Any           m_aCatalogRestriction;
-        css::uno::Any           m_aSchemaRestriction;
+        cpo::uno::Any           m_aCatalogRestriction;
+        cpo::uno::Any           m_aSchemaRestriction;
 
         /** transform named parameter into unnamed one.
             @param  _sSQL
@@ -89,8 +89,8 @@ namespace connectivity
 
         bool isIgnoreDriverPrivilegesEnabled() const { return   m_bIgnoreDriverPrivileges;}
         bool isIgnoreCurrencyEnabled() const { return   m_bIgnoreCurrency; }
-        const css::uno::Any& getCatalogRestriction() const { return m_aCatalogRestriction; }
-        const css::uno::Any& getSchemaRestriction() const { return m_aSchemaRestriction; }
+        const cpo::uno::Any& getCatalogRestriction() const { return m_aCatalogRestriction; }
+        const cpo::uno::Any& getSchemaRestriction() const { return m_aSchemaRestriction; }
 
         /** returns the instance used for logging events related to this connection
         */
@@ -127,7 +127,7 @@ namespace connectivity
         // XCloseable
         virtual void SAL_CALL close(  ) override;
         // XWarningsSupplier
-        virtual css::uno::Any SAL_CALL getWarnings(  ) override;
+        virtual cpo::uno::Any SAL_CALL getWarnings(  ) override;
         virtual void SAL_CALL clearWarnings(  ) override;
     };
 }

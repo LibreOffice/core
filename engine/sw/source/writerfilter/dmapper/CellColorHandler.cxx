@@ -48,7 +48,7 @@ CellColorHandler::~CellColorHandler()
 
 // ST_Shd strings are converted to integers by the tokenizer, store strings in
 // the InteropGrabBag
-static uno::Any lcl_ConvertShd(sal_Int32 nIntValue)
+static cpo::uno::Any lcl_ConvertShd(sal_Int32 nIntValue)
 {
     OUString aRet;
     // This should be in sync with the ST_Shd list in ooxml's model.xml.
@@ -93,7 +93,7 @@ static uno::Any lcl_ConvertShd(sal_Int32 nIntValue)
         case NS_ooxml::LN_Value_ST_Shd_pct95: aRet = u"pct95"_ustr; break;
         case NS_ooxml::LN_Value_ST_Shd_nil: aRet = u"nil"_ustr; break;
     }
-    return uno::Any(aRet);
+    return cpo::uno::Any(aRet);
 }
 
 void CellColorHandler::lcl_attribute(Id rName, const Value & rVal)
@@ -108,7 +108,7 @@ void CellColorHandler::lcl_attribute(Id rName, const Value & rVal)
         }
         break;
         case NS_ooxml::LN_CT_Shd_fill:
-            createGrabBag(u"fill"_ustr, uno::Any(msfilter::util::ConvertColorOU(Color(ColorTransparency, nIntValue))));
+            createGrabBag(u"fill"_ustr, cpo::uno::Any(msfilter::util::ConvertColorOU(Color(ColorTransparency, nIntValue))));
             if( nIntValue == sal_Int32(COL_AUTO) )
                 nIntValue = 0xffffff; //fill color auto means white
             else
@@ -118,7 +118,7 @@ void CellColorHandler::lcl_attribute(Id rName, const Value & rVal)
             m_bFillSpecified = true;
         break;
         case NS_ooxml::LN_CT_Shd_color:
-            createGrabBag(u"color"_ustr, uno::Any(msfilter::util::ConvertColorOU(Color(ColorTransparency, nIntValue))));
+            createGrabBag(u"color"_ustr, cpo::uno::Any(msfilter::util::ConvertColorOU(Color(ColorTransparency, nIntValue))));
             if( nIntValue == sal_Int32(COL_AUTO) )
                 nIntValue = 0; //shading color auto means black
             //color of the shading
@@ -126,27 +126,27 @@ void CellColorHandler::lcl_attribute(Id rName, const Value & rVal)
         break;
         case NS_ooxml::LN_CT_Shd_themeFill:
             m_eFillThemeColorType = TDefTableHandler::getThemeColorTypeIndex(nIntValue);
-            createGrabBag(u"themeFill"_ustr, uno::Any(TDefTableHandler::getThemeColorTypeString(nIntValue)));
+            createGrabBag(u"themeFill"_ustr, cpo::uno::Any(TDefTableHandler::getThemeColorTypeString(nIntValue)));
         break;
         case NS_ooxml::LN_CT_Shd_themeFillShade:
             m_nFillThemeColorShade = nIntValue;
-            createGrabBag(u"themeFillShade"_ustr, uno::Any(OUString::number(nIntValue, 16)));
+            createGrabBag(u"themeFillShade"_ustr, cpo::uno::Any(OUString::number(nIntValue, 16)));
         break;
         case NS_ooxml::LN_CT_Shd_themeFillTint:
             m_nFillThemeColorTint = nIntValue;
-            createGrabBag(u"themeFillTint"_ustr, uno::Any(OUString::number(nIntValue, 16)));
+            createGrabBag(u"themeFillTint"_ustr, cpo::uno::Any(OUString::number(nIntValue, 16)));
             break;
         case NS_ooxml::LN_CT_Shd_themeColor:
             m_eThemeColorType = TDefTableHandler::getThemeColorTypeIndex(nIntValue);
-            createGrabBag(u"themeColor"_ustr, uno::Any(TDefTableHandler::getThemeColorTypeString(nIntValue)));
+            createGrabBag(u"themeColor"_ustr, cpo::uno::Any(TDefTableHandler::getThemeColorTypeString(nIntValue)));
         break;
         case NS_ooxml::LN_CT_Shd_themeShade:
             m_nThemeColorShade = nIntValue;
-            createGrabBag(u"themeShade"_ustr, uno::Any(OUString::number(nIntValue, 16)));
+            createGrabBag(u"themeShade"_ustr, cpo::uno::Any(OUString::number(nIntValue, 16)));
         break;
         case NS_ooxml::LN_CT_Shd_themeTint:
             m_nThemeColorTint = nIntValue;
-            createGrabBag(u"themeTint"_ustr, uno::Any(OUString::number(nIntValue, 16)));
+            createGrabBag(u"themeTint"_ustr, cpo::uno::Any(OUString::number(nIntValue, 16)));
             break;
         default:
             OSL_FAIL( "unknown attribute");
@@ -277,43 +277,43 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
         }
 
         // Write the shading pattern property
-        pPropertyMap->Insert(PROP_CHAR_SHADING_VALUE, uno::Any( nShadingPattern ));
+        pPropertyMap->Insert(PROP_CHAR_SHADING_VALUE, cpo::uno::Any( nShadingPattern ));
     }
 
     if (m_OutputFormat == Paragraph && m_nShadingPattern != NS_ooxml::LN_Value_ST_Shd_nil)
     {
         if (nWW8BrushStyle || !m_bAutoFillColor)
-            pPropertyMap->Insert(PROP_FILL_STYLE, uno::Any(drawing::FillStyle_SOLID));
+            pPropertyMap->Insert(PROP_FILL_STYLE, cpo::uno::Any(drawing::FillStyle_SOLID));
         else if (m_bFillSpecified) // m_bAutoFillColor == true
-            pPropertyMap->Insert(PROP_FILL_STYLE, uno::Any(drawing::FillStyle_NONE));
+            pPropertyMap->Insert(PROP_FILL_STYLE, cpo::uno::Any(drawing::FillStyle_NONE));
 
-        pPropertyMap->Insert(PROP_FILL_COLOR, uno::Any(nApplyColor));
+        pPropertyMap->Insert(PROP_FILL_COLOR, cpo::uno::Any(nApplyColor));
         auto xComplexColor = model::color::createXComplexColor(getFillComplexColor());
-        pPropertyMap->Insert(PROP_FILL_COMPLEX_COLOR, uno::Any(xComplexColor));
+        pPropertyMap->Insert(PROP_FILL_COMPLEX_COLOR, cpo::uno::Any(xComplexColor));
     }
     else if ( nWW8BrushStyle || !m_bAutoFillColor || m_bFillSpecified )
     {
         if (m_OutputFormat == Form)
         {
-            pPropertyMap->Insert(PROP_BACK_COLOR, uno::Any(nApplyColor));
+            pPropertyMap->Insert(PROP_BACK_COLOR, cpo::uno::Any(nApplyColor));
         }
         else
         {
-            pPropertyMap->Insert(PROP_CHAR_BACK_COLOR, uno::Any(nApplyColor));
+            pPropertyMap->Insert(PROP_CHAR_BACK_COLOR, cpo::uno::Any(nApplyColor));
             auto aComplexColor = getFillComplexColor();
             if (aComplexColor.getType() != model::ColorType::Unused)
             {
                 auto xComplexColor = model::color::createXComplexColor(aComplexColor);
-                pPropertyMap->Insert(PROP_CHAR_BACKGROUND_COMPLEX_COLOR, uno::Any(xComplexColor));
+                pPropertyMap->Insert(PROP_CHAR_BACKGROUND_COMPLEX_COLOR, cpo::uno::Any(xComplexColor));
             }
         }
     }
-    createGrabBag(u"originalColor"_ustr, uno::Any(msfilter::util::ConvertColorOU(Color(ColorTransparency, nApplyColor))));
+    createGrabBag(u"originalColor"_ustr, cpo::uno::Any(msfilter::util::ConvertColorOU(Color(ColorTransparency, nApplyColor))));
 
     return pPropertyMap;
 }
 
-void CellColorHandler::createGrabBag(const OUString& aName, const uno::Any& rAny)
+void CellColorHandler::createGrabBag(const OUString& aName, const cpo::uno::Any& rAny)
 {
     if (m_aInteropGrabBagName.isEmpty())
         return;

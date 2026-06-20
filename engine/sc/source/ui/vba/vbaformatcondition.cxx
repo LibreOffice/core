@@ -60,7 +60,7 @@ ScVbaFormatCondition::Delete(  )
 }
 
 void SAL_CALL
-ScVbaFormatCondition::Modify( ::sal_Int32 _nType, const uno::Any& _aOperator, const uno::Any& _aFormula1, const uno::Any& _aFormula2 )
+ScVbaFormatCondition::Modify( ::sal_Int32 _nType, const cpo::uno::Any& _aOperator, const cpo::uno::Any& _aFormula1, const cpo::uno::Any& _aFormula2 )
 {
     try
     {
@@ -85,8 +85,8 @@ ScVbaFormatCondition::Font(  )
 {
     return mxStyle->Font();
 }
-uno::Any SAL_CALL
-ScVbaFormatCondition::Borders( const uno::Any& Index )
+cpo::uno::Any SAL_CALL
+ScVbaFormatCondition::Borders( const cpo::uno::Any& Index )
 { return mxStyle->Borders( Index );
 }
 
@@ -131,7 +131,7 @@ ScVbaFormatCondition::notifyRange()
 {
     try
     {
-        mxParentRangePropertySet->setPropertyValue(SC_UNONAME_CONDFMT, uno::Any( mxSheetConditionalEntries));
+        mxParentRangePropertySet->setPropertyValue(SC_UNONAME_CONDFMT, cpo::uno::Any( mxSheetConditionalEntries));
     }
     catch (uno::Exception& )
     {

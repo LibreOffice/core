@@ -67,13 +67,13 @@ void StatusBarCommandDispatch::fireStatusEvent(
 
     if( bFireContext && m_xChartModel.is())
     {
-        uno::Any aArg;
+        cpo::uno::Any aArg;
         aArg <<= ObjectNameProvider::getSelectedObjectText( m_aSelectedOID.getObjectCID(), m_xChartModel );
         fireStatusEventForURL( u".uno:Context"_ustr, aArg, true, xSingleListener );
     }
     if( bFireModified )
     {
-        uno::Any aArg;
+        cpo::uno::Any aArg;
         if( m_bIsModified )
             aArg <<= u"*"_ustr;
         fireStatusEventForURL( u".uno:ModifiedStatus"_ustr, aArg, true, xSingleListener );

@@ -201,14 +201,14 @@ bool SAL_CALL VCLXMenu::supportsService(const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Any VCLXMenu::queryInterface(
+cpo::uno::Any VCLXMenu::queryInterface(
     const css::uno::Type & rType )
 {
     std::unique_lock aGuard( maMutex );
     const bool bIsPopupMenu = IsPopupMenu();
     aGuard.unlock();
 
-    css::uno::Any aRet;
+    cpo::uno::Any aRet;
 
     if ( bIsPopupMenu )
         aRet = ::cppu::queryInterface(  rType,
@@ -864,7 +864,7 @@ VCLXMenuBar::VCLXMenuBar( MenuBar* pMenuBar ) : VCLXMenu( static_cast<Menu *>(pM
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_VCLXMenuBar_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new VCLXMenuBar());
 }
@@ -884,7 +884,7 @@ VCLXPopupMenu::~VCLXPopupMenu() = default;
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_VCLXPopupMenu_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new VCLXPopupMenu());
 }

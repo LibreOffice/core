@@ -75,6 +75,7 @@ using namespace ::com::sun::star;
 using namespace ::oox::core;
 using namespace ::oox::drawingml;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::presentation;
@@ -362,7 +363,7 @@ void PresentationFragmentHandler::saveThemeToGrabBag(const oox::drawingml::Theme
                 aGrabBag.update(aThemesHashMap);
 
                 // put it back to the document
-                xDocProps->setPropertyValue(aGrabBagPropName, uno::Any(aGrabBag.getAsConstPropertyValueList()));
+                xDocProps->setPropertyValue(aGrabBagPropName, cpo::uno::Any(aGrabBag.getAsConstPropertyValueList()));
             }
         }
     }
@@ -410,13 +411,13 @@ void PresentationFragmentHandler::saveColorMapToGrabBag(const oox::drawingml::Cl
 
                 uno::Sequence<beans::PropertyValue> aClrMapPropValue{ comphelper::makePropertyValue(
                     u"OOXColorMap"_ustr,
-                    uno::Any(comphelper::containerToSequence(aClrMapList))) };
+                    cpo::uno::Any(comphelper::containerToSequence(aClrMapList))) };
 
                 aClrMapHashMap << aClrMapPropValue;
                 aGrabBag.update(aClrMapHashMap);
 
                 xDocProps->setPropertyValue(aGrabBagPropName,
-                                            uno::Any(aGrabBag.getAsConstPropertyValueList()));
+                                            cpo::uno::Any(aGrabBag.getAsConstPropertyValueList()));
             }
         }
     }
@@ -482,7 +483,7 @@ void PresentationFragmentHandler::saveSections()
         }
 
         xDocProps->setPropertyValue(u"SlideSections"_ustr,
-                                    uno::Any(comphelper::containerToSequence(aSectionsList)));
+                                    cpo::uno::Any(comphelper::containerToSequence(aSectionsList)));
     }
     catch (const uno::Exception&)
     {
@@ -533,7 +534,7 @@ void PresentationFragmentHandler::saveLayoutColorMapToGrabBag(
                 aGrabBag[sKey] <<= comphelper::containerToSequence(aClrMapList);
 
                 xDocProps->setPropertyValue(aGrabBagPropName,
-                                            uno::Any(aGrabBag.getAsConstPropertyValueList()));
+                                            cpo::uno::Any(aGrabBag.getAsConstPropertyValueList()));
             }
         }
     }
@@ -948,7 +949,7 @@ void PresentationFragmentHandler::finalizeImport()
                         getFilter().getModelFactory()->createInstance(
                             u"com.sun.star.document.Settings"_ustr),
                         uno::UNO_QUERY);
-                    xDocSettings->setPropertyValue(u"ModifyPasswordInfo"_ustr, uno::Any(aResult));
+                    xDocSettings->setPropertyValue(u"ModifyPasswordInfo"_ustr, cpo::uno::Any(aResult));
                 }
                 catch (const uno::Exception&)
                 {

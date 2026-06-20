@@ -31,6 +31,7 @@
 using namespace cppu;
 
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::registry;
 
@@ -113,7 +114,7 @@ void NamingService_Impl::revokeObject( const OUString& Name )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 stoc_NamingService_Impl_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new stoc_namingservice::NamingService_Impl());
 }

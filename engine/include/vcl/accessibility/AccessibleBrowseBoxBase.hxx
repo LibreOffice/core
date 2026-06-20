@@ -168,8 +168,8 @@ public:
     /** Commits an event to all listeners. */
     void commitEvent(
             sal_Int16 nEventId,
-            const css::uno::Any& rNewValue,
-            const css::uno::Any& rOldValue );
+            const cpo::uno::Any& rNewValue,
+            const cpo::uno::Any& rOldValue );
     /** @return  TRUE, if the object is not disposed or disposing. */
     bool isAlive() const;
 

@@ -44,12 +44,12 @@ public:
     {
         return ( mIt != mRevisionMap.end() );
     }
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         if ( !hasMoreElements() )
             throw container::NoSuchElementException();
         uno::Reference< beans::XPropertySet > xRevision( *mIt++ );
-        return uno::Any( xRevision ) ;
+        return cpo::uno::Any( xRevision ) ;
     }
 };
 
@@ -66,12 +66,12 @@ public:
     virtual bool SAL_CALL hasElements(  ) override { return ( !mRevisionMap.empty() ); }
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) override { return mRevisionMap.size(); }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
+    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         if ( Index < 0 || Index >= getCount() )
             throw lang::IndexOutOfBoundsException();
 
-        return uno::Any( mRevisionMap[ Index ] );
+        return cpo::uno::Any( mRevisionMap[ Index ] );
 
     }
     // XEnumerationAccess
@@ -113,10 +113,10 @@ public:
     : EnumerationHelperImpl( xParent, xContext, xEnumeration ),
       m_xModel(std::move( xModel )) {}
 
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         uno::Reference< beans::XPropertySet > xRevision( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
-        return uno::Any( uno::Reference< word::XRevision > ( new SwVbaRevision( m_xParent, m_xContext, m_xModel, xRevision ) ) );
+        return cpo::uno::Any( uno::Reference< word::XRevision > ( new SwVbaRevision( m_xParent, m_xContext, m_xModel, xRevision ) ) );
     }
 
 };
@@ -154,11 +154,11 @@ SwVbaRevisions::createEnumeration()
     return new RevisionsEnumeration( this, mxContext, xEnumAccess->createEnumeration(), mxModel );
 }
 
-uno::Any
-SwVbaRevisions::createCollectionObject( const css::uno::Any& aSource )
+cpo::uno::Any
+SwVbaRevisions::createCollectionObject( const cpo::uno::Any& aSource )
 {
     uno::Reference< beans::XPropertySet > xRevision( aSource, uno::UNO_QUERY_THROW );
-    return uno::Any( uno::Reference< word::XRevision > ( new SwVbaRevision( this, mxContext, mxModel, xRevision ) ) );
+    return cpo::uno::Any( uno::Reference< word::XRevision > ( new SwVbaRevision( this, mxContext, mxModel, xRevision ) ) );
 }
 
 void SAL_CALL SwVbaRevisions::AcceptAll(  )

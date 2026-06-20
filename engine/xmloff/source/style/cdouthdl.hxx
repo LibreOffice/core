@@ -29,8 +29,8 @@ class XMLCrossedOutTypePropHdl : public XMLPropertyHandler
 public:
     virtual ~XMLCrossedOutTypePropHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 class XMLCrossedOutStylePropHdl : public XMLPropertyHandler
@@ -38,8 +38,8 @@ class XMLCrossedOutStylePropHdl : public XMLPropertyHandler
 public:
     virtual ~XMLCrossedOutStylePropHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 class XMLCrossedOutWidthPropHdl : public XMLPropertyHandler
@@ -47,8 +47,8 @@ class XMLCrossedOutWidthPropHdl : public XMLPropertyHandler
 public:
     virtual ~XMLCrossedOutWidthPropHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 class XMLCrossedOutTextPropHdl : public XMLPropertyHandler
@@ -56,8 +56,8 @@ class XMLCrossedOutTextPropHdl : public XMLPropertyHandler
 public:
     virtual ~XMLCrossedOutTextPropHdl() override;
 
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

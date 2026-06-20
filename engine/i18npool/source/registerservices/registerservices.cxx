@@ -78,7 +78,7 @@ using namespace i18npool;
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * \
 i18npool_##ImplName##_get_implementation( \
     css::uno::XComponentContext *, \
-    css::uno::Sequence<css::uno::Any> const &) \
+    css::uno::Sequence<cpo::uno::Any> const &) \
 { \
     return cppu::acquire(new ImplName()); \
 }
@@ -87,7 +87,7 @@ i18npool_##ImplName##_get_implementation( \
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * \
 i18npool_##ImplName##_get_implementation( \
     css::uno::XComponentContext * context, \
-    css::uno::Sequence<css::uno::Any> const &) \
+    css::uno::Sequence<cpo::uno::Any> const &) \
 { \
     return cppu::acquire(new ImplName(context)); \
 }

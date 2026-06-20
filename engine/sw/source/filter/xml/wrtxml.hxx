@@ -30,10 +30,10 @@
 namespace com::sun::star {
     namespace uno { template<class A> class Reference; }
     namespace uno { template<class A> class Sequence; }
-    namespace uno { class Any; }
     namespace lang { class XComponent; }
     namespace beans { struct PropertyValue; }
 }
+namespace cpo::uno { class Any; }
 
 class SwXMLWriter : public StgWriter
 {
@@ -66,7 +66,7 @@ private:
         const css::uno::Reference<css::uno::XComponentContext> & rFactory,
         const char* pServiceName,       // service name of the component
         // the argument (XInitialization)
-        const css::uno::Sequence<css::uno::Any> & rArguments,
+        const css::uno::Sequence<cpo::uno::Any> & rArguments,
         // output descriptor
         const css::uno::Sequence<css::beans::PropertyValue> & rMediaDesc );
 
@@ -77,7 +77,7 @@ private:
         const css::uno::Reference<css::lang::XComponent> & xComponent,
         const css::uno::Reference<css::uno::XComponentContext> & rFactory,
         const char* pServiceName,
-        const css::uno::Sequence<css::uno::Any> & rArguments,
+        const css::uno::Sequence<cpo::uno::Any> & rArguments,
         const css::uno::Sequence<css::beans::PropertyValue> & rMediaDesc );
 };
 

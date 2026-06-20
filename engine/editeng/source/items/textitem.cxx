@@ -139,7 +139,7 @@ bool SvxFontListItem::operator==( const SfxPoolItem& rAttr ) const
     return( pFontList == static_cast<const SvxFontListItem&>(rAttr).pFontList );
 }
 
-bool SvxFontListItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxFontListItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= aFontNameSeq;
     return true;
@@ -205,7 +205,7 @@ SvxFontItem::SvxFontItem(
 {
 }
 
-bool SvxFontItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxFontItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
@@ -234,7 +234,7 @@ bool SvxFontItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-bool SvxFontItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
+bool SvxFontItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId)
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
@@ -450,7 +450,7 @@ OUString SvxPostureItem::GetValueTextByPos( sal_uInt16 nPos )
     return pId ? EditResId(pId) : OUString();
 }
 
-bool SvxPostureItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxPostureItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
@@ -465,7 +465,7 @@ bool SvxPostureItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-bool SvxPostureItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxPostureItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
@@ -589,7 +589,7 @@ OUString SvxWeightItem::GetValueTextByPos( sal_uInt16 nPos )
     return EditResId(RID_SVXITEMS_WEIGHTS[nPos]);
 }
 
-bool SvxWeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxWeightItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
@@ -606,7 +606,7 @@ bool SvxWeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-bool SvxWeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxWeightItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
@@ -684,7 +684,7 @@ OUString SvxScriptHintItem::GetValueText(i18nutil::ScriptHintType eValue)
     return EditResId(RID_SVXITEMS_TYPES.at(static_cast<size_t>(eValue)));
 }
 
-bool SvxScriptHintItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId) const
+bool SvxScriptHintItem::QueryValue(cpo::uno::Any& rVal, sal_uInt8 nMemberId) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch (nMemberId)
@@ -697,7 +697,7 @@ bool SvxScriptHintItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId) const
     return true;
 }
 
-bool SvxScriptHintItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
+bool SvxScriptHintItem::PutValue(const cpo::uno::Any& rVal, sal_uInt8 nMemberId)
 {
     sal_uInt16 nValue = 0;
 
@@ -768,9 +768,9 @@ bool SvxFontHeightItem::operator==( const SfxPoolItem& rItem ) const
             GetPropUnit() == static_cast<const SvxFontHeightItem&>(rItem).GetPropUnit();
 }
 
-bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxFontHeightItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-    //  In StarOne is the uno::Any always 1/100mm. Through the MemberId it is
+    //  In StarOne is the cpo::uno::Any always 1/100mm. Through the MemberId it is
     //  controlled if the value in the Item should be 1/100mm or Twips.
 
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
@@ -903,7 +903,7 @@ static sal_uInt32 lcl_GetRealHeight_Impl(sal_uInt32 nHeight, sal_uInt16 nProp, M
     return nRet;
 }
 
-bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxFontHeightItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1137,7 +1137,7 @@ OUString SvxTextLineItem::GetValueTextByPos( sal_uInt16 /*nPos*/ ) const
     return OUString();
 }
 
-bool SvxTextLineItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxTextLineItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
@@ -1164,7 +1164,7 @@ bool SvxTextLineItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-bool SvxTextLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxTextLineItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     bool bRet = true;
@@ -1391,7 +1391,7 @@ OUString SvxCrossedOutItem::GetValueTextByPos( sal_uInt16 nPos )
     return EditResId(RID_SVXITEMS_STRIKEOUT[nPos]);
 }
 
-bool SvxCrossedOutItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxCrossedOutItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
@@ -1406,7 +1406,7 @@ bool SvxCrossedOutItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-bool SvxCrossedOutItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxCrossedOutItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
@@ -1580,7 +1580,7 @@ size_t SvxColorItem::hashCode() const
     return seed;
 }
 
-bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxColorItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch (nMemberId)
@@ -1657,7 +1657,7 @@ bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxColorItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
     nMemberId &= ~CONVERT_TWIPS;
@@ -1868,7 +1868,7 @@ bool SvxKerningItem::GetPresentation
     return false;
 }
 
-bool SvxKerningItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxKerningItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     sal_Int16 nVal = GetValue();
     if(nMemberId & CONVERT_TWIPS)
@@ -1877,7 +1877,7 @@ bool SvxKerningItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-bool SvxKerningItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
+bool SvxKerningItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId)
 {
     sal_Int16 nVal = sal_Int16();
     if(!(rVal >>= nVal))
@@ -1928,7 +1928,7 @@ OUString SvxCaseMapItem::GetValueTextByPos( sal_uInt16 nPos )
     return EditResId(RID_SVXITEMS_CASEMAP[nPos]);
 }
 
-bool SvxCaseMapItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxCaseMapItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     sal_Int16 nRet = style::CaseMap::NONE;
     switch( GetValue() )
@@ -1943,7 +1943,7 @@ bool SvxCaseMapItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
     return true;
 }
 
-bool SvxCaseMapItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvxCaseMapItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     sal_uInt16 nVal = sal_uInt16();
     if(!(rVal >>= nVal))
@@ -2046,7 +2046,7 @@ SvxEscapement SvxEscapementItem::GetEscapement() const
     return SvxEscapement::Off;
 }
 
-bool SvxEscapementItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxEscapementItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
@@ -2064,7 +2064,7 @@ bool SvxEscapementItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-bool SvxEscapementItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxEscapementItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
     nMemberId &= ~CONVERT_TWIPS;
@@ -2140,7 +2140,7 @@ bool SvxLanguageItem::GetPresentation
     return true;
 }
 
-bool SvxLanguageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxLanguageItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
@@ -2156,7 +2156,7 @@ bool SvxLanguageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-bool SvxLanguageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxLanguageItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
@@ -2298,7 +2298,7 @@ bool SvxEmphasisMarkItem::GetPresentation
     return true;
 }
 
-bool SvxEmphasisMarkItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxEmphasisMarkItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
@@ -2325,7 +2325,7 @@ bool SvxEmphasisMarkItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) cons
     return true;
 }
 
-bool SvxEmphasisMarkItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxEmphasisMarkItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
@@ -2384,7 +2384,7 @@ SvxTwoLinesItem* SvxTwoLinesItem::Clone( SfxItemPool* ) const
     return new SvxTwoLinesItem( *this );
 }
 
-bool SvxTwoLinesItem::QueryValue( css::uno::Any& rVal,
+bool SvxTwoLinesItem::QueryValue( cpo::uno::Any& rVal,
                                 sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
@@ -2417,7 +2417,7 @@ bool SvxTwoLinesItem::QueryValue( css::uno::Any& rVal,
     return bRet;
 }
 
-bool SvxTwoLinesItem::PutValue( const css::uno::Any& rVal,
+bool SvxTwoLinesItem::PutValue( const cpo::uno::Any& rVal,
                                     sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
@@ -2495,7 +2495,7 @@ bool SvxTextRotateItem::GetPresentation(
     return true;
 }
 
-bool SvxTextRotateItem::QueryValue(css::uno::Any& rVal,
+bool SvxTextRotateItem::QueryValue(cpo::uno::Any& rVal,
     sal_uInt8 nMemberId) const
 {
     nMemberId &= ~CONVERT_TWIPS;
@@ -2512,7 +2512,7 @@ bool SvxTextRotateItem::QueryValue(css::uno::Any& rVal,
     return bRet;
 }
 
-bool SvxTextRotateItem::PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId)
+bool SvxTextRotateItem::PutValue(const cpo::uno::Any& rVal, sal_uInt8 nMemberId)
 {
     nMemberId &= ~CONVERT_TWIPS;
     bool bRet = true;
@@ -2577,7 +2577,7 @@ bool SvxCharRotateItem::GetPresentation(
     return true;
 }
 
-bool SvxCharRotateItem::QueryValue( css::uno::Any& rVal,
+bool SvxCharRotateItem::QueryValue( cpo::uno::Any& rVal,
                                 sal_uInt8 nMemberId ) const
 {
     bool bRet = true;
@@ -2596,7 +2596,7 @@ bool SvxCharRotateItem::QueryValue( css::uno::Any& rVal,
     return bRet;
 }
 
-bool SvxCharRotateItem::PutValue( const css::uno::Any& rVal,
+bool SvxCharRotateItem::PutValue( const cpo::uno::Any& rVal,
                                     sal_uInt8 nMemberId )
 {
     bool bRet = true;
@@ -2664,7 +2664,7 @@ bool SvxCharScaleWidthItem::GetPresentation(
     return true;
 }
 
-bool SvxCharScaleWidthItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvxCharScaleWidthItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
     // where we still want this to be a sal_Int16
@@ -2679,7 +2679,7 @@ bool SvxCharScaleWidthItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberI
     return false;
 }
 
-bool SvxCharScaleWidthItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxCharScaleWidthItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
     // where we still want this to be a sal_Int16
@@ -2733,7 +2733,7 @@ bool SvxCharReliefItem::GetPresentation
     return true;
 }
 
-bool SvxCharReliefItem::PutValue( const css::uno::Any& rVal,
+bool SvxCharReliefItem::PutValue( const cpo::uno::Any& rVal,
                                         sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
@@ -2760,7 +2760,7 @@ bool SvxCharReliefItem::PutValue( const css::uno::Any& rVal,
     return bRet;
 }
 
-bool SvxCharReliefItem::QueryValue( css::uno::Any& rVal,
+bool SvxCharReliefItem::QueryValue( cpo::uno::Any& rVal,
                                         sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
@@ -2980,13 +2980,13 @@ ItemInstanceManager* SvxRsidItem::getItemInstanceManager() const
     return &aInstanceManager;
 }
 
-bool SvxRsidItem::QueryValue( uno::Any& rVal, sal_uInt8 ) const
+bool SvxRsidItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 ) const
 {
     rVal <<= GetValue();
     return true;
 }
 
-bool SvxRsidItem::PutValue( const uno::Any& rVal, sal_uInt8 )
+bool SvxRsidItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 )
 {
     sal_uInt32 nRsid = 0;
     if( !( rVal >>= nRsid ) )

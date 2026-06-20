@@ -51,6 +51,7 @@ using namespace ::svx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 // Declare the default interface. (The slotmap must not be empty, so
 // we enter something which never occurs here (hopefully).)
@@ -126,7 +127,7 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
     case SID_EXTRUSION_TOGGLE:
     {
         bool bOn(false);
-        css::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, sExtrusion );
+        cpo::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, sExtrusion );
         if ( pAny )
         {
             (*pAny) >>= bOn;
@@ -178,7 +179,7 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
         aRotateAnglePropPair.First.Type = EnhancedCustomShapeParameterType::NORMAL;
         aRotateAnglePropPair.Second.Value <<= fY;
         aRotateAnglePropPair.Second.Type = EnhancedCustomShapeParameterType::NORMAL;
-        css::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, sRotateAngle );
+        cpo::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, sRotateAngle );
         if( pAny && ( *pAny >>= aRotateAnglePropPair ) )
         {
             aRotateAnglePropPair.First.Value >>= fX;
@@ -349,7 +350,7 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
 
             // Set ShadeMode only when changing from or to wireframe, otherwise keep existing value.
             ShadeMode eOldShadeMode(ShadeMode_FLAT);
-            css::uno::Any* pAny = rGeometryItem.GetPropertyValueByName(sExtrusion, u"ShadeMode"_ustr);
+            cpo::uno::Any* pAny = rGeometryItem.GetPropertyValueByName(sExtrusion, u"ShadeMode"_ustr);
             if (pAny)
                 *pAny >>= eOldShadeMode;
             ShadeMode eShadeMode(eOldShadeMode);
@@ -698,7 +699,7 @@ static void getExtrusionDirectionState( SdrView const * pSdrView, SfxItemSet& rS
 
     static constexpr OUString sExtrusion = u"Extrusion"_ustr;
 
-    const css::uno::Any* pAny;
+    const cpo::uno::Any* pAny;
 
     double fFinalSkewAngle = -1;
     bool bHasCustomShape = false;
@@ -845,7 +846,7 @@ static void getExtrusionProjectionState( SdrView const * pSdrView, SfxItemSet& r
 
     static constexpr OUString sExtrusion = u"Extrusion"_ustr;
 
-    const css::uno::Any* pAny;
+    const cpo::uno::Any* pAny;
 
     sal_Int32 nFinalProjection = -1;
     bool bHasCustomShape = false;
@@ -900,7 +901,7 @@ static void getExtrusionSurfaceState( SdrView const * pSdrView, SfxItemSet& rSet
 
     static constexpr OUString sExtrusion = u"Extrusion"_ustr;
 
-    const css::uno::Any* pAny;
+    const cpo::uno::Any* pAny;
 
     sal_Int32 nFinalSurface = -1;
     bool bHasCustomShape = false;
@@ -993,7 +994,7 @@ static void getExtrusionDepthState( SdrView const * pSdrView, SfxItemSet& rSet )
 
     static constexpr OUString sExtrusion = u"Extrusion"_ustr;
 
-    const css::uno::Any* pAny;
+    const cpo::uno::Any* pAny;
 
     double fFinalDepth = -1;
     bool bHasCustomShape = false;
@@ -1075,7 +1076,7 @@ static void getExtrusionLightingDirectionState( SdrView const * pSdrView, SfxIte
 
     getLightingDirectionDefaults( &pLighting1Defaults, &pLighting2Defaults );
 
-    const css::uno::Any* pAny;
+    const cpo::uno::Any* pAny;
 
     int nFinalDirection = -1;
     bool bHasCustomShape = false;
@@ -1149,7 +1150,7 @@ static void getExtrusionLightingIntensityState( SdrView const * pSdrView, SfxIte
 
     static constexpr OUString sExtrusion = u"Extrusion"_ustr;
 
-    const css::uno::Any* pAny;
+    const cpo::uno::Any* pAny;
 
     int nFinalLevel = -1;
     bool bHasCustomShape = false;
@@ -1216,7 +1217,7 @@ static void getExtrusionColorState( SdrView const * pSdrView, SfxItemSet& rSet )
 
     static constexpr OUString sExtrusion = u"Extrusion"_ustr;
 
-    const css::uno::Any* pAny;
+    const cpo::uno::Any* pAny;
 
     bool bInit = false;
     bool bAmbigius = false;

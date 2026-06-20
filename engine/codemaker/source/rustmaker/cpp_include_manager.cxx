@@ -86,7 +86,7 @@ void CppIncludeManager::writeUnoIncludes(CppFile& file)
     // Core UNO types - implemented: Any
     if (m_typeInfo.needsAny)
     {
-        file.beginLine().append("#include <com/sun/star/uno/Any.hxx>").endLine();
+        file.beginLine().append("#include <cpo/uno/Any.hxx>").endLine();
         file.beginLine().append("#include <uno/data.h>").endLine();
         file.beginLine().append("#include <cppu/unotype.hxx>").endLine();
     }

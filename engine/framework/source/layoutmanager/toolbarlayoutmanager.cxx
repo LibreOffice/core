@@ -91,9 +91,9 @@ void SAL_CALL ToolbarLayoutManager::release() noexcept
     OWeakObject::release();
 }
 
-uno::Any SAL_CALL ToolbarLayoutManager::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL ToolbarLayoutManager::queryInterface( const uno::Type & rType )
 {
-    uno::Any a = ::cppu::queryInterface( rType,
+    cpo::uno::Any a = ::cppu::queryInterface( rType,
         static_cast< awt::XDockableWindowListener* >(this),
         static_cast< ui::XUIConfigurationListener* >(this),
         static_cast< awt::XWindowListener* >(this));
@@ -1587,12 +1587,12 @@ void ToolbarLayoutManager::implts_writeWindowStateData( const UIElement& rElemen
         if ( xPersistentWindowState->hasByName( aName ))
         {
             uno::Reference< container::XNameReplace > xReplace( xPersistentWindowState, uno::UNO_QUERY );
-            xReplace->replaceByName( aName, uno::Any( aWindowState ));
+            xReplace->replaceByName( aName, cpo::uno::Any( aWindowState ));
         }
         else
         {
             uno::Reference< container::XNameContainer > xInsert( xPersistentWindowState, uno::UNO_QUERY );
-            xInsert->insertByName( aName, uno::Any( aWindowState ));
+            xInsert->insertByName( aName, cpo::uno::Any( aWindowState ));
         }
     }
     catch (const uno::Exception&)
@@ -3155,7 +3155,7 @@ void ToolbarLayoutManager::implts_renumberRowColumnData(
                             aDockedPos.X += 1;
 
                         uno::Reference< container::XNameReplace > xReplace( xPersistentWindowState, uno::UNO_QUERY );
-                        xReplace->replaceByName( rWindowElementName, css::uno::Any( aPropValueSeq ));
+                        xReplace->replaceByName( rWindowElementName, cpo::uno::Any( aPropValueSeq ));
                     }
                 }
                 catch (const uno::Exception&)
@@ -3782,7 +3782,7 @@ void SAL_CALL ToolbarLayoutManager::elementInserted( const ui::ConfigurationEven
         if ( xPropSet.is() )
         {
             if ( rEvent.Source == uno::Reference< uno::XInterface >( m_xDocCfgMgr, uno::UNO_QUERY ))
-                xPropSet->setPropertyValue( u"ConfigurationSource"_ustr, css::uno::Any( m_xDocCfgMgr ));
+                xPropSet->setPropertyValue( u"ConfigurationSource"_ustr, cpo::uno::Any( m_xDocCfgMgr ));
         }
         xElementSettings->updateSettings();
     }
@@ -3866,7 +3866,7 @@ void SAL_CALL ToolbarLayoutManager::elementRemoved( const ui::ConfigurationEvent
             // document settings removed
             if ( xModuleCfgMgr->hasSettings( rEvent.ResourceURL ))
             {
-                xPropSet->setPropertyValue( aConfigSourcePropName, css::uno::Any( xModuleCfgMgr ));
+                xPropSet->setPropertyValue( aConfigSourcePropName, cpo::uno::Any( xModuleCfgMgr ));
                 xElementSettings->updateSettings();
                 return;
             }

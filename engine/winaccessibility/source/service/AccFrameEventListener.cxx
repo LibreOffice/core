@@ -33,6 +33,7 @@
 #include <vcl/sysdata.hxx>
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::accessibility;
 
 AccFrameEventListener::AccFrameEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager& rManager)

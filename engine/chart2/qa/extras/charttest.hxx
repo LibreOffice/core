@@ -93,7 +93,7 @@ public:
     css::uno::Sequence<OUString> getWriterChartColumnDescriptions();
     std::vector<std::vector<double>>
     getDataSeriesYValuesFromChartType(const css::uno::Reference<css::chart2::XChartType>& xCT);
-    std::vector<css::uno::Sequence<css::uno::Any>>
+    std::vector<css::uno::Sequence<cpo::uno::Any>>
     getDataSeriesLabelsFromChartType(const css::uno::Reference<css::chart2::XChartType>& xCT);
     css::uno::Reference<css::chart::XChartDocument> getChartDocFromDrawImpress(sal_Int32 nPage,
                                                                      sal_Int32 nShape);
@@ -338,10 +338,10 @@ std::vector<std::vector<double> > ChartTest::getDataSeriesYValuesFromChartType( 
             xPropSet->getPropertyValue(u"Role"_ustr) >>= aRoleName;
             if (aRoleName == "values-y")
             {
-                const css::uno::Sequence<css::uno::Any> aData = xValues->getData();
+                const css::uno::Sequence<cpo::uno::Any> aData = xValues->getData();
                 std::vector<double> aValues;
                 aValues.reserve(aData.getLength());
-                for (css::uno::Any const & any : aData)
+                for (cpo::uno::Any const & any : aData)
                 {
                     double fVal;
                     if (any >>= fVal)
@@ -357,7 +357,7 @@ std::vector<std::vector<double> > ChartTest::getDataSeriesYValuesFromChartType( 
     return aRet;
 }
 
-std::vector<css::uno::Sequence<css::uno::Any> > ChartTest::getDataSeriesLabelsFromChartType( const css::uno::Reference<css::chart2::XChartType>& xCT )
+std::vector<css::uno::Sequence<cpo::uno::Any> > ChartTest::getDataSeriesLabelsFromChartType( const css::uno::Reference<css::chart2::XChartType>& xCT )
 {
     OUString aLabelRole = xCT->getRoleOfSequenceForSeriesLabel();
 
@@ -365,7 +365,7 @@ std::vector<css::uno::Sequence<css::uno::Any> > ChartTest::getDataSeriesLabelsFr
     CPPUNIT_ASSERT(xDSCont.is());
     const css::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries> > aDataSeriesSeq = xDSCont->getDataSeries();
 
-    std::vector<css::uno::Sequence<css::uno::Any> > aRet;
+    std::vector<css::uno::Sequence<cpo::uno::Any> > aRet;
     for (auto const & ds : aDataSeriesSeq)
     {
         css::uno::Reference<css::chart2::data::XDataSource> xDSrc(ds, css::uno::UNO_QUERY);
@@ -387,7 +387,7 @@ std::vector<css::uno::Sequence<css::uno::Any> > ChartTest::getDataSeriesLabelsFr
                 CPPUNIT_ASSERT(xLabel.is());
                 css::uno::Reference<css::chart2::data::XDataSequence> xDS2 = xLabel->getLabel();
                 CPPUNIT_ASSERT(xDS2.is());
-                css::uno::Sequence<css::uno::Any> aData = xDS2->getData();
+                css::uno::Sequence<cpo::uno::Any> aData = xDS2->getData();
                 aRet.push_back(aData);
             }
         }

@@ -44,7 +44,7 @@ namespace svt::table
     using css::uno::Exception;
     using css::awt::grid::XGridDataModel;
     using css::awt::grid::XGridColumnModel;
-    using css::uno::Any;
+    using cpo::uno::Any;
     using css::style::VerticalAlignment_TOP;
     using css::style::VerticalAlignment;
     using css::awt::grid::GridDataEvent;
@@ -639,7 +639,7 @@ namespace svt::table
     }
 
 
-    void UnoControlTableModel::setRowBackgroundColors( css::uno::Any const & i_APIValue )
+    void UnoControlTableModel::setRowBackgroundColors( cpo::uno::Any const & i_APIValue )
     {
         DBG_TESTSOLARMUTEX();
         Sequence< css::util::Color > aAPIColors;

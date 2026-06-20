@@ -554,25 +554,25 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf145998_unnecessaryPageStyles)
 
     // Page Style should be explicitly mentioned - otherwise it would be a "follow" style
     uno::Reference<beans::XPropertySet> xPara(getParagraph(2, u"2"_ustr), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(uno::Any() != xPara->getPropertyValue(u"PageDescName"_ustr));
+    CPPUNIT_ASSERT(cpo::uno::Any() != xPara->getPropertyValue(u"PageDescName"_ustr));
     // CPPUNIT_ASSERT_EQUAL(OUString("First Page header"),
     //                      getXPathContent(pXmlDoc, "/root/page[2]/header/txt"));
 
     // Page Style is converted into a page break instead. Still shows "first" header.
     xPara.set(getParagraph(3, u"3"_ustr), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(), xPara->getPropertyValue(u"PageDescName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(), xPara->getPropertyValue(u"PageDescName"_ustr));
     // CPPUNIT_ASSERT_EQUAL(OUString("Default page style - first page style"),
     //                      getXPathContent(pXmlDoc, "/root/page[3]/header/txt"));
     assertXPathContent(pXmlDoc, "/root/page[3]/footer/txt", u"");
 
     // Page Style is converted into a page break instead. Shows the "normal" header.
     xPara.set(getParagraph(5, u"4"_ustr), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(), xPara->getPropertyValue(u"PageDescName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(), xPara->getPropertyValue(u"PageDescName"_ustr));
     assertXPathContent(pXmlDoc, "/root/page[4]/header/txt", u"Default page style");
 
     // Page Style is retained (with wrong header) in order to preserve page re-numbering.
     xPara.set(getParagraph(7, u"1"_ustr), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(uno::Any() != xPara->getPropertyValue(u"PageDescName"_ustr));
+    CPPUNIT_ASSERT(cpo::uno::Any() != xPara->getPropertyValue(u"PageDescName"_ustr));
     assertXPathContent(pXmlDoc, "/root/page[5]/footer/txt", u"");
 }
 
@@ -593,7 +593,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf136589_paraHadField, "tdf136589_paraHadField.doc
 
     //tdf#118711 - don't explicitly specify the default page style at the beginning of the document
     uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(), xPara->getPropertyValue(u"PageDescName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(), xPara->getPropertyValue(u"PageDescName"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf133370_columnBreak)
@@ -743,7 +743,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132149_pgBreak2)
     // The only specified page style change should be between page 1 and 2.
     // When the first paragraph was split into 3, each paragraph specified a page break. The last was unnecessary.
     uno::Reference<beans::XPropertySet> xParaThree(getParagraph(3), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(), xParaThree->getPropertyValue(u"PageDescName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(), xParaThree->getPropertyValue(u"PageDescName"_ustr));
     // The ODT is only 2 paragraphs, but a hack to get the right page style breaks para1 into pieces.
     // This was 4 paragraphs - the unnecessary page break had hacked in another paragraph split.
     CPPUNIT_ASSERT_LESSEQUAL( 3, getParagraphs() );

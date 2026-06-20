@@ -103,7 +103,7 @@ Paragraph::numberChanged(bool bIncremented)
 void Paragraph::textChanged()
 {
     OUString aParagraphText = implGetText();
-    css::uno::Any aOldValue, aNewValue;
+    cpo::uno::Any aOldValue, aNewValue;
     if ( implInitTextChangedEvent( m_aParagraphText, aParagraphText, aOldValue, aNewValue ) )
     {
         m_aParagraphText = aParagraphText;
@@ -114,8 +114,8 @@ void Paragraph::textChanged()
 }
 
 void Paragraph::notifyEvent(::sal_Int16 nEventId,
-                                css::uno::Any const & rOldValue,
-                                css::uno::Any const & rNewValue)
+                                cpo::uno::Any const & rOldValue,
+                                cpo::uno::Any const & rNewValue)
 {
     NotifyAccessibleEvent(nEventId, rOldValue, rNewValue);
 }
@@ -505,7 +505,7 @@ css::accessibility::TextSegment SAL_CALL Paragraph::getTextAtLineWithCaret(  )
             getTextAtLineNumber( nLineNo ) :
             css::accessibility::TextSegment();
     } catch (const css::lang::IndexOutOfBoundsException&) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
             u"textwindowaccessibility.cxx:"
             " Paragraph::getTextAtLineWithCaret"_ustr,
@@ -835,7 +835,7 @@ Document::retrieveCharacterAttributes(
     //character relief
     /*
     aAttrib.Name = "CharRelief";
-    aAttrib.Value = css::uno::Any( (sal_Int16)aFont.GetRelief() );
+    aAttrib.Value = cpo::uno::Any( (sal_Int16)aFont.GetRelief() );
     aAttribs.push_back(aAttrib);
     */
 
@@ -1400,8 +1400,8 @@ IMPL_LINK(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
                     xParagraph->notifyEvent(
                         css::accessibility::AccessibleEventId::
                         STATE_CHANGED,
-                        css::uno::Any(),
-                        css::uno::Any(
+                        cpo::uno::Any(),
+                        cpo::uno::Any(
                             css::accessibility::AccessibleStateType::
                             FOCUSED));
                 }
@@ -1424,10 +1424,10 @@ IMPL_LINK(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
                     xParagraph->notifyEvent(
                         css::accessibility::AccessibleEventId::
                         STATE_CHANGED,
-                        css::uno::Any(
+                        cpo::uno::Any(
                             css::accessibility::AccessibleStateType::
                             FOCUSED),
-                        css::uno::Any());
+                        cpo::uno::Any());
             }
             break;
         }
@@ -1505,8 +1505,8 @@ void Document::notifyVisibleRangeChanges(
             NotifyAccessibleEvent(
                 css::accessibility::AccessibleEventId::
                 CHILD,
-                css::uno::Any(getAccessibleChild(aIt)),
-                css::uno::Any());
+                cpo::uno::Any(getAccessibleChild(aIt)),
+                cpo::uno::Any());
     }
     for (Paragraphs::iterator aIt(aVisibleBegin); aIt != aVisibleEnd; ++aIt)
     {
@@ -1515,8 +1515,8 @@ void Document::notifyVisibleRangeChanges(
             NotifyAccessibleEvent(
                 css::accessibility::AccessibleEventId::
                 CHILD,
-                css::uno::Any(),
-                css::uno::Any(getAccessibleChild(aIt)));
+                cpo::uno::Any(),
+                cpo::uno::Any(getAccessibleChild(aIt)));
     }
 }
 
@@ -1611,8 +1611,8 @@ void Document::handleParagraphNotifications()
                         NotifyAccessibleEvent(
                             css::accessibility::AccessibleEventId::
                             CHILD,
-                            css::uno::Any(getAccessibleChild(aIt)),
-                            css::uno::Any());
+                            cpo::uno::Any(getAccessibleChild(aIt)),
+                            cpo::uno::Any());
                     }
                     disposeParagraphs();
                     m_aParagraphs.clear();
@@ -1692,8 +1692,8 @@ void Document::handleParagraphNotifications()
                         NotifyAccessibleEvent(
                             css::accessibility::AccessibleEventId::
                             CHILD,
-                            css::uno::Any(xStrong),
-                            css::uno::Any());
+                            cpo::uno::Any(xStrong),
+                            cpo::uno::Any());
 
                     rtl::Reference< Paragraph > xComponent( xWeak.get() );
                     if (xComponent.is())
@@ -1858,7 +1858,7 @@ void Document::sendEvent(::sal_Int32 start, ::sal_Int32 end, ::sal_Int16 nEventI
         if (xParagraph.is())
             xParagraph->notifyEvent(
             nEventId,
-                css::uno::Any(), css::uno::Any());
+                cpo::uno::Any(), cpo::uno::Any());
         ++aIt;
     }
 }
@@ -1888,9 +1888,9 @@ void Document::handleSelectionChangeNotification()
             xParagraph->notifyEvent(
                 css::accessibility::AccessibleEventId::
                 STATE_CHANGED,
-                css::uno::Any(
+                cpo::uno::Any(
                     css::accessibility::AccessibleStateType::FOCUSED),
-                css::uno::Any());
+                cpo::uno::Any());
     }
 
     // Gain focus and update cursor position:
@@ -1909,18 +1909,18 @@ void Document::handleSelectionChangeNotification()
                 xParagraph->notifyEvent(
                     css::accessibility::AccessibleEventId::
                     STATE_CHANGED,
-                    css::uno::Any(),
-                    css::uno::Any(
+                    cpo::uno::Any(),
+                    cpo::uno::Any(
                         css::accessibility::AccessibleStateType::FOCUSED));
             if (nNewLastPara != m_nSelectionLastPara
                 || nNewLastPos != m_nSelectionLastPos)
                 xParagraph->notifyEvent(
                     css::accessibility::AccessibleEventId::
                     CARET_CHANGED,
-                    css::uno::Any( ::sal_Int32 (
+                    cpo::uno::Any( ::sal_Int32 (
                         nNewLastPara == m_nSelectionLastPara
                         ? m_nSelectionLastPos : 0)),
-                    css::uno::Any(nNewLastPos));
+                    cpo::uno::Any(nNewLastPos));
         }
     }
     m_nFocused = std::distance(m_aParagraphs.begin(), aIt);
@@ -2034,14 +2034,14 @@ void Document::disposeParagraphs()
 }
 
 // static
-css::uno::Any Document::mapFontColor(::Color const & rColor)
+cpo::uno::Any Document::mapFontColor(::Color const & rColor)
 {
-    return css::uno::Any(rColor.GetRGBColor());
+    return cpo::uno::Any(rColor.GetRGBColor());
         // FIXME  keep transparency?
 }
 
 // static
-::Color Document::mapFontColor(css::uno::Any const & rColor)
+::Color Document::mapFontColor(cpo::uno::Any const & rColor)
 {
     ::Color nColor;
     rColor >>= nColor;
@@ -2049,7 +2049,7 @@ css::uno::Any Document::mapFontColor(::Color const & rColor)
 }
 
 // static
-css::uno::Any Document::mapFontWeight(::FontWeight nWeight)
+cpo::uno::Any Document::mapFontWeight(::FontWeight nWeight)
 {
     // Map from ::FontWeight to css::awt::FontWeight, depends on order of
     // elements in ::FontWeight (vcl/vclenum.hxx):
@@ -2065,11 +2065,11 @@ css::uno::Any Document::mapFontWeight(::FontWeight nWeight)
             css::awt::FontWeight::BOLD, // WEIGHT_BOLD
             css::awt::FontWeight::ULTRABOLD, // WEIGHT_ULTRABOLD
             css::awt::FontWeight::BLACK }; // WEIGHT_BLACK
-    return css::uno::Any(aWeight[nWeight]);
+    return cpo::uno::Any(aWeight[nWeight]);
 }
 
 // static
-::FontWeight Document::mapFontWeight(css::uno::Any const & rWeight)
+::FontWeight Document::mapFontWeight(cpo::uno::Any const & rWeight)
 {
     float nWeight = css::awt::FontWeight::NORMAL;
     rWeight >>= nWeight;

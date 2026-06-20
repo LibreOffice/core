@@ -62,6 +62,7 @@ using com::sun::star::xforms::XFormsSupplier;
 
 using namespace xforms;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::xml::dom;
 using namespace com::sun::star::xml::xpath;
 

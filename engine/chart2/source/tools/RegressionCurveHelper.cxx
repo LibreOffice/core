@@ -574,10 +574,10 @@ void RegressionCurveHelper::removeEquations(
                 uno::Reference< beans::XPropertySet > xEqProp( curve->getEquationProperties() ) ;
                 if( xEqProp.is())
                 {
-                    xEqProp->setPropertyValue( u"ShowEquation"_ustr, uno::Any( false ));
-                    xEqProp->setPropertyValue( u"XName"_ustr, uno::Any( u"x"_ustr ));
-                    xEqProp->setPropertyValue( u"YName"_ustr, uno::Any( u"f(x) "_ustr ));
-                    xEqProp->setPropertyValue( u"ShowCorrelationCoefficient"_ustr, uno::Any( false ));
+                    xEqProp->setPropertyValue( u"ShowEquation"_ustr, cpo::uno::Any( false ));
+                    xEqProp->setPropertyValue( u"XName"_ustr, cpo::uno::Any( u"x"_ustr ));
+                    xEqProp->setPropertyValue( u"YName"_ustr, cpo::uno::Any( u"f(x) "_ustr ));
+                    xEqProp->setPropertyValue( u"ShowCorrelationCoefficient"_ustr, cpo::uno::Any( false ));
                 }
             }
         }
@@ -833,7 +833,7 @@ void RegressionCurveHelper::resetEquationPosition(
         static constexpr OUString aPosPropertyName( u"RelativePosition"_ustr );
         Reference< beans::XPropertySet > xEqProp( xCurve->getEquationProperties()); // since m233: , uno::UNO_SET_THROW );
         if( xEqProp->getPropertyValue( aPosPropertyName ).hasValue())
-            xEqProp->setPropertyValue( aPosPropertyName, uno::Any());
+            xEqProp->setPropertyValue( aPosPropertyName, cpo::uno::Any());
     }
     catch( const uno::Exception & )
     {

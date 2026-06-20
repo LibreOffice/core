@@ -66,7 +66,7 @@ struct PresentationSettingsEx : public PresentationSettings
     void SetArguments( const css::uno::Sequence< css::beans::PropertyValue >& rArguments );
 
     /// @throws css::lang::IllegalArgumentException
-    void SetPropertyValue( std::u16string_view rProperty, const css::uno::Any& rValue );
+    void SetPropertyValue( std::u16string_view rProperty, const cpo::uno::Any& rValue );
 };
 
 struct WrappedShapeEventImpl
@@ -177,7 +177,7 @@ public:
 
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) override;
-    virtual css::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override;
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
     virtual bool SAL_CALL hasElements(  ) override;
 

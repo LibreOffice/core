@@ -58,6 +58,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
@@ -1703,7 +1704,7 @@ void ControlContainerBase::ImplUpdateResourceResolver()
 ////    Helper Method to convert relative url to physical location
 ////    ----------------------------------------------------
 
-OUString getPhysicalLocation( const css::uno::Any& rbase, const css::uno::Any& rUrl )
+OUString getPhysicalLocation( const cpo::uno::Any& rbase, const cpo::uno::Any& rUrl )
 {
 
     OUString baseLocation;
@@ -1753,7 +1754,7 @@ ControlModelContainerBase::updateUserFormChildren( const Reference< XNameContain
             // container control is being removed from this container, reset the
             // global list of containers
             if ( xProps.is() )
-                xProps->setPropertyValue(  GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ), uno::Any( uno::Reference< XNameContainer >() ) );
+                xProps->setPropertyValue(  GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ), cpo::uno::Any( uno::Reference< XNameContainer >() ) );
             const Sequence< OUString > aChildNames = xChildContainer->getElementNames();
             for ( const auto& rName : aChildNames )
                 updateUserFormChildren( xAllChildren, rName, Operation,  Reference< XControlModel > () );
@@ -1761,7 +1762,7 @@ ControlModelContainerBase::updateUserFormChildren( const Reference< XNameContain
     }
     else if ( Operation == Insert )
     {
-        xAllChildren->insertByName( aName, uno::Any( xTarget ) );
+        xAllChildren->insertByName( aName, cpo::uno::Any( xTarget ) );
         Reference< XNameContainer > xChildContainer( xTarget, UNO_QUERY );
         if ( xChildContainer.is() )
         {
@@ -1769,7 +1770,7 @@ ControlModelContainerBase::updateUserFormChildren( const Reference< XNameContain
             // global list of containers to point to the correct global list
             Reference< XPropertySet > xProps( xChildContainer, UNO_QUERY );
             if ( xProps.is() )
-                xProps->setPropertyValue(  GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ), uno::Any( xAllChildren ) );
+                xProps->setPropertyValue(  GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ), cpo::uno::Any( xAllChildren ) );
             const Sequence< OUString > aChildNames = xChildContainer->getElementNames();
             for ( const auto& rName : aChildNames )
             {

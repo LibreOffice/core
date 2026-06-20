@@ -127,7 +127,7 @@ CPPUNIT_TEST_FIXTURE(ThemeTest, testThemeChange)
     uno::Reference<drawing::XMasterPageTarget> xDrawPage2(
         xDrawPagesSupplier->getDrawPages()->getByIndex(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xMasterPage2(xDrawPage2->getMasterPage(), uno::UNO_QUERY);
-    uno::Any aTheme = xMasterPage2->getPropertyValue(u"Theme"_ustr);
+    cpo::uno::Any aTheme = xMasterPage2->getPropertyValue(u"Theme"_ustr);
 
     uno::Reference<beans::XPropertySet> xMasterPage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
     xMasterPage->setPropertyValue(u"Theme"_ustr, aTheme);

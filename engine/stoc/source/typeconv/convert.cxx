@@ -46,6 +46,7 @@
 namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::script;
 using namespace cppu;
@@ -863,7 +864,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_stoc_TypeConverter_get_implementation(css::uno::XComponentContext*,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return ::cppu::acquire(new stoc_tcv::TypeConverter_Impl());
 }

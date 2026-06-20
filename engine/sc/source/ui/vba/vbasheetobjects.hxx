@@ -57,8 +57,8 @@ public:
     virtual css::uno::Type SAL_CALL getElementType() override;
 
     // ScVbaCollectionBase
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& rSource ) override;
-    virtual css::uno::Any getItemByStringIndex( const OUString& rIndex ) override;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& rSource ) override;
+    virtual cpo::uno::Any getItemByStringIndex( const OUString& rIndex ) override;
 
 protected:
     ScVbaObjectContainerRef mxContainer;
@@ -76,11 +76,11 @@ public:
     explicit ScVbaGraphicObjectsBase( const ScVbaObjectContainerRef& rxContainer );
 
     // XGraphicObjects
-    virtual css::uno::Any SAL_CALL Add(
-        const css::uno::Any& rLeft,
-        const css::uno::Any& rTop,
-        const css::uno::Any& rWidth,
-        const css::uno::Any& rHeight ) override;
+    virtual cpo::uno::Any SAL_CALL Add(
+        const cpo::uno::Any& rLeft,
+        const cpo::uno::Any& rTop,
+        const cpo::uno::Any& rWidth,
+        const cpo::uno::Any& rHeight ) override;
 };
 
 /** Collection containing all button controls from a sheet (not ActiveX controls). */

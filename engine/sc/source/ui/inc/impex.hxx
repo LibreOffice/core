@@ -24,7 +24,7 @@
 #include <address.hxx>
 #include <tools/stream.hxx>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 class ScDocShell;
 class ScDocument;
@@ -140,7 +140,7 @@ public:
     SC_DLLPUBLIC bool ExportStream( SvStream&, const OUString& rBaseURL, SotClipboardFormatId );
 
     bool ExportData( std::u16string_view rMimeType,
-                     css::uno::Any & rValue  );
+                     cpo::uno::Any & rValue  );
 
     // after import
     bool IsOverflowRow() const { return bOverflowRow; }

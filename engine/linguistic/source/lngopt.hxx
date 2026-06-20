@@ -30,7 +30,7 @@
 #include <unotools/lingucfg.hxx>
 #include <svl/itemprop.hxx>
 #include <unotools/linguprops.hxx>
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 
 namespace com::sun::star {
     namespace beans {
@@ -92,13 +92,13 @@ class LinguProps :
     css::lang::Locale getPropertyLocale(const OUString& aPropertyName);
     /// @throws css::uno::RuntimeException
     void setProperty(const OUString& aPropertyName, bool p1)
-        { setPropertyValue( aPropertyName, css::uno::Any(p1) ); }
+        { setPropertyValue( aPropertyName, cpo::uno::Any(p1) ); }
     /// @throws css::uno::RuntimeException
     void setProperty(const OUString& aPropertyName, sal_Int16 p1)
-        { setPropertyValue( aPropertyName, css::uno::Any(p1) ); }
+        { setPropertyValue( aPropertyName, cpo::uno::Any(p1) ); }
     /// @throws css::uno::RuntimeException
     void setProperty(const OUString& aPropertyName, css::lang::Locale p1)
-        { setPropertyValue( aPropertyName, css::uno::Any(p1) ); }
+        { setPropertyValue( aPropertyName, cpo::uno::Any(p1) ); }
 
 public:
     LinguProps();
@@ -170,16 +170,16 @@ public:
 
     // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
     virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override;
     virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override;
     virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override;
     virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override;
 
     // XFastPropertySet
-    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getFastPropertyValue( sal_Int32 nHandle ) override;
+    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL getFastPropertyValue( sal_Int32 nHandle ) override;
 
     // XPropertyAccess
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPropertyValues() override;

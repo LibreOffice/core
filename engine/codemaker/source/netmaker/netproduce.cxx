@@ -53,7 +53,7 @@ const auto s_baseTypes = frozen::make_unordered_map<std::string_view, OString>(
       { "string", "string"_ostr },
       { "void", "void"_ostr },
       { "type", "System.Type"_ostr },
-      { "any", "com.sun.star.uno.Any"_ostr },
+      { "any", "cpo.uno.Any"_ostr },
       { "com.sun.star.uno.Exception", "com.sun.star.uno.UnoException"_ostr },
       { "com.sun.star.uno.XInterface", "com.sun.star.uno.IQueryInterface"_ostr } });
 
@@ -964,7 +964,7 @@ void NetProducer::produceService(
                 .append("ctx.getServiceManager();")
                 .endLine()
                 .beginLine()
-                .append("com.sun.star.uno.Any srv = new com.sun.star.uno.Any(")
+                .append("cpo.uno.Any srv = new cpo.uno.Any(")
                 .append("mcf.createInstanceWithContext(\"")
                 .append(name)
                 .append("\", ctx));")
@@ -1039,7 +1039,7 @@ void NetProducer::produceService(
                 .append("ctx.getServiceManager();")
                 .endLine()
                 .beginLine()
-                .append("com.sun.star.uno.Any srv = new com.sun.star.uno.Any(")
+                .append("cpo.uno.Any srv = new cpo.uno.Any(")
                 .append("mcf.createInstanceWithArgumentsAndContext(\"")
                 .append(name)
                 .append("\", ");
@@ -1049,14 +1049,14 @@ void NetProducer::produceService(
             }
             else if (ctor.parameters.empty())
             {
-                file.append("System.Array.Empty<com.sun.star.uno.Any>()");
+                file.append("System.Array.Empty<cpo.uno.Any>()");
             }
             else
             {
-                file.append("new com.sun.star.uno.Any[] { ");
+                file.append("new cpo.uno.Any[] { ");
                 separatedForeach(ctor.parameters, [&file]() { file.append(", "); },
                                  [&file](const auto& p) {
-                                     file.append("new com.sun.star.uno.Any(")
+                                     file.append("new cpo.uno.Any(")
                                          .append(getSafeIdentifier(p.name))
                                          .append(")");
                                  });
@@ -1148,7 +1148,7 @@ void NetProducer::produceSingleton(
         .endLine()
         .beginBlock()
         .beginLine()
-        .append("com.sun.star.uno.Any sgtn = ctx.getValueByName(\"/singletons/")
+        .append("cpo.uno.Any sgtn = ctx.getValueByName(\"/singletons/")
         .append(name)
         .append("\");")
         .endLine()

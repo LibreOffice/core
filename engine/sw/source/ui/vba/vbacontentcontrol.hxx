@@ -65,7 +65,7 @@ public:
     sal_Int32 SAL_CALL getDateStorageFormat() override;
     void SAL_CALL setDateStorageFormat(sal_Int32 nSet) override;
 
-    css::uno::Any SAL_CALL getDropdownListEntries() override;
+    cpo::uno::Any SAL_CALL getDropdownListEntries() override;
 
     // This is an integer used as a unique identifier string
     OUString SAL_CALL getID() override;
@@ -120,20 +120,20 @@ public:
     // Specifies whether to delete the contents of the content control. The default value is False.
     // True removes both the content control and its contents.
     // False removes the control but leaves the contents of the content control in the document.
-    void SAL_CALL Delete(const css::uno::Any& bDeleteContents) override;
+    void SAL_CALL Delete(const cpo::uno::Any& bDeleteContents) override;
 
     // Set the Unicode character used to display the checked state.
-    void SAL_CALL SetCheckedSymbol(sal_Int32 Character, const css::uno::Any& sFont) override;
+    void SAL_CALL SetCheckedSymbol(sal_Int32 Character, const cpo::uno::Any& sFont) override;
 
     // Set the Unicode character used to display the unchecked state.
-    void SAL_CALL SetUnCheckedSymbol(sal_Int32 Character, const css::uno::Any& sFont) override;
+    void SAL_CALL SetUnCheckedSymbol(sal_Int32 Character, const cpo::uno::Any& sFont) override;
 
     // Sets the placeholder text that displays until a user enters their own text.
     // Only one of the parameters is used when specifying placeholder text.
     // If more than one parameter is provided, use the text specified in the first parameter.
     // If all parameters are omitted, the placeholder text is blank.
-    void SAL_CALL SetPlaceholderText(const css::uno::Any& BuildingBlock, const css::uno::Any& Range,
-                                     const css::uno::Any& sText) override;
+    void SAL_CALL SetPlaceholderText(const cpo::uno::Any& BuildingBlock, const cpo::uno::Any& Range,
+                                     const cpo::uno::Any& sText) override;
 
     void SAL_CALL Ungroup() override;
 

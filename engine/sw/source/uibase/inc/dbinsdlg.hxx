@@ -150,7 +150,7 @@ public:
 
     virtual ~SwInsertDBColAutoPilot() override;
 
-    void DataToDoc( const css::uno::Sequence< css::uno::Any >& rSelection,
+    void DataToDoc( const css::uno::Sequence< cpo::uno::Any >& rSelection,
         css::uno::Reference< css::sdbc::XDataSource> const & rxSource,
         css::uno::Reference< css::sdbc::XConnection> const & xConnection,
         css::uno::Reference< css::sdbc::XResultSet > const & xResultSet);

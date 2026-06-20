@@ -222,7 +222,7 @@ void ScFunctionAccess::Notify( SfxBroadcaster&, const SfxHint& rHint )
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-ScFunctionAccess_get_implementation(css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const &)
+ScFunctionAccess_get_implementation(css::uno::XComponentContext*, css::uno::Sequence<cpo::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
     ScDLL::Init();
@@ -256,7 +256,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScFunctionAccess::getPropertySe
 }
 
 void SAL_CALL ScFunctionAccess::setPropertyValue(
-                        const OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
 
@@ -283,16 +283,16 @@ void SAL_CALL ScFunctionAccess::setPropertyValue(
     }
 }
 
-uno::Any SAL_CALL ScFunctionAccess::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ScFunctionAccess::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
 
     if ( aPropertyName == "IsArrayFunction" )
-        return uno::Any( mbArray );
+        return cpo::uno::Any( mbArray );
 
     // Allow this property because SpreadsheetDocumentSettings lists it
     if (aPropertyName == SC_UNO_SPELLONLINE)
-        return uno::Any(mbSpellOnline);
+        return cpo::uno::Any(mbSpellOnline);
 
     if ( !pOptions )
         pOptions.reset( new ScDocOptions() );
@@ -361,7 +361,7 @@ public:
     // could possibly just get away with JUST the following overload
     // 1) virtual void visitElem( long& nCol, long& nRow, const double& elem )
     // 2) virtual void visitElem( long& nCol, long& nRow, const OUString& elem )
-    // 3) virtual void visitElem( long& nCol, long& nRow, const uno::Any& elem )
+    // 3) virtual void visitElem( long& nCol, long& nRow, const cpo::uno::Any& elem )
     // the other types methods are here just to reflect the orig code and for
     // completeness.
 
@@ -386,7 +386,7 @@ public:
             mpDoc->SetString(ScAddress(nCol,nRow,0), elem, &aParam);
         }
     }
-    void visitElem( sal_Int32 nCol, sal_Int32 nRow, const uno::Any& rElement )
+    void visitElem( sal_Int32 nCol, sal_Int32 nRow, const cpo::uno::Any& rElement )
     {
         uno::TypeClass eElemClass = rElement.getValueTypeClass();
         if ( eElemClass == uno::TypeClass_VOID )
@@ -431,7 +431,7 @@ class SequencesContainer
     ScTokenArray& mrTokenArr;
 
 public:
-    SequencesContainer( const uno::Any& rArg, ScTokenArray& rTokenArr, sal_Int32& rDocRow, ScDocument* pDoc ) :
+    SequencesContainer( const cpo::uno::Any& rArg, ScTokenArray& rTokenArr, sal_Int32& rDocRow, ScDocument* pDoc ) :
         mrDocRow( rDocRow ), mbOverflow(false), mbArgError(false), mpDoc( pDoc ), mrTokenArr( rTokenArr )
     {
         rArg >>= maSeq;
@@ -473,7 +473,7 @@ template <class T>
 class ArrayOfArrayProc
 {
 public:
-static void processSequences( ScDocument* pDoc, const uno::Any& rArg, ScTokenArray& rTokenArr,
+static void processSequences( ScDocument* pDoc, const cpo::uno::Any& rArg, ScTokenArray& rTokenArr,
                                 sal_Int32& rDocRow, bool& rArgErr, bool& rOverflow )
 {
     SequencesContainer< T > aContainer( rArg, rTokenArr, rDocRow, pDoc );
@@ -485,8 +485,8 @@ static void processSequences( ScDocument* pDoc, const uno::Any& rArg, ScTokenArr
 
 }
 
-uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
-                            const uno::Sequence<uno::Any>& aArguments )
+cpo::uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
+                            const uno::Sequence<cpo::uno::Any>& aArguments )
 {
     SolarMutexGuard aGuard;
 
@@ -527,7 +527,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
     bool bOverflow = false;
     sal_Int32 nDocRow = 0;
     tools::Long nArgCount = aArguments.getLength();
-    const uno::Any* pArgArr = aArguments.getConstArray();
+    const cpo::uno::Any* pArgArr = aArguments.getConstArray();
 
     svl::SharedStringPool& rSPool = pDoc->GetSharedStringPool();
     aTokenArr.AddOpCode(ocOpen);
@@ -536,7 +536,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
         if ( nPos > 0 )
             aTokenArr.AddOpCode(ocSep);
 
-        const uno::Any& rArg = pArgArr[nPos];
+        const cpo::uno::Any& rArg = pArgArr[nPos];
 
         uno::TypeClass eClass = rArg.getValueTypeClass();
         const uno::Type& aType = rArg.getValueType();
@@ -577,9 +577,9 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
         {
             ArrayOfArrayProc<OUString>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );
         }
-        else if ( aType.equals( cppu::UnoType<uno::Sequence< uno::Sequence<uno::Any> >>::get() ) )
+        else if ( aType.equals( cppu::UnoType<uno::Sequence< uno::Sequence<cpo::uno::Any> >>::get() ) )
         {
-            ArrayOfArrayProc<uno::Any>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );
+            ArrayOfArrayProc<cpo::uno::Any>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );
         }
         else if (uno::Reference<table::XCellRange> xRange; (rArg >>= xRange) && xRange)
         {
@@ -624,7 +624,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
 
     //  execute formula
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if ( !bArgErr && !bOverflow && nDocRow <= pDoc->GetSheetLimits().GetMaxRowCount() )
     {
         ScAddress aFormulaPos( 0, 0, nTempSheet );

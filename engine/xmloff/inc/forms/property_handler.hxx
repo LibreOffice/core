@@ -21,7 +21,7 @@
 
 #include <forms/property_ids.hxx>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
@@ -31,7 +31,7 @@
 namespace xmloff
 {
 
-    typedef ::std::map< PropertyId, css::uno::Any >    PropertyValues;
+    typedef ::std::map< PropertyId, cpo::uno::Any >    PropertyValues;
 
     class PropertyHandlerBase : public ::salhelper::SimpleReferenceObject
     {
@@ -39,7 +39,7 @@ namespace xmloff
         /** is a convenience method for XML attributes whose value comprises of only one UNO API property
         */
         virtual OUString
-            getAttributeValue( const css::uno::Any& i_propertyValue ) const = 0;
+            getAttributeValue( const cpo::uno::Any& i_propertyValue ) const = 0;
 
         /** retrieves the values of the properties controlled by an XML attributed, described by a given attribute value
         */

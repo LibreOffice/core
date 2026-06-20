@@ -83,7 +83,7 @@ namespace logging
 
     public:
         FileHandler(const css::uno::Reference<XComponentContext> &context,
-                const css::uno::Sequence<css::uno::Any> &arguments);
+                const css::uno::Sequence<cpo::uno::Any> &arguments);
         virtual ~FileHandler() override;
 
     private:
@@ -126,7 +126,7 @@ namespace logging
     }
 
     FileHandler::FileHandler(const css::uno::Reference<XComponentContext> &context,
-            const css::uno::Sequence<css::uno::Any> &arguments)
+            const css::uno::Sequence<cpo::uno::Any> &arguments)
         :FileHandler_Base( m_aMutex )
         ,m_xContext( context )
         ,m_aHandlerHelper( context, m_aMutex, rBHelper )
@@ -351,7 +351,7 @@ namespace logging
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_extensions_FileHandler(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &arguments)
+    css::uno::Sequence<cpo::uno::Any> const &arguments)
 {
     return cppu::acquire(new logging::FileHandler(context, arguments));
 }

@@ -49,7 +49,7 @@ public:
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // SwVbaBookmarks_BASE
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 
@@ -59,7 +59,7 @@ public:
     virtual bool SAL_CALL getShowHidden() override;
     virtual void SAL_CALL setShowHidden( bool _hidden ) override;
 
-    virtual css::uno::Any SAL_CALL Add( const OUString& rName, const css::uno::Any& rRange ) override;
+    virtual cpo::uno::Any SAL_CALL Add( const OUString& rName, const cpo::uno::Any& rRange ) override;
     virtual bool SAL_CALL Exists( const OUString& rName ) override;
 };
 

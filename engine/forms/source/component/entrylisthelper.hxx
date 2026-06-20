@@ -51,7 +51,7 @@ namespace frm
                         m_xListSource;      /// our external list source
         std::vector< OUString >
                         m_aStringItems;     /// "overridden" StringItemList property value
-        css::uno::Sequence< css::uno::Any >
+        css::uno::Sequence< cpo::uno::Any >
                         m_aTypedItems;      /// "overridden" TypedItemList property value
         ::comphelper::OInterfaceContainerHelper3<css::util::XRefreshListener>
                         m_aRefreshListeners;
@@ -67,7 +67,7 @@ namespace frm
                     getStringItemList() const { return m_aStringItems; }
 
         /// returns the current typed item list
-        const css::uno::Sequence< css::uno::Any >&
+        const css::uno::Sequence< cpo::uno::Any >&
                     getTypedItemList() const { return m_aTypedItems; }
 
         /// determines whether we actually have an external list source
@@ -94,9 +94,9 @@ namespace frm
             as convertFastPropertyValue.</p>
         */
         bool    convertNewListSourceProperty(
-                        css::uno::Any& _rConvertedValue,
-                        css::uno::Any& _rOldValue,
-                        const css::uno::Any& _rValue
+                        cpo::uno::Any& _rConvertedValue,
+                        cpo::uno::Any& _rOldValue,
+                        const cpo::uno::Any& _rValue
                     );
 
         /** helper for implementing setFastPropertyValueNoBroadcast
@@ -108,7 +108,7 @@ namespace frm
                 not to be called when we have an external list source
             @see hasExternalListSource
         */
-        void        setNewStringItemList( const css::uno::Any& _rValue, ControlModelLock& _rInstanceLock );
+        void        setNewStringItemList( const cpo::uno::Any& _rValue, ControlModelLock& _rInstanceLock );
 
         /** helper for implementing setFastPropertyValueNoBroadcast
 
@@ -119,7 +119,7 @@ namespace frm
                 not to be called when we have an external list source
             @see hasExternalListSource
         */
-        void        setNewTypedItemList( const css::uno::Any& _rValue, ControlModelLock& _rInstanceLock );
+        void        setNewTypedItemList( const cpo::uno::Any& _rValue, ControlModelLock& _rInstanceLock );
 
         /** announces that the list of entries has changed.
 

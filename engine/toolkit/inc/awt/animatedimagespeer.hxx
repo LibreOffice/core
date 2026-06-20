@@ -56,8 +56,8 @@ namespace toolkit
         virtual bool SAL_CALL isAnimationRunning(  ) override;
 
         // VclWindowPeer
-        virtual void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
-        virtual css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
+        virtual void SAL_CALL setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
+        virtual cpo::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
 
         // XContainerListener
         virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) override;

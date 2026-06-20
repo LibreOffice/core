@@ -36,9 +36,9 @@ EditDataObject::~EditDataObject()
 }
 
 // datatransfer::XTransferable
-uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& rFlavor )
+cpo::uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& rFlavor )
 {
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     SotClipboardFormatId nT = SotExchange::GetFormat( rFlavor );
     if ( nT == SotClipboardFormatId::STRING )

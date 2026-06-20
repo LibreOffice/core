@@ -36,6 +36,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
@@ -140,7 +141,7 @@ bool XMLPageExport::exportStyle(
 
         if ( xPropSetInfo->hasPropertyByName( u"Hidden"_ustr ) )
         {
-            uno::Any aValue = xPropSet->getPropertyValue( u"Hidden"_ustr );
+            cpo::uno::Any aValue = xPropSet->getPropertyValue( u"Hidden"_ustr );
             bool bHidden = false;
             if ((aValue >>= bHidden) && bHidden
                 && GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)

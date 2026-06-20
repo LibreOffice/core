@@ -131,22 +131,22 @@ StockChartTypeTemplate::StockChartTypeTemplate(
 {
     setFastPropertyValue_NoBroadcast(
         PROP_STOCKCHARTTYPE_TEMPLATE_OPEN,
-        uno::Any( ( eVariant == StockVariant::Open ||
+        cpo::uno::Any( ( eVariant == StockVariant::Open ||
                         eVariant == StockVariant::VolumeOpen )));
     setFastPropertyValue_NoBroadcast(
         PROP_STOCKCHARTTYPE_TEMPLATE_VOLUME,
-        uno::Any( ( eVariant == StockVariant::Volume ||
+        cpo::uno::Any( ( eVariant == StockVariant::Volume ||
                         eVariant == StockVariant::VolumeOpen )));
     setFastPropertyValue_NoBroadcast(
         PROP_STOCKCHARTTYPE_TEMPLATE_JAPANESE,
-        uno::Any( bJapaneseStyle ));
+        cpo::uno::Any( bJapaneseStyle ));
 }
 
 StockChartTypeTemplate::~StockChartTypeTemplate()
 {}
 
 // ____ OPropertySet ____
-void StockChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
+void StockChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = GetStaticStockChartTypeTemplateDefaults();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
@@ -199,12 +199,12 @@ void StockChartTypeTemplate::applyStyle2(
         if( bHasVolume && nChartTypeIndex != 0 )
             nNewAxisIndex = 1;
 
-        xSeries->setPropertyValue( u"AttachedAxisIndex"_ustr, uno::Any( nNewAxisIndex ) );
+        xSeries->setPropertyValue( u"AttachedAxisIndex"_ustr, cpo::uno::Any( nNewAxisIndex ) );
 
         if( bHasVolume && nChartTypeIndex==0 )
         {
             //switch lines off for volume bars
-            xSeries->setPropertyAlsoToAllAttributedDataPoints( u"BorderStyle"_ustr, uno::Any( drawing::LineStyle_NONE ) );
+            xSeries->setPropertyAlsoToAllAttributedDataPoints( u"BorderStyle"_ustr, cpo::uno::Any( drawing::LineStyle_NONE ) );
         }
         else
         {
@@ -212,7 +212,7 @@ void StockChartTypeTemplate::applyStyle2(
             drawing::LineStyle eStyle = drawing::LineStyle_NONE;
             xSeries->getPropertyValue( u"LineStyle"_ustr ) >>= eStyle;
             if( eStyle == drawing::LineStyle_NONE )
-                xSeries->setPropertyValue( u"LineStyle"_ustr, uno::Any( drawing::LineStyle_SOLID ));
+                xSeries->setPropertyValue( u"LineStyle"_ustr, cpo::uno::Any( drawing::LineStyle_SOLID ));
         }
 
     }
@@ -232,7 +232,7 @@ void StockChartTypeTemplate::resetStyles2(
             xDiagram->getDataSeries();
         for (auto const& series : aSeriesVec)
         {
-            series->setPropertyValue( u"AttachedAxisIndex"_ustr, uno::Any( sal_Int32(0) ) );
+            series->setPropertyValue( u"AttachedAxisIndex"_ustr, cpo::uno::Any( sal_Int32(0) ) );
         }
     }
 
@@ -304,9 +304,9 @@ void StockChartTypeTemplate::createChartTypes(
         rtl::Reference< ChartType > xCT = new CandleStickChartType();
         aChartTypeVec.push_back( xCT );
 
-        xCT->setPropertyValue( u"Japanese"_ustr, uno::Any( bJapaneseStyle ));
-        xCT->setPropertyValue( u"ShowFirst"_ustr, uno::Any( bShowFirst ));
-        xCT->setPropertyValue( u"ShowHighLow"_ustr, uno::Any( bShowHighLow ));
+        xCT->setPropertyValue( u"Japanese"_ustr, cpo::uno::Any( bJapaneseStyle ));
+        xCT->setPropertyValue( u"ShowFirst"_ustr, cpo::uno::Any( bShowFirst ));
+        xCT->setPropertyValue( u"ShowHighLow"_ustr, cpo::uno::Any( bShowHighLow ));
 
         if( aSeriesSeq.size() > nSeriesIndex &&
             !aSeriesSeq[ nSeriesIndex ].empty() )

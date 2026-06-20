@@ -111,6 +111,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::container;
 
@@ -718,7 +719,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
                 // TODO/MBA: testing
                 uno::Reference < beans::XPropertySet > xSet( rMedium.GetStorage(), uno::UNO_QUERY );
                 if ( xSet.is() )
-                    xSet->setPropertyValue(u"MediaType"_ustr, uno::Any( SotExchange::GetFormatMimeType( nSaveClipId ) ) );
+                    xSet->setPropertyValue(u"MediaType"_ustr, cpo::uno::Any( SotExchange::GetFormatMimeType( nSaveClipId ) ) );
             }
             catch (const uno::Exception&)
             {
@@ -1215,7 +1216,7 @@ void SwDocShell::LoadingFinished()
     auto const args{GetBaseModel()->getArgs2({u"YrsConnect"_ustr})};
 #endif
     // when loading, it is only available from SfxMedium, not SfxBaseModel
-    if (css::uno::Any any = GetMedium()->GetArgs().getValue(u"YrsConnect"_ustr); any.hasValue())
+    if (cpo::uno::Any any = GetMedium()->GetArgs().getValue(u"YrsConnect"_ustr); any.hasValue())
         m_xDoc->getIDocumentState().YrsInitConnector(any);
 #endif
 
@@ -1491,7 +1492,7 @@ void SwDocShell::RegisterAutomationDocumentEventsCaller(css::uno::Reference< ooo
     mxAutomationDocumentEventsCaller = xCaller;
 }
 
-void SwDocShell::CallAutomationDocumentEventSinks(const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments)
+void SwDocShell::CallAutomationDocumentEventSinks(const OUString& Method, css::uno::Sequence< cpo::uno::Any >& Arguments)
 {
     if (mxAutomationDocumentEventsCaller.is())
         mxAutomationDocumentEventsCaller->CallSinks(Method, Arguments);

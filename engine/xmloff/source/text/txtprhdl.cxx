@@ -23,7 +23,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/style/DropCapFormat.hpp>
 #include <com/sun/star/text/FontRelief.hpp>
@@ -62,6 +62,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
@@ -267,17 +268,17 @@ class XMLDropCapPropHdl_Impl : public XMLPropertyHandler
 {
 public:
     virtual bool equals(
-            const css::uno::Any& r1,
-            const css::uno::Any& r2 ) const override;
+            const cpo::uno::Any& r1,
+            const cpo::uno::Any& r2 ) const override;
 
     /// TabStops will be imported/exported as XML-Elements. So the Import/Export-work must be done at another place.
     virtual bool importXML(
             const OUString& rStrImpValue,
-            css::uno::Any& rValue,
+            cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
             OUString& rStrExpValue,
-            const css::uno::Any& rValue,
+            const cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
 
@@ -322,11 +323,11 @@ class XMLOpaquePropHdl_Impl : public XMLPropertyHandler
 public:
     virtual bool importXML(
             const OUString& rStrImpValue,
-            css::uno::Any& rValue,
+            cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
             OUString& rStrExpValue,
-            const css::uno::Any& rValue,
+            const cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
 
@@ -370,11 +371,11 @@ class XMLContourModePropHdl_Impl : public XMLPropertyHandler
 public:
     virtual bool importXML(
             const OUString& rStrImpValue,
-            css::uno::Any& rValue,
+            cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
             OUString& rStrExpValue,
-            const css::uno::Any& rValue,
+            const cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
 
@@ -418,11 +419,11 @@ class XMLParagraphOnlyPropHdl_Impl : public XMLPropertyHandler
 public:
     virtual bool importXML(
             const OUString& rStrImpValue,
-            css::uno::Any& rValue,
+            cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
             OUString& rStrExpValue,
-            const css::uno::Any& rValue,
+            const cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
 
@@ -480,11 +481,11 @@ class XMLWrapPropHdl_Impl : public XMLPropertyHandler
 public:
     virtual bool importXML(
             const OUString& rStrImpValue,
-            css::uno::Any& rValue,
+            cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
             OUString& rStrExpValue,
-            const css::uno::Any& rValue,
+            const cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
 
@@ -533,11 +534,11 @@ public:
 
     virtual bool importXML(
             const OUString& rStrImpValue,
-            css::uno::Any& rValue,
+            cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
             OUString& rStrExpValue,
-            const css::uno::Any& rValue,
+            const cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
 
@@ -750,11 +751,11 @@ class XMLHoriMirrorPropHdl_Impl : public XMLPropertyHandler
 public:
     virtual bool importXML(
             const OUString& rStrImpValue,
-            css::uno::Any& rValue,
+            cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
             OUString& rStrExpValue,
-            const css::uno::Any& rValue,
+            const cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
 
@@ -801,11 +802,11 @@ public:
 
     virtual bool importXML(
             const OUString& rStrImpValue,
-            css::uno::Any& rValue,
+            cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
             OUString& rStrExpValue,
-            const css::uno::Any& rValue,
+            const cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
 
@@ -895,11 +896,11 @@ public:
 
     virtual bool importXML(
             const OUString& rStrImpValue,
-            css::uno::Any& rValue,
+            cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
             OUString& rStrExpValue,
-            const css::uno::Any& rValue,
+            const cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
 
@@ -994,11 +995,11 @@ public:
 
     virtual bool importXML(
             const OUString& rStrImpValue,
-            css::uno::Any& rValue,
+            cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
             OUString& rStrExpValue,
-            const css::uno::Any& rValue,
+            const cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
 
@@ -1037,11 +1038,11 @@ public:
 
     virtual bool importXML(
             const OUString& rStrImpValue,
-            css::uno::Any& rValue,
+            cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
             OUString& rStrExpValue,
-            const css::uno::Any& rValue,
+            const cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
 
@@ -1091,11 +1092,11 @@ public:
 
     virtual bool importXML(
             const OUString& rStrImpValue,
-            css::uno::Any& rValue,
+            cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
             OUString& rStrExpValue,
-            const css::uno::Any& rValue,
+            const cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
 
@@ -1136,11 +1137,11 @@ public:
 
     virtual bool importXML(
             const OUString& rStrImpValue,
-            css::uno::Any& rValue,
+            cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
             OUString& rStrExpValue,
-            const css::uno::Any& rValue,
+            const cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
 
@@ -1197,11 +1198,11 @@ public:
 
     virtual bool importXML(
             const OUString& rStrImpValue,
-            css::uno::Any& rValue,
+            cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
             OUString& rStrExpValue,
-            const css::uno::Any& rValue,
+            const cpo::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
 };
 
@@ -1240,19 +1241,19 @@ class XMLGraphicPropertyHandler : public XMLPropertyHandler
 public:
     XMLGraphicPropertyHandler() {}
 
-    virtual bool importXML(const OUString& , uno::Any& , const SvXMLUnitConverter& ) const override
+    virtual bool importXML(const OUString& , cpo::uno::Any& , const SvXMLUnitConverter& ) const override
     {
         SAL_WARN( "xmloff", "drop caps are an element import property" );
         return false;
     }
 
-    virtual bool exportXML(OUString& , const uno::Any& , const SvXMLUnitConverter& ) const override
+    virtual bool exportXML(OUString& , const cpo::uno::Any& , const SvXMLUnitConverter& ) const override
     {
         SAL_WARN( "xmloff", "drop caps are an element import property" );
         return false;
     }
 
-    virtual bool equals(const css::uno::Any& rAny1, const css::uno::Any& rAny2) const override;
+    virtual bool equals(const cpo::uno::Any& rAny1, const cpo::uno::Any& rAny2) const override;
 };
 
 }

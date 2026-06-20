@@ -91,11 +91,11 @@ uno::Reference< embed::XStorage > lcl_getWriteStorage(
                 }
             }
 
-            Sequence< uno::Any > aStorageArgs{
-                aMDHelper.ISSET_OutputStream ? uno::Any(aMDHelper.OutputStream)
-                                             : uno::Any(aMDHelper.URL),
-                uno::Any(embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE),
-                uno::Any(comphelper::containerToSequence( aPropertiesForStorage ))
+            Sequence< cpo::uno::Any > aStorageArgs{
+                aMDHelper.ISSET_OutputStream ? cpo::uno::Any(aMDHelper.OutputStream)
+                                             : cpo::uno::Any(aMDHelper.URL),
+                cpo::uno::Any(embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE),
+                cpo::uno::Any(comphelper::containerToSequence( aPropertiesForStorage ))
             };
 
             xStorage.set(
@@ -110,7 +110,7 @@ uno::Reference< embed::XStorage > lcl_getWriteStorage(
              ! ( xProp->getPropertyValue( u"MediaType"_ustr) >>= aMediaType ) ||
              ( aMediaType.isEmpty() ))
         {
-            xProp->setPropertyValue( u"MediaType"_ustr, uno::Any( _sMediaType ));
+            xProp->setPropertyValue( u"MediaType"_ustr, cpo::uno::Any( _sMediaType ));
         }
     }
     catch (const uno::Exception&)
@@ -156,10 +156,10 @@ uno::Reference< embed::XStorage > lcl_getReadStorage(
 
             // convert XInputStream to XStorage via the storage factory
             Reference< lang::XSingleServiceFactory > xStorageFact( embed::StorageFactory::create( xContext ) );
-            Sequence< uno::Any > aStorageArgs{
-                uno::Any(xStream),
-                uno::Any(embed::ElementModes::READ | embed::ElementModes::NOCREATE),
-                uno::Any(comphelper::containerToSequence( aPropertiesForStorage ))
+            Sequence< cpo::uno::Any > aStorageArgs{
+                cpo::uno::Any(xStream),
+                cpo::uno::Any(embed::ElementModes::READ | embed::ElementModes::NOCREATE),
+                cpo::uno::Any(comphelper::containerToSequence( aPropertiesForStorage ))
             };
             xStorage.set(
                 xStorageFact->createInstanceWithArguments( aStorageArgs ), uno::UNO_QUERY_THROW );
@@ -283,7 +283,7 @@ ErrCode XMLFilter::impl_Import(
         uno::Reference<lang::XMultiServiceFactory> xServiceFactory(xFactory, uno::UNO_QUERY);
         if (xServiceFactory.is())
         {
-            uno::Sequence<uno::Any> aArgs{ uno::Any(xStorage) };
+            uno::Sequence<cpo::uno::Any> aArgs{ cpo::uno::Any(xStorage) };
             xGraphicStorageHandler.set(
                 xServiceFactory->createInstanceWithArguments(
                     u"com.sun.star.comp.Svx.GraphicImportHelper"_ustr, aArgs), uno::UNO_QUERY);
@@ -331,10 +331,10 @@ ErrCode XMLFilter::impl_Import(
         // needed for relative URLs, but in clipboard copy/paste there may be none
         SAL_INFO_IF(aBaseUri.isEmpty(), "chart2", "chart::XMLFilter: no base URL");
         if( !aBaseUri.isEmpty() )
-            xImportInfo->setPropertyValue( u"BaseURI"_ustr, uno::Any( aBaseUri ) );
+            xImportInfo->setPropertyValue( u"BaseURI"_ustr, cpo::uno::Any( aBaseUri ) );
 
         if( !aHierarchName.isEmpty() )
-            xImportInfo->setPropertyValue( u"StreamRelPath"_ustr, uno::Any( aHierarchName ) );
+            xImportInfo->setPropertyValue( u"StreamRelPath"_ustr, cpo::uno::Any( aHierarchName ) );
 
         // import meta information
         if( bOasis )
@@ -387,7 +387,7 @@ ErrCode XMLFilter::impl_ImportStream(
         return ERRCODE_NONE;
 
     if( xImportInfo.is() )
-        xImportInfo->setPropertyValue( u"StreamName"_ustr, uno::Any( rStreamName ) );
+        xImportInfo->setPropertyValue( u"StreamName"_ustr, cpo::uno::Any( rStreamName ) );
 
     if( xStorage.is() &&
         xStorage->isStreamElement( rStreamName ) )
@@ -409,7 +409,7 @@ ErrCode XMLFilter::impl_ImportStream(
                 if( xImportInfo.is())
                     nArgs++;
 
-                uno::Sequence< uno::Any > aFilterCompArgs( nArgs );
+                uno::Sequence< cpo::uno::Any > aFilterCompArgs( nArgs );
                 auto aFilterCompArgsRange = asNonConstRange(aFilterCompArgs);
 
                 nArgs = 0;
@@ -430,9 +430,9 @@ ErrCode XMLFilter::impl_ImportStream(
                 {
                     try
                     {
-                        uno::Sequence< uno::Any > aArgs{
-                            uno::Any(beans::NamedValue(u"DocumentHandler"_ustr, uno::Any(xFilter))),
-                            uno::Any(beans::NamedValue(u"Model"_ustr, uno::Any(m_xTargetDoc)))
+                        uno::Sequence< cpo::uno::Any > aArgs{
+                            cpo::uno::Any(beans::NamedValue(u"DocumentHandler"_ustr, cpo::uno::Any(xFilter))),
+                            cpo::uno::Any(beans::NamedValue(u"Model"_ustr, cpo::uno::Any(m_xTargetDoc)))
                         };
 
                         xFilter = xFactory->createInstanceWithArgumentsAndContext(m_sDocumentHandler,aArgs,m_xContext);
@@ -533,9 +533,9 @@ ErrCode XMLFilter::impl_Export(
         {
             try
             {
-                uno::Sequence< uno::Any > aArgs{
-                    uno::Any(beans::NamedValue(u"DocumentHandler"_ustr, uno::Any(xDocHandler))),
-                    uno::Any(beans::NamedValue(u"Model"_ustr, uno::Any(xDocumentComp)))
+                uno::Sequence< cpo::uno::Any > aArgs{
+                    cpo::uno::Any(beans::NamedValue(u"DocumentHandler"_ustr, cpo::uno::Any(xDocHandler))),
+                    cpo::uno::Any(beans::NamedValue(u"Model"_ustr, cpo::uno::Any(xDocumentComp)))
                 };
 
                 xDocHandler.set(xServiceFactory->createInstanceWithArguments(m_sDocumentHandler,aArgs), uno::UNO_QUERY );
@@ -564,15 +564,15 @@ ErrCode XMLFilter::impl_Export(
             comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) );
 
         bool bUsePrettyPrinting( officecfg::Office::Common::Save::Document::PrettyPrinting::get() );
-        xInfoSet->setPropertyValue( u"UsePrettyPrinting"_ustr, uno::Any( bUsePrettyPrinting ) );
+        xInfoSet->setPropertyValue( u"UsePrettyPrinting"_ustr, cpo::uno::Any( bUsePrettyPrinting ) );
         if( ! bOasis )
-            xInfoSet->setPropertyValue( u"ExportTableNumberList"_ustr, uno::Any( true ));
+            xInfoSet->setPropertyValue( u"ExportTableNumberList"_ustr, cpo::uno::Any( true ));
 
         sal_Int32 nArgs = 2;
         if( xGraphicStorageHandler.is())
             nArgs++;
 
-        uno::Sequence< uno::Any > aFilterProperties( nArgs );
+        uno::Sequence< cpo::uno::Any > aFilterProperties( nArgs );
         {
             auto pFilterProperties = aFilterProperties.getArray();
             nArgs = 0;
@@ -632,7 +632,7 @@ ErrCode XMLFilter::impl_ExportStream(
     const Reference< embed::XStorage > & xStorage,
     const uno::Reference< xml::sax::XWriter >& xActiveDataSource,
     const Reference< lang::XMultiServiceFactory >& xServiceFactory,
-    const Sequence< uno::Any > & rFilterProperties )
+    const Sequence< cpo::uno::Any > & rFilterProperties )
 {
     try
     {
@@ -654,9 +654,9 @@ ErrCode XMLFilter::impl_ExportStream(
         uno::Reference< beans::XPropertySet > xStreamProp( xOutputStream, uno::UNO_QUERY );
         if(xStreamProp.is()) try
         {
-            xStreamProp->setPropertyValue( u"MediaType"_ustr, uno::Any( u"text/xml"_ustr ) );
-            xStreamProp->setPropertyValue( u"Compressed"_ustr, uno::Any( true ) );//@todo?
-            xStreamProp->setPropertyValue( u"UseCommonStoragePasswordEncryption"_ustr, uno::Any( true ) );
+            xStreamProp->setPropertyValue( u"MediaType"_ustr, cpo::uno::Any( u"text/xml"_ustr ) );
+            xStreamProp->setPropertyValue( u"Compressed"_ustr, cpo::uno::Any( true ) );//@todo?
+            xStreamProp->setPropertyValue( u"UseCommonStoragePasswordEncryption"_ustr, cpo::uno::Any( true ) );
         }
         catch (const uno::Exception&)
         {
@@ -672,7 +672,7 @@ ErrCode XMLFilter::impl_ExportStream(
                 rFilterProperties[0] >>= xInfoSet;
             OSL_ENSURE( xInfoSet.is(), "missing infoset for export" );
             if( xInfoSet.is() )
-                xInfoSet->setPropertyValue( u"StreamName"_ustr, uno::Any( rStreamName ) );
+                xInfoSet->setPropertyValue( u"StreamName"_ustr, cpo::uno::Any( rStreamName ) );
         }
 
         Reference< XExporter > xExporter( xServiceFactory->createInstanceWithArguments(
@@ -741,14 +741,14 @@ OUString XMLReportFilterHelper::getMediaType(bool )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_XMLFilter_get_implementation(css::uno::XComponentContext *context,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::XMLFilter(context));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_report_XMLFilter_get_implementation(css::uno::XComponentContext *context,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::XMLReportFilterHelper(context));
 }

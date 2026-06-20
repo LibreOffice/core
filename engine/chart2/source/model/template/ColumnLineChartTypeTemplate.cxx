@@ -103,14 +103,14 @@ ColumnLineChartTypeTemplate::ColumnLineChartTypeTemplate(
         ChartTypeTemplate( xContext, rServiceName ),
         m_eStackMode( eStackMode )
 {
-    setFastPropertyValue_NoBroadcast( PROP_COL_LINE_NUMBER_OF_LINES, uno::Any( nNumberOfLines ));
+    setFastPropertyValue_NoBroadcast( PROP_COL_LINE_NUMBER_OF_LINES, cpo::uno::Any( nNumberOfLines ));
 }
 
 ColumnLineChartTypeTemplate::~ColumnLineChartTypeTemplate()
 {}
 
 // ____ OPropertySet ____
-void ColumnLineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
+void ColumnLineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const
 {
     const tPropertyValueMap& rStaticDefaults = StaticColumnLineChartTypeTemplateDefaults();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
@@ -211,7 +211,7 @@ void ColumnLineChartTypeTemplate::applyStyle2(
 
     if( nChartTypeIndex==0 ) // columns
     {
-        xSeries->setPropertyAlsoToAllAttributedDataPoints( u"BorderStyle"_ustr, uno::Any( drawing::LineStyle_NONE ) );
+        xSeries->setPropertyAlsoToAllAttributedDataPoints( u"BorderStyle"_ustr, cpo::uno::Any( drawing::LineStyle_NONE ) );
     }
     else if( nChartTypeIndex==1 ) // lines
     {
@@ -288,7 +288,7 @@ bool ColumnLineChartTypeTemplate::matchesTemplate2(
                     if( xLineChartType.is() )
                     {
                         sal_Int32 nNumberOfLines = xLineChartType->getDataSeries().getLength();
-                        setFastPropertyValue_NoBroadcast( PROP_COL_LINE_NUMBER_OF_LINES, uno::Any( nNumberOfLines ));
+                        setFastPropertyValue_NoBroadcast( PROP_COL_LINE_NUMBER_OF_LINES, cpo::uno::Any( nNumberOfLines ));
                     }
                 }
             }

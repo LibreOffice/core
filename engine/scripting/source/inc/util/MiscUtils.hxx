@@ -96,7 +96,7 @@ static OUString xModelToTdocUrl( const css::uno::Reference< css::frame::XModel >
 
 static css::uno::Reference< css::frame::XModel > tDocUrlToModel( const OUString& url )
 {
-    css::uno::Any result;
+    cpo::uno::Any result;
 
     try
     {
@@ -119,9 +119,9 @@ static css::uno::Reference< css::frame::XModel > tDocUrlToModel( const OUString&
 }
 
 
-static css::uno::Any getUCBProperty( ::ucbhelper::Content& content, OUString const & prop )
+static cpo::uno::Any getUCBProperty( ::ucbhelper::Content& content, OUString const & prop )
 {
-    css::uno::Any result;
+    cpo::uno::Any result;
     try
     {
         result = content.getPropertyValue( prop );

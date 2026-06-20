@@ -13,21 +13,21 @@
 #include <basegfx/utils/bgradient.hxx>
 #include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/awt/ColorStopSequence.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 namespace model::gradient
 {
 DOCMODEL_DLLPUBLIC css::awt::Gradient2 createUnoGradient2(basegfx::BGradient const& rGradient);
 
 DOCMODEL_DLLPUBLIC basegfx::BGradient getFromUnoGradient2(css::awt::Gradient2 const& rGradient2);
-DOCMODEL_DLLPUBLIC basegfx::BGradient getFromAny(css::uno::Any const& rAny);
+DOCMODEL_DLLPUBLIC basegfx::BGradient getFromAny(cpo::uno::Any const& rAny);
 
 DOCMODEL_DLLPUBLIC css::awt::ColorStopSequence
 createColorStopSequence(basegfx::BColorStops const& rColorStops);
 
 DOCMODEL_DLLPUBLIC basegfx::BColorStops
 getColorStopsFromUno(css::awt::ColorStopSequence const& rColorStopSequence);
-DOCMODEL_DLLPUBLIC basegfx::BColorStops getColorStopsFromAny(css::uno::Any const& rAny);
+DOCMODEL_DLLPUBLIC basegfx::BColorStops getColorStopsFromAny(cpo::uno::Any const& rAny);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

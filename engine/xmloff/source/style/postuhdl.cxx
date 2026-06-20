@@ -22,7 +22,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlement.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <tools/fontenum.hxx>
 #include <vcl/unohelp.hxx>
@@ -46,7 +46,7 @@ XMLPosturePropHdl::~XMLPosturePropHdl()
     // nothing to do
 }
 
-bool XMLPosturePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLPosturePropHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     FontItalic ePosture;
     bool bRet = SvXMLUnitConverter::convertEnum( ePosture, rStrImpValue, aPostureGenericMapping );
@@ -56,7 +56,7 @@ bool XMLPosturePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValu
     return bRet;
 }
 
-bool XMLPosturePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLPosturePropHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     awt::FontSlant eSlant;
 

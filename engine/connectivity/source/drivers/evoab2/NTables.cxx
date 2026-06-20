@@ -29,6 +29,7 @@ using namespace ::cppu;
 using namespace connectivity::evoab;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::sdbc;
 
 css::uno::Reference< css::beans::XPropertySet > OEvoabTables::createObject(const OUString& aName)

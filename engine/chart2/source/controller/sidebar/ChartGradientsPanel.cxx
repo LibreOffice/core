@@ -40,14 +40,14 @@ OUString getCID(const uno::Reference<frame::XModel>& xModel)
     if (!xSelectionSupplier.is())
         return {};
 
-    uno::Any aAny = xSelectionSupplier->getSelection();
+    cpo::uno::Any aAny = xSelectionSupplier->getSelection();
     if (!aAny.hasValue())
     {
         // if no selection, default to diagram wall so sidebar can show some editable properties
         if (auto* pController = dynamic_cast<ChartController*>(xController.get()))
         {
             pController->select(
-                uno::Any(ObjectIdentifier::createClassifiedIdentifier(OBJECTTYPE_PAGE, u"")));
+                cpo::uno::Any(ObjectIdentifier::createClassifiedIdentifier(OBJECTTYPE_PAGE, u"")));
             xSelectionSupplier
                 = uno::Reference<css::view::XSelectionSupplier>(xController, uno::UNO_QUERY);
             if (xSelectionSupplier.is())

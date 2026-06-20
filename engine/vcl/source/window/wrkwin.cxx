@@ -67,7 +67,7 @@ void WorkWindow::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentDat
     SetActivateMode( ActivateModeFlags::GrabFocus );
 }
 
-void WorkWindow::ImplInit( vcl::Window* pParent, WinBits nStyle, const css::uno::Any& aSystemWorkWindowToken )
+void WorkWindow::ImplInit( vcl::Window* pParent, WinBits nStyle, const cpo::uno::Any& aSystemWorkWindowToken )
 {
     if( aSystemWorkWindowToken.hasValue() )
     {
@@ -95,7 +95,7 @@ WorkWindow::WorkWindow( vcl::Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-WorkWindow::WorkWindow( vcl::Window* pParent, const css::uno::Any& aSystemWorkWindowToken, WinBits nStyle ) :
+WorkWindow::WorkWindow( vcl::Window* pParent, const cpo::uno::Any& aSystemWorkWindowToken, WinBits nStyle ) :
     SystemWindow( WindowType::WORKWINDOW, "vcl::WorkWindow maLayoutIdle" )
 {
     ImplInitWorkWindowData();

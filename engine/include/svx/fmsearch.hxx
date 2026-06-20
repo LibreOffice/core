@@ -41,7 +41,7 @@ SVXCORE_DLLPUBLIC bool IsSearchableControl( const css::uno::Reference< css::uno:
 
 struct FmFoundRecordInformation
 {
-    css::uno::Any      aPosition;  // bookmark of the record in which the text was found
+    cpo::uno::Any      aPosition;  // bookmark of the record in which the text was found
     sal_Int16       nFieldPos;  // ditto: the relative position of the column (in the string name of the field list in the constructor)
     sal_Int16       nContext;   // the context in which was searched and found (if the current search knows several contexts)
 };

@@ -38,7 +38,7 @@ TagWindowAsModified::~TagWindowAsModified()
 {
 }
 
-void SAL_CALL TagWindowAsModified::initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
+void SAL_CALL TagWindowAsModified::initialize(const css::uno::Sequence< cpo::uno::Any >& lArguments)
 {
     css::uno::Reference< css::frame::XFrame > xFrame;
 

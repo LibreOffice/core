@@ -88,9 +88,9 @@ public:
 
     // XFilePickerControlAccess functions
 
-    virtual void SAL_CALL setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const css::uno::Any& aValue ) override;
+    virtual void SAL_CALL setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const cpo::uno::Any& aValue ) override;
 
-    virtual css::uno::Any SAL_CALL getValue( sal_Int16 aControlId, sal_Int16 aControlAction ) override;
+    virtual cpo::uno::Any SAL_CALL getValue( sal_Int16 aControlId, sal_Int16 aControlAction ) override;
 
     virtual void SAL_CALL enableControl( sal_Int16 nControlId, bool bEnable ) override;
 
@@ -100,7 +100,7 @@ public:
 
     // XInitialization
 
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XCancellable
 

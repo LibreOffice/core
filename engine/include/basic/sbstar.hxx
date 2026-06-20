@@ -139,7 +139,7 @@ public:
     const SbxObjectRef& getRTL() const { return pRtl; }
     bool IsDocBasic() const { return bDocBasic; }
     SbxVariable* VBAFind( const OUString& rName, SbxClassType t );
-    bool GetUNOConstant( const OUString& rName, css::uno::Any& aOut );
+    bool GetUNOConstant( const OUString& rName, cpo::uno::Any& aOut );
     void QuitAndExitApplication();
     bool IsQuitApplication() const { return bQuit; };
 

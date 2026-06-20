@@ -43,9 +43,9 @@ public:
     virtual SfxRectangleItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     const tools::Rectangle&         GetValue() const { return maVal; }
-    virtual bool             QueryValue( css::uno::Any& rVal,
+    virtual bool             QueryValue( cpo::uno::Any& rVal,
                                           sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool             PutValue( const css::uno::Any& rVal,
+    virtual bool             PutValue( const cpo::uno::Any& rVal,
                                           sal_uInt8 nMemberId ) override;
 };
 

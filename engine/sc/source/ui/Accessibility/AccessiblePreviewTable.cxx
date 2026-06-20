@@ -90,7 +90,7 @@ void ScAccessiblePreviewTable::Notify( SfxBroadcaster& rBC, const SfxHint& rHint
     }
     else if (nId == SfxHintId::ScAccVisAreaChanged)
     {
-        CommitChange(AccessibleEventId::VISIBLE_DATA_CHANGED, uno::Any(), uno::Any());
+        CommitChange(AccessibleEventId::VISIBLE_DATA_CHANGED, cpo::uno::Any(), cpo::uno::Any());
     }
 
     ScAccessibleContextBase::Notify(rBC, rHint);

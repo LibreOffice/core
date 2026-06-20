@@ -55,7 +55,7 @@ class ClassificationPropertyListener : public ClassificationPropertyListenerBase
 
 public:
     ClassificationPropertyListener(const rtl::Reference<comphelper::ConfigurationListener>& xListener, ClassificationCategoriesController& rController);
-    void setProperty(const uno::Any& rProperty) override;
+    void setProperty(const cpo::uno::Any& rProperty) override;
 };
 
 }
@@ -138,7 +138,7 @@ ClassificationPropertyListener::ClassificationPropertyListener(const rtl::Refere
 {
 }
 
-void ClassificationPropertyListener::setProperty(const uno::Any& /*rProperty*/)
+void ClassificationPropertyListener::setProperty(const cpo::uno::Any& /*rProperty*/)
 {
     // So that its gets re-filled with entries from the new policy.
     m_rController.removeEntries();
@@ -211,8 +211,8 @@ IMPL_LINK(ClassificationCategoriesController, SelectHdl, weld::ComboBox&, rCateg
 
         const OUString& aType = getCategoryType();
         uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
-            {"Name", uno::Any(aEntry)},
-            {"Type", uno::Any(aType)},
+            {"Name", cpo::uno::Any(aEntry)},
+            {"Type", cpo::uno::Any(aType)},
         }));
         comphelper::dispatchCommand(u".uno:ClassificationApply"_ustr, aPropertyValues);
     }
@@ -359,7 +359,7 @@ void ClassificationControl::setCategoryStateFromPolicy(const SfxClassificationHe
 
 } // namespace sfx2
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface* com_sun_star_sfx2_ClassificationCategoriesController_get_implementation(uno::XComponentContext* pContext, const uno::Sequence<uno::Any>&)
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface* com_sun_star_sfx2_ClassificationCategoriesController_get_implementation(uno::XComponentContext* pContext, const uno::Sequence<cpo::uno::Any>&)
 {
     return cppu::acquire(new sfx2::ClassificationCategoriesController(pContext));
 }

@@ -59,7 +59,7 @@ namespace slideshow::internal
             indefinite, i.e. either contains no value, or the
             value Timing_INDEFINITE.
         */
-        bool isIndefiniteTiming( const css::uno::Any& rAny );
+        bool isIndefiniteTiming( const cpo::uno::Any& rAny );
 
 }
 

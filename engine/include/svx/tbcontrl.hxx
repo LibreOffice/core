@@ -165,7 +165,7 @@ public:
     virtual css::uno::Reference<css::awt::XWindow> SAL_CALL createItemWindow(const css::uno::Reference<css::awt::XWindow>& rParent) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& aArguments) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& aArguments) override;
 
     // XUpdatable
     virtual void SAL_CALL update() override;
@@ -217,7 +217,7 @@ public:
     virtual ~SvxColorToolBoxControl() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence<css::uno::Any>& rArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence<cpo::uno::Any>& rArguments ) override;
 
     // XUpdatable
     virtual void SAL_CALL update() override;
@@ -280,7 +280,7 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     /** XInitialization **/
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& rArguments ) override;
 };
 
 #endif // INCLUDED_SVX_TBCONTRL_HXX

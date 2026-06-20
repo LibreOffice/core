@@ -59,6 +59,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::task;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace
 {
@@ -90,8 +91,8 @@ public:
         uno::Reference<task::XInteractionRequest > const & xRequest ) override;
 
     // XProgressHandler
-    virtual void SAL_CALL push( uno::Any const & Status ) override;
-    virtual void SAL_CALL update( uno::Any const & Status ) override;
+    virtual void SAL_CALL push( cpo::uno::Any const & Status ) override;
+    virtual void SAL_CALL update( cpo::uno::Any const & Status ) override;
     virtual void SAL_CALL pop() override;
 };
 
@@ -156,7 +157,7 @@ void SilentCommandEnv::handle( Reference< task::XInteractionRequest> const & xRe
 
 
 // XProgressHandler
-void SilentCommandEnv::push( uno::Any const & rStatus )
+void SilentCommandEnv::push( cpo::uno::Any const & rStatus )
 {
     OUString sText;
     mnLevel += 1;
@@ -171,7 +172,7 @@ void SilentCommandEnv::push( uno::Any const & rStatus )
 }
 
 
-void SilentCommandEnv::update( uno::Any const & rStatus )
+void SilentCommandEnv::update( cpo::uno::Any const & rStatus )
 {
     OUString sText;
     if (mpDesktop && rStatus.hasValue() && (rStatus >>= sText))
@@ -213,7 +214,7 @@ static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext
     catch ( const ucb::CommandFailedException & ) { return true; }
     catch ( const ucb::CommandAbortedException & ) { return true; }
     catch ( const lang::IllegalArgumentException & e ) {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException( e.Message,
                         e.Context, anyEx );
     }

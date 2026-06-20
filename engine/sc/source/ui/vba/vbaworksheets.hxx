@@ -46,17 +46,17 @@ public:
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // XWorksheets
-    virtual css::uno::Any SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( const css::uno::Any& _visible ) override;
-    virtual css::uno::Any SAL_CALL Add( const css::uno::Any& Before, const css::uno::Any& After, const css::uno::Any& Count, const css::uno::Any& Type ) override;
+    virtual cpo::uno::Any SAL_CALL getVisible() override;
+    virtual void SAL_CALL setVisible( const cpo::uno::Any& _visible ) override;
+    virtual cpo::uno::Any SAL_CALL Add( const cpo::uno::Any& Before, const cpo::uno::Any& After, const cpo::uno::Any& Count, const cpo::uno::Any& Type ) override;
     virtual void SAL_CALL Delete(  ) override;
-    virtual void SAL_CALL PrintOut( const css::uno::Any& From, const css::uno::Any& To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName ) override;
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
-    virtual void SAL_CALL Select( const css::uno::Any& Replace ) override;
-    virtual void SAL_CALL Copy ( const css::uno::Any& Before, const css::uno::Any& After) override;
-    virtual void SAL_CALL PrintPreview( const css::uno::Any& EnableChanges ) override;
+    virtual void SAL_CALL PrintOut( const cpo::uno::Any& From, const cpo::uno::Any& To, const cpo::uno::Any& Copies, const cpo::uno::Any& Preview, const cpo::uno::Any& ActivePrinter, const cpo::uno::Any& PrintToFile, const cpo::uno::Any& Collate, const cpo::uno::Any& PrToFileName ) override;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
+    virtual void SAL_CALL Select( const cpo::uno::Any& Replace ) override;
+    virtual void SAL_CALL Copy ( const cpo::uno::Any& Before, const cpo::uno::Any& After) override;
+    virtual void SAL_CALL PrintPreview( const cpo::uno::Any& EnableChanges ) override;
     // ScVbaWorksheets_BASE
-    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index1, const css::uno::Any& Index2 ) override;
+    virtual cpo::uno::Any SAL_CALL Item( const cpo::uno::Any& Index1, const cpo::uno::Any& Index2 ) override;
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 

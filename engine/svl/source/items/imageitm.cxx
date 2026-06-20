@@ -52,19 +52,19 @@ bool SfxImageItem::operator==( const SfxPoolItem& rItem ) const
     return mnAngle == rOther.mnAngle && mbMirrored == rOther.mbMirrored;
 }
 
-bool SfxImageItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
+bool SfxImageItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 ) const
 {
-    css::uno::Sequence< css::uno::Any > aSeq{ css::uno::Any(GetValue()),
-                                              css::uno::Any(sal_Int16(mnAngle)),
-                                              css::uno::Any(mbMirrored),
-                                              css::uno::Any(maURL) };
+    css::uno::Sequence< cpo::uno::Any > aSeq{ cpo::uno::Any(GetValue()),
+                                              cpo::uno::Any(sal_Int16(mnAngle)),
+                                              cpo::uno::Any(mbMirrored),
+                                              cpo::uno::Any(maURL) };
     rVal <<= aSeq;
     return true;
 }
 
-bool SfxImageItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
+bool SfxImageItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 )
 {
-    css::uno::Sequence< css::uno::Any > aSeq;
+    css::uno::Sequence< cpo::uno::Any > aSeq;
     if (( rVal >>= aSeq ) && ( aSeq.getLength() == 4 ))
     {
         sal_Int16     nVal = sal_Int16();

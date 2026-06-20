@@ -67,14 +67,14 @@ public:
     );
     virtual ~OImageControlModel() override;
 
-    virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle ) const override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const css::uno::Any& rValue) override;
+    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
 
-    virtual bool SAL_CALL convertFastPropertyValue(css::uno::Any& rConvertedValue, css::uno::Any& rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+    virtual bool SAL_CALL convertFastPropertyValue(cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
 
     // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(OImageControlModel, OBoundControlModel)
-    virtual css::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override
@@ -111,11 +111,11 @@ private:
     // OBoundControlModel overridables
     virtual void            onConnectedDbColumn( const css::uno::Reference< css::uno::XInterface >& _rxForm ) override;
     virtual void            onDisconnectedDbColumn() override;
-    virtual css::uno::Any   translateDbColumnToControlValue( ) override;
+    virtual cpo::uno::Any   translateDbColumnToControlValue( ) override;
     virtual bool            commitControlValueToDbColumn( bool _bPostReset ) override;
 
-    virtual css::uno::Any   getControlValue( ) const override;
-    virtual void            doSetControlValue( const css::uno::Any& _rValue ) override;
+    virtual cpo::uno::Any   getControlValue( ) const override;
+    virtual void            doSetControlValue( const cpo::uno::Any& _rValue ) override;
 
     virtual bool            approveDbColumnType(sal_Int32 _nColumnType) override;
 
@@ -156,7 +156,7 @@ public:
 
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS( OImageControlControl, OBoundControl )
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
 
     // XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource) override;

@@ -26,7 +26,7 @@
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
@@ -92,13 +92,13 @@ namespace pcr
         virtual css::uno::Sequence< css::beans::Property > SAL_CALL getSupportedProperties() override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupersededProperties( ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getActuatingProperties( ) override;
-        virtual css::uno::Any SAL_CALL convertToPropertyValue( const OUString& _rPropertyName, const css::uno::Any& _rControlValue ) override;
-        virtual css::uno::Any SAL_CALL convertToControlValue( const OUString& _rPropertyName, const css::uno::Any& _rPropertyValue, const css::uno::Type& _rControlValueType ) override;
+        virtual cpo::uno::Any SAL_CALL convertToPropertyValue( const OUString& _rPropertyName, const cpo::uno::Any& _rControlValue ) override;
+        virtual cpo::uno::Any SAL_CALL convertToControlValue( const OUString& _rPropertyName, const cpo::uno::Any& _rPropertyValue, const css::uno::Type& _rControlValueType ) override;
         virtual css::beans::PropertyState  SAL_CALL getPropertyState( const OUString& _rPropertyName ) override;
         virtual css::inspection::LineDescriptor SAL_CALL describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;
         virtual bool SAL_CALL isComposable( const OUString& _rPropertyName ) override;
-        virtual css::inspection::InteractiveSelectionResult SAL_CALL onInteractivePropertySelection( const OUString& _rPropertyName, bool _bPrimary, css::uno::Any& _rData, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) override;
-        virtual void SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const css::uno::Any& _rNewValue, const css::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit ) override;
+        virtual css::inspection::InteractiveSelectionResult SAL_CALL onInteractivePropertySelection( const OUString& _rPropertyName, bool _bPrimary, cpo::uno::Any& _rData, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) override;
+        virtual void SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const cpo::uno::Any& _rNewValue, const cpo::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit ) override;
         virtual void SAL_CALL addPropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
         virtual void SAL_CALL removePropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
         virtual bool SAL_CALL suspend( bool _bSuspend ) override;
@@ -119,7 +119,7 @@ namespace pcr
             @see addPropertyChangeListener
         */
         void    firePropertyChange( const OUString& _rPropName, PropertyId _nPropId,
-                    const css::uno::Any& _rOldValue, const css::uno::Any& _rNewValue );
+                    const cpo::uno::Any& _rOldValue, const cpo::uno::Any& _rNewValue );
 
         /** retrieves a window which can be used as parent for dialogs
         */

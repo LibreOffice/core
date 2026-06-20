@@ -64,6 +64,7 @@ using ::com::sun::star::uno::Sequence;
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::beans;
 
@@ -542,7 +543,7 @@ AdditionsDialog::getInstalledExtensions()
     }
     catch (const lang::IllegalArgumentException& e)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(e.Message, e.Context, anyEx);
     }
     return xAllPackages;
@@ -842,9 +843,9 @@ void TmpRepositoryCommandEnv::handle(uno::Reference<task::XInteractionRequest> c
 }
 
 // XProgressHandler
-void TmpRepositoryCommandEnv::push(uno::Any const& /*Status*/) {}
+void TmpRepositoryCommandEnv::push(cpo::uno::Any const& /*Status*/) {}
 
-void TmpRepositoryCommandEnv::update(uno::Any const& /*Status */) {}
+void TmpRepositoryCommandEnv::update(cpo::uno::Any const& /*Status */) {}
 
 void TmpRepositoryCommandEnv::pop() {}
 

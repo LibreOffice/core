@@ -44,7 +44,7 @@ using css::uno::Reference;
 using css::uno::Exception;
 using css::uno::UNO_QUERY;
 using css::uno::UNO_QUERY_THROW;
-using css::uno::Any;
+using cpo::uno::Any;
 using css::uno::Sequence;
 using css::awt::grid::XGridSelectionListener;
 using css::style::VerticalAlignment;

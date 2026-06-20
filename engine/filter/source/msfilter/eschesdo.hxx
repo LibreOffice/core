@@ -31,7 +31,7 @@ class SvxDrawPage;
 class ImplEESdrObject
 {
     css::uno::Reference< css::drawing::XShape >           mXShape;
-    css::uno::Any       mAny;
+    cpo::uno::Any       mAny;
     tools::Rectangle           maRect;
     OUString            mType;
     sal_uInt32          mnShapeId;
@@ -56,7 +56,7 @@ public:
     { return ImplGetPropertyValue( rStr ) ? *o3tl::doAccess<sal_Int32>(mAny) : 0; }
 
     const css::uno::Reference< css::drawing::XShape >&    GetShapeRef() const     { return mXShape; }
-    const css::uno::Any&       GetUsrAny() const       { return mAny; }
+    const cpo::uno::Any&       GetUsrAny() const       { return mAny; }
     const OUString&     GetType() const         { return mType; }
     void                SetType( const OUString& rS ) { mType = rS; }
 

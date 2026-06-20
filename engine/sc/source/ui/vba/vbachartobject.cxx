@@ -94,7 +94,7 @@ ScVbaChartObject::Delete()
 {
     // parent of this object is sheet
     uno::Reference< excel::XWorksheet > xParent( getParent(), uno::UNO_QUERY_THROW );
-    uno::Reference< excel::XChartObjects > xColl( xParent->ChartObjects( uno::Any() ), uno::UNO_QUERY_THROW );
+    uno::Reference< excel::XChartObjects > xColl( xParent->ChartObjects( cpo::uno::Any() ), uno::UNO_QUERY_THROW );
     ScVbaChartObjects* pChartObjectsImpl = static_cast< ScVbaChartObjects* >( xColl.get() );
     if (!pChartObjectsImpl)
         throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), u"Parent is not ChartObjects"_ustr );
@@ -113,7 +113,7 @@ ScVbaChartObject::Activate()
         // the XModel owner
         //uno::Reference< view::XSelectionSupplier > xSelectionSupplier( getXModel().getCurrentController());
         uno::Reference< view::XSelectionSupplier > xSelectionSupplier( getCurrentExcelDoc(mxContext)->getCurrentController(), uno::UNO_QUERY_THROW );
-        xSelectionSupplier->select(uno::Any(xShape));
+        xSelectionSupplier->select(cpo::uno::Any(xShape));
     }
     catch (uno::Exception& )
     {

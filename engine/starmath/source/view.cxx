@@ -105,6 +105,7 @@
 using namespace css;
 using namespace css::accessibility;
 using namespace css::uno;
+using namespace cpo::uno;
 
 static OUString GetScrollUIName(const SmViewShell& rShell)
 {
@@ -444,7 +445,7 @@ void SmGraphicWidget::LoseFocus()
 {
     if (mxAccessible.is())
     {
-        uno::Any aOldValue, aNewValue;
+        cpo::uno::Any aOldValue, aNewValue;
         aOldValue <<= AccessibleStateType::FOCUSED;
         // aNewValue remains empty
         mxAccessible->LaunchEvent( AccessibleEventId::STATE_CHANGED,

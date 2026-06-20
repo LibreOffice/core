@@ -98,11 +98,11 @@ protected:
     xmlDocUniquePtr parseLayoutDump(const css::uno::Reference< css::lang::XComponent >& xComponent = nullptr);
 
     template< typename T >
-    T getProperty( const css::uno::Any& obj, const OUString& name ) const
+    T getProperty( const cpo::uno::Any& obj, const OUString& name ) const
     {
         css::uno::Reference< css::beans::XPropertySet > properties( obj, css::uno::UNO_QUERY_THROW );
         T data;
-        if (!css::uno::fromAny(properties->getPropertyValue(name), &data))
+        if (!cpo::uno::fromAny(properties->getPropertyValue(name), &data))
         {
             OString const msg("the property is of unexpected type or void: "
                     + OUStringToOString(name, RTL_TEXTENCODING_UTF8));
@@ -136,7 +136,7 @@ protected:
 
     bool hasProperty(const css::uno::Reference<css::uno::XInterface>& obj, const OUString& name) const;
 
-    css::xml::AttributeData getUserDefineAttribute(const css::uno::Any& obj, const OUString& name, const OUString& rValue) const;
+    css::xml::AttributeData getUserDefineAttribute(const cpo::uno::Any& obj, const OUString& name, const OUString& rValue) const;
 
     int getParagraphs( css::uno::Reference<css::text::XText> const & xText );
 

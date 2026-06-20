@@ -58,8 +58,8 @@ public:
     virtual bool operator==( const SfxPoolItem& _rAttr ) const override;
     virtual SwFormatWrapInfluenceOnObjPos* Clone( SfxItemPool* pPool = nullptr ) const override;
 
-    virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     /// direct accessors to data
     void SetWrapInfluenceOnObjPos( sal_Int16 _nWrapInfluenceOnPosition );

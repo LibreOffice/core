@@ -51,7 +51,7 @@ namespace
     }
 }
 
-static bool lcl_SetLocale( LanguageType &rLanguage, const uno::Any &rVal )
+static bool lcl_SetLocale( LanguageType &rLanguage, const cpo::uno::Any &rVal )
 {
     bool bSucc = false;
 
@@ -76,7 +76,7 @@ static OUString lcl_LanguageToCfgLocaleStr( LanguageType nLanguage )
     return aRes;
 }
 
-static LanguageType lcl_CfgAnyToLanguage( const uno::Any &rVal )
+static LanguageType lcl_CfgAnyToLanguage( const cpo::uno::Any &rVal )
 {
     OUString aTmp;
     rVal >>= aTmp;
@@ -172,15 +172,15 @@ public:
     using utl::ConfigItem::ReplaceSetProperties;
     //using utl::ConfigItem::GetReadOnlyStates;
 
-    css::uno::Any
+    cpo::uno::Any
             GetProperty( std::u16string_view rPropertyName ) const;
-    css::uno::Any
+    cpo::uno::Any
             GetProperty( sal_Int32 nPropertyHandle ) const;
 
     bool    SetProperty( std::u16string_view rPropertyName,
-                         const css::uno::Any &rValue );
+                         const cpo::uno::Any &rValue );
     bool    SetProperty( sal_Int32 nPropertyHandle,
-                         const css::uno::Any &rValue );
+                         const cpo::uno::Any &rValue );
 
     void GetOptions( SvtLinguOptions& ) const;
 
@@ -319,17 +319,17 @@ bool SvtLinguConfigItem::GetHdlByName(
     }
 }
 
-uno::Any SvtLinguConfigItem::GetProperty( std::u16string_view rPropertyName ) const
+cpo::uno::Any SvtLinguConfigItem::GetProperty( std::u16string_view rPropertyName ) const
 {
     sal_Int32 nHdl;
-    return GetHdlByName( nHdl, rPropertyName ) ? GetProperty( nHdl ) : uno::Any();
+    return GetHdlByName( nHdl, rPropertyName ) ? GetProperty( nHdl ) : cpo::uno::Any();
 }
 
-uno::Any SvtLinguConfigItem::GetProperty( sal_Int32 nPropertyHandle ) const
+cpo::uno::Any SvtLinguConfigItem::GetProperty( sal_Int32 nPropertyHandle ) const
 {
     std::unique_lock aGuard(theSvtLinguConfigItemMutex());
 
-    uno::Any aRes;
+    cpo::uno::Any aRes;
 
     const sal_Int16 *pnVal = nullptr;
     const LanguageType *plVal = nullptr;
@@ -408,7 +408,7 @@ uno::Any SvtLinguConfigItem::GetProperty( sal_Int32 nPropertyHandle ) const
     return aRes;
 }
 
-bool SvtLinguConfigItem::SetProperty( std::u16string_view rPropertyName, const uno::Any &rValue )
+bool SvtLinguConfigItem::SetProperty( std::u16string_view rPropertyName, const cpo::uno::Any &rValue )
 {
     bool bSucc = false;
     sal_Int32 nHdl;
@@ -417,7 +417,7 @@ bool SvtLinguConfigItem::SetProperty( std::u16string_view rPropertyName, const u
     return bSucc;
 }
 
-bool SvtLinguConfigItem::SetProperty( sal_Int32 nPropertyHandle, const uno::Any &rValue )
+bool SvtLinguConfigItem::SetProperty( sal_Int32 nPropertyHandle, const cpo::uno::Any &rValue )
 {
     std::unique_lock aGuard(theSvtLinguConfigItemMutex());
 
@@ -570,18 +570,18 @@ void SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyN
     const OUString *pProperyNames = rProperyNames.getConstArray();
     sal_Int32 nProps = rProperyNames.getLength();
 
-    const uno::Sequence< uno::Any > aValues = GetProperties( rProperyNames );
+    const uno::Sequence< cpo::uno::Any > aValues = GetProperties( rProperyNames );
     const uno::Sequence< bool > aROStates = GetReadOnlyStates( rProperyNames );
 
     if (nProps  &&  aValues.getLength() == nProps &&  aROStates.getLength() == nProps)
     {
         SvtLinguOptions &rOpt = aOpt;
 
-        const uno::Any *pValue = aValues.getConstArray();
+        const cpo::uno::Any *pValue = aValues.getConstArray();
         const bool *pROStates = aROStates.getConstArray();
         for (sal_Int32 i = 0;  i < nProps;  ++i)
         {
-            const uno::Any &rVal = pValue[i];
+            const cpo::uno::Any &rVal = pValue[i];
             sal_Int32 nPropertyHandle(0);
             GetHdlByName( nPropertyHandle, pProperyNames[i], true );
             switch ( nPropertyHandle )
@@ -690,8 +690,8 @@ bool SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyN
     bool bRet = false;
 
     sal_Int32 nProps = rProperyNames.getLength();
-    uno::Sequence< uno::Any > aValues( nProps );
-    uno::Any *pValue = aValues.getArray();
+    uno::Sequence< cpo::uno::Any > aValues( nProps );
+    cpo::uno::Any *pValue = aValues.getArray();
 
     if (nProps  &&  aValues.getLength() == nProps)
     {
@@ -845,7 +845,7 @@ uno::Sequence< OUString > SvtLinguConfig::GetNodeNames( const OUString &rNode ) 
     return GetConfigItem().GetNodeNames( rNode );
 }
 
-uno::Sequence< uno::Any > SvtLinguConfig::GetProperties( const uno::Sequence< OUString > &rNames ) const
+uno::Sequence< cpo::uno::Any > SvtLinguConfig::GetProperties( const uno::Sequence< OUString > &rNames ) const
 {
     return GetConfigItem().GetProperties(rNames);
 }
@@ -856,22 +856,22 @@ bool SvtLinguConfig::ReplaceSetProperties(
     return GetConfigItem().ReplaceSetProperties( rNode, rValues );
 }
 
-uno::Any SvtLinguConfig::GetProperty( std::u16string_view rPropertyName ) const
+cpo::uno::Any SvtLinguConfig::GetProperty( std::u16string_view rPropertyName ) const
 {
     return GetConfigItem().GetProperty( rPropertyName );
 }
 
-uno::Any SvtLinguConfig::GetProperty( sal_Int32 nPropertyHandle ) const
+cpo::uno::Any SvtLinguConfig::GetProperty( sal_Int32 nPropertyHandle ) const
 {
     return GetConfigItem().GetProperty( nPropertyHandle );
 }
 
-bool SvtLinguConfig::SetProperty( std::u16string_view rPropertyName, const uno::Any &rValue )
+bool SvtLinguConfig::SetProperty( std::u16string_view rPropertyName, const cpo::uno::Any &rValue )
 {
     return GetConfigItem().SetProperty( rPropertyName, rValue );
 }
 
-bool SvtLinguConfig::SetProperty( sal_Int32 nPropertyHandle, const uno::Any &rValue )
+bool SvtLinguConfig::SetProperty( sal_Int32 nPropertyHandle, const cpo::uno::Any &rValue )
 {
     return GetConfigItem().SetProperty( nPropertyHandle, rValue );
 }
@@ -1121,7 +1121,7 @@ uno::Reference< util::XChangesBatch > const & SvtLinguConfig::GetMainUpdateAcces
         beans::PropertyValue aValue;
         aValue.Name  = u"nodepath"_ustr;
         aValue.Value <<= u"org.openoffice.Office.Linguistic"_ustr;
-        uno::Sequence< uno::Any > aProps{ uno::Any(aValue) };
+        uno::Sequence< cpo::uno::Any > aProps{ cpo::uno::Any(aValue) };
         m_xMainUpdateAccess.set(
                 xConfigurationProvider->createInstanceWithArguments(
                     u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr, aProps),
@@ -1146,7 +1146,7 @@ OUString SvtLinguConfig::GetVendorImageUrl_Impl(
 
         uno::Reference< container::XNameAccess > xNA( xImagesNA->getByName(u"ServiceNameEntries"_ustr), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rServiceImplName ), uno::UNO_QUERY_THROW );
-        uno::Any aAny(xNA->getByName(u"VendorImagesNode"_ustr));
+        cpo::uno::Any aAny(xNA->getByName(u"VendorImagesNode"_ustr));
         OUString aVendorImagesNode;
         if (aAny >>= aVendorImagesNode)
         {

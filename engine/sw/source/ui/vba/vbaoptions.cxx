@@ -38,7 +38,7 @@ SwVbaOptions::~SwVbaOptions()
 {
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwVbaOptions::DefaultFilePath( sal_Int32 _path )
 {
     switch( _path )
@@ -86,10 +86,10 @@ SwVbaOptions::DefaultFilePath( sal_Int32 _path )
             break;
         }
     }
-    return uno::Any( uno::Reference< XPropValue > ( new ScVbaPropValue( this ) ) );
+    return cpo::uno::Any( uno::Reference< XPropValue > ( new ScVbaPropValue( this ) ) );
 }
 
-void SwVbaOptions::setValueEvent( const uno::Any& value )
+void SwVbaOptions::setValueEvent( const cpo::uno::Any& value )
 {
     OUString sNewPath;
     value >>= sNewPath;
@@ -105,10 +105,10 @@ void SwVbaOptions::setValueEvent( const uno::Any& value )
     {
         sNewPathUrl = sOldPathUrl.subView( 0, nIndex + 1 ) + sNewPathUrl;
     }
-    xPathSettings->setPropertyValue( msDefaultFilePath, uno::Any( sNewPathUrl ) );
+    xPathSettings->setPropertyValue( msDefaultFilePath, cpo::uno::Any( sNewPathUrl ) );
 }
 
-uno::Any SwVbaOptions::getValueEvent()
+cpo::uno::Any SwVbaOptions::getValueEvent()
 {
     uno::Reference< util::XPathSettings > xPathSettings = util::thePathSettings::get( comphelper::getProcessComponentContext() );
     OUString sPathUrl;
@@ -122,7 +122,7 @@ uno::Any SwVbaOptions::getValueEvent()
     }
     OUString sPath;
     ::osl::File::getSystemPathFromFileURL( sPathUrl, sPath );
-    return uno::Any( sPath );
+    return cpo::uno::Any( sPath );
 }
 
 sal_Int32 SAL_CALL SwVbaOptions::getDefaultBorderLineStyle()

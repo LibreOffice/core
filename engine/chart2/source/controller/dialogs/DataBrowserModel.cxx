@@ -372,7 +372,7 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
     if( nSeriesNumberFormat != 0 )
     {
         //give the new series the same number format as the former series especially for bubble charts thus the bubble size values can be edited with same format immediately
-        xNewSeries->setPropertyValue(CHART_UNONAME_NUMFMT , uno::Any(nSeriesNumberFormat));
+        xNewSeries->setPropertyValue(CHART_UNONAME_NUMFMT , cpo::uno::Any(nSeriesNumberFormat));
     }
 
     updateFromModel();
@@ -582,9 +582,9 @@ double DataBrowserModel::getCellNumber( sal_Int32 nAtColumn, sal_Int32 nAtRow )
     return std::numeric_limits<double>::quiet_NaN();
 }
 
-uno::Any DataBrowserModel::getCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow )
+cpo::uno::Any DataBrowserModel::getCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow )
 {
-    uno::Any aResult;
+    cpo::uno::Any aResult;
 
     tDataColumnVector::size_type nIndex( nAtColumn );
     if( nIndex < m_aColumns.size() &&
@@ -594,7 +594,7 @@ uno::Any DataBrowserModel::getCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow )
             m_aColumns[ nIndex ].m_xLabeledDataSequence->getValues() );
         if( xData.is() )
         {
-            Sequence< uno::Any > aValues( xData->getData());
+            Sequence< cpo::uno::Any > aValues( xData->getData());
             if( nAtRow < aValues.getLength())
                 aResult = aValues[nAtRow];
         }
@@ -630,7 +630,7 @@ sal_uInt32 DataBrowserModel::getNumberFormatKey( sal_Int32 nAtColumn )
     return 0;
 }
 
-bool DataBrowserModel::setCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow, const uno::Any & rValue )
+bool DataBrowserModel::setCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow, const cpo::uno::Any & rValue )
 {
     bool bResult = false;
     tDataColumnVector::size_type nIndex( nAtColumn );
@@ -672,13 +672,13 @@ bool DataBrowserModel::setCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow, const 
 bool DataBrowserModel::setCellNumber( sal_Int32 nAtColumn, sal_Int32 nAtRow, double fValue )
 {
     return (getCellType( nAtColumn ) == NUMBER) &&
-        setCellAny( nAtColumn, nAtRow, uno::Any( fValue ));
+        setCellAny( nAtColumn, nAtRow, cpo::uno::Any( fValue ));
 }
 
 bool DataBrowserModel::setCellText( sal_Int32 nAtColumn, sal_Int32 nAtRow, const OUString & rText )
 {
     return (getCellType( nAtColumn ) == TEXT) &&
-        setCellAny( nAtColumn, nAtRow, uno::Any( rText ));
+        setCellAny( nAtColumn, nAtRow, cpo::uno::Any( rText ));
 }
 
 sal_Int32 DataBrowserModel::getColumnCount() const

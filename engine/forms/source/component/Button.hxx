@@ -56,7 +56,7 @@ public:
 
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS( OButtonModel, OClickableImageBaseModel )
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
 
     css::uno::Sequence< css::uno::Type> _getTypes() override;
 
@@ -82,11 +82,11 @@ public:
     ) const override;
 
     // XPropertySet and friends
-    virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle) const override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
     virtual bool SAL_CALL convertFastPropertyValue(
-                css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
-    virtual css::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const override;
+                cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
+    virtual cpo::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const override;
 
     // OComponentHelper
     virtual void SAL_CALL disposing() override;
@@ -144,7 +144,7 @@ public:
 
     // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(OButtonControl, OClickableImageBaseControl)
-    virtual css::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
 
     // XActionListener
     virtual void SAL_CALL actionPerformed(const css::awt::ActionEvent& rEvent) override;

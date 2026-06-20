@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/table/ShadowLocation.hpp>
@@ -150,7 +150,7 @@ SvxSizeItem::SvxSizeItem( const sal_uInt16 nId, const Size& rSize ) :
 }
 
 
-bool SvxSizeItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxSizeItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -174,7 +174,7 @@ bool SvxSizeItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 }
 
 
-bool SvxSizeItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxSizeItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -380,7 +380,7 @@ boost::property_tree::ptree lcl_IndentValueToJson(const char* aName, SvxIndentVa
     return aState;
 }
 
-bool lcl_FillAbsoluteMeasureAny(const SvxIndentValue& rIndent, uno::Any& rVal, bool bConvert)
+bool lcl_FillAbsoluteMeasureAny(const SvxIndentValue& rIndent, cpo::uno::Any& rVal, bool bConvert)
 {
     if (rIndent.m_nUnit == css::util::MeasureUnit::TWIP)
     {
@@ -392,7 +392,7 @@ bool lcl_FillAbsoluteMeasureAny(const SvxIndentValue& rIndent, uno::Any& rVal, b
     return false;
 }
 
-bool lcl_FillRelativeMeasureAny(const SvxIndentValue& rIndent, uno::Any& rVal)
+bool lcl_FillRelativeMeasureAny(const SvxIndentValue& rIndent, cpo::uno::Any& rVal)
 {
     if (rIndent.m_nUnit != css::util::MeasureUnit::TWIP)
     {
@@ -436,7 +436,7 @@ SvxLRSpaceItem::SvxLRSpaceItem(SvxIndentValue stLeft, SvxIndentValue stRight,
 }
 
 
-bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxLRSpaceItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bRet = true;
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
@@ -527,7 +527,7 @@ bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 }
 
 
-bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxLRSpaceItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bConvert = 0 != (nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -891,7 +891,7 @@ SvxLeftMarginItem::SvxLeftMarginItem(const tools::Long nLeft, const sal_uInt16 n
 {
 }
 
-bool SvxLeftMarginItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId) const
+bool SvxLeftMarginItem::QueryValue(cpo::uno::Any& rVal, sal_uInt8 nMemberId) const
 {
     bool bRet = true;
     bool bConvert = 0 != (nMemberId & CONVERT_TWIPS);
@@ -913,7 +913,7 @@ bool SvxLeftMarginItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId) const
     return bRet;
 }
 
-bool SvxLeftMarginItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
+bool SvxLeftMarginItem::PutValue(const cpo::uno::Any& rVal, sal_uInt8 nMemberId)
 {
     bool bConvert = 0 != (nMemberId & CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1060,7 +1060,7 @@ SvxTextLeftMarginItem::SvxTextLeftMarginItem(SvxIndentValue stLeft, const sal_uI
     SetTextLeft(stLeft);
 }
 
-bool SvxTextLeftMarginItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId) const
+bool SvxTextLeftMarginItem::QueryValue(cpo::uno::Any& rVal, sal_uInt8 nMemberId) const
 {
     bool bRet = false;
     bool bConvert = 0 != (nMemberId & CONVERT_TWIPS);
@@ -1099,7 +1099,7 @@ bool SvxTextLeftMarginItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId) cons
     return bRet;
 }
 
-bool SvxTextLeftMarginItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
+bool SvxTextLeftMarginItem::PutValue(const cpo::uno::Any& rVal, sal_uInt8 nMemberId)
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
     bool bConvert = 0 != (nMemberId & CONVERT_TWIPS);
@@ -1319,7 +1319,7 @@ SvxFirstLineIndentItem::ResolveTextFirstLineOffset(const SvxFontUnitMetrics& rMe
     return m_stFirstLineOffset.Resolve(rMetrics);
 }
 
-bool SvxFirstLineIndentItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId) const
+bool SvxFirstLineIndentItem::QueryValue(cpo::uno::Any& rVal, sal_uInt8 nMemberId) const
 {
     bool bRet = false;
     bool bConvert = 0 != (nMemberId & CONVERT_TWIPS);
@@ -1353,7 +1353,7 @@ bool SvxFirstLineIndentItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId) con
     return bRet;
 }
 
-bool SvxFirstLineIndentItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
+bool SvxFirstLineIndentItem::PutValue(const cpo::uno::Any& rVal, sal_uInt8 nMemberId)
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
     bool bConvert = 0 != (nMemberId & CONVERT_TWIPS);
@@ -1539,7 +1539,7 @@ SvxRightMarginItem::SvxRightMarginItem(SvxIndentValue stRight, const sal_uInt16 
     SetRight(stRight);
 }
 
-bool SvxRightMarginItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId) const
+bool SvxRightMarginItem::QueryValue(cpo::uno::Any& rVal, sal_uInt8 nMemberId) const
 {
     bool bRet = false;
     bool bConvert = 0 != (nMemberId & CONVERT_TWIPS);
@@ -1578,7 +1578,7 @@ bool SvxRightMarginItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId) const
     return bRet;
 }
 
-bool SvxRightMarginItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
+bool SvxRightMarginItem::PutValue(const cpo::uno::Any& rVal, sal_uInt8 nMemberId)
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
     bool bConvert = 0 != (nMemberId & CONVERT_TWIPS);
@@ -1747,7 +1747,7 @@ SvxGutterLeftMarginItem::SvxGutterLeftMarginItem(const sal_uInt16 nId)
 {
 }
 
-bool SvxGutterLeftMarginItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId) const
+bool SvxGutterLeftMarginItem::QueryValue(cpo::uno::Any& rVal, sal_uInt8 nMemberId) const
 {
     bool bRet = true;
     bool bConvert = 0 != (nMemberId & CONVERT_TWIPS);
@@ -1767,7 +1767,7 @@ bool SvxGutterLeftMarginItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId) co
     return bRet;
 }
 
-bool SvxGutterLeftMarginItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
+bool SvxGutterLeftMarginItem::PutValue(const cpo::uno::Any& rVal, sal_uInt8 nMemberId)
 {
     bool bConvert = 0 != (nMemberId & CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1856,7 +1856,7 @@ SvxGutterRightMarginItem::SvxGutterRightMarginItem(const sal_uInt16 nId)
 {
 }
 
-bool SvxGutterRightMarginItem::QueryValue(uno::Any& /*rVal*/, sal_uInt8 nMemberId) const
+bool SvxGutterRightMarginItem::QueryValue(cpo::uno::Any& /*rVal*/, sal_uInt8 nMemberId) const
 {
     bool bRet = true;
     //bool bConvert = 0 != (nMemberId & CONVERT_TWIPS);
@@ -1877,7 +1877,7 @@ bool SvxGutterRightMarginItem::QueryValue(uno::Any& /*rVal*/, sal_uInt8 nMemberI
     return bRet;
 }
 
-bool SvxGutterRightMarginItem::PutValue(const uno::Any& /*rVal*/, sal_uInt8 nMemberId)
+bool SvxGutterRightMarginItem::PutValue(const cpo::uno::Any& /*rVal*/, sal_uInt8 nMemberId)
 {
     //bool bConvert = 0 != (nMemberId & CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -2203,7 +2203,7 @@ SvxULSpaceItem::SvxULSpaceItem( const sal_uInt16 nUp, const sal_uInt16 nLow,
 }
 
 
-bool SvxULSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxULSpaceItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -2230,7 +2230,7 @@ bool SvxULSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 }
 
 
-bool SvxULSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxULSpaceItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
@@ -2486,7 +2486,7 @@ bool SvxProtectItem::operator==( const SfxPoolItem& rAttr ) const
 }
 
 
-bool SvxProtectItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxProtectItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     bool bValue;
@@ -2505,7 +2505,7 @@ bool SvxProtectItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 }
 
 
-bool SvxProtectItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxProtectItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     bool bVal( Any2Bool(rVal) );
@@ -2577,7 +2577,7 @@ SvxShadowItem::SvxShadowItem( const sal_uInt16 nId,
 }
 
 
-bool SvxShadowItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxShadowItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -2613,14 +2613,14 @@ bool SvxShadowItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-bool SvxShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxShadowItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
     table::ShadowFormat aShadow;
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     bool bRet = QueryValue( aAny, bConvert ? CONVERT_TWIPS : 0 ) && ( aAny >>= aShadow );
     switch ( nMemberId )
     {
@@ -2932,7 +2932,7 @@ table::BorderLine2 SvxBoxItem::SvxLineToLine(const SvxBorderLine* pLine, bool bC
     return aLine;
 }
 
-bool SvxBoxItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxBoxItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     table::BorderLine2 aRetLine;
@@ -2944,16 +2944,16 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case 0:
         {
             // 4 Borders and 5 distances
-            uno::Sequence< uno::Any > aSeq{
-                uno::Any(SvxBoxItem::SvxLineToLine(GetLeft(), bConvert)),
-                uno::Any(SvxBoxItem::SvxLineToLine(GetRight(), bConvert)),
-                uno::Any(SvxBoxItem::SvxLineToLine(GetBottom(), bConvert)),
-                uno::Any(SvxBoxItem::SvxLineToLine(GetTop(), bConvert)),
-                uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100(GetSmallestDistance()) : GetSmallestDistance())),
-                uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100(mnTopDistance) : mnTopDistance)),
-                uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100(mnBottomDistance) : mnBottomDistance)),
-                uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100(mnLeftDistance) : mnLeftDistance)),
-                uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100(mnRightDistance) : mnRightDistance))
+            uno::Sequence< cpo::uno::Any > aSeq{
+                cpo::uno::Any(SvxBoxItem::SvxLineToLine(GetLeft(), bConvert)),
+                cpo::uno::Any(SvxBoxItem::SvxLineToLine(GetRight(), bConvert)),
+                cpo::uno::Any(SvxBoxItem::SvxLineToLine(GetBottom(), bConvert)),
+                cpo::uno::Any(SvxBoxItem::SvxLineToLine(GetTop(), bConvert)),
+                cpo::uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100(GetSmallestDistance()) : GetSmallestDistance())),
+                cpo::uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100(mnTopDistance) : mnTopDistance)),
+                cpo::uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100(mnBottomDistance) : mnBottomDistance)),
+                cpo::uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100(mnLeftDistance) : mnLeftDistance)),
+                cpo::uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100(mnRightDistance) : mnRightDistance))
             };
             rVal <<= aSeq;
             return true;
@@ -3112,7 +3112,7 @@ namespace
 {
 
 bool
-lcl_extractBorderLine(const uno::Any& rAny, table::BorderLine2& rLine)
+lcl_extractBorderLine(const cpo::uno::Any& rAny, table::BorderLine2& rLine)
 {
     if (rAny >>= rLine)
         return true;
@@ -3133,7 +3133,7 @@ lcl_extractBorderLine(const uno::Any& rAny, table::BorderLine2& rLine)
 
 template<typename Item, typename Line>
 bool
-lcl_setLine(const uno::Any& rAny, Item& rItem, Line nLine, const bool bConvert)
+lcl_setLine(const cpo::uno::Any& rAny, Item& rItem, Line nLine, const bool bConvert)
 {
     bool bDone = false;
     table::BorderLine2 aBorderLine;
@@ -3149,7 +3149,7 @@ lcl_setLine(const uno::Any& rAny, Item& rItem, Line nLine, const bool bConvert)
 
 }
 
-bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxBoxItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
@@ -3160,7 +3160,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     {
         case 0:
         {
-            uno::Sequence< uno::Any > aSeq;
+            uno::Sequence< cpo::uno::Any > aSeq;
             if (( rVal >>= aSeq ) && ( aSeq.getLength() == 9 ))
             {
                 // 4 Borders and 5 distances
@@ -3361,9 +3361,9 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             // serialization for basic macro recording
             uno::Reference < script::XTypeConverter > xConverter
                     ( script::Converter::create(::comphelper::getProcessComponentContext()) );
-            uno::Sequence < uno::Any > aSeq;
-            uno::Any aNew;
-            try { aNew = xConverter->convertTo( rVal, cppu::UnoType<uno::Sequence < uno::Any >>::get() ); }
+            uno::Sequence < cpo::uno::Any > aSeq;
+            cpo::uno::Any aNew;
+            try { aNew = xConverter->convertTo( rVal, cppu::UnoType<uno::Sequence < cpo::uno::Any >>::get() ); }
             catch (const uno::Exception&) {}
 
             aNew >>= aSeq;
@@ -3909,7 +3909,7 @@ void SvxBoxInfoItem::ResetFlags()
     mnValidFlags = static_cast<SvxBoxInfoItemValidFlags>(0x7F); // all valid except Disable
 }
 
-bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxBoxInfoItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bConvert = 0 != (nMemberId & CONVERT_TWIPS);
     table::BorderLine2 aRetLine;
@@ -3927,12 +3927,12 @@ bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 nVal |= 0x02;
             if ( IsMinDist() )
                 nVal |= 0x04;
-            css::uno::Sequence< css::uno::Any > aSeq{
-                uno::Any(SvxBoxItem::SvxLineToLine(mpHorizontalLine.get(), bConvert)),
-                uno::Any(SvxBoxItem::SvxLineToLine(mpVerticalLine.get(), bConvert)),
-                uno::Any(nVal),
-                uno::Any(static_cast<sal_Int16>(mnValidFlags)),
-                uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100(GetDefDist()) : GetDefDist()))
+            css::uno::Sequence< cpo::uno::Any > aSeq{
+                cpo::uno::Any(SvxBoxItem::SvxLineToLine(mpHorizontalLine.get(), bConvert)),
+                cpo::uno::Any(SvxBoxItem::SvxLineToLine(mpVerticalLine.get(), bConvert)),
+                cpo::uno::Any(nVal),
+                cpo::uno::Any(static_cast<sal_Int16>(mnValidFlags)),
+                cpo::uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100(GetDefDist()) : GetDefDist()))
             };
             rVal <<= aSeq;
             return true;
@@ -3972,7 +3972,7 @@ bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 }
 
 
-bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxBoxInfoItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -3981,7 +3981,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     {
         case 0:
         {
-            css::uno::Sequence< css::uno::Any > aSeq;
+            css::uno::Sequence< cpo::uno::Any > aSeq;
             if (( rVal >>= aSeq ) && ( aSeq.getLength() == 5 ))
             {
                 // 2 BorderLines, flags, valid flags and distance
@@ -4029,9 +4029,9 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 // serialization for basic macro recording
                 uno::Reference < script::XTypeConverter > xConverter( script::Converter::create(::comphelper::getProcessComponentContext()) );
-                uno::Any aNew;
-                uno::Sequence < uno::Any > aSeq;
-                try { aNew = xConverter->convertTo( rVal, cppu::UnoType<uno::Sequence < uno::Any >>::get() ); }
+                cpo::uno::Any aNew;
+                uno::Sequence < cpo::uno::Any > aSeq;
+                try { aNew = xConverter->convertTo( rVal, cppu::UnoType<uno::Sequence < cpo::uno::Any >>::get() ); }
                 catch (const uno::Exception&) {}
 
                 if ((aNew >>= aSeq) &&
@@ -4298,7 +4298,7 @@ OUString SvxFormatBreakItem::GetValueTextByPos( sal_uInt16 nPos )
     return EditResId(RID_SVXITEMS_BREAK[nPos]);
 }
 
-bool SvxFormatBreakItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxFormatBreakItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     style::BreakType eBreak = style::BreakType_NONE;
     switch ( GetBreak() )
@@ -4315,7 +4315,7 @@ bool SvxFormatBreakItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) c
     return true;
 }
 
-bool SvxFormatBreakItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvxFormatBreakItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     style::BreakType nBreak;
 
@@ -4408,7 +4408,7 @@ SvxLineItem* SvxLineItem::Clone( SfxItemPool* ) const
     return new SvxLineItem( *this );
 }
 
-bool SvxLineItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemId ) const
+bool SvxLineItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemId ) const
 {
     bool bConvert = 0!=(nMemId&CONVERT_TWIPS);
     nMemId &= ~CONVERT_TWIPS;
@@ -4435,7 +4435,7 @@ bool SvxLineItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemId ) const
 }
 
 
-bool SvxLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemId )
+bool SvxLineItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemId )
 {
     bool bConvert = 0!=(nMemId&CONVERT_TWIPS);
     nMemId &= ~CONVERT_TWIPS;
@@ -4624,7 +4624,7 @@ sal_Int8 SvxBrushItem::TransparencyToPercent(sal_Int32 nTrans)
 }
 
 
-bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxBrushItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId)
@@ -4693,7 +4693,7 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 }
 
 
-bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxBrushItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
     nMemberId &= ~CONVERT_TWIPS;
@@ -5159,7 +5159,7 @@ bool SvxFrameDirectionItem::GetPresentation(
     return true;
 }
 
-bool SvxFrameDirectionItem::PutValue( const css::uno::Any& rVal,
+bool SvxFrameDirectionItem::PutValue( const cpo::uno::Any& rVal,
                                              sal_uInt8 )
 {
     sal_Int16 nVal = sal_Int16();
@@ -5204,7 +5204,7 @@ bool SvxFrameDirectionItem::PutValue( const css::uno::Any& rVal,
 }
 
 
-bool SvxFrameDirectionItem::QueryValue( css::uno::Any& rVal,
+bool SvxFrameDirectionItem::QueryValue( cpo::uno::Any& rVal,
                                             sal_uInt8 ) const
 {
     // translate SvxFrameDirection into WritingDirection2

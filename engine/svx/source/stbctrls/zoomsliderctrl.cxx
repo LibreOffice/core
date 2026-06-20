@@ -378,7 +378,7 @@ void SvxZoomSliderControl::repaintAndExecute()
     // commit state change
     SvxZoomSliderItem aZoomSliderItem(mxImpl->mnCurrentZoom);
 
-    css::uno::Any any;
+    cpo::uno::Any any;
     aZoomSliderItem.QueryValue(any);
 
     css::uno::Sequence<css::beans::PropertyValue> aArgs{ comphelper::makePropertyValue(u"ZoomSlider"_ustr,

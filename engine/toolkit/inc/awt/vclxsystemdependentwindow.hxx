@@ -33,7 +33,7 @@ public:
     virtual ~VCLXSystemDependentWindow() override;
 
     // css::awt::XSystemDependentWindowPeer
-    css::uno::Any SAL_CALL getWindowHandle( const css::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) override;
+    cpo::uno::Any SAL_CALL getWindowHandle( const css::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) override;
 };
 
 

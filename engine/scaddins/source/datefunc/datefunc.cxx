@@ -88,7 +88,7 @@ static void InitScaFuncDataList(ScaFuncDataList& rList)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 scaddins_ScaDateAddIn_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ScaDateAddIn());
 }
@@ -421,7 +421,7 @@ sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOptions )
     {
         try
         {
-            uno::Any aAny = xOptions->getPropertyValue( u"NullDate"_ustr );
+            cpo::uno::Any aAny = xOptions->getPropertyValue( u"NullDate"_ustr );
             util::Date aDate;
             if ( aAny >>= aDate )
                 return DateToDays( aDate.Day, aDate.Month, aDate.Year );

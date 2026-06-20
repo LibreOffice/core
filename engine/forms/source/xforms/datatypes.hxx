@@ -91,15 +91,15 @@ namespace xforms
 
     protected:
         // XPropertySet and friends
-        virtual bool convertFastPropertyValue( std::unique_lock<std::mutex>& rGuard, css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
+        virtual bool convertFastPropertyValue( std::unique_lock<std::mutex>& rGuard, cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
         virtual void setFastPropertyValue_NoBroadcast(
                                         std::unique_lock<std::mutex>& rGuard,
                                         sal_Int32 nHandle,
-                                        const css::uno::Any& rValue
+                                        const cpo::uno::Any& rValue
                                     ) override;
         using OPropertyImplHelper::setFastPropertyValue;
         using OPropertyImplHelper::getFastPropertyValue;
-        virtual void getFastPropertyValue( std::unique_lock<std::mutex>&, css::uno::Any& rValue, sal_Int32 nHandle ) const override
+        virtual void getFastPropertyValue( std::unique_lock<std::mutex>&, cpo::uno::Any& rValue, sal_Int32 nHandle ) const override
         {
             OPropertyContainerHelper::getFastPropertyValue( rValue, nHandle );
         }
@@ -114,7 +114,7 @@ namespace xforms
         virtual OUString _explainInvalid( TranslateId rReason );
 
         // helper method for checking properties values which are to be set
-        virtual bool        checkPropertySanity( sal_Int32 _nHandle, const css::uno::Any& _rNewValue, OUString& _rErrorMessage );
+        virtual bool        checkPropertySanity( sal_Int32 _nHandle, const cpo::uno::Any& _rNewValue, OUString& _rErrorMessage );
 
         // register properties implemented by this instance - call the base class when overriding
         virtual void        registerProperties();
@@ -126,10 +126,10 @@ namespace xforms
     class OValueLimitedType_Base : public OXSDDataType
     {
     protected:
-        css::uno::Any m_aMaxInclusive;
-        css::uno::Any m_aMaxExclusive;
-        css::uno::Any m_aMinInclusive;
-        css::uno::Any m_aMinExclusive;
+        cpo::uno::Any m_aMaxInclusive;
+        cpo::uno::Any m_aMaxExclusive;
+        cpo::uno::Any m_aMinInclusive;
+        cpo::uno::Any m_aMinExclusive;
 
         double  m_fCachedMaxInclusive;
         double  m_fCachedMaxExclusive;
@@ -146,7 +146,7 @@ namespace xforms
         virtual void setFastPropertyValue_NoBroadcast(
                                         std::unique_lock<std::mutex>& rGuard,
                                         sal_Int32 nHandle,
-                                        const css::uno::Any& rValue
+                                        const cpo::uno::Any& rValue
                                     ) override;
 
         // OXSDDataType overridables
@@ -159,7 +159,7 @@ namespace xforms
 
             The value is guaranteed to be not <NULL/>, and is of type <member>ValueType</member>
         */
-        virtual OUString typedValueAsHumanReadableString( const css::uno::Any& _rValue ) const = 0;
+        virtual OUString typedValueAsHumanReadableString( const cpo::uno::Any& _rValue ) const = 0;
 
         /** translates a <member>ValueType</member> value into a double value
 
@@ -173,7 +173,7 @@ namespace xforms
             @param _rDoubleValue
                 output parameter to hold the resulting double value
         */
-        virtual void normalizeValue( const css::uno::Any& _rValue, double& _rDoubleValue ) const = 0;
+        virtual void normalizeValue( const cpo::uno::Any& _rValue, double& _rDoubleValue ) const = 0;
     };
 
     template < typename VALUE_TYPE >
@@ -230,9 +230,9 @@ namespace xforms
     class OStringType   :public OStringType_Base
     {
         // <properties>
-        css::uno::Any m_aLength;
-        css::uno::Any m_aMinLength;
-        css::uno::Any m_aMaxLength;
+        cpo::uno::Any m_aLength;
+        cpo::uno::Any m_aMinLength;
+        cpo::uno::Any m_aMaxLength;
         // </properties>
 
     public:
@@ -246,7 +246,7 @@ namespace xforms
         // OXSDDataType overridables
         virtual TranslateId     _validate( const OUString& value ) override;
         virtual OUString _explainInvalid( TranslateId rReason ) override;
-        virtual bool            checkPropertySanity( sal_Int32 _nHandle, const css::uno::Any& _rNewValue, OUString& _rErrorMessage ) override;
+        virtual bool            checkPropertySanity( sal_Int32 _nHandle, const cpo::uno::Any& _rNewValue, OUString& _rErrorMessage ) override;
         virtual void            registerProperties() override;
     };
 
@@ -255,9 +255,9 @@ namespace xforms
     class OAnyURIType   :public OAnyURIType_Base
     {
         // <properties>
-        css::uno::Any m_aLength;
-        css::uno::Any m_aMinLength;
-        css::uno::Any m_aMaxLength;
+        cpo::uno::Any m_aLength;
+        cpo::uno::Any m_aMinLength;
+        cpo::uno::Any m_aMaxLength;
         // </properties>
         // helper to check URL validity
         css::uno::Reference<css::util::XURLTransformer> m_xURLTransformer;
@@ -273,7 +273,7 @@ namespace xforms
         // OXSDDataType overridables
         virtual TranslateId     _validate( const OUString& value ) override;
         virtual OUString _explainInvalid( TranslateId rReason ) override;
-        virtual bool            checkPropertySanity( sal_Int32 _nHandle, const css::uno::Any& _rNewValue, OUString& _rErrorMessage ) override;
+        virtual bool            checkPropertySanity( sal_Int32 _nHandle, const cpo::uno::Any& _rNewValue, OUString& _rErrorMessage ) override;
         virtual void            registerProperties() override;
     };
 
@@ -281,8 +281,8 @@ namespace xforms
     typedef ODerivedDataType< ODecimalType, OValueLimitedType< double > > ODecimalType_Base;
     class ODecimalType : public ODecimalType_Base
     {
-        css::uno::Any m_aTotalDigits;
-        css::uno::Any m_aFractionDigits;
+        cpo::uno::Any m_aTotalDigits;
+        cpo::uno::Any m_aFractionDigits;
 
     public:
         ODecimalType( const OUString& _rName, sal_Int16 _nTypeClass /* = css::xsd::DataTypeClass::DECIMAL */ );
@@ -298,8 +298,8 @@ namespace xforms
         virtual void            registerProperties() override;
 
         // OValueLimitedType overridables
-        virtual OUString typedValueAsHumanReadableString( const css::uno::Any& _rValue ) const override;
-        virtual void normalizeValue( const css::uno::Any& _rValue, double& _rDoubleValue ) const override;
+        virtual OUString typedValueAsHumanReadableString( const cpo::uno::Any& _rValue ) const override;
+        virtual void normalizeValue( const cpo::uno::Any& _rValue, double& _rDoubleValue ) const override;
 
     private:
         using ODecimalType_Base::initializeTypedClone;
@@ -324,8 +324,8 @@ namespace xforms
         virtual bool                _getValue( const OUString& value, double& fValue ) override;
 
         /* OValueLimitedType overridables */
-        virtual OUString     typedValueAsHumanReadableString( const css::uno::Any& _rValue ) const override;
-        virtual void normalizeValue( const css::uno::Any& _rValue, double& _rDoubleValue ) const override;
+        virtual OUString     typedValueAsHumanReadableString( const cpo::uno::Any& _rValue ) const override;
+        virtual void normalizeValue( const cpo::uno::Any& _rValue, double& _rDoubleValue ) const override;
 
     private:
         using ODateType_Base::initializeTypedClone;
@@ -348,8 +348,8 @@ namespace xforms
         virtual bool                _getValue( const OUString& value, double& fValue ) override;
 
         /* OValueLimitedType overridables */
-        virtual OUString     typedValueAsHumanReadableString( const css::uno::Any& _rValue ) const override;
-        virtual void normalizeValue( const css::uno::Any& _rValue, double& _rDoubleValue ) const override;
+        virtual OUString     typedValueAsHumanReadableString( const cpo::uno::Any& _rValue ) const override;
+        virtual void normalizeValue( const cpo::uno::Any& _rValue, double& _rDoubleValue ) const override;
 
     private:
         using OTimeType_Base::initializeTypedClone;
@@ -372,8 +372,8 @@ namespace xforms
         virtual bool                _getValue( const OUString& value, double& fValue ) override;
 
         /* OValueLimitedType overridables */
-        virtual OUString     typedValueAsHumanReadableString( const css::uno::Any& _rValue ) const override;
-        virtual void normalizeValue( const css::uno::Any& _rValue, double& _rDoubleValue ) const override;
+        virtual OUString     typedValueAsHumanReadableString( const cpo::uno::Any& _rValue ) const override;
+        virtual void normalizeValue( const cpo::uno::Any& _rValue, double& _rDoubleValue ) const override;
 
     private:
         using ODateTimeType_Base::initializeTypedClone;
@@ -395,8 +395,8 @@ namespace xforms
         virtual bool            _getValue( const OUString& value, double& fValue ) override;
 
         // OValueLimitedType overridables
-        virtual OUString typedValueAsHumanReadableString( const css::uno::Any& _rValue ) const override;
-        virtual void normalizeValue( const css::uno::Any& _rValue, double& _rDoubleValue ) const override;
+        virtual OUString typedValueAsHumanReadableString( const cpo::uno::Any& _rValue ) const override;
+        virtual void normalizeValue( const cpo::uno::Any& _rValue, double& _rDoubleValue ) const override;
 
     private:
         using OShortIntegerType_Base::initializeTypedClone;

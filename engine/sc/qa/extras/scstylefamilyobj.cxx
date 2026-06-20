@@ -107,12 +107,13 @@ uno::Reference<uno::XInterface> ScStyleFamilyObj::init()
                                         uno::UNO_SET_THROW);
     // XNameContainer
     XNameContainer::setElement(
-        uno::Any(xMSF->createInstance(u"com.sun.star.style.CellStyle"_ustr)));
+        cpo::uno::Any(xMSF->createInstance(u"com.sun.star.style.CellStyle"_ustr)));
     // XNameReplace
-    XNameReplace::setElement(uno::Any(xMSF->createInstance(u"com.sun.star.style.CellStyle"_ustr)));
+    XNameReplace::setElement(
+        cpo::uno::Any(xMSF->createInstance(u"com.sun.star.style.CellStyle"_ustr)));
 
     uno::Reference<container::XNameContainer> xNC(xNA_SF, uno::UNO_QUERY_THROW);
-    xNC->insertByName(u"ScStyleFamilyObj"_ustr, uno::Any(xCS));
+    xNC->insertByName(u"ScStyleFamilyObj"_ustr, cpo::uno::Any(xCS));
 
     return xNA_SF;
 }

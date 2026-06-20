@@ -150,7 +150,7 @@ bool EmbeddedObjectContainer::CommitImageSubStorage()
         {
             // get the open mode from the parent storage
             sal_Int32 nMode = 0;
-            uno::Any aAny = xSet->getPropertyValue(u"OpenMode"_ustr);
+            cpo::uno::Any aAny = xSet->getPropertyValue(u"OpenMode"_ustr);
             if ( aAny >>= nMode )
                 bReadOnlyMode = !(nMode & embed::ElementModes::WRITE );
         } // if ( xSet.is() )
@@ -315,7 +315,7 @@ uno::Reference<embed::XEmbeddedObject> EmbeddedObjectContainer::Get_Impl(
         {
             // get the open mode from the parent storage
             sal_Int32 nMode = 0;
-            uno::Any aAny = xSet->getPropertyValue(u"OpenMode"_ustr);
+            cpo::uno::Any aAny = xSet->getPropertyValue(u"OpenMode"_ustr);
             if ( aAny >>= nMode )
                 bReadOnlyMode = !(nMode & embed::ElementModes::WRITE );
         }
@@ -482,8 +482,8 @@ bool EmbeddedObjectContainer::StoreEmbeddedObject(
         {
             uno::Sequence < beans::PropertyValue > aSeq;
             auto aObjArgs(::comphelper::InitPropertySequence({
-                { "SourceShellID", uno::Any(rSrcShellID) },
-                { "DestinationShellID", uno::Any(rDestShellID) }
+                { "SourceShellID", cpo::uno::Any(rSrcShellID) },
+                { "DestinationShellID", cpo::uno::Any(rDestShellID) }
             }));
             if ( bCopy )
             {
@@ -562,7 +562,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
             // Probably introducing of such an object must be restricted ( a storage must be used! ).
             uno::Reference< beans::XPropertySet > xProps( xNewStream, uno::UNO_QUERY_THROW );
             xProps->setPropertyValue(u"MediaType"_ustr,
-                    uno::Any( u"application/vnd.sun.star.oleobject"_ustr ) );
+                    cpo::uno::Any( u"application/vnd.sun.star.oleobject"_ustr ) );
         }
         catch (uno::Exception const& e)
         {
@@ -931,7 +931,7 @@ bool EmbeddedObjectContainer::RemoveEmbeddedObject(
                     uno::Reference< beans::XPropertySet > xTargetStorProps(
                                                                 pImpl->mpTempObjectContainer->pImpl->mxStorage,
                                                                 uno::UNO_QUERY_THROW );
-                    xTargetStorProps->setPropertyValue( s_sMediaType,uno::Any( aOrigStorMediaType ) );
+                    xTargetStorProps->setPropertyValue( s_sMediaType,cpo::uno::Any( aOrigStorMediaType ) );
                 }
                 catch (const uno::Exception&)
                 {
@@ -1044,7 +1044,7 @@ uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( c
                 uno::Reference < beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
                 if ( xSet.is() )
                 {
-                    uno::Any aAny = xSet->getPropertyValue(u"MediaType"_ustr);
+                    cpo::uno::Any aAny = xSet->getPropertyValue(u"MediaType"_ustr);
                     aAny >>= *pMediaType;
                 }
             }
@@ -1083,11 +1083,11 @@ bool EmbeddedObjectContainer::InsertGraphicStream( const css::uno::Reference < c
         if (xPropSet)
         {
             xPropSet->setPropertyValue(u"UseCommonStoragePasswordEncryption"_ustr,
-                                        uno::Any( true ) );
-            xPropSet->setPropertyValue(u"MediaType"_ustr, uno::Any(rMediaType) );
+                                        cpo::uno::Any( true ) );
+            xPropSet->setPropertyValue(u"MediaType"_ustr, cpo::uno::Any(rMediaType) );
 
             xPropSet->setPropertyValue(u"Compressed"_ustr,
-                                        uno::Any( true ) );
+                                        cpo::uno::Any( true ) );
         }
     }
     catch (const uno::Exception&)

@@ -42,7 +42,7 @@ ScVbaCommandBar::getName()
 {
     // This will get a "NULL length string" when Name is not set.
     uno::Reference< beans::XPropertySet > xPropertySet( m_xBarSettings, uno::UNO_QUERY_THROW );
-    uno::Any aName = xPropertySet->getPropertyValue( u"UIName"_ustr );
+    cpo::uno::Any aName = xPropertySet->getPropertyValue( u"UIName"_ustr );
     OUString sName;
     aName >>= sName;
     if( sName.isEmpty() )
@@ -73,7 +73,7 @@ void SAL_CALL
 ScVbaCommandBar::setName( const OUString& _name )
 {
     uno::Reference< beans::XPropertySet > xPropertySet( m_xBarSettings, uno::UNO_QUERY_THROW );
-    xPropertySet->setPropertyValue( u"UIName"_ustr , uno::Any( _name ) );
+    xPropertySet->setPropertyValue( u"UIName"_ustr , cpo::uno::Any( _name ) );
 
     pCBarHelper->ApplyTempChange( m_sResourceUrl, m_xBarSettings );
 }
@@ -147,15 +147,15 @@ ScVbaCommandBar::Delete(  )
         xNameContainer->removeByName( m_sResourceUrl );
     }
 }
-uno::Any SAL_CALL
-ScVbaCommandBar::Controls( const uno::Any& aIndex )
+cpo::uno::Any SAL_CALL
+ScVbaCommandBar::Controls( const cpo::uno::Any& aIndex )
 {
     uno::Reference< XCommandBarControls > xCommandBarControls( new ScVbaCommandBarControls( this, mxContext, m_xBarSettings, pCBarHelper, m_xBarSettings, m_sResourceUrl ) );
     if( aIndex.hasValue() )
     {
-        return xCommandBarControls->Item( aIndex, uno::Any() );
+        return xCommandBarControls->Item( aIndex, cpo::uno::Any() );
     }
-    return uno::Any( xCommandBarControls );
+    return cpo::uno::Any( xCommandBarControls );
 }
 
 sal_Int32 SAL_CALL
@@ -167,11 +167,11 @@ ScVbaCommandBar::Type()
     return nType;
 }
 
-uno::Any SAL_CALL
-ScVbaCommandBar::FindControl( const uno::Any& /*aType*/, const uno::Any& /*aId*/, const uno::Any& /*aTag*/, const uno::Any& /*aVisible*/, const uno::Any& /*aRecursive*/ )
+cpo::uno::Any SAL_CALL
+ScVbaCommandBar::FindControl( const cpo::uno::Any& /*aType*/, const cpo::uno::Any& /*aId*/, const cpo::uno::Any& /*aTag*/, const cpo::uno::Any& /*aVisible*/, const cpo::uno::Any& /*aRecursive*/ )
 {
     // always fail to find control
-    return uno::Any( uno::Reference< XCommandBarControl > () );
+    return cpo::uno::Any( uno::Reference< XCommandBarControl > () );
 }
 
 OUString
@@ -239,12 +239,12 @@ void SAL_CALL VbaDummyCommandBar::Delete(  )
     // #STUB
 }
 
-uno::Any SAL_CALL VbaDummyCommandBar::Controls( const uno::Any& aIndex )
+cpo::uno::Any SAL_CALL VbaDummyCommandBar::Controls( const cpo::uno::Any& aIndex )
 {
     uno::Reference< XCommandBarControls > xCommandBarControls( new VbaDummyCommandBarControls( this, mxContext ) );
     if( aIndex.hasValue() )
-        return xCommandBarControls->Item( aIndex, uno::Any() );
-    return uno::Any( xCommandBarControls );
+        return xCommandBarControls->Item( aIndex, cpo::uno::Any() );
+    return cpo::uno::Any( xCommandBarControls );
 }
 
 sal_Int32 SAL_CALL VbaDummyCommandBar::Type()
@@ -252,9 +252,9 @@ sal_Int32 SAL_CALL VbaDummyCommandBar::Type()
     return office::MsoBarType::msoBarTypePopup;
 }
 
-uno::Any SAL_CALL VbaDummyCommandBar::FindControl( const uno::Any& /*aType*/, const uno::Any& /*aId*/, const uno::Any& /*aTag*/, const uno::Any& /*aVisible*/, const uno::Any& /*aRecursive*/ )
+cpo::uno::Any SAL_CALL VbaDummyCommandBar::FindControl( const cpo::uno::Any& /*aType*/, const cpo::uno::Any& /*aId*/, const cpo::uno::Any& /*aTag*/, const cpo::uno::Any& /*aVisible*/, const cpo::uno::Any& /*aRecursive*/ )
 {
-    return uno::Any( uno::Reference< XCommandBarControl >() );
+    return cpo::uno::Any( uno::Reference< XCommandBarControl >() );
 }
 
 OUString VbaDummyCommandBar::getServiceImplName()

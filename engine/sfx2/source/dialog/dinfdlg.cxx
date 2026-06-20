@@ -90,13 +90,14 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 struct CustomProperty
 {
     OUString         m_sName;
-    css::uno::Any    m_aValue;
+    cpo::uno::Any    m_aValue;
 
-    CustomProperty( OUString sName, css::uno::Any aValue ) :
+    CustomProperty( OUString sName, cpo::uno::Any aValue ) :
         m_sName(std::move( sName )), m_aValue(std::move( aValue )) {}
 
     bool operator==(const CustomProperty& rProp) const
@@ -246,7 +247,7 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
                     continue;
                 }
 
-                uno::Any aValue = xSet->getPropertyValue(rProp.Name);
+                cpo::uno::Any aValue = xSet->getPropertyValue(rProp.Name);
                 AddCustomProperty( rProp.Name, aValue );
             }
         }
@@ -1101,7 +1102,7 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet* rSet )
                     OUString aImagePreferredDPIString = m_xImagePreferredDpiComboBox->get_active_text();
                     nImagePreferredDPI = aImagePreferredDPIString.toInt32();
                 }
-                xProps->setPropertyValue(u"ImagePreferredDPI"_ustr, uno::Any(nImagePreferredDPI));
+                xProps->setPropertyValue(u"ImagePreferredDPI"_ustr, cpo::uno::Any(nImagePreferredDPI));
             }
         }
     }
@@ -1977,7 +1978,7 @@ void CustomPropertiesWindow::ReloadLinesContent()
     for (; nDataModelPos + i < GetTotalLineCount() && i < GetExistingLineCount(); i++)
     {
         const OUString& rName = m_aCustomProperties[nDataModelPos + i]->m_sName;
-        const css::uno::Any& rAny = m_aCustomProperties[nDataModelPos + i]->m_aValue;
+        const cpo::uno::Any& rAny = m_aCustomProperties[nDataModelPos + i]->m_aValue;
 
         CustomPropertyLine* pLine = m_aCustomPropertiesLines[i].get();
         pLine->Clear();

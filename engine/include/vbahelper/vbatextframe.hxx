@@ -65,7 +65,7 @@ public:
     virtual void SAL_CALL setMarginRight( float _marginright ) override;
 
     // Methods
-    virtual css::uno::Any SAL_CALL Characters(  ) override;
+    virtual cpo::uno::Any SAL_CALL Characters(  ) override;
 
 };
 

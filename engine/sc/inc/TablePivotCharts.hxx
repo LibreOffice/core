@@ -47,13 +47,13 @@ public:
     virtual void SAL_CALL removeByName(OUString const & aName) override;
 
     // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName(OUString const & aName) override;
+    virtual cpo::uno::Any SAL_CALL getByName(OUString const & aName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName(OUString const & aName) override;
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;

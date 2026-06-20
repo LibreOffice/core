@@ -129,22 +129,22 @@ void KitInitTest::testJsonToPropertyValuesBorder()
 
     // see SvxBoxItem::QueryValue for details
     table::BorderLine2 aLine(sal_Int32(COL_BLACK), 0, 1, 0, table::BorderLineStyle::SOLID, 1);
-    uno::Sequence<uno::Any> aOuterSeq{ uno::Any(aLine), // left
-                                       uno::Any(aLine), // right
-                                       uno::Any(aLine), // bottom
-                                       uno::Any(aLine), // top
-                                       uno::Any(static_cast<sal_Int32>(0)),
-                                       uno::Any(static_cast<sal_Int32>(0)),
-                                       uno::Any(static_cast<sal_Int32>(0)),
-                                       uno::Any(static_cast<sal_Int32>(0)),
-                                       uno::Any(static_cast<sal_Int32>(0)) };
+    uno::Sequence<cpo::uno::Any> aOuterSeq{ cpo::uno::Any(aLine), // left
+                                            cpo::uno::Any(aLine), // right
+                                            cpo::uno::Any(aLine), // bottom
+                                            cpo::uno::Any(aLine), // top
+                                            cpo::uno::Any(static_cast<sal_Int32>(0)),
+                                            cpo::uno::Any(static_cast<sal_Int32>(0)),
+                                            cpo::uno::Any(static_cast<sal_Int32>(0)),
+                                            cpo::uno::Any(static_cast<sal_Int32>(0)),
+                                            cpo::uno::Any(static_cast<sal_Int32>(0)) };
 
     // see SvxBoxInfoItem::QueryValue() for details
-    uno::Sequence<uno::Any> aInnerSeq{ uno::Any(aLine), // horizontal
-                                       uno::Any(aLine), // vertical
-                                       uno::Any(static_cast<sal_Int16>(0)),
-                                       uno::Any(static_cast<sal_Int16>(0x7F)),
-                                       uno::Any(static_cast<sal_Int32>(0)) };
+    uno::Sequence<cpo::uno::Any> aInnerSeq{ cpo::uno::Any(aLine), // horizontal
+                                            cpo::uno::Any(aLine), // vertical
+                                            cpo::uno::Any(static_cast<sal_Int16>(0)),
+                                            cpo::uno::Any(static_cast<sal_Int16>(0x7F)),
+                                            cpo::uno::Any(static_cast<sal_Int32>(0)) };
 
     uno::Sequence aArgs{ comphelper::makePropertyValue(u"OuterBorder"_ustr, aOuterSeq),
                          comphelper::makePropertyValue(u"InnerBorder"_ustr, aInnerSeq) };

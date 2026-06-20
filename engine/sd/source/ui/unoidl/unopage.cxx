@@ -87,6 +87,7 @@ using ::com::sun::star::animations::XAnimationNodeSupplier;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::drawing;
@@ -1029,7 +1030,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
 
     throwIfDisposed();
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     const SfxItemPropertyMapEntry* pEntry = mpPropSet->getPropertyMapEntry(PropertyName);
 
@@ -2679,7 +2680,7 @@ Any SAL_CALL SdMasterPage::queryInterface( const uno::Type & rType )
 
     throwIfDisposed();
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     if( rType == cppu::UnoType<container::XIndexAccess>::get() )
         aAny <<= Reference< container::XIndexAccess >(static_cast<presentation::XPresentationPage*>(this));

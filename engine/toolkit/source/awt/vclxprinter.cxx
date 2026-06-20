@@ -89,7 +89,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > VCLXPrinterPropertySet::getP
     return s_PropertyArrayHelper;
 }
 
-bool VCLXPrinterPropertySet::convertFastPropertyValue( css::uno::Any & rConvertedValue, css::uno::Any & rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue )
+bool VCLXPrinterPropertySet::convertFastPropertyValue( cpo::uno::Any & rConvertedValue, cpo::uno::Any & rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -126,7 +126,7 @@ bool VCLXPrinterPropertySet::convertFastPropertyValue( css::uno::Any & rConverte
     return bDifferent;
 }
 
-void VCLXPrinterPropertySet::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue )
+void VCLXPrinterPropertySet::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -149,7 +149,7 @@ void VCLXPrinterPropertySet::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle
     }
 }
 
-void VCLXPrinterPropertySet::getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const
+void VCLXPrinterPropertySet::getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const
 {
     ::osl::MutexGuard aGuard( const_cast<VCLXPrinterPropertySet*>(this)->m_aMutex );
 
@@ -173,7 +173,7 @@ void VCLXPrinterPropertySet::setHorizontal( bool bHorizontal )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    css::uno::Any aValue;
+    cpo::uno::Any aValue;
     aValue <<= bHorizontal;
     setFastPropertyValue( PROPERTY_Horizontal, aValue );
 }
@@ -368,7 +368,7 @@ css::uno::Sequence<OUString> VCLXPrinterServer::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_VCLXPrinterServer_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new VCLXPrinterServer);
 }

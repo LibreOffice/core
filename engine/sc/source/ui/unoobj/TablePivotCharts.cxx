@@ -141,9 +141,9 @@ void SAL_CALL TablePivotCharts::addNewByName(OUString const & rName,
         xReceiver->attachNumberFormatsSupplier(xNumberFormatsSupplier);
 
         uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
-                    { "CellRangeRepresentation", uno::Any(rDataPilotName) },
-                    { "HasCategories", uno::Any(true) },
-                    { "DataRowSource", uno::Any(chart::ChartDataRowSource_COLUMNS) }
+                    { "CellRangeRepresentation", cpo::uno::Any(rDataPilotName) },
+                    { "HasCategories", cpo::uno::Any(true) },
+                    { "DataRowSource", cpo::uno::Any(chart::ChartDataRowSource_COLUMNS) }
                 }));
         xReceiver->setArguments(aArgs);
     }
@@ -196,7 +196,7 @@ sal_Int32 SAL_CALL TablePivotCharts::getCount()
     return nCount;
 }
 
-uno::Any SAL_CALL TablePivotCharts::getByIndex(sal_Int32 nIndex)
+cpo::uno::Any SAL_CALL TablePivotCharts::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
     SdrOle2Obj* pObject = sctools::getChartByIndex(m_pDocShell, m_nTab, nIndex,
@@ -216,7 +216,7 @@ uno::Any SAL_CALL TablePivotCharts::getByIndex(sal_Int32 nIndex)
     if (!xChart.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(xChart);
+    return cpo::uno::Any(xChart);
 }
 
 uno::Type SAL_CALL TablePivotCharts::getElementType()
@@ -230,7 +230,7 @@ bool SAL_CALL TablePivotCharts::hasElements()
     return getCount() != 0;
 }
 
-uno::Any SAL_CALL TablePivotCharts::getByName(OUString const & rName)
+cpo::uno::Any SAL_CALL TablePivotCharts::getByName(OUString const & rName)
 {
     SolarMutexGuard aGuard;
 
@@ -241,7 +241,7 @@ uno::Any SAL_CALL TablePivotCharts::getByName(OUString const & rName)
     if (!xChart.is())
         throw container::NoSuchElementException();
 
-    return uno::Any(xChart);
+    return cpo::uno::Any(xChart);
 }
 
 uno::Sequence<OUString> SAL_CALL TablePivotCharts::getElementNames()

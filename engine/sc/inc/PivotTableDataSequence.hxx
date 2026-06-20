@@ -91,7 +91,7 @@ public:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     // XDataSequence
-    virtual css::uno::Sequence<css::uno::Any> SAL_CALL getData() override;
+    virtual css::uno::Sequence<cpo::uno::Any> SAL_CALL getData() override;
     virtual OUString SAL_CALL getSourceRangeRepresentation() override;
     virtual css::uno::Sequence<OUString> SAL_CALL
         generateLabel(css::chart2::data::LabelOrigin nOrigin) override;
@@ -109,9 +109,9 @@ public:
         getPropertySetInfo() override;
 
     virtual void SAL_CALL setPropertyValue(const OUString& rPropertyName,
-                                           const css::uno::Any& rValue) override;
+                                           const cpo::uno::Any& rValue) override;
 
-    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& rPropertyName) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(const OUString& rPropertyName) override;
 
     virtual void SAL_CALL addPropertyChangeListener(
             const OUString& rPropertyName,

@@ -101,7 +101,7 @@ private:
     void                setResultSize( sal_Int32 nColumns, sal_Int32 nRows );
 
 private:
-    typedef Matrix< css::uno::Any > ResultMatrix;
+    typedef Matrix< cpo::uno::Any > ResultMatrix;
 
     const ExternalLink& mrParentLink;       /// External link this name belongs to.
     ExternalNameModel   maExtNameModel;     /// Additional name data.

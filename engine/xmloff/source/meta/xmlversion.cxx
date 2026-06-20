@@ -39,6 +39,7 @@
 
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star;
 
 constexpr OUString XMLN_VERSIONSLIST = u"VersionList.xml"_ustr;
@@ -420,7 +421,7 @@ XMLVersionListPersistence::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 XMLVersionListPersistence_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new XMLVersionListPersistence);
 }

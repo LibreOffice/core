@@ -2844,7 +2844,7 @@ void ScInterpreter::ScExternal()
         {
             --nPar;     // 0 .. (nParamCount-1)
 
-            uno::Any aParam;
+            cpo::uno::Any aParam;
             if (IsMissing())
             {
                 // Add-In has to explicitly handle an omitted empty missing
@@ -2978,7 +2978,7 @@ void ScInterpreter::ScExternal()
                         case svString:
                         case svSingleRef:
                             {
-                                uno::Any aElem;
+                                cpo::uno::Any aElem;
                                 if ( nStackType == svDouble )
                                     aElem <<= GetDouble();
                                 else if ( nStackType == svString )
@@ -2999,8 +2999,8 @@ void ScInterpreter::ScExternal()
                                             aElem <<= GetCellValue(aAdr, aCell);
                                     }
                                 }
-                                uno::Sequence<uno::Any> aInner( &aElem, 1 );
-                                uno::Sequence< uno::Sequence<uno::Any> > aOuter( &aInner, 1 );
+                                uno::Sequence<cpo::uno::Any> aInner( &aElem, 1 );
+                                uno::Sequence< uno::Sequence<cpo::uno::Any> > aOuter( &aInner, 1 );
                                 aParam <<= aOuter;
                             }
                             break;
@@ -3204,7 +3204,7 @@ void ScInterpreter::ScMissing()
 
 #if HAVE_FEATURE_SCRIPTING
 
-static uno::Any lcl_getSheetModule( const uno::Reference<table::XCellRange>& xCellRange, const ScDocument* pDok )
+static cpo::uno::Any lcl_getSheetModule( const uno::Reference<table::XCellRange>& xCellRange, const ScDocument* pDok )
 {
     uno::Reference< sheet::XSheetCellRange > xSheetRange( xCellRange, uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xProps( xSheetRange->getSpreadsheet(), uno::UNO_QUERY_THROW );
@@ -3235,7 +3235,7 @@ static uno::Any lcl_getSheetModule( const uno::Reference<table::XCellRange>& xCe
             }
         }
     }
-    return uno::Any( xIf );
+    return cpo::uno::Any( xIf );
 }
 
 static bool lcl_setVBARange( const ScRange& aRange, const ScDocument& rDok, SbxVariable* pPar )
@@ -3245,12 +3245,12 @@ static bool lcl_setVBARange( const ScRange& aRange, const ScDocument& rDok, SbxV
     {
         uno::Reference< uno::XInterface > xVBARange;
         uno::Reference<table::XCellRange> xCellRange = ScCellRangeObj::CreateRangeFromDoc( rDok, aRange );
-        uno::Sequence< uno::Any > aArgs{ lcl_getSheetModule( xCellRange, &rDok ),
-                                         uno::Any(xCellRange) };
+        uno::Sequence< cpo::uno::Any > aArgs{ lcl_getSheetModule( xCellRange, &rDok ),
+                                         cpo::uno::Any(xCellRange) };
         xVBARange = ooo::vba::createVBAUnoAPIServiceWithArgs( rDok.GetDocumentShell(), "ooo.vba.excel.Range", aArgs );
         if ( xVBARange.is() )
         {
-            SbxObjectRef aObj = GetSbUnoObject( u"A-Range"_ustr, uno::Any( xVBARange ) );
+            SbxObjectRef aObj = GetSbUnoObject( u"A-Range"_ustr, cpo::uno::Any( xVBARange ) );
             SetSbUnoObjectDfltPropName( aObj.get() );
             bOk = pPar->PutObject( aObj.get() );
         }

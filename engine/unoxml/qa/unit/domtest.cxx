@@ -43,6 +43,7 @@
 using namespace ::comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using css::xml::dom::XDocumentBuilder;
 
 namespace
@@ -103,19 +104,19 @@ struct ErrorHandler
     ErrorHandler() : mnErrCount(0), /*mnFatalCount(0),*/ mnWarnCount(0)
     {}
 
-    virtual void SAL_CALL error( const uno::Any& ) override
+    virtual void SAL_CALL error( const cpo::uno::Any& ) override
     {
         ++mnErrCount;
     }
 
     // Just implement FatalError function as it is in XErrorHandler
     // This function is never used, as lib2xml doesn't distinguish between error and fatalerror and calls error functions in both cases
-    virtual void SAL_CALL fatalError( const uno::Any& ) override
+    virtual void SAL_CALL fatalError( const cpo::uno::Any& ) override
     {
         //++mnFatalCount;
     }
 
-    virtual void SAL_CALL warning( const uno::Any& ) override
+    virtual void SAL_CALL warning( const cpo::uno::Any& ) override
     {
         ++mnWarnCount;
     }

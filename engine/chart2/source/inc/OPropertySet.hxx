@@ -66,7 +66,7 @@ protected:
         @throws css::beans::UnknownPropertyException
         @throws css::uno::RuntimeException
      */
-    virtual void GetDefaultValue( sal_Int32 nHandle, css::uno::Any& rAny ) const = 0;
+    virtual void GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const = 0;
 
     /** The InfoHelper table contains all property names and types of
         this object.
@@ -103,10 +103,10 @@ protected:
         @see ::cppu::OPropertySetHelper
      */
     virtual bool SAL_CALL convertFastPropertyValue
-        ( css::uno::Any & rConvertedValue,
-          css::uno::Any & rOldValue,
+        ( cpo::uno::Any & rConvertedValue,
+          cpo::uno::Any & rOldValue,
           sal_Int32 nHandle,
-          const css::uno::Any& rValue ) override final;
+          const cpo::uno::Any& rValue ) override final;
 
     /** The same as setFastPropertyValue; nHandle is always valid.
         The changes must not be broadcasted in this method.
@@ -127,7 +127,7 @@ protected:
     */
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast
         ( sal_Int32 nHandle,
-          const css::uno::Any& rValue ) override;
+          const cpo::uno::Any& rValue ) override;
 
     /**
        The same as getFastPropertyValue, but return the value through rValue and
@@ -136,7 +136,7 @@ protected:
         @see ::cppu::OPropertySetHelper
      */
     virtual void SAL_CALL getFastPropertyValue
-        ( css::uno::Any& rValue,
+        ( cpo::uno::Any& rValue,
           sal_Int32 nHandle ) const override;
 
     /** implement this method in derived classes to get called when properties
@@ -151,7 +151,7 @@ public:
     // Interfaces
 
     // ____ XInterface ____
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
 
     // ____ XTypeProvider ____
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL
@@ -166,7 +166,7 @@ public:
         getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName ) override final;
     virtual void SAL_CALL
         setPropertyToDefault( const OUString& PropertyName ) override final;
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
         getPropertyDefault( const OUString& aPropertyName ) override final;
 
     // ____ XMultiPropertyStates ____
@@ -176,7 +176,7 @@ public:
         setAllPropertiesToDefault() override final;
     virtual void SAL_CALL
         setPropertiesToDefault( const css::uno::Sequence< OUString >& aPropertyNames ) override final;
-    virtual css::uno::Sequence< css::uno::Any > SAL_CALL
+    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL
         getPropertyDefaults( const css::uno::Sequence< OUString >& aPropertyNames ) override final;
 
     // ____ XStyleSupplier ____
@@ -186,10 +186,10 @@ public:
     // ____ XMultiPropertySet ____
     virtual void SAL_CALL setPropertyValues(
         const css::uno::Sequence< OUString >& PropertyNames,
-        const css::uno::Sequence< css::uno::Any >& Values ) override final;
+        const css::uno::Sequence< cpo::uno::Any >& Values ) override final;
 
     // ____ XFastPropertySet ____
-    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const css::uno::Any& rValue ) override final;
+    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override final;
 
     // Note: it is assumed that the base class implements setPropertyValue by
     // using setFastPropertyValue
@@ -216,16 +216,16 @@ private:
         @return false if the property is default, true otherwise.
      */
     bool GetPropertyValueByHandle(
-        css::uno::Any & rValue,
+        cpo::uno::Any & rValue,
         sal_Int32 nHandle ) const;
 
     void SetPropertyValueByHandle( sal_Int32 nHandle,
-                                   const css::uno::Any & rValue );
+                                   const cpo::uno::Any & rValue );
 
     bool SetStyle( const css::uno::Reference< css::style::XStyle > & xStyle );
 
     bool m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault;
-    std::unordered_map< sal_Int32, css::uno::Any >    m_aProperties;
+    std::unordered_map< sal_Int32, cpo::uno::Any >    m_aProperties;
     css::uno::Reference< css::style::XStyle > m_xStyle;
 };
 

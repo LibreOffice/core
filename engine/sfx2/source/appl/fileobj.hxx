@@ -61,7 +61,7 @@ protected:
 public:
     SvFileObject();
 
-    virtual bool GetData( css::uno::Any & rData /*out param*/,
+    virtual bool GetData( cpo::uno::Any & rData /*out param*/,
                             const OUString & rMimeType,
                             bool bSynchron = false ) override;
 

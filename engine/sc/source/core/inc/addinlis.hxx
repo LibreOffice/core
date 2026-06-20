@@ -37,7 +37,7 @@ class ScAddInListener final : public cppu::WeakImplHelper<
 {
 private:
     css::uno::Reference<css::sheet::XVolatileResult> xVolRes;
-    css::uno::Any aResult;
+    cpo::uno::Any aResult;
     std::unique_ptr<ScAddInDocs> pDocs; // documents where this is used
 
     static ::std::vector<rtl::Reference<ScAddInListener>> aAllListeners;
@@ -64,7 +64,7 @@ public:
     void AddDocument( ScDocument* pDoc )
          { pDocs->insert( pDoc ); }
 
-    const css::uno::Any& GetResult() const
+    const cpo::uno::Any& GetResult() const
           { return aResult; }
 
     // XResultListener

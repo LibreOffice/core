@@ -83,8 +83,8 @@ void CellMarginHandler::createGrabBag(const OUString& aName)
         case NS_ooxml::LN_Value_ST_TblWidth_auto: sType = u"auto"_ustr; break;
     }
     uno::Sequence<beans::PropertyValue> aSeq( comphelper::InitPropertySequence({
-        { "w", uno::Any(m_nWidth) },
-        { "type", uno::Any(sType) }
+        { "w", cpo::uno::Any(m_nWidth) },
+        { "type", cpo::uno::Any(sType) }
     }));
 
     aRet.Value <<= aSeq;

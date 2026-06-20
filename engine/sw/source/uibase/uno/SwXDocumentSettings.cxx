@@ -55,6 +55,7 @@
 using namespace comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
@@ -390,7 +391,7 @@ void SwXDocumentSettings::_preSetValues ()
         throw UnknownPropertyException();
 }
 
-void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const uno::Any &rValue )
+void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const cpo::uno::Any &rValue )
 {
     if (rInfo.mnAttributes & PropertyAttribute::READONLY)
         throw PropertyVetoException ("Property is read-only: " + rInfo.maName);
@@ -1298,7 +1299,7 @@ void SwXDocumentSettings::_preGetValues ()
         throw UnknownPropertyException();
 }
 
-void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, uno::Any & rValue )
+void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, cpo::uno::Any & rValue )
 {
     switch( rInfo.mnHandle )
     {
@@ -1419,7 +1420,7 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
 #if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
             rValue <<= mpDoc->GetDBManager()->getEmbeddedName();
 #else
-            rValue = uno::Any();
+            rValue = cpo::uno::Any();
 #endif
         }
         break;

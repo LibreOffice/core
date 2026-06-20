@@ -200,11 +200,11 @@ void XMLBitmapStyleContext::endFastElement(sal_Int32 )
         {
             if (xBitmapContainer->hasByName(maStrName))
             {
-                xBitmapContainer->replaceByName(maStrName, uno::Any(xBitmap));
+                xBitmapContainer->replaceByName(maStrName, cpo::uno::Any(xBitmap));
             }
             else
             {
-                xBitmapContainer->insertByName(maStrName, uno::Any(xBitmap));
+                xBitmapContainer->insertByName(maStrName, cpo::uno::Any(xBitmap));
             }
         }
     }

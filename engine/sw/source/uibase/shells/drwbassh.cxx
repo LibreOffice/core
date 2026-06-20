@@ -66,6 +66,7 @@
 using namespace ::com::sun::star;
 using namespace css::beans;
 using namespace css::uno;
+using namespace cpo::uno;
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SwDrawBaseShell, SwBaseShell)
 
@@ -248,8 +249,8 @@ void SwDrawBaseShell::Execute(SfxRequest& rReq)
                         if (rIDSA.get(DocumentSettingId::DO_NOT_MIRROR_RTL_DRAW_OBJS))
                         {
                             SfxGrabBagItem aItem(RES_CHRATR_GRABBAG,
-                                    std::map<OUString, css::uno::Any>{
-                                    { u"DoNotMirrorRtlDrawObjs"_ustr, uno::Any(true) } } );
+                                    std::map<OUString, cpo::uno::Any>{
+                                    { u"DoNotMirrorRtlDrawObjs"_ustr, cpo::uno::Any(true) } } );
                             aSet.Put(aItem);
                         }
 

@@ -56,7 +56,7 @@ private:
     SdrModel* mpSdrModel;
     bool      mbIsImpressDocument;
     sal_Int16 mnTempPageNumber; // for printing handouts
-    css::uno::Any  mSlideLayout;  // import slide layout pptx
+    cpo::uno::Any  mSlideLayout;  // import slide layout pptx
     const SvxItemPropertySet*   mpPropSet;
 
     void UpdateModel();
@@ -65,9 +65,9 @@ protected:
     friend class SdXImpressDocument;
 
     /// @throws css::lang::IllegalArgumentException
-    virtual void setBackground( const css::uno::Any& rValue );
+    virtual void setBackground( const cpo::uno::Any& rValue );
     /// @throws std::exception
-    virtual void getBackground( css::uno::Any& rValue );
+    virtual void getBackground( cpo::uno::Any& rValue );
 
     OUString getBookmarkURL() const;
     void setBookmarkURL( std::u16string_view rURL );
@@ -84,8 +84,8 @@ protected:
 
     virtual void disposing() noexcept override;
 
-    css::uno::Any getNavigationOrder();
-    void setNavigationOrder( const css::uno::Any& rValue );
+    cpo::uno::Any getNavigationOrder();
+    void setNavigationOrder( const cpo::uno::Any& rValue );
 
     /// @throws css::uno::RuntimeException
     void throwIfDisposed() const;
@@ -112,7 +112,7 @@ public:
     // XInterface
     virtual void SAL_CALL acquire() noexcept override { SvxDrawPage::acquire(); }
     virtual void SAL_CALL release() noexcept override { SvxDrawPage::release(); }
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
 
     // XShapeCombiner
     virtual css::uno::Reference< css::drawing::XShape > SAL_CALL combine( const css::uno::Reference< css::drawing::XShapes >& xShapes ) override;
@@ -124,16 +124,16 @@ public:
 
     // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
     virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
     virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
     virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     // XMultiPropertySet
-    virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues ) override;
-    virtual css::uno::Sequence< css::uno::Any > SAL_CALL getPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< cpo::uno::Any >& aValues ) override;
+    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL getPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     virtual void SAL_CALL addPropertiesChangeListener( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
     virtual void SAL_CALL removePropertiesChangeListener( const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
     virtual void SAL_CALL firePropertiesChangeEvent( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
@@ -164,8 +164,8 @@ class SdDrawPage final : public css::drawing::XMasterPageTarget,
 private:
     css::uno::Sequence< css::uno::Type > maTypeSequence;
 
-    virtual void setBackground( const css::uno::Any& rValue ) override;
-    virtual void getBackground( css::uno::Any& rValue ) override;
+    virtual void setBackground( const cpo::uno::Any& rValue ) override;
+    virtual void getBackground( cpo::uno::Any& rValue ) override;
 public:
     SdDrawPage(SdXImpressDocument* pModel, SdPage* pInPage);
     virtual ~SdDrawPage() noexcept override;
@@ -177,7 +177,7 @@ public:
     static OUString getUiNameFromPageApiName( const OUString& rApiName );
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override;
     virtual void SAL_CALL release() noexcept override;
 
@@ -203,7 +203,7 @@ public:
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override ;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
@@ -226,8 +226,8 @@ class SdMasterPage final : public css::presentation::XPresentationPage,
 private:
     css::uno::Sequence< css::uno::Type > maTypeSequence;
 
-    virtual void setBackground( const css::uno::Any& rValue ) override;
-    virtual void getBackground( css::uno::Any& rValue ) override;
+    virtual void setBackground( const cpo::uno::Any& rValue ) override;
+    virtual void getBackground( cpo::uno::Any& rValue ) override;
 
 public:
     SdMasterPage(SdXImpressDocument* pModel, SdPage* pInPage);
@@ -236,7 +236,7 @@ public:
     UNO3_GETIMPLEMENTATION_DECL(SdMasterPage)
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override;
     virtual void SAL_CALL release() noexcept override;
 
@@ -251,7 +251,7 @@ public:
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override ;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
@@ -292,7 +292,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 

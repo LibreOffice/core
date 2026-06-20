@@ -56,18 +56,18 @@ namespace pcr
 
         /** helper for implementing XPropertyHandler::convertToPropertyValue
         */
-        static css::uno::Any convertToPropertyValue(
+        static cpo::uno::Any convertToPropertyValue(
                 const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
                 const css::uno::Reference< css::script::XTypeConverter >& _rxTypeConverter,
                 const css::beans::Property& _rProperty,
-                const css::uno::Any& _rControlValue
+                const cpo::uno::Any& _rControlValue
             );
 
         /// helper for implementing XPropertyHandler::convertToControlValue
-        static css::uno::Any convertToControlValue(
+        static cpo::uno::Any convertToControlValue(
                 const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
                 const css::uno::Reference< css::script::XTypeConverter >& _rxTypeConverter,
-                const css::uno::Any& _rPropertyValue,
+                const cpo::uno::Any& _rPropertyValue,
                 const css::uno::Type& _rControlValueType
             );
 

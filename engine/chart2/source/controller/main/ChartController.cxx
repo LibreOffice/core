@@ -265,7 +265,7 @@ OUString ChartController::GetContextName()
     if (m_bDisposed)
         return OUString();
 
-    uno::Any aAny = getSelection();
+    cpo::uno::Any aAny = getSelection();
     if (!aAny.hasValue())
         return u"Chart"_ustr;
 
@@ -583,7 +583,7 @@ bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XModel 
 
     // #i119999# Do not do this per default to allow the user to deselect the chart OLE with a single press to ESC
     // select chart area per default:
-    // select( uno::Any( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) ) );
+    // select( cpo::uno::Any( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) ) );
 
     rtl::Reference< ChartModel > xFact = getChartModel();
     if( xFact.is())
@@ -640,7 +640,7 @@ rtl::Reference<::chart::Diagram> ChartController::getFirstDiagram()
     return xModel->getFirstChartDiagram();
 }
 
-uno::Any SAL_CALL ChartController::getViewData()
+cpo::uno::Any SAL_CALL ChartController::getViewData()
 {
     //provides access to current view status
     //set of data that can be used to restore the current view status at later time
@@ -648,17 +648,17 @@ uno::Any SAL_CALL ChartController::getViewData()
 
     SolarMutexGuard aGuard;
     if( impl_isDisposedOrSuspended() )
-        return uno::Any(); //behave passive if already disposed or suspended //@todo? or throw an exception??
+        return cpo::uno::Any(); //behave passive if already disposed or suspended //@todo? or throw an exception??
 
     //-- collect current view state
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     //// @todo integrate specialized implementation
 
     return aRet;
 }
 
 void SAL_CALL ChartController::restoreViewData(
-    const uno::Any& /* Value */ )
+    const cpo::uno::Any& /* Value */ )
 {
     //restores the view status using the data gotten from a previous call to XController::getViewData()
 
@@ -969,7 +969,7 @@ void SAL_CALL ChartController::disposing(
 void SAL_CALL ChartController::layoutEvent(
     const lang::EventObject& aSource,
     sal_Int16 eLayoutEvent,
-    const uno::Any& /* aInfo */ )
+    const cpo::uno::Any& /* aInfo */ )
 {
     if( eLayoutEvent == frame::LayoutManagerEvents::MERGEDMENUBAR )
     {
@@ -2047,7 +2047,7 @@ static void lcl_SetOrGetThemeToOrFromElement(bool bSet, ChartThemeType& aTheme,
 
         // Get the properties of the Theme
         // we may want to set it to the chart, or overwrite it with the chart element properties.
-        std::vector<std::pair<OUString, uno::Any>>& aProperties
+        std::vector<std::pair<OUString, cpo::uno::Any>>& aProperties
             = aTheme.m_aElements[static_cast<int>(nElementID)].m_aProperties;
 
         for (size_t i = 0; i < xProperties.size(); i++)
@@ -2082,7 +2082,7 @@ static void lcl_SetOrGetThemeToOrFromElement(bool bSet, ChartThemeType& aTheme,
                 if (xInfo.is())
                 {
                     auto aPropSeq = xInfo->getProperties();
-                    uno::Any aValue;
+                    cpo::uno::Any aValue;
                     if (aPropSeq.getLength() > 0)
                     {
                         // clear the theme properties, and reserve enough for the current style
@@ -2195,7 +2195,7 @@ const static ItemPropertyMapType& lcl_GetPropertyMap()
 
 void ChartElementThemeType::convertPoolItemsToProperties(std::vector<SfxPoolItem*> aPoolItems)
 {
-    uno::Any aValue;
+    cpo::uno::Any aValue;
 
     for (SfxPoolItem* pPoolItem : aPoolItems)
     {
@@ -2218,27 +2218,27 @@ void ChartElementThemeType::convertPoolItemsToProperties(std::vector<SfxPoolItem
                 if (rItem.QueryValue(aValue, MID_FONT_FAMILY_NAME))
                 {
                     m_aProperties.push_back(
-                        std::pair<OUString, uno::Any>("CharFontName" + aPostfix, aValue));
+                        std::pair<OUString, cpo::uno::Any>("CharFontName" + aPostfix, aValue));
                 }
                 if (rItem.QueryValue(aValue, MID_FONT_FAMILY))
                 {
                     m_aProperties.push_back(
-                        std::pair<OUString, uno::Any>("CharFontFamily" + aPostfix, aValue));
+                        std::pair<OUString, cpo::uno::Any>("CharFontFamily" + aPostfix, aValue));
                 }
                 if (rItem.QueryValue(aValue, MID_FONT_STYLE_NAME))
                 {
                     m_aProperties.push_back(
-                        std::pair<OUString, uno::Any>("CharFontStyleName" + aPostfix, aValue));
+                        std::pair<OUString, cpo::uno::Any>("CharFontStyleName" + aPostfix, aValue));
                 }
                 if (rItem.QueryValue(aValue, MID_FONT_CHAR_SET))
                 {
                     m_aProperties.push_back(
-                        std::pair<OUString, uno::Any>("CharFontCharSet" + aPostfix, aValue));
+                        std::pair<OUString, cpo::uno::Any>("CharFontCharSet" + aPostfix, aValue));
                 }
                 if (rItem.QueryValue(aValue, MID_FONT_PITCH))
                 {
                     m_aProperties.push_back(
-                        std::pair<OUString, uno::Any>("CharFontPitch" + aPostfix, aValue));
+                        std::pair<OUString, cpo::uno::Any>("CharFontPitch" + aPostfix, aValue));
                 }
             }
             break;
@@ -2311,7 +2311,7 @@ void ChartElementThemeType::convertPoolItemsToProperties(std::vector<SfxPoolItem
                 if (rItem.QueryValue(aValue, MID_POSTURE))
                 {
                     m_aProperties.push_back(
-                        std::pair<OUString, uno::Any>("CharPosture" + aPostfix, aValue));
+                        std::pair<OUString, cpo::uno::Any>("CharPosture" + aPostfix, aValue));
                 }
             }
             break;
@@ -2331,7 +2331,7 @@ void ChartElementThemeType::convertPoolItemsToProperties(std::vector<SfxPoolItem
                 if (rItem.QueryValue(aValue, MID_WEIGHT))
                 {
                     m_aProperties.push_back(
-                        std::pair<OUString, uno::Any>("CharWeight" + aPostfix, aValue));
+                        std::pair<OUString, cpo::uno::Any>("CharWeight" + aPostfix, aValue));
                 }
             }
             break;
@@ -2351,7 +2351,7 @@ void ChartElementThemeType::convertPoolItemsToProperties(std::vector<SfxPoolItem
                 if (rItem.QueryValue(aValue, MID_FONTHEIGHT))
                 {
                     m_aProperties.push_back(
-                        std::pair<OUString, uno::Any>("CharHeight" + aPostfix, aValue));
+                        std::pair<OUString, cpo::uno::Any>("CharHeight" + aPostfix, aValue));
                 }
             }
             break;

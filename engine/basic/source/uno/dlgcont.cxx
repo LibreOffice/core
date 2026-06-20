@@ -52,6 +52,7 @@ using namespace com::sun::star::document;
 using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::sax;
@@ -568,14 +569,14 @@ Reference< resource::XStringResourceResolver >
     return m_xStringResourcePersistence;
 }
 
-bool SfxDialogLibrary::containsValidDialog( const css::uno::Any& aElement )
+bool SfxDialogLibrary::containsValidDialog( const cpo::uno::Any& aElement )
 {
     Reference< XInputStreamProvider > xISP;
     aElement >>= xISP;
     return xISP.is();
 }
 
-bool SfxDialogLibrary::isLibraryElementValid(const css::uno::Any& rElement) const
+bool SfxDialogLibrary::isLibraryElementValid(const cpo::uno::Any& rElement) const
 {
     return SfxDialogLibrary::containsValidDialog(rElement);
 }
@@ -584,7 +585,7 @@ bool SfxDialogLibrary::isLibraryElementValid(const css::uno::Any& rElement) cons
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_sfx2_DialogLibraryContainer_get_implementation(css::uno::XComponentContext*,
-                                                           css::uno::Sequence<css::uno::Any> const &)
+                                                           css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new basic::SfxDialogLibraryContainer());
 }

@@ -21,7 +21,7 @@
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/TextAnimationKind.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/drawing/TextAnimationDirection.hpp>
 #include <com/sun/star/drawing/ConnectorType.hpp>
 #include <com/sun/star/drawing/MeasureKind.hpp>
@@ -1153,7 +1153,7 @@ void SdrTextFitToSizeTypeItem::SetBoolValue(bool bVal)
     SetValue(bVal ? drawing::TextFitToSizeType_PROPORTIONAL : drawing::TextFitToSizeType_NONE);
 }
 
-bool SdrTextFitToSizeTypeItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool SdrTextFitToSizeTypeItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     drawing::TextFitToSizeType eFS = GetValue();
     rVal <<= eFS;
@@ -1161,7 +1161,7 @@ bool SdrTextFitToSizeTypeItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId
     return true;
 }
 
-bool SdrTextFitToSizeTypeItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool SdrTextFitToSizeTypeItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     drawing::TextFitToSizeType eFS;
     if(!(rVal >>= eFS))
@@ -1205,13 +1205,13 @@ bool SdrTextVertAdjustItem::GetPresentation(SfxItemPresentation ePres,
     return true;
 }
 
-bool SdrTextVertAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool SdrTextVertAdjustItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= static_cast<drawing::TextVerticalAdjust>(GetValue());
     return true;
 }
 
-bool SdrTextVertAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool SdrTextVertAdjustItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     drawing::TextVerticalAdjust eAdj;
     if(!(rVal >>= eAdj))
@@ -1262,13 +1262,13 @@ bool SdrTextHorzAdjustItem::GetPresentation(SfxItemPresentation ePres,
     return true;
 }
 
-bool SdrTextHorzAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool SdrTextHorzAdjustItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= static_cast<drawing::TextHorizontalAdjust>(GetValue());
     return true;
 }
 
-bool SdrTextHorzAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool SdrTextHorzAdjustItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     drawing::TextHorizontalAdjust eAdj;
     if(!(rVal >>= eAdj))
@@ -1312,13 +1312,13 @@ bool SdrTextAniKindItem::GetPresentation(SfxItemPresentation ePres,
     return true;
 }
 
-bool SdrTextAniKindItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool SdrTextAniKindItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= static_cast<drawing::TextAnimationKind>(GetValue());
     return true;
 }
 
-bool SdrTextAniKindItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool SdrTextAniKindItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     drawing::TextAnimationKind eKind;
     if(!(rVal >>= eKind))
@@ -1360,13 +1360,13 @@ bool SdrTextAniDirectionItem::GetPresentation(SfxItemPresentation ePres,
     return true;
 }
 
-bool SdrTextAniDirectionItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool SdrTextAniDirectionItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= static_cast<drawing::TextAnimationDirection>(GetValue());
     return true;
 }
 
-bool SdrTextAniDirectionItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool SdrTextAniDirectionItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     drawing::TextAnimationDirection eDir;
     if(!(rVal >>= eDir))
@@ -1467,13 +1467,13 @@ SdrTextFixedCellHeightItem* SdrTextFixedCellHeightItem::Clone( SfxItemPool * /*p
     return new SdrTextFixedCellHeightItem( GetValue() );
 }
 
-bool SdrTextFixedCellHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool SdrTextFixedCellHeightItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     bool bValue = GetValue();
     rVal <<= bValue;
     return true;
 }
-bool SdrTextFixedCellHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool SdrTextFixedCellHeightItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     bool bValue;
     if( !( rVal >>= bValue ) )
@@ -1511,7 +1511,7 @@ bool SdrEdgeKindItem::GetPresentation(SfxItemPresentation ePres,
     return true;
 }
 
-bool SdrEdgeKindItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool SdrEdgeKindItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     drawing::ConnectorType eCT = drawing::ConnectorType_STANDARD;
 
@@ -1531,7 +1531,7 @@ bool SdrEdgeKindItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
     return true;
 }
 
-bool SdrEdgeKindItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool SdrEdgeKindItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     drawing::ConnectorType eCT;
     if(!(rVal >>= eCT))
@@ -1558,13 +1558,13 @@ bool SdrEdgeKindItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
     return true;
 }
 
-bool SdrEdgeNode1HorzDistItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool SdrEdgeNode1HorzDistItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= GetValue();
     return true;
 }
 
-bool SdrEdgeNode1HorzDistItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool SdrEdgeNode1HorzDistItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     if(!(rVal >>= nValue))
@@ -1579,13 +1579,13 @@ SdrEdgeNode1HorzDistItem* SdrEdgeNode1HorzDistItem::Clone(SfxItemPool* /*pPool*/
     return new SdrEdgeNode1HorzDistItem(*this);
 }
 
-bool SdrEdgeNode1VertDistItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool SdrEdgeNode1VertDistItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= GetValue();
     return true;
 }
 
-bool SdrEdgeNode1VertDistItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool SdrEdgeNode1VertDistItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     if(!(rVal >>= nValue))
@@ -1600,13 +1600,13 @@ SdrEdgeNode1VertDistItem* SdrEdgeNode1VertDistItem::Clone(SfxItemPool* /*pPool*/
     return new SdrEdgeNode1VertDistItem(*this);
 }
 
-bool SdrEdgeNode2HorzDistItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool SdrEdgeNode2HorzDistItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= GetValue();
     return true;
 }
 
-bool SdrEdgeNode2HorzDistItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool SdrEdgeNode2HorzDistItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     if(!(rVal >>= nValue))
@@ -1621,13 +1621,13 @@ SdrEdgeNode2HorzDistItem* SdrEdgeNode2HorzDistItem::Clone(SfxItemPool* /*pPool*/
     return new SdrEdgeNode2HorzDistItem(*this);
 }
 
-bool SdrEdgeNode2VertDistItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool SdrEdgeNode2VertDistItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= GetValue();
     return true;
 }
 
-bool SdrEdgeNode2VertDistItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool SdrEdgeNode2VertDistItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     if(!(rVal >>= nValue))
@@ -1675,13 +1675,13 @@ bool SdrMeasureKindItem::GetPresentation(SfxItemPresentation ePres,
     return true;
 }
 
-bool SdrMeasureKindItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool SdrMeasureKindItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= static_cast<drawing::MeasureKind>(GetValue());
     return true;
 }
 
-bool SdrMeasureKindItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool SdrMeasureKindItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     drawing::MeasureKind eKind;
     if(!(rVal >>= eKind))
@@ -1723,13 +1723,13 @@ bool SdrMeasureTextHPosItem::GetPresentation(SfxItemPresentation ePres,
     return true;
 }
 
-bool SdrMeasureTextHPosItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool SdrMeasureTextHPosItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= GetValue();
     return true;
 }
 
-bool SdrMeasureTextHPosItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool SdrMeasureTextHPosItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     drawing::MeasureTextHorzPos ePos;
     if(!(rVal >>= ePos))
@@ -1771,13 +1771,13 @@ bool SdrMeasureTextVPosItem::GetPresentation(SfxItemPresentation ePres,
     return true;
 }
 
-bool SdrMeasureTextVPosItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool SdrMeasureTextVPosItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= GetValue();
     return true;
 }
 
-bool SdrMeasureTextVPosItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool SdrMeasureTextVPosItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     drawing::MeasureTextVertPos ePos;
     if(!(rVal >>= ePos))
@@ -1813,13 +1813,13 @@ bool SdrMeasureUnitItem::GetPresentation(SfxItemPresentation ePres,
     return true;
 }
 
-bool SdrMeasureUnitItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool SdrMeasureUnitItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= static_cast<sal_Int32>(GetValue());
     return true;
 }
 
-bool SdrMeasureUnitItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool SdrMeasureUnitItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     sal_Int32 nMeasure = 0;
     if(!(rVal >>= nMeasure))
@@ -1855,13 +1855,13 @@ bool SdrCircKindItem::GetPresentation(SfxItemPresentation ePres,
     return true;
 }
 
-bool SdrCircKindItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool SdrCircKindItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= static_cast<drawing::CircleKind>(GetValue());
     return true;
 }
 
-bool SdrCircKindItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool SdrCircKindItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     drawing::CircleKind eKind;
     if(!(rVal >>= eKind))
@@ -1927,13 +1927,13 @@ SdrGrafGamma100Item* SdrGrafGamma100Item::Clone( SfxItemPool* /*pPool */) const
     return new SdrGrafGamma100Item( *this );
 }
 
-bool SdrGrafGamma100Item::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool SdrGrafGamma100Item::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= static_cast<double>(GetValue()) / 100.0;
     return true;
 }
 
-bool SdrGrafGamma100Item::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool SdrGrafGamma100Item::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     double nGamma = 0;
     if(!(rVal >>= nGamma))

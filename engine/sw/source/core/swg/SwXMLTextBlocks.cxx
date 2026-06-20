@@ -297,7 +297,7 @@ ErrCode SwXMLTextBlocks::StartPutBlock( const OUString& rShort, const OUString& 
         if (xRootProps)
         {
             OUString aMime( SotExchange::GetFormatMimeType( SotClipboardFormatId::STARWRITER_8 ) );
-            xRootProps->setPropertyValue( u"MediaType"_ustr, uno::Any( aMime ) );
+            xRootProps->setPropertyValue( u"MediaType"_ustr, cpo::uno::Any( aMime ) );
         }
     }
     catch (const uno::Exception&)

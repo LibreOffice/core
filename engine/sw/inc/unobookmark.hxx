@@ -114,8 +114,8 @@ public:
         getPropertySetInfo() override;
     virtual void SAL_CALL setPropertyValue(
             const OUString& rPropertyName,
-            const css::uno::Any& rValue) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue(
+            const cpo::uno::Any& rValue) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(
             const OUString& rPropertyName) override;
     virtual void SAL_CALL addPropertyChangeListener(
             const OUString& rPropertyName,
@@ -158,12 +158,12 @@ class SwXFieldmarkParameters final
         }
 
         // XNameContainer
-        virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement ) override;
+        virtual void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
         virtual void SAL_CALL removeByName( const OUString& Name ) override;
         // XNameReplace
-        virtual void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement ) override;
+        virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
         // XNameAccess
-        virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+        virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
         virtual bool SAL_CALL hasByName( const OUString& aName ) override;
         // XElementAccess
@@ -215,8 +215,8 @@ public:
         getPropertySetInfo() override;
     virtual void SAL_CALL setPropertyValue(
             const OUString& rPropertyName,
-            const css::uno::Any& rValue) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue(
+            const cpo::uno::Any& rValue) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(
             const OUString& rPropertyName) override;
 
     // XComponent

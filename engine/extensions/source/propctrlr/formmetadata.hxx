@@ -87,8 +87,8 @@ namespace pcr
         // IPropertyEnumRepresentation implementation
         virtual std::vector< OUString >
                                     getDescriptions() const override;
-        virtual void                getValueFromDescription( const OUString& _rDescription, css::uno::Any& _out_rValue ) const override;
-        virtual OUString            getDescriptionForValue( const css::uno::Any& _rEnumValue ) const override;
+        virtual void                getValueFromDescription( const OUString& _rDescription, cpo::uno::Any& _out_rValue ) const override;
+        virtual OUString            getDescriptionForValue( const cpo::uno::Any& _rEnumValue ) const override;
 
     private:
         DefaultEnumRepresentation( const DefaultEnumRepresentation& ) = delete;

@@ -186,7 +186,7 @@ void Includes::dump(
     static char const * hxxExtension[2] = { "h", "hxx" };
     if (m_includeAny) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"com/sun/star/uno/Any." << hxxExtension[(m_filetype == FileType::HPP)]
+        out << "#include \"cpo/uno/Any." << hxxExtension[(m_filetype == FileType::HPP)]
             << "\"\n";
     }
     if (m_includeReference) {

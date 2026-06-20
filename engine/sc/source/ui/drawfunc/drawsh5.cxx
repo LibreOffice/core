@@ -87,7 +87,7 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
 
             if(xInfo->hasPropertyByName( sPropButtonType ))
             {
-                uno::Any aAny = xPropSet->getPropertyValue( sPropButtonType );
+                cpo::uno::Any aAny = xPropSet->getPropertyValue( sPropButtonType );
                 form::FormButtonType eTmp;
                 if ( (aAny >>= eTmp) && eTmp == form::FormButtonType_URL )
                 {
@@ -182,20 +182,20 @@ void ScDrawShell::ExecuteHLink( const SfxRequest& rReq )
 
                                     if ( xInfo->hasPropertyByName( sPropLabel ) )
                                     {
-                                        xPropSet->setPropertyValue( sPropLabel, uno::Any(rName) );
+                                        xPropSet->setPropertyValue( sPropLabel, cpo::uno::Any(rName) );
                                     }
 
                                     OUString aTmp = INetURLObject::GetAbsURL( rViewData.GetDocShell()->GetMedium()->GetBaseURL(), rURL );
-                                    xPropSet->setPropertyValue( sPropTargetURL, uno::Any(aTmp) );
+                                    xPropSet->setPropertyValue( sPropTargetURL, cpo::uno::Any(aTmp) );
 
                                     if( !rTarget.isEmpty() && xInfo->hasPropertyByName( sPropTargetFrame ) )
                                     {
-                                        xPropSet->setPropertyValue( sPropTargetFrame, uno::Any(rTarget) );
+                                        xPropSet->setPropertyValue( sPropTargetFrame, cpo::uno::Any(rTarget) );
                                     }
 
                                     if ( xInfo->hasPropertyByName( sPropButtonType ) )
                                     {
-                                        xPropSet->setPropertyValue( sPropButtonType, uno::Any(form::FormButtonType_URL) );
+                                        xPropSet->setPropertyValue( sPropButtonType, cpo::uno::Any(form::FormButtonType_URL) );
                                     }
 
                                     //! Undo ???

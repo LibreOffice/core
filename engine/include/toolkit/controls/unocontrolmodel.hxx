@@ -41,7 +41,7 @@
 
 namespace com::sun::star::uno { class XComponentContext; }
 
-typedef std::map<sal_uInt16, css::uno::Any> ImplPropertyTable;
+typedef std::map<sal_uInt16, cpo::uno::Any> ImplPropertyTable;
 
 typedef ::cppu::WeakAggImplHelper6  <   css::awt::XControlModel
                                     ,   css::beans::XPropertyState
@@ -64,9 +64,9 @@ protected:
 protected:
     void                                        ImplRegisterProperty( sal_uInt16 nPropType );
     void                                        ImplRegisterProperties( const std::vector< sal_uInt16 > &rIds );
-    void                                        ImplRegisterProperty( sal_uInt16 nPropId, const css::uno::Any& rDefault );
+    void                                        ImplRegisterProperty( sal_uInt16 nPropId, const cpo::uno::Any& rDefault );
     css::uno::Sequence<sal_Int32>  ImplGetPropertyIds() const;
-    virtual css::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const;
+    virtual cpo::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const;
     bool                                    ImplHasProperty( sal_uInt16 nPropId ) const;
 
     /** called before setting multiple properties, allows to care for property dependencies
@@ -78,7 +78,7 @@ protected:
     virtual void ImplNormalizePropertySequence(
                     const sal_Int32                 _nCount,        /// the number of entries in the arrays
                     sal_Int32*                      _pHandles,      /// the handles of the properties to set
-                    css::uno::Any*     _pValues,       /// the values of the properties to set
+                    cpo::uno::Any*     _pValues,       /// the values of the properties to set
                     sal_Int32*                      _pValidHandles  /// pointer to the valid handles, allowed to be adjusted
                 )   const;
 
@@ -86,7 +86,7 @@ protected:
     static void ImplEnsureHandleOrder(
                 const sal_Int32 _nCount,                /// number of entries in the array
                 sal_Int32* _pHandles,                   /// pointer to the handles
-                css::uno::Any* _pValues,   /// pointer to the values
+                cpo::uno::Any* _pValues,   /// pointer to the values
                 sal_Int32 _nFirstHandle,                /// first handle, which should precede _nSecondHandle in the sequence
                 sal_Int32 _nSecondHandle                /// second handle, which should supersede _nFirstHandle in the sequence
             );
@@ -116,12 +116,12 @@ public:
     virtual rtl::Reference<UnoControlModel> Clone() const = 0;
 
     // css::uno::XInterface
-    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return OWeakAggObject::queryInterface(rType); }
+    cpo::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return OWeakAggObject::queryInterface(rType); }
     void                        SAL_CALL acquire() noexcept override;
     void                        SAL_CALL release() noexcept override;
 
     // css::uno::XAggregation
-    css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+    cpo::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
 
     // css::util::XCloneable
     css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
@@ -138,7 +138,7 @@ public:
     css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) override;
     css::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName ) override;
     void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) override;
-    css::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
+    cpo::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
 
     // css::io::XPersistObject
     OUString SAL_CALL getServiceName() override;
@@ -152,22 +152,22 @@ public:
 
     // ::cppu::OPropertySetHelper
     ::cppu::IPropertyArrayHelper& getInfoHelper() override = 0;
-    bool convertFastPropertyValue( std::unique_lock<std::mutex>& rGuard, css::uno::Any & rConvertedValue, css::uno::Any & rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+    bool convertFastPropertyValue( std::unique_lock<std::mutex>& rGuard, cpo::uno::Any & rConvertedValue, cpo::uno::Any & rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
     void setFastPropertyValue_NoBroadcast(
                 std::unique_lock<std::mutex>& rGuard,
-                sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+                sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
     using comphelper::OPropertySetHelper::getFastPropertyValue;
-    void getFastPropertyValue( std::unique_lock<std::mutex>& rGuard, css::uno::Any& rValue, sal_Int32 nHandle ) const override;
+    void getFastPropertyValue( std::unique_lock<std::mutex>& rGuard, cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
     // css::beans::XMultiPropertySet
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-    void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Sequence< css::uno::Any >& Values ) override;
+    void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Sequence< cpo::uno::Any >& Values ) override;
 protected:
     // override setValue methods to handle properties of FontDescriptor
     // css::beans::XFastPropertySet
-    void setFastPropertyValueImpl( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const css::uno::Any& aValue ) override;
+    void setFastPropertyValueImpl( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const cpo::uno::Any& aValue ) override;
     css::beans::PropertyState getPropertyStateImpl( std::unique_lock<std::mutex>& rGuard, const OUString& PropertyName );
-    void setPropertyValuesImpl( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Sequence< css::uno::Any >& Values );
+    void setPropertyValuesImpl( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Sequence< cpo::uno::Any >& Values );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -110,7 +110,7 @@ namespace dbaccess
         virtual void construct() override;
 
         //XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
         //XTypeProvider
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
@@ -119,7 +119,7 @@ namespace dbaccess
         DECLARE_SERVICE_INFO();
 
     // css::beans::XPropertySet
-        virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle) const override;
+        virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
 
     // css::sdbcx::XRename,
         virtual void SAL_CALL rename( const OUString& _rNewName ) override;

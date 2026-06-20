@@ -161,7 +161,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
 
             for(sal_Int32 a = 0; !bDone && a < xMasterPages->getCount(); a++)
             {
-                uno::Any aAny(xMasterPages->getByIndex(a));
+                cpo::uno::Any aAny(xMasterPages->getByIndex(a));
                 aAny >>= xMasterPage;
 
                 if(xMasterPage.is())
@@ -181,7 +181,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
                                     xPageLayouts->getByName(maPageLayoutName) >>= nType;
                             }
                             if (-1 != nType)
-                                xPropSet->setPropertyValue(aPropName, uno::Any(static_cast<sal_Int16>(nType)));
+                                xPropSet->setPropertyValue(aPropName, cpo::uno::Any(static_cast<sal_Int16>(nType)));
                         }
                     }
 
@@ -220,7 +220,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
                     + aBookmarkName;
             }
 
-            xProps->setPropertyValue(u"BookmarkURL"_ustr, uno::Any( sHREF ) );
+            xProps->setPropertyValue(u"BookmarkURL"_ustr, cpo::uno::Any( sHREF ) );
         }
     }
 
@@ -399,7 +399,7 @@ public:
             }
 
             xDocProps->setPropertyValue(u"SlideSections"_ustr,
-                                        uno::Any(comphelper::containerToSequence(aSectionsList)));
+                                        cpo::uno::Any(comphelper::containerToSequence(aSectionsList)));
         }
         catch (const uno::Exception&)
         {
@@ -451,7 +451,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLBodyContext::crea
                 else
                 {
                     // existing page, use it
-                    uno::Any aAny(xDrawPages->getByIndex(GetSdImport().GetNewPageCount()));
+                    cpo::uno::Any aAny(xDrawPages->getByIndex(GetSdImport().GetNewPageCount()));
                     aAny >>= xNewDrawPage;
                 }
 

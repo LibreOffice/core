@@ -119,7 +119,7 @@ public:
 // OPropertySetHelper
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                     sal_Int32 nHandle,
-                    const css::uno::Any& rValue ) override;
+                    const cpo::uno::Any& rValue ) override;
 
 public:
     // the caller is responsible for the lifetime!

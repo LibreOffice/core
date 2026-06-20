@@ -39,6 +39,7 @@ using namespace comphelper;
 using namespace ::cppu;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
@@ -531,7 +532,7 @@ css::uno::Reference< css::beans::XPropertySet > OCollection::getObject(sal_Int32
         }
         catch(const SQLException& e)
         {
-            css::uno::Any anyEx = cppu::getCaughtException();
+            cpo::uno::Any anyEx = cppu::getCaughtException();
             try
             {
                 dropImpl(_nIndex,false);

@@ -46,7 +46,7 @@ SwVbaVariable::setName( const OUString& )
     throw uno::RuntimeException(u" Fail to set name"_ustr );
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwVbaVariable::getValue()
 {
     uno::Reference< beans::XPropertySet > xProp( mxUserDefined, uno::UNO_QUERY_THROW );
@@ -54,7 +54,7 @@ SwVbaVariable::getValue()
 }
 
 void SAL_CALL
-SwVbaVariable::setValue( const uno::Any& rValue )
+SwVbaVariable::setValue( const cpo::uno::Any& rValue )
 {
     // FIXME: fail to set the value if the new type of value is different from the original one.
     uno::Reference< beans::XPropertySet > xProp( mxUserDefined, uno::UNO_QUERY_THROW );

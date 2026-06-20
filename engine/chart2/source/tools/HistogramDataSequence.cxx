@@ -25,7 +25,7 @@
 
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 using namespace css;
 
@@ -128,7 +128,7 @@ uno::Sequence<OUString> SAL_CALL HistogramDataSequence::getTextualData()
     return CommonFunctors::convertToSequence(mxValues, CommonFunctors::ToString());
 }
 
-uno::Sequence<uno::Any> SAL_CALL HistogramDataSequence::getData()
+uno::Sequence<cpo::uno::Any> SAL_CALL HistogramDataSequence::getData()
 {
     ::osl::MutexGuard aGuard(GetMutex());
     ensureCalculated();
@@ -202,7 +202,7 @@ void HistogramDataSequence::ensureCalculated()
     std::vector<double> rawData;
     try
     {
-        uno::Sequence<uno::Any> aRawAnyValues = m_xRawData->getData();
+        uno::Sequence<cpo::uno::Any> aRawAnyValues = m_xRawData->getData();
         for (const auto& aAny : aRawAnyValues)
         {
             double fValue = 0.0;
@@ -218,7 +218,7 @@ void HistogramDataSequence::ensureCalculated()
     HistogramCalculator aCalculator;
     aCalculator.computeBinFrequencyHistogram(rawData, m_nFrequencyType, m_fBinWidth, m_nBinCount);
 
-    std::vector<uno::Any> aNewValues;
+    std::vector<cpo::uno::Any> aNewValues;
 
     if (m_bIsCategory)
     {
@@ -245,7 +245,7 @@ void HistogramDataSequence::ensureCalculated()
                                              + formatBoundary(binRanges[i].second) + u"]"_ustr
                                        : u"("_ustr + formatBoundary(binRanges[i].first) + u"-"_ustr
                                              + formatBoundary(binRanges[i].second) + u"]"_ustr;
-            aNewValues.push_back(uno::Any(aLabel));
+            aNewValues.push_back(cpo::uno::Any(aLabel));
         }
     }
     else
@@ -253,7 +253,7 @@ void HistogramDataSequence::ensureCalculated()
         const auto& binFrequencies = aCalculator.getBinFrequencies();
         for (sal_Int32 freq : binFrequencies)
         {
-            aNewValues.push_back(uno::Any(static_cast<double>(freq)));
+            aNewValues.push_back(cpo::uno::Any(static_cast<double>(freq)));
         }
     }
 

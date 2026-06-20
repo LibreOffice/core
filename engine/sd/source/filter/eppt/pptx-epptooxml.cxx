@@ -120,6 +120,7 @@ using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::office;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::ppt;
 using ::com::sun::star::beans::XPropertySet;
@@ -418,7 +419,7 @@ ShapeExport& PowerPointShapeExport::WriteGraphicObjectShape(const Reference<XSha
     return ShapeExport::WriteGraphicObjectShape(xShape);
 }
 
-PowerPointExport::PowerPointExport(const Reference< XComponentContext >& rContext, const uno::Sequence<uno::Any>& rArguments)
+PowerPointExport::PowerPointExport(const Reference< XComponentContext >& rContext, const uno::Sequence<cpo::uno::Any>& rArguments)
     : XmlFilterBase(rContext)
     , mpAuthorIDs( new SvtSecurityMapPersonalInfo )
     , mnLayoutFileIdMax(1)
@@ -722,7 +723,7 @@ void PowerPointExport::WriteEmbeddedFontList()
 
     std::vector<EmbeddedFont> aEmbeddedFontInfo;
 
-    uno::Sequence<uno::Any> aAnySeq;
+    uno::Sequence<cpo::uno::Any> aAnySeq;
     if (!(mXModel->getPropertyValue(u"Fonts"_ustr) >>= aAnySeq))
         return;
 
@@ -2008,7 +2009,7 @@ void PowerPointExport::FindEquivalentMasterPages()
         if (i == mnCanvasMasterIndex)
             continue;
         css::uno::Reference<css::drawing::XDrawPage> xDrawPage;
-        uno::Any aAny(xDrawPages->getByIndex(i));
+        cpo::uno::Any aAny(xDrawPages->getByIndex(i));
         aAny >>= xDrawPage;
         if (!xDrawPage.is())
             continue;
@@ -2017,7 +2018,7 @@ void PowerPointExport::FindEquivalentMasterPages()
         uno::Reference<beans::XPropertySet> xPagePropSet(xDrawPage, uno::UNO_QUERY_THROW);
         if (xPagePropSet.is())
         {
-            uno::Any aLayout = xPagePropSet->getPropertyValue(u"SlideLayout"_ustr);
+            cpo::uno::Any aLayout = xPagePropSet->getPropertyValue(u"SlideLayout"_ustr);
             if (aLayout.hasValue())
             {
                 aLayout >>= maMastersLayouts[i].second;
@@ -2246,7 +2247,7 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
     xPagePropSet.set(mXDrawPage, UNO_QUERY);
     if (xPagePropSet.is())
     {
-        uno::Any aAny;
+        cpo::uno::Any aAny;
         if (GetPropertyValue(aAny, xPagePropSet, u"SlideLayout"_ustr))
             aLayouts.insert(aAny.get<sal_Int32>());
     }
@@ -3225,7 +3226,7 @@ Reference<XShape> PowerPointExport::GetReferencedPlaceholderXShape(const Placeho
 // UNO component
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 css_comp_Impress_oox_PowerPointExport(uno::XComponentContext* rxCtxt,
-                                      uno::Sequence<css::uno::Any> const& rArguments)
+                                      uno::Sequence<cpo::uno::Any> const& rArguments)
 {
     return cppu::acquire(new PowerPointExport(rxCtxt, rArguments));
 }

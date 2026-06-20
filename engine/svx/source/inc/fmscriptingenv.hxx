@@ -86,7 +86,7 @@ namespace svxform
 
         void impl_registerOrRevoke_throw( const css::uno::Reference< css::script::XEventAttacherManager >& _rxManager, bool _bRegister );
         // callback for FormScriptListener
-        void doFireScriptEvent( const css::script::ScriptEvent& _rEvent, css::uno::Any* _pSynchronousResult );
+        void doFireScriptEvent( const css::script::ScriptEvent& _rEvent, cpo::uno::Any* _pSynchronousResult );
 
     };
 

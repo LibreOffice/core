@@ -34,7 +34,7 @@ namespace connectivity
         virtual const ORowSetValue& getValue(sal_Int32 columnIndex) override;
     public:
         OResultSetPrivileges(const css::uno::Reference< css::sdbc::XDatabaseMetaData>& _rxMeta
-            ,const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern);
+            ,const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern);
 
         // ::comphelper::WeakComponentImplHelper
         virtual void disposing(std::unique_lock<std::mutex>&) override;

@@ -81,6 +81,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::animations;
 
@@ -644,7 +645,7 @@ bool CustomAnimationEffect::calculateIterateDuration()
     return bChange;
 }
 
-void CustomAnimationEffect::setTarget( const css::uno::Any& rTarget )
+void CustomAnimationEffect::setTarget( const cpo::uno::Any& rTarget )
 {
     try
     {
@@ -1440,7 +1441,7 @@ bool CustomAnimationEffect::setTransformationProperty( sal_Int32 nTransformType,
     return bChanged;
 }
 
-void CustomAnimationEffect::createAudio( const css::uno::Any& rSource )
+void CustomAnimationEffect::createAudio( const cpo::uno::Any& rSource )
 {
     DBG_ASSERT( !mxAudio.is(), "sd::CustomAnimationEffect::createAudio(), node already has an audio!" );
 
@@ -2201,7 +2202,7 @@ bool EffectSequenceHelper::getParagraphNumberingLevels( const Reference< XShape 
     return true;
 }
 
-void EffectSequenceHelper::insertTextRange( const css::uno::Any& aTarget )
+void EffectSequenceHelper::insertTextRange( const cpo::uno::Any& aTarget )
 {
     ParagraphTarget aParaTarget;
     if( !(aTarget >>= aParaTarget ) )
@@ -2227,7 +2228,7 @@ void EffectSequenceHelper::insertTextRange( const css::uno::Any& aTarget )
         rebuild();
 }
 
-void EffectSequenceHelper::disposeTextRange( const css::uno::Any& aTarget, bool bPreviousParagraphEmpty )
+void EffectSequenceHelper::disposeTextRange( const cpo::uno::Any& aTarget, bool bPreviousParagraphEmpty )
 {
     ParagraphTarget aParaTarget;
     if( !(aTarget >>= aParaTarget ) )
@@ -3027,7 +3028,7 @@ MainSequence::MainSequence()
     if( mxTimingRootNode.is() )
     {
         Sequence< css::beans::NamedValue > aUserData
-            { { u"node-type"_ustr, css::uno::Any(css::presentation::EffectNodeType::MAIN_SEQUENCE) } };
+            { { u"node-type"_ustr, cpo::uno::Any(css::presentation::EffectNodeType::MAIN_SEQUENCE) } };
         mxTimingRootNode->setUserData( aUserData );
     }
     init();
@@ -3115,7 +3116,7 @@ void MainSequence::createMainSequence()
             mxSequenceRoot = SequenceTimeContainer::create( ::comphelper::getProcessComponentContext() );
 
             uno::Sequence< css::beans::NamedValue > aUserData
-                { { u"node-type"_ustr, css::uno::Any(css::presentation::EffectNodeType::MAIN_SEQUENCE) } };
+                { { u"node-type"_ustr, cpo::uno::Any(css::presentation::EffectNodeType::MAIN_SEQUENCE) } };
             mxSequenceRoot->setUserData( aUserData );
 
             // empty sequence until now, set duration to 0.0
@@ -3172,7 +3173,7 @@ InteractiveSequencePtr MainSequence::createInteractiveSequence( const css::uno::
     Reference< XTimeContainer > xISRoot = SequenceTimeContainer::create( ::comphelper::getProcessComponentContext() );
 
     uno::Sequence< css::beans::NamedValue > aUserData
-        { { u"node-type"_ustr, css::uno::Any(css::presentation::EffectNodeType::INTERACTIVE_SEQUENCE) } };
+        { { u"node-type"_ustr, cpo::uno::Any(css::presentation::EffectNodeType::INTERACTIVE_SEQUENCE) } };
     xISRoot->setUserData( aUserData );
     xISRoot->setRestart( css::animations::AnimationRestart::WHEN_NOT_ACTIVE );
 
@@ -3277,7 +3278,7 @@ bool MainSequence::hasEffect( const css::uno::Reference< css::drawing::XShape >&
     return false;
 }
 
-void MainSequence::insertTextRange( const css::uno::Any& aTarget )
+void MainSequence::insertTextRange( const cpo::uno::Any& aTarget )
 {
     EffectSequenceHelper::insertTextRange( aTarget );
 
@@ -3287,7 +3288,7 @@ void MainSequence::insertTextRange( const css::uno::Any& aTarget )
     }
 }
 
-void MainSequence::disposeTextRange( const css::uno::Any& aTarget, bool bPreviousParagraphEmpty )
+void MainSequence::disposeTextRange( const cpo::uno::Any& aTarget, bool bPreviousParagraphEmpty )
 {
     EffectSequenceHelper::disposeTextRange( aTarget, bPreviousParagraphEmpty );
 

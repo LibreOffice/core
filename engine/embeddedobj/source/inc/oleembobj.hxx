@@ -447,7 +447,7 @@ public:
     css::uno::Reference<css::io::XStream> SAL_CALL getStream() override;
 
     // XInitialization
-    void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
+    void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;

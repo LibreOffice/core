@@ -347,7 +347,7 @@ public:
     virtual void SAL_CALL cancel(  ) override final;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) final override;

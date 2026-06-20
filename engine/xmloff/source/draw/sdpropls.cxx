@@ -69,7 +69,7 @@
 #include <climits>
 #include <algorithm>
 
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -793,11 +793,11 @@ class XMLCaptionEscapeRelative : public XMLPropertyHandler
 public:
     virtual bool importXML(
             const OUString& rStrImpValue,
-            css::uno::Any& rValue,
+            cpo::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML(
             OUString& rStrExpValue,
-            const css::uno::Any& rValue,
+            const cpo::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
@@ -837,11 +837,11 @@ public:
 
     virtual bool importXML(
             const OUString& rStrImpValue,
-            css::uno::Any& rValue,
+            cpo::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML(
             OUString& rStrExpValue,
-            const css::uno::Any& rValue,
+            const cpo::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const override;
 private:
     const sal_Int32 mnType;
@@ -878,15 +878,15 @@ namespace {
 class XMLSdHeaderFooterVisibilityTypeHdl : public XMLPropertyHandler
 {
 public:
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 }
 
 bool XMLSdHeaderFooterVisibilityTypeHdl::importXML(
         const OUString& rStrImpValue,
-        css::uno::Any& rValue,
+        cpo::uno::Any& rValue,
         const SvXMLUnitConverter& ) const
 {
     // #i38644#
@@ -922,15 +922,15 @@ namespace {
 class XMLSdRotationAngleTypeHdl : public XMLPropertyHandler
 {
 public:
-    virtual bool importXML(const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter) const override;
-    virtual bool exportXML(OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter) const override;
+    virtual bool importXML(const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter) const override;
+    virtual bool exportXML(OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter) const override;
 };
 
 }
 
 bool XMLSdRotationAngleTypeHdl::importXML(
     const OUString& rStrImpValue,
-    css::uno::Any& rValue,
+    cpo::uno::Any& rValue,
     const SvXMLUnitConverter&) const
 {
     sal_Int32 nValue;
@@ -976,7 +976,7 @@ public:
             const SvXMLEnumMapEntry<drawing::TextFitToSizeType> *const pMap)
         : XMLEnumPropertyHdl(pMap) {}
 
-    virtual bool importXML(const OUString& rStrImpValue, uno::Any& rValue,
+    virtual bool importXML(const OUString& rStrImpValue, cpo::uno::Any& rValue,
                            const SvXMLUnitConverter& rUC) const override
     {
         // we don't know here what the actual attribute name is -
@@ -1006,14 +1006,14 @@ namespace
 class XMLLatheEndAngleHdl : public XMLDoublePropHdl
 {
 public:
-    virtual bool importXML(const OUString& rStrImpValue, css::uno::Any& rValue,
+    virtual bool importXML(const OUString& rStrImpValue, cpo::uno::Any& rValue,
                            const SvXMLUnitConverter& rUnitConverter) const override;
-    virtual bool exportXML(OUString& rStrExpValue, const css::uno::Any& rValue,
+    virtual bool exportXML(OUString& rStrExpValue, const cpo::uno::Any& rValue,
                            const SvXMLUnitConverter& rUnitConverter) const override;
 };
 }
 
-bool XMLLatheEndAngleHdl::importXML(const OUString& rStrImpValue, uno::Any& rValue,
+bool XMLLatheEndAngleHdl::importXML(const OUString& rStrImpValue, cpo::uno::Any& rValue,
                                     const SvXMLUnitConverter& rUC) const
 {
     // tdf#161327. We keep reading unit-less values as being in 1/10th of a degree for backward
@@ -1033,7 +1033,7 @@ bool XMLLatheEndAngleHdl::importXML(const OUString& rStrImpValue, uno::Any& rVal
         return false;
 }
 
-bool XMLLatheEndAngleHdl::exportXML(OUString& rStrExpValue, const uno::Any& rValue,
+bool XMLLatheEndAngleHdl::exportXML(OUString& rStrExpValue, const cpo::uno::Any& rValue,
                                     const SvXMLUnitConverter& rUC) const
 {
     sal_Int16 nAngle; // type of D3DEndAngle is 'short'.

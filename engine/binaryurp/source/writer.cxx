@@ -358,7 +358,7 @@ void Writer::sendReply(
     if (exception) {
         marshal_.writeValue(
             &buf,
-            css::uno::TypeDescription(cppu::UnoType< css::uno::Any >::get()),
+            css::uno::TypeDescription(cppu::UnoType< cpo::uno::Any >::get()),
             returnValue);
     } else {
         switch (member.get()->eTypeClass) {
@@ -431,7 +431,7 @@ void Writer::sendMessage(std::vector< unsigned char > const & buffer) {
         try {
             bridge_->getConnection()->write(s);
         } catch (const css::io::IOException & e) {
-            css::uno::Any exc(cppu::getCaughtException());
+            cpo::uno::Any exc(cppu::getCaughtException());
             throw css::lang::WrappedTargetRuntimeException(
                 "Binary URP write raised IO exception: " + e.Message,
                 css::uno::Reference< css::uno::XInterface >(), exc);

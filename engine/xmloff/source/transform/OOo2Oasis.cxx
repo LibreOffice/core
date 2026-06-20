@@ -47,6 +47,7 @@
 
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::beans;
@@ -1728,7 +1729,7 @@ Sequence< OUString > SAL_CALL OOo2OasisTransformer::getSupportedServiceNames(  )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 xmloff_OOo2OasisTransformer_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new OOo2OasisTransformer(u"com.sun.star.comp.OOo2OasisTransformer"_ustr, OUString()));
 }
@@ -1736,7 +1737,7 @@ xmloff_OOo2OasisTransformer_get_implementation(
 #define OOO_IMPORTER( xml_className_get_impl, implName, subServiceName )             \
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* \
 xml_className_get_impl( \
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&) \
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&) \
 { \
     return cppu::acquire(new OOo2OasisTransformer( \
               implName, \

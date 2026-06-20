@@ -54,7 +54,7 @@ public:
 
     virtual void Closed() override;
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const OUString& rMimeType, const css::uno::Any & rValue ) override;
+        const OUString& rMimeType, const cpo::uno::Any & rValue ) override;
 
     virtual const SwNode* GetAnchor() const override;
     virtual bool IsInRange( SwNodeOffset nSttNd, SwNodeOffset nEndNd ) const override;
@@ -63,7 +63,7 @@ public:
 }
 
 ::sfx2::SvBaseLink::UpdateResult SwIntrnlRefLink::DataChanged( const OUString& rMimeType,
-                                const uno::Any & rValue )
+                                const cpo::uno::Any & rValue )
 {
     switch( SotExchange::GetFormatIdFromMimeType( rMimeType ) )
     {
@@ -233,7 +233,7 @@ void SwDDEFieldType::RefCntChgd()
     }
 }
 
-void SwDDEFieldType::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
+void SwDDEFieldType::QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhichId ) const
 {
     sal_Int32 nPart = -1;
     switch( nWhichId )
@@ -254,7 +254,7 @@ void SwDDEFieldType::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
         rVal <<= GetCmd().getToken(nPart, sfx2::cTokenSeparator);
 }
 
-void SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
+void SwDDEFieldType::PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhichId )
 {
     sal_Int32 nPart = -1;
     switch( nWhichId )

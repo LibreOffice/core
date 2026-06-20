@@ -97,6 +97,7 @@
 #include <memory>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdb::application;
@@ -122,7 +123,7 @@ using namespace ::svx;
 // SbaTableQueryBrowser
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_openoffice_comp_dbu_ODatasourceBrowser_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     SolarMutexGuard aGuard;
     return cppu::acquire(new ::dbaui::SbaTableQueryBrowser(context));
@@ -2334,7 +2335,7 @@ bool SbaTableQueryBrowser::implLoadAnything(const OUString& _rDataSourceName, co
             // set this _before_ setting the connection, else the rowset would rebuild it ...
         xProp->setPropertyValue(PROPERTY_COMMAND_TYPE, Any(nCommandType));
         xProp->setPropertyValue(PROPERTY_COMMAND, Any(_rCommand));
-        xProp->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, css::uno::Any(_bEscapeProcessing));
+        xProp->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, cpo::uno::Any(_bEscapeProcessing));
         if ( m_bPreview )
         {
             xProp->setPropertyValue(PROPERTY_FETCHDIRECTION, Any(FetchDirection::FORWARD));

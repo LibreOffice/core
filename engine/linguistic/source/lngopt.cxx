@@ -36,6 +36,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
@@ -386,7 +387,7 @@ uno::Sequence< OUString > SAL_CALL LinguProps::getSupportedServiceNames()
 
 bool LinguProps::getPropertyBool(const OUString& aPropertyName)
 {
-   uno::Any any = getPropertyValue(aPropertyName);
+   cpo::uno::Any any = getPropertyValue(aPropertyName);
    bool b = false;
    any >>= b;
    return b;
@@ -394,7 +395,7 @@ bool LinguProps::getPropertyBool(const OUString& aPropertyName)
 
 sal_Int16 LinguProps::getPropertyInt16(const OUString& aPropertyName)
 {
-   uno::Any any = getPropertyValue(aPropertyName);
+   cpo::uno::Any any = getPropertyValue(aPropertyName);
    sal_Int16 b = 0;
    any >>= b;
    return b;
@@ -402,7 +403,7 @@ sal_Int16 LinguProps::getPropertyInt16(const OUString& aPropertyName)
 
 Locale LinguProps::getPropertyLocale(const OUString& aPropertyName)
 {
-   uno::Any any = getPropertyValue(aPropertyName);
+   cpo::uno::Any any = getPropertyValue(aPropertyName);
    css::lang::Locale b;
    any >>= b;
    return b;
@@ -410,7 +411,7 @@ Locale LinguProps::getPropertyLocale(const OUString& aPropertyName)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 linguistic_LinguProps_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new LinguProps());
 }

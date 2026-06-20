@@ -303,7 +303,7 @@ public:
         { setStringProperty(u"UserConfig"_ustr, p1); }
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     /** read all configured paths and create all needed internal structures. */
     void readAll();
@@ -369,9 +369,9 @@ private:
     /** provides direct access to the list of path values
         using its internal property id.
      */
-    css::uno::Any impl_getPathValue(std::unique_lock<std::mutex>& g, sal_Int32 nID ) const;
+    cpo::uno::Any impl_getPathValue(std::unique_lock<std::mutex>& g, sal_Int32 nID ) const;
     void          impl_setPathValue(std::unique_lock<std::mutex>& g, sal_Int32 nID,
-                                    const css::uno::Any& aVal);
+                                    const cpo::uno::Any& aVal);
 
     /** check the given handle and return the corresponding PathInfo reference.
         These reference can be used then directly to manipulate these path. */
@@ -392,13 +392,13 @@ private:
                                   const PathSettings::PathInfo* pPathNew);
 
     //  OPropertyImplHelper
-    virtual bool convertFastPropertyValue( std::unique_lock<std::mutex>& g, css::uno::Any&  aConvertedValue,
-            css::uno::Any& aOldValue,
+    virtual bool convertFastPropertyValue( std::unique_lock<std::mutex>& g, cpo::uno::Any&  aConvertedValue,
+            cpo::uno::Any& aOldValue,
             sal_Int32 nHandle,
-            const css::uno::Any& aValue ) override;
+            const cpo::uno::Any& aValue ) override;
     virtual void setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& g, sal_Int32 nHandle,
-            const css::uno::Any&  aValue ) override;
-    virtual void getFastPropertyValue( std::unique_lock<std::mutex>& g, css::uno::Any&  aValue,
+            const cpo::uno::Any&  aValue ) override;
+    virtual void getFastPropertyValue( std::unique_lock<std::mutex>& g, cpo::uno::Any&  aValue,
             sal_Int32 nHandle ) const override;
     using PathSettings_BASE::getFastPropertyValue;
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
@@ -478,7 +478,7 @@ void SAL_CALL PathSettings::disposing(const css::lang::EventObject& aSource)
 
 OUString PathSettings::getStringProperty(const OUString& p1)
 {
-    css::uno::Any a = getPropertyValue(p1);
+    cpo::uno::Any a = getPropertyValue(p1);
     OUString s;
     a >>= s;
     return s;
@@ -486,7 +486,7 @@ OUString PathSettings::getStringProperty(const OUString& p1)
 
 void PathSettings::setStringProperty(const OUString& p1, const OUString& p2)
 {
-    setPropertyValue(p1, css::uno::Any(p2));
+    setPropertyValue(p1, cpo::uno::Any(p2));
 }
 
 void PathSettings::readAll()
@@ -525,7 +525,7 @@ std::vector<OUString> PathSettings::impl_readOldFormat(std::unique_lock<std::mut
 
     if( xCfg->hasByName(sPath) )
     {
-        css::uno::Any aVal( xCfg->getByName(sPath) );
+        cpo::uno::Any aVal( xCfg->getByName(sPath) );
 
         OUString                       sStringVal;
         css::uno::Sequence< OUString > lStringListVal;
@@ -613,13 +613,13 @@ void PathSettings::impl_storePath(std::unique_lock<std::mutex>& g, const PathSet
         ::comphelper::ConfigurationHelper::writeRelativeKey(xCfgNew,
                                                             aResubstPath.sPathName,
                                                             CFGPROP_USERPATHS,
-                            css::uno::Any(comphelper::containerToSequence(aResubstPath.lUserPaths)));
+                            cpo::uno::Any(comphelper::containerToSequence(aResubstPath.lUserPaths)));
     }
 
     ::comphelper::ConfigurationHelper::writeRelativeKey(xCfgNew,
                                                         aResubstPath.sPathName,
                                                         CFGPROP_WRITEPATH,
-                                                        css::uno::Any(aResubstPath.sWritePath));
+                                                        cpo::uno::Any(aResubstPath.sWritePath));
 
     ::comphelper::ConfigurationHelper::flush(xCfgNew);
 
@@ -632,7 +632,7 @@ void PathSettings::impl_storePath(std::unique_lock<std::mutex>& g, const PathSet
     if (xCfgOld->hasByName(aResubstPath.sPathName))
     {
         css::uno::Reference< css::beans::XPropertySet > xProps(xCfgOld, css::uno::UNO_QUERY_THROW);
-        xProps->setPropertyValue(aResubstPath.sPathName, css::uno::Any());
+        xProps->setPropertyValue(aResubstPath.sPathName, cpo::uno::Any());
         ::comphelper::ConfigurationHelper::flush(xCfgOld);
     }
 
@@ -829,9 +829,9 @@ void PathSettings::impl_notifyPropListener( std::unique_lock<std::mutex>& g,
 {
     css::uno::Sequence< sal_Int32 >     lHandles(1);
     auto plHandles = lHandles.getArray();
-    css::uno::Sequence< css::uno::Any > lOldVals(1);
+    css::uno::Sequence< cpo::uno::Any > lOldVals(1);
     auto plOldVals = lOldVals.getArray();
-    css::uno::Sequence< css::uno::Any > lNewVals(1);
+    css::uno::Sequence< cpo::uno::Any > lNewVals(1);
     auto plNewVals = lNewVals.getArray();
 
     css::uno::Sequence< sal_Int32 > lIDs   = impl_mapPathName2IDList(sPath);
@@ -1065,13 +1065,13 @@ void PathSettings::impl_rebuildPropertyDescriptor(std::unique_lock<std::mutex>& 
     m_pPropHelp.reset(new ::cppu::OPropertyArrayHelper(m_lPropDesc, false)); // false => not sorted ... must be done inside helper
 }
 
-css::uno::Any PathSettings::impl_getPathValue(std::unique_lock<std::mutex>& g, sal_Int32 nID) const
+cpo::uno::Any PathSettings::impl_getPathValue(std::unique_lock<std::mutex>& g, sal_Int32 nID) const
 {
     const PathSettings::PathInfo* pPath = impl_getPathAccessConst(g, nID);
     if (! pPath)
         throw css::lang::IllegalArgumentException();
 
-    css::uno::Any aVal;
+    cpo::uno::Any aVal;
     switch(impl_getPropGroup(nID))
     {
         case IDGROUP_OLDSTYLE :
@@ -1125,7 +1125,7 @@ css::uno::Any PathSettings::impl_getPathValue(std::unique_lock<std::mutex>& g, s
 
 void PathSettings::impl_setPathValue(std::unique_lock<std::mutex>& g,
                                      sal_Int32      nID ,
-                                     const css::uno::Any& aVal)
+                                     const cpo::uno::Any& aVal)
 {
     PathSettings::PathInfo* pOrgPath = impl_getPathAccess(g, nID);
     if (! pOrgPath)
@@ -1296,13 +1296,13 @@ const PathSettings::PathInfo* PathSettings::impl_getPathAccessConst(std::unique_
 }
 
 bool PathSettings::convertFastPropertyValue(std::unique_lock<std::mutex>& g,
-                                            css::uno::Any& aConvertedValue,
-                                            css::uno::Any& aOldValue      ,
+                                            cpo::uno::Any& aConvertedValue,
+                                            cpo::uno::Any& aOldValue      ,
                                             sal_Int32      nHandle        ,
-                                            const css::uno::Any& aValue         )
+                                            const cpo::uno::Any& aValue         )
 {
     // throws NoSuchElementException !
-    css::uno::Any aCurrentVal = impl_getPathValue(g, nHandle);
+    cpo::uno::Any aCurrentVal = impl_getPathValue(g, nHandle);
 
     return PropHelper::willPropertyBeChanged(
                 aCurrentVal,
@@ -1313,14 +1313,14 @@ bool PathSettings::convertFastPropertyValue(std::unique_lock<std::mutex>& g,
 
 void PathSettings::setFastPropertyValue_NoBroadcast(std::unique_lock<std::mutex>& g,
                                                     sal_Int32      nHandle,
-                                                    const css::uno::Any& aValue )
+                                                    const cpo::uno::Any& aValue )
 {
     // throws NoSuchElement- and IllegalArgumentException !
     impl_setPathValue(g, nHandle, aValue);
 }
 
 void PathSettings::getFastPropertyValue(std::unique_lock<std::mutex>& g,
-                                                 css::uno::Any& aValue ,
+                                                 cpo::uno::Any& aValue ,
                                                  sal_Int32      nHandle) const
 {
     aValue = impl_getPathValue(g, nHandle);
@@ -1401,7 +1401,7 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgNew(st
 }
 
 // XInitialization
-void SAL_CALL PathSettings::initialize(const css::uno::Sequence<css::uno::Any>& /*rArguments*/)
+void SAL_CALL PathSettings::initialize(const css::uno::Sequence<cpo::uno::Any>& /*rArguments*/)
 {
     // so we can reinitialize/reset all path variables to default
     std::unique_lock g(m_aMutex);
@@ -1413,7 +1413,7 @@ void SAL_CALL PathSettings::initialize(const css::uno::Sequence<css::uno::Any>& 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_PathSettings_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     rtl::Reference<PathSettings> xPathSettings = new PathSettings(context);
     // fill cache

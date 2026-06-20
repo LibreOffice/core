@@ -293,7 +293,7 @@ static OUString queryFile( Printer const * pPrinter, const OUString & rJobName )
 
                 css::uno::Reference< css::ui::dialogs::XFilePickerControlAccess > xControlAccess( xFilePicker, css::uno::UNO_QUERY );
                 if( xControlAccess.is() )
-                    xControlAccess->setValue( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, css::uno::Any( true ) );
+                    xControlAccess->setValue( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, cpo::uno::Any( true ) );
             }
         }
 #else
@@ -391,7 +391,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
             xBox->run();
         }
         xController->setValue( u"IsDirect"_ustr,
-                               css::uno::Any( false ) );
+                               cpo::uno::Any( false ) );
     }
 
     // setup printer
@@ -466,7 +466,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
                         {
                             aBuf.append( "-" + OUString::number( nPages ) );
                         }
-                        xController->setValue(u"PageRange"_ustr, css::uno::Any(aBuf.makeStringAndClear()));
+                        xController->setValue(u"PageRange"_ustr, cpo::uno::Any(aBuf.makeStringAndClear()));
                     }
                 }
             }
@@ -570,7 +570,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
                     return false;
                 }
                 xController->setValue( u"LocalFileName"_ustr,
-                                       css::uno::Any( aFile ) );
+                                       cpo::uno::Any( aFile ) );
             }
             else if (aDlg.isSingleJobs())
             {
@@ -872,7 +872,7 @@ void PrinterController::setPrinter( const VclPtr<Printer>& i_rPrinter )
 
     mpImplData->mxPrinter = i_rPrinter;
     setValue( u"Name"_ustr,
-              css::uno::Any( i_rPrinter->GetName() ) );
+              cpo::uno::Any( i_rPrinter->GetName() ) );
     mpImplData->mnDefaultPaperBin = mpImplData->mxPrinter->GetPaperBin();
     mpImplData->maDefaultPageSize = mpImplData->mxPrinter->GetSizeOfPaper();
 
@@ -1587,7 +1587,7 @@ const css::beans::PropertyValue* PrinterController::getValue( const OUString& i_
     return it != mpImplData->maPropertyToIndex.end() ? &mpImplData->maUIProperties[it->second] : nullptr;
 }
 
-void PrinterController::setValue( const OUString& i_rPropertyName, const css::uno::Any& i_rValue )
+void PrinterController::setValue( const OUString& i_rPropertyName, const cpo::uno::Any& i_rValue )
 {
     css::beans::PropertyValue aVal;
     aVal.Name = i_rPropertyName;
@@ -1768,12 +1768,12 @@ OUString PrinterController::makeEnabled( const OUString& i_rProperty )
                {
                    if( it->second.mnDependsOnEntry != -1 )
                    {
-                       setValue( aDependency, css::uno::Any( sal_Int32( it->second.mnDependsOnEntry ) ) );
+                       setValue( aDependency, cpo::uno::Any( sal_Int32( it->second.mnDependsOnEntry ) ) );
                    }
                }
                else if( pVal->Value >>= bDepVal )
                {
-                   setValue( aDependency, css::uno::Any( it->second.mnDependsOnEntry != 0 ) );
+                   setValue( aDependency, cpo::uno::Any( it->second.mnDependsOnEntry != 0 ) );
                }
                else
                {
@@ -1906,10 +1906,10 @@ sal_Int32 PrinterController::getIntProperty( const OUString& i_rProperty, sal_In
 /*
  * PrinterOptionsHelper
 **/
-css::uno::Any PrinterOptionsHelper::getValue( const OUString& i_rPropertyName ) const
+cpo::uno::Any PrinterOptionsHelper::getValue( const OUString& i_rPropertyName ) const
 {
-    css::uno::Any aRet;
-    std::unordered_map< OUString, css::uno::Any >::const_iterator it =
+    cpo::uno::Any aRet;
+    std::unordered_map< OUString, cpo::uno::Any >::const_iterator it =
         m_aPropertyMap.find( i_rPropertyName );
     if( it != m_aPropertyMap.end() )
         aRet = it->second;
@@ -1919,21 +1919,21 @@ css::uno::Any PrinterOptionsHelper::getValue( const OUString& i_rPropertyName ) 
 bool PrinterOptionsHelper::getBoolValue( const OUString& i_rPropertyName, bool i_bDefault ) const
 {
     bool bRet = false;
-    css::uno::Any aVal( getValue( i_rPropertyName ) );
+    cpo::uno::Any aVal( getValue( i_rPropertyName ) );
     return (aVal >>= bRet) ? bRet : i_bDefault;
 }
 
 sal_Int64 PrinterOptionsHelper::getIntValue( const OUString& i_rPropertyName, sal_Int64 i_nDefault ) const
 {
     sal_Int64 nRet = 0;
-    css::uno::Any aVal( getValue( i_rPropertyName ) );
+    cpo::uno::Any aVal( getValue( i_rPropertyName ) );
     return (aVal >>= nRet) ? nRet : i_nDefault;
 }
 
 OUString PrinterOptionsHelper::getStringValue( const OUString& i_rPropertyName ) const
 {
     OUString aRet;
-    css::uno::Any aVal( getValue( i_rPropertyName ) );
+    cpo::uno::Any aVal( getValue( i_rPropertyName ) );
     return (aVal >>= aRet) ? aRet : OUString();
 }
 
@@ -1943,7 +1943,7 @@ bool PrinterOptionsHelper::processProperties( const css::uno::Sequence< css::bea
 
     for( const auto& rVal : i_rNewProp )
     {
-        std::unordered_map< OUString, css::uno::Any >::iterator it =
+        std::unordered_map< OUString, cpo::uno::Any >::iterator it =
             m_aPropertyMap.find( rVal.Name );
 
         bool bElementChanged = (it == m_aPropertyMap.end()) || (it->second != rVal.Value);
@@ -1967,7 +1967,7 @@ void PrinterOptionsHelper::appendPrintUIOptions( css::uno::Sequence< css::beans:
     }
 }
 
-css::uno::Any PrinterOptionsHelper::setUIControlOpt(const css::uno::Sequence< OUString >& i_rIDs,
+cpo::uno::Any PrinterOptionsHelper::setUIControlOpt(const css::uno::Sequence< OUString >& i_rIDs,
                                           const OUString& i_rTitle,
                                           const css::uno::Sequence< OUString >& i_rHelpIds,
                                           const OUString& i_rType,
@@ -2052,10 +2052,10 @@ css::uno::Any PrinterOptionsHelper::setUIControlOpt(const css::uno::Sequence< OU
 
     SAL_WARN_IF( nUsed != nElements, "vcl.gdi", "nUsed != nElements, probable heap corruption" );
 
-    return css::uno::Any( aCtrl );
+    return cpo::uno::Any( aCtrl );
 }
 
-css::uno::Any PrinterOptionsHelper::setGroupControlOpt(const OUString& i_rID,
+cpo::uno::Any PrinterOptionsHelper::setGroupControlOpt(const OUString& i_rID,
                                              const OUString& i_rTitle,
                                              const OUString& i_rHelpId)
 {
@@ -2069,7 +2069,7 @@ css::uno::Any PrinterOptionsHelper::setGroupControlOpt(const OUString& i_rID,
     return setUIControlOpt(aIds, i_rTitle, aHelpId, u"Group"_ustr);
 }
 
-css::uno::Any PrinterOptionsHelper::setSubgroupControlOpt(const OUString& i_rID,
+cpo::uno::Any PrinterOptionsHelper::setSubgroupControlOpt(const OUString& i_rID,
                                                 const OUString& i_rTitle,
                                                 const OUString& i_rHelpId,
                                                 const PrinterOptionsHelper::UIControlOptions& i_rControlOptions)
@@ -2084,7 +2084,7 @@ css::uno::Any PrinterOptionsHelper::setSubgroupControlOpt(const OUString& i_rID,
     return setUIControlOpt(aIds, i_rTitle, aHelpId, u"Subgroup"_ustr, nullptr, i_rControlOptions);
 }
 
-css::uno::Any PrinterOptionsHelper::setBoolControlOpt(const OUString& i_rID,
+cpo::uno::Any PrinterOptionsHelper::setBoolControlOpt(const OUString& i_rID,
                                             const OUString& i_rTitle,
                                             const OUString& i_rHelpId,
                                             const OUString& i_rProperty,
@@ -2104,7 +2104,7 @@ css::uno::Any PrinterOptionsHelper::setBoolControlOpt(const OUString& i_rID,
     return setUIControlOpt(aIds, i_rTitle, aHelpId, u"Bool"_ustr, &aVal, i_rControlOptions);
 }
 
-css::uno::Any PrinterOptionsHelper::setChoiceRadiosControlOpt(const css::uno::Sequence< OUString >& i_rIDs,
+cpo::uno::Any PrinterOptionsHelper::setChoiceRadiosControlOpt(const css::uno::Sequence< OUString >& i_rIDs,
                                               const OUString& i_rTitle,
                                               const css::uno::Sequence< OUString >& i_rHelpId,
                                               const OUString& i_rProperty,
@@ -2130,7 +2130,7 @@ css::uno::Any PrinterOptionsHelper::setChoiceRadiosControlOpt(const css::uno::Se
     return setUIControlOpt(i_rIDs, i_rTitle, i_rHelpId, u"Radio"_ustr, &aVal, aOpt);
 }
 
-css::uno::Any PrinterOptionsHelper::setChoiceListControlOpt(const OUString& i_rID,
+cpo::uno::Any PrinterOptionsHelper::setChoiceListControlOpt(const OUString& i_rID,
                                               const OUString& i_rTitle,
                                               const css::uno::Sequence< OUString >& i_rHelpId,
                                               const OUString& i_rProperty,
@@ -2157,7 +2157,7 @@ css::uno::Any PrinterOptionsHelper::setChoiceListControlOpt(const OUString& i_rI
     return setUIControlOpt(aIds, i_rTitle, i_rHelpId, u"List"_ustr, &aVal, aOpt);
 }
 
-css::uno::Any PrinterOptionsHelper::setRangeControlOpt(const OUString& i_rID,
+cpo::uno::Any PrinterOptionsHelper::setRangeControlOpt(const OUString& i_rID,
                                              const OUString& i_rTitle,
                                              const OUString& i_rHelpId,
                                              const OUString& i_rProperty,
@@ -2190,7 +2190,7 @@ css::uno::Any PrinterOptionsHelper::setRangeControlOpt(const OUString& i_rID,
     return setUIControlOpt(aIds, i_rTitle, aHelpId, u"Range"_ustr, &aVal, aOpt);
 }
 
-css::uno::Any PrinterOptionsHelper::setEditControlOpt(const OUString& i_rID,
+cpo::uno::Any PrinterOptionsHelper::setEditControlOpt(const OUString& i_rID,
                                             const OUString& i_rTitle,
                                             const OUString& i_rHelpId,
                                             const OUString& i_rProperty,

@@ -51,7 +51,7 @@
 #include <sfx2/objsh.hxx>
 #include <docsh.hxx>
 
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -62,7 +62,7 @@ using ::com::sun::star::embed::XClassifiedObject;
 using ::com::sun::star::drawing::XShape;
 using ::com::sun::star::awt::XControlModel;
 using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::form::XFormsSupplier;
 using ::com::sun::star::io::XOutputStream;
 using ::com::sun::star::script::ScriptEventDescriptor;

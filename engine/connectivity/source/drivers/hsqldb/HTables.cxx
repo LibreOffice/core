@@ -33,6 +33,7 @@ using namespace connectivity;
 using namespace ::cppu;
 using namespace connectivity::hsqldb;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;

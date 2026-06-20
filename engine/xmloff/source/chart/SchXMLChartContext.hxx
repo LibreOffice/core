@@ -40,26 +40,26 @@ namespace com::sun::star {
 struct SeriesDefaultsAndStyles
 {
     //default values for series:
-    css::uno::Any    maSymbolTypeDefault;
-    css::uno::Any    maDataCaptionDefault;
+    cpo::uno::Any    maSymbolTypeDefault;
+    cpo::uno::Any    maDataCaptionDefault;
 
-    css::uno::Any    maErrorIndicatorDefault;
-    css::uno::Any    maErrorCategoryDefault;
-    css::uno::Any    maConstantErrorLowDefault;
-    css::uno::Any    maConstantErrorHighDefault;
-    css::uno::Any    maPercentageErrorDefault;
-    css::uno::Any    maErrorMarginDefault;
+    cpo::uno::Any    maErrorIndicatorDefault;
+    cpo::uno::Any    maErrorCategoryDefault;
+    cpo::uno::Any    maConstantErrorLowDefault;
+    cpo::uno::Any    maConstantErrorHighDefault;
+    cpo::uno::Any    maPercentageErrorDefault;
+    cpo::uno::Any    maErrorMarginDefault;
 
-    css::uno::Any    maMeanValueDefault;
-    css::uno::Any    maRegressionCurvesDefault;
+    cpo::uno::Any    maMeanValueDefault;
+    cpo::uno::Any    maRegressionCurvesDefault;
 
-    css::uno::Any    maStackedDefault;
-    css::uno::Any    maPercentDefault;
-    css::uno::Any    maDeepDefault;
-    css::uno::Any    maStackedBarsConnectedDefault;
+    cpo::uno::Any    maStackedDefault;
+    cpo::uno::Any    maPercentDefault;
+    cpo::uno::Any    maDeepDefault;
+    cpo::uno::Any    maStackedBarsConnectedDefault;
 
     //additional information
-    css::uno::Any    maLinesOnProperty;
+    cpo::uno::Any    maLinesOnProperty;
 
     //styles for series and datapoints
     ::std::vector< DataRowPointStyle > maSeriesStyleVector;

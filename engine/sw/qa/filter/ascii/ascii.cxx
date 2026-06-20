@@ -76,7 +76,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf144576_ascii)
     datatransfer::DataFlavor aFlavor;
     aFlavor.MimeType = u"text/plain;charset=utf-16"_ustr;
     aFlavor.DataType = cppu::UnoType<OUString>::get();
-    uno::Any aData = xTransferable->getTransferData(aFlavor);
+    cpo::uno::Any aData = xTransferable->getTransferData(aFlavor);
     OUString aActual;
     aData >>= aActual;
     pWrtShell->ClearMark();
@@ -169,7 +169,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf162180)
     datatransfer::DataFlavor aFlavor;
     aFlavor.MimeType = u"text/plain;charset=utf-16"_ustr;
     aFlavor.DataType = cppu::UnoType<OUString>::get();
-    uno::Any aData = xTransferable->getTransferData(aFlavor);
+    cpo::uno::Any aData = xTransferable->getTransferData(aFlavor);
     CPPUNIT_ASSERT(aData.hasValue());
 
     OUString aActual;

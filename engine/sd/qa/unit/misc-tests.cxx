@@ -335,8 +335,8 @@ void SdMiscTest::testFillColor()
         uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropSet(xShape1, uno::UNO_QUERY_THROW);
     // Set FillStyle and FillColor
-    xPropSet->setPropertyValue(u"FillStyle"_ustr, uno::Any(drawing::FillStyle_SOLID));
-    xPropSet->setPropertyValue(u"FillColor"_ustr, uno::Any(COL_RED));
+    xPropSet->setPropertyValue(u"FillStyle"_ustr, cpo::uno::Any(drawing::FillStyle_SOLID));
+    xPropSet->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(COL_RED));
     // Add the rectangle to the page.
     xShapes->add(xShape1);
 
@@ -357,7 +357,7 @@ void SdMiscTest::testFillColor()
     uno::Reference<view::XSelectionSupplier> xSelectionSupplier(xModel->getCurrentController(),
                                                                 uno::UNO_QUERY);
 
-    xSelectionSupplier->select(uno::Any(xShape1));
+    xSelectionSupplier->select(cpo::uno::Any(xShape1));
     CPPUNIT_ASSERT(xSelectionSupplier->getSelection().hasValue());
 
     const char arguments[] = "{"
@@ -397,8 +397,8 @@ void SdMiscTest::testFillGradient()
     awt::Gradient aGradient;
     aGradient.StartColor = sal_Int32(COL_LIGHTRED);
     aGradient.EndColor = sal_Int32(COL_LIGHTGREEN);
-    xPropSet->setPropertyValue(u"FillStyle"_ustr, uno::Any(drawing::FillStyle_GRADIENT));
-    xPropSet->setPropertyValue(u"FillGradient"_ustr, uno::Any(aGradient));
+    xPropSet->setPropertyValue(u"FillStyle"_ustr, cpo::uno::Any(drawing::FillStyle_GRADIENT));
+    xPropSet->setPropertyValue(u"FillGradient"_ustr, cpo::uno::Any(aGradient));
     // Add the rectangle to the page.
     xShapes->add(xShape1);
 
@@ -506,7 +506,7 @@ void SdMiscTest::testTdf120527()
         xFactory->createInstance(u"com.sun.star.drawing.BitmapTable"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xBitmaps.is());
     OUString aGraphicURL = createFileURL(u"tdf120527.jpg");
-    xBitmaps->insertByName(u"test"_ustr, uno::Any(aGraphicURL));
+    xBitmaps->insertByName(u"test"_ustr, cpo::uno::Any(aGraphicURL));
 
     // Create a graphic.
     uno::Reference<drawing::XShape> xShape(
@@ -1061,11 +1061,11 @@ void SdMiscTest::testEncodedTableStyles()
                                                  uno::UNO_QUERY_THROW);
 
         uno::Reference<container::XNameContainer>(xTableStyleFamily, uno::UNO_QUERY_THROW)
-            ->insertByName(u"table_1"_ustr, uno::Any(xTableStyle));
+            ->insertByName(u"table_1"_ustr, cpo::uno::Any(xTableStyle));
         uno::Reference<container::XNameContainer>(xCellStyleFamily, uno::UNO_QUERY_THROW)
-            ->insertByName(u"table-body_1"_ustr, uno::Any(xCellStyle));
+            ->insertByName(u"table-body_1"_ustr, cpo::uno::Any(xCellStyle));
         uno::Reference<container::XNameReplace>(xTableStyle, uno::UNO_QUERY_THROW)
-            ->replaceByName(u"body"_ustr, uno::Any(xCellStyle));
+            ->replaceByName(u"body"_ustr, cpo::uno::Any(xCellStyle));
     }
 
     saveAndReload(TestFilter::ODG);
@@ -1160,7 +1160,7 @@ void SdMiscTest::testPageBackgroundImages()
     {
         CPPUNIT_ASSERT_EQUAL(true, pDrawViewShell->SwitchPage(0));
         uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-            { "FileName", uno::Any(createFileURL(u"TestImage1.png")) },
+            { "FileName", cpo::uno::Any(createFileURL(u"TestImage1.png")) },
         }));
 
         dispatchCommand(mxComponent, u".uno:SelectBackground"_ustr, aArgs);
@@ -1170,7 +1170,7 @@ void SdMiscTest::testPageBackgroundImages()
     {
         CPPUNIT_ASSERT_EQUAL(true, pDrawViewShell->SwitchPage(1));
         uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-            { "FileName", uno::Any(createFileURL(u"TestImage2.png")) },
+            { "FileName", cpo::uno::Any(createFileURL(u"TestImage2.png")) },
         }));
 
         dispatchCommand(mxComponent, u".uno:SelectBackground"_ustr, aArgs);
@@ -1180,7 +1180,7 @@ void SdMiscTest::testPageBackgroundImages()
     {
         CPPUNIT_ASSERT_EQUAL(true, pDrawViewShell->SwitchPage(2));
         uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-            { "FileName", uno::Any(createFileURL(u"TestImage3.png")) },
+            { "FileName", cpo::uno::Any(createFileURL(u"TestImage3.png")) },
         }));
 
         dispatchCommand(mxComponent, u".uno:SelectBackground"_ustr, aArgs);
@@ -1190,7 +1190,7 @@ void SdMiscTest::testPageBackgroundImages()
     {
         CPPUNIT_ASSERT_EQUAL(true, pDrawViewShell->SwitchPage(3));
         uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-            { "FileName", uno::Any(createFileURL(u"TestImage4.png")) },
+            { "FileName", cpo::uno::Any(createFileURL(u"TestImage4.png")) },
         }));
 
         dispatchCommand(mxComponent, u".uno:SelectBackground"_ustr, aArgs);

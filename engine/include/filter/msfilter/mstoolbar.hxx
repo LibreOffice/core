@@ -12,7 +12,7 @@
 #include <string_view>
 #include <vector>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <filter/msfilter/msfilterdllapi.h>
 #include <rtl/ustring.hxx>
@@ -61,7 +61,7 @@ public:
     const css::uno::Reference< css::ui::XUIConfigurationManager >& getAppCfgManager() const { return m_xAppCfgMgr;}
 
 
-    static css::uno::Any createCommandFromMacro( std::u16string_view sCmd );
+    static cpo::uno::Any createCommandFromMacro( std::u16string_view sCmd );
 
     void addIcon( const css::uno::Reference< css::graphic::XGraphic >& xImage, const OUString& sString );
     void applyIcons();

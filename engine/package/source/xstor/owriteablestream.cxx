@@ -134,7 +134,7 @@ void SetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySet >&
         throw uno::RuntimeException();
 
     try {
-        xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY, uno::Any( aKey ) );
+        xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY, cpo::uno::Any( aKey ) );
     }
     catch ( const uno::Exception& ex )
     {
@@ -143,7 +143,7 @@ void SetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySet >&
     }
 }
 
-uno::Any GetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySet >& xPropertySet )
+cpo::uno::Any GetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySet >& xPropertySet )
 {
     SAL_WARN_IF( !xPropertySet.is(), "package.xstor", "No property set is provided!" );
     if ( !xPropertySet.is() )
@@ -301,7 +301,7 @@ void OWriteStream_Impl::InsertIntoPackageFolder( const OUString& aName,
     {
         SAL_WARN_IF( !m_xPackageStream.is(), "package.xstor", "An inserted stream is incomplete!" );
         uno::Reference< uno::XInterface > xTmp( m_xPackageStream, uno::UNO_QUERY_THROW );
-        xParentPackageFolder->insertByName( aName, uno::Any( xTmp ) );
+        xParentPackageFolder->insertByName( aName, cpo::uno::Any( xTmp ) );
 
         m_bFlushed = false;
         m_bHasInsertedStreamOptimization = false;
@@ -325,7 +325,7 @@ bool OWriteStream_Impl::IsEncrypted()
     uno::Reference< beans::XPropertySet > xPropSet( m_xPackageStream, uno::UNO_QUERY );
     if ( xPropSet.is() )
     {
-        uno::Any aValue = xPropSet->getPropertyValue(u"WasEncrypted"_ustr);
+        cpo::uno::Any aValue = xPropSet->getPropertyValue(u"WasEncrypted"_ustr);
         if ( !( aValue >>= bWasEncr ) )
         {
             SAL_WARN( "package.xstor", "The property WasEncrypted has wrong type!" );
@@ -676,7 +676,7 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
 
     if ( bCompressedIsSet )
     {
-        xPropertySet->setPropertyValue( aComprPropName, uno::Any( bCompressed ) );
+        xPropertySet->setPropertyValue( aComprPropName, cpo::uno::Any( bCompressed ) );
         m_bCompressedSetExplicit = true;
     }
 
@@ -687,8 +687,8 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
 
         // set to be encrypted but do not use encryption key
         xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
-                                        uno::Any( uno::Sequence< beans::NamedValue >() ) );
-        xPropertySet->setPropertyValue( u"Encrypted"_ustr, uno::Any( true ) );
+                                        cpo::uno::Any( uno::Sequence< beans::NamedValue >() ) );
+        xPropertySet->setPropertyValue( u"Encrypted"_ustr, cpo::uno::Any( true ) );
     }
 
     // the stream should be free soon, after package is stored
@@ -707,7 +707,7 @@ void OWriteStream_Impl::Commit()
         return;
 
     uno::Reference< packages::XDataSinkEncrSupport > xNewPackageStream;
-    uno::Sequence< uno::Any > aSeq{ uno::Any(false) };
+    uno::Sequence< cpo::uno::Any > aSeq{ cpo::uno::Any(false) };
 
     if ( m_xCacheStream.is() )
     {
@@ -778,9 +778,9 @@ void OWriteStream_Impl::Commit()
 
         // set to be encrypted but do not use encryption key
         xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
-                                        uno::Any( uno::Sequence< beans::NamedValue >() ) );
+                                        cpo::uno::Any( uno::Sequence< beans::NamedValue >() ) );
         xPropertySet->setPropertyValue( u"Encrypted"_ustr,
-                                        uno::Any( true ) );
+                                        cpo::uno::Any( true ) );
     }
     else if ( m_bHasCachedEncryptionData )
     {
@@ -788,7 +788,7 @@ void OWriteStream_Impl::Commit()
             throw uno::RuntimeException();
 
         xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
-                                        uno::Any( m_aEncryptionData.getAsConstNamedValueList() ) );
+                                        cpo::uno::Any( m_aEncryptionData.getAsConstNamedValueList() ) );
     }
 
     // the stream should be free soon, after package is stored
@@ -1459,7 +1459,7 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
                 uno::Reference< beans::XPropertySet > xPropSet( xRelsStream, uno::UNO_QUERY_THROW );
                 xPropSet->setPropertyValue(
                     u"MediaType"_ustr,
-                    uno::Any( u"application/vnd.openxmlformats-package.relationships+xml"_ustr ) );
+                    cpo::uno::Any( u"application/vnd.openxmlformats-package.relationships+xml"_ustr ) );
 
                 m_nRelInfoStatus = RELINFO_READ;
             }
@@ -1483,7 +1483,7 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
             // set the mediatype
             uno::Reference< beans::XPropertySet > xPropSet( xRelsStream, uno::UNO_QUERY_THROW );
             xPropSet->setPropertyValue(u"MediaType"_ustr,
-                uno::Any( u"application/vnd.openxmlformats-package.relationships+xml"_ustr ) );
+                cpo::uno::Any( u"application/vnd.openxmlformats-package.relationships+xml"_ustr ) );
 
             if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
                 m_nRelInfoStatus = RELINFO_NO_INIT;
@@ -1677,10 +1677,10 @@ void OWriteStream::ModifyParentUnlockMutex_Impl(osl::ClearableMutexGuard& aGuard
     }
 }
 
-uno::Any SAL_CALL OWriteStream::queryInterface( const uno::Type& rType )
+cpo::uno::Any SAL_CALL OWriteStream::queryInterface( const uno::Type& rType )
 {
     // common interfaces
-    uno::Any aReturn = ::cppu::queryInterface
+    cpo::uno::Any aReturn = ::cppu::queryInterface
                 (   rType
                     ,   static_cast<lang::XTypeProvider*> ( this )
                     ,   static_cast<io::XInputStream*> ( this )
@@ -1958,7 +1958,7 @@ uno::Reference< io::XOutputStream > SAL_CALL OWriteStream::getOutputStream()
     catch( const io::IOException& r )
     {
         throw lang::WrappedTargetRuntimeException(u"OWriteStream::getOutputStream: Could not create backing temp file"_ustr,
-                getXWeak(), css::uno::Any ( r ) );
+                getXWeak(), cpo::uno::Any ( r ) );
     }
 
     if ( !m_xOutStream.is() )
@@ -2214,7 +2214,7 @@ void SAL_CALL OWriteStream::dispose()
             }
             catch( const uno::Exception& )
             {
-                uno::Any aCaught( ::cppu::getCaughtException() );
+                cpo::uno::Any aCaught( ::cppu::getCaughtException() );
                 SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
                 throw lang::WrappedTargetRuntimeException(u"Can not commit/revert the storage!"_ustr,
                                                 getXWeak(),
@@ -2325,7 +2325,7 @@ bool SAL_CALL OWriteStream::hasEncryptionData()
     }
     catch( const uno::Exception& )
     {
-        uno::Any aCaught( ::cppu::getCaughtException() );
+        cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
         throw lang::WrappedTargetRuntimeException( u"Problems on hasEncryptionData!"_ustr,
                                   getXWeak(),
@@ -2633,7 +2633,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL OWriteStream::getPropertySetI
     return uno::Reference< beans::XPropertySetInfo >();
 }
 
-void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
+void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     osl::ClearableMutexGuard aGuard(m_xSharedMutex->GetMutex());
 
@@ -2748,7 +2748,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
     ModifyParentUnlockMutex_Impl( aGuard );
 }
 
-uno::Any SAL_CALL OWriteStream::getPropertyValue( const OUString& aProp )
+cpo::uno::Any SAL_CALL OWriteStream::getPropertyValue( const OUString& aProp )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -2760,7 +2760,7 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const OUString& aProp )
 
     if ( aProp == "RelId" )
     {
-        return uno::Any( m_pImpl->GetNewRelId() );
+        return cpo::uno::Any( m_pImpl->GetNewRelId() );
     }
 
     OUString aPropertyName;
@@ -2783,7 +2783,7 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const OUString& aProp )
     }
     else if ( m_nStorageType == embed::StorageFormats::PACKAGE
             && aPropertyName == "UseCommonStoragePasswordEncryption" )
-        return uno::Any( m_pImpl->m_bUseCommonEncryption );
+        return cpo::uno::Any( m_pImpl->m_bUseCommonEncryption );
     else if ( aPropertyName == "Size" )
     {
         bool bThrow = false;
@@ -2798,7 +2798,7 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const OUString& aProp )
         if (bThrow || !m_xSeekable.is())
             throw uno::RuntimeException();
 
-        return uno::Any( m_xSeekable->getLength() );
+        return cpo::uno::Any( m_xSeekable->getLength() );
     }
 
     throw beans::UnknownPropertyException(aPropertyName); // TODO
@@ -2957,7 +2957,7 @@ void SAL_CALL OWriteStream::commit()
     }
     catch( const uno::Exception& )
     {
-        uno::Any aCaught( ::cppu::getCaughtException() );
+        cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
         throw embed::StorageWrappedTargetException( u"Problems on commit!"_ustr,
                                   getXWeak(),
@@ -3013,7 +3013,7 @@ void SAL_CALL OWriteStream::revert()
         }
         catch (const uno::Exception&)
         {
-            uno::Any aCaught(::cppu::getCaughtException());
+            cpo::uno::Any aCaught(::cppu::getCaughtException());
             SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
             throw embed::StorageWrappedTargetException(u"Problems on revert!"_ustr,
                 getXWeak(),

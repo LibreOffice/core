@@ -247,7 +247,7 @@ void
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <msvc/amd64.hxx>
 #include <except.hxx>
 

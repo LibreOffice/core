@@ -38,7 +38,7 @@ SfxObjectShellItem* SfxObjectShellItem::Clone( SfxItemPool *) const
     return new SfxObjectShellItem( *this );
 }
 
-bool SfxObjectShellItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SfxObjectShellItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     if ( pObjSh )
     {
@@ -53,7 +53,7 @@ bool SfxObjectShellItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*
     return true;
 }
 
-bool SfxObjectShellItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SfxObjectShellItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     // This item MUST have a model. Please don't change this, there are UNO-based
     // implementations which need it!!
@@ -84,12 +84,12 @@ SfxObjectItem* SfxObjectItem::Clone( SfxItemPool *) const
     return new SfxObjectItem( *this );
 }
 
-bool SfxObjectItem::QueryValue(css::uno::Any&, sal_uInt8) const
+bool SfxObjectItem::QueryValue(cpo::uno::Any&, sal_uInt8) const
 {
     return false;
 }
 
-bool SfxObjectItem::PutValue(const css::uno::Any&, sal_uInt8)
+bool SfxObjectItem::PutValue(const cpo::uno::Any&, sal_uInt8)
 {
   return false;
 }

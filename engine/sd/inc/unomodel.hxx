@@ -171,7 +171,7 @@ public:
     UNO3_GETIMPLEMENTATION_DECL(SdXImpressDocument)
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     SD_DLLPUBLIC virtual void SAL_CALL acquire() noexcept override;
     SD_DLLPUBLIC virtual void SAL_CALL release() noexcept override;
 
@@ -212,7 +212,7 @@ public:
     virtual css::uno::Reference<css::uno::XInterface> SAL_CALL
     createInstanceWithArguments(
         OUString const & ServiceSpecifier,
-        css::uno::Sequence<css::uno::Any> const & Arguments) override;
+        css::uno::Sequence<cpo::uno::Any> const & Arguments) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
 
     // XServiceInfo
@@ -222,8 +222,8 @@ public:
 
     // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
     virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
     virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
     virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
@@ -239,9 +239,9 @@ public:
     virtual css::uno::Reference< css::ucb::XAnyCompare > SAL_CALL createAnyCompareByName( const OUString& PropertyName ) override;
 
     // XRenderable
-    virtual sal_Int32 SAL_CALL getRendererCount( const css::uno::Any& aSelection, const css::uno::Sequence< css::beans::PropertyValue >& xOptions ) override;
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getRenderer( sal_Int32 nRenderer, const css::uno::Any& aSelection, const css::uno::Sequence< css::beans::PropertyValue >& xOptions ) override;
-    virtual void SAL_CALL render( sal_Int32 nRenderer, const css::uno::Any& aSelection, const css::uno::Sequence< css::beans::PropertyValue >& xOptions ) override;
+    virtual sal_Int32 SAL_CALL getRendererCount( const cpo::uno::Any& aSelection, const css::uno::Sequence< css::beans::PropertyValue >& xOptions ) override;
+    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getRenderer( sal_Int32 nRenderer, const cpo::uno::Any& aSelection, const css::uno::Sequence< css::beans::PropertyValue >& xOptions ) override;
+    virtual void SAL_CALL render( sal_Int32 nRenderer, const cpo::uno::Any& aSelection, const css::uno::Sequence< css::beans::PropertyValue >& xOptions ) override;
 
     // ITiledRenderable
     SD_DLLPUBLIC virtual void paintTile( VirtualDevice& rDevice,
@@ -359,13 +359,13 @@ public:
     virtual void SAL_CALL remove( const css::uno::Reference< css::drawing::XDrawPage >& xPage ) override;
 
     // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override ;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
@@ -406,7 +406,7 @@ public:
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override ;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
@@ -451,7 +451,7 @@ public:
     virtual ~SdDocLinkTargets() noexcept override;
 
     // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
@@ -492,8 +492,8 @@ public:
     // css::beans::XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
     virtual void SAL_CALL setPropertyValue(const OUString& aPropertyName,
-                                           const css::uno::Any& aValue) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName) override;
+                                           const cpo::uno::Any& aValue) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName) override;
     virtual void SAL_CALL addPropertyChangeListener(const OUString& aPropertyName,
                           const css::uno::Reference< css::beans::XPropertyChangeListener > & xListener) override;
     virtual void SAL_CALL removePropertyChangeListener(const OUString& aPropertyName,
@@ -515,7 +515,7 @@ public:
     SdDocLinkTarget( SdXImpressDocument* pModel, sal_uInt16 nT );
 
     // css::container::XNameAccess
-    virtual css::uno::Any SAL_CALL getByName(const OUString& aName) override;
+    virtual cpo::uno::Any SAL_CALL getByName(const OUString& aName) override;
     virtual css::uno::Sequence< OUString> SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName(const OUString& aName) override;
 

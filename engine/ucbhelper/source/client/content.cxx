@@ -71,6 +71,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::task;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace ucbhelper
 {
@@ -132,7 +133,7 @@ public:
         : m_rContent( rContent ) {}
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         noexcept override;
     virtual void SAL_CALL release()
@@ -1299,9 +1300,9 @@ void SAL_CALL ContentEventListener_Impl::release()
     OWeakObject::release();
 }
 
-css::uno::Any SAL_CALL ContentEventListener_Impl::queryInterface( const css::uno::Type & rType )
+cpo::uno::Any SAL_CALL ContentEventListener_Impl::queryInterface( const css::uno::Type & rType )
 {
-    css::uno::Any aRet = cppu::queryInterface( rType,
+    cpo::uno::Any aRet = cppu::queryInterface( rType,
                                                static_cast< XContentEventListener* >(this),
                                                static_cast< XEventListener* >(this)
                                                );

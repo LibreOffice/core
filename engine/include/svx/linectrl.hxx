@@ -28,7 +28,7 @@ namespace svx {
     class ToolboxButtonLineStyleUpdater;
 }
 
-typedef std::function<bool(const OUString&, const css::uno::Any&)> LineStyleSelectFunction;
+typedef std::function<bool(const OUString&, const cpo::uno::Any&)> LineStyleSelectFunction;
 typedef std::function<void(bool)> LineStyleIsNoneFunction;
 
 // SvxLineStyleController:
@@ -44,7 +44,7 @@ public:
     SvxLineStyleToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext );
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence<css::uno::Any>& rArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence<cpo::uno::Any>& rArguments ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

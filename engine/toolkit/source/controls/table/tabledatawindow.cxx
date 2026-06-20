@@ -30,7 +30,7 @@
 
 namespace svt::table
 {
-    using css::uno::Any;
+    using cpo::uno::Any;
 
     TableDataWindow::TableDataWindow( TableControl_Impl& _rTableControl )
         :Window( &_rTableControl.getAntiImpl() )

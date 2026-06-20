@@ -42,6 +42,7 @@
 namespace svt
 {
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using ::com::sun::star::util::XNumberFormatter;
 using ::com::sun::star::util::NumberFormatter;
 using ::com::sun::star::util::XNumberFormatsSupplier;
@@ -82,7 +83,7 @@ public:
 
     /** converts the given <code>Any</code> into a <code>double</code> value to be fed into a number formatter
         */
-    virtual double convertToDouble(css::uno::Any const& i_value) const = 0;
+    virtual double convertToDouble(cpo::uno::Any const& i_value) const = 0;
 
     /** returns the format key to be used for formatting values
         */

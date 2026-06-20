@@ -57,7 +57,7 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 
 namespace
 {
@@ -547,7 +547,7 @@ void AxisWrapper::updateReferenceSize()
     if( xProp.is() )
     {
         if( xProp->getPropertyValue(u"ReferencePageSize"_ustr).hasValue() )
-            xProp->setPropertyValue(u"ReferencePageSize"_ustr, uno::Any(
+            xProp->setPropertyValue(u"ReferencePageSize"_ustr, cpo::uno::Any(
             m_spChart2ModelContact->GetPageSize() ));
     }
 }
@@ -579,7 +579,7 @@ Reference< chart2::XAxis > AxisWrapper::getAxis()
         {
             xAxis = AxisHelper::createAxis( nDimensionIndex, bMainAxis, xDiagram, m_spChart2ModelContact->m_xContext );
             if( xAxis.is() )
-                xAxis->setPropertyValue(u"Show"_ustr, uno::Any( false ) );
+                xAxis->setPropertyValue(u"Show"_ustr, cpo::uno::Any( false ) );
         }
     }
     catch( const uno::Exception & )

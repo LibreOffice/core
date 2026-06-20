@@ -92,7 +92,7 @@ protected:
     virtual css::awt::Rectangle implGetBounds() override;
 
 private:
-    css::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
+    cpo::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -153,11 +153,11 @@ private:
     void SAL_CALL deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
 
     // XAccessibleValue
-    virtual css::uno::Any SAL_CALL getCurrentValue(  ) override;
-    virtual bool SAL_CALL setCurrentValue( const css::uno::Any& aNumber ) override;
-    virtual css::uno::Any SAL_CALL getMaximumValue(  ) override;
-    virtual css::uno::Any SAL_CALL getMinimumValue(  ) override;
-    virtual css::uno::Any SAL_CALL getMinimumIncrement(  ) override;
+    virtual cpo::uno::Any SAL_CALL getCurrentValue(  ) override;
+    virtual bool SAL_CALL setCurrentValue( const cpo::uno::Any& aNumber ) override;
+    virtual cpo::uno::Any SAL_CALL getMaximumValue(  ) override;
+    virtual cpo::uno::Any SAL_CALL getMinimumValue(  ) override;
+    virtual cpo::uno::Any SAL_CALL getMinimumIncrement(  ) override;
 
     rtl::Reference<comphelper::OAccessible> implGetParentAccessible() const;
     SvTreeListEntry* GetRealChild(sal_Int32 nIndex);

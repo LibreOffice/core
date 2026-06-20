@@ -102,6 +102,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::view;
 
@@ -580,7 +581,7 @@ void IndexTabPage_Impl::InitializeIndex()
                                                      PROPERTY_ANCHORREF, PROPERTY_TITLEREF };
 
             // abi: use one possibly remote call only
-            css::uno::Sequence< css::uno::Any > aAnySeq =
+            css::uno::Sequence< cpo::uno::Any > aAnySeq =
                   aCnt.getPropertyValues( aPropSeq );
 
             css::uno::Sequence< OUString > aKeywordList;
@@ -2576,7 +2577,7 @@ void SfxHelpWindow_Impl::DoAction(std::u16string_view  rActionId)
                 css::uno::Reference< css::beans::XPropertySetInfo > xInfo = aCnt.getProperties();
                 if ( xInfo->hasPropertyByName( PROPERTY_TITLE ) )
                 {
-                    css::uno::Any aAny = aCnt.getPropertyValue( PROPERTY_TITLE );
+                    cpo::uno::Any aAny = aCnt.getPropertyValue( PROPERTY_TITLE );
                     OUString aValue;
                     if ( aAny >>= aValue )
                     {

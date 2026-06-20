@@ -111,7 +111,7 @@ public:
     }
 
     // XNameAccess
-    virtual uno::Any SAL_CALL getByName( const OUString& aName ) override
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override
     {
         if ( !hasByName( aName ) )
             throw container::NoSuchElementException();
@@ -135,11 +135,11 @@ public:
         return mControls.size();
     }
 
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
+    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         if ( Index < 0 || o3tl::make_unsigned(Index) >= mControls.size() )
             throw lang::IndexOutOfBoundsException();
-        return uno::Any( mControls[ Index ] );
+        return cpo::uno::Any( mControls[ Index ] );
     }
 };
 
@@ -175,7 +175,7 @@ public:
         return ( nIndex < m_xIndexAccess->getCount() );
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         if ( nIndex < m_xIndexAccess->getCount() )
         {
@@ -185,7 +185,7 @@ public:
             uno::Reference< msforms::XControl > xVBAControl;
             if ( xControl.is() && m_xDlg.is() )
                 xVBAControl = ScVbaControlFactory::createUserformControl( m_xContext, xControl, m_xDlg, m_xModel, mfOffsetX, mfOffsetY );
-            return uno::Any( xVBAControl );
+            return cpo::uno::Any( xVBAControl );
         }
         throw container::NoSuchElementException();
     }
@@ -223,13 +223,13 @@ ScVbaControls::createEnumeration()
     return xEnum;
 }
 
-uno::Any
-ScVbaControls::createCollectionObject( const css::uno::Any& aSource )
+cpo::uno::Any
+ScVbaControls::createCollectionObject( const cpo::uno::Any& aSource )
 {
     // Create control from awt::XControl
     uno::Reference< awt::XControl > xControl( aSource, uno::UNO_QUERY_THROW );
     uno::Reference< msforms::XControl > xVBAControl = ScVbaControlFactory::createUserformControl( mxContext, xControl, mxDialog, mxModel, mfOffsetX, mfOffsetY );
-    return uno::Any( xVBAControl );
+    return cpo::uno::Any( xVBAControl );
 }
 
 void SAL_CALL
@@ -244,9 +244,9 @@ ScVbaControls::Move( double cx, double cy )
     }
 }
 
-uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& StringKey, const uno::Any& /*Before*/, const uno::Any& /*After*/ )
+cpo::uno::Any SAL_CALL ScVbaControls::Add( const cpo::uno::Any& Object, const cpo::uno::Any& StringKey, const cpo::uno::Any& /*Before*/, const cpo::uno::Any& /*After*/ )
 {
-    uno::Any aResult;
+    cpo::uno::Any aResult;
     OUString aComServiceName;
 
     try
@@ -329,7 +329,7 @@ uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& St
             {
                 xNewModel.set( xModelFactory->createInstance( u"com.sun.star.awt.UnoControlComboBoxModel"_ustr ), uno::UNO_QUERY_THROW );
                 uno::Reference< beans::XPropertySet > xProps( xNewModel, uno::UNO_QUERY_THROW );
-                xProps->setPropertyValue( u"Dropdown"_ustr , uno::Any( true ) );
+                xProps->setPropertyValue( u"Dropdown"_ustr , cpo::uno::Any( true ) );
                 fDefWidth = 72.0; fDefHeight = 18.0;
                 bFontSupport = true;
             }
@@ -337,7 +337,7 @@ uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& St
             {
                 xNewModel.set( xModelFactory->createInstance( u"com.sun.star.awt.UnoControlButtonModel"_ustr ), uno::UNO_QUERY_THROW );
                 uno::Reference< beans::XPropertySet > xProps( xNewModel, uno::UNO_QUERY_THROW );
-                xProps->setPropertyValue( u"Toggle"_ustr , uno::Any( true ) );
+                xProps->setPropertyValue( u"Toggle"_ustr , cpo::uno::Any( true ) );
                 fDefWidth = 72.0; fDefHeight = 18.0;
                 bFontSupport = true;
             }
@@ -368,15 +368,15 @@ uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& St
             if( bFontSupport )
             {
                 uno::Reference< beans::XPropertySet > xModelProps( xNewModel, uno::UNO_QUERY_THROW );
-                xModelProps->setPropertyValue( u"FontName"_ustr , uno::Any( u"Tahoma"_ustr ) );
-                xModelProps->setPropertyValue( u"FontHeight"_ustr , uno::Any( float( 8.0 ) ) );
-                xModelProps->setPropertyValue( u"FontWeight"_ustr , uno::Any( awt::FontWeight::NORMAL ) );
-                xModelProps->setPropertyValue( u"FontSlant"_ustr , uno::Any( awt::FontSlant_NONE ) );
-                xModelProps->setPropertyValue( u"FontUnderline"_ustr , uno::Any( awt::FontUnderline::NONE ) );
-                xModelProps->setPropertyValue( u"FontStrikeout"_ustr , uno::Any( awt::FontStrikeout::NONE ) );
+                xModelProps->setPropertyValue( u"FontName"_ustr , cpo::uno::Any( u"Tahoma"_ustr ) );
+                xModelProps->setPropertyValue( u"FontHeight"_ustr , cpo::uno::Any( float( 8.0 ) ) );
+                xModelProps->setPropertyValue( u"FontWeight"_ustr , cpo::uno::Any( awt::FontWeight::NORMAL ) );
+                xModelProps->setPropertyValue( u"FontSlant"_ustr , cpo::uno::Any( awt::FontSlant_NONE ) );
+                xModelProps->setPropertyValue( u"FontUnderline"_ustr , cpo::uno::Any( awt::FontUnderline::NONE ) );
+                xModelProps->setPropertyValue( u"FontStrikeout"_ustr , cpo::uno::Any( awt::FontStrikeout::NONE ) );
             }
 
-            xDialogContainer->insertByName( aNewName, uno::Any( xNewModel ) );
+            xDialogContainer->insertByName( aNewName, cpo::uno::Any( xNewModel ) );
             uno::Reference< awt::XControlContainer > xControlContainer( mxDialog, uno::UNO_QUERY_THROW );
             xNewControl = xControlContainer->getControl( aNewName );
 
@@ -384,9 +384,9 @@ uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& St
             {
                 uno::Reference< script::XInvocation > xControlInvoke( xNewControl, uno::UNO_QUERY_THROW );
 
-                uno::Sequence< uno::Any > aArgs{ uno::Any(aComServiceName) };
+                uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(aComServiceName) };
                 uno::Sequence< sal_Int16 > aOutIDDummy;
-                uno::Sequence< uno::Any > aOutDummy;
+                uno::Sequence< cpo::uno::Any > aOutDummy;
                 xControlInvoke->invoke( u"SOAddAXControl"_ustr , aArgs, aOutIDDummy, aOutDummy );
             }
             catch (const uno::Exception&)
@@ -414,7 +414,7 @@ uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& St
     }
     catch (const uno::Exception&)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException( u"Can not create AXControl!"_ustr,
                 uno::Reference< uno::XInterface >(),
                 anyEx );
@@ -423,7 +423,7 @@ uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& St
     return aResult;
 }
 
-void SAL_CALL ScVbaControls::Remove( const uno::Any& StringKeyOrIndex )
+void SAL_CALL ScVbaControls::Remove( const cpo::uno::Any& StringKeyOrIndex )
 {
     try
     {

@@ -29,6 +29,7 @@
 
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 /**
    * Get current value.
@@ -48,7 +49,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_currentValue(VARIANT* currentVa
             return E_FAIL;
 
         // Get Any type value from UNO.
-        css::uno::Any anyVal = m_xValue->getCurrentValue();
+        cpo::uno::Any anyVal = m_xValue->getCurrentValue();
         // Convert Any to VARIANT.
         CMAccessible::ConvertAnyToVariant(anyVal, currentValue);
 
@@ -76,7 +77,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::setCurrentValue(VARIANT value)
             return E_FAIL;
 
         HRESULT hRet = S_OK;
-        css::uno::Any anyVal;
+        cpo::uno::Any anyVal;
 
         // Set value according to value type.
         switch (value.vt)
@@ -160,7 +161,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_maximumValue(VARIANT* maximumVa
             return E_FAIL;
 
         // Get Any type value from UNO.
-        css::uno::Any anyVal = m_xValue->getMaximumValue();
+        cpo::uno::Any anyVal = m_xValue->getMaximumValue();
         // Convert Any to VARIANT.
         CMAccessible::ConvertAnyToVariant(anyVal, maximumValue);
 
@@ -189,7 +190,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_minimumValue(VARIANT* minimumVa
             return E_FAIL;
 
         // Get Any type value from UNO.
-        css::uno::Any anyVal = m_xValue->getMinimumValue();
+        cpo::uno::Any anyVal = m_xValue->getMinimumValue();
         // Convert Any to VARIANT.
         CMAccessible::ConvertAnyToVariant(anyVal, minimumValue);
 

@@ -42,7 +42,7 @@ public:
     void SAL_CALL setValue(sal_Int32 nIndex) override;
 
     // Returns a ListEntries collection that represents all the available entries
-    css::uno::Any SAL_CALL ListEntries(const css::uno::Any& rIndex) override;
+    cpo::uno::Any SAL_CALL ListEntries(const cpo::uno::Any& rIndex) override;
 
     // XHelperInterface
     OUString getServiceImplName() override;

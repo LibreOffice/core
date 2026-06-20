@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -389,7 +389,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::parse(
             } catch (css::uno::RuntimeException &) {
                 throw;
             } catch (const css::uno::Exception &) {
-                css::uno::Any anyEx = cppu::getCaughtException();
+                cpo::uno::Any anyEx = cppu::getCaughtException();
                 throw css::lang::WrappedTargetRuntimeException(
                     "creating service " + serviceName,
                     getXWeak(),
@@ -693,7 +693,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeRelative(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_uri_UriReferenceFactory_get_implementation(css::uno::XComponentContext* rxContext,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return ::cppu::acquire(new Factory(rxContext));
 }

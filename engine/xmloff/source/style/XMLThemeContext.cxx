@@ -54,7 +54,7 @@ XMLThemeContext::~XMLThemeContext()
         auto xTheme = model::theme::createXTheme(mpTheme);
         try
         {
-            xPropertySet->setPropertyValue(u"Theme"_ustr, uno::Any(xTheme));
+            xPropertySet->setPropertyValue(u"Theme"_ustr, cpo::uno::Any(xTheme));
         }
         catch (uno::Exception&)
         {

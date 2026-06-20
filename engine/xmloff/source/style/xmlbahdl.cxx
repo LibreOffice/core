@@ -26,13 +26,14 @@
 #include <o3tl/string_view.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/beans/Pair.hpp>
 #include <xmloff/xmltoken.hxx>
 
 #include <limits.h>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::xmloff::token;
 
 static void lcl_xmloff_setAny( Any& rValue, sal_Int32 nValue, sal_Int8 nBytes )

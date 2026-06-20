@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -762,7 +762,7 @@ isOfType( uno::XInterface *pInterface, const uno::Type & rType )
 
     bool bIs = false;
     try {
-        uno::Any aRet = pInterface->queryInterface( rType );
+        cpo::uno::Any aRet = pInterface->queryInterface( rType );
 
         bIs = ( ( typelib_TypeClass_INTERFACE == aRet.pType->eTypeClass ) &&
                 ( aRet.pReserved != nullptr ) );
@@ -780,7 +780,7 @@ static bool isTableCell(uno::XInterface* pInterface)
 
     try {
         auto aType = cppu::UnoType<accessibility::XAccessible>::get().getTypeLibType();
-        uno::Any aAcc = pInterface->queryInterface(aType);
+        cpo::uno::Any aAcc = pInterface->queryInterface(aType);
 
         css::uno::Reference<css::accessibility::XAccessible> xAcc;
         aAcc >>= xAcc;

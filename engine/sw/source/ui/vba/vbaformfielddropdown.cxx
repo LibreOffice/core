@@ -74,18 +74,18 @@ void SwVbaFormFieldDropDown::setValue(sal_Int32 nIndex)
     m_pDropDown->ReplaceContent(/*pText=*/nullptr, &nIndex);
 }
 
-uno::Any SwVbaFormFieldDropDown::ListEntries(const uno::Any& rIndex)
+cpo::uno::Any SwVbaFormFieldDropDown::ListEntries(const cpo::uno::Any& rIndex)
 {
     if (!getValid())
-        return uno::Any();
+        return cpo::uno::Any();
 
     uno::Reference<XCollection> xCol(
         new SwVbaFormFieldDropDownListEntries(this, mxContext, *m_pDropDown));
 
     if (rIndex.hasValue())
-        return xCol->Item(rIndex, uno::Any());
+        return xCol->Item(rIndex, cpo::uno::Any());
 
-    return uno::Any(xCol);
+    return cpo::uno::Any(xCol);
 }
 
 OUString SwVbaFormFieldDropDown::getServiceImplName() { return u"SwVbaFormFieldDropDown"_ustr; }

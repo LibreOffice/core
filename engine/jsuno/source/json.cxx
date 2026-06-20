@@ -24,7 +24,7 @@
 #include <utility>
 #include <vector>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -586,7 +586,7 @@ void appendUnoAsJson(OStringBuffer& buf, css::uno::Type const& type, void const*
     }
 }
 
-css::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type)
+cpo::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type)
 {
     switch (type.getTypeClass())
     {
@@ -596,11 +596,11 @@ css::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type)
         {
             if (json == u"true")
             {
-                return css::uno::Any(true);
+                return cpo::uno::Any(true);
             }
             if (json == u"false")
             {
-                return css::uno::Any(false);
+                return cpo::uno::Any(false);
             }
             throw css::uno::RuntimeException(u"JSON value "_ustr + json
                                              + u" does not parse as UNO type "_ustr
@@ -615,7 +615,7 @@ css::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type)
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
-            return css::uno::Any(*v);
+            return cpo::uno::Any(*v);
         }
         case css::uno::TypeClass_SHORT:
         {
@@ -626,7 +626,7 @@ css::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type)
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
-            return css::uno::Any(*v);
+            return cpo::uno::Any(*v);
         }
         case css::uno::TypeClass_UNSIGNED_SHORT:
         {
@@ -637,7 +637,7 @@ css::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type)
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
-            return css::uno::Any(*v);
+            return cpo::uno::Any(*v);
         }
         case css::uno::TypeClass_LONG:
         {
@@ -648,7 +648,7 @@ css::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type)
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
-            return css::uno::Any(*v);
+            return cpo::uno::Any(*v);
         }
         case css::uno::TypeClass_UNSIGNED_LONG:
         {
@@ -659,7 +659,7 @@ css::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type)
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
-            return css::uno::Any(*v);
+            return cpo::uno::Any(*v);
         }
         case css::uno::TypeClass_HYPER:
         {
@@ -670,7 +670,7 @@ css::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type)
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
-            return css::uno::Any(*v);
+            return cpo::uno::Any(*v);
         }
         case css::uno::TypeClass_UNSIGNED_HYPER:
         {
@@ -681,7 +681,7 @@ css::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type)
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
-            return css::uno::Any(*v);
+            return cpo::uno::Any(*v);
         }
         case css::uno::TypeClass_FLOAT:
         {
@@ -692,7 +692,7 @@ css::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type)
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
-            return css::uno::Any(*v);
+            return cpo::uno::Any(*v);
         }
         case css::uno::TypeClass_DOUBLE:
         {
@@ -703,7 +703,7 @@ css::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type)
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
-            return css::uno::Any(*v);
+            return cpo::uno::Any(*v);
         }
         case css::uno::TypeClass_CHAR:
         {
@@ -714,7 +714,7 @@ css::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type)
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
-            return css::uno::Any((*decoded)[0]);
+            return cpo::uno::Any((*decoded)[0]);
         }
         case css::uno::TypeClass_STRING:
         {
@@ -725,7 +725,7 @@ css::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type)
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
-            return css::uno::Any(*decoded);
+            return cpo::uno::Any(*decoded);
         }
         case css::uno::TypeClass_TYPE:
         {
@@ -743,7 +743,7 @@ css::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type)
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
-            return css::uno::Any(css::uno::Type(tdesc.get()->pWeakRef));
+            return cpo::uno::Any(css::uno::Type(tdesc.get()->pWeakRef));
         }
         case css::uno::TypeClass_ANY:
         {
@@ -800,7 +800,7 @@ css::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type)
                                    css::uno::cpp_acquire);
             for (std::size_t i = 0; i != elems.size(); ++i)
             {
-                css::uno::Any const any = parseJsonToAny(elems[i], elemType);
+                cpo::uno::Any const any = parseJsonToAny(elems[i], elemType);
                 uno_copyData(seq->elements + (i * elemDesc.get()->nSize),
                              const_cast<void*>(elemType.getTypeClass() == css::uno::TypeClass_ANY
                                                    ? &any
@@ -819,7 +819,7 @@ css::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type)
                 {
                     if (OUString::unacquired(&enumDesc->ppEnumNames[i]) == *name)
                     {
-                        return css::uno::Any(&enumDesc->pEnumValues[i], type);
+                        return cpo::uno::Any(&enumDesc->pEnumValues[i], type);
                     }
                 }
             }
@@ -839,7 +839,7 @@ css::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type)
             }
             css::uno::TypeDescription desc(type);
             auto compDesc = reinterpret_cast<typelib_CompoundTypeDescription const*>(desc.get());
-            std::vector<css::uno::Any> mems;
+            std::vector<cpo::uno::Any> mems;
             for (;;)
             {
                 for (sal_Int32 i = 0; i != compDesc->nMembers; ++i)
@@ -882,7 +882,7 @@ css::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type)
                     break;
                 }
             }
-            css::uno::Any result(buf, type);
+            cpo::uno::Any result(buf, type);
             uno_type_destructData(buf, type.getTypeLibType(), nullptr);
             std::free(buf);
             return result;
@@ -892,7 +892,7 @@ css::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type)
             if (json == u"null")
             {
                 css::uno::XInterface* nullRef = nullptr;
-                return css::uno::Any(&nullRef, type);
+                return cpo::uno::Any(&nullRef, type);
             }
             //TODO: non-null interface references need a JSContext-based path that can
             // round-trip a wrapped UNO object identity from kit→iframe→kit.

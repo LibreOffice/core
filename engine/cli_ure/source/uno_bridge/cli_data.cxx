@@ -222,7 +222,7 @@ System::Type^ mapUnoType(typelib_TypeDescriptionReference const * pTD)
     case typelib_TypeClass_TYPE:
         retVal= System::Type::typeid; break;
     case typelib_TypeClass_ANY:
-        retVal= uno::Any::typeid; break;
+        retVal= cpo::uno::Any::typeid; break;
     case typelib_TypeClass_ENUM:
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
@@ -849,7 +849,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                 uno_any_construct( pAny, 0, 0, 0 );
                 break;
             }
-            uno::Any aAny= *safe_cast<uno::Any^>(cli_data);
+            cpo::uno::Any aAny= *safe_cast<cpo::uno::Any^>(cli_data);
             css::uno::Type  value_td( mapCliType(aAny.Type), SAL_NO_ACQUIRE);
 
             if (assign)
@@ -1510,12 +1510,12 @@ void Bridge::map_to_cli(
                 &objCli, pAny->pData, pAny->pType, nullptr,
                 false);
 
-            uno::Any anyVal(mapUnoType(pAny->pType), objCli);
+            cpo::uno::Any anyVal(mapUnoType(pAny->pType), objCli);
             *cli_data= anyVal;
         }
         else
         { // void any
-            *cli_data= uno::Any::VOID;
+            *cli_data= cpo::uno::Any::VOID;
         }
         break;
     }
@@ -1802,14 +1802,14 @@ void Bridge::map_to_cli(
         }
         case typelib_TypeClass_ANY:
         {
-            cli::array<uno::Any>^ arCli= gcnew cli::array<uno::Any>(nElements);
+            cli::array<cpo::uno::Any>^ arCli= gcnew cli::array<cpo::uno::Any>(nElements);
             uno_Any const * p = (uno_Any const *)seq->elements;
             for (sal_Int32 nPos = 0; nPos < nElements; ++nPos )
             {
                 System::Object^ cli_obj = nullptr;
                 map_to_cli(
                     &cli_obj, &p[ nPos ], element_type, nullptr, false);
-                arCli[nPos]= *safe_cast<uno::Any^>(cli_obj);
+                arCli[nPos]= *safe_cast<cpo::uno::Any^>(cli_obj);
             }
             *cli_data= arCli;
             break;

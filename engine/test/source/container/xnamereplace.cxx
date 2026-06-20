@@ -11,7 +11,7 @@
 
 #include <com/sun/star/container/XNameReplace.hpp>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <cppunit/TestAssert.h>
@@ -25,7 +25,7 @@ void XNameReplace::testReplaceByName()
     uno::Reference<container::XNameReplace> xNameReplace(init(), uno::UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT_NO_THROW(xNameReplace->replaceByName(m_aReplacementName, m_aReplacementElement));
-    uno::Any aAny = xNameReplace->getByName(m_aReplacementName);
+    cpo::uno::Any aAny = xNameReplace->getByName(m_aReplacementName);
 
     // we deliberately avoid uno::UNO_QUERY_THROW, so a test on .is() can be made
     uno::Reference<uno::XInterface> xElement(aAny, uno::UNO_QUERY);

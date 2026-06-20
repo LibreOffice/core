@@ -42,12 +42,12 @@ public:
     SvxItemPropertySet( SvxItemPropertySet const & ) = delete; // MSVC2015 workaround
 
     // Methods, which work directly with the ItemSet
-    static css::uno::Any getPropertyValue( const SfxItemPropertyMapEntry* pMap, const SfxItemSet& rSet, bool bSearchInParent, bool bDontConvertNegativeValues );
-    static void setPropertyValue( const SfxItemPropertyMapEntry* pMap, const css::uno::Any& rVal, SfxItemSet& rSet, bool bDontConvertNegativeValues );
+    static cpo::uno::Any getPropertyValue( const SfxItemPropertyMapEntry* pMap, const SfxItemSet& rSet, bool bSearchInParent, bool bDontConvertNegativeValues );
+    static void setPropertyValue( const SfxItemPropertyMapEntry* pMap, const cpo::uno::Any& rVal, SfxItemSet& rSet, bool bDontConvertNegativeValues );
 
     // Methods that use Any instead
-    css::uno::Any getPropertyValue( const SfxItemPropertyMapEntry* pMap, SvxItemPropertySetUsrAnys& rAnys ) const;
-    static void setPropertyValue( const SfxItemPropertyMapEntry* pMap, const css::uno::Any& rVal, SvxItemPropertySetUsrAnys& rAnys );
+    cpo::uno::Any getPropertyValue( const SfxItemPropertyMapEntry* pMap, SvxItemPropertySetUsrAnys& rAnys ) const;
+    static void setPropertyValue( const SfxItemPropertyMapEntry* pMap, const cpo::uno::Any& rVal, SvxItemPropertySetUsrAnys& rAnys );
 
     rtl::Reference< SfxItemPropertySetInfo > const & getPropertySetInfo() const;
     const SfxItemPropertyMap& getPropertyMap() const { return m_aPropertyMap;}
@@ -58,7 +58,7 @@ struct SvxIDPropertyCombine
 {
     sal_uInt16  nWID;
     sal_uInt8   memberId;
-    css::uno::Any    aAny;
+    cpo::uno::Any    aAny;
 };
 
 
@@ -70,16 +70,16 @@ public:
     SvxItemPropertySetUsrAnys();
     ~SvxItemPropertySetUsrAnys();
     bool AreThereOwnUsrAnys() const { return ! aCombineList.empty(); }
-    css::uno::Any* GetUsrAnyForID(SfxItemPropertyMapEntry const & entry) const;
-    void AddUsrAnyForID(const css::uno::Any& rAny, SfxItemPropertyMapEntry const & entry);
+    cpo::uno::Any* GetUsrAnyForID(SfxItemPropertyMapEntry const & entry) const;
+    void AddUsrAnyForID(const cpo::uno::Any& rAny, SfxItemPropertyMapEntry const & entry);
     void ClearAllUsrAny();
 };
 
 /** converts the given any with a metric to 100th/mm if needed */
-EDITENG_DLLPUBLIC void SvxUnoConvertToMM( const MapUnit eSourceMapUnit, css::uno::Any & rMetric ) noexcept;
+EDITENG_DLLPUBLIC void SvxUnoConvertToMM( const MapUnit eSourceMapUnit, cpo::uno::Any & rMetric ) noexcept;
 
 /** converts the given any with a metric from 100th/mm to the given metric if needed */
-EDITENG_DLLPUBLIC void SvxUnoConvertFromMM( const MapUnit eDestinationMapUnit, css::uno::Any & rMetric ) noexcept;
+EDITENG_DLLPUBLIC void SvxUnoConvertFromMM( const MapUnit eDestinationMapUnit, cpo::uno::Any & rMetric ) noexcept;
 
 #endif // INCLUDED_EDITENG_UNOIPSET_HXX
 

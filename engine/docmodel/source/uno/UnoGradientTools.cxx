@@ -137,7 +137,7 @@ basegfx::BColorStops getColorStopsFromUno(css::awt::ColorStopSequence const& rCo
     return aColorStops;
 }
 
-basegfx::BColorStops getColorStopsFromAny(css::uno::Any const& rAny)
+basegfx::BColorStops getColorStopsFromAny(cpo::uno::Any const& rAny)
 {
     basegfx::BColorStops aColorStops;
     if (!rAny.has<css::awt::ColorStopSequence>())
@@ -155,7 +155,7 @@ basegfx::BGradient getFromUnoGradient2(css::awt::Gradient2 const& rGradient2)
     return aBGradient;
 }
 
-basegfx::BGradient getFromAny(css::uno::Any const& rAny)
+basegfx::BGradient getFromAny(cpo::uno::Any const& rAny)
 {
     basegfx::BGradient aBGradient;
 

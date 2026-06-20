@@ -127,8 +127,8 @@ public:
     SwGetSetExpType     GetSubType() const;
     void                SetSubType(SwGetSetExpType nType);
 
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
 
     static sal_Int32    GetReferenceTextPos( const SwFormatField& rFormat, SwDoc& rDoc, sal_Int32 nHint = 0);
     // #i82544#
@@ -185,8 +185,8 @@ public:
     void SetOutlineLvl( sal_uInt8 n )           { m_nLevel = n; }
     void SetChapter(SwSetExpField& rField, const SwNode& rNd, SwRootFrame const* pLayout);
 
-    virtual void QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual void PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual void QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual void PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
     virtual void UpdateFields() override {};
 };
 
@@ -258,8 +258,8 @@ public:
     /// Query formula.
     virtual OUString       GetPar2()   const override;
     virtual void                SetPar2(const OUString& rStr) override;
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
@@ -350,8 +350,8 @@ public:
     SwInputFieldSubType     GetSubType() const;
     void                    SetSubType(SwInputFieldSubType nSub);
 
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 // Sorted list of input fields and DropDown fields
@@ -418,8 +418,8 @@ public:
     /// The formula.
     virtual OUString GetPar2()   const override;
     virtual void        SetPar2(const OUString& rStr) override;
-    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( cpo::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const cpo::uno::Any& rVal, sal_uInt16 nWhich ) override;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };

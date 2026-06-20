@@ -26,8 +26,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Array;
-import com.sun.star.uno.Any;
-import com.sun.star.uno.AnyConverter;
+import cpo.uno.Any;
+import cpo.uno.AnyConverter;
 import com.sun.star.uno.Type;
 
 public class ValueChanger {
@@ -37,7 +37,7 @@ public class ValueChanger {
 
         Object newValue = null;
 
-        if (oldValue instanceof com.sun.star.uno.Any) {
+        if (oldValue instanceof cpo.uno.Any) {
             try {
                 oldValue = AnyConverter.toObject(((Any) oldValue).getType(),
                         oldValue);

@@ -40,14 +40,14 @@ public:
     SwVbaTablesOfContents( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const rtl::Reference< SwXTextDocument >& xDoc );
 
     // Methods
-    virtual css::uno::Reference< ::ooo::vba::word::XTableOfContents > SAL_CALL Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, const css::uno::Any& UseHeadingStyles, const css::uno::Any& UpperHeadingLevel, const css::uno::Any& LowerHeadingLevel, const css::uno::Any& UseFields, const css::uno::Any& TableID, const css::uno::Any& RightAlignPageNumbers, const css::uno::Any& IncludePageNumbers, const css::uno::Any& AddedStyles, const css::uno::Any& UseHyperlinks, const css::uno::Any& HidePageNumbersInWeb, const css::uno::Any& UseOutlineLevels ) override;
+    virtual css::uno::Reference< ::ooo::vba::word::XTableOfContents > SAL_CALL Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, const cpo::uno::Any& UseHeadingStyles, const cpo::uno::Any& UpperHeadingLevel, const cpo::uno::Any& LowerHeadingLevel, const cpo::uno::Any& UseFields, const cpo::uno::Any& TableID, const cpo::uno::Any& RightAlignPageNumbers, const cpo::uno::Any& IncludePageNumbers, const cpo::uno::Any& AddedStyles, const cpo::uno::Any& UseHyperlinks, const cpo::uno::Any& HidePageNumbersInWeb, const cpo::uno::Any& UseOutlineLevels ) override;
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // SwVbaTablesOfContents_BASE
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 };

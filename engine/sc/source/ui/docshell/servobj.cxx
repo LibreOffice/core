@@ -132,7 +132,7 @@ void ScServerObject::EndListeningAll()
 }
 
 bool ScServerObject::GetData(
-        css::uno::Any & rData /*out param*/,
+        cpo::uno::Any & rData /*out param*/,
         const OUString & rMimeType, bool /* bSynchron */ )
 {
     if (!pDocSh)

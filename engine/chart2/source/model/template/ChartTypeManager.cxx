@@ -605,7 +605,7 @@ rtl::Reference< ::chart::ChartTypeTemplate > ChartTypeManager::createTemplate(
 
 uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstanceWithArguments(
     const OUString& ServiceSpecifier,
-    const uno::Sequence< uno::Any >& /* Arguments */ )
+    const uno::Sequence< cpo::uno::Any >& /* Arguments */ )
 {
     OSL_FAIL( "createInstanceWithArguments: No arguments supported" );
     return createInstance( ServiceSpecifier );
@@ -669,7 +669,7 @@ css::uno::Sequence< OUString > SAL_CALL ChartTypeManager::getSupportedServiceNam
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart_ChartTypeManager_get_implementation(css::uno::XComponentContext *context,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::ChartTypeManager(context));
 }

@@ -108,7 +108,7 @@ css::uno::Reference<css::ui::XUIElement> SAL_CALL SmPanelFactory::createUIElemen
     }
     catch (const css::uno::Exception&)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
             u"SmPanelFactory::createUIElement exception"_ustr, nullptr, anyEx);
     }
@@ -135,7 +135,7 @@ css::uno::Sequence<OUString> SmPanelFactory::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_libreoffice_comp_Math_sidebar_SmPanelFactory(css::uno::XComponentContext*,
-                                                 css::uno::Sequence<css::uno::Any> const&)
+                                                 css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SmPanelFactory);
 }

@@ -42,7 +42,7 @@ class GraphicObjectImpl : public GraphicObject_BASE
 
 public:
     /// @throws uno::RuntimeException
-    explicit GraphicObjectImpl(uno::Sequence<uno::Any> const & rArgs);
+    explicit GraphicObjectImpl(uno::Sequence<cpo::uno::Any> const & rArgs);
 
      // XGraphicObject
     virtual uno::Reference<graphic::XGraphic> SAL_CALL getGraphic() override;
@@ -64,7 +64,7 @@ public:
     }
 };
 
-GraphicObjectImpl::GraphicObjectImpl(const uno::Sequence<uno::Any>& /*rArgs*/)
+GraphicObjectImpl::GraphicObjectImpl(const uno::Sequence<cpo::uno::Any>& /*rArgs*/)
 {
     mpGraphicObject.emplace();
 }
@@ -93,7 +93,7 @@ void SAL_CALL GraphicObjectImpl::setGraphic(uno::Reference<graphic::XGraphic> co
 extern "C" SAL_DLLPUBLIC_EXPORT
 css::uno::XInterface* com_sun_star_graphic_GraphicObject_get_implementation(
                             SAL_UNUSED_PARAMETER uno::XComponentContext*,
-                            uno::Sequence<uno::Any> const & rArguments)
+                            uno::Sequence<cpo::uno::Any> const & rArguments)
 {
     return cppu::acquire(new GraphicObjectImpl(rArguments));
 }

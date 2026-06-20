@@ -34,7 +34,7 @@
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -152,8 +152,8 @@ lang::Locale SAL_CALL AccessibleBrowseBoxBase::getLocale()
 
 void SAL_CALL AccessibleBrowseBoxBase::focusGained( const css::awt::FocusEvent& )
 {
-    css::uno::Any aFocused;
-    css::uno::Any aEmpty;
+    cpo::uno::Any aFocused;
+    cpo::uno::Any aEmpty;
     aFocused <<= FOCUSED;
 
     commitEvent(AccessibleEventId::STATE_CHANGED,aFocused,aEmpty);
@@ -162,8 +162,8 @@ void SAL_CALL AccessibleBrowseBoxBase::focusGained( const css::awt::FocusEvent& 
 
 void SAL_CALL AccessibleBrowseBoxBase::focusLost( const css::awt::FocusEvent& )
 {
-    css::uno::Any aFocused;
-    css::uno::Any aEmpty;
+    cpo::uno::Any aFocused;
+    cpo::uno::Any aEmpty;
     aFocused <<= FOCUSED;
 
     commitEvent(AccessibleEventId::STATE_CHANGED,aEmpty,aFocused);
@@ -195,7 +195,7 @@ void AccessibleBrowseBoxBase::setAccessibleName( const OUString& rName )
 
     commitEvent(
         AccessibleEventId::NAME_CHANGED,
-        uno::Any( maName ),
+        cpo::uno::Any( maName ),
         aOld );
 }
 
@@ -210,7 +210,7 @@ void AccessibleBrowseBoxBase::setAccessibleDescription( const OUString& rDescrip
 
     commitEvent(
         AccessibleEventId::DESCRIPTION_CHANGED,
-        uno::Any( maDescription ),
+        cpo::uno::Any( maDescription ),
         aOld );
 }
 

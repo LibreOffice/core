@@ -58,9 +58,9 @@ class ODBExport : public SvXMLExport
     {
         OUString         Name;
         css::uno::Type   Type;
-        css::uno::Any    Value;
+        cpo::uno::Any    Value;
 
-        TypedPropertyValue( OUString _name, const css::uno::Type& _type, css::uno::Any _value )
+        TypedPropertyValue( OUString _name, const css::uno::Type& _type, cpo::uno::Any _value )
             :Name(std::move( _name ))
             ,Type( _type )
             ,Value(std::move( _value ))
@@ -127,7 +127,7 @@ class ODBExport : public SvXMLExport
     void                    exportColumns(const css::uno::Reference<css::sdbcx::XColumnsSupplier>& _xColSup);
     void                    collectComponentStyles();
 
-    static OUString         implConvertAny(const css::uno::Any& _rValue);
+    static OUString         implConvertAny(const cpo::uno::Any& _rValue);
 
     rtl::Reference < XMLPropertySetMapper > const & GetTableStylesPropertySetMapper() const;
 

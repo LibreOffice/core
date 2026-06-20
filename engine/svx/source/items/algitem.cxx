@@ -72,7 +72,7 @@ bool SvxOrientationItem::GetPresentation
 }
 
 
-bool SvxOrientationItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxOrientationItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     table::CellOrientation eUno = table::CellOrientation_STANDARD;
     switch ( GetValue() )
@@ -86,7 +86,7 @@ bool SvxOrientationItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) c
     return true;
 }
 
-bool SvxOrientationItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvxOrientationItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     table::CellOrientation eOrient;
     if(!(rVal >>= eOrient))
@@ -227,7 +227,7 @@ SvxMarginItem* SvxMarginItem::Clone( SfxItemPool* ) const
     return new SvxMarginItem(*this);
 }
 
-bool SvxMarginItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxMarginItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -254,7 +254,7 @@ bool SvxMarginItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 }
 
 
-bool SvxMarginItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxMarginItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
     bool bConvert = ( ( nMemberId & CONVERT_TWIPS ) != 0 );

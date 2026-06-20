@@ -39,7 +39,7 @@ public:
     virtual void SAL_CALL setValue( sal_Int32 nValue ) override;
 
     // XInitialize
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any>& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any>& aArguments ) override;
 
     virtual OUString SAL_CALL getImplementationName() override;
 

@@ -52,7 +52,7 @@ namespace xmlscript
         virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XExporter
         virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& rxDoc ) override;

@@ -42,6 +42,7 @@
 //  Defines
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
@@ -278,7 +279,7 @@ void SAL_CALL FontSizeMenuController::updatePopupMenu()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_FontSizeMenuController_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::FontSizeMenuController(context));
 }

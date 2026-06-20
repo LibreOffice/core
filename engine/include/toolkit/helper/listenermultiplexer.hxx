@@ -73,7 +73,7 @@ public:
     }
 
     // css::uno::XInterface
-    css::uno::Any  SAL_CALL queryInterface(const css::uno::Type & rType) override
+    cpo::uno::Any  SAL_CALL queryInterface(const css::uno::Type & rType) override
     {
         return ::cppu::queryInterface(rType, static_cast<css::uno::XInterface*>(this));
     }

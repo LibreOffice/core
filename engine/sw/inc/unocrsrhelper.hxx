@@ -68,11 +68,11 @@ namespace SwUnoCursorHelper
     {
         private:
             //  keep Any's mapped by (WhichId << 16 ) + (MemberId)
-            std::map<sal_uInt32, css::uno::Any> m_Map;
+            std::map<sal_uInt32, cpo::uno::Any> m_Map;
 
         public:
-            void    SetValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const css::uno::Any& rAny );
-            bool    FillValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const css::uno::Any*& pAny );
+            void    SetValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const cpo::uno::Any& rAny );
+            bool    FillValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const cpo::uno::Any*& pAny );
     };
 
     css::uno::Reference< css::text::XTextContent >
@@ -81,7 +81,7 @@ namespace SwUnoCursorHelper
 
     bool                    getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
                                         , SwPaM& rPam
-                                        , css::uno::Any *pAny
+                                        , cpo::uno::Any *pAny
                                         , css::beans::PropertyState& eState
                                         , const SwTextNode* pNode = nullptr );
 
@@ -104,10 +104,10 @@ namespace SwUnoCursorHelper
     void                        getNumberingProperty(
                                     SwPaM& rPam,
                                     css::beans::PropertyState& eState,
-                                    css::uno::Any *pAny );
+                                    cpo::uno::Any *pAny );
 
     void                        setNumberingProperty(
-                                    const css::uno::Any& rValue,
+                                    const cpo::uno::Any& rValue,
                                     SwPaM& rPam);
 
     sal_Int16                   IsNodeNumStart(
@@ -160,7 +160,7 @@ namespace SwUnoCursorHelper
             SwPaM& rPaM,
             const SfxItemPropertySet & rPropSet,
             const OUString & rPropertyName,
-            const css::uno::Any & rValue,
+            const cpo::uno::Any & rValue,
             const SetAttrMode nAttrMode = SetAttrMode::DEFAULT);
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::beans::PropertyVetoException
@@ -181,7 +181,7 @@ namespace SwUnoCursorHelper
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    css::uno::Any  GetPropertyValue(
+    cpo::uno::Any  GetPropertyValue(
             SwPaM& rPaM,
             const SfxItemPropertySet & rPropSet,
             std::u16string_view rPropertyName);
@@ -209,23 +209,23 @@ namespace SwUnoCursorHelper
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    css::uno::Any  GetPropertyDefault(
+    cpo::uno::Any  GetPropertyDefault(
             SwPaM const & rPaM,
             const SfxItemPropertySet & rPropSet,
             std::u16string_view rPropertyName);
 
     bool SetPageDesc(
-            const css::uno::Any& rValue,
+            const cpo::uno::Any& rValue,
             SwDoc & rDoc, SfxItemSet & rSet);
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    void SetTextFormatColl(const css::uno::Any & rAny, SwPaM & rPaM);
+    void SetTextFormatColl(const cpo::uno::Any & rAny, SwPaM & rPaM);
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
     /// @throws css::uno::DeploymentException
     bool SetCursorPropertyValue(
             SfxItemPropertyMapEntry const& rEntry,
-            css::uno::Any const& rValue,
+            cpo::uno::Any const& rValue,
             SwPaM & rPam, SfxItemSet & rItemSet);
 
     /// try to get something that can be selected out of the XInterface
@@ -242,7 +242,7 @@ namespace SwUnoCursorHelper
     css::uno::Reference<css::text::XFlatParagraphIterator>
             CreateFlatParagraphIterator(SwDoc &, sal_Int32,  bool);
 
-    void SetCharStyle(SwDoc& rDoc, const css::uno::Any& rValue, SfxItemSet& rSet);
+    void SetCharStyle(SwDoc& rDoc, const cpo::uno::Any& rValue, SfxItemSet& rSet);
 
 } // namespace SwUnoCursorHelper
 

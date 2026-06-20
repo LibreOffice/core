@@ -46,7 +46,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::drawing::XDrawPageSupplier;
 using ::com::sun::star::drawing::XShapes;
 using ::com::sun::star::chart2::XDiagram;
@@ -59,6 +59,7 @@ using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::chart2::data;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 ChartSpaceConverter::ChartSpaceConverter( const ConverterRoot& rParent, ChartSpaceModel& rModel ) :
     ConverterBase< ChartSpaceModel >( rParent, rModel )
@@ -126,7 +127,7 @@ static bool lcl_useWorkaroundForNoGapInOOXML( Reference< chart2::XChartDocument 
             xPropSet->getPropertyValue(u"Role"_ustr) >>= aRoleName;
             if (aRoleName == "values-y")
             {
-                const uno::Sequence<uno::Any> aData = xValues->getData();
+                const uno::Sequence<cpo::uno::Any> aData = xValues->getData();
                 for (const auto& rVal : aData)
                 {
                     double fVal;
@@ -320,7 +321,7 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
     {
         Reference< css::chart::XChartDocument > xChartDoc( getChartDocument(), UNO_QUERY );
         PropertySet aProps( xChartDoc->getDiagram() );
-        aProps.setProperty( PROP_ExternalData , uno::Any(mrModel.maSheetPath) );
+        aProps.setProperty( PROP_ExternalData , cpo::uno::Any(mrModel.maSheetPath) );
     }
 
     if (mrModel.mbDate1904) {

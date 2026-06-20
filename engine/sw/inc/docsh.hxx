@@ -249,9 +249,9 @@ public:
 
 #if defined(_WIN32)
     virtual bool DdeGetData( const OUString& rItem, const OUString& rMimeType,
-                             css::uno::Any & rValue ) override;
+                             cpo::uno::Any & rValue ) override;
     virtual bool DdeSetData( const OUString& rItem, const OUString& rMimeType,
-                             const css::uno::Any & rValue ) override;
+                             const cpo::uno::Any & rValue ) override;
 #endif
     virtual ::sfx2::SvLinkSource* DdeCreateLinkSource( const OUString& rItem ) override;
     virtual void ReconnectDdeLink(SfxObjectShell& rServer) override;
@@ -333,7 +333,7 @@ public:
     virtual bool    GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash ) override;
 
     void RegisterAutomationDocumentEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
-    void CallAutomationDocumentEventSinks(const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments);
+    void CallAutomationDocumentEventSinks(const OUString& Method, css::uno::Sequence< cpo::uno::Any >& Arguments);
     void RegisterAutomationDocumentObject(css::uno::Reference< ooo::vba::word::XDocument > const& xDocument);
 
     // Lock all unlocked views, and returns a guard object which unlocks those views when destructed

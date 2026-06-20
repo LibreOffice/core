@@ -168,12 +168,12 @@ public:
     virtual OUString SAL_CALL getServiceName() override;
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
     // XNamedContainer
-    void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement ) override;
+    void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
 
     // Override the method of parent class
     virtual bool SAL_CALL getGroupControl(  ) override;
 private:
-    virtual css::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    virtual cpo::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 };
@@ -191,8 +191,8 @@ public:
 
     // css::lang::XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoMultiPageControl, ControlContainerBase, "com.sun.star.awt.UnoControlMultiPage" )
-    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return ControlContainerBase::queryInterface(rType); }
-    css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+    cpo::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return ControlContainerBase::queryInterface(rType); }
+    cpo::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
     void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
     // css::lang::XTypeProvider
@@ -246,7 +246,7 @@ public:
     // Override the method of parent class
     virtual bool SAL_CALL getGroupControl(  ) override;
 private:
-    virtual css::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    virtual cpo::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 };
@@ -278,7 +278,7 @@ public:
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
 
 private:
-    virtual css::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    virtual cpo::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 };
 

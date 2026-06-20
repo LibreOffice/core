@@ -307,7 +307,7 @@ public:
     virtual ~ContentImplHelper() override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override
     { cppu::OWeakObject::acquire(); }
     virtual void SAL_CALL release() noexcept override;
@@ -349,7 +349,7 @@ public:
     // XCommandProcessor
     virtual sal_Int32 SAL_CALL
     createCommandIdentifier() override;
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
     execute( const css::ucb::Command& aCommand,
              sal_Int32 CommandId,
              const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override = 0;
@@ -389,7 +389,7 @@ public:
     virtual void SAL_CALL
     addProperty( const OUString& Name,
                  sal_Int16 Attributes,
-                 const css::uno::Any& DefaultValue ) override;
+                 const cpo::uno::Any& DefaultValue ) override;
 
     /**
       * This method removes a property from the content according to the

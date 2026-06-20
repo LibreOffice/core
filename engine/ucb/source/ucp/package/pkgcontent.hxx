@@ -133,7 +133,7 @@ private:
     css::uno::Reference< css::sdbc::XRow >
     getPropertyValues( const css::uno::Sequence< css::beans::Property >& rProperties );
     /// @throws css::uno::Exception
-    css::uno::Sequence< css::uno::Any >
+    css::uno::Sequence< cpo::uno::Any >
     setPropertyValues( const css::uno::Sequence< css::beans::PropertyValue >& rValues,
                        const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
@@ -174,7 +174,7 @@ private:
                         css::ucb::XContentIdentifier >& xNewId );
 
     /// @throws css::uno::Exception
-    css::uno::Any
+    cpo::uno::Any
     open( const css::ucb::OpenCommandArgument2& rArg,
           const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
@@ -214,7 +214,7 @@ public:
     virtual ~Content() override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         noexcept override;
     virtual void SAL_CALL release()
@@ -235,7 +235,7 @@ public:
     getContentType() override;
 
     // XCommandProcessor
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
     execute( const css::ucb::Command& aCommand,
              sal_Int32 CommandId,
              const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override;

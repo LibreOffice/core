@@ -19,7 +19,7 @@
 
 #include "DrawAspectHdl.hxx"
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <sax/tools/converter.hxx>
 
 using namespace ::com::sun::star;
@@ -29,7 +29,7 @@ DrawAspectHdl::~DrawAspectHdl()
     // nothing to do
 }
 
-bool DrawAspectHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool DrawAspectHdl::importXML( const OUString& rStrImpValue, cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int64 nAspect = 0;
 
@@ -39,7 +39,7 @@ bool DrawAspectHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, c
     return nAspect > 0;
 }
 
-bool DrawAspectHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool DrawAspectHdl::exportXML( OUString& rStrExpValue, const cpo::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
 

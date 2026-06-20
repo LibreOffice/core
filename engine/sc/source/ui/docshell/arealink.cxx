@@ -94,7 +94,7 @@ void ScAreaLink::Edit(weld::Window* pParent, const Link<SvBaseLink&,void>& /* rE
 }
 
 ::sfx2::SvBaseLink::UpdateResult ScAreaLink::DataChanged(
-    const OUString&, const css::uno::Any& )
+    const OUString&, const cpo::uno::Any& )
 {
     //  Do not do anything at bInCreate so that update can be called to set
     //  the status in the LinkManager without changing the data in the document

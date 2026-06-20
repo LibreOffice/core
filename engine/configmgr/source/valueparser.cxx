@@ -21,7 +21,7 @@
 
 #include <cassert>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/sequence.hxx>
@@ -174,14 +174,14 @@ bool parseValue(
     return true;
 }
 
-template< typename T > css::uno::Any parseSingleValue(
+template< typename T > cpo::uno::Any parseSingleValue(
     xmlreader::Span const & text)
 {
     T val;
     if (!parseValue(text, &val)) {
         throw css::uno::RuntimeException(u"invalid value"_ustr);
     }
-    return css::uno::Any(val);
+    return cpo::uno::Any(val);
 }
 
 // Use type-traits so we use boost::container::vector for elements of type bool,
@@ -197,7 +197,7 @@ struct ParseListValueTraits<bool>
     using ContainerType = boost::container::vector<bool>;
 };
 
-template< typename T > css::uno::Any parseListValue(
+template< typename T > cpo::uno::Any parseListValue(
     OString const & separator, xmlreader::Span const & text)
 {
     typename ParseListValueTraits<T>::ContainerType seq;
@@ -225,10 +225,10 @@ template< typename T > css::uno::Any parseListValue(
             t.length -= i + sep.length;
         }
     }
-    return css::uno::Any(comphelper::containerToSequence(seq));
+    return cpo::uno::Any(comphelper::containerToSequence(seq));
 }
 
-css::uno::Any parseValue(
+cpo::uno::Any parseValue(
     OString const & separator, xmlreader::Span const & text, Type type)
 {
     switch (type) {
@@ -367,7 +367,7 @@ bool ValueParser::endElement() {
     switch (state_) {
     case State::Text:
         {
-            css::uno::Any *pValue = nullptr;
+            cpo::uno::Any *pValue = nullptr;
 
             switch (node_->kind()) {
             case Node::KIND_PROPERTY:
@@ -461,7 +461,7 @@ void ValueParser::start(
 }
 
 
-template< typename T > css::uno::Any ValueParser::convertItems() {
+template< typename T > cpo::uno::Any ValueParser::convertItems() {
     css::uno::Sequence< T > seq(items_.size());
     auto seqRange = asNonConstRange(seq);
     for (sal_Int32 i = 0; i < seq.getLength(); ++i) {
@@ -469,7 +469,7 @@ template< typename T > css::uno::Any ValueParser::convertItems() {
         assert(ok);
         (void) ok; // avoid warnings
     }
-    return css::uno::Any(seq);
+    return cpo::uno::Any(seq);
 }
 
 }

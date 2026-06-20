@@ -28,7 +28,7 @@ namespace cppu
 {
 
 template < class target >
-inline void SAL_CALL convertPropertyValue( target &value , const  css::uno::Any & a)
+inline void SAL_CALL convertPropertyValue( target &value , const  cpo::uno::Any & a)
 {
 
     if( !( a >>= value ) ) {
@@ -36,7 +36,7 @@ inline void SAL_CALL convertPropertyValue( target &value , const  css::uno::Any 
     }
 }
 
-void convertPropertyValue(bool & b, const css::uno::Any & a)
+void convertPropertyValue(bool & b, const cpo::uno::Any & a)
 {
     if( a >>= b )
         return;
@@ -72,7 +72,7 @@ void convertPropertyValue(bool & b, const css::uno::Any & a)
     }
 }
 
-inline void SAL_CALL convertPropertyValue( sal_Int64 & i  , const css::uno::Any & a )
+inline void SAL_CALL convertPropertyValue( sal_Int64 & i  , const cpo::uno::Any & a )
 {
     if( !(a >>= i) ) {
         switch( a.getValueTypeClass() ) {
@@ -93,7 +93,7 @@ inline void SAL_CALL convertPropertyValue( sal_Int64 & i  , const css::uno::Any 
 }
 
 
-inline void SAL_CALL convertPropertyValue( sal_uInt64 & i  , const css::uno::Any & a )
+inline void SAL_CALL convertPropertyValue( sal_uInt64 & i  , const cpo::uno::Any & a )
 {
     if( !(a >>= i) ) {
         switch( a.getValueTypeClass() ) {
@@ -113,7 +113,7 @@ inline void SAL_CALL convertPropertyValue( sal_uInt64 & i  , const css::uno::Any
     }
 }
 
-inline void SAL_CALL convertPropertyValue( sal_Int32 & i  , const css::uno::Any & a )
+inline void SAL_CALL convertPropertyValue( sal_Int32 & i  , const cpo::uno::Any & a )
 {
     if( !(a >>= i) ) {
         switch( a.getValueTypeClass() ) {
@@ -133,7 +133,7 @@ inline void SAL_CALL convertPropertyValue( sal_Int32 & i  , const css::uno::Any 
     }
 }
 
-inline void SAL_CALL convertPropertyValue( sal_uInt32 & i  , const css::uno::Any & a )
+inline void SAL_CALL convertPropertyValue( sal_uInt32 & i  , const cpo::uno::Any & a )
 {
     if( !(a >>= i) ) {
         switch( a.getValueTypeClass() ) {
@@ -153,7 +153,7 @@ inline void SAL_CALL convertPropertyValue( sal_uInt32 & i  , const css::uno::Any
     }
 }
 
-inline void SAL_CALL convertPropertyValue( sal_Int16 & i  , const css::uno::Any & a )
+inline void SAL_CALL convertPropertyValue( sal_Int16 & i  , const cpo::uno::Any & a )
 {
     if( !(a >>= i) ) {
         switch( a.getValueTypeClass() ) {
@@ -173,7 +173,7 @@ inline void SAL_CALL convertPropertyValue( sal_Int16 & i  , const css::uno::Any 
     }
 }
 
-inline void SAL_CALL convertPropertyValue( sal_uInt16 & i  , const css::uno::Any & a )
+inline void SAL_CALL convertPropertyValue( sal_uInt16 & i  , const cpo::uno::Any & a )
 {
     if( !(a >>= i) ) {
         switch( a.getValueTypeClass() ) {
@@ -193,7 +193,7 @@ inline void SAL_CALL convertPropertyValue( sal_uInt16 & i  , const css::uno::Any
     }
 }
 
-inline void SAL_CALL convertPropertyValue( sal_Int8 & i  , const css::uno::Any & a )
+inline void SAL_CALL convertPropertyValue( sal_Int8 & i  , const cpo::uno::Any & a )
 {
     if( !(a >>= i) ) {
         switch( a.getValueTypeClass() ) {
@@ -206,7 +206,7 @@ inline void SAL_CALL convertPropertyValue( sal_Int8 & i  , const css::uno::Any &
     }
 }
 
-inline void SAL_CALL convertPropertyValue( float &f , const css::uno::Any &a )
+inline void SAL_CALL convertPropertyValue( float &f , const cpo::uno::Any &a )
 {
     if( a >>= f )
         return;
@@ -242,7 +242,7 @@ inline void SAL_CALL convertPropertyValue( float &f , const css::uno::Any &a )
     }
 }
 
-inline void SAL_CALL convertPropertyValue( double &d , const css::uno::Any &a )
+inline void SAL_CALL convertPropertyValue( double &d , const cpo::uno::Any &a )
 {
     if( a >>= d )
         return;

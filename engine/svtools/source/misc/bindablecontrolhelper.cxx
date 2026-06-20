@@ -87,8 +87,8 @@ BindableControlHelper::ApplyListSourceAndBindableData( const css::uno::Reference
          {
              // we need this service to properly convert XL notation also
              // Should be easy to extend
-             xConvertor->setPropertyValue( u"ReferenceSheet"_ustr, uno::Any( nRefTab ) );
-             xConvertor->setPropertyValue( u"XLA1Representation"_ustr, uno::Any( rsCtrlSource ) );
+             xConvertor->setPropertyValue( u"ReferenceSheet"_ustr, cpo::uno::Any( nRefTab ) );
+             xConvertor->setPropertyValue( u"XLA1Representation"_ustr, cpo::uno::Any( rsCtrlSource ) );
              xConvertor->getPropertyValue( u"Address"_ustr ) >>= aAddress;
          }
 
@@ -96,7 +96,7 @@ BindableControlHelper::ApplyListSourceAndBindableData( const css::uno::Reference
          aArg1.Name = u"BoundCell"_ustr;
          aArg1.Value <<= aAddress;
 
-         uno::Sequence< uno::Any > aArgs{ uno::Any(aArg1) };
+         uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(aArg1) };
          uno::Reference< form::binding::XValueBinding > xBinding( xFac->createInstanceWithArguments( u"com.sun.star.table.CellValueBinding"_ustr, aArgs ), uno::UNO_QUERY );
          xBindable->setValueBinding( xBinding );
     }
@@ -118,8 +118,8 @@ BindableControlHelper::ApplyListSourceAndBindableData( const css::uno::Reference
              {
                  // we need this service to properly convert XL notation also
                  // Should be easy to extend
-                 xConvertor->setPropertyValue( u"ReferenceSheet"_ustr, uno::Any( nRefTab ) );
-                 xConvertor->setPropertyValue( u"XLA1Representation"_ustr, uno::Any( rsRowSource ) );
+                 xConvertor->setPropertyValue( u"ReferenceSheet"_ustr, cpo::uno::Any( nRefTab ) );
+                 xConvertor->setPropertyValue( u"XLA1Representation"_ustr, cpo::uno::Any( rsRowSource ) );
                  xConvertor->getPropertyValue( u"Address"_ustr ) >>= aAddress;
              }
          }
@@ -128,7 +128,7 @@ BindableControlHelper::ApplyListSourceAndBindableData( const css::uno::Reference
          aArg1.Name = u"CellRange"_ustr;
          aArg1.Value <<= aAddress;
 
-         uno::Sequence< uno::Any > aArgs{ uno::Any(aArg1) };
+         uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(aArg1) };
          uno::Reference< form::binding::XListEntrySource > xSource( xFac->createInstanceWithArguments( u"com.sun.star.table.CellRangeListSource"_ustr, aArgs ), uno::UNO_QUERY );
          xListEntrySink->setListEntrySource( xSource );
     }

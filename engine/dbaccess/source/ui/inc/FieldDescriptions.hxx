@@ -28,9 +28,9 @@ namespace dbaui
     class OFieldDescription
     {
     private:
-        css::uno::Any      m_aControlDefault;  // the value which the control inserts as default
-        css::uno::Any      m_aWidth;               // sal_Int32 or void
-        css::uno::Any      m_aRelativePosition;    // sal_Int32 or void
+        cpo::uno::Any      m_aControlDefault;  // the value which the control inserts as default
+        cpo::uno::Any      m_aWidth;               // sal_Int32 or void
+        cpo::uno::Any      m_aRelativePosition;    // sal_Int32 or void
 
         TOTypeInfoSP       m_pType;
 
@@ -64,8 +64,8 @@ namespace dbaui
         void SetName(const OUString& _rName);
         void SetDescription(const OUString& _rDescription);
         void SetHelpText(const OUString& _sHelptext);
-        void SetDefaultValue(const css::uno::Any& _rDefaultValue);
-        void SetControlDefault(const css::uno::Any& _rControlDefault);
+        void SetDefaultValue(const cpo::uno::Any& _rDefaultValue);
+        void SetControlDefault(const cpo::uno::Any& _rControlDefault);
         void SetAutoIncrementValue(const OUString& _sAutoIncValue);
         void SetType(const TOTypeInfoSP& _pType);
         void SetTypeValue(sal_Int32 _nType);
@@ -89,7 +89,7 @@ namespace dbaui
         OUString             GetName()               const;
         OUString             GetDescription()        const;
         OUString             GetHelpText()           const;
-        css::uno::Any  GetControlDefault()     const;
+        cpo::uno::Any  GetControlDefault()     const;
         OUString             GetAutoIncrementValue() const;
         sal_Int32                   GetType()               const;
         OUString             GetTypeName()           const;

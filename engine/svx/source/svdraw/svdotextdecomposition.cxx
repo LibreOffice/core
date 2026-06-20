@@ -1167,7 +1167,7 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
 
 double SdrTextObj::GetCameraZRotation() const
 {
-    const css::uno::Any* pAny;
+    const cpo::uno::Any* pAny;
     double fTextCameraZRotateAngle = 0.0;
     const SfxItemSet& rSet = GetObjectItemSet();
     const SdrCustomShapeGeometryItem& rGeometryItem(rSet.Get(SDRATTR_CUSTOMSHAPE_GEOMETRY));

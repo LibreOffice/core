@@ -96,7 +96,7 @@ sal_Int32 SAL_CALL ScAccessibleCellBase::getForeground()
                 uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
                 if ( xIndex.is() )
                 {
-                    uno::Any aTable = xIndex->getByIndex(maCellAddress.Tab());
+                    cpo::uno::Any aTable = xIndex->getByIndex(maCellAddress.Tab());
                     uno::Reference<sheet::XSpreadsheet> xTable;
                     if (aTable>>=xTable)
                     {
@@ -106,7 +106,7 @@ sal_Int32 SAL_CALL ScAccessibleCellBase::getForeground()
                             uno::Reference<beans::XPropertySet> xCellProps(xCell, uno::UNO_QUERY);
                             if (xCellProps.is())
                             {
-                                uno::Any aAny = xCellProps->getPropertyValue(SC_UNONAME_CCOLOR);
+                                cpo::uno::Any aAny = xCellProps->getPropertyValue(SC_UNONAME_CCOLOR);
                                 aAny >>= nColor;
                             }
                         }
@@ -136,7 +136,7 @@ sal_Int32 SAL_CALL ScAccessibleCellBase::getBackground()
                 uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
                 if ( xIndex.is() )
                 {
-                    uno::Any aTable = xIndex->getByIndex(maCellAddress.Tab());
+                    cpo::uno::Any aTable = xIndex->getByIndex(maCellAddress.Tab());
                     uno::Reference<sheet::XSpreadsheet> xTable;
                     if (aTable>>=xTable)
                     {
@@ -146,7 +146,7 @@ sal_Int32 SAL_CALL ScAccessibleCellBase::getBackground()
                             uno::Reference<beans::XPropertySet> xCellProps(xCell, uno::UNO_QUERY);
                             if (xCellProps.is())
                             {
-                                uno::Any aAny = xCellProps->getPropertyValue(SC_UNONAME_CELLBACK);
+                                cpo::uno::Any aAny = xCellProps->getPropertyValue(SC_UNONAME_CELLBACK);
                                 aAny >>= nColor;
                             }
                         }
@@ -185,12 +185,12 @@ OUString
 
     //=====  XAccessibleValue  ================================================
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
     ScAccessibleCellBase::getCurrentValue()
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     if (mpDoc)
     {
         aAny <<= mpDoc->GetValue(maCellAddress);
@@ -199,7 +199,7 @@ uno::Any SAL_CALL
 }
 
 bool SAL_CALL
-    ScAccessibleCellBase::setCurrentValue( const uno::Any& aNumber )
+    ScAccessibleCellBase::setCurrentValue( const cpo::uno::Any& aNumber )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -222,22 +222,22 @@ bool SAL_CALL
     return bResult;
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
     ScAccessibleCellBase::getMaximumValue(  )
 {
-    return uno::Any(DBL_MAX);
+    return cpo::uno::Any(DBL_MAX);
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
     ScAccessibleCellBase::getMinimumValue(  )
 {
-    return uno::Any(-DBL_MAX);
+    return cpo::uno::Any(-DBL_MAX);
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
     ScAccessibleCellBase::getMinimumIncrement(  )
 {
-    return uno::Any();
+    return cpo::uno::Any();
 }
 
 bool ScAccessibleCellBase::IsEditable(sal_Int64 nParentStates)
@@ -263,7 +263,7 @@ OUString ScAccessibleCellBase::GetNote() const
                 uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
                 if ( xIndex.is() )
                 {
-                    uno::Any aTable = xIndex->getByIndex(maCellAddress.Tab());
+                    cpo::uno::Any aTable = xIndex->getByIndex(maCellAddress.Tab());
                     uno::Reference<sheet::XSpreadsheet> xTable;
                     if (aTable>>=xTable)
                     {
@@ -309,7 +309,7 @@ OUString ScAccessibleCellBase::getShadowAttrs() const
                 uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
                 if ( xIndex.is() )
                 {
-                    uno::Any aTable = xIndex->getByIndex(maCellAddress.Tab());
+                    cpo::uno::Any aTable = xIndex->getByIndex(maCellAddress.Tab());
                     uno::Reference<sheet::XSpreadsheet> xTable;
                     if (aTable>>=xTable)
                     {
@@ -319,7 +319,7 @@ OUString ScAccessibleCellBase::getShadowAttrs() const
                             uno::Reference<beans::XPropertySet> xCellProps(xCell, uno::UNO_QUERY);
                             if (xCellProps.is())
                             {
-                                uno::Any aAny = xCellProps->getPropertyValue(SC_UNONAME_SHADOW);
+                                cpo::uno::Any aAny = xCellProps->getPropertyValue(SC_UNONAME_SHADOW);
                                 aAny >>= aShadowFmt;
                             }
                         }
@@ -392,7 +392,7 @@ OUString ScAccessibleCellBase::getBorderAttrs()
                 uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
                 if ( xIndex.is() )
                 {
-                    uno::Any aTable = xIndex->getByIndex(maCellAddress.Tab());
+                    cpo::uno::Any aTable = xIndex->getByIndex(maCellAddress.Tab());
                     uno::Reference<sheet::XSpreadsheet> xTable;
                     if (aTable>>=xTable)
                     {
@@ -402,7 +402,7 @@ OUString ScAccessibleCellBase::getBorderAttrs()
                             uno::Reference<beans::XPropertySet> xCellProps(xCell, uno::UNO_QUERY);
                             if (xCellProps.is())
                             {
-                                uno::Any aAny = xCellProps->getPropertyValue(SC_UNONAME_TOPBORDER);
+                                cpo::uno::Any aAny = xCellProps->getPropertyValue(SC_UNONAME_TOPBORDER);
                                 aAny >>= aTopBorder;
                                 aAny = xCellProps->getPropertyValue(SC_UNONAME_BOTTBORDER);
                                 aAny >>= aBottomBorder;

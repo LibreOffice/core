@@ -41,9 +41,9 @@ public:
     bool                           m_bApplyFilter;     // no BitField ! the base class needs a pointer to this member !
     bool                           m_bAutoGrow;
     css::awt::FontDescriptor       m_aFont;
-    css::uno::Any                  m_aRowHeight;
-    css::uno::Any                  m_aTextColor;
-    css::uno::Any                  m_aTextLineColor;
+    cpo::uno::Any                  m_aRowHeight;
+    cpo::uno::Any                  m_aTextColor;
+    cpo::uno::Any                  m_aTextLineColor;
     sal_Int16                      m_nFontEmphasis;
     sal_Int16                      m_nFontRelief;
 // </properties>
@@ -63,7 +63,7 @@ class ODataSettings : public ::comphelper::OPropertyStateContainer
     bool m_bQuery;
 protected:
     ODataSettings(::cppu::OBroadcastHelper& _rBHelper,bool _bQuery = false);
-    virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, css::uno::Any& _rDefault ) const override;
+    virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, cpo::uno::Any& _rDefault ) const override;
 
     /** register the properties from the param given. The parameter instance must be alive as long as its object lives.
         @param  _pItem

@@ -42,7 +42,7 @@ private:
     std::vector<css::uno::Reference< ooo::vba::XSink >> mvSinks;
 
     void Initialize();
-    css::uno::Any getControlShape( std::u16string_view sName );
+    cpo::uno::Any getControlShape( std::u16string_view sName );
     css::uno::Reference< css::container::XNameAccess > getFormControls() const;
 
 protected:
@@ -51,7 +51,7 @@ protected:
 
 public:
     SwVbaDocument( const css::uno::Reference< ooo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& m_xContext, rtl::Reference< SwXTextDocument > const & xModel );
-    SwVbaDocument(  css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
+    SwVbaDocument(  css::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
     virtual ~SwVbaDocument() override;
 
     sal_uInt32 AddSink( const css::uno::Reference< ooo::vba::XSink >& xSink );
@@ -59,28 +59,28 @@ public:
 
     // XDocument
     virtual css::uno::Reference< ooo::vba::word::XRange > SAL_CALL getContent() override;
-    virtual css::uno::Reference< ooo::vba::word::XRange > SAL_CALL Range( const css::uno::Any& rStart, const css::uno::Any& rEnd ) override;
-    virtual css::uno::Any SAL_CALL BuiltInDocumentProperties( const css::uno::Any& index ) override;
-    virtual css::uno::Any SAL_CALL CustomDocumentProperties( const css::uno::Any& index ) override;
-    virtual css::uno::Any SAL_CALL Bookmarks( const css::uno::Any& rIndex ) override;
-    css::uno::Any SAL_CALL ContentControls(const css::uno::Any& index) override;
-    css::uno::Any SAL_CALL SelectContentControlsByTag(const css::uno::Any& index) override;
-    css::uno::Any SAL_CALL SelectContentControlsByTitle(const css::uno::Any& index) override;
+    virtual css::uno::Reference< ooo::vba::word::XRange > SAL_CALL Range( const cpo::uno::Any& rStart, const cpo::uno::Any& rEnd ) override;
+    virtual cpo::uno::Any SAL_CALL BuiltInDocumentProperties( const cpo::uno::Any& index ) override;
+    virtual cpo::uno::Any SAL_CALL CustomDocumentProperties( const cpo::uno::Any& index ) override;
+    virtual cpo::uno::Any SAL_CALL Bookmarks( const cpo::uno::Any& rIndex ) override;
+    cpo::uno::Any SAL_CALL ContentControls(const cpo::uno::Any& index) override;
+    cpo::uno::Any SAL_CALL SelectContentControlsByTag(const cpo::uno::Any& index) override;
+    cpo::uno::Any SAL_CALL SelectContentControlsByTitle(const cpo::uno::Any& index) override;
     css::uno::Reference<ov::word::XWindow> SAL_CALL getActiveWindow() override;
-    virtual css::uno::Any SAL_CALL Variables( const css::uno::Any& rIndex ) override;
-    virtual css::uno::Any SAL_CALL getAttachedTemplate() override;
-    virtual void SAL_CALL setAttachedTemplate( const css::uno::Any& _attachedtemplate ) override;
-    virtual css::uno::Any SAL_CALL Paragraphs( const css::uno::Any& rIndex ) override;
-    virtual css::uno::Any SAL_CALL Styles( const css::uno::Any& rIndex ) override;
-    virtual css::uno::Any SAL_CALL Tables( const css::uno::Any& aIndex ) override;
-    virtual css::uno::Any SAL_CALL Fields( const css::uno::Any& aIndex ) override;
-    virtual css::uno::Any SAL_CALL Shapes( const css::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Variables( const cpo::uno::Any& rIndex ) override;
+    virtual cpo::uno::Any SAL_CALL getAttachedTemplate() override;
+    virtual void SAL_CALL setAttachedTemplate( const cpo::uno::Any& _attachedtemplate ) override;
+    virtual cpo::uno::Any SAL_CALL Paragraphs( const cpo::uno::Any& rIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Styles( const cpo::uno::Any& rIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Tables( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Fields( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Shapes( const cpo::uno::Any& aIndex ) override;
     virtual void SAL_CALL Select() override;
-    virtual css::uno::Any SAL_CALL Sections( const css::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Sections( const cpo::uno::Any& aIndex ) override;
     virtual void SAL_CALL Activate() override;
-    virtual css::uno::Any SAL_CALL PageSetup() override;
-    virtual css::uno::Any SAL_CALL TablesOfContents( const css::uno::Any& aIndex ) override;
-    virtual css::uno::Any SAL_CALL FormFields( const css::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL PageSetup() override;
+    virtual cpo::uno::Any SAL_CALL TablesOfContents( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL FormFields( const cpo::uno::Any& aIndex ) override;
     virtual ::sal_Int32 SAL_CALL getProtectionType() override;
     virtual void SAL_CALL setProtectionType( ::sal_Int32 _protectiontype ) override;
     virtual bool SAL_CALL getUpdateStylesOnOpen() override;
@@ -94,22 +94,22 @@ public:
     virtual css::uno::Reference< ooo::vba::word::XMailMerge > SAL_CALL getMailMerge() override;
 
     using VbaDocumentBase::Protect;
-    virtual void SAL_CALL Protect( ::sal_Int32 Type, const css::uno::Any& NOReset, const css::uno::Any& Password, const css::uno::Any& UseIRM, const css::uno::Any& EnforceStyleLock ) override;
-    virtual void SAL_CALL PrintOut( const css::uno::Any& Background, const css::uno::Any& Append, const css::uno::Any& Range, const css::uno::Any& OutputFileName, const css::uno::Any& From, const css::uno::Any& To, const css::uno::Any& Item, const css::uno::Any& Copies, const css::uno::Any& Pages, const css::uno::Any& PageType, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& FileName, const css::uno::Any& ActivePrinterMacGX, const css::uno::Any& ManualDuplexPrint, const css::uno::Any& PrintZoomColumn, const css::uno::Any& PrintZoomRow, const css::uno::Any& PrintZoomPaperWidth, const css::uno::Any& PrintZoomPaperHeight ) override;
+    virtual void SAL_CALL Protect( ::sal_Int32 Type, const cpo::uno::Any& NOReset, const cpo::uno::Any& Password, const cpo::uno::Any& UseIRM, const cpo::uno::Any& EnforceStyleLock ) override;
+    virtual void SAL_CALL PrintOut( const cpo::uno::Any& Background, const cpo::uno::Any& Append, const cpo::uno::Any& Range, const cpo::uno::Any& OutputFileName, const cpo::uno::Any& From, const cpo::uno::Any& To, const cpo::uno::Any& Item, const cpo::uno::Any& Copies, const cpo::uno::Any& Pages, const cpo::uno::Any& PageType, const cpo::uno::Any& PrintToFile, const cpo::uno::Any& Collate, const cpo::uno::Any& FileName, const cpo::uno::Any& ActivePrinterMacGX, const cpo::uno::Any& ManualDuplexPrint, const cpo::uno::Any& PrintZoomColumn, const cpo::uno::Any& PrintZoomRow, const cpo::uno::Any& PrintZoomPaperWidth, const cpo::uno::Any& PrintZoomPaperHeight ) override;
     virtual void SAL_CALL PrintPreview(  ) override;
     virtual void SAL_CALL ClosePrintPreview(  ) override;
-    virtual css::uno::Any SAL_CALL Revisions( const css::uno::Any& aIndex ) override;
-    virtual css::uno::Any SAL_CALL Frames( const css::uno::Any& aIndex ) override;
-    virtual void SAL_CALL SaveAs2000( const css::uno::Any& FileName, const css::uno::Any& FileFormat, const css::uno::Any& LockComments, const css::uno::Any& Password, const css::uno::Any& AddToRecentFiles, const css::uno::Any& WritePassword, const css::uno::Any& ReadOnlyRecommended, const css::uno::Any& EmbedTrueTypeFonts, const css::uno::Any& SaveNativePictureFormat, const css::uno::Any& SaveFormsData, const css::uno::Any& SaveAsAOCELetter ) override;
-    virtual void SAL_CALL SaveAs( const css::uno::Any& FileName, const css::uno::Any& FileFormat, const css::uno::Any& LockComments, const css::uno::Any& Password, const css::uno::Any& AddToRecentFiles, const css::uno::Any& WritePassword, const css::uno::Any& ReadOnlyRecommended, const css::uno::Any& EmbedTrueTypeFonts, const css::uno::Any& SaveNativePictureFormat, const css::uno::Any& SaveFormsData, const css::uno::Any& SaveAsAOCELetter, const css::uno::Any& Encoding, const css::uno::Any& InsertLineBreaks, const css::uno::Any& AllowSubstitutions, const css::uno::Any& LineEnding, const css::uno::Any& AddBiDiMarks ) override;
-    virtual void SAL_CALL Close( const css::uno::Any& SaveChanges, const css::uno::Any& OriginalFormat, const css::uno::Any& RouteDocument ) override;
-    virtual void SAL_CALL SavePreviewPngAs( const css::uno::Any& FileName ) override;
+    virtual cpo::uno::Any SAL_CALL Revisions( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any SAL_CALL Frames( const cpo::uno::Any& aIndex ) override;
+    virtual void SAL_CALL SaveAs2000( const cpo::uno::Any& FileName, const cpo::uno::Any& FileFormat, const cpo::uno::Any& LockComments, const cpo::uno::Any& Password, const cpo::uno::Any& AddToRecentFiles, const cpo::uno::Any& WritePassword, const cpo::uno::Any& ReadOnlyRecommended, const cpo::uno::Any& EmbedTrueTypeFonts, const cpo::uno::Any& SaveNativePictureFormat, const cpo::uno::Any& SaveFormsData, const cpo::uno::Any& SaveAsAOCELetter ) override;
+    virtual void SAL_CALL SaveAs( const cpo::uno::Any& FileName, const cpo::uno::Any& FileFormat, const cpo::uno::Any& LockComments, const cpo::uno::Any& Password, const cpo::uno::Any& AddToRecentFiles, const cpo::uno::Any& WritePassword, const cpo::uno::Any& ReadOnlyRecommended, const cpo::uno::Any& EmbedTrueTypeFonts, const cpo::uno::Any& SaveNativePictureFormat, const cpo::uno::Any& SaveFormsData, const cpo::uno::Any& SaveAsAOCELetter, const cpo::uno::Any& Encoding, const cpo::uno::Any& InsertLineBreaks, const cpo::uno::Any& AllowSubstitutions, const cpo::uno::Any& LineEnding, const cpo::uno::Any& AddBiDiMarks ) override;
+    virtual void SAL_CALL Close( const cpo::uno::Any& SaveChanges, const cpo::uno::Any& OriginalFormat, const cpo::uno::Any& RouteDocument ) override;
+    virtual void SAL_CALL SavePreviewPngAs( const cpo::uno::Any& FileName ) override;
 
     // XInvocation
     virtual css::uno::Reference< css::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  ) override;
-    virtual css::uno::Any SAL_CALL invoke( const OUString& aFunctionName, const css::uno::Sequence< css::uno::Any >& aParams, css::uno::Sequence< ::sal_Int16 >& aOutParamIndex, css::uno::Sequence< css::uno::Any >& aOutParam ) override;
-    virtual void SAL_CALL setValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getValue( const OUString& aPropertyName ) override;
+    virtual cpo::uno::Any SAL_CALL invoke( const OUString& aFunctionName, const css::uno::Sequence< cpo::uno::Any >& aParams, css::uno::Sequence< ::sal_Int16 >& aOutParamIndex, css::uno::Sequence< cpo::uno::Any >& aOutParam ) override;
+    virtual void SAL_CALL setValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL getValue( const OUString& aPropertyName ) override;
     virtual bool SAL_CALL hasMethod( const OUString& aName ) override;
     virtual bool SAL_CALL hasProperty( const OUString& aName ) override;
 
@@ -126,7 +126,7 @@ public:
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 
     // XSinkCaller
-    virtual void SAL_CALL CallSinks( const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments ) override;
+    virtual void SAL_CALL CallSinks( const OUString& Method, css::uno::Sequence< cpo::uno::Any >& Arguments ) override;
 };
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBADOCUMENT_HXX
 

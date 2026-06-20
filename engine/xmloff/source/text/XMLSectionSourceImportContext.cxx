@@ -31,6 +31,7 @@ using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 

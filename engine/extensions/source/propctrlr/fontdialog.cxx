@@ -61,6 +61,7 @@ namespace pcr
 
 
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::beans;
 
 
@@ -110,7 +111,7 @@ namespace pcr
             _rxProps );
 
     public:
-        bool            getCheckFontProperty(const OUString& _rPropName, css::uno::Any& _rValue);
+        bool            getCheckFontProperty(const OUString& _rPropName, cpo::uno::Any& _rValue);
         OUString        getStringFontProperty(const OUString& _rPropName, const OUString& _rDefault);
         sal_Int16       getInt16FontProperty(const OUString& _rPropName, const sal_Int16 _nDefault);
         sal_Int32       getInt32FontProperty(const OUString& _rPropName, const sal_Int32 _nDefault);
@@ -231,7 +232,7 @@ namespace pcr
             if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(PROPERTY_STANDARD_THEME))
             {
                 bool bStandardTheme = false;
-                css::uno::Any aAnyStandardTheme
+                cpo::uno::Any aAnyStandardTheme
                     = _rxModel->getPropertyValue(PROPERTY_STANDARD_THEME);
                 if ((aAnyStandardTheme >>= bStandardTheme) && bStandardTheme)
                     aStyleSettings.SetStandardStyles();
@@ -439,7 +440,7 @@ namespace pcr
                 const SvxWordLineModeItem& rWordLineModeItem =
                     _rSet.Get(FontItemIds::CFID_WORDLINEMODE);
 
-                lcl_pushBackPropertyValue( _out_properties, PROPERTY_WORDLINEMODE, css::uno::Any(rWordLineModeItem.GetValue()));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_WORDLINEMODE, cpo::uno::Any(rWordLineModeItem.GetValue()));
             }
 
 

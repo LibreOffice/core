@@ -125,7 +125,7 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
             { OWeakObject::acquire(); }
         virtual void SAL_CALL release() noexcept override
             { OWeakObject::release(); }
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) override;
 
         // XTypeProvider
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
@@ -287,14 +287,14 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
 
     private:
         //  OPropertySetHelper
-        virtual bool                                            SAL_CALL convertFastPropertyValue        (       css::uno::Any&  aConvertedValue ,
-                                                                                                                     css::uno::Any&  aOldValue       ,
+        virtual bool                                            SAL_CALL convertFastPropertyValue        (       cpo::uno::Any&  aConvertedValue ,
+                                                                                                                     cpo::uno::Any&  aOldValue       ,
                                                                                                                      sal_Int32       nHandle         ,
-                                                                                                               const css::uno::Any&  aValue          ) override;
+                                                                                                               const cpo::uno::Any&  aValue          ) override;
         virtual void                                                SAL_CALL setFastPropertyValue_NoBroadcast(       sal_Int32       nHandle         ,
-                                                                                                               const css::uno::Any&  aValue          ) override;
+                                                                                                               const cpo::uno::Any&  aValue          ) override;
         using cppu::OPropertySetHelper::getFastPropertyValue;
-        virtual void                                                SAL_CALL getFastPropertyValue            (       css::uno::Any&  aValue          ,
+        virtual void                                                SAL_CALL getFastPropertyValue            (       cpo::uno::Any&  aValue          ,
                                                                                                                      sal_Int32       nHandle         ) const override;
         virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper                   (                                       ) override;
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo              (                                       ) override;

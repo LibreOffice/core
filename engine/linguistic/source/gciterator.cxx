@@ -225,18 +225,18 @@ static lang::Locale lcl_GetPrimaryLanguageOfSentence(
 
 LngXStringKeyMap::LngXStringKeyMap() {}
 
-void SAL_CALL LngXStringKeyMap::insertValue(const OUString& aKey, const css::uno::Any& aValue)
+void SAL_CALL LngXStringKeyMap::insertValue(const OUString& aKey, const cpo::uno::Any& aValue)
 {
-    std::map<OUString, css::uno::Any>::const_iterator aIter = maMap.find(aKey);
+    std::map<OUString, cpo::uno::Any>::const_iterator aIter = maMap.find(aKey);
     if (aIter != maMap.end())
         throw css::container::ElementExistException();
 
     maMap[aKey] = aValue;
 }
 
-css::uno::Any SAL_CALL LngXStringKeyMap::getValue(const OUString& aKey)
+cpo::uno::Any SAL_CALL LngXStringKeyMap::getValue(const OUString& aKey)
 {
-    std::map<OUString, css::uno::Any>::const_iterator aIter = maMap.find(aKey);
+    std::map<OUString, cpo::uno::Any>::const_iterator aIter = maMap.find(aKey);
     if (aIter == maMap.end())
         throw css::container::NoSuchElementException();
 
@@ -258,12 +258,12 @@ OUString SAL_CALL LngXStringKeyMap::getKeyByIndex(::sal_Int32 nIndex)
     return OUString();
 }
 
-css::uno::Any SAL_CALL LngXStringKeyMap::getValueByIndex(::sal_Int32 nIndex)
+cpo::uno::Any SAL_CALL LngXStringKeyMap::getValueByIndex(::sal_Int32 nIndex)
 {
     if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= maMap.size())
         throw css::lang::IndexOutOfBoundsException();
 
-    return css::uno::Any();
+    return cpo::uno::Any();
 }
 
 
@@ -625,7 +625,7 @@ lcl_makeProperties(uno::Reference<text::XFlatParagraph> const& xFlatPara, sal_In
 {
     uno::Reference<beans::XPropertySet> const xProps(
             xFlatPara, uno::UNO_QUERY_THROW);
-    css::uno::Any a (nProofInfo);
+    cpo::uno::Any a (nProofInfo);
     return comphelper::InitPropertySequence({
         { "FieldPositions", xProps->getPropertyValue(u"FieldPositions"_ustr) },
         { "FootnotePositions", xProps->getPropertyValue(u"FootnotePositions"_ustr) },
@@ -1139,7 +1139,7 @@ uno::Reference< util::XChangesBatch > const & GrammarCheckingIterator::GetUpdate
             beans::PropertyValue aValue;
             aValue.Name  = u"nodepath"_ustr;
             aValue.Value <<= u"org.openoffice.Office.Linguistic/ServiceManager"_ustr;
-            uno::Sequence< uno::Any > aProps{ uno::Any(aValue) };
+            uno::Sequence< cpo::uno::Any > aProps{ cpo::uno::Any(aValue) };
             m_xUpdateAccess.set(
                     xConfigurationProvider->createInstanceWithArguments(
                         u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr, aProps ),
@@ -1168,7 +1168,7 @@ void GrammarCheckingIterator::GetConfiguredGCSvcs_Impl()
         for (const OUString& rElementName : aElementNames)
         {
             uno::Sequence< OUString > aImplNames;
-            uno::Any aTmp( xNA->getByName( rElementName ) );
+            cpo::uno::Any aTmp( xNA->getByName( rElementName ) );
             if (aTmp >>= aImplNames)
             {
                 if (aImplNames.hasElements())
@@ -1255,7 +1255,7 @@ uno::Sequence< OUString > GrammarCheckingIterator::GetServiceList(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 linguistic_GrammarCheckingIterator_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new GrammarCheckingIterator());
 }

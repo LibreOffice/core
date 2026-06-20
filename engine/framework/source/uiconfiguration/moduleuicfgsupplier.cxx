@@ -37,6 +37,7 @@
 #include <unordered_map>
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
@@ -169,7 +170,7 @@ Reference< XUIConfigurationManager > SAL_CALL ModuleUIConfigurationManagerSuppli
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_ModuleUIConfigurationManagerSupplier_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ModuleUIConfigurationManagerSupplier(context));
 }

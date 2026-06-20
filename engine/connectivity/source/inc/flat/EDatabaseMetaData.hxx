@@ -36,7 +36,7 @@ namespace connectivity::flat
         OFlatDatabaseMetaData(file::OConnection* _pCon);
 
         virtual OUString SAL_CALL getURL(  ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getColumns( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const OUString& columnNamePattern ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getColumns( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const OUString& columnNamePattern ) override;
     };
 
 }

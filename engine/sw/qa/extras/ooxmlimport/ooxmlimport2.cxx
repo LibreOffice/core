@@ -691,7 +691,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104167)
 {
     createSwDoc("tdf104167.docx");
     // Make sure that heading 1 paragraphs start on a new page.
-    uno::Any xStyle = getStyles(u"ParagraphStyles"_ustr)->getByName(u"Heading 1"_ustr);
+    cpo::uno::Any xStyle = getStyles(u"ParagraphStyles"_ustr)->getByName(u"Heading 1"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 4
     // - Actual  : 0
@@ -1131,7 +1131,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154319)
                            [&name](const css::beans::PropertyValue& p) { return p.Name == name; });
         OString msg = "Property: " + name.toUtf8() + ", level: " + OString::number(level);
         CPPUNIT_ASSERT_MESSAGE(msg.getStr(), it != entry.end());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), css::uno::Any(expected), it->Value);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), cpo::uno::Any(expected), it->Value);
     };
 
     // tdf#154360: check tab stops between the number and the entry text
@@ -1194,7 +1194,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154695)
                            [&name](const css::beans::PropertyValue& p) { return p.Name == name; });
         OString msg = "Property: " + name.toUtf8() + ", level: " + OString::number(level);
         CPPUNIT_ASSERT_MESSAGE(msg.getStr(), it != entry.end());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), css::uno::Any(expected), it->Value);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), cpo::uno::Any(expected), it->Value);
     };
 
     //start with level 1, 0 is the header level
@@ -1228,11 +1228,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156078)
 
     // Export it to a PNG (96 ppi)
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PixelWidth", uno::Any(sal_Int32(816)) },
-                                           { "PixelHeight", uno::Any(sal_Int32(1056)) } }));
-    uno::Sequence<beans::PropertyValue> aDescriptor(
-        comphelper::InitPropertySequence({ { "FilterName", uno::Any(u"writer_png_Export"_ustr) },
-                                           { "FilterData", uno::Any(aFilterData) } }));
+        comphelper::InitPropertySequence({ { "PixelWidth", cpo::uno::Any(sal_Int32(816)) },
+                                           { "PixelHeight", cpo::uno::Any(sal_Int32(1056)) } }));
+    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
+        { { "FilterName", cpo::uno::Any(u"writer_png_Export"_ustr) },
+          { "FilterData", cpo::uno::Any(aFilterData) } }));
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     xStorable->storeToURL(maTempFile.GetURL(), aDescriptor);
     CPPUNIT_ASSERT(maTempFile.IsValid());

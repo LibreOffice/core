@@ -53,9 +53,9 @@ public:
         return css::uno::Reference<css::beans::XPropertySetInfo>();
     }
 
-    virtual void SAL_CALL setPropertyValue(OUString const&, css::uno::Any const&) override;
+    virtual void SAL_CALL setPropertyValue(OUString const&, cpo::uno::Any const&) override;
 
-    virtual css::uno::Any SAL_CALL getPropertyValue(OUString const& PropertyName) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(OUString const& PropertyName) override;
 
     virtual void SAL_CALL addPropertyChangeListener(
         OUString const&, css::uno::Reference<css::beans::XPropertyChangeListener> const&) override

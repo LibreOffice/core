@@ -67,6 +67,7 @@
 
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::accessibility;
 
 namespace {
@@ -2389,7 +2390,7 @@ IAccessible* CMAccessible::get_IAccessibleFromXAccessible(XAccessible* pXAcc)
     return nullptr;
 }
 
-void CMAccessible::ConvertAnyToVariant(const css::uno::Any &rAnyVal, VARIANT *pvData)
+void CMAccessible::ConvertAnyToVariant(const cpo::uno::Any &rAnyVal, VARIANT *pvData)
 {
     if(rAnyVal.hasValue())
     {

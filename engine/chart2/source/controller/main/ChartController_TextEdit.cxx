@@ -78,7 +78,7 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
 
     //#i77362 change notification for changes on additional shapes are missing
     if( m_xChartView.is() )
-        m_xChartView->setPropertyValue( u"SdrViewIsInEditMode"_ustr, uno::Any(true) );
+        m_xChartView->setPropertyValue( u"SdrViewIsInEditMode"_ustr, cpo::uno::Any(true) );
 
     auto pChartWindow(GetChartWindow());
 
@@ -122,7 +122,7 @@ bool ChartController::EndTextEdit()
 
     //#i77362 change notification for changes on additional shapes are missing
     if( m_xChartView.is() )
-        m_xChartView->setPropertyValue( u"SdrViewIsInEditMode"_ustr, uno::Any(false) );
+        m_xChartView->setPropertyValue( u"SdrViewIsInEditMode"_ustr, cpo::uno::Any(false) );
 
     SdrObject* pTextObject = m_pDrawViewWrapper->getTextEditObject();
     if(!pTextObject)
@@ -201,7 +201,7 @@ uno::Sequence< uno::Reference< chart2::XFormattedString > > ChartController::Get
             {
                 if (xInfo.is() && xInfo->hasPropertyByName(rProp.Name))
                 {
-                    const uno::Any aValue = xSelectionProp->getPropertyValue(rProp.Name);
+                    const cpo::uno::Any aValue = xSelectionProp->getPropertyValue(rProp.Name);
                     xFmtStr->setPropertyValue(rProp.Name, aValue);
                 }
             }

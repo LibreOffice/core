@@ -341,7 +341,7 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
     {
         if( !xLibContainer->hasByName( aPrjName ) )
             xLibContainer->createLibrary( aPrjName );
-        uno::Any aLibAny = xLibContainer->getByName( aPrjName );
+        cpo::uno::Any aLibAny = xLibContainer->getByName( aPrjName );
         uno::Reference< container::XNameContainer > xLib;
         aLibAny >>= xLib;
         if( xLib.is()  )
@@ -371,14 +371,14 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
             {
                 script::ModuleInfo sModuleInfo;
 
-                uno::Any aName= xVBACodeNamedObjectAccess->getByName( rName );
+                cpo::uno::Any aName= xVBACodeNamedObjectAccess->getByName( rName );
                 sModuleInfo.ModuleObject.set( aName, uno::UNO_QUERY );
                 sModuleInfo.ModuleType = script::ModuleType::DOCUMENT;
                 xVBAModuleInfo->insertModuleInfo( rName, sModuleInfo );
                 if( xLib->hasByName( rName ) )
-                    xLib->replaceByName( rName, uno::Any( u"Option VBASupport 1\n"_ustr ) );
+                    xLib->replaceByName( rName, cpo::uno::Any( u"Option VBASupport 1\n"_ustr ) );
                 else
-                    xLib->insertByName( rName, uno::Any( u"Option VBASupport 1\n"_ustr ) );
+                    xLib->insertByName( rName, cpo::uno::Any( u"Option VBASupport 1\n"_ustr ) );
             }
         }
     }
@@ -388,7 +388,7 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
     try
     {
         uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( pShell->GetDocument().GetVbaEventProcessor(), uno::UNO_SET_THROW );
-        uno::Sequence< uno::Any > aArgs;
+        uno::Sequence< cpo::uno::Any > aArgs;
         xVbaEvents->processVbaEvent( script::vba::VBAEventId::WORKBOOK_OPEN, aArgs );
     }
     catch( uno::Exception& )
@@ -398,9 +398,9 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
 
 void ExportAsFixedFormatHelper(
     const uno::Reference< frame::XModel >& xModel, const css::uno::Reference< XApplication >& xApplication,
-    const css::uno::Any& Type, const css::uno::Any& FileName, const css::uno::Any& Quality,
-    const css::uno::Any& IncludeDocProperties, const css::uno::Any& From,
-    const css::uno::Any& To, const css::uno::Any& OpenAfterPublish)
+    const cpo::uno::Any& Type, const cpo::uno::Any& FileName, const cpo::uno::Any& Quality,
+    const cpo::uno::Any& IncludeDocProperties, const cpo::uno::Any& From,
+    const cpo::uno::Any& To, const cpo::uno::Any& OpenAfterPublish)
 {
     OUString sType;
     if ((Type >>= sType) && (sType.equalsIgnoreAsciiCase(u"xlTypeXPS") || sType == "1"))
@@ -563,7 +563,7 @@ void SetDocInfoState(
         const uno::Sequence< beans::Property > lProps = xSetInfo->getProperties();
         for (const beans::Property& rProp : lProps)
         {
-            uno::Any aValue = xPropSet->getPropertyValue(rProp.Name);
+            cpo::uno::Any aValue = xPropSet->getPropertyValue(rProp.Name);
             if (rProp.Attributes & css::beans::PropertyAttribute::REMOVABLE)
             {
                 try

@@ -569,7 +569,7 @@ SwXFieldMaster::getPropertySetInfo()
 }
 
 void SAL_CALL SwXFieldMaster::setPropertyValue(
-        const OUString& rPropertyName, const uno::Any& rValue)
+        const OUString& rPropertyName, const cpo::uno::Any& rValue)
 {
     SolarMutexGuard aGuard;
     SwFieldType* pType = GetFieldType(true);
@@ -798,11 +798,11 @@ SwFieldType* SwXFieldMaster::GetFieldType(bool const bDontCreate) const
     return m_pImpl->m_pType;
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     SwFieldType* pType = GetFieldType(true);
     if( rPropertyName == UNO_NAME_INSTANCE_NAME )
     {
@@ -1435,7 +1435,7 @@ void SAL_CALL SwXTextField::attach(
                 }
                 if (m_pImpl->m_pProps->pDateTime)
                 {
-                    uno::Any aVal; aVal <<= *m_pImpl->m_pProps->pDateTime;
+                    cpo::uno::Any aVal; aVal <<= *m_pImpl->m_pProps->pDateTime;
                     xField->PutValue( aVal, FIELD_PROP_DATE_TIME );
                 }
                 pDTField->SetOffset(m_pImpl->m_pProps->nSubType);
@@ -1469,7 +1469,7 @@ void SAL_CALL SwXTextField::attach(
                         static_cast<SwChapterFormat>(m_pImpl->m_pProps->nUSHORT1));
                 xField.reset(pChapterField);
                 pChapterField->SetLevel(m_pImpl->m_pProps->nByte1);
-                uno::Any aVal;
+                cpo::uno::Any aVal;
                 aVal <<= static_cast<sal_Int16>(m_pImpl->m_pProps->nUSHORT1);
                 xField->PutValue(aVal, FIELD_PROP_USHORT1 );
             }
@@ -1499,7 +1499,7 @@ void SAL_CALL SwXTextField::attach(
                              SwFieldTypesEnum::HiddenText : SwFieldTypesEnum::ConditionalText);
                 xField.reset(pHTField);
                 pHTField->SetValue(m_pImpl->m_pProps->bBool1);
-                uno::Any aVal;
+                cpo::uno::Any aVal;
                 aVal <<= m_pImpl->m_pProps->sPar4;
                 xField->PutValue(aVal, FIELD_PROP_PAR4 );
             }
@@ -1529,7 +1529,7 @@ void SAL_CALL SwXTextField::attach(
                             RefFieldFormat::Page));
                 if (!m_pImpl->m_pProps->sPar3.isEmpty())
                     static_cast<SwGetRefField*>(xField.get())->SetExpand(m_pImpl->m_pProps->sPar3);
-                uno::Any aVal;
+                cpo::uno::Any aVal;
                 aVal <<= static_cast<sal_Int16>(m_pImpl->m_pProps->nUSHORT1);
                 xField->PutValue(aVal, FIELD_PROP_USHORT1 );
                 aVal <<= static_cast<sal_Int16>(m_pImpl->m_pProps->nUSHORT2);
@@ -1654,7 +1654,7 @@ void SAL_CALL SwXTextField::attach(
                     m_pImpl->m_pProps->nUSHORT1);
                 xField.reset(pPNField);
                 pPNField->SetUserString(m_pImpl->m_pProps->sPar1);
-                uno::Any aVal;
+                cpo::uno::Any aVal;
                 aVal <<= m_pImpl->m_pProps->nSubType;
                 xField->PutValue( aVal, FIELD_PROP_SUBTYPE );
             }
@@ -1901,7 +1901,7 @@ void SAL_CALL SwXTextField::attach(
                         u""));
                 if (m_pImpl->m_pProps->aPropSeq.hasElements())
                 {
-                    uno::Any aVal;
+                    cpo::uno::Any aVal;
                     aVal <<= m_pImpl->m_pProps->aPropSeq;
                     xField->PutValue( aVal, FIELD_PROP_PROP_SEQ );
                 }
@@ -2165,7 +2165,7 @@ SwXTextField::getPropertySetInfo()
 
 void SAL_CALL
 SwXTextField::setPropertyValue(
-        const OUString& rPropertyName, const uno::Any& rValue)
+        const OUString& rPropertyName, const cpo::uno::Any& rValue)
 {
     SolarMutexGuard aGuard;
     SwField const*const pField = m_pImpl->GetField();
@@ -2328,10 +2328,10 @@ SwXTextField::setPropertyValue(
         throw uno::RuntimeException();
 }
 
-uno::Any SAL_CALL SwXTextField::getPropertyValue(const OUString& rPropertyName)
+cpo::uno::Any SAL_CALL SwXTextField::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     SwField const*const pField = m_pImpl->GetField();
     const SfxItemPropertySet* _pPropSet = aSwMapProvider.GetPropertySet(
                 lcl_GetPropertyMapOfService(m_pImpl->m_nServiceId));
@@ -2749,9 +2749,9 @@ static SwFieldIds lcl_GetIdByName( OUString& rName, OUString& rTypeName )
     return nResId;
 }
 
-uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
+cpo::uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
 {
-    return uno::Any(uno::Reference<beans::XPropertySet>(getFieldMasterByName(rName)));
+    return cpo::uno::Any(uno::Reference<beans::XPropertySet>(getFieldMasterByName(rName)));
 }
 
 rtl::Reference<SwXFieldMaster> SwXTextFieldMasters::getFieldMasterByName(const OUString& rName)
@@ -2960,10 +2960,10 @@ void SAL_CALL SwXTextFieldTypes::removeRefreshListener(
 }
 
 // This is specifically for looking up annotations, so we only need to search a couple of places
-css::uno::Any SAL_CALL SwXTextFieldTypes::getByUniqueID(const OUString& ID)
+cpo::uno::Any SAL_CALL SwXTextFieldTypes::getByUniqueID(const OUString& ID)
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     auto& rDoc = GetDoc();
 
     const SwFieldTypes* pFieldTypes = rDoc.getIDocumentFieldsAccess().GetFieldTypes();
@@ -3084,7 +3084,7 @@ bool SAL_CALL SwXFieldEnumeration::hasMoreElements()
     return m_pImpl->m_nNextIndex < static_cast<sal_Int32>(m_pImpl->m_Items.size());
 }
 
-uno::Any SAL_CALL SwXFieldEnumeration::nextElement()
+cpo::uno::Any SAL_CALL SwXFieldEnumeration::nextElement()
 {
     SolarMutexGuard aGuard;
 
@@ -3095,7 +3095,7 @@ uno::Any SAL_CALL SwXFieldEnumeration::nextElement()
 
     uno::Reference< text::XTextField >  &rxField =
         m_pImpl->m_Items[ m_pImpl->m_nNextIndex++ ];
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     aRet <<= rxField;
     rxField = nullptr;  // free memory for item that is no longer used
     return aRet;

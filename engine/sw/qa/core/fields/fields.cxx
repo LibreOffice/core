@@ -26,7 +26,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <cppunit/TestAssert.h>
@@ -72,7 +72,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTooltip)
         comphelper::makePropertyValue(u"Title"_ustr, u"mytitle"_ustr),
         comphelper::makePropertyValue(u"Year"_ustr, u"2020"_ustr),
     };
-    xField->setPropertyValue(u"Fields"_ustr, uno::Any(aFields));
+    xField->setPropertyValue(u"Fields"_ustr, cpo::uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -197,7 +197,7 @@ void InsertHeading(const uno::Reference<text::XTextCursor>& xCursor, const OUStr
     uno::Reference<beans::XPropertySet> xCursorPropertySet(xCursor, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xCursor->getText();
 
-    xCursorPropertySet->setPropertyValue(u"ParaStyleName"_ustr, uno::Any(u"Heading 1"_ustr));
+    xCursorPropertySet->setPropertyValue(u"ParaStyleName"_ustr, cpo::uno::Any(u"Heading 1"_ustr));
     xText->insertString(xCursor, content, false);
     InsertParagraphBreak(xCursor);
 }
@@ -232,11 +232,11 @@ CPPUNIT_TEST_FIXTURE(Test, testStyleRefSearchUp)
         xFactory->createInstance(u"com.sun.star.text.TextField.GetReference"_ustr), uno::UNO_QUERY);
 
     uno::Reference<beans::XPropertySet> xFieldPropertySet(xField, uno::UNO_QUERY);
-    xFieldPropertySet->setPropertyValue(u"ReferenceFieldSource"_ustr,
-                                        uno::Any(sal_Int16(text::ReferenceFieldSource::STYLE)));
+    xFieldPropertySet->setPropertyValue(
+        u"ReferenceFieldSource"_ustr, cpo::uno::Any(sal_Int16(text::ReferenceFieldSource::STYLE)));
     xFieldPropertySet->setPropertyValue(u"ReferenceFieldPart"_ustr,
-                                        uno::Any(sal_Int16(text::ReferenceFieldPart::TEXT)));
-    xFieldPropertySet->setPropertyValue(u"SourceName"_ustr, uno::Any(u"Heading 1"_ustr));
+                                        cpo::uno::Any(sal_Int16(text::ReferenceFieldPart::TEXT)));
+    xFieldPropertySet->setPropertyValue(u"SourceName"_ustr, cpo::uno::Any(u"Heading 1"_ustr));
 
     xField->attach(xCursor);
 
@@ -273,11 +273,11 @@ CPPUNIT_TEST_FIXTURE(Test, testStyleRefSearchDown)
         xFactory->createInstance(u"com.sun.star.text.TextField.GetReference"_ustr), uno::UNO_QUERY);
 
     uno::Reference<beans::XPropertySet> xFieldPropertySet(xField, uno::UNO_QUERY);
-    xFieldPropertySet->setPropertyValue(u"ReferenceFieldSource"_ustr,
-                                        uno::Any(sal_Int16(text::ReferenceFieldSource::STYLE)));
+    xFieldPropertySet->setPropertyValue(
+        u"ReferenceFieldSource"_ustr, cpo::uno::Any(sal_Int16(text::ReferenceFieldSource::STYLE)));
     xFieldPropertySet->setPropertyValue(u"ReferenceFieldPart"_ustr,
-                                        uno::Any(sal_Int16(text::ReferenceFieldPart::TEXT)));
-    xFieldPropertySet->setPropertyValue(u"SourceName"_ustr, uno::Any(u"Heading 1"_ustr));
+                                        cpo::uno::Any(sal_Int16(text::ReferenceFieldPart::TEXT)));
+    xFieldPropertySet->setPropertyValue(u"SourceName"_ustr, cpo::uno::Any(u"Heading 1"_ustr));
 
     xField->attach(xCursor);
 
@@ -315,16 +315,16 @@ CPPUNIT_TEST_FIXTURE(Test, testMarginalStyleRef)
     uno::Reference<beans::XPropertySet> xPagePropertySet(
         xParagraphStylesContainer->getByName(u"Standard"_ustr), uno::UNO_QUERY);
 
-    xPagePropertySet->setPropertyValue(u"FooterIsOn"_ustr, uno::Any(true));
+    xPagePropertySet->setPropertyValue(u"FooterIsOn"_ustr, cpo::uno::Any(true));
     uno::Reference<text::XText> xFooterText(xPagePropertySet->getPropertyValue(u"FooterText"_ustr),
                                             uno::UNO_QUERY);
 
     uno::Reference<beans::XPropertySet> xFieldPropertySet(xField, uno::UNO_QUERY);
-    xFieldPropertySet->setPropertyValue(u"ReferenceFieldSource"_ustr,
-                                        uno::Any(sal_Int16(text::ReferenceFieldSource::STYLE)));
+    xFieldPropertySet->setPropertyValue(
+        u"ReferenceFieldSource"_ustr, cpo::uno::Any(sal_Int16(text::ReferenceFieldSource::STYLE)));
     xFieldPropertySet->setPropertyValue(u"ReferenceFieldPart"_ustr,
-                                        uno::Any(sal_Int16(text::ReferenceFieldPart::TEXT)));
-    xFieldPropertySet->setPropertyValue(u"SourceName"_ustr, uno::Any(u"Heading 1"_ustr));
+                                        cpo::uno::Any(sal_Int16(text::ReferenceFieldPart::TEXT)));
+    xFieldPropertySet->setPropertyValue(u"SourceName"_ustr, cpo::uno::Any(u"Heading 1"_ustr));
 
     uno::Reference<text::XTextRange> xFooterCursor = xFooterText->createTextCursor();
     xField->attach(xFooterCursor);
@@ -370,11 +370,11 @@ CPPUNIT_TEST_FIXTURE(Test, testFootnoteStyleRef)
         xFactory->createInstance(u"com.sun.star.text.TextField.GetReference"_ustr), uno::UNO_QUERY);
 
     uno::Reference<beans::XPropertySet> xFieldPropertySet(xField, uno::UNO_QUERY);
-    xFieldPropertySet->setPropertyValue(u"ReferenceFieldSource"_ustr,
-                                        uno::Any(sal_Int16(text::ReferenceFieldSource::STYLE)));
+    xFieldPropertySet->setPropertyValue(
+        u"ReferenceFieldSource"_ustr, cpo::uno::Any(sal_Int16(text::ReferenceFieldSource::STYLE)));
     xFieldPropertySet->setPropertyValue(u"ReferenceFieldPart"_ustr,
-                                        uno::Any(sal_Int16(text::ReferenceFieldPart::TEXT)));
-    xFieldPropertySet->setPropertyValue(u"SourceName"_ustr, uno::Any(u"Heading 1"_ustr));
+                                        cpo::uno::Any(sal_Int16(text::ReferenceFieldPart::TEXT)));
+    xFieldPropertySet->setPropertyValue(u"SourceName"_ustr, cpo::uno::Any(u"Heading 1"_ustr));
 
     uno::Reference<text::XSimpleText> xFootnoteText(xFootnote, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xFootnoteCursor = xFootnoteText->createTextCursor();

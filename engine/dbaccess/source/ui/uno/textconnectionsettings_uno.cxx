@@ -36,7 +36,7 @@ namespace dbaui
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::uno::Sequence;
@@ -81,9 +81,9 @@ namespace dbaui
         virtual void SAL_CALL getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const override;
 
         // Overrides to resolve inheritance ambiguity
-        virtual void SAL_CALL setPropertyValue(const OUString& p1, const css::uno::Any& p2) override
+        virtual void SAL_CALL setPropertyValue(const OUString& p1, const cpo::uno::Any& p2) override
             { ODatabaseAdministrationDialog::setPropertyValue(p1, p2); }
-        virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& p1) override
+        virtual cpo::uno::Any SAL_CALL getPropertyValue(const OUString& p1) override
             { return ODatabaseAdministrationDialog::getPropertyValue(p1); }
         virtual void SAL_CALL addPropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
             { ODatabaseAdministrationDialog::addPropertyChangeListener(p1, p2); }
@@ -259,7 +259,7 @@ namespace dbaui
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_dbaccess_OTextConnectionSettingsDialog_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(static_cast<dbaui::ODatabaseAdministrationDialog*>(new ::dbaui::OTextConnectionSettingsDialog(context)));
 }

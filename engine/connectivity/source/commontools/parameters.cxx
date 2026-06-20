@@ -43,6 +43,7 @@
 namespace dbtools
 {
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::sdbcx;
@@ -1126,7 +1127,7 @@ namespace dbtools
     }
 
 
-    void ParameterManager::setObject( sal_Int32 _nIndex, const css::uno::Any& x )
+    void ParameterManager::setObject( sal_Int32 _nIndex, const cpo::uno::Any& x )
     {
         ::osl::MutexGuard aGuard(m_rMutex);
         OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
@@ -1137,7 +1138,7 @@ namespace dbtools
     }
 
 
-    void ParameterManager::setObjectWithInfo( sal_Int32 _nIndex, const css::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale )
+    void ParameterManager::setObjectWithInfo( sal_Int32 _nIndex, const cpo::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale )
     {
         ::osl::MutexGuard aGuard(m_rMutex);
         OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");

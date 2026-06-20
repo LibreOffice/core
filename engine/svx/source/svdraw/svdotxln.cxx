@@ -47,7 +47,7 @@ public:
 
     virtual void Closed() override;
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const OUString& rMimeType, const css::uno::Any & rValue ) override;
+        const OUString& rMimeType, const cpo::uno::Any & rValue ) override;
 };
 
 void ImpSdrObjTextLink::Closed()
@@ -64,7 +64,7 @@ void ImpSdrObjTextLink::Closed()
 
 
 ::sfx2::SvBaseLink::UpdateResult ImpSdrObjTextLink::DataChanged(
-    const OUString& /*rMimeType*/, const css::uno::Any & /*rValue */)
+    const OUString& /*rMimeType*/, const cpo::uno::Any & /*rValue */)
 {
     bool bForceReload = false;
     SdrModel* pModel(pSdrObj ? &pSdrObj->getSdrModelFromSdrObject() : nullptr);
@@ -164,7 +164,7 @@ bool SdrTextObj::ReloadLinkedText( bool bForceLoad)
             DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 
             ::ucbhelper::Content aCnt( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-            css::uno::Any aAny( aCnt.getPropertyValue(u"DateModified"_ustr) );
+            cpo::uno::Any aAny( aCnt.getPropertyValue(u"DateModified"_ustr) );
             css::util::DateTime aDateTime;
 
             aAny >>= aDateTime;

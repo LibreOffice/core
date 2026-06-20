@@ -52,7 +52,7 @@ awt::Point LabelPositionHelper::transformSceneToScreenPosition( const drawing::P
 
 void LabelPositionHelper::changeTextAdjustment( tAnySequence& rPropValues, const tNameSequence& rPropNames, LabelAlignment eAlignment)
 {
-    uno::Any* pHorizontalAdjustAny
+    cpo::uno::Any* pHorizontalAdjustAny
         = PropertyMapper::getValuePointer(rPropValues, rPropNames, u"TextHorizontalAdjust");
     if (pHorizontalAdjustAny)
     {
@@ -64,7 +64,7 @@ void LabelPositionHelper::changeTextAdjustment( tAnySequence& rPropValues, const
         *pHorizontalAdjustAny <<= eHorizontalAdjust;
     }
 
-    uno::Any* pVerticalAdjustAny
+    cpo::uno::Any* pVerticalAdjustAny
         = PropertyMapper::getValuePointer(rPropValues, rPropNames, u"TextVerticalAdjust");
     if (pVerticalAdjustAny)
     {
@@ -77,7 +77,7 @@ void LabelPositionHelper::changeTextAdjustment( tAnySequence& rPropValues, const
     }
 }
 
-static void lcl_doDynamicFontResize( uno::Any* pAOldAndNewFontHeightAny
+static void lcl_doDynamicFontResize( cpo::uno::Any* pAOldAndNewFontHeightAny
                           , const awt::Size& rOldReferenceSize
                           , const awt::Size& rNewReferenceSize  )
 {
@@ -99,7 +99,7 @@ void LabelPositionHelper::doDynamicFontResize( tAnySequence& rPropValues
     awt::Size aOldReferenceSize;
     if( xAxisModelProps->getPropertyValue( u"ReferencePageSize"_ustr) >>= aOldReferenceSize )
     {
-        uno::Any* pAOldAndNewFontHeightAny = PropertyMapper::getValuePointer( rPropValues, rPropNames, u"CharHeight" );
+        cpo::uno::Any* pAOldAndNewFontHeightAny = PropertyMapper::getValuePointer( rPropValues, rPropNames, u"CharHeight" );
         lcl_doDynamicFontResize( pAOldAndNewFontHeightAny, aOldReferenceSize, rNewReferenceSize );
         pAOldAndNewFontHeightAny = PropertyMapper::getValuePointer( rPropValues, rPropNames, u"CharHeightAsian" );
         lcl_doDynamicFontResize( pAOldAndNewFontHeightAny, aOldReferenceSize, rNewReferenceSize );

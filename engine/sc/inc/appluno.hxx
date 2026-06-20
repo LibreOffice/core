@@ -58,10 +58,10 @@ private:
     sal_Int16 getPropertyInt16(const OUString& aPropertyName);
     /// @throws css::uno::RuntimeException
     void setProperty(const OUString& aPropertyName, bool p1)
-        { setPropertyValue( aPropertyName, css::uno::Any(p1) ); }
+        { setPropertyValue( aPropertyName, cpo::uno::Any(p1) ); }
     /// @throws css::uno::RuntimeException
     void setProperty(const OUString& aPropertyName, sal_Int16 p1)
-        { setPropertyValue( aPropertyName, css::uno::Any(p1) ); }
+        { setPropertyValue( aPropertyName, cpo::uno::Any(p1) ); }
 public:
                             ScSpreadsheetSettings();
     virtual                 ~ScSpreadsheetSettings() override;
@@ -117,13 +117,13 @@ public:
         { setProperty(u"StatusBarFunction"_ustr, p1); }
     virtual css::uno::Sequence<OUString> SAL_CALL getUserLists() override
         {
-           css::uno::Any any = getPropertyValue(u"UserLists"_ustr);
+           cpo::uno::Any any = getPropertyValue(u"UserLists"_ustr);
            css::uno::Sequence<OUString> b;
            any >>= b;
            return b;
         }
     virtual void SAL_CALL setUserLists(const css::uno::Sequence<OUString>& p1) override
-        { setPropertyValue( u"UserLists"_ustr, css::uno::Any(p1) ); }
+        { setPropertyValue( u"UserLists"_ustr, cpo::uno::Any(p1) ); }
     virtual sal_Int16 SAL_CALL getLinkUpdateMode() override
         { return getPropertyInt16(u"LinkUpdateMode"_ustr); }
     virtual void SAL_CALL setLinkUpdateMode(sal_Int16 p1) override
@@ -149,8 +149,8 @@ public:
     virtual css::uno::Reference< css::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo() override;
     virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
-                                    const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue(
+                                    const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue(
                                     const OUString& PropertyName ) override;
     virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
                                     const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
@@ -201,13 +201,13 @@ public:
                             getById( sal_Int32 nId ) override;
 
                             // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
                             // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL

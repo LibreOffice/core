@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <rtl/ustring.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
@@ -44,13 +44,13 @@ namespace pcr
         */
         virtual void getValueFromDescription(
                 const OUString& _rDescription,
-                css::uno::Any& _out_rValue
+                cpo::uno::Any& _out_rValue
             ) const = 0;
 
         /** converts a given property value into a description
         */
         virtual OUString getDescriptionForValue(
-                const css::uno::Any& _rEnumValue
+                const cpo::uno::Any& _rEnumValue
             ) const = 0;
 
     };

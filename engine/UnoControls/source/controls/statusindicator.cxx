@@ -30,6 +30,7 @@
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
+using namespace css::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::task;
@@ -38,7 +39,7 @@ namespace unocontrols {
 
 //  construct/destruct
 
-StatusIndicator::StatusIndicator( const cpo::uno::Reference< XComponentContext >& rxContext )
+StatusIndicator::StatusIndicator( const css::uno::Reference< XComponentContext >& rxContext )
     : StatusIndicator_BASE(rxContext)
 {
     // It's not allowed to work with member in this method (refcounter !!!)
@@ -48,7 +49,7 @@ StatusIndicator::StatusIndicator( const cpo::uno::Reference< XComponentContext >
     // Create instances for fixedtext and progress ...
     m_xText = new UnoFixedTextControl();
     m_xProgressBar = new ProgressBar(rxContext);
-    // ... cast controls to cpo::uno::Reference< XControl > and set model ...
+    // ... cast controls to css::uno::Reference< XControl > and set model ...
     // ( ProgressBar has no model !!! )
     m_xText->setModel( new UnoControlFixedTextModel(rxContext) );
     // ... and add controls to basecontainercontrol!
@@ -130,20 +131,20 @@ void SAL_CALL StatusIndicator::reset()
 
 //  XLayoutConstrains
 
-cpo::awt::Size SAL_CALL StatusIndicator::getMinimumSize ()
+css::awt::Size SAL_CALL StatusIndicator::getMinimumSize ()
 {
-    return cpo::awt::Size(STATUSINDICATOR_DEFAULT_WIDTH, STATUSINDICATOR_DEFAULT_HEIGHT);
+    return css::awt::Size(STATUSINDICATOR_DEFAULT_WIDTH, STATUSINDICATOR_DEFAULT_HEIGHT);
 }
 
 //  XLayoutConstrains
 
-cpo::awt::Size SAL_CALL StatusIndicator::getPreferredSize ()
+css::awt::Size SAL_CALL StatusIndicator::getPreferredSize ()
 {
     // Ready for multithreading
     ClearableMutexGuard aGuard ( m_aMutex );
 
     // get information about required place of child controls
-    cpo::awt::Size                            aTextSize   = m_xText->getPreferredSize();
+    css::awt::Size                            aTextSize   = m_xText->getPreferredSize();
 
     aGuard.clear ();
 
@@ -162,12 +163,12 @@ cpo::awt::Size SAL_CALL StatusIndicator::getPreferredSize ()
     }
 
     // return to caller
-    return cpo::awt::Size ( nWidth, nHeight );
+    return css::awt::Size ( nWidth, nHeight );
 }
 
 //  XLayoutConstrains
 
-cpo::awt::Size SAL_CALL StatusIndicator::calcAdjustedSize ( const cpo::awt::Size& /*rNewSize*/ )
+css::awt::Size SAL_CALL StatusIndicator::calcAdjustedSize ( const css::awt::Size& /*rNewSize*/ )
 {
     return getPreferredSize ();
 }
@@ -175,8 +176,8 @@ cpo::awt::Size SAL_CALL StatusIndicator::calcAdjustedSize ( const cpo::awt::Size
 //  XControl
 
 void SAL_CALL StatusIndicator::createPeer (
-    const cpo::uno::Reference< XToolkit > & rToolkit,
-    const cpo::uno::Reference< XWindowPeer > & rParent
+    const css::uno::Reference< XToolkit > & rToolkit,
+    const css::uno::Reference< XWindowPeer > & rParent
 )
 {
     if( !getPeer().is() )
@@ -186,14 +187,14 @@ void SAL_CALL StatusIndicator::createPeer (
         // If user forget to call "setPosSize()", we have still a correct size.
         // And a "MinimumSize" IS A "MinimumSize"!
         // We change not the position of control at this point.
-        cpo::awt::Size aDefaultSize = getMinimumSize ();
+        css::awt::Size aDefaultSize = getMinimumSize ();
         setPosSize ( 0, 0, aDefaultSize.Width, aDefaultSize.Height, PosSize::SIZE );
     }
 }
 
 //  XControl
 
-bool SAL_CALL StatusIndicator::setModel ( const cpo::uno::Reference< XControlModel > & /*rModel*/ )
+bool SAL_CALL StatusIndicator::setModel ( const css::uno::Reference< XControlModel > & /*rModel*/ )
 {
     // We have no model.
     return false;
@@ -201,11 +202,11 @@ bool SAL_CALL StatusIndicator::setModel ( const cpo::uno::Reference< XControlMod
 
 //  XControl
 
-cpo::uno::Reference< XControlModel > SAL_CALL StatusIndicator::getModel ()
+css::uno::Reference< XControlModel > SAL_CALL StatusIndicator::getModel ()
 {
     // We have no model.
     // return (XControlModel*)this;
-    return cpo::uno::Reference< XControlModel >  ();
+    return css::uno::Reference< XControlModel >  ();
 }
 
 //  XComponent
@@ -260,7 +261,7 @@ void SAL_CALL StatusIndicator::setPosSize (
 
 //  protected method
 
-WindowDescriptor StatusIndicator::impl_getWindowDescriptor( const cpo::uno::Reference< XWindowPeer >& xParentPeer )
+WindowDescriptor StatusIndicator::impl_getWindowDescriptor( const css::uno::Reference< XWindowPeer >& xParentPeer )
 {
     WindowDescriptor aDescriptor;
 
@@ -275,7 +276,7 @@ WindowDescriptor StatusIndicator::impl_getWindowDescriptor( const cpo::uno::Refe
 
 //  protected method
 
-void StatusIndicator::impl_paint ( sal_Int32 nX, sal_Int32 nY, const cpo::uno::Reference< XGraphics > & rGraphics )
+void StatusIndicator::impl_paint ( sal_Int32 nX, sal_Int32 nY, const css::uno::Reference< XGraphics > & rGraphics )
 {
     // This paint method is not buffered!
     // Every request paint the completely control. (But only, if peer exist)
@@ -285,7 +286,7 @@ void StatusIndicator::impl_paint ( sal_Int32 nX, sal_Int32 nY, const cpo::uno::R
     MutexGuard  aGuard (m_aMutex);
 
     // background = gray
-    cpo::uno::Reference< XWindowPeer > xPeer( impl_getPeerWindow(), UNO_QUERY );
+    css::uno::Reference< XWindowPeer > xPeer( impl_getPeerWindow(), UNO_QUERY );
     if( xPeer.is() )
         xPeer->setBackground( STATUSINDICATOR_BACKGROUNDCOLOR );
 
@@ -326,8 +327,8 @@ void StatusIndicator::impl_recalcLayout ( const WindowEvent& aEvent )
     MutexGuard aGuard ( m_aMutex );
 
     // get information about required place of child controls
-    cpo::awt::Size                            aWindowSize     ( aEvent.Width, aEvent.Height );
-    cpo::awt::Size                            aTextSize       = m_xText->getPreferredSize();
+    css::awt::Size                            aWindowSize     ( aEvent.Width, aEvent.Height );
+    css::awt::Size                            aTextSize       = m_xText->getPreferredSize();
 
     if( aWindowSize.Width < STATUSINDICATOR_DEFAULT_WIDTH )
     {
@@ -356,9 +357,9 @@ void StatusIndicator::impl_recalcLayout ( const WindowEvent& aEvent )
 
 }   // namespace unocontrols
 
-extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 stardiv_UnoControls_StatusIndicator_get_implementation(
-    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new unocontrols::StatusIndicator(context));
 }

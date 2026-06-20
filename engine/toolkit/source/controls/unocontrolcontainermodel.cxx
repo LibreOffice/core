@@ -59,9 +59,9 @@ UnoControlContainerModel::getSupportedServiceNames()
     return s;
 }
 
-css::uno::Any UnoControlContainerModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+cpo::uno::Any UnoControlContainerModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
-    css::uno::Any aDefault;
+    cpo::uno::Any aDefault;
     if ( nPropId == BASEPROPERTY_BORDER )
         aDefault <<= sal_Int16(0);
     else
@@ -85,7 +85,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > UnoControlContainerModel::ge
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlContainerModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlContainerModel(context));
 }

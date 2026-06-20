@@ -36,7 +36,7 @@ namespace sfx2
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::beans::NamedValue;
     using ::com::sun::star::beans::PropertyValue;
@@ -66,7 +66,7 @@ namespace sfx2
 
 
     css::uno::Reference<css::uno::XInterface> createSfxModelInstance(
-        const css::uno::Sequence<css::uno::Any> & _rArguments,
+        const css::uno::Sequence<cpo::uno::Any> & _rArguments,
         std::function<css::uno::Reference<css::uno::XInterface>(SfxModelFlags)> creationFunc)
     {
         ::comphelper::NamedValueCollection aArgs( _rArguments );

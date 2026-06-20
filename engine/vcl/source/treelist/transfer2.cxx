@@ -39,6 +39,7 @@
 #include <svdata.hxx>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::datatransfer;
@@ -308,7 +309,7 @@ namespace {
 
 struct TDataCntnrEntry_Impl
 {
-    css::uno::Any aAny;
+    cpo::uno::Any aAny;
     SotClipboardFormatId nId;
 };
 

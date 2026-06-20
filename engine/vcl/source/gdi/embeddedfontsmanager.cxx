@@ -465,7 +465,7 @@ void EmbeddedFontsManager::activateFonts(std::vector<std::pair<OUString, OUStrin
             for (const auto& family : filteredFamilies)
                 fontlist.append("\n" + family);
             rtl::Reference pRequest(new comphelper::OInteractionRequest(
-                uno::Any(document::FontsDisallowEditingRequest({}, {}, fontlist.toString()))));
+                cpo::uno::Any(document::FontsDisallowEditingRequest({}, {}, fontlist.toString()))));
             rtl::Reference pApprove(new comphelper::OInteractionApprove);
             pRequest->addContinuation(pApprove);
             pRequest->addContinuation(new comphelper::OInteractionDisapprove);

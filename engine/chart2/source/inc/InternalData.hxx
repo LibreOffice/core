@@ -42,12 +42,12 @@ public:
     void setColumnValues( sal_Int32 nColumnIndex, const std::vector< double > & rNewData );
     void setRowValues( sal_Int32 nRowIndex, const std::vector< double > & rNewData );
 
-    void setComplexColumnLabel( sal_Int32 nColumnIndex, std::vector< css::uno::Any >&& rComplexLabel );
-    void setComplexRowLabel( sal_Int32 nRowIndex, std::vector< css::uno::Any >&& rComplexLabel );
-    void setComplexCategoryLabel( sal_Int32 nRowIndex, std::vector< css::uno::Any >&& rComplexLabel );
+    void setComplexColumnLabel( sal_Int32 nColumnIndex, std::vector< cpo::uno::Any >&& rComplexLabel );
+    void setComplexRowLabel( sal_Int32 nRowIndex, std::vector< cpo::uno::Any >&& rComplexLabel );
+    void setComplexCategoryLabel( sal_Int32 nRowIndex, std::vector< cpo::uno::Any >&& rComplexLabel );
 
-    std::vector< css::uno::Any > getComplexColumnLabel( sal_Int32 nColumnIndex ) const;
-    std::vector< css::uno::Any > getComplexRowLabel( sal_Int32 nRowIndex ) const;
+    std::vector< cpo::uno::Any > getComplexColumnLabel( sal_Int32 nColumnIndex ) const;
+    std::vector< cpo::uno::Any > getComplexRowLabel( sal_Int32 nRowIndex ) const;
 
     void swapRowWithNext( sal_Int32 nRowIndex );
     void swapColumnWithNext( sal_Int32 nColumnIndex );
@@ -65,7 +65,7 @@ public:
     sal_Int32 getRowCount() const;
     sal_Int32 getColumnCount() const;
 
-    typedef std::vector< std::vector< css::uno::Any > > tVecVecAny; //inner index is hierarchical level
+    typedef std::vector< std::vector< cpo::uno::Any > > tVecVecAny; //inner index is hierarchical level
 
     void setComplexRowLabels( tVecVecAny&& rNewRowLabels );
     const tVecVecAny& getComplexRowLabels() const;

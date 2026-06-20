@@ -42,6 +42,7 @@
 constexpr OUString TOOLBAR_STR = u"private:resource/toolbar/notebookbarshortcuts"_ustr;
 
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::ui;
 using namespace css::frame;
 

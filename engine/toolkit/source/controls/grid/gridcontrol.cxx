@@ -42,6 +42,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::awt::grid;
 using namespace ::com::sun::star::lang;
@@ -222,16 +223,16 @@ Any UnoGridModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     switch( nPropId )
     {
         case BASEPROPERTY_DEFAULTCONTROL:
-            return uno::Any( u"com.sun.star.awt.grid.UnoControlGrid"_ustr );
+            return cpo::uno::Any( u"com.sun.star.awt.grid.UnoControlGrid"_ustr );
         case BASEPROPERTY_GRID_SELECTIONMODE:
-            return uno::Any( SelectionType(1) );
+            return cpo::uno::Any( SelectionType(1) );
         case BASEPROPERTY_GRID_SHOWROWHEADER:
         case BASEPROPERTY_USE_GRID_LINES:
-            return uno::Any( false );
+            return cpo::uno::Any( false );
         case BASEPROPERTY_ROW_HEADER_WIDTH:
-            return uno::Any( sal_Int32( 10 ) );
+            return cpo::uno::Any( sal_Int32( 10 ) );
         case BASEPROPERTY_GRID_SHOWCOLUMNHEADER:
-            return uno::Any( true );
+            return cpo::uno::Any( true );
         case BASEPROPERTY_COLUMN_HEADER_HEIGHT:
         case BASEPROPERTY_ROW_HEIGHT:
         case BASEPROPERTY_GRID_HEADER_BACKGROUND:
@@ -446,7 +447,7 @@ void SAL_CALL UnoGridControl::removeSelectionListener(const css::uno::Reference<
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_GridControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new toolkit::UnoGridControl());
 }
@@ -454,7 +455,7 @@ stardiv_Toolkit_GridControl_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_GridControlModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new toolkit::UnoGridModel(context));
 }

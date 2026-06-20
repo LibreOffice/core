@@ -2721,7 +2721,7 @@ void SwWW8ImplReader::StopApo()
         if (pNd && m_xSFlyPara->GetFlyFormat())
         {
             // Help DOCX export by indicating that the frame was defined by framePr
-            std::map<OUString, css::uno::Any> aGrabBagMap
+            std::map<OUString, cpo::uno::Any> aGrabBagMap
                 = m_xSFlyPara->GetFlyFormat()->GetFormatAttr(RES_FRMATR_GRABBAG).GetGrabBag();
             aGrabBagMap[u"ParaFrameProperties"_ustr] <<= true;
             m_xSFlyPara->GetFlyFormat()->SetFormatAttr(
@@ -4207,7 +4207,7 @@ void SwWW8ImplReader::Read_CharShadow(  sal_uInt16, const sal_uInt8* pData, shor
 
         // Add a marker to the grabbag indicating that character background was imported from MSO shading
         const SfxGrabBagItem* pGrabBag = GetFormatAttr(RES_CHRATR_GRABBAG);
-        std::map<OUString, css::uno::Any> aGrabBagMap = pGrabBag->GetGrabBag();
+        std::map<OUString, cpo::uno::Any> aGrabBagMap = pGrabBag->GetGrabBag();
         aGrabBagMap[u"CharShadingMarker"_ustr] <<= true;
         NewAttr(SfxGrabBagItem(RES_CHRATR_GRABBAG, std::move(aGrabBagMap)));
     }
@@ -4229,7 +4229,7 @@ void SwWW8ImplReader::Read_TextBackColor(sal_uInt16, const sal_uInt8* pData, sho
 
         // Add a marker to the grabbag indicating that character background was imported from MSO shading
         const SfxGrabBagItem* pGrabBag = GetFormatAttr(RES_CHRATR_GRABBAG);
-        std::map<OUString, css::uno::Any> aGrabBagMap = pGrabBag->GetGrabBag();
+        std::map<OUString, cpo::uno::Any> aGrabBagMap = pGrabBag->GetGrabBag();
         aGrabBagMap[u"CharShadingMarker"_ustr] <<= true;
         NewAttr(SfxGrabBagItem(RES_CHRATR_GRABBAG, std::move(aGrabBagMap)));
     }

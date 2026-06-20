@@ -114,7 +114,7 @@ public:
 
     template<typename T>
     inline bool readProp( T * ret, OUString const & rPropName );
-    css::uno::Any readProp( OUString const & rPropName );
+    cpo::uno::Any readProp( OUString const & rPropName );
     void readScrollableSettings();
     void readDefaults( bool supportPrintable = true, bool supportVisible = true );
     void readStringAttr(
@@ -211,7 +211,7 @@ inline void ElementDescriptor::read(
         css::beans::PropertyState_DEFAULT_VALUE !=
         _xPropState->getPropertyState( propName ))
     {
-        css::uno::Any a( _xProps->getPropertyValue( propName ) );
+        cpo::uno::Any a( _xProps->getPropertyValue( propName ) );
         T v = T();
         if (a >>= v)
             addAttribute( attrName, OUString::number(v) );
@@ -229,7 +229,7 @@ inline void ElementDescriptor::read<bool>(
         css::beans::PropertyState_DEFAULT_VALUE !=
         _xPropState->getPropertyState( propName ))
     {
-        css::uno::Any a( _xProps->getPropertyValue( propName ) );
+        cpo::uno::Any a( _xProps->getPropertyValue( propName ) );
         bool v;
         if (a >>= v)
             addAttribute( attrName, OUString::boolean(v) );

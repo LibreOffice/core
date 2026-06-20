@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <utility>
@@ -29,7 +29,7 @@
 
 namespace configmgr {
 
-LocalizedValueNode::LocalizedValueNode(int layer, css::uno::Any value):
+LocalizedValueNode::LocalizedValueNode(int layer, cpo::uno::Any value):
     Node(layer), value_(std::move(value)), modified_(false)
 {}
 
@@ -46,7 +46,7 @@ OUString LocalizedValueNode::getTemplateName() const {
 }
 
 
-void LocalizedValueNode::setValue(int layer, css::uno::Any const & value, bool bIsUserModification)
+void LocalizedValueNode::setValue(int layer, cpo::uno::Any const & value, bool bIsUserModification)
 {
     setLayer(layer);
     modified_ = bIsUserModification;

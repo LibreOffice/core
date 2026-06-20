@@ -128,7 +128,7 @@ WrappedDataCaptionProperty::WrappedDataCaptionProperty(
       const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact
     , tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedSeriesOrDiagramProperty< sal_Int32 >( u"DataCaption"_ustr
-            , uno::Any( sal_Int32(0) ), spChart2ModelContact, ePropertyType )
+            , cpo::uno::Any( sal_Int32(0) ), spChart2ModelContact, ePropertyType )
 {
 }
 
@@ -148,7 +148,7 @@ void WrappedDataCaptionProperty::setValueToSeries( const Reference< beans::XProp
         return;
 
     chart2::DataPointLabel aLabel = lcl_CaptionToLabel( nCaption );
-    xSeriesPropertySet->setPropertyValue( CHART_UNONAME_LABEL, uno::Any( aLabel ) );
+    xSeriesPropertySet->setPropertyValue( CHART_UNONAME_LABEL, cpo::uno::Any( aLabel ) );
 }
 
 } //namespace chart::wrapper

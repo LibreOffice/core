@@ -63,7 +63,7 @@ class ConfigurationAccess_FactoryManager final : public ::cppu::WeakImplHelper< 
 
     private:
 
-        bool impl_getElementProps( const css::uno::Any& rElement, OUString& rType, OUString& rName, OUString& rModule, OUString& rServiceSpecifier ) const;
+        bool impl_getElementProps( const cpo::uno::Any& rElement, OUString& rType, OUString& rName, OUString& rModule, OUString& rServiceSpecifier ) const;
 
         mutable std::mutex           m_aMutex;
         OUString                     m_aPropType;

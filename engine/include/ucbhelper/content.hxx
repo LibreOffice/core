@@ -59,7 +59,7 @@ namespace com::sun::star::uno
 class XComponentContext;
 }
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 class Any;
 }
@@ -102,7 +102,7 @@ class UCBHELPER_DLLPUBLIC Content final
     /// @throws css::ucb::CommandAbortedException
     /// @throws css::uno::RuntimeException,
     /// @throws css::uno::Exception
-    css::uno::Any createCursorAny(const css::uno::Sequence<OUString>& rPropertyNames,
+    cpo::uno::Any createCursorAny(const css::uno::Sequence<OUString>& rPropertyNames,
                                   ResultSetInclude eMode);
 
 public:
@@ -260,7 +260,7 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    css::uno::Any getPropertyValue(const OUString& rPropertyName);
+    cpo::uno::Any getPropertyValue(const OUString& rPropertyName);
     /**
       * This method can be used to set a single property value.
       *
@@ -288,7 +288,7 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    css::uno::Any setPropertyValue(const OUString& rPropertyName, const css::uno::Any& rValue);
+    cpo::uno::Any setPropertyValue(const OUString& rPropertyName, const cpo::uno::Any& rValue);
     /**
       * This method can be used to read multiple property values.
       *
@@ -299,7 +299,7 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    css::uno::Sequence<css::uno::Any>
+    css::uno::Sequence<cpo::uno::Any>
     getPropertyValues(const css::uno::Sequence<OUString>& rPropertyNames);
     /**
       * This method can be used to read multiple property values.
@@ -347,9 +347,9 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    css::uno::Sequence<css::uno::Any>
+    css::uno::Sequence<cpo::uno::Any>
     setPropertyValues(const css::uno::Sequence<OUString>& rPropertyNames,
-                      const css::uno::Sequence<css::uno::Any>& rValues);
+                      const css::uno::Sequence<cpo::uno::Any>& rValues);
 
     // General command execution.
 
@@ -366,8 +366,8 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    css::uno::Any executeCommand(const OUString& rCommandName,
-                                 const css::uno::Any& rCommandArgument);
+    cpo::uno::Any executeCommand(const OUString& rCommandName,
+                                 const cpo::uno::Any& rCommandArgument);
 
     // Special commands.
 
@@ -555,7 +555,7 @@ public:
       */
     bool insertNewContent(const OUString& rContentType,
                           const css::uno::Sequence<OUString>& rPropertyNames,
-                          const css::uno::Sequence<css::uno::Any>& rPropertyValues,
+                          const css::uno::Sequence<cpo::uno::Any>& rPropertyValues,
                           Content& rNewContent);
     /**
       * This method creates, initializes and inserts (commits) a new content
@@ -588,7 +588,7 @@ public:
       */
     bool insertNewContent(const OUString& rContentType,
                           const css::uno::Sequence<OUString>& rPropertyNames,
-                          const css::uno::Sequence<css::uno::Any>& rPropertyValues,
+                          const css::uno::Sequence<cpo::uno::Any>& rPropertyValues,
                           const css::uno::Reference<css::io::XInputStream>& rStream,
                           Content& rNewContent);
 

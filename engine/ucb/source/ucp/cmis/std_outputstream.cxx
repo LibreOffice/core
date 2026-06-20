@@ -31,9 +31,9 @@ namespace cmis
             m_pStream->setstate( std::ios::eofbit );
     }
 
-    uno::Any SAL_CALL StdOutputStream::queryInterface( const uno::Type& rType )
+    cpo::uno::Any SAL_CALL StdOutputStream::queryInterface( const uno::Type& rType )
     {
-        uno::Any aRet = ::cppu::queryInterface( rType, static_cast< XOutputStream* >( this ) );
+        cpo::uno::Any aRet = ::cppu::queryInterface( rType, static_cast< XOutputStream* >( this ) );
 
         return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
     }

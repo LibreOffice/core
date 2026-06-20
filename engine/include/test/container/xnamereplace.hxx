@@ -16,7 +16,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <utility>
 
 namespace apitest
@@ -32,14 +32,14 @@ public:
     virtual css::uno::Reference<css::uno::XInterface> init() = 0;
     void testReplaceByName();
 
-    void setElement(const css::uno::Any& rElement) { m_aReplacementElement = rElement; }
+    void setElement(const cpo::uno::Any& rElement) { m_aReplacementElement = rElement; }
 
 protected:
     ~XNameReplace() {}
 
 private:
     OUString m_aReplacementName;
-    css::uno::Any m_aReplacementElement;
+    cpo::uno::Any m_aReplacementElement;
 };
 
 } // namespace apitest

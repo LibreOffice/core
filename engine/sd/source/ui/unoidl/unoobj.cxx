@@ -74,7 +74,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::animations;
 
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::drawing::XShape;
 
 #define WID_EFFECT          1
@@ -271,7 +271,7 @@ void SdXShape::dispose()
     delete this;
 }
 
-uno::Any SAL_CALL SdXShape::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SdXShape::queryInterface( const uno::Type & rType )
 {
     return mpShape->queryInterface( rType );
 }
@@ -286,7 +286,7 @@ void SAL_CALL SdXShape::release() noexcept
     mpShape->release();
 }
 
-bool SdXShape::queryAggregation( const css::uno::Type & rType, css::uno::Any& aAny )
+bool SdXShape::queryAggregation( const css::uno::Type & rType, cpo::uno::Any& aAny )
 {
     if( mpModel && mpModel ->IsImpressDocument() )
     {
@@ -363,7 +363,7 @@ void SAL_CALL SdXShape::setPropertyToDefault( const OUString& PropertyName )
     }
 }
 
-uno::Any SAL_CALL SdXShape::getPropertyDefault( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL SdXShape::getPropertyDefault( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
 
@@ -373,7 +373,7 @@ uno::Any SAL_CALL SdXShape::getPropertyDefault( const OUString& aPropertyName )
     }
     else
     {
-        uno::Any aRet( mpShape->_getPropertyDefault(aPropertyName) );
+        cpo::uno::Any aRet( mpShape->_getPropertyDefault(aPropertyName) );
         return aRet;
     }
 }
@@ -404,7 +404,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL SdXShape::getProper
     return pInfo;
 }
 
-void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue )
+void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
 
@@ -651,11 +651,11 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const c
         mpModel->SetModified();
 }
 
-css::uno::Any SAL_CALL SdXShape::getPropertyValue( const OUString& PropertyName )
+cpo::uno::Any SAL_CALL SdXShape::getPropertyValue( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
 
     const SfxItemPropertyMapEntry* pEntry = mpPropSet->getPropertyMapEntry(PropertyName);
 
@@ -1020,7 +1020,7 @@ void SdXShape::SetMasterDepend( bool bDepend ) noexcept
     }
 }
 
-void SdXShape::SetStyleSheet( const uno::Any& rAny )
+void SdXShape::SetStyleSheet( const cpo::uno::Any& rAny )
 {
     SdrObject* pObj = mpShape->GetSdrObject();
     if( pObj == nullptr )
@@ -1049,7 +1049,7 @@ void SdXShape::SetStyleSheet( const uno::Any& rAny )
     }
 }
 
-uno::Any SdXShape::GetStyleSheet() const
+cpo::uno::Any SdXShape::GetStyleSheet() const
 {
     SdrObject* pObj = mpShape->GetSdrObject();
     if( pObj == nullptr )
@@ -1073,10 +1073,10 @@ public:
     explicit SdUnoEventsAccess(SdXShape* pShape) noexcept;
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement ) override;
+    virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
 
     // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
@@ -1150,7 +1150,7 @@ static void clearEventsInAnimationInfo( SdAnimationInfo* pInfo )
 }
 
 // XNameReplace
-void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno::Any& aElement )
+void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
     if( mpShape == nullptr || aName != gaStrOnClick )
         throw container::NoSuchElementException();
@@ -1412,7 +1412,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
 }
 
 // XNameAccess
-uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
 {
     if( mpShape == nullptr || aName != gaStrOnClick )
         throw container::NoSuchElementException();
@@ -1457,7 +1457,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
     uno::Sequence< beans::PropertyValue > aProperties( nPropertyCount );
     beans::PropertyValue* pProperties = aProperties.getArray();
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     if( eClickAction == presentation::ClickAction_MACRO )
     {

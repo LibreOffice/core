@@ -54,7 +54,7 @@ SvxB3DVectorItem* SvxB3DVectorItem::Clone( SfxItemPool* /*pPool*/ ) const
     return new SvxB3DVectorItem( *this );
 }
 
-bool SvxB3DVectorItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxB3DVectorItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     assert(!std::isnan(m_aVal.getX()) && !std::isnan(m_aVal.getY()) && !std::isnan(m_aVal.getZ()));
 
@@ -70,7 +70,7 @@ bool SvxB3DVectorItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) con
 }
 
 
-bool SvxB3DVectorItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvxB3DVectorItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
     drawing::Direction3D aDirection;

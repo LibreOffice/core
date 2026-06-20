@@ -1961,7 +1961,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
         func = ::std::for_each(aAllTokens.begin(), aAllTokens.end(), func);
         func.getVector(aTableNumVector);
         aResult.emplace_back( "TableNumberList", -1,
-                                  uno::Any( lcl_createTableNumberList( aTableNumVector ) ),
+                                  cpo::uno::Any( lcl_createTableNumberList( aTableNumVector ) ),
                                   beans::PropertyState_DIRECT_VALUE );
     }
 
@@ -1969,13 +1969,13 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
     {
         // DataRowSource (calculated before)
         aResult.emplace_back( "DataRowSource", -1,
-                                  uno::Any( eRowSource ), beans::PropertyState_DIRECT_VALUE );
+                                  cpo::uno::Any( eRowSource ), beans::PropertyState_DIRECT_VALUE );
         // HasCategories
         aResult.emplace_back( "HasCategories", -1,
-                                  uno::Any( bHasCategories ), beans::PropertyState_DIRECT_VALUE );
+                                  cpo::uno::Any( bHasCategories ), beans::PropertyState_DIRECT_VALUE );
         // FirstCellAsLabel
         aResult.emplace_back( "FirstCellAsLabel", -1,
-                                  uno::Any( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE );
+                                  cpo::uno::Any( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE );
     }
 
     // Add the left upper corner to the range if it is missing.
@@ -2000,7 +2000,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
 
     // add cell range property
     aResult.emplace_back( "CellRangeRepresentation", -1,
-                              uno::Any( sRangeRep ), beans::PropertyState_DIRECT_VALUE );
+                              cpo::uno::Any( sRangeRep ), beans::PropertyState_DIRECT_VALUE );
 
     //Sequence Mapping
     bool const bSequencesReordered = true;//todo detect this above or detect this sequence mapping cheaper ...
@@ -2060,7 +2060,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
         if( bDifferentIndexes && !aSequenceMappingVector.empty() )
         {
             aResult.emplace_back( "SequenceMapping", -1,
-                    uno::Any( comphelper::containerToSequence(aSequenceMappingVector) )
+                    cpo::uno::Any( comphelper::containerToSequence(aSequenceMappingVector) )
                     , beans::PropertyState_DIRECT_VALUE );
         }
     }
@@ -2334,7 +2334,7 @@ ScChart2DataProvider::getPropertySetInfo()
 }
 
 void SAL_CALL ScChart2DataProvider::setPropertyValue(
-        const OUString& rPropertyName, const uno::Any& rValue)
+        const OUString& rPropertyName, const cpo::uno::Any& rValue)
 {
     if ( rPropertyName != SC_UNONAME_INCLUDEHIDDENCELLS )
         throw beans::UnknownPropertyException(rPropertyName);
@@ -2344,10 +2344,10 @@ void SAL_CALL ScChart2DataProvider::setPropertyValue(
 
 }
 
-uno::Any SAL_CALL ScChart2DataProvider::getPropertyValue(
+cpo::uno::Any SAL_CALL ScChart2DataProvider::getPropertyValue(
         const OUString& rPropertyName)
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if ( rPropertyName == SC_UNONAME_INCLUDEHIDDENCELLS )
         aRet <<= m_bIncludeHiddenCells;
     else if (rPropertyName == SC_UNONAME_USE_INTERNAL_DATA_PROVIDER)
@@ -3015,7 +3015,7 @@ void ScChart2DataSequence::ExternalRefListener::addFileId(sal_uInt16 nFileId)
     maFileIds.insert(nFileId);
 }
 
-uno::Sequence< uno::Any> SAL_CALL ScChart2DataSequence::getData()
+uno::Sequence< cpo::uno::Any> SAL_CALL ScChart2DataSequence::getData()
 {
     SolarMutexGuard aGuard;
     if ( !m_pDocument)
@@ -3029,7 +3029,7 @@ uno::Sequence< uno::Any> SAL_CALL ScChart2DataSequence::getData()
 
         sal_Int32 nCount = m_xDataArray->size();
         m_aMixedDataCache.realloc(nCount);
-        uno::Any* pArr = m_aMixedDataCache.getArray();
+        cpo::uno::Any* pArr = m_aMixedDataCache.getArray();
         for (const Item &rItem : *m_xDataArray)
         {
             if (rItem.mbIsValue)
@@ -3038,7 +3038,7 @@ uno::Sequence< uno::Any> SAL_CALL ScChart2DataSequence::getData()
             {
                 ScRefCellValue aCell(*m_pDocument, rItem.mAddress);
                 if (aCell.isEmpty())
-                   *pArr = uno::Any();
+                   *pArr = cpo::uno::Any();
                 else
                    *pArr <<= rItem.maString;
             }
@@ -3383,7 +3383,7 @@ ScChart2DataSequence::getPropertySetInfo()
 }
 
 void SAL_CALL ScChart2DataSequence::setPropertyValue(
-        const OUString& rPropertyName, const uno::Any& rValue)
+        const OUString& rPropertyName, const cpo::uno::Any& rValue)
 {
     if ( rPropertyName == SC_UNONAME_ROLE )
     {
@@ -3424,9 +3424,9 @@ void SAL_CALL ScChart2DataSequence::setPropertyValue(
     // TODO: support optional properties
 }
 
-uno::Any SAL_CALL ScChart2DataSequence::getPropertyValue(const OUString& rPropertyName)
+cpo::uno::Any SAL_CALL ScChart2DataSequence::getPropertyValue(const OUString& rPropertyName)
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if ( rPropertyName == SC_UNONAME_ROLE )
         aRet <<= m_aRole;
     else if ( rPropertyName == SC_UNONAME_INCLUDEHIDDENCELLS )

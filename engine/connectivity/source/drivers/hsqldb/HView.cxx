@@ -43,7 +43,7 @@ namespace connectivity::hsqldb
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::sdbc::SQLException;
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::lang::WrappedTargetException;

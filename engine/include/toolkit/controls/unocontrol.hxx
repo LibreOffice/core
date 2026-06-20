@@ -111,7 +111,7 @@ protected:
     void                                                                        peerCreated();
     bool                                                                        ImplCheckLocalize( OUString& _rPossiblyLocalizable );
     css::uno::Reference< css::awt::XVclWindowPeer >      ImplGetCompatiblePeer();
-    virtual void                                                                ImplSetPeerProperty( const OUString& rPropName, const css::uno::Any& rVal );
+    virtual void                                                                ImplSetPeerProperty( const OUString& rPropName, const cpo::uno::Any& rVal );
     virtual void                                                                PrepareWindowDescriptor( css::awt::WindowDescriptor& rDesc );
     virtual void                                                                ImplModelPropertiesChanged( const css::uno::Sequence< css::beans::PropertyChangeEvent >& rEvents );
 

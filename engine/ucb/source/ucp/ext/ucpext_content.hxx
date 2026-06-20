@@ -93,7 +93,7 @@ namespace ucb::ucp::ext
         virtual OUString SAL_CALL getContentType() override;
 
         // XCommandProcessor
-        virtual css::uno::Any SAL_CALL
+        virtual cpo::uno::Any SAL_CALL
                 execute(
                     const css::ucb::Command& aCommand,
                     sal_Int32 CommandId,
@@ -109,7 +109,7 @@ namespace ucb::ucp::ext
         virtual css::uno::Sequence< css::beans::Property > getProperties( const css::uno::Reference< css::ucb::XCommandEnvironment >& i_rEnv ) override;
         virtual css::uno::Sequence< css::ucb::CommandInfo > getCommands( const css::uno::Reference< css::ucb::XCommandEnvironment >& i_rEnv ) override;
 
-        css::uno::Sequence< css::uno::Any >
+        css::uno::Sequence< cpo::uno::Any >
             setPropertyValues(
                 const css::uno::Sequence< css::beans::PropertyValue >& rValues
             );

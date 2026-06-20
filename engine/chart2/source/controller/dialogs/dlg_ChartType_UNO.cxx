@@ -55,7 +55,7 @@ uno::Sequence< sal_Int8 > SAL_CALL ChartTypeUnoDlg::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
-void ChartTypeUnoDlg::implInitialize(const uno::Any& _rValue)
+void ChartTypeUnoDlg::implInitialize(const cpo::uno::Any& _rValue)
 {
     beans::PropertyValue aProperty;
     if (_rValue >>= aProperty)
@@ -102,7 +102,7 @@ uno::Reference<beans::XPropertySetInfo>  SAL_CALL ChartTypeUnoDlg::getPropertySe
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_ChartTypeDialog_get_implementation(css::uno::XComponentContext *context,
-                                                            css::uno::Sequence<css::uno::Any> const &)
+                                                            css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new chart::ChartTypeUnoDlg(context));
 }

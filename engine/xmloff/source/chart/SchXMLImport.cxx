@@ -265,7 +265,7 @@ SchXMLImport::~SchXMLImport() noexcept
                 // which is only sent when the chart model is set modified; during the load,
                 // setting modified is disabled. So, the view needs an explicit notification.
                 // See ChartDocumentWrapper::setPropertyValue
-                xPropSet->setPropertyValue(u"ODFImport_UpdateView"_ustr, css::uno::Any(xChartDoc));
+                xPropSet->setPropertyValue(u"ODFImport_UpdateView"_ustr, cpo::uno::Any(xChartDoc));
             }
             catch (css::beans::UnknownPropertyException&)
             {
@@ -363,7 +363,7 @@ void SAL_CALL SchXMLImport::setTargetDocument(const uno::Reference<lang::XCompon
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Chart_XMLOasisImporter_get_implementation(uno::XComponentContext* pCtx,
-                                                            uno::Sequence<uno::Any> const& /*rSeq*/)
+                                                            uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SchXMLImport(pCtx, u"SchXMLImport"_ustr, SvXMLImportFlags::ALL));
 }
@@ -372,21 +372,21 @@ com_sun_star_comp_Chart_XMLOasisImporter_get_implementation(uno::XComponentConte
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Chart_XMLOasisMetaImporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SchXMLImport(pCtx, u"SchXMLImport.Meta"_ustr, SvXMLImportFlags::META));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Chart_XMLOasisStylesImporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SchXMLImport(pCtx, u"SchXMLImport.Styles"_ustr, SvXMLImportFlags::STYLES));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Chart_XMLOasisContentImporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SchXMLImport(pCtx, u"SchXMLImport.Content"_ustr,
                                           SvXMLImportFlags::CONTENT | SvXMLImportFlags::AUTOSTYLES

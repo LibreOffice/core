@@ -56,7 +56,7 @@ private:
     virtual void lcl_attribute(Id Name, const Value & val) override;
     virtual void lcl_sprm(Sprm & sprm) override;
 
-    void createGrabBag(const OUString& aName, const css::uno::Any& rValue);
+    void createGrabBag(const OUString& aName, const cpo::uno::Any& rValue);
 
 public:
     CellColorHandler( );

@@ -135,12 +135,12 @@ uno::Reference< XAccessibleKeyBinding > SAL_CALL
 }
 
 // XAccessibleHyperlink
-uno::Any SAL_CALL SwAccessibleHyperlink::getAccessibleActionAnchor(
+cpo::uno::Any SAL_CALL SwAccessibleHyperlink::getAccessibleActionAnchor(
         sal_Int32 nIndex)
 {
     SolarMutexGuard g;
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if(nIndex != 0)
         throw lang::IndexOutOfBoundsException();
     OUString text( m_xParagraph->GetString() );
@@ -149,7 +149,7 @@ uno::Any SAL_CALL SwAccessibleHyperlink::getAccessibleActionAnchor(
     return aRet;
 }
 
-uno::Any SAL_CALL SwAccessibleHyperlink::getAccessibleActionObject(
+cpo::uno::Any SAL_CALL SwAccessibleHyperlink::getAccessibleActionObject(
             sal_Int32 nIndex )
 {
     SolarMutexGuard g;
@@ -161,7 +161,7 @@ uno::Any SAL_CALL SwAccessibleHyperlink::getAccessibleActionObject(
     {
         retText = pINetFormat->GetValue();
     }
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     aRet <<= retText;
     return aRet;
 }
@@ -207,7 +207,7 @@ bool SAL_CALL SwAccessibleHyperlink::isValid(  )
 
                 for( const OUString& aLink : aNames )
                 {
-                    uno::Any aAny = xLinks->getByName( aLink );
+                    cpo::uno::Any aAny = xLinks->getByName( aLink );
                     aAny >>= xSubLinks;
                     if (xSubLinks->hasByName(sText.copy(1)) )
                         return true;

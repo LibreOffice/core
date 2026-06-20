@@ -232,7 +232,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testSPARQL)
     CPPUNIT_ASSERT_EQUAL(u"p"_ustr, aBindings[0]);
 
     uno::Sequence<uno::Reference<rdf::XNode>> aNode;
-    css::uno::fromAny(aResult->nextElement(), &aNode);
+    cpo::uno::fromAny(aResult->nextElement(), &aNode);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aNode.getLength());
     CPPUNIT_ASSERT_EQUAL(u"urn:uuid:224ab023-77b8-4396-a75a-8cecd85b81e3"_ustr,
                          aNode[0]->getStringValue());
@@ -250,7 +250,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testSPARQL)
     CPPUNIT_ASSERT_EQUAL(u"part"_ustr, aBindings[0]);
     CPPUNIT_ASSERT_EQUAL(u"path"_ustr, aBindings[1]);
 
-    css::uno::fromAny(aResult->nextElement(), &aNode);
+    cpo::uno::fromAny(aResult->nextElement(), &aNode);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aNode.getLength());
     CPPUNIT_ASSERT(!aNode[0]->getStringValue().isEmpty());
     CPPUNIT_ASSERT_EQUAL(u"content.xml"_ustr, aNode[1]->getStringValue());
@@ -267,7 +267,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testSPARQL)
     CPPUNIT_ASSERT_EQUAL(u"pkg"_ustr, aBindings[0]);
     CPPUNIT_ASSERT_EQUAL(u"path"_ustr, aBindings[1]);
 
-    css::uno::fromAny(aResult->nextElement(), &aNode);
+    cpo::uno::fromAny(aResult->nextElement(), &aNode);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aNode.getLength());
     CPPUNIT_ASSERT_EQUAL(u"urn:uuid:224ab023-77b8-4396-a75a-8cecd85b81e3"_ustr,
                          aNode[0]->getStringValue());
@@ -295,7 +295,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testSPARQL)
     CPPUNIT_ASSERT_EQUAL(u"part"_ustr, aBindings[0]);
     CPPUNIT_ASSERT_EQUAL(u"path"_ustr, aBindings[1]);
 
-    css::uno::fromAny(aResult->nextElement(), &aNode);
+    cpo::uno::fromAny(aResult->nextElement(), &aNode);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aNode.getLength());
     CPPUNIT_ASSERT_EQUAL(u"http://hospital-employee/doctor"_ustr, aNode[0]->getStringValue());
     CPPUNIT_ASSERT_EQUAL(u"meta/hospital/doctor.rdf"_ustr, aNode[1]->getStringValue());
@@ -315,7 +315,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testSPARQL)
     CPPUNIT_ASSERT_EQUAL(u"path"_ustr, aBindings[0]);
     CPPUNIT_ASSERT_EQUAL(u"idref"_ustr, aBindings[1]);
 
-    css::uno::fromAny(aResult->nextElement(), &aNode);
+    cpo::uno::fromAny(aResult->nextElement(), &aNode);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aNode.getLength());
     CPPUNIT_ASSERT_EQUAL(u"content.xml"_ustr, aNode[0]->getStringValue());
     CPPUNIT_ASSERT_EQUAL(u"ID_B"_ustr, aNode[1]->getStringValue());

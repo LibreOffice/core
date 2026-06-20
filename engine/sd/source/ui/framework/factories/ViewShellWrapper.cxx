@@ -39,6 +39,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 using ::com::sun::star::awt::XWindow;
 
@@ -77,7 +78,7 @@ void ViewShellWrapper::disposing(std::unique_lock<std::mutex>&)
     mpViewShell.reset();
 }
 
-uno::Any SAL_CALL ViewShellWrapper::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL ViewShellWrapper::queryInterface( const uno::Type & rType )
 {
     if( mpSlideSorterViewShell &&
         rType == cppu::UnoType<view::XSelectionSupplier>::get() )
@@ -103,7 +104,7 @@ bool ViewShellWrapper::isAnchorOnly()
 
 //----- XSelectionSupplier --------------------------------------------------
 
-bool SAL_CALL ViewShellWrapper::select( const css::uno::Any& aSelection )
+bool SAL_CALL ViewShellWrapper::select( const cpo::uno::Any& aSelection )
 {
     if (!mpSlideSorterViewShell)
         return false;
@@ -136,7 +137,7 @@ bool SAL_CALL ViewShellWrapper::select( const css::uno::Any& aSelection )
     return true;
 }
 
-uno::Any SAL_CALL ViewShellWrapper::getSelection()
+cpo::uno::Any SAL_CALL ViewShellWrapper::getSelection()
 {
     Any aResult;
 

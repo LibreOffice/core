@@ -40,7 +40,7 @@ class OFormattedModel final
 
         css::uno::Reference< css::util::XNumberFormatsSupplier>   m_xOriginalFormatter;
         css::util::Date        m_aNullDate;
-        css::uno::Any          m_aSaveValue;
+        cpo::uno::Any          m_aSaveValue;
 
         sal_Int16                           m_nKeyType;
         bool                                m_bOriginalNumeric      : 1,
@@ -69,7 +69,7 @@ class OFormattedModel final
         virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
 
         // XAggregation
-        virtual css::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
+        virtual cpo::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
 
         // OComponentHelper
         virtual void SAL_CALL disposing() override;
@@ -90,10 +90,10 @@ class OFormattedModel final
 
         // XPropertyState
         void setPropertyToDefaultByHandle(sal_Int32 nHandle) override;
-        css::uno::Any getPropertyDefaultByHandle(sal_Int32 nHandle) const override;
+        cpo::uno::Any getPropertyDefaultByHandle(sal_Int32 nHandle) const override;
 
         void SAL_CALL setPropertyToDefault(const OUString& aPropertyName) override;
-        css::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
+        cpo::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
 
         // OControlModel's property handling
         virtual void describeFixedProperties(
@@ -114,19 +114,19 @@ class OFormattedModel final
         // as we have an own version handling for persistence
 
         // OBoundControlModel overridables
-        virtual css::uno::Any
+        virtual cpo::uno::Any
                             translateDbColumnToControlValue( ) override;
         virtual bool        commitControlValueToDbColumn( bool _bPostReset ) override;
 
         virtual css::uno::Sequence< css::uno::Type >
                             getSupportedBindingTypes() override;
-        virtual css::uno::Any
-                            translateExternalValueToControlValue( const css::uno::Any& _rExternalValue ) const override;
-        virtual css::uno::Any
+        virtual cpo::uno::Any
+                            translateExternalValueToControlValue( const cpo::uno::Any& _rExternalValue ) const override;
+        virtual cpo::uno::Any
                             translateControlValueToExternalValue( ) const override;
         virtual void onConnectedExternalValue( ) override;
 
-        virtual css::uno::Any
+        virtual cpo::uno::Any
                             getDefaultForReset() const override;
         virtual void        resetNoBroadcast() override;
 
@@ -151,7 +151,7 @@ class OFormattedModel final
         virtual ~OFormattedControl() override;
 
         DECLARE_UNO3_AGG_DEFAULTS(OFormattedControl, OBoundControl)
-        virtual css::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
+        virtual cpo::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
 
         virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
 

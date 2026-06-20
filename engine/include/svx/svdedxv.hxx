@@ -37,9 +37,7 @@ struct PasteOrDropInfos;
 class SdrUndoManager;
 class TextChainCursorManager;
 
-namespace com::sun::star::uno {
-    class Any;
-}
+namespace cpo::uno { class Any; }
 
 namespace sdr {
     class SelectionController;
@@ -306,7 +304,7 @@ public:
 
     /** fills the given any with a XTextCursor for the current text selection.
         Leaves the any untouched if there currently is no text selected */
-    void getTextSelection( css::uno::Any& rSelection );
+    void getTextSelection( cpo::uno::Any& rSelection );
 
     virtual void MarkListHasChanged() override;
 

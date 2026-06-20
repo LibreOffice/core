@@ -201,12 +201,12 @@ std::vector< T >
 }
 
 
-bool hasDoubleValue( const css::uno::Any& rAny );
+bool hasDoubleValue( const cpo::uno::Any& rAny );
 
 
-bool  hasLongOrShortValue( const css::uno::Any& rAny );
+bool  hasLongOrShortValue( const cpo::uno::Any& rAny );
 
-sal_Int16 getShortForLongAlso( const css::uno::Any& rAny );
+sal_Int16 getShortForLongAlso( const cpo::uno::Any& rAny );
 
 
 bool replaceParamterInString( OUString & rInOutResourceString,

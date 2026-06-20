@@ -56,12 +56,12 @@ uno::Sequence< uno::Type > SAL_CALL OFSInputStreamContainer::getTypes()
     }
 }
 
-uno::Any SAL_CALL OFSInputStreamContainer::queryInterface( const uno::Type& rType )
+cpo::uno::Any SAL_CALL OFSInputStreamContainer::queryInterface( const uno::Type& rType )
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
 
-    uno::Any aReturn;
+    cpo::uno::Any aReturn;
     if ( m_bSeekable )
         aReturn = ::cppu::queryInterface( rType,
                                            static_cast< io::XStream* >( this ),

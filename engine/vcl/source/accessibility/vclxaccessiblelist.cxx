@@ -36,6 +36,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 using namespace ::accessibility;
@@ -204,7 +205,7 @@ void VCLXAccessibleList::UpdateSelection_Acc (std::u16string_view /*sTextOfSelec
 
 void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool bHasDropDownList)
 {
-    uno::Any aOldValue, aNewValue;
+    cpo::uno::Any aOldValue, aNewValue;
 
     {
         SolarMutexGuard aSolarGuard;
@@ -282,7 +283,7 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool bHasDropDownList)
         else
         {
             //VCLXAccessibleComboBox
-            NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, uno::Any(), uno::Any() );
+            NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, cpo::uno::Any(), cpo::uno::Any() );
         }
     }
     else if (m_aBoxType == LISTBOX)
@@ -302,7 +303,7 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool bHasDropDownList)
     }
 }
 
-void VCLXAccessibleList::NotifyListItem(css::uno::Any const & val)
+void VCLXAccessibleList::NotifyListItem(cpo::uno::Any const & val)
 {
     Reference< XAccessible > xCurItem;
     val >>= xCurItem;
@@ -341,7 +342,7 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
                 {
                     if ( m_pListBoxHelper )
                     {
-                        uno::Any    aOldValue,
+                        cpo::uno::Any    aOldValue,
                                     aNewValue;
                         sal_Int32 nPos = m_nCurSelectedPos; //m_pListBoxHelper->GetSelectedEntryPos();
 
@@ -410,7 +411,7 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
                 {
                     if ( m_pListBoxHelper )
                     {
-                        uno::Any    aOldValue,
+                        cpo::uno::Any    aOldValue,
                                     aNewValue;
                         sal_Int32 nPos = m_nCurSelectedPos;
 
@@ -661,7 +662,7 @@ bool VCLXAccessibleList::checkEntrySelected(sal_Int32 _nPos,Any& _rNewValue, rtl
 
 void VCLXAccessibleList::UpdateSelection_Impl(sal_Int32)
 {
-    uno::Any aOldValue, aNewValue;
+    cpo::uno::Any aOldValue, aNewValue;
 
     {
         SolarMutexGuard aSolarGuard;
@@ -925,9 +926,9 @@ void VCLXAccessibleList::HandleDropOpen()
         Reference< XAccessible > xChild = getAccessibleChild(m_nCurSelectedPos);
         if(xChild.is())
         {
-            uno::Any aNewValue;
+            cpo::uno::Any aNewValue;
             aNewValue <<= xChild;
-            NotifyAccessibleEvent(AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, uno::Any(), aNewValue );
+            NotifyAccessibleEvent(AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, cpo::uno::Any(), aNewValue );
         }
     }
 }

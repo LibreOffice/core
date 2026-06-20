@@ -55,6 +55,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::text;
 using namespace com::sun::star::style;
 using namespace ::com::sun::star::i18n;
@@ -787,7 +788,7 @@ void SvXMLUnitConverter::convertPropertySet(uno::Sequence<beans::PropertyValue>&
         std::vector<beans::PropertyValue> aPropsVec;
         for (const auto& rProp : aProps)
         {
-            uno::Any aPropertyValue = aProperties->getPropertyValue(rProp.Name);
+            cpo::uno::Any aPropertyValue = aProperties->getPropertyValue(rProp.Name);
             if (pOmitFalseValues && aPropertyValue.has<bool>() && !aPropertyValue.get<bool>())
             {
                 const std::initializer_list<std::u16string_view>& rOmitFalseValues = *pOmitFalseValues;

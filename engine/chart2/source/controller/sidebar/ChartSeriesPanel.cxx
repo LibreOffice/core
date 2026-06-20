@@ -38,6 +38,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace chart::sidebar {
 
@@ -92,7 +93,7 @@ sal_Int32 getDataLabelPlacement(const rtl::Reference<::chart::ChartModel>& xMode
     if (!xSeries.is())
         return 0;
 
-    css::uno::Any aAny = xSeries->getPropertyValue(u"LabelPlacement"_ustr);
+    cpo::uno::Any aAny = xSeries->getPropertyValue(u"LabelPlacement"_ustr);
     if (!aAny.hasValue())
         return 0;
 
@@ -127,7 +128,7 @@ void setDataLabelPlacement(const rtl::Reference<::chart::ChartModel>& xModel,
         }
     }
 
-    xSeries->setPropertyValue(u"LabelPlacement"_ustr, css::uno::Any(nApi));
+    xSeries->setPropertyValue(u"LabelPlacement"_ustr, cpo::uno::Any(nApi));
 }
 
 bool isTrendlineVisible(const rtl::Reference<::chart::ChartModel>& xModel,
@@ -247,7 +248,7 @@ OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
     if (!xSelectionSupplier.is())
         return OUString();
 
-    uno::Any aAny = xSelectionSupplier->getSelection();
+    cpo::uno::Any aAny = xSelectionSupplier->getSelection();
     if (!aAny.hasValue())
         return OUString();
 

@@ -94,7 +94,7 @@ uno::Sequence<OUString> ClusteredColumnChartType::getSupportedPropertyRoles()
 }
 
 // ____ OPropertySet ____
-void ClusteredColumnChartType::GetDefaultValue(sal_Int32 nHandle, uno::Any& rAny) const
+void ClusteredColumnChartType::GetDefaultValue(sal_Int32 nHandle, cpo::uno::Any& rAny) const
 {
     static const ::chart::tPropertyValueMap aStaticDefaults = []() {
         ::chart::tPropertyValueMap aTmp;
@@ -146,7 +146,7 @@ css::uno::Sequence<OUString> SAL_CALL ClusteredColumnChartType::getSupportedServ
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_chart_ClusteredColumnChartType_get_implementation(
-    css::uno::XComponentContext* /*context*/, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* /*context*/, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ::chart::ClusteredColumnChartType);
 }

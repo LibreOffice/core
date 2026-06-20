@@ -160,7 +160,7 @@ UNOTOOLS_DLLPUBLIC bool isStreamReadOnly(const comphelper::SequenceAsHashMap& rM
         sequence of the 'ComponentData' property, otherwise an empty
         Any.
  */
-UNOTOOLS_DLLPUBLIC css::uno::Any
+UNOTOOLS_DLLPUBLIC cpo::uno::Any
 getComponentDataEntry(const comphelper::SequenceAsHashMap& rMediaDescriptor, const OUString& rName);
 
 /** Inserts a value into the sequence contained in the property
@@ -179,7 +179,7 @@ getComponentDataEntry(const comphelper::SequenceAsHashMap& rMediaDescriptor, con
         'ComponentData' property.
  */
 UNOTOOLS_DLLPUBLIC void setComponentDataEntry(comphelper::SequenceAsHashMap& rMediaDescriptor,
-                                              const OUString& rName, const css::uno::Any& rValue);
+                                              const OUString& rName, const cpo::uno::Any& rValue);
 
 /** Removes a value from the sequence contained in the property
     'ComponentData' of the media descriptor.

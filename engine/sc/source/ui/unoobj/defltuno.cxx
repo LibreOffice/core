@@ -116,7 +116,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDocDefaultsObj::getPropertySe
 }
 
 void SAL_CALL ScDocDefaultsObj::setPropertyValue(
-                        const OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
 
@@ -211,7 +211,7 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
     }
 }
 
-uno::Any SAL_CALL ScDocDefaultsObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ScDocDefaultsObj::getPropertyValue( const OUString& aPropertyName )
 {
     //  use pool default if set
 
@@ -220,7 +220,7 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyValue( const OUString& aPropertyN
     if ( !pDocShell )
         throw uno::RuntimeException();
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     const SfxItemPropertyMapEntry* pEntry = aPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
@@ -332,7 +332,7 @@ void SAL_CALL ScDocDefaultsObj::setPropertyToDefault( const OUString& aPropertyN
     }
 }
 
-uno::Any SAL_CALL ScDocDefaultsObj::getPropertyDefault( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ScDocDefaultsObj::getPropertyDefault( const OUString& aPropertyName )
 {
     //  always use static default
 
@@ -345,7 +345,7 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyDefault( const OUString& aPropert
     if ( !pEntry )
         throw beans::UnknownPropertyException(aPropertyName);
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if (pEntry->nWID)
     {
         ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();

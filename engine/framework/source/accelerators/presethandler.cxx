@@ -164,7 +164,7 @@ OUString lcl_getLocalizedMessage(::sal_Int32 nID)
 }
 
 void lcl_throwCorruptedUIConfigurationException(
-    css::uno::Any const & exception, sal_Int32 id)
+    cpo::uno::Any const & exception, sal_Int32 id)
 {
     css::uno::Exception e;
     bool ok = (exception >>= e);
@@ -212,9 +212,9 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     // based of a system directory. This must be used so, till the storage implementation
     // can work on directories too.
     */
-    css::uno::Sequence< css::uno::Any > lArgs{
-        css::uno::Any(sShareLayer),
-        css::uno::Any(css::embed::ElementModes::READ | css::embed::ElementModes::NOCREATE)
+    css::uno::Sequence< cpo::uno::Any > lArgs{
+        cpo::uno::Any(sShareLayer),
+        cpo::uno::Any(css::embed::ElementModes::READ | css::embed::ElementModes::NOCREATE)
     };
 
     css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory = css::embed::FileSystemStorageFactory::create( xContext );
@@ -226,7 +226,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     }
     catch(const css::uno::Exception&)
     {
-        css::uno::Any ex(cppu::getCaughtException());
+        cpo::uno::Any ex(cppu::getCaughtException());
         lcl_throwCorruptedUIConfigurationException(
             ex, ID_CORRUPT_UICONFIG_SHARE);
     }
@@ -261,8 +261,8 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
 
     sUserLayer  += "soffice.cfg"; // storage file
 
-    css::uno::Sequence< css::uno::Any > lArgs{ css::uno::Any(sUserLayer),
-                                               css::uno::Any(css::embed::ElementModes::READWRITE) };
+    css::uno::Sequence< cpo::uno::Any > lArgs{ cpo::uno::Any(sUserLayer),
+                                               cpo::uno::Any(css::embed::ElementModes::READWRITE) };
 
     css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory = css::embed::FileSystemStorageFactory::create( xContext );
     css::uno::Reference< css::embed::XStorage >             xStorage;
@@ -273,7 +273,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     }
     catch(const css::uno::Exception&)
     {
-        css::uno::Any ex(cppu::getCaughtException());
+        cpo::uno::Any ex(cppu::getCaughtException());
         lcl_throwCorruptedUIConfigurationException(
             ex, ID_CORRUPT_UICONFIG_USER);
     }
@@ -462,7 +462,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     }
     catch(const css::uno::Exception&)
     {
-        css::uno::Any ex(cppu::getCaughtException());
+        cpo::uno::Any ex(cppu::getCaughtException());
         lcl_throwCorruptedUIConfigurationException(
             ex, ID_CORRUPT_UICONFIG_GENERAL);
     }

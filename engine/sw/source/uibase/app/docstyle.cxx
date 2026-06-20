@@ -627,7 +627,7 @@ void  SwDocStyleSheet::Reset()
     SetPhysical(false);
 }
 
-void SwDocStyleSheet::SetGrabBagItem(const uno::Any& rVal)
+void SwDocStyleSheet::SetGrabBagItem(const cpo::uno::Any& rVal)
 {
     bool bChg = false;
     if (!m_bPhysical)
@@ -675,7 +675,7 @@ void SwDocStyleSheet::SetGrabBagItem(const uno::Any& rVal)
     }
 }
 
-void SwDocStyleSheet::GetGrabBagItem(uno::Any& rVal) const
+void SwDocStyleSheet::GetGrabBagItem(cpo::uno::Any& rVal) const
 {
     SwFormat* pFormat = nullptr;
     switch (nFamily)

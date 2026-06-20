@@ -129,7 +129,7 @@ public:
      @see DomainMapper_Impl::processDeferredCharacterProperties()
     */
     void processDeferredCharacterProperties(
-        const std::map<sal_Int32, css::uno::Any>& rDeferredCharacterProperties,
+        const std::map<sal_Int32, cpo::uno::Any>& rDeferredCharacterProperties,
         bool bCharContext = true);
 
     void ProcessDeferredStyleCharacterProperties();

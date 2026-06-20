@@ -50,7 +50,7 @@ SvxGalleryItem::~SvxGalleryItem()
 {
 }
 
-bool SvxGalleryItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /* nMemberId */ ) const
+bool SvxGalleryItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /* nMemberId */ ) const
 {
     css::uno::Sequence< css::beans::PropertyValue > aSeq{
         comphelper::makePropertyValue(SVXGALLERYITEM_TYPE, m_nType),
@@ -66,7 +66,7 @@ bool SvxGalleryItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /* nMemberId */ 
     return true;
 }
 
-bool SvxGalleryItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /* nMemberId */)
+bool SvxGalleryItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /* nMemberId */)
 {
     css::uno::Sequence< css::beans::PropertyValue > aSeq;
 

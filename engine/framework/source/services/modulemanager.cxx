@@ -81,10 +81,10 @@ public:
 
     // XNameReplace
     virtual void SAL_CALL replaceByName(const OUString& sName ,
-                                        const css::uno::Any&   aValue) override;
+                                        const cpo::uno::Any&   aValue) override;
 
     // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName(const OUString& sName) override;
+    virtual cpo::uno::Any SAL_CALL getByName(const OUString& sName) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
 
@@ -203,7 +203,7 @@ OUString SAL_CALL ModuleManager::identify(const css::uno::Reference< css::uno::X
 }
 
 void SAL_CALL ModuleManager::replaceByName(const OUString& sName ,
-                                           const css::uno::Any&   aValue)
+                                           const cpo::uno::Any&   aValue)
 {
     ::comphelper::SequenceAsHashMap lProps(aValue);
     if (lProps.empty() )
@@ -244,7 +244,7 @@ void SAL_CALL ModuleManager::replaceByName(const OUString& sName ,
     ::comphelper::ConfigurationHelper::flush(xCfg);
 }
 
-css::uno::Any SAL_CALL ModuleManager::getByName(const OUString& sName)
+cpo::uno::Any SAL_CALL ModuleManager::getByName(const OUString& sName)
 {
     // get access to the element
     css::uno::Reference< css::container::XNameAccess > xModule;
@@ -267,7 +267,7 @@ css::uno::Any SAL_CALL ModuleManager::getByName(const OUString& sName)
         lProps[sPropName] = xModule->getByName(sPropName);
     }
 
-    return css::uno::Any(lProps.getAsConstPropertyValueList());
+    return cpo::uno::Any(lProps.getAsConstPropertyValueList());
 }
 
 css::uno::Sequence< OUString > SAL_CALL ModuleManager::getElementNames()
@@ -299,7 +299,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::crea
 {
     ::comphelper::SequenceAsHashMap lSearchProps(lProperties);
     const css::uno::Sequence< OUString > lModules = getElementNames();
-    ::std::vector< css::uno::Any > lResult;
+    ::std::vector< cpo::uno::Any > lResult;
 
     for (const OUString& rModuleName : lModules)
     {
@@ -307,7 +307,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::crea
         {
             ::comphelper::SequenceAsHashMap lModuleProps = getByName(rModuleName);
             if (lModuleProps.match(lSearchProps))
-                lResult.push_back(css::uno::Any(lModuleProps.getAsConstPropertyValueList()));
+                lResult.push_back(cpo::uno::Any(lModuleProps.getAsConstPropertyValueList()));
         }
         catch(const css::uno::Exception&)
         {
@@ -347,7 +347,7 @@ OUString ModuleManager::implts_identify(const css::uno::Reference< css::uno::XIn
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_ModuleManager_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ModuleManager(context));
 }

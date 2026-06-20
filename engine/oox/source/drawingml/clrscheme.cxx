@@ -152,7 +152,7 @@ bool ClrScheme::getColorByIndex(size_t nIndex, ::Color& rColor) const
     return true;
 }
 
-void ClrScheme::ToAny(css::uno::Any& rVal) const
+void ClrScheme::ToAny(cpo::uno::Any& rVal) const
 {
     std::vector<util::Color> aRet;
 

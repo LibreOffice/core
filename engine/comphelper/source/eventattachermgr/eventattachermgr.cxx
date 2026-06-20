@@ -52,6 +52,7 @@
 #include <utility>
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::io;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -322,7 +323,7 @@ Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Even
                 }
                 catch (const CannotConvertException& e)
                 {
-                    css::uno::Any anyEx = cppu::getCaughtException();
+                    cpo::uno::Any anyEx = cppu::getCaughtException();
                     throw css::lang::WrappedTargetRuntimeException(
                         "wrapped CannotConvertException " + e.Message,
                         css::uno::Reference<css::uno::XInterface>(), anyEx);

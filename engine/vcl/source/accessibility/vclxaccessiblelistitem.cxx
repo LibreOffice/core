@@ -51,6 +51,7 @@ namespace
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
@@ -100,8 +101,8 @@ void VCLXAccessibleListItem::SetVisible( bool _bVisible )
 }
 
 void VCLXAccessibleListItem::NotifyAccessibleEvent( sal_Int16 _nEventId,
-                                                    const css::uno::Any& _aOldValue,
-                                                    const css::uno::Any& _aNewValue )
+                                                    const cpo::uno::Any& _aOldValue,
+                                                    const cpo::uno::Any& _aNewValue )
 {
     comphelper::OAccessible::NotifyAccessibleEvent(_nEventId, _aOldValue, _aNewValue);
 }

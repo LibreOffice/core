@@ -60,7 +60,7 @@ KFFilePicker::KFFilePicker(css::uno::Reference<css::uno::XComponentContext> cons
 
 // XFilePickerControlAccess
 void SAL_CALL KFFilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAction,
-                                     const uno::Any& value)
+                                     const cpo::uno::Any& value)
 {
     if (CHECKBOX_AUTOEXTENSION == controlId)
         // We ignore this one and rely on QFileDialog to provide the functionality
@@ -69,13 +69,13 @@ void SAL_CALL KFFilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlActi
     QtFilePicker::setValue(controlId, nControlAction, value);
 }
 
-uno::Any SAL_CALL KFFilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction)
+cpo::uno::Any SAL_CALL KFFilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction)
 {
     SolarMutexGuard g;
     QtInstance& rQtInstance = GetQtInstance();
     if (!rQtInstance.IsMainThread())
     {
-        uno::Any ret;
+        cpo::uno::Any ret;
         rQtInstance.RunInMainThread([&ret, this, controlId, nControlAction]() {
             ret = getValue(controlId, nControlAction);
         });
@@ -88,7 +88,7 @@ uno::Any SAL_CALL KFFilePicker::getValue(sal_Int16 controlId, sal_Int16 nControl
         // LO core would try to be smart and cut the extension in some places,
         // interfering with QFileDialog's handling of it. QFileDialog also
         // saves the value of the setting, so LO core is not needed for that either.
-        return uno::Any(false);
+        return cpo::uno::Any(false);
 
     return QtFilePicker::getValue(controlId, nControlAction);
 }

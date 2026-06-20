@@ -38,12 +38,12 @@ public:
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // SwVbaVariables_BASE
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 
     // XVariables
-    virtual css::uno::Any SAL_CALL Add( const OUString& rName, const css::uno::Any& rValue ) override;
+    virtual cpo::uno::Any SAL_CALL Add( const OUString& rName, const cpo::uno::Any& rValue ) override;
 };
 
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBAVARIABLES_HXX

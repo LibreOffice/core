@@ -27,7 +27,7 @@
 #include <config_options.h>
 
 namespace com::sun::star::ucb { class XProgressHandler; }
-namespace com::sun::star::uno { class Any; }
+namespace cpo::uno { class Any; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 
 class StgIo;
@@ -224,7 +224,7 @@ public:
     virtual bool                Validate( bool=false ) const override;
     virtual bool                ValidateMode( StreamMode ) const override;
     virtual bool                Equals( const BaseStorageStream& rStream ) const override;
-    bool                        SetProperty( const OUString& rName, const css::uno::Any& rValue );
+    bool                        SetProperty( const OUString& rName, const cpo::uno::Any& rValue );
 
     SvStream*                   GetModifySvStream();
 };

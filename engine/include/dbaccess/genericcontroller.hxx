@@ -42,7 +42,7 @@
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/URL.hpp>
@@ -86,7 +86,7 @@ namespace dbaui
     class ODataView;
 
     template< typename T >
-    inline bool SAL_CALL operator >>= (const css::uno::Any& _any, std::optional< T >& _value)
+    inline bool SAL_CALL operator >>= (const cpo::uno::Any& _any, std::optional< T >& _value)
     {
         _value.reset();  // de-init the optional value
 
@@ -111,7 +111,7 @@ namespace dbaui
         bool                        bEnabled;
 
         std::optional<bool> bChecked;
-        css::uno::Any               aValue;
+        cpo::uno::Any               aValue;
         std::optional<OUString> sTitle;
 
         FeatureState() : bEnabled(false) { }
@@ -398,8 +398,8 @@ namespace dbaui
         virtual void SAL_CALL attachFrame(const css::uno::Reference< css::frame::XFrame > & xFrame) override;
         virtual bool SAL_CALL attachModel(const css::uno::Reference< css::frame::XModel > & xModel) override;
         virtual bool SAL_CALL suspend(bool bSuspend) override = 0;
-        virtual css::uno::Any SAL_CALL getViewData() override;
-        virtual void SAL_CALL restoreViewData(const css::uno::Any& Data) override;
+        virtual cpo::uno::Any SAL_CALL getViewData() override;
+        virtual void SAL_CALL restoreViewData(const cpo::uno::Any& Data) override;
         virtual css::uno::Reference< css::frame::XModel >  SAL_CALL getModel() override;
         virtual css::uno::Reference< css::frame::XFrame >  SAL_CALL getFrame() override;
 
@@ -427,7 +427,7 @@ namespace dbaui
         // css::frame::XFrameActionListener
         virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent) override;
         // lang::XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override = 0;

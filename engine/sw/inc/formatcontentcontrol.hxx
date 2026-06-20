@@ -102,9 +102,9 @@ public:
     bool operator==(const SwContentControlListItem& rOther) const;
 
     static void ItemsToAny(const std::vector<SwContentControlListItem>& rItems,
-                           css::uno::Any& rVal);
+                           cpo::uno::Any& rVal);
 
-    static std::vector<SwContentControlListItem> ItemsFromAny(const css::uno::Any& rVal);
+    static std::vector<SwContentControlListItem> ItemsFromAny(const cpo::uno::Any& rVal);
 };
 
 /// Stores the properties of a content control.

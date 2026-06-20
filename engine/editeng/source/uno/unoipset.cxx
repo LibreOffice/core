@@ -41,7 +41,7 @@ SvxItemPropertySet::~SvxItemPropertySet()
 }
 
 
-static bool SvxUnoCheckForPositiveValue( const uno::Any& rVal )
+static bool SvxUnoCheckForPositiveValue( const cpo::uno::Any& rVal )
 {
     bool bConvert = true; // the default is that all metric items must be converted
     sal_Int32 nValue = 0;
@@ -51,9 +51,9 @@ static bool SvxUnoCheckForPositiveValue( const uno::Any& rVal )
 }
 
 
-uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntry* pMap, const SfxItemSet& rSet, bool bSearchInParent, bool bDontConvertNegativeValues )
+cpo::uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntry* pMap, const SfxItemSet& rSet, bool bSearchInParent, bool bDontConvertNegativeValues )
 {
-    uno::Any aVal;
+    cpo::uno::Any aVal;
     if(!pMap || !pMap->nWID)
         return aVal;
 
@@ -96,7 +96,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntry* pM
 }
 
 
-void SvxItemPropertySet::setPropertyValue( const SfxItemPropertyMapEntry* pMap, const uno::Any& rVal, SfxItemSet& rSet, bool bDontConvertNegativeValues )
+void SvxItemPropertySet::setPropertyValue( const SfxItemPropertyMapEntry* pMap, const cpo::uno::Any& rVal, SfxItemSet& rSet, bool bDontConvertNegativeValues )
 {
     if(!pMap || !pMap->nWID)
         return;
@@ -118,7 +118,7 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertyMapEntry* pMap, 
         pItem = &pPool->GetUserOrPoolDefaultItem( pMap->nWID );
     }
 
-    uno::Any aValue(rVal);
+    cpo::uno::Any aValue(rVal);
 
     const MapUnit eMapUnit = pPool ? pPool->GetMetric(pMap->nWID) : MapUnit::Map100thMM;
 
@@ -144,10 +144,10 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertyMapEntry* pMap, 
 }
 
 
-uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntry* pMap, SvxItemPropertySetUsrAnys& rAnys ) const
+cpo::uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntry* pMap, SvxItemPropertySetUsrAnys& rAnys ) const
 {
     // Already entered a value? Then finish quickly
-    uno::Any* pUsrAny = rAnys.GetUsrAnyForID(*pMap);
+    cpo::uno::Any* pUsrAny = rAnys.GetUsrAnyForID(*pMap);
     if(pUsrAny)
         return *pUsrAny;
 
@@ -156,7 +156,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntry* pM
     sal_uInt8 nMemberId = pMap->nMemberId;
     if( eMapUnit == MapUnit::Map100thMM )
         nMemberId &= (~CONVERT_TWIPS);
-    uno::Any aVal;
+    cpo::uno::Any aVal;
     SfxItemSet aSet( mrItemPool, pMap->nWID, pMap->nWID);
 
     if( (pMap->nWID < OWN_ATTR_VALUE_START) || (pMap->nWID > OWN_ATTR_VALUE_END ) )
@@ -196,9 +196,9 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntry* pM
 }
 
 
-void SvxItemPropertySet::setPropertyValue( const SfxItemPropertyMapEntry* pMap, const uno::Any& rVal, SvxItemPropertySetUsrAnys& rAnys )
+void SvxItemPropertySet::setPropertyValue( const SfxItemPropertyMapEntry* pMap, const cpo::uno::Any& rVal, SvxItemPropertySetUsrAnys& rAnys )
 {
-    uno::Any* pUsrAny = rAnys.GetUsrAnyForID(*pMap);
+    cpo::uno::Any* pUsrAny = rAnys.GetUsrAnyForID(*pMap);
     if(!pUsrAny)
         rAnys.AddUsrAnyForID(rVal, *pMap);
     else
@@ -221,7 +221,7 @@ rtl::Reference< SfxItemPropertySetInfo > const &  SvxItemPropertySet::getPropert
 
 
 /** converts the given any with a metric to 100th/mm if needed */
-void SvxUnoConvertToMM( const MapUnit eSourceMapUnit, uno::Any & rMetric ) noexcept
+void SvxUnoConvertToMM( const MapUnit eSourceMapUnit, cpo::uno::Any & rMetric ) noexcept
 {
     // map the metric of the itempool to 100th mm
     switch(eSourceMapUnit)
@@ -260,7 +260,7 @@ void SvxUnoConvertToMM( const MapUnit eSourceMapUnit, uno::Any & rMetric ) noexc
 
 
 /** converts the given any with a metric from 100th/mm to the given metric if needed */
-void SvxUnoConvertFromMM( const MapUnit eDestinationMapUnit, uno::Any & rMetric ) noexcept
+void SvxUnoConvertFromMM( const MapUnit eDestinationMapUnit, cpo::uno::Any & rMetric ) noexcept
 {
     switch(eDestinationMapUnit)
     {
@@ -302,18 +302,18 @@ SvxItemPropertySetUsrAnys::~SvxItemPropertySetUsrAnys()
     ClearAllUsrAny();
 }
 
-uno::Any* SvxItemPropertySetUsrAnys::GetUsrAnyForID(SfxItemPropertyMapEntry const & entry) const
+cpo::uno::Any* SvxItemPropertySetUsrAnys::GetUsrAnyForID(SfxItemPropertyMapEntry const & entry) const
 {
     for (auto const & rActual : aCombineList)
     {
         if( rActual.nWID == entry.nWID && rActual.memberId == entry.nMemberId )
-            return const_cast<uno::Any*>(&rActual.aAny);
+            return const_cast<cpo::uno::Any*>(&rActual.aAny);
     }
     return nullptr;
 }
 
 void SvxItemPropertySetUsrAnys::AddUsrAnyForID(
-    const uno::Any& rAny, SfxItemPropertyMapEntry const & entry)
+    const cpo::uno::Any& rAny, SfxItemPropertyMapEntry const & entry)
 {
     SvxIDPropertyCombine aNew;
     aNew.nWID = entry.nWID;

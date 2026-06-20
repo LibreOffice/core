@@ -131,6 +131,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::scanner;
 using namespace ::com::sun::star::sdb;
@@ -1614,7 +1615,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
     if (bGotBrowseMode)
     {
         // delegate further
-        GetViewImpl()->GetUNOObject_Impl()->getViewSettings()->setPropertyValue(u"ShowOnlineLayout"_ustr, uno::Any(bBrowseMode));
+        GetViewImpl()->GetUNOObject_Impl()->getViewSettings()->setPropertyValue(u"ShowOnlineLayout"_ustr, cpo::uno::Any(bBrowseMode));
     }
 
     SelectShell();

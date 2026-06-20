@@ -186,17 +186,17 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
         nFlags |= TransliterationFlags::IGNORE_KASHIDA_CTL;
 
     auto aArgs( comphelper::InitPropertySequence( {
-        { "SearchItem.SearchString", css::uno::Any( sFindText ) },
+        { "SearchItem.SearchString", cpo::uno::Any( sFindText ) },
         // Related tdf#102506: make Find Bar Ctrl+F searching by value by default
-        { "SearchItem.CellType", css::uno::Any( sal_Int16(SvxSearchCellType::VALUE) ) },
-        { "SearchItem.Backward", css::uno::Any( aSearchBackwards ) },
-        { "SearchItem.SearchFlags", css::uno::Any( sal_Int32(0) ) },
-        { "SearchItem.TransliterateFlags", css::uno::Any( static_cast<sal_Int32>(nFlags) ) },
-        { "SearchItem.Command", css::uno::Any( static_cast<sal_Int16>(aFindAll ?SvxSearchCmd::FIND_ALL : SvxSearchCmd::FIND ) ) },
-        { "SearchItem.AlgorithmType", css::uno::Any( sal_Int16(css::util::SearchAlgorithms_ABSOLUTE) ) },
-        { "SearchItem.AlgorithmType2", css::uno::Any( sal_Int16(css::util::SearchAlgorithms2::ABSOLUTE) ) },
-        { "SearchItem.SearchFormatted", css::uno::Any( bSearchFormatted ) },
-        { "UseAttrItemList", css::uno::Any(false) }
+        { "SearchItem.CellType", cpo::uno::Any( sal_Int16(SvxSearchCellType::VALUE) ) },
+        { "SearchItem.Backward", cpo::uno::Any( aSearchBackwards ) },
+        { "SearchItem.SearchFlags", cpo::uno::Any( sal_Int32(0) ) },
+        { "SearchItem.TransliterateFlags", cpo::uno::Any( static_cast<sal_Int32>(nFlags) ) },
+        { "SearchItem.Command", cpo::uno::Any( static_cast<sal_Int16>(aFindAll ?SvxSearchCmd::FIND_ALL : SvxSearchCmd::FIND ) ) },
+        { "SearchItem.AlgorithmType", cpo::uno::Any( sal_Int16(css::util::SearchAlgorithms_ABSOLUTE) ) },
+        { "SearchItem.AlgorithmType2", cpo::uno::Any( sal_Int16(css::util::SearchAlgorithms2::ABSOLUTE) ) },
+        { "SearchItem.SearchFormatted", cpo::uno::Any( bSearchFormatted ) },
+        { "UseAttrItemList", cpo::uno::Any(false) }
     } ) );
 
     css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider(xFrame, css::uno::UNO_QUERY);
@@ -332,7 +332,7 @@ IMPL_LINK(FindTextFieldControl, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
         if (xPropSet.is())
         {
             css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-            css::uno::Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
+            cpo::uno::Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
             aValue >>= xLayoutManager;
             if (xLayoutManager.is())
             {
@@ -651,7 +651,7 @@ public:
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XToolbarController
     virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) override;
@@ -715,7 +715,7 @@ void FindTextToolbarController::disposing(std::unique_lock<std::mutex>& rGuard)
 }
 
 // XInitialization
-void SAL_CALL FindTextToolbarController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+void SAL_CALL FindTextToolbarController::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     svt::ToolboxController::initialize(aArguments);
 
@@ -806,7 +806,7 @@ public:
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XToolbarController
     virtual void SAL_CALL execute( sal_Int16 KeyModifier ) override;
@@ -856,7 +856,7 @@ void UpDownSearchToolboxController::disposing(std::unique_lock<std::mutex>& rGua
 }
 
 // XInitialization
-void SAL_CALL UpDownSearchToolboxController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+void SAL_CALL UpDownSearchToolboxController::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     svt::ToolboxController::initialize( aArguments );
     SearchToolbarControllersManager::createControllersManager().registryController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(this), m_aCommandURL);
@@ -901,7 +901,7 @@ public:
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XToolbarController
     virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) override;
@@ -953,7 +953,7 @@ void MatchCaseToolboxController::disposing(std::unique_lock<std::mutex>& rGuard)
 }
 
 // XInitialization
-void SAL_CALL MatchCaseToolboxController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+void SAL_CALL MatchCaseToolboxController::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     svt::ToolboxController::initialize(aArguments);
 
@@ -1005,7 +1005,7 @@ public:
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XToolbarController
     virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) override;
@@ -1057,7 +1057,7 @@ void MatchDiacriticsToolboxController::disposing(std::unique_lock<std::mutex>& r
 }
 
 // XInitialization
-void SAL_CALL MatchDiacriticsToolboxController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+void SAL_CALL MatchDiacriticsToolboxController::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     svt::ToolboxController::initialize(aArguments);
 
@@ -1109,7 +1109,7 @@ public:
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XToolbarController
     virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) override;
@@ -1159,7 +1159,7 @@ void SearchFormattedToolboxController::disposing(std::unique_lock<std::mutex>& r
 }
 
 // XInitialization
-void SAL_CALL SearchFormattedToolboxController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+void SAL_CALL SearchFormattedToolboxController::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     svt::ToolboxController::initialize(aArguments);
 
@@ -1202,7 +1202,7 @@ public:
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XToolbarController
     virtual void SAL_CALL execute( sal_Int16 KeyModifier ) override;
@@ -1247,7 +1247,7 @@ void FindAllToolboxController::disposing(std::unique_lock<std::mutex>& rGuard)
 }
 
 // XInitialization
-void SAL_CALL FindAllToolboxController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+void SAL_CALL FindAllToolboxController::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     svt::ToolboxController::initialize( aArguments );
     SearchToolbarControllersManager::createControllersManager().registryController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(this), m_aCommandURL);
@@ -1286,7 +1286,7 @@ public:
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XToolbarController
     virtual void SAL_CALL execute( sal_Int16 KeyModifier ) override;
@@ -1331,7 +1331,7 @@ void ExitSearchToolboxController::disposing(std::unique_lock<std::mutex>& rGuard
 }
 
 // XInitialization
-void SAL_CALL ExitSearchToolboxController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+void SAL_CALL ExitSearchToolboxController::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     svt::ToolboxController::initialize( aArguments );
     SearchToolbarControllersManager::createControllersManager().registryController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(this), m_aCommandURL);
@@ -1349,7 +1349,7 @@ void SAL_CALL ExitSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ )
     if (xPropSet.is())
     {
         css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-        css::uno::Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
+        cpo::uno::Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
         aValue >>= xLayoutManager;
         if (xLayoutManager.is())
         {
@@ -1381,7 +1381,7 @@ public:
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XToolbarController
     virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) override;
@@ -1430,7 +1430,7 @@ void SearchLabelToolboxController::disposing(std::unique_lock<std::mutex>& rGuar
 }
 
 // XInitialization
-void SAL_CALL SearchLabelToolboxController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+void SAL_CALL SearchLabelToolboxController::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     svt::ToolboxController::initialize( aArguments );
     SearchToolbarControllersManager::createControllersManager().registryController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(this), m_aCommandURL);
@@ -1476,7 +1476,7 @@ public:
     virtual ~FindbarDispatcher() override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
     virtual void SAL_CALL acquire() noexcept override;
     virtual void SAL_CALL release() noexcept override;
 
@@ -1486,7 +1486,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XDispatchProvider
     virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& aURL, const OUString& sTargetFrameName , sal_Int32 nSearchFlags ) override;
@@ -1513,9 +1513,9 @@ FindbarDispatcher::~FindbarDispatcher()
 }
 
 // XInterface
-css::uno::Any SAL_CALL FindbarDispatcher::queryInterface( const css::uno::Type& aType )
+cpo::uno::Any SAL_CALL FindbarDispatcher::queryInterface( const css::uno::Type& aType )
 {
-    css::uno::Any aReturn( ::cppu::queryInterface( aType,
+    cpo::uno::Any aReturn( ::cppu::queryInterface( aType,
         static_cast< css::lang::XServiceInfo* >(this),
         static_cast< css::lang::XInitialization* >(this),
         static_cast< css::frame::XDispatchProvider* >(this),
@@ -1554,7 +1554,7 @@ css::uno::Sequence< OUString > SAL_CALL FindbarDispatcher::getSupportedServiceNa
 }
 
 // XInitialization
-void SAL_CALL FindbarDispatcher::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+void SAL_CALL FindbarDispatcher::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     if ( aArguments.hasElements() )
         aArguments[0] >>= m_xFrame;
@@ -1595,7 +1595,7 @@ void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css
         return;
 
     css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-    css::uno::Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
+    cpo::uno::Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
     aValue >>= xLayoutManager;
     if (!xLayoutManager.is())
         return;
@@ -1653,7 +1653,7 @@ void SAL_CALL FindbarDispatcher::removeStatusListener( const css::uno::Reference
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_FindTextToolboxController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new FindTextToolbarController(context));
 }
@@ -1661,7 +1661,7 @@ com_sun_star_svx_FindTextToolboxController_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_ExitFindbarToolboxController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ExitSearchToolboxController(context));
 }
@@ -1669,7 +1669,7 @@ com_sun_star_svx_ExitFindbarToolboxController_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_UpSearchToolboxController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UpDownSearchToolboxController(context, UpDownSearchToolboxController::UP));
 }
@@ -1677,7 +1677,7 @@ com_sun_star_svx_UpSearchToolboxController_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_DownSearchToolboxController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UpDownSearchToolboxController(context, UpDownSearchToolboxController::DOWN));
 }
@@ -1685,7 +1685,7 @@ com_sun_star_svx_DownSearchToolboxController_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_MatchCaseToolboxController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new MatchCaseToolboxController(context));
 }
@@ -1693,7 +1693,7 @@ com_sun_star_svx_MatchCaseToolboxController_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_MatchDiacriticsToolboxController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new MatchDiacriticsToolboxController(context));
 }
@@ -1701,7 +1701,7 @@ com_sun_star_svx_MatchDiacriticsToolboxController_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_SearchFormattedToolboxController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SearchFormattedToolboxController(context));
 }
@@ -1709,7 +1709,7 @@ com_sun_star_svx_SearchFormattedToolboxController_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_FindAllToolboxController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new FindAllToolboxController(context));
 }
@@ -1717,7 +1717,7 @@ com_sun_star_svx_FindAllToolboxController_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_SearchLabelToolboxController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SearchLabelToolboxController(context));
 }
@@ -1725,7 +1725,7 @@ com_sun_star_svx_SearchLabelToolboxController_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_Impl_FindbarDispatcher_get_implementation(
     SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new FindbarDispatcher);
 }

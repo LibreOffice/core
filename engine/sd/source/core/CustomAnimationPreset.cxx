@@ -48,6 +48,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
 
@@ -66,7 +67,7 @@ static Reference< XNameAccess > getNodeAccess( const Reference< XMultiServiceFac
     {
         Sequence<Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", uno::Any(rNodePath)}
+            {"nodepath", cpo::uno::Any(rNodePath)}
         }));
 
         xConfigAccess.set(

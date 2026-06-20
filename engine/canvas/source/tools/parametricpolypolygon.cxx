@@ -43,7 +43,7 @@ namespace canvas
     rtl::Reference<ParametricPolyPolygon> ParametricPolyPolygon::create(
         const uno::Reference< rendering::XGraphicDevice >& rDevice,
         std::u16string_view rServiceName,
-        const uno::Sequence< uno::Any >& rArgs )
+        const uno::Sequence< cpo::uno::Any >& rArgs )
     {
         double fAspectRatio=1.0;
 
@@ -55,7 +55,7 @@ namespace canvas
         uno::Sequence< double > colorStops{ 0, 1 };
 
         // extract args
-        for( const uno::Any& rArg : rArgs )
+        for( const cpo::uno::Any& rArg : rArgs )
         {
             beans::PropertyValue aProp;
             if( rArg >>= aProp )

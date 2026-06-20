@@ -73,7 +73,7 @@ class ShellJob final : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,cs
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // css.task.XJob
-        virtual css::uno::Any SAL_CALL execute(const css::uno::Sequence< css::beans::NamedValue >& lArguments) override;
+        virtual cpo::uno::Any SAL_CALL execute(const css::uno::Sequence< css::beans::NamedValue >& lArguments) override;
 
     // helper
     private:
@@ -83,7 +83,7 @@ class ShellJob final : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,cs
 
             @return an Any following the job protocol for deactivation.
          */
-        static css::uno::Any impl_generateAnswer4Deactivation();
+        static cpo::uno::Any impl_generateAnswer4Deactivation();
 
         /** substitute all might existing placeholder variables
             within the configured command.

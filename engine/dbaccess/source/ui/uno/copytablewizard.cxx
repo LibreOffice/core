@@ -79,7 +79,7 @@ namespace dbaui
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::beans::XPropertySetInfo;
@@ -1011,7 +1011,7 @@ bool CopyTableWizard::impl_processCopyError_nothrow( const CopyTableRowEvent& _r
 
     try
     {
-        css::uno::Any next;
+        cpo::uno::Any next;
         ::dbtools::SQLExceptionInfo aInfo( _rEvent.Error );
         if ( aInfo.isValid() )
             next = _rEvent.Error;
@@ -1521,7 +1521,7 @@ void CopyTableWizard::executedDialog( sal_Int16 _nExecutionResult )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_openoffice_comp_dbu_CopyTableWizard_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new ::dbaui::CopyTableWizard(context));
 }

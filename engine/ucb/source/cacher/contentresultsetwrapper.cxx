@@ -29,6 +29,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::util;
 using namespace comphelper;
 using namespace cppu;
@@ -208,10 +209,10 @@ bool ContentResultSetWrapper::impl_isForwardOnly(std::unique_lock<std::mutex>& /
 
 // XInterface methods.
 
-css::uno::Any SAL_CALL ContentResultSetWrapper::queryInterface( const css::uno::Type & rType )
+cpo::uno::Any SAL_CALL ContentResultSetWrapper::queryInterface( const css::uno::Type & rType )
 {
     //list all interfaces inclusive baseclasses of interfaces
-    css::uno::Any aRet = cppu::queryInterface( rType,
+    cpo::uno::Any aRet = cppu::queryInterface( rType,
                                                static_cast< XComponent* >(this),
                                                static_cast< XCloseable* >(this),
                                                static_cast< XResultSetMetaDataSupplier* >(this),
@@ -1154,10 +1155,10 @@ void SAL_CALL ContentResultSetWrapperListener::release()
     OWeakObject::release();
 }
 
-css::uno::Any SAL_CALL ContentResultSetWrapperListener::queryInterface( const css::uno::Type & rType )
+cpo::uno::Any SAL_CALL ContentResultSetWrapperListener::queryInterface( const css::uno::Type & rType )
 {
     //list all interfaces inclusive baseclasses of interfaces
-    css::uno::Any aRet = cppu::queryInterface( rType,
+    cpo::uno::Any aRet = cppu::queryInterface( rType,
                                                static_cast< XEventListener * >(
                                                        static_cast< XPropertyChangeListener * >(this)),
                                                static_cast< XPropertyChangeListener* >(this),

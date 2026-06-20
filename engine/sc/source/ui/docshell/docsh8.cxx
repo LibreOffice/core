@@ -122,8 +122,8 @@ namespace
         // character set name string (which might not exist for certain eCharSet values, like
         // RTL_TEXTENCODING_MS_950):
         uno::Sequence<beans::PropertyValue> aProps( comphelper::InitPropertySequence({
-                { SC_DBPROP_EXTENSION, uno::Any(aExtension) },
-                { SC_DBPROP_CHARSET, uno::Any(eCharSet) }
+                { SC_DBPROP_EXTENSION, cpo::uno::Any(aExtension) },
+                { SC_DBPROP_CHARSET, cpo::uno::Any(eCharSet) }
             }));
 
         _rConnection = _rDrvMgr->getConnectionWithInfo( aConnUrl, aProps );
@@ -158,7 +158,7 @@ bool ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObject&
         OUString aTransferName = u"transfer"_ustr;
         if ( xInfo->hasCommandByName( aTransferName ) )
         {
-            aDestPath.executeCommand( aTransferName, uno::Any(
+            aDestPath.executeCommand( aTransferName, cpo::uno::Any(
                 css::ucb::TransferInfo( bMoveData, rSourceObj.GetMainURL(INetURLObject::DecodeMechanism::NONE), aName,
                                                        css::ucb::NameClash::ERROR ) ) );
         }
@@ -187,7 +187,7 @@ bool ScDocShell::KillFile( const INetURLObject& rURL )
         ::ucbhelper::Content aCnt( rURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),
                         uno::Reference< css::ucb::XCommandEnvironment >(),
                         comphelper::getProcessComponentContext() );
-        aCnt.executeCommand( u"delete"_ustr, css::uno::Any( true ) );
+        aCnt.executeCommand( u"delete"_ustr, cpo::uno::Any( true ) );
     }
     catch( uno::Exception& )
     {
@@ -299,13 +299,13 @@ ErrCode ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding
         OSL_ENSURE( xRowProp.is(), "can't get RowSet" );
         if (!xRowProp.is()) return SCERR_IMPORT_CONNECT;
 
-        xRowProp->setPropertyValue( SC_DBPROP_ACTIVECONNECTION, uno::Any(xConnection) );
+        xRowProp->setPropertyValue( SC_DBPROP_ACTIVECONNECTION, cpo::uno::Any(xConnection) );
 
-        xRowProp->setPropertyValue( SC_DBPROP_COMMANDTYPE, uno::Any(sdb::CommandType::TABLE) );
+        xRowProp->setPropertyValue( SC_DBPROP_COMMANDTYPE, cpo::uno::Any(sdb::CommandType::TABLE) );
 
-        xRowProp->setPropertyValue( SC_DBPROP_COMMAND, uno::Any(aTabName) );
+        xRowProp->setPropertyValue( SC_DBPROP_COMMAND, cpo::uno::Any(aTabName) );
 
-        xRowProp->setPropertyValue( u"PropertyChangeNotificationEnabled"_ustr, uno::Any(false) );
+        xRowProp->setPropertyValue( u"PropertyChangeNotificationEnabled"_ustr, cpo::uno::Any(false) );
 
         xRowSet->execute();
 
@@ -818,7 +818,7 @@ ErrCodeMsg ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncod
         OSL_ENSURE( xTableDesc.is(), "can't get table descriptor" );
         if (!xTableDesc.is()) return SCERR_EXPORT_CONNECT;
 
-        xTableDesc->setPropertyValue( SC_DBPROP_NAME, uno::Any(aTabName) );
+        xTableDesc->setPropertyValue( SC_DBPROP_NAME, cpo::uno::Any(aTabName) );
 
         // create columns
 
@@ -850,13 +850,13 @@ ErrCodeMsg ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncod
             OSL_ENSURE( xColumnDesc.is(), "can't get column descriptor" );
             if (!xColumnDesc.is()) return SCERR_EXPORT_CONNECT;
 
-            xColumnDesc->setPropertyValue( SC_DBPROP_NAME, uno::Any(pColNames[nCol]) );
+            xColumnDesc->setPropertyValue( SC_DBPROP_NAME, cpo::uno::Any(pColNames[nCol]) );
 
-            xColumnDesc->setPropertyValue( u"Type"_ustr, uno::Any(pColTypes[nCol]) );
+            xColumnDesc->setPropertyValue( u"Type"_ustr, cpo::uno::Any(pColTypes[nCol]) );
 
-            xColumnDesc->setPropertyValue( u"Precision"_ustr, uno::Any(pColLengths[nCol]) );
+            xColumnDesc->setPropertyValue( u"Precision"_ustr, cpo::uno::Any(pColLengths[nCol]) );
 
-            xColumnDesc->setPropertyValue( u"Scale"_ustr, uno::Any(pColScales[nCol]) );
+            xColumnDesc->setPropertyValue( u"Scale"_ustr, cpo::uno::Any(pColScales[nCol]) );
 
             xColumnsAppend->appendByDescriptor( xColumnDesc );
         }
@@ -872,11 +872,11 @@ ErrCodeMsg ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncod
         OSL_ENSURE( xRowProp.is(), "can't get RowSet" );
         if (!xRowProp.is()) return SCERR_EXPORT_CONNECT;
 
-        xRowProp->setPropertyValue( SC_DBPROP_ACTIVECONNECTION, uno::Any(xConnection) );
+        xRowProp->setPropertyValue( SC_DBPROP_ACTIVECONNECTION, cpo::uno::Any(xConnection) );
 
-        xRowProp->setPropertyValue( SC_DBPROP_COMMANDTYPE, uno::Any(sal_Int32(sdb::CommandType::TABLE)) );
+        xRowProp->setPropertyValue( SC_DBPROP_COMMANDTYPE, cpo::uno::Any(sal_Int32(sdb::CommandType::TABLE)) );
 
-        xRowProp->setPropertyValue( SC_DBPROP_COMMAND, uno::Any(aTabName) );
+        xRowProp->setPropertyValue( SC_DBPROP_COMMAND, cpo::uno::Any(aTabName) );
 
         xRowSet->execute();
 

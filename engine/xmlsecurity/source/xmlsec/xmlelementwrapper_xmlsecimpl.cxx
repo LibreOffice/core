@@ -47,7 +47,7 @@ uno::Sequence< OUString > SAL_CALL XMLElementWrapper_XmlSecImpl::getSupportedSer
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_xml_wrapper_XMLElementWrapper_get_implementation(
-    uno::XComponentContext* /*pCtx*/, uno::Sequence<uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* /*pCtx*/, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new XMLElementWrapper_XmlSecImpl(nullptr));
 }

@@ -53,10 +53,10 @@ public:
     virtual bool supportsHashCode() const override final;
     virtual size_t hashCode() const override final;
 
-    virtual bool QueryValue(css::uno::Any& rVal,
+    virtual bool QueryValue(cpo::uno::Any& rVal,
                             sal_uInt8 nMemberId = 0) const override;
 
-    virtual bool PutValue(const css::uno::Any& rVal,
+    virtual bool PutValue(const cpo::uno::Any& rVal,
                           sal_uInt8 nMemberId) override;
 
 };

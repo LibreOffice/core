@@ -17,6 +17,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 
 namespace apitest {
@@ -56,7 +57,7 @@ void XSpreadsheets::testMoveByName()
 
     // get sheet from the new position
     uno::Reference< container::XIndexAccess > oIndexAccess(xSpreadsheets, UNO_QUERY_THROW);
-    uno::Any aAny = oIndexAccess->getByIndex(2);
+    cpo::uno::Any aAny = oIndexAccess->getByIndex(2);
     uno::Reference< container::XNamed > xNamed;
     CPPUNIT_ASSERT(aAny >>= xNamed);
 

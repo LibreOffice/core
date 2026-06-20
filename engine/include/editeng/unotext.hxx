@@ -283,19 +283,19 @@ protected:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    SAL_DLLPRIVATE void _setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue, sal_Int32 nPara = -1 );
+    SAL_DLLPRIVATE void _setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue, sal_Int32 nPara = -1 );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    SAL_DLLPRIVATE css::uno::Any _getPropertyValue( const OUString& PropertyName, sal_Int32 nPara = -1 );
+    SAL_DLLPRIVATE cpo::uno::Any _getPropertyValue( const OUString& PropertyName, sal_Int32 nPara = -1 );
 
     /// @throws css::beans::PropertyVetoException
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    SAL_DLLPRIVATE void _setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues, sal_Int32 nPara = -1 );
+    SAL_DLLPRIVATE void _setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< cpo::uno::Any >& aValues, sal_Int32 nPara = -1 );
     /// @throws css::uno::RuntimeException
-    SAL_DLLPRIVATE css::uno::Sequence< css::uno::Any > _getPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, sal_Int32 nPara = -1 );
+    SAL_DLLPRIVATE css::uno::Sequence< cpo::uno::Any > _getPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, sal_Int32 nPara = -1 );
 
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
@@ -319,10 +319,10 @@ protected:
 
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
-    SAL_DLLPRIVATE void getPropertyValue( const SfxItemPropertyMapEntry* pMap, css::uno::Any& rAny, const SfxItemSet& rSet );
+    SAL_DLLPRIVATE void getPropertyValue( const SfxItemPropertyMapEntry* pMap, cpo::uno::Any& rAny, const SfxItemSet& rSet );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::IllegalArgumentException
-    SAL_DLLPRIVATE void setPropertyValue( const SfxItemPropertyMapEntry* pMap, const css::uno::Any& rValue, const ESelection& rSelection, const SfxItemSet& rOldSet, SfxItemSet& rNewSet );
+    SAL_DLLPRIVATE void setPropertyValue( const SfxItemPropertyMapEntry* pMap, const cpo::uno::Any& rValue, const ESelection& rSelection, const SfxItemSet& rOldSet, SfxItemSet& rNewSet );
 
     SAL_DLLPRIVATE SvxUnoTextRangeBase(const SvxItemPropertySet* _pSet);
     SAL_DLLPRIVATE SvxUnoTextRangeBase(const SvxEditSource* pSource, const SvxItemPropertySet* _pSet);
@@ -351,9 +351,9 @@ public:
     const SvxItemPropertySet*   getPropertySet() const noexcept { return mpPropSet; }
     SvxEditSource*              GetEditSource() const noexcept { return mpEditSource.get(); }
 
-    static bool SetPropertyValueHelper( const SfxItemPropertyMapEntry* pMap, const css::uno::Any& aValue, SfxItemSet& rNewSet, const ESelection* pSelection = nullptr, SvxEditSource* pEditSource = nullptr );
+    static bool SetPropertyValueHelper( const SfxItemPropertyMapEntry* pMap, const cpo::uno::Any& aValue, SfxItemSet& rNewSet, const ESelection* pSelection = nullptr, SvxEditSource* pEditSource = nullptr );
     /// @throws css::uno::RuntimeException
-    static bool GetPropertyValueHelper(  SfxItemSet const & rSet, const SfxItemPropertyMapEntry* pMap, css::uno::Any& aAny, const ESelection* pSelection = nullptr,  SvxEditSource* pEditSource = nullptr  );
+    static bool GetPropertyValueHelper(  SfxItemSet const & rSet, const SfxItemPropertyMapEntry* pMap, cpo::uno::Any& aAny, const ESelection* pSelection = nullptr,  SvxEditSource* pEditSource = nullptr  );
 
     void attachField( std::unique_ptr<SvxFieldData> pData ) noexcept;
 
@@ -367,16 +367,16 @@ public:
 
     // css::beans::XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
     virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
     virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
     virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     // XMultiPropertySet
-    virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues ) override;
-    virtual css::uno::Sequence< css::uno::Any > SAL_CALL getPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< cpo::uno::Any >& aValues ) override;
+    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL getPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     virtual void SAL_CALL addPropertiesChangeListener( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
     virtual void SAL_CALL removePropertiesChangeListener( const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
     virtual void SAL_CALL firePropertiesChangeEvent( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
@@ -385,13 +385,13 @@ public:
     virtual css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) override;
     virtual css::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName ) override;
     virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) override;
-    virtual css::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
 
     // css::beans::XMultiPropertyStates
     //virtual css::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException);
     virtual void SAL_CALL setAllPropertiesToDefault() override;
     virtual void SAL_CALL setPropertiesToDefault( const css::uno::Sequence< OUString >& aPropertyNames ) override;
-    virtual css::uno::Sequence< css::uno::Any > SAL_CALL getPropertyDefaults( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL getPropertyDefaults( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 
     // XTextRangeCompare
     virtual ::sal_Int16 SAL_CALL compareRegionStarts( const css::uno::Reference< css::text::XTextRange >& xR1, const css::uno::Reference< css::text::XTextRange >& xR2 ) override final;
@@ -419,8 +419,8 @@ public:
     virtual ~SvxUnoTextRange() noexcept override;
 
     // css::uno::XInterface
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override;
     virtual void SAL_CALL release() noexcept override;
 
@@ -457,7 +457,7 @@ public:
 
     // css::uno::XInterface
     /// @throws css::uno::RuntimeException
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType );
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType );
 
     // css::text::XSimpleText
     virtual css::uno::Reference< css::text::XTextCursor > SAL_CALL createTextCursor(  ) override final;
@@ -523,8 +523,8 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override final;
 
     // css::uno::XInterface
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override final;
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override final;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override final;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override final;
     virtual void SAL_CALL acquire() noexcept override final;
     virtual void SAL_CALL release() noexcept override final;
 
@@ -561,8 +561,8 @@ public:
     virtual ~SvxUnoTextContent() noexcept override;
 
     // css::uno::XInterface
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override;
     virtual void SAL_CALL release() noexcept override;
 
@@ -586,12 +586,12 @@ public:
     virtual bool SAL_CALL hasElements() override;
 
     // css::beans::XPropertySet
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
 
     // XMultiPropertySet
-    virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues ) override;
-    virtual css::uno::Sequence< css::uno::Any > SAL_CALL getPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< cpo::uno::Any >& aValues ) override;
+    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL getPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 
     // css::beans::XPropertyState
     virtual css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) override;
@@ -622,7 +622,7 @@ public:
 
     // css::container::XEnumeration
     virtual bool SAL_CALL hasMoreElements(  ) override;
-    virtual css::uno::Any SAL_CALL nextElement(  ) override;
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override;
 };
 
 
@@ -640,7 +640,7 @@ public:
 
     // css::container::XEnumeration
     virtual bool SAL_CALL hasMoreElements(  ) override;
-    virtual css::uno::Any SAL_CALL nextElement(  ) override;
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override;
 };
 
 
@@ -658,8 +658,8 @@ public:
     virtual ~SvxUnoTextCursor() noexcept override;
 
     // css::uno::XInterface
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override final;
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override final;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override final;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override final;
     virtual void SAL_CALL acquire() noexcept override final;
     virtual void SAL_CALL release() noexcept override final;
 

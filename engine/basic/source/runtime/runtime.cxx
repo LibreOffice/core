@@ -26,7 +26,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/script/XDefaultMethod.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -69,6 +69,7 @@
 using com::sun::star::uno::Reference;
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::script;

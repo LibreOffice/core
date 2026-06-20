@@ -27,7 +27,7 @@ CharmapPopup::CharmapPopup(const css::uno::Reference<css::uno::XComponentContext
 
 CharmapPopup::~CharmapPopup() {}
 
-void CharmapPopup::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
+void CharmapPopup::initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     PopupWindowController::initialize(rArguments);
 
@@ -65,7 +65,7 @@ css::uno::Sequence<OUString> CharmapPopup::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_sfx2_InsertSymbolToolBoxControl_get_implementation(
-    css::uno::XComponentContext* rContext, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* rContext, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new CharmapPopup(rContext));
 }

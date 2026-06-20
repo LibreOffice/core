@@ -41,6 +41,7 @@
 #include <edtwin.hxx>
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::comphelper;
@@ -284,7 +285,7 @@ void SwXPrintSettings::_preSetValues ()
 
 namespace
 {
-    bool tryBoolAccess(std::u16string_view rName, const uno::Any &rValue)
+    bool tryBoolAccess(std::u16string_view rName, const cpo::uno::Any &rValue)
     {
         const std::optional<const bool> xPrSet = o3tl::tryAccess<bool>(rValue);
         if (!xPrSet.has_value())
@@ -293,7 +294,7 @@ namespace
     }
 }
 
-void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const uno::Any &rValue )
+void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const cpo::uno::Any &rValue )
 {
     switch( rInfo.mnHandle )
     {
@@ -419,7 +420,7 @@ void SwXPrintSettings::_preGetValues()
     }
 }
 
-void SwXPrintSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, uno::Any & rValue )
+void SwXPrintSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, cpo::uno::Any & rValue )
 {
     switch( rInfo.mnHandle )
     {
@@ -551,7 +552,7 @@ void SwXViewSettings::_preSetValues ()
         mpViewOption->SetStarOneSetting(true);
 }
 
-void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const uno::Any &rValue )
+void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const cpo::uno::Any &rValue )
 {
     // the API flag should not be set to the application's view settings
     switch( rInfo.mnHandle )
@@ -796,7 +797,7 @@ void SwXViewSettings::_preGetValues ()
         mpConstViewOption = SwModule::get()->GetViewOption(false);
 }
 
-void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, uno::Any & rValue )
+void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, cpo::uno::Any & rValue )
 {
     bool bBool = true;
     bool bBoolVal = false;
@@ -961,7 +962,7 @@ Sequence< OUString > SwXViewSettings::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 SwXModule_get_implementation(css::uno::XComponentContext*,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SwXModule());
 }

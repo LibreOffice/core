@@ -43,24 +43,24 @@ void registerComponentToBeDisposedForBasic( const css::uno::Reference< css::lang
 
 class StructRefInfo
 {
-    css::uno::Any& maAny;
+    cpo::uno::Any& maAny;
     css::uno::Type maType;
     sal_Int32 mnPos;
 public:
-    StructRefInfo( css::uno::Any& aAny, css::uno::Type const & rType, sal_Int32 nPos ) : maAny( aAny ), maType( rType ), mnPos( nPos ) {}
+    StructRefInfo( cpo::uno::Any& aAny, css::uno::Type const & rType, sal_Int32 nPos ) : maAny( aAny ), maType( rType ), mnPos( nPos ) {}
 
     sal_Int32 getPos() const { return mnPos; }
     const css::uno::Type& getType() const { return maType; }
     OUString getTypeName() const;
-    css::uno::Any& getRootAnyRef() { return maAny; };
+    cpo::uno::Any& getRootAnyRef() { return maAny; };
 
     css::uno::TypeClass getTypeClass() const;
 
     void* getInst();
     bool isEmpty() const { return (mnPos == -1); }
 
-    css::uno::Any getValue();
-    void setValue( const css::uno::Any& );
+    cpo::uno::Any getValue();
+    void setValue( const cpo::uno::Any& );
 };
 
 class SbUnoStructRefObject final : public SbxObject
@@ -95,7 +95,7 @@ public:
         { implCreateAll(); }
 
     // give out value
-    css::uno::Any getUnoAny();
+    cpo::uno::Any getUnoAny();
     void Notify( SfxBroadcaster&, const SfxHint& rHint ) override;
 };
 
@@ -108,7 +108,7 @@ class SbUnoObject: public SbxObject
     css::uno::Reference< css::beans::XExactName > mxExactNameInvocation;
     bool bNeedIntrospection;
     bool bNativeCOMObject;
-    css::uno::Any maTmpUnoObj; // Only to save obj for doIntrospection!
+    cpo::uno::Any maTmpUnoObj; // Only to save obj for doIntrospection!
     std::shared_ptr< SbUnoStructRefObject > maStructInfo;
     // help method to establish the dbg_-properties
     void implCreateDbgProperties();
@@ -119,7 +119,7 @@ class SbUnoObject: public SbxObject
 
 public:
     static bool getDefaultPropName( SbUnoObject const * pUnoObj, OUString& sDfltProp );
-    SbUnoObject( const OUString& aName_, const css::uno::Any& aUnoObj_ );
+    SbUnoObject( const OUString& aName_, const cpo::uno::Any& aUnoObj_ );
     virtual ~SbUnoObject() override;
 
     // #76470 do introspection on demand
@@ -133,7 +133,7 @@ public:
         { implCreateAll(); }
 
     // give out value
-    css::uno::Any getUnoAny();
+    cpo::uno::Any getUnoAny();
     const css::uno::Reference< css::beans::XIntrospectionAccess >& getIntrospectionAccess() const { return mxUnoAccess; }
     const css::uno::Reference< css::script::XInvocation >& getInvocation() const { return mxInvocation; }
 
@@ -295,15 +295,15 @@ SbUnoSingleton* findUnoSingleton( const OUString& rName );
 // #105565 Special Object to wrap a strongly typed Uno Any
 class SbUnoAnyObject final : public SbxObject
 {
-    css::uno::Any     mVal;
+    cpo::uno::Any     mVal;
 
 public:
-    SbUnoAnyObject( css::uno::Any  rVal )
+    SbUnoAnyObject( cpo::uno::Any  rVal )
         : SbxObject( OUString() )
         , mVal(std::move( rVal ))
     {}
 
-    const css::uno::Any& getValue() const
+    const cpo::uno::Any& getValue() const
         { return mVal; }
 
 };
@@ -369,7 +369,7 @@ class VBAConstantHelper
 {
 private:
     std::vector< OUString > aConstCache;
-    std::unordered_map< OUString, css::uno::Any > aConstHash;
+    std::unordered_map< OUString, cpo::uno::Any > aConstHash;
     bool isInited;
     VBAConstantHelper():isInited( false ) {}
     VBAConstantHelper(const VBAConstantHelper&) = delete;
@@ -382,7 +382,7 @@ public:
 
 SbxVariable* getDefaultProp( SbxVariable* pRef );
 
-css::uno::Reference< css::uno::XInterface > createComListener( const css::uno::Any& aControlAny,
+css::uno::Reference< css::uno::XInterface > createComListener( const cpo::uno::Any& aControlAny,
                                                                const OUString& aVBAType,
                                                                std::u16string_view aPrefix,
                                                                const SbxObjectRef& xScopeObj );

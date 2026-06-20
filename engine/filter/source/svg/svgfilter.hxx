@@ -268,7 +268,7 @@ private:
     const OUString &                implGetValidIDFromInterface( const css::uno::Reference< XInterface >& rxIf );
     static OUString                 implGetInterfaceName( const css::uno::Reference< XInterface >& rxIf );
     bool                            implLookForFirstVisiblePage();
-    static css::uno::Any            implSafeGetPagePropSet( const OUString & sPropertyName,
+    static cpo::uno::Any            implSafeGetPagePropSet( const OUString & sPropertyName,
                                                                 const css::uno::Reference< css::beans::XPropertySet > & rxPropSet,
                                                                 const css::uno::Reference< css::beans::XPropertySetInfo > & rxPropSetInfo );
     DECL_LINK( CalcFieldHdl, EditFieldInfo*, void );

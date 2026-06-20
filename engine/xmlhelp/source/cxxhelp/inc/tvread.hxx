@@ -115,7 +115,7 @@ namespace treeview {
         // Abstract functions
         // XNameAccess
 
-        virtual css::uno::Any SAL_CALL
+        virtual cpo::uno::Any SAL_CALL
         getByName( const OUString& aName ) override = 0;
 
         virtual css::uno::Sequence< OUString > SAL_CALL
@@ -126,7 +126,7 @@ namespace treeview {
 
         // XHierarchicalNameAccess
 
-        virtual css::uno::Any SAL_CALL
+        virtual cpo::uno::Any SAL_CALL
         getByHierarchicalName( const OUString& aName ) override = 0;
 
         virtual bool SAL_CALL
@@ -146,7 +146,7 @@ namespace treeview {
 
         // XNameAccess
 
-        virtual css::uno::Any SAL_CALL
+        virtual cpo::uno::Any SAL_CALL
         getByName( const OUString& aName ) override;
 
         virtual css::uno::Sequence< OUString > SAL_CALL
@@ -157,7 +157,7 @@ namespace treeview {
 
         // XHierarchicalNameAccess
 
-        virtual css::uno::Any SAL_CALL
+        virtual cpo::uno::Any SAL_CALL
         getByHierarchicalName( const OUString& aName ) override;
 
         virtual bool SAL_CALL
@@ -182,7 +182,7 @@ namespace treeview {
 
         virtual ~TVChildTarget() override;
 
-        virtual css::uno::Any SAL_CALL
+        virtual cpo::uno::Any SAL_CALL
         getByName( const OUString& aName ) override;
 
         virtual css::uno::Sequence< OUString > SAL_CALL
@@ -193,7 +193,7 @@ namespace treeview {
 
         // XHierarchicalNameAccess
 
-        virtual css::uno::Any SAL_CALL
+        virtual cpo::uno::Any SAL_CALL
         getByHierarchicalName( const OUString& aName ) override;
 
         virtual bool SAL_CALL

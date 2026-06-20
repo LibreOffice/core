@@ -24,7 +24,7 @@
 #include <comphelper/comphelperdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 
-namespace com::sun::star::uno { class Any; }
+namespace cpo::uno { class Any; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::uno { class XInterface; }
@@ -115,7 +115,7 @@ public:
      *          E.g. css::container::NoSuchElementException if the specified
      *          key does not exists.
      */
-    static css::uno::Any readRelativeKey(const css::uno::Reference< css::uno::XInterface >& xCFG    ,
+    static cpo::uno::Any readRelativeKey(const css::uno::Reference< css::uno::XInterface >& xCFG    ,
                                          const OUString&                            sRelPath,
                                          const OUString&                            sKey    );
 
@@ -148,7 +148,7 @@ public:
     static void writeRelativeKey(const css::uno::Reference< css::uno::XInterface >& xCFG    ,
                                  const OUString&                            sRelPath,
                                  const OUString&                            sKey    ,
-                                 const css::uno::Any&                              aValue  );
+                                 const cpo::uno::Any&                              aValue  );
 
 
     /** it checks if the specified set node exists ... or create an empty one
@@ -208,7 +208,7 @@ public:
      * So it's not very useful to use this method for reading multiple keys at the same time.
      * (Excepting these keys exists inside different configuration packages ...))
      */
-    static css::uno::Any readDirectKey(const css::uno::Reference< css::uno::XComponentContext >&    rxContext,
+    static cpo::uno::Any readDirectKey(const css::uno::Reference< css::uno::XComponentContext >&    rxContext,
                                        const OUString&                                       sPackage,
                                        const OUString&                                       sRelPath,
                                        const OUString&                                       sKey    ,
@@ -228,7 +228,7 @@ public:
                                const OUString&                                       sPackage,
                                const OUString&                                       sRelPath,
                                const OUString&                                       sKey    ,
-                               const css::uno::Any&                                  aValue  ,
+                               const cpo::uno::Any&                                  aValue  ,
                                      EConfigurationModes                             eMode   );
 };
 

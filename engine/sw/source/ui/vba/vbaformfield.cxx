@@ -44,33 +44,33 @@ SwVbaFormField::SwVbaFormField(const uno::Reference<ooo::vba::XHelperInterface>&
 
 SwVbaFormField::~SwVbaFormField() {}
 
-uno::Any SwVbaFormField::CheckBox()
+cpo::uno::Any SwVbaFormField::CheckBox()
 {
-    return uno::Any(uno::Reference<word::XCheckBox>(
+    return cpo::uno::Any(uno::Reference<word::XCheckBox>(
         new SwVbaFormFieldCheckBox(mxParent, mxContext, m_rFormField)));
 }
 
-uno::Any SwVbaFormField::DropDown()
+cpo::uno::Any SwVbaFormField::DropDown()
 {
-    return uno::Any(uno::Reference<word::XDropDown>(
+    return cpo::uno::Any(uno::Reference<word::XDropDown>(
         new SwVbaFormFieldDropDown(mxParent, mxContext, m_rFormField)));
 }
 
-uno::Any SwVbaFormField::TextInput()
+cpo::uno::Any SwVbaFormField::TextInput()
 {
-    return uno::Any(uno::Reference<word::XTextInput>(
+    return cpo::uno::Any(uno::Reference<word::XTextInput>(
         new SwVbaFormFieldTextInput(mxParent, mxContext, m_rFormField)));
 }
 
-uno::Any SwVbaFormField::Previous()
+cpo::uno::Any SwVbaFormField::Previous()
 {
     SwDoc* pDoc = m_xTextDocument->GetDocShell()->GetDoc();
     if (!pDoc)
-        return uno::Any();
+        return cpo::uno::Any();
 
     const IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
     if (!pMarkAccess)
-        return uno::Any();
+        return cpo::uno::Any();
 
     sw::mark::Fieldmark* pFieldMark = pMarkAccess->getFieldmarkBefore(m_rFormField.GetMarkPos(),
                                                                       /*bLoop=*/false);
@@ -84,21 +84,21 @@ uno::Any SwVbaFormField::Previous()
     }
 
     if (!pFieldMark)
-        return uno::Any();
+        return cpo::uno::Any();
 
-    return uno::Any(uno::Reference<word::XFormField>(
+    return cpo::uno::Any(uno::Reference<word::XFormField>(
         new SwVbaFormField(mxParent, mxContext, m_xTextDocument, *pFieldMark)));
 }
 
-uno::Any SwVbaFormField::Next()
+cpo::uno::Any SwVbaFormField::Next()
 {
     SwDoc* pDoc = m_xTextDocument->GetDocShell()->GetDoc();
     if (!pDoc)
-        return uno::Any();
+        return cpo::uno::Any();
 
     const IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
     if (!pMarkAccess)
-        return uno::Any();
+        return cpo::uno::Any();
 
     sw::mark::Fieldmark* pFieldMark = pMarkAccess->getFieldmarkAfter(m_rFormField.GetMarkPos(),
                                                                      /*bLoop=*/false);
@@ -112,9 +112,9 @@ uno::Any SwVbaFormField::Next()
     }
 
     if (!pFieldMark)
-        return uno::Any();
+        return cpo::uno::Any();
 
-    return uno::Any(uno::Reference<word::XFormField>(
+    return cpo::uno::Any(uno::Reference<word::XFormField>(
         new SwVbaFormField(mxParent, mxContext, m_xTextDocument, *pFieldMark)));
 }
 

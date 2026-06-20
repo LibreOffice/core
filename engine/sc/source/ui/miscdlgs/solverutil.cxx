@@ -58,7 +58,7 @@ void ScSolverUtil::GetImplementations( uno::Sequence<OUString>& rImplNames,
     sal_Int32 nCount = 0;
     while ( xEnum->hasMoreElements() )
     {
-        uno::Any aAny = xEnum->nextElement();
+        cpo::uno::Any aAny = xEnum->nextElement();
         uno::Reference<lang::XServiceInfo> xInfo;
         aAny >>= xInfo;
         if ( xInfo.is() )
@@ -112,7 +112,7 @@ uno::Reference<sheet::XSolver> ScSolverUtil::GetSolver( std::u16string_view rImp
         {
             while ( xEnum->hasMoreElements() && !xSolver.is() )
             {
-                uno::Any aAny = xEnum->nextElement();
+                cpo::uno::Any aAny = xEnum->nextElement();
                 uno::Reference<lang::XServiceInfo> xInfo;
                 aAny >>= xInfo;
                 if ( xInfo.is() )
@@ -159,7 +159,7 @@ uno::Sequence<beans::PropertyValue> ScSolverUtil::GetDefaults( std::u16string_vi
     sal_Int32 nValid = 0;
     for (const beans::Property& rProp : aPropSeq)
     {
-        uno::Any aValue = xPropSet->getPropertyValue( rProp.Name );
+        cpo::uno::Any aValue = xPropSet->getPropertyValue( rProp.Name );
         uno::TypeClass eClass = aValue.getValueTypeClass();
         // only use properties of supported types
         if (eClass == uno::TypeClass_BOOLEAN || eClass == uno::TypeClass_LONG || eClass == uno::TypeClass_SHORT

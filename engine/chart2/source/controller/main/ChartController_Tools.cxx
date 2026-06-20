@@ -168,7 +168,7 @@ bool lcl_arePropertiesSame(const std::vector<Reference<beans::XPropertySet>>& xP
     if (xProperties.size() < 1)
         return false;
 
-    uno::Any aValue = xProperties[0]->getPropertyValue(aPropName);
+    cpo::uno::Any aValue = xProperties[0]->getPropertyValue(aPropName);
     for (std::size_t i = 1; i < xProperties.size(); i++)
     {
         if (aValue != xProperties[i]->getPropertyValue(aPropName))
@@ -179,7 +179,7 @@ bool lcl_arePropertiesSame(const std::vector<Reference<beans::XPropertySet>>& xP
 
 // Cf. ChartColorWrapper::operator()
 std::pair<css::uno::Reference<css::beans::XPropertySet>, ObjectType>
-getSelectedGraphObject(const css::uno::Any& rSelection, const rtl::Reference<ChartModel>& pModel)
+getSelectedGraphObject(const cpo::uno::Any& rSelection, const rtl::Reference<ChartModel>& pModel)
 {
     if (OUString sCID; rSelection >>= sCID)
     {
@@ -309,7 +309,7 @@ void ChartController::executeDispatch_FontBold(
     nFontWeight = (nFontWeight == awt::FontWeight::NORMAL) ? awt::FontWeight::BOLD
                                                            : awt::FontWeight::NORMAL;
     for (const auto& xProperty : xProperties)
-        xProperty->setPropertyValue(aPropName, uno::Any(nFontWeight));
+        xProperty->setPropertyValue(aPropName, cpo::uno::Any(nFontWeight));
 }
 
 void ChartController::executeDispatch_FontName(
@@ -322,7 +322,7 @@ void ChartController::executeDispatch_FontName(
     rArgs[0].Value >>= aFont;
 
     for (const auto& xProperty : xProperties)
-        xProperty->setPropertyValue(u"CharFontName"_ustr, css::uno::Any(aFont.Name));
+        xProperty->setPropertyValue(u"CharFontName"_ustr, cpo::uno::Any(aFont.Name));
 }
 
 void ChartController::executeDispatch_FontHeight(
@@ -345,7 +345,7 @@ void ChartController::executeDispatch_FontItalic(
     nFontItalic = (nFontItalic == awt::FontSlant::FontSlant_NONE ? awt::FontSlant::FontSlant_ITALIC
                                                                  : awt::FontSlant::FontSlant_NONE);
     for (const auto& xProperty : xProperties)
-        xProperty->setPropertyValue(aPropName, css::uno::Any(nFontItalic));
+        xProperty->setPropertyValue(aPropName, cpo::uno::Any(nFontItalic));
 }
 
 void ChartController::executeDispatch_FontUnderline(
@@ -369,7 +369,7 @@ void ChartController::executeDispatch_FontUnderline(
     }
 
     for (const auto& xProperty : xProperties)
-        xProperty->setPropertyValue(aPropName, css::uno::Any(nFontUnderline));
+        xProperty->setPropertyValue(aPropName, cpo::uno::Any(nFontUnderline));
 }
 
 void ChartController::executeDispatch_FontStrikeout(
@@ -383,7 +383,7 @@ void ChartController::executeDispatch_FontStrikeout(
     }
     nFontStrikeout = (nFontStrikeout == 0 ? 1 : 0);
     for (const auto& xProperty : xProperties)
-        xProperty->setPropertyValue(aPropName, css::uno::Any(nFontStrikeout));
+        xProperty->setPropertyValue(aPropName, cpo::uno::Any(nFontStrikeout));
 }
 
 void ChartController::executeDispatch_FontShadowed(
@@ -396,7 +396,7 @@ void ChartController::executeDispatch_FontShadowed(
         xProperties[0]->getPropertyValue(aPropName) >>= bFontShadowed;
     }
     for (const auto& xProperty : xProperties)
-        xProperty->setPropertyValue(u"CharShadowed"_ustr, css::uno::Any(!bFontShadowed));
+        xProperty->setPropertyValue(u"CharShadowed"_ustr, cpo::uno::Any(!bFontShadowed));
 }
 
 void ChartController::executeDispatch_FontColor(
@@ -420,7 +420,7 @@ void ChartController::executeDispatch_FontGrow(
             nFontHeight += 1;
             if (nFontHeight > 999)
                 nFontHeight = 999;
-            xProperty->setPropertyValue(u"CharHeight"_ustr, css::uno::Any(nFontHeight));
+            xProperty->setPropertyValue(u"CharHeight"_ustr, cpo::uno::Any(nFontHeight));
         }
     }
 }
@@ -442,7 +442,7 @@ void ChartController::executeDispatch_FontShrink(
                 if (nFontHeight < 2)
                     nFontHeight = 2;
             }
-            xProperty->setPropertyValue(u"CharHeight"_ustr, css::uno::Any(nFontHeight));
+            xProperty->setPropertyValue(u"CharHeight"_ustr, cpo::uno::Any(nFontHeight));
         }
     }
 }
@@ -453,20 +453,20 @@ void ChartController::executeDispatch_FontReset(
     for (const auto& xProperty: xProperties)
     {
         xProperty->setPropertyValue(u"CharFontName"_ustr,
-                                         css::uno::Any(u"Liberation Sans"_ustr));
-        xProperty->setPropertyValue(u"CharHeight"_ustr, css::uno::Any(float(13)));
-        xProperty->setPropertyValue(u"CharWeight"_ustr, uno::Any(float(100)));
+                                         cpo::uno::Any(u"Liberation Sans"_ustr));
+        xProperty->setPropertyValue(u"CharHeight"_ustr, cpo::uno::Any(float(13)));
+        xProperty->setPropertyValue(u"CharWeight"_ustr, cpo::uno::Any(float(100)));
         xProperty->setPropertyValue(u"CharPosture"_ustr,
-                                         css::uno::Any(awt::FontSlant::FontSlant_NONE));
-        xProperty->setPropertyValue(u"CharUnderline"_ustr, css::uno::Any(sal_Int16(0)));
-        xProperty->setPropertyValue(u"CharStrikeout"_ustr, css::uno::Any(sal_Int16(0)));
-        xProperty->setPropertyValue(u"CharShadowed"_ustr, css::uno::Any(false));
-        xProperty->setPropertyValue(u"CharColor"_ustr, css::uno::Any(Color(0)));
+                                         cpo::uno::Any(awt::FontSlant::FontSlant_NONE));
+        xProperty->setPropertyValue(u"CharUnderline"_ustr, cpo::uno::Any(sal_Int16(0)));
+        xProperty->setPropertyValue(u"CharStrikeout"_ustr, cpo::uno::Any(sal_Int16(0)));
+        xProperty->setPropertyValue(u"CharShadowed"_ustr, cpo::uno::Any(false));
+        xProperty->setPropertyValue(u"CharColor"_ustr, cpo::uno::Any(Color(0)));
 
-        xProperty->setPropertyValue(u"CharKerning"_ustr, css::uno::Any(sal_Int16(0)));
-        xProperty->setPropertyValue(u"CharEscapement"_ustr, css::uno::Any(sal_Int16(0)));
+        xProperty->setPropertyValue(u"CharKerning"_ustr, cpo::uno::Any(sal_Int16(0)));
+        xProperty->setPropertyValue(u"CharEscapement"_ustr, cpo::uno::Any(sal_Int16(0)));
         xProperty->setPropertyValue(u"CharEscapementHeight"_ustr,
-                                         css::uno::Any(sal_Int8(100)));
+                                         cpo::uno::Any(sal_Int8(100)));
     }
 }
 
@@ -477,7 +477,7 @@ void ChartController::executeDispatch_FontSpacing(
     sal_Int16 nKerning = 0;
     rArgs[0].Value >>= nKerning;
     for (const auto& xProperty: xProperties)
-        xProperty->setPropertyValue(u"CharKerning"_ustr, css::uno::Any(nKerning));
+        xProperty->setPropertyValue(u"CharKerning"_ustr, cpo::uno::Any(nKerning));
 }
 
 void ChartController::executeDispatch_FontSuperScript(
@@ -489,16 +489,16 @@ void ChartController::executeDispatch_FontSuperScript(
     {
         if (nCharEscapement > 0)
         {
-            xProperty->setPropertyValue(u"CharEscapement"_ustr, css::uno::Any(sal_Int16(0)));
+            xProperty->setPropertyValue(u"CharEscapement"_ustr, cpo::uno::Any(sal_Int16(0)));
             xProperty->setPropertyValue(u"CharEscapementHeight"_ustr,
-                                             css::uno::Any(sal_Int8(100)));
+                                             cpo::uno::Any(sal_Int8(100)));
         }
         else
         {
             xProperty->setPropertyValue(u"CharEscapement"_ustr,
-                                             css::uno::Any(sal_Int16(14000)));
+                                             cpo::uno::Any(sal_Int16(14000)));
             xProperty->setPropertyValue(u"CharEscapementHeight"_ustr,
-                                             css::uno::Any(sal_Int8(58)));
+                                             cpo::uno::Any(sal_Int8(58)));
         }
     }
 }
@@ -512,16 +512,16 @@ void ChartController::executeDispatch_FontSubScript(
     {
         if (nCharEscapement < 0)
         {
-            xProperty->setPropertyValue(u"CharEscapement"_ustr, css::uno::Any(sal_Int16(0)));
+            xProperty->setPropertyValue(u"CharEscapement"_ustr, cpo::uno::Any(sal_Int16(0)));
             xProperty->setPropertyValue(u"CharEscapementHeight"_ustr,
-                                             css::uno::Any(sal_Int8(100)));
+                                             cpo::uno::Any(sal_Int8(100)));
         }
         else
         {
             xProperty->setPropertyValue(u"CharEscapement"_ustr,
-                                             css::uno::Any(sal_Int16(-14000)));
+                                             cpo::uno::Any(sal_Int16(-14000)));
             xProperty->setPropertyValue(u"CharEscapementHeight"_ustr,
-                                             css::uno::Any(sal_Int8(58)));
+                                             cpo::uno::Any(sal_Int8(58)));
         }
     }
 }
@@ -633,7 +633,7 @@ void ChartController::impl_PasteGraphic(
         m_aSelection.setSelection( xGraphicShape );
         m_aSelection.applySelection( m_pDrawViewWrapper.get() );
     }
-    xGraphicShape->SvxShape::setPropertyValue( u"Graphic"_ustr, uno::Any( xGraphic ));
+    xGraphicShape->SvxShape::setPropertyValue( u"Graphic"_ustr, cpo::uno::Any( xGraphic ));
 
     awt::Size aGraphicSize( 1000, 1000 );
     bool bGotGraphicSize = false;
@@ -743,14 +743,14 @@ void ChartController::impl_PasteStringAsTextShape( const OUString& rString, cons
         xTextShape->setString( rString );
 
         float fCharHeight = 10.0;
-        xTextShape->SvxShape::setPropertyValue( u"TextAutoGrowHeight"_ustr, uno::Any( true ) );
-        xTextShape->SvxShape::setPropertyValue( u"TextAutoGrowWidth"_ustr, uno::Any( true ) );
-        xTextShape->SvxShape::setPropertyValue( u"CharHeight"_ustr, uno::Any( fCharHeight ) );
-        xTextShape->SvxShape::setPropertyValue( u"CharHeightAsian"_ustr, uno::Any( fCharHeight ) );
-        xTextShape->SvxShape::setPropertyValue( u"CharHeightComplex"_ustr, uno::Any( fCharHeight ) );
-        xTextShape->SvxShape::setPropertyValue( u"TextVerticalAdjust"_ustr, uno::Any( drawing::TextVerticalAdjust_CENTER ) );
-        xTextShape->SvxShape::setPropertyValue( u"TextHorizontalAdjust"_ustr, uno::Any( drawing::TextHorizontalAdjust_CENTER ) );
-        xTextShape->SvxShape::setPropertyValue( u"CharFontName"_ustr, uno::Any( u"Albany"_ustr ) );
+        xTextShape->SvxShape::setPropertyValue( u"TextAutoGrowHeight"_ustr, cpo::uno::Any( true ) );
+        xTextShape->SvxShape::setPropertyValue( u"TextAutoGrowWidth"_ustr, cpo::uno::Any( true ) );
+        xTextShape->SvxShape::setPropertyValue( u"CharHeight"_ustr, cpo::uno::Any( fCharHeight ) );
+        xTextShape->SvxShape::setPropertyValue( u"CharHeightAsian"_ustr, cpo::uno::Any( fCharHeight ) );
+        xTextShape->SvxShape::setPropertyValue( u"CharHeightComplex"_ustr, cpo::uno::Any( fCharHeight ) );
+        xTextShape->SvxShape::setPropertyValue( u"TextVerticalAdjust"_ustr, cpo::uno::Any( drawing::TextVerticalAdjust_CENTER ) );
+        xTextShape->SvxShape::setPropertyValue( u"TextHorizontalAdjust"_ustr, cpo::uno::Any( drawing::TextHorizontalAdjust_CENTER ) );
+        xTextShape->SvxShape::setPropertyValue( u"CharFontName"_ustr, cpo::uno::Any( u"Albany"_ustr ) );
 
         xTextShape->setPosition( rPosition );
 
@@ -812,7 +812,7 @@ void ChartController::executeDispatch_Cut()
     executeDispatch_Delete();
 }
 
-bool ChartController::isObjectDeleteable( const uno::Any& rSelection )
+bool ChartController::isObjectDeleteable( const cpo::uno::Any& rSelection )
 {
     ObjectIdentifier aSelOID( rSelection );
     if ( aSelOID.isAutoGeneratedObject() )
@@ -881,7 +881,7 @@ bool ChartController::executeDispatch_Delete()
     OUString aCID( m_aSelection.getSelectedCID() );
     if( !aCID.isEmpty() )
     {
-        if( !isObjectDeleteable( uno::Any( aCID ) ) )
+        if( !isObjectDeleteable( cpo::uno::Any( aCID ) ) )
             return false;
 
         //remove chart object
@@ -916,7 +916,7 @@ bool ChartController::executeDispatch_Delete()
                             ActionDescriptionProvider::createDescription(
                                 ActionDescriptionProvider::ActionType::Delete, SchResId( STR_OBJECT_LEGEND )),
                             m_xUndoManager );
-                        xLegend->setPropertyValue( u"Show"_ustr, uno::Any( false ));
+                        xLegend->setPropertyValue( u"Show"_ustr, cpo::uno::Any( false ));
                         bReturn = true;
                         aUndoGuard.commit();
                     }
@@ -989,10 +989,10 @@ bool ChartController::executeDispatch_Delete()
                         m_xUndoManager );
                     {
                         ControllerLockGuardUNO aCtlLockGuard( xModel );
-                        xEqProp->setPropertyValue( u"ShowEquation"_ustr, uno::Any( false ));
-                        xEqProp->setPropertyValue( u"XName"_ustr, uno::Any( u"x"_ustr ));
-                        xEqProp->setPropertyValue( u"YName"_ustr, uno::Any( u"f(x)"_ustr ));
-                        xEqProp->setPropertyValue( u"ShowCorrelationCoefficient"_ustr, uno::Any( false ));
+                        xEqProp->setPropertyValue( u"ShowEquation"_ustr, cpo::uno::Any( false ));
+                        xEqProp->setPropertyValue( u"XName"_ustr, cpo::uno::Any( u"x"_ustr ));
+                        xEqProp->setPropertyValue( u"YName"_ustr, cpo::uno::Any( u"f(x)"_ustr ));
+                        xEqProp->setPropertyValue( u"ShowCorrelationCoefficient"_ustr, cpo::uno::Any( false ));
                     }
                     bReturn = true;
                     aUndoGuard.commit();
@@ -1026,7 +1026,7 @@ bool ChartController::executeDispatch_Delete()
                         ControllerLockGuardUNO aCtlLockGuard( xModel );
                         xErrorBarProp->setPropertyValue(
                             u"ErrorBarStyle"_ustr,
-                            uno::Any( css::chart::ErrorBarStyle::NONE ));
+                            cpo::uno::Any( css::chart::ErrorBarStyle::NONE ));
                     }
                     bReturn = true;
                     aUndoGuard.commit();
@@ -1057,13 +1057,13 @@ bool ChartController::executeDispatch_Delete()
                     if( aObjectType == OBJECTTYPE_DATA_LABELS )
                     {
                         rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( aCID, getChartModel() );
-                        xSeries->setPropertyAlsoToAllAttributedDataPoints( CHART_UNONAME_LABEL, uno::Any(aLabel) );
-                        xSeries->setPropertyAlsoToAllAttributedDataPoints( CHART_UNONAME_CUSTOM_LABEL_FIELDS, uno::Any() );
+                        xSeries->setPropertyAlsoToAllAttributedDataPoints( CHART_UNONAME_LABEL, cpo::uno::Any(aLabel) );
+                        xSeries->setPropertyAlsoToAllAttributedDataPoints( CHART_UNONAME_CUSTOM_LABEL_FIELDS, cpo::uno::Any() );
                     }
                     else
                     {
-                        xObjectProperties->setPropertyValue(CHART_UNONAME_LABEL, uno::Any(aLabel));
-                        xObjectProperties->setPropertyValue(CHART_UNONAME_CUSTOM_LABEL_FIELDS, uno::Any());
+                        xObjectProperties->setPropertyValue(CHART_UNONAME_LABEL, cpo::uno::Any(aLabel));
+                        xObjectProperties->setPropertyValue(CHART_UNONAME_CUSTOM_LABEL_FIELDS, cpo::uno::Any());
                     }
                     bReturn = true;
                     aUndoGuard.commit();
@@ -1125,7 +1125,7 @@ void ChartController::executeDispatch_ToggleLegend()
             bool bShow = false;
             if( xLegendProp->getPropertyValue( u"Show"_ustr) >>= bShow )
             {
-                xLegendProp->setPropertyValue( u"Show"_ustr, uno::Any( ! bShow ));
+                xLegendProp->setPropertyValue( u"Show"_ustr, cpo::uno::Any( ! bShow ));
                 bChanged = true;
             }
         }
@@ -1211,7 +1211,7 @@ void ChartController::executeDispatch_ToggleGridVertical()
     aUndoGuard.commit();
 }
 
-void ChartController::executeDispatch_FillColor(const css::uno::Any& rColor)
+void ChartController::executeDispatch_FillColor(const cpo::uno::Any& rColor)
 {
     try
     {
@@ -1257,11 +1257,11 @@ void ChartController::executeDispatch_FillGradient(std::u16string_view sJSONGrad
                     + OUString::number(static_cast<sal_Int32>(Color(aBGradient.GetColorStops().back().getStopColor())))
                     + OUString::number(static_cast<sal_Int32>(aBGradient.GetAngle().get()));
 
-                OUString aNewName = PropertyHelper::addGradientUniqueNameToTable(css::uno::Any(aGradient),
+                OUString aNewName = PropertyHelper::addGradientUniqueNameToTable(cpo::uno::Any(aGradient),
                                         xChartModel,
                                         aPrefferedName);
 
-                xPropSet->setPropertyValue(u"FillGradientName"_ustr, css::uno::Any(aNewName));
+                xPropSet->setPropertyValue(u"FillGradientName"_ustr, cpo::uno::Any(aNewName));
             }
         }
     }
@@ -1271,7 +1271,7 @@ void ChartController::executeDispatch_FillGradient(std::u16string_view sJSONGrad
     }
 }
 
-void ChartController::executeDispatch_LineColor(const css::uno::Any& rColor)
+void ChartController::executeDispatch_LineColor(const cpo::uno::Any& rColor)
 {
     try
     {
@@ -1284,7 +1284,7 @@ void ChartController::executeDispatch_LineColor(const css::uno::Any& rColor)
     }
 }
 
-void ChartController::executeDispatch_LineWidth(const css::uno::Any& rWidth)
+void ChartController::executeDispatch_LineWidth(const cpo::uno::Any& rWidth)
 {
     try
     {
@@ -1339,7 +1339,7 @@ void ChartController::executeDispatch_KitPieSegmentDragging( int nOffset )
             Reference< beans::XPropertySet > xPointProperties(
                 ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ) );
             if( xPointProperties.is() )
-                xPointProperties->setPropertyValue( u"Offset"_ustr, uno::Any( nOffset / 100.0 ) );
+                xPointProperties->setPropertyValue( u"Offset"_ustr, cpo::uno::Any( nOffset / 100.0 ) );
         }
     }
     catch( const uno::Exception & )

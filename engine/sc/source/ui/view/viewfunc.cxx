@@ -1493,7 +1493,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
                 {
                     if ( pEntry->nWID == nWhich )
                     {
-                        css::uno::Any aVal;
+                        cpo::uno::Any aVal;
                         pItem->QueryValue( aVal, pEntry->nMemberId );
                         aProperties.realloc( nCount + 1 );
                         auto pProperties = aProperties.getArray();

@@ -72,6 +72,7 @@
 #include <memory>
 
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
@@ -632,7 +633,7 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
                         break;
                     default:
                         aCommandType <<= sal_Int32(CommandType::COMMAND);
-                        xForm->setPropertyValue(FM_PROP_ESCAPE_PROCESSING, css::uno::Any(2 == nCommandType));
+                        xForm->setPropertyValue(FM_PROP_ESCAPE_PROCESSING, cpo::uno::Any(2 == nCommandType));
                         break;
                 }
                 xForm->setPropertyValue(FM_PROP_COMMANDTYPE, aCommandType);

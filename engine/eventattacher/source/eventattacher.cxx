@@ -43,6 +43,7 @@
 #include <utility>
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::script;
@@ -494,7 +495,7 @@ Any SAL_CALL FilterAllListenerImpl::approveFiring( const AllEventObject& Event )
         }
         catch( const CannotConvertException& )
         {
-            css::uno::Any anyEx = cppu::getCaughtException();
+            cpo::uno::Any anyEx = cppu::getCaughtException();
             throw InvocationTargetException( OUString(), Reference< XInterface >(), anyEx );
         }
     }
@@ -830,7 +831,7 @@ Sequence< Reference<XEventListener> > EventAttacherImpl::attachMultipleEventList
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 eventattacher_EventAttacher(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new comp_EventAttacher::EventAttacherImpl(context));
 }

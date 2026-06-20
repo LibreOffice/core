@@ -276,7 +276,7 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
                 uno::UNO_QUERY_THROW );
 
             OUString aDocServiceName;
-            uno::Any aFilterAnyData = xFilterFactory->getByName( m_aFilterName );
+            cpo::uno::Any aFilterAnyData = xFilterFactory->getByName( m_aFilterName );
             uno::Sequence< beans::PropertyValue > aFilterData;
             if ( aFilterAnyData >>= aFilterData )
             {
@@ -288,8 +288,8 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
             if ( !aDocServiceName.isEmpty() )
             {
                 // create the model
-                uno::Sequence< uno::Any > aArguments{ uno::Any(
-                    beans::NamedValue( u"EmbeddedObject"_ustr, uno::Any( true ))) };
+                uno::Sequence< cpo::uno::Any > aArguments{ cpo::uno::Any(
+                    beans::NamedValue( u"EmbeddedObject"_ustr, cpo::uno::Any( true ))) };
 
                 uno::Reference< util::XCloseable > xDocument( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( aDocServiceName, aArguments, m_xContext ), uno::UNO_QUERY_THROW );
                 uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY_THROW );
@@ -382,7 +382,7 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
                 }
                 catch ( const uno::Exception& ex )
                 {
-                    css::uno::Any anyEx = cppu::getCaughtException();
+                    cpo::uno::Any anyEx = cppu::getCaughtException();
                     try {
                         close( true );
                     } catch( const uno::Exception& ) {}
@@ -400,7 +400,7 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
                 }
                 catch( const uno::Exception& ex )
                 {
-                    css::uno::Any anyEx = cppu::getCaughtException();
+                    cpo::uno::Any anyEx = cppu::getCaughtException();
                     try {
                         close( true );
                     } catch( const uno::Exception& ) {}
@@ -691,8 +691,8 @@ namespace
             uno::UNO_SET_THROW);
         uno::Reference < io::XStream > xStream(xNativeTempFile);
 
-        uno::Sequence< uno::Any > aArgs{ uno::Any(xObjectStream),
-                                         uno::Any(true) }; // do not create copy
+        uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xObjectStream),
+                                         cpo::uno::Any(true) }; // do not create copy
         uno::Reference< container::XNameContainer > xNameContainer(
             xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                 u"com.sun.star.embed.OLESimpleStorage"_ustr,

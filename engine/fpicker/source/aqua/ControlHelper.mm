@@ -39,12 +39,13 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::ui::dialogs::TemplateDescription;
 using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
 using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
+using namespace cpo::uno;
 
 namespace {
 
-uno::Any HandleGetListValue(const NSControl* pControl, const sal_Int16 nControlAction)
+Any HandleGetListValue(const NSControl* pControl, const sal_Int16 nControlAction)
 {
-    uno::Any aAny;
+    Any aAny;
 
     if ([pControl class] != [NSPopUpButton class]) {
         SAL_INFO("fpicker.aqua","not a popup button");
@@ -325,7 +326,7 @@ void ControlHelper::setLabel( sal_Int16 nControlId, NSString* aLabel )
     [pool release];
 }
 
-void ControlHelper::setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const uno::Any& rValue )
+void ControlHelper::setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const Any& rValue )
 {
     SolarMutexGuard aGuard;
 
@@ -353,10 +354,10 @@ void ControlHelper::setValue( sal_Int16 nControlId, sal_Int16 nControlAction, co
     }
 }
 
-uno::Any ControlHelper::getValue( sal_Int16 nControlId, sal_Int16 nControlAction ) const
+Any ControlHelper::getValue( sal_Int16 nControlId, sal_Int16 nControlAction ) const
 {
     SolarMutexGuard aGuard;
-    uno::Any aRetval;
+    Any aRetval;
 
     NSControl* pControl = getControl( nControlId );
 
@@ -639,7 +640,7 @@ int ControlHelper::getControlElementName(const Class aClazz, const int nControlI
     return nReturn;
 }
 
-void ControlHelper::HandleSetListValue(const NSControl* pControl, const sal_Int16 nControlAction, const uno::Any& rValue)
+void ControlHelper::HandleSetListValue(const NSControl* pControl, const sal_Int16 nControlAction, const Any& rValue)
 {
     if ([pControl class] != [NSPopUpButton class]) {
         SAL_INFO("fpicker.aqua","not a popup menu");

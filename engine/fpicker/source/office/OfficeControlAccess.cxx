@@ -41,6 +41,7 @@ namespace svt
     // helper -------------------------------------------------------------
 
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::ui::dialogs;
 
@@ -251,7 +252,7 @@ namespace svt
         return pControl;
     }
 
-    void OControlAccess::setControlProperty( std::u16string_view rControlName, const OUString& rControlProperty, const css::uno::Any& rValue )
+    void OControlAccess::setControlProperty( std::u16string_view rControlName, const OUString& rControlProperty, const cpo::uno::Any& rValue )
     {
         // look up the control
         sal_Int16 nControlId = -1;

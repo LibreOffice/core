@@ -37,11 +37,11 @@ public:
     // XFormField Methods
     OUString SAL_CALL getDefaultPropertyName() override;
 
-    css::uno::Any SAL_CALL CheckBox() override;
-    css::uno::Any SAL_CALL DropDown() override;
-    css::uno::Any SAL_CALL TextInput() override;
-    css::uno::Any SAL_CALL Previous() override;
-    css::uno::Any SAL_CALL Next() override;
+    cpo::uno::Any SAL_CALL CheckBox() override;
+    cpo::uno::Any SAL_CALL DropDown() override;
+    cpo::uno::Any SAL_CALL TextInput() override;
+    cpo::uno::Any SAL_CALL Previous() override;
+    cpo::uno::Any SAL_CALL Next() override;
     css::uno::Reference<ooo::vba::word::XRange> SAL_CALL Range() override;
 
     // Indicates which of the three form fields this is: oovbaapi/ooo/vba/word/WdFieldType.idl

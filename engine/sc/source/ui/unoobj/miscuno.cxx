@@ -29,7 +29,7 @@
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 
 SC_SIMPLE_SERVICE_INFO( ScNameToIndexAccess, u"ScNameToIndexAccess"_ustr, u"stardiv.unknown"_ustr )
 
@@ -96,7 +96,7 @@ sal_Int32 ScUnoHelpFunctions::GetEnumPropertyImpl( const uno::Reference<beans::X
     {
         try
         {
-            uno::Any aAny(xProp->getPropertyValue( rName ));
+            cpo::uno::Any aAny(xProp->getPropertyValue( rName ));
 
             if ( aAny.getValueTypeClass() == uno::TypeClass_ENUM )
             {
@@ -136,13 +136,13 @@ OUString ScUnoHelpFunctions::GetStringProperty(
     return aRet;
 }
 
-bool ScUnoHelpFunctions::GetBoolFromAny( const uno::Any& aAny )
+bool ScUnoHelpFunctions::GetBoolFromAny( const cpo::uno::Any& aAny )
 {
     auto b = o3tl::tryAccess<bool>(aAny);
     return b.has_value() && *b;
 }
 
-sal_Int16 ScUnoHelpFunctions::GetInt16FromAny( const uno::Any& aAny )
+sal_Int16 ScUnoHelpFunctions::GetInt16FromAny( const cpo::uno::Any& aAny )
 {
     sal_Int16 nRet = 0;
     if ( aAny >>= nRet )
@@ -150,7 +150,7 @@ sal_Int16 ScUnoHelpFunctions::GetInt16FromAny( const uno::Any& aAny )
     return 0;
 }
 
-sal_Int32 ScUnoHelpFunctions::GetInt32FromAny( const uno::Any& aAny )
+sal_Int32 ScUnoHelpFunctions::GetInt32FromAny( const cpo::uno::Any& aAny )
 {
     sal_Int32 nRet = 0;
     if ( aAny >>= nRet )
@@ -158,7 +158,7 @@ sal_Int32 ScUnoHelpFunctions::GetInt32FromAny( const uno::Any& aAny )
     return 0;
 }
 
-sal_Int32 ScUnoHelpFunctions::GetEnumFromAny( const uno::Any& aAny )
+sal_Int32 ScUnoHelpFunctions::GetEnumFromAny( const cpo::uno::Any& aAny )
 {
     sal_Int32 nRet = 0;
     if ( aAny.getValueTypeClass() == uno::TypeClass_ENUM )
@@ -207,10 +207,10 @@ bool SAL_CALL ScIndexEnumeration::hasMoreElements()
     return ( nPos < xIndex->getCount() );
 }
 
-uno::Any SAL_CALL ScIndexEnumeration::nextElement()
+cpo::uno::Any SAL_CALL ScIndexEnumeration::nextElement()
 {
     SolarMutexGuard aGuard;
-    uno::Any aReturn;
+    cpo::uno::Any aReturn;
     try
     {
         aReturn = xIndex->getByIndex(nPos++);
@@ -259,7 +259,7 @@ sal_Int32 SAL_CALL ScNameToIndexAccess::getCount(  )
     return aNames.getLength();
 }
 
-css::uno::Any SAL_CALL ScNameToIndexAccess::getByIndex( sal_Int32 nIndex )
+cpo::uno::Any SAL_CALL ScNameToIndexAccess::getByIndex( sal_Int32 nIndex )
 {
     if ( xNameAccess.is() && nIndex >= 0 && nIndex < aNames.getLength() )
         return xNameAccess->getByName( aNames.getConstArray()[nIndex] );

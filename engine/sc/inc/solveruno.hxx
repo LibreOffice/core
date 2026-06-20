@@ -65,16 +65,16 @@ public:
     // XSolverSettings attributes
     virtual sal_Int8 SAL_CALL getObjectiveType() override;
     virtual void SAL_CALL setObjectiveType(sal_Int8 aObjType) override;
-    virtual css::uno::Any SAL_CALL getObjectiveCell() override;
-    virtual void SAL_CALL setObjectiveCell(const css::uno::Any& aValue) override;
-    virtual css::uno::Any SAL_CALL getGoalValue() override;
-    virtual void SAL_CALL setGoalValue(const css::uno::Any& aValue) override;
+    virtual cpo::uno::Any SAL_CALL getObjectiveCell() override;
+    virtual void SAL_CALL setObjectiveCell(const cpo::uno::Any& aValue) override;
+    virtual cpo::uno::Any SAL_CALL getGoalValue() override;
+    virtual void SAL_CALL setGoalValue(const cpo::uno::Any& aValue) override;
     virtual OUString SAL_CALL getEngine() override;
     virtual void SAL_CALL setEngine(const OUString& sEngine) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getAvailableEngines() override;
-    virtual css::uno::Sequence<css::uno::Any> SAL_CALL getVariableCells() override;
+    virtual css::uno::Sequence<cpo::uno::Any> SAL_CALL getVariableCells() override;
     virtual void SAL_CALL
-    setVariableCells(const css::uno::Sequence<css::uno::Any>& aRanges) override;
+    setVariableCells(const css::uno::Sequence<cpo::uno::Any>& aRanges) override;
     virtual css::uno::Sequence<css::sheet::ModelConstraint> SAL_CALL getConstraints() override;
     virtual void SAL_CALL
     setConstraints(const css::uno::Sequence<css::sheet::ModelConstraint>& aConstraints) override;

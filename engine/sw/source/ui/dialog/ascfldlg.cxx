@@ -75,7 +75,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
         SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
         if (aDlgOpt.Exists())
         {
-            css::uno::Any aUserItem = aDlgOpt.GetUserItem(u"UserItem"_ustr);
+            cpo::uno::Any aUserItem = aDlgOpt.GetUserItem(u"UserItem"_ustr);
             aUserItem >>= m_sExtraData;
         }
 
@@ -266,7 +266,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
 SwAsciiFilterDlg::~SwAsciiFilterDlg()
 {
     SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
-    aDlgOpt.SetUserItem(u"UserItem"_ustr, uno::Any(m_sExtraData));
+    aDlgOpt.SetUserItem(u"UserItem"_ustr, cpo::uno::Any(m_sExtraData));
 }
 
 void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )

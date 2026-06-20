@@ -60,14 +60,14 @@ CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testFindReplace)
     xViewCursor->goLeft(/*nCount=*/6, /*bExpand=*/false);
     xViewCursor->goLeft(/*nCount=*/1, /*bExpand=*/true);
     uno::Reference<beans::XPropertySet> xViewCursorProps(xViewCursor, uno::UNO_QUERY);
-    xViewCursorProps->setPropertyValue(u"CharWeight"_ustr, uno::Any(awt::FontWeight::BOLD));
+    xViewCursorProps->setPropertyValue(u"CharWeight"_ustr, cpo::uno::Any(awt::FontWeight::BOLD));
     xViewCursor->gotoStart(/*bExpand=*/false);
 
     // When: doing search & replace 3 times.
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { "SearchItem.SearchString", uno::Any(u"foo"_ustr) },
-        { "SearchItem.ReplaceString", uno::Any(u"bar"_ustr) },
-        { "SearchItem.Command", uno::Any(static_cast<sal_Int16>(SvxSearchCmd::REPLACE)) },
+        { "SearchItem.SearchString", cpo::uno::Any(u"foo"_ustr) },
+        { "SearchItem.ReplaceString", cpo::uno::Any(u"bar"_ustr) },
+        { "SearchItem.Command", cpo::uno::Any(static_cast<sal_Int16>(SvxSearchCmd::REPLACE)) },
     }));
     // Find the first foo.
     dispatchCommand(mxComponent, u".uno:ExecuteSearch"_ustr, aArgs);
@@ -156,7 +156,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testContentControlReadOnly)
     uno::Reference<text::XTextContent> xContentControl(
         xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue(u"Checkbox"_ustr, uno::Any(true));
+    xContentControlProps->setPropertyValue(u"Checkbox"_ustr, cpo::uno::Any(true));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When entering the content control:

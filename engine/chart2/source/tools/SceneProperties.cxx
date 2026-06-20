@@ -305,7 +305,7 @@ void SceneProperties::AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_ON_7, false );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_ON_8, false );
 
-    uno::Any aDefaultLightDirection( drawing::Direction3D( 0.0, 0.0, 1.0 ) );
+    cpo::uno::Any aDefaultLightDirection( drawing::Direction3D( 0.0, 0.0, 1.0 ) );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_DIRECTION_1, aDefaultLightDirection );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_DIRECTION_2, ChartTypeHelper::getDefaultSimpleLightDirection(nullptr));
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_DIRECTION_3, aDefaultLightDirection );
@@ -315,7 +315,7 @@ void SceneProperties::AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_DIRECTION_7, aDefaultLightDirection );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_DIRECTION_8, aDefaultLightDirection );
 
-    uno::Any aDefaultLightColor;
+    cpo::uno::Any aDefaultLightColor;
     aDefaultLightColor <<= ChartTypeHelper::getDefaultDirectLightColor(false,nullptr);
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_COLOR_1, aDefaultLightColor );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_COLOR_2, aDefaultLightColor );

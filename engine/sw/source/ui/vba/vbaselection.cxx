@@ -130,7 +130,7 @@ SwVbaSelection::TypeText( const OUString& rText )
 }
 
 void SAL_CALL
-SwVbaSelection::HomeKey( const uno::Any& _unit, const uno::Any& _extend )
+SwVbaSelection::HomeKey( const cpo::uno::Any& _unit, const cpo::uno::Any& _extend )
 {
     sal_Int32 nUnit = word::WdUnits::wdLine;
     sal_Int32 nExtend = word::WdMovementType::wdMove;
@@ -165,7 +165,7 @@ SwVbaSelection::HomeKey( const uno::Any& _unit, const uno::Any& _extend )
 }
 
 void SAL_CALL
-SwVbaSelection::EndKey( const uno::Any& _unit, const uno::Any& _extend )
+SwVbaSelection::EndKey( const cpo::uno::Any& _unit, const cpo::uno::Any& _extend )
 {
     sal_Int32 nUnit = word::WdUnits::wdLine;
     sal_Int32 nExtend = word::WdMovementType::wdMove;
@@ -200,7 +200,7 @@ SwVbaSelection::EndKey( const uno::Any& _unit, const uno::Any& _extend )
 }
 
 void SAL_CALL
-SwVbaSelection::Delete( const uno::Any& _unit, const uno::Any& _count )
+SwVbaSelection::Delete( const cpo::uno::Any& _unit, const cpo::uno::Any& _count )
 {
     sal_Int32 nUnit = word::WdUnits::wdLine;
     sal_Int32 nCount = 0;
@@ -228,7 +228,7 @@ SwVbaSelection::Delete( const uno::Any& _unit, const uno::Any& _count )
 }
 
 void
-SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::Any& _extend, word::E_DIRECTION eDirection )
+SwVbaSelection::Move( const cpo::uno::Any& _unit, const cpo::uno::Any& _count, const cpo::uno::Any& _extend, word::E_DIRECTION eDirection )
 {
     sal_Int32 nUnit = word::WdUnits::wdCharacter;
     sal_Int32 nCount = 1;
@@ -405,7 +405,7 @@ void SwVbaSelection::NextCell(sal_Int32 nCount, word::E_DIRECTION eDirection)
 }
 
 void SAL_CALL
-SwVbaSelection::MoveRight(const uno::Any& _unit, const uno::Any& _count, const uno::Any& _extend)
+SwVbaSelection::MoveRight(const cpo::uno::Any& _unit, const cpo::uno::Any& _count, const cpo::uno::Any& _extend)
 {
     sal_Int32 nCount = 1;
 
@@ -417,7 +417,7 @@ SwVbaSelection::MoveRight(const uno::Any& _unit, const uno::Any& _count, const u
 
     if( nCount < 0 )
     {
-        MoveLeft( _unit, uno::Any( -nCount ), _extend );
+        MoveLeft( _unit, cpo::uno::Any( -nCount ), _extend );
         return;
     }
 
@@ -425,7 +425,7 @@ SwVbaSelection::MoveRight(const uno::Any& _unit, const uno::Any& _count, const u
 }
 
 void SAL_CALL
-SwVbaSelection::MoveLeft(const uno::Any& _unit, const uno::Any& _count, const uno::Any& _extend)
+SwVbaSelection::MoveLeft(const cpo::uno::Any& _unit, const cpo::uno::Any& _count, const cpo::uno::Any& _extend)
 {
     sal_Int32 nCount = 1;
     if( _count.hasValue() )
@@ -436,7 +436,7 @@ SwVbaSelection::MoveLeft(const uno::Any& _unit, const uno::Any& _count, const un
 
     if( nCount < 0 )
     {
-        MoveRight( _unit, uno::Any( -nCount ), _extend );
+        MoveRight( _unit, cpo::uno::Any( -nCount ), _extend );
         return;
     }
 
@@ -444,7 +444,7 @@ SwVbaSelection::MoveLeft(const uno::Any& _unit, const uno::Any& _count, const un
 }
 
 void SAL_CALL
-SwVbaSelection::MoveDown(const uno::Any& _unit, const uno::Any& _count, const uno::Any& _extend)
+SwVbaSelection::MoveDown(const cpo::uno::Any& _unit, const cpo::uno::Any& _count, const cpo::uno::Any& _extend)
 {
     sal_Int32 nCount = 1;
 
@@ -456,7 +456,7 @@ SwVbaSelection::MoveDown(const uno::Any& _unit, const uno::Any& _count, const un
 
     if( nCount < 0 )
     {
-        MoveUp( _unit, uno::Any( -nCount ), _extend );
+        MoveUp( _unit, cpo::uno::Any( -nCount ), _extend );
         return;
     }
 
@@ -464,7 +464,7 @@ SwVbaSelection::MoveDown(const uno::Any& _unit, const uno::Any& _count, const un
 }
 
 void SAL_CALL
-SwVbaSelection::MoveUp(const uno::Any& _unit, const uno::Any& _count, const uno::Any& _extend)
+SwVbaSelection::MoveUp(const cpo::uno::Any& _unit, const cpo::uno::Any& _count, const cpo::uno::Any& _extend)
 {
     sal_Int32 nCount = 1;
 
@@ -476,7 +476,7 @@ SwVbaSelection::MoveUp(const uno::Any& _unit, const uno::Any& _count, const uno:
 
     if( nCount < 0 )
     {
-        MoveDown( _unit, uno::Any( -nCount ), _extend );
+        MoveDown( _unit, cpo::uno::Any( -nCount ), _extend );
         return;
     }
 
@@ -541,14 +541,14 @@ SwVbaSelection::getFind()
     return SwVbaFind::GetOrCreateFind(this, mxContext, mxModel, xTextRange);
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwVbaSelection::getStyle()
 {
     return getRange()->getStyle();
 }
 
 void SAL_CALL
-SwVbaSelection::setStyle( const uno::Any& rStyle )
+SwVbaSelection::setStyle( const cpo::uno::Any& rStyle )
 {
     uno::Reference< beans::XPropertySet > xParaProps( mxTextViewCursor, uno::UNO_QUERY_THROW );
     return SwVbaStyle::setStyle( xParaProps, rStyle );
@@ -566,7 +566,7 @@ SwVbaSelection::TypeBackspace()
     dispatchRequests( static_cast<SfxBaseModel*>(mxModel.get()), u".uno:SwBackspace"_ustr );
 }
 
-uno::Reference< word::XRange > SAL_CALL SwVbaSelection::GoTo( const uno::Any& _what, const uno::Any& _which, const uno::Any& _count, const uno::Any& _name )
+uno::Reference< word::XRange > SAL_CALL SwVbaSelection::GoTo( const cpo::uno::Any& _what, const cpo::uno::Any& _which, const cpo::uno::Any& _count, const cpo::uno::Any& _name )
 {
     sal_Int32 nWhat = 0;
     if( !( _what >>= nWhat ) )
@@ -680,9 +680,9 @@ void SAL_CALL SwVbaSelection::setLanguageID( ::sal_Int32 _languageid )
     getRange()->setLanguageID( _languageid );
 }
 
-uno::Any SAL_CALL SwVbaSelection::Information( sal_Int32 _type )
+cpo::uno::Any SAL_CALL SwVbaSelection::Information( sal_Int32 _type )
 {
-    uno::Any result;
+    cpo::uno::Any result;
     switch( _type )
     {
         case word::WdInformation::wdActiveEndPageNumber:
@@ -779,13 +779,13 @@ uno::Any SAL_CALL SwVbaSelection::Information( sal_Int32 _type )
     return result;
 }
 
-void SAL_CALL SwVbaSelection::InsertBreak( const uno::Any& _breakType )
+void SAL_CALL SwVbaSelection::InsertBreak( const cpo::uno::Any& _breakType )
 {
     getRange()->InsertBreak( _breakType );
 }
 
-uno::Any SAL_CALL
-SwVbaSelection::Tables( const uno::Any& aIndex )
+cpo::uno::Any SAL_CALL
+SwVbaSelection::Tables( const cpo::uno::Any& aIndex )
 {
     // Hacky implementation due to missing api ( and lack of knowledge )
     // we can only support a selection that is a single table
@@ -795,7 +795,7 @@ SwVbaSelection::Tables( const uno::Any& aIndex )
     sal_Int32 nIndex = 0;
     aIndex >>= nIndex;
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
 
     if ( nIndex != 1 )
        throw uno::RuntimeException();
@@ -829,13 +829,13 @@ SwVbaSelection::Tables( const uno::Any& aIndex )
 
 }
 
-uno::Any SAL_CALL
-SwVbaSelection::Fields( const uno::Any& index )
+cpo::uno::Any SAL_CALL
+SwVbaSelection::Fields( const cpo::uno::Any& index )
 {
     uno::Reference< XCollection > xCol( new SwVbaFields( mxParent, mxContext, mxModel ) );
     if ( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-    return uno::Any( xCol );
+        return xCol->Item( index, cpo::uno::Any() );
+    return cpo::uno::Any( xCol );
 }
 
 uno::Reference< word::XHeaderFooter > SAL_CALL
@@ -857,7 +857,7 @@ SwVbaSelection::getHeaderFooter()
     return uno::Reference< word::XHeaderFooter >();
 }
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 SwVbaSelection::ShapeRange( )
 {
     uno::Reference< drawing::XShapes > xShapes( mxModel->getCurrentSelection(), uno::UNO_QUERY );
@@ -870,7 +870,7 @@ SwVbaSelection::ShapeRange( )
 
     rtl::Reference< SwFmDrawPage > xDrawPage = mxModel->getSwDrawPage();
     uno::Reference< container::XIndexAccess > xShapesAccess( xShapes, uno::UNO_QUERY_THROW );
-    return uno::Any( uno::Reference< msforms::XShapeRange >( new ScVbaShapeRange( this, mxContext, xShapesAccess, xDrawPage, static_cast<SfxBaseModel*>(mxModel.get()) ) ) );
+    return cpo::uno::Any( uno::Reference< msforms::XShapeRange >( new ScVbaShapeRange( this, mxContext, xShapesAccess, xDrawPage, static_cast<SfxBaseModel*>(mxModel.get()) ) ) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaSelection::getStart()
@@ -894,17 +894,17 @@ void SAL_CALL SwVbaSelection::setEnd( ::sal_Int32 _end )
 
 void SAL_CALL SwVbaSelection::SelectRow()
 {
-    uno::Reference< word::XRows > xRows( Rows( uno::Any() ), uno::UNO_QUERY_THROW );
+    uno::Reference< word::XRows > xRows( Rows( cpo::uno::Any() ), uno::UNO_QUERY_THROW );
     xRows->Select();
 }
 
 void SAL_CALL SwVbaSelection::SelectColumn()
 {
-    uno::Reference< word::XColumns > xColumns( Columns( uno::Any() ), uno::UNO_QUERY_THROW );
+    uno::Reference< word::XColumns > xColumns( Columns( cpo::uno::Any() ), uno::UNO_QUERY_THROW );
     xColumns->Select();
 }
 
-uno::Any SAL_CALL SwVbaSelection::Rows( const uno::Any& index )
+cpo::uno::Any SAL_CALL SwVbaSelection::Rows( const cpo::uno::Any& index )
 {
     OUString sTLName;
     OUString sBRName;
@@ -926,11 +926,11 @@ uno::Any SAL_CALL SwVbaSelection::Rows( const uno::Any& index )
 
     uno::Reference< XCollection > xCol( new SwVbaRows( this, mxContext, xTextTable, xTextTable->getRows(), nStartRow, nEndRow ) );
     if ( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-    return uno::Any( xCol );
+        return xCol->Item( index, cpo::uno::Any() );
+    return cpo::uno::Any( xCol );
 }
 
-uno::Any SAL_CALL SwVbaSelection::Columns( const uno::Any& index )
+cpo::uno::Any SAL_CALL SwVbaSelection::Columns( const cpo::uno::Any& index )
 {
     OUString sTLName;
     OUString sBRName;
@@ -952,8 +952,8 @@ uno::Any SAL_CALL SwVbaSelection::Columns( const uno::Any& index )
 
     uno::Reference< XCollection > xCol( new SwVbaColumns( this, mxContext, xTextTable, xTextTable->getColumns(), nStartColumn, nEndColumn ) );
     if ( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-    return uno::Any( xCol );
+        return xCol->Item( index, cpo::uno::Any() );
+    return cpo::uno::Any( xCol );
 }
 
 rtl::Reference< SwXTextTable > SwVbaSelection::GetXTextTable() const
@@ -1014,7 +1014,7 @@ void SwVbaSelection::GetSelectedCellRange( OUString& sTLName, OUString& sBRName 
     }
 }
 
-uno::Any SAL_CALL SwVbaSelection::Cells( const uno::Any& index )
+cpo::uno::Any SAL_CALL SwVbaSelection::Cells( const cpo::uno::Any& index )
 {
     OUString sTLName;
     OUString sBRName;
@@ -1041,8 +1041,8 @@ uno::Any SAL_CALL SwVbaSelection::Cells( const uno::Any& index )
 
     uno::Reference< XCollection > xCol( new SwVbaCells( this, mxContext, xTextTable, nLeft, nTop, nRight, nBottom ) );
     if ( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-    return uno::Any( xCol );
+        return xCol->Item( index, cpo::uno::Any() );
+    return cpo::uno::Any( xCol );
 }
 
 void SAL_CALL SwVbaSelection::Copy(  )
@@ -1061,7 +1061,7 @@ void SAL_CALL SwVbaSelection::Paste(  )
     dispatchRequests( static_cast<SfxBaseModel*>(mxModel.get()), u".uno:Paste"_ustr );
 }
 
-void SAL_CALL SwVbaSelection::Collapse( const uno::Any& Direction )
+void SAL_CALL SwVbaSelection::Collapse( const cpo::uno::Any& Direction )
 {
     if( word::gotoSelectedObjectAnchor( mxModel ) )
         return;
@@ -1132,8 +1132,8 @@ void SAL_CALL SwVbaSelection::SplitTable()
     }
 }
 
-uno::Any SAL_CALL
-SwVbaSelection::Paragraphs( const uno::Any& aIndex )
+cpo::uno::Any SAL_CALL
+SwVbaSelection::Paragraphs( const cpo::uno::Any& aIndex )
 {
     // Hacky implementation due to missing api ( and lack of knowledge )
     // we can only support a selection that is a single paragraph
@@ -1143,7 +1143,7 @@ SwVbaSelection::Paragraphs( const uno::Any& aIndex )
     sal_Int32 nIndex = 0;
     aIndex >>= nIndex;
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
 
     if ( nIndex != 1 )
        throw uno::RuntimeException();

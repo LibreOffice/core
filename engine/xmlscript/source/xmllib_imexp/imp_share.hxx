@@ -65,7 +65,7 @@ inline bool getBoolAttr(
         }
         else
         {
-            throw css::xml::sax::SAXException(rAttrName + ": no boolean value (true|false)!", css::uno::Reference< css::uno::XInterface >(), css::uno::Any() );
+            throw css::xml::sax::SAXException(rAttrName + ": no boolean value (true|false)!", css::uno::Reference< css::uno::XInterface >(), cpo::uno::Any() );
         }
     }
     return false;

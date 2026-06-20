@@ -35,16 +35,16 @@ public:
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // SwVbaDocuments_BASE
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 
     // Methods
-    virtual css::uno::Any SAL_CALL Add( const css::uno::Any& Template, const css::uno::Any& NewTemplate, const css::uno::Any& DocumentType, const css::uno::Any& Visible ) override;
-    virtual css::uno::Any SAL_CALL Open( const OUString& Filename, const css::uno::Any& ConfirmConversions, const css::uno::Any& ReadOnly, const css::uno::Any& AddToRecentFiles, const css::uno::Any& PasswordDocument, const css::uno::Any& PasswordTemplate, const css::uno::Any& Revert, const css::uno::Any& WritePasswordDocument, const css::uno::Any& WritePasswordTemplate, const css::uno::Any& Format, const css::uno::Any& Encoding, const css::uno::Any& Visible, const css::uno::Any& OpenAndRepair, const css::uno::Any& DocumentDirection, const css::uno::Any& NoEncodingDialog, const css::uno::Any& XMLTransform ) override;
-    virtual css::uno::Any SAL_CALL OpenNoRepairDialog( const OUString& Filename, const css::uno::Any& ConfirmConversions, const css::uno::Any& ReadOnly, const css::uno::Any& AddToRecentFiles, const css::uno::Any& PasswordDocument, const css::uno::Any& PasswordTemplate, const css::uno::Any& Revert, const css::uno::Any& WritePasswordDocument, const css::uno::Any& WritePasswordTemplate, const css::uno::Any& Format, const css::uno::Any& Encoding, const css::uno::Any& Visible, const css::uno::Any& OpenAndRepair, const css::uno::Any& DocumentDirection, const css::uno::Any& NoEncodingDialog, const css::uno::Any& XMLTransform ) override;
-    virtual css::uno::Any SAL_CALL OpenOld( const OUString& FileName, const css::uno::Any& ConfirmConversions, const css::uno::Any& ReadOnly, const css::uno::Any& AddToRecentFiles, const css::uno::Any& PasswordDocument, const css::uno::Any& PasswordTemplate, const css::uno::Any& Revert, const css::uno::Any& WritePasswordDocument, const css::uno::Any& WritePasswordTemplate, const css::uno::Any& Format ) override;
-    virtual void SAL_CALL Close( const css::uno::Any& SaveChanges, const css::uno::Any& OriginalFormat, const css::uno::Any& RouteDocument ) override;
+    virtual cpo::uno::Any SAL_CALL Add( const cpo::uno::Any& Template, const cpo::uno::Any& NewTemplate, const cpo::uno::Any& DocumentType, const cpo::uno::Any& Visible ) override;
+    virtual cpo::uno::Any SAL_CALL Open( const OUString& Filename, const cpo::uno::Any& ConfirmConversions, const cpo::uno::Any& ReadOnly, const cpo::uno::Any& AddToRecentFiles, const cpo::uno::Any& PasswordDocument, const cpo::uno::Any& PasswordTemplate, const cpo::uno::Any& Revert, const cpo::uno::Any& WritePasswordDocument, const cpo::uno::Any& WritePasswordTemplate, const cpo::uno::Any& Format, const cpo::uno::Any& Encoding, const cpo::uno::Any& Visible, const cpo::uno::Any& OpenAndRepair, const cpo::uno::Any& DocumentDirection, const cpo::uno::Any& NoEncodingDialog, const cpo::uno::Any& XMLTransform ) override;
+    virtual cpo::uno::Any SAL_CALL OpenNoRepairDialog( const OUString& Filename, const cpo::uno::Any& ConfirmConversions, const cpo::uno::Any& ReadOnly, const cpo::uno::Any& AddToRecentFiles, const cpo::uno::Any& PasswordDocument, const cpo::uno::Any& PasswordTemplate, const cpo::uno::Any& Revert, const cpo::uno::Any& WritePasswordDocument, const cpo::uno::Any& WritePasswordTemplate, const cpo::uno::Any& Format, const cpo::uno::Any& Encoding, const cpo::uno::Any& Visible, const cpo::uno::Any& OpenAndRepair, const cpo::uno::Any& DocumentDirection, const cpo::uno::Any& NoEncodingDialog, const cpo::uno::Any& XMLTransform ) override;
+    virtual cpo::uno::Any SAL_CALL OpenOld( const OUString& FileName, const cpo::uno::Any& ConfirmConversions, const cpo::uno::Any& ReadOnly, const cpo::uno::Any& AddToRecentFiles, const cpo::uno::Any& PasswordDocument, const cpo::uno::Any& PasswordTemplate, const cpo::uno::Any& Revert, const cpo::uno::Any& WritePasswordDocument, const cpo::uno::Any& WritePasswordTemplate, const cpo::uno::Any& Format ) override;
+    virtual void SAL_CALL Close( const cpo::uno::Any& SaveChanges, const cpo::uno::Any& OriginalFormat, const cpo::uno::Any& RouteDocument ) override;
 };
 
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBADOCUMENTS_HXX

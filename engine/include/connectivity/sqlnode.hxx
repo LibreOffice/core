@@ -382,7 +382,7 @@ namespace connectivity
         // return the catalog, schema and tablename from this node
         // _pTableNode must be a rule of that above or a SQL_TOKEN_NAME
         static bool getTableComponents(const OSQLParseNode* _pTableNode,
-                                            css::uno::Any &_rCatalog,
+                                            cpo::uno::Any &_rCatalog,
                                             OUString &_rSchema,
                                             OUString &_rTable,
                                             const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _xMetaData);

@@ -46,8 +46,8 @@
 
 using namespace ::com::sun::star;
 
-typedef gchar* (* AtkTextAttrFunc)       ( const uno::Any& rAny );
-typedef bool   (* TextPropertyValueFunc) ( uno::Any& rAny, const gchar * value );
+typedef gchar* (* AtkTextAttrFunc)       ( const cpo::uno::Any& rAny );
+typedef bool   (* TextPropertyValueFunc) ( cpo::uno::Any& rAny, const gchar * value );
 
 #define STRNCMP_PARAM( s )  s,sizeof( s )-1
 
@@ -179,7 +179,7 @@ get_value( const uno::Sequence< beans::PropertyValue >& rAttributeList,
 /*****************************************************************************/
 
 static bool
-InvalidValue( uno::Any&, const gchar * )
+InvalidValue( cpo::uno::Any&, const gchar * )
 {
     return false;
 }
@@ -187,13 +187,13 @@ InvalidValue( uno::Any&, const gchar * )
 /*****************************************************************************/
 
 static gchar*
-Float2String(const uno::Any& rAny)
+Float2String(const cpo::uno::Any& rAny)
 {
     return g_strdup_printf( "%g", rAny.get<float>() );
 }
 
 static bool
-String2Float( uno::Any& rAny, const gchar * value )
+String2Float( cpo::uno::Any& rAny, const gchar * value )
 {
     float fval;
 
@@ -282,7 +282,7 @@ get_color_value(const uno::Sequence< beans::PropertyValue >& rAttributeList,
 }
 
 static bool
-String2Color( uno::Any& rAny, const gchar * value )
+String2Color( cpo::uno::Any& rAny, const gchar * value )
 {
     int red, green, blue;
 
@@ -297,7 +297,7 @@ String2Color( uno::Any& rAny, const gchar * value )
 /*****************************************************************************/
 
 static gchar*
-FontSlant2Style(const uno::Any& rAny)
+FontSlant2Style(const cpo::uno::Any& rAny)
 {
     const gchar * value = nullptr;
 
@@ -338,7 +338,7 @@ FontSlant2Style(const uno::Any& rAny)
 }
 
 static bool
-Style2FontSlant( uno::Any& rAny, const gchar * value )
+Style2FontSlant( cpo::uno::Any& rAny, const gchar * value )
 {
     awt::FontSlant aFontSlant;
 
@@ -362,13 +362,13 @@ Style2FontSlant( uno::Any& rAny, const gchar * value )
 /*****************************************************************************/
 
 static gchar*
-Weight2String(const uno::Any& rAny)
+Weight2String(const cpo::uno::Any& rAny)
 {
     return g_strdup_printf( "%g", rAny.get<float>() * 4 );
 }
 
 static bool
-String2Weight( uno::Any& rAny, const gchar * value )
+String2Weight( cpo::uno::Any& rAny, const gchar * value )
 {
     float weight;
 
@@ -382,7 +382,7 @@ String2Weight( uno::Any& rAny, const gchar * value )
 /*****************************************************************************/
 
 static gchar*
-Adjust2Justification(const uno::Any& rAny)
+Adjust2Justification(const cpo::uno::Any& rAny)
 {
     const gchar * value = nullptr;
 
@@ -416,7 +416,7 @@ Adjust2Justification(const uno::Any& rAny)
 }
 
 static bool
-Justification2Adjust( uno::Any& rAny, const gchar * value )
+Justification2Adjust( cpo::uno::Any& rAny, const gchar * value )
 {
     style::ParagraphAdjust nParagraphAdjust;
 
@@ -448,7 +448,7 @@ const gchar * const font_strikethrough[] = {
 };
 
 static gchar*
-Strikeout2String(const uno::Any& rAny)
+Strikeout2String(const cpo::uno::Any& rAny)
 {
     sal_Int16 n = rAny.get<sal_Int16>();
 
@@ -459,7 +459,7 @@ Strikeout2String(const uno::Any& rAny)
 }
 
 static bool
-String2Strikeout( uno::Any& rAny, const gchar * value )
+String2Strikeout( cpo::uno::Any& rAny, const gchar * value )
 {
     for( sal_Int16 n=0; n < sal_Int16(SAL_N_ELEMENTS(font_strikethrough)); ++n )
     {
@@ -477,7 +477,7 @@ String2Strikeout( uno::Any& rAny, const gchar * value )
 /*****************************************************************************/
 
 static gchar*
-Underline2String(const uno::Any& rAny)
+Underline2String(const cpo::uno::Any& rAny)
 {
     const gchar * value = nullptr;
 
@@ -506,7 +506,7 @@ Underline2String(const uno::Any& rAny)
 }
 
 static bool
-String2Underline( uno::Any& rAny, const gchar * value )
+String2Underline( cpo::uno::Any& rAny, const gchar * value )
 {
     short nUnderline;
 
@@ -526,7 +526,7 @@ String2Underline( uno::Any& rAny, const gchar * value )
 /*****************************************************************************/
 
 static gchar*
-GetString(const uno::Any& rAny)
+GetString(const cpo::uno::Any& rAny)
 {
     OString aFontName = OUStringToOString( rAny.get< OUString > (), RTL_TEXTENCODING_UTF8 );
 
@@ -537,7 +537,7 @@ GetString(const uno::Any& rAny)
 }
 
 static bool
-SetString( uno::Any& rAny, const gchar * value )
+SetString( cpo::uno::Any& rAny, const gchar * value )
 {
     OString aFontName( value );
 
@@ -556,7 +556,7 @@ SetString( uno::Any& rAny, const gchar * value )
 
 // CMM = 100th of mm
 static gchar*
-CMM2UnitString(const uno::Any& rAny)
+CMM2UnitString(const cpo::uno::Any& rAny)
 {
     double fValue = rAny.get<sal_Int32>();
     fValue = fValue * 0.01;
@@ -565,7 +565,7 @@ CMM2UnitString(const uno::Any& rAny)
 }
 
 static bool
-UnitString2CMM( uno::Any& rAny, const gchar * value )
+UnitString2CMM( cpo::uno::Any& rAny, const gchar * value )
 {
     float fValue = 0.0; // pb: don't use double here because of warning on linux
 
@@ -583,7 +583,7 @@ UnitString2CMM( uno::Any& rAny, const gchar * value )
 const gchar* const bool_values[] = { "true", "false" };
 
 static gchar *
-Bool2String( const uno::Any& rAny )
+Bool2String( const cpo::uno::Any& rAny )
 {
     int n = 1;
 
@@ -594,7 +594,7 @@ Bool2String( const uno::Any& rAny )
 }
 
 static bool
-String2Bool( uno::Any& rAny, const gchar * value )
+String2Bool( cpo::uno::Any& rAny, const gchar * value )
 {
     bool bValue;
 
@@ -612,13 +612,13 @@ String2Bool( uno::Any& rAny, const gchar * value )
 /*****************************************************************************/
 
 static gchar*
-Scale2String( const uno::Any& rAny )
+Scale2String( const cpo::uno::Any& rAny )
 {
     return g_strdup_printf( "%g", static_cast<double>(rAny.get< sal_Int16 > ()) / 100 );
 }
 
 static bool
-String2Scale( uno::Any& rAny, const gchar * value )
+String2Scale( cpo::uno::Any& rAny, const gchar * value )
 {
     double dval;
 
@@ -632,7 +632,7 @@ String2Scale( uno::Any& rAny, const gchar * value )
 /*****************************************************************************/
 
 static gchar *
-CaseMap2String( const uno::Any& rAny )
+CaseMap2String( const cpo::uno::Any& rAny )
 {
     const gchar * value;
 
@@ -651,7 +651,7 @@ CaseMap2String( const uno::Any& rAny )
 }
 
 static bool
-String2CaseMap( uno::Any& rAny, const gchar * value )
+String2CaseMap( cpo::uno::Any& rAny, const gchar * value )
 {
     short nCaseMap;
 
@@ -681,7 +681,7 @@ const gchar * const font_stretch[] = {
 };
 
 static gchar*
-Kerning2Stretch(const uno::Any& rAny)
+Kerning2Stretch(const cpo::uno::Any& rAny)
 {
     sal_Int16 n = rAny.get<sal_Int16>();
     int i = 4;
@@ -698,7 +698,7 @@ Kerning2Stretch(const uno::Any& rAny)
 /*****************************************************************************/
 
 static gchar*
-Locale2String(const uno::Any& rAny)
+Locale2String(const cpo::uno::Any& rAny)
 {
     /* FIXME-BCP47: support language tags? And why is country lowercase? */
     lang::Locale aLocale = rAny.get<lang::Locale> ();
@@ -709,7 +709,7 @@ Locale2String(const uno::Any& rAny)
 }
 
 static bool
-String2Locale( uno::Any& rAny, const gchar * value )
+String2Locale( cpo::uno::Any& rAny, const gchar * value )
 {
     /* FIXME-BCP47: support language tags? */
     bool ret = false;
@@ -819,7 +819,7 @@ get_text_decoration(const uno::Sequence< beans::PropertyValue >& rAttributeList,
 const gchar* const shadow_values[] = { "none", "black" };
 
 static gchar *
-Bool2Shadow( const uno::Any& rAny )
+Bool2Shadow( const cpo::uno::Any& rAny )
 {
     int n = 0;
 
@@ -832,7 +832,7 @@ Bool2Shadow( const uno::Any& rAny )
 /*****************************************************************************/
 
 static gchar *
-Short2Degree( const uno::Any& rAny )
+Short2Degree( const cpo::uno::Any& rAny )
 {
     float f = rAny.get<sal_Int16>() / 10.0;
     return g_strdup_printf( "%g", f );
@@ -843,7 +843,7 @@ Short2Degree( const uno::Any& rAny )
 const gchar * const directions[] = { "ltr", "rtl", "rtl", "ltr", "none" };
 
 static gchar *
-WritingMode2Direction( const uno::Any& rAny )
+WritingMode2Direction( const cpo::uno::Any& rAny )
 {
     sal_Int16 n = rAny.get<sal_Int16>();
 
@@ -857,7 +857,7 @@ WritingMode2Direction( const uno::Any& rAny )
 
 const gchar * const writing_modes[] = { "lr-tb", "rl-tb", "tb-rl", "tb-lr", "none" };
 static gchar *
-WritingMode2String( const uno::Any& rAny )
+WritingMode2String( const cpo::uno::Any& rAny )
 {
     sal_Int16 n = rAny.get<sal_Int16>();
 
@@ -873,7 +873,7 @@ const char * const baseline_values[] = { "baseline", "sub", "super" };
 
 // @see http://www.w3.org/TR/REC-CSS2/visudet.html#propdef-vertical-align
 static gchar *
-Escapement2VerticalAlign( const uno::Any& rAny )
+Escapement2VerticalAlign( const cpo::uno::Any& rAny )
 {
     sal_Int16 n = rAny.get<sal_Int16>();
     gchar * ret = nullptr;
@@ -895,7 +895,7 @@ Escapement2VerticalAlign( const uno::Any& rAny )
 
 // @see http://www.w3.org/TR/REC-CSS2/visudet.html#propdef-line-height
 static gchar *
-LineSpacing2LineHeight( const uno::Any& rAny )
+LineSpacing2LineHeight( const cpo::uno::Any& rAny )
 {
     style::LineSpacing ls;
     gchar * ret = nullptr;
@@ -915,7 +915,7 @@ LineSpacing2LineHeight( const uno::Any& rAny )
 
 // @see http://www.w3.org/People/howcome/t/970224HTMLERB-CSS/WD-tabs-970117.html
 static gchar *
-TabStopList2String( const uno::Any& rAny, bool default_tabs )
+TabStopList2String( const cpo::uno::Any& rAny, bool default_tabs )
 {
     uno::Sequence< style::TabStop > theTabStops;
     gchar * ret = nullptr;
@@ -1000,13 +1000,13 @@ TabStopList2String( const uno::Any& rAny, bool default_tabs )
 }
 
 static gchar *
-TabStops2String( const uno::Any& rAny )
+TabStops2String( const cpo::uno::Any& rAny )
 {
     return TabStopList2String(rAny, false);
 }
 
 static gchar *
-DefaultTabStops2String( const uno::Any& rAny )
+DefaultTabStops2String( const cpo::uno::Any& rAny )
 {
     return TabStopList2String(rAny, true);
 }

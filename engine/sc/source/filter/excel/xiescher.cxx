@@ -131,7 +131,7 @@
 #include <utility>
 
 using namespace com::sun::star;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;

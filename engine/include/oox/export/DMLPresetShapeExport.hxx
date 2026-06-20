@@ -10,7 +10,7 @@
 #ifndef INCLUDED_OOX_EXPORT_DMLPRESETSHAPEXPORT_HXX
 #define INCLUDED_OOX_EXPORT_DMLPRESETSHAPEXPORT_HXX
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -111,7 +111,7 @@ private:
     const css::uno::Sequence<css::drawing::EnhancedCustomShapeAdjustmentValue>&
     GetAdjustmentValues() const;
     // Returns with the raw value of the given property of the shape geometry.
-    css::uno::Any GetHandleValueOfModificationPoint(sal_Int32 nPoint, std::u16string_view sType);
+    cpo::uno::Any GetHandleValueOfModificationPoint(sal_Int32 nPoint, std::u16string_view sType);
     // Returns with the appropriate value of the handle point.
     RadiusAdjustmentValue GetAdjustmentPointRadiusValue(sal_Int32 nPoint);
     AngleAdjustmentValue GetAdjustmentPointAngleValue(sal_Int32 nPoint);
@@ -125,7 +125,7 @@ private:
     bool EndAVListWriting();
 
     // Finds the given value in the sequence
-    static css::uno::Any FindHandleValue(css::uno::Sequence<css::beans::PropertyValue> aValues,
+    static cpo::uno::Any FindHandleValue(css::uno::Sequence<css::beans::PropertyValue> aValues,
                                          std::u16string_view sKey);
     // Writes and converts the adjustment points from sdr to ooxml ones per shape type.
     bool WriteShapeWithAVlist();

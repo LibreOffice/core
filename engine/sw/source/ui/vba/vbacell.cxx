@@ -46,13 +46,13 @@ void SAL_CALL SwVbaCell::setWidth( ::sal_Int32 _width )
     aTableHelper.SetColWidth( _width, mnColumn, mnRow, true );
 }
 
-uno::Any SAL_CALL SwVbaCell::getHeight()
+cpo::uno::Any SAL_CALL SwVbaCell::getHeight()
 {
     uno::Reference< word::XRow > xRow( new SwVbaRow( getParent(), mxContext, mxTextTable, mnRow ) );
     return xRow->getHeight();
 }
 
-void SAL_CALL SwVbaCell::setHeight( const uno::Any& _height )
+void SAL_CALL SwVbaCell::setHeight( const cpo::uno::Any& _height )
 {
     uno::Reference< word::XRow > xRow( new SwVbaRow( getParent(), mxContext, mxTextTable, mnRow ) );
     xRow->setHeight( _height );
@@ -80,7 +80,7 @@ void SAL_CALL SwVbaCell::SetHeight( float height, sal_Int32 heightrule )
 {
     // FIXME: handle the argument: heightrule
     setHeightRule( heightrule );
-    setHeight( uno::Any( height ) );
+    setHeight( cpo::uno::Any( height ) );
 }
 
 OUString

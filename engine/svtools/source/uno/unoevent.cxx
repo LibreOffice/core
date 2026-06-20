@@ -29,6 +29,7 @@
 
 using namespace ::com::sun::star;
 using namespace css::uno;
+using namespace cpo::uno;
 
 using css::container::NoSuchElementException;
 using css::container::XNameReplace;

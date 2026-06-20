@@ -39,6 +39,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::xml::sax;
@@ -129,7 +130,7 @@ void XMLGraphicsDefaultStyle::SetDefaults()
     {
         // OOo 1.x only supported "true" so that is the more appropriate
         // default for OOoXML format documents.
-        xDefaults->setPropertyValue(u"IsFollowingTextFlow"_ustr, uno::Any(true));
+        xDefaults->setPropertyValue(u"IsFollowingTextFlow"_ustr, cpo::uno::Any(true));
     }
 
     // NOTE: the only reason why it's legal to check "==" (not "<") against

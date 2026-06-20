@@ -66,7 +66,7 @@ public:
         @param  _rName
             The name of the data source
     */
-    void selectDataSource(const css::uno::Any& _aDataSourceName);
+    void selectDataSource(const cpo::uno::Any& _aDataSourceName);
 
     virtual const SfxItemSet* getOutputSet() const override;
     virtual SfxItemSet* getWriteOutputSet() override;
@@ -88,7 +88,7 @@ private:
     virtual short Ok() override;
 
     /// select a datasource with a given name, adjust the item set accordingly, and everything like that ..
-    void impl_selectDataSource(const css::uno::Any& _aDataSourceName);
+    void impl_selectDataSource(const cpo::uno::Any& _aDataSourceName);
     /// reset the tag pages according to m_sCurrentDatasource and <arg>_rxDatasource</arg>
     void impl_resetPages(const css::uno::Reference< css::beans::XPropertySet >& _rxDatasource);
 

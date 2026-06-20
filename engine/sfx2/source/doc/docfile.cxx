@@ -146,6 +146,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
@@ -589,7 +590,7 @@ void SfxMedium::CheckFileDate( const util::DateTime& aInitDate )
 
     try
     {
-        ::rtl::Reference< ::ucbhelper::InteractionRequest > xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::Any(
+        ::rtl::Reference< ::ucbhelper::InteractionRequest > xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( cpo::uno::Any(
             document::ChangedByOthersRequest() ) );
         uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations{
             new ::ucbhelper::InteractionAbort( xInteractionRequestImpl.get() ),
@@ -1042,7 +1043,7 @@ bool SfxMedium::SetEncryptionDataToStorage_Impl()
 
     // replace the password with encryption data
     pImpl->m_pSet->ClearItem( SID_PASSWORD );
-    pImpl->m_pSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData ) ) );
+    pImpl->m_pSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, cpo::uno::Any( aEncryptionData ) ) );
 
     try
     {
@@ -1132,7 +1133,7 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog(const LockFileEntr
         {
             aInfo = aData[LockFileComponent::EDITTIME];
 
-            xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::Any(
+            xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( cpo::uno::Any(
                 document::OwnLockOnDocumentRequest( OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo, !bIsLoading ) ) );
         }
         else
@@ -1157,13 +1158,13 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog(const LockFileEntr
 
             if (!bIsLoading) // so, !bHandleSysLocked
             {
-                xInteractionRequestImpl = new ::ucbhelper::InteractionRequest(uno::Any(
+                xInteractionRequestImpl = new ::ucbhelper::InteractionRequest(cpo::uno::Any(
                     document::LockedOnSavingRequest(OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo)));
                 // Currently, only the last "Retry" continuation (meaning ignore the lock and try overwriting) can be returned.
             }
             else /*logically therefore bIsLoading is set */
             {
-                xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::Any(
+                xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( cpo::uno::Any(
                     document::LockedDocumentRequest( OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo ) ) );
             }
         }
@@ -1261,10 +1262,10 @@ bool SfxMedium::ShowLockFileProblemDialog(MessageDlg nWhichDlg)
         switch (nWhichDlg)
         {
             case MessageDlg::LockFileIgnore:
-                xIgnoreRequestImpl = new ::ucbhelper::InteractionRequest(uno::Any( document::LockFileIgnoreRequest() ));
+                xIgnoreRequestImpl = new ::ucbhelper::InteractionRequest(cpo::uno::Any( document::LockFileIgnoreRequest() ));
                 break;
             case MessageDlg::LockFileCorrupt:
-                xIgnoreRequestImpl = new ::ucbhelper::InteractionRequest(uno::Any( document::LockFileCorruptRequest() ));
+                xIgnoreRequestImpl = new ::ucbhelper::InteractionRequest(cpo::uno::Any( document::LockFileCorruptRequest() ));
                 break;
         }
 
@@ -1820,7 +1821,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
     if ( pImpl->xStorage.is() || pImpl->m_bTriedStorage )
         return pImpl->xStorage;
 
-    uno::Sequence< uno::Any > aArgs( 2 );
+    uno::Sequence< cpo::uno::Any > aArgs( 2 );
     auto pArgs = aArgs.getArray();
 
     // the medium should be retrieved before temporary file creation
@@ -1871,7 +1872,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
             aArgs.realloc(3); // ??? this may re-write the data added above for pRepairItem
             pArgs = aArgs.getArray();
             uno::Sequence<beans::PropertyValue> aProperties(
-                comphelper::InitPropertySequence({ { "NoFileSync", uno::Any(true) } }));
+                comphelper::InitPropertySequence({ { "NoFileSync", cpo::uno::Any(true) } }));
             pArgs[2] <<= aProperties;
         }
     }
@@ -2324,7 +2325,7 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
                     {
                         Reference< XInputStream > aTempInput = aTempCont.openStream();
                         bTransactStarted = true;
-                        aOriginalContent.setPropertyValue( u"Size"_ustr, uno::Any( sal_Int64(0) ) );
+                        aOriginalContent.setPropertyValue( u"Size"_ustr, cpo::uno::Any( sal_Int64(0) ) );
                         aOriginalContent.writeStream( aTempInput, bOverWrite );
                         bResult = true;
                     }
@@ -4706,7 +4707,7 @@ OUString SfxMedium::CreateTempCopyWithExt( std::u16string_view aURL )
     return aResult;
 }
 
-bool SfxMedium::CallApproveHandler(const uno::Reference< task::XInteractionHandler >& xHandler, const uno::Any& rRequest, bool bAllowAbort)
+bool SfxMedium::CallApproveHandler(const uno::Reference< task::XInteractionHandler >& xHandler, const cpo::uno::Any& rRequest, bool bAllowAbort)
 {
     bool bResult = false;
 
@@ -4988,7 +4989,7 @@ IMPL_STATIC_LINK(SfxMedium, ShowReloadEditableDialog, void*, p, void)
         OUString aDocumentURL
             = pMed->GetURLObject().GetLastName(INetURLObject::DecodeMechanism::WithCharset);
         ::rtl::Reference<::ucbhelper::InteractionRequest> xInteractionRequestImpl
-            = new ::ucbhelper::InteractionRequest(uno::Any(document::ReloadEditableRequest(
+            = new ::ucbhelper::InteractionRequest(cpo::uno::Any(document::ReloadEditableRequest(
                 OUString(), uno::Reference<uno::XInterface>(), aDocumentURL)));
         if (xInteractionRequestImpl != nullptr)
         {

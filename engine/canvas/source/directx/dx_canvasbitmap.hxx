@@ -76,8 +76,8 @@ namespace dxcanvas
         // BitmapProvider
         virtual IBitmapSharedPtr getBitmap() const override { return mpBitmap; }
 
-        virtual css::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle) override;
-        virtual void SAL_CALL setFastPropertyValue(sal_Int32, const css::uno::Any&) override {}
+        virtual cpo::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle) override;
+        virtual void SAL_CALL setFastPropertyValue(sal_Int32, const cpo::uno::Any&) override {}
 
     private:
         /** MUST hold here, too, since CanvasHelper only contains a

@@ -16,7 +16,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleLoader2.hpp>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -28,6 +28,7 @@
 using namespace comphelper;
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace apitest
 {
@@ -98,8 +99,8 @@ void XStyleLoader::checkStyleProperties(
                                            UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropSet(xMyStyle, UNO_QUERY_THROW);
 
-    uno::Any aBackColor = xPropSet->getPropertyValue(u"CellBackColor"_ustr);
-    uno::Any expectedBackColor(sal_Int32(16724787));
+    cpo::uno::Any aBackColor = xPropSet->getPropertyValue(u"CellBackColor"_ustr);
+    cpo::uno::Any expectedBackColor(sal_Int32(16724787));
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong CellBackColor", expectedBackColor, aBackColor);
 
@@ -110,8 +111,8 @@ void XStyleLoader::checkStyleProperties(
     uno::Reference<beans::XPropertySet> xPagePropSet(xPageStyles->getByName(u"Default"_ustr),
                                                      UNO_QUERY_THROW);
 
-    uno::Any aPageBackColor = xPagePropSet->getPropertyValue(u"BackColor"_ustr);
-    uno::Any expectedPageBackColor(sal_Int32(13434879));
+    cpo::uno::Any aPageBackColor = xPagePropSet->getPropertyValue(u"BackColor"_ustr);
+    cpo::uno::Any expectedPageBackColor(sal_Int32(13434879));
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong page style BackColor", expectedPageBackColor,
                                  aPageBackColor);

@@ -32,6 +32,7 @@
 
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 
@@ -225,7 +226,7 @@ void java_lang_Object::ThrowRuntimeException( JNIEnv* _pEnvironment, const Refer
     }
     catch (const SQLException& e)
     {
-        css::uno::Any anyEx = cppu::getCaughtException();
+        cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException( e.Message,
                         e.Context, anyEx );
     }

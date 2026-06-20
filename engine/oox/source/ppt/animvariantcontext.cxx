@@ -19,7 +19,7 @@
 
 #include "animvariantcontext.hxx"
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <rtl/ustring.hxx>
 
 #include <oox/helper/attributelist.hxx>
@@ -30,6 +30,7 @@
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace oox::ppt {
     AnimVariantContext::AnimVariantContext( FragmentHandler2 const & rParent, sal_Int32 aElement, Any & aValue )

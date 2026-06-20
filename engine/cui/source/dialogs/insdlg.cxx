@@ -59,6 +59,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::ui::dialogs;
 
 bool InsertObjectDialog_Impl::IsCreateNew() const
@@ -433,7 +434,7 @@ short SfxInsertFloatingFrameDialog::run()
                 m_xObj->changeState( embed::EmbedStates::RUNNING );
             xSet.set( m_xObj->getComponent(), uno::UNO_QUERY );
             OUString aStr;
-            uno::Any aAny = xSet->getPropertyValue( u"FrameURL"_ustr );
+            cpo::uno::Any aAny = xSet->getPropertyValue( u"FrameURL"_ustr );
             if ( aAny >>= aStr )
                 m_xEDURL->set_text( aStr );
             aAny = xSet->getPropertyValue( u"FrameName"_ustr );

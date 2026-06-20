@@ -40,7 +40,7 @@
 
 #define UNO_2_OLE_EXCEPTIONCODE 1001
 
-VARTYPE getVarType(const css::uno::Any& val);
+VARTYPE getVarType(const cpo::uno::Any& val);
 /* creates a Type object for a given type name.
 
     The function returns false if the name does not represent

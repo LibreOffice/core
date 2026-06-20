@@ -364,7 +364,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHyperlinkWithoutURL)
     createSwDoc("tdf90421.fodt");
     // Change the hyperlink, so its URL is empty.
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 2), uno::UNO_QUERY);
-    xRun->setPropertyValue(u"HyperLinkURL"_ustr, uno::Any(OUString()));
+    xRun->setPropertyValue(u"HyperLinkURL"_ustr, cpo::uno::Any(OUString()));
     saveAndReload(TestFilter::RTF);
     SvMemoryStream aMemoryStream;
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);

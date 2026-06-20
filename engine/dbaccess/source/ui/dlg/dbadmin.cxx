@@ -35,6 +35,7 @@
 namespace dbaui
 {
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::beans;
 
@@ -80,7 +81,7 @@ void ODbAdminDialog::addDetailPage(const OUString& rPageId, TranslateId pTextId,
     AddTabPage(rPageId, DBA_RES(pTextId), pCreateFunc);
 }
 
-void ODbAdminDialog::impl_selectDataSource(const css::uno::Any& _aDataSourceName)
+void ODbAdminDialog::impl_selectDataSource(const cpo::uno::Any& _aDataSourceName)
 {
     m_pImpl->setDataSourceOrName(_aDataSourceName);
     Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
@@ -219,7 +220,7 @@ ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges()
     return AR_LEAVE_MODIFIED;
 }
 
-void ODbAdminDialog::selectDataSource(const css::uno::Any& _aDataSourceName)
+void ODbAdminDialog::selectDataSource(const cpo::uno::Any& _aDataSourceName)
 {
     impl_selectDataSource(_aDataSourceName);
 }

@@ -38,6 +38,7 @@ namespace comphelper
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::accessibility;
 
@@ -645,8 +646,8 @@ namespace comphelper
     bool OCommonAccessibleText::implInitTextChangedEvent(
         std::u16string_view rOldString,
         std::u16string_view rNewString,
-        css::uno::Any& rDeleted,
-        css::uno::Any& rInserted) // throw()
+        cpo::uno::Any& rDeleted,
+        cpo::uno::Any& rInserted) // throw()
     {
         size_t nLenOld = rOldString.size();
         size_t nLenNew = rNewString.size();

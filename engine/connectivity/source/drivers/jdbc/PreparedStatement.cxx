@@ -40,6 +40,7 @@
 
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 
@@ -70,9 +71,9 @@ jclass java_sql_PreparedStatement::getMyClass() const
 }
 
 
-css::uno::Any SAL_CALL java_sql_PreparedStatement::queryInterface( const css::uno::Type & rType )
+cpo::uno::Any SAL_CALL java_sql_PreparedStatement::queryInterface( const css::uno::Type & rType )
 {
-    css::uno::Any aRet = OStatement_BASE2::queryInterface(rType);
+    cpo::uno::Any aRet = OStatement_BASE2::queryInterface(rType);
     return aRet.hasValue() ? aRet : ::cppu::queryInterface( rType,
                                         static_cast< XPreparedStatement*>(this),
                                         static_cast< XParameters*>(this),
@@ -316,7 +317,7 @@ void SAL_CALL java_sql_PreparedStatement::setRef( sal_Int32 /*parameterIndex*/, 
 }
 
 
-void SAL_CALL java_sql_PreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, const css::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale )
+void SAL_CALL java_sql_PreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, const cpo::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale )
 {
     m_aLogger.log( LogLevel::FINER, STR_LOG_OBJECT_NULL_PARAMETER, parameterIndex );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -389,7 +390,7 @@ void SAL_CALL java_sql_PreparedStatement::setObjectNull( sal_Int32 parameterInde
 }
 
 
-void SAL_CALL java_sql_PreparedStatement::setObject( sal_Int32 parameterIndex, const css::uno::Any& x )
+void SAL_CALL java_sql_PreparedStatement::setObject( sal_Int32 parameterIndex, const cpo::uno::Any& x )
 {
     if(!::dbtools::implSetObject(this,parameterIndex,x))
     {

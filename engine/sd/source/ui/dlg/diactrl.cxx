@@ -135,7 +135,7 @@ IMPL_LINK_NOARG(SdPagesField, ModifyHdl, weld::SpinButton&, void)
 {
     SfxUInt16Item aItem(SID_PAGES_PER_ROW, m_xWidget->get_value());
 
-    uno::Any a;
+    cpo::uno::Any a;
     aItem.QueryValue( a );
     uno::Sequence< beans::PropertyValue > aArgs{ comphelper::makePropertyValue(u"PagesPerRow"_ustr, a) };
     SfxToolBoxControl::Dispatch( ::uno::Reference< ::frame::XDispatchProvider >( m_xFrame->getController(), ::uno::UNO_QUERY ),

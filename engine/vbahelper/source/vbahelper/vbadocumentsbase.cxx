@@ -85,13 +85,13 @@ public:
         return m_it != m_documents.end();
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         if ( !hasMoreElements() )
         {
             throw container::NoSuchElementException();
         }
-        return css::uno::Any( *(m_it++) );
+        return cpo::uno::Any( *(m_it++) );
     }
 };
 
@@ -147,12 +147,12 @@ public:
     {
         return m_documents.size();
     }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
+    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         if ( Index < 0
             || o3tl::make_unsigned(Index) >= m_documents.size() )
             throw lang::IndexOutOfBoundsException();
-        return css::uno::Any( m_documents[ Index ] ); // returns xspreadsheetdoc
+        return cpo::uno::Any( m_documents[ Index ] ); // returns xspreadsheetdoc
     }
 
     //XElementAccess
@@ -167,12 +167,12 @@ public:
     }
 
     //XNameAccess
-    virtual uno::Any SAL_CALL getByName( const OUString& aName ) override
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override
     {
         NameIndexHash::const_iterator it = namesToIndices.find( aName );
         if ( it == namesToIndices.end() )
             throw container::NoSuchElementException();
-        return css::uno::Any( m_documents[ it->second ] );
+        return cpo::uno::Any( m_documents[ it->second ] );
 
     }
 
@@ -232,7 +232,7 @@ void lclSetupComponent( const uno::Reference< lang::XComponent >& rxComponent, b
 
 } // namespace
 
-uno::Any VbaDocumentsBase::createDocument()
+cpo::uno::Any VbaDocumentsBase::createDocument()
 {
     // #163808# determine state of Application.ScreenUpdating and Application.Interactive symbols (before new document is opened)
     uno::Reference< XApplicationBase > xApplication( Application(), uno::UNO_QUERY );
@@ -259,7 +259,7 @@ uno::Any VbaDocumentsBase::createDocument()
     // prepare the media descriptor
     comphelper::SequenceAsHashMap aMediaDesc;
     aMediaDesc[ utl::MediaDescriptor::PROP_MACROEXECUTIONMODE ] <<= document::MacroExecMode::USE_CONFIG;
-    utl::MediaDescriptor::setComponentDataEntry(aMediaDesc, u"ApplyFormDesignMode"_ustr , uno::Any( false ) );
+    utl::MediaDescriptor::setComponentDataEntry(aMediaDesc, u"ApplyFormDesignMode"_ustr , cpo::uno::Any( false ) );
 
     // create the new document
     uno::Reference< lang::XComponent > xComponent = xLoader->loadComponentFromURL(
@@ -269,11 +269,11 @@ uno::Any VbaDocumentsBase::createDocument()
     // #163808# lock document controllers and container window if specified by application
     lclSetupComponent( xComponent, bScreenUpdating, bInteractive );
 
-    return uno::Any( xComponent );
+    return cpo::uno::Any( xComponent );
 }
 
 // #TODO# #FIXME# can any of the unused params below be used?
-uno::Any VbaDocumentsBase::openDocument( const OUString& rFileName, const uno::Any& ReadOnly, const uno::Sequence< beans::PropertyValue >& rProps )
+cpo::uno::Any VbaDocumentsBase::openDocument( const OUString& rFileName, const cpo::uno::Any& ReadOnly, const uno::Sequence< beans::PropertyValue >& rProps )
 {
     // #163808# determine state of Application.ScreenUpdating and Application.Interactive symbols (before new document is opened)
     uno::Reference< XApplicationBase > xApplication( Application(), uno::UNO_QUERY );
@@ -326,7 +326,7 @@ uno::Any VbaDocumentsBase::openDocument( const OUString& rFileName, const uno::A
     // #163808# lock document controllers and container window if specified by application
     lclSetupComponent( xComponent, bScreenUpdating, bInteractive );
 
-    return uno::Any( xComponent );
+    return cpo::uno::Any( xComponent );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

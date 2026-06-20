@@ -66,6 +66,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
@@ -984,7 +985,7 @@ void SvxXMLListStyleContext::CreateAndInsertLate( bool bOverwrite )
         }
 
         if ( xPropSetInfo->hasPropertyByName( u"Hidden"_ustr ) )
-            xPropSet->setPropertyValue( u"Hidden"_ustr, uno::Any( IsHidden( ) ) );
+            xPropSet->setPropertyValue( u"Hidden"_ustr, cpo::uno::Any( IsHidden( ) ) );
 
         if( rName != GetName() )
             GetImport().AddStyleDisplayName( XmlStyleFamily::TEXT_LIST,

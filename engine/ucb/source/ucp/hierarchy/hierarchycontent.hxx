@@ -161,7 +161,7 @@ private:
     css::uno::Reference< css::sdbc::XRow >
     getPropertyValues( const css::uno::Sequence< css::beans::Property >& rProperties );
     /// @throws css::uno::Exception
-    css::uno::Sequence< css::uno::Any >
+    css::uno::Sequence< cpo::uno::Any >
     setPropertyValues(
             const css::uno::Sequence< css::beans::PropertyValue >& rValues,
             const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
@@ -196,7 +196,7 @@ public:
     virtual ~HierarchyContent() override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         noexcept override;
     virtual void SAL_CALL release()
@@ -219,7 +219,7 @@ public:
     getIdentifier() override;
 
     // XCommandProcessor
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
     execute( const css::ucb::Command& aCommand,
              sal_Int32 CommandId,
              const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override;

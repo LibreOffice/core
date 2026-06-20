@@ -79,7 +79,7 @@ public:
         propertyChange (const css::beans::PropertyChangeEvent& rEventObject) override;
     //=====  XInterface  ======================================================
 
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
         queryInterface (const css::uno::Type & rType) override;
 
     virtual void SAL_CALL
@@ -92,8 +92,8 @@ public:
 
     //=====  XAccessibleGroupPosition  =========================================
     virtual css::uno::Sequence< sal_Int32 > SAL_CALL
-        getGroupPosition( const css::uno::Any& rAny ) override;
-    virtual OUString SAL_CALL getObjectLink( const css::uno::Any& accoject ) override;
+        getGroupPosition( const cpo::uno::Any& rAny ) override;
+    virtual OUString SAL_CALL getObjectLink( const cpo::uno::Any& accoject ) override;
 
 private:
 

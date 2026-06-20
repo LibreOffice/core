@@ -101,7 +101,7 @@ namespace pcr
         bool                        RemoveEntry( const OUString& _rName );
         void                        ChangeEntry( const OLineDescriptor&, ListBoxLines::size_type nPos );
 
-        void                        SetPropertyValue( const OUString& rEntryName, const css::uno::Any& rValue, bool _bUnknownValue );
+        void                        SetPropertyValue( const OUString& rEntryName, const cpo::uno::Any& rValue, bool _bUnknownValue );
         sal_uInt16                  GetPropertyPos( std::u16string_view rEntryName ) const;
         css::uno::Reference< css::inspection::XPropertyControl >
                                     GetPropertyControl( const OUString& rEntryName );
@@ -135,13 +135,13 @@ namespace pcr
                 the property value to set. If it's not compatible with the control value,
                 it will be converted, using <member>XPropertyHandler::convertToControlValue</member>
         */
-        static void impl_setControlAsPropertyValue( const ListBoxLine& _rLine, const css::uno::Any& _rPropertyValue );
+        static void impl_setControlAsPropertyValue( const ListBoxLine& _rLine, const cpo::uno::Any& _rPropertyValue );
 
         /** retrieves the value for the given control, as a property value, after converting it as necessary
             @param _rLine
                 The line whose at which the value is to be set.
         */
-        static css::uno::Any
+        static cpo::uno::Any
                     impl_getControlAsPropertyValue( const ListBoxLine& _rLine );
 
         /** retrieves the ->BrowserLinePointer for a given entry name

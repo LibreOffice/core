@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <o3tl/hash_combine.hxx>
 #include <svl/cintitem.hxx>
 #include <sal/log.hxx>
@@ -55,7 +55,7 @@ bool CntByteItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit,
 }
 
 // virtual
-bool CntByteItem::QueryValue(css::uno::Any& rVal, sal_uInt8) const
+bool CntByteItem::QueryValue(cpo::uno::Any& rVal, sal_uInt8) const
 {
     sal_Int8 nValue = m_nValue;
     rVal <<= nValue;
@@ -63,7 +63,7 @@ bool CntByteItem::QueryValue(css::uno::Any& rVal, sal_uInt8) const
 }
 
 // virtual
-bool CntByteItem::PutValue(const css::uno::Any& rVal, sal_uInt8)
+bool CntByteItem::PutValue(const cpo::uno::Any& rVal, sal_uInt8)
 {
     sal_Int8 nValue = sal_Int8();
     if (rVal >>= nValue)
@@ -116,14 +116,14 @@ bool CntUInt16Item::GetPresentation(SfxItemPresentation,
 }
 
 // virtual
-bool CntUInt16Item::QueryValue(css::uno::Any& rVal, sal_uInt8) const
+bool CntUInt16Item::QueryValue(cpo::uno::Any& rVal, sal_uInt8) const
 {
     rVal <<= m_nValue;
     return true;
 }
 
 // virtual
-bool CntUInt16Item::PutValue(const css::uno::Any& rVal, sal_uInt8)
+bool CntUInt16Item::PutValue(const cpo::uno::Any& rVal, sal_uInt8)
 {
     if (rVal >>= m_nValue)
         return true;
@@ -180,7 +180,7 @@ bool CntInt32Item::GetPresentation(SfxItemPresentation,
 }
 
 // virtual
-bool CntInt32Item::QueryValue(css::uno::Any& rVal, sal_uInt8) const
+bool CntInt32Item::QueryValue(cpo::uno::Any& rVal, sal_uInt8) const
 {
     sal_Int32 nValue = m_nValue;
     rVal <<= nValue;
@@ -188,7 +188,7 @@ bool CntInt32Item::QueryValue(css::uno::Any& rVal, sal_uInt8) const
 }
 
 // virtual
-bool CntInt32Item::PutValue(const css::uno::Any& rVal, sal_uInt8)
+bool CntInt32Item::PutValue(const cpo::uno::Any& rVal, sal_uInt8)
 {
     sal_Int32 nValue = 0;
     if (rVal >>= nValue)
@@ -241,7 +241,7 @@ bool CntUInt32Item::GetPresentation(SfxItemPresentation,
 }
 
 // virtual
-bool CntUInt32Item::QueryValue(css::uno::Any& rVal, sal_uInt8) const
+bool CntUInt32Item::QueryValue(cpo::uno::Any& rVal, sal_uInt8) const
 {
     sal_Int32 nValue = m_nValue;
     SAL_WARN_IF(nValue < 0, "svl.items", "Overflow in UInt32 value!");
@@ -250,7 +250,7 @@ bool CntUInt32Item::QueryValue(css::uno::Any& rVal, sal_uInt8) const
 }
 
 // virtual
-bool CntUInt32Item::PutValue(const css::uno::Any& rVal, sal_uInt8)
+bool CntUInt32Item::PutValue(const cpo::uno::Any& rVal, sal_uInt8)
 {
     sal_Int32 nValue = 0;
     if (rVal >>= nValue)

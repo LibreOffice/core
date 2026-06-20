@@ -37,6 +37,7 @@
 #include <stdio.h>
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::accessibility;
 using namespace cppu;
 
@@ -96,7 +97,7 @@ void AccEventListener::HandleNameChangedEvent()
  * @param oldValue the child to be deleted
  * @param newValue the child to be added
  */
-void AccEventListener::HandleChildChangedEvent(css::uno::Any oldValue, css::uno::Any newValue)
+void AccEventListener::HandleChildChangedEvent(cpo::uno::Any oldValue, cpo::uno::Any newValue)
 {
     Reference<XAccessible> xChild;
     if (newValue >>= xChild)

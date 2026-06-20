@@ -131,8 +131,8 @@ public:
     // XPropertySet
     css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
     void SAL_CALL setPropertyValue(const OUString& rPropertyName,
-                                   const css::uno::Any& rValue) override;
-    css::uno::Any SAL_CALL getPropertyValue(const OUString& rPropertyName) override;
+                                   const cpo::uno::Any& rValue) override;
+    cpo::uno::Any SAL_CALL getPropertyValue(const OUString& rPropertyName) override;
     void SAL_CALL addPropertyChangeListener(
         const OUString& rPropertyName,
         const css::uno::Reference<css::beans::XPropertyChangeListener>& xListener) override;
@@ -158,7 +158,7 @@ public:
 
     // XIndexAccess
     sal_Int32 SAL_CALL getCount() override;
-    css::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
+    cpo::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
 
     // XElementAccess
     css::uno::Type SAL_CALL getElementType() override;

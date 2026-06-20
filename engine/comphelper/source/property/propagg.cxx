@@ -37,6 +37,7 @@ namespace comphelper
 
 
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
 
@@ -336,9 +337,9 @@ OPropertySetAggregationHelper::~OPropertySetAggregationHelper()
 }
 
 
-css::uno::Any SAL_CALL OPropertySetAggregationHelper::queryInterface(const  css::uno::Type& _rType)
+cpo::uno::Any SAL_CALL OPropertySetAggregationHelper::queryInterface(const  css::uno::Type& _rType)
 {
-    css::uno::Any aReturn = OPropertyStateHelper::queryInterface(_rType);
+    cpo::uno::Any aReturn = OPropertyStateHelper::queryInterface(_rType);
 
     if ( !aReturn.hasValue() )
         aReturn = cppu::queryInterface(_rType
@@ -400,8 +401,8 @@ void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const css::uno::Se
     else
     {
         std::unique_ptr<sal_Int32[]> pHandles(new sal_Int32[nLen]);
-        std::unique_ptr< css::uno::Any[]> pNewValues(new css::uno::Any[nLen]);
-        std::unique_ptr< css::uno::Any[]> pOldValues(new css::uno::Any[nLen]);
+        std::unique_ptr< cpo::uno::Any[]> pNewValues(new cpo::uno::Any[nLen]);
+        std::unique_ptr< cpo::uno::Any[]> pOldValues(new cpo::uno::Any[nLen]);
 
         sal_Int32 nDest = 0;
         for (const css::beans::PropertyChangeEvent& rEvent : _rEvents)
@@ -516,7 +517,7 @@ OUString OPropertySetAggregationHelper::getPropertyName( sal_Int32 _nHandle ) co
 }
 
 
-void SAL_CALL OPropertySetAggregationHelper::setFastPropertyValue(sal_Int32 _nHandle, const  css::uno::Any& _rValue)
+void SAL_CALL OPropertySetAggregationHelper::setFastPropertyValue(sal_Int32 _nHandle, const  cpo::uno::Any& _rValue)
 {
     OPropertyArrayAggregationHelper& rPH = static_cast< OPropertyArrayAggregationHelper& >( getInfoHelper() );
     OUString aPropName;
@@ -533,7 +534,7 @@ void SAL_CALL OPropertySetAggregationHelper::setFastPropertyValue(sal_Int32 _nHa
 }
 
 
-void OPropertySetAggregationHelper::getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle) const
+void OPropertySetAggregationHelper::getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle) const
 {
     OPropertyArrayAggregationHelper& rPH = static_cast<OPropertyArrayAggregationHelper&>( const_cast<OPropertySetAggregationHelper*>(this)->getInfoHelper() );
     OUString aPropName;
@@ -555,12 +556,12 @@ void OPropertySetAggregationHelper::getFastPropertyValue( css::uno::Any& rValue,
 }
 
 
-css::uno::Any SAL_CALL OPropertySetAggregationHelper::getFastPropertyValue(sal_Int32 nHandle)
+cpo::uno::Any SAL_CALL OPropertySetAggregationHelper::getFastPropertyValue(sal_Int32 nHandle)
 {
     OPropertyArrayAggregationHelper& rPH = static_cast< OPropertyArrayAggregationHelper& >( getInfoHelper() );
     OUString aPropName;
     sal_Int32   nOriginalHandle = -1;
-    css::uno::Any  aValue;
+    cpo::uno::Any  aValue;
 
     if (rPH.fillAggregatePropertyInfoByHandle(&aPropName, &nOriginalHandle, nHandle))
     {
@@ -674,8 +675,8 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
             sal_Int32 nHitCount = rPH2.fillHandles( pHandles.get(), DelPropertyNames );
             if (nHitCount != 0)
             {
-                std::unique_ptr< css::uno::Any[]> pConvertedValues(new  css::uno::Any[ nHitCount ]);
-                std::unique_ptr< css::uno::Any[]> pOldValues(new  css::uno::Any[ nHitCount ]);
+                std::unique_ptr< cpo::uno::Any[]> pConvertedValues(new  cpo::uno::Any[ nHitCount ]);
+                std::unique_ptr< cpo::uno::Any[]> pOldValues(new  cpo::uno::Any[ nHitCount ]);
                 nHitCount = 0;
                 sal_Int32 i;
 
@@ -788,7 +789,7 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyToDefault(const OUString
 }
 
 
-css::uno::Any SAL_CALL OPropertySetAggregationHelper::getPropertyDefault(const OUString& aPropertyName)
+cpo::uno::Any SAL_CALL OPropertySetAggregationHelper::getPropertyDefault(const OUString& aPropertyName)
 {
     OPropertyArrayAggregationHelper& rPH = static_cast< OPropertyArrayAggregationHelper& >( getInfoHelper() );
     sal_Int32 nHandle = rPH.getHandleByName( aPropertyName );
@@ -803,7 +804,7 @@ css::uno::Any SAL_CALL OPropertySetAggregationHelper::getPropertyDefault(const O
         if (m_xAggregateState.is())
             return m_xAggregateState->getPropertyDefault(aPropertyName);
         else
-            return css::uno::Any();
+            return cpo::uno::Any();
     }
     else
         return getPropertyDefaultByHandle(nHandle);

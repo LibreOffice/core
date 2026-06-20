@@ -33,6 +33,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::lang;
@@ -326,7 +327,7 @@ void SAL_CALL ToolBarWrapper::functionExecute(
         m_xToolBarManager->notifyRegisteredControllers( aUIElementName, aCommand );
 }
 
-void SAL_CALL ToolBarWrapper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any&  aValue )
+void SAL_CALL ToolBarWrapper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any&  aValue )
 {
     SolarMutexResettableGuard aLock;
     bool bNoClose( m_bNoClose );

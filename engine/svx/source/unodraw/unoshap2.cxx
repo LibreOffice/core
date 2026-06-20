@@ -71,6 +71,7 @@
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
@@ -95,14 +96,14 @@ void SvxShapeGroup::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 }
 
 
-uno::Any SAL_CALL SvxShapeGroup::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxShapeGroup::queryInterface( const uno::Type & rType )
 {
     return SvxShape::queryInterface( rType );
 }
 
-uno::Any SAL_CALL SvxShapeGroup::queryAggregation( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxShapeGroup::queryAggregation( const uno::Type & rType )
 {
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     QUERYINT( drawing::XShapeGroup );
     else QUERYINT( drawing::XShapes );
@@ -319,7 +320,7 @@ sal_Int32 SAL_CALL SvxShapeGroup::getCount()
 }
 
 
-uno::Any SAL_CALL SvxShapeGroup::getByIndex( sal_Int32 Index )
+cpo::uno::Any SAL_CALL SvxShapeGroup::getByIndex( sal_Int32 Index )
 {
     ::SolarMutexGuard aGuard;
 
@@ -335,7 +336,7 @@ uno::Any SAL_CALL SvxShapeGroup::getByIndex( sal_Int32 Index )
         throw lang::IndexOutOfBoundsException();
 
     Reference< drawing::XShape > xShape( pDestObj->getUnoShape(), uno::UNO_QUERY );
-    return uno::Any( xShape );
+    return cpo::uno::Any( xShape );
 }
 
 // css::container::XElementAccess
@@ -365,14 +366,14 @@ SvxShapeConnector::~SvxShapeConnector() noexcept
 }
 
 
-uno::Any SAL_CALL SvxShapeConnector::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxShapeConnector::queryInterface( const uno::Type & rType )
 {
     return SvxShapeText::queryInterface( rType );
 }
 
-uno::Any SAL_CALL SvxShapeConnector::queryAggregation( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxShapeConnector::queryAggregation( const uno::Type & rType )
 {
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     QUERYINT( drawing::XConnectorShape );
     else
@@ -488,14 +489,14 @@ SvxShapeControl::~SvxShapeControl() noexcept
 }
 
 
-uno::Any SAL_CALL SvxShapeControl::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxShapeControl::queryInterface( const uno::Type & rType )
 {
     return SvxShapeText::queryInterface( rType );
 }
 
-uno::Any SAL_CALL SvxShapeControl::queryAggregation( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxShapeControl::queryAggregation( const uno::Type & rType )
 {
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     QUERYINT( drawing::XControlShape );
     else
@@ -713,7 +714,7 @@ namespace
     }
 }
 
-void SAL_CALL SvxShapeControl::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
+void SAL_CALL SvxShapeControl::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     OUString aFormsName;
     if ( lcl_convertPropertyName( aPropertyName, aFormsName ) )
@@ -724,7 +725,7 @@ void SAL_CALL SvxShapeControl::setPropertyValue( const OUString& aPropertyName, 
             uno::Reference< beans::XPropertySetInfo > xInfo( xControl->getPropertySetInfo() );
             if( xInfo.is() && xInfo->hasPropertyByName( aFormsName ) )
             {
-                uno::Any aConvertedValue( aValue );
+                cpo::uno::Any aConvertedValue( aValue );
                 if ( aFormsName == "FontSlant" )
                 {
                     awt::FontSlant nSlant;
@@ -751,14 +752,14 @@ void SAL_CALL SvxShapeControl::setPropertyValue( const OUString& aPropertyName, 
     }
 }
 
-uno::Any SAL_CALL SvxShapeControl::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL SvxShapeControl::getPropertyValue( const OUString& aPropertyName )
 {
     OUString aFormsName;
     if ( lcl_convertPropertyName( aPropertyName, aFormsName ) )
     {
         uno::Reference< beans::XPropertySet > xControl( getControl(), uno::UNO_QUERY );
 
-        uno::Any aValue;
+        cpo::uno::Any aValue;
         if( xControl.is() )
         {
             uno::Reference< beans::XPropertySetInfo > xInfo( xControl->getPropertySetInfo() );
@@ -848,7 +849,7 @@ void SAL_CALL SvxShapeControl::setPropertyToDefault( const OUString& PropertyNam
     }
 }
 
-uno::Any SAL_CALL SvxShapeControl::getPropertyDefault( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL SvxShapeControl::getPropertyDefault( const OUString& aPropertyName )
 {
     OUString aFormsName;
     if ( lcl_convertPropertyName( aPropertyName, aFormsName ) )
@@ -916,7 +917,7 @@ SvxShapePolyPolygon::~SvxShapePolyPolygon() noexcept
 {
 }
 
-bool SvxShapePolyPolygon::setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue )
+bool SvxShapePolyPolygon::setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const cpo::uno::Any& rValue )
 {
     switch( pProperty->nWID )
     {
@@ -1029,7 +1030,7 @@ bool SvxShapePolyPolygon::setPropertyValueImpl( const OUString& rName, const Sfx
 }
 
 bool SvxShapePolyPolygon::getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty,
-                                                css::uno::Any& rValue )
+                                                cpo::uno::Any& rValue )
 {
     switch( pProperty->nWID )
     {
@@ -1186,7 +1187,7 @@ SvxGraphicObject::~SvxGraphicObject() noexcept
 {
 }
 
-bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue )
+bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const cpo::uno::Any& rValue )
 {
     bool bOk = false;
     switch( pProperty->nWID )
@@ -1423,7 +1424,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
     return true;
 }
 
-bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue )
+bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, cpo::uno::Any& rValue )
 {
     switch( pProperty->nWID )
     {
@@ -1602,14 +1603,14 @@ SvxCustomShape::~SvxCustomShape() noexcept
 {
 }
 
-uno::Any SAL_CALL SvxCustomShape::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxCustomShape::queryInterface( const uno::Type & rType )
 {
     return SvxShapeText::queryInterface( rType );
 }
 
-uno::Any SAL_CALL SvxCustomShape::queryAggregation( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxCustomShape::queryAggregation( const uno::Type & rType )
 {
-    css::uno::Any aReturn = SvxShapeText::queryAggregation( rType );
+    cpo::uno::Any aReturn = SvxShapeText::queryAggregation( rType );
     if ( !aReturn.hasValue() )
         aReturn = ::cppu::queryInterface(rType, static_cast<drawing::XEnhancedCustomShapeDefaulter*>(this) );
     return aReturn;
@@ -1705,7 +1706,7 @@ awt::Point SAL_CALL SvxCustomShape::getPosition()
 }
 
 
-void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
+void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     ::SolarMutexGuard aGuard;
 
@@ -1788,7 +1789,7 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
     }
 }
 
-bool SvxCustomShape::getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue )
+bool SvxCustomShape::getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, cpo::uno::Any& rValue )
 {
     switch( pProperty->nWID )
     {

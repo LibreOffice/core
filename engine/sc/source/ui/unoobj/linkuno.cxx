@@ -47,7 +47,7 @@
 
 using namespace com::sun::star;
 using namespace formula;
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::uno::RuntimeException;
@@ -205,7 +205,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScSheetLinkObj::getPropertySetI
 }
 
 void SAL_CALL ScSheetLinkObj::setPropertyValue(
-                        const OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
     OUString aValStr;
@@ -238,10 +238,10 @@ void SAL_CALL ScSheetLinkObj::setPropertyValue(
     }
 }
 
-uno::Any SAL_CALL ScSheetLinkObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ScSheetLinkObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if ( aPropertyName == SC_UNONAME_LINKURL )
         aRet <<= getFileName();
     else if ( aPropertyName == SC_UNONAME_FILTER )
@@ -466,14 +466,14 @@ sal_Int32 SAL_CALL ScSheetLinksObj::getCount()
     return nCount;
 }
 
-uno::Any SAL_CALL ScSheetLinksObj::getByIndex( sal_Int32 nIndex )
+cpo::uno::Any SAL_CALL ScSheetLinksObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     rtl::Reference<ScSheetLinkObj> xLink(GetObjectByIndex_Impl(nIndex));
     if (!xLink.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(uno::Reference<beans::XPropertySet>(xLink));
+    return cpo::uno::Any(uno::Reference<beans::XPropertySet>(xLink));
 }
 
 uno::Type SAL_CALL ScSheetLinksObj::getElementType()
@@ -487,14 +487,14 @@ bool SAL_CALL ScSheetLinksObj::hasElements()
     return ( getCount() != 0 );
 }
 
-uno::Any SAL_CALL ScSheetLinksObj::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL ScSheetLinksObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     rtl::Reference<ScSheetLinkObj> xLink(GetObjectByName_Impl(aName));
     if (!xLink.is())
         throw container::NoSuchElementException();
 
-    return uno::Any(uno::Reference<beans::XPropertySet>(xLink));
+    return cpo::uno::Any(uno::Reference<beans::XPropertySet>(xLink));
 }
 
 bool SAL_CALL ScSheetLinksObj::hasByName( const OUString& aName )
@@ -718,7 +718,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAreaLinkObj::getPropertySetIn
 }
 
 void SAL_CALL ScAreaLinkObj::setPropertyValue(
-                        const OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
     OUString aValStr;
@@ -751,10 +751,10 @@ void SAL_CALL ScAreaLinkObj::setPropertyValue(
     }
 }
 
-uno::Any SAL_CALL ScAreaLinkObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any SAL_CALL ScAreaLinkObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if ( aPropertyName == SC_UNONAME_LINKURL )
         aRet <<= getFileName();
     else if ( aPropertyName == SC_UNONAME_FILTER )
@@ -964,14 +964,14 @@ sal_Int32 SAL_CALL ScAreaLinksObj::getCount()
     return nAreaCount;
 }
 
-uno::Any SAL_CALL ScAreaLinksObj::getByIndex( sal_Int32 nIndex )
+cpo::uno::Any SAL_CALL ScAreaLinksObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     rtl::Reference<ScAreaLinkObj> xLink(GetObjectByIndex_Impl(nIndex));
     if (!xLink.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(uno::Reference<sheet::XAreaLink>(xLink));
+    return cpo::uno::Any(uno::Reference<sheet::XAreaLink>(xLink));
 
 }
 
@@ -1109,10 +1109,10 @@ void SAL_CALL ScDDELinkObj::removeRefreshListener(
 
 // XDDELinkResults
 
-uno::Sequence< uno::Sequence< uno::Any > > ScDDELinkObj::getResults(  )
+uno::Sequence< uno::Sequence< cpo::uno::Any > > ScDDELinkObj::getResults(  )
 {
     SolarMutexGuard aGuard;
-    uno::Sequence< uno::Sequence< uno::Any > > aReturn;
+    uno::Sequence< uno::Sequence< cpo::uno::Any > > aReturn;
     bool bSuccess = false;
 
     if ( pDocShell )
@@ -1124,7 +1124,7 @@ uno::Sequence< uno::Sequence< uno::Any > > ScDDELinkObj::getResults(  )
             const ScMatrix* pMatrix = rDoc.GetDdeLinkResultMatrix( nPos );
             if ( pMatrix )
             {
-                uno::Any aAny;
+                cpo::uno::Any aAny;
                 if ( ScRangeToSequence::FillMixedArray( aAny, pMatrix, true ) )
                 {
                     aAny >>= aReturn;
@@ -1143,7 +1143,7 @@ uno::Sequence< uno::Sequence< uno::Any > > ScDDELinkObj::getResults(  )
     return aReturn;
 }
 
-void ScDDELinkObj::setResults( const uno::Sequence< uno::Sequence< uno::Any > >& aResults )
+void ScDDELinkObj::setResults( const uno::Sequence< uno::Sequence< cpo::uno::Any > >& aResults )
 {
     SolarMutexGuard aGuard;
     bool bSuccess = false;
@@ -1248,14 +1248,14 @@ sal_Int32 SAL_CALL ScDDELinksObj::getCount()
     return nAreaCount;
 }
 
-uno::Any SAL_CALL ScDDELinksObj::getByIndex( sal_Int32 nIndex )
+cpo::uno::Any SAL_CALL ScDDELinksObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     rtl::Reference<ScDDELinkObj> xLink(GetObjectByIndex_Impl(nIndex));
     if (!xLink.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(uno::Reference<sheet::XDDELink>(xLink));
+    return cpo::uno::Any(uno::Reference<sheet::XDDELink>(xLink));
 }
 
 uno::Type SAL_CALL ScDDELinksObj::getElementType()
@@ -1269,14 +1269,14 @@ bool SAL_CALL ScDDELinksObj::hasElements()
     return ( getCount() != 0 );
 }
 
-uno::Any SAL_CALL ScDDELinksObj::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL ScDDELinksObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     rtl::Reference<ScDDELinkObj> xLink(GetObjectByName_Impl(aName));
     if (!xLink.is())
         throw container::NoSuchElementException();
 
-    return uno::Any(uno::Reference<sheet::XDDELink>(xLink));
+    return cpo::uno::Any(uno::Reference<sheet::XDDELink>(xLink));
 }
 
 uno::Sequence<OUString> SAL_CALL ScDDELinksObj::getElementNames()

@@ -136,7 +136,7 @@ private:
     void Init(std::u16string_view strVisibleFields, const OUString& strInitialText);
     // only to be used out of the constructors
 
-    void OnFound(const css::uno::Any& aCursorPos, sal_Int16 nFieldPos);
+    void OnFound(const cpo::uno::Any& aCursorPos, sal_Int16 nFieldPos);
 
     void EnableSearchUI(bool bEnable);
 

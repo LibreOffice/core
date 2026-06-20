@@ -91,7 +91,7 @@ protected:
 
     void    Clone_Impl(ControlModelContainerBase& _rClone) const;
 protected:
-    css::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    cpo::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     UnoControlModelHolderVector::iterator         ImplFindElement( std::u16string_view rName );
@@ -117,11 +117,11 @@ public:
     bool SAL_CALL hasElements(  ) override;
 
     // css::container::XNameContainer, XNameReplace, XNameAccess
-    void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement ) override;
-    css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
+    cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
     bool SAL_CALL hasByName( const OUString& aName ) override;
-    void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement ) override;
+    void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
     void SAL_CALL removeByName( const OUString& Name ) override;
 
     // css::beans::XMultiPropertySet
@@ -129,7 +129,7 @@ public:
 
     // css::lang::XMultiServiceFactory
     css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
-    css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments ) override;
+    css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const css::uno::Sequence< cpo::uno::Any >& Arguments ) override;
     css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
 
     // XComponent
@@ -160,7 +160,7 @@ public:
     DECLIMPL_SERVICEINFO_DERIVED(ControlModelContainerBase, ControlModel_Base, "toolkit.ControlModelContainerBase" )
 
     // XInitialization
-    virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments) override;
+    virtual void SAL_CALL initialize (const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // css::awt::tab::XTabPageModel
     virtual ::sal_Int16 SAL_CALL getTabPageID() override;
@@ -193,7 +193,7 @@ class ResourceListener final : public css::util::XModifyListener,
         void stopListening();
 
         // XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
         virtual void SAL_CALL acquire() noexcept override;
         virtual void SAL_CALL release() noexcept override;
 

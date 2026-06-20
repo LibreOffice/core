@@ -27,6 +27,7 @@ constexpr OUString WRONG_TYPE_EXCEPTION = u"Only XPropertSet allowed!"_ustr;
 
 using namespace cppu;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -43,7 +44,7 @@ PropertySetContainer::~PropertySetContainer()
 }
 
 // XIndexContainer
-void SAL_CALL PropertySetContainer::insertByIndex( sal_Int32 Index, const css::uno::Any& Element )
+void SAL_CALL PropertySetContainer::insertByIndex( sal_Int32 Index, const cpo::uno::Any& Element )
 {
     std::unique_lock g(m_aMutex);
 
@@ -82,7 +83,7 @@ void SAL_CALL PropertySetContainer::removeByIndex( sal_Int32 nIndex )
 }
 
 // XIndexReplace
-void SAL_CALL PropertySetContainer::replaceByIndex( sal_Int32 Index, const css::uno::Any& Element )
+void SAL_CALL PropertySetContainer::replaceByIndex( sal_Int32 Index, const cpo::uno::Any& Element )
 {
     std::unique_lock g(m_aMutex);
 

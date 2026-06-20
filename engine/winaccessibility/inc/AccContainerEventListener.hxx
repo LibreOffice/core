@@ -47,20 +47,20 @@ public:
 
     //for selection changed event
     virtual void HandleSelectionChangedEvent(
-            const css::uno::Any &oldValue, const css::uno::Any &newValue);
+            const cpo::uno::Any &oldValue, const cpo::uno::Any &newValue);
 
     //for all children changed event
     virtual void HandleAllChildrenChangedEvent();
 
     //for text changed event
     virtual void HandleTextChangedEvent(
-            css::uno::Any oldValue, css::uno::Any newValue);
+            cpo::uno::Any oldValue, cpo::uno::Any newValue);
     virtual void HandleStateChangedEvent(
-            css::uno::Any oldValue, css::uno::Any newValue) override;
+            cpo::uno::Any oldValue, cpo::uno::Any newValue) override;
 
     //for value changed event
     virtual void HandleValueChangedEvent(
-            css::uno::Any oldValue, css::uno::Any newValue);
+            cpo::uno::Any oldValue, cpo::uno::Any newValue);
 
     //state changed
     virtual void SetComponentState(sal_Int64 state, bool enable) override;
@@ -71,22 +71,22 @@ public:
     // update all children's state
     void UpdateAllChildrenState( css::accessibility::XAccessible* pXAccessible);
 
-    bool NotifyChildEvent(UnoMSAAEvent eWinEvent, const css::uno::Any& Value);
+    bool NotifyChildEvent(UnoMSAAEvent eWinEvent, const cpo::uno::Any& Value);
 
     virtual void HandleSelectionChangedAddEvent(
-            const css::uno::Any &oldValue, const css::uno::Any &newValue);
+            const cpo::uno::Any &oldValue, const cpo::uno::Any &newValue);
     virtual void HandleSelectionChangedRemoveEvent(
-            const css::uno::Any &oldValue, const css::uno::Any &newValue);
+            const cpo::uno::Any &oldValue, const cpo::uno::Any &newValue);
     virtual void HandleSelectionChangedWithinEvent(
-            const css::uno::Any &oldValue, const css::uno::Any &newValue);
+            const cpo::uno::Any &oldValue, const cpo::uno::Any &newValue);
 
     virtual void HandlePageChangedEvent(
-            const css::uno::Any &oldValue, const css::uno::Any &newValue);
+            const cpo::uno::Any &oldValue, const cpo::uno::Any &newValue);
 
     virtual void HandleSectionChangedEvent(
-            const css::uno::Any &oldValue, const css::uno::Any &newValue);
+            const cpo::uno::Any &oldValue, const cpo::uno::Any &newValue);
     virtual void HandleColumnChangedEvent(
-            const css::uno::Any &oldValue, const css::uno::Any &newValue);
+            const cpo::uno::Any &oldValue, const cpo::uno::Any &newValue);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

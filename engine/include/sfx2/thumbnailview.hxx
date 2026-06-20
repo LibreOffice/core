@@ -277,7 +277,7 @@ protected:
     SAL_DLLPRIVATE ThumbnailViewItem* ImplGetItem( size_t nPos );
     SAL_DLLPRIVATE sal_uInt16 ImplGetVisibleItemCount() const;
     SAL_DLLPRIVATE ThumbnailViewItem* ImplGetVisibleItem(sal_uInt16 nVisiblePos);
-    SAL_DLLPRIVATE void ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
+    SAL_DLLPRIVATE void ImplFireAccessibleEvent( short nEventId, const cpo::uno::Any& rOldValue, const cpo::uno::Any& rNewValue );
     SAL_DLLPRIVATE bool ImplHasAccessibleListeners() const;
     DECL_DLLPRIVATE_LINK( ImplScrollHdl, weld::ScrolledWindow&, void );
 

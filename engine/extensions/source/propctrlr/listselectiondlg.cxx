@@ -27,6 +27,7 @@
 namespace pcr
 {
     using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
     using namespace ::com::sun::star::beans;
 
     ListSelectionDialog::ListSelectionDialog(weld::Window* pParent, const Reference< XPropertySet >& _rxListBox,

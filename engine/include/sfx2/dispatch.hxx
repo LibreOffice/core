@@ -154,7 +154,7 @@ public:
     ToolbarId           GetObjectBarId( sal_uInt16 nPos ) const;
 
     SfxItemState        QueryState( sal_uInt16 nSID, SfxPoolItemHolder& rState );
-    SfxItemState        QueryState( sal_uInt16 nSID, css::uno::Any& rAny );
+    SfxItemState        QueryState( sal_uInt16 nSID, cpo::uno::Any& rAny );
 
     void                SetDisableFlags( SfxDisableFlags nFlags );
     SfxDisableFlags     GetDisableFlags() const;

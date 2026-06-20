@@ -287,7 +287,7 @@ bool WinSalBitmap::Create( const css::uno::Reference< css::rendering::XBitmapCan
     if( !xFastPropertySet )
         return false;
 
-    css::uno::Sequence< css::uno::Any > args;
+    css::uno::Sequence< cpo::uno::Any > args;
     if( !(xFastPropertySet->getFastPropertyValue(1) >>= args) )
         return false;
 

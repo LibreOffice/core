@@ -48,7 +48,7 @@ class ChartConfigItem : public ::utl::ConfigItem
 public:
     explicit ChartConfigItem( ConfigColorScheme & rListener );
 
-    uno::Any getProperty( const OUString & aPropertyName );
+    cpo::uno::Any getProperty( const OUString & aPropertyName );
 
 protected:
     // ____ ::utl::ConfigItem ____
@@ -78,12 +78,12 @@ void ChartConfigItem::Notify( const Sequence< OUString > & aPropertyNames )
 void ChartConfigItem::ImplCommit()
 {}
 
-uno::Any ChartConfigItem::getProperty( const OUString & aPropertyName )
+cpo::uno::Any ChartConfigItem::getProperty( const OUString & aPropertyName )
 {
-    Sequence< uno::Any > aValues(
+    Sequence< cpo::uno::Any > aValues(
         GetProperties( Sequence< OUString >( &aPropertyName, 1 )));
     if( ! aValues.hasElements())
-        return uno::Any();
+        return cpo::uno::Any();
     return aValues[0];
 }
 
@@ -115,7 +115,7 @@ void ConfigColorScheme::retrieveConfigColors()
     assert(m_apChartConfigItem && "this can only be set at this point");
 
     // retrieve colors
-    uno::Any aValue(
+    cpo::uno::Any aValue(
         m_apChartConfigItem->getProperty( aSeriesPropName ));
     if( aValue >>= m_aColorSequence )
         m_nNumberOfColors = m_aColorSequence.getLength();
@@ -157,7 +157,7 @@ OUString SAL_CALL ConfigColorScheme::getImplementationName()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_ConfigDefaultColorScheme_get_implementation(css::uno::XComponentContext *context,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::ConfigColorScheme(context));
 }

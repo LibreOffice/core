@@ -94,9 +94,9 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
 
         // XFilePickerControlAccess functions
 
-        virtual void SAL_CALL setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const css::uno::Any& aValue ) override;
+        virtual void SAL_CALL setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const cpo::uno::Any& aValue ) override;
 
-        virtual css::uno::Any SAL_CALL getValue( sal_Int16 aControlId, sal_Int16 aControlAction ) override;
+        virtual cpo::uno::Any SAL_CALL getValue( sal_Int16 aControlId, sal_Int16 aControlAction ) override;
 
         virtual void SAL_CALL enableControl( sal_Int16 nControlId, bool bEnable ) override;
 
@@ -114,7 +114,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
 
         virtual sal_Int32 SAL_CALL getAvailableHeight(  ) override;
 
-        virtual void SAL_CALL setImage( sal_Int16 aImageFormat, const css::uno::Any& aImage ) override;
+        virtual void SAL_CALL setImage( sal_Int16 aImageFormat, const cpo::uno::Any& aImage ) override;
 
         virtual bool SAL_CALL setShowState( bool bShowState ) override;
 
@@ -122,7 +122,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
 
         // XInitialization
 
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XCancellable
 
@@ -221,8 +221,8 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         void InitialMapping();
 
         void HandleSetListValue(GtkComboBox *pWidget, sal_Int16 nControlAction,
-            const css::uno::Any& rValue);
-        static css::uno::Any HandleGetListValue(GtkComboBox *pWidget, sal_Int16 nControlAction);
+            const cpo::uno::Any& rValue);
+        static cpo::uno::Any HandleGetListValue(GtkComboBox *pWidget, sal_Int16 nControlAction);
 
         static void expander_changed_cb( GtkExpander *expander, SalGtkFilePicker *pobjFP );
         static void preview_toggled_cb( GObject *cb, SalGtkFilePicker *pobjFP );

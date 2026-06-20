@@ -32,6 +32,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::beans;
@@ -140,7 +141,7 @@ Sequence< OUString > SAL_CALL SmFilterDetect::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 math_FormatDetector_get_implementation(uno::XComponentContext* /*pCtx*/,
-                                       uno::Sequence<uno::Any> const& /*rSeq*/)
+                                       uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SmFilterDetect);
 }

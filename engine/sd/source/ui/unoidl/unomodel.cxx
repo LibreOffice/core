@@ -199,6 +199,7 @@
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::sd;
+using namespace ::cpo::uno;
 
 const TranslateId aTypeResIds[SdLinkTargetType::Count] =
 {
@@ -604,7 +605,7 @@ private:
     void convertValue(XMLTokenEnum eAttributeName, OStringBuffer& sTmp, const Any& rValue) const;
     void convertTiming(OStringBuffer& sTmp, const Any& rValue);
 
-    void appendTrigger(const css::uno::Any& rTarget, const OString& rTriggerHash);
+    void appendTrigger(const cpo::uno::Any& rTarget, const OString& rTriggerHash);
     void exportTriggersImpl(const uno::Reference<drawing::XShapes>& xShapes) const;
 
 private:
@@ -741,7 +742,7 @@ SdrObject* getObjectForShape(uno::Reference<drawing::XShape> const& xShape)
     return nullptr;
 }
 
-SdrObject* getTargetObject(const uno::Any& aTargetAny)
+SdrObject* getTargetObject(const cpo::uno::Any& aTargetAny)
 {
     SdrObject* pObject = nullptr;
     uno::Reference<drawing::XShape> xShape;
@@ -1155,7 +1156,7 @@ void AnimationsExporter::convertTiming(OStringBuffer& sTmp, const Any& rValue)
     }
 }
 
-void AnimationsExporter::appendTrigger(const css::uno::Any& rTarget, const OString& rTriggerHash)
+void AnimationsExporter::appendTrigger(const cpo::uno::Any& rTarget, const OString& rTriggerHash)
 {
     css::uno::Reference<css::uno::XInterface> xRef;
     rTarget >>= xRef;
@@ -1824,7 +1825,7 @@ static const SvxItemPropertySet* ImplGetDrawModelPropertySet()
         { sUNO_Prop_RuntimeUID,           WID_MODEL_RUNTIMEUID,         ::cppu::UnoType<OUString>::get(),                      beans::PropertyAttribute::READONLY, 0},
         { sUNO_Prop_HasValidSignatures,   WID_MODEL_HASVALIDSIGNATURES, ::cppu::UnoType<bool>::get(),                      beans::PropertyAttribute::READONLY, 0},
         { sUNO_Prop_AllowLinkUpdate,      WID_MODEL_ALLOWLINKUPDATE,    ::cppu::UnoType<bool>::get(),                      beans::PropertyAttribute::READONLY, 0},
-        { u"Fonts"_ustr,                  WID_MODEL_FONTS,              cppu::UnoType<uno::Sequence<uno::Any>>::get(),                     beans::PropertyAttribute::READONLY, 0},
+        { u"Fonts"_ustr,                  WID_MODEL_FONTS,              cppu::UnoType<uno::Sequence<cpo::uno::Any>>::get(),                     beans::PropertyAttribute::READONLY, 0},
         { sUNO_Prop_InteropGrabBag,       WID_MODEL_INTEROPGRABBAG,     cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(),       0, 0},
         { u"SlideSections"_ustr,          WID_MODEL_SLIDESECTIONS,      cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(),       0, 0},
         { sUNO_Prop_Theme,                WID_MODEL_THEME,              cppu::UnoType<util::XTheme>::get(),       0, 0},
@@ -1882,9 +1883,9 @@ SdXImpressDocument::~SdXImpressDocument() noexcept
 }
 
 // XInterface
-uno::Any SAL_CALL SdXImpressDocument::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SdXImpressDocument::queryInterface( const uno::Type & rType )
 {
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     if (rType == cppu::UnoType<lang::XServiceInfo>::get())
         aAny <<= uno::Reference<lang::XServiceInfo>(this);
@@ -2477,7 +2478,7 @@ uno::Reference < container::XIndexAccess > SAL_CALL SdXImpressDocument::getViewD
 
                     uno::Sequence< beans::PropertyValue > aSeq;
                     pFrameView->WriteUserDataSequence( aSeq );
-                    xCont->insertByIndex( i, uno::Any( aSeq ) );
+                    xCont->insertByIndex( i, cpo::uno::Any( aSeq ) );
                 }
             }
         }
@@ -2940,7 +2941,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
 css::uno::Reference<css::uno::XInterface>
 SdXImpressDocument::createInstanceWithArguments(
     OUString const & ServiceSpecifier,
-    css::uno::Sequence<css::uno::Any> const & Arguments)
+    css::uno::Sequence<cpo::uno::Any> const & Arguments)
 {
     OUString arg;
     if ((ServiceSpecifier == "com.sun.star.drawing.GraphicObjectShape"
@@ -3047,7 +3048,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL SdXImpressDocument::getProper
     return mpPropSet->getPropertySetInfo();
 }
 
-void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
+void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     ::SolarMutexGuard aGuard;
 
@@ -3138,11 +3139,11 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
     SetModified();
 }
 
-uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& PropertyName )
+cpo::uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& PropertyName )
 {
     ::SolarMutexGuard aGuard;
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
     if( nullptr == mpDoc )
         throw lang::DisposedException();
 
@@ -3202,7 +3203,7 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
             aAny <<= getRuntimeUID();
             break;
         case WID_MODEL_BUILDID:
-            return uno::Any( maBuildId );
+            return cpo::uno::Any( maBuildId );
         case WID_MODEL_HASVALIDSIGNATURES:
             aAny <<= hasValidSignatures();
             break;
@@ -3214,7 +3215,7 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
         }
         case WID_MODEL_FONTS:
             {
-                uno::Sequence<uno::Any> aSeq;
+                uno::Sequence<cpo::uno::Any> aSeq;
                 int nSeqIndex = 0;
 
                 sal_uInt16 const aWhichIds[] { EE_CHAR_FONTINFO, EE_CHAR_FONTINFO_CJK,
@@ -3312,7 +3313,7 @@ uno::Reference< css::ucb::XAnyCompare > SAL_CALL SdXImpressDocument::createAnyCo
 }
 
 // XRenderable
-sal_Int32 SAL_CALL SdXImpressDocument::getRendererCount( const uno::Any& rSelection,
+sal_Int32 SAL_CALL SdXImpressDocument::getRendererCount( const cpo::uno::Any& rSelection,
                                                          const uno::Sequence< beans::PropertyValue >&  )
 {
     ::SolarMutexGuard aGuard;
@@ -3342,7 +3343,7 @@ sal_Int32 SAL_CALL SdXImpressDocument::getRendererCount( const uno::Any& rSelect
     return nRet;
 }
 
-uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( sal_Int32 , const uno::Any& ,
+uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( sal_Int32 , const cpo::uno::Any& ,
                                                                                 const uno::Sequence< beans::PropertyValue >& rxOptions )
 {
     ::SolarMutexGuard aGuard;
@@ -3563,7 +3564,7 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
             }
 
             presentation::ClickAction eCa;
-            uno::Any aAny( xShapePropSet->getPropertyValue( u"OnClick"_ustr ) );
+            cpo::uno::Any aAny( xShapePropSet->getPropertyValue( u"OnClick"_ustr ) );
             if ( aAny >>= eCa )
             {
                 OUString const actionName(SdResId(SdTPAction::GetClickActionSdResId(eCa)));
@@ -3728,7 +3729,7 @@ namespace
     }
 }
 
-void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& rSelection,
+void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const cpo::uno::Any& rSelection,
                                           const uno::Sequence< beans::PropertyValue >& rxOptions )
 {
     ::SolarMutexGuard aGuard;
@@ -3842,7 +3843,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
         {
             try
             {
-                uno::Any aAny;
+                cpo::uno::Any aAny;
                 rtl::Reference< SvxDrawPage > xPage( pPage->getUnoPage() );
                 if ( xPage.is() )
                 {
@@ -4711,7 +4712,7 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
     {
         css::uno::Sequence<css::beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
-            { "NewTheme", uno::Any(sThemeName) }
+            { "NewTheme", cpo::uno::Any(sThemeName) }
         }));
         comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, aPropertyValues);
     }
@@ -4719,7 +4720,7 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
     {
         css::uno::Sequence<css::beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
-            { "NewTheme", uno::Any(sBackgroundThemeName) }
+            { "NewTheme", cpo::uno::Any(sBackgroundThemeName) }
         }));
         comphelper::dispatchCommand(u".uno:InvertBackground"_ustr, aPropertyValues);
     }
@@ -5581,10 +5582,10 @@ sal_Int32 SAL_CALL SdDrawPagesAccess::getCount()
     return mpModel->mpDoc->GetSdPageCount( PageKind::Standard );
 }
 
-uno::Any SAL_CALL SdDrawPagesAccess::getByIndex( sal_Int32 Index )
+cpo::uno::Any SAL_CALL SdDrawPagesAccess::getByIndex( sal_Int32 Index )
 {
     uno::Reference< drawing::XDrawPage > xDrawPage( getDrawPageByIndex(Index) );
-    return uno::Any(xDrawPage);
+    return cpo::uno::Any(xDrawPage);
 }
 
 SdGenericDrawPage* SdDrawPagesAccess::getDrawPageByIndex( sal_Int32 Index )
@@ -5605,7 +5606,7 @@ SdGenericDrawPage* SdDrawPagesAccess::getDrawPageByIndex( sal_Int32 Index )
 }
 
 // XNameAccess
-uno::Any SAL_CALL SdDrawPagesAccess::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL SdDrawPagesAccess::getByName( const OUString& aName )
 {
     ::SolarMutexGuard aGuard;
 
@@ -5624,7 +5625,7 @@ uno::Any SAL_CALL SdDrawPagesAccess::getByName( const OUString& aName )
 
             if( aName == SdDrawPage::getPageApiName( pPage ) )
             {
-                uno::Any aAny;
+                cpo::uno::Any aAny;
                 uno::Reference< drawing::XDrawPage > xDrawPage( pPage->getUnoPage() );
                 aAny <<= xDrawPage;
                 return aAny;
@@ -5848,7 +5849,7 @@ sal_Int32 SAL_CALL SdMasterPagesAccess::getCount()
  * Provides a drawing::XDrawPage interface for accessing the Masterpage at the
  * specified position in the model.
  */
-uno::Any SAL_CALL SdMasterPagesAccess::getByIndex( sal_Int32 Index )
+cpo::uno::Any SAL_CALL SdMasterPagesAccess::getByIndex( sal_Int32 Index )
 {
     ::SolarMutexGuard aGuard;
     comphelper::ProfileZone aZone("SdMasterPagesAccess::getByIndex");
@@ -5856,7 +5857,7 @@ uno::Any SAL_CALL SdMasterPagesAccess::getByIndex( sal_Int32 Index )
     if( nullptr == mpModel )
         throw lang::DisposedException();
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     if( (Index < 0) || (Index >= mpModel->mpDoc->GetMasterSdPageCount( PageKind::Standard ) ) )
         throw lang::IndexOutOfBoundsException();
@@ -6085,13 +6086,13 @@ void SAL_CALL SdDocLinkTargets::removeEventListener( const uno::Reference< lang:
 }
 
 // XNameAccess
-uno::Any SAL_CALL SdDocLinkTargets::getByName( const OUString& aName )
+cpo::uno::Any SAL_CALL SdDocLinkTargets::getByName( const OUString& aName )
 {
     if (mpModel)
     {
         for (sal_uInt16 i=0; i < SdLinkTargetType::Count; i++)
             if ( aNames[i] == aName )
-                return uno::Any(uno::Reference< beans::XPropertySet >(new SdDocLinkTargetType( mpModel, i )));
+                return cpo::uno::Any(uno::Reference< beans::XPropertySet >(new SdDocLinkTargetType( mpModel, i )));
     }
 
     throw container::NoSuchElementException();
@@ -6190,14 +6191,14 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL SdDocLinkTargetType::getPrope
 }
 
 void SAL_CALL SdDocLinkTargetType::setPropertyValue(const OUString& /* aPropertyName */,
-            const uno::Any& /* aValue */)
+            const cpo::uno::Any& /* aValue */)
 {
     //  everything is read-only
 }
 
-uno::Any SAL_CALL SdDocLinkTargetType::getPropertyValue(const OUString& PropertyName)
+cpo::uno::Any SAL_CALL SdDocLinkTargetType::getPropertyValue(const OUString& PropertyName)
 {
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if ( PropertyName == "LinkDisplayName" )
         aRet <<= maName;
 
@@ -6251,7 +6252,7 @@ SdDocLinkTarget::SdDocLinkTarget( SdXImpressDocument* pModel, sal_uInt16 nT )
 
 // container::XNameAccess
 
-uno::Any SAL_CALL SdDocLinkTarget::getByName(const OUString& aName)
+cpo::uno::Any SAL_CALL SdDocLinkTarget::getByName(const OUString& aName)
 {
     ::SolarMutexGuard aGuard;
 
@@ -6263,7 +6264,7 @@ uno::Any SAL_CALL SdDocLinkTarget::getByName(const OUString& aName)
     if( pPage == nullptr )
         throw container::NoSuchElementException();
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     uno::Reference< beans::XPropertySet > xProps( cppu::getXWeak(pPage->getUnoPage().get()), uno::UNO_QUERY );
     if( xProps.is() )

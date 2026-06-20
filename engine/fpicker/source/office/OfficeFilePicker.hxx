@@ -109,8 +109,8 @@ public:
     // XFilePickerControlAccess functions
 
 
-    virtual void SAL_CALL           setValue( sal_Int16 ElementID, sal_Int16 ControlAction, const css::uno::Any& value ) override;
-    virtual css::uno::Any SAL_CALL           getValue( sal_Int16 ElementID, sal_Int16 ControlAction ) override;
+    virtual void SAL_CALL           setValue( sal_Int16 ElementID, sal_Int16 ControlAction, const cpo::uno::Any& value ) override;
+    virtual cpo::uno::Any SAL_CALL           getValue( sal_Int16 ElementID, sal_Int16 ControlAction ) override;
     virtual void SAL_CALL           setLabel( sal_Int16 ElementID, const OUString& aValue ) override;
     virtual OUString SAL_CALL    getLabel( sal_Int16 ElementID ) override;
     virtual void SAL_CALL           enableControl( sal_Int16 ElementID, bool bEnable ) override;
@@ -130,7 +130,7 @@ public:
     virtual sal_Int32 SAL_CALL      getTargetColorDepth() override;
     virtual sal_Int32 SAL_CALL      getAvailableWidth() override;
     virtual sal_Int32 SAL_CALL      getAvailableHeight() override;
-    virtual void SAL_CALL           setImage( sal_Int16 aImageFormat, const css::uno::Any& aImage ) override;
+    virtual void SAL_CALL           setImage( sal_Int16 aImageFormat, const cpo::uno::Any& aImage ) override;
     virtual bool SAL_CALL       setShowState( bool bShowState ) override;
     virtual bool SAL_CALL       getShowState() override;
 
@@ -163,7 +163,7 @@ public:
     // XInitialization functions
 
 
-    virtual void SAL_CALL           initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL           initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
 
     // XServiceInfo functions
@@ -183,7 +183,7 @@ protected:
     virtual sal_Int16       implExecutePicker( ) override;
     virtual bool            implHandleInitializationArgument(
                                 const OUString& _rName,
-                                const css::uno::Any& _rValue
+                                const cpo::uno::Any& _rValue
                             ) override;
 
 protected:

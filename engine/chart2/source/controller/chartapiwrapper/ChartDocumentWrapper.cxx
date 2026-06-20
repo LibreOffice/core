@@ -67,7 +67,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart;
 
-using ::com::sun::star::uno::Any;
+using ::cpo::uno::Any;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -254,11 +254,11 @@ class WrappedDataSourceLabelsInFirstRowProperty : public WrappedProperty
 public:
     explicit WrappedDataSourceLabelsInFirstRowProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
@@ -344,11 +344,11 @@ class WrappedDataSourceLabelsInFirstColumnProperty : public WrappedProperty
 public:
     explicit WrappedDataSourceLabelsInFirstColumnProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
@@ -434,11 +434,11 @@ class WrappedHasLegendProperty : public WrappedProperty
 public:
     explicit WrappedHasLegendProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 private: //member
     std::shared_ptr< Chart2ModelContact > m_spChart2ModelContact;
@@ -473,7 +473,7 @@ void WrappedHasLegendProperty::setPropertyValue( const Any& rOuterValue, const R
             Any aAOld = xLegend->getPropertyValue(u"Show"_ustr);
             aAOld >>= bOldValue;
             if( bOldValue != bNewValue )
-                xLegend->setPropertyValue(u"Show"_ustr, uno::Any( bNewValue ));
+                xLegend->setPropertyValue(u"Show"_ustr, cpo::uno::Any( bNewValue ));
         }
     }
     catch (const uno::Exception&)
@@ -522,11 +522,11 @@ class WrappedHasMainTitleProperty : public WrappedProperty
 public:
     explicit WrappedHasMainTitleProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 private: //member
     std::shared_ptr< Chart2ModelContact > m_spChart2ModelContact;
@@ -588,11 +588,11 @@ class WrappedHasSubTitleProperty : public WrappedProperty
 public:
     explicit WrappedHasSubTitleProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 private: //member
     std::shared_ptr< Chart2ModelContact > m_spChart2ModelContact;
@@ -654,11 +654,11 @@ class WrappedNullDateProperty : public WrappedProperty
 public:
     explicit WrappedNullDateProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 private: //member
     std::shared_ptr< Chart2ModelContact > m_spChart2ModelContact;
@@ -727,7 +727,7 @@ ChartDocumentWrapper::~ChartDocumentWrapper()
 
 // ____ XInterface (for new interfaces) ____
 // [-loplugin:unoaggregation]
-uno::Any SAL_CALL ChartDocumentWrapper::queryInterface( const uno::Type& aType )
+cpo::uno::Any SAL_CALL ChartDocumentWrapper::queryInterface( const uno::Type& aType )
 {
     if( m_xDelegator.is())
         // calls queryAggregation if the delegator doesn't know aType
@@ -1016,10 +1016,10 @@ void ChartDocumentWrapper::impl_resetAddIn()
             uno::Reference< lang::XInitialization > xInit( xAddIn, uno::UNO_QUERY );
             if( xInit.is() )
             {
-                uno::Any aParam;
+                cpo::uno::Any aParam;
                 uno::Reference< css::chart::XChartDocument > xDoc;
                 aParam <<= xDoc;
-                uno::Sequence< uno::Any > aSeq( &aParam, 1 );
+                uno::Sequence< cpo::uno::Any > aSeq( &aParam, 1 );
                 xInit->initialize( aSeq );
             }
         }
@@ -1068,10 +1068,10 @@ void ChartDocumentWrapper::setAddIn( const Reference< util::XRefreshable >& xAdd
     uno::Reference< lang::XInitialization > xInit( m_xAddIn, uno::UNO_QUERY );
     if( xInit.is() )
     {
-        uno::Any aParam;
+        cpo::uno::Any aParam;
         uno::Reference< XChartDocument > xDoc(this);
         aParam <<= xDoc;
-        uno::Sequence< uno::Any > aSeq( &aParam, 1 );
+        uno::Sequence< cpo::uno::Any > aSeq( &aParam, 1 );
         xInit->initialize( aSeq );
     }
 }
@@ -1417,7 +1417,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
 
 uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstanceWithArguments(
     const OUString& ServiceSpecifier,
-    const uno::Sequence< uno::Any >& Arguments )
+    const uno::Sequence< cpo::uno::Any >& Arguments )
 {
     OSL_ENSURE( Arguments.hasElements(), "createInstanceWithArguments: Warning: Arguments are ignored" );
 
@@ -1462,7 +1462,7 @@ void SAL_CALL ChartDocumentWrapper::setDelegator(
     }
 }
 
-uno::Any SAL_CALL ChartDocumentWrapper::queryAggregation( const uno::Type& rType )
+cpo::uno::Any SAL_CALL ChartDocumentWrapper::queryAggregation( const uno::Type& rType )
 {
     return ChartDocumentWrapper_Base::queryInterface( rType );
 }
@@ -1489,7 +1489,7 @@ void ChartDocumentWrapper::_disposing( const lang::EventObject& rSource )
 }
 
 // ____ XPropertySet ____
-void SAL_CALL ChartDocumentWrapper::setPropertyValue(const OUString& rPropertyName, const css::uno::Any& rValue)
+void SAL_CALL ChartDocumentWrapper::setPropertyValue(const OUString& rPropertyName, const cpo::uno::Any& rValue)
 {
     if (rPropertyName == u"ODFImport_UpdateView")
     {
@@ -1525,9 +1525,9 @@ std::vector< std::unique_ptr<WrappedProperty> > ChartDocumentWrapper::createWrap
     aWrappedProperties.emplace_back( new WrappedAdditionalShapesProperty( *this ) );
     aWrappedProperties.emplace_back( new WrappedRefreshAddInAllowedProperty( *this ) );
     aWrappedProperties.emplace_back( new WrappedNullDateProperty( m_spChart2ModelContact ) );
-    aWrappedProperties.emplace_back( new WrappedIgnoreProperty(u"EnableComplexChartTypes"_ustr, uno::Any(true) ) );
-    aWrappedProperties.emplace_back( new WrappedIgnoreProperty(u"EnableDataTableDialog"_ustr, uno::Any(true) ) );
-    aWrappedProperties.emplace_back( new WrappedIgnoreProperty(u"DisableDataTableDialog"_ustr, uno::Any(false) ) );
+    aWrappedProperties.emplace_back( new WrappedIgnoreProperty(u"EnableComplexChartTypes"_ustr, cpo::uno::Any(true) ) );
+    aWrappedProperties.emplace_back( new WrappedIgnoreProperty(u"EnableDataTableDialog"_ustr, cpo::uno::Any(true) ) );
+    aWrappedProperties.emplace_back( new WrappedIgnoreProperty(u"DisableDataTableDialog"_ustr, cpo::uno::Any(false) ) );
 
     return aWrappedProperties;
 }
@@ -1556,7 +1556,7 @@ css::uno::Sequence< OUString > SAL_CALL ChartDocumentWrapper::getSupportedServic
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_ChartDocumentWrapper_get_implementation(css::uno::XComponentContext *context,
-                                                                css::uno::Sequence<css::uno::Any> const &)
+                                                                css::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::wrapper::ChartDocumentWrapper(context));
 }

@@ -30,8 +30,8 @@ class SVX_DLLPUBLIC SvxLongLRSpaceItem final : public SfxPoolItem
     tools::Long    mlRight;        // the unproblematic right edge
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
-    virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool             QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool             PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
@@ -61,8 +61,8 @@ class SVX_DLLPUBLIC SvxLongULSpaceItem final : public SfxPoolItem
     tools::Long    mlRight;        // the unproblematic right edge
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
-    virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool             QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool             PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
@@ -93,8 +93,8 @@ class SVX_DLLPUBLIC SvxPagePosSizeItem final : public SfxPoolItem
     tools::Long m_lHeight;
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
-    virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool             QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool             PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
@@ -166,8 +166,8 @@ class SVX_DLLPUBLIC SvxColumnItem final : public SfxPoolItem
                                   const IntlWrapper& ) const override;
 
     virtual SvxColumnItem* Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual bool         QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool         PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool         QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool         PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
 public:
     static SfxPoolItem* CreateDefault();
@@ -213,8 +213,8 @@ class SVX_DLLPUBLIC SvxObjectItem final : public SfxPoolItem
                                   OUString &rText, const IntlWrapper& ) const override;
 
     virtual SvxObjectItem*   Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool             QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool             PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     const SvxObjectItem &operator=(const SvxObjectItem &) = delete;
 

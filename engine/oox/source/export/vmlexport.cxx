@@ -1227,7 +1227,7 @@ static bool lcl_isTextBox(const SdrObject* pSdrObject)
     uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
     if (!xPropertySetInfo->hasPropertyByName(u"TextBox"_ustr))
        return false;
-    css::uno::Any aTextBox(xPropertySet->getPropertyValue(u"TextBox"_ustr));
+    cpo::uno::Any aTextBox(xPropertySet->getPropertyValue(u"TextBox"_ustr));
     if (!aTextBox.hasValue())
        return false;
     return aTextBox.get<bool>();

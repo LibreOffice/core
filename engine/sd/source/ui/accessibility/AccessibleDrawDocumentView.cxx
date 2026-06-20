@@ -55,6 +55,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::accessibility;
 
 namespace accessibility {
@@ -151,7 +152,7 @@ rtl::Reference<AccessiblePageShape> AccessibleDrawDocumentView::CreateDrawPageSh
             // Set the shape's size and position.
             if (xRectangle.is())
             {
-                uno::Any aValue;
+                cpo::uno::Any aValue;
                 awt::Point aPosition;
                 awt::Size aSize;
 
@@ -389,10 +390,10 @@ css::uno::Sequence< OUString> SAL_CALL
 
 //=====  XInterface  ==========================================================
 
-uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
     AccessibleDrawDocumentView::queryInterface (const uno::Type & rType)
 {
-    uno::Any aReturn = AccessibleDocumentViewBase::queryInterface (rType);
+    cpo::uno::Any aReturn = AccessibleDocumentViewBase::queryInterface (rType);
     if ( ! aReturn.hasValue())
         aReturn = ::cppu::queryInterface (rType,
             static_cast<XAccessibleGroupPosition*>(this)
@@ -414,7 +415,7 @@ void SAL_CALL
 }
 //=====  XAccessibleGroupPosition  =========================================
 uno::Sequence< sal_Int32 > SAL_CALL
-    AccessibleDrawDocumentView::getGroupPosition( const uno::Any& rAny )
+    AccessibleDrawDocumentView::getGroupPosition( const cpo::uno::Any& rAny )
 {
     SolarMutexGuard g;
 
@@ -482,7 +483,7 @@ uno::Sequence< sal_Int32 > SAL_CALL
     return aRet;
 }
 
-OUString AccessibleDrawDocumentView::getObjectLink( const uno::Any& rAny )
+OUString AccessibleDrawDocumentView::getObjectLink( const cpo::uno::Any& rAny )
 {
     SolarMutexGuard g;
 
@@ -576,7 +577,7 @@ bool
 
     if( xSel.is() && ( 0 <= nAccessibleChildIndex ) )
     {
-        uno::Any                            aAny( xSel->getSelection() );
+        cpo::uno::Any                            aAny( xSel->getSelection() );
         uno::Reference< drawing::XShapes >  xShapes;
 
         aAny >>= xShapes;
@@ -615,7 +616,7 @@ void
     if( !xSel.is() )
         return;
 
-    uno::Any aAny;
+    cpo::uno::Any aAny;
 
     if( ACCESSIBLE_SELECTION_CHILD_ALL == nAccessibleChildIndex )
     {

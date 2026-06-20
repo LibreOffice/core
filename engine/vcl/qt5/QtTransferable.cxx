@@ -142,9 +142,9 @@ bool SAL_CALL QtTransferable::isDataFlavorSupported(const css::datatransfer::Dat
     });
 }
 
-css::uno::Any SAL_CALL QtTransferable::getTransferData(const css::datatransfer::DataFlavor& rFlavor)
+cpo::uno::Any SAL_CALL QtTransferable::getTransferData(const css::datatransfer::DataFlavor& rFlavor)
 {
-    css::uno::Any aAny;
+    cpo::uno::Any aAny;
     if (!isDataFlavorSupported(rFlavor))
         return aAny;
 
@@ -200,10 +200,10 @@ bool QtClipboardTransferable::hasMimeData(const QMimeData* pMimeData) const
     return QtTransferable::mimeData() == pMimeData;
 }
 
-css::uno::Any SAL_CALL
+cpo::uno::Any SAL_CALL
 QtClipboardTransferable::getTransferData(const css::datatransfer::DataFlavor& rFlavor)
 {
-    css::uno::Any aAny;
+    cpo::uno::Any aAny;
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&, this]() {
         ensureConsistencyWithSystemClipboard();
@@ -351,7 +351,7 @@ QVariant QtMimeData::retrieveData(const QString& mimeType, QMetaType) const
             aFlavor.DataType = cppu::UnoType<OUString>::get();
     }
 
-    css::uno::Any aValue;
+    cpo::uno::Any aValue;
 
     try
     {

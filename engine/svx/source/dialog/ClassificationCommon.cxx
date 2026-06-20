@@ -85,10 +85,10 @@ bool addOrInsertDocumentProperty(
     try
     {
         if (containsProperty(xPropertySet->getPropertySetInfo()->getProperties(), rsKey))
-            xPropertySet->setPropertyValue(rsKey, uno::Any(rsValue));
+            xPropertySet->setPropertyValue(rsKey, cpo::uno::Any(rsValue));
         else
             rxPropertyContainer->addProperty(rsKey, beans::PropertyAttribute::REMOVABLE,
-                                             uno::Any(rsValue));
+                                             cpo::uno::Any(rsValue));
     }
     catch (const uno::Exception& /*rException*/)
     {

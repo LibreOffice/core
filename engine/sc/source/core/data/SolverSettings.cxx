@@ -83,8 +83,7 @@ const std::map<OUString, TParamInfo> gaSolverParamNames
         { u"SwarmSize"_ustr, { SP_SWARM_SIZE, "solver_ssz", "int" } },
         { u"LearningCycles"_ustr, { SP_LEARNING_CYCLES, "solver_lcy", "int" } },
         { u"GuessVariableRange"_ustr, { SP_GUESS_VARIABLE_RANGE, "solver_gvr", "bool" } },
-        { u"VariableRangeThreshold"_ustr,
-          { SP_VARIABLE_RANGE_THRESHOLD, "solver_vrt", "double" } },
+        { u"VariableRangeThreshold"_ustr, { SP_VARIABLE_RANGE_THRESHOLD, "solver_vrt", "double" } },
         { u"UseACRComparator"_ustr, { SP_ACR_COMPARATOR, "solver_acr", "bool" } },
         { u"UseRandomStartingPoint"_ustr, { SP_RND_STARTING_POINT, "solver_rsp", "bool" } },
         { u"UseStrongerPRNG"_ustr, { SP_STRONGER_PRNG, "solver_prng", "bool" } },
@@ -106,7 +105,7 @@ const std::map<OUString, TParamInfo> gaSolverParamNames
 // Stores the roots used for named ranges of constraint parts
 // Items here must be in the same order as in ConstraintPart enum
 const std::vector<OUString> gaConstraintParts{ u"solver_lhs"_ustr, u"solver_rel"_ustr,
-                                          u"solver_rhs"_ustr };
+                                               u"solver_rhs"_ustr };
 
 SolverSettings::SolverSettings(ScTable& rTable)
     : m_rTable(rTable)
@@ -750,13 +749,13 @@ void SolverSettings::GetEngineOptions(css::uno::Sequence<css::beans::PropertyVal
             OUString sParamValue = GetParameter(eParamId);
             if (sParamType == "int")
             {
-                css::uno::Any nValue(sParamValue.toInt32());
+                cpo::uno::Any nValue(sParamValue.toInt32());
                 pParamValues[i] = css::beans::PropertyValue(sLOParamName, -1, nValue,
                                                             css::beans::PropertyState_DIRECT_VALUE);
             }
             if (sParamType == "double")
             {
-                css::uno::Any fValue(sParamValue.toDouble());
+                cpo::uno::Any fValue(sParamValue.toDouble());
                 pParamValues[i] = css::beans::PropertyValue(sLOParamName, -1, fValue,
                                                             css::beans::PropertyState_DIRECT_VALUE);
             }
@@ -770,7 +769,7 @@ void SolverSettings::GetEngineOptions(css::uno::Sequence<css::beans::PropertyVal
                 else
                     bTmpValue = sParamValue.toBoolean();
 
-                css::uno::Any bValue(bTmpValue);
+                cpo::uno::Any bValue(bTmpValue);
                 pParamValues[i] = css::beans::PropertyValue(sLOParamName, -1, bValue,
                                                             css::beans::PropertyState_DIRECT_VALUE);
             }

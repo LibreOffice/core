@@ -38,7 +38,7 @@ class GlobalSettings
 
         // settings access
         bool HasToolbarStatesInfo() const;
-        bool GetToolbarStateInfo( StateInfo eStateInfo, css::uno::Any& aValue );
+        bool GetToolbarStateInfo( StateInfo eStateInfo, cpo::uno::Any& aValue );
 
     private:
         GlobalSettings(const GlobalSettings&) = delete;

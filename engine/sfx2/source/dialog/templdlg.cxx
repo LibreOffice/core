@@ -55,6 +55,7 @@ using namespace css;
 using namespace css::beans;
 using namespace css::frame;
 using namespace css::uno;
+using namespace cpo::uno;
 
 class SfxCommonTemplateDialog_Impl::DeletionWatcher
 {

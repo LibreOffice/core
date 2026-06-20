@@ -125,7 +125,7 @@ namespace svxform
     using ::com::sun::star::sdb::XInteractionSupplyParameters;
     using ::com::sun::star::awt::XTextComponent;
     using ::com::sun::star::awt::XTextListener;
-    using ::com::sun::star::uno::Any;
+    using ::cpo::uno::Any;
     using ::com::sun::star::frame::XDispatch;
     using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::uno::Type;
@@ -3924,7 +3924,7 @@ bool SAL_CALL FormController::confirmDelete(const RowChangeEvent& aEvent)
 
         // the request
         SQLWarning aDetails(SvxResId(RID_STR_DELETECONFIRM), {}, {}, 0, {});
-        SQLWarning aWarning(sTitle, {}, {}, 0, css::uno::Any(aDetails));
+        SQLWarning aWarning(sTitle, {}, {}, 0, cpo::uno::Any(aDetails));
 
         rtl::Reference<OInteractionRequest> pRequest = new OInteractionRequest( Any( aWarning ) );
 

@@ -23,12 +23,13 @@
 #include <tools/debug.hxx>
 #include <unotools/configitem.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Any.h>
+#include <cpo/uno/Any.h>
 #include <osl/diagnose.h>
 #include <i18nutil/transliteration.hxx>
 
 using namespace utl;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 #define MAX_FLAGS_OFFSET    29
 

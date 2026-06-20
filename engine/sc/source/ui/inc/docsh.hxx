@@ -383,9 +383,9 @@ public:
 
 #if defined(_WIN32)
     virtual bool DdeGetData( const OUString& rItem, const OUString& rMimeType,
-                                css::uno::Any & rValue ) override;
+                                cpo::uno::Any & rValue ) override;
     virtual bool DdeSetData( const OUString& rItem, const OUString& rMimeType,
-                                const css::uno::Any & rValue ) override;
+                                const cpo::uno::Any & rValue ) override;
 #endif
 
     virtual ::sfx2::SvLinkSource* DdeCreateLinkSource( const OUString& rItem ) override;

@@ -26,10 +26,7 @@
 #include <memory>
 #include <utility>
 
-namespace com::sun::star::uno
-{
-    class Any;
-}
+namespace cpo::uno { class Any; }
 namespace weld { class Window; }
 
 template <typename Arg, typename Ret> class Link;
@@ -68,12 +65,12 @@ public:
                         // notify the sink, the mime type is not
                         // a selection criterion
     void                DataChanged( const OUString & rMimeType,
-                                    const css::uno::Any & rVal );
+                                    const cpo::uno::Any & rVal );
     void                SendDataChanged();
     void                NotifyDataChanged();
 
     virtual bool        Connect( SvBaseLink* );
-    virtual bool        GetData( css::uno::Any & rData /*out param*/,
+    virtual bool        GetData( cpo::uno::Any & rData /*out param*/,
                                 const OUString & rMimeType,
                                 bool bSynchron = false );
 

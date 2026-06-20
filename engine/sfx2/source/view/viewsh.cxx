@@ -124,6 +124,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::cppu;
@@ -1935,8 +1936,8 @@ static OUString impl_retrieveFilterNameFromTypeAndModule(
 {
     // Retrieve filter from type
     css::uno::Sequence< css::beans::NamedValue > aQuery {
-        { u"Type"_ustr, css::uno::Any( rType ) },
-        { u"DocumentService"_ustr, css::uno::Any( rModuleIdentifier ) }
+        { u"Type"_ustr, cpo::uno::Any( rType ) },
+        { u"DocumentService"_ustr, cpo::uno::Any( rModuleIdentifier ) }
     };
 
     css::uno::Reference< css::container::XEnumeration > xEnumeration =
@@ -2875,7 +2876,7 @@ void SfxViewShell::SetSignPDFCertificate(const svl::crypto::CertificateOrName& r
     {
         aMap.erase(it);
     }
-    xShape->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(aMap.getAsConstPropertyValueList()));
+    xShape->setPropertyValue(u"InteropGrabBag"_ustr, cpo::uno::Any(aMap.getAsConstPropertyValueList()));
     if (!rCertificateOrName.Is())
     {
         // The shape's property is now reset, so the doc model is no longer modified.

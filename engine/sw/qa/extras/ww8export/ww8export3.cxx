@@ -165,7 +165,7 @@ DECLARE_WW8EXPORT_TEST(testTdf138345_paraCharHighlight, "tdf138345_paraCharHighl
 
     //tdf#118711 - don't explicitly specify the default page style at the beginning of the document
     uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(), xPara->getPropertyValue(u"PageDescName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(), xPara->getPropertyValue(u"PageDescName"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf104596_wrapInHeaderTable, "tdf104596_wrapInHeaderTable.doc")
@@ -240,7 +240,7 @@ CPPUNIT_TEST_FIXTURE(Test, testArabicZeroNumberingFootnote)
     uno::Reference<beans::XPropertySet> xFootnoteSettings
         = xFootnotesSupplier->getFootnoteSettings();
     sal_uInt16 nNumberingType = style::NumberingType::ARABIC_ZERO;
-    xFootnoteSettings->setPropertyValue(u"NumberingType"_ustr, uno::Any(nNumberingType));
+    xFootnoteSettings->setPropertyValue(u"NumberingType"_ustr, cpo::uno::Any(nNumberingType));
 
     // Insert a footnote.
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
@@ -270,7 +270,7 @@ CPPUNIT_TEST_FIXTURE(Test, testChicagoNumberingFootnote)
     uno::Reference<beans::XPropertySet> xFootnoteSettings
         = xFootnotesSupplier->getFootnoteSettings();
     sal_uInt16 nNumberingType = style::NumberingType::SYMBOL_CHICAGO;
-    xFootnoteSettings->setPropertyValue(u"NumberingType"_ustr, uno::Any(nNumberingType));
+    xFootnoteSettings->setPropertyValue(u"NumberingType"_ustr, cpo::uno::Any(nNumberingType));
 
     // Insert a footnote.
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);

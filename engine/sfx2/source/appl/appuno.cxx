@@ -54,6 +54,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
@@ -1657,7 +1658,7 @@ RequestFilterOptions::RequestFilterOptions( uno::Reference< frame::XModel > cons
     m_xOptions = new FilterOptionsContinuation;
 }
 
-uno::Any SAL_CALL RequestFilterOptions::getRequest()
+cpo::uno::Any SAL_CALL RequestFilterOptions::getRequest()
 {
     return m_aRequest;
 }
@@ -1671,14 +1672,14 @@ uno::Sequence< uno::Reference< task::XInteractionContinuation > >
 
 class RequestPackageReparation_Impl : public ::cppu::WeakImplHelper< task::XInteractionRequest >
 {
-    uno::Any m_aRequest;
+    cpo::uno::Any m_aRequest;
     rtl::Reference<comphelper::OInteractionApprove> m_xApprove;
     rtl::Reference<comphelper::OInteractionDisapprove>  m_xDisapprove;
 
 public:
     explicit RequestPackageReparation_Impl( const OUString& aName );
     bool    isApproved() const;
-    virtual uno::Any SAL_CALL getRequest() override;
+    virtual cpo::uno::Any SAL_CALL getRequest() override;
     virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations() override;
 };
 
@@ -1696,7 +1697,7 @@ bool RequestPackageReparation_Impl::isApproved() const
     return m_xApprove->wasSelected();
 }
 
-uno::Any SAL_CALL RequestPackageReparation_Impl::getRequest()
+cpo::uno::Any SAL_CALL RequestPackageReparation_Impl::getRequest()
 {
     return m_aRequest;
 }
@@ -1729,12 +1730,12 @@ css::uno::Reference < task::XInteractionRequest > RequestPackageReparation::GetR
 
 class NotifyBrokenPackage_Impl : public ::cppu::WeakImplHelper< task::XInteractionRequest >
 {
-    uno::Any m_aRequest;
+    cpo::uno::Any m_aRequest;
     rtl::Reference<comphelper::OInteractionAbort>  m_xAbort;
 
 public:
     explicit NotifyBrokenPackage_Impl(const OUString& rName);
-    virtual uno::Any SAL_CALL getRequest() override;
+    virtual cpo::uno::Any SAL_CALL getRequest() override;
     virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations() override;
 };
 
@@ -1746,7 +1747,7 @@ NotifyBrokenPackage_Impl::NotifyBrokenPackage_Impl( const OUString& aName )
     m_xAbort = new comphelper::OInteractionAbort;
 }
 
-uno::Any SAL_CALL NotifyBrokenPackage_Impl::getRequest()
+cpo::uno::Any SAL_CALL NotifyBrokenPackage_Impl::getRequest()
 {
     return m_aRequest;
 }

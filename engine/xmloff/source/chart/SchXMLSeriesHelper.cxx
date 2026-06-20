@@ -170,7 +170,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPISeriesProp
                 Reference< lang::XInitialization > xInit( xRet, uno::UNO_QUERY );
                 if(xInit.is())
                 {
-                    xInit->initialize( { uno::Any(xSeries) });
+                    xInit->initialize( { cpo::uno::Any(xSeries) });
                 }
             }
         }
@@ -202,7 +202,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPIDataPointP
                 Reference< lang::XInitialization > xInit( xRet, uno::UNO_QUERY );
                 if(xInit.is())
                 {
-                    xInit->initialize({ uno::Any(xSeries), uno::Any(nPointIndex) });
+                    xInit->initialize({ cpo::uno::Any(xSeries), cpo::uno::Any(nPointIndex) });
                 }
             }
         }

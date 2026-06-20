@@ -28,7 +28,7 @@
 #include <mutex>
 #include <unordered_map>
 
-namespace com::sun::star::uno { class Any; }
+namespace cpo::uno { class Any; }
 
 /** Implementation of a least recently used (lru) cache.
     <br>
@@ -200,7 +200,7 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash >::clear()
 
 /** Template instance for OUString keys, Any values.<br>
 */
-typedef LRU_Cache< OUString, css::uno::Any, OUStringHash >
+typedef LRU_Cache< OUString, cpo::uno::Any, OUStringHash >
     LRU_CacheAnyByOUString;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

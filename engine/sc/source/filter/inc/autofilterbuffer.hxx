@@ -135,7 +135,7 @@ private:
 /** A filter criterion for a custom filter. */
 struct FilterCriterionModel
 {
-    css::uno::Any       maValue; /// Comparison operand.
+    cpo::uno::Any       maValue; /// Comparison operand.
     sal_Int32           mnOperator;     /// Comparison operator.
     sal_uInt8           mnDataType;     /// Operand data type (BIFF only).
 

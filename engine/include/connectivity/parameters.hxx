@@ -229,8 +229,8 @@ namespace dbtools
         void setTimestamp       ( sal_Int32 _nIndex, const css::util::DateTime& x);
         void setBinaryStream    ( sal_Int32 _nIndex, const css::uno::Reference< css::io::XInputStream>& x, sal_Int32 length);
         void setCharacterStream ( sal_Int32 _nIndex, const css::uno::Reference< css::io::XInputStream>& x, sal_Int32 length);
-        void setObject          ( sal_Int32 _nIndex, const css::uno::Any& x);
-        void setObjectWithInfo  ( sal_Int32 _nIndex, const css::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale);
+        void setObject          ( sal_Int32 _nIndex, const cpo::uno::Any& x);
+        void setObjectWithInfo  ( sal_Int32 _nIndex, const cpo::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale);
         void setRef             ( sal_Int32 _nIndex, const css::uno::Reference< css::sdbc::XRef>& x);
         void setBlob            ( sal_Int32 _nIndex, const css::uno::Reference< css::sdbc::XBlob>& x);
         void setClob            ( sal_Int32 _nIndex, const css::uno::Reference< css::sdbc::XClob>& x);

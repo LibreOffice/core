@@ -847,7 +847,7 @@ void SAL_CALL SwarmSolver::solve()
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Calc_SwarmSolver_get_implementation(uno::XComponentContext*,
-                                                      uno::Sequence<uno::Any> const&)
+                                                      uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SwarmSolver());
 }

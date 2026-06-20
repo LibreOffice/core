@@ -21,7 +21,7 @@
 #include <sal/log.hxx>
 
 #include <basegfx/vector/b2ivector.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -45,7 +45,7 @@ namespace dxcanvas
     {
         try
         {
-            uno::Sequence< uno::Any > aProps( GetProperties( { "DeviceDenylist" } ));
+            uno::Sequence< cpo::uno::Any > aProps( GetProperties( { "DeviceDenylist" } ));
             uno::Sequence< sal_Int32 > aValues;
 
             if (aProps.hasElements() &&
@@ -107,7 +107,7 @@ namespace dxcanvas
                 *pValues++ = rInfo.nDriverBuildId;
             }
 
-            PutProperties({"DeviceDenylist"}, {css::uno::Any(aValues)});
+            PutProperties({"DeviceDenylist"}, {cpo::uno::Any(aValues)});
         }
         catch( const uno::Exception& )
         {

@@ -19,7 +19,7 @@
 #pragma once
 
 #include <com/sun/star/beans/Property.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 
 #include <unordered_map>
 
@@ -30,7 +30,7 @@ namespace chart
 
 typedef int tPropertyValueMapKey;
 
-typedef std::unordered_map<tPropertyValueMapKey, css::uno::Any> tPropertyValueMap;
+typedef std::unordered_map<tPropertyValueMapKey, cpo::uno::Any> tPropertyValueMap;
 
 namespace PropertyHelper
 {
@@ -41,7 +41,7 @@ namespace PropertyHelper
     @return The name used for storing this element in the table
 */
 OUString addLineDashUniqueNameToTable(
-    const css::uno::Any & rValue,
+    const cpo::uno::Any & rValue,
     const css::uno::Reference< css::lang::XMultiServiceFactory > & xFact,
     const OUString & rPreferredName );
 
@@ -51,7 +51,7 @@ OUString addLineDashUniqueNameToTable(
     @return The name used for storing this element in the table
 */
 OUString addGradientUniqueNameToTable(
-    const css::uno::Any & rValue,
+    const cpo::uno::Any & rValue,
     const css::uno::Reference< css::lang::XMultiServiceFactory > & xFact,
     const OUString & rPreferredName );
 
@@ -61,7 +61,7 @@ OUString addGradientUniqueNameToTable(
     @return The name used for storing this element in the table
 */
 OUString addTransparencyGradientUniqueNameToTable(
-    const css::uno::Any & rValue,
+    const cpo::uno::Any & rValue,
     const css::uno::Reference< css::lang::XMultiServiceFactory > & xFact,
     const OUString & rPreferredName );
 
@@ -71,7 +71,7 @@ OUString addTransparencyGradientUniqueNameToTable(
     @return The name used for storing this element in the table
 */
 OUString addHatchUniqueNameToTable(
-    const css::uno::Any & rValue,
+    const cpo::uno::Any & rValue,
     const css::uno::Reference< css::lang::XMultiServiceFactory > & xFact,
     const OUString & rPreferredName );
 
@@ -81,7 +81,7 @@ OUString addHatchUniqueNameToTable(
     @return The name used for storing this element in the table
 */
 OUString addBitmapUniqueNameToTable(
-    const css::uno::Any & rValue,
+    const cpo::uno::Any & rValue,
     const css::uno::Reference< css::lang::XMultiServiceFactory > & xFact,
     const OUString & rPreferredName );
 
@@ -91,7 +91,7 @@ OUString addBitmapUniqueNameToTable(
     @param any is the value encapsulated in the variant type Any
  */
 void setPropertyValueAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key,
-                          const css::uno::Any & rAny );
+                          const cpo::uno::Any & rAny );
 
 /** Set a property to a certain value in the given map.  This works for
     properties that are already set, and those which are not yet in the map.
@@ -102,13 +102,13 @@ void setPropertyValueAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key,
 template< typename Value >
     void setPropertyValue( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const Value & value )
 {
-    setPropertyValueAny( rOutMap, key, css::uno::Any( value ));
+    setPropertyValueAny( rOutMap, key, cpo::uno::Any( value ));
 }
 
 template<>
-    void setPropertyValue< css::uno::Any >( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const css::uno::Any & rAny );
+    void setPropertyValue< cpo::uno::Any >( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const cpo::uno::Any & rAny );
 
-void setPropertyValueDefaultAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const css::uno::Any & rAny );
+void setPropertyValueDefaultAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const cpo::uno::Any & rAny );
 
 /** Calls setPropertyValue() but asserts that the given property hasn't been set
     before.
@@ -116,14 +116,14 @@ void setPropertyValueDefaultAny( tPropertyValueMap & rOutMap, tPropertyValueMapK
 template< typename Value >
     void setPropertyValueDefault( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const Value & value )
 {
-    setPropertyValueDefaultAny( rOutMap, key, css::uno::Any( value ));
+    setPropertyValueDefaultAny( rOutMap, key, cpo::uno::Any( value ));
 }
 
 /** Calls setPropertyValue() but asserts that the given property hasn't been set
     before.
  */
 template<>
-    void setPropertyValueDefault< css::uno::Any >( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const css::uno::Any & rAny );
+    void setPropertyValueDefault< cpo::uno::Any >( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const cpo::uno::Any & rAny );
 
 /** Calls setPropertyValueDefault() with an empty Any as value
  */

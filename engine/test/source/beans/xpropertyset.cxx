@@ -19,7 +19,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/XComplexColor.hpp>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Type.h>
 
@@ -31,6 +31,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace apitest
 {
@@ -180,7 +181,7 @@ bool XPropertySet::isPropertyValueChangeable(const OUString& rName)
     uno::Reference<beans::XPropertySet> xPropSet(init(), UNO_QUERY_THROW);
     try
     {
-        uno::Any any = xPropSet->getPropertyValue(rName);
+        cpo::uno::Any any = xPropSet->getPropertyValue(rName);
         const uno::Type& type = any.getValueType();
         if (type == cppu::UnoType<bool>::get())
         {
@@ -263,7 +264,7 @@ bool XPropertySet::isPropertyValueChangeable(const OUString& rName)
                 "XPropertySet::isPropertyValueChangeable: unknown type in Any tested.", false);
         }
 
-        uno::Any anyTest = xPropSet->getPropertyValue(rName);
+        cpo::uno::Any anyTest = xPropSet->getPropertyValue(rName);
         return any != anyTest;
     }
     catch (const uno::Exception&)

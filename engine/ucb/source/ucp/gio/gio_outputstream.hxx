@@ -44,7 +44,7 @@ public:
     virtual ~OutputStream() override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type & type ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface(const css::uno::Type & type ) override;
     virtual void SAL_CALL acquire() noexcept override { OWeakObject::acquire(); }
     virtual void SAL_CALL release() noexcept override { OWeakObject::release(); }
 

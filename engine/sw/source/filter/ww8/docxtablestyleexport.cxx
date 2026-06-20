@@ -171,7 +171,7 @@ void DocxTableStyleExport::Impl::tableStyleTableCellMar(
     comphelper::SequenceAsHashMap aCellMap(rTableCellMar);
     for (const std::pair<OUString, sal_Int32>& rPair : aTableCellOrder)
     {
-        uno::Any aAny = aCellMap.getValue(rPair.first);
+        cpo::uno::Any aAny = aCellMap.getValue(rPair.first);
         if (!aAny.hasValue())
             continue;
         comphelper::SequenceAsHashMap aMap(aAny.get<uno::Sequence<beans::PropertyValue>>());
@@ -226,7 +226,7 @@ void DocxTableStyleExport::Impl::tableStyleTcBorders(
     m_pSerializer->startElementNS(XML_w, nToken);
     for (const auto& rPair : aBordersOrder)
     {
-        uno::Any aAny = aBorderMap.getValue(rPair.first);
+        cpo::uno::Any aAny = aBorderMap.getValue(rPair.first);
         if (!aAny.hasValue())
             continue;
         tableStyleTcBorder(rPair.second, aAny.get<uno::Sequence<beans::PropertyValue>>());

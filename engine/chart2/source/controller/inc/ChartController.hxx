@@ -117,11 +117,11 @@ public:
     virtual css::uno::Reference< css::frame::XModel > SAL_CALL
         getModel() override;
 
-    virtual css::uno::Any SAL_CALL
+    virtual cpo::uno::Any SAL_CALL
         getViewData() override;
 
     virtual void SAL_CALL
-        restoreViewData( const css::uno::Any& rValue ) override;
+        restoreViewData( const cpo::uno::Any& rValue ) override;
 
     virtual bool SAL_CALL
         suspend( bool bSuspend ) override;
@@ -153,9 +153,9 @@ public:
 
     // css::view::XSelectionSupplier (optional interface)
     virtual bool SAL_CALL
-        select( const css::uno::Any& rSelection ) override;
+        select( const cpo::uno::Any& rSelection ) override;
 
-    virtual css::uno::Any  SAL_CALL
+    virtual cpo::uno::Any  SAL_CALL
         getSelection() override;
 
     virtual void SAL_CALL
@@ -264,7 +264,7 @@ public:
     virtual void SAL_CALL layoutEvent(
         const css::lang::EventObject& aSource,
         ::sal_Int16 eLayoutEvent,
-        const css::uno::Any& aInfo ) override;
+        const cpo::uno::Any& aInfo ) override;
 
     // WindowController stuff
     void PrePaint();
@@ -307,7 +307,7 @@ public:
      */
     rtl::Reference< ::chart::AccessibleTextHelper > createAccessibleTextContext();
 
-    static bool isObjectDeleteable( const css::uno::Any& rSelection );
+    static bool isObjectDeleteable( const cpo::uno::Any& rSelection );
 
     void setDrawMode( ChartDrawMode eMode ) { m_eDrawMode = eMode; }
 
@@ -536,10 +536,10 @@ private:
 
     void executeDispatch_KitSetTextSelection(int nType, int nX, int nY);
     void executeDispatch_KitPieSegmentDragging(int nOffset);
-    void executeDispatch_FillColor(const css::uno::Any& rColor);
+    void executeDispatch_FillColor(const cpo::uno::Any& rColor);
     void executeDispatch_FillGradient(std::u16string_view sJSONGradient);
-    void executeDispatch_LineColor(const css::uno::Any& rColor);
-    void executeDispatch_LineWidth(const css::uno::Any& rWidth);
+    void executeDispatch_LineColor(const cpo::uno::Any& rColor);
+    void executeDispatch_LineWidth(const cpo::uno::Any& rWidth);
 
     void sendPopupRequest(std::u16string_view rCID, tools::Rectangle aRectangle);
 

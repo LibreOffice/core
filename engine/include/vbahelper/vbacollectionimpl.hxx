@@ -26,7 +26,7 @@
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -78,7 +78,7 @@ public:
         return mnIndex < mxIndexAccess->getCount();
     }
 
-    virtual css::uno::Any SAL_CALL nextElement() override
+    virtual cpo::uno::Any SAL_CALL nextElement() override
     {
         if( !hasMoreElements() )
             throw css::container::NoSuchElementException();
@@ -111,14 +111,14 @@ public:
         return mxEnumeration->hasMoreElements();
     }
 
-    virtual css::uno::Any SAL_CALL nextElement() override
+    virtual cpo::uno::Any SAL_CALL nextElement() override
     {
         return createCollectionObject( mxEnumeration->nextElement() );
     }
 
     /** Derived classes implement creation of a VBA implementation object from
         the passed container element. */
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& rSource ) = 0;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& rSource ) = 0;
 
 private:
     css::uno::Reference< css::container::XEnumeration > mxEnumeration;
@@ -163,10 +163,10 @@ private:
             return ( mIt != mXNamedVec.end() );
             }
 
-            virtual css::uno::Any SAL_CALL nextElement(  ) override
+            virtual cpo::uno::Any SAL_CALL nextElement(  ) override
             {
                 if ( hasMoreElements() )
-                    return css::uno::Any( *mIt++ );
+                    return cpo::uno::Any( *mIt++ );
                 throw css::container::NoSuchElementException();
             }
     };
@@ -179,11 +179,11 @@ public:
     virtual css::uno::Type SAL_CALL getElementType(  ) override { return cppu::UnoType< OneIfc >::get(); }
     virtual bool SAL_CALL hasElements(  ) override { return ( mXNamedVec.size() > 0 ); }
     // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override
+    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override
     {
         if ( !hasByName(aName) )
             throw css::container::NoSuchElementException();
-        return css::uno::Any( *cachePos );
+        return cpo::uno::Any( *cachePos );
     }
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
@@ -214,12 +214,12 @@ public:
 
     // XElementAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) override { return mXNamedVec.size(); }
-    virtual css::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
+    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         if ( Index < 0 || Index >= getCount() )
             throw css::lang::IndexOutOfBoundsException();
 
-        return css::uno::Any( mXNamedVec[ Index ] );
+        return cpo::uno::Any( mXNamedVec[ Index ] );
 
     }
     // XEnumerationAccess
@@ -240,7 +240,7 @@ protected:
     bool mbIgnoreCase;
 
     /// @throws css::uno::RuntimeException
-    virtual css::uno::Any getItemByStringIndex( const OUString& sIndex )
+    virtual cpo::uno::Any getItemByStringIndex( const OUString& sIndex )
     {
         if ( !m_xNameAccess.is() )
             throw css::uno::RuntimeException(u"ScVbaCollectionBase string index access not supported by this object"_ustr );
@@ -261,7 +261,7 @@ protected:
 
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IndexOutOfBoundsException
-    virtual css::uno::Any getItemByIntIndex( const sal_Int32 nIndex )
+    virtual cpo::uno::Any getItemByIntIndex( const sal_Int32 nIndex )
     {
         if ( !m_xIndexAccess.is() )
             throw css::uno::RuntimeException(u"ScVbaCollectionBase numeric index access not supported by this object"_ustr );
@@ -289,7 +289,7 @@ public:
         return m_xIndexAccess->getCount();
     }
 
-    virtual css::uno::Any SAL_CALL Item(const css::uno::Any& Index1, const css::uno::Any& /*not processed in this base class*/) override
+    virtual cpo::uno::Any SAL_CALL Item(const cpo::uno::Any& Index1, const cpo::uno::Any& /*not processed in this base class*/) override
     {
         OUString aStringSheet;
         if (Index1.getValueTypeClass() == css::uno::TypeClass_DOUBLE)
@@ -331,7 +331,7 @@ public:
     {
         return ( m_xIndexAccess->getCount() > 0 );
     }
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) = 0;
+    virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) = 0;
 
 };
 

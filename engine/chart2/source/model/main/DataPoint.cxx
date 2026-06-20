@@ -82,7 +82,7 @@ DataPoint::DataPoint( const DataPoint & rOther ) :
 
     // add as listener to XPropertySet properties
     Reference< beans::XPropertySet > xPropertySet;
-    uno::Any aValue;
+    cpo::uno::Any aValue;
 
     getFastPropertyValue( aValue, DataPointProperties::PROP_DATAPOINT_ERROR_BAR_X );
     if( ( aValue >>= xPropertySet )
@@ -103,7 +103,7 @@ DataPoint::~DataPoint()
     {
         // remove listener from XPropertySet properties
         Reference< beans::XPropertySet > xPropertySet;
-        uno::Any aValue;
+        cpo::uno::Any aValue;
 
         getFastPropertyValue( aValue, DataPointProperties::PROP_DATAPOINT_ERROR_BAR_X );
         if( ( aValue >>= xPropertySet )
@@ -140,7 +140,7 @@ void SAL_CALL DataPoint::setParent(
 }
 
 // ____ OPropertySet ____
-void DataPoint::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
+void DataPoint::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const
 {
     // the value set at the data series is the default
     uno::Reference< beans::XFastPropertySet > xFast( m_xParentProperties.get(), uno::UNO_QUERY );
@@ -155,12 +155,12 @@ void DataPoint::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 }
 
 void SAL_CALL DataPoint::setFastPropertyValue_NoBroadcast(
-    sal_Int32 nHandle, const uno::Any& rValue )
+    sal_Int32 nHandle, const cpo::uno::Any& rValue )
 {
     if(    nHandle == DataPointProperties::PROP_DATAPOINT_ERROR_BAR_Y
         || nHandle == DataPointProperties::PROP_DATAPOINT_ERROR_BAR_X )
     {
-        uno::Any aOldValue;
+        cpo::uno::Any aOldValue;
         Reference< util::XModifyBroadcaster > xBroadcaster;
         getFastPropertyValue( aOldValue, nHandle );
         if( aOldValue.hasValue() &&

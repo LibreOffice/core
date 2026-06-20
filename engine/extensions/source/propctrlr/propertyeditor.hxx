@@ -80,7 +80,7 @@ namespace pcr
         sal_uInt16                  GetCurPage() const;
         void                        ClearAll();
 
-        void                        SetPropertyValue(const OUString& _rEntryName, const css::uno::Any& _rValue, bool _bUnknownValue );
+        void                        SetPropertyValue(const OUString& _rEntryName, const cpo::uno::Any& _rValue, bool _bUnknownValue );
         sal_uInt16                  GetPropertyPos(const OUString& rEntryName ) const;
         css::uno::Reference< css::inspection::XPropertyControl >
                                     GetPropertyControl( const OUString& rEntryName );

@@ -47,6 +47,7 @@ using namespace css::io;
 using namespace css::lang;
 using namespace css::ucb;
 using namespace css::uno;
+using namespace cpo::uno;
 using namespace css::xml::dom;
 using namespace css::xml::sax;
 using namespace ucbhelper;
@@ -264,7 +265,7 @@ namespace DOM
                                                        lastError->line, lastError->int2);
 
                 // Call custom warning function
-                xErrorHandler->warning(::css::uno::Any(saxex));
+                xErrorHandler->warning(::cpo::uno::Any(saxex));
             }
         }
         catch (const css::uno::Exception &)
@@ -296,7 +297,7 @@ namespace DOM
                                                        lastError->line, lastError->int2);
 
                 // Call custom warning function
-                xErrorHandler->error(::css::uno::Any(saxex));
+                xErrorHandler->error(::cpo::uno::Any(saxex));
             }
         }
         catch (const css::uno::Exception &)
@@ -429,7 +430,7 @@ namespace DOM
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 unoxml_CDocumentBuilder_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new DOM::CDocumentBuilder());
 }

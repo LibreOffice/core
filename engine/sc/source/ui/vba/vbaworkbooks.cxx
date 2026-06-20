@@ -40,23 +40,23 @@ using namespace ::com::sun::star;
 
 const sal_Int16 CUSTOM_CHAR = 5;
 
-static uno::Any
+static cpo::uno::Any
 getWorkbook( const uno::Reference< uno::XComponentContext >& xContext,
              const rtl::Reference< ScModelObj > &xModel,
              const uno::Reference< XHelperInterface >& xParent )
 {
     // FIXME: fine as long as ScVbaWorkbook is stateless ...
     if( !xModel.is() )
-        return uno::Any();
+        return cpo::uno::Any();
 
     uno::Reference< excel::XWorkbook > xWb( getVBADocument( xModel ), uno::UNO_QUERY );
     if ( xWb.is() )
     {
-        return uno::Any( xWb );
+        return cpo::uno::Any( xWb );
     }
 
     rtl::Reference<ScVbaWorkbook> pWb = new ScVbaWorkbook( xParent, xContext, xModel );
-    return uno::Any( uno::Reference< excel::XWorkbook > (pWb) );
+    return cpo::uno::Any( uno::Reference< excel::XWorkbook > (pWb) );
 }
 
 namespace {
@@ -67,7 +67,7 @@ public:
     /// @throws uno::RuntimeException
     WorkBookEnumImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ) {}
 
-    virtual uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         uno::Reference< sheet::XSpreadsheetDocument > xDoc( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
         return getWorkbook( m_xContext, static_cast<ScModelObj*>(xDoc.get()), m_xParent );
@@ -97,15 +97,15 @@ ScVbaWorkbooks::createEnumeration()
     return new WorkBookEnumImpl( mxParent, mxContext, xEnumerationAccess->createEnumeration() );
 }
 
-uno::Any
-ScVbaWorkbooks::createCollectionObject( const css::uno::Any& aSource )
+cpo::uno::Any
+ScVbaWorkbooks::createCollectionObject( const cpo::uno::Any& aSource )
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc( aSource, uno::UNO_QUERY_THROW );
     return getWorkbook( mxContext, dynamic_cast<ScModelObj*>(xDoc.get()), mxParent );
 }
 
-uno::Any SAL_CALL
-ScVbaWorkbooks::Add( const uno::Any& Template )
+cpo::uno::Any SAL_CALL
+ScVbaWorkbooks::Add( const cpo::uno::Any& Template )
 {
     uno::Reference< sheet::XSpreadsheetDocument > xSpreadDoc;
     sal_Int32 nWorkbookType = 0;
@@ -144,9 +144,9 @@ ScVbaWorkbooks::Add( const uno::Any& Template )
     // need to set up the document modules ( and vba mode ) here
     excel::setUpDocumentModules( xSpreadDoc );
     if (!xSpreadDoc.is())
-        return uno::Any();
+        return cpo::uno::Any();
 
-    uno::Any aRet = getWorkbook( mxContext, dynamic_cast<ScModelObj*>(xSpreadDoc.get()), mxParent );
+    cpo::uno::Any aRet = getWorkbook( mxContext, dynamic_cast<ScModelObj*>(xSpreadDoc.get()), mxParent );
     uno::Reference< excel::XWorkbook > xWBook( aRet, uno::UNO_QUERY );
     if (xWBook.is())
         xWBook->Activate();
@@ -190,8 +190,8 @@ ScVbaWorkbooks::getFileFilterType( const OUString& rFileName )
 }
 
 // #TODO# #FIXME# can any of the unused params below be used?
-uno::Any SAL_CALL
-ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/, const uno::Any& ReadOnly, const uno::Any& Format, const uno::Any& /*Password*/, const uno::Any& /*WriteResPassword*/, const uno::Any& /*IgnoreReadOnlyRecommended*/, const uno::Any& /*Origin*/, const uno::Any& Delimiter, const uno::Any& /*Editable*/, const uno::Any& /*Notify*/, const uno::Any& /*Converter*/, const uno::Any& /*AddToMru*/ )
+cpo::uno::Any SAL_CALL
+ScVbaWorkbooks::Open( const OUString& rFileName, const cpo::uno::Any& /*UpdateLinks*/, const cpo::uno::Any& ReadOnly, const cpo::uno::Any& Format, const cpo::uno::Any& /*Password*/, const cpo::uno::Any& /*WriteResPassword*/, const cpo::uno::Any& /*IgnoreReadOnlyRecommended*/, const cpo::uno::Any& /*Origin*/, const cpo::uno::Any& Delimiter, const cpo::uno::Any& /*Editable*/, const cpo::uno::Any& /*Notify*/, const cpo::uno::Any& /*Converter*/, const cpo::uno::Any& /*AddToMru*/ )
 {
     // we need to detect if this is a URL, if not then assume it's a file path
     OUString aURL;
@@ -265,7 +265,7 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/
         throw uno::RuntimeException(u"Bad Format"_ustr );
 
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( openDocument( rFileName, ReadOnly, sProps ), uno::UNO_QUERY_THROW );
-    uno::Any aRet = getWorkbook( mxContext, dynamic_cast<ScModelObj*>(xSpreadDoc.get()), mxParent );
+    cpo::uno::Any aRet = getWorkbook( mxContext, dynamic_cast<ScModelObj*>(xSpreadDoc.get()), mxParent );
     uno::Reference< excel::XWorkbook > xWBook( aRet, uno::UNO_QUERY );
     if ( xWBook.is() )
         xWBook->Activate();

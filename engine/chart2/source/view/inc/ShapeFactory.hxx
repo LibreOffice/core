@@ -198,7 +198,7 @@ public:
                     , const OUString& rText
                     , const tNameSequence& rPropNames
                     , const tAnySequence& rPropValues
-                    , const css::uno::Any& rATransformation
+                    , const cpo::uno::Any& rATransformation
                      );
 
     static rtl::Reference<SvxShapeText>
@@ -206,7 +206,7 @@ public:
             , const css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& xFormattedString
             , const tNameSequence& rPropNames
             , const tAnySequence& rPropValues
-            , const css::uno::Any& rATransformation);
+            , const cpo::uno::Any& rATransformation);
 
     static rtl::Reference<SvxShapeText>
         createText( const rtl::Reference<SvxShapeGroupAnyD>& xTarget2D,
@@ -252,7 +252,7 @@ public:
 
     static OUString getShapeName( const css::uno::Reference< css::drawing::XShape >& xShape );
 
-    static css::uno::Any makeTransformation( const css::awt::Point& rScreenPosition2D, double fRotationAnglePi=0.0 );
+    static cpo::uno::Any makeTransformation( const css::awt::Point& rScreenPosition2D, double fRotationAnglePi=0.0 );
 
     static OUString getStackedString( const OUString& rString, bool bStacked );
 

@@ -40,7 +40,7 @@ public:
 
     virtual bool SAL_CALL hasMoreElements() override;
 
-    virtual css::uno::Any SAL_CALL nextElement() override;
+    virtual cpo::uno::Any SAL_CALL nextElement() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

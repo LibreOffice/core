@@ -162,7 +162,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteHeaderDisable)
         xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName(u"Standard"_ustr),
                                                uno::UNO_QUERY);
-    xStyle->setPropertyValue(u"HeaderIsOn"_ustr, uno::Any(true));
+    xStyle->setPropertyValue(u"HeaderIsOn"_ustr, cpo::uno::Any(true));
 
     // When pasting RTF content:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);

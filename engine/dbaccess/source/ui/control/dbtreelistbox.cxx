@@ -48,6 +48,7 @@ namespace dbaui
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer;
@@ -375,10 +376,10 @@ IMPL_LINK(TreeListBox, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (aResourceName.isEmpty())
         return false;
 
-    css::uno::Sequence< css::uno::Any > aArgs{
-        css::uno::Any(comphelper::makePropertyValue( u"Value"_ustr, aResourceName )),
-        css::uno::Any(comphelper::makePropertyValue( u"Frame"_ustr, m_pContextMenuProvider->getCommandController().getXController()->getFrame() )),
-        css::uno::Any(comphelper::makePropertyValue( u"IsContextMenu"_ustr, true ))
+    css::uno::Sequence< cpo::uno::Any > aArgs{
+        cpo::uno::Any(comphelper::makePropertyValue( u"Value"_ustr, aResourceName )),
+        cpo::uno::Any(comphelper::makePropertyValue( u"Frame"_ustr, m_pContextMenuProvider->getCommandController().getXController()->getFrame() )),
+        cpo::uno::Any(comphelper::makePropertyValue( u"IsContextMenu"_ustr, true ))
     };
 
     const css::uno::Reference< css::uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();

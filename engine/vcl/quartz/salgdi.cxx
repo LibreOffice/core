@@ -618,9 +618,9 @@ cairo::SurfaceSharedPtr AquaSalGraphics::CreateBitmapSurface(const OutputDevice&
     return cairo::SurfaceSharedPtr();
 }
 
-css::uno::Any AquaSalGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& /*rSurface*/, const basegfx::B2ISize& /*rSize*/) const
+cpo::uno::Any AquaSalGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& /*rSurface*/, const basegfx::B2ISize& /*rSize*/) const
 {
-    return css::uno::Any();
+    return cpo::uno::Any();
 }
 
 #endif // ENABLE_CAIRO_CANVAS

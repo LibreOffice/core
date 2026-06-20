@@ -766,11 +766,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testPDFExportCrash)
     createSwDoc("section-table-section.fodt");
 
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
-    uno::Sequence<beans::PropertyValue> aDescriptor(
-        comphelper::InitPropertySequence({ { "FilterName", uno::Any(u"writer_pdf_Export"_ustr) },
-                                           { "FilterData", uno::Any(aFilterData) },
-                                           { "URL", uno::Any(maTempFile.GetURL()) } }));
+        comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) } }));
+    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
+        { { "FilterName", cpo::uno::Any(u"writer_pdf_Export"_ustr) },
+          { "FilterData", cpo::uno::Any(aFilterData) },
+          { "URL", cpo::uno::Any(maTempFile.GetURL()) } }));
 
     // Without the fix in place, this test would have crashed here
     dispatchCommand(mxComponent, u".uno:ExportToPDF"_ustr, aDescriptor);
@@ -805,7 +805,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159049)
 
     // Paste special as RTF
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "SelectedFormat", uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } }));
+        { { "SelectedFormat",
+            cpo::uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } }));
     dispatchCommand(mxComponent, u".uno:ClipboardFormatItems"_ustr, aArgs);
     // Without fix Actual was "Abreakhere", the line break \n was missing.
     CPPUNIT_ASSERT_EQUAL(u"Abreak\nhere"_ustr, getParagraph(1)->getString());
@@ -821,7 +822,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf135083)
     // Paste special as RTF
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         { { u"SelectedFormat"_ustr,
-            uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } }));
+            cpo::uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } }));
     dispatchCommand(mxComponent, u".uno:ClipboardFormatItems"_ustr, aArgs);
 
     auto xLastPara = getParagraph(3);
@@ -1016,7 +1017,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf151710)
 
     // Insert some text to work with
     uno::Sequence<beans::PropertyValue> aArgsInsert(
-        comphelper::InitPropertySequence({ { "Text", uno::Any(u"abcd"_ustr) } }));
+        comphelper::InitPropertySequence({ { "Text", cpo::uno::Any(u"abcd"_ustr) } }));
     dispatchCommand(mxComponent, u".uno:InsertText"_ustr, aArgsInsert);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"abcd"_ustr, xTextDocument->getText()->getString());
@@ -1100,7 +1101,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf167132)
     xCursor->goRight(1, false);
     xCursor->gotoRange(pTextDoc->getText()->getEnd(), true);
     xCursor->goLeft(1, true);
-    xSelSupplier->select(css::uno::Any(xCursor));
+    xSelSupplier->select(cpo::uno::Any(xCursor));
 
     pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, '(', 0);
     Scheduler::ProcessEventsToIdle();
@@ -1131,7 +1132,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf167132)
     xContentEnum
         = xContentEnumAccess->createContentEnumeration(u"com.sun.star.text.TextContent"_ustr);
     CPPUNIT_ASSERT(xContentEnum->hasMoreElements()); // The selection contains the formula
-    xSelSupplier->select(css::uno::Any(xCursor));
+    xSelSupplier->select(cpo::uno::Any(xCursor));
 
     pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, '[', 0);
     Scheduler::ProcessEventsToIdle();
@@ -1241,8 +1242,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158375_dde_disable)
     uno::Sequence<OUString> aNames{ u"DDECommandFile"_ustr, u"DDECommandType"_ustr,
                                     u"DDECommandElement"_ustr, u"IsAutomaticUpdate"_ustr,
                                     u"IsProtected"_ustr };
-    uno::Sequence<uno::Any> aValues{ uno::Any(u"soffice"_ustr), uno::Any(maTempFile.GetURL()),
-                                     uno::Any(u"Section1"_ustr), uno::Any(true), uno::Any(true) };
+    uno::Sequence<cpo::uno::Any> aValues{ cpo::uno::Any(u"soffice"_ustr),
+                                          cpo::uno::Any(maTempFile.GetURL()),
+                                          cpo::uno::Any(u"Section1"_ustr), cpo::uno::Any(true),
+                                          cpo::uno::Any(true) };
     uno::Reference<beans::XMultiPropertySet> rMultiPropSet(xTextSectionProps, uno::UNO_QUERY);
     rMultiPropSet->setPropertyValues(aNames, aValues);
 
@@ -1356,7 +1359,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf164949)
 
     dispatchCommand(mxComponent, u".uno:SelectTable"_ustr, {});
 
-    uno::Sequence aArgs{ comphelper::makePropertyValue(u"PersistentCopy"_ustr, uno::Any(false)) };
+    uno::Sequence aArgs{ comphelper::makePropertyValue(u"PersistentCopy"_ustr,
+                                                       cpo::uno::Any(false)) };
 
     // Without the fix in place, this test would have crashed here
     dispatchCommand(mxComponent, u".uno:FormatPaintbrush"_ustr, aArgs);
@@ -1380,8 +1384,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testParagraphStyleCloneFormatting)
                          getProperty<OUString>(getParagraph(2), u"ParaStyleName"_ustr));
 
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "Style", uno::Any(u"Heading 1"_ustr) },
-        { "FamilyName", uno::Any(u"ParagraphStyles"_ustr) },
+        { "Style", cpo::uno::Any(u"Heading 1"_ustr) },
+        { "FamilyName", cpo::uno::Any(u"ParagraphStyles"_ustr) },
     });
     dispatchCommand(mxComponent, u".uno:StyleApply"_ustr, aPropertyValues);
 
@@ -1390,7 +1394,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testParagraphStyleCloneFormatting)
     CPPUNIT_ASSERT_EQUAL(u"Heading 1"_ustr,
                          getProperty<OUString>(getParagraph(2), u"ParaStyleName"_ustr));
 
-    uno::Sequence aArgs{ comphelper::makePropertyValue(u"PersistentCopy"_ustr, uno::Any(false)) };
+    uno::Sequence aArgs{ comphelper::makePropertyValue(u"PersistentCopy"_ustr,
+                                                       cpo::uno::Any(false)) };
     dispatchCommand(mxComponent, u".uno:FormatPaintbrush"_ustr, aArgs);
 
     // Disable map mode, so that it's possible to send mouse event coordinates
@@ -1432,7 +1437,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf122756)
     CPPUNIT_ASSERT_EQUAL(u"100"_ustr, xCellA2->getString());
 
     // Cursor is already on cell A1
-    uno::Sequence aArgs{ comphelper::makePropertyValue(u"PersistentCopy"_ustr, uno::Any(false)) };
+    uno::Sequence aArgs{ comphelper::makePropertyValue(u"PersistentCopy"_ustr,
+                                                       cpo::uno::Any(false)) };
     dispatchCommand(mxComponent, u".uno:FormatPaintbrush"_ustr, aArgs);
 
     // Disable map mode, so that it's possible to send mouse event coordinates
@@ -1548,10 +1554,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf162326_Paragraph)
 
     pWrtShell->Down(/*bSelect=*/true, 3);
 
-    dispatchCommand(mxComponent, u".uno:StyleApply"_ustr,
-                    { comphelper::makePropertyValue(u"FamilyName"_ustr, u"ParagraphStyles"_ustr),
-                      comphelper::makePropertyValue(u"Style"_ustr, u"Footnote"_ustr),
-                      comphelper::makePropertyValue(u"KeyModifier"_ustr, uno::Any(KEY_MOD1)) });
+    dispatchCommand(
+        mxComponent, u".uno:StyleApply"_ustr,
+        { comphelper::makePropertyValue(u"FamilyName"_ustr, u"ParagraphStyles"_ustr),
+          comphelper::makePropertyValue(u"Style"_ustr, u"Footnote"_ustr),
+          comphelper::makePropertyValue(u"KeyModifier"_ustr, cpo::uno::Any(KEY_MOD1)) });
 
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL,
                          getProperty<float>(getRun(getParagraph(1), 1), u"CharWeight"_ustr));
@@ -1576,10 +1583,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf162326_Character)
     pWrtShell->Down(/*bSelect=*/true, 3);
 
     //add Ctrl/MOD_1
-    dispatchCommand(mxComponent, u".uno:StyleApply"_ustr,
-                    { comphelper::makePropertyValue(u"FamilyName"_ustr, u"CharacterStyles"_ustr),
-                      comphelper::makePropertyValue(u"Style"_ustr, u"Definition"_ustr),
-                      comphelper::makePropertyValue(u"KeyModifier"_ustr, uno::Any(KEY_MOD1)) });
+    dispatchCommand(
+        mxComponent, u".uno:StyleApply"_ustr,
+        { comphelper::makePropertyValue(u"FamilyName"_ustr, u"CharacterStyles"_ustr),
+          comphelper::makePropertyValue(u"Style"_ustr, u"Definition"_ustr),
+          comphelper::makePropertyValue(u"KeyModifier"_ustr, cpo::uno::Any(KEY_MOD1)) });
 
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL,
                          getProperty<float>(getRun(getParagraph(1), 1), u"CharWeight"_ustr));
@@ -1605,10 +1613,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf162326_List)
     //hard list attribute unchanged
     CPPUNIT_ASSERT_EQUAL(u"A)"_ustr, getProperty<OUString>(xParaCursor, u"ListLabelString"_ustr));
 
-    dispatchCommand(mxComponent, u".uno:StyleApply"_ustr,
-                    { comphelper::makePropertyValue(u"FamilyName"_ustr, u"ParagraphStyles"_ustr),
-                      comphelper::makePropertyValue(u"Style"_ustr, u"Footnote"_ustr),
-                      comphelper::makePropertyValue(u"KeyModifier"_ustr, uno::Any(KEY_MOD1)) });
+    dispatchCommand(
+        mxComponent, u".uno:StyleApply"_ustr,
+        { comphelper::makePropertyValue(u"FamilyName"_ustr, u"ParagraphStyles"_ustr),
+          comphelper::makePropertyValue(u"Style"_ustr, u"Footnote"_ustr),
+          comphelper::makePropertyValue(u"KeyModifier"_ustr, cpo::uno::Any(KEY_MOD1)) });
 
     //list replaced by para style list setting
     CPPUNIT_ASSERT_EQUAL(u"1."_ustr, getProperty<OUString>(xParaCursor, u"ListLabelString"_ustr));
@@ -1628,7 +1637,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf163340)
     for (int i = 0; i < 14; i++)
         xParaCursor->gotoNextParagraph(false);
     xParaCursor->gotoEndOfParagraph(true);
-    xSelSupplier->select(uno::Any(xParaCursor));
+    xSelSupplier->select(cpo::uno::Any(xParaCursor));
 
     CPPUNIT_ASSERT_EQUAL(u"A."_ustr, getProperty<OUString>(xParaCursor, u"ListLabelString"_ustr));
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
@@ -1638,7 +1647,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf163340)
         xParaCursor->gotoNextParagraph(false);
     xParaCursor->gotoEndOfParagraph(true);
     CPPUNIT_ASSERT_EQUAL(u"1."_ustr, getProperty<OUString>(xParaCursor, u"ListLabelString"_ustr));
-    xSelSupplier->select(uno::Any(xParaCursor));
+    xSelSupplier->select(cpo::uno::Any(xParaCursor));
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(u"A."_ustr, getProperty<OUString>(xParaCursor, u"ListLabelString"_ustr));
 }
@@ -1660,7 +1669,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf163340_2)
     for (int i = 0; i < 2; i++)
         xParaCursor->gotoNextParagraph(false);
     xParaCursor->gotoEndOfParagraph(true);
-    xSelSupplier->select(uno::Any(xParaCursor));
+    xSelSupplier->select(cpo::uno::Any(xParaCursor));
 
     xParaCursor = uno::Reference<text::XParagraphCursor>(xText->createTextCursor(), uno::UNO_QUERY);
     for (int i = 0; i < 10; i++)
@@ -1721,7 +1730,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf162195)
     CPPUNIT_ASSERT(xSections);
     auto xSection
         = xSections->getByName(u"Section Hidden"_ustr).queryThrow<css::beans::XPropertySet>();
-    xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(true));
+    xSection->setPropertyValue(u"IsVisible"_ustr, cpo::uno::Any(true));
 
     xToC->update();
     CPPUNIT_ASSERT_EQUAL(u"Table of Contents" SAL_NEWLINE_STRING
@@ -1897,8 +1906,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testStyleApplyForwardsOriginalName)
     // SwStyleNameMapper.
     dispatchCommand(mxComponent, u".uno:StyleApply"_ustr,
                     comphelper::InitPropertySequence({
-                        { "Style", uno::Any(u"Heading 1"_ustr) },
-                        { "FamilyName", uno::Any(u"BogusFamily"_ustr) },
+                        { "Style", cpo::uno::Any(u"Heading 1"_ustr) },
+                        { "FamilyName", cpo::uno::Any(u"BogusFamily"_ustr) },
                     }));
     // Without the fix in place, this would have failed with
     // - Expected: Heading 1

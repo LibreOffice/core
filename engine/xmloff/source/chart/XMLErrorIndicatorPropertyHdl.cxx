@@ -22,7 +22,7 @@
 
 #include <rtl/ustrbuf.hxx>
 
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/chart/ChartErrorIndicatorType.hpp>
 
 #include <sax/tools/converter.hxx>
@@ -34,7 +34,7 @@ XMLErrorIndicatorPropertyHdl::~XMLErrorIndicatorPropertyHdl()
 {}
 
 bool XMLErrorIndicatorPropertyHdl::importXML( const OUString& rStrImpValue,
-                                                  uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
+                                                  cpo::uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     bool bValue(false);
     (void)::sax::Converter::convertBool( bValue, rStrImpValue );
@@ -79,7 +79,7 @@ bool XMLErrorIndicatorPropertyHdl::importXML( const OUString& rStrImpValue,
 }
 
 bool XMLErrorIndicatorPropertyHdl::exportXML( OUString& rStrExpValue,
-                                                  const uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
+                                                  const cpo::uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     chart::ChartErrorIndicatorType eType;
 

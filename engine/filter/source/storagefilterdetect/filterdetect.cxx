@@ -172,7 +172,7 @@ OUString SAL_CALL StorageFilterDetect::detect(uno::Sequence<beans::PropertyValue
 }
 
 // XInitialization
-void SAL_CALL StorageFilterDetect::initialize(const uno::Sequence<uno::Any>& /*aArguments*/) {}
+void SAL_CALL StorageFilterDetect::initialize(const uno::Sequence<cpo::uno::Any>& /*aArguments*/) {}
 
 // XServiceInfo
 OUString SAL_CALL StorageFilterDetect::getImplementationName()
@@ -193,7 +193,7 @@ uno::Sequence<OUString> SAL_CALL StorageFilterDetect::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_StorageFilterDetect_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new StorageFilterDetect(context));
 }

@@ -29,6 +29,7 @@
 
 using namespace cppu;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
@@ -230,7 +231,7 @@ void SAL_CALL ConstItemContainer::removeVetoableChangeListener( const OUString&,
 }
 
 // XFastPropertySet
-void SAL_CALL ConstItemContainer::setFastPropertyValue( sal_Int32, const css::uno::Any& )
+void SAL_CALL ConstItemContainer::setFastPropertyValue( sal_Int32, const cpo::uno::Any& )
 {
 }
 

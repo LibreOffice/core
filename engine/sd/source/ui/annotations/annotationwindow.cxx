@@ -315,13 +315,13 @@ IMPL_LINK(AnnotationWindow, MenuItemSelectedHdl, const OUString&, rIdent, void)
     if (rIdent == ".uno:ReplyToAnnotation")
     {
 
-        const SfxUnoAnyItem aItem(SID_REPLYTO_POSTIT, uno::Any(xUnoAnnotation));
+        const SfxUnoAnyItem aItem(SID_REPLYTO_POSTIT, cpo::uno::Any(xUnoAnnotation));
         pDispatcher->ExecuteList(SID_REPLYTO_POSTIT,
                 SfxCallMode::ASYNCHRON, { &aItem });
     }
     else if (rIdent == ".uno:DeleteAnnotation")
     {
-        const SfxUnoAnyItem aItem(SID_DELETE_POSTIT, uno::Any(xUnoAnnotation));
+        const SfxUnoAnyItem aItem(SID_DELETE_POSTIT, cpo::uno::Any(xUnoAnnotation));
         pDispatcher->ExecuteList(SID_DELETE_POSTIT, SfxCallMode::ASYNCHRON,
                 { &aItem });
     }
@@ -781,13 +781,13 @@ bool AnnotationTextWindow::Command(const CommandEvent& rCEvt)
 
         if (sId == ".uno:ReplyToAnnotation")
         {
-            const SfxUnoAnyItem aItem(SID_REPLYTO_POSTIT, uno::Any(xUnoAnnotation));
+            const SfxUnoAnyItem aItem(SID_REPLYTO_POSTIT, cpo::uno::Any(xUnoAnnotation));
             pDispatcher->ExecuteList(SID_REPLYTO_POSTIT,
                     SfxCallMode::ASYNCHRON, { &aItem });
         }
         else if (sId == ".uno:DeleteAnnotation")
         {
-            const SfxUnoAnyItem aItem(SID_DELETE_POSTIT, uno::Any(xUnoAnnotation));
+            const SfxUnoAnyItem aItem(SID_DELETE_POSTIT, cpo::uno::Any(xUnoAnnotation));
             pDispatcher->ExecuteList(SID_DELETE_POSTIT, SfxCallMode::ASYNCHRON,
                     { &aItem });
         }

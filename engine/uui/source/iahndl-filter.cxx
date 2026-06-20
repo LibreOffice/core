@@ -222,9 +222,9 @@ handleFilterOptionsRequest_(
                     pProp->Value >>= aServiceName;
                     if( !aServiceName.isEmpty() )
                     {
-                        uno::Sequence<uno::Any> aDialogArgs(comphelper::InitAnyPropertySequence(
+                        uno::Sequence<cpo::uno::Any> aDialogArgs(comphelper::InitAnyPropertySequence(
                         {
-                            {"ParentWindow", uno::Any(rWindow)},
+                            {"ParentWindow", cpo::uno::Any(rWindow)},
                         }));
 
                         uno::Reference<
@@ -278,7 +278,7 @@ bool
 UUIInteractionHelper::handleNoSuchFilterRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
 {
-    uno::Any aAnyRequest(rRequest->getRequest());
+    cpo::uno::Any aAnyRequest(rRequest->getRequest());
 
     document::NoSuchFilterRequest aNoSuchFilterRequest;
     if (aAnyRequest >>= aNoSuchFilterRequest)
@@ -297,7 +297,7 @@ bool
 UUIInteractionHelper::handleFilterOptionsRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
 {
-    uno::Any aAnyRequest(rRequest->getRequest());
+    cpo::uno::Any aAnyRequest(rRequest->getRequest());
 
     document::FilterOptionsRequest aFilterOptionsRequest;
     if (aAnyRequest >>= aFilterOptionsRequest)

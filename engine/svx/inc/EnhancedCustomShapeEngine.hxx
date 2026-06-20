@@ -36,7 +36,7 @@ class SVXCORE_DLLPUBLIC EnhancedCustomShapeEngine
                                                             SdrObject* pRenderedShape);
 
 public:
-    EnhancedCustomShapeEngine(const css::uno::Sequence<css::uno::Any>& aArguments);
+    EnhancedCustomShapeEngine(const css::uno::Sequence<cpo::uno::Any>& aArguments);
     EnhancedCustomShapeEngine(SdrObjCustomShape& rShape);
 
     // XInterface

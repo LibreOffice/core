@@ -32,7 +32,7 @@ namespace toolkit
 
     class UnoControlScrollBarModel final : public UnoControlModel
     {
-        css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+        cpo::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
         ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     public:
@@ -67,8 +67,8 @@ namespace toolkit
                                     UnoScrollBarControl();
         OUString             GetComponentServiceName() const override;
 
-        css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoControlBase::queryInterface(rType); }
-        css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+        cpo::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoControlBase::queryInterface(rType); }
+        cpo::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
         void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
         void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
         void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;

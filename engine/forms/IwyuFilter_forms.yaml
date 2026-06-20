@@ -47,7 +47,7 @@ excludelist:
     forms/source/xforms/enumeration.cxx:
     # Actually used
     - com/sun/star/container/XIndexAccess.hpp
-    - com/sun/star/uno/Any.hxx
+    - cpo/uno/Any.hxx
     forms/source/xforms/pathexpression.cxx:
     # Actually used
     - com/sun/star/xml/dom/XNode.hpp

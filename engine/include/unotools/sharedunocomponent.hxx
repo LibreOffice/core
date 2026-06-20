@@ -231,9 +231,9 @@ namespace utl
     }
 
     template < class INTERFACE, class COMPONENT >
-    inline css::uno::Any SAL_CALL makeAny( const SharedUNOComponent< INTERFACE, COMPONENT >& value )
+    inline cpo::uno::Any SAL_CALL makeAny( const SharedUNOComponent< INTERFACE, COMPONENT >& value )
     {
-        return css::uno::Any( value.getTyped() );
+        return cpo::uno::Any( value.getTyped() );
     }
 
     template < class INTERFACE, class COMPONENT >

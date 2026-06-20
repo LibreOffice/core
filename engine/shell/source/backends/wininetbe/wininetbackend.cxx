@@ -278,34 +278,34 @@ WinInetBackend::~WinInetBackend()
 }
 
 void WinInetBackend::setPropertyValue(
-    OUString const &, css::uno::Any const &)
+    OUString const &, cpo::uno::Any const &)
 {
     throw css::lang::IllegalArgumentException(
         "setPropertyValue not supported",
         getXWeak(), -1);
 }
 
-css::uno::Any WinInetBackend::getPropertyValue(
+cpo::uno::Any WinInetBackend::getPropertyValue(
     OUString const & PropertyName)
 {
     if (PropertyName == "ooInetHTTPProxyName")
     {
-        return css::uno::Any(valueHttpProxyName_);
+        return cpo::uno::Any(valueHttpProxyName_);
     } else if ( PropertyName == "ooInetHTTPProxyPort" )
     {
-        return css::uno::Any(valueHttpProxyPort_);
+        return cpo::uno::Any(valueHttpProxyPort_);
     } else if ( PropertyName == "ooInetHTTPSProxyName" )
     {
-        return css::uno::Any(valueHttpsProxyName_);
+        return cpo::uno::Any(valueHttpsProxyName_);
     } else if ( PropertyName == "ooInetHTTPSProxyPort" )
     {
-        return css::uno::Any(valueHttpsProxyPort_);
+        return cpo::uno::Any(valueHttpsProxyPort_);
     } else if ( PropertyName == "ooInetNoProxy" )
     {
-        return css::uno::Any(valueNoProxy_);
+        return cpo::uno::Any(valueNoProxy_);
     } else if ( PropertyName == "ooInetProxyType" )
     {
-        return css::uno::Any(valueProxyType_);
+        return cpo::uno::Any(valueProxyType_);
     } else {
         throw css::beans::UnknownPropertyException(
             PropertyName, getXWeak());
@@ -329,7 +329,7 @@ uno::Sequence<OUString> SAL_CALL WinInetBackend::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 shell_WinInetBackend_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new WinInetBackend);
 }

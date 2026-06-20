@@ -127,7 +127,7 @@ namespace dbaccess
     protected:
         // own overridables
         /// retrieves the value represented by the element
-        virtual void getItemValue( css::uno::Any& o_rValue ) const;
+        virtual void getItemValue( cpo::uno::Any& o_rValue ) const;
 
     private:
         // the settings collection to which |this| will contribute a single setting
@@ -151,7 +151,7 @@ namespace dbaccess
 
     protected:
         // ConfigItemImport overridables
-        virtual void getItemValue( css::uno::Any& o_rValue ) const override;
+        virtual void getItemValue( cpo::uno::Any& o_rValue ) const override;
 
     private:
         /// the settings represented by our child elements

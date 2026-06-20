@@ -391,7 +391,7 @@ bool DataSupplier::getData(std::unique_lock<std::mutex>& rResultSetGuard)
                         {
                             bool bFolder = false;
 
-                            const uno::Any & rValue
+                            const cpo::uno::Any & rValue
                                 = pContentProperties->getValue( u"IsFolder"_ustr );
                             rValue >>= bFolder;
 
@@ -405,7 +405,7 @@ bool DataSupplier::getData(std::unique_lock<std::mutex>& rResultSetGuard)
                         {
                             bool bDocument = false;
 
-                            const uno::Any & rValue
+                            const cpo::uno::Any & rValue
                                 = pContentProperties->getValue( u"IsDocument"_ustr );
                             rValue >>= bDocument;
 

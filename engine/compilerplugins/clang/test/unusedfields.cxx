@@ -15,7 +15,7 @@
 #include <memory>
 #include <vector>
 #include <ostream>
-#include <com/sun/star/uno/Any.hxx>
+#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <rtl/ref.hxx>
@@ -72,8 +72,8 @@ struct Bar
     int m_barstream;
     sal_Int32 m_bar9;
     sal_Int32 m_bar10;
-    css::uno::Any m_bar11;
-    css::uno::Any m_bar12;
+    cpo::uno::Any m_bar11;
+    cpo::uno::Any m_bar12;
 
     // check that we see reads of fields like m_foo1 when referred to via constructor initializer
     Bar(Foo const & foo) : m_bar1(foo.m_foo1) {}
@@ -117,14 +117,14 @@ struct Bar
     // check that we don't see reads when calling operator>>=
     void bar9()
     {
-        css::uno::Any any;
+        cpo::uno::Any any;
         any >>= m_bar9;
     }
 
     // check that we see don't see writes when calling operator<<=
     void bar10()
     {
-        css::uno::Any any;
+        cpo::uno::Any any;
         any <<= m_bar10;
         (void)any;
     }

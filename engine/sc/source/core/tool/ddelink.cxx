@@ -121,7 +121,7 @@ void ScDdeLink::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
 }
 
 sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
-    const OUString& rMimeType, const css::uno::Any & rValue )
+    const OUString& rMimeType, const cpo::uno::Any & rValue )
 {
     //  we only master strings...
     if ( SotClipboardFormatId::STRING != SotExchange::GetFormatIdFromMimeType( rMimeType ))
