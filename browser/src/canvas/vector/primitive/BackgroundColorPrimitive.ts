@@ -10,7 +10,7 @@
  */
 
 namespace cool {
-	/// Fills the entire drawing area with a solid color (slide background).
+	/// Fills the slide rectangle with a solid color (the slide background).
 	export interface BackgroundColorPrimitive extends Primitive {
 		type: typeof BackgroundColorPrimitive.type;
 		color: string;

@@ -98,6 +98,7 @@ class VectorManager extends RenderManagerBase {
 		context: CanvasRenderingContext2D,
 		data: cool.VectorTileData,
 	): void {
+		this._renderer.setSlideBounds(data.slideWidth, data.slideHeight);
 		for (const primitive of data.masterPage) {
 			this._renderer.renderPrimitive(context, primitive);
 		}

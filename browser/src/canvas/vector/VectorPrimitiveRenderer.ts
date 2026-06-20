@@ -17,9 +17,19 @@ namespace cool {
 	/// Renders JSON primitives with Canvas 2D drawing operations.
 	export class VectorPrimitiveRenderer {
 		private _bitmapLookup: BitmapLookup | undefined;
+		// Slide size in twips. The background primitive fills this rectangle.
+		private _slideWidth = 0;
+		private _slideHeight = 0;
 
 		constructor(bitmapLookup?: BitmapLookup) {
 			this._bitmapLookup = bitmapLookup;
+		}
+
+		/// Set the slide size in twips before rendering a primitive tree, so the
+		/// background fills the slide and leaves the area around it untouched.
+		setSlideBounds(width: number, height: number): void {
+			this._slideWidth = width;
+			this._slideHeight = height;
 		}
 
 		renderPrimitive(
@@ -139,12 +149,12 @@ namespace cool {
 		): void {
 			if (!primitive.color) return;
 
-			// Fill the entire canvas = the whole drawing area.
+			// Fill only the slide rectangle, in the current twip transform, so
+			// the workspace color shows around the slide.
 			context.save();
-			context.resetTransform();
 			context.globalAlpha = 1 - (primitive.transparency ?? 0);
 			context.fillStyle = primitive.color;
-			context.fillRect(0, 0, context.canvas.width, context.canvas.height);
+			context.fillRect(0, 0, this._slideWidth, this._slideHeight);
 			context.restore();
 		}
 

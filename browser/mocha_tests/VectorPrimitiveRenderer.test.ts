@@ -31,18 +31,21 @@ describe('VectorPrimitiveRenderer', function () {
 	// Each fixture is a single primitive built with the drawinglayer
 	// primitive constructor, so we can test the primitive in isolation.
 	describe('Primitive references', function () {
-		it('fills the whole canvas for backgroundcolor', function () {
+		it('fills the slide rectangle for backgroundcolor', function () {
 			const primitive = loadVectorRenderingReference('testBackgroundColor').primitives[0];
 			nodeassert.strictEqual(primitive.type, 'backgroundcolor');
 			nodeassert.strictEqual(typeof primitive.color, 'string');
 
 			const recorder = new CanvasRecorder(200, 150);
 			const renderer = new cool.VectorPrimitiveRenderer();
+			// Slide smaller than the canvas: the fill must follow the slide,
+			// leaving the surrounding area for the workspace color.
+			renderer.setSlideBounds(120, 90);
 			renderer.renderPrimitive(recorder as any, primitive);
 
 			const fillRect = recorder.findCall('fillRect');
 			nodeassert.ok(fillRect, 'fillRect not called');
-			nodeassert.deepStrictEqual(fillRect.args, [0, 0, 200, 150]);
+			nodeassert.deepStrictEqual(fillRect.args, [0, 0, 120, 90]);
 			nodeassert.strictEqual(recorder.properties.fillStyle, primitive.color);
 			// The background fill must not leak its canvas state to
 			// anything drawn after it.
@@ -864,6 +867,10 @@ describe('VectorPrimitiveRenderer', function () {
 				primitiveTree.slideHeight,
 			);
 			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.setSlideBounds(
+				primitiveTree.slideWidth,
+				primitiveTree.slideHeight,
+			);
 
 			for (const primitive of primitiveTree.masterPage.primitives)
 				renderer.renderPrimitive(recorder as any, primitive);
@@ -914,6 +921,10 @@ describe('VectorPrimitiveRenderer', function () {
 				primitiveTree.slideHeight,
 			);
 			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.setSlideBounds(
+				primitiveTree.slideWidth,
+				primitiveTree.slideHeight,
+			);
 
 			for (const primitive of primitiveTree.masterPage.primitives)
 				renderer.renderPrimitive(recorder as any, primitive);
