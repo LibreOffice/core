@@ -14,6 +14,7 @@
 #include <tools/stream.hxx>
 
 #include <algorithm>
+#include <set>
 
 namespace sw::seclabel
 {
@@ -131,6 +132,21 @@ SpifCategoryTagSet parseTagSet(tools::XmlWalker& rWalker)
     rWalker.parent();
     return aSet;
 }
+
+// Whether the referenced category (tag-set name + lacv, or all of the tag set) is
+// among the selected categories.
+bool isRefSelected(const SpifCategoryRef& rRef,
+                   const std::set<std::pair<OUString, sal_Int64>>& rSelected)
+{
+    if (rRef.bAll)
+    {
+        for (const auto& rEntry : rSelected)
+            if (rEntry.first == rRef.aTagSetRef)
+                return true;
+        return false;
+    }
+    return rSelected.count({ rRef.aTagSetRef, rRef.nLacv }) != 0;
+}
 }
 
 // SPIF elements are namespace-prefixed (spif:...); XmlWalker::name() yields the
@@ -233,6 +249,10 @@ std::vector<SpifViolation> SpifPolicy::validate(const OUString& rClassification,
                                                 const std::vector<bool>& rSelected) const
 {
     std::vector<SpifViolation> aViolations;
+
+    // First pass: record selected categories (tag-set name + lacv) and check the
+    // per-tag min/max selection counts.
+    std::set<std::pair<OUString, sal_Int64>> aSelectedSet;
     size_t nIdx = 0;
     for (const auto& rTagSet : aTagSets)
     {
@@ -246,17 +266,64 @@ std::vector<SpifViolation> SpifPolicy::validate(const OUString& rClassification,
                     continue;
                 ++nSelectable;
                 if (nIdx < rSelected.size() && rSelected[nIdx])
+                {
                     ++nSelected;
+                    aSelectedSet.emplace(rTagSet.aName, rCategory.nLacv);
+                }
                 ++nIdx;
             }
             if (nSelectable == 0)
                 continue; // tag not applicable under this classification
 
-            const bool bUnderMin = rTag.nMinSelection > 0 && nSelected < rTag.nMinSelection;
-            const bool bOverMax = rTag.nMaxSelection >= 0 && nSelected > rTag.nMaxSelection;
-            if (bUnderMin || bOverMax)
-                aViolations.push_back(
-                    { rTag.aName, rTag.nMinSelection, rTag.nMaxSelection, nSelected });
+            if (rTag.nMinSelection > 0 && nSelected < rTag.nMinSelection)
+                aViolations.push_back({ SpifViolationType::MinSelection, rTag.aName,
+                                        rTag.nMinSelection, rTag.nMaxSelection, nSelected });
+            if (rTag.nMaxSelection >= 0 && nSelected > rTag.nMaxSelection)
+                aViolations.push_back({ SpifViolationType::MaxSelection, rTag.aName,
+                                        rTag.nMinSelection, rTag.nMaxSelection, nSelected });
+        }
+    }
+
+    // Second pass: for each selected category, check excludedCategory and
+    // requiredCategory against the selected set.
+    nIdx = 0;
+    for (const auto& rTagSet : aTagSets)
+    {
+        for (const auto& rTag : rTagSet.aTags)
+        {
+            for (const auto& rCategory : rTag.aCategories)
+            {
+                if (!rCategory.isSelectable(rClassification))
+                    continue;
+                const bool bSelected = nIdx < rSelected.size() && rSelected[nIdx];
+                ++nIdx;
+                if (!bSelected)
+                    continue;
+
+                for (const auto& rRef : rCategory.aExcludedCategories)
+                    if (isRefSelected(rRef, aSelectedSet))
+                        aViolations.push_back(
+                            { SpifViolationType::ExcludedCategory, rCategory.aName, -1, -1, 0 });
+
+                for (const auto& rReq : rCategory.aRequiredCategories)
+                {
+                    sal_Int32 nRefsSelected = 0;
+                    for (const auto& rRef : rReq.aCategories)
+                        if (isRefSelected(rRef, aSelectedSet))
+                            ++nRefsSelected;
+                    const sal_Int32 nTotal = static_cast<sal_Int32>(rReq.aCategories.size());
+                    bool bOk = true;
+                    if (rReq.aOperation == u"onlyOne"_ustr)
+                        bOk = nRefsSelected == 1;
+                    else if (rReq.aOperation == u"oneOrMore"_ustr)
+                        bOk = nRefsSelected >= 1;
+                    else if (rReq.aOperation == u"all"_ustr)
+                        bOk = nRefsSelected == nTotal;
+                    if (!bOk)
+                        aViolations.push_back(
+                            { SpifViolationType::RequiredCategory, rCategory.aName, -1, -1, 0 });
+                }
+            }
         }
     }
     return aViolations;

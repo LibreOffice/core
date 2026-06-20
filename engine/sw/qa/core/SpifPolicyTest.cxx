@@ -23,10 +23,12 @@ class SpifPolicyTest : public CppUnit::TestFixture
 {
     void testParse();
     void testValidate();
+    void testValidateRelationships();
 
     CPPUNIT_TEST_SUITE(SpifPolicyTest);
     CPPUNIT_TEST(testParse);
     CPPUNIT_TEST(testValidate);
+    CPPUNIT_TEST(testValidateRelationships);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -179,10 +181,13 @@ void SpifPolicyTest::testValidate()
     sw::seclabel::SpifPolicy aPolicy;
     CPPUNIT_ASSERT(aPolicy.parse(aStream));
 
+    using T = sw::seclabel::SpifViolationType;
+
     // Below minimum (0 < 1).
     auto aTooFew = aPolicy.validate(u"SECRET"_ustr, { false, false, false });
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aTooFew.size());
-    CPPUNIT_ASSERT_EQUAL(u"Rel"_ustr, aTooFew[0].aTagName);
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(T::MinSelection), static_cast<int>(aTooFew[0].eType));
+    CPPUNIT_ASSERT_EQUAL(u"Rel"_ustr, aTooFew[0].aName);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aTooFew[0].nSelected);
 
     // Within range (1 in 1..2).
@@ -191,7 +196,58 @@ void SpifPolicyTest::testValidate()
     // Above maximum (3 > 2).
     auto aTooMany = aPolicy.validate(u"SECRET"_ustr, { true, true, true });
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aTooMany.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(T::MaxSelection), static_cast<int>(aTooMany[0].eType));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aTooMany[0].nSelected);
+}
+
+void SpifPolicyTest::testValidateRelationships()
+{
+    static const OString aSpif(
+        R"xml(<?xml version="1.0" encoding="utf-8"?>
+<spif:SPIF xmlns:spif="http://www.xmlspif.org/spif" schemaVersion="1.0" version="1">
+  <spif:securityPolicyId name="T" id="1.2.3" />
+  <spif:securityClassifications>
+    <spif:securityClassification name="SECRET" color="red" lacv="4" hierarchy="4" />
+  </spif:securityClassifications>
+  <spif:securityCategoryTagSets>
+    <spif:securityCategoryTagSet name="Caveats" id="1.2.3.0">
+      <spif:securityCategoryTag name="Cav" tagType="enumerated" enumType="permissive">
+        <spif:tagCategory name="X" lacv="1" obsolete="false" />
+        <spif:tagCategory name="Y" lacv="2" obsolete="false" />
+      </spif:securityCategoryTag>
+    </spif:securityCategoryTagSet>
+    <spif:securityCategoryTagSet name="Codeword" id="1.2.3.1">
+      <spif:securityCategoryTag name="Cw" tagType="enumerated" enumType="permissive">
+        <spif:tagCategory name="Z" lacv="3" obsolete="false">
+          <spif:excludedCategory tagSetRef="Caveats" tagType="enumerated" lacv="1" />
+          <spif:requiredCategory operation="oneOrMore">
+            <spif:categoryGroup tagSetRef="Caveats" tagType="enumerated" lacv="2" />
+          </spif:requiredCategory>
+        </spif:tagCategory>
+      </spif:securityCategoryTag>
+    </spif:securityCategoryTagSet>
+  </spif:securityCategoryTagSets>
+</spif:SPIF>)xml"_ostr);
+
+    SvMemoryStream aStream(const_cast<char*>(aSpif.getStr()), aSpif.getLength(), StreamMode::READ);
+    sw::seclabel::SpifPolicy aPolicy;
+    CPPUNIT_ASSERT(aPolicy.parse(aStream));
+
+    using T = sw::seclabel::SpifViolationType;
+
+    // Selectable order under SECRET: X(0), Y(1), Z(2).
+    // Z alone: requiredCategory (needs Y) unmet.
+    auto aZ = aPolicy.validate(u"SECRET"_ustr, { false, false, true });
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aZ.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(T::RequiredCategory), static_cast<int>(aZ[0].eType));
+    CPPUNIT_ASSERT_EQUAL(u"Z"_ustr, aZ[0].aName);
+
+    // Z + X: X is excluded by Z, and Y is still missing -> two violations.
+    auto aZX = aPolicy.validate(u"SECRET"_ustr, { true, false, true });
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aZX.size());
+
+    // Z + Y: exclusion satisfied (X not chosen) and requirement met.
+    CPPUNIT_ASSERT(aPolicy.validate(u"SECRET"_ustr, { false, true, true }).empty());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SpifPolicyTest);

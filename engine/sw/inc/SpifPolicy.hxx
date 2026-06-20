@@ -85,13 +85,23 @@ struct SpifCategoryTagSet
     std::vector<SpifCategoryTag> aTags;
 };
 
-/// A selection-constraint violation found by SpifPolicy::validate.
+/// The kind of constraint a SpifViolation reports.
+enum class SpifViolationType
+{
+    MinSelection, ///< fewer than minSelection categories chosen in a tag
+    MaxSelection, ///< more than maxSelection categories chosen in a tag
+    ExcludedCategory, ///< a selected category excludes another selected category
+    RequiredCategory, ///< a selected category's requiredCategory operation is unmet
+};
+
+/// A constraint violation found by SpifPolicy::validate.
 struct SpifViolation
 {
-    OUString aTagName; ///< the tag whose selection count is out of range
+    SpifViolationType eType = SpifViolationType::MinSelection;
+    OUString aName; ///< the tag (min/max) or category (required/excluded) at fault
     sal_Int32 nMinSelection = -1; ///< required minimum (-1 if none)
     sal_Int32 nMaxSelection = -1; ///< allowed maximum (-1 if none)
-    sal_Int32 nSelected = 0; ///< how many were selected
+    sal_Int32 nSelected = 0; ///< how many were selected (min/max)
 };
 
 /// A parsed SPIF policy: policy identifier, classifications and category tag
