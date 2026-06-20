@@ -41,8 +41,8 @@ class tdf133189(UITestCase):
                 xHeight.executeAction("VALUE", actionProps)
 
 
-            self.ui_test.wait_until_property_is_updated(xPaperMargin, "SelectEntryText", "Normal (0.75″)")
-            self.assertEqual(get_state_as_dict(xPaperMargin)['SelectEntryText'], "Normal (0.75″)")
+            self.ui_test.wait_until_property_is_updated(xPaperMargin, "SelectEntryText", "Normal (0.79″)")
+            self.assertEqual(get_state_as_dict(xPaperMargin)['SelectEntryText'], "Normal (0.79″)")
             self.ui_test.wait_until_property_is_updated(xPaperSize, "SelectEntryText", "User")
             self.assertEqual(get_state_as_dict(xPaperSize)['SelectEntryText'], "User")
             self.ui_test.wait_until_property_is_updated(xPaperOrient, "SelectEntryText", "Portrait")
@@ -54,9 +54,9 @@ class tdf133189(UITestCase):
 
             with change_measurement_unit(self, 'Centimeter'):
 
-                self.ui_test.wait_until_property_is_updated(xPaperMargin, "SelectEntryText", "Normal (1.90 cm)")
+                self.ui_test.wait_until_property_is_updated(xPaperMargin, "SelectEntryText", "Normal (2 cm)")
                 # tdf#129267
-                self.assertEqual(get_state_as_dict(xPaperMargin)['SelectEntryText'], "Normal (1.90 cm)")
+                self.assertEqual(get_state_as_dict(xPaperMargin)['SelectEntryText'], "Normal (2 cm)")
                 self.ui_test.wait_until_property_is_updated(xPaperSize, "SelectEntryText", "User")
                 self.assertEqual(get_state_as_dict(xPaperSize)['SelectEntryText'], "User")
                 self.ui_test.wait_until_property_is_updated(xPaperOrient, "SelectEntryText", "Portrait")
