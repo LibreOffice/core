@@ -110,7 +110,6 @@ public:
     virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
     virtual void    StateChanged( StateChangedType nStateChange ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
-    virtual void    PixelInvalidate(const tools::Rectangle* pRectangle) override;
 
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
     virtual bool set_property(const OUString &rKey, const OUString &rValue) override;
