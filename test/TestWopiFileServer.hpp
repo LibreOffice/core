@@ -243,10 +243,8 @@ void handleWopiRequest(const Poco::Net::HTTPRequest& request, const RequestDetai
                 httpResponse.setBody("{\"COOLStatusCode\":" +
                                          std::to_string(static_cast<int>(
                                              LocalFileInfo::COOLStatusCode::DocChanged)) +
-                                         ',' + "{\"LOOLStatusCode\":" +
-                                         std::to_string(static_cast<int>(
-                                             LocalFileInfo::COOLStatusCode::DocChanged)) +
-                                         '}',
+                                     ",\"stamp\": \"" + localFile->getLastModifiedTime() + "\"" +
+                                     '}',
                                      "application/json; charset=utf-8");
                 socket->send(httpResponse);
                 return;
