@@ -48,6 +48,8 @@ struct SpifCategoryTag
     OUString aTagType; ///< @tagType: enumerated/restrictive/permissive/tagType7/notApplicable
     OUString aEnumType; ///< @enumType when tagType=enumerated: permissive/restrictive
     bool bSingleSelection = false; ///< @singleSelection
+    sal_Int32 nMinSelection = -1; ///< @minSelection; -1 = unbounded (no minimum)
+    sal_Int32 nMaxSelection = -1; ///< @maxSelection; -1 = unbounded (no maximum)
     OUString aMarkingPrefix; ///< markingQualifier qualifier @qualifierCode=prefix
     OUString aMarkingSeparator; ///< qualifierCode=separator (precedes the values)
     OUString aMarkingSuffix; ///< qualifierCode=suffix

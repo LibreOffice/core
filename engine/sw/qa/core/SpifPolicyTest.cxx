@@ -41,7 +41,7 @@ void SpifPolicyTest::testParse()
   </spif:securityClassifications>
   <spif:securityCategoryTagSets>
     <spif:securityCategoryTagSet name="Release Categories" id="1.2.826.0.1310.1.2.0.0">
-      <spif:securityCategoryTag name="Releasable To" tagType="enumerated" enumType="permissive" singleSelection="false">
+      <spif:securityCategoryTag name="Releasable To" tagType="enumerated" enumType="permissive" singleSelection="false" minSelection="1" maxSelection="2">
         <spif:tagCategory name="CANADA" lacv="4407630" obsolete="false" />
         <spif:tagCategory name="UNITED KINGDOM" lacv="5591873" obsolete="false" />
         <spif:markingQualifier markingCode="pageTopBottom">
@@ -101,10 +101,13 @@ void SpifPolicyTest::testParse()
     CPPUNIT_ASSERT_EQUAL(u"UNITED KINGDOM"_ustr, rRelTag.aCategories[1].aName);
     CPPUNIT_ASSERT_EQUAL(u"//"_ustr, rRelTag.aMarkingSeparator);
     CPPUNIT_ASSERT_EQUAL(u"."_ustr, rRelTag.aMarkingSuffix);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rRelTag.nMinSelection);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rRelTag.nMaxSelection);
 
     // lacv exceeding 32 bits must round-trip.
     const auto& rNtkTag = aPolicy.aTagSets[1].aTags[0];
     CPPUNIT_ASSERT_EQUAL(u"restrictive"_ustr, rNtkTag.aEnumType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), rNtkTag.nMinSelection); // unset => unbounded
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(21745403334774610), rNtkTag.aCategories[0].nLacv);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rNtkTag.aCategories[0].aExcludedClasses.size());
     CPPUNIT_ASSERT_EQUAL(u"OFFICIAL"_ustr, rNtkTag.aCategories[0].aExcludedClasses[0]);
@@ -115,12 +118,19 @@ void SpifPolicyTest::testParse()
     CPPUNIT_ASSERT_EQUAL(u"OPS"_ustr, rNtkTag.aCategories[1].aName);
     CPPUNIT_ASSERT(!rNtkTag.aCategories[1].isSelectable(u"SECRET"_ustr)); // OPS obsolete
 
-    // Marking derivation: classification + the tag's separator/values/suffix.
-    std::vector<bool> aSelected(4, false);
+    // Marking derivation walks only categories selectable under the classification
+    // (matching the dialog's filtered rows). Under SECRET: CANADA, UNITED KINGDOM,
+    // INT (OPS is obsolete and skipped).
+    std::vector<bool> aSelected(3, false);
     aSelected[0] = true; // CANADA
     aSelected[1] = true; // UNITED KINGDOM
     CPPUNIT_ASSERT_EQUAL(u"SECRET//CANADA UNITED KINGDOM."_ustr,
                          aPolicy.buildMarking(u"SECRET"_ustr, aSelected));
+
+    // INT is the 3rd selectable; its tag has no qualifiers, so it attaches plainly.
+    std::vector<bool> aIntOnly(3, false);
+    aIntOnly[2] = true; // INT
+    CPPUNIT_ASSERT_EQUAL(u"SECRETINT"_ustr, aPolicy.buildMarking(u"SECRET"_ustr, aIntOnly));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SpifPolicyTest);

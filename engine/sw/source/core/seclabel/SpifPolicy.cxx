@@ -9,6 +9,7 @@
 
 #include <SpifPolicy.hxx>
 
+#include <o3tl/string_view.hxx>
 #include <tools/XmlWalker.hxx>
 #include <tools/stream.hxx>
 
@@ -19,6 +20,14 @@ namespace sw::seclabel
 namespace
 {
 OUString toOU(std::string_view rStr) { return OStringToOUString(rStr, RTL_TEXTENCODING_UTF8); }
+
+// SPIF "selection" type: an integer or "unbounded". -1 represents unbounded.
+sal_Int32 parseSelection(std::string_view rValue)
+{
+    if (rValue.empty() || rValue == "unbounded")
+        return -1;
+    return o3tl::toInt32(rValue);
+}
 
 SpifTagCategory parseTagCategory(tools::XmlWalker& rWalker)
 {
@@ -45,6 +54,8 @@ SpifCategoryTag parseCategoryTag(tools::XmlWalker& rWalker)
     aTag.aTagType = toOU(rWalker.attribute("tagType"_ostr));
     aTag.aEnumType = toOU(rWalker.attribute("enumType"_ostr));
     aTag.bSingleSelection = rWalker.attribute("singleSelection"_ostr) == "true";
+    aTag.nMinSelection = parseSelection(rWalker.attribute("minSelection"_ostr));
+    aTag.nMaxSelection = parseSelection(rWalker.attribute("maxSelection"_ostr));
 
     rWalker.children();
     while (rWalker.isValid())
@@ -171,6 +182,10 @@ OUString SpifPolicy::buildMarking(const OUString& rClassification,
             OUString aValues;
             for (const auto& rCategory : rTag.aCategories)
             {
+                // Walk only the categories the dialog shows for this classification,
+                // so rSelected (built from the filtered rows) stays index-aligned.
+                if (!rCategory.isSelectable(rClassification))
+                    continue;
                 if (nIdx < rSelected.size() && rSelected[nIdx])
                 {
                     if (!aValues.isEmpty())
