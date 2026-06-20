@@ -1507,6 +1507,47 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf126926)
     CPPUNIT_ASSERT(pDBs->empty());
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testCrossDocCutPasteTableUndoable)
+{
+    // Cutting a named table from one document and pasting it into another that
+    // has no database ranges adds a range to the destination. Undoing the paste
+    // must drop it again rather than leave it orphaned over the now-empty cells.
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    insertStringToCell(u"A1"_ustr, u"a");
+    insertStringToCell(u"B1"_ustr, u"b");
+    insertStringToCell(u"A2"_ustr, u"c");
+    insertStringToCell(u"B2"_ustr, u"d");
+
+    // A named table over A1:B2.
+    ScDBData* pDBData = new ScDBData(u"MyTable"_ustr, 0, 0, 0, 1, 1, true, true);
+    CPPUNIT_ASSERT(
+        pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData)));
+
+    // Cut the whole table.
+    goToCell(u"A1:B2"_ustr);
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
+
+    // A second, empty document that owns no database ranges.
+    mxComponent2 = loadFromDesktop(u"private:factory/scalc"_ustr);
+    ScModelObj* pModelObj2 = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent2);
+    CPPUNIT_ASSERT(pModelObj2);
+    ScDocument* pDoc2 = pModelObj2->GetDocument();
+    CPPUNIT_ASSERT(pDoc2->GetDBCollection()->getNamedDBs().empty());
+
+    // Pasting into the second document recreates MyTable there.
+    dispatchCommand(mxComponent2, u".uno:Paste"_ustr, {});
+    CPPUNIT_ASSERT_MESSAGE(
+        "paste should have recreated the table in the destination",
+        pDoc2->GetDBCollection()->getNamedDBs().findByUpperName(u"MYTABLE"_ustr));
+
+    // Undo must drop the range the paste added.
+    dispatchCommand(mxComponent2, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_MESSAGE("undo of a cut-paste must drop the table it added",
+                           pDoc2->GetDBCollection()->getNamedDBs().empty());
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testUnallocatedColumnsAttributes)
 {
     createScDoc();

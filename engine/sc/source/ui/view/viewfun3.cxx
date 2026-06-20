@@ -1493,20 +1493,25 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         rDoc.CopyToDocument( nStartCol, nStartRow, 0, nUndoEndCol, nUndoEndRow, nTabCount-1,
                               nUndoFlags, false, *pUndoDoc );
 
+        // A clip document carrying named tables can add a database range to
+        // this document during paste. Force the DB-range snapshot so that
+        // addition is undoable even when this document had no ranges yet -
+        // the general path skips an empty collection. The cut path always
+        // builds ScRefUndoData, and the flag extends its snapshot to the
+        // empty pre-state.
+        const bool bForceDBSnapshot = pClipDoc->GetDBCollection()
+                                      && !pClipDoc->GetDBCollection()->getNamedDBs().empty();
+
         if ( bCutMode )
         {
             pRefUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
             pRefUndoDoc->InitUndo( rDoc, 0, nTabCount-1 );
 
-            pUndoData.reset(new ScRefUndoData( rDoc ));
+            pUndoData.reset(new ScRefUndoData( rDoc, bForceDBSnapshot ));
         }
-        else if (pClipDoc->GetDBCollection() && !pClipDoc->GetDBCollection()->getNamedDBs().empty())
+        else if (bForceDBSnapshot)
         {
-            // A clip document carrying named tables can add a database range to
-            // this document during paste. Force the DB-range snapshot so that
-            // addition is undoable even when this document had no ranges yet.
-            // The general path skips an empty collection.
-            pUndoData.reset(new ScRefUndoData( rDoc, /*bForceDBSnapshot*/true ));
+            pUndoData.reset(new ScRefUndoData( rDoc, true ));
         }
     }
 
