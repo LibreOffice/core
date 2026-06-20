@@ -1319,7 +1319,7 @@ bool ChildSession::getCommandValues(const StringVector& tokens)
         insertUserNames(viewInfo, json);
         success = sendTextFrame("commandvalues: " + json);
     }
-    else if (command.rfind(".uno:VectorTile", 0) == 0)
+    else if (command.rfind(".uno:VectorPrimitives", 0) == 0)
     {
         LOKitHelper::ScopedString values(getLOKitDocument()->getCommandValues(command.c_str()));
         const char* json = values.get() ? values.get() : "{}";
@@ -1328,7 +1328,7 @@ bool ChildSession::getCommandValues(const StringVector& tokens)
         // The primitive-tree JSON is large, so compress it with zstd and send
         // it as a binary frame: a newline-terminated name header followed by
         // the compressed payload.
-        const std::string header("zstdvectortile:\n");
+        const std::string header("zstdvectorprimitives:\n");
         const size_t bound = ZSTD_COMPRESSBOUND(jsonSize);
         std::vector<char> output(header.size() + bound);
         std::memcpy(output.data(), header.data(), header.size());
@@ -1337,7 +1337,7 @@ bool ChildSession::getCommandValues(const StringVector& tokens)
             ZSTD_compress(output.data() + header.size(), bound, json, jsonSize, 3);
         if (ZSTD_isError(compressedSize))
         {
-            LOG_WRN("Failed to zstd-compress vector tile: " << ZSTD_getErrorName(compressedSize));
+            LOG_WRN("Failed to zstd-compress vector primitives: " << ZSTD_getErrorName(compressedSize));
             success = sendTextFrame("commandvalues: " + std::string(json));
         }
         else

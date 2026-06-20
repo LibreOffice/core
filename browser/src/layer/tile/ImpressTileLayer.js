@@ -388,8 +388,8 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 			return;
 		}
 
-		if (values.type === 'vectortile') {
-			RenderManager.handleVectorTileResponse(values);
+		if (values.type === 'vectorprimitives') {
+			RenderManager.handleVectorPrimitivesResponse(values);
 			return;
 		}
 

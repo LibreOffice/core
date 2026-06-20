@@ -11,7 +11,7 @@
 
 namespace cool {
 	/// One bitmap delivered by the engine. The checksum matches the
-	/// value carried by bitmap primitives in a vector tile. data is
+	/// value carried by bitmap primitives in the primitive tree. data is
 	/// a base64 data URL with a native MIME type (image/png,
 	/// image/jpeg, image/svg+xml, image/gif or image/webp).
 	export interface VectorRenderingGraphicsResponse {

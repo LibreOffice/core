@@ -4653,14 +4653,14 @@ std::vector<OString> collectPrimitiveTexts(const tools::JsonPath& rJson)
 }
 } // anonymous namespace
 
-CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorTile)
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorPrimitives)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("SlideExample.odp");
     CPPUNIT_ASSERT(pXImpressDocument);
 
     // Request vector content for the current slide
     tools::JsonWriter aJsonWriter;
-    pXImpressDocument->getCommandValues(aJsonWriter, ".uno:VectorTile");
+    pXImpressDocument->getCommandValues(aJsonWriter, ".uno:VectorPrimitives");
     OString aResult = aJsonWriter.finishAndGetAsOString();
 
     // Is JSON empty
@@ -4669,8 +4669,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorTile)
     // Parse and verify JSON structure
     auto aJson = JsonTestTools::parseJson(std::string_view(aResult.getStr(), aResult.getLength()));
 
-    // Must have a "vectortile"
-    CPPUNIT_ASSERT_EQUAL("vectortile"_ostr, aJson.getString("/type").value_or(OString()));
+    // Must have a "vectorprimitives"
+    CPPUNIT_ASSERT_EQUAL("vectorprimitives"_ostr, aJson.getString("/type").value_or(OString()));
 
     // Slide dimensions must be present
     CPPUNIT_ASSERT(aJson.has("/slideWidth"));
@@ -4751,7 +4751,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorTile)
     }
 }
 
-CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorTileMasterPagePlaceholderFilter)
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorPrimitivesMasterPagePlaceholderFilter)
 {
     // Verify that Title and Outline placeholder text boxes on the master page
     // are filtered out when rendering a normal slide.
@@ -4760,7 +4760,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorTileMasterPagePlacehol
     CPPUNIT_ASSERT(pXImpressDocument);
 
     tools::JsonWriter aJsonWriter;
-    pXImpressDocument->getCommandValues(aJsonWriter, ".uno:VectorTile");
+    pXImpressDocument->getCommandValues(aJsonWriter, ".uno:VectorPrimitives");
     OString aResult = aJsonWriter.finishAndGetAsOString();
     CPPUNIT_ASSERT(!aResult.isEmpty());
 

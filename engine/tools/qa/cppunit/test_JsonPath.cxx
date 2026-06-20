@@ -21,7 +21,7 @@ class JsonPathTest : public CppUnit::TestFixture
 };
 
 constexpr std::string_view kSample = R"({
-    "type": "vectortile",
+    "type": "vectorprimitives",
     "part": 0,
     "slideWidth": 15874,
     "slideHeight": 8929,
@@ -69,7 +69,7 @@ CPPUNIT_TEST_FIXTURE(JsonPathTest, testGetString)
     auto oJson = tools::JsonPath::parse(kSample);
     CPPUNIT_ASSERT(oJson.has_value());
 
-    CPPUNIT_ASSERT_EQUAL("vectortile"_ostr, oJson->getString("/type").value_or(OString()));
+    CPPUNIT_ASSERT_EQUAL("vectorprimitives"_ostr, oJson->getString("/type").value_or(OString()));
     CPPUNIT_ASSERT_EQUAL("#ffffff"_ostr,
                          oJson->getString("/primitives/0/color").value_or(OString()));
     CPPUNIT_ASSERT(!oJson->getString("/nonexistent").has_value());

@@ -10,12 +10,11 @@
  */
 
 namespace cool {
-	/// Interface for the vector tile response from core.
-	export interface VectorTileResponse {
-		part?: number;
-		slideWidth?: number;
-		slideHeight?: number;
-		masterPage?: SlideObject;
-		objects?: SlideObject[];
+	/// Vector representation of a slide.
+	export interface VectorPrimitivesData {
+		slideWidth: number; // twips
+		slideHeight: number; // twips
+		masterPage: Primitive[];
+		objects: SlideObject[];
 	}
 }

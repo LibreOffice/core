@@ -442,8 +442,8 @@ COOL_JS_LST =\
 	src/canvas/vector/VectorPrimitiveRenderer.ts \
 	src/canvas/vector/VectorRenderingConfig.ts \
 	src/canvas/vector/VectorRenderingGraphicsResponse.ts \
-	src/canvas/vector/VectorTileData.ts \
-	src/canvas/vector/VectorTileResponse.ts \
+	src/canvas/vector/VectorPrimitivesData.ts \
+	src/canvas/vector/VectorPrimitivesResponse.ts \
 	src/canvas/vector/VectorContentSection.ts \
 	src/canvas/sections/AutoFillBaseSection.ts \
 	src/canvas/sections/CellFillMarkerSection.ts \

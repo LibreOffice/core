@@ -7154,7 +7154,7 @@ static char* doc_getCommandValues(COKitDocument* pThis, const char* pCommand)
         return nullptr;
     }
 
-    if (aCommand.starts_with(".uno:VectorTile"))
+    if (aCommand.starts_with(".uno:VectorPrimitives"))
     {
         // The requesting view renders from vector primitives rather than
         // bitmap tiles; record that on its callback handler.

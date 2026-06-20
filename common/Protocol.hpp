@@ -40,7 +40,7 @@ namespace COOLProtocol
         "rendersearchresult:",
         "slidelayer:",
         "zstdslidelayer:",
-        "zstdvectortile:",
+        "zstdvectorprimitives:",
         "windowpaint:",
         "urp:"
     };

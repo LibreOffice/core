@@ -2115,7 +2115,7 @@ private:
 
     void writeHeader(tools::JsonWriter& rWriter, SdPage* pPage)
     {
-        rWriter.put("type", "vectortile");
+        rWriter.put("type", "vectorprimitives");
         rWriter.put("part", sal_Int32(mnResolvedPage));
 
         rWriter.put("slideWidth",
@@ -2254,7 +2254,7 @@ private:
 
 bool SdXImpressDocument::supportsCommand(std::u16string_view rCommand)
 {
-    if (rCommand == u"VectorTile" || rCommand == u"VectorRenderingGraphics")
+    if (rCommand == u"VectorPrimitives" || rCommand == u"VectorRenderingGraphics")
         return true;
     return false;
 }
@@ -2286,7 +2286,7 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
             }
         }
     }
-    else if (o3tl::starts_with(rCommand, ".uno:VectorTile"))
+    else if (o3tl::starts_with(rCommand, ".uno:VectorPrimitives"))
     {
         sal_Int32 nPart = -1;
         auto it = aMap.find(u"part"_ustr);

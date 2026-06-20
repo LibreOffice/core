@@ -858,7 +858,7 @@ describe('VectorPrimitiveRenderer', function () {
 		it('renders the filled-rectangle slide from its document reference', function () {
 			const primitiveTree = loadVectorRenderingReference('testSingleRectangle');
 
-			nodeassert.strictEqual(primitiveTree.type, 'vectortile');
+			nodeassert.strictEqual(primitiveTree.type, 'vectorprimitives');
 			nodeassert.strictEqual(typeof primitiveTree.slideWidth, 'number');
 			nodeassert.strictEqual(typeof primitiveTree.slideHeight, 'number');
 

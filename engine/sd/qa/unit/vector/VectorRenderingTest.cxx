@@ -92,7 +92,7 @@ protected:
     /// Add a page-object placeholder (slide embedded in slide) to the
     /// first slide. Its view-independent decomposition is a single
     /// polygonHairline outline (drawn yellow by the engine), which is
-    /// exactly what the vector tile pipeline emits.
+    /// exactly what the vector primitives pipeline emits.
     void addPageObject(const tools::Rectangle& rRect)
     {
         SdrPage* pPage = page(1);
@@ -169,14 +169,14 @@ protected:
     }
 
     /// Request for the first slide. The raw JSON is written as a reference.
-    tools::JsonPath getVectorTile(std::u16string_view sName)
+    tools::JsonPath getVectorPrimitives(std::u16string_view sName)
     {
         SdXImpressDocument* pDoc = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
         CPPUNIT_ASSERT(pDoc);
 
         tools::JsonWriter aJsonWriter;
         // Explicitly get only part 0 -> first slide
-        pDoc->getCommandValues(aJsonWriter, ".uno:VectorTile?part=0");
+        pDoc->getCommandValues(aJsonWriter, ".uno:VectorPrimitives?part=0");
         OString aResult = aJsonWriter.finishAndGetAsOString();
         CPPUNIT_ASSERT(!aResult.isEmpty());
 
@@ -205,9 +205,9 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testSingleRectangle)
     createBlankDoc();
     addRectangle(tools::Rectangle(Point(5000, 5000), Size(5000, 3000)), Color(0x4472c4), COL_BLACK);
 
-    auto aJson = getVectorTile(u"testSingleRectangle");
+    auto aJson = getVectorPrimitives(u"testSingleRectangle");
 
-    assertJsonPath(aJson, "/type", "vectortile");
+    assertJsonPath(aJson, "/type", "vectorprimitives");
     assertJsonPath(aJson, "/part", sal_Int64(0));
 
     // The master page has been cleared, so it contributes only the
@@ -244,9 +244,9 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testStrokedRectangle)
     createBlankDoc();
     addStrokedRectangle(tools::Rectangle(Point(5000, 5000), Size(5000, 3000)), COL_BLACK);
 
-    auto aJson = getVectorTile(u"testStrokedRectangle");
+    auto aJson = getVectorPrimitives(u"testStrokedRectangle");
 
-    assertJsonPath(aJson, "/type", "vectortile");
+    assertJsonPath(aJson, "/type", "vectorprimitives");
     CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/objects").value_or(0));
 
     auto oStroke = aJson.at("/objects/0/primitives/0/children/0/children/0");
@@ -264,9 +264,9 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testRotatedRectangle)
     addRotatedRectangle(tools::Rectangle(Point(5000, 5000), Size(5000, 3000)), Color(0x4472c4),
                         Degree100(4500));
 
-    auto aJson = getVectorTile(u"testRotatedRectangle");
+    auto aJson = getVectorPrimitives(u"testRotatedRectangle");
 
-    assertJsonPath(aJson, "/type", "vectortile");
+    assertJsonPath(aJson, "/type", "vectorprimitives");
     CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/objects").value_or(0));
 }
 
@@ -279,9 +279,9 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testObjectInfo)
                                Color(0x4472c4), u"Rectangle 1"_ustr, u"My title"_ustr,
                                u"My description"_ustr);
 
-    auto aJson = getVectorTile(u"testObjectInfo");
+    auto aJson = getVectorPrimitives(u"testObjectInfo");
 
-    assertJsonPath(aJson, "/type", "vectortile");
+    assertJsonPath(aJson, "/type", "vectorprimitives");
     CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/objects").value_or(0));
 
     // The object info wraps the SdrObject's primitive sequence, so it
@@ -307,9 +307,9 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPolyPolygonRGBA)
     addTransparentRectangle(tools::Rectangle(Point(5000, 5000), Size(5000, 3000)), Color(0x4472c4),
                             25);
 
-    auto aJson = getVectorTile(u"testPolyPolygonRGBA");
+    auto aJson = getVectorPrimitives(u"testPolyPolygonRGBA");
 
-    assertJsonPath(aJson, "/type", "vectortile");
+    assertJsonPath(aJson, "/type", "vectorprimitives");
     CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/objects").value_or(0));
 
     // The wrapping path is svx:N -> group -> polyPolygonRGBA.
@@ -323,15 +323,15 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPolyPolygonRGBA)
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPolygonHairline)
 {
     // An SdrPageObj's view-independent decomposition is a single
-    // yellow polygonHairline outline. The vector tile pipeline goes
+    // yellow polygonHairline outline. The vector primitives pipeline goes
     // through that exact path, so the reference JSON for the browser
     // mocha test gets a real polygonHairline emitted by the engine.
     createBlankDoc();
     addPageObject(tools::Rectangle(Point(5000, 5000), Size(5000, 3000)));
 
-    auto aJson = getVectorTile(u"testPolygonHairline");
+    auto aJson = getVectorPrimitives(u"testPolygonHairline");
 
-    assertJsonPath(aJson, "/type", "vectortile");
+    assertJsonPath(aJson, "/type", "vectorprimitives");
     CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/objects").value_or(0));
 
     auto oHairline = aJson.at("/objects/0/primitives/0");

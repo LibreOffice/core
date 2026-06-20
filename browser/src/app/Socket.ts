@@ -1338,8 +1338,8 @@ class Socket {
 		} else if (textMsg.startsWith('zstdslidelayer:')) {
 			this._onZstdSlideLayerMsg(textMsg, e);
 			return;
-		} else if (textMsg.startsWith('zstdvectortile:')) {
-			this._onZstdVectorTileMsg(e);
+		} else if (textMsg.startsWith('zstdvectorprimitives:')) {
+			this._onZstdVectorPrimitivesMsg(e);
 			return;
 		} else if (textMsg.startsWith('sliderenderingcomplete:')) {
 			this._onSlideRenderingCompleteMsg(textMsg, e);
@@ -1452,7 +1452,7 @@ class Socket {
 				e.data.startsWith('rendersearchlist:') ||
 				e.data.startsWith('slidelayer:') ||
 				e.data.startsWith('zstdslidelayer:') ||
-				e.data.startsWith('zstdvectortile:') ||
+				e.data.startsWith('zstdvectorprimitives:') ||
 				e.data.startsWith('windowpaint:')
 			) {
 				let index: number;
@@ -2521,15 +2521,15 @@ class Socket {
 		else window.app.console.warn('zstdslidelayer with no image');
 	}
 
-	// 'zstdvectortile:' message: a zstd-compressed .uno:VectorTile response.
+	// 'zstdvectorprimitives:' message: a zstd-compressed .uno:VectorPrimitives response.
 	// Decompress the binary payload and route it through the normal
 	// command-values handler.
-	private _onZstdVectorTileMsg(
+	private _onZstdVectorPrimitivesMsg(
 		e: SlurpMessageEvent | MinimalMessageEvent,
 	): void {
 		const event = e as SlurpMessageEvent;
 		if (!event.imgBytes || event.imgIndex === undefined) {
-			window.app.console.warn('zstdvectortile with no payload');
+			window.app.console.warn('zstdvectorprimitives with no payload');
 			return;
 		}
 		const json = new TextDecoder().decode(

@@ -27,7 +27,7 @@ class VectorManager extends RenderManagerBase {
 		);
 
 	// Cached parsed JSON primitive tree keyed by part number.
-	private _cache: Map<number, cool.VectorTileData> = new Map();
+	private _cache: Map<number, cool.VectorPrimitivesData> = new Map();
 
 	// Previews waiting for a JSON primitive tree response, keyed by part.
 	private _pendingPreviews: Map<number, cool.PendingPreview[]> = new Map();
@@ -80,13 +80,13 @@ class VectorManager extends RenderManagerBase {
 	/// Return the cached primitive tree for a part, or undefined while a
 	/// request is sent. Subscribers registered with onVectorChanged are
 	/// notified once the data arrives.
-	requestPart(part: number): cool.VectorTileData | undefined {
+	requestPart(part: number): cool.VectorPrimitivesData | undefined {
 		const cached = this._cache.get(part);
 		if (cached) return cached;
 
 		if (!this._inFlightParts.has(part)) {
 			this._inFlightParts.add(part);
-			this._sendVectorTileRequest(part);
+			this._sendVectorPrimitivesRequest(part);
 		}
 		return undefined;
 	}
@@ -96,7 +96,7 @@ class VectorManager extends RenderManagerBase {
 	/// maps the part's twips to the target pixels.
 	renderInto(
 		context: CanvasRenderingContext2D,
-		data: cool.VectorTileData,
+		data: cool.VectorPrimitivesData,
 	): void {
 		this._renderer.setSlideBounds(data.slideWidth, data.slideHeight);
 		for (const primitive of data.masterPage) {
@@ -132,18 +132,18 @@ class VectorManager extends RenderManagerBase {
 
 		if (!this._inFlightParts.has(part)) {
 			this._inFlightParts.add(part);
-			this._sendVectorTileRequest(part);
+			this._sendVectorPrimitivesRequest(part);
 		}
 	}
 
-	private _sendVectorTileRequest(part: number): void {
+	private _sendVectorPrimitivesRequest(part: number): void {
 		app.socket.sendMessage(
-			'commandvalues command=.uno:VectorTile?part=' + String(part),
+			'commandvalues command=.uno:VectorPrimitives?part=' + String(part),
 		);
 	}
 
-	/// Handle a vector tile response.
-	handleVectorTileResponse(values: cool.VectorTileResponse): void {
+	/// Handle a vector primitives response.
+	handleVectorPrimitivesResponse(values: cool.VectorPrimitivesResponse): void {
 		const part =
 			values.part !== undefined ? values.part : this._docLayer._selectedPart;
 
@@ -155,7 +155,7 @@ class VectorManager extends RenderManagerBase {
 				: [];
 		const objects = values.objects || [];
 
-		const data: cool.VectorTileData = {
+		const data: cool.VectorPrimitivesData = {
 			slideWidth: values.slideWidth || 0,
 			slideHeight: values.slideHeight || 0,
 			masterPage: masterPage,
@@ -262,7 +262,7 @@ class VectorManager extends RenderManagerBase {
 		this._fireChanged();
 	}
 
-	private _drainPending(part: number, data: cool.VectorTileData): void {
+	private _drainPending(part: number, data: cool.VectorPrimitivesData): void {
 		const queue = this._pendingPreviews.get(part);
 		if (!queue) return;
 		this._pendingPreviews.delete(part);
@@ -284,7 +284,7 @@ class VectorManager extends RenderManagerBase {
 		part: number,
 		maxWidth: number,
 		maxHeight: number,
-		data: cool.VectorTileData,
+		data: cool.VectorPrimitivesData,
 	): void {
 		if (data.slideWidth <= 0 || data.slideHeight <= 0) return;
 

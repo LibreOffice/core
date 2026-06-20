@@ -217,13 +217,13 @@ class RenderManager {
 		);
 	}
 
-	static requestPart(part: number): cool.VectorTileData | undefined {
+	static requestPart(part: number): cool.VectorPrimitivesData | undefined {
 		return RenderManager.ensureInstance().requestPart(part);
 	}
 
 	static renderInto(
 		context: CanvasRenderingContext2D,
-		data: cool.VectorTileData,
+		data: cool.VectorPrimitivesData,
 	): void {
 		RenderManager.ensureInstance().renderInto(context, data);
 	}
@@ -232,8 +232,10 @@ class RenderManager {
 		RenderManager.ensureInstance().onVectorChanged(callback);
 	}
 
-	static handleVectorTileResponse(values: cool.VectorTileResponse): void {
-		RenderManager.ensureInstance().handleVectorTileResponse(values);
+	static handleVectorPrimitivesResponse(
+		values: cool.VectorPrimitivesResponse,
+	): void {
+		RenderManager.ensureInstance().handleVectorPrimitivesResponse(values);
 	}
 
 	static handleVectorRenderingGraphicsResponse(

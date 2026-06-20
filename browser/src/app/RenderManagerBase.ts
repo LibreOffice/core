@@ -140,18 +140,20 @@ class RenderManagerBase {
 		_maxHeight: number,
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
 	): void {}
-	requestPart(_part: number): cool.VectorTileData | undefined {
+	requestPart(_part: number): cool.VectorPrimitivesData | undefined {
 		return undefined;
 	}
 	renderInto(
 		_context: CanvasRenderingContext2D,
-		_data: cool.VectorTileData,
+		_data: cool.VectorPrimitivesData,
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
 	): void {}
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	onVectorChanged(_callback: () => void): void {}
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	handleVectorTileResponse(_values: cool.VectorTileResponse): void {}
+	handleVectorPrimitivesResponse(
+		_values: cool.VectorPrimitivesResponse,
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+	): void {}
 	handleVectorRenderingGraphicsResponse(
 		_values: cool.VectorRenderingGraphicsResponse,
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
