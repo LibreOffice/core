@@ -35,6 +35,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,afdko, \
     external/afdko/ubsan.patch.0 \
     external/afdko/cstdint.patch \
     external/afdko/classrec-fallback-ref.patch.0 \
+    external/afdko/clang.patch.0 \
 ))
 
 # static replacement for the cmake-generated version files
