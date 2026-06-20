@@ -32,22 +32,27 @@ namespace
 class LocalFileInfo
 {
 public:
-    // Attributes of file
+    // Path and name identify the file. The size and the modified time are
+    // read live from the filesystem on each request, so a file that changes
+    // on disk while a session is open reports its real current state.
     std::string localPath;
     std::string fileName;
-    std::string size;
-
-    // Last modified time of the file
-    std::chrono::system_clock::time_point fileLastModifiedTime;
 
     enum class COOLStatusCode : std::uint16_t
     {
         DocChanged = 1010 // Document changed externally in storage
     };
 
+    std::string getSize() const { return std::to_string(FileUtil::Stat(localPath).size()); }
+
+    std::chrono::system_clock::time_point getLastModifiedTimepoint() const
+    {
+        return FileUtil::Stat(localPath).modifiedTimepoint();
+    }
+
     std::string getLastModifiedTime() const
     {
-        return Util::getIso8601FracformatTime(fileLastModifiedTime);
+        return Util::getIso8601FracformatTime(getLastModifiedTimepoint());
     }
 
     LocalFileInfo() = delete;
@@ -55,14 +60,12 @@ public:
         : localPath(std::move(lPath))
         , fileName(std::move(fName))
     {
-        const FileUtil::Stat stat(localPath);
-        size = std::to_string(stat.size());
-        fileLastModifiedTime = stat.modifiedTimepoint();
     }
 
 private:
-    // Internal tracking of known files: to store various data
-    // on files - rather than writing it back to the file-system.
+    // A handle to each known file, so repeated requests for the same path
+    // share one object. It holds only the path and name. The size and the
+    // modified time are always read live from the filesystem.
     static std::vector<std::shared_ptr<LocalFileInfo>> fileInfoVec;
 
 public:
@@ -148,7 +151,7 @@ void handleWopiRequest(const Poco::Net::HTTPRequest& request, const RequestDetai
         postMessageOrigin += requestDetails.getHostUntrusted();
 
         fileInfo->set("BaseFileName", localFile->fileName);
-        fileInfo->set("Size", localFile->size);
+        fileInfo->set("Size", localFile->getSize());
         fileInfo->set("Version", "1.0");
         fileInfo->set("OwnerId", "test");
         // usually in debug mode with debug.html the user that opening the document is same therefore set a static userId
@@ -204,7 +207,7 @@ void handleWopiRequest(const Poco::Net::HTTPRequest& request, const RequestDetai
 
         http::Response httpResponse(http::StatusCode::OK);
         FileServerRequestHandler::hstsHeaders(httpResponse);
-        httpResponse.set("Last-Modified", Util::getHttpTime(localFile->fileLastModifiedTime));
+        httpResponse.set("Last-Modified", Util::getHttpTime(localFile->getLastModifiedTimepoint()));
         httpResponse.setBody(jsonStream.str(), "application/json; charset=utf-8");
         socket->send(httpResponse);
 
@@ -221,7 +224,7 @@ void handleWopiRequest(const Poco::Net::HTTPRequest& request, const RequestDetai
 
         http::Response httpResponse(http::StatusCode::OK);
         FileServerRequestHandler::hstsHeaders(httpResponse);
-        httpResponse.set("Last-Modified", Util::getHttpTime(localFile->fileLastModifiedTime));
+        httpResponse.set("Last-Modified", Util::getHttpTime(localFile->getLastModifiedTimepoint()));
         httpResponse.setBody(ss.str(), "text/plain; charset=utf-8");
         socket->send(httpResponse);
         return;
@@ -251,13 +254,13 @@ void handleWopiRequest(const Poco::Net::HTTPRequest& request, const RequestDetai
             }
         }
 
-        localFile->fileLastModifiedTime = std::chrono::system_clock::now();
-
         std::ofstream outfile(localFile->localPath, std::ofstream::binary);
         std::copy_n(std::istreambuf_iterator<char>(message), request.getContentLength(),
                     std::ostreambuf_iterator<char>(outfile));
         outfile.close();
 
+        // Report the modified time the file now has on disk, so the next
+        // upload sends it back and matches.
         std::string body = R"({"LastModifiedTime": ")" + localFile->getLastModifiedTime() + "\" }";
         http::Response httpResponse(http::StatusCode::OK);
         FileServerRequestHandler::hstsHeaders(httpResponse);
@@ -514,7 +517,7 @@ void handleSettingsRequest(const Poco::Net::HTTPRequest& request, const std::str
 
         http::Response httpResponse(http::StatusCode::OK);
         FileServerRequestHandler::hstsHeaders(httpResponse);
-        httpResponse.set("Last-Modified", Util::getHttpTime(localFile->fileLastModifiedTime));
+        httpResponse.set("Last-Modified", Util::getHttpTime(localFile->getLastModifiedTimepoint()));
         httpResponse.setBody(ss.str(), "text/plain; charset=utf-8");
         socket->send(httpResponse);
     }
