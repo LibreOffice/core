@@ -26,7 +26,7 @@
     <string name="app_description">$APP_NAME je moderan softverski paket otvorenog koda s modernim aplikacijama za obradu teksta, proračunskih tablica, prezentacija i još mnogo toga.</string>
     <string name="app_vendor">Proizvođač izdanja je $VENDOR.</string>
     <string name="no_items">Nema stavki</string>
-    <string name="temp_file_saving_disabled">Datoteka je zaštićena, spremanje je deaktivirano.</string>
+    <string name="temp_file_saving_disabled">Izvorna aplikacija dijeli datoteku u modusu samo-za-čitanje. Za promjene koristi „Uredi kopiju”.</string>
     <string name="file_exists_warning">Datoteka s tim imenom već postoji, biti će prepisana.</string>
     <string name="file_creation_failed">Neuspjelo stvaranje datoteke</string>
     <string name="storage_permission_required">Potrebna je dozvola za spremište</string>
