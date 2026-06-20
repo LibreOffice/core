@@ -25,6 +25,8 @@
 
 #include <unotools/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
+#include <unotools/syslocale.hxx>
+#include <svtools/langhelp.hxx>
 #include <o3tl/environment.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
@@ -36,6 +38,7 @@
 #include <rtl/bootstrap.hxx>
 
 #include <officecfg/Office/Paths.hxx>
+#include <officecfg/Setup.hxx>
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -173,6 +176,7 @@ private:
     // Don't store them in the pre defined struct
     static OUString GetWorkPath();
     static OUString GetWorkVariableValue();
+    static OUString GetVlangVariableValue();
     static OUString GetPathVariableValue();
 
     static OUString GetHomeVariableValue();
@@ -288,6 +292,25 @@ OUString SubstitutePathVariables::GetWorkVariableValue()
 }
 
 // static
+OUString SubstitutePathVariables::GetVlangVariableValue()
+{
+    // Follow the active view's UI language, the same source the translated
+    // strings use: SvtSysLocale::GetUILanguageTag returns the kit's current
+    // language when the kit is active, so each view's autotext (and other
+    // $(vlang)) directories track that view's user.
+    const OUString aUILang = SvtSysLocale().GetUILanguageTag().getBcp47();
+    // The directories are named by the installed langpack id (hu, en-US,
+    // pt-BR), not the full UI tag (hu-HU), so map the UI language onto an
+    // installed one before it goes into a path.
+    const OUString aInstalled = getInstalledLocaleForLanguage(
+        officecfg::Setup::Office::InstalledLocales::get()->getElementNames(),
+        aUILang);
+    // No installed langpack matches (an empty result): keep the UI tag, the
+    // value this variable carried before any resolution.
+    return aInstalled.isEmpty() ? aUILang : aInstalled;
+}
+
+// static
 OUString SubstitutePathVariables::GetHomeVariableValue()
 {
     osl::Security   aSecurity;
@@ -363,6 +386,7 @@ OUString SubstitutePathVariables::impl_substituteVariable( const OUString& rText
     // Is there something to replace ?
     bool bWorkRetrieved       = false;
     bool bWorkDirURLRetrieved = false;
+    bool bVlangRetrieved      = false;
     while (nDepth < nMaxRecursiveDepth)
     {
         while ( ( nPosition != -1 ) && ( nLength > 3 ) ) // "$(" ")"
@@ -392,6 +416,12 @@ OUString SubstitutePathVariables::impl_substituteVariable( const OUString& rText
                     // Transient value, retrieve it again
                     m_aPreDefVars.m_FixedVar[ nIndex ] = GetWorkPath();
                     bWorkDirURLRetrieved = true;
+                }
+                else if ( nIndex == PREDEFVAR_VLANG && !bVlangRetrieved )
+                {
+                    // Transient value, follows the active view's UI language
+                    m_aPreDefVars.m_FixedVar[ nIndex ] = GetVlangVariableValue();
+                    bVlangRetrieved = true;
                 }
 
                 // Check preconditions to substitute path variables.
@@ -679,8 +709,10 @@ void SubstitutePathVariables::SetPredefinedPathVariables()
     // m_aPreDefVars.m_eLanguageType has been initialized to a
     // default value above anyway.
 
-    // Set $(vlang)
-    m_aPreDefVars.m_FixedVar[ PREDEFVAR_VLANG ] = aLocaleStr;
+    // Set $(vlang). This is a transient value: it is refreshed on every
+    // substitution from the active view's UI language, so the initial value
+    // here is only a starting point.
+    m_aPreDefVars.m_FixedVar[ PREDEFVAR_VLANG ] = GetVlangVariableValue();
 
     // Set $(langid)
     m_aPreDefVars.m_FixedVar[ PREDEFVAR_LANGID ] = OUString::number( static_cast<sal_uInt16>(m_aPreDefVars.m_eLanguageType) );

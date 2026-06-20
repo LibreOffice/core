@@ -111,6 +111,11 @@ class PathSettings : public PathSettings_BASE
             /// contains all paths, which are used internally - but are not visible for the user.
             std::vector<OUString> lInternalPaths;
 
+            /// the unsubstituted internal paths, kept only when they contain a
+            /// transient variable such as $(vlang) whose value changes at
+            /// runtime, so the paths can be expanded again on every read.
+            std::vector<OUString> lInternalPathsTemplate;
+
             /// contains all paths configured by the user
             std::vector<OUString> lUserPaths;
 
@@ -146,8 +151,9 @@ private:
         Will be generated on demand based on our path list m_lPaths. */
     css::uno::Sequence< css::beans::Property > m_lPropDesc;
 
-    /** helper needed to (re-)substitute all internal save path values. */
-    css::uno::Reference< css::util::XStringSubstitution > m_xSubstitution;
+    /** helper needed to (re-)substitute all internal save path values.
+        Created on demand, also from the const read path, so it is mutable. */
+    mutable css::uno::Reference< css::util::XStringSubstitution > m_xSubstitution;
 
     /** provides access to the old configuration schema (which will be migrated on demand). */
     css::uno::Reference< css::container::XNameAccess > m_xCfgOld;
@@ -398,7 +404,7 @@ private:
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     /** factory methods to guarantee right (but on demand) initialized members ... */
-    css::uno::Reference< css::util::XStringSubstitution > fa_getSubstitution(std::unique_lock<std::mutex>& g);
+    css::uno::Reference< css::util::XStringSubstitution > fa_getSubstitution(std::unique_lock<std::mutex>& g) const;
     css::uno::Reference< css::container::XNameAccess >    fa_getCfgOld(std::unique_lock<std::mutex>& g);
     css::uno::Reference< css::container::XNameAccess >    fa_getCfgNew(std::unique_lock<std::mutex>& g);
 };
@@ -672,6 +678,18 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(std::unique_lock<std::mute
     {
         aPath = impl_readNewFormat(g, sPath);
         aPath.sPathName = sPath;
+        // $(vlang) follows the active view's UI language and so changes at
+        // runtime. Keep the unsubstituted form of any internal path that
+        // uses it, so the read path can expand it again against the current
+        // language instead of returning the value baked in here.
+        for (const OUString& rInternal : aPath.lInternalPaths)
+        {
+            if (rInternal.indexOf(u"$(vlang)") != -1)
+            {
+                aPath.lInternalPathsTemplate = aPath.lInternalPaths;
+                break;
+            }
+        }
         // replace all might existing variables with real values
         // Do it before these old paths will be compared against the
         // new path configuration. Otherwise some strings uses different variables ... but substitution
@@ -1058,14 +1076,34 @@ css::uno::Any PathSettings::impl_getPathValue(std::unique_lock<std::mutex>& g, s
     {
         case IDGROUP_OLDSTYLE :
              {
-                OUString sVal = impl_convertPath2OldStyle(*pPath);
-                aVal <<= sVal;
+                if (pPath->lInternalPathsTemplate.empty())
+                {
+                    aVal <<= impl_convertPath2OldStyle(*pPath);
+                }
+                else
+                {
+                    // re-expand $(vlang) against the active view's language now
+                    PathSettings::PathInfo aLivePath = *pPath;
+                    aLivePath.lInternalPaths = pPath->lInternalPathsTemplate;
+                    impl_subst(aLivePath.lInternalPaths, fa_getSubstitution(g), false);
+                    aVal <<= impl_convertPath2OldStyle(aLivePath);
+                }
              }
              break;
 
         case IDGROUP_INTERNAL_PATHS :
              {
-                aVal <<= comphelper::containerToSequence(pPath->lInternalPaths);
+                if (pPath->lInternalPathsTemplate.empty())
+                {
+                    aVal <<= comphelper::containerToSequence(pPath->lInternalPaths);
+                }
+                else
+                {
+                    // re-expand $(vlang) against the active view's language now
+                    std::vector<OUString> aLive = pPath->lInternalPathsTemplate;
+                    impl_subst(aLive, fa_getSubstitution(g), false);
+                    aVal <<= comphelper::containerToSequence(aLive);
+                }
              }
              break;
 
@@ -1293,10 +1331,9 @@ void PathSettings::getFastPropertyValue(std::unique_lock<std::mutex>& g,
     return *m_pPropHelp;
 }
 
-css::uno::Reference< css::util::XStringSubstitution > PathSettings::fa_getSubstitution(std::unique_lock<std::mutex>& g)
+css::uno::Reference< css::util::XStringSubstitution > PathSettings::fa_getSubstitution(std::unique_lock<std::mutex>& g) const
 {
     css::uno::Reference< css::util::XStringSubstitution > xSubst = m_xSubstitution;
-
 
     if (! xSubst.is())
     {
