@@ -10223,6 +10223,41 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyToClipMultiRangeGapTable)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyToClipMultiSheetForeignTable)
+{
+    // A grouped-sheet copy carries only the tables on the sheet whose cells are
+    // copied, not a same-area table living on another selected sheet. So the
+    // paste side never receives tables from several sheets that would all be
+    // placed onto a single destination sheet.
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    m_pDoc->InsertTab(1, u"Sheet2"_ustr);
+
+    auto pTab0 = std::make_unique<ScDBData>(u"Table0"_ustr, 0, 0, 0, 1, 1, true, true);
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().insert(std::move(pTab0)));
+    auto pTab1 = std::make_unique<ScDBData>(u"Table1"_ustr, 1, 0, 0, 1, 1, true, true);
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().insert(std::move(pTab1)));
+
+    // Copy A1:B2 with both sheets grouped. The copied ranges live on sheet 0.
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectTable(0, true);
+    aMark.SelectTable(1, true);
+    ScRange aClipRange(0, 0, 0, 1, 1, 0); // A1:B2 on sheet 0
+    aMark.SetMarkArea(aClipRange);
+    ScClipParam aClipParam(aClipRange, false);
+
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
+
+    ScDBCollection::NamedDBs& rClipDBs = aClipDoc.GetDBCollection()->getNamedDBs();
+    CPPUNIT_ASSERT_MESSAGE("the copied sheet's table is carried",
+                           rClipDBs.findByUpperName(u"TABLE0"_ustr));
+    CPPUNIT_ASSERT_MESSAGE("a table on another sheet is not carried",
+                           !rClipDBs.findByUpperName(u"TABLE1"_ustr));
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteFormulasExternalDoc)
 {
     SfxMedium* pMedium = new SfxMedium(u"file:///source.fake"_ustr, StreamMode::STD_READWRITE);
