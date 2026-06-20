@@ -1406,6 +1406,10 @@
 
 #define STR_TEXTCOLL_HEADER                     NC_("STR_TEXTCOLL_HEADER", "(Paragraph Style: ")
 #define STR_ILLEGAL_PAGENUM                     NC_("STR_ILLEGAL_PAGENUM", "Page numbers cannot be applied to the current page. Even numbers can be used on left pages, odd numbers on right pages.")
+#define STR_SECLABEL_MIN                        NC_("STR_SECLABEL_MIN", "Select at least %1 value(s) from '%2'.")
+#define STR_SECLABEL_MAX                        NC_("STR_SECLABEL_MAX", "Select at most %1 value(s) from '%2'.")
+#define STR_SECLABEL_EXCLUDED                   NC_("STR_SECLABEL_EXCLUDED", "'%1' cannot be combined with the current selection.")
+#define STR_SECLABEL_REQUIRED                   NC_("STR_SECLABEL_REQUIRED", "'%1' requires another category to be selected.")
 
 #define STR_WRITER_GLOBALDOC_FULLTYPE           NC_("STR_WRITER_GLOBALDOC_FULLTYPE", "%PRODUCTNAME %PRODUCTVERSION Master Document")
 

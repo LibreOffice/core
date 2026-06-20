@@ -4365,6 +4365,13 @@ kbd,
 	padding-left: inherit;
 }
 
+/* SPIF/STANAG security-label dialog: validation warning on its own line, in red */
+#seclabelwarning.static-label {
+	display: block;
+	margin-top: 6px;
+	color: #cc0000;
+}
+
 #sheets-buttons-toolbox #sheetlist.menubutton:hover {
 	border: 1px solid var(--color-btn-border);
 	background-color: var(--color-background-tabs-group);

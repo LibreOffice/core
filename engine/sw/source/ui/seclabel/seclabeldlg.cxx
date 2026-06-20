@@ -9,6 +9,9 @@
 
 #include <seclabeldlg.hxx>
 
+#include <swtypes.hxx>
+#include <strings.hrc>
+
 #include <tools/stream.hxx>
 #include <rtl/bootstrap.hxx>
 #include <config_folders.h>
@@ -26,6 +29,27 @@ OUString getDevPolicyUrl()
     rtl::Bootstrap::expandMacros(sUrl);
     return sUrl;
 }
+
+OUString formatViolation(const sw::seclabel::SpifViolation& rViolation)
+{
+    using T = sw::seclabel::SpifViolationType;
+    switch (rViolation.eType)
+    {
+        case T::MinSelection:
+            return SwResId(STR_SECLABEL_MIN)
+                .replaceFirst(u"%1", OUString::number(rViolation.nMinSelection))
+                .replaceFirst(u"%2", rViolation.aName);
+        case T::MaxSelection:
+            return SwResId(STR_SECLABEL_MAX)
+                .replaceFirst(u"%1", OUString::number(rViolation.nMaxSelection))
+                .replaceFirst(u"%2", rViolation.aName);
+        case T::ExcludedCategory:
+            return SwResId(STR_SECLABEL_EXCLUDED).replaceFirst(u"%1", rViolation.aName);
+        case T::RequiredCategory:
+            return SwResId(STR_SECLABEL_REQUIRED).replaceFirst(u"%1", rViolation.aName);
+    }
+    return OUString();
+}
 }
 
 SwSecurityLabelDlg::SwSecurityLabelDlg(weld::Window* pParent)
@@ -34,6 +58,8 @@ SwSecurityLabelDlg::SwSecurityLabelDlg(weld::Window* pParent)
     , m_xClassification(m_xBuilder->weld_combo_box(u"classification"_ustr))
     , m_xCategories(m_xBuilder->weld_tree_view(u"categories"_ustr))
     , m_xPreview(m_xBuilder->weld_label(u"preview"_ustr))
+    , m_xWarning(m_xBuilder->weld_label(u"seclabelwarning"_ustr))
+    , m_xOkBtn(m_xBuilder->weld_button(u"ok"_ustr))
 {
     m_xCategories->set_size_request(m_xCategories->get_approximate_digit_width() * 32,
                                     m_xCategories->get_height_rows(6));
@@ -57,6 +83,9 @@ SwSecurityLabelDlg::SwSecurityLabelDlg(weld::Window* pParent)
 
     m_xClassification->connect_changed(LINK(this, SwSecurityLabelDlg, ClassificationHdl));
     m_xCategories->connect_toggled(LINK(this, SwSecurityLabelDlg, CategoryToggleHdl));
+    m_xOkBtn->connect_clicked(LINK(this, SwSecurityLabelDlg, OkHdl));
+
+    m_xWarning->set_label_type(weld::LabelType::Warning);
 
     UpdatePreview();
 }
@@ -104,14 +133,31 @@ void SwSecurityLabelDlg::PopulateCategories()
     }
 }
 
-void SwSecurityLabelDlg::UpdatePreview()
+std::vector<bool> SwSecurityLabelDlg::collectSelection() const
 {
     const int nCount = m_xCategories->n_children();
     std::vector<bool> aSelected(nCount);
     for (int i = 0; i < nCount; ++i)
         aSelected[i] = m_xCategories->get_toggle(i) == TRISTATE_TRUE;
+    return aSelected;
+}
 
-    m_xPreview->set_label(m_aPolicy.buildMarking(m_xClassification->get_active_text(), aSelected));
+void SwSecurityLabelDlg::UpdatePreview()
+{
+    const OUString sClassification = m_xClassification->get_active_text();
+    const std::vector<bool> aSelected = collectSelection();
+
+    m_xPreview->set_label(m_aPolicy.buildMarking(sClassification, aSelected));
+
+    OUString sWarning;
+    for (const auto& rViolation : m_aPolicy.validate(sClassification, aSelected))
+    {
+        if (!sWarning.isEmpty())
+            sWarning += u"\n";
+        sWarning += formatViolation(rViolation);
+    }
+    m_xWarning->set_label(sWarning);
+    m_xWarning->set_visible(!sWarning.isEmpty());
 }
 
 IMPL_LINK_NOARG(SwSecurityLabelDlg, ClassificationHdl, weld::ComboBox&, void)
@@ -138,6 +184,13 @@ IMPL_LINK(SwSecurityLabelDlg, CategoryToggleHdl, const weld::TreeView::iter_col&
         }
     }
     UpdatePreview();
+}
+
+IMPL_LINK_NOARG(SwSecurityLabelDlg, OkHdl, weld::Button&, void)
+{
+    if (!m_aPolicy.validate(m_xClassification->get_active_text(), collectSelection()).empty())
+        return; // the warning label already shows why; keep the dialog open
+    m_xDialog->response(RET_OK);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

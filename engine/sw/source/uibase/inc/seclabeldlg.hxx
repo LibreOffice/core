@@ -37,10 +37,14 @@ class SwSecurityLabelDlg final : public weld::GenericDialogController
     std::unique_ptr<weld::ComboBox> m_xClassification;
     std::unique_ptr<weld::TreeView> m_xCategories;
     std::unique_ptr<weld::Label> m_xPreview;
+    std::unique_ptr<weld::Label> m_xWarning;
+    std::unique_ptr<weld::Button> m_xOkBtn;
 
     DECL_LINK(ClassificationHdl, weld::ComboBox&, void);
     DECL_LINK(CategoryToggleHdl, const weld::TreeView::iter_col&, void);
+    DECL_LINK(OkHdl, weld::Button&, void);
 
+    std::vector<bool> collectSelection() const;
     void PopulateCategories();
     void UpdatePreview();
 
