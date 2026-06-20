@@ -280,6 +280,7 @@ $(DIST_FOLDER)/src/app/TaskWorker.js: \
 	$(DIST_FOLDER)/src/layer/tile/CanvasTileUtils.js \
 	$(WORKER_NODE_MODULES_JS)
 
+	@mkdir -p $(dir $@)
 	$(QUIET_M4) m4 -PE -DDEBUG=$(ENABLE_DEBUG) \
 		-DMOBILEAPP=$(ENABLE_MOBILEAPP) \
 		-DNODE_MODULES_JS=$(subst $(SPACE),$(COMMA),$(WORKER_NODE_MODULES_JS)) \
@@ -1561,5 +1562,3 @@ perf-test:
 		cp $(abs_top_srcdir)/test/data/perf-test.odt $(abs_top_builddir)/test/data/perf-test-edit.odt; \
 	fi
 	$(NODE) $(abs_srcdir)/test/bootstrap.js $(abs_top_builddir) $(abs_srcdir) $(typing_speed) $(single_view) $(typing_duration) $(node_inspect) ${record_stats}
-# for now - unwinding ts and js deps for different targets is a real pain.
-.NOTPARALLEL:
