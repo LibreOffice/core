@@ -60,7 +60,12 @@ void SpifPolicyTest::testParse()
         <spif:tagCategory name="OPS" lacv="21745403334774611" obsolete="true">
           <spif:excludedClass>OFFICIAL</spif:excludedClass>
         </spif:tagCategory>
-        <spif:tagCategory name="REL" lacv="99" requiredClass="OFFICIAL" obsolete="false" />
+        <spif:tagCategory name="REL" lacv="99" requiredClass="OFFICIAL" obsolete="false">
+          <spif:excludedCategory tagSetRef="Release Categories" tagType="enumerated" lacv="4407630" />
+          <spif:requiredCategory operation="oneOrMore">
+            <spif:categoryGroup tagSetRef="Release Categories" tagType="enumerated" lacv="5591873" />
+          </spif:requiredCategory>
+        </spif:tagCategory>
       </spif:securityCategoryTag>
     </spif:securityCategoryTagSet>
   </spif:securityCategoryTagSets>
@@ -124,6 +129,16 @@ void SpifPolicyTest::testParse()
     CPPUNIT_ASSERT_EQUAL(u"OFFICIAL"_ustr, rNtkTag.aCategories[2].aRequiredClass);
     CPPUNIT_ASSERT(rNtkTag.aCategories[2].isSelectable(u"OFFICIAL"_ustr));
     CPPUNIT_ASSERT(!rNtkTag.aCategories[2].isSelectable(u"SECRET"_ustr)); // requiredClass=OFFICIAL
+
+    const auto& rRel = rNtkTag.aCategories[2];
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRel.aExcludedCategories.size());
+    CPPUNIT_ASSERT_EQUAL(u"Release Categories"_ustr, rRel.aExcludedCategories[0].aTagSetRef);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(4407630), rRel.aExcludedCategories[0].nLacv);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRel.aRequiredCategories.size());
+    CPPUNIT_ASSERT_EQUAL(u"oneOrMore"_ustr, rRel.aRequiredCategories[0].aOperation);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRel.aRequiredCategories[0].aCategories.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(5591873),
+                         rRel.aRequiredCategories[0].aCategories[0].nLacv);
 
     // Marking derivation walks only categories selectable under the classification
     // (matching the dialog's filtered rows). Under SECRET: CANADA, UNITED KINGDOM,

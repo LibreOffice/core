@@ -28,6 +28,24 @@ struct SpifClassification
     bool bObsolete = false; ///< @obsolete: not for newly created labels
 };
 
+/// A reference to a category in a tag set, by tag-set name + lacv (or all of them).
+/// Used by required/excluded category relationships (optionalCategoryData).
+struct SpifCategoryRef
+{
+    OUString aTagSetRef; ///< tagSetRef: the referenced tag set's name
+    OUString aTagType; ///< @tagType of the reference
+    sal_Int64 nLacv = 0; ///< @lacv of the referenced category (when !bAll)
+    bool bAll = false; ///< @all: all categories of the referenced tag set
+};
+
+/// A required-category group: `aOperation` (onlyOne/oneOrMore/all) of the referenced
+/// categories must be selected when the owning category is selected.
+struct SpifRequiredCategory
+{
+    OUString aOperation; ///< operation: onlyOne / oneOrMore / all
+    std::vector<SpifCategoryRef> aCategories;
+};
+
 /// A selectable value within a category tag (e.g. "CANADA" under "Releasable To").
 struct SW_DLLPUBLIC SpifTagCategory
 {
@@ -36,6 +54,8 @@ struct SW_DLLPUBLIC SpifTagCategory
     bool bObsolete = false; ///< @obsolete: not for newly created labels
     OUString aRequiredClass; ///< @requiredClass: classification required when this category is used
     std::vector<OUString> aExcludedClasses; ///< excludedClass: classifications this category excludes
+    std::vector<SpifCategoryRef> aExcludedCategories; ///< excludedCategory: categories this excludes
+    std::vector<SpifRequiredCategory> aRequiredCategories; ///< requiredCategory groups
 
     /// Whether this category may be selected for a NEW label under rClassification
     /// (not obsolete, not excluded, and requiredClass, if set, matches).

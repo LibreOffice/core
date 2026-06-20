@@ -29,6 +29,16 @@ sal_Int32 parseSelection(std::string_view rValue)
     return o3tl::toInt32(rValue);
 }
 
+SpifCategoryRef parseCategoryRef(tools::XmlWalker& rWalker)
+{
+    SpifCategoryRef aRef;
+    aRef.aTagSetRef = toOU(rWalker.attribute("tagSetRef"_ostr));
+    aRef.aTagType = toOU(rWalker.attribute("tagType"_ostr));
+    aRef.nLacv = rWalker.attribute("lacv"_ostr).toInt64();
+    aRef.bAll = rWalker.attribute("all"_ostr) == "true";
+    return aRef;
+}
+
 SpifTagCategory parseTagCategory(tools::XmlWalker& rWalker)
 {
     SpifTagCategory aCategory;
@@ -42,6 +52,22 @@ SpifTagCategory parseTagCategory(tools::XmlWalker& rWalker)
     {
         if (rWalker.name() == "excludedClass")
             aCategory.aExcludedClasses.push_back(toOU(rWalker.content()));
+        else if (rWalker.name() == "excludedCategory")
+            aCategory.aExcludedCategories.push_back(parseCategoryRef(rWalker));
+        else if (rWalker.name() == "requiredCategory")
+        {
+            SpifRequiredCategory aRequired;
+            aRequired.aOperation = toOU(rWalker.attribute("operation"_ostr));
+            rWalker.children();
+            while (rWalker.isValid())
+            {
+                if (rWalker.name() == "categoryGroup")
+                    aRequired.aCategories.push_back(parseCategoryRef(rWalker));
+                rWalker.next();
+            }
+            rWalker.parent();
+            aCategory.aRequiredCategories.push_back(aRequired);
+        }
         rWalker.next();
     }
     rWalker.parent();
