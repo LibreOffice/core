@@ -22,9 +22,11 @@
 class SpifPolicyTest : public CppUnit::TestFixture
 {
     void testParse();
+    void testValidate();
 
     CPPUNIT_TEST_SUITE(SpifPolicyTest);
     CPPUNIT_TEST(testParse);
+    CPPUNIT_TEST(testValidate);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -136,6 +138,45 @@ void SpifPolicyTest::testParse()
     std::vector<bool> aIntOnly(3, false);
     aIntOnly[2] = true; // INT
     CPPUNIT_ASSERT_EQUAL(u"SECRETINT"_ustr, aPolicy.buildMarking(u"SECRET"_ustr, aIntOnly));
+}
+
+void SpifPolicyTest::testValidate()
+{
+    static const OString aSpif(
+        R"xml(<?xml version="1.0" encoding="utf-8"?>
+<spif:SPIF xmlns:spif="http://www.xmlspif.org/spif" schemaVersion="1.0" version="1">
+  <spif:securityPolicyId name="T" id="1.2.3" />
+  <spif:securityClassifications>
+    <spif:securityClassification name="SECRET" color="red" lacv="4" hierarchy="4" />
+  </spif:securityClassifications>
+  <spif:securityCategoryTagSets>
+    <spif:securityCategoryTagSet name="TS" id="1.2.3.0">
+      <spif:securityCategoryTag name="Rel" tagType="enumerated" enumType="permissive" minSelection="1" maxSelection="2">
+        <spif:tagCategory name="A" lacv="1" obsolete="false" />
+        <spif:tagCategory name="B" lacv="2" obsolete="false" />
+        <spif:tagCategory name="C" lacv="3" obsolete="false" />
+      </spif:securityCategoryTag>
+    </spif:securityCategoryTagSet>
+  </spif:securityCategoryTagSets>
+</spif:SPIF>)xml"_ostr);
+
+    SvMemoryStream aStream(const_cast<char*>(aSpif.getStr()), aSpif.getLength(), StreamMode::READ);
+    sw::seclabel::SpifPolicy aPolicy;
+    CPPUNIT_ASSERT(aPolicy.parse(aStream));
+
+    // Below minimum (0 < 1).
+    auto aTooFew = aPolicy.validate(u"SECRET"_ustr, { false, false, false });
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aTooFew.size());
+    CPPUNIT_ASSERT_EQUAL(u"Rel"_ustr, aTooFew[0].aTagName);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aTooFew[0].nSelected);
+
+    // Within range (1 in 1..2).
+    CPPUNIT_ASSERT(aPolicy.validate(u"SECRET"_ustr, { true, false, false }).empty());
+
+    // Above maximum (3 > 2).
+    auto aTooMany = aPolicy.validate(u"SECRET"_ustr, { true, true, true });
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aTooMany.size());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aTooMany[0].nSelected);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SpifPolicyTest);

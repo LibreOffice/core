@@ -203,6 +203,39 @@ OUString SpifPolicy::buildMarking(const OUString& rClassification,
     return aMarking;
 }
 
+std::vector<SpifViolation> SpifPolicy::validate(const OUString& rClassification,
+                                                const std::vector<bool>& rSelected) const
+{
+    std::vector<SpifViolation> aViolations;
+    size_t nIdx = 0;
+    for (const auto& rTagSet : aTagSets)
+    {
+        for (const auto& rTag : rTagSet.aTags)
+        {
+            sal_Int32 nSelectable = 0;
+            sal_Int32 nSelected = 0;
+            for (const auto& rCategory : rTag.aCategories)
+            {
+                if (!rCategory.isSelectable(rClassification))
+                    continue;
+                ++nSelectable;
+                if (nIdx < rSelected.size() && rSelected[nIdx])
+                    ++nSelected;
+                ++nIdx;
+            }
+            if (nSelectable == 0)
+                continue; // tag not applicable under this classification
+
+            const bool bUnderMin = rTag.nMinSelection > 0 && nSelected < rTag.nMinSelection;
+            const bool bOverMax = rTag.nMaxSelection >= 0 && nSelected > rTag.nMaxSelection;
+            if (bUnderMin || bOverMax)
+                aViolations.push_back(
+                    { rTag.aName, rTag.nMinSelection, rTag.nMaxSelection, nSelected });
+        }
+    }
+    return aViolations;
+}
+
 bool SpifTagCategory::isSelectable(const OUString& rClassification) const
 {
     if (bObsolete)

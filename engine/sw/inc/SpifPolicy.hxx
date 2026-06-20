@@ -65,6 +65,15 @@ struct SpifCategoryTagSet
     std::vector<SpifCategoryTag> aTags;
 };
 
+/// A selection-constraint violation found by SpifPolicy::validate.
+struct SpifViolation
+{
+    OUString aTagName; ///< the tag whose selection count is out of range
+    sal_Int32 nMinSelection = -1; ///< required minimum (-1 if none)
+    sal_Int32 nMaxSelection = -1; ///< allowed maximum (-1 if none)
+    sal_Int32 nSelected = 0; ///< how many were selected
+};
+
 /// A parsed SPIF policy: policy identifier, classifications and category tag
 /// sets. Privacy marks, marking rules and relationships follow.
 class SW_DLLPUBLIC SpifPolicy
@@ -84,6 +93,13 @@ public:
     /// the order categories appear across aTagSets).
     OUString buildMarking(const OUString& rClassification,
                           const std::vector<bool>& rSelected) const;
+
+    /// Check selection-count constraints (minSelection/maxSelection per tag) for
+    /// the given classification and selection. rSelected is indexed as in
+    /// buildMarking (selectable categories in tag-set/tag/category order). Returns
+    /// one entry per violating tag; empty means valid.
+    std::vector<SpifViolation> validate(const OUString& rClassification,
+                                        const std::vector<bool>& rSelected) const;
 };
 
 } // namespace sw::seclabel
