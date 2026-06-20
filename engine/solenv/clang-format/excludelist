@@ -26,12 +26,6 @@ avmedia/source/framework/mediaplayer.cxx
 avmedia/source/framework/mediatoolbox.cxx
 avmedia/source/framework/soundhandler.cxx
 avmedia/source/framework/soundhandler.hxx
-avmedia/source/gstreamer/gstframegrabber.cxx
-avmedia/source/gstreamer/gstframegrabber.hxx
-avmedia/source/gstreamer/gstmanager.cxx
-avmedia/source/gstreamer/gstmanager.hxx
-avmedia/source/gstreamer/gstplayer.cxx
-avmedia/source/gstreamer/gstplayer.hxx
 avmedia/source/gstreamer/gstwindow.cxx
 avmedia/source/gstreamer/gstwindow.hxx
 avmedia/source/macavf/framegrabber.hxx

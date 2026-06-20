@@ -174,11 +174,6 @@ sal_IntPtr SystemChildWindow::GetParentWindowHandle() const
     return nRet;
 }
 
-void* SystemChildWindow::CreateGStreamerSink()
-{
-    return ImplGetSVData()->mpDefInst->CreateGStreamerSink(this);
-}
-
 #if defined( MACOSX )
 #elif defined( ANDROID )
 #elif defined( IOS )

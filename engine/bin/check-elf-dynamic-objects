@@ -93,7 +93,6 @@ x11allowlist="libX11.so.6 libX11-xcb.so.1 libXext.so.6 libSM.so.6 libICE.so.6 li
 gobjectallowlist="libgobject-2.0.so.0 libglib-2.0.so.0"
 gdbusallowlist="libdbus-glib-1.so.2 libdbus-1.so.3 libgmodule-2.0.so.0 libgthread-2.0.so.0 ${gobjectallowlist}"
 gioallowlist="libgio-2.0.so.0 ${gdbusallowlist}"
-gstreamerallowlist="libgsttag-1.0.so.0 libgstaudio-1.0.so.0 libgstpbutils-1.0.so.0 libgstvideo-1.0.so.0 libgstbase-1.0.so.0 libgstreamer-1.0.so.0 ${gobjectallowlist}"
 gtk3allowlist="libgtk-3.so.0 libgdk-3.so.0 libcairo-gobject.so.2 libpangocairo-1.0.so.0 libfribidi.so.0 libatk-1.0.so.0 libcairo.so.2 libpangoft2-1.0.so.0 libpango-1.0.so.0 libfontconfig.so.1 libfreetype.so.6 libgdk_pixbuf-2.0.so.0 libharfbuzz.so.0 ${gioallowlist}"
 gtk4allowlist="libgtk-4.so.1 libcairo-gobject.so.2 libpangocairo-1.0.so.0 libatk-1.0.so.0 libcairo.so.2 libpango-1.0.so.0 libgdk_pixbuf-2.0.so.0 libharfbuzz.so.0 libgraphene-1.0.so.0 ${gioallowlist}"
 qt5allowlist="libQt5Core.so.5 libQt5Gui.so.5 libQt5Network.so.5 libQt5Widgets.so.5 libQt5X11Extras.so.5 libcairo.so.2 libxcb.so.1 libxcb-icccm.so.4 ${gobjectallowlist}"
@@ -121,9 +120,6 @@ local file="$1"
         ;;
         */libucpgio1lo.so|*/liblosessioninstalllo.so|*/libevoablo.so)
             allowlist="${allowlist} ${gioallowlist}"
-        ;;
-        */libavmediagst.so)
-            allowlist="${allowlist} ${gstreamerallowlist}"
         ;;
         */libavmediagtk.so)
             allowlist="${allowlist} ${gtk4allowlist}"

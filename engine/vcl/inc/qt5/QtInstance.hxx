@@ -227,8 +227,6 @@ public:
     virtual bool GetUseReducedAnimation() { return false; }
     void UpdateStyle(bool bFontsChanged);
 
-    void* CreateGStreamerSink(const SystemChildWindow*) override;
-
     bool DoExecute(int& nExitCode) override;
     void DoQuit() override;
 

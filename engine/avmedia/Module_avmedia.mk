@@ -19,12 +19,6 @@ $(eval $(call gb_Module_add_l10n_targets,avmedia,\
     AllLangMoTarget_avmedia \
 ))
 
-ifeq ($(ENABLE_GSTREAMER_1_0),TRUE)
-$(eval $(call gb_Module_add_targets,avmedia,\
-	Library_avmediagst \
-))
-endif
-
 ifneq ($(ENABLE_GTK4),)
 $(eval $(call gb_Module_add_targets,avmedia,\
 	Library_avmediagtk \

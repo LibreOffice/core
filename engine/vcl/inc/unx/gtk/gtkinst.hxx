@@ -291,8 +291,6 @@ public:
 
     void                        RemoveTimer ();
 
-    void* CreateGStreamerSink(const SystemChildWindow*) override;
-
 private:
     GtkSalTimer *m_pTimer;
     css::uno::Reference<css::datatransfer::clipboard::XClipboard> m_aClipboards[2];

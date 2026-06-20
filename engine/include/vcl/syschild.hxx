@@ -51,8 +51,6 @@ public:
     void                    SetForwardKey( bool bEnable );
     // return the platform specific handle/id of this window;
     sal_IntPtr              GetParentWindowHandle() const;
-
-    void*                   CreateGStreamerSink();
 };
 
 #endif // INCLUDED_VCL_SYSCHILD_HXX

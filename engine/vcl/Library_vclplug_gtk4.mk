@@ -30,7 +30,6 @@ $(eval $(call gb_Library_add_cxxflags,vclplug_gtk4, \
 $(eval $(call gb_Library_set_include,vclplug_gtk4,\
     $$(INCLUDE) \
     $$(GTK4_CFLAGS) \
-    $$(GSTREAMER_1_0_CFLAGS) \
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/vcl/unx \
     -I$(SRCDIR)/vcl/unx/gtk4 \

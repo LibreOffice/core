@@ -120,7 +120,6 @@ public:
             typeName = typeName.substr(23);
         static std::unordered_set<std::string> ignoreClassNamesSet{
             "apphelper::NegativeGuard<class osl::Mutex>",
-            "avmedia::gstreamer::(anonymous namespace)::FlagGuard",
             "BoolEnv_Impl",
             "BoolResetter",
             "boost::io::basic_ios_all_saver<char, struct std::char_traits<char> >",

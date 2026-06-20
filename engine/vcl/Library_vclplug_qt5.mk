@@ -27,7 +27,6 @@ $(eval $(call gb_Library_set_include,vclplug_qt5,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/vcl/inc/qt5 \
-    $(GSTREAMER_1_0_CFLAGS) \
 ))
 
 $(eval $(call gb_Library_add_defs,vclplug_qt5,\
@@ -64,15 +63,6 @@ $(eval $(call gb_Library_use_externals,vclplug_qt5,\
     icuuc \
     qt5 \
 ))
-
-ifneq ($(QT5_HAVE_GOBJECT),)
-$(eval $(call gb_Library_add_cxxflags,vclplug_qt5,\
-    $(QT5_GOBJECT_CFLAGS) \
-))
-$(eval $(call gb_Library_add_libs,vclplug_qt5,\
-    $(QT5_GOBJECT_LIBS) \
-))
-endif
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_qt5,\
     vcl/qt5/QtAccessibleEventListener \

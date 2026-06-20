@@ -1263,7 +1263,6 @@ test "${test_cpdb+set}" = set || test_cpdb="$using_x11"
 test "${test_cups+set}" = set || test_cups="$using_x11"
 test "${test_dbus+set}" = set || test_dbus="$using_x11"
 test "${test_gen+set}" = set || test_gen="$using_x11"
-test "${test_gstreamer_1_0+set}" = set || test_gstreamer_1_0="$using_x11"
 test "${test_gtk3+set}" = set || test_gtk3="$using_x11"
 test "${test_gtk4+set}" = set || test_gtk4="$using_x11"
 test "${test_kf5+set}" = set || test_kf5="$using_x11"
@@ -1295,7 +1294,6 @@ disable_x11_tests()
     test_cups=no
     test_dbus=no
     test_gen=no
-    test_gstreamer_1_0=no
     test_gtk3_kde5=no
     test_gtk3=no
     test_gtk4=no
@@ -1918,11 +1916,6 @@ libo_FUZZ_ARG_ENABLE(randr,
     AS_HELP_STRING([--disable-randr],
         [Disable RandR support in the vcl project.]),
 ,test "${enable_randr+set}" = set || enable_randr=yes)
-
-libo_FUZZ_ARG_ENABLE(gstreamer-1-0,
-    AS_HELP_STRING([--disable-gstreamer-1-0],
-        [Disable building with the gstreamer 1.0 avmedia backend.]),
-,test "${enable_gstreamer_1_0+set}" = set || enable_gstreamer_1_0=yes)
 
 # Enable by default on Linux and macOS only
 if test $_os = Darwin -o $_os = Linux -o $_os = WINNT; then
@@ -3137,8 +3130,6 @@ fi
 if test "$enable_avmedia" = yes; then
     BUILD_TYPE="$BUILD_TYPE AVMEDIA"
     AC_DEFINE(HAVE_FEATURE_AVMEDIA)
-else
-    test_gstreamer_1_0=no
 fi
 
 # Decide whether to build database connectivity stuff (including Base) or not.
@@ -5985,7 +5976,6 @@ if test "$cross_compiling" = "yes"; then
         --disable-cups \
         --disable-customtarget-components \
         --disable-gpgmepp \
-        --disable-gstreamer-1-0 \
         --disable-gtk3 \
         --disable-gtk4 \
         --disable-libcmis \
@@ -11931,31 +11921,6 @@ if test "$enable_split_opt_features" = "yes"; then
 fi
 AC_SUBST(SPLIT_OPT_FEATURES)
 
-dnl ===================================================================
-dnl Check whether the GStreamer libraries are available.
-dnl ===================================================================
-
-ENABLE_GSTREAMER_1_0=""
-
-if test "$test_gstreamer_1_0" = yes; then
-
-    AC_MSG_CHECKING([whether to enable the GStreamer 1.0 avmedia backend])
-    if test "$enable_avmedia" = yes -a "$enable_gstreamer_1_0" != no; then
-        ENABLE_GSTREAMER_1_0="TRUE"
-        AC_MSG_RESULT([yes])
-        PKG_CHECK_MODULES( [GSTREAMER_1_0], [gstreamer-1.0 gstreamer-plugins-base-1.0 gstreamer-pbutils-1.0 gstreamer-video-1.0] )
-        GSTREAMER_1_0_CFLAGS=$(printf '%s' "$GSTREAMER_1_0_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-        FilterLibs "${GSTREAMER_1_0_LIBS}"
-        GSTREAMER_1_0_LIBS="${filteredlibs}"
-        AC_DEFINE(ENABLE_GSTREAMER_1_0)
-    else
-        AC_MSG_RESULT([no])
-    fi
-fi
-AC_SUBST(GSTREAMER_1_0_CFLAGS)
-AC_SUBST(GSTREAMER_1_0_LIBS)
-AC_SUBST(ENABLE_GSTREAMER_1_0)
-
 dnl =================================================
 dnl Check whether to build with OpenCL support.
 dnl =================================================
@@ -12671,9 +12636,6 @@ dnl ===================================================================
 
 QT5_CFLAGS=""
 QT5_LIBS=""
-QT5_GOBJECT_CFLAGS=""
-QT5_GOBJECT_LIBS=""
-QT5_HAVE_GOBJECT=""
 QT5_PLATFORMS_SRCDIR=""
 if test \( "$test_kf5" = "yes" -a "$ENABLE_KF5" = "TRUE" \) -o \
         \( "$test_qt5" = "yes" -a "$ENABLE_QT5" = "TRUE" \) -o \
@@ -12801,22 +12763,10 @@ then
         AC_MSG_ERROR([Qt Meta Object Compiler not found.  Please specify
 the root of your Qt installation by exporting QT5DIR before running "configure".])
     fi
-
-    if test "$test_gstreamer_1_0" = yes; then
-        PKG_CHECK_MODULES(QT5_GOBJECT,[gobject-2.0], [
-                QT5_HAVE_GOBJECT=1
-                AC_DEFINE(QT5_HAVE_GOBJECT)
-            ],
-            AC_MSG_WARN([[No GObject found, can't use QWidget GStreamer sink on wayland!]])
-        )
-    fi
 fi
 AC_SUBST(QT5_CFLAGS)
 AC_SUBST(QT5_LIBS)
 AC_SUBST(MOC5)
-AC_SUBST(QT5_GOBJECT_CFLAGS)
-AC_SUBST(QT5_GOBJECT_LIBS)
-AC_SUBST(QT5_HAVE_GOBJECT)
 AC_SUBST(QT5_PLATFORMS_SRCDIR)
 
 dnl ===================================================================

@@ -62,9 +62,6 @@
 #include <o3tl/unreachable.hxx>
 #include <o3tl/temporary.hxx>
 #include <osl/process.h>
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) && ENABLE_GSTREAMER_1_0 && QT5_HAVE_GOBJECT
-#include <unx/gstsink.hxx>
-#endif
 #include <headless/svpbmp.hxx>
 
 #include <mutex>
@@ -708,42 +705,6 @@ void QtInstance::UpdateStyle(bool bFontsChanged)
         m_bUpdateFonts = true;
     if (!m_aUpdateStyleTimer.IsActive())
         m_aUpdateStyleTimer.Start();
-}
-
-void* QtInstance::CreateGStreamerSink(const SystemChildWindow* pWindow)
-{
-// As of 2021-09, qt-gstreamer is unmaintained and there is no Qt 6 video sink
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) && ENABLE_GSTREAMER_1_0 && QT5_HAVE_GOBJECT
-    auto pSymbol = gstElementFactoryNameSymbol();
-    if (!pSymbol)
-        return nullptr;
-
-    const SystemEnvData* pEnvData = pWindow->GetSystemData();
-    if (!pEnvData)
-        return nullptr;
-
-    if (pEnvData->platform != SystemEnvData::Platform::Wayland)
-        return nullptr;
-
-    GstElement* pVideosink = pSymbol("qwidget5videosink", "qwidget5videosink");
-    if (pVideosink)
-    {
-        QWidget* pQWidget = static_cast<QWidget*>(pEnvData->pWidget);
-        g_object_set(G_OBJECT(pVideosink), "widget", pQWidget, nullptr);
-    }
-    else
-    {
-        SAL_WARN("vcl.qt", "Couldn't initialize qwidget5videosink."
-                           " Video playback might not work as expected."
-                           " Please install Qt5 packages for QtGStreamer.");
-        // with no videosink explicitly set, GStreamer will open its own (misplaced) window(s) to display video
-    }
-
-    return pVideosink;
-#else
-    Q_UNUSED(pWindow);
-    return nullptr;
-#endif
 }
 
 void QtInstance::connectQScreenSignals(const QScreen* pScreen)
