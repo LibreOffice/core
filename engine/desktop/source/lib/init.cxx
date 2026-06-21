@@ -4661,6 +4661,11 @@ static void doc_paintPartTile(COKitDocument* pThis,
         SfxViewShell* pCurrentViewShell = SfxViewShell::Current();
         const OString sCurrentViewRenderState = pDoc->getViewRenderState(pCurrentViewShell);
 
+        // When rendering another part's tile we switch the view page, this
+        // clears the current selections (marked objects).
+        // Remember the selections here and restore it after switching back.
+        std::vector<SdrObject*> aSavedMarkedObjects;
+
         // Check if just switching to another view is enough, that has less side-effects.
         // Render state is sometimes empty, don't risk it.
         if ((nPart != doc_getPart(pThis) || nMode != pDoc->getEditMode()) && !sCurrentViewRenderState.isEmpty())
@@ -4682,7 +4687,15 @@ static void doc_paintPartTile(COKitDocument* pThis,
             {
                 nOrigPart = doc_getPart(pThis);
                 if (nPart != nOrigPart)
+                {
+                    if (SdrView* pSaveView = pCurrentViewShell ? pCurrentViewShell->GetDrawView() : nullptr)
+                    {
+                        const SdrMarkList& rMarks = pSaveView->GetMarkedObjectList();
+                        for (size_t i = 0; i < rMarks.GetMarkCount(); ++i)
+                            aSavedMarkedObjects.push_back(rMarks.GetMark(i)->GetMarkedSdrObj());
+                    }
                     doc_setPartImpl(pThis, nPart, false);
+                }
             }
 
             nOrigEditMode = pDoc->getEditMode();
@@ -4712,7 +4725,24 @@ static void doc_paintPartTile(COKitDocument* pThis,
             if (!isText)
             {
                 if (nPart != nOrigPart)
+                {
                     doc_setPartImpl(pThis, nOrigPart, false);
+                    // Re-apply the selections cleared during the view page switching.
+                    if (!aSavedMarkedObjects.empty())
+                    {
+                        if (SdrView* pRestoreView = pCurrentViewShell ? pCurrentViewShell->GetDrawView() : nullptr)
+                        {
+                            if (SdrPageView* pPageView = pRestoreView->GetSdrPageView())
+                            {
+                                for (SdrObject* pObj : aSavedMarkedObjects)
+                                {
+                                    if (pObj)
+                                        pRestoreView->MarkObj(pObj, pPageView);
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
         else
