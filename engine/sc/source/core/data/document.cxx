@@ -3132,9 +3132,10 @@ void ScDocument::CopyFromClip(
 
     // Recreate named tables the copy fully covered at the paste location, so the
     // structured-reference tokens resolved further down bind to a table placed
-    // at the paste position. Must run before the cells, and their formulas, are
-    // copied in.
-    if (nInsFlag & InsertDeleteFlags::CONTENTS)
+    // at the paste position. Only a formula paste carries such tokens, so a
+    // values-only paste needs no table. Must run before the cells, and their
+    // formulas, are copied in.
+    if (nInsFlag & InsertDeleteFlags::FORMULA)
         CopyDBsFromClip(rDestRange, aClipRange, pClipDoc);
 
     bInsertingFromOtherDoc = true;  // No Broadcast/Listener created at Insert

@@ -10258,6 +10258,48 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyToClipMultiSheetForeignTable)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyFromClipValuesOnlyNoTable)
+{
+    // Pasting only values of a copied table must not recreate the table in the
+    // destination. The table is recreated so structured-reference formulas can
+    // resolve against it. A values-only paste carries no such formula, so it
+    // should leave the destination without a table.
+    m_pDoc->InsertTab(0, u"Src"_ustr);
+
+    auto pTable = std::make_unique<ScDBData>(u"MyTable"_ustr, 0, 0, 0, 2, 2, true, true);
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().insert(std::move(pTable)));
+    m_pDoc->SetString(0, 0, 0, u"Name"_ustr);
+    m_pDoc->SetValue(2, 2, 0, 42.0);
+
+    // Copy the whole table A1:C3.
+    ScRange aClipRange(0, 0, 0, 2, 2, 0);
+    ScClipParam aClipParam(aClipRange, false);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    aMark.SetMarkArea(aClipRange);
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
+
+    // Fresh destination document that has no MyTable of its own.
+    ScDocShellRef xDestDocSh = new ScDocShell;
+    xDestDocSh->DoLoad(new SfxMedium(u"file:///valuesonly.fake"_ustr, StreamMode::STD_READWRITE));
+    ScDocument& rDestDoc = xDestDocSh->GetDocument();
+    rDestDoc.InsertTab(0, u"Dest"_ustr);
+
+    // Paste values only, no formulas.
+    ScRange aDestRange(0, 0, 0, 2, 2, 0);
+    ScMarkData aDestMark(rDestDoc.GetSheetLimits());
+    aDestMark.SelectOneTable(0);
+    rDestDoc.CopyFromClip(aDestRange, aDestMark, InsertDeleteFlags::VALUE, nullptr, &aClipDoc);
+
+    ScDBCollection* pDestDBs = rDestDoc.GetDBCollection();
+    CPPUNIT_ASSERT_MESSAGE("a values-only paste must not recreate the table",
+                           !pDestDBs || pDestDBs->getNamedDBs().empty());
+
+    xDestDocSh->DoClose();
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteFormulasExternalDoc)
 {
     SfxMedium* pMedium = new SfxMedium(u"file:///source.fake"_ustr, StreamMode::STD_READWRITE);
