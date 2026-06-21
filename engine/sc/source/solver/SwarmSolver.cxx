@@ -47,6 +47,7 @@
 
 #include "DifferentialEvolution.hxx"
 #include "ParticelSwarmOptimization.hxx"
+#include "DEPSOSolver.hxx"
 
 #include "strings.hrc"
 
@@ -805,6 +806,15 @@ void SAL_CALL SwarmSolver::solve()
         SwarmRunner<DifferentialEvolutionSolver<SwarmSolver>> aEvolution(aDE);
         aEvolution.setTimeout(mnTimeout);
         aSolution = aEvolution.solve();
+    }
+    else if (mnAlgorithm == 2)
+    {
+        size_t nPopulation = std::clamp<size_t>(10 * nDimensions, 100, 300);
+        mnSeedCount = nPopulation / 2;
+        DEPSOSolver<SwarmSolver> aDepso(*this, nPopulation);
+        SwarmRunner<DEPSOSolver<SwarmSolver>> aRunner(aDepso);
+        aRunner.setTimeout(mnTimeout);
+        aSolution = aRunner.solve();
     }
     else
     {
