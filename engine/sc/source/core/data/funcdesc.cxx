@@ -811,6 +811,12 @@ ScFunctionList::ScFunctionList( bool bEnglishFunctionNames )
         { ocUnique, ENTRY(ocUNIQUE_ARY), 0, ID_FUNCTION_GRP_TABLE, HID_FUNC_UNIQUE_MS, 3, { 0, 1, 1 }, 0 },
         { ocWrapCols, ENTRY(ocWRAPCOLS_ARY), 0, ID_FUNCTION_GRP_TABLE, HID_FUNC_WRAPCOLS_MS, 3, { 0, 1, 1 }, 0 },
         { ocWrapRows, ENTRY(ocWRAPROWS_ARY), 0, ID_FUNCTION_GRP_TABLE, HID_FUNC_WRAPROWS_MS, 3, { 0, 1, 1 }, 0 },
+        { ocByCol, ENTRY(ocBYCOL_ARY), 0, ID_FUNCTION_GRP_MATRIX, HID_FUNC_BYCOL_MS, 2, {0, 0}, 0 },
+        { ocByRow, ENTRY(ocBYROW_ARY), 0, ID_FUNCTION_GRP_MATRIX, HID_FUNC_BYROW_MS, 2, {0, 0}, 0 },
+        { ocMakeArray, ENTRY(ocMAKEARRAY_ARY), 0, ID_FUNCTION_GRP_MATRIX, HID_FUNC_MAKEARRAY_MS, 3, { 0, 0, 0 }, 0 },
+        { ocMap, ENTRY(ocMAP_ARY), 0, ID_FUNCTION_GRP_MATRIX, HID_FUNC_MAP_MS, VAR_ARGS + 2, { 0, 0 }, 0 },
+        { ocReduce, ENTRY(ocREDUCE_ARY), 0, ID_FUNCTION_GRP_MATRIX, HID_FUNC_REDUCE_MS, 3, { 1, 0, 0 }, 0 },
+        { ocScan, ENTRY(ocSCAN_ARY), 0, ID_FUNCTION_GRP_MATRIX, HID_FUNC_SCAN_MS, 3, { 1, 0, 0 }, 0 },
     };
 
     ScFuncDesc* pDesc = nullptr;

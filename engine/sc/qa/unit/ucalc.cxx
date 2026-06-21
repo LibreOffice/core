@@ -2919,15 +2919,21 @@ CPPUNIT_TEST_FIXTURE(Test, testFunctionLists)
     };
 
     const char* aArray[] = {
+        "BYCOL",
+        "BYROW",
         "FOURIER",
         "FREQUENCY",
         "GROWTH",
         "LINEST",
         "LOGEST",
+        "MAKEARRAY",
+        "MAP",
         "MDETERM",
         "MINVERSE",
         "MMULT",
         "MUNIT",
+        "REDUCE",
+        "SCAN",
         "SEQUENCE",
         "SUMPRODUCT",
         "SUMX2MY2",

@@ -354,6 +354,12 @@ inline constexpr OUString HID_FUNC_RKP = u"SC_HID_FUNC_RKP"_ustr;
 inline constexpr OUString HID_FUNC_TREND = u"SC_HID_FUNC_TREND"_ustr;
 inline constexpr OUString HID_FUNC_VARIATION = u"SC_HID_FUNC_VARIATION"_ustr;
 inline constexpr OUString HID_FUNC_IS_OMITTED_MS = u"SC_HID_FUNC_IS_OMITTED_MS"_ustr;
+inline constexpr OUString HID_FUNC_BYCOL_MS = u"SC_HID_FUNC_BYCOL_MS"_ustr;
+inline constexpr OUString HID_FUNC_BYROW_MS = u"SC_HID_FUNC_BYROW_MS"_ustr;
+inline constexpr OUString HID_FUNC_MAKEARRAY_MS = u"SC_HID_FUNC_MAKEARRAY_MS"_ustr;
+inline constexpr OUString HID_FUNC_MAP_MS = u"SC_HID_FUNC_MAP_MS"_ustr;
+inline constexpr OUString HID_FUNC_REDUCE_MS = u"SC_HID_FUNC_REDUCE_MS"_ustr;
+inline constexpr OUString HID_FUNC_SCAN_MS = u"SC_HID_FUNC_SCAN_MS"_ustr;
 
 inline constexpr OUString HID_FUNC_ANZAHL = u"SC_HID_FUNC_ANZAHL"_ustr;
 inline constexpr OUString HID_FUNC_ANZAHL2 = u"SC_HID_FUNC_ANZAHL2"_ustr;

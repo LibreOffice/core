@@ -1584,6 +1584,60 @@ const TranslateId ocMATRIX_UNIT_ARY[] =
     NC_("ocMATRIX_UNIT", "The size of the unitary array.")
 };
 
+// -=*# Resources for function BYCOL #*=-
+const TranslateId ocBYCOL_ARY[] =
+{
+    NC_("ocBYCOL", "Applies a function to each column of an array. Returns an single-row array of the same width."),
+    NC_("ocBYCOL", "Array"),
+    NC_("ocBYCOL", "An array to calculate."),
+    NC_("ocBYCOL", "Function"),
+    NC_("ocBYCOL", "A function (LAMBDA or otherwise) that will be called on each column of the array.")
+};
+
+// -=*# Resources for function BYROW #*=-
+const TranslateId ocBYROW_ARY[] =
+{
+    NC_("ocBYCOL", "Applies a function to each row of an array. Returns an single-column array of the same height."),
+    NC_("ocBYCOL", "Array"),
+    NC_("ocBYCOL", "An array to calculate."),
+    NC_("ocBYCOL", "Function"),
+    NC_("ocBYCOL", "A function (LAMBDA or otherwise) that will be called on each row of the array.")
+};
+
+// -=*# Resource for function MAKEARRAY #*=-
+const TranslateId ocMAKEARRAY_ARY[] =
+{
+    NC_("ocMAKEARRAY", "Array generation. Creates an array of certain dimensions, with generated contents."),
+    NC_("ocMAKEARRAY", "Rows"),
+    NC_("ocMAKEARRAY", "The number of rows the new array should have."),
+    NC_("ocMAKEARRAY", "Columns"),
+    NC_("ocMAKEARRAY", "The number of columns the new array should have."),
+    NC_("ocMAKEARRAY", "Generator"),
+    NC_("ocMAKEARRAY", "A LAMBDA function that is called with (row, column) values to generate each element of the array.")
+};
+
+// -=*# Resources for function MAP #*=-
+const TranslateId ocMAP_ARY[] =
+{
+    NC_("ocMAP", "Applies a function to each cell of one or more arrays."),
+    NC_("ocMAP", "Array 1"),
+    NC_("ocMAP", "The array that provides the first arguments to the function."),
+    NC_("ocMAP", "Function or Array "),
+    NC_("ocMAP", "A function (usually built with LAMBDA) that receives the data provided in the array(s). More than one array may be provided; their corresponding cells are all passed to the function. The function must accept that many parameters.")
+};
+
+// -=*# Resources for function REDUCE #*=-
+const TranslateId ocREDUCE_ARY[] =
+{
+    NC_("ocREDUCE", "placeholder text"),
+};
+
+// -=*# Resources for function SCAN #*=-
+const TranslateId ocSCAN_ARY[] =
+{
+    NC_("ocSCAN", "placeholder text"),
+};
+
 // -=*# Resource for function SUMPRODUCT #*=-
 const TranslateId ocSUM_PRODUCT_ARY[] =
 {

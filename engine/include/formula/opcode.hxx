@@ -559,7 +559,13 @@ enum OpCode : sal_uInt16
         ocWrapCols          = 518,
         ocWrapRows          = 519,
         ocUDExternal        = 520, /* User-defined external function */
-        ocStopTwoParameters = 521, /* last function with two or more parameters' OpCode + 1 */
+        ocByCol             = 521,
+        ocByRow             = 522,
+        ocMakeArray         = 523,
+        ocMap               = 524,
+        ocReduce            = 525,
+        ocScan              = 526,
+        ocStopTwoParameters = 527, /* last function with two or more parameters' OpCode + 1 */
 
         ocStopFunction      = ocStopTwoParameters,  /* last function's OpCode + 1 */
         ocLastOpcodeId      = ocStopFunction - 1, /* last OpCode */
@@ -1070,6 +1076,12 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocWrapRows: return "WrapRows";
     case ocLambda: return "Lambda";
     case ocIsOmitted: return "IsOmitted";
+    case ocByCol: return "ByCol";
+    case ocByRow: return "ByRow";
+    case ocMakeArray: return "MakeArray";
+    case ocMap: return "Map";
+    case ocReduce: return "Reduce";
+    case ocScan: return "Scan";
     case ocTTT: return "TTT";
     case ocDebugVar: return "DebugVar";
     case ocDataToken1: return "DataToken1";

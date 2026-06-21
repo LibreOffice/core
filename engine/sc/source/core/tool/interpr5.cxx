@@ -1245,6 +1245,512 @@ ScMatrixRef ScInterpreter::MatConcat(const ScMatrixRef& pMat1, const ScMatrixRef
     return xResMat;
 }
 
+void ScInterpreter::PutMatrixValue(FormulaConstTokenRef pToken, ScMatrixRef xMatrix, SCSIZE nCol, SCSIZE nRow)
+{
+    switch (pToken->GetType())
+    {
+        case svSingleRef:
+        {
+            auto pTypedToken = static_cast<const ScSingleRefToken*>(pToken.get());
+            const ScSingleRefData& rRefData = pTypedToken->GetSingleRef();
+            if (rRefData.IsDeleted())
+            {
+                xMatrix->PutError(FormulaError::NoRef, nCol, nRow);
+                break;
+            }
+
+            ScAddress aAdr = rRefData.toAbs(mrDoc, aPos);
+            if (!mrDoc.m_TableOpList.empty())
+                ReplaceCell(aAdr);
+
+            PutMatrixValue(mrDoc.GetFormulaCell(aAdr)->CloneResultToken(), xMatrix, nCol, nRow);
+            break;
+        }
+        case svDoubleRef:
+        {
+            auto pTypedToken = static_cast<const ScDoubleRefToken*>(pToken.get());
+            const ScComplexRefData& rRefData = pTypedToken->GetDoubleRef();
+            if (rRefData.IsDeleted())
+            {
+                xMatrix->PutError(FormulaError::NoRef, nCol, nRow);
+                break;
+            }
+
+            ScRange aRange = rRefData.toAbs(mrDoc, aPos);
+            if (aRange.aStart != aRange.aEnd)
+            {
+                xMatrix->PutError(FormulaError::IllegalArgument, nCol, nRow);
+                break;
+            }
+
+            if (!mrDoc.m_TableOpList.empty())
+                ReplaceCell(aRange.aStart);
+
+            PutMatrixValue(mrDoc.GetFormulaCell(aRange.aStart)->CloneResultToken(), xMatrix, nCol, nRow);
+            break;
+        }
+        case svRefList:
+        {
+            auto pTypedToken = static_cast<const ScRefListToken*>(pToken.get());
+            const ScRefList* pRefList = pTypedToken->GetRefList();
+            if (pRefList->size() > 1)
+            {
+                xMatrix->PutError(FormulaError::IllegalArgument, nCol, nRow);
+                break;
+            }
+            const ScComplexRefData& rRefData = (*pRefList)[0];
+            if (rRefData.IsDeleted())
+            {
+                xMatrix->PutError(FormulaError::NoRef, nCol, nRow);
+                break;
+            }
+
+            ScRange aRange = rRefData.toAbs(mrDoc, aPos);
+            if (aRange.aStart != aRange.aEnd)
+            {
+                xMatrix->PutError(FormulaError::IllegalArgument, nCol, nRow);
+                break;
+            }
+
+            if (!mrDoc.m_TableOpList.empty())
+                ReplaceCell(aRange.aStart);
+
+            PutMatrixValue(mrDoc.GetFormulaCell(aRange.aStart)->CloneResultToken(), xMatrix, nCol, nRow);
+            break;
+        }
+        case svDouble:
+        {
+            auto pTypedToken = static_cast<const FormulaDoubleToken*>(pToken.get());
+            xMatrix->PutDouble(pTypedToken->GetDouble(), nCol, nRow);
+            break;
+        }
+        case svString:
+        {
+            auto pTypedToken = static_cast<const FormulaStringToken*>(pToken.get());
+            xMatrix->PutString(pTypedToken->GetString(), nCol, nRow);
+            break;
+        }
+        case svEmptyCell:
+        case svMissing:
+        {
+            xMatrix->PutEmpty(nCol, nRow);
+            break;
+        }
+        case svError:
+        {
+            auto pTypedToken = static_cast<const FormulaErrorToken*>(pToken.get());
+            xMatrix->PutError(pTypedToken->GetError(), nCol, nRow);
+            break;
+        }
+        case svMatrix:
+        case svMatrixCell:
+        {
+            // Reduce a one by one matrix result to its single value.
+            const ScMatrix* xTokMatrix;
+            if (pToken->GetType() == svMatrix)
+                xTokMatrix = static_cast<const ScMatrixToken*>(pToken.get())->GetMatrix();
+            else
+                xTokMatrix = static_cast<const ScMatrixCellResultToken*>(pToken.get())->GetMatrix();
+            SCSIZE nCols = 0, nRows = 0;
+            if (xTokMatrix)
+                xTokMatrix->GetDimensions(nCols, nRows);
+            if (xTokMatrix && nCols == 1 && nRows == 1)
+            {
+                if (xTokMatrix->IsEmpty(0, 0))
+                    xMatrix->PutEmpty(nCol, nRow);
+                else if (xTokMatrix->IsValue(0, 0))
+                {
+                    FormulaError nError = xTokMatrix->GetError(0, 0);
+                    if (nError == FormulaError::NONE)
+                        xMatrix->PutDouble(xTokMatrix->GetDouble(0, 0), nCol, nRow);
+                    else
+                        xMatrix->PutError(nError, nCol, nRow);
+                }
+                else if (xTokMatrix->IsStringOrEmpty(0, 0))
+                    xMatrix->PutString(xTokMatrix->GetString(0, 0), nCol, nRow);
+                else // TODO: callable
+                    xMatrix->PutError(FormulaError::IllegalArgument, nCol, nRow);
+            }
+            else
+                xMatrix->PutError(FormulaError::IllegalArgument, nCol, nRow);
+            break;
+        }
+        case svCallable: // TODO
+        default:
+        {
+            xMatrix->PutError(FormulaError::IllegalArgument, nCol, nRow);
+            break;
+        }
+    }
+}
+
+void ScInterpreter::ScByCol()
+{
+    if ( ! MustHaveParamCount( GetByte(), 2 ) )
+        return;
+
+    formula::FormulaCallableRef pCallable = GetCallable();
+    ScMatrixRef xMatrix = GetMatrix();
+    if (nGlobalError != FormulaError::NONE)
+    {
+        PushError(nGlobalError);
+        return;
+    }
+    else if (!pCallable || !xMatrix)
+    {
+        PushIllegalArgument();
+        return;
+    }
+
+    SCSIZE nC, nR;
+    xMatrix->GetDimensions(nC, nR);
+
+    ScMatrixRef xArgMat = GetNewMat(1, nR, /*bEmpty*/true);
+    ScMatrixRef xResMat = GetNewMat(nC, 1, /*bEmpty*/true);
+    if (!xArgMat || !xResMat)
+    {
+        PushError(FormulaError::MatrixSize);
+        return;
+    }
+
+    std::vector<formula::FormulaConstTokenRef> aArgs(1);
+    aArgs[0] = new ScMatrixToken(xArgMat);
+
+    // TODO: These loops are definitely candidates for multithreading
+    for (SCSIZE nCol = 0; nCol < nC; ++nCol)
+    {
+        for (SCSIZE nRow = 0; nRow < nR; ++nRow)
+        {
+            if (xMatrix->IsEmpty(nCol, nRow))
+                xArgMat->PutEmpty(0, nRow);
+            else if (xMatrix->IsValue(nCol, nRow))
+            {
+                FormulaError nError = xMatrix->GetError(nCol, nRow);
+                if (nError == FormulaError::NONE)
+                    xArgMat->PutDouble(xMatrix->GetDouble(nCol, nRow), 0, nRow);
+                else
+                    xArgMat->PutError(nError, 0, nRow);
+            }
+            else if (xMatrix->IsStringOrEmpty(nCol, nRow))
+                xArgMat->PutString(xMatrix->GetString(nCol, nRow), 0, nRow);
+            else // TODO: callable
+                xArgMat->PutError(FormulaError::IllegalArgument, 0, nRow);
+        }
+        ScCall(pCallable, aArgs);
+        PutMatrixValue(PopToken(), xResMat, nCol, 0);
+    }
+
+    PushMatrix(xResMat);
+}
+
+void ScInterpreter::ScByRow()
+{
+    if ( ! MustHaveParamCount( GetByte(), 2 ) )
+        return;
+
+    formula::FormulaCallableRef pCallable = GetCallable();
+    ScMatrixRef xMatrix = GetMatrix();
+    if (nGlobalError != FormulaError::NONE)
+    {
+        PushError(nGlobalError);
+        return;
+    }
+    else if (!pCallable || !xMatrix)
+    {
+        PushIllegalArgument();
+        return;
+    }
+
+    SCSIZE nC, nR;
+    xMatrix->GetDimensions(nC, nR);
+
+    ScMatrixRef xArgMat = GetNewMat(nC, 1, /*bEmpty*/true);
+    ScMatrixRef xResMat = GetNewMat(1, nR, /*bEmpty*/true);
+    if (!xArgMat || !xResMat)
+    {
+        PushError(FormulaError::MatrixSize);
+        return;
+    }
+
+    std::vector<formula::FormulaConstTokenRef> aArgs(1);
+    aArgs[0] = new ScMatrixToken(xArgMat);
+
+    // TODO: These loops are definitely candidates for multithreading
+    for (SCSIZE nRow = 0; nRow < nR; ++nRow)
+    {
+        for (SCSIZE nCol = 0; nCol < nC; ++nCol)
+        {
+            if (xMatrix->IsEmpty(nCol, nRow))
+                xArgMat->PutEmpty(nCol, 0);
+            else if (xMatrix->IsValue(nCol, nRow))
+            {
+                FormulaError nError = xMatrix->GetError(nCol, nRow);
+                if (nError == FormulaError::NONE)
+                    xArgMat->PutDouble(xMatrix->GetDouble(nCol, nRow), nCol, 0);
+                else
+                    xArgMat->PutError(nError, nCol, 0);
+            }
+            else if (xMatrix->IsStringOrEmpty(nCol, nRow))
+                xArgMat->PutString(xMatrix->GetString(nCol, nRow), nCol, 0);
+            else // TODO: callable
+                xArgMat->PutError(FormulaError::IllegalArgument, nCol, 0);
+        }
+        ScCall(pCallable, aArgs);
+        PutMatrixValue(PopToken(), xResMat, 0, nRow);
+    }
+
+    PushMatrix(xResMat);
+}
+
+void ScInterpreter::ScMakeArray()
+{
+    if ( ! MustHaveParamCount( GetByte(), 3 ) )
+        return;
+
+    formula::FormulaCallableRef pCallable = GetCallable();
+    SCSIZE nCols = static_cast<SCSIZE>(GetInt32());
+    SCSIZE nRows = static_cast<SCSIZE>(GetInt32());
+
+    if (nGlobalError != FormulaError::NONE)
+    {
+        PushError(nGlobalError);
+        return;
+    }
+    else if (!pCallable)
+    {
+        PushIllegalArgument();
+        return;
+    }
+    else if (nCols <= 0 || nRows <= 0)
+    {
+        // A non-positive number of rows or columns is a value error.
+        PushNoValue();
+        return;
+    }
+
+    if (nCols == 1 && nRows == 1)
+    {
+        formula::FormulaConstTokenRef pRow = new formula::FormulaDoubleToken(1);
+        formula::FormulaConstTokenRef pCol = new formula::FormulaDoubleToken(1);
+        std::vector<formula::FormulaConstTokenRef> aArguments(2);
+        aArguments[0] = pRow;
+        aArguments[1] = pCol;
+        ScCall(pCallable, aArguments);
+        return;
+    }
+
+    ScMatrixRef xResMat = GetNewMat(nCols, nRows, /*bEmpty*/true);
+    if (!xResMat)
+    {
+        PushError(FormulaError::MatrixSize);
+        return;
+    }
+
+    // TODO: These loops are definitely candidates for multithreading
+    for (SCSIZE nRow = 0; nRow < nRows; nRow++)
+    {
+        for (SCSIZE nCol = 0; nCol < nCols; nCol++)
+        {
+            formula::FormulaConstTokenRef pRowToken = new formula::FormulaDoubleToken(nRow + 1);
+            formula::FormulaConstTokenRef pColToken = new formula::FormulaDoubleToken(nCol + 1);
+            std::vector<formula::FormulaConstTokenRef> aArguments(2);
+            aArguments[0] = pRowToken;
+            aArguments[1] = pColToken;
+            ScCall(pCallable, aArguments);
+            PutMatrixValue(PopToken(), xResMat, nCol, nRow);
+        }
+    }
+
+    PushMatrix(xResMat);
+}
+
+void ScInterpreter::ScMap()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if ( ! MustHaveParamCountMin(nParamCount, 2) )
+        return;
+
+    sal_uInt8 nArgCount = nParamCount - 1;
+    formula::FormulaCallableRef pCallable = GetCallable();
+    std::vector<ScMatrixRef> aMatrices(nArgCount);
+    SCSIZE nC = 0, nR = 0;
+    for (sal_Int32 i = static_cast<sal_Int32>(nArgCount) - 1; i >= 0; --i)
+    {
+        ScMatrixRef xMat = GetMatrix();
+        if (xMat)
+        {
+            SCSIZE nCols, nRows;
+            xMat->GetDimensions(nCols, nRows);
+            if (nC == 0 || nCols < nC)
+                nC = nCols;
+            if (nR == 0 || nRows < nR)
+                nR = nRows;
+            aMatrices[i] = xMat;
+        }
+        else
+            SetError(FormulaError::IllegalArgument);
+    }
+    if (nGlobalError != FormulaError::NONE)
+    {
+        PushError(nGlobalError);
+        return;
+    }
+    else if (!pCallable)
+    {
+        PushIllegalArgument();
+        return;
+    }
+
+    std::vector<formula::FormulaConstTokenRef> aArgs(nArgCount);
+    ScMatrixRef xResMat = GetNewMat(nC, nR, /*bEmpty*/true);
+    if (!xResMat)
+    {
+        PushError(FormulaError::MatrixSize);
+        return;
+    }
+
+    for (SCSIZE nCol = 0; nCol < nC; ++nCol)
+    {
+        for (SCSIZE nRow = 0; nRow < nR; ++nRow)
+        {
+            for (sal_uInt8 nMat = 0; nMat < nArgCount; ++nMat)
+            {
+                if (aMatrices[nMat]->IsEmpty(nCol, nRow))
+                    aArgs[nMat] = new formula::FormulaMissingToken();
+                else if (aMatrices[nMat]->IsValue(nCol, nRow))
+                {
+                    FormulaError nError = aMatrices[nMat]->GetError(nCol, nRow);
+                    if (nError == FormulaError::NONE)
+                        aArgs[nMat] = new formula::FormulaDoubleToken(aMatrices[nMat]->GetDouble(nCol, nRow));
+                    else
+                        aArgs[nMat] = new formula::FormulaErrorToken(nError);
+                }
+                else if (aMatrices[nMat]->IsStringOrEmpty(nCol, nRow))
+                    aArgs[nMat] = new formula::FormulaStringToken(aMatrices[nMat]->GetString(nCol, nRow));
+                else // TODO: callable
+                    aArgs[nMat] = new formula::FormulaErrorToken(FormulaError::IllegalParameter);
+            }
+            ScCall(pCallable, aArgs);
+            PutMatrixValue(PopToken(), xResMat, nCol, nRow);
+        }
+    }
+
+    PushMatrix(xResMat);
+}
+
+void ScInterpreter::ScReduce()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if ( ! MustHaveParamCount(nParamCount, 2, 3) )
+        return;
+
+    formula::FormulaCallableRef pCallable = GetCallable();
+    ScMatrixRef xMatrix = GetMatrix();
+    formula::FormulaConstTokenRef xInitValue = nullptr;
+    if (nParamCount == 3)
+    {
+        xInitValue = PopToken();
+        if (xInitValue->GetType() == svMissing)
+            xInitValue = new formula::FormulaDoubleToken(0.0);
+    }
+    if (!pCallable || !xMatrix)
+    {
+        PushIllegalArgument();
+        return;
+    }
+
+    SCSIZE nC, nR;
+    xMatrix->GetDimensions(nC, nR);
+    std::vector<formula::FormulaConstTokenRef> aArgs(2);
+    aArgs[0] = xInitValue;
+
+    for (SCSIZE nRow = 0; nRow < nR; ++nRow)
+    {
+        for (SCSIZE nCol = 0; nCol < nC; ++nCol)
+        {
+            if (xMatrix->IsEmpty(nCol, nRow))
+                aArgs[1] = new formula::FormulaMissingToken();
+            else if (xMatrix->IsValue(nCol, nRow))
+            {
+                FormulaError nError = xMatrix->GetError(nCol, nRow);
+                if (nError == FormulaError::NONE)
+                    aArgs[1] = new formula::FormulaDoubleToken(xMatrix->GetDouble(nCol, nRow));
+                else
+                    aArgs[1] = new formula::FormulaErrorToken(nError);
+            }
+            else if (xMatrix->IsStringOrEmpty(nCol, nRow))
+                aArgs[1] = new formula::FormulaStringToken(xMatrix->GetString(nCol, nRow));
+            else // TODO: callable
+                aArgs[1] = new formula::FormulaErrorToken(FormulaError::IllegalParameter);
+
+            ScCall(pCallable, aArgs);
+            aArgs[0] = PopToken();
+        }
+    }
+
+    PushTokenRef(aArgs[0]);
+}
+
+void ScInterpreter::ScScan()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if ( ! MustHaveParamCount(nParamCount, 2, 3) )
+        return;
+
+    formula::FormulaCallableRef pCallable = GetCallable();
+    ScMatrixRef xMatrix = GetMatrix();
+    formula::FormulaConstTokenRef xInitValue = nullptr;
+    if (nParamCount == 3)
+    {
+        xInitValue = PopToken();
+        if (xInitValue->GetType() == svMissing)
+            xInitValue = new formula::FormulaDoubleToken(0.0);
+    }
+    if (!pCallable || !xMatrix)
+    {
+        PushIllegalArgument();
+        return;
+    }
+
+    SCSIZE nC, nR;
+    xMatrix->GetDimensions(nC, nR);
+    ScMatrixRef xResMat = GetNewMat(nC, nR, /*bEmpty*/true);
+    if (!xResMat)
+    {
+        PushError(FormulaError::MatrixSize);
+        return;
+    }
+    std::vector<formula::FormulaConstTokenRef> aArgs(2);
+    aArgs[0] = xInitValue;
+
+    for (SCSIZE nRow = 0; nRow < nR; ++nRow)
+    {
+        for (SCSIZE nCol = 0; nCol < nC; ++nCol)
+        {
+            if (xMatrix->IsEmpty(nCol, nRow))
+                aArgs[1] = new formula::FormulaMissingToken();
+            else if (xMatrix->IsValue(nCol, nRow))
+            {
+                FormulaError nError = xMatrix->GetError(nCol, nRow);
+                if (nError == FormulaError::NONE)
+                    aArgs[1] = new formula::FormulaDoubleToken(xMatrix->GetDouble(nCol, nRow));
+                else
+                    aArgs[1] = new formula::FormulaErrorToken(nError);
+            }
+            else if (xMatrix->IsStringOrEmpty(nCol, nRow))
+                aArgs[1] = new formula::FormulaStringToken(xMatrix->GetString(nCol, nRow));
+            else // TODO: callable
+                aArgs[1] = new formula::FormulaErrorToken(FormulaError::IllegalParameter);
+
+            ScCall(pCallable, aArgs);
+            aArgs[0] = PopToken();
+            PutMatrixValue(aArgs[0], xResMat, nCol, nRow);
+        }
+    }
+
+    PushMatrix(xResMat);
+}
+
 // for DATE, TIME, DATETIME, DURATION
 static void lcl_GetDiffDateTimeFmtType( SvNumFormatType& nFuncFmt, SvNumFormatType nFmt1, SvNumFormatType nFmt2 )
 {

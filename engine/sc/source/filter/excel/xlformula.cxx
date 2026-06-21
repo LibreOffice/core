@@ -616,6 +616,12 @@ const XclFunctionInfo saFuncTable_2021[] =
     EXC_FUNCENTRY_V_VR(  ocLet,        3,  3,  0,  "LET"),
     EXC_FUNCENTRY_V_VR(  ocLambda,     1, MX,  0,  "LAMBDA"),
     EXC_FUNCENTRY_V_VR(  ocIsOmitted,  1,  1,  0,  "ISOMITTED"),
+    EXC_FUNCENTRY_V_VR(  ocByCol,      2,  2,  0,  "BYCOL"),
+    EXC_FUNCENTRY_V_VR(  ocByRow,      2,  2,  0,  "BYROW"),
+    EXC_FUNCENTRY_V_VR(  ocMakeArray,  3,  3,  0,  "MAKEARRAY"),
+    EXC_FUNCENTRY_V_VR(  ocMap,        2, MX,  0,  "MAP"),
+    EXC_FUNCENTRY_V_VR(  ocReduce,     2,  3,  0,  "REDUCE"),
+    EXC_FUNCENTRY_V_VR(  ocScan,       2,  3,  0,  "SCAN"),
 };
 
 /** Functions new in Excel 2024.

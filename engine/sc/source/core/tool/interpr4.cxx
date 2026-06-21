@@ -4048,6 +4048,12 @@ void ScInterpreter::DispatchOpCode( OpCode eOp )
         case ocMatSequence      : ScMatSequence();              break;
         case ocMatTrans         : ScMatTrans();                 break;
         case ocMatRef           : ScMatRef();                   break;
+        case ocByCol            : ScByCol();                    break;
+        case ocByRow            : ScByRow();                    break;
+        case ocMakeArray        : ScMakeArray();                break;
+        case ocMap              : ScMap();                      break;
+        case ocReduce           : ScReduce();                   break;
+        case ocScan             : ScScan();                     break;
         case ocB                : ScB();                        break;
         case ocNormDist         : ScNormDist( 3 );              break;
         case ocNormDist_MS      : ScNormDist( 4 );              break;
