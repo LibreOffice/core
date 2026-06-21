@@ -132,6 +132,8 @@ SwSecurityLabelDlg::SwSecurityLabelDlg(weld::Window* pParent, SwWrtShell& rSh)
     m_xCategories->enable_toggle_buttons(weld::ColumnToggleType::Check);
     PopulateCategories();
 
+    initFromExistingLabel();
+
     m_xClassification->connect_changed(LINK(this, SwSecurityLabelDlg, ClassificationHdl));
     m_xCategories->connect_toggled(LINK(this, SwSecurityLabelDlg, CategoryToggleHdl));
     m_xOkBtn->connect_clicked(LINK(this, SwSecurityLabelDlg, OkHdl));
@@ -181,6 +183,47 @@ void SwSecurityLabelDlg::PopulateCategories()
             }
             ++nTag;
         }
+    }
+}
+
+void SwSecurityLabelDlg::initFromExistingLabel()
+{
+    SwDocShell* pDocShell = m_rSh.GetDoc()->GetDocShell();
+    if (!pDocShell)
+        return;
+    uno::Reference<frame::XModel> xModel(pDocShell->GetModel());
+    if (!xModel.is())
+        return;
+
+    sw::seclabel::StanagLabel aLabel;
+    if (!sw::seclabel::readLabel(xModel, aLabel))
+        return;
+
+    // Select the stored classification. An obsolete value is hidden for new
+    // labels but must render when editing one that uses it, so append it.
+    int nPos = m_xClassification->find_text(aLabel.aClassification);
+    if (nPos == -1)
+    {
+        m_xClassification->append_text(aLabel.aClassification);
+        nPos = m_xClassification->find_text(aLabel.aClassification);
+    }
+    if (nPos != -1)
+        m_xClassification->set_active(nPos);
+
+    PopulateCategories();
+
+    // Check the rows whose category name appears among the label's values.
+    std::set<OUString> aValues;
+    for (const auto& rCategory : aLabel.aCategories)
+    {
+        for (const auto& rValue : rCategory.aValues)
+            aValues.insert(rValue);
+    }
+    const int nCount = m_xCategories->n_children();
+    for (int i = 0; i < nCount; ++i)
+    {
+        if (aValues.count(m_xCategories->get_text(i, 0)))
+            m_xCategories->set_toggle(i, TRISTATE_TRUE);
     }
 }
 

@@ -26,6 +26,12 @@
 #include <svx/svdobj.hxx>
 #include <svx/diagram/DiagramHelper_svx.hxx>
 
+#include <SecLabelApply.hxx>
+#include <SpifPolicy.hxx>
+#include <StanagLabel.hxx>
+#include <com/sun/star/frame/XModel.hpp>
+#include <tools/stream.hxx>
+
 using namespace css;
 using namespace css::uno;
 
@@ -49,6 +55,69 @@ DECLARE_OOXMLEXPORT_TEST(testFdo68418, "fdo68418.docx")
 
     // First page footer is empty, second page footer is 'aaaa'
     CPPUNIT_ASSERT_EQUAL(u"aaaa"_ustr, xFooterParagraph->getString());        // I get an error that it expects ''
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelApply)
+{
+    // Apply a STANAG label to an empty document and round-trip through DOCX.
+    createSwDoc();
+
+    static const OString aSpif(
+        R"xml(<?xml version="1.0" encoding="utf-8"?>
+<spif:SPIF xmlns:spif="http://www.xmlspif.org/spif" schemaVersion="1.0" version="1">
+  <spif:securityPolicyId name="SPIF Collabora" id="1.2.826.0.1310.1.2.0" />
+  <spif:securityClassifications>
+    <spif:securityClassification name="SECRET" color="red" lacv="4" hierarchy="4" />
+  </spif:securityClassifications>
+  <spif:securityCategoryTagSets>
+    <spif:securityCategoryTagSet name="Release Categories" id="1.2.826.0.1310.1.2.0.0">
+      <spif:securityCategoryTag name="Releasable To" tagType="enumerated" enumType="permissive">
+        <spif:tagCategory name="CANADA" lacv="4407630" obsolete="false" />
+        <spif:tagCategory name="UNITED KINGDOM" lacv="5591873" obsolete="false" />
+        <spif:markingQualifier markingCode="pageTopBottom">
+          <spif:qualifier markingQualifier="//" qualifierCode="separator" />
+          <spif:qualifier markingQualifier="." qualifierCode="suffix" />
+        </spif:markingQualifier>
+      </spif:securityCategoryTag>
+    </spif:securityCategoryTagSet>
+  </spif:securityCategoryTagSets>
+</spif:SPIF>)xml"_ostr);
+    SvMemoryStream aPolicyStream(const_cast<char*>(aSpif.getStr()), aSpif.getLength(),
+                                 StreamMode::READ);
+    sw::seclabel::SpifPolicy aPolicy;
+    CPPUNIT_ASSERT(aPolicy.parse(aPolicyStream));
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    const std::vector<bool> aSelected{ true, true };
+    const sw::seclabel::StanagLabel aLabel = aPolicy.buildLabel(
+        u"SECRET"_ustr, aSelected, u"2026-06-21T10:00:00Z"_ustr, u"2027-06-21T10:00:00Z"_ustr);
+    sw::seclabel::storeLabelPart(
+        xModel, aLabel.toBindingXml(),
+        sw::seclabel::buildItemProps(u"{B6E4D8A1-1A35-4F0E-9B7A-71F4C0F5E0D3}"_ustr,
+                                     u"urn:nato:stanag:4778:bindinginformation:1:0"_ustr));
+    sw::seclabel::applyMarking(xModel, aPolicy.buildMarking(u"SECRET"_ustr, aSelected),
+                               sw::seclabel::resolveColor(u"red"_ustr), u"Standard"_ustr);
+
+    saveAndReload(TestFilter::DOCX);
+
+    // The customXml part survived the round-trip.
+    CPPUNIT_ASSERT(parseExport(u"customXml/item1.xml"_ustr));
+
+    // The marking is in the (shared) page-style header.
+    uno::Reference<text::XText> xHeader = getProperty<uno::Reference<text::XText>>(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"HeaderText"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"SECRET//CANADA UNITED KINGDOM."_ustr,
+                         getParagraphOfText(1, xHeader)->getString());
+
+    // Read the label back out of the reloaded document.
+    uno::Reference<frame::XModel> xReloaded(mxComponent, uno::UNO_QUERY);
+    sw::seclabel::StanagLabel aReadBack;
+    CPPUNIT_ASSERT(sw::seclabel::readLabel(xReloaded, aReadBack));
+    CPPUNIT_ASSERT_EQUAL(u"SECRET"_ustr, aReadBack.aClassification);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aReadBack.aCategories.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aReadBack.aCategories[0].aValues.size());
+    CPPUNIT_ASSERT_EQUAL(u"CANADA"_ustr, aReadBack.aCategories[0].aValues[0]);
+    CPPUNIT_ASSERT_EQUAL(u"UNITED KINGDOM"_ustr, aReadBack.aCategories[0].aValues[1]);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testA4AndBorders, "a4andborders.docx")

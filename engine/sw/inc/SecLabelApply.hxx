@@ -10,6 +10,7 @@
 #ifndef INCLUDED_SW_INC_SECLABELAPPLY_HXX
 #define INCLUDED_SW_INC_SECLABELAPPLY_HXX
 
+#include "StanagLabel.hxx"
 #include "swdllapi.h"
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
@@ -38,6 +39,11 @@ SW_DLLPUBLIC sal_Int32 resolveColor(const OUString& rColor);
 SW_DLLPUBLIC void applyMarking(const css::uno::Reference<css::frame::XModel>& xModel,
                                const OUString& rMarking, sal_Int32 nColor,
                                const OUString& rPageStyleName);
+
+/// Read a STANAG label from the document's customXml grab-bag into rLabel (handles
+/// a 4778 binding wrapper or a standalone 4774 label). Returns false if none found.
+SW_DLLPUBLIC bool readLabel(const css::uno::Reference<css::frame::XModel>& xModel,
+                            StanagLabel& rLabel);
 
 } // namespace sw::seclabel
 

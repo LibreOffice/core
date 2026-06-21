@@ -52,6 +52,9 @@ class SwSecurityLabelDlg final : public weld::GenericDialogController
     void PopulateCategories();
     void UpdatePreview();
 
+    // Pre-select classification and categories from a label already in the document.
+    void initFromExistingLabel();
+
 public:
     SwSecurityLabelDlg(weld::Window* pParent, SwWrtShell& rSh);
     virtual ~SwSecurityLabelDlg() override;

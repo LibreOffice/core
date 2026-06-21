@@ -10,17 +10,22 @@
 #include <SecLabelApply.hxx>
 
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
+#include <com/sun/star/xml/sax/XSAXSerializable.hpp>
+#include <com/sun/star/xml/sax/XWriter.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -75,6 +80,22 @@ void setMarkingArea(const uno::Reference<beans::XPropertySet>& xPageStyle, const
     xProps->setPropertyValue(u"CharWeight"_ustr, cpo::uno::Any(awt::FontWeight::BOLD));
     xProps->setPropertyValue(u"CharColor"_ustr, cpo::uno::Any(nColor));
     xProps->setPropertyValue(u"ParaAdjust"_ustr, cpo::uno::Any(style::ParagraphAdjust_CENTER));
+}
+
+// Serialize a DOM document back to its XML string.
+OUString domToString(const uno::Reference<xml::dom::XDocument>& xDom)
+{
+    uno::Reference<xml::sax::XSAXSerializable> xSer(xDom, uno::UNO_QUERY);
+    if (!xSer.is())
+        return OUString();
+    SvMemoryStream aStream;
+    uno::Reference<io::XOutputStream> xOut(new utl::OOutputStreamWrapper(aStream));
+    uno::Reference<xml::sax::XWriter> xWriter(
+        xml::sax::Writer::create(comphelper::getProcessComponentContext()));
+    xWriter->setOutputStream(xOut);
+    xSer->serialize(xWriter, cpo::uno::Sequence<beans::StringPair>());
+    return OUString(static_cast<const char*>(aStream.GetData()),
+                    static_cast<sal_Int32>(aStream.GetSize()), RTL_TEXTENCODING_UTF8);
 }
 }
 
@@ -135,6 +156,34 @@ void applyMarking(const uno::Reference<frame::XModel>& xModel, const OUString& r
 
     setMarkingArea(xPageStyle, u"HeaderIsOn"_ustr, u"HeaderText"_ustr, rMarking, nColor);
     setMarkingArea(xPageStyle, u"FooterIsOn"_ustr, u"FooterText"_ustr, rMarking, nColor);
+}
+
+bool readLabel(const uno::Reference<frame::XModel>& xModel, StanagLabel& rLabel)
+{
+    uno::Reference<beans::XPropertySet> xProps(xModel, uno::UNO_QUERY);
+    if (!xProps.is())
+        return false;
+    uno::Reference<beans::XPropertySetInfo> xInfo = xProps->getPropertySetInfo();
+    if (!xInfo.is() || !xInfo->hasPropertyByName(u"InteropGrabBag"_ustr))
+        return false;
+
+    comphelper::SequenceAsHashMap aGrabBag(xProps->getPropertyValue(u"InteropGrabBag"_ustr));
+    cpo::uno::Sequence<uno::Reference<xml::dom::XDocument>> aList;
+    aGrabBag[u"OOXCustomXml"_ustr] >>= aList;
+    for (const auto& xDom : aList)
+    {
+        if (!xDom.is())
+            continue;
+        const OUString sXml = domToString(xDom);
+        if (sXml.isEmpty())
+            continue;
+        const OString aUtf8 = OUStringToOString(sXml, RTL_TEXTENCODING_UTF8);
+        SvMemoryStream aStream(const_cast<char*>(aUtf8.getStr()), aUtf8.getLength(),
+                               StreamMode::READ);
+        if (rLabel.parse(aStream) && !rLabel.aClassification.isEmpty())
+            return true;
+    }
+    return false;
 }
 
 } // namespace sw::seclabel
