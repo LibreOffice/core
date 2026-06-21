@@ -14,6 +14,7 @@
 #include "WebView.hpp"
 
 #include <qt/bridge.hpp>
+#include <qt/CodaConfig.hpp>
 #include <qt/DBusService.hpp>
 #include <net/FakeSocket.hpp>
 #include <common/LangUtil.hpp>
@@ -720,7 +721,8 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode)
     else
     {
         urlAndQuery.addQueryParameter("file_path", _document._fileURL.toString());
-        urlAndQuery.addQueryParameter("permission", "edit");
+        urlAndQuery.addQueryParameter(
+            "permission", CodaConfig::instance().isForcedReadOnly() ? "readonly" : "edit");
         urlAndQuery.addQueryParameter("appdocid", std::to_string(_document._appDocId));
         urlAndQuery.addQueryParameter("userinterfacemode", "notebookbar");
     }

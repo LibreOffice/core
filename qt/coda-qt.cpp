@@ -12,6 +12,7 @@
 #include <config.h>
 
 #include <wsd/COOLWSD.hpp>
+#include <qt/CodaConfig.hpp>
 #include <qt/DBusService.hpp>
 #include <net/FakeSocket.hpp>
 #include <common/Log.hpp>
@@ -197,6 +198,10 @@ int main(int argc, char** argv)
         QStringList() << "d" << "debug",
         "Enable debug output (shortcut for --log-level=trace)."
     );
+    QCommandLineOption forcedReadOnlyOption(
+        QStringList() << "readonly",
+        "Open Collabora Office in read-only mode, only for document viewing."
+    );
     QCommandLineOption logLevelOption(
         QStringList() << "log-level",
         "Set log level (none, fatal, critical, error, warning, notice, information, debug, trace).",
@@ -227,6 +232,7 @@ int main(int argc, char** argv)
     );
 
     argParser.addOption(debugOption);
+    argParser.addOption(forcedReadOnlyOption);
     argParser.addOption(logLevelOption);
     argParser.addOption(logDisabledAreasOption);
     argParser.addOption(textDocumentOption);
@@ -246,6 +252,9 @@ int main(int argc, char** argv)
     // in debug mode or user has set QT_LOGGING_RULES environment variable
     if (!debugMode && !qEnvironmentVariableIsSet("QT_LOGGING_RULES"))
         QLoggingCategory::setFilterRules(QStringLiteral("js=false"));
+
+    bool forcedReadOnly = argParser.isSet(forcedReadOnlyOption);
+    CodaConfig::instance().setForcedReadOnly(forcedReadOnly);
 
     Log::initialize(QApplication::applicationName().toStdString(), logLevel);
     Log::setDisabledAreas(argParser.value(logDisabledAreasOption).toStdString());
