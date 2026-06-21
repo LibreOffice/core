@@ -76,8 +76,6 @@ inline void readIpcArg(std::istream& stream, Commands& value)
     value = static_cast<Commands>(v);
 }
 
-void readIpcArg(std::istream&, bool) = delete;
-
 inline void readIpcArg(std::istream& stream, bool& value)
 {
     stream >> value;
@@ -130,8 +128,6 @@ inline void sendIpcArg(std::ostream& stream, Commands value)
 {
     stream << static_cast<uint16_t>(value) << ' ';
 }
-
-void sendIpcArg(std::ostream&, bool) = delete;
 
 inline void sendIpcArg(std::ostream& stream, bool value) { stream << value << ' '; }
 

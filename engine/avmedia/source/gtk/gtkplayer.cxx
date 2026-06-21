@@ -256,7 +256,7 @@ void SAL_CALL GtkPlayer::setMute(bool bSet)
 {
     osl::MutexGuard aGuard(m_aMutex);
     bool bMuted = gtk_media_stream_get_muted(m_pStream);
-    if (bMuted == static_cast<bool>(bSet))
+    if (bMuted == bSet)
         return;
     gtk_media_stream_set_muted(m_pStream, bSet);
     if (!bSet)
