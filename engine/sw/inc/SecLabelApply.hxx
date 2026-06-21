@@ -29,6 +29,16 @@ SW_DLLPUBLIC void storeLabelPart(const css::uno::Reference<css::frame::XModel>& 
                                  std::u16string_view rBindingXml,
                                  std::u16string_view rItemPropsXml);
 
+/// Resolve a SPIF colour (a W3C colour name or #RRGGBB) to an RGB value; unknown
+/// names fall back to black.
+SW_DLLPUBLIC sal_Int32 resolveColor(const OUString& rColor);
+
+/// Set the page style's header and footer to the marking text (bold, coloured,
+/// centred), replacing any existing content (v1 pageTopBottom behaviour).
+SW_DLLPUBLIC void applyMarking(const css::uno::Reference<css::frame::XModel>& xModel,
+                               const OUString& rMarking, sal_Int32 nColor,
+                               const OUString& rPageStyleName);
+
 } // namespace sw::seclabel
 
 #endif // INCLUDED_SW_INC_SECLABELAPPLY_HXX

@@ -9,15 +9,22 @@
 
 #include <SecLabelApply.hxx>
 
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <o3tl/string_view.hxx>
 #include <unotools/streamwrap.hxx>
 #include <tools/stream.hxx>
 
@@ -49,6 +56,26 @@ void appendDom(comphelper::SequenceAsHashMap& rGrabBag, const OUString& rKey,
     aList.getArray()[nOld] = xDom;
     rGrabBag[rKey] <<= aList;
 }
+
+// Set one page area (header or footer) to the marking text, formatted.
+void setMarkingArea(const uno::Reference<beans::XPropertySet>& xPageStyle, const OUString& rIsOn,
+                    const OUString& rTextProp, const OUString& rMarking, sal_Int32 nColor)
+{
+    xPageStyle->setPropertyValue(rIsOn, cpo::uno::Any(true));
+    uno::Reference<text::XText> xText(xPageStyle->getPropertyValue(rTextProp), uno::UNO_QUERY);
+    if (!xText.is())
+        return;
+    xText->setString(rMarking);
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xCursor->gotoStart(false);
+    xCursor->gotoEnd(true);
+    uno::Reference<beans::XPropertySet> xProps(xCursor, uno::UNO_QUERY);
+    if (!xProps.is())
+        return;
+    xProps->setPropertyValue(u"CharWeight"_ustr, cpo::uno::Any(awt::FontWeight::BOLD));
+    xProps->setPropertyValue(u"CharColor"_ustr, cpo::uno::Any(nColor));
+    xProps->setPropertyValue(u"ParaAdjust"_ustr, cpo::uno::Any(style::ParagraphAdjust_CENTER));
+}
 }
 
 void storeLabelPart(const uno::Reference<frame::XModel>& xModel, std::u16string_view rBindingXml,
@@ -68,6 +95,46 @@ void storeLabelPart(const uno::Reference<frame::XModel>& xModel, std::u16string_
     appendDom(aGrabBag, u"OOXCustomXmlProps"_ustr, parseToDom(xContext, rItemPropsXml));
     xModelProps->setPropertyValue(u"InteropGrabBag"_ustr,
                                   cpo::uno::Any(aGrabBag.getAsConstPropertyValueList()));
+}
+
+sal_Int32 resolveColor(const OUString& rColor)
+{
+    if (rColor.startsWith(u"#") && rColor.getLength() == 7)
+        return o3tl::toInt32(rColor.subView(1), 16);
+
+    static const struct
+    {
+        const char* pName;
+        sal_Int32 nRgb;
+    } aW3c[] = { { "aqua", 0x00FFFF },   { "black", 0x000000 }, { "blue", 0x0000FF },
+                 { "fuchsia", 0xFF00FF }, { "gray", 0x808080 },  { "green", 0x008000 },
+                 { "lime", 0x00FF00 },   { "maroon", 0x800000 }, { "navy", 0x000080 },
+                 { "olive", 0x808000 },  { "purple", 0x800080 }, { "red", 0xFF0000 },
+                 { "silver", 0xC0C0C0 }, { "teal", 0x008080 },   { "white", 0xFFFFFF },
+                 { "yellow", 0xFFFF00 } };
+    for (const auto& rEntry : aW3c)
+        if (rColor.equalsAscii(rEntry.pName))
+            return rEntry.nRgb;
+    return 0x000000;
+}
+
+void applyMarking(const uno::Reference<frame::XModel>& xModel, const OUString& rMarking,
+                  sal_Int32 nColor, const OUString& rPageStyleName)
+{
+    uno::Reference<style::XStyleFamiliesSupplier> xSupplier(xModel, uno::UNO_QUERY);
+    if (!xSupplier.is())
+        return;
+    uno::Reference<container::XNameAccess> xPageStyles;
+    xSupplier->getStyleFamilies()->getByName(u"PageStyles"_ustr) >>= xPageStyles;
+    if (!xPageStyles.is() || !xPageStyles->hasByName(rPageStyleName))
+        return;
+    uno::Reference<beans::XPropertySet> xPageStyle(xPageStyles->getByName(rPageStyleName),
+                                                   uno::UNO_QUERY);
+    if (!xPageStyle.is())
+        return;
+
+    setMarkingArea(xPageStyle, u"HeaderIsOn"_ustr, u"HeaderText"_ustr, rMarking, nColor);
+    setMarkingArea(xPageStyle, u"FooterIsOn"_ustr, u"FooterText"_ustr, rMarking, nColor);
 }
 
 } // namespace sw::seclabel

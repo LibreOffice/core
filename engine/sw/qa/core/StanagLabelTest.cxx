@@ -12,6 +12,7 @@
 #include <rtl/ustring.hxx>
 
 #include <StanagLabel.hxx>
+#include <SecLabelApply.hxx>
 
 #include <tools/stream.hxx>
 
@@ -25,12 +26,14 @@ class StanagLabelTest : public CppUnit::TestFixture
     void testToBindingXml();
     void testItemProps();
     void testParseRoundTrip();
+    void testResolveColor();
 
     CPPUNIT_TEST_SUITE(StanagLabelTest);
     CPPUNIT_TEST(testToXml);
     CPPUNIT_TEST(testToBindingXml);
     CPPUNIT_TEST(testItemProps);
     CPPUNIT_TEST(testParseRoundTrip);
+    CPPUNIT_TEST(testResolveColor);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -134,6 +137,14 @@ void StanagLabelTest::testParseRoundTrip()
     CPPUNIT_ASSERT(aParsed2.parse(aLabelStream));
     CPPUNIT_ASSERT_EQUAL(u"SECRET"_ustr, aParsed2.aClassification);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aParsed2.aCategories[0].aValues.size());
+}
+
+void StanagLabelTest::testResolveColor()
+{
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF0000), sw::seclabel::resolveColor(u"red"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFFFF00), sw::seclabel::resolveColor(u"yellow"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x1A2B3C), sw::seclabel::resolveColor(u"#1A2B3C"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x000000), sw::seclabel::resolveColor(u"bogus"_ustr));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(StanagLabelTest);
