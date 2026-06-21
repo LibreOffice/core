@@ -1212,9 +1212,15 @@ if ENABLE_DEBUG
 SourceMap=--sourceMap true --inlineSources true
 endif
 
-tscompile.done: $(COOL_JS_SRC) $(COOL_TS_SRC) $(COOL_TSX_SRC)
+tsc-emit.done: $(COOL_JS_SRC) $(COOL_TS_SRC) $(COOL_TSX_SRC)
 	$(QUIET_TSC) $(NODE) $(builddir)/node_modules/typescript/bin/tsc --typeRoots $(builddir)/node_modules/@types --outDir $(DIST_FOLDER)/src --rootDir $(srcdir)/src --checkJs false --project $(srcdir)/tsconfig.json $(AllowJs) $(SourceMap)
-	$(QUIET_TSC) $(NODE) $(builddir)/node_modules/.bin/tsc-strict --typeRoots $(builddir)/node_modules/@types --outDir $(DIST_FOLDER)/src --rootDir $(srcdir)/src --checkJs false --project $(srcdir)/tsconfig.json $(AllowJs) $(SourceMap)
+	@touch $@
+
+tsc-strict.done: $(COOL_JS_SRC) $(COOL_TS_SRC) $(COOL_TSX_SRC)
+	$(QUIET_TSC) $(NODE) $(builddir)/node_modules/.bin/tsc-strict --typeRoots $(builddir)/node_modules/@types --outDir $(DIST_FOLDER)/src --rootDir $(srcdir)/src --checkJs false --project $(srcdir)/tsconfig.json --tsBuildInfoFile $(DIST_FOLDER)/strict.tsbuildinfo $(AllowJs)
+	@touch $@
+
+tscompile.done: tsc-emit.done tsc-strict.done
 	@touch $@
 
 $(COOL_TS_JS_DST): tscompile.done
@@ -1487,7 +1493,7 @@ clean-local:
 	@rm -f mocha.log duplication.log
 	@rm -f $(MOCHA_JS_DIR)/main.js
 
-CLEANFILES = tscompile.done $(INTERMEDIATE_DIR)/cool-src.js $(DIST_FOLDER)/bundle.css $(DIST_FOLDER)/bundle.js $(INTERMEDIATE_DIR)/cool-src.js admin/adminIntegratorSettings.html
+CLEANFILES = tscompile.done tsc-emit.done tsc-strict.done $(DIST_FOLDER)/strict.tsbuildinfo $(INTERMEDIATE_DIR)/cool-src.js $(DIST_FOLDER)/bundle.css $(DIST_FOLDER)/bundle.js $(INTERMEDIATE_DIR)/cool-src.js admin/adminIntegratorSettings.html
 
 $(abs_srcdir)/jsconfig.json:
 	@printf "{\n \
