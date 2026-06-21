@@ -2,7 +2,7 @@
 <resources>
     <string name="failed_to_load_file">Theip ar chinneadh an chomhaid le luchtú</string>
     <string name="convert_odf_message">D’fhéadfadh formáidiú nó ábhar a bheith sa cháipéis seo nach féidir a shábháil san fhormáid comhaid atá roghnaithe faoi láthair, \"Téacs\".</string>
-    <string name="temp_file_saving_disabled">Is comhad inléite amháin é seo, tá sábháil díchumasaithe.</string>
+    <string name="temp_file_saving_disabled">Roinnte mar léite amháin ag an aip foinse. Úsáid \"Cuir cóip in eagar\" chun athruithe a dhéanamh.</string>
     <string name="file_chromeos_read_only">Ní féidir an comhad seo a shábháil sa suíomh seo, é a oscailt inléite amháin. Bog go dtí na Comhaid Súgartha é chun rochtain iomlán léite/scríofa a fháil.</string>
     <string name="storage_permission_required">Tá cead stórála ag teastáil</string>
     <string name="failed_to_insert_image">Theip ar an íomhá a chur isteach</string>
