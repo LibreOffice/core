@@ -171,7 +171,6 @@ public:
     {
         return ExpressionFunct::EnumAdjustment;
     }
-    virtual sal_Int32 getIndex() const override { return mnIndex; }
     virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& /*rEquations*/, ExpressionNode* /*pOptionalArg*/, sal_uInt32 /*nFlags*/ ) override
     {
         EnhancedCustomShapeParameter aRet;
@@ -212,7 +211,6 @@ public:
     {
         return ExpressionFunct::EnumEquation;
     }
-    virtual sal_Int32 getIndex() const override { return mnIndex; }
     virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& /*rEquations*/, ExpressionNode* /*pOptionalArg*/, sal_uInt32 /*nFlags*/ ) override
     {
         EnhancedCustomShapeParameter aRet;
@@ -327,10 +325,6 @@ public:
     virtual ExpressionFunct getType() const override
     {
         return meFunct;
-    }
-    virtual const ExpressionNode* getChild(sal_Int32 nIndex) const override
-    {
-        return nIndex == 0 ? mpArg.get() : nullptr;
     }
     virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* pOptionalArg, sal_uInt32 nFlags ) override
     {
@@ -502,14 +496,6 @@ public:
     virtual ExpressionFunct getType() const override
     {
         return meFunct;
-    }
-    virtual const ExpressionNode* getChild(sal_Int32 nIndex) const override
-    {
-        if (nIndex == 0)
-            return mpFirstArg.get();
-        if (nIndex == 1)
-            return mpSecondArg.get();
-        return nullptr;
     }
     virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* /*pOptionalArg*/, sal_uInt32 nFlags ) override
     {
@@ -720,16 +706,6 @@ public:
     virtual ExpressionFunct getType() const override
     {
         return ExpressionFunct::TernaryIf;
-    }
-    virtual const ExpressionNode* getChild(sal_Int32 nIndex) const override
-    {
-        switch (nIndex)
-        {
-            case 0: return mpFirstArg.get();
-            case 1: return mpSecondArg.get();
-            case 2: return mpThirdArg.get();
-            default: return nullptr;
-        }
     }
     virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* /*pOptionalArg*/, sal_uInt32 nFlags ) override
     {

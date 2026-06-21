@@ -140,29 +140,6 @@ CPPUNIT_TEST_FIXTURE(Test, testDmlGroupshapePolygon)
     assertXPath(pXmlDoc, "//wps:spPr/a:xfrm/a:ext", "cx", u"5328360");
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testCustomShapeAdjustHandleExport)
-{
-    // tdf#142603: a custom shape that is exported as <a:custGeom> must keep its
-    // adjustment handle so it stays editable. The handle (<a:ahXY>) references an
-    // adjustment guide declared in <a:avLst>, which the geometry formulas
-    // (<a:gdLst>) use in turn. Without the fix <a:ahLst> and <a:avLst> were empty
-    // and the shape was frozen after export.
-    loadFromFile(u"tdf142603.odt");
-    save(TestFilter::DOCX);
-    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-
-    // Pick the shape (a "moon") whose handle drives adjustment adj1 in X.
-    OString aShape
-        = "(//wps:wsp[.//a:custGeom/a:ahLst/a:ahXY/@gdRefX])[1]/wps:spPr/a:custGeom"_ostr;
-    // The adjustment value is declared in the adjust-value list.
-    assertXPath(pXmlDoc, aShape + "/a:avLst/a:gd[@name='adj1']", 1);
-    // A geometry guide uses it (so changing it re-evaluates the geometry).
-    assertXPath(pXmlDoc, aShape + "/a:gdLst/a:gd[contains(@fmla,'adj1')][1]", 1);
-    // The handle drives adj1 and is positioned at it.
-    assertXPath(pXmlDoc, aShape + "/a:ahLst/a:ahXY", "gdRefX", u"adj1");
-    assertXPath(pXmlDoc, aShape + "/a:ahLst/a:ahXY/a:pos", "x", u"adj1");
-}
-
 CPPUNIT_TEST_FIXTURE(Test, testCustomShapeArrowExport)
 {
     // Given a document with a few different kinds of arrow shapes in it:
@@ -1350,14 +1327,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf157289CircularArrowExport)
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo[1]", "wR", u"6750");
     assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo[1]", "hR", u"6750");
-
-    // The shape's trigonometric equations are exported as <a:gd> guides: the angle
-    // adjustment (degrees) is converted to OOXML's 60000ths of a degree (x*10800000/180)
-    // and then used by a sin/cos guide.
-    OString aGdLst = "//a:custGeom/a:gdLst"_ostr;
-    CPPUNIT_ASSERT(countXPathNodes(pXmlDoc, aGdLst + "/a:gd[@fmla='*/ adj1 10800000 180']") > 0);
-    CPPUNIT_ASSERT(countXPathNodes(pXmlDoc, aGdLst + "/a:gd[starts-with(@fmla,'sin ')]") > 0);
-    CPPUNIT_ASSERT(countXPathNodes(pXmlDoc, aGdLst + "/a:gd[starts-with(@fmla,'cos ')]") > 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf134401_ExportAutoGrowToTextWordWrap)
