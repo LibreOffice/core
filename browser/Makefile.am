@@ -880,10 +880,10 @@ define bundle_all
 		@echo "Sanity-check: parsing bundle at ES2022..."
 		@$(NODE) $(srcdir)/scripts/check-bundle-syntax.js $(INTERMEDIATE_DIR)/bundle.js
 		@echo "Minify cool js files..."
-		@$(NODE) node_modules/terser/bin/terser \
-			--compress --mangle \
-			--format max_line_len=100 \
-			-o $@ \
+		@$(NODE) node_modules/esbuild-wasm/bin/esbuild \
+			--minify --charset=utf8 \
+			--line-limit=100 \
+			--outfile=$@ \
 			$(INTERMEDIATE_DIR)/bundle.js)
 endef
 
@@ -896,7 +896,7 @@ define global_file
 	$(if $(IS_SEPARATE),
 		@cp $< $@,
 		@echo "Minify global.js file..."
-		@$(NODE) node_modules/terser/bin/terser --compress --mangle -o $@ $<)
+		@$(NODE) node_modules/esbuild-wasm/bin/esbuild --minify --charset=utf8 --outfile=$@ $<)
 endef
 
 define run_eslint_check
@@ -1052,7 +1052,7 @@ $(DIST_FOLDER)/images/templates/preview/%.png: $(srcdir)/images/templates/previe
 $(DIST_FOLDER)/admin-bundle.js: $(COOL_ADMIN_DST) \
 	$(INTERMEDIATE_DIR)/admin-src.js
 	@NODE_PATH=$(abs_builddir)/node_modules:$(INTERMEDIATE_DIR) $(NODE) node_modules/browserify/bin/cmd.js -g browserify-css $(if $(IS_SEPARATE),--debug,) -o $@ $(srcdir)/admin/main-admin.js
-	$(if $(IS_SEPARATE),,@$(NODE) node_modules/terser/bin/terser --compress --mangle -o $@.tmp $@ && mv $@.tmp $@)
+	$(if $(IS_SEPARATE),,@$(NODE) node_modules/esbuild-wasm/bin/esbuild --minify --charset=utf8 --outfile=$@.tmp $@ && mv $@.tmp $@)
 
 $(INTERMEDIATE_DIR)/admin-src.js: $(COOL_ADMIN_TS_JS) $(COOL_ADMIN_JS)
 	@mkdir -p $(dir $@)

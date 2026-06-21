@@ -29,6 +29,7 @@
         "browserify-css": "0.15.0",
         "d3": "6.7.0",
         "dompurify": "3.4.9",
+        "esbuild-wasm": "^0.28.1",
         "eslint": "^7.32.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-compat": "^4.2.0",
@@ -47,7 +48,6 @@
         "shrinkpack": "0.20.0",
         "smartmenus": "1.0.0",
         "stylelint": "13.7.0",
-        "terser": "^5.36.0",
         "tmp": "0.2.4",
         "typescript": "^4.9.5",
         "typescript-strict-plugin": "^2.4.4",
@@ -611,17 +611,6 @@
       "license": "MIT",
       "engines": {
         "node": ">=6.0.0"
-      }
-    },
-    "node_modules/@jridgewell/source-map": {
-      "version": "0.3.11",
-      "resolved": "file:node_shrinkpack/@jridgewell_source-map-0.3.11.tar",
-      "integrity": "sha512-ZMp1V8ZFcPG5dIWnQLr3NSI1MiCU7UETdS/A0G8V/XWHvJv3ZsFqutJn1Y5RPmAPX6F3BiE397OqveU/9NCuIA== sha512-1AnU8jAm0DfQ7KchVdjDX7XHXIW6q5T5JLnrIBIV3CQycbNOnJTLlaTJ/5/b27f6bfv0tc5DK5QBeeyRXw4/aw==",
-      "dev": true,
-      "license": "MIT",
-      "dependencies": {
-        "@jridgewell/gen-mapping": "^0.3.5",
-        "@jridgewell/trace-mapping": "^0.3.25"
       }
     },
     "node_modules/@jridgewell/sourcemap-codec": {
@@ -3773,6 +3762,19 @@
       },
       "engines": {
         "node": ">= 0.4"
+      }
+    },
+    "node_modules/esbuild-wasm": {
+      "version": "0.28.1",
+      "resolved": "file:node_shrinkpack/esbuild-wasm-0.28.1.tar",
+      "integrity": "sha512-p/GD4E8oYRjg3kjdKrnMb0s4PzXgJF42e0MF4H0+ACyK/kIlFRp3e0fzOleIG+wBBm6MM3XQrbpe7soEA+vJIA== sha512-rYlejWzIGNHsEYboki34QT//zeJ8VSgJHz4UEbCyiwY8HtTJRZo3x0Ic2goI5cjOn+ccBFNdYip0XW6Ba+VYLA==",
+      "dev": true,
+      "license": "MIT",
+      "bin": {
+        "esbuild": "bin/esbuild"
+      },
+      "engines": {
+        "node": ">=18"
       }
     },
     "node_modules/escalade": {
@@ -9289,17 +9291,6 @@
         "urix": "^0.1.0"
       }
     },
-    "node_modules/source-map-support": {
-      "version": "0.5.21",
-      "resolved": "file:node_shrinkpack/source-map-support-0.5.21.tar",
-      "integrity": "sha512-uBHU3L3czsIyYXKX88fdrGovxdSCoTGDRZ6SYXtSRxLZUzHg5P/66Ht6uoUlHu9EZod+inXhKo3qQgwXUT/y1w== sha512-vAsaV7J3oznxJoRd16hL3b80v27kSUWWb/Zd4AkvoBUUQD8d8WbAV9Vil4tXSlg2HAJkIynCsdEEzUms08f5fQ==",
-      "dev": true,
-      "license": "MIT",
-      "dependencies": {
-        "buffer-from": "^1.0.0",
-        "source-map": "^0.6.0"
-      }
-    },
     "node_modules/source-map-url": {
       "version": "0.4.1",
       "resolved": "file:node_shrinkpack/source-map-url-0.4.1.tar",
@@ -9919,25 +9910,6 @@
       "license": "ISC",
       "engines": {
         "node": ">=8"
-      }
-    },
-    "node_modules/terser": {
-      "version": "5.47.1",
-      "resolved": "file:node_shrinkpack/terser-5.47.1.tar",
-      "integrity": "sha512-tPbLXTI6ohPASb/1YViL428oEHu6/qv1OxqYnfaonVCFHqx4+wCd95pHrQWsL5X4pl90CTyW9piSAsS2L0VoMw== sha512-DrLKQtDwOCl8wlUm6V8o//qFprJOpYwXJBMGXRxlON9ty4jKjloGv0PBgFcBv+q0AWbkAbB4qh2g1wNXe9IN9w==",
-      "dev": true,
-      "license": "BSD-2-Clause",
-      "dependencies": {
-        "@jridgewell/source-map": "^0.3.3",
-        "acorn": "^8.15.0",
-        "commander": "^2.20.0",
-        "source-map-support": "~0.5.20"
-      },
-      "bin": {
-        "terser": "bin/terser"
-      },
-      "engines": {
-        "node": ">=10"
       }
     },
     "node_modules/text-table": {
