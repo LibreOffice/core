@@ -154,8 +154,8 @@ void XMLListPropertiesContext::startElement(
     // 1 "text:list-style" tag which only contains the attribute "style:name"
     // several (most of times 10) "text:list-level-style-number" or "text:list-level-style-bullet" subtags
     // remark: these subtags contains other elements but we haven't dealt with them
-    // anyway, that's why we need a RVNGPropertyListVector, this one will contains subtags
-    // all attributes of the a subtag will be in a RVNGPropertyList
+    // anyway, that's why we need a RVNGPropertyListVector, this one will contain subtags.
+    // All attributes of the subtag will be in a RVNGPropertyList
 
     // declare the vector for the current style
     librevenge::RVNGPropertyListVector aStyleCurrentVector;
