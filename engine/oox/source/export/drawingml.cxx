@@ -5085,21 +5085,12 @@ struct OoxmlEqContext
     std::set<sal_Int32>& rUsedAdjustments; // adjustment indices referenced
     const std::vector<OString>& rEqNames; // source equation index -> its OOXML token
     const std::vector<bool>& rEqIsAngle; // source equation index -> token is an angle (60000ths)
-    std::map<OString, OString> aGuideByFormula{}; // formula -> guide name, to reuse equal guides
     bool bFailed = false;
 
-    // Append a guide for the given formula and return its name ("f<n>"). Guides
-    // are functional (no side effects), so an equal formula reuses the existing
-    // guide instead of emitting a duplicate; because guides are built bottom-up
-    // this deduplicates whole sub-expressions, not just leaves.
     OString addGuide(const OString& rFormula)
     {
-        auto it = aGuideByFormula.find(rFormula);
-        if (it != aGuideByFormula.end())
-            return it->second;
         OString aName = "f" + OString::number(rGuides.size());
         rGuides.push_back({ aName, rFormula });
-        aGuideByFormula.emplace(rFormula, aName);
         return aName;
     }
 };
