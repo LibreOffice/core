@@ -26,6 +26,7 @@ class MouseControl extends CanvasSectionObject {
 	clickTimer: any | null = null;
 	currentPosition: cool.SimplePoint = new cool.SimplePoint(0, 0);
 	clickCount: number = 0;
+	pendingClickInfo: any | null = null;
 	positionOnMouseDown: cool.SimplePoint | null = null;
 	localPositionOnMouseDown: cool.SimplePoint | null = null;
 	mouseDownSent: boolean = false;
@@ -112,6 +113,10 @@ class MouseControl extends CanvasSectionObject {
 
 		const buttons = app.LOButtons.right;
 		const modifier = MouseControl.readModifier(e);
+
+		// A double-click (count=2) is deferred by the 250ms timer.
+		// If the user right-clicks before it fires, flush it now.
+		this.flushPendingClick();
 
 		if (modifier === 0) {
 			this.postCoreMouseEvent(
@@ -558,22 +563,37 @@ class MouseControl extends CanvasSectionObject {
 			);
 		}
 
+		this.pendingClickInfo = clickInfo;
+
 		this.clickTimer = app.timerRegistry.setTimeout(
 			'clicktimer',
 			() => {
-				if (this.clickCount === 3 && app.map._docLayer.isCalc()) {
-					// Also send a double click for a triple click in Calc.
-					this.sendClick(clickInfo, 2);
-					this.sendClick(clickInfo, 3);
-				} else if (this.clickCount > 1) {
-					this.sendClick(clickInfo, this.clickCount);
-				}
-
-				this.clickTimer = null;
-				this.clickCount = 0;
+				this.flushPendingClick();
 			},
 			250,
 		);
+	}
+
+	// Send the deferred multi-click immediately and cancel the pending timer.
+	private flushPendingClick(): void {
+		if (this.clickTimer) {
+			app.timerRegistry.clearTimeout(this.clickTimer);
+			this.clickTimer = null;
+		}
+
+		const clickInfo = this.pendingClickInfo;
+		if (clickInfo) {
+			if (this.clickCount === 3 && app.map._docLayer.isCalc()) {
+				// Also send a double click for a triple click in Calc.
+				this.sendClick(clickInfo, 2);
+				this.sendClick(clickInfo, 3);
+			} else if (this.clickCount > 1) {
+				this.sendClick(clickInfo, this.clickCount);
+			}
+		}
+
+		this.pendingClickInfo = null;
+		this.clickCount = 0;
 	}
 
 	onMultiTouchStart(e: TouchEvent): void {
