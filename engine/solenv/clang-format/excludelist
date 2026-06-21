@@ -57,6 +57,7 @@ basctl/inc/helpids.h
 basctl/inc/strings.hxx
 basctl/source/accessibility/accessibledialogcontrolshape.cxx
 basctl/source/accessibility/accessibledialogwindow.cxx
+basctl/source/basicide/BasicColorConfig.cxx
 basctl/source/basicide/basdoc.cxx
 basctl/source/basicide/basdoc.hxx
 basctl/source/basicide/basicrenderable.cxx
@@ -7137,6 +7138,7 @@ sc/qa/unit/subsequent_export_test2.cxx
 sc/qa/unit/tiledrendering/tiledrendering.cxx
 sc/qa/unit/ucalc.cxx
 sc/qa/unit/ucalc_condformat.cxx
+sc/qa/unit/ucalc_copypaste.cxx
 sc/qa/unit/ucalc_datatransformation.cxx
 sc/qa/unit/ucalc_formula.cxx
 sc/qa/unit/ucalc_parallelism.cxx
@@ -7145,6 +7147,7 @@ sc/qa/unit/ucalc_range.cxx
 sc/qa/unit/ucalc_rangelst.cxx
 sc/qa/unit/ucalc_sharedformula.cxx
 sc/qa/unit/ucalc_sort.cxx
+sc/source/core/data/SolverSettings.cxx
 sc/source/core/data/TableStyleGenerator.cxx
 sc/source/core/data/attarray.cxx
 sc/source/core/data/attrib.cxx
@@ -8556,7 +8559,9 @@ sd/qa/unit/dialogs-test.cxx
 sd/qa/unit/export-tests-ooxml4.cxx
 sd/qa/unit/filters-test.cxx
 sd/qa/unit/tiledrendering/tiledrendering.cxx
+sd/qa/unit/uiimpress.cxx
 sd/qa/unit/uimpress.cxx
+sd/qa/unit/vector/VectorPrimitiveReferenceTest.cxx
 sd/source/core/CustomAnimationCloner.cxx
 sd/source/core/CustomAnimationEffect.cxx
 sd/source/core/CustomAnimationPreset.cxx
