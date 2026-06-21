@@ -801,8 +801,8 @@ void SAL_CALL SwarmSolver::solve()
     {
         size_t nPopulation = std::clamp<size_t>(10 * nDimensions, 50, 300);
         mnSeedCount = nPopulation / 2;
-        DifferentialEvolutionAlgorithm<SwarmSolver> aDE(*this, nPopulation);
-        SwarmRunner<DifferentialEvolutionAlgorithm<SwarmSolver>> aEvolution(aDE);
+        DifferentialEvolutionSolver<SwarmSolver> aDE(*this, nPopulation);
+        SwarmRunner<DifferentialEvolutionSolver<SwarmSolver>> aEvolution(aDE);
         aEvolution.setTimeout(mnTimeout);
         aSolution = aEvolution.solve();
     }
@@ -810,8 +810,8 @@ void SAL_CALL SwarmSolver::solve()
     {
         size_t nPopulation = std::clamp<size_t>(10 * nDimensions, 100, 300);
         mnSeedCount = nPopulation / 2;
-        ParticleSwarmOptimizationAlgorithm<SwarmSolver> aPSO(*this, nPopulation);
-        SwarmRunner<ParticleSwarmOptimizationAlgorithm<SwarmSolver>> aSwarmSolver(aPSO);
+        ParticleSwarmOptimizationSolver<SwarmSolver> aPSO(*this, nPopulation);
+        SwarmRunner<ParticleSwarmOptimizationSolver<SwarmSolver>> aSwarmSolver(aPSO);
         aSwarmSolver.setTimeout(mnTimeout);
         aSolution = aSwarmSolver.solve();
     }

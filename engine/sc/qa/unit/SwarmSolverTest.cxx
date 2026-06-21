@@ -496,7 +496,7 @@ void SwarmSolverTest::testParticleSwarmResultLength()
     // grew past the variable count.
 
     MockProvider aProvider(3);
-    ParticleSwarmOptimizationAlgorithm<MockProvider> aAlgorithm(aProvider, 8);
+    ParticleSwarmOptimizationSolver<MockProvider> aAlgorithm(aProvider, 8);
 
     aAlgorithm.initialize();
     for (int i = 0; i < 20; ++i)
@@ -512,7 +512,7 @@ void SwarmSolverTest::testParticleSwarmVelocityNotInitializedAsPosition()
     // (for the position only), not twice.
 
     MockProvider aProvider(3);
-    ParticleSwarmOptimizationAlgorithm<MockProvider> aAlgorithm(aProvider, 8);
+    ParticleSwarmOptimizationSolver<MockProvider> aAlgorithm(aProvider, 8);
 
     aAlgorithm.initialize();
 

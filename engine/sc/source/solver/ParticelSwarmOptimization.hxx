@@ -10,200 +10,33 @@
 
 #pragma once
 
+#include "Swarm.hxx"
+#include "PSOAlgorithm.hxx"
+
 #include <vector>
-#include <random>
-#include <limits>
 
-struct Particle
+// Standalone particle swarm solver: a swarm driven by the particle swarm engine
+// every generation.
+template <typename DataProvider> class ParticleSwarmOptimizationSolver
 {
-    Particle(size_t nDimensionality)
-        : mVelocity(nDimensionality)
-        , mPosition(nDimensionality)
-        , mCurrentFitness(std::numeric_limits<double>::lowest())
-        , mBestPosition(nDimensionality)
-        , mBestFitness(std::numeric_limits<double>::lowest())
-    {
-    }
-
-    std::vector<double> mVelocity;
-
-    std::vector<double> mPosition;
-    double mCurrentFitness;
-
-    std::vector<double> mBestPosition;
-    double mBestFitness;
-};
-
-template <typename DataProvider> class ParticleSwarmOptimizationAlgorithm
-{
-private:
-    // inertia
-    static constexpr double constWeight = 0.729;
-    // cognitive coefficient
-    static constexpr double c1 = 1.49445;
-    // social  coefficient
-    static constexpr double c2 = 1.49445;
-
-    static constexpr double constAcceptedPrecision = 0.000000001;
-
-    DataProvider& mrDataProvider;
-
-    size_t mnNumOfParticles;
-
-    std::vector<Particle> maSwarm;
-
-    std::random_device maRandomDevice;
-    std::mt19937 maGenerator;
-    size_t mnDimensionality;
-
-    std::uniform_real_distribution<> maRandom01;
-
-    std::vector<double> maBestPosition;
-    double mfBestFitness;
-    int mnGeneration;
-    int mnLastChange;
+    Swarm<DataProvider> maSwarm;
+    PSOAlgorithm<DataProvider> maAlgorithm;
 
 public:
-    ParticleSwarmOptimizationAlgorithm(DataProvider& rDataProvider, size_t nNumOfParticles)
-        : mrDataProvider(rDataProvider)
-        , mnNumOfParticles(nNumOfParticles)
-        , maGenerator(maRandomDevice())
-        , mnDimensionality(mrDataProvider.getDimensionality())
-        , maRandom01(0.0, 1.0)
-        , maBestPosition(mnDimensionality)
-        , mfBestFitness(std::numeric_limits<double>::lowest())
-        , mnGeneration(0)
-        , mnLastChange(0)
+    ParticleSwarmOptimizationSolver(DataProvider& rDataProvider, size_t nNumOfParticles)
+        : maSwarm(rDataProvider, nNumOfParticles)
+        , maAlgorithm(maSwarm)
     {
     }
 
-    std::vector<double> const& getResult() { return maBestPosition; }
+    void initialize() { maSwarm.initialize(); }
+    void restart() { maSwarm.restart(); }
+    bool next() { return maAlgorithm.next(); }
 
-    int getGeneration() { return mnGeneration; }
-
-    int getLastChange() { return mnLastChange; }
-
-    double getBestFitness() { return mfBestFitness; }
-
-    // Rebuild the swarm from a fresh random spread to escape a local optimum it
-    // has collapsed into, seeding one particle at the best position found so far
-    // so it is not lost. The no-change counter is reset to give the search a
-    // fresh window to improve in.
-    void restart()
-    {
-        mnLastChange = mnGeneration;
-
-        maSwarm.clear();
-        maSwarm.reserve(mnNumOfParticles);
-        for (size_t i = 0; i < mnNumOfParticles; i++)
-        {
-            maSwarm.emplace_back(mnDimensionality);
-            Particle& rParticle = maSwarm.back();
-
-            mrDataProvider.initializeVariables(rParticle.mPosition, maGenerator);
-            for (size_t k = 0; k < mnDimensionality; k++)
-                rParticle.mPosition[k] = mrDataProvider.clampVariable(k, rParticle.mPosition[k]);
-
-            rParticle.mCurrentFitness = mrDataProvider.calculateFitness(rParticle.mPosition);
-            rParticle.mBestPosition.assign(rParticle.mPosition.begin(), rParticle.mPosition.end());
-            rParticle.mBestFitness = rParticle.mCurrentFitness;
-        }
-
-        // Seed one particle at the global best so the swarm can keep refining
-        // it. The global best position and fitness are kept across the restart.
-        if (!maBestPosition.empty() && !maSwarm.empty())
-        {
-            Particle& rFirst = maSwarm.front();
-            rFirst.mPosition.assign(maBestPosition.begin(), maBestPosition.end());
-            rFirst.mBestPosition.assign(maBestPosition.begin(), maBestPosition.end());
-            rFirst.mCurrentFitness = mfBestFitness;
-            rFirst.mBestFitness = mfBestFitness;
-        }
-    }
-
-    void initialize()
-    {
-        mnGeneration = 0;
-        mnLastChange = 0;
-        maSwarm.clear();
-
-        mfBestFitness = std::numeric_limits<double>::lowest();
-
-        maSwarm.reserve(mnNumOfParticles);
-        for (size_t i = 0; i < mnNumOfParticles; i++)
-        {
-            maSwarm.emplace_back(mnDimensionality);
-            Particle& rParticle = maSwarm.back();
-
-            mrDataProvider.initializeVariables(rParticle.mPosition, maGenerator);
-            // Only the position is seeded. The velocity keeps the zero the
-            // constructor gave it, so a particle starts at rest and builds up
-            // speed gradually over the first few steps.
-
-            for (size_t k = 0; k < mnDimensionality; k++)
-            {
-                rParticle.mPosition[k] = mrDataProvider.clampVariable(k, rParticle.mPosition[k]);
-            }
-
-            rParticle.mCurrentFitness = mrDataProvider.calculateFitness(rParticle.mPosition);
-
-            rParticle.mBestPosition.assign(rParticle.mPosition.begin(), rParticle.mPosition.end());
-            rParticle.mBestFitness = rParticle.mCurrentFitness;
-
-            if (rParticle.mCurrentFitness > mfBestFitness)
-            {
-                mfBestFitness = rParticle.mCurrentFitness;
-                maBestPosition.assign(rParticle.mPosition.begin(), rParticle.mPosition.end());
-            }
-        }
-    }
-
-    bool next()
-    {
-        bool bBestChanged = false;
-
-        for (Particle& rParticle : maSwarm)
-        {
-            double fRandom1 = maRandom01(maGenerator);
-            double fRandom2 = maRandom01(maGenerator);
-
-            for (size_t k = 0; k < mnDimensionality; k++)
-            {
-                rParticle.mVelocity[k]
-                    = (constWeight * rParticle.mVelocity[k])
-                      + (c1 * fRandom1 * (rParticle.mBestPosition[k] - rParticle.mPosition[k]))
-                      + (c2 * fRandom2 * (maBestPosition[k] - rParticle.mPosition[k]));
-
-                // The inertia weight below one keeps the velocity bounded on
-                // its own, so only the position is clamped, which holds the
-                // particle inside its bounds.
-                rParticle.mPosition[k] += rParticle.mVelocity[k];
-                rParticle.mPosition[k] = mrDataProvider.clampVariable(k, rParticle.mPosition[k]);
-            }
-
-            rParticle.mCurrentFitness = mrDataProvider.calculateFitness(rParticle.mPosition);
-
-            if (rParticle.mCurrentFitness > rParticle.mBestFitness)
-            {
-                rParticle.mBestFitness = rParticle.mCurrentFitness;
-                rParticle.mBestPosition.assign(rParticle.mPosition.begin(),
-                                               rParticle.mPosition.end());
-            }
-
-            if (rParticle.mCurrentFitness > mfBestFitness)
-            {
-                if (std::abs(rParticle.mCurrentFitness - mfBestFitness) > constAcceptedPrecision)
-                {
-                    bBestChanged = true;
-                    mnLastChange = mnGeneration;
-                }
-                maBestPosition.assign(rParticle.mPosition.begin(), rParticle.mPosition.end());
-                mfBestFitness = rParticle.mCurrentFitness;
-            }
-        }
-        mnGeneration++;
-        return bBestChanged;
-    }
+    std::vector<double> const& getResult() const { return maSwarm.getResult(); }
+    int getGeneration() const { return maSwarm.getGeneration(); }
+    int getLastChange() const { return maSwarm.getLastChange(); }
+    double getBestFitness() const { return maSwarm.getBestFitness(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
