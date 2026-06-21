@@ -1200,6 +1200,7 @@ void ScTokenArray::CheckForThreading( const FormulaToken& r )
     constinit
 #endif
     static const o3tl::sorted_vector<OpCode> aThreadedCalcDenyList({
+        ocCall,
         ocIndirect,
         ocMacro,
         ocOffset,
@@ -1512,6 +1513,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
                 // Depends on the reference state.
                 meVectorState = FormulaVectorCheckReference;
             break;
+            case svCallable:
             case svError:
             case svEmptyCell:
             case svExternal:

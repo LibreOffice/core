@@ -23,6 +23,7 @@
 #include <memory>
 #include <optional>
 
+#include <formula/callable.hxx>
 #include <formula/tokenarray.hxx>
 #include <formula/errorcodes.hxx>
 #include <svl/listener.hxx>
@@ -340,8 +341,13 @@ public:
     SC_DLLPUBLIC bool IsValue();      // also true if formula::svEmptyCell
     bool            IsValueNoError();
     bool            IsValueNoError() const;
+    SC_DLLPUBLIC bool IsString();
+    SC_DLLPUBLIC bool IsCallable();
     SC_DLLPUBLIC double GetValue();
     SC_DLLPUBLIC const svl::SharedString & GetString();
+    SC_DLLPUBLIC formula::FormulaCallableRef GetCallable();
+    SC_DLLPUBLIC formula::FormulaConstTokenRef GetResultToken();
+    SC_DLLPUBLIC formula::FormulaTokenRef CloneResultToken();
 
     /**
      * Get a numeric value without potentially triggering re-calculation.
@@ -352,6 +358,21 @@ public:
      * Get a string value without potentially triggering re-calculation.
      */
     const svl::SharedString & GetRawString() const;
+
+    /**
+     * Get a callable value without potentially triggering re-calculation.
+     */
+    formula::FormulaCallableRef GetRawCallable() const;
+    /**
+     * Get a value without potentially triggering re-calculation. May return NULL if the
+     * result is not a token.
+     */
+    formula::FormulaConstTokenRef GetRawResultToken() const;
+    /**
+     * Get a copy of the token without potentially triggering re-calculation. Will not
+     * return NULL, but the caller is responsible for the reference.
+     */
+    formula::FormulaTokenRef CloneRawResultToken() const;
     const ScMatrix* GetMatrix();
     SC_DLLPUBLIC bool GetMatrixOrigin( const ScDocument& rDoc, ScAddress& rPos ) const;
     void            GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows );

@@ -440,6 +440,9 @@ OUString ScGlobal::GetLongErrorString(FormulaError nErr)
         case FormulaError::NoValue:
             pErrNumber = STR_LONG_ERR_NO_VALUE;
         break;
+        case FormulaError::NotAFunction:
+            pErrNumber = STR_LONG_ERR_NOT_FUNC;
+        break;
         case FormulaError::NotAvailable:
             pErrNumber = STR_LONG_ERR_NV;
         break;

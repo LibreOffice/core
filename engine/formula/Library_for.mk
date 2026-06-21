@@ -38,6 +38,7 @@ $(eval $(call gb_Library_use_libraries,for,\
 $(eval $(call gb_Library_set_componentfile,for,formula/util/for,services))
 
 $(eval $(call gb_Library_add_exception_objects,for,\
+    formula/source/core/api/callable \
     formula/source/core/api/FormulaCompiler \
     formula/source/core/api/FormulaOpCodeMapperObj \
     formula/source/core/api/grammar \

@@ -19,6 +19,7 @@
 #include <sal/macros.h>
 #include <sal/log.hxx>
 #include <rtl/math.hxx>
+#include <formula/callable.hxx>
 #include <formula/FormulaCompiler.hxx>
 #include <formula/errorcodes.hxx>
 #include <formula/token.hxx>
@@ -782,7 +783,8 @@ FormulaCompiler::FormulaCompiler( FormulaTokenArray& rArr, bool bComputeII, bool
         mbJumpCommandReorder(true),
         mbStopOnError(true),
         mbComputeII(bComputeII),
-        mbMatrixFlag(bMatrixFlag)
+        mbMatrixFlag(bMatrixFlag),
+        mbPreferLocalNames(false)
 {
 }
 
@@ -807,7 +809,8 @@ FormulaCompiler::FormulaCompiler(bool bComputeII, bool bMatrixFlag)
         mbJumpCommandReorder(true),
         mbStopOnError(true),
         mbComputeII(bComputeII),
-        mbMatrixFlag(bMatrixFlag)
+        mbMatrixFlag(bMatrixFlag),
+        mbPreferLocalNames(false)
 {
 }
 
@@ -1217,6 +1220,8 @@ bool FormulaCompiler::IsOpCodeVolatile( OpCode eOp )
         case ocDebugVar:
             // ocRandArray is a volatile function.
         case ocRandArray:
+            // ocCall could wind up calling any of the above
+        case ocCall:
             bRet = true;
             break;
         default:
@@ -1807,7 +1812,8 @@ void FormulaCompiler::Factor()
             eOp = NextToken();
             if (eOp != ocOpen)
             {
-                SetError( FormulaError::PairExpected);
+                // if we're not calling the function right now, we need the Callable form
+                pFacToken = new FormulaCallableToken( FormulaBuiltInFunction::Get( pFacToken->GetOpCode() ) );
                 PutCode( pFacToken );
             }
             else
@@ -1900,27 +1906,31 @@ void FormulaCompiler::Factor()
                 eOp = NextToken();
                 if( mnNumFmt == SvNumFormatType::UNDEFINED && eOp == ocNot )
                     mnNumFmt = SvNumFormatType::LOGICAL;
-                if (eOp == ocOpen)
+                if (eOp != ocOpen)
+                {
+                    // if we're not calling the function right now, we need the Callable form
+                    pFacToken = new FormulaCallableToken( FormulaBuiltInFunction::Get( pFacToken->GetOpCode() ) );
+                    PutCode( pFacToken);
+                }
+                else
                 {
                     NextToken();
                     CheckSetForceArrayParameter( mpToken, 0);
                     eOp = Expression();
-                }
-                else
-                    SetError( FormulaError::PairExpected);
-                if (eOp != ocClose)
-                    SetError( FormulaError::PairExpected);
-                else if ( mpArr->GetCodeError() == FormulaError::NONE )
-                {
-                    static_cast<FormulaByteToken*>(&*pFacToken)->SetByte( 1 );
-                    if (mbComputeII)
+                    if (eOp != ocClose)
+                        SetError( FormulaError::PairExpected);
+                    else if ( mpArr->GetCodeError() == FormulaError::NONE )
                     {
-                        FormulaToken** pArg = mpCode - 1;
-                        HandleIIOpCode(pFacToken, &pArg, 1);
+                        static_cast<FormulaByteToken*>(&*pFacToken)->SetByte( 1 );
+                        if (mbComputeII)
+                        {
+                            FormulaToken** pArg = mpCode - 1;
+                            HandleIIOpCode(pFacToken, &pArg, 1);
+                        }
                     }
+                    PutCode( pFacToken );
+                    NextToken();
                 }
-                PutCode( pFacToken );
-                NextToken();
             }
         }
         else if ((ocStartTwoParameters <= eOp && eOp < ocStopTwoParameters)
@@ -1936,84 +1946,92 @@ void FormulaCompiler::Factor()
             pFacToken = mpToken;
             OpCode eMyLastOp = eOp;
             eOp = NextToken();
-            bool bNoParam = false;
-            bool bBadName = false;
-            if (eOp == ocOpen)
+            if (eOp != ocOpen)
             {
-                eOp = NextToken();
-                if (eOp == ocClose)
-                    bNoParam = true;
+                if (eMyLastOp == ocBad)
+                {
+                    // Just a bad name, not an unknown function, no parameters, no
+                    // closing expected. A bad name is held in a string token, so
+                    // set its parameter count to zero through that type. The byte
+                    // then lands in the token's own field next to its string.
+                    if (pFacToken->GetType() == svString)
+                        static_cast<FormulaStringOpToken*>(&*pFacToken)->SetByte(0);
+                    else
+                        static_cast<FormulaByteToken*>(&*pFacToken)->SetByte(0);
+                    PutCode( pFacToken);
+                    // keep current token for return
+                }
                 else
+                {
+                    // if we're not calling the function right now, we need a Callable form
+                    if ((ocStartTwoParameters <= eMyLastOp && eMyLastOp < ocStopTwoParameters)
+                       || eMyLastOp == ocAnd
+                       || eMyLastOp == ocOr)
+                        pFacToken = new FormulaCallableToken( FormulaBuiltInFunction::Get( eMyLastOp ) );
+                    PutCode( pFacToken);
+                }
+            }
+            else
+            {
+                sal_uInt32 nSepCount = 0;
+                eOp = NextToken();
+                if (eOp != ocClose)
                 {
                     CheckSetForceArrayParameter( mpToken, 0);
                     eOp = Expression();
-                }
-            }
-            else if (eMyLastOp == ocBad)
-            {
-                // Just a bad name, not an unknown function, no parameters, no
-                // closing expected.
-                bBadName = true;
-                bNoParam = true;
-            }
-            else
-                SetError( FormulaError::PairExpected);
-            sal_uInt32 nSepCount = 0;
-            if( !bNoParam )
-            {
-                bool bDoIICompute = mbComputeII;
-                // Array of FormulaToken double pointers to collect the parameters of II opcodes.
-                FormulaToken*** pArgArray = nullptr;
-                if (bDoIICompute)
-                {
-                    pArgArray = static_cast<FormulaToken***>(alloca(sizeof(FormulaToken**)*FORMULA_MAXPARAMSII));
-                    if (!pArgArray)
-                        bDoIICompute = false;
-                }
 
-                nSepCount++;
+                    bool bDoIICompute = mbComputeII;
+                    // Array of FormulaToken double pointers to collect the parameters of II opcodes.
+                    FormulaToken*** pArgArray = nullptr;
+                    if (bDoIICompute)
+                    {
+                        pArgArray = static_cast<FormulaToken***>(alloca(sizeof(FormulaToken**)*FORMULA_MAXPARAMSII));
+                        if (!pArgArray)
+                            bDoIICompute = false;
+                    }
 
-                if (bDoIICompute)
-                    pArgArray[nSepCount-1] = mpCode - 1; // Add first argument
+                    nSepCount++;
 
-                while ((eOp == ocSep) && (mpArr->GetCodeError() == FormulaError::NONE || !mbStopOnError))
+                    if (bDoIICompute)
+                        pArgArray[nSepCount-1] = mpCode - 1; // Add first argument
+
+                    while ((eOp == ocSep) && (mpArr->GetCodeError() == FormulaError::NONE || !mbStopOnError))
+                    {
+                        NextToken();
+                        CheckSetForceArrayParameter( mpToken, nSepCount);
+                        nSepCount++;
+                        if (nSepCount > FORMULA_MAXPARAMS)
+                            SetError( FormulaError::CodeOverflow);
+                        eOp = Expression();
+                        if (bDoIICompute && nSepCount <= FORMULA_MAXPARAMSII)
+                            pArgArray[nSepCount - 1] = mpCode - 1; // Add rest of the arguments
+                    }
+                    if (bDoIICompute)
+                        HandleIIOpCode(pFacToken, pArgArray,
+                                    std::min(nSepCount, static_cast<sal_uInt32>(FORMULA_MAXPARAMSII)));
+                } // params were supplied
+                bool bDone = false;
+                if (eOp != ocClose)
+                    SetError( FormulaError::PairExpected);
+                else
                 {
                     NextToken();
-                    CheckSetForceArrayParameter( mpToken, nSepCount);
-                    nSepCount++;
-                    if (nSepCount > FORMULA_MAXPARAMS)
-                        SetError( FormulaError::CodeOverflow);
-                    eOp = Expression();
-                    if (bDoIICompute && nSepCount <= FORMULA_MAXPARAMSII)
-                        pArgArray[nSepCount - 1] = mpCode - 1; // Add rest of the arguments
+                    bDone = true;
                 }
-                if (bDoIICompute)
-                    HandleIIOpCode(pFacToken, pArgArray,
-                                   std::min(nSepCount, static_cast<sal_uInt32>(FORMULA_MAXPARAMSII)));
-            }
-            bool bDone = false;
-            if (bBadName)
-                ;   // nothing, keep current token for return
-            else if (eOp != ocClose)
-                SetError( FormulaError::PairExpected);
-            else
-            {
-                NextToken();
-                bDone = true;
-            }
-            // Jumps are just normal functions for the FunctionAutoPilot tree view
-            if (!mbJumpCommandReorder && pFacToken->GetType() == svJump)
-                pFacToken = new FormulaFAPToken( pFacToken->GetOpCode(), nSepCount, pFacToken );
-            else if (pFacToken->GetType() == svExternal)
-                static_cast<FormulaExternalToken*>(&*pFacToken)->SetByte( nSepCount );
-            else if (pFacToken->GetType() == svString)
-                static_cast<FormulaStringOpToken*>(&*pFacToken)->SetByte( nSepCount );
-            else
-                static_cast<FormulaByteToken*>(&*pFacToken)->SetByte( nSepCount );
-            PutCode( pFacToken );
+                // Jumps are just normal functions for the FunctionAutoPilot tree view
+                if (!mbJumpCommandReorder && pFacToken->GetType() == svJump)
+                    pFacToken = new FormulaFAPToken( pFacToken->GetOpCode(), nSepCount, pFacToken );
+                else if (pFacToken->GetType() == svExternal)
+                    static_cast<FormulaExternalToken*>(&*pFacToken)->SetByte( nSepCount );
+                else if (pFacToken->GetType() == svString)
+                    static_cast<FormulaStringOpToken*>(&*pFacToken)->SetByte( nSepCount );
+                else
+                    static_cast<FormulaByteToken*>(&*pFacToken)->SetByte( nSepCount );
+                PutCode( pFacToken );
 
-            if (bDone)
-                AnnotateOperands();
+                if (bDone)
+                    AnnotateOperands();
+            }
         }
         else if (IsOpCodeJumpCommand(eOp))
         {
@@ -2225,14 +2243,146 @@ void FormulaCompiler::IntersectionLine()
     }
 }
 
-void FormulaCompiler::UnionLine()
+void FormulaCompiler::CallLine()
 {
     IntersectionLine();
+    OpCode eOp = mpToken->GetOpCode();
+    while (mpToken->GetOpCode() == ocCall)
+    {
+        FormulaToken* pPrevToken = mpCode[-1];
+        FormulaTokenRef pOpToken = mpToken;
+        OpCode eCallableOp = ocNone;
+        sal_uInt32 nMaxArgs = FORMULA_MAXPARAMS;
+        bool isBuiltIn = false;
+        if (pPrevToken && pPrevToken->GetType() == svCallable && pPrevToken->GetOpCode() == ocPush)
+        {
+            eCallableOp = static_cast<FormulaCallableToken*>(pPrevToken)->GetCallable()->GetOpCode();
+            if ( ocStartNoParameters <= eCallableOp && eCallableOp < ocStopNoParameters )
+            {
+                nMaxArgs = 0;
+                isBuiltIn = true;
+            }
+            else if ( ocStartOneParameter <= eCallableOp && eCallableOp < ocStopOneParameter )
+            {
+                nMaxArgs = 1;
+                isBuiltIn = true;
+            }
+            else if ( ocStartTwoParameters <= eCallableOp && eCallableOp < ocStopTwoParameters )
+            {
+                nMaxArgs = FORMULA_MAXPARAMS;
+                isBuiltIn = true;
+            }
+            if (isBuiltIn)
+            {
+                // directly calling a builtin takes a shortcut; see below
+                // we're taking ownership of pPrevToken
+                *(--mpCode) = nullptr;
+                mnPC--;
+            }
+        }
+        OpCode eMyLastOp = eOp;
+        eOp = NextToken();
+        if (eOp != ocOpen)
+        {
+            if (eMyLastOp == ocBad)
+            {
+                // Just a bad name, not an unknown function, no parameters, no
+                // closing expected.
+                static_cast<FormulaByteToken*>(pOpToken.get())->SetByte( 0 );
+                PutCode( pOpToken);
+                // keep current token for return
+            }
+            else
+            {
+                SetError( FormulaError::PairExpected);
+                PutCode( pOpToken);
+            }
+        }
+        else
+        {
+            sal_uInt32 nArgCount = 0;
+            eOp = NextToken();
+            if (eOp != ocClose)
+            {
+                if (nMaxArgs < 1)
+                    SetError( FormulaError::PairExpected);
+                CheckSetForceArrayParameter( mpToken, 0);
+                eOp = Expression();
+                bool bDoIICompute = mbComputeII;
+                // Array of FormulaToken double pointers to collect the parameters of II opcodes.
+                FormulaToken*** pArgArray = nullptr;
+                if (bDoIICompute)
+                {
+                    pArgArray = static_cast<FormulaToken***>(alloca(sizeof(FormulaToken**)*FORMULA_MAXPARAMSII));
+                    if (!pArgArray)
+                        bDoIICompute = false;
+                }
+
+                nArgCount++;
+
+                if (bDoIICompute)
+                    pArgArray[nArgCount - 1] = mpCode - 1; // Add first argument
+
+                while ((eOp == ocSep) && (mpArr->GetCodeError() == FormulaError::NONE || !mbStopOnError))
+                {
+                    NextToken();
+                    CheckSetForceArrayParameter( mpToken, nArgCount);
+                    nArgCount++;
+                    if (nArgCount > FORMULA_MAXPARAMS)
+                        SetError( FormulaError::CodeOverflow);
+                    else if (nArgCount > nMaxArgs)
+                        SetError( FormulaError::PairExpected);
+                    eOp = Expression();
+                    if (bDoIICompute && nArgCount <= FORMULA_MAXPARAMSII)
+                        pArgArray[nArgCount - 1] = mpCode - 1; // Add rest of the arguments
+                }
+                if (bDoIICompute)
+                    HandleIIOpCode(&*pOpToken, pArgArray,
+                                    std::min(nArgCount, static_cast<sal_uInt32>(FORMULA_MAXPARAMSII)));
+            }
+            bool bDone = false;
+            if (eOp != ocClose)
+                SetError( FormulaError::PairExpected);
+            else
+            {
+                NextToken();
+                bDone = true;
+            }
+            // The ocCall token's byte counts the arguments plus the callable
+            // operand on the stack. A built-in invoked directly uses its own
+            // opcode and has had its callable operand removed from the code, so
+            // its byte counts only the arguments.
+            if (!isBuiltIn)
+                nArgCount++;
+            // Jumps are just normal functions for the FunctionAutoPilot tree view
+            if (!mbJumpCommandReorder && pOpToken->GetType() == svJump)
+                pOpToken = new FormulaFAPToken( pOpToken->GetOpCode(), nArgCount, &*pOpToken );
+            else
+            {
+                // instead of using ocCall, built-in functions use their own OpCodes, if they are called directly
+                if (isBuiltIn)
+                    pOpToken->NewOpCode( eCallableOp, FormulaToken::PrivateAccess() );
+                static_cast<FormulaByteToken*>(pOpToken.get())->SetByte( nArgCount);
+            }
+            PutCode( pOpToken);
+
+            if (bDone)
+                AnnotateOperands();
+        }
+
+        if (isBuiltIn)
+            pPrevToken->DecRef();
+    }
+}
+
+void FormulaCompiler::UnionLine()
+{
+    CallLine();
     while (mpToken->GetOpCode() == ocUnion)
     {
         FormulaTokenRef p = mpToken;
         NextToken();
-        IntersectionLine();
+        CallLine();
         PutCode(p);
     }
 }
@@ -2691,7 +2841,7 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
             // Suppress/remove it in any case also in UI, it will not be
             // preserved.
             const FormulaToken* p = maArrIterator.PeekPrevNoSpaces();
-            if (p && p->IsFunction())
+            if (p && (p->IsFunction() || p->GetOpCode() == ocCall) )
             {
                 p = maArrIterator.PeekNextNoSpaces();
                 if (p && p->GetOpCode() == ocOpen)

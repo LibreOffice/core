@@ -31,6 +31,7 @@
 #include <formula/types.hxx>
 #include <formula/paramclass.hxx>
 #include <formula/errorcodes.hxx>
+#include <formula/callable.hxx>
 #include <osl/interlck.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -50,6 +51,7 @@ enum StackVar : sal_uInt8
     svDouble,
     svString,
     svStringName,
+    svCallable,
     svDPFieldName,
     svSingleRef,
     svDoubleRef,
@@ -95,6 +97,7 @@ inline std::string StackVarEnumToString(StackVar const e)
         case svDouble:            return "Double";
         case svString:            return "String";
         case svStringName:        return "StringName";
+        case svCallable:          return "Callable";
         case svDPFieldName:       return "DPFieldName";
         case svSingleRef:         return "SingleRef";
         case svDoubleRef:         return "DoubleRef";
@@ -510,6 +513,21 @@ public:
         nError = rOther.nError;
         return *this;
     }
+};
+
+
+// Only created from within the interpreter
+class FORMULA_DLLPUBLIC FormulaCallableToken final : public FormulaToken
+{
+private:
+            FormulaCallableRef  mpCallable;
+public:
+                                FormulaCallableToken( FormulaCallableRef pCallable ) :
+                                    FormulaToken( svCallable ), mpCallable(pCallable) {}
+                                FormulaCallableToken( const FormulaCallableToken& r ) = default;
+    virtual FormulaToken*       Clone() const override { return new FormulaCallableToken(*this); }
+            FormulaCallableRef  GetCallable() const;
+    virtual bool                operator==( const FormulaToken& rToken ) const override;
 };
 
 

@@ -68,6 +68,7 @@
 #include <queryparam.hxx>
 #include <tokenarray.hxx>
 #include <compiler.hxx>
+#include <callable.hxx>
 
 #include <map>
 #include <algorithm>
@@ -289,6 +290,50 @@ void ScInterpreter::GetCellString( svl::SharedString& rStr, const ScRefCellValue
     }
 
     SetError(nErr);
+}
+
+formula::FormulaCallableRef ScInterpreter::GetCellCallable( const ScRefCellValue& rCell )
+{
+    formula::FormulaCallableRef pCallable = nullptr;
+
+    CellType eType = rCell.getType();
+    switch (eType)
+    {
+        case CELLTYPE_FORMULA:
+        {
+            ScFormulaCell* pFCell = rCell.getFormula();
+            FormulaError nErr = pFCell->GetErrCode();
+            if( nErr == FormulaError::NONE )
+            {
+                if (pFCell->IsCallable())
+                {
+                    pCallable = pFCell->GetCallable();
+                }
+                else
+                {
+                    pCallable = nullptr;
+                    SetError(FormulaError::NotAFunction);
+                }
+            }
+            else
+            {
+                pCallable = nullptr;
+                SetError(nErr);
+            }
+        }
+        break;
+        case CELLTYPE_VALUE:
+        case CELLTYPE_STRING:
+        case CELLTYPE_EDIT:
+        case CELLTYPE_NONE:
+        {
+            pCallable = nullptr;
+            SetError(FormulaError::NotAFunction);
+        }
+        break;
+    }
+
+    return pCallable;
 }
 
 bool ScInterpreter::CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
@@ -733,7 +778,7 @@ void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
         if (pRetIndexExpr)
             *pRetIndexExpr = 0;
     }
-    else
+    else if (aCell.hasNumeric())
     {
         double fVal = GetCellValue(rAddress, aCell);
         if (bFinalResult)
@@ -750,6 +795,15 @@ void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
             *pRetTypeExpr = nCurFmtType;
         if (pRetIndexExpr)
             *pRetIndexExpr = nCurFmtIndex;
+    }
+    else
+    {
+        formula::FormulaCallableRef pCallable = GetCellCallable(aCell);
+        PushCallable(pCallable);
+        if (pRetTypeExpr)
+            *pRetTypeExpr = SvNumFormatType::UNDEFINED;
+        if (pRetIndexExpr)
+            *pRetIndexExpr = 0;
     }
 }
 
@@ -1494,6 +1548,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                 case svDouble:
                 case svString:
                 case svStringName:
+                case svCallable:
                 case svDPFieldName:
                 case svSingleRef:
                 case svExternalSingleRef:
@@ -1870,6 +1925,12 @@ void ScInterpreter::PushString( const svl::SharedString& rString )
         PushTempTokenWithoutError( new FormulaStringToken( rString ) );
 }
 
+void ScInterpreter::PushCallable( formula::FormulaCallableRef pCallable )
+{
+    if (!IfErrorPushError())
+        PushTempTokenWithoutError( new FormulaCallableToken( pCallable ) );
+}
+
 void ScInterpreter::PushSingleRef(SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
     if (!IfErrorPushError())
@@ -2225,6 +2286,24 @@ double ScInterpreter::GetDouble()
             Pop();
             nVal = 0.0;
         break;
+        case svCallable:
+        {
+            formula::FormulaCallableRef pCallable = GetCallable();
+            // GetCallable returns nullptr and sets an error for an operand that
+            // is not a usable callable, so the value stays zero in that case.
+            if (!pCallable)
+                nVal = 0.0;
+            else if (pCallable->GetOpCode() == ocTrue)
+                nVal = 1.0;
+            else if (pCallable->GetOpCode() == ocFalse)
+                nVal = 0.0;
+            else
+            {
+                SetError( FormulaError::IllegalParameter);
+                nVal = 0.0;
+            }
+        }
+        break;
         default:
             PopError();
             SetError( FormulaError::IllegalParameter);
@@ -2559,6 +2638,111 @@ svl::SharedString ScInterpreter::GetStringFromDouble( double fVal )
                         ScGlobal::eLnge);
     return mrStrPool.intern(mrContext.NFGetInputLineString(fVal, nIndex));
 }
+
+formula::FormulaCallableRef ScInterpreter::GetCallable()
+{
+    switch (GetRawStackType())
+    {
+        case svError:
+        {
+            PopError();
+            return nullptr;
+        }
+        case svMissing:
+        case svEmptyCell:
+        case svDouble:
+        case svString:
+        case svStringName:
+        {
+            Pop();
+            SetError( FormulaError::NotAFunction );
+            return nullptr;
+        }
+        case svCallable:
+            return PopToken<formula::FormulaCallableToken>()->GetCallable();
+        case svSingleRef:
+        {
+            ScAddress aAdr;
+            PopSingleRef( aAdr );
+            if (nGlobalError == FormulaError::NONE)
+            {
+                ScRefCellValue aCell(mrDoc, aAdr);
+                return GetCellCallable(aCell);
+            }
+            else
+                return nullptr;
+        }
+        case svDoubleRef:
+        {   // generate position dependent SingleRef
+            ScRange aRange;
+            PopDoubleRef( aRange );
+            ScAddress aAdr;
+            if ( nGlobalError == FormulaError::NONE && DoubleRefToPosSingleRef( aRange, aAdr ) )
+            {
+                ScRefCellValue aCell(mrDoc, aAdr);
+                return GetCellCallable(aCell);
+            }
+            else
+                return nullptr;
+        }
+        case svExternalSingleRef:
+        {
+            ScExternalRefCache::TokenRef pToken;
+            PopExternalSingleRef(pToken);
+            if (nGlobalError != FormulaError::NONE)
+                return nullptr;
+
+            if (pToken->GetType() == svCallable)
+            {
+                return static_cast<const formula::FormulaCallableToken*>(pToken.get())->GetCallable();
+            }
+            else
+            {
+                SetError( FormulaError::NotAFunction );
+                return nullptr;
+            }
+        }
+/*        case svExternalDoubleRef:
+        {
+            ScMatrixRef pMat;
+            PopExternalDoubleRef(pMat);
+            return GetCallableFromMatrix(pMat); // TODO
+        }
+        case svMatrix:
+        {
+            ScMatrixRef pMat = PopMatrix();
+            return GetCallableFromMatrix(pMat); // TODO
+        }*/
+        default:
+        {
+            PopError();
+            SetError( FormulaError::IllegalArgument);
+            return nullptr;
+        }
+    }
+}
+
+/*formula::FormulaCallableRef ScInterpreter::GetCallableFromMatrix(const ScMatrixRef& pMat) // TODO
+{
+    if ( !pMat )
+        ;   // nothing
+    else if ( !pJumpMatrix )
+    {
+        return pMat->GetCallable( mrContext, 0, 0);
+    }
+    else
+    {
+        SCSIZE nCols, nRows, nC, nR;
+        pMat->GetDimensions( nCols, nRows);
+        pJumpMatrix->GetPos( nC, nR);
+        // Use vector replication for single row/column arrays.
+        if ( (nC < nCols || nCols == 1) && (nR < nRows || nRows == 1) )
+            return pMat->GetCallable( mrContext, nC, nR);
+
+        SetError( FormulaError::NoValue);
+    }
+    return nullptr;
+}*/
 
 void ScInterpreter::ScDBGet()
 {
@@ -3202,477 +3386,15 @@ void ScInterpreter::ScMissing()
         PushTempToken( new FormulaMissingToken );
 }
 
-#if HAVE_FEATURE_SCRIPTING
-
-static cpo::uno::Any lcl_getSheetModule( const uno::Reference<table::XCellRange>& xCellRange, const ScDocument* pDok )
-{
-    uno::Reference< sheet::XSheetCellRange > xSheetRange( xCellRange, uno::UNO_QUERY_THROW );
-    uno::Reference< beans::XPropertySet > xProps( xSheetRange->getSpreadsheet(), uno::UNO_QUERY_THROW );
-    OUString sCodeName;
-    xProps->getPropertyValue(u"CodeName"_ustr) >>= sCodeName;
-    // #TODO #FIXME ideally we should 'throw' here if we don't get a valid parent, but... it is possible
-    // to create a module ( and use 'Option VBASupport 1' ) for a calc document, in this scenario there
-    // are *NO* special document module objects ( of course being able to switch between vba/non vba mode at
-    // the document in the future could fix this, especially IF the switching of the vba mode takes care to
-    // create the special document module objects if they don't exist.
-    BasicManager* pBasMgr = pDok->GetDocumentShell()->GetBasicManager();
-
-    uno::Reference< uno::XInterface > xIf;
-    if ( pBasMgr && !pBasMgr->GetName().isEmpty() )
-    {
-        OUString sProj( u"Standard"_ustr );
-        if ( !pDok->GetDocumentShell()->GetBasicManager()->GetName().isEmpty() )
-        {
-            sProj = pDok->GetDocumentShell()->GetBasicManager()->GetName();
-        }
-        StarBASIC* pBasic = pDok->GetDocumentShell()->GetBasicManager()->GetLib( sProj );
-        if ( pBasic )
-        {
-            SbModule* pMod = pBasic->FindModule( sCodeName );
-            if ( pMod )
-            {
-                xIf = pMod->GetUnoModule();
-            }
-        }
-    }
-    return cpo::uno::Any( xIf );
-}
-
-static bool lcl_setVBARange( const ScRange& aRange, const ScDocument& rDok, SbxVariable* pPar )
-{
-    bool bOk = false;
-    try
-    {
-        uno::Reference< uno::XInterface > xVBARange;
-        uno::Reference<table::XCellRange> xCellRange = ScCellRangeObj::CreateRangeFromDoc( rDok, aRange );
-        uno::Sequence< cpo::uno::Any > aArgs{ lcl_getSheetModule( xCellRange, &rDok ),
-                                         cpo::uno::Any(xCellRange) };
-        xVBARange = ooo::vba::createVBAUnoAPIServiceWithArgs( rDok.GetDocumentShell(), "ooo.vba.excel.Range", aArgs );
-        if ( xVBARange.is() )
-        {
-            SbxObjectRef aObj = GetSbUnoObject( u"A-Range"_ustr, cpo::uno::Any( xVBARange ) );
-            SetSbUnoObjectDfltPropName( aObj.get() );
-            bOk = pPar->PutObject( aObj.get() );
-        }
-    }
-    catch( uno::Exception& )
-    {
-    }
-    return bOk;
-}
-
-static bool lcl_isNumericResult( double& fVal, const SbxVariable* pVar )
-{
-    switch (pVar->GetType())
-    {
-        case SbxINTEGER:
-        case SbxLONG:
-        case SbxSINGLE:
-        case SbxDOUBLE:
-        case SbxCURRENCY:
-        case SbxDATE:
-        case SbxUSHORT:
-        case SbxULONG:
-        case SbxINT:
-        case SbxUINT:
-        case SbxSALINT64:
-        case SbxSALUINT64:
-        case SbxDECIMAL:
-            fVal = pVar->GetDouble();
-            return true;
-        case SbxBOOL:
-            fVal = (pVar->GetBool() ? 1.0 : 0.0);
-            return true;
-        default:
-            ;   // nothing
-    }
-    return false;
-}
-
-#endif
-
 void ScInterpreter::ScMacro()
 {
-
 #if !HAVE_FEATURE_SCRIPTING
     PushNoValue();      // without DocShell no CallBasic
-    return;
 #else
-    SbxBase::ResetError();
-
-    sal_uInt8 nParamCount = GetByte();
     OUString aMacro( static_cast<const FormulaExternalToken*>(pCur)->GetExternal() );
-
-    ScDocShell* pDocSh = mrDoc.GetDocumentShell();
-    if ( !pDocSh )
-    {
-        PushNoValue();      // without DocShell no CallBasic
-        return;
-    }
-
-    //  no security queue beforehand (just CheckMacroWarn), moved to  CallBasic
-
-    //  If the  Dok was loaded during a Basic-Calls,
-    //  is the  Sbx-object created(?)
-//  pDocSh->GetSbxObject();
-
-    //  search function with the name,
-    //  then assemble  SfxObjectShell::CallBasic from aBasicStr, aMacroStr
-
-    StarBASIC* pRoot;
-
-    try
-    {
-        pRoot = pDocSh->GetBasic();
-    }
-    catch (...)
-    {
-        pRoot = nullptr;
-    }
-
-    SbxVariable* pVar = pRoot ? pRoot->Find(aMacro, SbxClassType::Method) : nullptr;
-    if( !pVar || pVar->GetType() == SbxVOID )
-    {
-        PushError( FormulaError::NoMacro );
-        return;
-    }
-    SbMethod* pMethod = dynamic_cast<SbMethod*>(pVar);
-    if( !pMethod )
-    {
-        PushError( FormulaError::NoMacro );
-        return;
-    }
-
-    bool bVolatileMacro = false;
-
-    SbModule* pModule = pMethod->GetModule();
-    bool bUseVBAObjects = pModule->IsVBASupport();
-    SbxObject* pObject = pModule->GetParent();
-    assert(pObject);
-    OSL_ENSURE(dynamic_cast<const StarBASIC *>(pObject) != nullptr, "No Basic found!");
-    OUString aMacroStr = pObject->GetName() + "." + pModule->GetName() + "." + pMethod->GetName();
-    OUString aBasicStr;
-    if (pRoot && bUseVBAObjects)
-    {
-        // just here to make sure the VBA objects when we run the macro during ODF import
-        pRoot->getVBAGlobals();
-    }
-    if (pObject->GetParent())
-    {
-        aBasicStr = pObject->GetParent()->GetName();    // document BASIC
-    }
-    else
-    {
-        aBasicStr = SfxGetpApp()->GetName();            // application BASIC
-    }
-    //  assemble a parameter array
-
-    SbxArrayRef refPar = new SbxArray;
-    bool bOk = true;
-    for( sal_uInt32 i = nParamCount; i && bOk ; i-- )
-    {
-        SbxVariable* pPar = refPar->Get(i);
-        switch( GetStackType() )
-        {
-            case svDouble:
-                pPar->PutDouble( GetDouble() );
-            break;
-            case svString:
-                pPar->PutString( GetString().getString() );
-            break;
-            case svExternalSingleRef:
-            {
-                ScExternalRefCache::TokenRef pToken;
-                PopExternalSingleRef(pToken);
-                if (nGlobalError != FormulaError::NONE)
-                    bOk = false;
-                else
-                {
-                    if ( pToken->GetType() == svString )
-                        pPar->PutString( static_cast<FormulaStringToken*>(pToken.get())->GetString().getString() );
-                    else if ( pToken->GetType() == svDouble )
-                        pPar->PutDouble( static_cast<FormulaDoubleToken*>(pToken.get())->GetDouble() );
-                    else
-                    {
-                        SetError( FormulaError::IllegalArgument );
-                        bOk = false;
-                    }
-                }
-            }
-            break;
-            case svSingleRef:
-            {
-                ScAddress aAdr;
-                PopSingleRef( aAdr );
-                if ( bUseVBAObjects )
-                {
-                    ScRange aRange( aAdr );
-                    bOk = lcl_setVBARange( aRange, mrDoc, pPar );
-                }
-                else
-                {
-                    bOk = SetSbxVariable( pPar, aAdr );
-                }
-            }
-            break;
-            case svDoubleRef:
-            {
-                SCCOL nCol1;
-                SCROW nRow1;
-                SCTAB nTab1;
-                SCCOL nCol2;
-                SCROW nRow2;
-                SCTAB nTab2;
-                PopDoubleRef( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-                if( nTab1 != nTab2 )
-                {
-                    SetError( FormulaError::IllegalParameter );
-                    bOk = false;
-                }
-                else
-                {
-                    if ( bUseVBAObjects )
-                    {
-                        ScRange aRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-                        bOk = lcl_setVBARange( aRange, mrDoc, pPar );
-                    }
-                    else
-                    {
-                        SbxDimArrayRef refArray = new SbxDimArray;
-                        refArray->AddDim(1, nRow2 - nRow1 + 1);
-                        refArray->AddDim(1, nCol2 - nCol1 + 1);
-                        ScAddress aAdr( nCol1, nRow1, nTab1 );
-                        for( SCROW nRow = nRow1; bOk && nRow <= nRow2; nRow++ )
-                        {
-                            aAdr.SetRow( nRow );
-                            sal_Int32 nIdx[ 2 ];
-                            nIdx[ 0 ] = nRow-nRow1+1;
-                            for( SCCOL nCol = nCol1; bOk && nCol <= nCol2; nCol++ )
-                            {
-                                aAdr.SetCol( nCol );
-                                nIdx[ 1 ] = nCol-nCol1+1;
-                                SbxVariable* p = refArray->Get(nIdx);
-                                bOk = SetSbxVariable( p, aAdr );
-                            }
-                        }
-                        pPar->PutObject( refArray.get() );
-                    }
-                }
-            }
-            break;
-            case svExternalDoubleRef:
-            case svMatrix:
-            {
-                ScMatrixRef pMat = GetMatrix();
-                SCSIZE nC, nR;
-                if (pMat && nGlobalError == FormulaError::NONE)
-                {
-                    pMat->GetDimensions(nC, nR);
-                    SbxDimArrayRef refArray = new SbxDimArray;
-                    refArray->AddDim(1, static_cast<sal_Int32>(nR));
-                    refArray->AddDim(1, static_cast<sal_Int32>(nC));
-                    for( SCSIZE nMatRow = 0; nMatRow < nR; nMatRow++ )
-                    {
-                        sal_Int32 nIdx[ 2 ];
-                        nIdx[ 0 ] = static_cast<sal_Int32>(nMatRow+1);
-                        for( SCSIZE nMatCol = 0; nMatCol < nC; nMatCol++ )
-                        {
-                            nIdx[ 1 ] = static_cast<sal_Int32>(nMatCol+1);
-                            SbxVariable* p = refArray->Get(nIdx);
-                            if (pMat->IsStringOrEmpty(nMatCol, nMatRow))
-                            {
-                                p->PutString( pMat->GetString(nMatCol, nMatRow).getString() );
-                            }
-                            else
-                            {
-                                p->PutDouble( pMat->GetDouble(nMatCol, nMatRow));
-                            }
-                        }
-                    }
-                    pPar->PutObject( refArray.get() );
-                }
-                else
-                {
-                    SetError( FormulaError::IllegalParameter );
-                }
-            }
-            break;
-            default:
-                SetError( FormulaError::IllegalParameter );
-                bOk = false;
-        }
-    }
-    if( bOk )
-    {
-        mrDoc.LockTable( aPos.Tab() );
-        SbxVariableRef refRes = new SbxVariable;
-        mrDoc.IncMacroInterpretLevel();
-        ErrCode eRet = pDocSh->CallBasic( aMacroStr, aBasicStr, refPar.get(), refRes.get() );
-        mrDoc.DecMacroInterpretLevel();
-        mrDoc.UnlockTable( aPos.Tab() );
-
-        ScMacroManager* pMacroMgr = mrDoc.GetMacroManager();
-        if (pMacroMgr)
-        {
-            bVolatileMacro = pMacroMgr->GetUserFuncVolatile( pMethod->GetName() );
-            pMacroMgr->AddDependentCell(pModule->GetName(), pMyFormulaCell);
-        }
-
-        double fVal;
-        SbxDataType eResType = refRes->GetType();
-        if( SbxBase::GetError() )
-        {
-            SetError( FormulaError::NoValue);
-        }
-        if ( eRet != ERRCODE_NONE )
-        {
-            PushNoValue();
-        }
-        else if (lcl_isNumericResult( fVal, refRes.get()))
-        {
-            switch (eResType)
-            {
-                case SbxDATE:
-                    nFuncFmtType = SvNumFormatType::DATE;
-                break;
-                case SbxBOOL:
-                    nFuncFmtType = SvNumFormatType::LOGICAL;
-                break;
-                // Do not add SbxCURRENCY, we don't know which currency.
-                default:
-                    ;   // nothing
-            }
-            PushDouble( fVal );
-        }
-        else if ( eResType & SbxARRAY )
-        {
-            SbxBase* pElemObj = refRes->GetObject();
-            SbxDimArray* pDimArray = dynamic_cast<SbxDimArray*>(pElemObj);
-            sal_Int32 nDim = pDimArray ? pDimArray->GetDims() : 0;
-            if ( 1 <= nDim && nDim <= 2 )
-            {
-                sal_Int32 nCs, nCe, nRs;
-                SCSIZE nC, nR;
-                SCCOL nColIdx;
-                SCROW nRowIdx;
-                if ( nDim == 1 )
-                {   // array( cols )  one line, several columns
-                    pDimArray->GetDim(1, nCs, nCe);
-                    nC = static_cast<SCSIZE>(nCe - nCs + 1);
-                    nRs = 0;
-                    nR = 1;
-                    nColIdx = 0;
-                    nRowIdx = 1;
-                }
-                else
-                {   // array( rows, cols )
-                    sal_Int32 nRe;
-                    pDimArray->GetDim(1, nRs, nRe);
-                    nR = static_cast<SCSIZE>(nRe - nRs + 1);
-                    pDimArray->GetDim(2, nCs, nCe);
-                    nC = static_cast<SCSIZE>(nCe - nCs + 1);
-                    nColIdx = 1;
-                    nRowIdx = 0;
-                }
-                ScMatrixRef pMat = GetNewMat( nC, nR, /*bEmpty*/true);
-                if ( pMat )
-                {
-                    SbxVariable* pV;
-                    for ( SCSIZE j=0; j < nR; j++ )
-                    {
-                        sal_Int32 nIdx[ 2 ];
-                        //  in one-dimensional array( cols )  nIdx[1]
-                        // from SbxDimArray::Get is ignored
-                        nIdx[ nRowIdx ] = nRs + static_cast<sal_Int32>(j);
-                        for ( SCSIZE i=0; i < nC; i++ )
-                        {
-                            nIdx[ nColIdx ] = nCs + static_cast<sal_Int32>(i);
-                            pV = pDimArray->Get(nIdx);
-                            if ( lcl_isNumericResult( fVal, pV) )
-                            {
-                                pMat->PutDouble( fVal, i, j );
-                            }
-                            else
-                            {
-                                pMat->PutString(mrStrPool.intern(pV->GetOUString()), i, j);
-                            }
-                        }
-                    }
-                    PushMatrix( pMat );
-                }
-                else
-                {
-                    PushIllegalArgument();
-                }
-            }
-            else
-            {
-                PushNoValue();
-            }
-        }
-        else
-        {
-            PushString( refRes->GetOUString() );
-        }
-    }
-
-    // prevent cycles from leaking memory
-    refPar->Clear();
-
-    if (bVolatileMacro && meVolatileType == NOT_VOLATILE)
-        meVolatileType = VOLATILE_MACRO;
+    PushCallable(new ScMacroFunction(*this, aMacro));
 #endif
 }
-
-#if HAVE_FEATURE_SCRIPTING
-
-bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
-{
-    bool bOk = true;
-    ScRefCellValue aCell(mrDoc, rPos);
-    if (!aCell.isEmpty())
-    {
-        FormulaError nErr;
-        double nVal;
-        switch (aCell.getType())
-        {
-            case CELLTYPE_VALUE :
-                nVal = GetValueCellValue(rPos, aCell.getDouble());
-                pVar->PutDouble( nVal );
-            break;
-            case CELLTYPE_STRING :
-            case CELLTYPE_EDIT :
-                pVar->PutString(aCell.getString(mrDoc));
-            break;
-            case CELLTYPE_FORMULA :
-                nErr = aCell.getFormula()->GetErrCode();
-                if( nErr == FormulaError::NONE )
-                {
-                    if (aCell.getFormula()->IsValue())
-                    {
-                        nVal = aCell.getFormula()->GetValue();
-                        pVar->PutDouble( nVal );
-                    }
-                    else
-                        pVar->PutString(aCell.getFormula()->GetString().getString());
-                }
-                else
-                {
-                    SetError( nErr );
-                    bOk = false;
-                }
-                break;
-            default :
-                pVar->PutEmpty();
-        }
-    }
-    else
-        pVar->PutEmpty();
-
-    return bOk;
-}
-
-#endif
 
 void ScInterpreter::ScTableOp()
 {
@@ -4028,6 +3750,470 @@ bool IsErrFunc(OpCode oc)
 
 } //namespace
 
+void ScInterpreter::DispatchOpCode( OpCode eOp )
+{
+    switch( eOp )
+    {
+        case ocSep:
+        case ocClose:           // pushed by the compiler
+        case ocMissing          : ScMissing();                  break;
+        case ocMacro            : ScMacro();                    break;
+        case ocDBArea           : ScDBArea();                   break;
+        case ocColRowNameAuto   : ScColRowNameAuto();           break;
+        case ocIf               : ScIfJump();                   break;
+        case ocIfError          : ScIfError( false );           break;
+        case ocIfNA             : ScIfError( true );            break;
+        case ocChoose           : ScChooseJump();               break;
+        case ocChooseCols       : ScChooseCols();               break;
+        case ocChooseRows       : ScChooseRows();               break;
+        case ocAdd              : ScAdd();                      break;
+        case ocSub              : ScSub();                      break;
+        case ocMul              : ScMul();                      break;
+        case ocDiv              : ScDiv();                      break;
+        case ocAmpersand        : ScAmpersand();                break;
+        case ocPow              : ScPow();                      break;
+        case ocEqual            : ScEqual();                    break;
+        case ocNotEqual         : ScNotEqual();                 break;
+        case ocLess             : ScLess();                     break;
+        case ocGreater          : ScGreater();                  break;
+        case ocLessEqual        : ScLessEqual();                break;
+        case ocGreaterEqual     : ScGreaterEqual();             break;
+        case ocAnd              : ScAnd();                      break;
+        case ocOr               : ScOr();                       break;
+        case ocXor              : ScXor();                      break;
+        case ocIntersect        : ScIntersect();                break;
+        case ocRange            : ScRangeFunc();                break;
+        case ocUnion            : ScUnionFunc();                break;
+        case ocCall             : ScCall();                     break;
+        case ocNot              : ScNot();                      break;
+        case ocNegSub           :
+        case ocNeg              : ScNeg();                      break;
+        case ocSingleValue      : ScSingleValue();              break;
+        case ocPercentSign      : ScPercentSign();              break;
+        case ocPi               : ScPi();                       break;
+        case ocRandom           : ScRandom();                   break;
+        case ocRandArray        : ScRandArray();                break;
+        case ocRandomNV         : ScRandom();                   break;
+        case ocRandbetweenNV    : ScRandbetween();              break;
+        case ocFilter           : ScFilter();                   break;
+        case ocSort             : ScSort();                     break;
+        case ocSortBy           : ScSortBy();                   break;
+        case ocDrop             : ScDrop();                     break;
+        case ocExpand           : ScExpand();                   break;
+        case ocHStack           : ScHStack();                   break;
+        case ocVStack           : ScVStack();                   break;
+        case ocTake             : ScTake();                     break;
+        case ocTextAfter        : ScTextAfter();                break;
+        case ocTextBefore       : ScTextBefore();               break;
+        case ocTextSplit        : ScTextSplit();                break;
+        case ocToCol            : ScToCol();                    break;
+        case ocToRow            : ScToRow();                    break;
+        case ocUnique           : ScUnique();                   break;
+        case ocLet              : ScLet();                      break;
+        case ocWrapCols         : ScWrapCols();                 break;
+        case ocWrapRows         : ScWrapRows();                 break;
+        case ocTrue             : ScTrue();                     break;
+        case ocFalse            : ScFalse();                    break;
+        case ocGetActDate       : ScGetActDate();               break;
+        case ocGetActTime       : ScGetActTime();               break;
+        case ocNotAvail         : PushError( FormulaError::NotAvailable); break;
+        case ocDeg              : ScDeg();                      break;
+        case ocRad              : ScRad();                      break;
+        case ocSin              : ScSin();                      break;
+        case ocCos              : ScCos();                      break;
+        case ocTan              : ScTan();                      break;
+        case ocCot              : ScCot();                      break;
+        case ocArcSin           : ScArcSin();                   break;
+        case ocArcCos           : ScArcCos();                   break;
+        case ocArcTan           : ScArcTan();                   break;
+        case ocArcCot           : ScArcCot();                   break;
+        case ocSinHyp           : ScSinHyp();                   break;
+        case ocCosHyp           : ScCosHyp();                   break;
+        case ocTanHyp           : ScTanHyp();                   break;
+        case ocCotHyp           : ScCotHyp();                   break;
+        case ocArcSinHyp        : ScArcSinHyp();                break;
+        case ocArcCosHyp        : ScArcCosHyp();                break;
+        case ocArcTanHyp        : ScArcTanHyp();                break;
+        case ocArcCotHyp        : ScArcCotHyp();                break;
+        case ocCosecant         : ScCosecant();                 break;
+        case ocSecant           : ScSecant();                   break;
+        case ocCosecantHyp      : ScCosecantHyp();              break;
+        case ocSecantHyp        : ScSecantHyp();                break;
+        case ocExp              : ScExp();                      break;
+        case ocLn               : ScLn();                       break;
+        case ocLog10            : ScLog10();                    break;
+        case ocSqrt             : ScSqrt();                     break;
+        case ocFact             : ScFact();                     break;
+        case ocGetYear          : ScGetYear();                  break;
+        case ocGetMonth         : ScGetMonth();                 break;
+        case ocGetDay           : ScGetDay();                   break;
+        case ocGetDayOfWeek     : ScGetDayOfWeek();             break;
+        case ocWeek             : ScGetWeekOfYear();            break;
+        case ocIsoWeeknum       : ScGetIsoWeekOfYear();         break;
+        case ocWeeknumOOo       : ScWeeknumOOo();               break;
+        case ocEasterSunday     : ScEasterSunday();             break;
+        case ocNetWorkdays      : ScNetWorkdays( false);        break;
+        case ocNetWorkdays_MS   : ScNetWorkdays( true );        break;
+        case ocWorkday_MS       : ScWorkday_MS();               break;
+        case ocGetHour          : ScGetHour();                  break;
+        case ocGetMin           : ScGetMin();                   break;
+        case ocGetSec           : ScGetSec();                   break;
+        case ocPlusMinus        : ScPlusMinus();                break;
+        case ocAbs              : ScAbs();                      break;
+        case ocInt              : ScInt();                      break;
+        case ocEven             : ScEven();                     break;
+        case ocOdd              : ScOdd();                      break;
+        case ocPhi              : ScPhi();                      break;
+        case ocGauss            : ScGauss();                    break;
+        case ocStdNormDist      : ScStdNormDist();              break;
+        case ocStdNormDist_MS   : ScStdNormDist_MS();           break;
+        case ocFisher           : ScFisher();                   break;
+        case ocFisherInv        : ScFisherInv();                break;
+        case ocIsEmpty          : ScIsEmpty();                  break;
+        case ocIsString         : ScIsString();                 break;
+        case ocIsNonString      : ScIsNonString();              break;
+        case ocIsLogical        : ScIsLogical();                break;
+        case ocType             : ScType();                     break;
+        case ocCell             : ScCell();                     break;
+        case ocIsRef            : ScIsRef();                    break;
+        case ocIsValue          : ScIsValue();                  break;
+        case ocIsFormula        : ScIsFormula();                break;
+        case ocFormula          : ScFormula();                  break;
+        case ocIsNA             : ScIsNV();                     break;
+        case ocIsErr            : ScIsErr();                    break;
+        case ocIsError          : ScIsError();                  break;
+        case ocIsEven           : ScIsEven();                   break;
+        case ocIsOdd            : ScIsOdd();                    break;
+        case ocN                : ScN();                        break;
+        case ocGetDateValue     : ScGetDateValue();             break;
+        case ocGetTimeValue     : ScGetTimeValue();             break;
+        case ocCode             : ScCode();                     break;
+        case ocTrim             : ScTrim();                     break;
+        case ocUpper            : ScUpper();                    break;
+        case ocProper           : ScProper();                   break;
+        case ocLower            : ScLower();                    break;
+        case ocLen              : ScLen();                      break;
+        case ocT                : ScT();                        break;
+        case ocClean            : ScClean();                    break;
+        case ocValue            : ScValue();                    break;
+        case ocNumberValue      : ScNumberValue();              break;
+        case ocChar             : ScChar();                     break;
+        case ocArcTan2          : ScArcTan2();                  break;
+        case ocMod              : ScMod();                      break;
+        case ocPower            : ScPower();                    break;
+        case ocRound            : ScRound();                    break;
+        case ocRoundSig         : ScRoundSignificant();         break;
+        case ocRoundUp          : ScRoundUp();                  break;
+        case ocTrunc            :
+        case ocRoundDown        : ScRoundDown();                break;
+        case ocCeil             : ScCeil( true );               break;
+        case ocCeil_MS          : ScCeil_MS();                  break;
+        case ocCeil_Precise     :
+        case ocCeil_ISO         : ScCeil_Precise();             break;
+        case ocCeil_Math        : ScCeil( false );              break;
+        case ocFloor            : ScFloor( true );              break;
+        case ocFloor_MS         : ScFloor_MS();                 break;
+        case ocFloor_Precise    : ScFloor_Precise();            break;
+        case ocFloor_Math       : ScFloor( false );             break;
+        case ocSumProduct       : ScSumProduct();               break;
+        case ocSumSQ            : ScSumSQ();                    break;
+        case ocSumX2MY2         : ScSumX2MY2();                 break;
+        case ocSumX2DY2         : ScSumX2DY2();                 break;
+        case ocSumXMY2          : ScSumXMY2();                  break;
+        case ocRawSubtract      : ScRawSubtract();              break;
+        case ocLog              : ScLog();                      break;
+        case ocGCD              : ScGCD();                      break;
+        case ocLCM              : ScLCM();                      break;
+        case ocGetDate          : ScGetDate();                  break;
+        case ocGetTime          : ScGetTime();                  break;
+        case ocGetDiffDate      : ScGetDiffDate();              break;
+        case ocGetDiffDate360   : ScGetDiffDate360();           break;
+        case ocGetDateDif       : ScGetDateDif();               break;
+        case ocMin              : ScMin()       ;               break;
+        case ocMinA             : ScMin( true );                break;
+        case ocMax              : ScMax();                      break;
+        case ocMaxA             : ScMax( true );                break;
+        case ocSum              : ScSum();                      break;
+        case ocProduct          : ScProduct();                  break;
+        case ocNPV              : ScNPV();                      break;
+        case ocIRR              : ScIRR();                      break;
+        case ocMIRR             : ScMIRR();                     break;
+        case ocISPMT            : ScISPMT();                    break;
+        case ocAverage          : ScAverage()       ;           break;
+        case ocAverageA         : ScAverage( true );            break;
+        case ocCount            : ScCount();                    break;
+        case ocCount2           : ScCount2();                   break;
+        case ocVar              :
+        case ocVarS             : ScVar();                      break;
+        case ocVarA             : ScVar( true );                break;
+        case ocVarP             :
+        case ocVarP_MS          : ScVarP();                     break;
+        case ocVarPA            : ScVarP( true );               break;
+        case ocStDev            :
+        case ocStDevS           : ScStDev();                    break;
+        case ocStDevA           : ScStDev( true );              break;
+        case ocStDevP           :
+        case ocStDevP_MS        : ScStDevP();                   break;
+        case ocStDevPA          : ScStDevP( true );             break;
+        case ocPV               : ScPV();                       break;
+        case ocSYD              : ScSYD();                      break;
+        case ocDDB              : ScDDB();                      break;
+        case ocDB               : ScDB();                       break;
+        case ocVBD              : ScVDB();                      break;
+        case ocPDuration        : ScPDuration();                break;
+        case ocSLN              : ScSLN();                      break;
+        case ocPMT              : ScPMT();                      break;
+        case ocColumns          : ScColumns();                  break;
+        case ocRows             : ScRows();                     break;
+        case ocSheets           : ScSheets();                   break;
+        case ocColumn           : ScColumn();                   break;
+        case ocRow              : ScRow();                      break;
+        case ocSheet            : ScSheet();                    break;
+        case ocRRI              : ScRRI();                      break;
+        case ocFV               : ScFV();                       break;
+        case ocNper             : ScNper();                     break;
+        case ocRate             : ScRate();                     break;
+        case ocFilterXML        : ScFilterXML();                break;
+        case ocWebservice       : ScWebservice();               break;
+        case ocEncodeURL        : ScEncodeURL();                break;
+        case ocColor            : ScColor();                    break;
+        case ocErf_MS           : ScErf();                      break;
+        case ocErfc_MS          : ScErfc();                     break;
+        case ocIpmt             : ScIpmt();                     break;
+        case ocPpmt             : ScPpmt();                     break;
+        case ocCumIpmt          : ScCumIpmt();                  break;
+        case ocCumPrinc         : ScCumPrinc();                 break;
+        case ocEffect           : ScEffect();                   break;
+        case ocNominal          : ScNominal();                  break;
+        case ocSubTotal         : ScSubTotal();                 break;
+        case ocAggregate        : ScAggregate();                break;
+        case ocDBSum            : ScDBSum();                    break;
+        case ocDBCount          : ScDBCount();                  break;
+        case ocDBCount2         : ScDBCount2();                 break;
+        case ocDBAverage        : ScDBAverage();                break;
+        case ocDBGet            : ScDBGet();                    break;
+        case ocDBMax            : ScDBMax();                    break;
+        case ocDBMin            : ScDBMin();                    break;
+        case ocDBProduct        : ScDBProduct();                break;
+        case ocDBStdDev         : ScDBStdDev();                 break;
+        case ocDBStdDevP        : ScDBStdDevP();                break;
+        case ocDBVar            : ScDBVar();                    break;
+        case ocDBVarP           : ScDBVarP();                   break;
+        case ocIndirect         : ScIndirect();                 break;
+        case ocAddress          : ScAddressFunc();              break;
+        case ocMatch            : ScMatch();                    break;
+        case ocXMatch           : ScXMatch();                   break;
+        case ocCountEmptyCells  : ScCountEmptyCells();          break;
+        case ocCountIf          : ScCountIf();                  break;
+        case ocSumIf            : ScSumIf();                    break;
+        case ocAverageIf        : ScAverageIf();                break;
+        case ocSumIfs           : ScSumIfs();                   break;
+        case ocAverageIfs       : ScAverageIfs();               break;
+        case ocCountIfs         : ScCountIfs();                 break;
+        case ocLookup           : ScLookup();                   break;
+        case ocVLookup          : ScVLookup();                  break;
+        case ocXLookup          : ScXLookup();                  break;
+        case ocHLookup          : ScHLookup();                  break;
+        case ocIndex            : ScIndex();                    break;
+        case ocMultiArea        : ScMultiArea();                break;
+        case ocOffset           : ScOffset();                   break;
+        case ocAreas            : ScAreas();                    break;
+        case ocCurrency         : ScCurrency();                 break;
+        case ocReplace          : ScReplace();                  break;
+        case ocFixed            : ScFixed();                    break;
+        case ocFind             : ScFind();                     break;
+        case ocExact            : ScExact();                    break;
+        case ocLeft             : ScLeft();                     break;
+        case ocRight            : ScRight();                    break;
+        case ocSearch           : ScSearch();                   break;
+        case ocMid              : ScMid();                      break;
+        case ocText             : ScText();                     break;
+        case ocSubstitute       : ScSubstitute();               break;
+        case ocRegex            : ScRegex();                    break;
+        case ocRept             : ScRept();                     break;
+        case ocConcat           : ScConcat();                   break;
+        case ocConcat_MS        : ScConcat_MS();                break;
+        case ocTextJoin_MS      : ScTextJoin_MS();              break;
+        case ocIfs_MS           : ScIfs_MS();                   break;
+        case ocSwitch_MS        : ScSwitch_MS();                break;
+        case ocMinIfs_MS        : ScMinIfs_MS();                break;
+        case ocMaxIfs_MS        : ScMaxIfs_MS();                break;
+        case ocMatValue         : ScMatValue();                 break;
+        case ocMatrixUnit       : ScEMat();                     break;
+        case ocMatDet           : ScMatDet();                   break;
+        case ocMatInv           : ScMatInv();                   break;
+        case ocMatMult          : ScMatMult();                  break;
+        case ocMatSequence      : ScMatSequence();              break;
+        case ocMatTrans         : ScMatTrans();                 break;
+        case ocMatRef           : ScMatRef();                   break;
+        case ocB                : ScB();                        break;
+        case ocNormDist         : ScNormDist( 3 );              break;
+        case ocNormDist_MS      : ScNormDist( 4 );              break;
+        case ocExpDist          :
+        case ocExpDist_MS       : ScExpDist();                  break;
+        case ocBinomDist        :
+        case ocBinomDist_MS     : ScBinomDist();                break;
+        case ocPoissonDist      : ScPoissonDist( true );        break;
+        case ocPoissonDist_MS   : ScPoissonDist( false );       break;
+        case ocCombin           : ScCombin();                   break;
+        case ocCombinA          : ScCombinA();                  break;
+        case ocPermut           : ScPermut();                   break;
+        case ocPermutationA     : ScPermutationA();             break;
+        case ocHypGeomDist      : ScHypGeomDist( 4 );           break;
+        case ocHypGeomDist_MS   : ScHypGeomDist( 5 );           break;
+        case ocLogNormDist      : ScLogNormDist( 1 );           break;
+        case ocLogNormDist_MS   : ScLogNormDist( 4 );           break;
+        case ocTDist            : ScTDist();                    break;
+        case ocTDist_MS         : ScTDist_MS();                 break;
+        case ocTDist_RT         : ScTDist_T( 1 );               break;
+        case ocTDist_2T         : ScTDist_T( 2 );               break;
+        case ocFDist            :
+        case ocFDist_RT         : ScFDist();                    break;
+        case ocFDist_LT         : ScFDist_LT();                 break;
+        case ocChiDist          : ScChiDist( true );            break;
+        case ocChiDist_MS       : ScChiDist( false );           break;
+        case ocChiSqDist        : ScChiSqDist();                break;
+        case ocChiSqDist_MS     : ScChiSqDist_MS();             break;
+        case ocStandard         : ScStandard();                 break;
+        case ocAveDev           : ScAveDev();                   break;
+        case ocDevSq            : ScDevSq();                    break;
+        case ocKurt             : ScKurt();                     break;
+        case ocSkew             : ScSkew();                     break;
+        case ocSkewp            : ScSkewp();                    break;
+        case ocModalValue       : ScModalValue();               break;
+        case ocModalValue_MS    : ScModalValue_MS( true );      break;
+        case ocModalValue_Multi : ScModalValue_MS( false );     break;
+        case ocMedian           : ScMedian();                   break;
+        case ocGeoMean          : ScGeoMean();                  break;
+        case ocHarMean          : ScHarMean();                  break;
+        case ocWeibull          :
+        case ocWeibull_MS       : ScWeibull();                  break;
+        case ocBinomInv         :
+        case ocCritBinom        : ScCritBinom();                break;
+        case ocNegBinomVert     : ScNegBinomDist();             break;
+        case ocNegBinomDist_MS  : ScNegBinomDist_MS();          break;
+        case ocNoName           : ScNoName();                   break;
+        case ocBad              : ScBadName();                  break;
+        case ocZTest            :
+        case ocZTest_MS         : ScZTest();                    break;
+        case ocTTest            :
+        case ocTTest_MS         : ScTTest();                    break;
+        case ocFTest            :
+        case ocFTest_MS         : ScFTest();                    break;
+        case ocRank             :
+        case ocRank_Eq          : ScRank( false );              break;
+        case ocRank_Avg         : ScRank( true );               break;
+        case ocPercentile       :
+        case ocPercentile_Inc   : ScPercentile( true );         break;
+        case ocPercentile_Exc   : ScPercentile( false );        break;
+        case ocPercentrank      :
+        case ocPercentrank_Inc  : ScPercentrank( true );        break;
+        case ocPercentrank_Exc  : ScPercentrank( false );       break;
+        case ocLarge            : ScLarge();                    break;
+        case ocSmall            : ScSmall();                    break;
+        case ocFrequency        : ScFrequency();                break;
+        case ocQuartile         :
+        case ocQuartile_Inc     : ScQuartile( true );           break;
+        case ocQuartile_Exc     : ScQuartile( false );          break;
+        case ocNormInv          :
+        case ocNormInv_MS       : ScNormInv();                  break;
+        case ocSNormInv         :
+        case ocSNormInv_MS      : ScSNormInv();                 break;
+        case ocConfidence       :
+        case ocConfidence_N     : ScConfidence();               break;
+        case ocConfidence_T     : ScConfidenceT();              break;
+        case ocTrimMean         : ScTrimMean();                 break;
+        case ocProb             : ScProbability();              break;
+        case ocCorrel           : ScCorrel();                   break;
+        case ocCovar            :
+        case ocCovarianceP      : ScCovarianceP();              break;
+        case ocCovarianceS      : ScCovarianceS();              break;
+        case ocPearson          : ScPearson();                  break;
+        case ocRSQ              : ScRSQ();                      break;
+        case ocSTEYX            : ScSTEYX();                    break;
+        case ocSlope            : ScSlope();                    break;
+        case ocIntercept        : ScIntercept();                break;
+        case ocTrend            : ScTrend();                    break;
+        case ocGrowth           : ScGrowth();                   break;
+        case ocLinest           : ScLinest();                   break;
+        case ocLogest           : ScLogest();                   break;
+        case ocForecast_LIN     :
+        case ocForecast         : ScForecast();                   break;
+        case ocForecast_ETS_ADD : ScForecast_Ets( etsAdd );       break;
+        case ocForecast_ETS_SEA : ScForecast_Ets( etsSeason );    break;
+        case ocForecast_ETS_MUL : ScForecast_Ets( etsMult );      break;
+        case ocForecast_ETS_PIA : ScForecast_Ets( etsPIAdd );     break;
+        case ocForecast_ETS_PIM : ScForecast_Ets( etsPIMult );    break;
+        case ocForecast_ETS_STA : ScForecast_Ets( etsStatAdd );   break;
+        case ocForecast_ETS_STM : ScForecast_Ets( etsStatMult );  break;
+        case ocGammaLn          :
+        case ocGammaLn_MS       : ScLogGamma();                 break;
+        case ocGamma            : ScGamma();                    break;
+        case ocGammaDist        : ScGammaDist( true );          break;
+        case ocGammaDist_MS     : ScGammaDist( false );         break;
+        case ocGammaInv         :
+        case ocGammaInv_MS      : ScGammaInv();                 break;
+        case ocChiTest          :
+        case ocChiTest_MS       : ScChiTest();                  break;
+        case ocChiInv           :
+        case ocChiInv_MS        : ScChiInv();                   break;
+        case ocChiSqInv         :
+        case ocChiSqInv_MS      : ScChiSqInv();                 break;
+        case ocTInv             :
+        case ocTInv_2T          : ScTInv( 2 );                  break;
+        case ocTInv_MS          : ScTInv( 4 );                  break;
+        case ocFInv             :
+        case ocFInv_RT          : ScFInv();                     break;
+        case ocFInv_LT          : ScFInv_LT();                  break;
+        case ocLogInv           :
+        case ocLogInv_MS        : ScLogNormInv();               break;
+        case ocBetaDist         : ScBetaDist();                 break;
+        case ocBetaDist_MS      : ScBetaDist_MS();              break;
+        case ocBetaInv          :
+        case ocBetaInv_MS       : ScBetaInv();                  break;
+        case ocFourier          : ScFourier();                  break;
+        case ocExternal         :
+        case ocUDExternal       : ScExternal();                 break;
+        case ocTableOp          : ScTableOp();                  break;
+        case ocStop :                                           break;
+        case ocErrorType        : ScErrorType();                break;
+        case ocErrorType_ODF    : ScErrorType_ODF();            break;
+        case ocCurrent          : ScCurrent();                  break;
+        case ocStyle            : ScStyle();                    break;
+        case ocDde              : ScDde();                      break;
+        case ocBase             : ScBase();                     break;
+        case ocDecimal          : ScDecimal();                  break;
+        case ocConvertOOo       : ScConvertOOo();               break;
+        case ocEuroConvert      : ScEuroConvert();              break;
+        case ocRoman            : ScRoman();                    break;
+        case ocArabic           : ScArabic();                   break;
+        case ocInfo             : ScInfo();                     break;
+        case ocHyperLink        : ScHyperLink();                break;
+        case ocBahtText         : ScBahtText();                 break;
+        case ocGetPivotData     : ScGetPivotData();             break;
+        case ocJis              : ScJis();                      break;
+        case ocAsc              : ScAsc();                      break;
+        case ocLenB             : ScLenB();                     break;
+        case ocRightB           : ScRightB();                   break;
+        case ocLeftB            : ScLeftB();                    break;
+        case ocMidB             : ScMidB();                     break;
+        case ocReplaceB         : ScReplaceB();                 break;
+        case ocFindB            : ScFindB();                    break;
+        case ocSearchB          : ScSearchB();                  break;
+        case ocUnicode          : ScUnicode();                  break;
+        case ocUnichar          : ScUnichar();                  break;
+        case ocBitAnd           : ScBitAnd();                   break;
+        case ocBitOr            : ScBitOr();                    break;
+        case ocBitXor           : ScBitXor();                   break;
+        case ocBitRshift        : ScBitRshift();                break;
+        case ocBitLshift        : ScBitLshift();                break;
+        case ocTTT              : ScTTT();                      break;
+        case ocDebugVar         : ScDebugVar();                 break;
+        case ocNone             :                               break;
+        default : PushError( FormulaError::UnknownOpCode);      break;
+    }
+}
+
 StackVar ScInterpreter::Interpret()
 {
     SvNumFormatType nRetTypeExpr = SvNumFormatType::UNDEFINED;
@@ -4136,465 +4322,9 @@ StackVar ScInterpreter::Interpret()
                     }
                 }
 
-                switch( eOp )
-                {
-                    case ocSep:
-                    case ocClose:           // pushed by the compiler
-                    case ocMissing          : ScMissing();                  break;
-                    case ocMacro            : ScMacro();                    break;
-                    case ocDBArea           : ScDBArea();                   break;
-                    case ocColRowNameAuto   : ScColRowNameAuto();           break;
-                    case ocIf               : ScIfJump();                   break;
-                    case ocIfError          : ScIfError( false );           break;
-                    case ocIfNA             : ScIfError( true );            break;
-                    case ocChoose           : ScChooseJump();               break;
-                    case ocChooseCols       : ScChooseCols();               break;
-                    case ocChooseRows       : ScChooseRows();               break;
-                    case ocAdd              : ScAdd();                      break;
-                    case ocSub              : ScSub();                      break;
-                    case ocMul              : ScMul();                      break;
-                    case ocDiv              : ScDiv();                      break;
-                    case ocAmpersand        : ScAmpersand();                break;
-                    case ocPow              : ScPow();                      break;
-                    case ocEqual            : ScEqual();                    break;
-                    case ocNotEqual         : ScNotEqual();                 break;
-                    case ocLess             : ScLess();                     break;
-                    case ocGreater          : ScGreater();                  break;
-                    case ocLessEqual        : ScLessEqual();                break;
-                    case ocGreaterEqual     : ScGreaterEqual();             break;
-                    case ocAnd              : ScAnd();                      break;
-                    case ocOr               : ScOr();                       break;
-                    case ocXor              : ScXor();                      break;
-                    case ocIntersect        : ScIntersect();                break;
-                    case ocRange            : ScRangeFunc();                break;
-                    case ocUnion            : ScUnionFunc();                break;
-                    case ocNot              : ScNot();                      break;
-                    case ocNegSub           :
-                    case ocNeg              : ScNeg();                      break;
-                    case ocSingleValue      : ScSingleValue();              break;
-                    case ocPercentSign      : ScPercentSign();              break;
-                    case ocPi               : ScPi();                       break;
-                    case ocRandom           : ScRandom();                   break;
-                    case ocRandArray        : ScRandArray();                break;
-                    case ocRandomNV         : ScRandom();                   break;
-                    case ocRandbetweenNV    : ScRandbetween();              break;
-                    case ocFilter           : ScFilter();                   break;
-                    case ocSort             : ScSort();                     break;
-                    case ocSortBy           : ScSortBy();                   break;
-                    case ocDrop             : ScDrop();                     break;
-                    case ocExpand           : ScExpand();                   break;
-                    case ocHStack           : ScHStack();                   break;
-                    case ocVStack           : ScVStack();                   break;
-                    case ocTake             : ScTake();                     break;
-                    case ocTextAfter        : ScTextAfter();                break;
-                    case ocTextBefore       : ScTextBefore();               break;
-                    case ocTextSplit        : ScTextSplit();                break;
-                    case ocToCol            : ScToCol();                    break;
-                    case ocToRow            : ScToRow();                    break;
-                    case ocUnique           : ScUnique();                   break;
-                    case ocLet              : ScLet();                      break;
-                    case ocWrapCols         : ScWrapCols();                 break;
-                    case ocWrapRows         : ScWrapRows();                 break;
-                    case ocTrue             : ScTrue();                     break;
-                    case ocFalse            : ScFalse();                    break;
-                    case ocGetActDate       : ScGetActDate();               break;
-                    case ocGetActTime       : ScGetActTime();               break;
-                    case ocNotAvail         : PushError( FormulaError::NotAvailable); break;
-                    case ocDeg              : ScDeg();                      break;
-                    case ocRad              : ScRad();                      break;
-                    case ocSin              : ScSin();                      break;
-                    case ocCos              : ScCos();                      break;
-                    case ocTan              : ScTan();                      break;
-                    case ocCot              : ScCot();                      break;
-                    case ocArcSin           : ScArcSin();                   break;
-                    case ocArcCos           : ScArcCos();                   break;
-                    case ocArcTan           : ScArcTan();                   break;
-                    case ocArcCot           : ScArcCot();                   break;
-                    case ocSinHyp           : ScSinHyp();                   break;
-                    case ocCosHyp           : ScCosHyp();                   break;
-                    case ocTanHyp           : ScTanHyp();                   break;
-                    case ocCotHyp           : ScCotHyp();                   break;
-                    case ocArcSinHyp        : ScArcSinHyp();                break;
-                    case ocArcCosHyp        : ScArcCosHyp();                break;
-                    case ocArcTanHyp        : ScArcTanHyp();                break;
-                    case ocArcCotHyp        : ScArcCotHyp();                break;
-                    case ocCosecant         : ScCosecant();                 break;
-                    case ocSecant           : ScSecant();                   break;
-                    case ocCosecantHyp      : ScCosecantHyp();              break;
-                    case ocSecantHyp        : ScSecantHyp();                break;
-                    case ocExp              : ScExp();                      break;
-                    case ocLn               : ScLn();                       break;
-                    case ocLog10            : ScLog10();                    break;
-                    case ocSqrt             : ScSqrt();                     break;
-                    case ocFact             : ScFact();                     break;
-                    case ocGetYear          : ScGetYear();                  break;
-                    case ocGetMonth         : ScGetMonth();                 break;
-                    case ocGetDay           : ScGetDay();                   break;
-                    case ocGetDayOfWeek     : ScGetDayOfWeek();             break;
-                    case ocWeek             : ScGetWeekOfYear();            break;
-                    case ocIsoWeeknum       : ScGetIsoWeekOfYear();         break;
-                    case ocWeeknumOOo       : ScWeeknumOOo();               break;
-                    case ocEasterSunday     : ScEasterSunday();             break;
-                    case ocNetWorkdays      : ScNetWorkdays( false);        break;
-                    case ocNetWorkdays_MS   : ScNetWorkdays( true );        break;
-                    case ocWorkday_MS       : ScWorkday_MS();               break;
-                    case ocGetHour          : ScGetHour();                  break;
-                    case ocGetMin           : ScGetMin();                   break;
-                    case ocGetSec           : ScGetSec();                   break;
-                    case ocPlusMinus        : ScPlusMinus();                break;
-                    case ocAbs              : ScAbs();                      break;
-                    case ocInt              : ScInt();                      break;
-                    case ocEven             : ScEven();                     break;
-                    case ocOdd              : ScOdd();                      break;
-                    case ocPhi              : ScPhi();                      break;
-                    case ocGauss            : ScGauss();                    break;
-                    case ocStdNormDist      : ScStdNormDist();              break;
-                    case ocStdNormDist_MS   : ScStdNormDist_MS();           break;
-                    case ocFisher           : ScFisher();                   break;
-                    case ocFisherInv        : ScFisherInv();                break;
-                    case ocIsEmpty          : ScIsEmpty();                  break;
-                    case ocIsString         : ScIsString();                 break;
-                    case ocIsNonString      : ScIsNonString();              break;
-                    case ocIsLogical        : ScIsLogical();                break;
-                    case ocType             : ScType();                     break;
-                    case ocCell             : ScCell();                     break;
-                    case ocIsRef            : ScIsRef();                    break;
-                    case ocIsValue          : ScIsValue();                  break;
-                    case ocIsFormula        : ScIsFormula();                break;
-                    case ocFormula          : ScFormula();                  break;
-                    case ocIsNA             : ScIsNV();                     break;
-                    case ocIsErr            : ScIsErr();                    break;
-                    case ocIsError          : ScIsError();                  break;
-                    case ocIsEven           : ScIsEven();                   break;
-                    case ocIsOdd            : ScIsOdd();                    break;
-                    case ocN                : ScN();                        break;
-                    case ocGetDateValue     : ScGetDateValue();             break;
-                    case ocGetTimeValue     : ScGetTimeValue();             break;
-                    case ocCode             : ScCode();                     break;
-                    case ocTrim             : ScTrim();                     break;
-                    case ocUpper            : ScUpper();                    break;
-                    case ocProper           : ScProper();                   break;
-                    case ocLower            : ScLower();                    break;
-                    case ocLen              : ScLen();                      break;
-                    case ocT                : ScT();                        break;
-                    case ocClean            : ScClean();                    break;
-                    case ocValue            : ScValue();                    break;
-                    case ocNumberValue      : ScNumberValue();              break;
-                    case ocChar             : ScChar();                     break;
-                    case ocArcTan2          : ScArcTan2();                  break;
-                    case ocMod              : ScMod();                      break;
-                    case ocPower            : ScPower();                    break;
-                    case ocRound            : ScRound();                    break;
-                    case ocRoundSig         : ScRoundSignificant();         break;
-                    case ocRoundUp          : ScRoundUp();                  break;
-                    case ocTrunc            :
-                    case ocRoundDown        : ScRoundDown();                break;
-                    case ocCeil             : ScCeil( true );               break;
-                    case ocCeil_MS          : ScCeil_MS();                  break;
-                    case ocCeil_Precise     :
-                    case ocCeil_ISO         : ScCeil_Precise();             break;
-                    case ocCeil_Math        : ScCeil( false );              break;
-                    case ocFloor            : ScFloor( true );              break;
-                    case ocFloor_MS         : ScFloor_MS();                 break;
-                    case ocFloor_Precise    : ScFloor_Precise();            break;
-                    case ocFloor_Math       : ScFloor( false );             break;
-                    case ocSumProduct       : ScSumProduct();               break;
-                    case ocSumSQ            : ScSumSQ();                    break;
-                    case ocSumX2MY2         : ScSumX2MY2();                 break;
-                    case ocSumX2DY2         : ScSumX2DY2();                 break;
-                    case ocSumXMY2          : ScSumXMY2();                  break;
-                    case ocRawSubtract      : ScRawSubtract();              break;
-                    case ocLog              : ScLog();                      break;
-                    case ocGCD              : ScGCD();                      break;
-                    case ocLCM              : ScLCM();                      break;
-                    case ocGetDate          : ScGetDate();                  break;
-                    case ocGetTime          : ScGetTime();                  break;
-                    case ocGetDiffDate      : ScGetDiffDate();              break;
-                    case ocGetDiffDate360   : ScGetDiffDate360();           break;
-                    case ocGetDateDif       : ScGetDateDif();               break;
-                    case ocMin              : ScMin()       ;               break;
-                    case ocMinA             : ScMin( true );                break;
-                    case ocMax              : ScMax();                      break;
-                    case ocMaxA             : ScMax( true );                break;
-                    case ocSum              : ScSum();                      break;
-                    case ocProduct          : ScProduct();                  break;
-                    case ocNPV              : ScNPV();                      break;
-                    case ocIRR              : ScIRR();                      break;
-                    case ocMIRR             : ScMIRR();                     break;
-                    case ocISPMT            : ScISPMT();                    break;
-                    case ocAverage          : ScAverage()       ;           break;
-                    case ocAverageA         : ScAverage( true );            break;
-                    case ocCount            : ScCount();                    break;
-                    case ocCount2           : ScCount2();                   break;
-                    case ocVar              :
-                    case ocVarS             : ScVar();                      break;
-                    case ocVarA             : ScVar( true );                break;
-                    case ocVarP             :
-                    case ocVarP_MS          : ScVarP();                     break;
-                    case ocVarPA            : ScVarP( true );               break;
-                    case ocStDev            :
-                    case ocStDevS           : ScStDev();                    break;
-                    case ocStDevA           : ScStDev( true );              break;
-                    case ocStDevP           :
-                    case ocStDevP_MS        : ScStDevP();                   break;
-                    case ocStDevPA          : ScStDevP( true );             break;
-                    case ocPV               : ScPV();                       break;
-                    case ocSYD              : ScSYD();                      break;
-                    case ocDDB              : ScDDB();                      break;
-                    case ocDB               : ScDB();                       break;
-                    case ocVBD              : ScVDB();                      break;
-                    case ocPDuration        : ScPDuration();                break;
-                    case ocSLN              : ScSLN();                      break;
-                    case ocPMT              : ScPMT();                      break;
-                    case ocColumns          : ScColumns();                  break;
-                    case ocRows             : ScRows();                     break;
-                    case ocSheets           : ScSheets();                   break;
-                    case ocColumn           : ScColumn();                   break;
-                    case ocRow              : ScRow();                      break;
-                    case ocSheet            : ScSheet();                    break;
-                    case ocRRI              : ScRRI();                      break;
-                    case ocFV               : ScFV();                       break;
-                    case ocNper             : ScNper();                     break;
-                    case ocRate             : ScRate();                     break;
-                    case ocFilterXML        : ScFilterXML();                break;
-                    case ocWebservice       : ScWebservice();               break;
-                    case ocEncodeURL        : ScEncodeURL();                break;
-                    case ocColor            : ScColor();                    break;
-                    case ocErf_MS           : ScErf();                      break;
-                    case ocErfc_MS          : ScErfc();                     break;
-                    case ocIpmt             : ScIpmt();                     break;
-                    case ocPpmt             : ScPpmt();                     break;
-                    case ocCumIpmt          : ScCumIpmt();                  break;
-                    case ocCumPrinc         : ScCumPrinc();                 break;
-                    case ocEffect           : ScEffect();                   break;
-                    case ocNominal          : ScNominal();                  break;
-                    case ocSubTotal         : ScSubTotal();                 break;
-                    case ocAggregate        : ScAggregate();                break;
-                    case ocDBSum            : ScDBSum();                    break;
-                    case ocDBCount          : ScDBCount();                  break;
-                    case ocDBCount2         : ScDBCount2();                 break;
-                    case ocDBAverage        : ScDBAverage();                break;
-                    case ocDBGet            : ScDBGet();                    break;
-                    case ocDBMax            : ScDBMax();                    break;
-                    case ocDBMin            : ScDBMin();                    break;
-                    case ocDBProduct        : ScDBProduct();                break;
-                    case ocDBStdDev         : ScDBStdDev();                 break;
-                    case ocDBStdDevP        : ScDBStdDevP();                break;
-                    case ocDBVar            : ScDBVar();                    break;
-                    case ocDBVarP           : ScDBVarP();                   break;
-                    case ocIndirect         : ScIndirect();                 break;
-                    case ocAddress          : ScAddressFunc();              break;
-                    case ocMatch            : ScMatch();                    break;
-                    case ocXMatch           : ScXMatch();                   break;
-                    case ocCountEmptyCells  : ScCountEmptyCells();          break;
-                    case ocCountIf          : ScCountIf();                  break;
-                    case ocSumIf            : ScSumIf();                    break;
-                    case ocAverageIf        : ScAverageIf();                break;
-                    case ocSumIfs           : ScSumIfs();                   break;
-                    case ocAverageIfs       : ScAverageIfs();               break;
-                    case ocCountIfs         : ScCountIfs();                 break;
-                    case ocLookup           : ScLookup();                   break;
-                    case ocVLookup          : ScVLookup();                  break;
-                    case ocXLookup          : ScXLookup();                  break;
-                    case ocHLookup          : ScHLookup();                  break;
-                    case ocIndex            : ScIndex();                    break;
-                    case ocMultiArea        : ScMultiArea();                break;
-                    case ocOffset           : ScOffset();                   break;
-                    case ocAreas            : ScAreas();                    break;
-                    case ocCurrency         : ScCurrency();                 break;
-                    case ocReplace          : ScReplace();                  break;
-                    case ocFixed            : ScFixed();                    break;
-                    case ocFind             : ScFind();                     break;
-                    case ocExact            : ScExact();                    break;
-                    case ocLeft             : ScLeft();                     break;
-                    case ocRight            : ScRight();                    break;
-                    case ocSearch           : ScSearch();                   break;
-                    case ocMid              : ScMid();                      break;
-                    case ocText             : ScText();                     break;
-                    case ocSubstitute       : ScSubstitute();               break;
-                    case ocRegex            : ScRegex();                    break;
-                    case ocRept             : ScRept();                     break;
-                    case ocConcat           : ScConcat();                   break;
-                    case ocConcat_MS        : ScConcat_MS();                break;
-                    case ocTextJoin_MS      : ScTextJoin_MS();              break;
-                    case ocIfs_MS           : ScIfs_MS();                   break;
-                    case ocSwitch_MS        : ScSwitch_MS();                break;
-                    case ocMinIfs_MS        : ScMinIfs_MS();                break;
-                    case ocMaxIfs_MS        : ScMaxIfs_MS();                break;
-                    case ocMatValue         : ScMatValue();                 break;
-                    case ocMatrixUnit       : ScEMat();                     break;
-                    case ocMatDet           : ScMatDet();                   break;
-                    case ocMatInv           : ScMatInv();                   break;
-                    case ocMatMult          : ScMatMult();                  break;
-                    case ocMatSequence      : ScMatSequence();              break;
-                    case ocMatTrans         : ScMatTrans();                 break;
-                    case ocMatRef           : ScMatRef();                   break;
-                    case ocB                : ScB();                        break;
-                    case ocNormDist         : ScNormDist( 3 );              break;
-                    case ocNormDist_MS      : ScNormDist( 4 );              break;
-                    case ocExpDist          :
-                    case ocExpDist_MS       : ScExpDist();                  break;
-                    case ocBinomDist        :
-                    case ocBinomDist_MS     : ScBinomDist();                break;
-                    case ocPoissonDist      : ScPoissonDist( true );        break;
-                    case ocPoissonDist_MS   : ScPoissonDist( false );       break;
-                    case ocCombin           : ScCombin();                   break;
-                    case ocCombinA          : ScCombinA();                  break;
-                    case ocPermut           : ScPermut();                   break;
-                    case ocPermutationA     : ScPermutationA();             break;
-                    case ocHypGeomDist      : ScHypGeomDist( 4 );           break;
-                    case ocHypGeomDist_MS   : ScHypGeomDist( 5 );           break;
-                    case ocLogNormDist      : ScLogNormDist( 1 );           break;
-                    case ocLogNormDist_MS   : ScLogNormDist( 4 );           break;
-                    case ocTDist            : ScTDist();                    break;
-                    case ocTDist_MS         : ScTDist_MS();                 break;
-                    case ocTDist_RT         : ScTDist_T( 1 );               break;
-                    case ocTDist_2T         : ScTDist_T( 2 );               break;
-                    case ocFDist            :
-                    case ocFDist_RT         : ScFDist();                    break;
-                    case ocFDist_LT         : ScFDist_LT();                 break;
-                    case ocChiDist          : ScChiDist( true );            break;
-                    case ocChiDist_MS       : ScChiDist( false );           break;
-                    case ocChiSqDist        : ScChiSqDist();                break;
-                    case ocChiSqDist_MS     : ScChiSqDist_MS();             break;
-                    case ocStandard         : ScStandard();                 break;
-                    case ocAveDev           : ScAveDev();                   break;
-                    case ocDevSq            : ScDevSq();                    break;
-                    case ocKurt             : ScKurt();                     break;
-                    case ocSkew             : ScSkew();                     break;
-                    case ocSkewp            : ScSkewp();                    break;
-                    case ocModalValue       : ScModalValue();               break;
-                    case ocModalValue_MS    : ScModalValue_MS( true );      break;
-                    case ocModalValue_Multi : ScModalValue_MS( false );     break;
-                    case ocMedian           : ScMedian();                   break;
-                    case ocGeoMean          : ScGeoMean();                  break;
-                    case ocHarMean          : ScHarMean();                  break;
-                    case ocWeibull          :
-                    case ocWeibull_MS       : ScWeibull();                  break;
-                    case ocBinomInv         :
-                    case ocCritBinom        : ScCritBinom();                break;
-                    case ocNegBinomVert     : ScNegBinomDist();             break;
-                    case ocNegBinomDist_MS  : ScNegBinomDist_MS();          break;
-                    case ocNoName           : ScNoName();                   break;
-                    case ocBad              : ScBadName();                  break;
-                    case ocZTest            :
-                    case ocZTest_MS         : ScZTest();                    break;
-                    case ocTTest            :
-                    case ocTTest_MS         : ScTTest();                    break;
-                    case ocFTest            :
-                    case ocFTest_MS         : ScFTest();                    break;
-                    case ocRank             :
-                    case ocRank_Eq          : ScRank( false );              break;
-                    case ocRank_Avg         : ScRank( true );               break;
-                    case ocPercentile       :
-                    case ocPercentile_Inc   : ScPercentile( true );         break;
-                    case ocPercentile_Exc   : ScPercentile( false );        break;
-                    case ocPercentrank      :
-                    case ocPercentrank_Inc  : ScPercentrank( true );        break;
-                    case ocPercentrank_Exc  : ScPercentrank( false );       break;
-                    case ocLarge            : ScLarge();                    break;
-                    case ocSmall            : ScSmall();                    break;
-                    case ocFrequency        : ScFrequency();                break;
-                    case ocQuartile         :
-                    case ocQuartile_Inc     : ScQuartile( true );           break;
-                    case ocQuartile_Exc     : ScQuartile( false );          break;
-                    case ocNormInv          :
-                    case ocNormInv_MS       : ScNormInv();                  break;
-                    case ocSNormInv         :
-                    case ocSNormInv_MS      : ScSNormInv();                 break;
-                    case ocConfidence       :
-                    case ocConfidence_N     : ScConfidence();               break;
-                    case ocConfidence_T     : ScConfidenceT();              break;
-                    case ocTrimMean         : ScTrimMean();                 break;
-                    case ocProb             : ScProbability();              break;
-                    case ocCorrel           : ScCorrel();                   break;
-                    case ocCovar            :
-                    case ocCovarianceP      : ScCovarianceP();              break;
-                    case ocCovarianceS      : ScCovarianceS();              break;
-                    case ocPearson          : ScPearson();                  break;
-                    case ocRSQ              : ScRSQ();                      break;
-                    case ocSTEYX            : ScSTEYX();                    break;
-                    case ocSlope            : ScSlope();                    break;
-                    case ocIntercept        : ScIntercept();                break;
-                    case ocTrend            : ScTrend();                    break;
-                    case ocGrowth           : ScGrowth();                   break;
-                    case ocLinest           : ScLinest();                   break;
-                    case ocLogest           : ScLogest();                   break;
-                    case ocForecast_LIN     :
-                    case ocForecast         : ScForecast();                   break;
-                    case ocForecast_ETS_ADD : ScForecast_Ets( etsAdd );       break;
-                    case ocForecast_ETS_SEA : ScForecast_Ets( etsSeason );    break;
-                    case ocForecast_ETS_MUL : ScForecast_Ets( etsMult );      break;
-                    case ocForecast_ETS_PIA : ScForecast_Ets( etsPIAdd );     break;
-                    case ocForecast_ETS_PIM : ScForecast_Ets( etsPIMult );    break;
-                    case ocForecast_ETS_STA : ScForecast_Ets( etsStatAdd );   break;
-                    case ocForecast_ETS_STM : ScForecast_Ets( etsStatMult );  break;
-                    case ocGammaLn          :
-                    case ocGammaLn_MS       : ScLogGamma();                 break;
-                    case ocGamma            : ScGamma();                    break;
-                    case ocGammaDist        : ScGammaDist( true );          break;
-                    case ocGammaDist_MS     : ScGammaDist( false );         break;
-                    case ocGammaInv         :
-                    case ocGammaInv_MS      : ScGammaInv();                 break;
-                    case ocChiTest          :
-                    case ocChiTest_MS       : ScChiTest();                  break;
-                    case ocChiInv           :
-                    case ocChiInv_MS        : ScChiInv();                   break;
-                    case ocChiSqInv         :
-                    case ocChiSqInv_MS      : ScChiSqInv();                 break;
-                    case ocTInv             :
-                    case ocTInv_2T          : ScTInv( 2 );                  break;
-                    case ocTInv_MS          : ScTInv( 4 );                  break;
-                    case ocFInv             :
-                    case ocFInv_RT          : ScFInv();                     break;
-                    case ocFInv_LT          : ScFInv_LT();                  break;
-                    case ocLogInv           :
-                    case ocLogInv_MS        : ScLogNormInv();               break;
-                    case ocBetaDist         : ScBetaDist();                 break;
-                    case ocBetaDist_MS      : ScBetaDist_MS();              break;
-                    case ocBetaInv          :
-                    case ocBetaInv_MS       : ScBetaInv();                  break;
-                    case ocFourier          : ScFourier();                  break;
-                    case ocExternal         :
-                    case ocUDExternal       : ScExternal();                 break;
-                    case ocTableOp          : ScTableOp();                  break;
-                    case ocStop :                                           break;
-                    case ocErrorType        : ScErrorType();                break;
-                    case ocErrorType_ODF    : ScErrorType_ODF();            break;
-                    case ocCurrent          : ScCurrent();                  break;
-                    case ocStyle            : ScStyle();                    break;
-                    case ocDde              : ScDde();                      break;
-                    case ocBase             : ScBase();                     break;
-                    case ocDecimal          : ScDecimal();                  break;
-                    case ocConvertOOo       : ScConvertOOo();               break;
-                    case ocEuroConvert      : ScEuroConvert();              break;
-                    case ocRoman            : ScRoman();                    break;
-                    case ocArabic           : ScArabic();                   break;
-                    case ocInfo             : ScInfo();                     break;
-                    case ocHyperLink        : ScHyperLink();                break;
-                    case ocBahtText         : ScBahtText();                 break;
-                    case ocGetPivotData     : ScGetPivotData();             break;
-                    case ocJis              : ScJis();                      break;
-                    case ocAsc              : ScAsc();                      break;
-                    case ocLenB             : ScLenB();                     break;
-                    case ocRightB           : ScRightB();                   break;
-                    case ocLeftB            : ScLeftB();                    break;
-                    case ocMidB             : ScMidB();                     break;
-                    case ocReplaceB         : ScReplaceB();                 break;
-                    case ocFindB            : ScFindB();                    break;
-                    case ocSearchB          : ScSearchB();                  break;
-                    case ocUnicode          : ScUnicode();                  break;
-                    case ocUnichar          : ScUnichar();                  break;
-                    case ocBitAnd           : ScBitAnd();                   break;
-                    case ocBitOr            : ScBitOr();                    break;
-                    case ocBitXor           : ScBitXor();                   break;
-                    case ocBitRshift        : ScBitRshift();                break;
-                    case ocBitLshift        : ScBitLshift();                break;
-                    case ocTTT              : ScTTT();                      break;
-                    case ocDebugVar         : ScDebugVar();                 break;
-                    case ocNone : nFuncFmtType = SvNumFormatType::UNDEFINED;    break;
-                    default : PushError( FormulaError::UnknownOpCode);                 break;
-                }
+                DispatchOpCode( eOp );
+                if (eOp == ocNone)
+                    nFuncFmtType = SvNumFormatType::UNDEFINED;
 
                 if (FormulaCompiler::IsOpCodeVolatile(eOp))
                     meVolatileType = VOLATILE;
@@ -4718,137 +4448,146 @@ StackVar ScInterpreter::Interpret()
         pCur = pStack[ sp-1 ];
         if( pCur->GetOpCode() == ocPush )
         {
-            // An svRefList can be resolved if it a) contains just one
-            // reference, or b) in array context contains an array of single
-            // cell references.
-            if (pCur->GetType() == svRefList)
+            if ( ! aCode.IsLambda() )   // leave everything alone inside a lambda
             {
-                PopRefListPushMatrixOrRef();
-                pCur = pStack[ sp-1 ];
-            }
-            switch( pCur->GetType() )
-            {
-                case svEmptyCell:
-                    ;   // nothing
-                break;
-                case svError:
-                    nGlobalError = static_cast<const FormulaErrorToken*>(pCur)->GetError();
-                break;
-                case svDouble :
-                    {
-                        auto pDToken = static_cast<const FormulaDoubleToken*>(pCur);
-                        // If typed, pop token to obtain type information and
-                        // push a plain untyped double so the result token to
-                        // be transferred to the formula cell result does not
-                        // unnecessarily duplicate the information.
-                        if (pDToken->GetDoubleType() != 0)
-                        {
-                            double fVal = PopDouble();
-                            if (!bForcedResultType)
-                            {
-                                if (nCurFmtType != nFuncFmtType)
-                                    nRetIndexExpr = 0;  // carry format index only for matching type
-                                nRetTypeExpr = nFuncFmtType = nCurFmtType;
-                            }
-                            if (nRetTypeExpr == SvNumFormatType::DURATION)
-                            {
-                                // Round the duration in case a wall clock time
-                                // display format is used instead of a duration
-                                // format. To micro seconds which then catches
-                                // the converted hh:mm:ss.9999997 cases.
-                                if (fVal != 0.0)
-                                {
-                                    fVal *= 86400.0;
-                                    fVal = rtl::math::round( fVal, 6);
-                                    fVal /= 86400.0;
-                                }
-                            }
-                            PushTempToken( CreateFormulaDoubleToken( fVal));
-                        }
-                        if ( nFuncFmtType == SvNumFormatType::UNDEFINED )
-                        {
-                            nRetTypeExpr = SvNumFormatType::NUMBER;
-                            nRetIndexExpr = 0;
-                        }
-                    }
-                break;
-                case svString :
-                    nRetTypeExpr = SvNumFormatType::TEXT;
-                    nRetIndexExpr = 0;
-                break;
-                case svSingleRef :
+                // An svRefList can be resolved if it a) contains just one
+                // reference, or b) in array context contains an array of single
+                // cell references.
+                if (pCur->GetType() == svRefList)
                 {
-                    ScAddress aAdr;
-                    PopSingleRef( aAdr );
-                    if( nGlobalError == FormulaError::NONE)
-                        PushCellResultToken( false, aAdr, &nRetTypeExpr, &nRetIndexExpr, true);
+                    PopRefListPushMatrixOrRef();
+                    pCur = pStack[ sp-1 ];
                 }
-                break;
-                case svRefList :
-                    PopError();     // maybe #REF! takes precedence over #VALUE!
-                    PushError( FormulaError::NoValue);
-                break;
-                case svDoubleRef :
+                switch( pCur->GetType() )
                 {
-                    if ( bMatrixFormula )
-                    {   // create matrix for {=A1:A5}
-                        PopDoubleRefPushMatrix();
-                        ScMatrixRef xMat = PopMatrix();
-                        QueryMatrixType(xMat, nRetTypeExpr, nRetIndexExpr);
-                    }
-                    else
+                    case svEmptyCell:
+                        ;   // nothing
+                    break;
+                    case svError:
+                        nGlobalError = static_cast<const FormulaErrorToken*>(pCur)->GetError();
+                    break;
+                    case svDouble :
+                        {
+                            auto pDToken = static_cast<const FormulaDoubleToken*>(pCur);
+                            // If typed, pop token to obtain type information and
+                            // push a plain untyped double so the result token to
+                            // be transferred to the formula cell result does not
+                            // unnecessarily duplicate the information.
+                            if (pDToken->GetDoubleType() != 0)
+                            {
+                                double fVal = PopDouble();
+                                if (!bForcedResultType)
+                                {
+                                    if (nCurFmtType != nFuncFmtType)
+                                        nRetIndexExpr = 0;  // carry format index only for matching type
+                                    nRetTypeExpr = nFuncFmtType = nCurFmtType;
+                                }
+                                if (nRetTypeExpr == SvNumFormatType::DURATION)
+                                {
+                                    // Round the duration in case a wall clock time
+                                    // display format is used instead of a duration
+                                    // format. To micro seconds which then catches
+                                    // the converted hh:mm:ss.9999997 cases.
+                                    if (fVal != 0.0)
+                                    {
+                                        fVal *= 86400.0;
+                                        fVal = rtl::math::round( fVal, 6);
+                                        fVal /= 86400.0;
+                                    }
+                                }
+                                PushTempToken( CreateFormulaDoubleToken( fVal));
+                            }
+                            if ( nFuncFmtType == SvNumFormatType::UNDEFINED )
+                            {
+                                nRetTypeExpr = SvNumFormatType::NUMBER;
+                                nRetIndexExpr = 0;
+                            }
+                        }
+                    break;
+                    case svString :
+                        nRetTypeExpr = SvNumFormatType::TEXT;
+                        nRetIndexExpr = 0;
+                    break;
+                    case svSingleRef :
                     {
-                        ScRange aRange;
-                        PopDoubleRef( aRange );
                         ScAddress aAdr;
-                        if ( nGlobalError == FormulaError::NONE && DoubleRefToPosSingleRef( aRange, aAdr))
+                        PopSingleRef( aAdr );
+                        if( nGlobalError == FormulaError::NONE)
                             PushCellResultToken( false, aAdr, &nRetTypeExpr, &nRetIndexExpr, true);
                     }
-                }
-                break;
-                case svExternalDoubleRef:
-                {
-                    ScMatrixRef xMat;
-                    PopExternalDoubleRef(xMat);
-                    QueryMatrixType(xMat, nRetTypeExpr, nRetIndexExpr);
-                }
-                break;
-                case svMatrix :
-                {
-                    sc::RangeMatrix aMat = PopRangeMatrix();
-                    if (aMat.isRangeValid())
+                    break;
+                    case svRefList :
+                        PopError();     // maybe #REF! takes precedence over #VALUE!
+                        PushError( FormulaError::NoValue);
+                    break;
+                    case svDoubleRef :
                     {
-                        // This matrix represents a range reference. Apply implicit intersection.
-                        double fVal = applyImplicitIntersection(aMat, aPos);
-                        if (std::isnan(fVal))
-                            PushNoValue();
+                        if ( bMatrixFormula )
+                        {   // create matrix for {=A1:A5}
+                            PopDoubleRefPushMatrix();
+                            ScMatrixRef xMat = PopMatrix();
+                            QueryMatrixType(xMat, nRetTypeExpr, nRetIndexExpr);
+                        }
                         else
-                            PushInt(fVal);
+                        {
+                            ScRange aRange;
+                            PopDoubleRef( aRange );
+                            ScAddress aAdr;
+                            if ( nGlobalError == FormulaError::NONE && DoubleRefToPosSingleRef( aRange, aAdr))
+                                PushCellResultToken( false, aAdr, &nRetTypeExpr, &nRetIndexExpr, true);
+                        }
                     }
-                    else
-                        // This is a normal matrix.
-                        QueryMatrixType(aMat.mpMat, nRetTypeExpr, nRetIndexExpr);
-                }
-                break;
-                case svExternalSingleRef:
-                {
-                    FormulaTokenRef xToken;
-                    ScExternalRefCache::CellFormat aFmt;
-                    PopExternalSingleRef(xToken, &aFmt);
-                    if (nGlobalError != FormulaError::NONE)
-                        break;
-
-                    PushTokenRef(xToken);
-
-                    if (aFmt.mbIsSet)
+                    break;
+                    case svExternalDoubleRef:
                     {
-                        nFuncFmtType = aFmt.mnType;
-                        nFuncFmtIndex = aFmt.mnIndex;
+                        ScMatrixRef xMat;
+                        PopExternalDoubleRef(xMat);
+                        QueryMatrixType(xMat, nRetTypeExpr, nRetIndexExpr);
                     }
+                    break;
+                    case svMatrix :
+                    {
+                        sc::RangeMatrix aMat = PopRangeMatrix();
+                        if (aMat.isRangeValid())
+                        {
+                            // This matrix represents a range reference. Apply implicit intersection.
+                            double fVal = applyImplicitIntersection(aMat, aPos);
+                            if (std::isnan(fVal))
+                                PushNoValue();
+                            else
+                                PushInt(fVal);
+                        }
+                        else
+                            // This is a normal matrix.
+                            QueryMatrixType(aMat.mpMat, nRetTypeExpr, nRetIndexExpr);
+                    }
+                    break;
+                    case svExternalSingleRef:
+                    {
+                        FormulaTokenRef xToken;
+                        ScExternalRefCache::CellFormat aFmt;
+                        PopExternalSingleRef(xToken, &aFmt);
+                        if (nGlobalError != FormulaError::NONE)
+                            break;
+
+                        PushTokenRef(xToken);
+
+                        if (aFmt.mbIsSet)
+                        {
+                            nFuncFmtType = aFmt.mnType;
+                            nFuncFmtIndex = aFmt.mnIndex;
+                        }
+                    }
+                    break;
+                    case svCallable:
+                    {
+                        nRetTypeExpr = SvNumFormatType::UNDEFINED;
+                        nRetIndexExpr = 0;
+                    }
+                    break;
+                    default :
+                        SetError( FormulaError::UnknownStackVariable);
                 }
-                break;
-                default :
-                    SetError( FormulaError::UnknownStackVariable);
             }
         }
         else

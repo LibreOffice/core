@@ -591,6 +591,7 @@ public:
     void Pop();
     void FrontPop();
     void Lambda( bool bOpt );
+    bool IsLambda() const;
 
     /** Reconstruct the iterator afresh from a token array
     */

@@ -30,7 +30,7 @@ enum OpCode : sal_uInt16
 {
     // Special commands
         ocPush              = 0,
-        // 1 used to be SC_OPCODE_CALL
+        // 1 used to be ocCall, which is now a binary operator
         ocStop              = 2,
         ocExternal          = 3,
         ocName              = 4,
@@ -40,41 +40,41 @@ enum OpCode : sal_uInt16
         ocIfError           = 7,
         ocIfNA              = 8,
         ocChoose            = 9,
+        ocLet               = 10,
     // Parentheses and separators
-        ocOpen              = 10,
-        ocClose             = 11,
-        ocSep               = 12,
+        ocOpen              = 11,
+        ocClose             = 12,
+        ocSep               = 13,
     // Special OpCodes
-        ocMissing           = 13,
-        ocBad               = 14,
-        ocStringXML         = 15,
-        ocSpaces            = 16,
-        ocWhitespace        = 17,
-        ocMatRef            = 18,
+        ocMissing           = 14,
+        ocBad               = 15,
+        ocStringXML         = 16,
+        ocSpaces            = 17,
+        ocWhitespace        = 18,
+        ocMatRef            = 19,
     // Access commands
     /* additional access operators */
-        ocDBArea            = 19,
-        ocTableRef          = 20,
-        ocMacro             = 21,
-        ocColRowName        = 22,
-        ocColRowNameAuto    = 23,
+        ocDBArea            = 20,
+        ocTableRef          = 21,
+        ocMacro             = 22,
+        ocColRowName        = 23,
+        ocColRowNameAuto    = 24,
     // Percent operator _follows_ value
-        ocPercentSign       = 24,
-        ocArrayOpen         = 25,
-        ocArrayClose        = 26,
-        ocArrayRowSep       = 27,
-        ocArrayColSep       = 28, /* some convs use sep != col_sep */
-        ocTableRefOpen      = 29,
-        ocTableRefClose     = 30,
-        ocTableRefItemAll     = 31,
-        ocTableRefItemHeaders = 32,
-        ocTableRefItemData    = 33,
-        ocTableRefItemTotals  = 34,
-        ocTableRefItemThisRow = 35,
-        ocStopDiv           = 36,
-        ocSkip              = 37, /* used to skip raw tokens during string compilation */
-        ocStringName        = 38, /* special OpCode for lambda function names */
-        ocLet               = 39,
+        ocPercentSign       = 25,
+        ocArrayOpen         = 26,
+        ocArrayClose        = 27,
+        ocArrayRowSep       = 28,
+        ocArrayColSep       = 29, /* some convs use sep != col_sep */
+        ocTableRefOpen      = 30,
+        ocTableRefClose     = 31,
+        ocTableRefItemAll     = 32,
+        ocTableRefItemHeaders = 33,
+        ocTableRefItemData    = 34,
+        ocTableRefItemTotals  = 35,
+        ocTableRefItemThisRow = 36,
+        ocStopDiv           = 37,
+        ocSkip              = 38, /* used to skip raw tokens during string compilation */
+        ocStringName        = 39, /* special OpCode for locally bound names (LET) */
         ocDPFieldName       = 40,
     // Error constants
         ocStartErrors       = 41,
@@ -106,7 +106,8 @@ enum OpCode : sal_uInt16
         ocIntersect         = 64,
         ocUnion             = 65,
         ocRange             = 66,
-        ocStopBinaryOperators = 67,
+        ocCall              = 67,
+        ocStopBinaryOperators = 68,
 
     /* NOTE: binary and unary operators must be in sequence for compiler! */
 
@@ -590,6 +591,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocIfError: return "IfError";
     case ocIfNA: return "IfNA";
     case ocChoose: return "Choose";
+    case ocLet: return "Let";
     case ocOpen: return "Open";
     case ocClose: return "Close";
     case ocTableRefOpen: return "TableRefOpen";
@@ -645,6 +647,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocIntersect: return "Intersect";
     case ocUnion: return "Union";
     case ocRange: return "Range";
+    case ocCall: return "Call";
     case ocNot: return "Not";
     case ocNeg: return "Neg";
     case ocNegSub: return "NegSub";
@@ -1061,7 +1064,6 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocToCol: return "ToCol";
     case ocToRow: return "ToRow";
     case ocUnique: return "Unique";
-    case ocLet: return "Let";
     case ocWrapCols: return "WrapCols";
     case ocWrapRows: return "WrapRows";
     case ocTTT: return "TTT";

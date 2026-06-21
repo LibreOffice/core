@@ -167,7 +167,7 @@ bool hasStringImpl( CellType eType, ScFormulaCell* pFormula )
         case CELLTYPE_EDIT:
             return true;
         case CELLTYPE_FORMULA:
-            return !pFormula->IsValue();
+            return pFormula->IsString();
         default:
             return false;
     }

@@ -22,6 +22,7 @@
 #include "global.hxx"
 #include "calcmacros.hxx"
 #include <svl/sharedstring.hxx>
+#include <formula/callable.hxx>
 #include <formula/token.hxx>
 #include <formula/types.hxx>
 
@@ -117,6 +118,9 @@ public:
     /** May be NULL if SetToken() did so, also if type formula::svDouble or formula::svError! */
     formula::FormulaConstTokenRef GetToken() const;
 
+    /** Caller owns the reference to the token; will not be NULL */
+    formula::FormulaTokenRef CloneToken() const;
+
     /** Return upper left token if formula::svMatrixCell, else return GetToken().
         May be NULL if SetToken() did so, also if type formula::svDouble or formula::svError! */
     formula::FormulaConstTokenRef GetCellResultToken() const;
@@ -142,6 +146,14 @@ public:
     bool IsValue() const;
 
     bool IsValueNoError() const;
+
+    /** Test for cell result type formula::svString, including upper left if
+        formula::svMatrixCell. */
+    bool IsString() const;
+
+    /** Test for cell result type formula::svCallable, including upper left if
+        formula::svMatrixCell. */
+    bool IsCallable() const;
 
     /** Determines whether or not the result is a string containing more than
         one paragraph */
@@ -173,6 +185,9 @@ public:
     /** Return string if type formula::svString or formula::svHybridCell or formula::svMatrixCell and
         upper left formula::svString, else empty string. */
     const svl::SharedString & GetString() const;
+
+    /** Return callable if type formula::svCallable, else nullptr. */
+    formula::FormulaCallableRef GetCallable() const;
 
     /** Return matrix if type formula::svMatrixCell and ScMatrix present, else NULL. */
     ScConstMatrixRef GetMatrix() const;

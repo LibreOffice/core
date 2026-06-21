@@ -19,11 +19,16 @@
 
 #pragma once
 
+#include <config_features.h>
+
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/textsearch.hxx>
+#include <formula/callable.hxx>
 #include <formula/errorcodes.hxx>
 #include <formula/tokenarray.hxx>
+#include <basic/sbx.hxx>
+#include <basic/sbxvar.hxx>
 #include <types.hxx>
 #include <externalrefmgr.hxx>
 #include <calcconfig.hxx>
@@ -198,6 +203,9 @@ class ScInterpreter
     friend class ScChiDistFunction;
     friend class ScChiSqDistFunction;
 
+    // ScMacroFunction needs to save context data when constructed
+    friend class ScMacroFunction;
+
 public:
     static void SetGlobalConfig(const ScCalcConfig& rConfig);
     static const ScCalcConfig& GetGlobalConfig();
@@ -299,6 +307,7 @@ private:
     double GetCellValueOrZero( const ScAddress&, const ScRefCellValue& rCell );
     double GetValueCellValue( const ScAddress&, double fOrig );
     void GetCellString( svl::SharedString& rStr, const ScRefCellValue& rCell );
+    formula::FormulaCallableRef GetCellCallable( const ScRefCellValue& rCell );
     static FormulaError GetCellErrCode( const ScRefCellValue& rCell );
 
     bool CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
@@ -456,6 +465,7 @@ private:
     void PushStringBuffer( const sal_Unicode* pString );
     void PushString( const OUString& rStr );
     void PushString( const svl::SharedString& rString );
+    void PushCallable( formula::FormulaCallableRef pCallable );
     void PushSingleRef(SCCOL nCol, SCROW nRow, SCTAB nTab);
     void PushDoubleRef(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                        SCCOL nCol2, SCROW nRow2, SCTAB nTab2);
@@ -519,8 +529,12 @@ private:
         ScTokenArray& rTokens, short nStartPos, short nEndPos );
     ScTokenArray checkPushTokens( const ScTokenArray& rTokens,
         short nStartPos, short nEndPos );
+    formula::FormulaCallableRef GetCallable();
+    //formula::FormulaCallableRef GetCallableFromMatrix(const ScMatrixRef& pMat);
 
     void ScTableOp();                                       // repeated operations
+
+    void DispatchOpCode(OpCode eOp);
 
     // common helper functions
 
@@ -742,6 +756,7 @@ private:
     void ScSubTotal();
     void ScWrapCols();
     void ScWrapRows();
+    void ScCall();
 
 private:
     void ScTextBeforeOrAfter(bool bBefore);
@@ -750,6 +765,12 @@ private:
     void ScWrapColsOrRows(bool bCols);
     void ScTakeOrDrop(bool bTake);
     void ScHorizontalOrVerticalStack(bool bHorizontal);
+    void ScCall(formula::FormulaCallableRef pCallable, sal_uInt8 nArgCount);
+    void ScCall(formula::FormulaCallableRef pCallable, const std::vector<formula::FormulaConstTokenRef>& aArguments);
+#if HAVE_FEATURE_SCRIPTING
+    bool BuildMacroArgs(const std::vector<formula::FormulaConstTokenRef>& rArgsIn, SbxArrayRef refArgsOut, bool bUseVBAObjects);
+    bool GetMacroArg(formula::FormulaConstTokenRef pArgIn, SbxVariable* pArgOut, bool bUseVBAObjects);
+#endif
 
 public:
     // If upon call rMissingField==true then the database field parameter may be

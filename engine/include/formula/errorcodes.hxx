@@ -89,6 +89,8 @@ enum class FormulaError : sal_uInt16
     LinkFormulaNeedingCheck = 540,
 // Array/matrix formula result can't spill because target cells are not empty.
     Spill                = 541,
+// Expected function here; signaled when attempting to call a non-function
+    NotAFunction         = 542,
 
 // Interpreter: NA() not available condition, not a real error
     NotAvailable         = 0x7fff
@@ -179,6 +181,7 @@ inline bool isPublishedFormulaError( FormulaError nErr )
         case FormulaError::MatrixSize:
         case FormulaError::LinkFormulaNeedingCheck:
         case FormulaError::Spill:
+        case FormulaError::NotAFunction:
             return true;
 
         case FormulaError::NotAvailable:

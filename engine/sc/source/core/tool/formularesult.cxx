@@ -347,6 +347,16 @@ bool ScFormulaResult::IsValueNoError() const
     }
 }
 
+bool ScFormulaResult::IsString() const
+{
+    return isString(GetCellResultType());
+}
+
+bool ScFormulaResult::IsCallable() const
+{
+    return GetCellResultType() == formula::svCallable;
+}
+
 bool ScFormulaResult::IsMultiline() const
 {
     if (meMultiline == MULTILINE_UNKNOWN)
@@ -476,6 +486,16 @@ formula::FormulaConstTokenRef ScFormulaResult::GetToken() const
     return nullptr;
 }
 
+formula::FormulaTokenRef ScFormulaResult::CloneToken() const
+{
+    if (mnError != FormulaError::NONE)
+        return new formula::FormulaErrorToken(mnError);
+    else if (mbToken)
+        return mpToken->Clone();
+    else
+        return new formula::FormulaDoubleToken(mfValue);
+}
+
 formula::FormulaConstTokenRef ScFormulaResult::GetCellResultToken() const
 {
     if (GetType() == formula::svMatrixCell)
@@ -542,6 +562,29 @@ const svl::SharedString & ScFormulaResult::GetString() const
         }
     }
     return svl::SharedString::getEmptyString();
+}
+
+formula::FormulaCallableRef ScFormulaResult::GetCallable() const
+{
+    if (mbToken && mpToken)
+    {
+        switch (mpToken->GetType())
+        {
+            case formula::svCallable:
+                return static_cast<const formula::FormulaCallableToken*>(mpToken)->GetCallable();
+            case formula::svMatrixCell:
+            {
+                const ScMatrixCellResultToken* p =
+                    static_cast<const ScMatrixCellResultToken*>(mpToken);
+                if (p->GetUpperLeftType() == formula::svCallable)
+                    return static_cast<const formula::FormulaCallableToken*>(p->GetUpperLeftToken().get())->GetCallable();
+            }
+            break;
+            default:
+                ;   // nothing
+        }
+    }
+    return nullptr;
 }
 
 ScConstMatrixRef ScFormulaResult::GetMatrix() const

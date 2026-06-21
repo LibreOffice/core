@@ -17,17 +17,34 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#include <sal/config.h>
 
-#include <boost/intrusive_ptr.hpp>
+#include <map>
+#include <vector>
+
+#include <formula/opcode.hxx>
+#include <formula/token.hxx>
+#include <formula/types.hxx>
+#include <sal/log.hxx>
+
+#include <formula/callable.hxx>
 
 namespace formula
 {
-class FormulaToken;
-class FormulaCallable;
-typedef ::boost::intrusive_ptr<FormulaToken> FormulaTokenRef;
-typedef ::boost::intrusive_ptr<const FormulaToken> FormulaConstTokenRef;
-typedef ::boost::intrusive_ptr<const FormulaCallable> FormulaCallableRef;
+/// a static hash of all the built-ins that have been accessed
+static std::map<OpCode, FormulaCallableRef> aAllBuiltIns;
+
+// We're ensuring that a FormulaBuiltInFunction corresponding to eOpCode is
+// in our map, and returning a reference to it. This allows us to ensure that
+// at most one FormulaBuiltInFunction exists for each OpCode.
+FormulaCallableRef FormulaBuiltInFunction::Get(OpCode eOpCode)
+{
+    auto iter = aAllBuiltIns.find(eOpCode);
+    if (iter == aAllBuiltIns.end())
+        return (aAllBuiltIns[eOpCode] = new FormulaBuiltInFunction(eOpCode));
+    else
+        return iter->second;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

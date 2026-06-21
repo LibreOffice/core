@@ -3172,6 +3172,18 @@ bool ScFormulaCell::IsValueNoError() const
     return aResult.IsValueNoError();
 }
 
+bool ScFormulaCell::IsString()
+{
+    MaybeInterpret();
+    return aResult.IsString();
+}
+
+bool ScFormulaCell::IsCallable()
+{
+    MaybeInterpret();
+    return aResult.IsCallable();
+}
+
 double ScFormulaCell::GetValue()
 {
     MaybeInterpret();
@@ -3182,6 +3194,24 @@ const svl::SharedString & ScFormulaCell::GetString()
 {
     MaybeInterpret();
     return GetRawString();
+}
+
+formula::FormulaCallableRef ScFormulaCell::GetCallable()
+{
+    MaybeInterpret();
+    return GetRawCallable();
+}
+
+formula::FormulaConstTokenRef ScFormulaCell::GetResultToken()
+{
+    MaybeInterpret();
+    return GetRawResultToken();
+}
+
+formula::FormulaTokenRef ScFormulaCell::CloneResultToken()
+{
+    MaybeInterpret();
+    return CloneRawResultToken();
 }
 
 double ScFormulaCell::GetRawValue() const
@@ -3195,10 +3225,36 @@ double ScFormulaCell::GetRawValue() const
 const svl::SharedString & ScFormulaCell::GetRawString() const
 {
     if ((pCode->GetCodeError() == FormulaError::NONE) &&
-            aResult.GetResultError() == FormulaError::NONE)
+        aResult.GetResultError() == FormulaError::NONE)
         return aResult.GetString();
 
     return svl::SharedString::getEmptyString();
+}
+
+formula::FormulaCallableRef ScFormulaCell::GetRawCallable() const
+{
+    if ((pCode->GetCodeError() == FormulaError::NONE) &&
+        aResult.GetResultError() == FormulaError::NONE)
+        return aResult.GetCallable();
+
+    return nullptr;
+}
+
+formula::FormulaConstTokenRef ScFormulaCell::GetRawResultToken() const
+{
+    if ((pCode->GetCodeError() == FormulaError::NONE) &&
+        aResult.GetResultError() == FormulaError::NONE)
+        return aResult.GetToken();
+
+    return nullptr;
+}
+
+formula::FormulaTokenRef ScFormulaCell::CloneRawResultToken() const
+{
+    if (pCode->GetCodeError() != FormulaError::NONE)
+        return new formula::FormulaErrorToken(pCode->GetCodeError());
+    else
+        return aResult.CloneToken();
 }
 
 const ScMatrix* ScFormulaCell::GetMatrix()

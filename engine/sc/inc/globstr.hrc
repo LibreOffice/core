@@ -271,6 +271,7 @@
 #define STR_LONG_ERR_MATRIX_SIZE                NC_("STR_LONG_ERR_MATRIX_SIZE", "Error: Array or matrix size")
 #define STR_LONG_ERR_CIRC_REF                   NC_("STR_LONG_ERR_CIRC_REF", "Error: Circular reference")
 #define STR_LONG_ERR_NO_CONV                    NC_("STR_LONG_ERR_NO_CONV", "Error: Calculation does not converge")
+#define STR_LONG_ERR_NOT_FUNC                   NC_("STR_LONG_ERR_NOT_FUNC", "Error: Attempted to call non-function")
 /* END error constants and error strings. */
 
 #define STR_CELL_FILTER                         NC_("STR_CELL_FILTER", "Filter")

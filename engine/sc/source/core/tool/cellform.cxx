@@ -105,6 +105,13 @@ OUString ScCellFormat::GetString( const ScRefCellValue& rCell, sal_uInt32 nForma
                             return str;
                         }
                     }
+                    else if ( pFCell->IsCallable() )
+                    {
+                        // TODO: Consider showing more information than just a bare lambda
+                        // callables can't be represented visually, so we'll just use a placeholder
+                        // U+03BB GREEK SMALL LETTER LAMBDA.
+                        return u"\u03BB"_ustr;
+                    }
                     else
                     {
                         OUString str;
