@@ -146,6 +146,7 @@ parts:
         --disable-sdremote-bluetooth \
         --enable-cairo-rgba \
         --enable-hardening-flags \
+        --enable-ld \
         --enable-mergelibs \
         --enable-mpl-subset \
         --with-branding=icon-themes/galaxy/brand_cp \
@@ -252,6 +253,7 @@ parts:
       ./configure \
         --prefix=/usr \
         --enable-qtapp \
+        --enable-ld \
         --disable-ssl \
         --with-lo-path=/usr/lib/collaboraoffice \
         --with-lokit-path=$(pwd)/engine/include \
@@ -303,6 +305,7 @@ parts:
       - libzstd-dev
       - make
       - meson
+      - mold
       - nasm
       - pkg-config
       - python3-dev
