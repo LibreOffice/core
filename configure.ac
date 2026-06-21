@@ -584,14 +584,25 @@ dnl Pick a fast linker (lld/mold/gold) for debug builds; the system
 dnl default ld is commonly the slow GNU bfd.
 AC_ARG_ENABLE(ld,
     AS_HELP_STRING([--enable-ld=<linker>],
-        [Use the given linker (lld, mold or gold). With no argument a debug
-         build picks the fastest available linker. --disable-ld forces the
-         system default linker.]),
+        [Use the given linker (lld, mold or gold), optionally as <linker>:<path>
+         to also set --ld-path (clang only). With no argument, or =yes, pick the
+         fastest available linker. With no --enable-ld at all a debug build still
+         auto-picks; --disable-ld forces the system default linker.]),
 ,)
 
 check_use_ld()
 {
-    use_ld="-fuse-ld=$1"
+    use_ld="-fuse-ld=${1%%:*}"
+    use_ld_path="${1#*:}"
+    if test "$use_ld_path" != "$1"; then
+        if test "$cxx_clang" = "true"; then
+            use_ld="${use_ld} --ld-path=${use_ld_path}"
+        else
+            dnl libtool strips the gcc -B<path> option, so naming a linker by
+            dnl path only works with clang.
+            AC_MSG_ERROR([a linker path is only supported with clang])
+        fi
+    fi
     use_ld_fail_if_error=$2
     AC_MSG_CHECKING([whether $CXX links with $use_ld])
     use_ld_ldflags_save="$LDFLAGS"
@@ -612,13 +623,34 @@ check_use_ld()
     return 1
 }
 
-if test "$enable_ld" != "no" -a "$GXX" = "yes"; then
-    if test -n "$enable_ld" -a "$enable_ld" != "yes"; then
-        dnl an explicit --enable-ld=<linker> must work
-        check_use_ld "$enable_ld" fail_if_error
-    elif test "$ENABLE_DEBUG" = "true" -o "$enable_ld" = "yes"; then
-        dnl gold is deprecated, try it last before the slow default ld
-        check_use_ld lld || check_use_ld mold || check_use_ld gold || true
+if test "$enable_ld" != "no"; then
+    if test "$GXX" = "yes" -a "$host_os" != "emscripten"; then
+        if test -n "$enable_ld" -a "$enable_ld" != "yes"; then
+            dnl an explicit --enable-ld=<linker> must work
+            check_use_ld "$enable_ld" fail_if_error
+        elif test "$ENABLE_DEBUG" = "true" -o "$enable_ld" = "yes"; then
+            dnl gold is deprecated, try it last before the slow default ld
+            check_use_ld lld || check_use_ld mold || check_use_ld gold || true
+        fi
+        dnl report which linker the compiler actually drives, and nudge
+        dnl debug builds off the slow default GNU ld.
+        ld_output=$(echo 'int main() { return 0; }' | $CC -Wl,-v -x c -o conftest.out - $CFLAGS $LDFLAGS 2>/dev/null)
+        rm -f conftest.out
+        ld_used=$(echo "$ld_output" | grep -E '(^GNU gold|^GNU ld|^LLD|^mold)')
+        if test -z "$ld_used"; then
+            ld_used="unknown"
+        fi
+        AC_MSG_CHECKING([for linker that is used])
+        AC_MSG_RESULT([$ld_used])
+        if test "$ENABLE_DEBUG" = "true"; then
+            if echo "$ld_used" | grep -q "^GNU ld"; then
+                AC_MSG_WARN([The default GNU linker is slow, consider using lld or mold.])
+            fi
+        fi
+    else
+        if test "$enable_ld" = "yes"; then
+            AC_MSG_ERROR([--enable-ld not supported])
+        fi
     fi
 fi
 

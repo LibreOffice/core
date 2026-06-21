@@ -4799,10 +4799,12 @@ printf ("hello world\n");
 USE_LD=
 if test "$enable_ld" != "no"; then
     if test "$GCC" = "yes" -a "$_os" != "Emscripten"; then
-        if test -n "$enable_ld"; then
+        if test -n "$enable_ld" -a "$enable_ld" != "yes"; then
+            dnl an explicit --enable-ld=<linker> must work
             check_use_ld "$enable_ld" fail_if_error
-        elif test -z "$ENABLE_DEBUG$ENABLE_DBGUTIL"; then
-            dnl non-debug builds default to the default linker
+        elif test "$enable_ld" != "yes" -a -z "$ENABLE_DEBUG$ENABLE_DBGUTIL"; then
+            dnl non-debug builds default to the default linker, unless
+            dnl --enable-ld (or --enable-ld=yes) asks to pick a fast one
             true
         elif test -n "$COM_IS_CLANG"; then
             check_use_ld lld
