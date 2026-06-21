@@ -226,7 +226,7 @@ enum OpCode : sal_uInt16
         ocNeg               = 179,
         ocStopOneParameter  = 180,
 
-    // Functions with more than one parameters
+    // Functions with more than one parameter
         ocStartTwoParameters = 201,
         ocArcTan2           = 201,
         ocCeil              = 202,

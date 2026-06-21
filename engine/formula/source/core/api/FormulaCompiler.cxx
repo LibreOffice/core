@@ -1206,7 +1206,7 @@ bool FormulaCompiler::IsOpCodeVolatile( OpCode eOp )
         // one parameter:
         case ocFormula:
         case ocInfo:
-        // more than one parameters:
+        // more than one parameter:
             // ocIndirect otherwise would have to do
             // StopListening and StartListening on a reference for every
             // interpreted value.
