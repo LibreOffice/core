@@ -1465,6 +1465,10 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 	},
 
 	_handleDragStart: function (e) {
+		if (!this.partsPreview._map.isEditMode()) {
+			e.preventDefault();
+			return;
+		}
 		// To avoid having to add a new message to move an arbitrary part, let's select the
 		// slide that is being dragged.
 		const targetNode = (e.target.id.startsWith('preview') ? e.target : e.target.parentNode);
