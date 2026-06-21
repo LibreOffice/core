@@ -11,6 +11,7 @@
 #define INCLUDED_SW_INC_SPIFPOLICY_HXX
 
 #include "swdllapi.h"
+#include "StanagLabel.hxx"
 #include <rtl/ustring.hxx>
 #include <vector>
 
@@ -130,6 +131,12 @@ public:
     /// one entry per violating tag; empty means valid.
     std::vector<SpifViolation> validate(const OUString& rClassification,
                                         const std::vector<bool>& rSelected) const;
+
+    /// Build a STANAG 4774 label from the selection. rSelected is indexed as in
+    /// buildMarking; the timestamps are passed through to the label.
+    StanagLabel buildLabel(const OUString& rClassification, const std::vector<bool>& rSelected,
+                           const OUString& rCreationDateTime,
+                           const OUString& rReviewDateTime) const;
 };
 
 } // namespace sw::seclabel

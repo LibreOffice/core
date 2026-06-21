@@ -24,11 +24,13 @@ class SpifPolicyTest : public CppUnit::TestFixture
     void testParse();
     void testValidate();
     void testValidateRelationships();
+    void testBuildLabel();
 
     CPPUNIT_TEST_SUITE(SpifPolicyTest);
     CPPUNIT_TEST(testParse);
     CPPUNIT_TEST(testValidate);
     CPPUNIT_TEST(testValidateRelationships);
+    CPPUNIT_TEST(testBuildLabel);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -248,6 +250,44 @@ void SpifPolicyTest::testValidateRelationships()
 
     // Z + Y: exclusion satisfied (X not chosen) and requirement met.
     CPPUNIT_ASSERT(aPolicy.validate(u"SECRET"_ustr, { false, true, true }).empty());
+}
+
+void SpifPolicyTest::testBuildLabel()
+{
+    static const OString aSpif(
+        R"xml(<?xml version="1.0" encoding="utf-8"?>
+<spif:SPIF xmlns:spif="http://www.xmlspif.org/spif" schemaVersion="1.0" version="1">
+  <spif:securityPolicyId name="SPIF Collabora" id="1.2.826.0.1310.1.2.0" />
+  <spif:securityClassifications>
+    <spif:securityClassification name="SECRET" color="red" lacv="4" hierarchy="4" />
+  </spif:securityClassifications>
+  <spif:securityCategoryTagSets>
+    <spif:securityCategoryTagSet name="Release Categories" id="1.2.826.0.1310.1.2.0.0">
+      <spif:securityCategoryTag name="Releasable To" tagType="enumerated" enumType="permissive">
+        <spif:tagCategory name="CANADA" lacv="4407630" obsolete="false" />
+        <spif:tagCategory name="UNITED KINGDOM" lacv="5591873" obsolete="false" />
+      </spif:securityCategoryTag>
+    </spif:securityCategoryTagSet>
+  </spif:securityCategoryTagSets>
+</spif:SPIF>)xml"_ostr);
+
+    SvMemoryStream aStream(const_cast<char*>(aSpif.getStr()), aSpif.getLength(), StreamMode::READ);
+    sw::seclabel::SpifPolicy aPolicy;
+    CPPUNIT_ASSERT(aPolicy.parse(aStream));
+
+    const auto aLabel = aPolicy.buildLabel(u"SECRET"_ustr, { true, true },
+                                           u"2026-06-21T10:00:00Z"_ustr, u"2027-06-21T10:00:00Z"_ustr);
+
+    CPPUNIT_ASSERT_EQUAL(u"SPIF Collabora"_ustr, aLabel.aPolicyName);
+    CPPUNIT_ASSERT_EQUAL(u"urn:oid:1.2.826.0.1310.1.2.0"_ustr, aLabel.aPolicyId);
+    CPPUNIT_ASSERT_EQUAL(u"SECRET"_ustr, aLabel.aClassification);
+    CPPUNIT_ASSERT_EQUAL(u"2026-06-21T10:00:00Z"_ustr, aLabel.aCreationDateTime);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aLabel.aCategories.size());
+    CPPUNIT_ASSERT_EQUAL(u"Releasable To"_ustr, aLabel.aCategories[0].aTagName);
+    CPPUNIT_ASSERT_EQUAL(u"PERMISSIVE"_ustr, aLabel.aCategories[0].aType);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aLabel.aCategories[0].aValues.size());
+    CPPUNIT_ASSERT_EQUAL(u"CANADA"_ustr, aLabel.aCategories[0].aValues[0]);
+    CPPUNIT_ASSERT_EQUAL(u"UNITED KINGDOM"_ustr, aLabel.aCategories[0].aValues[1]);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SpifPolicyTest);

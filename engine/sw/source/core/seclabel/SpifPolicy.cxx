@@ -147,6 +147,18 @@ bool isRefSelected(const SpifCategoryRef& rRef,
     }
     return rSelected.count({ rRef.aTagSetRef, rRef.nLacv }) != 0;
 }
+
+// Map a SPIF tag's type to a STANAG 4774 Category/@Type.
+OUString mapTagType(const SpifCategoryTag& rTag)
+{
+    if (rTag.aTagType == u"restrictive"_ustr)
+        return u"RESTRICTIVE"_ustr;
+    if (rTag.aTagType == u"permissive"_ustr)
+        return u"PERMISSIVE"_ustr;
+    if (rTag.aTagType == u"enumerated"_ustr)
+        return rTag.aEnumType == u"restrictive"_ustr ? u"RESTRICTIVE"_ustr : u"PERMISSIVE"_ustr;
+    return u"INFORMATIVE"_ustr; // tagType7 / notApplicable
+}
 }
 
 // SPIF elements are namespace-prefixed (spif:...); XmlWalker::name() yields the
@@ -337,6 +349,42 @@ bool SpifTagCategory::isSelectable(const OUString& rClassification) const
         return false;
     return std::find(aExcludedClasses.begin(), aExcludedClasses.end(), rClassification)
            == aExcludedClasses.end();
+}
+
+StanagLabel SpifPolicy::buildLabel(const OUString& rClassification,
+                                   const std::vector<bool>& rSelected,
+                                   const OUString& rCreationDateTime,
+                                   const OUString& rReviewDateTime) const
+{
+    StanagLabel aLabel;
+    aLabel.aPolicyName = aName;
+    if (!aId.isEmpty())
+        aLabel.aPolicyId = u"urn:oid:"_ustr + aId;
+    aLabel.aClassification = rClassification;
+    aLabel.aCreationDateTime = rCreationDateTime;
+    aLabel.aReviewDateTime = rReviewDateTime;
+
+    size_t nIdx = 0;
+    for (const auto& rTagSet : aTagSets)
+    {
+        for (const auto& rTag : rTagSet.aTags)
+        {
+            StanagCategory aCategory;
+            aCategory.aTagName = rTag.aName;
+            aCategory.aType = mapTagType(rTag);
+            for (const auto& rCat : rTag.aCategories)
+            {
+                if (!rCat.isSelectable(rClassification))
+                    continue;
+                if (nIdx < rSelected.size() && rSelected[nIdx])
+                    aCategory.aValues.push_back(rCat.aName);
+                ++nIdx;
+            }
+            if (!aCategory.aValues.empty())
+                aLabel.aCategories.push_back(aCategory);
+        }
+    }
+    return aLabel;
 }
 
 } // namespace sw::seclabel
