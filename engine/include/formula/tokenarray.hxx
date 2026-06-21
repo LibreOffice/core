@@ -365,6 +365,15 @@ public:
         memcpy( pRPN.get(), pData, nSize * sizeof( FormulaToken* ) );
     }
 
+    // Assign pCode to point to a newly created array filled with data; the array is sized exactly
+    // to size, so it is final:
+    void CreateNewCodeArrayFromData(FormulaToken ** data, sal_uInt16 size) {
+        pCode = std::make_unique<FormulaToken*[]>(size);
+        nLen = size;
+        memcpy(pCode.get(), data, size * sizeof (FormulaToken *));
+        mbFinalized = true;
+    }
+
     FormulaToken** GetArray() const  { return pCode.get(); }
 
     FormulaTokenArrayStandardRange Tokens() const

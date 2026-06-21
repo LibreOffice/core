@@ -1651,27 +1651,28 @@ bool rpnIntendsArrayResult(const ScTokenArray& rCode)
 // (where ocSingleValue belongs in postfix).
 void prependImplicitIntersection(ScTokenArray& rCode)
 {
-    formula::FormulaToken* pSingleValue = rCode.AddOpCode(ocSingleValue);
-    if (!pSingleValue)
-        return;
+    // A cloned or compiled array is already at its final size and cannot grow, so build fresh parse
+    // and RPN buffers with the extra token in place and install them directly:
+    formula::FormulaToken* pSingleValue = new formula::FormulaByteToken(ocSingleValue);
 
-    // AddOpCode appended to the parse array. Rotate so the new token
-    // sits at index 0.
-    const sal_uInt16 nNewLength = rCode.GetLen();
+    // For the parse buffer, the new token is a prefix operator, so it is prepended at index 0:
+    const sal_uInt16 parseLength = rCode.GetLen();
     formula::FormulaToken** pParse = rCode.GetArray();
-    formula::FormulaToken* pSaved = pParse[nNewLength - 1];
-    for (sal_uInt16 i = nNewLength - 1; i > 0; --i)
-        pParse[i] = pParse[i - 1];
-    pParse[0] = pSaved;
+    std::vector<formula::FormulaToken *> newParse(parseLength + 1);
+    newParse[0] = pSingleValue;
+    for (sal_uInt16 i = 0; i < parseLength; ++i)
+        newParse[i + 1] = pParse[i];
+    pSingleValue->IncRef();
+    rCode.CreateNewCodeArrayFromData(newParse.data(), parseLength + 1);
 
-    // Append to RPN, keeping the token's reference count balanced.
+    // For the RPN buffer, ocSingleValue belongs at the end in postfix order:
     const sal_uInt16 nRpnLength = rCode.GetCodeLen();
     formula::FormulaToken** pRpn = rCode.GetCode();
-    pSingleValue->IncRef();
     std::vector<formula::FormulaToken*> aNewRpn(nRpnLength + 1);
     for (sal_uInt16 i = 0; i < nRpnLength; ++i)
         aNewRpn[i] = pRpn[i];
     aNewRpn[nRpnLength] = pSingleValue;
+    pSingleValue->IncRef();
     rCode.CreateNewRPNArrayFromData(aNewRpn.data(), nRpnLength + 1);
 }
 

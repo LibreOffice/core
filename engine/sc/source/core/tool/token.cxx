@@ -1906,6 +1906,9 @@ std::unique_ptr<ScTokenArray> ScTokenArray::Clone() const
             *pp = (*pp)->Clone();
             (*pp)->IncRef();
         }
+        // pCode is sized to exactly nLen here, so the array is already at its minimum size; mark it
+        // so that a later Add() reallocates instead of writing past the end:
+        p->mbFinalized = true;
     }
     if( nRPN )
     {
@@ -1966,6 +1969,9 @@ ScTokenArray ScTokenArray::CloneValue() const
             *pp = (*pp)->Clone();
             (*pp)->IncRef();
         }
+        // pCode is sized to exactly nLen here, so the array is already at its minimum size; mark it
+        // so that a later Add() reallocates instead of writing past the end:
+        aNew.mbFinalized = true;
     }
     if( nRPN )
     {
