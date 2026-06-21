@@ -353,6 +353,7 @@ inline constexpr OUString HID_FUNC_RGP = u"SC_HID_FUNC_RGP"_ustr;
 inline constexpr OUString HID_FUNC_RKP = u"SC_HID_FUNC_RKP"_ustr;
 inline constexpr OUString HID_FUNC_TREND = u"SC_HID_FUNC_TREND"_ustr;
 inline constexpr OUString HID_FUNC_VARIATION = u"SC_HID_FUNC_VARIATION"_ustr;
+inline constexpr OUString HID_FUNC_IS_OMITTED_MS = u"SC_HID_FUNC_IS_OMITTED_MS"_ustr;
 
 inline constexpr OUString HID_FUNC_ANZAHL = u"SC_HID_FUNC_ANZAHL"_ustr;
 inline constexpr OUString HID_FUNC_ANZAHL2 = u"SC_HID_FUNC_ANZAHL2"_ustr;
@@ -616,5 +617,6 @@ inline constexpr OUString HID_FUNC_UNIQUE_MS = u"SC_HID_FUNC_UNIQUE_MS"_ustr;
 inline constexpr OUString HID_FUNC_LET_MS = u"SC_HID_FUNC_LET_MS"_ustr;
 inline constexpr OUString HID_FUNC_WRAPCOLS_MS = u"SC_HID_FUNC_WRAPCOLS_MS"_ustr;
 inline constexpr OUString HID_FUNC_WRAPROWS_MS = u"SC_HID_FUNC_WRAPROWS_MS"_ustr;
+inline constexpr OUString HID_FUNC_LAMBDA_MS = u"SC_HID_FUNC_LAMBDA_MS"_ustr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

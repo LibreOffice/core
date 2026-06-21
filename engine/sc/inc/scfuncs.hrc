@@ -4455,4 +4455,22 @@ const TranslateId ocWRAPROWS_ARY[] =
     NC_("ocWRAPROWS", "The value with which to pad. The default is #N/A.")
 };
 
+// -=*# Resource for function LAMBDA #*=-
+const TranslateId ocLAMBDA_ARY[] =
+{
+    NC_("ocLAMBDA", "LAMBDA builds new functions. This allows you to write formulas that can be reused with different inputs, and to use more complicated features such as recursion and higher-order functions."),
+    NC_("ocLAMBDA", "Name 1"),
+    NC_("ocLAMBDA", "The name of the first input to the function. Must start with a letter. Cannot be the output of a formula or conflict with range syntax. All names only apply within the Formula (last) argument inside the LAMBDA."),
+    NC_("ocLAMBDA", "Formula or Name "),
+    NC_("ocLAMBDA", "A formula that uses any or (more likely) all of the names within the LAMBDA. This must be the last argument to LAMBDA. If more than one input is desired, more names can be provided, but the last argument must be the formula.")
+};
+
+// -=*# Resource for function ISOMITTED #*=-
+const TranslateId ocIS_OMITTED_ARY[] =
+{
+    NC_("ocIS_OMITTED", "Reports whether a LAMBDA parameter was provided (FALSE) or omitted (TRUE). Only valid within a LAMBDA."),
+    NC_("ocIS_OMITTED", "Name"),
+    NC_("ocIS_OMITTED", "The name of the parameter to check.")
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

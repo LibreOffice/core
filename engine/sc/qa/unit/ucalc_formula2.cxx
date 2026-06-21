@@ -200,6 +200,66 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncIF)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncLAMBDA)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+
+    m_pDoc->InsertTab(0, u"Formula"_ustr);
+
+    // No parameters, constant body.
+    // TODO : The formula system does not yet support this.
+    //m_pDoc->SetString(ScAddress(0, 0, 0), u"=LAMBDA(1)()"_ustr);
+    //CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0, 0, 0)));
+
+    // One unused parameter, constant body.
+    m_pDoc->SetString(ScAddress(0, 1, 0), u"=LAMBDA(a; 2)(1)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+
+    // Identity.
+    m_pDoc->SetString(ScAddress(0, 2, 0), u"=LAMBDA(a; a)(3)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0, 2, 0)));
+
+    // One parameter, simple expression on it.
+    m_pDoc->SetString(ScAddress(0, 3, 0), u"=LAMBDA(a; a * 2)(2)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(0, 3, 0)));
+
+    // Two parameters, arithmetic.
+    m_pDoc->SetString(ScAddress(0, 4, 0), u"=LAMBDA(x; y; x + y)(3; 4)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(0, 4, 0)));
+
+    // Parameter used more than once.
+    m_pDoc->SetString(ScAddress(0, 5, 0), u"=LAMBDA(a;a+a)(5)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0, 5, 0)));
+
+    // Operator precedence inside the body.
+    m_pDoc->SetString(ScAddress(0, 6, 0), u"=LAMBDA(x; y; x * y + x)(3; 4)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(15.0, m_pDoc->GetValue(ScAddress(0, 6, 0)));
+
+    // Identifiers are case insensitive.
+    // TODO : should be automatically changed from a to A in
+    // LAMBDA expression when submitting.
+    m_pDoc->SetString(ScAddress(0, 7, 0), u"=LAMBDA(A; a * 2)(3)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0, 7, 0)));
+
+    // Function inside the body.
+    m_pDoc->SetString(ScAddress(0, 8, 0), u"=LAMBDA(a; IF(a > 0; a; -a))(-5)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(0, 8, 0)));
+
+    // Nested LAMBDA
+    m_pDoc->SetString(ScAddress(0, 9, 0), u"=LAMBDA(x;LAMBDA(y; x + y)(10))(5)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(15.0, m_pDoc->GetValue(ScAddress(0, 9, 0)));
+
+    // String argument flowing through identity body.
+    m_pDoc->SetString(ScAddress(0, 10, 0), u"=LAMBDA(a;a & \"!\")(\"hi\")"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"hi!"_ustr, m_pDoc->GetString(ScAddress(0, 10, 0)));
+
+    // Name precedence matches MSO.
+    m_pDoc->SetString(ScAddress(0, 11, 0), u"=LAMBDA(SQRT; SQRT(SQRT))(4)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0, 11, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncCHOOSE)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.

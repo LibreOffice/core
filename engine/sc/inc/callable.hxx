@@ -21,8 +21,12 @@
 
 #include <sal/config.h>
 
+#include <forward_list>
+#include <vector>
+
 #include <formula/callable.hxx>
 #include <formula/opcode.hxx>
+#include "tokenarray.hxx"
 #include <interpre.hxx>
 
 class ScDocument;
@@ -56,6 +60,40 @@ public:
     SbModule* GetModule() const { return mpModule; }
     const OUString& GetMacroStr() const { return maMacroStr; }
     const OUString& GetBasicStr() const { return maBasicStr; }
+};
+
+/// a callable closure from a formula
+class SAL_DLLPUBLIC_RTTI ScFormulaFunction : public formula::FormulaCallable
+{
+private:
+    // ScInterpreter context data
+    ScDocument* mpDoc;
+    const ScAddress maPos;
+    ScFormulaCell* mpCell;
+    ScInterpreterContext* mpContext;
+
+    /// the body (code) of the lambda
+    ScTokenArray maLambdaBody;
+    /// for each parameter, a list of positions where it appears in the body
+    std::vector<std::forward_list<short>> maReplacementPositions;
+
+public:
+    ScFormulaFunction(const ScFormulaFunction&) = default;
+    ScFormulaFunction(const ScInterpreter& rInterpreter, const std::vector<OUString>& rLambdaParams,
+                      const ScTokenArray& rLambdaBody, short nBodyStart, short nBodyEnd);
+
+    virtual OpCode GetOpCode() const override { return ocLambda; }
+
+    ScDocument& GetDocument() const { return *mpDoc; }
+    ScAddress GetAddress() const { return maPos; }
+    ScFormulaCell* GetFormulaCell() const { return mpCell; }
+    ScInterpreterContext& GetContext() const { return *mpContext; }
+    const ScTokenArray& GetLambdaBody() const { return maLambdaBody; }
+    short GetNumParams() const { return maReplacementPositions.size(); }
+    const std::forward_list<short>& GetReplacementPositions(short nParam) const
+    {
+        return maReplacementPositions[nParam];
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

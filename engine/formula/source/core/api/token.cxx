@@ -1571,13 +1571,14 @@ FormulaToken* FormulaTokenArray::AddOpCode( OpCode eOp )
         case ocIfNA:
         case ocChoose:
         case ocLet:
+        case ocLambda:
             {
                 short nJump[FORMULA_MAXPARAMS + 1];
                 if ( eOp == ocIf )
                     nJump[ 0 ] = 3;
                 else if ( eOp == ocChoose )
                     nJump[ 0 ] = FORMULA_MAXJUMPCOUNT + 1;
-                else if ( eOp == ocLet )
+                else if ( eOp == ocLet || eOp == ocLambda )
                     nJump[ 0 ] = FORMULA_MAXPARAMS + 1;
                 else
                     nJump[ 0 ] = 2;

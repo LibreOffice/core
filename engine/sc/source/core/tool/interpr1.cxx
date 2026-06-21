@@ -9985,11 +9985,64 @@ void ScInterpreter::ScUnique()
     PushMatrix(pResMat);
 }
 
+void ScInterpreter::ScLambda()
+{
+    const short* pJump = static_cast<const FormulaJumpToken*>(pCur)->GetJump();
+    short nJumpCount = pJump[0];
+    short nJump;
+
+    if (nJumpCount < 1)
+    {
+        PushError(FormulaError::ParameterExpected);
+        aCode.Jump(pJump[nJumpCount], pJump[nJumpCount]);
+        return;
+    }
+
+    FormulaToken** pCode = pArr->GetCode();
+    std::vector<OUString> aParams(nJumpCount - 1);
+
+    if (nJumpCount > 1)
+    {
+        // first param name is on the top of the stack
+        aParams[0] = GetString().getString();
+        // param names after the first are found at pJump[1] to pJump[nJumpCount - 2]
+        for (nJump = 1; nJump <= nJumpCount - 2; ++nJump)
+        {
+            auto pToken = static_cast<FormulaStringNameToken*>(pCode[pJump[nJump] + 1]);
+            aParams[nJump] = pToken->GetString().getString();
+        }
+
+        // body is between pJump[nJumpCount - 1] and pJump[nJumpCount]
+        FormulaCallableRef pFunc = new ScFormulaFunction(*this, aParams, *pArr, pJump[nJumpCount - 1], pJump[nJumpCount]);
+        PushCallable(pFunc);
+    }
+    else
+    {
+        // FIXME: jump opcodes need to work differently; this shouldn't be forbidden
+        SAL_WARN("sc", "Cannot construct a LAMBDA with no parameters");
+        PushError(FormulaError::ParameterExpected);
+    }
+
+    aCode.Jump(pJump[nJumpCount], pJump[nJumpCount]);
+}
+
+void ScInterpreter::ScIsOmitted()
+{
+    if ( ! MustHaveParamCount(GetByte(), 1) )
+        return;
+
+    auto pArg = PopToken();
+    if (pArg->GetType() == svMissing)
+        PushInt(1);
+    else
+        PushInt(0);
+}
+
 /// Calls a Callable with arguments on the stack
 void ScInterpreter::ScCall( FormulaCallableRef rCallable, sal_uInt8 nArgCount )
 {
     OpCode eOpCode = rCallable->GetOpCode();
-    if (eOpCode == ocMacro)
+    if (eOpCode == ocLambda || eOpCode == ocMacro)
     {
         std::vector<FormulaConstTokenRef> aArguments(nArgCount);
         for( sal_uInt32 i = nArgCount; i > 0 ; i-- )
@@ -10031,6 +10084,87 @@ void ScInterpreter::ScCall( FormulaCallableRef rCallable, sal_uInt8 nArgCount )
     pCur = pTempToken.get();
     cPar = nArgCount;
     DispatchOpCode( eOpCode );
+}
+
+/// If pToken contains one or more relative references, they are converted to absolute references
+/// Either way, a fresh token is returned, or nullptr if an error occurred
+FormulaTokenRef ScInterpreter::RefToAbs(FormulaConstTokenRef pToken)
+{
+    switch (pToken->GetType())
+    {
+        case svSingleRef:
+        {
+            auto pRefToken = static_cast<const ScSingleRefToken*>(pToken.get());
+            const ScSingleRefData& rRefData = pRefToken->GetSingleRef();
+            if (rRefData.IsDeleted())
+            {
+                SetError(FormulaError::NoRef);
+                return nullptr;
+            }
+
+            ScAddress aAbsAdr = rRefData.toAbs(mrDoc, aPos);
+            ScSingleRefData aAbsRefData;
+            aAbsRefData.InitAddress(aAbsAdr);
+            return new ScSingleRefToken(mrDoc.GetSheetLimits(), aAbsRefData);
+        }
+        case svExternalSingleRef:
+        {
+            auto pRefToken = static_cast<const ScExternalSingleRefToken*>(pToken.get());
+            const ScSingleRefData& rRefData = pRefToken->GetSingleRef();
+            if (rRefData.IsDeleted())
+            {
+                SetError(FormulaError::NoRef);
+                return nullptr;
+            }
+
+            ScAddress aAbsAdr = rRefData.toAbs(mrDoc, aPos);
+            ScSingleRefData aAbsRefData;
+            aAbsRefData.InitAddress(aAbsAdr);
+            return new ScExternalSingleRefToken(pRefToken->GetFileId(), pRefToken->GetTableName(), aAbsRefData);
+        }
+        case svDoubleRef:
+        {
+            auto pRefToken = static_cast<const ScDoubleRefToken*>(pToken.get());
+            const ScComplexRefData& rRefData = pRefToken->GetDoubleRef();
+            if (rRefData.IsDeleted())
+            {
+                SetError(FormulaError::NoRef);
+                return nullptr;
+            }
+
+            ScRange aAbsRange = rRefData.toAbs(mrDoc, aPos);
+            ScComplexRefData aAbsRefData;
+            aAbsRefData.InitRange(aAbsRange);
+            return new ScDoubleRefToken(mrDoc.GetSheetLimits(), aAbsRefData);
+        }
+        case svExternalDoubleRef:
+        {
+            auto pRefToken = static_cast<const ScExternalDoubleRefToken*>(pToken.get());
+            const ScComplexRefData& rRefData = pRefToken->GetDoubleRef();
+            if (rRefData.IsDeleted())
+            {
+                SetError(FormulaError::NoRef);
+                return nullptr;
+            }
+
+            ScRange aAbsRange = rRefData.toAbs(mrDoc, aPos);
+            ScComplexRefData aAbsRefData;
+            aAbsRefData.InitRange(aAbsRange);
+            return new ScExternalDoubleRefToken(pRefToken->GetFileId(), pRefToken->GetTableName(), aAbsRefData);
+        }
+        case svRefList:
+        {
+            auto pRefListToken = static_cast<ScRefListToken*>(pToken->Clone());
+            for (auto &rRefData : *pRefListToken->GetRefList())
+            {
+                ScRange aAbsRange = rRefData.toAbs(mrDoc, aPos);
+                rRefData.SetRange(mrDoc.GetSheetLimits(), aAbsRange, aPos);
+            }
+            return pRefListToken;
+        }
+        default:
+            return pToken->Clone();
+    }
 }
 
 #if HAVE_FEATURE_SCRIPTING
@@ -10421,11 +10555,78 @@ bool ScInterpreter::GetMacroArg( formula::FormulaConstTokenRef pArgIn, SbxVariab
 }
 #endif
 
+/// Replaces the tokens at the specified positions with references to pToken
+static void lcl_ReplaceParam( ScTokenArray& rTokens, const std::forward_list<short>& rPositions, FormulaTokenRef pToken )
+{
+    std::for_each( rPositions.begin(), rPositions.end(), [&rTokens, pToken](short nPos)
+    {
+        rTokens.ReplaceRPNToken(nPos, pToken.get());
+    } );
+}
+
 /// Calls a Callable with passed args
 void ScInterpreter::ScCall( FormulaCallableRef pCallable, const std::vector<FormulaConstTokenRef>& aArguments )
 {
     OpCode eOpCode = pCallable->GetOpCode();
-    if (eOpCode == ocMacro)
+    if (eOpCode == ocLambda)
+    {
+        auto pLambda = dynamic_cast<const ScFormulaFunction*>(pCallable.get());
+        if ( !pLambda )
+        {
+            SAL_WARN("sc", "Callable is ocLambda, but is not a ScFormulaFunction");
+            SetError(FormulaError::IllegalArgument);
+            PushError(nGlobalError);
+            return;
+        }
+
+        short nParamCount = pLambda->GetNumParams();
+        short nArgCount = aArguments.size();
+        if (nParamCount != nArgCount)
+        {
+            // A call with the wrong number of arguments is a value error,
+            // matching the OOXML interpretation.
+            SetError(FormulaError::NoValue);
+            PushError(nGlobalError);
+            return;
+        }
+
+        // clone tokens of lambda-body for replacing string name tokens with arguments
+        ScTokenArray aNewTokens = pLambda->GetLambdaBody().CloneValue();
+
+        for (short nParam = 0; nParam < nArgCount; ++nParam)
+        {
+            const std::forward_list<short>& rPositions = pLambda->GetReplacementPositions(nParam);
+            FormulaConstTokenRef pArgument = aArguments[nParam];
+            FormulaTokenRef pNewArg = RefToAbs(pArgument);
+            if (!pNewArg)
+            {
+                PushError(nGlobalError);
+                return;
+            }
+
+            lcl_ReplaceParam(aNewTokens, rPositions, pNewArg);
+        }
+
+        // calculate the final result, in the stored context
+        ScInterpreter aInt(pLambda->GetFormulaCell(), pLambda->GetDocument(), pLambda->GetContext(),
+                           pLambda->GetAddress(), aNewTokens);
+        aInt.aCode.Lambda(true);
+
+        sfx2::LinkManager aNewLinkMgr(pLambda->GetDocument().GetDocumentShell());
+        aInt.SetLinkManager(&aNewLinkMgr);
+
+        formula::StackVar aResultType = aInt.Interpret();
+        formula::FormulaConstTokenRef xLambdaResult( aInt.GetResultToken() );
+
+        if (aResultType == formula::svMatrixCell)
+        {
+            ScConstMatrixRef xMat(static_cast<const ScMatrixCellResultToken*>(xLambdaResult.get())->GetMatrix());
+            PushTokenRef(new ScMatrixToken(xMat->Clone()));
+        }
+        else if (xLambdaResult)
+            PushTokenRef(xLambdaResult);
+    }
+    else if (eOpCode == ocMacro)
     {
 #if !HAVE_FEATURE_SCRIPTING
         PushNoValue();      // without DocShell no CallBasic
@@ -10602,174 +10803,60 @@ void ScInterpreter::ScCall()
     ScCall(pCallable, nArgCount);
 }
 
-void ScInterpreter::replaceNamesToResult( const std::unordered_map<OUString, formula::FormulaConstTokenRef>& rResultIndexes,
-    ScTokenArray& rTokens, short nStartPos, short nEndPos )
-{
-    formula::FormulaTokenArrayPlainIterator aIterResult(rTokens);
-    aIterResult.Jump(nStartPos + 1);
-    for (FormulaToken* t = aIterResult.GetNextStringNameRPN(); t; t = aIterResult.GetNextStringNameRPN())
-    {
-        if (aIterResult.GetIndex() > nEndPos)
-            break;
-        auto iRes = rResultIndexes.find(static_cast<FormulaStringNameToken*>(t)->GetString().getString());
-        if (iRes != rResultIndexes.end())
-            rTokens.ReplaceRPNToken(aIterResult.GetIndex() - 1, iRes->second->Clone());
-    }
-}
-
-ScTokenArray ScInterpreter::checkPushTokens(const ScTokenArray& rTokens, short nStartPos, short nEndPos)
-{
-    formula::FormulaTokenArrayPlainIterator aIterResult(rTokens);
-    aIterResult.Jump(nStartPos + 1);
-    ScTokenArray aTempTokens(mrDoc);
-    for (FormulaToken* t = aIterResult.NextRPN(); t; t = aIterResult.NextRPN())
-    {
-        if (aIterResult.GetIndex() > nEndPos)
-            break;
-
-        aTempTokens.AddToken(*t);
-    }
-    return aTempTokens;
-}
-
 void ScInterpreter::ScLet()
 {
     const short* pJump = static_cast<const FormulaJumpToken*>(pCur)->GetJump();
     short nJumpCount = pJump[0];
-    short nOrgJumpCount = nJumpCount;
+    short nJump;
 
-    if (nJumpCount < 3 || (nJumpCount % 2 != 1))
+    // LET without bindings is not an error; the result is already on the stack,
+    // so we have nothing to do
+    if (nJumpCount == 1)
+    {
+        aCode.Jump(pJump[nJumpCount], pJump[nJumpCount]);
+        return;
+    }
+    else if (nJumpCount < 3 || (nJumpCount % 2) != 1)
     {
         PushError(FormulaError::ParameterExpected);
-        aCode.Jump(pJump[nOrgJumpCount], pJump[nOrgJumpCount]);
+        aCode.Jump(pJump[nJumpCount], pJump[nJumpCount]);
         return;
     }
 
-    OUString aStrName;
-    std::unordered_map<OUString, formula::FormulaConstTokenRef> nResultIndexes;
-    formula::FormulaTokenArrayPlainIterator aIter(*pArr);
-    // clone tokens for replacing string name tokens
-    ScTokenArray aValueTokens = pArr->CloneValue();
+    std::vector<OUString> aParams;
+    std::vector<FormulaConstTokenRef> aArgs;
 
-    // name and function pairs parameter
-    while (nJumpCount > 1)
+    // calculate the first subformula with no bindings
     {
-        if (nJumpCount == nOrgJumpCount)
-        {
-            aStrName = GetString().getString();
-        }
-        else if ((nOrgJumpCount - nJumpCount + 1) % 2 == 1)
-        {
-            aIter.Jump(pJump[static_cast<short>(nOrgJumpCount - nJumpCount + 1)] - 1);
-            FormulaToken* t = aIter.NextRPN();
-            const StackVar eType = t->GetType();
-            aStrName = (eType == svStringName || eType == svDPFieldName)
-                ? static_cast<FormulaStringNameToken*>(t)->GetString().getString()
-                : OUString();
-        }
-        else
-        {
-            PushError(FormulaError::ParameterExpected);
-            aCode.Jump(pJump[nOrgJumpCount], pJump[nOrgJumpCount]);
-            return;
-        }
-        nJumpCount--;
+        FormulaCallableRef pFunc = new ScFormulaFunction(*this, aParams, *pArr, pJump[1], pJump[2]);
+        ScCall(pFunc, aArgs);
 
-        // replace names with result tokens
-        replaceNamesToResult(nResultIndexes, aValueTokens, pJump[nOrgJumpCount - nJumpCount], pJump[nOrgJumpCount - nJumpCount + 1]);
-
-        ScTokenArray aTempTokens = checkPushTokens(aValueTokens, pJump[nOrgJumpCount - nJumpCount], pJump[nOrgJumpCount - nJumpCount + 1]);
-
-        // calculate the inner results unless we already have a push result token
-        if (aTempTokens.GetLen() == 0)
-        {
-            PushIllegalParameter();
-            aCode.Jump(pJump[nOrgJumpCount], pJump[nOrgJumpCount]);
-            return;
-        }
-        else if (aTempTokens.GetLen() == 1 && aTempTokens.GetArray()[0]->GetOpCode() == ocPush)
-        {
-            if (!nResultIndexes.insert(std::make_pair(aStrName, aTempTokens.GetArray()[0])).second)
-            {
-                PushIllegalParameter();
-                aCode.Jump(pJump[nOrgJumpCount], pJump[nOrgJumpCount]);
-                return;
-            }
-        }
-        else
-        {
-            ScInterpreter aInt(mrDoc.GetFormulaCell(aPos), mrDoc, mrContext, aPos, aValueTokens);
-            aInt.aCode.Jump(pJump[nOrgJumpCount - nJumpCount], pJump[nOrgJumpCount - nJumpCount + 1], pJump[nOrgJumpCount - nJumpCount + 1]);
-            while (aInt.aCode.HasStacked())
-                aInt.aCode.FrontPop();
-            aInt.aCode.Lambda(true);
-
-            sfx2::LinkManager aNewLinkMgr(mrDoc.GetDocumentShell());
-            aInt.SetLinkManager(&aNewLinkMgr);
-
-            formula::StackVar aIntType = aInt.Interpret();
-
-            if (aIntType == formula::svMatrixCell)
-            {
-                ScConstMatrixRef xMat(static_cast<const ScMatrixCellResultToken*>(aInt.GetResultToken().get())->GetMatrix());
-                if (!nResultIndexes.insert(std::make_pair(aStrName, new ScMatrixToken(xMat->Clone()))).second)
-                {
-                    PushIllegalParameter();
-                    aCode.Jump(pJump[nOrgJumpCount], pJump[nOrgJumpCount]);
-                    return;
-                }
-            }
-            else
-            {
-                if (!nResultIndexes.insert(std::make_pair(aStrName, aInt.GetResultToken())).second)
-                {
-                    PushIllegalParameter();
-                    aCode.Jump(pJump[nOrgJumpCount], pJump[nOrgJumpCount]);
-                    return;
-                }
-            }
-        }
-        nJumpCount--;
+        aArgs.push_back(PopToken());
+        // the param name is on the stack
+        aParams.push_back(GetString().getString());
     }
 
-    // last parameter: calculation
-    // replace names with result tokens
-    replaceNamesToResult(nResultIndexes, aValueTokens, pJump[nOrgJumpCount - nJumpCount], pJump[nOrgJumpCount - nJumpCount + 1]);
-
-    // calculate the final result
-    ScInterpreter aInt(mrDoc.GetFormulaCell(aPos), mrDoc, mrContext, aPos, aValueTokens);
-    aInt.aCode.Jump(pJump[nOrgJumpCount - nJumpCount], pJump[nOrgJumpCount - nJumpCount + 1], pJump[nOrgJumpCount - nJumpCount + 1]);
-    while (aInt.aCode.HasStacked())
-        aInt.aCode.FrontPop();
-    aInt.aCode.Lambda(true);
-
-    sfx2::LinkManager aNewLinkMgr(mrDoc.GetDocumentShell());
-    aInt.SetLinkManager(&aNewLinkMgr);
-    formula::StackVar aIntType = aInt.Interpret();
-
-    if (aIntType == formula::svMatrixCell)
+    FormulaToken** pCode = pArr->GetCode();
+    for (nJump = 3; nJump < nJumpCount; nJump += 2)
     {
-        ScConstMatrixRef xMat(static_cast<const ScMatrixCellResultToken*>(aInt.GetResultToken().get())->GetMatrix());
-        PushTokenRef(new ScMatrixToken(xMat->Clone()));
-    }
-    else
-    {
-        const formula::FormulaConstTokenRef& xLambdaResult(aInt.GetResultToken());
-        if (xLambdaResult)
-        {
-            if (xLambdaResult->GetType() == svError)
-                nGlobalError = static_cast<const FormulaErrorToken*>(xLambdaResult.get())->GetError();
-            else
-                nGlobalError = FormulaError::NONE;
-            if (nGlobalError == FormulaError::NONE)
-                PushTokenRef(xLambdaResult);
-            else
-                PushError(nGlobalError);
-        }
+        // calculate each subformula with the bindings created before it
+        FormulaCallableRef pFunc = new ScFormulaFunction(*this, aParams, *pArr, pJump[nJump], pJump[nJump + 1]);
+        ScCall(pFunc, aArgs);
+
+        aArgs.push_back(PopToken());
+        // the param name is one jump before the current one
+        auto pToken = static_cast<const FormulaStringNameToken*>(pCode[pJump[nJump - 1] + 1]);
+        aParams.push_back(pToken->GetString().getString());
     }
 
-    nJumpCount--;
-    aCode.Jump(pJump[nOrgJumpCount], pJump[nOrgJumpCount]);
+    // the last subformula isn't named
+    nJump--;
+
+    // calculate the last subformula with all of the bindings in place
+    FormulaCallableRef pFunc = new ScFormulaFunction(*this, aParams, *pArr, pJump[nJump], pJump[nJump + 1]);
+    ScCall(pFunc, aArgs);
+
+    aCode.Jump(pJump[nJumpCount], pJump[nJumpCount]);
 }
 
 void ScInterpreter::ScSubTotal()

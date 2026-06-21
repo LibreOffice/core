@@ -622,6 +622,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
                 ocIfNA,
                 ocChoose,
                 ocLet,
+                ocLambda,
                 ocAnd,
                 ocOr
             };
@@ -1240,6 +1241,7 @@ bool FormulaCompiler::IsOpCodeJumpCommand( OpCode eOp )
         case ocIfNA:
         case ocChoose:
         case ocLet:
+        case ocLambda:
             return true;
         default:
             ;
@@ -1733,77 +1735,83 @@ void FormulaCompiler::Factor()
         if( mnNumFmt == SvNumFormatType::UNDEFINED )
             mnNumFmt = lcl_GetRetFormat( eOp );
 
-        if ( IsOpCodeVolatile( eOp) )
-            mpArr->SetExclusiveRecalcModeAlways();
-        else
+        if ( std::none_of( maBindings.begin(), maBindings.end(), [](BindingsLayer aLayer) {
+            return aLayer.eOpCode == ocLambda;
+        })) // anything inside a LAMBDA is never volatile, until it's called
         {
-            switch( eOp )
+            if ( IsOpCodeVolatile( eOp) )
+                mpArr->SetExclusiveRecalcModeAlways();
+            else
             {
-                    // Functions recalculated on every document load.
-                    // ONLOAD_LENIENT here to be able to distinguish and not
-                    // force a recalc (if not in an ALWAYS or ONLOAD_MUST
-                    // context) but keep an imported result from for example
-                    // OOXML a DDE call. Will be recalculated for ODFF.
-                case ocConvertOOo :
-                case ocDde:
-                case ocMacro:
-                case ocWebservice:
-                    mpArr->AddRecalcMode( ScRecalcMode::ONLOAD_LENIENT );
-                break;
-                    // RANDBETWEEN() is volatile like RAND(). Other Add-In
-                    // functions may have to be recalculated or not, we don't
-                    // know, classify as ONLOAD_LENIENT.
-                case ocExternal:
-                case ocUDExternal:
-                    if (mpToken->GetType() == svExternal
-                        && static_cast<FormulaExternalToken*>(mpToken.get())->GetExternal() == "com.sun.star.sheet.addin.Analysis.getRandbetween")
-                        mpArr->SetExclusiveRecalcModeAlways();
-                    else
+                switch( eOp )
+                {
+                        // Functions recalculated on every document load.
+                        // ONLOAD_LENIENT here to be able to distinguish and not
+                        // force a recalc (if not in an ALWAYS or ONLOAD_MUST
+                        // context) but keep an imported result from for example
+                        // OOXML a DDE call. Will be recalculated for ODFF.
+                    case ocConvertOOo :
+                    case ocDde:
+                    case ocMacro:
+                    case ocWebservice:
                         mpArr->AddRecalcMode( ScRecalcMode::ONLOAD_LENIENT );
-                break;
-                    // If the referred cell is moved the value changes.
-                case ocColumn :
-                case ocRow :
-                    mpArr->SetRecalcModeOnRefMove();
-                break;
-                    // ocCell needs recalc on move for some possible type values.
-                    // And recalc mode on load, tdf#60645
-                case ocCell :
-                    mpArr->SetRecalcModeOnRefMove();
-                    mpArr->AddRecalcMode( ScRecalcMode::ONLOAD_MUST );
-                break;
-                case ocHyperLink :
-                    // Cell with hyperlink needs to be calculated on load to
-                    // get its matrix result generated.
-                    mpArr->AddRecalcMode( ScRecalcMode::ONLOAD_MUST );
-                    mpArr->SetHyperLink( true);
-                break;
-                    // Functions whose natural output is a dynamic array. A
-                    // 1 by 1 declared matrix formula wrapping one of these is
-                    // treated as a dynamic array. Other matrix formulas keep
-                    // their declared dimensions.
-                case ocUnique:
-                case ocFilter:
-                case ocSort:
-                case ocSortBy:
-                case ocMatSequence:
-                case ocRandArray:
-                case ocChooseCols:
-                case ocChooseRows:
-                case ocDrop:
-                case ocExpand:
-                case ocHStack:
-                case ocVStack:
-                case ocTake:
-                case ocTextSplit:
-                case ocToCol:
-                case ocToRow:
-                case ocWrapCols:
-                case ocWrapRows:
-                    mpArr->SetDynamicArrayFunction( true);
-                break;
-                default:
-                    ;   // nothing
+                    break;
+                        // RANDBETWEEN() is volatile like RAND(). Other Add-In
+                        // functions may have to be recalculated or not, we don't
+                        // know, classify as ONLOAD_LENIENT.
+                    case ocExternal:
+                    case ocUDExternal:
+                        if (mpToken->GetType() == svExternal
+                            && static_cast<FormulaExternalToken*>(mpToken.get())->GetExternal()
+                                   == "com.sun.star.sheet.addin.Analysis.getRandbetween")
+                            mpArr->SetExclusiveRecalcModeAlways();
+                        else
+                            mpArr->AddRecalcMode( ScRecalcMode::ONLOAD_LENIENT );
+                    break;
+                        // If the referred cell is moved the value changes.
+                    case ocColumn :
+                    case ocRow :
+                        mpArr->SetRecalcModeOnRefMove();
+                    break;
+                        // ocCell needs recalc on move for some possible type values.
+                        // And recalc mode on load, tdf#60645
+                    case ocCell :
+                        mpArr->SetRecalcModeOnRefMove();
+                        mpArr->AddRecalcMode( ScRecalcMode::ONLOAD_MUST );
+                    break;
+                    case ocHyperLink :
+                        // Cell with hyperlink needs to be calculated on load to
+                        // get its matrix result generated.
+                        mpArr->AddRecalcMode( ScRecalcMode::ONLOAD_MUST );
+                        mpArr->SetHyperLink( true);
+                    break;
+                        // Functions whose natural output is a dynamic array. A
+                        // 1 by 1 declared matrix formula wrapping one of these is
+                        // treated as a dynamic array. Other matrix formulas keep
+                        // their declared dimensions.
+                    case ocUnique:
+                    case ocFilter:
+                    case ocSort:
+                    case ocSortBy:
+                    case ocMatSequence:
+                    case ocRandArray:
+                    case ocChooseCols:
+                    case ocChooseRows:
+                    case ocDrop:
+                    case ocExpand:
+                    case ocHStack:
+                    case ocVStack:
+                    case ocTake:
+                    case ocTextSplit:
+                    case ocToCol:
+                    case ocToRow:
+                    case ocWrapCols:
+                    case ocWrapRows:
+                        mpArr->SetDynamicArrayFunction( true);
+                    break;
+                    default:
+                        ;   // nothing
+                }
             }
         }
         if (ocStartNoParameters <= eOp && eOp < ocStopNoParameters)
@@ -2047,6 +2055,7 @@ void FormulaCompiler::Factor()
                     pJumpToken->GetJump()[ 0 ] = FORMULA_MAXJUMPCOUNT + 1;
                     break;
                 case ocLet:
+                case ocLambda:
                     pJumpToken->GetJump()[ 0 ] = FORMULA_MAXPARAMS + 1;
                     break;
                 case ocIfError:
@@ -2082,6 +2091,7 @@ void FormulaCompiler::Factor()
                     nJumpMax = FORMULA_MAXJUMPCOUNT;
                     break;
                 case ocLet:
+                case ocLambda:
                     nJumpMax = FORMULA_MAXPARAMS;
                     break;
                 case ocIfError:
@@ -2129,6 +2139,7 @@ void FormulaCompiler::Factor()
                         bLimitOk = (nJumpCount < FORMULA_MAXJUMPCOUNT);
                         break;
                     case ocLet:
+                    case ocLambda:
                         bLimitOk = (nJumpCount < FORMULA_MAXPARAMS);
                         break;
                     case ocIfError:

@@ -35,6 +35,15 @@ external to Calc. These are provided by means of add-ins.
         * Pass the name of the external function to the constructor to
 instantiate an object.
 
+    3. The `ScFormulaFunction` class represents a function that has been built
+using a `LAMBDA` formula.
+
+        * To instantiate a `ScFormulaFunction`, pass a reference to the
+interpreter containing the `LAMBDA`, along with an `OUString` vector naming the
+parameters, and a reference to the `TokenArray` that the `LAMBDA` body comes
+from, along with the positions of the beginning and end of the `LAMBDA` body
+within that array.
+
     4. The `ScMacroFunction` class represents a function that is defined as a
 macro.
         * Pass the `ScInterpreter` and the name of the macro to the constructor
@@ -65,6 +74,11 @@ interpretation.
 without a following parenthesis, and inserts a `FormulaExternalFunction` there
 instead. As with a built-in function, if an external function is called
 immediately, no callable is created.
+
+* The `LAMBDA` operator (`ocLambda`) is dealt with (mostly) like other jump
+operators. See [../sc/README.Lambda.md](../sc/README.Lambda.md) for details.
+When an `ocLambda` is interpreted, a `ScFormulaFunction` is built, which can be
+called by the interpreter via `ScInterpreter::ScCall`.
 
 * Macro references produce `ocMacro` tokens (in `ScCompiler::CompileString`),
 which generate `ScMacroFunction` objects when interpreted.
@@ -105,9 +119,9 @@ used. The result appears on the top of the stack.
 A subclass must implement a `GetOpCode` method, whose result uniquely determines
 which subclass it is. `FormulaBuiltInFunction` returns an `OpCode` corresponding
 to one of the built-in operators. `FormulaExternalFunction` returns ocExternal,
-and `ScMacroFunction` returns `ocMacro`. The versions of `ScInterpreter::ScCall`
-use this information to determine which subclass is being called, and perform
-the actions necessary to implement the call. Note that each subclass has a
-preferred means of receiving arguments; the other version of
-`ScInterpreter::ScCall` just sets up the arguments and calls the preferred
-version.
+`ScFormulaFunction` returns `ocLambda`, and `ScMacroFunction` returns `ocMacro`.
+The versions of `ScInterpreter::ScCall` use this information to determine which
+subclass is being called, and perform the actions necessary to implement the
+call. Note that each subclass has a preferred means of receiving arguments; the
+other version of `ScInterpreter::ScCall` just sets up the arguments and calls
+the preferred version.

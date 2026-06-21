@@ -134,7 +134,10 @@ void ParaWin::UpdateArgDesc( sal_uInt16 nArg )
         aArgName  = pFuncDesc->getParameterName(nRealArg);
         sal_uInt16 nVarArgsStart = pFuncDesc->getVarArgsStart();
         if ( nArg >= nVarArgsStart )
-            aArgName += OUString::number( nArg-nVarArgsStart+1 );
+        {
+            sal_Int16 nShifted = pFuncDesc->getFunctionName().equalsIgnoreAsciiCase(u"LAMBDA") ? nPos : 0;
+            aArgName += OUString::number( nArg-nVarArgsStart + 1 + nShifted );
+        }
         aArgName += " " + ((nArg > nFix || pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired) ;
     }
     else
@@ -190,8 +193,9 @@ void ParaWin::UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i )
         sal_uInt16 nVarArgsStart = pFuncDesc->getVarArgsStart();
         if ( nArg >= nVarArgsStart )
         {
+            sal_Int16 nShifted = pFuncDesc->getFunctionName().equalsIgnoreAsciiCase(u"LAMBDA") ? nPos : 0;
             OUString aArgName = pFuncDesc->getParameterName(nRealArg) +
-                OUString::number(nArg-nVarArgsStart+1);
+                OUString::number(nArg-nVarArgsStart + 1 + nShifted);
             SetArgName( i, aArgName );
         }
         else

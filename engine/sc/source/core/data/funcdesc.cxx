@@ -182,10 +182,10 @@ OUString ScFuncDesc::GetParamList() const
              * parameters. For now parameters are always added, so no special
              * treatment of a trailing "; " necessary. */
             aSig.append(maDefArgNames[nVarArgsStart]
-                + "1"
+                + (mxFuncName != "LAMBDA" ? "1" : "2")
                 + sep + " "
                 + maDefArgNames[nVarArgsStart]
-                + "2"
+                + (mxFuncName != "LAMBDA" ? "2" : "3")
                 + sep + " ... ");
         }
         else
@@ -396,6 +396,7 @@ ScFunctionList::ScFunctionList( bool bEnglishFunctionNames )
         { ocIfNA, ENTRY(ocIF_NA_ARY), 0, ID_FUNCTION_GRP_LOGIC, HID_FUNC_IFNA, 2, { 0, 0 }, 0 },
         { ocChoose, ENTRY(ocCHOOSE_ARY), 0, ID_FUNCTION_GRP_TABLE, HID_FUNC_WAHL, VAR_ARGS+1, { 0, 0 }, 31 },
         { ocLet, ENTRY(ocLET_ARY), 0, ID_FUNCTION_GRP_TABLE, HID_FUNC_LET_MS, PAIRED_VAR_ARGS + 1, { 0, 0, 0 }, 0 },
+        { ocLambda, ENTRY(ocLAMBDA_ARY), 0, ID_FUNCTION_GRP_TABLE, HID_FUNC_LAMBDA_MS, VAR_ARGS + 1, { 0 }, 0 },
         { ocAnd, ENTRY(ocAND_ARY), 0, ID_FUNCTION_GRP_LOGIC, HID_FUNC_UND, VAR_ARGS, { 0 }, 0 },
         { ocOr, ENTRY(ocOR_ARY), 0, ID_FUNCTION_GRP_LOGIC, HID_FUNC_ODER, VAR_ARGS, { 0 }, 0 },
         { ocPi, ENTRY(ocPI_ARY), 0, ID_FUNCTION_GRP_MATH, HID_FUNC_PI, 0, { }, 0 },
@@ -458,6 +459,7 @@ ScFunctionList::ScFunctionList( bool bEnglishFunctionNames )
         { ocIsEven, ENTRY(ocIS_EVEN_ARY), 0, ID_FUNCTION_GRP_INFO, HID_FUNC_ISTGERADE, 1, { 0 }, 0 },
         { ocIsOdd, ENTRY(ocIS_ODD_ARY), 0, ID_FUNCTION_GRP_INFO, HID_FUNC_ISTUNGERADE, 1, { 0 }, 0 },
         { ocN, ENTRY(ocN_ARY), 0, ID_FUNCTION_GRP_INFO, HID_FUNC_N, 1, { 0 }, 0 },
+        { ocIsOmitted, ENTRY(ocIS_OMITTED_ARY), 0, ID_FUNCTION_GRP_INFO, HID_FUNC_IS_OMITTED_MS, 1, { 0 }, 0 },
         { ocGetDateValue, ENTRY(ocGET_DATE_VALUE_ARY), 0, ID_FUNCTION_GRP_DATETIME, HID_FUNC_DATWERT, 1, { 0 }, 0 },
         { ocGetTimeValue, ENTRY(ocGET_TIME_VALUE_ARY), 0, ID_FUNCTION_GRP_DATETIME, HID_FUNC_ZEITWERT, 1, { 0 }, 0 },
         { ocCode, ENTRY(ocCODE_ARY), 0, ID_FUNCTION_GRP_TEXT, HID_FUNC_CODE, 1, { 0 }, 0 },

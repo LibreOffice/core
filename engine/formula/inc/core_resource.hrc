@@ -298,6 +298,8 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF[] =
     { "COM.MICROSOFT.LET" , ocLet },
     { "COM.MICROSOFT.WRAPCOLS" , ocWrapCols },
     { "COM.MICROSOFT.WRAPROWS" , ocWrapRows },
+    { "COM.MICROSOFT.LAMBDA" , ocLambda },
+    { "COM.MICROSOFT.ISOMITTED" , ocIsOmitted },
     { "_xlpm." , ocStringName },
     { "ORG.OPENOFFICE.MULTIRANGE" , ocMultiArea }, // legacy for range list (union)
     { "OFFSET" , ocOffset },
@@ -771,6 +773,8 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML[] =
     { "_xlfn.LET" , ocLet },
     { "_xlfn.WRAPCOLS" , ocWrapCols },
     { "_xlfn.WRAPROWS" , ocWrapRows },
+    { "_xlfn.LAMBDA" , ocLambda },
+    { "_xlfn.ISOMITTED" , ocIsOmitted },
     { "_xlpm." , ocStringName },
     { "_xlfn.ORG.OPENOFFICE.MULTIRANGE" , ocMultiArea }, // legacy for range list (union)
     { "OFFSET" , ocOffset },
@@ -1249,6 +1253,8 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF[] =
     { "LET" , ocLet },
     { "WRAPCOLS" , ocWrapCols },
     { "WRAPROWS" , ocWrapRows },
+    { "LAMBDA" , ocLambda },
+    { "ISOMITTED" , ocIsOmitted },
     { "MULTIRANGE" , ocMultiArea },    // legacy for range list (union)
     { "OFFSET" , ocOffset },
     { "INDEX" , ocIndex },
@@ -1725,6 +1731,8 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_API[] =
     { "LET" , ocLet },
     { "WRAPCOLS" , ocWrapCols },
     { "WRAPROWS" , ocWrapRows },
+    { "LAMBDA" , ocLambda },
+    { "ISOMITTED" , ocIsOmitted },
     { "MULTIRANGE" , ocMultiArea },    // legacy for range list (union)
     { "OFFSET" , ocOffset },
     { "INDEX" , ocIndex },  // ?? first character = I ??
@@ -2199,6 +2207,8 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH[] =
     { "LET" , ocLet },
     { "WRAPCOLS" , ocWrapCols },
     { "WRAPROWS" , ocWrapRows },
+    { "LAMBDA" , ocLambda },
+    { "ISOMITTED" , ocIsOmitted },
     { "MULTIRANGE" , ocMultiArea },
     { "OFFSET" , ocOffset },
     { "INDEX" , ocIndex },
@@ -2653,6 +2663,8 @@ const std::pair<TranslateId, int> RID_STRLIST_FUNCTION_NAMES[] =
     { NC_("RID_STRLIST_FUNCTION_NAMES", "LET") , ocLet },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "WRAPCOLS") , ocWrapCols },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "WRAPROWS") , ocWrapRows },
+    { NC_("RID_STRLIST_FUNCTION_NAMES", "LAMBDA") , ocLambda },
+    { NC_("RID_STRLIST_FUNCTION_NAMES", "ISOMITTED") , ocIsOmitted },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "MULTIRANGE") , ocMultiArea }, // legacy for range list (union)
     { NC_("RID_STRLIST_FUNCTION_NAMES", "OFFSET") , ocOffset },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "INDEX") , ocIndex }, // ?? first character = I ??

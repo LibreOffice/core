@@ -3879,6 +3879,9 @@ bool ScCompiler::ParseLocalName( const OUString& aOrg )
             case ocLet:
                 bSearch = (maBindings.front().nParaPos % 2 == 0 || maBindings.front().nParaPos == maBindings.front().nParaCount);
                 break;
+            case ocLambda:
+                bSearch = (maBindings.front().nParaPos == maBindings.front().nParaCount);
+                break;
             default:
                 SAL_WARN( "sc.core", "OpCode: " << +maBindings.front().eOpCode);
                 assert(!"ScCompiler::ParseLocalName: someone forgot to add an OpCode case");
@@ -5183,7 +5186,7 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
         {
             case ocOpen:
             {
-                if (meLastOp == ocLet)
+                if (meLastOp == ocLet || meLastOp == ocLambda)
                 {
                     maBindings.push_front(BindingsLayer {
                         meLastOp,

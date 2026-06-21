@@ -138,7 +138,7 @@ public:
         } sharedstring;
         ScMatrix*    pMat;
         FormulaError nError;
-        short        nJump[ FORMULA_MAXPARAMS + 1 ];     // If/Choose/Let token
+        short        nJump[ FORMULA_MAXPARAMS + 1 ];     // If/Choose/Let/Lambda token
     };
     OUString   maExternalName; // depending on the opcode, this is either the external, or the external name, or the external table name
 

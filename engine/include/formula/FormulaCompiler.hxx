@@ -433,14 +433,14 @@ protected:
 
     struct BindingsLayer
     {
-        OpCode eOpCode;                         // the OpCode that applies to this layer; should be ocLet
+        OpCode eOpCode;                         // the OpCode that applies to this layer; should be ocLet or ocLambda
         short  nBracketPos;                     // how deep the nesting is to reach this layer
         short  nParaPos;                        // the current parameter position; starts at 1
         short  nParaCount;                      // the number of parameters in this layer
         std::unordered_set<OUString> aNameSet;  // a set of names bound in this layer
     };
 
-    // a stack keeping track of names bound using LET
+    // a stack keeping track of names bound using LET or LAMBDA
     std::forward_list<BindingsLayer> maBindings;
     bool mIsInBinding = false;                  // true iff the layer we're currently working on is a binding layer
 

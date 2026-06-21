@@ -203,8 +203,9 @@ class ScInterpreter
     friend class ScChiDistFunction;
     friend class ScChiSqDistFunction;
 
-    // ScMacroFunction needs to save context data when constructed
+    // some Callable objects need to save context data when constructed
     friend class ScMacroFunction;
+    friend class ScFormulaFunction;
 
 public:
     static void SetGlobalConfig(const ScCalcConfig& rConfig);
@@ -523,12 +524,6 @@ private:
     ScMatrixRef GetMatrix();
     ScMatrixRef GetMatrix( short & rParam, size_t & rInRefList );
     sc::RangeMatrix GetRangeMatrix();
-
-    // Get tokens at specific parameters for LET (lambda) function
-    static void replaceNamesToResult( const std::unordered_map<OUString, formula::FormulaConstTokenRef>& rResultIndexes,
-        ScTokenArray& rTokens, short nStartPos, short nEndPos );
-    ScTokenArray checkPushTokens( const ScTokenArray& rTokens,
-        short nStartPos, short nEndPos );
     formula::FormulaCallableRef GetCallable();
     //formula::FormulaCallableRef GetCallableFromMatrix(const ScMatrixRef& pMat);
 
@@ -756,6 +751,8 @@ private:
     void ScSubTotal();
     void ScWrapCols();
     void ScWrapRows();
+    void ScLambda();
+    void ScIsOmitted();
     void ScCall();
 
 private:
@@ -767,6 +764,7 @@ private:
     void ScHorizontalOrVerticalStack(bool bHorizontal);
     void ScCall(formula::FormulaCallableRef pCallable, sal_uInt8 nArgCount);
     void ScCall(formula::FormulaCallableRef pCallable, const std::vector<formula::FormulaConstTokenRef>& aArguments);
+    formula::FormulaTokenRef RefToAbs(formula::FormulaConstTokenRef pToken);
 #if HAVE_FEATURE_SCRIPTING
     bool BuildMacroArgs(const std::vector<formula::FormulaConstTokenRef>& rArgsIn, SbxArrayRef refArgsOut, bool bUseVBAObjects);
     bool GetMacroArg(formula::FormulaConstTokenRef pArgIn, SbxVariable* pArgOut, bool bUseVBAObjects);
