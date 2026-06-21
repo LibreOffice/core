@@ -23,11 +23,14 @@
 
 #include <SpifPolicy.hxx>
 
+class SwWrtShell;
+
 // SPIF/STANAG security label dialog. Classifications and category tag sets come
 // from the SPIF policy; categories are shown as a flat checkable list.
 class SwSecurityLabelDlg final : public weld::GenericDialogController
 {
     sw::seclabel::SpifPolicy m_aPolicy;
+    SwWrtShell& m_rSh;
 
     // Per category row: flat index of its owning tag, and whether that tag is
     // single-selection (toggling one of its categories clears the others).
@@ -45,11 +48,12 @@ class SwSecurityLabelDlg final : public weld::GenericDialogController
     DECL_LINK(OkHdl, weld::Button&, void);
 
     std::vector<bool> collectSelection() const;
+    void applyLabel(const OUString& rClassification, const std::vector<bool>& rSelected);
     void PopulateCategories();
     void UpdatePreview();
 
 public:
-    SwSecurityLabelDlg(weld::Window* pParent);
+    SwSecurityLabelDlg(weld::Window* pParent, SwWrtShell& rSh);
     virtual ~SwSecurityLabelDlg() override;
 };
 

@@ -1229,7 +1229,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_SECURITY_LABEL:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            VclPtr<VclAbstractDialog> pDlg(pFact->CreateSecurityLabelDlg(GetView().GetFrameWeld()));
+            VclPtr<VclAbstractDialog> pDlg(pFact->CreateSecurityLabelDlg(GetView().GetFrameWeld(), rWrtSh));
             pDlg->StartExecuteAsync([pDlg](sal_Int32){
                                         pDlg->disposeOnce();
                                     });

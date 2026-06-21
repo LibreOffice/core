@@ -9,14 +9,30 @@
 
 #include <seclabeldlg.hxx>
 
-#include <swtypes.hxx>
+#include <SecLabelApply.hxx>
+#include <StanagLabel.hxx>
+#include <doc.hxx>
+#include <docsh.hxx>
 #include <strings.hrc>
+#include <swtypes.hxx>
+#include <wrtsh.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+
+#include <rtl/ustrbuf.hxx>
+#include <rtl/uuid.h>
+#include <tools/datetime.hxx>
 #include <tools/stream.hxx>
 #include <rtl/bootstrap.hxx>
 #include <config_folders.h>
+#include <unotools/datetime.hxx>
 
 #include <set>
+
+using namespace css;
 
 namespace
 {
@@ -50,11 +66,46 @@ OUString formatViolation(const sw::seclabel::SpifViolation& rViolation)
     }
     return OUString();
 }
+
+// Random itemID for the customXml part: {XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}.
+OUString makeGuid()
+{
+    sal_uInt8 aId[16];
+    rtl_createUuid(aId, nullptr, false);
+    OUStringBuffer aBuf(u"{");
+    for (int i = 0; i < 16; ++i)
+    {
+        if (i == 4 || i == 6 || i == 8 || i == 10)
+            aBuf.append(u"-");
+        const OUString aByte = OUString::number(aId[i], 16).toAsciiUpperCase();
+        if (aByte.getLength() == 1)
+            aBuf.append(u"0");
+        aBuf.append(aByte);
+    }
+    aBuf.append(u"}");
+    return aBuf.makeStringAndClear();
 }
 
-SwSecurityLabelDlg::SwSecurityLabelDlg(weld::Window* pParent)
+// The page style of the current view cursor (consistent with PageStyles getByName).
+OUString getCurrentPageStyle(const uno::Reference<frame::XModel>& xModel)
+{
+    OUString sName(u"Standard"_ustr);
+    uno::Reference<text::XTextViewCursorSupplier> xSupplier(xModel->getCurrentController(),
+                                                            uno::UNO_QUERY);
+    if (xSupplier.is())
+    {
+        uno::Reference<beans::XPropertySet> xProps(xSupplier->getViewCursor(), uno::UNO_QUERY);
+        if (xProps.is())
+            xProps->getPropertyValue(u"PageStyleName"_ustr) >>= sName;
+    }
+    return sName;
+}
+}
+
+SwSecurityLabelDlg::SwSecurityLabelDlg(weld::Window* pParent, SwWrtShell& rSh)
     : GenericDialogController(pParent, u"modules/swriter/ui/seclabeldialog.ui"_ustr,
                               u"SecurityLabelDialog"_ustr)
+    , m_rSh(rSh)
     , m_xClassification(m_xBuilder->weld_combo_box(u"classification"_ustr))
     , m_xCategories(m_xBuilder->weld_tree_view(u"categories"_ustr))
     , m_xPreview(m_xBuilder->weld_label(u"preview"_ustr))
@@ -186,10 +237,47 @@ IMPL_LINK(SwSecurityLabelDlg, CategoryToggleHdl, const weld::TreeView::iter_col&
     UpdatePreview();
 }
 
+void SwSecurityLabelDlg::applyLabel(const OUString& rClassification,
+                                   const std::vector<bool>& rSelected)
+{
+    SwDocShell* pDocShell = m_rSh.GetDoc()->GetDocShell();
+    if (!pDocShell)
+        return;
+    uno::Reference<frame::XModel> xModel(pDocShell->GetModel());
+    if (!xModel.is())
+        return;
+
+    const DateTime aNow(DateTime::SYSTEM);
+    DateTime aReview(aNow);
+    aReview.AddYears(1);
+
+    const sw::seclabel::StanagLabel aLabel
+        = m_aPolicy.buildLabel(rClassification, rSelected, utl::toISO8601(aNow.GetUNODateTime()),
+                               utl::toISO8601(aReview.GetUNODateTime()));
+    const OUString sItemProps = sw::seclabel::buildItemProps(
+        makeGuid(), u"urn:nato:stanag:4778:bindinginformation:1:0"_ustr);
+    sw::seclabel::storeLabelPart(xModel, aLabel.toBindingXml(), sItemProps);
+
+    sal_Int32 nColor = 0;
+    for (const auto& rClass : m_aPolicy.aClassifications)
+    {
+        if (rClass.aName == rClassification)
+        {
+            nColor = sw::seclabel::resolveColor(rClass.aColor);
+            break;
+        }
+    }
+    sw::seclabel::applyMarking(xModel, m_aPolicy.buildMarking(rClassification, rSelected), nColor,
+                               getCurrentPageStyle(xModel));
+}
+
 IMPL_LINK_NOARG(SwSecurityLabelDlg, OkHdl, weld::Button&, void)
 {
-    if (!m_aPolicy.validate(m_xClassification->get_active_text(), collectSelection()).empty())
+    const OUString sClassification = m_xClassification->get_active_text();
+    const std::vector<bool> aSelected = collectSelection();
+    if (!m_aPolicy.validate(sClassification, aSelected).empty())
         return; // the warning label already shows why; keep the dialog open
+    applyLabel(sClassification, aSelected);
     m_xDialog->response(RET_OK);
 }
 

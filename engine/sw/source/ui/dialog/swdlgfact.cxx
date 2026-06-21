@@ -1030,11 +1030,11 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateMultiTOXMarkDlg(we
     return VclPtr<AbstractMultiTOXMarkDlg_Impl>::Create(pParent, rTOXMgr);
 }
 
-VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSecurityLabelDlg(weld::Window* pParent)
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSecurityLabelDlg(weld::Window* pParent, SwWrtShell& rSh)
 {
     using AbstractSecurityLabelDlg_Impl
         = vcl::AbstractDialogImpl_Async<VclAbstractDialog, SwSecurityLabelDlg>;
-    return VclPtr<AbstractSecurityLabelDlg_Impl>::Create(pParent);
+    return VclPtr<AbstractSecurityLabelDlg_Impl>::Create(pParent, rSh);
 }
 
 namespace
