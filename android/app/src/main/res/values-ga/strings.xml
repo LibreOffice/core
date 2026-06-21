@@ -3,7 +3,7 @@
     <string name="app_name_settings">Socruithe</string>
     <string name="app_version_and_hash">Leagan: %1$s\ngit-hash ar líne: %2$s\ncroí-git-hash: %3$s</string>
     <string name="app_vendor">Chuir $VENDOR ar fáil an eisiúint seo.</string>
-    <string name="temp_file_saving_disabled">Is comhad inléite amháin é seo, tá sábháil díchumasaithe.</string>
+    <string name="temp_file_saving_disabled">Roinnte mar léite amháin ag an aip foinse. Úsáid \"Cuir cóip in eagar\" chun athruithe a dhéanamh.</string>
     <string name="file_exists_warning">Tá comhad leis an ainm seo ann cheana féin, agus déanfar é a fhorscríobh.</string>
     <string name="file_creation_failed">Theip ar chruthú comhad</string>
     <string name="storage_permission_required">Tá cead stórála ag teastáil</string>
