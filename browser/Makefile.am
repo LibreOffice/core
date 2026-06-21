@@ -992,6 +992,8 @@ $(TYPESCRIPT_JS_DIR)/%.js: $(srcdir)/%.ts
 	$(QUIET_TSC) $(NODE) $(builddir)/node_modules/typescript/bin/tsc --outFile $@ $<
 
 build-cool: \
+	eslint.done \
+	prettier.done \
 	$(COOL_L10N_DST) \
 	$(L10N_JSON) \
 	$(SETTINGS_L10N_JS) \
@@ -1058,14 +1060,20 @@ $(INTERMEDIATE_DIR)/admin-src.js: $(COOL_ADMIN_TS_JS) $(COOL_ADMIN_JS)
 	$(call run_prettier_check,--debug-check $(srcdir)/admin/src)
 	@awk 'FNR == 1 {print ""} 1' $(COOL_ADMIN_TS_JS) $(patsubst %.js,$(srcdir)/%.js,$(COOL_ADMIN_JS)) > $@
 
+eslint.done: $(COOL_JS_SRC) $(COOL_TS_SRC) $(COOL_TSX_SRC)
+	$(call run_eslint_check,$(srcdir)/src $(srcdir)/js)
+	@touch $@
+
+prettier.done: $(COOL_JS_SRC) $(COOL_TS_SRC) $(COOL_TSX_SRC)
+	$(call run_prettier_check,--debug-check $(srcdir)/src $(srcdir)/js/global.js)
+	@touch $@
+
 $(INTERMEDIATE_DIR)/cool-src.js: tscompile.done $(call prereq_cool) $(COOL_JS_DST) $(abs_top_srcdir)/scripts/unocommands.py $(abs_top_srcdir)/scripts/unoshortcuts.py $(srcdir)/cool-src.js.m4
 	@mkdir -p $(dir $@)
 	$(QUIET_UNOCOMMANDS) $(abs_top_srcdir)/scripts/unocommands.py --check $(abs_top_srcdir)
 	$(QUIET_UNOSHORTCUTS) $(abs_top_srcdir)/scripts/unoshortcuts.py --check $(abs_top_srcdir)
 	@printf "Checking for obsolete JS build intermediates in this makefile... "
 	@if ! test "z$(COOL_ASSERT_INTERSECT)" = "z"; then echo; echo "Error: please remove obsolete files:"; echo "$(COOL_ASSERT_INTERSECT)"; exit 1; else echo "clean"; fi
-	$(call run_eslint_check,$(srcdir)/src $(srcdir)/js)
-	$(call run_prettier_check,--debug-check $(srcdir)/src $(srcdir)/js/global.js)
 	@echo "Bundling cool..."
 	$(call bundle_cool)
 
@@ -1493,7 +1501,7 @@ clean-local:
 	@rm -f mocha.log duplication.log
 	@rm -f $(MOCHA_JS_DIR)/main.js
 
-CLEANFILES = tscompile.done tsc-emit.done tsc-strict.done $(DIST_FOLDER)/strict.tsbuildinfo $(INTERMEDIATE_DIR)/cool-src.js $(DIST_FOLDER)/bundle.css $(DIST_FOLDER)/bundle.js $(INTERMEDIATE_DIR)/cool-src.js admin/adminIntegratorSettings.html
+CLEANFILES = tscompile.done tsc-emit.done tsc-strict.done $(DIST_FOLDER)/strict.tsbuildinfo eslint.done prettier.done $(INTERMEDIATE_DIR)/cool-src.js $(DIST_FOLDER)/bundle.css $(DIST_FOLDER)/bundle.js $(INTERMEDIATE_DIR)/cool-src.js admin/adminIntegratorSettings.html
 
 $(abs_srcdir)/jsconfig.json:
 	@printf "{\n \
