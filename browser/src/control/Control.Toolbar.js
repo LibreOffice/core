@@ -532,6 +532,18 @@ var shapes = {
 	}
 };
 
+// Localized titles for the insert-shapes groups, keyed by the group name used
+// in the 'shapes' table above. The matching shape-group .uno: commands provide
+// the labels (from the engine command descriptions in unocommands.js).
+const shapeGroupTitles = {
+	'Basic Shapes': _UNO('.uno:BasicShapes'),
+	'Symbol Shapes': _UNO('.uno:SymbolShapes'),
+	'Block Arrows': _UNO('.uno:ArrowShapes'),
+	'Stars and Banners': _UNO('.uno:StarShapes'),
+	'Callouts': _UNO('.uno:CalloutShapes'),
+	'Flowchart': _UNO('.uno:FlowChartShapes')
+};
+
 function createShapesPanel(shapeType) {
 	const wrapper = document.createElement('div');
 	wrapper.className = 'ui-grid-cell';
@@ -545,7 +557,7 @@ function createShapesPanel(shapeType) {
 	for (var s in collection) {
 		const rowHeader = document.createElement('div');
 		rowHeader.className = 'row-header cool-font';
-		rowHeader.textContent = _(s);
+		rowHeader.textContent = shapeGroupTitles[s] || _(s);
 		grid.appendChild(rowHeader);
 
 		const row = document.createElement('div');
@@ -617,7 +629,7 @@ function insertShapes(shapeType, grid = document.getElementsByClassName('inserts
 		rowHeader.setAttribute('role', 'presentation');
 		rowHeader.id = `${shapeType}_row_${cIdx++}`;
 		rowHeader.className = 'row-header cool-font';
-		rowHeader.textContent = _(s);
+		rowHeader.textContent = shapeGroupTitles[s] || _(s);
 		group.appendChild(rowHeader);
 		grid.appendChild(group);
 
