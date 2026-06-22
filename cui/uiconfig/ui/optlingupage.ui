@@ -117,12 +117,6 @@
                                 <attribute name="active">0</attribute>
                               </attributes>
                             </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="treeviewcolumn5">
-                            <property name="resizable">True</property>
-                            <property name="spacing">6</property>
                             <child>
                               <object class="GtkCellRendererText" id="cellrenderer4"/>
                               <attributes>
@@ -239,12 +233,6 @@
                             <attribute name="active">0</attribute>
                           </attributes>
                         </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn55">
-                        <property name="resizable">True</property>
-                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderer44"/>
                           <attributes>
@@ -409,12 +397,6 @@
                             <attribute name="active">0</attribute>
                           </attributes>
                         </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn555">
-                        <property name="resizable">True</property>
-                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderer444"/>
                           <attributes>
