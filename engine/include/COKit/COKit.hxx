@@ -448,6 +448,23 @@ public:
     }
 
     /**
+     * Register a clipboard backend for this document that does the raw platform
+     * clipboard input and output. With a provider installed the engine drives
+     * the format decision: it advertises its own formats on copy and, on an
+     * external paste, pulls only the single format it chose from the platform.
+     * Pass nullptr to remove the provider and fall back to the plain
+     * getClipboard()/setClipboard() handling.
+     *
+     * No-op when running against an engine that predates this entry point, so
+     * the caller keeps whatever clipboard handling it had.
+     */
+    void installClipboardProvider(const COKitClipboardProvider* pProvider)
+    {
+        if (COKIT_DOCUMENT_HAS(mpDoc, installClipboardProvider))
+            mpDoc->pClass->installClipboardProvider(mpDoc, pProvider);
+    }
+
+    /**
      * Pastes content at the current cursor position.
      *
      * @param pMimeType format of pData, for example text/plain;charset=utf-8.

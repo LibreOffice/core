@@ -8,8 +8,12 @@
  */
 
 #include "kitclipboard.hxx"
+#include <algorithm>
+#include <cstdlib>
+#include <cstring>
 #include <unordered_map>
 #include <comphelper/kit.hxx>
+#include <comphelper/sequence.hxx>
 #include <tools/json_writer.hxx>
 #include <tools/lazydelete.hxx>
 #include <vcl/svapp.hxx>
@@ -93,6 +97,26 @@ KitClipboard::KitClipboard()
     setContents(xTransferable, uno::Reference<datatransfer::clipboard::XClipboardOwner>());
 }
 
+KitClipboard::~KitClipboard() { setProvider(nullptr); }
+
+void KitClipboard::setProvider(const COKitClipboardProvider* pProvider)
+{
+    osl::MutexGuard aGuard(m_aMutex);
+    if (m_oProvider && m_oProvider->release)
+        m_oProvider->release(m_oProvider->pUserData);
+    if (pProvider)
+    {
+        // Copy only what the caller actually filled in (its nSize), leaving any
+        // fields a future engine adds zeroed. Keeps an older app's smaller struct
+        // safe to read.
+        COKitClipboardProvider aCopy{};
+        std::memcpy(&aCopy, pProvider, std::min(pProvider->nSize, sizeof(aCopy)));
+        m_oProvider = aCopy;
+    }
+    else
+        m_oProvider.reset();
+}
+
 Sequence<OUString> KitClipboard::getSupportedServiceNames_static()
 {
     Sequence<OUString> aRet{ u"com.sun.star.datatransfer.clipboard.KitClipboard"_ustr };
@@ -114,7 +138,21 @@ bool KitClipboard::supportsService(const OUString& ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-Reference<css::datatransfer::XTransferable> KitClipboard::getContents() { return m_xTransferable; }
+Reference<css::datatransfer::XTransferable> KitClipboard::getContents()
+{
+    // With a provider whose platform clipboard is no longer ours, paste from the
+    // platform: the engine picks one format from the flavor list and pulls only
+    // that one. When the platform still holds our own copy, fall through to the
+    // in-memory transferable for full fidelity.
+    if (m_oProvider && m_oProvider->getMimeTypes && m_oProvider->getDataForMimeType)
+    {
+        const bool bOurs = m_oProvider->ownsClipboard
+                           && m_oProvider->ownsClipboard(m_oProvider->pUserData) != 0;
+        if (!bOurs)
+            return new KitProviderTransferable(*m_oProvider);
+    }
+    return m_xTransferable;
+}
 
 void KitClipboard::setContents(
     const Reference<css::datatransfer::XTransferable>& xTrans,
@@ -154,7 +192,7 @@ void KitClipboard::setContents(
         for (const auto& rFlavor : aFlavors)
         {
             OString aMime = OUStringToOString(rFlavor.MimeType, RTL_TEXTENCODING_UTF8);
-            // Match doc_getClipboard() behaviour: advertise utf-8 not utf-16
+            // Match doc_getClipboard() behaviour: advertise UTF-8 not UTF-16
             if (aMime.startsWith("text/plain"))
                 aMime = "text/plain;charset=utf-8"_ostr;
             aMimeTypes.push_back(aMime);
@@ -167,6 +205,19 @@ void KitClipboard::setContents(
 
     if (aMimeTypes.empty())
         return;
+
+    // With a provider, advertise straight onto the platform clipboard; otherwise
+    // tell the view's client (the browser) which formats are now available.
+    if (m_oProvider && m_oProvider->advertiseToPlatform)
+    {
+        std::vector<const char*> aPtrs;
+        aPtrs.reserve(aMimeTypes.size() + 1);
+        for (const auto& rMime : aMimeTypes)
+            aPtrs.push_back(rMime.getStr());
+        aPtrs.push_back(nullptr);
+        m_oProvider->advertiseToPlatform(m_oProvider->pUserData, aPtrs.data());
+        return;
+    }
 
     tools::JsonWriter aWriter;
     {
@@ -291,6 +342,90 @@ bool SAL_CALL KitTransferable::isDataFlavorSupported(const datatransfer::DataFla
                             return i.MimeType == rFlavor.MimeType && i.DataType == rFlavor.DataType;
                         })
            != std::cend(m_aFlavors);
+}
+
+KitProviderTransferable::KitProviderTransferable(const COKitClipboardProvider& rProvider)
+    : m_aProvider(rProvider)
+{
+    std::vector<datatransfer::DataFlavor> aFlavors;
+    char** ppMimeTypes = m_aProvider.getMimeTypes ? m_aProvider.getMimeTypes(m_aProvider.pUserData)
+                                                  : nullptr;
+    if (ppMimeTypes)
+    {
+        for (size_t i = 0; ppMimeTypes[i]; ++i)
+        {
+            datatransfer::DataFlavor aFlavor;
+            KitTransferable::initFlavourFromMime(aFlavor, OUString::fromUtf8(ppMimeTypes[i]));
+            free(ppMimeTypes[i]);
+
+            // Several platform types can map to one flavor (the plain-text
+            // variants); keep the first.
+            const bool bSeen = std::any_of(aFlavors.begin(), aFlavors.end(),
+                                           [&aFlavor](const datatransfer::DataFlavor& r)
+                                           { return r.MimeType == aFlavor.MimeType; });
+            if (!bSeen)
+                aFlavors.push_back(aFlavor);
+        }
+        free(ppMimeTypes);
+    }
+    m_aFlavors = comphelper::containerToSequence(aFlavors);
+}
+
+uno::Any SAL_CALL KitProviderTransferable::getTransferData(const datatransfer::DataFlavor& rFlavor)
+{
+    auto itCache = m_aCache.find(rFlavor.MimeType);
+    if (itCache != m_aCache.end())
+        return itCache->second;
+
+    if (!m_aProvider.getDataForMimeType)
+        return {};
+
+    // The provider speaks the wire MIME; the engine flavor for text carries the
+    // UTF-16 variant, so ask for UTF-8 back.
+    const bool bText = rFlavor.DataType == cppu::UnoType<OUString>::get();
+    OString aWireMime = OUStringToOString(rFlavor.MimeType, RTL_TEXTENCODING_UTF8);
+    if (aWireMime.startsWith("text/plain"))
+        aWireMime = "text/plain;charset=utf-8"_ostr;
+
+    // Reading the platform clipboard can re-enter the source document (its own
+    // advertise pulls a format through getClipboard, which makes its view
+    // current). Restore the current view afterwards so the running paste stays
+    // on its own view.
+    const int nSavedView = KitHelper::getCurrentView();
+
+    char* pData = nullptr;
+    size_t nSize = 0;
+    const int nOk
+        = m_aProvider.getDataForMimeType(m_aProvider.pUserData, aWireMime.getStr(), &pData, &nSize);
+
+    if (nSavedView >= 0 && KitHelper::getCurrentView() != nSavedView)
+        KitHelper::setView(nSavedView);
+
+    uno::Any aRet;
+    if (nOk && pData)
+    {
+        if (bText)
+            aRet <<= OUString(pData, nSize, RTL_TEXTENCODING_UTF8);
+        else
+            aRet <<= uno::Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(pData), nSize);
+    }
+    free(pData);
+
+    m_aCache.emplace(rFlavor.MimeType, aRet);
+    return aRet;
+}
+
+uno::Sequence<datatransfer::DataFlavor> SAL_CALL KitProviderTransferable::getTransferDataFlavors()
+{
+    return m_aFlavors;
+}
+
+bool SAL_CALL
+KitProviderTransferable::isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor)
+{
+    return std::any_of(std::cbegin(m_aFlavors), std::cend(m_aFlavors),
+                       [&rFlavor](const datatransfer::DataFlavor& i)
+                       { return i.MimeType == rFlavor.MimeType && i.DataType == rFlavor.DataType; });
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

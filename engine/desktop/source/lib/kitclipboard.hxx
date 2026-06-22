@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <map>
+#include <optional>
 #include <vector>
 
 #include <rtl/ref.hxx>
@@ -17,6 +19,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp>
+#include <COKit/COKitTypes.h>
 
 /// A clipboard implementation for COKit.
 class KitClipboard final
@@ -28,11 +31,22 @@ class KitClipboard final
     css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> m_aOwner;
     std::vector<css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>> m_aListeners;
     int m_nViewId = -1;
+    /**
+     * When set, the app does the raw platform clipboard input and output for this
+     * view: copies advertise through it and external pastes read through it.
+     */
+    std::optional<COKitClipboardProvider> m_oProvider;
 
 public:
     KitClipboard();
+    ~KitClipboard();
 
     void setViewId(int nViewId) { m_nViewId = nViewId; }
+
+    /**
+     * Install (or, with nullptr, remove) the app's platform clipboard backend.
+     */
+    void setProvider(const COKitClipboardProvider* pProvider);
 
     /// get an XInterface easily.
     css::uno::Reference<css::uno::XInterface> getXI()
@@ -72,9 +86,13 @@ class KitTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransfer
     css::uno::Sequence<css::datatransfer::DataFlavor> m_aFlavors;
     std::vector<css::uno::Any> m_aContent;
 
+public:
+    /**
+     * Fill a DataFlavor from a wire MIME type, picking the UNO DataType (string
+     * vs byte sequence) the engine expects for it.
+     */
     static void initFlavourFromMime(css::datatransfer::DataFlavor& rFlavor, OUString aMimeType);
 
-public:
     KitTransferable();
     KitTransferable(size_t nInCount, const char** pInMimeTypes, const size_t* pInSizes,
                     const char** pInStreams);
@@ -84,6 +102,27 @@ public:
 
     css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
 
+    bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
+};
+
+/**
+ * Clipboard contents that live on the platform clipboard. It advertises the
+ * flavors the platform offers (asked of the provider once, no bytes) and fetches
+ * the bytes for a single flavor only when the engine actually pulls it, so a
+ * paste renders only the one format the engine chose. The provider's pUserData
+ * is owned by the KitClipboard that handed it over, not by this object.
+ */
+class KitProviderTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransferable>
+{
+    COKitClipboardProvider m_aProvider;
+    css::uno::Sequence<css::datatransfer::DataFlavor> m_aFlavors;
+    mutable std::map<OUString, css::uno::Any> m_aCache;
+
+public:
+    explicit KitProviderTransferable(const COKitClipboardProvider& rProvider);
+
+    css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override;
+    css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
     bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
 };
 

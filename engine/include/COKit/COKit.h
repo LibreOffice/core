@@ -589,6 +589,10 @@ struct COKitDocumentClassStruct
     /// @see kit::Document::setAllowManageRedlines().
     void (*setAllowManageRedlines)(COKitDocument* pThis, int nId, bool allow);
 
+    /** @see kit::Document::installClipboardProvider(). */
+    void (*installClipboardProvider) (COKitDocument* pThis,
+                                      const COKitClipboardProvider* pProvider);
+
 #endif // defined KIT_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

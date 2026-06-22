@@ -4507,9 +4507,10 @@ void DesktopKitTest::testABI()
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(78), offsetof(COKitDocumentClass, setViewOption));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(79), offsetof(COKitDocumentClass, setColorPreviewState));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(80), offsetof(COKitDocumentClass, setAllowManageRedlines));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(81), offsetof(COKitDocumentClass, installClipboardProvider));
 
     // As above
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(81), sizeof(COKitDocumentClass));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(82), sizeof(COKitDocumentClass));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopKitTest);
