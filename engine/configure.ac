@@ -13437,12 +13437,19 @@ if test "$need_meson" = "yes"; then
         fi
         MESON='$(call gb_ExternalExecutable_get_command,python) '"$MESON"
     fi
-    if test -n "$PROGRAMFILESX86" -a -n "$MESON"; then
+    if test "$_os" = "WINNT" -a -n "$MESON"; then
         # meson reads ProgramFiles(x86) to find vswhere, but dash drops such
-        # (foo) using env names. Resupply it from PROGRAMFILESX86 (exported by
-        # autogen.sh) via env, which is not constrained by the shell name
-        # rules.
-        MESON="env 'ProgramFiles(x86)=$PROGRAMFILESX86' $MESON"
+        # (foo) using env names. Resupply it via env, which is not constrained
+        # by the shell name rules. PROGRAMFILESX86 is exported by autogen.sh
+        # when ProgramFiles(x86) made it into the environment, but that does
+        # not happen when building from WSL without WSLENV set up to forward
+        # it; fall back to the standard location in that case, matching what
+        # find_msvc does above.
+        my_programfilesx86="$PROGRAMFILESX86"
+        if test -z "$my_programfilesx86"; then
+            my_programfilesx86="c:\\Program Files (x86)"
+        fi
+        MESON="env 'ProgramFiles(x86)=$my_programfilesx86' $MESON"
     fi
     AC_CHECK_PROG(NINJA,ninja,ninja)
     if test -z "$MESON" -o -z "$NINJA"; then
