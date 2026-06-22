@@ -30,10 +30,11 @@ private:
 
 public:
     /** Returns the related QObject* for the XAccessible. Creates a new one if none exists yet. */
-    static QObject* getQObject(const css::uno::Reference<XAccessible>& xAcc);
-    static void insert(const css::uno::Reference<XAccessible>& xAcc, QObject* pQObject);
+    static QObject* getQObject(const css::uno::Reference<css::accessibility::XAccessible>& xAcc);
+    static void insert(const css::uno::Reference<css::accessibility::XAccessible>& xAcc,
+                       QObject* pQObject);
     /** Removes the entry for the given XAccessible. */
-    static void remove(const css::uno::Reference<XAccessible>& xAcc);
+    static void remove(const css::uno::Reference<css::accessibility::XAccessible>& xAcc);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
