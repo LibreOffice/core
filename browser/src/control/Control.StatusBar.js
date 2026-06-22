@@ -636,7 +636,7 @@ class StatusBar extends JSDialog.Toolbar {
 		}
 		else if (commandName === '.uno:StatusSelectionMode' || commandName === '.uno:SelectionMode') {
 			$('#statusselectionmode-container').attr('default-state', state === '0' || null);
-			this.updateHtmlItem('StatusSelectionMode', state ? window.L.Styles.selectionMode[state].toLocaleString() : _('Selection mode: inactive'), !state);
+			this.updateHtmlItem('StatusSelectionMode', state ? window.L.Styles.selectionMode[state] : _('Selection mode: inactive'), !state);
 		}
 		else if (commandName == '.uno:StateTableCell') {
 			this.updateHtmlItem('StateTableCell', state ? this.localizeStateTableCell(state) : ' ');

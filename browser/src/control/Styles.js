@@ -40,9 +40,9 @@ window.L.Styles = {
 	},
 
 	selectionMode : [
-		'Standard selection',
-		'Extending selection',
-		'Adding selection',
-		'Block selection'
+		_('Standard selection'),
+		_('Extending selection'),
+		_('Adding selection'),
+		_('Block selection')
 	]
 };

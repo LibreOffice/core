@@ -1424,6 +1424,7 @@ pot:
 		src/control/Parts.js \
 		src/control/Permission.js \
 		src/control/Signing.js \
+		src/control/Styles.js \
 		src/control/Toolbar.js \
 		src/control/VRuler.ts \
 		src/control/PermissionMode.ts \
