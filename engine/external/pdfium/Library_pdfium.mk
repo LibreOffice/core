@@ -24,6 +24,10 @@ $(eval $(call gb_Library_add_cxxflags,pdfium, \
 ))
 endif
 endif
+#TODO: Drop this once Clang supports -std=c++29 or -std=c++2d:
+ifneq ($(filter -std=c++29 -std=c++2d,$(CXXFLAGS_CXX11)),)
+$(eval $(call gb_Library_add_cxxflags,pdfium,-std=c++26))
+endif
 
 $(eval $(call gb_Library_set_include,pdfium,\
     -I$(gb_UnpackedTarball_workdir)/pdfium \
