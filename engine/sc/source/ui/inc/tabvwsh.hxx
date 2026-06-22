@@ -260,6 +260,7 @@ protected:
 
     virtual bool    KeyInput( const KeyEvent &rKeyEvent ) override;
     virtual SdrView* GetDrawView() const override;
+    virtual std::vector<OUString> GetParentContextNames() const override;
 
 public:
                     SFX_DECL_INTERFACE(SCID_TABVIEW_SHELL)

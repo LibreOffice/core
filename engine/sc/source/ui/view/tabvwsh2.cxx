@@ -43,12 +43,36 @@
 
 // Create default drawing objects via keyboard
 #include <svx/svdpagv.hxx>
+#include <svx/svdview.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdobjkind.hxx>
 #include <svl/stritem.hxx>
+#include <vcl/EnumContext.hxx>
 #include <fuconcustomshape.hxx>
 
 SdrView* ScTabViewShell::GetDrawView() const
 {
     return const_cast<ScTabViewShell*>(this)->GetScDrawView();    // GetScDrawView is non-const
+}
+
+std::vector<OUString> ScTabViewShell::GetParentContextNames() const
+{
+    std::vector<OUString> aParents;
+
+    // While text inside a shape is edited the primary context is the text
+    // context, which maps to the home tab. Report the shape context too so the
+    // Shape tab stays available.
+    SdrView* pView = GetDrawView();
+    if (pView && pView->IsTextEdit())
+    {
+        const SdrObject* pObj = pView->GetTextEditObject();
+        if (pObj && pObj->GetObjIdentifier() != SdrObjKind::Table
+            && pObj->GetObjIdentifier() != SdrObjKind::OLE2)
+            aParents.push_back(
+                vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Draw));
+    }
+
+    return aParents;
 }
 
 void ScTabViewShell::WindowChanged()
