@@ -15,6 +15,7 @@
 import collections
 import datetime
 import json
+import statistics
 import subprocess
 import sys
 import urllib.request
@@ -114,20 +115,40 @@ def top_reviewers_this_week(n=10):
     return counter.most_common(n)
 
 
-def jenkins_recent_build_success(limit=JENKINS_RECENT_BUILD_LIMIT):
-    """Returns (green, total) for the last `limit` completed Jenkins builds.
+def jenkins_recent_build_stats(limit=JENKINS_RECENT_BUILD_LIMIT):
+    """Returns (green, total, median_duration_ms, median_sample_size) for the
+    last `limit` completed Jenkins builds, in a single API request.
 
     A build counts as completed once its result is non-null (i.e. it is no
     longer queued or running). "Green" means result == "SUCCESS".
+    The median ignores ABORTED/UNSTABLE/etc. and only considers SUCCESS and
+    FAILURE — those are the builds whose duration reflects a real turnaround
+    a contributor would have observed.
     """
-    url = f"{JENKINS_JOB_URL}api/json?tree=builds%5Bresult%5D"
+    url = f"{JENKINS_JOB_URL}api/json?tree=builds%5Bresult,duration%5D"
     req = urllib.request.Request(url, headers={"User-Agent": "cool_tc_stats"})
     with urllib.request.urlopen(req) as resp:
         body = resp.read().decode("utf-8")
-    results = [b.get("result") for b in json.loads(body).get("builds", [])]
-    completed = [r for r in results if r is not None][:limit]
-    green = sum(1 for r in completed if r == "SUCCESS")
-    return green, len(completed)
+    builds = json.loads(body).get("builds", [])
+    completed = [b for b in builds if b.get("result") is not None][:limit]
+    green = sum(1 for b in completed if b.get("result") == "SUCCESS")
+    durations = [
+        b["duration"]
+        for b in completed
+        if b.get("result") in ("SUCCESS", "FAILURE") and b.get("duration")
+    ]
+    median_ms = int(statistics.median(durations)) if durations else 0
+    return green, len(completed), median_ms, len(durations)
+
+
+def fmt_duration_ms(ms):
+    """Renders a millisecond duration as 'X hr Y min', matching how the
+    Jenkins UI prints the 'Took ...' line on a build page."""
+    minutes = ms // 60_000
+    hours, minutes = divmod(minutes, 60)
+    if hours:
+        return f"{hours} hr {minutes} min"
+    return f"{minutes} min"
 
 
 def read_previous_week_stats(current_week_key):
@@ -177,7 +198,7 @@ def main():
     gerrit_count = open_non_wip_count()
     pr_count = open_pr_count()
     regression_count = regression_issue_count()
-    jenkins_green, jenkins_total = jenkins_recent_build_success()
+    jenkins_green, jenkins_total, jenkins_median_ms, jenkins_median_n = jenkins_recent_build_stats()
     jenkins_success_rate = (
         round(100 * jenkins_green / jenkins_total) if jenkins_total else 0
     )
@@ -209,6 +230,7 @@ def main():
     print("# Jenkins / CI update")
     print(f"- [Gerrit for online main]({JENKINS_JOB_URL})")
     print(f"  - Week {week}: Success rate is {jenkins_success_rate}%, failed builds are {jenkins_failed}/{jenkins_total}")
+    print(f"  - Week {week}: Turnaround time is {fmt_duration_ms(jenkins_median_ms)} (median of last {jenkins_median_n} SUCCESS/FAILURE builds)")
 
     write_stats_json(week_key, gerrit_count, pr_count, regression_count)
     return 0
