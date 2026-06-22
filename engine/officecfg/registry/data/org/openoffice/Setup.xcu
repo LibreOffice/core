@@ -784,11 +784,6 @@
               <value>/org.openoffice.Office.Writer/Wizard</value>
             </prop>
           </node>
-          <node oor:name="BaseWindowState" oor:op="replace">
-            <prop oor:name="IncludedNodes">
-              <value>/org.openoffice.Office.UI.BaseWindowState/UIElements</value>
-            </prop>
-          </node>
           <node oor:name="BasicIDEWindowState" oor:op="replace">
             <prop oor:name="IncludedNodes">
               <value>/org.openoffice.Office.UI.BasicIDEWindowState/UIElements</value>
@@ -809,24 +804,9 @@
               <value>/org.openoffice.Office.UI.DbBrowserWindowState/UIElements</value>
             </prop>
           </node>
-          <node oor:name="DbQueryWindowState" oor:op="replace">
-            <prop oor:name="IncludedNodes">
-              <value>/org.openoffice.Office.UI.DbQueryWindowState/UIElements</value>
-            </prop>
-          </node>
-          <node oor:name="DbRelationWindowState" oor:op="replace">
-            <prop oor:name="IncludedNodes">
-              <value>/org.openoffice.Office.UI.DbRelationWindowState/UIElements</value>
-            </prop>
-          </node>
           <node oor:name="DbTableDataWindowState" oor:op="replace">
             <prop oor:name="IncludedNodes">
               <value>/org.openoffice.Office.UI.DbTableDataWindowState/UIElements</value>
-            </prop>
-          </node>
-          <node oor:name="DbTableWindowState" oor:op="replace">
-            <prop oor:name="IncludedNodes">
-              <value>/org.openoffice.Office.UI.DbTableWindowState/UIElements</value>
             </prop>
           </node>
           <node oor:name="DrawWindowState" oor:op="replace">
@@ -857,11 +837,6 @@
           <node oor:name="WriterGlobalWindowState" oor:op="replace">
             <prop oor:name="IncludedNodes">
               <value>/org.openoffice.Office.UI.WriterGlobalWindowState/UIElements</value>
-            </prop>
-          </node>
-          <node oor:name="WriterReportWindowState" oor:op="replace">
-            <prop oor:name="IncludedNodes">
-              <value>/org.openoffice.Office.UI.WriterReportWindowState/UIElements</value>
             </prop>
           </node>
           <node oor:name="WriterWebWindowState" oor:op="replace">
