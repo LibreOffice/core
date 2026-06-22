@@ -136,7 +136,6 @@ class SvxZoomSliderItem;
 #define SID_DRAW_NOTEEDIT       (SC_VIEW_START + 81)
 
 #define SID_CHOOSE_DESIGN       (SC_VIEW_START + 82)
-#define SID_EURO_CONVERTER      (SC_VIEW_START + 83)
 //See include/sfx2/sfxsids.hrc for reserved usage of (SC_VIEW_START + 84)
 #define SID_EXTERNAL_SOURCE     (SC_VIEW_START + 85)
 
