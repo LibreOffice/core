@@ -391,6 +391,7 @@ function _formulabarEditControl(parentContainer, data, builder) {
 
 	if (data.enabled !== false)
 		textLayer.setAttribute('contenteditable', 'true');
+	textLayer.setAttribute('spellcheck', 'false');
 
 	var cursorLayer = window.L.DomUtil.create('div', 'ui-custom-textarea-cursor-layer ' + builder.options.cssClass, wrapper);
 	var handleLayer = window.L.DomUtil.create('div', 'ui-custom-textarea-handle-layer ' + builder.options.cssClass, wrapper);
