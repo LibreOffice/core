@@ -24,10 +24,10 @@
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
                                       const TypedWhichId<SvxNumberInfoItem> nId ) :
     SfxPoolItem     ( nId ),
-    pFormatter      ( pNumFormatter ),
-    eValueType      ( SvxNumberValueType::Undefined ),
-    aStringVal      ( u""_ustr ),
-    nDoubleVal      ( 0 )
+    m_pFormatter      ( pNumFormatter ),
+    m_eValueType      ( SvxNumberValueType::Undefined ),
+    m_aStringVal      ( u""_ustr ),
+    m_nDoubleVal      ( 0 )
 {
 }
 
@@ -35,10 +35,10 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
                                       OUString aVal, const TypedWhichId<SvxNumberInfoItem> nId ) :
     SfxPoolItem     ( nId ),
-    pFormatter      ( pNumFormatter ),
-    eValueType      ( SvxNumberValueType::String ),
-    aStringVal      (std::move( aVal )),
-    nDoubleVal      ( 0 )
+    m_pFormatter      ( pNumFormatter ),
+    m_eValueType      ( SvxNumberValueType::String ),
+    m_aStringVal      (std::move( aVal )),
+    m_nDoubleVal      ( 0 )
 {
 }
 
@@ -46,10 +46,10 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
                                       const double& rVal, const TypedWhichId<SvxNumberInfoItem> nId ) :
     SfxPoolItem     ( nId ),
-    pFormatter      ( pNumFormatter ),
-    eValueType      ( SvxNumberValueType::Number ),
-    aStringVal      ( u""_ustr ),
-    nDoubleVal      ( rVal )
+    m_pFormatter      ( pNumFormatter ),
+    m_eValueType      ( SvxNumberValueType::Number ),
+    m_aStringVal      ( u""_ustr ),
+    m_nDoubleVal      ( rVal )
 {
 }
 
@@ -58,20 +58,20 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
                                       const double& rVal, OUString aValueStr,
                                       const TypedWhichId<SvxNumberInfoItem> nId ) :
     SfxPoolItem     ( nId ),
-    pFormatter      ( pNumFormatter ),
-    eValueType      ( SvxNumberValueType::Number ),
-    aStringVal      (std::move( aValueStr )),
-    nDoubleVal      ( rVal )
+    m_pFormatter      ( pNumFormatter ),
+    m_eValueType      ( SvxNumberValueType::Number ),
+    m_aStringVal      (std::move( aValueStr )),
+    m_nDoubleVal      ( rVal )
 {
 }
 
 
 SvxNumberInfoItem::SvxNumberInfoItem( const SvxNumberInfoItem& rItem ) :
     SfxPoolItem  ( rItem ),
-    pFormatter   ( rItem.pFormatter ),
-    eValueType   ( rItem.eValueType ),
-    aStringVal   ( rItem.aStringVal ),
-    nDoubleVal   ( rItem.nDoubleVal ),
+    m_pFormatter   ( rItem.m_pFormatter ),
+    m_eValueType   ( rItem.m_eValueType ),
+    m_aStringVal   ( rItem.m_aStringVal ),
+    m_nDoubleVal   ( rItem.m_nDoubleVal ),
     mvDelFormats( rItem.mvDelFormats )
 {
 }
@@ -102,10 +102,10 @@ bool SvxNumberInfoItem::operator==( const SfxPoolItem& rItem ) const
     const SvxNumberInfoItem& rOther = static_cast<const SvxNumberInfoItem&>(rItem);
 
     return mvDelFormats == rOther.mvDelFormats &&
-           pFormatter == rOther.pFormatter &&
-           eValueType == rOther.eValueType &&
-           nDoubleVal == rOther.nDoubleVal &&
-           aStringVal == rOther.aStringVal;
+           m_pFormatter == rOther.m_pFormatter &&
+           m_eValueType == rOther.m_eValueType &&
+           m_nDoubleVal == rOther.m_nDoubleVal &&
+           m_aStringVal == rOther.m_aStringVal;
 }
 
 SvxNumberInfoItem* SvxNumberInfoItem::Clone( SfxItemPool * ) const

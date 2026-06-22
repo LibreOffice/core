@@ -50,20 +50,20 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    SvNumberFormatter*      GetNumberFormatter() const { return pFormatter; }
-    const OUString&         GetValueString() const { return aStringVal; }
-    double                  GetValueDouble() const  { return nDoubleVal; }
+    SvNumberFormatter*      GetNumberFormatter() const { return m_pFormatter; }
+    const OUString&         GetValueString() const { return m_aStringVal; }
+    double                  GetValueDouble() const  { return m_nDoubleVal; }
 
     const std::vector<sal_uInt32> & GetDelFormats() const { return mvDelFormats; }
     void                    SetDelFormats( std::vector<sal_uInt32> && );
 
-    SvxNumberValueType      GetValueType() const { return eValueType; }
+    SvxNumberValueType      GetValueType() const { return m_eValueType; }
 
 private:
-    SvNumberFormatter*  pFormatter;
-    SvxNumberValueType  eValueType;
-    OUString            aStringVal;
-    double              nDoubleVal;
+    SvNumberFormatter*  m_pFormatter;
+    SvxNumberValueType  m_eValueType;
+    OUString            m_aStringVal;
+    double              m_nDoubleVal;
 
     std::vector<sal_uInt32> mvDelFormats;
 };
