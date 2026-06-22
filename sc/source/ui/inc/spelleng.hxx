@@ -100,7 +100,7 @@ public:
                             ScViewData& rViewData,
                             ScDocument* pUndoDoc,
                             ScDocument* pRedoDoc,
-                            css::uno::Reference< css::linguistic2::XSpellChecker > const & xSpeller );
+                            css::uno::Reference< css::linguistic2::XSpellChecker1 > const & xSpeller );
 
     /** Checks spelling of all cells in the selection or sheet. */
     virtual void        ConvertAll(weld::Widget* pDialogParent, EditView& rEditView) override;

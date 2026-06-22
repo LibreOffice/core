@@ -34,7 +34,7 @@
 #include <svx/svdotext.hxx>
 #include <svx/svdograf.hxx>
 #include <editeng/unolingu.hxx>
-#include <com/sun/star/linguistic2/XSpellChecker.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <svx/srchdlg.hxx>
 #include <unotools/linguprops.hxx>
 #include <unotools/lingucfg.hxx>
@@ -226,7 +226,7 @@ SdOutliner::SdOutliner( SdDrawDocument& rDoc, OutlinerMode nMode )
 
     SetControlWord(nCntrl);
 
-    Reference< XSpellChecker > xSpellChecker( LinguMgr::GetSpellChecker() );
+    Reference< XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
     if ( xSpellChecker.is() )
         SetSpeller( xSpellChecker );
 

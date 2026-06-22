@@ -84,7 +84,7 @@ namespace datatransfer {
     }
 }
 namespace linguistic2 {
-    class XSpellChecker;
+    class XSpellChecker1;
     class XLanguageGuessing;
 }
 }}}
@@ -381,7 +381,7 @@ public:
     */
     static LanguageType CheckLanguage(
                             const OUString &rText,
-                            const css::uno::Reference< css::linguistic2::XSpellChecker >& xSpell,
+                            const css::uno::Reference< css::linguistic2::XSpellChecker1 >& xSpell,
                             const css::uno::Reference< css::linguistic2::XLanguageGuessing >& xLangGuess,
                             bool bIsParaText );
     /// Allows adjusting the point or mark of the selection to a document coordinate.

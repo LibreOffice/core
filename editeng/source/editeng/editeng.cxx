@@ -1295,12 +1295,12 @@ void EditEngine::EraseVirtualDevice()
     getImpl().EraseVirtualDevice();
 }
 
-void EditEngine::SetSpeller( Reference< XSpellChecker > const &xSpeller )
+void EditEngine::SetSpeller( Reference< XSpellChecker1 > const &xSpeller )
 {
     getImpl().SetSpeller(xSpeller);
 }
 
-Reference< XSpellChecker > const & EditEngine::GetSpeller()
+Reference< XSpellChecker1 > const & EditEngine::GetSpeller()
 {
     return getImpl().GetSpeller();
 }

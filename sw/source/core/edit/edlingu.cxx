@@ -103,7 +103,7 @@ namespace {
 
 class SwSpellIter : public SwLinguIter
 {
-    uno::Reference<XSpellChecker> m_xSpeller;
+    uno::Reference<XSpellChecker1> m_xSpeller;
     svx::SpellPortions m_aLastPortions;
 
     SpellContentPositions m_aLastPositions;
@@ -363,7 +363,7 @@ uno::Any SwConvIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
         *pMySh->GetCursor()->GetMark() = *m_oEnd;
 
         // call function to find next text portion to be converted
-        uno::Reference< linguistic2::XSpellChecker > xEmpty;
+        uno::Reference< linguistic2::XSpellChecker1 > xEmpty;
         pMySh->GetDoc()->Spell(*pMySh->GetCursor(), xEmpty, pPageCnt, pPageSt, false,
                                pMySh->GetLayout(), &m_rArgs)
             >>= aConvText;
@@ -908,11 +908,11 @@ uno::Reference< XSpellAlternatives >
             OUString const aWord(aConversionMap.getViewText().copy(nBeginView,
                 aConversionMap.ConvertToViewPosition(nBegin+nLen) - nBeginView));
 
-            uno::Reference< XSpellChecker >  xSpell( ::GetSpellChecker() );
+            uno::Reference< XSpellChecker1 >  xSpell( ::GetSpellChecker() );
             if( xSpell.is() )
             {
                 LanguageType eActLang = pNode->GetLang( nBegin, nLen );
-                if( xSpell->hasLocale( LanguageTag::convertToLocale(eActLang) ))
+                if( xSpell->hasLanguage( static_cast<sal_uInt16>(eActLang) ))
                 {
                     // restrict the maximal number of suggestions displayed
                     // in the context menu.
@@ -926,7 +926,7 @@ uno::Reference< XSpellAlternatives >
                     // implementation here by providing an additional parameter.
                     Sequence< PropertyValue > aPropVals ( { comphelper::makePropertyValue( UPN_MAX_NUMBER_OF_SUGGESTIONS, sal_Int16(7)) } );
 
-                    xSpellAlt = xSpell->spell( aWord, LanguageTag::convertToLocale(eActLang), aPropVals );
+                    xSpellAlt = xSpell->spell( aWord, static_cast<sal_uInt16>(eActLang), aPropVals );
                 }
             }
 

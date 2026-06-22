@@ -51,7 +51,7 @@ template <typename Arg, typename Ret> class Link;
 
 namespace com::sun::star {
   namespace linguistic2 {
-    class XSpellChecker;
+    class XSpellChecker1;
     class XHyphenator;
   }
   namespace datatransfer {
@@ -433,9 +433,9 @@ public:
     void            EraseVirtualDevice();
 
     void            SetSpeller( css::uno::Reference<
-                            css::linguistic2::XSpellChecker > const &xSpeller );
+                            css::linguistic2::XSpellChecker1 > const &xSpeller );
     SAL_DLLPRIVATE css::uno::Reference<
-        css::linguistic2::XSpellChecker > const &
+        css::linguistic2::XSpellChecker1 > const &
                     GetSpeller();
     void            SetHyphenator( css::uno::Reference<
                             css::linguistic2::XHyphenator > const & xHyph );

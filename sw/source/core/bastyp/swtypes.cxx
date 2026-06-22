@@ -50,7 +50,10 @@ Size GetGraphicSizeTwip(const Graphic& rGraphic, vcl::RenderContext* pOutDev)
     return aSize;
 }
 
-uno::Reference<linguistic2::XSpellChecker> GetSpellChecker() { return LinguMgr::GetSpellChecker(); }
+uno::Reference<linguistic2::XSpellChecker1> GetSpellChecker()
+{
+    return LinguMgr::GetSpellChecker();
+}
 
 uno::Reference<linguistic2::XHyphenator> GetHyphenator() { return LinguMgr::GetHyphenator(); }
 

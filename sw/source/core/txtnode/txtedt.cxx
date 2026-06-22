@@ -89,10 +89,10 @@ using namespace ::com::sun::star::smarttags;
 namespace
 {
     void DetectAndMarkMissingDictionaries( SwDoc& rDoc,
-                                           const uno::Reference< XSpellChecker >& xSpell,
+                                           const uno::Reference< XSpellChecker1 >& xSpell,
                                            const LanguageType eActLang )
     {
-        if( xSpell.is() && !xSpell->hasLocale( LanguageTag::convertToLocale(eActLang) ) )
+        if( xSpell.is() && !xSpell->hasLanguage( eActLang.get() ) )
             rDoc.SetMissingDictionaries( true );
         else
             rDoc.SetMissingDictionaries( false );
@@ -1095,7 +1095,7 @@ bool SwTextNode::Spell(SwSpellArgs* pArgs, bool bIsReadOnly)
                 if (pArgs->xSpeller.is())
                 {
                     SvxSpellWrapper::CheckSpellLang( pArgs->xSpeller, eActLang );
-                    pArgs->xSpellAlt = pArgs->xSpeller->spell( rWord, LanguageTag::convertToLocale(eActLang),
+                    pArgs->xSpellAlt = pArgs->xSpeller->spell( rWord, static_cast<sal_uInt16>(eActLang),
                                             Sequence< PropertyValue >() );
                 }
                 if( pArgs->xSpellAlt.is() )
@@ -1105,7 +1105,7 @@ bool SwTextNode::Spell(SwSpellArgs* pArgs, bool bIsReadOnly)
                         // we must remove them before spell checking
                         // to avoid false alarm
                         ( (bRestoreString || bContainsComments) && pArgs->xSpeller->isValid( rWord.replaceAll(OUStringChar(CH_TXTATR_INWORD), ""),
-                            LanguageTag::convertToLocale(eActLang), Sequence< PropertyValue >() ) ) )
+                            static_cast<sal_uInt16>(eActLang), Sequence< PropertyValue >() ) ) )
                     {
                         pArgs->xSpellAlt = nullptr;
                     }
@@ -1120,10 +1120,10 @@ bool SwTextNode::Spell(SwSpellArgs* pArgs, bool bIsReadOnly)
                         // check space separated word pairs in the dictionary, e.g. "vice versa"
                         if ( !((bNextWord && !linguistic::HasDigits(aScanner.GetWord()) &&
                             pArgs->xSpeller->isValid( rActualWord + " " + aScanner.GetWord(),
-                                LanguageTag::convertToLocale(eActLang), Sequence< PropertyValue >() )) ||
+                                static_cast<sal_uInt16>(eActLang), Sequence< PropertyValue >() )) ||
                            ( !sPrevWord.isEmpty() && !linguistic::HasDigits(sPrevWord) &&
                             pArgs->xSpeller->isValid( sPrevWord + " " + rActualWord,
-                                LanguageTag::convertToLocale(eActLang), Sequence< PropertyValue >() ))) )
+                                static_cast<sal_uInt16>(eActLang), Sequence< PropertyValue >() ))) )
                         {
                             // make sure the selection build later from the data
                             // below does not include "in word" character to the
@@ -1403,7 +1403,7 @@ SwRect SwTextFrame::AutoSpell_(SwTextNode & rNode, sal_Int32 nActPos)
 
     if( bFresh )
     {
-        uno::Reference< XSpellChecker > xSpell( ::GetSpellChecker() );
+        uno::Reference< XSpellChecker1 > xSpell( ::GetSpellChecker() );
         SwDoc& rDoc = pNode->GetDoc();
 
         SwScanner aScanner( *pNode, pNode->GetText(), nullptr, ModelToViewHelper(),
@@ -1422,17 +1422,17 @@ SwRect SwTextFrame::AutoSpell_(SwTextNode & rNode, sal_Int32 nActPos)
             LanguageType eActLang = aScanner.GetCurrentLanguage();
             DetectAndMarkMissingDictionaries( rDoc, xSpell, eActLang );
 
-            bool bSpell = xSpell.is() && xSpell->hasLocale( LanguageTag::convertToLocale(eActLang) );
+            bool bSpell = xSpell.is() && xSpell->hasLanguage( static_cast<sal_uInt16>(eActLang) );
             if( bSpell && !rWord.isEmpty() && !lcl_IsURL(rWord, *pNode, nBegin, nLen) )
             {
                 // check for: bAlter => xHyphWord.is()
                 OSL_ENSURE(!bSpell || xSpell.is(), "NULL pointer");
-                if( !xSpell->isValid( rWord, LanguageTag::convertToLocale(eActLang), Sequence< PropertyValue >() ) &&
+                if( !xSpell->isValid( rWord, static_cast<sal_uInt16>(eActLang), Sequence< PropertyValue >() ) &&
                     // redlines can leave "in word" character within word,
                     // we must remove them before spell checking
                     // to avoid false alarm
                     ((!bRestoreString && !bContainsComments) || !xSpell->isValid( rWord.replaceAll(OUStringChar(CH_TXTATR_INWORD), ""),
-                            LanguageTag::convertToLocale(eActLang), Sequence< PropertyValue >() ) ) )
+                            static_cast<sal_uInt16>(eActLang), Sequence< PropertyValue >() ) ) )
                 {
                     OUString sPrevWord = aScanner.GetPrevWord();
                     bNextWord = aScanner.NextWord();
@@ -1440,10 +1440,10 @@ SwRect SwTextFrame::AutoSpell_(SwTextNode & rNode, sal_Int32 nActPos)
                     // check space separated word pairs in the dictionary, e.g. "vice versa"
                     if ( !((bNextWord && !linguistic::HasDigits(aScanner.GetWord()) &&
                             xSpell->isValid( aScanner.GetPrevWord() + " " + aScanner.GetWord(),
-                                LanguageTag::convertToLocale(eActLang), Sequence< PropertyValue >() )) ||
+                                static_cast<sal_uInt16>(eActLang), Sequence< PropertyValue >() )) ||
                            (!sPrevWord.isEmpty() && !linguistic::HasDigits(sPrevWord) &&
                             xSpell->isValid( sPrevWord + " " + aScanner.GetPrevWord(),
-                                LanguageTag::convertToLocale(eActLang), Sequence< PropertyValue >() ))) )
+                                static_cast<sal_uInt16>(eActLang), Sequence< PropertyValue >() ))) )
                     {
                         sal_Int32 nSmartTagStt = nBegin;
                         sal_Int32 nDummy = 1;

@@ -30,7 +30,7 @@ namespace com::sun::star::linguistic2 { class XHyphenator; }
 namespace com::sun::star::linguistic2 { class XLinguProperties; }
 namespace com::sun::star::linguistic2 { class XLinguServiceManager2; }
 namespace com::sun::star::linguistic2 { class XSearchableDictionaryList; }
-namespace com::sun::star::linguistic2 { class XSpellChecker; }
+namespace com::sun::star::linguistic2 { class XSpellChecker1; }
 namespace com::sun::star::linguistic2 { class XThesaurus; }
 
 class LinguMgrExitLstnr;
@@ -44,7 +44,7 @@ class EDITENG_DLLPUBLIC LinguMgr
     friend class LinguMgrExitLstnr;
 
     static css::uno::Reference< css::linguistic2::XLinguServiceManager2 >     xLngSvcMgr;
-    static css::uno::Reference< css::linguistic2::XSpellChecker >             xSpell;
+    static css::uno::Reference< css::linguistic2::XSpellChecker1 >            xSpell;
     static css::uno::Reference< css::linguistic2::XHyphenator >               xHyph;
     static css::uno::Reference< css::linguistic2::XThesaurus >                xThes;
     static css::uno::Reference< css::linguistic2::XSearchableDictionaryList > xDicList;
@@ -56,7 +56,7 @@ class EDITENG_DLLPUBLIC LinguMgr
     static rtl::Reference<LinguMgrExitLstnr>           pExitLstnr;
     static bool                                        bExiting;
 
-    static css::uno::Reference< css::linguistic2::XSpellChecker >             GetSpell();
+    static css::uno::Reference< css::linguistic2::XSpellChecker1 >            GetSpell();
     static css::uno::Reference< css::linguistic2::XHyphenator >               GetHyph();
     static css::uno::Reference< css::linguistic2::XThesaurus >                GetThes();
     static css::uno::Reference< css::linguistic2::XSearchableDictionaryList > GetDicList();
@@ -70,7 +70,7 @@ class EDITENG_DLLPUBLIC LinguMgr
 
 public:
 
-    static css::uno::Reference< css::linguistic2::XSpellChecker >             GetSpellChecker();
+    static css::uno::Reference< css::linguistic2::XSpellChecker1 >            GetSpellChecker();
     static css::uno::Reference< css::linguistic2::XHyphenator >               GetHyphenator();
     static css::uno::Reference< css::linguistic2::XThesaurus >                GetThesaurus();
     static css::uno::Reference< css::linguistic2::XSearchableDictionaryList > GetDictionaryList();

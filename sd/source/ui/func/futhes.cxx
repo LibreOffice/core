@@ -89,7 +89,7 @@ void FuThesaurus::DoExecute(SfxRequest& rReq)
         {
             if ( !pOutliner->GetSpeller().is() )
             {
-                Reference< XSpellChecker > xSpellChecker( LinguMgr::GetSpellChecker() );
+                Reference< XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
                 if ( xSpellChecker.is() )
                     pOutliner->SetSpeller( xSpellChecker );
 
@@ -111,7 +111,7 @@ void FuThesaurus::DoExecute(SfxRequest& rReq)
 
         if ( !pOutliner->GetSpeller().is() )
         {
-            Reference< XSpellChecker > xSpellChecker( LinguMgr::GetSpellChecker() );
+            Reference< XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
             if ( xSpellChecker.is() )
                 pOutliner->SetSpeller( xSpellChecker );
 

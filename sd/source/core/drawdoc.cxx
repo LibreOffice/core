@@ -97,7 +97,7 @@
 #include <unomodel.hxx>
 
 namespace com::sun::star::linguistic2 { class XHyphenator; }
-namespace com::sun::star::linguistic2 { class XSpellChecker; }
+namespace com::sun::star::linguistic2 { class XSpellChecker1; }
 
 using namespace ::sd;
 using namespace ::com::sun::star;
@@ -252,7 +252,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 
     try
     {
-        Reference< XSpellChecker > xSpellChecker( LinguMgr::GetSpellChecker() );
+        Reference< XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
         if ( xSpellChecker.is() )
             rOutliner.SetSpeller( xSpellChecker );
 
@@ -305,7 +305,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 
     try
     {
-        Reference< XSpellChecker > xSpellChecker( LinguMgr::GetSpellChecker() );
+        Reference< XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
         if ( xSpellChecker.is() )
             m_pHitTestOutliner->SetSpeller( xSpellChecker );
 

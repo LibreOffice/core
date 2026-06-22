@@ -1624,7 +1624,7 @@ css::lang::Locale ImpEditEngine::GetLocale( const EditPaM& rPaM ) const
     return LanguageTag( GetLanguage( rPaM ).nLang ).getLocale();
 }
 
-Reference< XSpellChecker > const & ImpEditEngine::GetSpeller()
+Reference< XSpellChecker1 > const & ImpEditEngine::GetSpeller()
 {
     if (!mxSpeller.is())
         mxSpeller = LinguMgr::GetSpellChecker();
@@ -2061,7 +2061,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
         {
             LanguageType eLang = GetLanguage( aCurSel.Max() ).nLang;
             SvxSpellWrapper::CheckSpellLang(mxSpeller, eLang);
-            xSpellAlt = mxSpeller->spell( aWord, LanguageTag::convertToLocale(eLang), aEmptySeq );
+            xSpellAlt = mxSpeller->spell( aWord, static_cast<sal_uInt16>(eLang), aEmptySeq );
         }
 
         if ( !xSpellAlt.is() )
@@ -2108,7 +2108,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpFindNextError(EditSelection& r
         }
 
         if ( !aWord.isEmpty() )
-            xSpellAlt = mxSpeller->spell( aWord, LanguageTag::convertToLocale(GetLanguage( aCurSel.Max() ).nLang), aEmptySeq );
+            xSpellAlt = mxSpeller->spell( aWord, static_cast<sal_uInt16>(GetLanguage( aCurSel.Max() ).nLang), aEmptySeq );
 
         if ( !xSpellAlt.is() )
             aCurSel = WordRight( aCurSel.Min(), css::i18n::WordType::DICTIONARY_WORD );
@@ -2479,7 +2479,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                 {
                     const sal_Int32 nWStart = aSel.Min().GetIndex();
                     const sal_Int32 nWEnd = aSel.Max().GetIndex();
-                    if (!mxSpeller->isValid( aWord, LanguageTag::convertToLocale(GetLanguage( EditPaM( aSel.Min().GetNode(), nWStart+1 ) ).nLang), aEmptySeq))
+                    if (!mxSpeller->isValid( aWord, static_cast<sal_uInt16>(GetLanguage( EditPaM( aSel.Min().GetNode(), nWStart+1 ) ).nLang), aEmptySeq))
                     {
                         // Check if already marked correctly...
                         const sal_Int32 nXEnd = bDottAdded ? nWEnd -1 : nWEnd;
@@ -2627,7 +2627,7 @@ EESpellState ImpEditEngine::HasSpellErrors()
         {
             LanguageType eLang = GetLanguage( aCurSel.Max() ).nLang;
             SvxSpellWrapper::CheckSpellLang(mxSpeller, eLang);
-            xSpellAlt = mxSpeller->spell( aWord, LanguageTag::convertToLocale(eLang), aEmptySeq );
+            xSpellAlt = mxSpeller->spell( aWord, static_cast<sal_uInt16>(eLang), aEmptySeq );
         }
         aCurSel = WordRight( aCurSel.Max(), css::i18n::WordType::DICTIONARY_WORD );
     }

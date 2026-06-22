@@ -77,7 +77,7 @@ using namespace com::sun::star::beans;
 // static
 LanguageType EditView::CheckLanguage(
         const OUString &rText,
-        const Reference< linguistic2::XSpellChecker >& xSpell,
+        const Reference< linguistic2::XSpellChecker1 >& xSpell,
         const Reference< linguistic2::XLanguageGuessing >& xLangGuess,
         bool bIsParaText )
 {
@@ -138,8 +138,8 @@ LanguageType EditView::CheckLanguage(
         {
             if (nTmpLang != LANGUAGE_NONE  &&  nTmpLang != LANGUAGE_DONTKNOW)
             {
-                if (xSpell->hasLocale( LanguageTag::convertToLocale(nTmpLang) ) &&
-                    xSpell->isValid( rText, LanguageTag::convertToLocale(nTmpLang), Sequence< PropertyValue >() ))
+                if (xSpell->hasLanguage( static_cast<sal_uInt16>(nTmpLang) ) &&
+                    xSpell->isValid( rText, static_cast<sal_uInt16>(nTmpLang), Sequence< PropertyValue >() ))
                 {
                     nLang = nTmpLang;
                     break;
@@ -1075,7 +1075,7 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
     Point aPos(rDevice.PixelToLogic(rPosPixel));
     aPos = getImpl().GetDocPos( aPos );
     EditPaM aPaM = getEditEngine().GetPaM(aPos, false);
-    Reference< linguistic2::XSpellChecker >  xSpeller(getImpEditEngine().GetSpeller());
+    Reference< linguistic2::XSpellChecker1 >  xSpeller(getImpEditEngine().GetSpeller());
     ESelection aOldSel = GetSelection();
     if ( !(xSpeller.is() && getImpl().IsWrongSpelledWord( aPaM, true )) )
         return false;
@@ -1113,7 +1113,7 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
 
     // Are there any replace suggestions?
     Reference< linguistic2::XSpellAlternatives >  xSpellAlt =
-            xSpeller->spell( aSelected, LanguageTag::convertToLocale(getImpEditEngine().GetLanguage( aPaM2 ).nLang), aPropVals );
+            xSpeller->spell( aSelected, static_cast<sal_uInt16>(getImpEditEngine().GetLanguage( aPaM2 ).nLang), aPropVals );
 
     Reference< linguistic2::XLanguageGuessing >  xLangGuesser( EditDLL::Get().GetGlobalData()->GetLanguageGuesser() );
 

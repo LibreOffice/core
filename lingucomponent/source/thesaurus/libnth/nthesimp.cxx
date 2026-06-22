@@ -23,7 +23,7 @@
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
-#include <com/sun/star/linguistic2/XSpellChecker.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/lok.hxx>
@@ -220,7 +220,7 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
     uno::Sequence< Reference< XMeaning > > aMeanings( 1 );
     uno::Sequence< Reference< XMeaning > > noMeanings( 0 );
     uno::Reference< XLinguServiceManager2 > xLngSvcMgr( GetLngSvcMgr_Impl() );
-    uno::Reference< XSpellChecker > xSpell;
+    uno::Reference< XSpellChecker1 > xSpell;
 
     OUString aRTerm(qTerm);
     OUString aPTerm(qTerm);
@@ -316,7 +316,7 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
         if (stem)
         {
             xTmpRes2 = xSpell->spell( "<?xml?><query type='analyze'><word>" +
-                                      aPTerm + "</word></query>", LanguageTag::convertToLocale(nLanguage), rProperties );
+                                      aPTerm + "</word></query>", static_cast<sal_uInt16>(nLanguage), rProperties );
             if (xTmpRes2.is())
             {
                 Sequence<OUString>seq = xTmpRes2->getAlternatives();
@@ -352,7 +352,7 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
                     if (stem && stem2)
                     {
                         Reference< XSpellAlternatives > xTmpRes = xSpell->spell( "<?xml?><query type='generate'><word>" +
-                            sTerm + "</word>" + codeTerm + "</query>", LanguageTag::convertToLocale(nLanguage), rProperties );
+                            sTerm + "</word>" + codeTerm + "</query>", static_cast<sal_uInt16>(nLanguage), rProperties );
                         if (xTmpRes.is())
                         {
                             Sequence<OUString>seq = xTmpRes->getAlternatives();
@@ -402,11 +402,11 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
             return noMeanings;
         stem = 1;
 
-        xSpell = xLngSvcMgr->getSpellChecker();
-        if (!xSpell.is() || !xSpell->isValid( SPELLML_SUPPORT, LanguageTag::convertToLocale(nLanguage), rProperties ))
+        xSpell.set( xLngSvcMgr->getSpellChecker(), UNO_QUERY );
+        if (!xSpell.is() || !xSpell->isValid( SPELLML_SUPPORT, static_cast<sal_uInt16>(nLanguage), rProperties ))
             return noMeanings;
         Reference< XSpellAlternatives > xTmpRes = xSpell->spell( "<?xml?><query type='stem'><word>" +
-            aRTerm + "</word></query>", LanguageTag::convertToLocale(nLanguage), rProperties );
+            aRTerm + "</word></query>", static_cast<sal_uInt16>(nLanguage), rProperties );
         if (xTmpRes.is())
         {
             Sequence<OUString>seq = xTmpRes->getAlternatives();
@@ -423,7 +423,7 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
         if (!pos)
             return noMeanings;
         xTmpRes = xSpell->spell( OUString::Concat("<?xml?><query type='stem'><word>") +
-            aRTerm.subView(pos + 1) + "</word></query>", LanguageTag::convertToLocale(nLanguage), rProperties );
+            aRTerm.subView(pos + 1) + "</word></query>", static_cast<sal_uInt16>(nLanguage), rProperties );
         if (xTmpRes.is())
         {
             Sequence<OUString>seq = xTmpRes->getAlternatives();

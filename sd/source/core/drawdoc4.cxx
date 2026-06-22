@@ -768,7 +768,7 @@ void SdDrawDocument::StartOnlineSpelling(bool bForceSpelling)
 
     SdOutliner* pOutl = GetInternalOutliner();
 
-    Reference< XSpellChecker > xSpellChecker( LinguMgr::GetSpellChecker() );
+    Reference< XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
     if ( xSpellChecker.is() )
         pOutl->SetSpeller( xSpellChecker );
 

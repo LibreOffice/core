@@ -374,12 +374,12 @@ bool Outliner::SpellNextDocument()
 }
 
 
-void Outliner::SetSpeller( Reference< XSpellChecker > const &xSpeller )
+void Outliner::SetSpeller( Reference< XSpellChecker1 > const &xSpeller )
 {
     pEditEngine->SetSpeller( xSpeller );
 }
 
-Reference< XSpellChecker > const & Outliner::GetSpeller()
+Reference< XSpellChecker1 > const & Outliner::GetSpeller()
 {
     return pEditEngine->GetSpeller();
 }

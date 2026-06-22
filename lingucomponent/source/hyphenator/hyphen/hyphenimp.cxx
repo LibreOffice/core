@@ -27,7 +27,7 @@
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
-#include <com/sun/star/linguistic2/XSpellChecker.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
@@ -481,22 +481,22 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                         minCompoundLead == 0 || minCompoundTrail == 0 ) )
                 {
                     uno::Reference< XLinguServiceManager2 > xLngSvcMgr( GetLngSvcMgr_Impl() );
-                    uno::Reference< XSpellChecker > xSpell;
+                    uno::Reference< XSpellChecker1 > xSpell;
 
                     LanguageType nLanguage = LinguLocaleToLanguage( aLocale );
 
-                    xSpell = xLngSvcMgr->getSpellChecker();
+                    xSpell.set( xLngSvcMgr->getSpellChecker(), UNO_QUERY );
 
                     // get morphological analysis of the word
                     if ( ( bAnalyzed && xTmpRes.is() ) || ( xSpell.is() && xSpell->isValid(
-                            SPELLML_SUPPORT, LanguageTag::convertToLocale(nLanguage),
+                            SPELLML_SUPPORT, static_cast<sal_uInt16>(nLanguage),
                             uno::Sequence< beans::PropertyValue >() ) ) )
                     {
                         if ( !bAnalyzed )
                         {
                             xTmpRes = xSpell->spell( "<?xml?><query type='analyze'><word>" +
                                                        aWord + "</word></query>",
-                                               LanguageTag::convertToLocale(nLanguage),
+                                               static_cast<sal_uInt16>(nLanguage),
                                                uno::Sequence< beans::PropertyValue >() );
                             bAnalyzed = true;
 

@@ -23,7 +23,7 @@
 #include <string_view>
 #include <sal/config.h>
 
-#include <com/sun/star/linguistic2/XSpellChecker.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XStream.hpp>
@@ -441,12 +441,12 @@ void SvxAutoCorrect::FnCapitalStartWord( SvxAutoCorrDoc& rDoc,
             if( !FindInWordStartExceptList(eLang, sWord) )
             {
                 // Check that word isn't correctly spelt before correcting:
-                css::uno::Reference< css::linguistic2::XSpellChecker > xSpeller =
+                css::uno::Reference< css::linguistic2::XSpellChecker1 > xSpeller =
                     LinguMgr::GetSpellChecker();
-                if( xSpeller->hasLocale(LanguageTag::convertToLocale(eLang)) )
+                if( xSpeller->hasLanguage(static_cast<sal_uInt16>(eLang)) )
                 {
                     Sequence< css::beans::PropertyValue > aEmptySeq;
-                    if (xSpeller->isValid(sWord, LanguageTag::convertToLocale(eLang), aEmptySeq))
+                    if (xSpeller->isValid(sWord, static_cast<sal_uInt16>(eLang), aEmptySeq))
                     {
                         return;
                     }

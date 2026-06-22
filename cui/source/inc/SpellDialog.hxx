@@ -49,7 +49,7 @@ struct ImplSVEvent;
 // forward ---------------------------------------------------------------
 
 struct SpellDialog_Impl;
-namespace com::sun::star::linguistic2 { class XSpellChecker; }
+namespace com::sun::star::linguistic2 { class XSpellChecker1; }
 
 namespace svx{
 class SpellDialog;
@@ -104,7 +104,7 @@ public:
 
     void            SetText(const OUString& rStr);
 
-    bool            MarkNextError( bool bIgnoreCurrentError, const css::uno::Reference<css::linguistic2::XSpellChecker>& );
+    bool            MarkNextError( bool bIgnoreCurrentError, const css::uno::Reference<css::linguistic2::XSpellChecker1>& );
     int             ChangeMarkedWord(const OUString& rNewWord, LanguageType eLanguage);
     void            MoveErrorMarkTo(sal_Int32 nErrorStart, sal_Int32 nErrorEnd, bool bGrammar);
     OUString        GetErrorText() const;
@@ -160,7 +160,8 @@ private:
     svx::SpellPortions           m_aSavedSentence;
 
     std::unique_ptr<SpellDialog_Impl> pImpl;
-    css::uno::Reference<css::linguistic2::XSpellChecker> xSpell;
+    css::uno::Reference<
+        css::linguistic2::XSpellChecker1 >     xSpell;
 
     rtl::Reference<DictionaryEventListener> m_xChangeAllDictListener;
     bool m_bResumeClearsChangeAllDict = false; // clear if another instance changed this word list

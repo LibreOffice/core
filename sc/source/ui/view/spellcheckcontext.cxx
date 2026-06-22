@@ -20,7 +20,7 @@
 #include <editutil.hxx>
 #include <dpobject.hxx>
 
-#include <com/sun/star/linguistic2/XSpellChecker.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 
 #include <o3tl/hash_combine.hxx>
 
@@ -407,7 +407,7 @@ void SpellCheckContext::setup()
     mpEngine->SetWordDelimiters(
                 ScEditUtil::ModifyDelimiters(mpEngine->GetWordDelimiters()));
 
-    uno::Reference<linguistic2::XSpellChecker> xXSpellChecker1(LinguMgr::GetSpellChecker());
+    uno::Reference<linguistic2::XSpellChecker1> xXSpellChecker1(LinguMgr::GetSpellChecker());
     mpEngine->SetSpeller(xXSpellChecker1);
     mpEngine->SetDefaultLanguage(meLanguage);
 }

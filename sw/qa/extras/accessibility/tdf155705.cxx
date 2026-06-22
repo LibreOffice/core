@@ -10,12 +10,12 @@
 #include <com/sun/star/accessibility/XAccessibleTextMarkup.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceManager2.hpp>
-#include <com/sun/star/linguistic2/XSpellChecker.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/text/TextMarkupType.hpp>
+#include <i18nlangtag/lang.h>
 
 #include <vcl/scheduler.hxx>
 
-#include <i18nlangtag/languagetag.hxx>
 #include <test/a11y/accessibletestbase.hxx>
 #include <test/a11y/AccessibilityTools.hxx>
 
@@ -32,8 +32,8 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, tdf155705)
 
     uno::Reference<linguistic2::XLinguServiceManager2> xLSM2
         = linguistic2::LinguServiceManager::create(m_xContext);
-    uno::Reference<linguistic2::XSpellChecker> xSpell(xLSM2->getSpellChecker());
-    if (!xSpell.is() || !xSpell->hasLocale(LanguageTag::convertToLocale(LANGUAGE_ENGLISH_US)))
+    uno::Reference<linguistic2::XSpellChecker1> xSpell(xLSM2->getSpellChecker(), uno::UNO_QUERY);
+    if (!xSpell.is() || !xSpell->hasLanguage(static_cast<sal_uInt16>(LANGUAGE_ENGLISH_US)))
         return;
 
     auto xContext = getDocumentAccessibleContext();

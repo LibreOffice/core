@@ -357,7 +357,7 @@ void ScViewFunc::DoThesaurus()
         return;
     }
 
-    uno::Reference<linguistic2::XSpellChecker> xSpeller = LinguMgr::GetSpellChecker();
+    uno::Reference<linguistic2::XSpellChecker1> xSpeller = LinguMgr::GetSpellChecker();
 
     pThesaurusEngine.reset(new ScEditEngineDefaulter(rDoc.GetEditEnginePool()));
     pThesaurusEngine->SetRefDevice(GetViewData().GetActiveWin()->GetOutDev());

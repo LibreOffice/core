@@ -554,7 +554,7 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
     SwWrtShell *pSh = &GetWrtShell();
     SdrView *pSdrView = pSh->GetDrawView();
     std::unique_ptr<SdrOutliner> pOutliner = ::SdrMakeOutliner(OutlinerMode::TextObject, pSdrView->GetModel());
-    uno::Reference< linguistic2::XSpellChecker >  xSpell( ::GetSpellChecker() );
+    uno::Reference< linguistic2::XSpellChecker1 >  xSpell( ::GetSpellChecker() );
     if (pOutliner)
     {
         pOutliner->SetRefDevice(pSh->getIDocumentDeviceAccess().getReferenceDevice(false));

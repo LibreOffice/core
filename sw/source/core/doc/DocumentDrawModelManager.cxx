@@ -116,7 +116,7 @@ void DocumentDrawModelManager::InitDrawModel()
     if (!comphelper::IsFuzzing())
     {
         SAL_INFO( "sw.doc", "before create Spellchecker/Hyphenator" );
-        css::uno::Reference< css::linguistic2::XSpellChecker > xSpell = ::GetSpellChecker();
+        css::uno::Reference< css::linguistic2::XSpellChecker1 > xSpell = ::GetSpellChecker();
         rOutliner.SetSpeller( xSpell );
         css::uno::Reference< css::linguistic2::XHyphenator > xHyphenator( ::GetHyphenator() );
         rOutliner.SetHyphenator( xHyphenator );

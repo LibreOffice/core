@@ -25,7 +25,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/PropertyValues.hpp>
-#include <com/sun/star/linguistic2/XSpellChecker.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 
 #include <map>
@@ -37,7 +37,11 @@ class LngSvcMgr;
 
 
 class SpellCheckerDispatcher :
-    public cppu::WeakImplHelper<css::linguistic2::XSpellChecker>,
+    public cppu::WeakImplHelper
+    <
+        css::linguistic2::XSpellChecker1,
+        css::linguistic2::XSpellChecker
+    >,
     public LinguDispatcher
 {
     typedef std::shared_ptr< LangSvcEntries_Spell >               LangSvcEntries_Spell_Ptr_t;
@@ -85,6 +89,14 @@ public:
     // XSpellChecker
     virtual sal_Bool SAL_CALL isValid( const OUString& aWord, const css::lang::Locale& aLocale, const css::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
     virtual css::uno::Reference< css::linguistic2::XSpellAlternatives > SAL_CALL spell( const OUString& aWord, const css::lang::Locale& aLocale, const css::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
+
+    // XSupportedLanguages
+    virtual css::uno::Sequence< ::sal_Int16 > SAL_CALL getLanguages(  ) override;
+    virtual sal_Bool SAL_CALL hasLanguage( ::sal_Int16 nLanguage ) override;
+
+    // XSpellChecker1
+    virtual sal_Bool SAL_CALL isValid( const OUString& aWord, ::sal_Int16 nLanguage, const css::uno::Sequence< css::beans::PropertyValue >& aProperties ) override;
+    virtual css::uno::Reference< css::linguistic2::XSpellAlternatives > SAL_CALL spell( const OUString& aWord, ::sal_Int16 nLanguage, const css::uno::Sequence< css::beans::PropertyValue >& aProperties ) override;
 
     // LinguDispatcher
     virtual void SetServiceList( const css::lang::Locale &rLocale, const css::uno::Sequence< OUString > &rSvcImplNames ) override;

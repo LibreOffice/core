@@ -33,7 +33,7 @@
 namespace com::sun::star {
     namespace linguistic2{
         class XLinguProperties;
-        class XSpellChecker;
+        class XSpellChecker1;
         class XHyphenator;
         class XThesaurus;
     }
@@ -113,7 +113,7 @@ constexpr short lOutlineMinTextDistance = o3tl::toTwips(15, o3tl::Length::in100)
 SW_DLLPUBLIC OUString SwResId(TranslateId aId);
 OUString SwResId(TranslateNId aContextSingularPlural, int nCardinality);
 
-css::uno::Reference< css::linguistic2::XSpellChecker >  GetSpellChecker();
+css::uno::Reference< css::linguistic2::XSpellChecker1 > GetSpellChecker();
 css::uno::Reference< css::linguistic2::XHyphenator >    GetHyphenator();
 css::uno::Reference< css::linguistic2::XThesaurus >     GetThesaurus();
 css::uno::Reference< css::linguistic2::XLinguProperties > GetLinguPropertySet();

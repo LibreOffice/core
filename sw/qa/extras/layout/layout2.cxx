@@ -11,7 +11,7 @@
 
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/linguistic2/XSpellChecker.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
@@ -1236,9 +1236,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf158885_compound_remain)
     if (!xHyphenator->hasLocale(lang::Locale(u"hu"_ustr, u"HU"_ustr, OUString())))
         return;
 
-    uno::Reference<linguistic2::XSpellChecker> xSpell = LinguMgr::GetSpellChecker();
-    lang::Locale aLocale(u"hu"_ustr, u"HU"_ustr, OUString());
-    if (!xSpell.is() || !xSpell->hasLocale(aLocale))
+    uno::Reference<linguistic2::XSpellChecker1> xSpell = LinguMgr::GetSpellChecker();
+    LanguageType eLang
+        = LanguageTag::convertToLanguageType(lang::Locale(u"hu"_ustr, u"HU"_ustr, OUString()));
+    if (!xSpell.is() || !xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
         return;
 
     createSwDoc("tdf158885_compound-remain.fodt");
@@ -1266,9 +1267,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf158885_not_compound_remain)
     if (!xHyphenator->hasLocale(lang::Locale(u"hu"_ustr, u"HU"_ustr, OUString())))
         return;
 
-    uno::Reference<linguistic2::XSpellChecker> xSpell = LinguMgr::GetSpellChecker();
-    lang::Locale aLocale(u"hu"_ustr, u"HU"_ustr, OUString());
-    if (!xSpell.is() || !xSpell->hasLocale(aLocale))
+    uno::Reference<linguistic2::XSpellChecker1> xSpell = LinguMgr::GetSpellChecker();
+    LanguageType eLang
+        = LanguageTag::convertToLanguageType(lang::Locale(u"hu"_ustr, u"HU"_ustr, OUString()));
+    if (!xSpell.is() || !xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
         return;
 
     createSwDoc("tdf158885_not_compound-remain.fodt");
@@ -1297,10 +1299,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf170177_compound_push)
     if (!xHyphenator->hasLocale(lang::Locale(u"hu"_ustr, u"HU"_ustr, OUString())))
         return;
 
-    uno::Reference<linguistic2::XSpellChecker> xSpell = LinguMgr::GetSpellChecker();
+    uno::Reference<linguistic2::XSpellChecker1> xSpell = LinguMgr::GetSpellChecker();
     LanguageType eLang
         = LanguageTag::convertToLanguageType(lang::Locale(u"hu"_ustr, u"HU"_ustr, OUString()));
-    if (!xSpell.is() || !xSpell->hasLocale(LanguageTag::convertToLocale(eLang)))
+    if (!xSpell.is() || !xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
         return;
 
     createSwDoc("tdf170177_compound-push.fodt");
@@ -1338,10 +1340,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf170177_not_compound_push)
     if (!xHyphenator->hasLocale(lang::Locale(u"hu"_ustr, u"HU"_ustr, OUString())))
         return;
 
-    uno::Reference<linguistic2::XSpellChecker> xSpell = LinguMgr::GetSpellChecker();
+    uno::Reference<linguistic2::XSpellChecker1> xSpell = LinguMgr::GetSpellChecker();
     LanguageType eLang
         = LanguageTag::convertToLanguageType(lang::Locale(u"hu"_ustr, u"HU"_ustr, OUString()));
-    if (!xSpell.is() || !xSpell->hasLocale(LanguageTag::convertToLocale(eLang)))
+    if (!xSpell.is() || !xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
         return;
 
     createSwDoc("tdf170177_not_compound-push.fodt");
@@ -1362,46 +1364,46 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf170177_not_compound_push)
 // TODO: move this test to the lingucomponent project
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf170140)
 {
-    uno::Reference<linguistic2::XSpellChecker> xSpell = LinguMgr::GetSpellChecker();
+    uno::Reference<linguistic2::XSpellChecker1> xSpell = LinguMgr::GetSpellChecker();
     auto aLocale = lang::Locale(u"hu"_ustr, u"HU"_ustr, OUString());
     LanguageType eLang = LanguageTag::convertToLanguageType(aLocale);
-    if (!xSpell.is() || !xSpell->hasLocale(aLocale))
+    if (!xSpell.is() || !xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
         return;
 
     uno::Sequence<beans::PropertyValue> aProperties;
 
     // correct non-ASCII apostrophe
     OUString sWord(u"d’Arc"_ustr);
-    CPPUNIT_ASSERT(xSpell->isValid(sWord, LanguageTag::convertToLocale(eLang), aProperties));
+    CPPUNIT_ASSERT(xSpell->isValid(sWord, static_cast<sal_uInt16>(eLang), aProperties));
 
     // bad ASCII apostrophe
     OUString sWord2(u"d'Arc"_ustr);
-    CPPUNIT_ASSERT(!xSpell->isValid(sWord2, LanguageTag::convertToLocale(eLang), aProperties));
+    CPPUNIT_ASSERT(!xSpell->isValid(sWord2, static_cast<sal_uInt16>(eLang), aProperties));
 }
 
 // TODO: move this test to the linguistic project
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf40277)
 {
-    uno::Reference<linguistic2::XSpellChecker> xSpell = LinguMgr::GetSpellChecker();
+    uno::Reference<linguistic2::XSpellChecker1> xSpell = LinguMgr::GetSpellChecker();
     auto aLocale = lang::Locale(u"en"_ustr, u"US"_ustr, OUString());
     LanguageType eLang = LanguageTag::convertToLanguageType(aLocale);
-    if (!xSpell.is() || !xSpell->hasLocale(aLocale))
+    if (!xSpell.is() || !xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
         return;
 
     uno::Sequence<beans::PropertyValue> aProperties;
 
     // check Hunspell dictionary
     OUString sWord(u"based"_ustr);
-    CPPUNIT_ASSERT(xSpell->isValid(sWord, LanguageTag::convertToLocale(eLang), aProperties));
+    CPPUNIT_ASSERT(xSpell->isValid(sWord, static_cast<sal_uInt16>(eLang), aProperties));
 
     // check custom dictionary support (a word which is stored only in technical.dic)
     OUString sWord2(u"SunHSI"_ustr);
-    CPPUNIT_ASSERT(xSpell->isValid(sWord2, LanguageTag::convertToLocale(eLang), aProperties));
+    CPPUNIT_ASSERT(xSpell->isValid(sWord2, static_cast<sal_uInt16>(eLang), aProperties));
 
     OUString sWord3(u"SunHSI-based"_ustr);
     // This was false (missing recognition of compounds formed from Hunspell
     // dictionary words and custom dictionary words)
-    CPPUNIT_ASSERT(xSpell->isValid(sWord3, LanguageTag::convertToLocale(eLang), aProperties));
+    CPPUNIT_ASSERT(xSpell->isValid(sWord3, static_cast<sal_uInt16>(eLang), aProperties));
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf163894)

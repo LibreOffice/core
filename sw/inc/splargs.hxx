@@ -23,7 +23,7 @@
 #include <tools/gen.hxx>
 
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
-#include <com/sun/star/linguistic2/XSpellChecker.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 
 #include <functional>
 #include <utility>
@@ -81,13 +81,13 @@ struct SwConversionArgs : SwArgsBase
 
 struct SwSpellArgs : SwArgsBase
 {
-    css::uno::Reference< css::linguistic2::XSpellChecker >      xSpeller;
+    css::uno::Reference< css::linguistic2::XSpellChecker1 >     xSpeller;
 
     css::uno::Reference< css::linguistic2::XSpellAlternatives > xSpellAlt;
 
     bool bIsGrammarCheck;
 
-    SwSpellArgs(css::uno::Reference< css::linguistic2::XSpellChecker > xSplChk,
+    SwSpellArgs(css::uno::Reference< css::linguistic2::XSpellChecker1 > xSplChk,
             SwPosition& rStart,
             SwPosition& rEnd,
             bool bGrammar )

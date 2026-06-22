@@ -744,6 +744,43 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
     return xRes;
 }
 
+uno::Sequence< sal_Int16 > SAL_CALL SpellCheckerDispatcher::getLanguages(  )
+{
+    MutexGuard  aGuard( GetLinguMutex() );
+    uno::Sequence< Locale > aTmp( getLocales() );
+    uno::Sequence< sal_Int16 > aRes( LocaleSeqToLangSeq( aTmp ) );
+    return aRes;
+}
+
+
+sal_Bool SAL_CALL SpellCheckerDispatcher::hasLanguage(
+    sal_Int16 nLanguage )
+{
+    MutexGuard  aGuard( GetLinguMutex() );
+    return hasLocale( LanguageTag::convertToLocale(LanguageType(static_cast<sal_uInt16>(nLanguage))));
+}
+
+
+sal_Bool SAL_CALL SpellCheckerDispatcher::isValid(
+    const OUString& rWord,
+    sal_Int16 nLanguage,
+    const uno::Sequence< beans::PropertyValue >& rProperties )
+{
+    MutexGuard  aGuard( GetLinguMutex() );
+    return isValid( rWord, LanguageTag::convertToLocale(LanguageType(static_cast<sal_uInt16>(nLanguage))), rProperties);
+}
+
+
+uno::Reference< linguistic2::XSpellAlternatives > SAL_CALL SpellCheckerDispatcher::spell(
+    const OUString& rWord,
+    sal_Int16 nLanguage,
+    const uno::Sequence< beans::PropertyValue >& rProperties )
+{
+    MutexGuard  aGuard( GetLinguMutex() );
+    return spell(rWord, LanguageTag::convertToLocale(LanguageType(static_cast<sal_uInt16>(nLanguage))), rProperties);
+}
+
+
 void SpellCheckerDispatcher::SetServiceList( const Locale &rLocale,
         const Sequence< OUString > &rSvcImplNames )
 {

@@ -21,7 +21,7 @@
 
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <com/sun/star/linguistic2/XSpellChecker.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 
 #include <View.hxx>
 #include <slideshow.hxx>
@@ -689,7 +689,7 @@ bool View::SdrBeginTextEdit(
 
         pOutl->SetControlWord(nCntrl);
 
-        Reference< linguistic2::XSpellChecker > xSpellChecker( LinguMgr::GetSpellChecker() );
+        Reference< linguistic2::XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
         if ( xSpellChecker.is() )
             pOutl->SetSpeller( xSpellChecker );
 

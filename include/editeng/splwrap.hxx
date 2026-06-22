@@ -30,7 +30,7 @@
 
 namespace com::sun::star::linguistic2 {
     class XDictionary;
-    class XSpellChecker;
+    class XSpellChecker1;
     class XHyphenator;
 }
 
@@ -79,7 +79,7 @@ public:
     virtual ~SvxSpellWrapper();
 
     static sal_Int16    CheckSpellLang(
-                            css::uno::Reference< css::linguistic2::XSpellChecker > const & xSpell,
+                            css::uno::Reference< css::linguistic2::XSpellChecker1 > const & xSpell,
                             LanguageType nLang );
     static sal_Int16    CheckHyphLang(
                             css::uno::Reference< css::linguistic2::XHyphenator >const & xHyph,

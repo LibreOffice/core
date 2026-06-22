@@ -4351,7 +4351,7 @@ void ScViewData::UpdateOutlinerFlags( Outliner& rOutl ) const
 
     if ( bOnlineSpell )
     {
-        css::uno::Reference<css::linguistic2::XSpellChecker> xXSpellChecker1( LinguMgr::GetSpellChecker() );
+        css::uno::Reference<css::linguistic2::XSpellChecker1> xXSpellChecker1( LinguMgr::GetSpellChecker() );
         rOutl.SetSpeller( xXSpellChecker1 );
     }
 
