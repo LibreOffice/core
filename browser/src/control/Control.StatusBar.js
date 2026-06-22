@@ -47,14 +47,6 @@ class StatusBar extends JSDialog.Toolbar {
 		return localizedText;
 	}
 
-	toLocalePattern(pattern, regex, text, sub1, sub2) {
-		var matches = new RegExp(regex, 'g').exec(text);
-		if (matches) {
-			text = pattern.toLocaleString().replace(sub1, parseInt(matches[1].replace(/,/g,'')).toLocaleString(String.locale)).replace(sub2, parseInt(matches[2].replace(/,/g,'')).toLocaleString(String.locale));
-		}
-		return text;
-	}
-
 	_updateToolbarsVisibility(context) {
 		var isReadOnly = this.map.isReadOnlyMode();
 		if (isReadOnly) {
@@ -151,7 +143,6 @@ class StatusBar extends JSDialog.Toolbar {
 
 	onPageChange(e) {
 		var state = e.state;
-		state = this.toLocalePattern('Page %1 of %2', 'Page (\\d+) of (\\d+)', state, '%1', '%2');
 		this.updateHtmlItem('StatePageNumber', state ? state : ' ');
 	}
 
@@ -621,7 +612,6 @@ class StatusBar extends JSDialog.Toolbar {
 			return;
 
 		if (commandName === '.uno:StatusDocPos') {
-			state = this.toLocalePattern('Sheet %1 of %2', 'Sheet (\\d+) of (\\d+)', state, '%1', '%2');
 			this.updateHtmlItem('StatusDocPos', state ? state : ' ');
 		}
 		else if (commandName === '.uno:LanguageStatus') {
@@ -629,8 +619,6 @@ class StatusBar extends JSDialog.Toolbar {
 			this.updateLanguageItem(language);
 		}
 		else if (commandName === '.uno:RowColSelCount') {
-			state = this.toLocalePattern('$1 rows, $2 columns selected', '(\\d+) rows, (\\d+) columns selected', state, '$1', '$2');
-			state = this.toLocalePattern('$1 of $2 records found', '(\\d+) of (\\d+) records found', state, '$1', '$2');
 			this.updateHtmlItem('RowColSelCount', state ? state : _('Select multiple cells'), !state);
 		}
 		else if (commandName === '.uno:InsertMode') {
@@ -677,15 +665,12 @@ class StatusBar extends JSDialog.Toolbar {
 			return;
 		}
 		else if (commandName === '.uno:StateWordCount') {
-			state = this.toLocalePattern('%1 words, %2 characters', '([\\d,]+) words, ([\\d,]+) characters', state, '%1', '%2');
 			this.updateHtmlItem('StateWordCount', state ? state : ' ');
 		}
 		else if (commandName === '.uno:PageStatus') {
 			if (this.map.getDocType() === 'presentation') {
-				state = this.toLocalePattern('Slide %1 of %2', 'Slide (\\d+) of (\\d+)', state, '%1', '%2');
 				this.updateHtmlItem('SlideStatus', state ? state : ' ');
 			} else {
-				state = this.toLocalePattern('Page %1 of %2', 'Slide (\\d+) of (\\d+)', state, '%1', '%2');
 				this.updateHtmlItem('PageStatus', state ? state : ' ');
 			}
 		}
