@@ -45,14 +45,6 @@ export class TilesSection extends CanvasSectionObject {
 		this.sectionProperties.skeletonHeadingColor = '#c8d2dc';
 		this.sectionProperties.skeletonLineColor = '#dde3ea';
 
-		/*
-			Seems that this number is equal to 45 twips in core.
-			Page rectangles are sent from core side.
-			Tiles also overlap with page rectangles but they don't overlap entirely.
-			Tiles render a slightly longer page.
-		*/
-		this.sectionProperties.multiPageViewMagicHeightFix = 3;
-
 		this.isJSDOM = typeof window === 'object' && window.name === 'nodejs';
 
 		this.checkpattern = this.makeCheckPattern();
@@ -463,30 +455,65 @@ export class TilesSection extends CanvasSectionObject {
 	}
 
 	private drawForViewLayoutMultiPage() {
+		Util.ensureValue(app.activeDocument);
+
 		const view = app.activeDocument.activeLayout as ViewLayoutMultiPage;
 
 		const visibleCoordList: Array<TileCoordData> = view.getCurrentCoordList();
+		const tileSize = RenderManager.tileSize;
 
 		for (let i = 0; i < visibleCoordList.length; i++) {
 			const tile = RenderManager.get(visibleCoordList[i]);
 
-			if (tile && tile.isReadyToDraw()) {
-				const tilePos = tile.coords.getPosSimplePoint();
+			if (!(tile && tile.isReadyToDraw())) continue;
 
-				const layoutRectangle1 = view.documentRectangles[view.getClosestRectangleIndex(tilePos)];
-				const layoutRectangle2 = view.documentRectangles[view.getClosestRectangleIndex(cool.SimplePoint.fromCorePixels([tilePos.pX, tilePos.pY + RenderManager.tileSize]))];
+			const tilePos = tile.coords.getPosSimplePoint();
 
-				if (layoutRectangle1.part === layoutRectangle2.part)
-					this.drawTileToCanvas(tile, this.context, tilePos.vX, tilePos.vY, RenderManager.tileSize, RenderManager.tileSize);
-				else {
-					// A tile in Writer may intersect 2 pages.
-					const height1 = layoutRectangle1.pY2 - tilePos.pY + this.sectionProperties.multiPageViewMagicHeightFix;
-					this.drawTileToCanvasCrop(tile, this.context, 0, 0, RenderManager.tileSize, height1, tilePos.vX, tilePos.vY, RenderManager.tileSize, height1);
+			// Core tiles live on a single continuous stacked-document grid. In
+			// multipage view the pages are re-laid into a grid, so one tile can
+			// overlap several pages (two vertically-consecutive pages, three when
+			// a page is shorter than a tile, and the area beyond a narrow page's
+			// right edge). Clip the tile to each page it overlaps in document
+			// space and blit only that intersection into the page's grid cell.
+			// This handles horizontal clipping, inter-page gaps and degenerate
+			// (0x0) pages uniformly.
+			const tx1 = tilePos.pX;
+			const ty1 = tilePos.pY;
+			const tx2 = tx1 + tileSize;
+			const ty2 = ty1 + tileSize;
 
-					tilePos.pY += RenderManager.tileSize;
-					const height2 = RenderManager.tileSize - height1;
-					this.drawTileToCanvasCrop(tile, this.context, 0, height1, RenderManager.tileSize, height2, tilePos.vX, tilePos.vY - height2, RenderManager.tileSize, height2);
-				}
+			for (let p = 0; p < view.documentRectangles.length; p++) {
+				const pr = view.documentRectangles[p];
+
+				const ix1 = Math.max(tx1, pr.pX1);
+				const iy1 = Math.max(ty1, pr.pY1);
+				const ix2 = Math.min(tx2, pr.pX2);
+				const iy2 = Math.min(ty2, pr.pY2);
+
+				if (ix2 <= ix1 || iy2 <= iy1) continue; // No overlap with this page.
+
+				const sx = ix1 - tx1;
+				const sy = iy1 - ty1;
+				const sw = ix2 - ix1;
+				const sh = iy2 - iy1;
+
+				const screen = view.documentPointToScreenWithIndex(
+					cool.SimplePoint.fromCorePixels([ix1, iy1]),
+					p,
+				);
+
+				this.drawTileToCanvasCrop(
+					tile,
+					this.context,
+					sx,
+					sy,
+					sw,
+					sh,
+					screen.x,
+					screen.y,
+					sw,
+					sh,
+				);
 			}
 		}
 	}
@@ -524,6 +551,8 @@ export class TilesSection extends CanvasSectionObject {
 	}
 
 	private drawForViewLayoutCompareChanges() {
+		Util.ensureValue(app.activeDocument);
+
 		const view = app.activeDocument.activeLayout as ViewLayoutCompareChanges;
 
 		const visibleCoordList: Array<TileCoordData> = view.getCurrentCoordList();

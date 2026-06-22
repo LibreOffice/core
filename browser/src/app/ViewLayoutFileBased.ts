@@ -173,7 +173,7 @@ class ViewLayoutFileBased extends ViewLayoutNewBase {
 		return this.documentRectangles.length - 1;
 	}
 
-	private getClosestRectangleIndex(
+	protected getClosestRectangleIndex(
 		point: cool.SimplePoint,
 		documentPoint = true,
 	): number {
@@ -258,57 +258,6 @@ class ViewLayoutFileBased extends ViewLayoutNewBase {
 		RenderManager.endTransaction(null);
 	}
 
-	public override documentToViewX(point: cool.SimplePoint): number {
-		if (this.viewRectangles.length === 0) return super.documentToViewX(point);
-
-		const index = this.getClosestRectangleIndex(point);
-		return (
-			this.viewRectangles[index].pX1 +
-			(point.pX - this.documentRectangles[index].pX1) -
-			this.scrollProperties.viewX +
-			app.sectionContainer.getDocumentAnchor()[0]
-		);
-	}
-
-	public override documentToViewY(point: cool.SimplePoint): number {
-		if (this.viewRectangles.length === 0) return super.documentToViewY(point);
-
-		const index = this.getClosestRectangleIndex(point);
-		return (
-			this.viewRectangles[index].pY1 +
-			(point.pY - this.documentRectangles[index].pY1) -
-			this.scrollProperties.viewY +
-			app.sectionContainer.getDocumentAnchor()[1]
-		);
-	}
-
-	public override canvasToDocumentPoint(
-		point: cool.SimplePoint,
-	): cool.SimplePoint {
-		if (this.viewRectangles.length === 0)
-			return super.canvasToDocumentPoint(point);
-
-		point.pX += this.scrollProperties.viewX;
-		point.pY += this.scrollProperties.viewY;
-
-		const index = this.getClosestRectangleIndex(point, false);
-
-		const result = point.clone();
-
-		if (this.documentRectangles[index] && this.viewRectangles[index]) {
-			result.pX =
-				this.documentRectangles[index].pX1 +
-				(point.pX - this.viewRectangles[index].pX1) -
-				this._documentAnchorPosition[0];
-			result.pY =
-				this.documentRectangles[index].pY1 +
-				(point.pY - this.viewRectangles[index].pY1) -
-				this._documentAnchorPosition[1];
-		}
-
-		return result;
-	}
-
 	public override scroll(pX: number, pY: number): boolean {
 		// pX / pY are document-pixel deltas (legacy ViewLayoutBase semantics).
 		// ViewLayoutNewBase.scroll dampens pY by /20, so callers that pass raw
@@ -387,3 +336,10 @@ class ViewLayoutFileBased extends ViewLayoutNewBase {
 		}
 	}
 }
+
+ViewLayoutFileBased.prototype.documentToViewX =
+	ViewLayoutMultiPage.prototype.documentToViewX;
+ViewLayoutFileBased.prototype.documentToViewY =
+	ViewLayoutMultiPage.prototype.documentToViewY;
+ViewLayoutFileBased.prototype.canvasToDocumentPoint =
+	ViewLayoutMultiPage.prototype.canvasToDocumentPoint;

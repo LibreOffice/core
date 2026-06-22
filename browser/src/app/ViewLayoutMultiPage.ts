@@ -238,7 +238,34 @@ class ViewLayoutMultiPage extends ViewLayoutNewBase {
 		if (app.UI.horizontalRuler) app.UI.horizontalRuler.fixOffset();
 	}
 
+	// Map a document point to its on-screen position using an explicitly
+	// supplied page index. The corner-mapping getters (documentToViewX/Y) each
+	// re-resolve the index via getClosestRectangleIndex, so two points of the
+	// same tile/page can land on different pages (gaps between stacked pages,
+	// mixed page sizes, or the closest-fallback heuristic). Callers that already
+	// know which page a point belongs to should use this to stay on one index.
+	public documentPointToScreenWithIndex(
+		point: cool.SimplePoint,
+		index: number,
+	): { x: number; y: number } {
+		const anchor = app.sectionContainer.getDocumentAnchor();
+		return {
+			x:
+				this.viewRectangles[index].pX1 +
+				(point.pX - this.documentRectangles[index].pX1) -
+				this.scrollProperties.viewX +
+				anchor[0],
+			y:
+				this.viewRectangles[index].pY1 +
+				(point.pY - this.documentRectangles[index].pY1) -
+				this.scrollProperties.viewY +
+				anchor[1],
+		};
+	}
+
 	public override documentToViewX(point: cool.SimplePoint): number {
+		if (this.viewRectangles.length === 0) return super.documentToViewX(point);
+
 		const index = this.getClosestRectangleIndex(point);
 		return (
 			this.viewRectangles[index].pX1 +
@@ -249,6 +276,8 @@ class ViewLayoutMultiPage extends ViewLayoutNewBase {
 	}
 
 	public override documentToViewY(point: cool.SimplePoint): number {
+		if (this.viewRectangles.length === 0) return super.documentToViewY(point);
+
 		const index = this.getClosestRectangleIndex(point);
 		return (
 			this.viewRectangles[index].pY1 +
@@ -261,6 +290,9 @@ class ViewLayoutMultiPage extends ViewLayoutNewBase {
 	public override canvasToDocumentPoint(
 		point: cool.SimplePoint,
 	): cool.SimplePoint {
+		if (this.viewRectangles.length === 0)
+			return super.canvasToDocumentPoint(point);
+
 		point.pX += this.scrollProperties.viewX;
 		point.pY += this.scrollProperties.viewY;
 
@@ -268,14 +300,16 @@ class ViewLayoutMultiPage extends ViewLayoutNewBase {
 
 		const result = point.clone();
 
-		result.pX =
-			this.documentRectangles[index].pX1 +
-			(point.pX - this.viewRectangles[index].pX1) -
-			this._documentAnchorPosition[0];
-		result.pY =
-			this.documentRectangles[index].pY1 +
-			(point.pY - this.viewRectangles[index].pY1) -
-			this._documentAnchorPosition[1];
+		if (this.documentRectangles[index] && this.viewRectangles[index]) {
+			result.pX =
+				this.documentRectangles[index].pX1 +
+				(point.pX - this.viewRectangles[index].pX1) -
+				this._documentAnchorPosition[0];
+			result.pY =
+				this.documentRectangles[index].pY1 +
+				(point.pY - this.viewRectangles[index].pY1) -
+				this._documentAnchorPosition[1];
+		}
 
 		return result;
 	}
