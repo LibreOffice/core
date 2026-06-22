@@ -133,9 +133,17 @@ class Mention extends AutoCompletePopup {
 			cursorPos = currentPos;
 			this.cursorPosAtStart = currentPos;
 		}
-		// popup mention should have total top margin of navigation bar + if toolbar present then toolbar height
-		var canvasEl = this.map._docLayer._canvas.getBoundingClientRect();
-		cursorPos.y += canvasEl.top;
+		// For a mention typed in the document body the cursor position is
+		// canvas-relative, so shift it by the canvas offset to reach viewport
+		// coordinates: the top offset covers the navigation bar and toolbar above
+		// the canvas, the left offset covers the navigation panel beside it. A
+		// mention inside a comment already comes back in viewport coordinates, so
+		// it must not be shifted again.
+		if (!commentSection?.getActiveEdit()) {
+			var canvasEl = this.map._docLayer._canvas.getBoundingClientRect();
+			cursorPos.x += canvasEl.left;
+			cursorPos.y += canvasEl.top;
+		}
 		if (entries.length === 0) {
 			// If the key pressed was a space, and there are no matches, then just
 			// dismiss the popup.

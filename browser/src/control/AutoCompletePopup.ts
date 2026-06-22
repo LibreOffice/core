@@ -127,11 +127,7 @@ abstract class AutoCompletePopup {
 				.getSelection()
 				.getRangeAt(0)
 				.getBoundingClientRect();
-			const mapRect = this.map._container.getBoundingClientRect();
-			return new cool.Point(
-				caretRect.left - mapRect.left,
-				caretRect.bottom - mapRect.top,
-			);
+			return new cool.Point(caretRect.left, caretRect.bottom);
 		}
 
 		const currPos = {
