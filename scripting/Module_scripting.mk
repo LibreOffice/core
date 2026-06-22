@@ -49,6 +49,7 @@ $(eval $(call gb_Module_add_targets,scripting,\
 
 $(eval $(call gb_Module_add_check_targets,scripting,\
     $(if $(ENABLE_QUICKJS),CppunitTest_scripting_jsprov) \
+    $(if $(ENABLE_SCRIPTING_BEANSHELL),CppunitTest_scripting_beanshell) \
 ))
 
 endif

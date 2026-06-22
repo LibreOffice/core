@@ -267,11 +267,13 @@ public class ParcelBrowseNode extends PropertySet implements
                     getChildNodes();
                 }
 
-                ScriptBrowseNode[] childNodes =
-                    browsenodes.toArray(new ScriptBrowseNode[browsenodes.size()]);
+                if (browsenodes != null) {
+                    ScriptBrowseNode[] childNodes =
+                        browsenodes.toArray(new ScriptBrowseNode[browsenodes.size()]);
 
-                for (int index = 0; index < childNodes.length; index++) {
-                    childNodes[ index ].updateURI(p);
+                    for (int index = 0; index < childNodes.length; index++) {
+                        childNodes[ index ].updateURI(p);
+                  }
                 }
 
                 result = new Any(new Type(XBrowseNode.class), this);
