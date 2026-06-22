@@ -300,6 +300,7 @@ constexpr auto SUPPORTED_UI_FILES = frozen::make_unordered_set<std::u16string_vi
     u"modules/swriter/ui/watermarkdialog.ui",
     u"modules/swriter/ui/wordcount.ui",
     u"modules/swriter/ui/wrapdialog.ui",
+    u"svx/ui/chineseconversiondialog.ui",
     u"sfx/ui/commandpopup.ui",
     u"sfx/ui/documentpropertiesdialog.ui",
     u"sfx/ui/editdurationdialog.ui",
