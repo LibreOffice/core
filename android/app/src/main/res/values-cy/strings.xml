@@ -53,7 +53,7 @@
     <string name="storage_permission_required">Mae angen caniatâd cadw</string>
     <string name="file_creation_failed">Methodd creu\'r ffeil</string>
     <string name="file_exists_warning">Mae ffeil o\'r enw yna\'n bodoli eisoes, a bydd yn cael ei thros ysgrifennu.</string>
-    <string name="temp_file_saving_disabled">Darllen yn unig yw\'r ffeil hon, mae cadw wedi ei analluogi.</string>
+    <string name="temp_file_saving_disabled">"Yn cael ei rannu fel darllen-yn-unig gan yr ap ffynhonnell. Defnyddiwch \"Golygu copi\" i wneud  newidiadau."</string>
     <string name="no_items">Dim eitemau</string>
     <string name="no_recent_items">Agorwch ffeil gan ddefnyddio\'r eicon ffolder yn y bar offer.</string>
     <string name="app_vendor">Darparwyd y fersiwn yma gan $VENDOR.</string>
