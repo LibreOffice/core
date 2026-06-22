@@ -44,7 +44,6 @@
 #include <unordered_map>
 
 namespace com::sun::star::frame { class XController; }
-using namespace css::document;
 
 // Placeholder tag used into the ImplWriteActions method to filter text placeholder fields
 inline constexpr OUString sPlaceholderTag = u"<[:isPlaceholder:]>"_ustr;
@@ -157,10 +156,10 @@ class SVGFontExport;
 class SVGActionWriter;
 class EditFieldInfo;
 
-class SVGFilter : public cppu::WeakImplHelper < XFilter,
-                                                 XImporter,
-                                                 XExporter,
-                                                 XExtendedFilterDetection, css::lang::XServiceInfo >
+class SVGFilter : public cppu::WeakImplHelper < css::document::XFilter,
+                                                 css::document::XImporter,
+                                                 css::document::XExporter,
+                                                 css::document::XExtendedFilterDetection, css::lang::XServiceInfo >
 {
 public:
     typedef std::unordered_map< css::uno::Reference< XInterface >, ObjectRepresentation >    ObjectMap;

@@ -34,8 +34,6 @@
 
 #include <memory>
 
-using namespace css::container;
-
 namespace dbaxml {
 
 class ODBExport : public SvXMLExport
