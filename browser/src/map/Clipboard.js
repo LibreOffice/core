@@ -1141,7 +1141,12 @@ window.L.Clipboard = window.L.Class.extend({
 	// apps and the dummy clipboard under cypress. Returns a ClipboardItem array,
 	// or null when the native app reports an internal copy ("(internal)").
 	_readClipboardItems: async function() {
-		if (window.ThisIsTheiOSApp || window.ThisIsTheMacOSApp)
+		if (window.ThisIsTheMacOSApp)
+			// The engine clipboard provider reads the pasteboard itself on
+			// .uno:Paste, so there is nothing to fetch here. Reporting null
+			// drops straight to an internal paste.
+			return null;
+		if (window.ThisIsTheiOSApp)
 			return this._iOSReadClipboard();
 		if (window.ThisIsTheWindowsApp)
 			return this._WindowsReadClipboard();

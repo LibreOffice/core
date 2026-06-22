@@ -180,13 +180,6 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
             if let body = message.body as? String {
                 switch body {
 
-                case "read":
-                    // The clipboard provider reads the platform pasteboard on
-                    // demand during the paste, choosing our own in-memory copy
-                    // when we still own it, so there is nothing to sync here.
-                    COWrapper.ensureClipboardProvider(for: document)
-                    return ("(internal)", nil);
-
                 case let s where s.hasPrefix("sendToInternal "):
                     if !COWrapper.sendToInternalClipboard(document, content: String(s.dropFirst("sendToInternal ".count))) {
                         COWrapper.LOG_ERR("set clipboard returned failure");

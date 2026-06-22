@@ -223,6 +223,7 @@ static NSData *_Nullable copyEngineClipboardData(unsigned appDocId, const char *
  * Private read helpers used by the clipboard provider callbacks below.
  */
 @interface COWrapper ()
++ (void)ensureClipboardProviderFor:(Document *_Nonnull)document;
 + (char *_Nullable *_Nonnull)copyPasteboardMimeTypes;
 + (BOOL)copyPasteboardData:(NSString *_Nonnull)mime
                        out:(char *_Nullable *_Nonnull)pOutData
@@ -630,10 +631,10 @@ static void clipboardProviderRelease(void* pUserData) { CFBridgingRelease(pUserD
  */
 + (bool)sendToInternalWith:(Document *_Nonnull)document content:(NSString *_Nonnull)content {
     // The clipboard provider serves the paste straight from the platform
-    // pasteboard, where it can reach the internal engine formats that the
-    // browser's serialized content cannot, or from our own copy when we still
-    // own it. So the content the JavaScript handed us is not needed here.
-    [COWrapper ensureClipboardProviderFor:document];
+    // pasteboard on the following .uno:Paste, where it can reach the internal
+    // engine formats that the browser's serialized content cannot, or from our
+    // own copy when we still own it. So the content the JavaScript handed us is
+    // not needed here.
     return true;
 }
 

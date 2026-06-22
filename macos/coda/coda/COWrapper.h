@@ -22,7 +22,6 @@
 + (void)handleHULLOWithDocument:(Document *_Nonnull)document;
 + (void)handleByeWith:(Document *_Nonnull)document NS_SWIFT_NAME(bye(_:));
 + (void)handleMessageWith:(Document *_Nonnull)document message:(NSString *_Nonnull)message;
-+ (void)ensureClipboardProviderFor:(Document *_Nonnull)document NS_SWIFT_NAME(ensureClipboardProvider(for:));
 + (void)saveAsWith:(Document *_Nonnull)document url:(NSString *_Nonnull)url format:(NSString *_Nonnull)format filterOptions:(NSString *_Nullable)filterOptions;
 + (BOOL)advertiseClipboardFor:(Document *_Nonnull)document mimeTypes:(NSArray<NSString *> *_Nonnull)mimeTypes NS_SWIFT_NAME(advertiseClipboard(for:mimeTypes:));
 + (void)materializeClipboardFor:(Document *_Nonnull)document NS_SWIFT_NAME(materializeClipboard(for:));

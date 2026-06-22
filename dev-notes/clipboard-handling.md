@@ -111,11 +111,11 @@ formats and the app does only raw NSPasteboard input and output:
 3. The text editor asks the pasteboard for the richest flavor it
    understands, for example RTF. The owner fetches just that one format
    from the Kit on demand and hands it over, so the paste keeps formatting.
-4. Copy in the text editor, then Ctrl+V in CODA. The browser sends the
-   `read` message, which only makes sure the provider is registered. On
-   `.uno:Paste` the Kit reads the pasteboard through the provider: it lists
-   the flavors, picks the single one its paste path wants, and fetches only
-   that. Fidelity is whatever the text editor offered.
+4. Copy in the text editor, then Ctrl+V in CODA. The browser issues
+   `.uno:Paste` directly, with no `read` round-trip to the native side. The
+   Kit reads the pasteboard through the provider: it lists the flavors,
+   picks the single one its paste path wants, and fetches only that.
+   Fidelity is whatever the text editor offered.
 
 ## Shared contract (the parts every platform reuses)
 
@@ -155,7 +155,7 @@ formats and the app does only raw NSPasteboard input and output:
 | Platform | Bridge mechanism | OS clipboard API | Mapping table |
 |---|---|---|---|
 | Web | HTTP `/cool/clipboard` plus WebSocket | browser `navigator.clipboard` | `Clipboard.js` |
-| macOS | engine-driven COKitClipboardProvider, plus a thin `clipboard` handler (read/sendToInternal) | NSPasteboard, UTType | `macos/coda/coda/COWrapper.mm` |
+| macOS | engine-driven COKitClipboardProvider; paste issues `.uno:Paste` directly with no `read` round-trip | NSPasteboard, UTType | `macos/coda/coda/COWrapper.mm` |
 | Windows | WebView2 `postMobileMessage`: COPY/CUT/PASTE/CLIPBOARD* | Win32 clipboard formats | `windows/coda/CODA/CODA.cpp:631` |
 | Qt | QWebChannel `Bridge.cool()`: COPY/CUT/PASTE/... | QClipboard, QMimeData | `qt/QtClipboard.cpp:162` |
 | iOS | WKWebView `clipboard` handler: read/write/sendToInternal | UIPasteboard, UTType | `ios/Mobile/DocumentViewController.mm:307` |
@@ -605,6 +605,15 @@ per-app "which flavors matter" guesswork is gone.
   handler) are gone for macOS. That message path stays only for the
   server, the web and WASM clients, and the Qt app, which are not yet on
   the provider.
+- No browser round-trip for paste either. The engine reads the pasteboard
+  through the provider on `.uno:Paste`, so the browser issues `.uno:Paste`
+  directly instead of asking the native side through the `read` script
+  message. `_readClipboardItems` (`browser/src/map/Clipboard.js`) reports an
+  internal paste for macOS without a round-trip, and the macOS `read`
+  handler is gone. iOS still uses `read`, since it is not on the provider.
+- The provider is registered once, on the first message after the kit
+  document loads (`COWrapper handleMessageWith`), not on copy or paste, so
+  copy and paste need no setup step of their own.
 
 ## Action plan
 
