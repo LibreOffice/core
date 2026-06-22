@@ -184,10 +184,23 @@ template< typename T > css::uno::Any parseSingleValue(
     return css::uno::Any(val);
 }
 
+// Use type-traits so we use boost::container::vector for elements of type bool,
+// to avoid the std::vector<bool> issues.
+template <typename T>
+struct ParseListValueTraits
+{
+    using ContainerType = std::vector<T>;
+};
+template <>
+struct ParseListValueTraits<bool>
+{
+    using ContainerType = boost::container::vector<bool>;
+};
+
 template< typename T > css::uno::Any parseListValue(
     OString const & separator, xmlreader::Span const & text)
 {
-    std::vector< T > seq;
+    typename ParseListValueTraits<T>::ContainerType seq;
     xmlreader::Span sep;
     if (separator.isEmpty()) {
         sep = xmlreader::Span(RTL_CONSTASCII_STRINGPARAM(" "));
@@ -213,38 +226,6 @@ template< typename T > css::uno::Any parseListValue(
         }
     }
     return css::uno::Any(comphelper::containerToSequence(seq));
-}
-
-template<> css::uno::Any parseListValue<bool>(
-    OString const & separator, xmlreader::Span const & text)
-{
-    boost::container::vector<bool> seq;
-    xmlreader::Span sep;
-    if (separator.isEmpty()) {
-        sep = xmlreader::Span(RTL_CONSTASCII_STRINGPARAM(" "));
-    } else {
-        sep = xmlreader::Span(separator.getStr(), separator.getLength());
-    }
-    if (text.length != 0) {
-        for (xmlreader::Span t(text);;) {
-            sal_Int32 i = rtl_str_indexOfStr_WithLength(
-                t.begin, t.length, sep.begin, sep.length);
-            bool val;
-            if (!parseValue(
-                    xmlreader::Span(t.begin, i == -1 ? t.length : i), &val))
-            {
-                throw css::uno::RuntimeException(u"invalid value"_ustr);
-            }
-            seq.push_back(val);
-            if (i < 0) {
-                break;
-            }
-            t.begin += i + sep.length;
-            t.length -= i + sep.length;
-        }
-    }
-    return css::uno::Any(
-        css::uno::Sequence<bool>(seq.data(), static_cast<sal_Int32>(seq.size()) ) );
 }
 
 css::uno::Any parseValue(
