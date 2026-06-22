@@ -5,7 +5,7 @@
     <string name="failed_to_insert_image">Methwyd mewnosod delwedd</string>
     <string name="failed_to_load_file">Methwyd penderfynu pa ffeil i\'w chadw</string>
     <string name="storage_permission_required">Mae angen caniatâd cadw</string>
-    <string name="temp_file_saving_disabled">Darllen yn unig yw\'r ffeil hon, mae cadw wedi ei analluogi.</string>
+    <string name="temp_file_saving_disabled">"Yn cael ei rannu fel darllen-yn-unig gan yr ap ffynhonnell. Defnyddiwch \"Golygu copi\" i wneud  newidiadau."</string>
     <string name="saving">Yn cadw...</string>
     <string name="preparing_for_the_first_start_after_an_update">Paratoi am y cychwyn cyntaf ar ôl diweddariad.</string>
     <string name="rate_our_app_title">Diolch am ddefnyddio %1$s!</string>
