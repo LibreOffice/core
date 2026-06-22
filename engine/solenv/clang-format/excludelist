@@ -5281,6 +5281,7 @@ include/svtools/embedhlp.hxx
 include/svtools/embedtransfer.hxx
 include/svtools/filechangedchecker.hxx
 include/svtools/fontsubstconfig.hxx
+include/svtools/genericasyncunodialog.hxx
 include/svtools/genericunodialog.hxx
 include/svtools/helpids.h
 include/svtools/htmlcfg.hxx
@@ -7015,6 +7016,7 @@ sc/inc/pagepar.hxx
 sc/inc/paramisc.hxx
 sc/inc/patattr.hxx
 sc/inc/pivot.hxx
+sc/inc/pivot/DPOutLevelData.hxx
 sc/inc/poolcach.hxx
 sc/inc/postit.hxx
 sc/inc/printopt.hxx
@@ -12172,6 +12174,7 @@ sw/source/uibase/inc/FrameControl.hxx
 sw/source/uibase/inc/FrameControlsManager.hxx
 sw/source/uibase/inc/HeaderFooterWin.hxx
 sw/source/uibase/inc/PageBreakWin.hxx
+sw/source/uibase/inc/QuickFindPanel.hxx
 sw/source/uibase/inc/SwSpellDialogChildWindow.hxx
 sw/source/uibase/inc/SwXFilterOptions.hxx
 sw/source/uibase/inc/annotsh.hxx
