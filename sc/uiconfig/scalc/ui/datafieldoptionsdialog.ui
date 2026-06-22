@@ -120,6 +120,25 @@
                     <property name="row-spacing">6</property>
                     <property name="column-spacing">12</property>
                     <child>
+                      <object class="GtkComboBoxText" id="sortby">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="sortby-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="datafieldoptionsdialog|sortby-atkobject">Sort by</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|sortby">Select the data field that you want to sort columns or rows by.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                        <property name="height">2</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkRadioButton" id="ascending">
                         <property name="label" translatable="yes" context="datafieldoptionsdialog|ascending">_Ascending</property>
                         <property name="visible">True</property>
@@ -180,25 +199,6 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBoxText" id="sortby">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="valign">center</property>
-                        <property name="hexpand">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="sortby-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes" context="datafieldoptionsdialog|sortby-atkobject">Sort by</property>
-                            <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|sortby">Select the data field that you want to sort columns or rows by.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                        <property name="height">2</property>
-                      </packing>
-                    </child>
-                    <child>
                       <placeholder/>
                     </child>
                   </object>
@@ -235,41 +235,6 @@
                     <property name="row-spacing">6</property>
                     <property name="column-spacing">12</property>
                     <child>
-                      <object class="GtkCheckButton" id="repeatitemlabels">
-                        <property name="label" translatable="yes" context="datafieldoptionsdialog|repeatitemlabels">_Repeat item labels</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="use-underline">True</property>
-                        <property name="draw-indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
-                        <property name="width">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="emptyline">
-                        <property name="label" translatable="yes" context="datafieldoptionsdialog|emptyline">_Empty line after each item</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="use-underline">True</property>
-                        <property name="draw-indicator">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="emptyline-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|emptyline">Adds an empty row after the data for each item in the pivot table.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                        <property name="width">2</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
@@ -303,6 +268,41 @@
                       <packing>
                         <property name="left-attach">1</property>
                         <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="emptyline">
+                        <property name="label" translatable="yes" context="datafieldoptionsdialog|emptyline">_Empty line after each item</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="emptyline-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|emptyline">Adds an empty row after the data for each item in the pivot table.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                        <property name="width">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="repeatitemlabels">
+                        <property name="label" translatable="yes" context="datafieldoptionsdialog|repeatitemlabels">_Repeat item labels</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
+                        <property name="width">2</property>
                       </packing>
                     </child>
                   </object>
@@ -361,53 +361,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="showfromft">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="datafieldoptionsdialog|showfromft">_From:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">from</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="usingft">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="datafieldoptionsdialog|usingft">_Using field:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">using</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
                       <!-- n-columns=2 n-rows=1 -->
                       <object class="GtkGrid" id="grid5">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="column-spacing">12</property>
-                        <child>
-                          <object class="GtkLabel" id="showft">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="label" translatable="yes" context="datafieldoptionsdialog|showft">items</property>
-                            <property name="use-underline">True</property>
-                            <property name="mnemonic-widget">layout</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">0</property>
-                          </packing>
-                        </child>
                         <child>
                           <object class="GtkSpinButton" id="items">
                             <property name="visible">True</property>
@@ -428,10 +386,38 @@
                             <property name="top-attach">0</property>
                           </packing>
                         </child>
+                        <child>
+                          <object class="GtkLabel" id="showft">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="label" translatable="yes" context="datafieldoptionsdialog|showft">items</property>
+                            <property name="use-underline">True</property>
+                            <property name="mnemonic-widget">layout</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
                         <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="showfromft">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="datafieldoptionsdialog|showfromft">_From:</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">from</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                     <child>
@@ -451,6 +437,20 @@
                       <packing>
                         <property name="left-attach">1</property>
                         <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="usingft">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="datafieldoptionsdialog|usingft">_Using field:</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">using</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
                       </packing>
                     </child>
                     <child>
@@ -575,6 +575,20 @@
                 <property name="can-focus">False</property>
                 <property name="column-spacing">12</property>
                 <child>
+                  <object class="GtkLabel" id="hierarchyft">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="datafieldoptionsdialog|hierarchyft">Hierarch_y:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">hierarchy</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkComboBoxText" id="hierarchy">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -586,20 +600,6 @@
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="hierarchyft">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="datafieldoptionsdialog|hierarchyft">Hierarch_y:</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">hierarchy</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
                     <property name="top-attach">0</property>
                   </packing>
                 </child>
