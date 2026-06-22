@@ -17,11 +17,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,uui_dialogs_test, \
 
 $(eval $(call gb_CppunitTest_use_sdk_api,uui_dialogs_test))
 
-$(eval $(call gb_CppunitTest_set_include,desktop_dialogs_test,\
-    -I$(SRCDIR)/uui/inc \
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_CppunitTest_use_libraries,uui_dialogs_test, \
     basegfx \
     comphelper \

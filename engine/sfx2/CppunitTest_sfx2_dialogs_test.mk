@@ -17,12 +17,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sfx2_dialogs_test, \
 
 $(eval $(call gb_CppunitTest_use_sdk_api,sfx2_dialogs_test))
 
-$(eval $(call gb_CppunitTest_set_include,desktop_dialogs_test,\
-    -I$(SRCDIR)/sfx2/source/inc \
-    -I$(SRCDIR)/sfx2/inc \
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_CppunitTest_use_libraries,sfx2_dialogs_test, \
     basegfx \
     comphelper \

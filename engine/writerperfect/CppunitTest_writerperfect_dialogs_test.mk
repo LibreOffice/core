@@ -17,11 +17,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,writerperfect_dialogs_test, \
 
 $(eval $(call gb_CppunitTest_use_sdk_api,writerperfect_dialogs_test))
 
-$(eval $(call gb_CppunitTest_set_include,desktop_dialogs_test,\
-    -I$(SRCDIR)/writerperfect/inc \
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_CppunitTest_use_libraries,writerperfect_dialogs_test, \
     basegfx \
     comphelper \

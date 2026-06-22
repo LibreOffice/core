@@ -17,11 +17,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,xmlsecurity_dialogs_test, \
 
 $(eval $(call gb_CppunitTest_use_sdk_api,xmlsecurity_dialogs_test))
 
-$(eval $(call gb_CppunitTest_set_include,desktop_dialogs_test,\
-    -I$(SRCDIR)/xmlsecurity/inc \
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_CppunitTest_use_libraries,xmlsecurity_dialogs_test, \
     basegfx \
     comphelper \
