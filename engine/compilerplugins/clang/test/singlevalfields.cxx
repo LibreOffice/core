@@ -11,15 +11,13 @@
 
 struct Foo
 {
-    // expected-error@+1 {{assign XXX [loplugin:singlevalfields]}}
+    // expected-error@+1 {{assign ? [loplugin:singlevalfields]}}
     OUString m_aMenuResourceURL;
 
     Foo()
-        : m_aMenuResourceURL("XXX")
+        : m_aMenuResourceURL(u"XXX"_ustr)
     {
-        m_aMenuResourceURL = "XXX";
-        m_aMenuResourceURL = "X"
-                             "XX";
+        m_aMenuResourceURL = u"XXX"_ustr;
     }
 };
 

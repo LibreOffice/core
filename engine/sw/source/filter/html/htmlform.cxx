@@ -1675,12 +1675,12 @@ void SwHTMLParser::InsertInput()
             case HTMLInputType::Submit:
                 eButtonType = FormButtonType_SUBMIT;
                 if (sText.isEmpty())
-                    sText = OOO_STRING_SVTOOLS_HTML_IT_submit;
+                    sText = u"" OOO_STRING_SVTOOLS_HTML_IT_submit ""_ustr;
                 break;
             case HTMLInputType::Reset:
                 eButtonType = FormButtonType_RESET;
                 if (sText.isEmpty())
-                    sText = OOO_STRING_SVTOOLS_HTML_IT_reset;
+                    sText = u"" OOO_STRING_SVTOOLS_HTML_IT_reset ""_ustr;
                 break;
             default:
                 ;

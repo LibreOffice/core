@@ -66,14 +66,14 @@ bool dataSourceTypeToCx(DataSourceType eType, bool& rbNumeric, OUString& rsType)
 {
     switch (eType)
     {
-        case DataSourceType::STR_CAT:      rbNumeric = false; rsType = "cat";      return true;
-        case DataSourceType::STR_COLORSTR: rbNumeric = false; rsType = "colorStr"; return true;
-        case DataSourceType::STR_ENTITYID: rbNumeric = false; rsType = "entityId"; return true;
-        case DataSourceType::NUM_VAL:      rbNumeric = true;  rsType = "val";      return true;
-        case DataSourceType::NUM_X:        rbNumeric = true;  rsType = "x";        return true;
-        case DataSourceType::NUM_Y:        rbNumeric = true;  rsType = "y";        return true;
-        case DataSourceType::NUM_SIZE:     rbNumeric = true;  rsType = "size";     return true;
-        case DataSourceType::NUM_COLORVAL: rbNumeric = true;  rsType = "colorVal"; return true;
+        case DataSourceType::STR_CAT:      rbNumeric = false; rsType = u"cat"_ustr;      return true;
+        case DataSourceType::STR_COLORSTR: rbNumeric = false; rsType = u"colorStr"_ustr; return true;
+        case DataSourceType::STR_ENTITYID: rbNumeric = false; rsType = u"entityId"_ustr; return true;
+        case DataSourceType::NUM_VAL:      rbNumeric = true;  rsType = u"val"_ustr;      return true;
+        case DataSourceType::NUM_X:        rbNumeric = true;  rsType = u"x"_ustr;        return true;
+        case DataSourceType::NUM_Y:        rbNumeric = true;  rsType = u"y"_ustr;        return true;
+        case DataSourceType::NUM_SIZE:     rbNumeric = true;  rsType = u"size"_ustr;     return true;
+        case DataSourceType::NUM_COLORVAL: rbNumeric = true;  rsType = u"colorVal"_ustr; return true;
         default: return false;
     }
 }

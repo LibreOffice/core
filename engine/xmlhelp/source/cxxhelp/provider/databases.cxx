@@ -930,11 +930,11 @@ void Databases::cascadingStylesheet( const OUString& Language,
                             {
                                 szBuffer[nSize] = '\0';
                                 if ( wcscmp( szBuffer, L"High Contrast #1" ) == 0 )
-                                    aCSS = "highcontrast1";
+                                    aCSS = u"highcontrast1"_ustr;
                                 if ( wcscmp( szBuffer, L"High Contrast #2" ) == 0 )
-                                    aCSS = "highcontrast2";
+                                    aCSS = u"highcontrast2"_ustr;
                                 if ( wcscmp( szBuffer, L"High Contrast White" ) == 0 )
-                                    aCSS = "highcontrastwhite";
+                                    aCSS = u"highcontrastwhite"_ustr;
                             }
                             RegCloseKey( hKey );
                         }

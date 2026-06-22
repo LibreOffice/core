@@ -197,19 +197,19 @@ cpo::uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoadin
 {
     cpo::uno::Sequence< beans::PropertyValue > aArgs( xStream.is() ? 3 : 2 );
     auto pArgs = aArgs.getArray();
-    pArgs[0].Name = "FilterName";
+    pArgs[0].Name = u"FilterName"_ustr;
     pArgs[0].Value <<= getFilterNameFromGUID_Impl( m_guid );
 
     if ( xStream.is() )
     {
-        pArgs[1].Name = "InputStream";
+        pArgs[1].Name = u"InputStream"_ustr;
         pArgs[1].Value <<= xStream;
-        pArgs[2].Name = "URL";
-        pArgs[2].Value <<= OUString( "private:stream" );
+        pArgs[2].Name = u"URL"_ustr;
+        pArgs[2].Value <<= u"private:stream"_ustr;
     }
     else
     {
-        pArgs[1].Name = "URL";
+        pArgs[1].Name = u"URL"_ustr;
 
         OUString sDocUrl;
         if ( pFilePath )
@@ -236,12 +236,12 @@ cpo::uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForStorin
 {
     cpo::uno::Sequence< beans::PropertyValue > aArgs( xStream.is() ? 2 : 1 );
     auto pArgs = aArgs.getArray();
-    pArgs[0].Name = "FilterName";
+    pArgs[0].Name = u"FilterName"_ustr;
     pArgs[0].Value <<= getFilterNameFromGUID_Impl( m_guid );
 
     if ( xStream.is() )
     {
-        pArgs[1].Name = "OutputStream";
+        pArgs[1].Name = u"OutputStream"_ustr;
         pArgs[1].Value <<= xStream;
     }
 

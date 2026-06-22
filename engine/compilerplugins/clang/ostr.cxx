@@ -455,8 +455,7 @@ public:
         }
         auto const t1 = expr->getType().getNonReferenceType();
         auto const tc1 = loplugin::TypeCheck(t1);
-        if (!(tc1.ClassOrStruct("basic_string").StdNamespace()
-              || tc1.ClassOrStruct("basic_string_view").StdNamespace()))
+        if (!(tc1.ClassOrStruct("basic_string").StdNamespace()))
         {
             return true;
         }

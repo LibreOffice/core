@@ -140,7 +140,7 @@ static OUString& getFallbackPrinterName()
     {
         aFallbackPrinter = VclResId( SV_PRINT_DEFPRT_TXT );
         if ( aFallbackPrinter.isEmpty() )
-            aFallbackPrinter = "Printer";
+            aFallbackPrinter = u"Printer"_ustr;
     }
 
     return aFallbackPrinter;

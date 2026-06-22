@@ -164,7 +164,7 @@ Interceptor::dispatch(
                 {
                     aNewArgs.realloc( nInd + 1 );
                     auto pNewArgs = aNewArgs.getArray();
-                    pNewArgs[nInd].Name = "SaveTo";
+                    pNewArgs[nInd].Name = u"SaveTo"_ustr;
                     pNewArgs[nInd].Value <<= true;
                 }
 
@@ -215,20 +215,20 @@ void Interceptor::generateFeatureStateEvent()
             {
 
                 aStateEvent.FeatureURL.Complete = m_aInterceptedURL[0];
-                aStateEvent.FeatureDescriptor = "Update";
+                aStateEvent.FeatureDescriptor = u"Update"_ustr;
                 aStateEvent.State <<= "($1) " + aTitle;
 
             }
             else if ( i == 5 )
             {
                 aStateEvent.FeatureURL.Complete = m_aInterceptedURL[5];
-                aStateEvent.FeatureDescriptor = "SaveCopyTo";
+                aStateEvent.FeatureDescriptor = u"SaveCopyTo"_ustr;
                 aStateEvent.State <<= OUString("($3)");
             }
             else
             {
                 aStateEvent.FeatureURL.Complete = m_aInterceptedURL[i];
-                aStateEvent.FeatureDescriptor = "Close and Return";
+                aStateEvent.FeatureDescriptor = u"Close and Return"_ustr;
                 aStateEvent.State <<= "($2) " + aTitle;
 
             }
@@ -266,7 +266,7 @@ Interceptor::addStatusListener(
 
         frame::FeatureStateEvent aStateEvent;
         aStateEvent.FeatureURL.Complete = m_aInterceptedURL[0];
-        aStateEvent.FeatureDescriptor = "Update";
+        aStateEvent.FeatureDescriptor = u"Update"_ustr;
         aStateEvent.IsEnabled = true;
         aStateEvent.Requery = false;
         aStateEvent.State <<= "($1) " + aTitle;
@@ -304,7 +304,7 @@ Interceptor::addStatusListener(
 
         frame::FeatureStateEvent aStateEvent;
         aStateEvent.FeatureURL.Complete = m_aInterceptedURL[i];
-        aStateEvent.FeatureDescriptor = "Close and Return";
+        aStateEvent.FeatureDescriptor = u"Close and Return"_ustr;
         aStateEvent.IsEnabled = true;
         aStateEvent.Requery = false;
         aStateEvent.State <<= "($2) " + aTitle;
@@ -326,7 +326,7 @@ Interceptor::addStatusListener(
     {   // SaveAs
         frame::FeatureStateEvent aStateEvent;
         aStateEvent.FeatureURL.Complete = m_aInterceptedURL[5];
-        aStateEvent.FeatureDescriptor = "SaveCopyTo";
+        aStateEvent.FeatureDescriptor = u"SaveCopyTo"_ustr;
         aStateEvent.IsEnabled = true;
         aStateEvent.Requery = false;
         aStateEvent.State <<= OUString("($3)");

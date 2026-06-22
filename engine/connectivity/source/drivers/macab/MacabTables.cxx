@@ -40,7 +40,7 @@ using namespace ::com::sun::star::lang;
 css::uno::Reference< css::beans::XPropertySet > MacabTables::createObject(const OUString& _rName)
 {
     OUString aName,aSchema;
-    aSchema = "%";
+    aSchema = u"%"_ustr;
     aName = _rName;
 
     Sequence< OUString > aTypes { "%" };

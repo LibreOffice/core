@@ -798,7 +798,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
                 if( !nDeep )
                 {
                     rToken = OOO_STRING_SVTOOLS_HTML_parabreak ""_ostr;
-                    rClass = OOO_STRING_SVTOOLS_HTML_sdfootnote;
+                    rClass = u"" OOO_STRING_SVTOOLS_HTML_sdfootnote ""_ustr;
                     rRefPoolId = SwPoolFormatId::COLL_TEXT;
                     nDeep = CSS1_FMT_CMPREF;
                 }
@@ -807,7 +807,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
                 if( !nDeep )
                 {
                     rToken = OOO_STRING_SVTOOLS_HTML_parabreak ""_ostr;
-                    rClass = OOO_STRING_SVTOOLS_HTML_sdendnote;
+                    rClass = u"" OOO_STRING_SVTOOLS_HTML_sdendnote ""_ustr;
                     rRefPoolId = SwPoolFormatId::COLL_TEXT;
                     nDeep = CSS1_FMT_CMPREF;
                 }

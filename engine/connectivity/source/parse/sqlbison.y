@@ -4346,18 +4346,18 @@ OUString OParseContext::getErrorMessage(ErrorCode _eCode) const
     OUString aMsg;
     switch (_eCode)
     {
-        case ErrorCode::General:              aMsg = "Syntax error in SQL expression"; break;
-        case ErrorCode::ValueNoLike:          aMsg = "The value #1 can not be used with LIKE."; break;
-        case ErrorCode::FieldNoLike:          aMsg = "LIKE can not be used with this field."; break;
-        case ErrorCode::InvalidCompare:       aMsg = "The entered criterion can not be compared with this field."; break;
-        case ErrorCode::InvalidIntCompare:    aMsg = "The field can not be compared with a number."; break;
-        case ErrorCode::InvalidDateCompare:   aMsg = "The field can not be compared with a date."; break;
-        case ErrorCode::InvalidRealCompare:   aMsg = "The field can not be compared with a floating point number."; break;
-        case ErrorCode::InvalidTableNosuch:   aMsg = "The database does not contain a table named \"#\"."; break;
-        case ErrorCode::InvalidTableOrQuery:  aMsg = "The database does contain neither a table nor a query named \"#\"."; break;
-        case ErrorCode::InvalidColumn:        aMsg = "The column \"#1\" is unknown in the table \"#2\"."; break;
-        case ErrorCode::InvalidTableExist:    aMsg = "The database already contains a table or view with name \"#\"."; break;
-        case ErrorCode::InvalidQueryExist:    aMsg = "The database already contains a query with name \"#\"."; break;
+        case ErrorCode::General:              aMsg = u"Syntax error in SQL expression"_ustr; break;
+        case ErrorCode::ValueNoLike:          aMsg = u"The value #1 can not be used with LIKE."_ustr; break;
+        case ErrorCode::FieldNoLike:          aMsg = u"LIKE can not be used with this field."_ustr; break;
+        case ErrorCode::InvalidCompare:       aMsg = u"The entered criterion can not be compared with this field."_ustr; break;
+        case ErrorCode::InvalidIntCompare:    aMsg = u"The field can not be compared with a number."_ustr; break;
+        case ErrorCode::InvalidDateCompare:   aMsg = u"The field can not be compared with a date."_ustr; break;
+        case ErrorCode::InvalidRealCompare:   aMsg = u"The field can not be compared with a floating point number."_ustr; break;
+        case ErrorCode::InvalidTableNosuch:   aMsg = u"The database does not contain a table named \"#\"."_ustr; break;
+        case ErrorCode::InvalidTableOrQuery:  aMsg = u"The database does contain neither a table nor a query named \"#\"."_ustr; break;
+        case ErrorCode::InvalidColumn:        aMsg = u"The column \"#1\" is unknown in the table \"#2\"."_ustr; break;
+        case ErrorCode::InvalidTableExist:    aMsg = u"The database already contains a table or view with name \"#\"."_ustr; break;
+        case ErrorCode::InvalidQueryExist:    aMsg = u"The database already contains a query with name \"#\"."_ustr; break;
         default:
             OSL_FAIL( "OParseContext::getErrorMessage: unknown error code!" );
             break;
@@ -4611,7 +4611,7 @@ std::unique_ptr<OSQLParseNode> OSQLParser::parseTree(OUString& rErrorMessage,
 	SQLyylval.pParseNode = nullptr;
 	//	SQLyypvt = NULL;
 	m_pParseTree = nullptr;
-	m_sErrorMessage = "";
+	m_sErrorMessage = u""_ustr;
 
     // start parsing
 	if (SQLyyparse() != 0)

@@ -163,7 +163,7 @@ public:
 
     rtl::Reference<UnoControlModel> Clone() const override;
 
-    DECLIMPL_SERVICEINFO_DERIVED( UnoMultiPageModel, ControlModelContainerBase, "com.sun.star.awt.UnoMultiPageModel" )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoMultiPageModel, ControlModelContainerBase, u"com.sun.star.awt.UnoMultiPageModel"_ustr )
 
     virtual OUString SAL_CALL getServiceName() override;
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
@@ -190,7 +190,7 @@ public:
     OUString     GetComponentServiceName() const override;
 
     // css::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO_DERIVED( UnoMultiPageControl, ControlContainerBase, "com.sun.star.awt.UnoControlMultiPage" )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoMultiPageControl, ControlContainerBase, u"com.sun.star.awt.UnoControlMultiPage"_ustr )
     cpo::uno::Any  SAL_CALL queryInterface( const cpo::uno::Type & rType ) override { return ControlContainerBase::queryInterface(rType); }
     cpo::uno::Any  SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override;
     void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
@@ -238,7 +238,7 @@ public:
 
     rtl::Reference<UnoControlModel> Clone() const override;
 
-    DECLIMPL_SERVICEINFO_DERIVED( UnoPageModel, ControlModelContainerBase, "com.sun.star.awt.UnoPageModel" )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoPageModel, ControlModelContainerBase, u"com.sun.star.awt.UnoPageModel"_ustr )
 
     virtual OUString SAL_CALL getServiceName() override;
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
@@ -260,7 +260,7 @@ public:
 
 
     // css::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO_DERIVED( UnoPageControl, ControlContainerBase, "com.sun.star.awt.UnoControlPage" )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoPageControl, ControlContainerBase, u"com.sun.star.awt.UnoControlPage"_ustr )
 };
 
 class UnoFrameModel final : public ControlModelContainerBase
@@ -272,7 +272,7 @@ public:
 
     rtl::Reference<UnoControlModel> Clone() const override;
 
-    DECLIMPL_SERVICEINFO_DERIVED( UnoFrameModel, ControlModelContainerBase, "com.sun.star.awt.UnoFrameModel" )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoFrameModel, ControlModelContainerBase, u"com.sun.star.awt.UnoFrameModel"_ustr )
 
     virtual OUString SAL_CALL getServiceName() override;
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
@@ -291,7 +291,7 @@ public:
     OUString     GetComponentServiceName() const override;
 
 // css::lang::XServiceInfo
-DECLIMPL_SERVICEINFO_DERIVED( UnoFrameControl, ControlContainerBase, "com.sun.star.awt.UnoControlFrame" )
+DECLIMPL_SERVICEINFO_DERIVED( UnoFrameControl, ControlContainerBase, u"com.sun.star.awt.UnoControlFrame"_ustr )
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

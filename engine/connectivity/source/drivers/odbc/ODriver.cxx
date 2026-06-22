@@ -293,11 +293,11 @@ bool LoadLibrary_ODBC3(OUString &_rPath)
     (void)_rPath;
 #else
 #ifdef _WIN32
-    _rPath = "ODBC32.DLL";
+    _rPath = u"ODBC32.DLL"_ustr;
 #endif
 #ifdef UNX
  #ifdef MACOSX
-    _rPath = "libiodbc.dylib";
+    _rPath = u"libiodbc.dylib"_ustr;
  #else
     _rPath = u"libodbc.so.2"_ustr;
     pODBCso = osl_loadModule( _rPath.pData,SAL_LOADMODULE_NOW );

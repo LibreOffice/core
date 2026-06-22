@@ -55,7 +55,7 @@ public:
     OUString SAL_CALL getServiceName() override;
 
     // css::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO_DERIVED( UnoControlTabPageContainerModel, UnoControlModel, "com.sun.star.awt.tab.UnoControlTabPageContainerModel" )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoControlTabPageContainerModel, UnoControlModel, u"com.sun.star.awt.tab.UnoControlTabPageContainerModel"_ustr )
 
     // XTabPageContainerModel
     virtual css::uno::Reference< css::awt::tab::XTabPageModel > SAL_CALL createTabPage( ::sal_Int16 TabPageID ) override;
@@ -114,7 +114,7 @@ public:
 
     virtual void SAL_CALL addControl( const OUString& Name, const css::uno::Reference< css::awt::XControl >& Control ) override;
     // css::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO_DERIVED( UnoControlTabPageContainer, UnoControlBase, "com.sun.star.awt.tab.UnoControlTabPageContainer" )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoControlTabPageContainer, UnoControlBase, u"com.sun.star.awt.tab.UnoControlTabPageContainer"_ustr )
 
 //  using UnoControl::getPeer;
 private:

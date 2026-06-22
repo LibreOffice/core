@@ -155,7 +155,7 @@ bool SAL_CALL PDFIHybridAdaptor::filter( const cpo::uno::Sequence< beans::Proper
                     {
                         nPwPos = aFilterData.getLength();
                         aFilterData.realloc( nPwPos+1 );
-                        aFilterData.getArray()[nPwPos].Name = "Password";
+                        aFilterData.getArray()[nPwPos].Name = u"Password"_ustr;
                     }
                     aFilterData.getArray()[nPwPos].Value <<= aPwd;
                     bRet = xSubFilter->filter( aFilterData );

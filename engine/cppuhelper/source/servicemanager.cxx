@@ -1905,7 +1905,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
                 else if (!rEntry.second->prefix.isEmpty())
                     aSymFactory = rEntry.second->prefix + "_" COMPONENT_GETFACTORY;
                 else
-                    aSymFactory = COMPONENT_GETFACTORY;
+                    aSymFactory = u"" COMPONENT_GETFACTORY ""_ustr;
 
                 // get function symbol component factory
                 fpFactory = aModule.getFunctionSymbol(aSymFactory);

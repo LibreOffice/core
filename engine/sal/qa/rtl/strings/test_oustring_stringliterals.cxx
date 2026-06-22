@@ -145,7 +145,7 @@ void test::oustring::StringLiterals::checkUsage()
     rtl::OUString test( "test" );
 
     rtl_string_unittest_const_literal = false; // start checking for OUString conversions
-    CPPUNIT_ASSERT_EQUAL( foo, rtl::OUString() = "foo" );
+    CPPUNIT_ASSERT_EQUAL( foo, rtl::OUString() = u"foo"_ustr );
     CPPUNIT_ASSERT( FoO.equalsIgnoreAsciiCase( "fOo" ));
     CPPUNIT_ASSERT( foobarfoo.match( "bar", 3 ));
     CPPUNIT_ASSERT( foobar.match( "foo" ));

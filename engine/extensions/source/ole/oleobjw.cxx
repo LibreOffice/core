@@ -461,7 +461,7 @@ Any SAL_CALL IUnknownWrapper::getValue( const OUString& aPropertyName )
         {
             if ( pInfo && m_sTypeName.getLength() == 0 )
             {
-                m_sTypeName = "IDispatch";
+                m_sTypeName = u"IDispatch"_ustr;
                 CComBSTR sName;
 
                 if ( SUCCEEDED( pInfo->GetDocumentation( -1, &sName, nullptr, nullptr, nullptr  ) ) )
@@ -2407,13 +2407,13 @@ void IUnknownWrapper::buildComTlbIndex()
                             }
                             else
                             {
-                                sError = "[automation bridge] IUnknownWrapper::buildComTlbIndex, "
-                                         "ITypeInfo::GetNames failed.";
+                                sError = u"[automation bridge] IUnknownWrapper::buildComTlbIndex, "
+                                         "ITypeInfo::GetNames failed."_ustr;
                             }
                         }
                         else
-                            sError = "[automation bridge] IUnknownWrapper::buildComTlbIndex, "
-                                     "ITypeInfo::GetFuncDesc failed.";
+                            sError = u"[automation bridge] IUnknownWrapper::buildComTlbIndex, "
+                                     "ITypeInfo::GetFuncDesc failed."_ustr;
                     }
 
                     //If we create an Object in JScript and a property then it
@@ -2435,19 +2435,19 @@ void IUnknownWrapper::buildComTlbIndex()
                             }
                             else
                             {
-                                sError = "[automation bridge] IUnknownWrapper::buildComTlbIndex, "
-                                         "ITypeInfo::GetNames failed.";
+                                sError = u"[automation bridge] IUnknownWrapper::buildComTlbIndex, "
+                                         "ITypeInfo::GetNames failed."_ustr;
                             }
                         }
                         else
-                            sError = "[automation bridge] IUnknownWrapper::buildComTlbIndex, "
-                                     "ITypeInfo::GetVarDesc failed.";
+                            sError = u"[automation bridge] IUnknownWrapper::buildComTlbIndex, "
+                                     "ITypeInfo::GetVarDesc failed."_ustr;
 
                     }
                 }
                 else
-                    sError = "[automation bridge] IUnknownWrapper::buildComTlbIndex, "
-                             "ITypeInfo::GetTypeAttr failed.";
+                    sError = u"[automation bridge] IUnknownWrapper::buildComTlbIndex, "
+                             "ITypeInfo::GetTypeAttr failed."_ustr;
 
                 if (sError.getLength())
                 {

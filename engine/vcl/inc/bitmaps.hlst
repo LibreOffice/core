@@ -181,7 +181,7 @@ inline constexpr OUString RID_CURSOR_DRAW_POLYGON = u"vcl/res/draw_polygon.png"_
 inline constexpr OUString RID_CURSOR_DRAW_RECT = u"vcl/res/draw_rect.png"_ustr;
 inline constexpr OUString RID_CURSOR_DRAW_TEXT = u"vcl/res/draw_text.png"_ustr;
 inline constexpr OUString RID_CURSOR_FILL = u"vcl/res/fill.png"_ustr;
-#define RID_CURSOR_HELP              "vcl/res/help.png"
+#define RID_CURSOR_HELP              u"vcl/res/help.png"_ustr
 inline constexpr OUString RID_CURSOR_H_SHEAR = u"vcl/res/h_shear.png"_ustr;
 inline constexpr OUString RID_CURSOR_LINK_DATA = u"vcl/res/link_data.png"_ustr;
 inline constexpr OUString RID_CURSOR_LINK_FILE = u"vcl/res/link_file.png"_ustr;
@@ -196,7 +196,7 @@ inline constexpr OUString RID_CURSOR_MOVE_FILE_LINK = u"vcl/res/move_file_link.p
 inline constexpr OUString RID_CURSOR_MOVE_POINT = u"vcl/res/move_point.png"_ustr;
 inline constexpr OUString RID_CURSOR_NOT_ALLOWED = u"vcl/res/not_allowed.png"_ustr;
 inline constexpr OUString RID_CURSOR_NULL = u"vcl/res/null.png"_ustr;
-#define RID_CURSOR_PEN               "vcl/res/pen.png"
+#define RID_CURSOR_PEN               u"vcl/res/pen.png"_ustr
 inline constexpr OUString RID_CURSOR_PIVOT_COLUMN = u"vcl/res/pivot_column.png"_ustr;
 inline constexpr OUString RID_CURSOR_PIVOT_DELETE = u"vcl/res/pivot_delete.png"_ustr;
 inline constexpr OUString RID_CURSOR_PIVOT_FIELD = u"vcl/res/pivot_field.png"_ustr;
@@ -211,15 +211,15 @@ inline constexpr OUString RID_CURSOR_V_SHEAR = u"vcl/res/v_shear.png"_ustr;
 inline constexpr OUString RID_CURSOR_TEXT_VERTICAL = u"vcl/res/text_vertical.png"_ustr;
 inline constexpr OUString RID_CURSOR_HIDE_WHITESPACE = u"vcl/res/hide_whitespace.png"_ustr;
 inline constexpr OUString RID_CURSOR_SHOW_WHITESPACE = u"vcl/res/show_whitespace.png"_ustr;
-#define RID_CURSOR_WAIT              "vcl/res/wait.png"
-#define RID_CURSOR_NWSIZE            "vcl/res/nwsize.png"
-#define RID_CURSOR_NESIZE            "vcl/res/nesize.png"
-#define RID_CURSOR_SWSIZE            "vcl/res/swsize.png"
-#define RID_CURSOR_SESIZE            "vcl/res/sesize.png"
-#define RID_CURSOR_WINDOW_NWSIZE     "vcl/res/window_nwsize.png"
-#define RID_CURSOR_WINDOW_NESIZE     "vcl/res/window_nesize.png"
-#define RID_CURSOR_WINDOW_SWSIZE     "vcl/res/window_swsize.png"
-#define RID_CURSOR_WINDOW_SESIZE     "vcl/res/window_sesize.png"
+#define RID_CURSOR_WAIT              u"vcl/res/wait.png"_ustr
+#define RID_CURSOR_NWSIZE            u"vcl/res/nwsize.png"_ustr
+#define RID_CURSOR_NESIZE            u"vcl/res/nesize.png"_ustr
+#define RID_CURSOR_SWSIZE            u"vcl/res/swsize.png"_ustr
+#define RID_CURSOR_SESIZE            u"vcl/res/sesize.png"_ustr
+#define RID_CURSOR_WINDOW_NWSIZE     u"vcl/res/window_nwsize.png"_ustr
+#define RID_CURSOR_WINDOW_NESIZE     u"vcl/res/window_nesize.png"_ustr
+#define RID_CURSOR_WINDOW_SWSIZE     u"vcl/res/window_swsize.png"_ustr
+#define RID_CURSOR_WINDOW_SESIZE     u"vcl/res/window_sesize.png"_ustr
 inline constexpr OUString RID_CURSOR_FATCROSS = u"vcl/res/fatcross.png"_ustr;
 
 inline constexpr OUString CHEVRON = u"sfx2/res/chevron.png"_ustr;

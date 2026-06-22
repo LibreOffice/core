@@ -110,7 +110,7 @@ sal_uInt16 SwHTMLWriter::GetDefListLvl( const UIName& rNm, SwPoolFormatId nPoolI
         // DefinitionList - term
         return o3tl::narrowing<sal_uInt16>(o3tl::toInt32(rNm.toString().subView( sDTDD.getLength() ))) | HTML_DLCOLL_DT;
 
-    sDTDD = OOO_STRING_SVTOOLS_HTML_dd " ";
+    sDTDD = u"" OOO_STRING_SVTOOLS_HTML_dd " "_ustr;
     if( o3tl::starts_with(rNm.toString(), sDTDD) )
         // DefinitionList - definition
         return o3tl::narrowing<sal_uInt16>(o3tl::toInt32(rNm.toString().subView( sDTDD.getLength() ))) | HTML_DLCOLL_DD;

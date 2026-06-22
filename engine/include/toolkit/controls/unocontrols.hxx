@@ -558,7 +558,7 @@ public:
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
 
     // css::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO_DERIVED( UnoControlFixedHyperlinkModel, UnoControlModel, "com.sun.star.awt.UnoControlFixedHyperlinkModel" )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoControlFixedHyperlinkModel, UnoControlModel, u"com.sun.star.awt.UnoControlFixedHyperlinkModel"_ustr )
 };
 
 
@@ -606,7 +606,7 @@ public:
     css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& aNewSize ) override;
 
     // css::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO_DERIVED( UnoFixedHyperlinkControl, UnoControlBase, "com.sun.star.awt.UnoControlFixedHyperlink" )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoFixedHyperlinkControl, UnoControlBase, u"com.sun.star.awt.UnoControlFixedHyperlink"_ustr )
 };
 
 

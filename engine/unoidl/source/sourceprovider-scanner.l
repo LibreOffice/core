@@ -126,7 +126,7 @@ ALNUM {DIGIT}|{ALPHA}
 <comment2,docdepr>.
 <comment2,doc,docdepr>\n *yylloc = yylineno;
 <comment2,doc,docdepr><<EOF>> {
-    yyextra->errorMessage = "unterminated comment";
+    yyextra->errorMessage = u"unterminated comment"_ustr;
     return TOK_ERROR;
 }
 

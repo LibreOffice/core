@@ -547,7 +547,7 @@ OWriteToolBoxDocumentHandler::OWriteToolBoxDocumentHandler(
     m_rItemAccess( rItemAccess )
 {
     m_xEmptyList = new ::comphelper::AttributeList;
-    m_aXMLXlinkNS       = XMLNS_XLINK_PREFIX;
+    m_aXMLXlinkNS       = u"" XMLNS_XLINK_PREFIX ""_ustr;
     m_aXMLToolbarNS     = XMLNS_TOOLBAR_PREFIX;
 }
 

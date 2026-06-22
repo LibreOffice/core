@@ -246,7 +246,7 @@ void SwCSS1Parser::SetLinkCharFormats()
         m_bBodyLinkSet |= bColorSet;
     }
 
-    sTmp = OOO_STRING_SVTOOLS_HTML_anchor ":visited";
+    sTmp = u"" OOO_STRING_SVTOOLS_HTML_anchor ":visited"_ustr;
 
     pStyleEntry = GetTag( sTmp );
     if( pStyleEntry )
@@ -319,12 +319,12 @@ void SwCSS1Parser::SetTableTextColl( bool bHeader )
     if( bHeader )
     {
         nPoolId = SwPoolFormatId::COLL_TABLE_HDLN;
-        sTag = OOO_STRING_SVTOOLS_HTML_tableheader;
+        sTag = u"" OOO_STRING_SVTOOLS_HTML_tableheader ""_ustr;
     }
     else
     {
         nPoolId = SwPoolFormatId::COLL_TABLE;
-        sTag = OOO_STRING_SVTOOLS_HTML_tabledata;
+        sTag = u"" OOO_STRING_SVTOOLS_HTML_tabledata ""_ustr;
     }
 
     SwTextFormatColl *pColl = nullptr;

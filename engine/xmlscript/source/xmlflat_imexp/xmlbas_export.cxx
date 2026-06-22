@@ -114,7 +114,7 @@ bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /*aDe
                 }
                 else
                 {
-                    aPrefix = XMLNS_SCRIPT_PREFIX;
+                    aPrefix = u"" XMLNS_SCRIPT_PREFIX ""_ustr;
                     aURI = XMLNS_SCRIPT_URI;
                 }
 

@@ -270,79 +270,79 @@ static void ShowError(ULONG nMAPIResult)
     switch (nMAPIResult)
     {
     case MAPI_E_FAILURE:
-        sErrorId = "MAPI_E_FAILURE";
+        sErrorId = u"MAPI_E_FAILURE"_ustr;
         break;
     case MAPI_E_LOGON_FAILURE:
-        sErrorId = "MAPI_E_LOGON_FAILURE";
+        sErrorId = u"MAPI_E_LOGON_FAILURE"_ustr;
         break;
     case MAPI_E_DISK_FULL:
-        sErrorId = "MAPI_E_DISK_FULL";
+        sErrorId = u"MAPI_E_DISK_FULL"_ustr;
         break;
     case MAPI_E_INSUFFICIENT_MEMORY:
-        sErrorId = "MAPI_E_INSUFFICIENT_MEMORY";
+        sErrorId = u"MAPI_E_INSUFFICIENT_MEMORY"_ustr;
         break;
     case MAPI_E_ACCESS_DENIED:
-        sErrorId = "MAPI_E_ACCESS_DENIED";
+        sErrorId = u"MAPI_E_ACCESS_DENIED"_ustr;
         break;
     case MAPI_E_TOO_MANY_SESSIONS:
-        sErrorId = "MAPI_E_ACCESS_DENIED";
+        sErrorId = u"MAPI_E_ACCESS_DENIED"_ustr;
         break;
     case MAPI_E_TOO_MANY_FILES:
-        sErrorId = "MAPI_E_TOO_MANY_FILES";
+        sErrorId = u"MAPI_E_TOO_MANY_FILES"_ustr;
         break;
     case MAPI_E_TOO_MANY_RECIPIENTS:
-        sErrorId = "MAPI_E_TOO_MANY_RECIPIENTS";
+        sErrorId = u"MAPI_E_TOO_MANY_RECIPIENTS"_ustr;
         break;
     case MAPI_E_ATTACHMENT_NOT_FOUND:
-        sErrorId = "MAPI_E_ATTACHMENT_NOT_FOUND";
+        sErrorId = u"MAPI_E_ATTACHMENT_NOT_FOUND"_ustr;
         break;
     case MAPI_E_ATTACHMENT_OPEN_FAILURE:
-        sErrorId = "MAPI_E_ATTACHMENT_OPEN_FAILURE";
+        sErrorId = u"MAPI_E_ATTACHMENT_OPEN_FAILURE"_ustr;
         break;
     case MAPI_E_ATTACHMENT_WRITE_FAILURE:
-        sErrorId = "MAPI_E_ATTACHMENT_WRITE_FAILURE";
+        sErrorId = u"MAPI_E_ATTACHMENT_WRITE_FAILURE"_ustr;
         break;
     case MAPI_E_UNKNOWN_RECIPIENT:
-        sErrorId = "MAPI_E_UNKNOWN_RECIPIENT";
+        sErrorId = u"MAPI_E_UNKNOWN_RECIPIENT"_ustr;
         break;
     case MAPI_E_BAD_RECIPTYPE:
-        sErrorId = "MAPI_E_BAD_RECIPTYPE";
+        sErrorId = u"MAPI_E_BAD_RECIPTYPE"_ustr;
         break;
     case MAPI_E_NO_MESSAGES:
-        sErrorId = "MAPI_E_NO_MESSAGES";
+        sErrorId = u"MAPI_E_NO_MESSAGES"_ustr;
         break;
     case MAPI_E_INVALID_MESSAGE:
-        sErrorId = "MAPI_E_INVALID_MESSAGE";
+        sErrorId = u"MAPI_E_INVALID_MESSAGE"_ustr;
         break;
     case MAPI_E_TEXT_TOO_LARGE:
-        sErrorId = "MAPI_E_TEXT_TOO_LARGE";
+        sErrorId = u"MAPI_E_TEXT_TOO_LARGE"_ustr;
         break;
     case MAPI_E_INVALID_SESSION:
-        sErrorId = "MAPI_E_INVALID_SESSION";
+        sErrorId = u"MAPI_E_INVALID_SESSION"_ustr;
         break;
     case MAPI_E_TYPE_NOT_SUPPORTED:
-        sErrorId = "MAPI_E_TYPE_NOT_SUPPORTED";
+        sErrorId = u"MAPI_E_TYPE_NOT_SUPPORTED"_ustr;
         break;
     case MAPI_E_AMBIGUOUS_RECIPIENT:
-        sErrorId = "MAPI_E_AMBIGUOUS_RECIPIENT";
+        sErrorId = u"MAPI_E_AMBIGUOUS_RECIPIENT"_ustr;
         break;
     case MAPI_E_MESSAGE_IN_USE:
-        sErrorId = "MAPI_E_MESSAGE_IN_USE";
+        sErrorId = u"MAPI_E_MESSAGE_IN_USE"_ustr;
         break;
     case MAPI_E_NETWORK_FAILURE:
-        sErrorId = "MAPI_E_NETWORK_FAILURE";
+        sErrorId = u"MAPI_E_NETWORK_FAILURE"_ustr;
         break;
     case MAPI_E_INVALID_EDITFIELDS:
-        sErrorId = "MAPI_E_INVALID_EDITFIELDS";
+        sErrorId = u"MAPI_E_INVALID_EDITFIELDS"_ustr;
         break;
     case MAPI_E_INVALID_RECIPS:
-        sErrorId = "MAPI_E_INVALID_RECIPS";
+        sErrorId = u"MAPI_E_INVALID_RECIPS"_ustr;
         break;
     case MAPI_E_NOT_SUPPORTED:
-        sErrorId = "MAPI_E_NOT_SUPPORTED";
+        sErrorId = u"MAPI_E_NOT_SUPPORTED"_ustr;
         break;
     case MAPI_E_UNICODE_NOT_SUPPORTED:
-        sErrorId = "MAPI_E_UNICODE_NOT_SUPPORTED";
+        sErrorId = u"MAPI_E_UNICODE_NOT_SUPPORTED"_ustr;
         break;
     default:
         sErrorId = OUString::number(nMAPIResult);

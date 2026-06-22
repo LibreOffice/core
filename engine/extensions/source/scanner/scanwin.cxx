@@ -577,7 +577,7 @@ cpo::uno::Sequence<ScannerContext> SAL_CALL ScannerManager::getAvailableScanners
     osl::MutexGuard aGuard(maProtector);
     cpo::uno::Sequence<ScannerContext> aRet(1);
 
-    aRet.getArray()[0].ScannerName = "TWAIN";
+    aRet.getArray()[0].ScannerName = u"TWAIN"_ustr;
     aRet.getArray()[0].InternalData = 0;
 
     return aRet;

@@ -316,7 +316,7 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
         if (!prefix.isEmpty()) {
             sym = prefix + "_" COMPONENT_GETFACTORY;
         } else {
-            sym = COMPONENT_GETFACTORY;
+            sym = u"" COMPONENT_GETFACTORY ""_ustr;
         }
         oslGenericFunction fp = mod.getFunctionSymbol(sym);
         if (fp == nullptr) {

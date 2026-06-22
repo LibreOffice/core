@@ -724,7 +724,7 @@ bool TransferableHelper::SetBitmap(const Bitmap& rBitmap, const DataFlavor& rFla
 #ifdef IOS
             // Use faster compression on slow devices
             aFilterData.realloc(aFilterData.getLength() + 1);
-            aFilterData.getArray()[aFilterData.getLength() - 1].Name = "Compression";
+            aFilterData.getArray()[aFilterData.getLength() - 1].Name = u"Compression"_ustr;
 
             // We "know" that this gets passed to zlib's deflateInit2_(). 1 means best speed. For a
             // typical 15 megapixel image from a DSLR, we are talking about a difference of 17 s for

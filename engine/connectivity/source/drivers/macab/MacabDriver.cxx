@@ -46,7 +46,7 @@ void throwGenericSQLException( const OUString& _rMessage )
 {
     SQLException aError;
     aError.Message = _rMessage;
-    aError.SQLState = "S1000";
+    aError.SQLState = u"S1000"_ustr;
     aError.ErrorCode = 0;
     throw aError;
 }

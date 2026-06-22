@@ -214,7 +214,7 @@ namespace comphelper {
         {
             aMedDescr.realloc(nNewLen + 1);
             pMedDescr = aMedDescr.getArray();
-            pMedDescr[nNewLen].Name = "RemoteContentFound";
+            pMedDescr[nNewLen].Name = u"RemoteContentFound"_ustr;
             pMedDescr[nNewLen].Value <<= aExisting;
         }
 

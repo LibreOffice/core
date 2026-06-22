@@ -163,12 +163,12 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
         aFormatName     = u"DICT_SPELL"_ustr;
         aDicExtension   = u".dic"_ustr;
 #ifdef SYSTEM_DICTS
-        aSystemDir      = DICT_SYSTEM_DIR;
+        aSystemDir      = u"" DICT_SYSTEM_DIR ""_ustr;
         aSystemSuffix   = aDicExtension;
 #elif defined IOS
-        aSystemDir      = "$BRAND_BASE_DIR/share/spell";
+        aSystemDir      = u"$BRAND_BASE_DIR/share/spell"_ustr;
         rtl::Bootstrap::expandMacros(aSystemDir);
-        aSystemSuffix   = ".dic";
+        aSystemSuffix   = u".dic"_ustr;
 #endif
     }
     else if (strcmp( pDicType, "HYPH" ) == 0)
@@ -176,7 +176,7 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
         aFormatName     = u"DICT_HYPH"_ustr;
         aDicExtension   = u".dic"_ustr;
 #ifdef SYSTEM_DICTS
-        aSystemDir      = HYPH_SYSTEM_DIR;
+        aSystemDir      = u"" HYPH_SYSTEM_DIR ""_ustr;
         aSystemPrefix   = u"hyph_"_ustr;
         aSystemSuffix   = aDicExtension;
 #endif
@@ -186,14 +186,14 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
         aFormatName     = u"DICT_THES"_ustr;
         aDicExtension   = u".dat"_ustr;
 #ifdef SYSTEM_DICTS
-        aSystemDir      = THES_SYSTEM_DIR;
+        aSystemDir      = u"" THES_SYSTEM_DIR ""_ustr;
         aSystemPrefix   = u"th_"_ustr;
         aSystemSuffix   = u"_v2.dat"_ustr;
 #elif defined IOS
-        aSystemDir      = "$BRAND_BASE_DIR/share/thes";
+        aSystemDir      = u"$BRAND_BASE_DIR/share/thes"_ustr;
         rtl::Bootstrap::expandMacros(aSystemDir);
-        aSystemPrefix   = "th_";
-        aSystemSuffix   = "_v2.dat";
+        aSystemPrefix   = u"th_"_ustr;
+        aSystemSuffix   = u"_v2.dat"_ustr;
 #endif
     }
 

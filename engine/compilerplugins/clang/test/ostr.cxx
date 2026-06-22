@@ -121,10 +121,6 @@ void passLiteral()
     takeStdString(std::string(""_ostr));
     // expected-error-re@+1 {{directly use a 'std::u16string' (aka 'basic_string<char16_t{{(, char_traits<char16_t>, allocator<char16_t>)?}}>') value instead of a _ustr user-defined string literal [loplugin:ostr]}}
     takeStdString(std::u16string(u""_ustr));
-    // expected-error@+1 {{directly use a 'std::string_view' (aka 'basic_string_view<char>') value instead of a _ostr user-defined string literal [loplugin:ostr]}}
-    takeStdView(""_ostr);
-    // expected-error@+1 {{directly use a 'std::u16string_view' (aka 'basic_string_view<char16_t>') value instead of a _ustr user-defined string literal [loplugin:ostr]}}
-    takeStdView(u""_ustr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

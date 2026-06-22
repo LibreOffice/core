@@ -1861,7 +1861,7 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
         {
             aFilterData.realloc(aFilterData.getLength() + 1);
             auto pFilterData = aFilterData.getArray();
-            pFilterData[aFilterData.getLength() - 1].Name = "Compression";
+            pFilterData[aFilterData.getLength() - 1].Name = u"Compression"_ustr;
             // We "know" that this gets passed to zlib's deflateInit2_(). 1 means best speed.
             pFilterData[aFilterData.getLength() - 1].Value <<= static_cast<sal_Int32>(1);
         }

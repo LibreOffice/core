@@ -1913,8 +1913,7 @@ bool HTMLParser::InternalImgToPrivateURL( OUString& rURL )
     if( bFound )
     {
         OUString sTmp ( rURL );
-        rURL =  OOO_STRING_SVTOOLS_HTML_private_image;
-        rURL += sTmp;
+        rURL = OOO_STRING_SVTOOLS_HTML_private_image + sTmp;
     }
 
     return bFound;

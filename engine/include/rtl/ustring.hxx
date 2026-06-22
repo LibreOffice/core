@@ -524,31 +524,12 @@ public:
 #endif
 
     /**
-      Assign a new string from an 8-Bit string literal that is expected to contain only
-      characters in the ASCII set (i.e. first 128 characters). This operator
-      allows an efficient and convenient way to assign OUString
-      instances from ASCII literals. When assigning strings from data that
-      is not pure ASCII, it needs to be converted to OUString by explicitly
-      providing the encoding to use for the conversion.
-
-      @param    literal         the 8-bit ASCII string literal
+      Prevent assigning a new string from an 8-Bit string literal. We delete this
+      to prevent it being converted to a string_view, we rather want to use a OUString literal.
     */
     template< typename T >
-    typename libreoffice_internal::ConstCharArrayDetector< T, OUString& >::Type operator=( T& literal )
-    {
-        assert(
-            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
-        if SAL_CONSTEXPR (libreoffice_internal::ConstCharArrayDetector<T>::length == 0) {
-            rtl_uString_new(&pData);
-        } else {
-            rtl_uString_newFromLiteral(
-                &pData,
-                libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
-                    literal),
-                libreoffice_internal::ConstCharArrayDetector<T>::length, 0);
-        }
-        return *this;
-    }
+    typename libreoffice_internal::ConstCharArrayDetector< T, OUString& >::Type operator=( T& )
+        = delete;
 
     // Rather assign from a u""_ustr literal (but don't remove this entirely, to avoid implicit
     // support for it via std::u16string_view from kicking in):

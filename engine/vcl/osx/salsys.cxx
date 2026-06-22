@@ -77,12 +77,12 @@ static NSString* getStandardString( StandardButtonType nButtonId, bool bUseResou
     {
         switch( nButtonId )
         {
-        case StandardButtonType::OK:         aText = "OK";break;
-        case StandardButtonType::Abort:      aText = "Abort";break;
-        case StandardButtonType::Cancel:     aText = "Cancel";break;
-        case StandardButtonType::Retry:      aText = "Retry";break;
-        case StandardButtonType::Yes:        aText = "Yes";break;
-        case StandardButtonType::No:         aText = "No";break;
+        case StandardButtonType::OK:         aText = u"OK"_ustr;break;
+        case StandardButtonType::Abort:      aText = u"Abort"_ustr;break;
+        case StandardButtonType::Cancel:     aText = u"Cancel"_ustr;break;
+        case StandardButtonType::Retry:      aText = u"Retry"_ustr;break;
+        case StandardButtonType::Yes:        aText = u"Yes"_ustr;break;
+        case StandardButtonType::No:         aText = u"No"_ustr;break;
         default: break;
         }
     }

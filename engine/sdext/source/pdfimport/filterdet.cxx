@@ -498,14 +498,14 @@ OUString SAL_CALL PDFDetector::detect( cpo::uno::Sequence< beans::PropertyValue 
     {
         if( aEmbedMimetype == "application/vnd.oasis.opendocument.text"
             || aEmbedMimetype == "application/vnd.oasis.opendocument.text-master" )
-            aOutFilterName = "writer_pdf_addstream_import";
+            aOutFilterName = u"writer_pdf_addstream_import"_ustr;
         else if ( aEmbedMimetype == "application/vnd.oasis.opendocument.presentation" )
-            aOutFilterName = "impress_pdf_addstream_import";
+            aOutFilterName = u"impress_pdf_addstream_import"_ustr;
         else if( aEmbedMimetype == "application/vnd.oasis.opendocument.graphics"
                  || aEmbedMimetype == "application/vnd.oasis.opendocument.drawing" )
-            aOutFilterName = "draw_pdf_addstream_import";
+            aOutFilterName = u"draw_pdf_addstream_import"_ustr;
         else if ( aEmbedMimetype == "application/vnd.oasis.opendocument.spreadsheet" )
-            aOutFilterName = "calc_pdf_addstream_import";
+            aOutFilterName = u"calc_pdf_addstream_import"_ustr;
     }
 
     // Stash the password so that the importer can use it, even if we came to the
@@ -516,7 +516,7 @@ OUString SAL_CALL PDFDetector::detect( cpo::uno::Sequence< beans::PropertyValue 
         {
             nPasswordPos = nAttribs;
             rFilterData.realloc(++nAttribs);
-            rFilterData.getArray()[nPasswordPos].Name = "Password";
+            rFilterData.getArray()[nPasswordPos].Name = u"Password"_ustr;
         }
         rFilterData.getArray()[nPasswordPos].Value <<= aPassword;
     }
@@ -527,17 +527,17 @@ OUString SAL_CALL PDFDetector::detect( cpo::uno::Sequence< beans::PropertyValue 
         {
             nFilterNamePos = nAttribs;
             rFilterData.realloc( ++nAttribs );
-            rFilterData.getArray()[ nFilterNamePos ].Name = "FilterName";
+            rFilterData.getArray()[ nFilterNamePos ].Name = u"FilterName"_ustr;
         }
         auto pFilterData = rFilterData.getArray();
-        aOutTypeName = "pdf_Portable_Document_Format";
+        aOutTypeName = u"pdf_Portable_Document_Format"_ustr;
 
         pFilterData[nFilterNamePos].Value <<= aOutFilterName;
         if( xEmbedStream.is() )
         {
             rFilterData.realloc( ++nAttribs );
             pFilterData = rFilterData.getArray();
-            pFilterData[nAttribs-1].Name = "EmbeddedSubstream";
+            pFilterData[nAttribs-1].Name = u"EmbeddedSubstream"_ustr;
             pFilterData[nAttribs-1].Value <<= xEmbedStream;
         }
     }
@@ -549,7 +549,7 @@ OUString SAL_CALL PDFDetector::detect( cpo::uno::Sequence< beans::PropertyValue 
             nFilterNamePos = nAttribs;
             rFilterData.realloc( ++nAttribs );
             pFilterData = rFilterData.getArray();
-            pFilterData[ nFilterNamePos ].Name = "FilterName";
+            pFilterData[ nFilterNamePos ].Name = u"FilterName"_ustr;
         }
         else
             pFilterData = rFilterData.getArray();
@@ -580,7 +580,7 @@ OUString SAL_CALL PDFDetector::detect( cpo::uno::Sequence< beans::PropertyValue 
             }
         }
 
-        aOutTypeName = "pdf_Portable_Document_Format";
+        aOutTypeName = u"pdf_Portable_Document_Format"_ustr;
     }
 
     return aOutTypeName;

@@ -103,7 +103,7 @@ bool MenuWindow::ImplHandleHelpEvent(vcl::Window* pMenuWindow, Menu const * pMen
                 aHelpId = pMenu->GetHelpId(nId);
 
             if( aHelpId.isEmpty() )
-                aHelpId = OOO_HELP_INDEX;
+                aHelpId = u"" OOO_HELP_INDEX ""_ustr;
 
             if ( !aHelpId.isEmpty() )
                 pHelp->Start(aHelpId);

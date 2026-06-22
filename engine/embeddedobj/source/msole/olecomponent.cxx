@@ -227,11 +227,11 @@ static OUString GetFlavorSuffixFromAspect( DWORD nAsp )
     OUString aResult;
 
     if ( nAsp == DVASPECT_THUMBNAIL )
-        aResult = ";Aspect=THUMBNAIL";
+        aResult = u";Aspect=THUMBNAIL"_ustr;
     else if ( nAsp == DVASPECT_ICON )
-        aResult = ";Aspect=ICON";
+        aResult = u";Aspect=ICON"_ustr;
     else if ( nAsp == DVASPECT_DOCPRINT )
-        aResult = ";Aspect=DOCPRINT";
+        aResult = u";Aspect=DOCPRINT"_ustr;
 
     // no suffix for DVASPECT_CONTENT
 
@@ -256,7 +256,7 @@ bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium,
 
         if ( aMedium.tymed == TYMED_MFPICT ) // Win Metafile
         {
-            aFormat = "image/x-wmf";
+            aFormat = u"image/x-wmf"_ustr;
             METAFILEPICT* pMF = static_cast<METAFILEPICT*>(GlobalLock( aMedium.hMetaFilePict ));
             if ( pMF )
             {
@@ -287,7 +287,7 @@ bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium,
         }
         else if ( aMedium.tymed == TYMED_ENHMF ) // Enh Metafile
         {
-            aFormat = "image/x-emf";
+            aFormat = u"image/x-emf"_ustr;
             nBufSize = GetEnhMetaFileBits( aMedium.hEnhMetaFile, 0, nullptr );
             pBuf.reset(new sal_Int8[nBufSize]);
             if ( nBufSize && nBufSize == GetEnhMetaFileBits( aMedium.hEnhMetaFile, nBufSize, reinterpret_cast<LPBYTE>(pBuf.get()) ) )
@@ -301,7 +301,7 @@ bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium,
         }
         else if ( aMedium.tymed == TYMED_GDI ) // Bitmap
         {
-            aFormat = "image/x-MS-bmp";
+            aFormat = u"image/x-MS-bmp"_ustr;
 
             // Find out size of buffer: deprecated GetBitmapBits does not have a mode to return
             // required buffer size

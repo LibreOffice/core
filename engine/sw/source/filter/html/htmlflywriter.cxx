@@ -1118,7 +1118,7 @@ OUString lclWriteOutImap(SwHTMLWriter& rWrt, const SfxItemSet& rItemSet, const S
             aNameBase = aIMapName;
         else
         {
-            aNameBase = OOO_STRING_SVTOOLS_HTML_map;
+            aNameBase = u"" OOO_STRING_SVTOOLS_HTML_map ""_ustr;
             aIMapName = aNameBase + OUString::number(rWrt.m_nImgMapCnt);
         }
 

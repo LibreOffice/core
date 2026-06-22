@@ -86,7 +86,7 @@ namespace /* private */
 
         if (senddocUrl.isEmpty())
         {
-            senddocUrl = "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER "/senddoc.exe";
+            senddocUrl = u"$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER "/senddoc.exe"_ustr;
             rtl::Bootstrap::expandMacros(senddocUrl); //TODO: detect failure
         }
         return senddocUrl;

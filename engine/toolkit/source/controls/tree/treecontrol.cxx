@@ -172,7 +172,7 @@ public:
     virtual void SAL_CALL removeTreeEditListener( const css::uno::Reference< css::awt::tree::XTreeEditListener >& Listener ) override;
 
     // css::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO_DERIVED( UnoTreeControl, UnoControlBase, "com.sun.star.awt.tree.TreeControl" )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoTreeControl, UnoControlBase, u"com.sun.star.awt.tree.TreeControl"_ustr )
 
     using UnoControl::getPeer;
 private:

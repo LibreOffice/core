@@ -337,7 +337,7 @@ bool SlideSorterController::Command (
                             }
                         }
                     }
-                    aPopupId = bOnSectionHeader ? "sectionheader" : "pagepanenosel";
+                    aPopupId = bOnSectionHeader ? u"sectionheader"_ustr : u"pagepanenosel"_ustr;
                 }
             }
             else if (pPage != nullptr)

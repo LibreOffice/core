@@ -1062,7 +1062,7 @@ void SvxXMLListStyleContext::SetDefaultStyle(
         awt::FontDescriptor aFDesc;
         aFDesc.Name =
 #ifdef _WIN32
-                        "StarBats"
+                        u"StarBats"_ustr
 #else
                         u"starbats"_ustr
 #endif

@@ -3054,7 +3054,7 @@ cpo::uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer
             ++nLen;
             aRenderer.realloc( nLen );
             auto pRenderer = aRenderer.getArray();
-            pRenderer[ nLen - 1 ].Name  = "PaperOrientation";
+            pRenderer[ nLen - 1 ].Name  = u"PaperOrientation"_ustr;
             pRenderer[ nLen - 1 ].Value <<= nNewOrientation;
         }
 #endif

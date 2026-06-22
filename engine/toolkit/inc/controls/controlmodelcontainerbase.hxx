@@ -157,7 +157,7 @@ public:
     virtual void SAL_CALL disposing( const css::lang::EventObject& evt ) override;
 
     // XServiceInfo
-    DECLIMPL_SERVICEINFO_DERIVED(ControlModelContainerBase, ControlModel_Base, "toolkit.ControlModelContainerBase" )
+    DECLIMPL_SERVICEINFO_DERIVED(ControlModelContainerBase, ControlModel_Base, u"toolkit.ControlModelContainerBase"_ustr )
 
     // XInitialization
     virtual void SAL_CALL initialize (const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
@@ -240,7 +240,7 @@ public:
     ControlContainerBase( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~ControlContainerBase() override;
 
-    DECLIMPL_SERVICEINFO_DERIVED( ControlContainerBase, UnoControlBase, "toolkit.ControlContainerBase" )
+    DECLIMPL_SERVICEINFO_DERIVED( ControlContainerBase, UnoControlBase, u"toolkit.ControlContainerBase"_ustr )
 
     void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
     void SAL_CALL dispose() override;

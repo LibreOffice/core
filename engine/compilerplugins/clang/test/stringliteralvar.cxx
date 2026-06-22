@@ -95,21 +95,6 @@ void f10()
     f(OUString(literal, 3));
 }
 
-void f11(int nStreamType)
-{
-    // expected-error-re@+1 {{change type of variable 'sDocumentType' from constant character array ('const char{{ ?}}[4]') to OUStringLiteral, and make it static [loplugin:stringliteralvar]}}
-    const char sDocumentType[] = "foo";
-    OUString sStreamType;
-    switch (nStreamType)
-    {
-        case 1:
-            // expected-note@+1 {{first assigned here [loplugin:stringliteralvar]}}
-            sStreamType = sDocumentType;
-            break;
-    }
-    (void)sStreamType;
-}
-
 extern sal_Unicode const extarr[1];
 
 sal_Unicode init();
