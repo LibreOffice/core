@@ -120,6 +120,9 @@ static sal_uInt8* X11_getPaletteBmpFromImage(
             break;
         case 1:
             assert(false);
+#ifdef NDEBUG
+            [[fallthrough]];
+#endif
         default:
         case 8:
             nHeaderSize = 1084;
