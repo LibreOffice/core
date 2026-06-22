@@ -91,6 +91,7 @@ class IconUtil {
 		'DuplicateSheet',
 		'Remove',
 		'Protect',
+		'Spreadsheet_protected',
 		'SetTabBgColor',
 		'ResetTabBgColor',
 		'Show',

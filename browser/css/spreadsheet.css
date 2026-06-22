@@ -67,6 +67,31 @@
 	background-repeat: no-repeat !important;
 }
 
+[data-theme='dark'] .spreadsheet-tab.spreadsheet-tab-protected > .lock,
+[data-theme='dark'] .spreadsheet-tab.spreadsheet-tab-protected:hover > .lock {
+	background-image: url('images/dark/lc_spreadsheet_protected.svg') !important;
+}
+
+.spreadsheet-tab.spreadsheet-tab-protected.spreadsheet-tab-lock-black > .lock,
+.spreadsheet-tab.spreadsheet-tab-protected.spreadsheet-tab-lock-black:hover > .lock {
+	background-image: url('images/lc_spreadsheet_protected_black.svg') !important;
+}
+
+.spreadsheet-tab.spreadsheet-tab-protected.spreadsheet-tab-lock-white > .lock,
+.spreadsheet-tab.spreadsheet-tab-protected.spreadsheet-tab-lock-white:hover > .lock {
+	background-image: url('images/lc_spreadsheet_protected_white.svg') !important;
+}
+
+.spreadsheet-tab.spreadsheet-tab-colored.spreadsheet-tab-selected.spreadsheet-tab-protected > .lock,
+.spreadsheet-tab.spreadsheet-tab-colored.spreadsheet-tab-selected.spreadsheet-tab-protected:hover > .lock {
+	background-image: url('images/lc_spreadsheet_protected_black.svg') !important;
+}
+
+[data-theme='dark'] .spreadsheet-tab.spreadsheet-tab-colored.spreadsheet-tab-selected.spreadsheet-tab-protected > .lock,
+[data-theme='dark'] .spreadsheet-tab.spreadsheet-tab-colored.spreadsheet-tab-selected.spreadsheet-tab-protected:hover > .lock {
+	background-image: url('images/lc_spreadsheet_protected_white.svg') !important;
+}
+
 .spreadsheet-tab.spreadsheet-tab-sheetview > .view-indicator, .spreadsheet-tab.spreadsheet-tab-sheetview:hover > .view-indicator {
 	width: 16px;
 	height: 16px;
