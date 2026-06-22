@@ -24,6 +24,7 @@
 // Include necessary C++ headers
 #include <thread>
 #include <string>
+#include <set>
 #include <common/Clipboard.hpp>
 #include <common/LangUtil.hpp>
 #include <common/AIHttpTransport.hpp>
@@ -45,6 +46,31 @@ COOLWSD *coolwsd = nullptr;
 // check the Qt (Bridge.cpp) and Windows (do_paste_or_read) app variants do.
 static NSInteger sOwnedPasteboardChangeCount = -1;
 static unsigned sOwnedClipboardDocId = 0;
+
+/**
+ * Supplies clipboard bytes to the system pasteboard on demand. After a copy we
+ * advertise only the list of formats; when something actually pastes one, the
+ * pasteboard asks this owner for that format's bytes, which it fetches from the
+ * engine then. Mirrors what desktop LibreOffice does in vcl/osx/clipboard.cxx
+ * and what the Qt app does with its LazyClipboardMimeData.
+ */
+@interface COClipboardOwner : NSObject
+- (instancetype)initWithDocId:(unsigned)appDocId
+                   mimeByType:(NSDictionary<NSPasteboardType, NSString *> *)mimeByType;
+/**
+ * Force every advertised format onto the pasteboard now. Used before the source
+ * document goes away, so a later paste still finds the content.
+ */
+- (void)flushTo:(NSPasteboard *)pasteboard;
+@property (nonatomic, readonly) unsigned appDocId;
+@end
+
+/**
+ * The pasteboard does not retain the type owner it is given in declareTypes,
+ * so we hold the current lazy owner ourselves until the next advertise (or a
+ * flush) replaces it.
+ */
+static COClipboardOwner *sClipboardOwner = nil;
 
 static int closeNotificationPipeForForwardingThread[2];
 static std::thread coolwsdThread;
@@ -102,6 +128,151 @@ static void registerAIHttpTransport()
             }
         });
 }
+
+/**
+ * Pull the bytes the engine holds for one clipboard format of an open document.
+ * Returns nil when the document is gone or offers nothing for that format.
+ */
+static NSData *_Nullable copyEngineClipboardData(unsigned appDocId, const char *mime)
+{
+    // A still-mounted owner can outlive the document it came from; getIfExists
+    // looks the document up without aborting on a removed id.
+    DocumentData *docData = DocumentData::getIfExists(appDocId);
+    if (!docData || !docData->loKitDocument)
+        return nil;
+    kit::Document *loKitDoc = docData->loKitDocument;
+
+    // getClipboard acts on the kit's current view, so make this document's view
+    // current first.
+    int nViewId = -1;
+    if (!loKitDoc->getViewIds(&nViewId, 1) || nViewId < 0)
+        return nil;
+    loKitDoc->setView(nViewId);
+
+    const char *filter[] = { mime, nullptr };
+    size_t outCount = 0;
+    char **outMimeTypes = nullptr;
+    size_t *outSizes = nullptr;
+    char **outStreams = nullptr;
+    if (!loKitDoc->getClipboard(filter, &outCount, &outMimeTypes, &outSizes, &outStreams)
+        || outCount == 0)
+        return nil;
+
+    NSData *data = nil;
+    if (outStreams[0] && outSizes[0] > 0)
+        data = [NSData dataWithBytes:outStreams[0] length:outSizes[0]];
+    for (size_t i = 0; i < outCount; ++i) {
+        free(outMimeTypes[i]);
+        free(outStreams[i]);
+    }
+    free(outMimeTypes);
+    free(outSizes);
+    free(outStreams);
+    return data;
+}
+
+@implementation COClipboardOwner
+{
+    unsigned _appDocId;
+    /**
+     * Maps an advertised pasteboard type back to the engine mime it stands for,
+     * so a request for that type can fetch the matching format.
+     */
+    NSDictionary<NSPasteboardType, NSString *> *_mimeByType;
+}
+
+- (instancetype)initWithDocId:(unsigned)appDocId
+                   mimeByType:(NSDictionary<NSPasteboardType, NSString *> *)mimeByType {
+    self = [super init];
+    if (self) {
+        _appDocId = appDocId;
+        _mimeByType = mimeByType;
+    }
+    return self;
+}
+
+- (unsigned)appDocId {
+    return _appDocId;
+}
+
+- (void)provideType:(NSPasteboardType)type to:(NSPasteboard *)pasteboard {
+    NSString *mime = _mimeByType[type];
+    if (mime == nil)
+        return;
+
+    NSData *data = copyEngineClipboardData(_appDocId, [mime UTF8String]);
+    if (data != nil)
+        [pasteboard setData:data forType:type];
+}
+
+/**
+ * Sent by the system when an application reads a type we only promised.
+ */
+- (void)pasteboard:(NSPasteboard *)sender provideDataForType:(NSPasteboardType)type {
+    [self provideType:type to:sender];
+}
+
+- (void)flushTo:(NSPasteboard *)pasteboard {
+    for (NSPasteboardType type in _mimeByType)
+        [self provideType:type to:pasteboard];
+}
+
+@end
+
+/**
+ * Private read helpers used by the clipboard provider callbacks below.
+ */
+@interface COWrapper ()
++ (char *_Nullable *_Nonnull)copyPasteboardMimeTypes;
++ (BOOL)copyPasteboardData:(NSString *_Nonnull)mime
+                       out:(char *_Nullable *_Nonnull)pOutData
+                      size:(size_t *_Nonnull)pOutSize;
+@end
+
+/**
+ * The clipboard provider the engine drives. On copy the engine advertises its
+ * formats through advertise; on an external paste it reads the pasteboard one
+ * format at a time. pUserData is a retained Document so the callbacks can reuse
+ * the document's clipboard helpers.
+ */
+
+static void clipboardProviderAdvertise(void* pUserData, const char** pMimeTypes)
+{
+    @autoreleasepool {
+        Document* document = (__bridge Document*)pUserData;
+        NSMutableArray<NSString*>* mimes = [NSMutableArray array];
+        for (size_t i = 0; pMimeTypes && pMimeTypes[i]; ++i)
+            [mimes addObject:[NSString stringWithUTF8String:pMimeTypes[i]]];
+        [COWrapper advertiseClipboardFor:document mimeTypes:mimes];
+    }
+}
+
+static int clipboardProviderOwns(void* pUserData)
+{
+    Document* document = (__bridge Document*)pUserData;
+    return [COWrapper pasteboardOwnedBy:document] ? 1 : 0;
+}
+
+static char** clipboardProviderGetMimeTypes(void* /*pUserData*/)
+{
+    @autoreleasepool {
+        return [COWrapper copyPasteboardMimeTypes];
+    }
+}
+
+static int clipboardProviderGetData(void* /*pUserData*/, const char* pMimeType, char** pOutData,
+                                    size_t* pOutSize)
+{
+    @autoreleasepool {
+        return [COWrapper copyPasteboardData:[NSString stringWithUTF8String:pMimeType]
+                                         out:pOutData
+                                        size:pOutSize]
+                   ? 1
+                   : 0;
+    }
+}
+
+static void clipboardProviderRelease(void* pUserData) { CFBridgingRelease(pUserData); }
 
 /**
  * Wrapper to be able to call the C++ code from Swift.
@@ -230,11 +401,19 @@ static void registerAIHttpTransport()
 }
 
 + (void)handleByeWith:(Document *_Nonnull)document {
+    // Pull any clipboard formats this document only promised onto the pasteboard
+    // while its engine is still alive, so a later paste elsewhere still works.
+    [COWrapper materializeClipboardFor:document];
+
     // Close one end of the socket pair, that will wake up the forwarding thread
     fakeSocketClose(closeNotificationPipeForForwardingThread[0]);
 }
 
 + (void)handleMessageWith:(Document *)document message:(NSString *)message {
+    // The kit document is ready by the time messages flow; register the clipboard
+    // provider as soon as it is, well before the first copy.
+    [COWrapper ensureClipboardProviderFor:document];
+
     const char *buf = [message UTF8String];
     fakeSocketWriteQueue(document.fakeClientFd, buf, strlen(buf));
 }
@@ -267,76 +446,50 @@ static void registerAIHttpTransport()
 }
 
 /**
- * Fetch the requested flavours from the engine and put them all on the system
- * pasteboard as raw, unaltered bytes, each under the pasteboard type other apps
- * expect. Returns NO when there was nothing to write.
- *
- * We write through the declareTypes/setData API (the same one desktop LibreOffice
- * uses, see vcl/osx/clipboard.cxx) rather than NSPasteboardItem, because the
- * internal engine formats carry raw mime strings as their type names rather than
- * UTIs. That API accepts them unchanged, which is what lets a paste into desktop
- * LibreOffice keep full fidelity.
+ * Advertise the given formats on the system pasteboard without serializing any
+ * bytes. The bytes for a format are fetched from the engine only when something
+ * actually reads it, through the COClipboardOwner. The mime types are the ones
+ * the engine reported it can offer for the current selection.
  */
-+ (BOOL)putOnPasteboard:(const char**)mimeTypes for:(Document *_Nonnull)document {
-    size_t outCount = 0;
-    char  **outMimeTypes = nullptr;
-    size_t *outSizes = nullptr;
-    char  **outStreams = nullptr;
-
-    if (!DocumentData::get(document.appDocId).loKitDocument->getClipboard(mimeTypes,
-                                                                          &outCount, &outMimeTypes,
-                                                                          &outSizes, &outStreams))
-    {
-        LOG_DBG("failed to fetch mime-types");
-        return NO;
-    }
-
-    // Collect one representation per pasteboard type, keeping the first we see.
++ (BOOL)advertiseClipboardFor:(Document *_Nonnull)document
+                   mimeTypes:(NSArray<NSString *> *_Nonnull)mimeTypes {
     NSMutableArray<NSPasteboardType> * types = [NSMutableArray array];
-    NSMutableDictionary<NSPasteboardType, NSData *> * dataByType = [NSMutableDictionary dictionary];
+    NSMutableDictionary<NSPasteboardType, NSString *> * mimeByType = [NSMutableDictionary dictionary];
 
-    for (size_t i = 0; i < outCount; ++i) {
-        if (outStreams[i] == nullptr || outSizes[i] == 0)
+    for (NSString * mime in mimeTypes) {
+        NSString * type = [COWrapper pasteboardTypeForMime:mime];
+        // Several mimes can fold onto one pasteboard type (the plain-text
+        // variants), so keep the first, matching the eager write.
+        if (mimeByType[type] != nil)
             continue;
-
-        NSString * type = [COWrapper pasteboardTypeForMime:[NSString stringWithUTF8String:outMimeTypes[i]]];
-        if (dataByType[type] != nil)
-            continue;
-
-        dataByType[type] = [NSData dataWithBytes:outStreams[i] length:outSizes[i]];
+        mimeByType[type] = mime;
         [types addObject:type];
     }
 
     if (types.count == 0)
         return NO;
 
+    COClipboardOwner * owner = [[COClipboardOwner alloc] initWithDocId:document.appDocId
+                                                           mimeByType:mimeByType];
     NSPasteboard * pasteboard = [NSPasteboard generalPasteboard];
-    [pasteboard declareTypes:types owner:nil];
-    for (NSPasteboardType type in types)
-        [pasteboard setData:dataByType[type] forType:type];
-
+    [pasteboard declareTypes:types owner:owner];
+    sClipboardOwner = owner;
+    [COWrapper noteClipboardWrittenBy:document];
     return YES;
 }
 
 /**
- * Put the current clipboard content on the system pasteboard. Defaults to text
- * and/or html only when the generic query yields nothing.
+ * Serialize every still-promised format onto the pasteboard now. Called just
+ * before a document closes, so a paste into another app keeps working once the
+ * engine that would have provided the bytes is gone.
  */
-+ (BOOL)writeClipboardFor:(Document *_Nonnull)document {
-    BOOL written = [COWrapper putOnPasteboard:nullptr for:document];
-    if (!written) {
-        const char* textMimeTypes[] = {
-            "text/plain;charset=utf-8",
-            "text/html",
-            nullptr
-        };
-        written = [COWrapper putOnPasteboard:textMimeTypes for:document];
-    }
++ (void)materializeClipboardFor:(Document *_Nonnull)document {
+    if (sClipboardOwner == nil
+        || sClipboardOwner.appDocId != document.appDocId
+        || ![COWrapper pasteboardOwnedBy:document])
+        return;
 
-    if (written)
-        [COWrapper noteClipboardWrittenBy:document];
-
-    return written;
+    [sClipboardOwner flushTo:[NSPasteboard generalPasteboard]];
 }
 
 /**
@@ -395,75 +548,92 @@ static void registerAIHttpTransport()
 }
 
 /**
- * Sets the LOKit internal clipboard with the content of NSPasteboard.
+ * Register the platform clipboard provider with the engine for this document,
+ * once its kit document is ready. After this the engine advertises on copy and
+ * reads the pasteboard on paste through the provider callbacks. Safe to call on
+ * every message; it registers a document only once.
  */
-+ (void)setClipboardWith:(Document *_Nonnull)document from:(NSPasteboard *_Nonnull)pasteboard {
-    // Read the flavours per pasteboard item rather than through the pasteboard-level
-    // types property. The latter returns only the types backed by a uniform type
-    // identifier, so the internal engine formats (application/x-openoffice-*), which
-    // have no such identifier, are invisible through it even though they are present.
-    // The per-item types carry the raw type names as written, which is what reaches
-    // the engine and lets a slide or other rich content paste with full fidelity.
-    NSMutableArray<NSString *> * orderedMimes = [NSMutableArray array];
-    NSMutableDictionary<NSString *, NSData *> * dataByMime = [NSMutableDictionary dictionary];
++ (void)ensureClipboardProviderFor:(Document *_Nonnull)document {
+    static std::set<unsigned> sRegistered;
+    if (sRegistered.count(document.appDocId))
+        return;
 
+    kit::Document * loKitDoc = DocumentData::get(document.appDocId).loKitDocument;
+    if (!loKitDoc)
+        return; // the kit document is not loaded yet; try again on the next message
+
+    COKitClipboardProvider provider{};
+    provider.nSize = sizeof(provider);
+    provider.pUserData = (void *)CFBridgingRetain(document);
+    provider.advertiseToPlatform = clipboardProviderAdvertise;
+    provider.ownsClipboard = clipboardProviderOwns;
+    provider.getMimeTypes = clipboardProviderGetMimeTypes;
+    provider.getDataForMimeType = clipboardProviderGetData;
+    provider.release = clipboardProviderRelease;
+    loKitDoc->installClipboardProvider(&provider);
+
+    sRegistered.insert(document.appDocId);
+}
+
+/**
+ * The engine mime types the system pasteboard currently offers, as a
+ * nullptr-terminated malloc'd array of malloc'd strings the engine then frees.
+ */
++ (char *_Nullable *_Nonnull)copyPasteboardMimeTypes {
+    NSPasteboard * pasteboard = [NSPasteboard generalPasteboard];
+    NSMutableArray<NSString *> * mimes = [NSMutableArray array];
     for (NSPasteboardItem * item in pasteboard.pasteboardItems) {
         for (NSPasteboardType identifier in item.types) {
             NSString * mime = [COWrapper mimeForPasteboardType:identifier];
-            if (mime == nil) {
-                LOG_WRN("Pasteboard type " << [identifier UTF8String] << " had no mime type when deserializing clipboard, skipping...");
-                continue;
-            }
+            if (mime != nil && ![mimes containsObject:mime])
+                [mimes addObject:mime];
+        }
+    }
 
-            // Keep the first representation we see for a given mime.
-            if (dataByMime[mime] != nil)
+    char ** result = static_cast<char **>(malloc((mimes.count + 1) * sizeof(char *)));
+    NSUInteger i = 0;
+    for (NSString * mime in mimes)
+        result[i++] = strdup([mime UTF8String]);
+    result[i] = nullptr;
+    return result;
+}
+
+/**
+ * Copy the bytes the pasteboard holds for one engine mime into a malloc'd buffer
+ * the engine then frees. Returns NO when the format is not present.
+ */
++ (BOOL)copyPasteboardData:(NSString *_Nonnull)mime
+                       out:(char *_Nullable *_Nonnull)pOutData
+                      size:(size_t *_Nonnull)pOutSize {
+    NSPasteboard * pasteboard = [NSPasteboard generalPasteboard];
+    for (NSPasteboardItem * item in pasteboard.pasteboardItems) {
+        for (NSPasteboardType identifier in item.types) {
+            NSString * candidate = [COWrapper mimeForPasteboardType:identifier];
+            if (candidate == nil || ![candidate isEqualToString:mime])
                 continue;
 
             NSData * value = [item dataForType:identifier];
             if (value == nil)
                 continue;
 
-            dataByMime[mime] = value;
-            [orderedMimes addObject:mime];
+            *pOutData = static_cast<char *>(malloc(value.length ? value.length : 1));
+            memcpy(*pOutData, value.bytes, value.length);
+            *pOutSize = value.length;
+            return YES;
         }
     }
-
-    if (orderedMimes.count == 0)
-        return;
-
-    std::vector<const char *> pInMimeTypes(orderedMimes.count);
-    std::vector<size_t> pInSizes(orderedMimes.count);
-    std::vector<const char *> pInStreams(orderedMimes.count);
-
-    size_t i = 0;
-    for (NSString * mime in orderedMimes) {
-        pInMimeTypes[i] = [mime UTF8String];
-        pInStreams[i] = (const char *)[dataByMime[mime] bytes];
-        pInSizes[i] = [dataByMime[mime] length];
-        i++;
-    }
-
-    DocumentData::get(document.appDocId).loKitDocument->setClipboard(orderedMimes.count,
-                                                                     pInMimeTypes.data(),
-                                                                     pInSizes.data(),
-                                                                     pInStreams.data());
+    return NO;
 }
 
 /**
  * Insert data into the internal clipboard. The content's format is mimeType\nlegth\ndata\n[...repeat for more mimetypes...].
  */
 + (bool)sendToInternalWith:(Document *_Nonnull)document content:(NSString *_Nonnull)content {
-    // If we still own the pasteboard from our own copy, the engine's in-memory
-    // transferable is the richer representation, so keep it.
-    if ([COWrapper pasteboardOwnedBy:document])
-        return true;
-
-    // Otherwise the content came from another app. Ignore the serialized HTML the
-    // JavaScript handed us and read every flavour straight off the pasteboard
-    // instead. The internal engine formats that desktop LibreOffice puts there
-    // never reach the browser's DataTransfer, and they are what a full-fidelity
-    // paste needs.
-    [COWrapper setClipboardWith:document from:[NSPasteboard generalPasteboard]];
+    // The clipboard provider serves the paste straight from the platform
+    // pasteboard, where it can reach the internal engine formats that the
+    // browser's serialized content cannot, or from our own copy when we still
+    // own it. So the content the JavaScript handed us is not needed here.
+    [COWrapper ensureClipboardProviderFor:document];
     return true;
 }
 

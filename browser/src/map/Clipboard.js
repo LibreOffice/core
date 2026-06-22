@@ -964,7 +964,7 @@ window.L.Clipboard = window.L.Class.extend({
 		// I don't like it either :). If you change this make sure to thoroughly test
 		// cross-browser and cross-device!
 
-		if (window.ThisIsTheiOSApp || window.ThisIsTheMacOSApp) {
+		if (window.ThisIsTheiOSApp) {
 			// This is sent down the fakewebsocket which can race with the
 			// native message - so first step is to wait for the result of
 			// that command so we are sure the clipboard is set before
@@ -973,6 +973,13 @@ window.L.Clipboard = window.L.Class.extend({
 				return; // Either wrong command or a pending event.
 
 			await window.webkit.messageHandlers.clipboard.postMessage(`write`);
+		} else if (window.ThisIsTheMacOSApp) {
+			// macOS advertises the clipboard lazily: when the copy completes the
+			// engine reports the available formats through the clipboardmimetypes
+			// message, and the native side puts those formats on the pasteboard
+			// and fetches the bytes only when something pastes them. So there is
+			// no eager write to make here; just confirm the copy went through.
+			await check_;
 		} else if (window.ThisIsTheWindowsApp) {
 			// As above.
 			if (await check_ === null)

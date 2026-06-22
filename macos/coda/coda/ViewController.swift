@@ -181,19 +181,11 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
                 switch body {
 
                 case "read":
-                    // If we still own the pasteboard from our own copy, leave the
-                    // engine's in-memory clipboard untouched so the paste uses it
-                    // directly (full fidelity, no round-trip).
-                    if !COWrapper.pasteboardOwned(by: document) {
-                        COWrapper.setClipboard(document, from: .general)
-                    }
+                    // The clipboard provider reads the platform pasteboard on
+                    // demand during the paste, choosing our own in-memory copy
+                    // when we still own it, so there is nothing to sync here.
+                    COWrapper.ensureClipboardProvider(for: document)
                     return ("(internal)", nil);
-
-                case "write":
-                    if !COWrapper.writeClipboard(for: document) {
-                        COWrapper.LOG_ERR("Failed to get clipboard contents")
-                        return (nil, nil)
-                    }
 
                 case let s where s.hasPrefix("sendToInternal "):
                     if !COWrapper.sendToInternalClipboard(document, content: String(s.dropFirst("sendToInternal ".count))) {

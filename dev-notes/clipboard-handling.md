@@ -98,20 +98,24 @@ document (full fidelity, server-held):
    operating system clipboard.
 
 Copy in the macOS CODA app and paste into a plain text editor, then back
-(full native fidelity, no server):
-1. Ctrl+C. The browser sends the `clipboard` script message `write`
-   (`Clipboard.js:975`), handled in `ViewController.swift:191`, which
-   calls `COWrapper.writeClipboard` (`COWrapper.mm:259`).
-2. `getClipboard(nullptr,...)` pulls every native flavor from the in
-   process Kit, and `putOnPasteboard` writes each one to NSPasteboard
-   (HTML, RTF, PNG, Star Embed Source XML, Object Descriptor).
-3. The text editor reads the richest flavor it understands, for example
-   RTF, so the paste keeps formatting.
+(full native fidelity, no server). macOS now runs through the engine-driven
+COKitClipboardProvider (see the Done section), so the engine decides the
+formats and the app does only raw NSPasteboard input and output:
+1. Ctrl+C. The browser sends `.uno:Copy` over the fake socket. There is no
+   `write` script message any more.
+2. The Kit runs Copy and sets its per-view clipboard. Because the macOS app
+   registered a provider, the Kit calls the provider advertise callback
+   directly, in process, with its flavor list. The macOS side advertises
+   those flavors on NSPasteboard with a retained owner (COClipboardOwner)
+   and no bytes (HTML, RTF, PNG, Star Embed Source XML, Object Descriptor).
+3. The text editor asks the pasteboard for the richest flavor it
+   understands, for example RTF. The owner fetches just that one format
+   from the Kit on demand and hands it over, so the paste keeps formatting.
 4. Copy in the text editor, then Ctrl+V in CODA. The browser sends the
-   `read` message, `COWrapper.setClipboard` (`COWrapper.mm:298`) reads the
-   NSPasteboard flavors, maps each system type back to a MIME type, calls
-   the Kit `setClipboard`, then issues `.uno:Paste`. Fidelity is whatever
-   the text editor offered.
+   `read` message, which only makes sure the provider is registered. On
+   `.uno:Paste` the Kit reads the pasteboard through the provider: it lists
+   the flavors, picks the single one its paste path wants, and fetches only
+   that. Fidelity is whatever the text editor offered.
 
 ## Shared contract (the parts every platform reuses)
 
@@ -151,7 +155,7 @@ Copy in the macOS CODA app and paste into a plain text editor, then back
 | Platform | Bridge mechanism | OS clipboard API | Mapping table |
 |---|---|---|---|
 | Web | HTTP `/cool/clipboard` plus WebSocket | browser `navigator.clipboard` | `Clipboard.js` |
-| macOS | WKWebView `clipboard` handler: read/write/sendToInternal | NSPasteboard, UTType | `macos/coda/coda/COWrapper.mm:187` |
+| macOS | engine-driven COKitClipboardProvider, plus a thin `clipboard` handler (read/sendToInternal) | NSPasteboard, UTType | `macos/coda/coda/COWrapper.mm` |
 | Windows | WebView2 `postMobileMessage`: COPY/CUT/PASTE/CLIPBOARD* | Win32 clipboard formats | `windows/coda/CODA/CODA.cpp:631` |
 | Qt | QWebChannel `Bridge.cool()`: COPY/CUT/PASTE/... | QClipboard, QMimeData | `qt/QtClipboard.cpp:162` |
 | iOS | WKWebView `clipboard` handler: read/write/sendToInternal | UIPasteboard, UTType | `ios/Mobile/DocumentViewController.mm:307` |
@@ -226,7 +230,7 @@ same tables):
 | Platform | Paste in: flavors accepted from the OS clipboard | Copy out: flavors published to the OS clipboard |
 |---|---|---|
 | Web and WASM | Whatever the browser exposes in `dataTransfer`: `text/html`, `text/plain`, image files. No custom MIME types. | `text/html` (with meta-origin), `text/plain`, and `image/png` for image selections. Browser ceiling. |
-| macOS | Every pasteboard flavor, each system type mapped back to its MIME type, rich types kept (`COWrapper.mm:298`). | Every flavor the Kit reports, raw, including the internal Star formats under their raw MIME names (`COWrapper.mm:214`). |
+| macOS | The engine drives the paste through the provider: it lists the pasteboard flavors, each system type mapped back to its MIME type, rich types kept, and pulls only the single format its paste path chooses. | Advertises every flavor the Kit reports, raw, including the internal Star formats under their raw MIME names; bytes are fetched per format on demand by the owner. |
 | Windows | Fixed list (`CODA.cpp:771`): plain text, `text/html` (CF_HTML fragment extracted), `text/rtf`, `image/png`, Star Embed Source XML, Star Object Descriptor XML. `image/svg+xml` is recognised but not yet consumed. Anything else is dropped. | The same fixed list (`CODA.cpp:631`): plain text, RTF, HTML, PNG (written under both `image/png` and `PNG`), Star Embed Source XML, Star Object Descriptor XML. |
 | Qt | Explicit whitelist (`QtClipboard.cpp:162`): `text/*`, `image/png`, `image/jpeg`, `image/bmp`, `image/svg+*`, `application/x-openoffice-*`, `application/x-libreoffice-*`, ODF `application/vnd.oasis.opendocument.*`, `application/vnd.sun.xml.*`, `application/msword`, `application/mathml+xml`, `application/pdf`. Broadest of the native apps. | Whatever the Kit advertises. The lazy clipboard publishes the full reported flavor list and fetches bytes on demand (`QtClipboard.cpp:92,225`). No whitelist on this side. |
 | iOS | Every pasteboard type that maps to a MIME type, forwarded as is. Types with no MIME mapping are skipped (`DocumentViewController.mm:384`). | Every flavor the Kit reports. Plain text and images get a typed representation, and every flavor is also stored raw under its MIME key (`DocumentViewController.mm:307`). |
@@ -366,6 +370,14 @@ fields are browser widgets, and clipboard there mostly bypasses the Kit.
   (comment at `DocumentViewController.mm:306`).
 
 ## What is not shared (duplicated per platform)
+
+This section describes the state before the COKitClipboardProvider move and
+still holds for Windows, Qt, iOS, and Android. macOS has since moved to the
+provider (see the Done section): the engine now decides the formats, so on
+macOS the mapping table is reached through the provider callbacks and the
+old `write` and `setClipboardWith` paths named below are gone. The
+duplication described here is what the provider move is meant to remove,
+one app at a time.
 
 - **Operating system to MIME mapping tables.** Written five times, each
   covering a slightly different format set:
@@ -553,6 +565,47 @@ This design measured against an external requirements list.
 | Super-bonus: hook and push PC to online pastes in the CODA shell | Feasible, natural home | The shell has native operating system clipboard access and the in-process Kit, so it can read the system clipboard and push it into the document. It rides the shared C++ bridge (action plan). |
 | Shares lots of code cross-platform | Goal of the rework | The shared C++ bridge replaces five native glue layers with one helper plus thin adapters (action plan). |
 
+## Done
+
+### macOS: engine-driven clipboard through COKitClipboardProvider
+
+The macOS app no longer copies bytes between NSPasteboard and the Kit with
+its own per-flavor logic. The engine decides which formats matter, and the
+app does only raw NSPasteboard input and output, through a provider the app
+registers per document. This is the engine-driven model: it differs from
+the "Windows native does everything" base proposed in the native message
+protocol notes above, because the engine, not the app, picks the useful
+formats. The app shrinks to a thin raw input and output adapter, so the
+per-app "which flavors matter" guesswork is gone.
+
+- New Kit API. `COKitClipboardProvider` and the `installClipboardProvider`
+  document entry point (`engine/include/COKit/COKitTypes.h`,
+  `engine/include/COKit/COKit.h`). The kit clipboard uses the provider in
+  both directions (`engine/desktop/source/lib/kitclipboard.cxx`). On copy
+  `KitClipboard::setContents` advertises the engine's own flavor list
+  straight onto the pasteboard through the provider, in process, instead of
+  the `clipboardmimetypes:` notification. On an external paste a new
+  `KitProviderTransferable` reads the pasteboard one format at a time, so
+  the engine's existing format-priority choice governs and only the chosen
+  format is fetched. The own-clipboard shortcut, where the paste comes from
+  the in-memory transferable when we still own the clipboard, is preserved
+  through the provider `ownsClipboard` callback. Installing a provider is
+  refused unless the document work runs on the app's own thread, so the
+  out-of-process server keeps the plain `getClipboard` and `setClipboard`
+  path untouched.
+- macOS side (`macos/coda/coda/COWrapper.mm`). Implements the provider:
+  advertise through a retained `COClipboardOwner` that serves a format's
+  bytes on demand, list and read the pasteboard for paste, and the
+  `ownsClipboard` check on the pasteboard change count. The old eager paths
+  are removed: the `write` script message, the whole-clipboard
+  `putOnPasteboard` write, and the read-everything `setClipboardWith`.
+- No browser round-trip for advertise. Because the engine calls the
+  provider in process, the `clipboardmimetypes:` message and its forwarding
+  (`browser/src/layer/tile/CanvasTileLayer.js`, the `ViewController`
+  handler) are gone for macOS. That message path stays only for the
+  server, the web and WASM clients, and the Qt app, which are not yet on
+  the provider.
+
 ## Action plan
 
 Ordered by effort. Each item points back to the section above that
@@ -588,6 +641,19 @@ explains it.
 
 ### Larger reworks
 
+- Move Qt and Windows onto the COKitClipboardProvider (the model macOS now
+  uses, see the Done section). Each app registers a provider per document
+  and implements the same small surface: advertise a flavor list on copy,
+  list the pasteboard flavors, fetch one format's bytes, and answer the
+  own-clipboard check. The engine then drives both directions and picks the
+  paste format, so the per-platform "which flavors matter" lists (the Qt
+  whitelist, the Windows fixed list) and the eager copy out go away. Qt
+  already has a lazy clipboard, so it is the smaller step; Windows still
+  serializes every format up front and gains lazy copy from the move. Start
+  with Qt, then Windows; iOS and Android can follow later. This is the
+  chosen shape of the "shares lots of code" goal for the in-process apps:
+  the shared logic lives in the engine instead of a shared C++ helper, and
+  each app is left a thin raw input and output adapter.
 - Browser to native rich paste (scenario 7, the easy half). Teach the
   native apps to spot a `data-coolorigin` URL in pasted HTML, fetch the
   rich content from the source server in one asynchronous HTTP request, and
@@ -596,16 +662,21 @@ explains it.
   cross-server paste (`Clipboard.js:341`), and lifts that paste from HTML
   up to server fidelity. Start with one platform.
 - One shared C++ clipboard bridge (the native message protocol rework).
-  Move the copy and paste sequence into a single C++ helper linked by
-  macOS, iOS, Windows, Qt, and Android, behind a thin per-platform adapter
-  with three calls: write flavors, read flavors, and has-it-changed. Adopt
-  the Windows native-does-everything model, so JavaScript sends one
-  fire-and-forget verb and never needs a reply. This folds in the MIME
-  table unification, the own-clipboard check, and a single verb vocabulary.
-  Android needs the most work, since it has no clipboard verbs today. This
-  is also the home for the super-bonus, hooking the system clipboard in the
-  CODA shell and pushing it into the online document, since the native side
-  already reads the operating system clipboard.
+  Superseded for the in-process apps by the COKitClipboardProvider move
+  above: that keeps the shared logic in the engine rather than a shared C++
+  helper, and reaches the same "native does the transfer, JavaScript only
+  picks the verb" end state. The reasoning is kept here because it still
+  describes the goal and the trade-offs. Move the copy and paste sequence
+  into a single C++ helper linked by macOS, iOS, Windows, Qt, and Android,
+  behind a thin per-platform adapter with three calls: write flavors, read
+  flavors, and has-it-changed. Adopt the Windows native-does-everything
+  model, so JavaScript sends one fire-and-forget verb and never needs a
+  reply. This folds in the MIME table unification, the own-clipboard check,
+  and a single verb vocabulary. Android needs the most work, since it has no
+  clipboard verbs today. This is also the home for the super-bonus, hooking
+  the system clipboard in the CODA shell and pushing it into the online
+  document, since the native side already reads the operating system
+  clipboard.
 - Native to browser rich paste (scenario 7, the hard half). Decide whether
   to invest in the web custom formats path described in the findings, or to
   accept HTML fidelity in this direction. Lowest priority of the three,
