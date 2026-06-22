@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="temp_file_saving_disabled">இந்தக் கோப்பு படிக்க மட்டுமே, சேமிப்பது முடக்கப்பட்டுள்ளது.</string>
+    <string name="temp_file_saving_disabled">மூல பயன்பாட்டால் படிக்கக்கூடியதாக மட்டுமே பகிரப்பட்டது. மாற்றங்களைச் செய்ய \"நகலைத் திருத்து\" என்பதைப் பயன்படுத்தவும்.</string>
     <string name="storage_permission_required">சேமிப்பக அனுமதி தேவை</string>
     <string name="failed_to_load_file">ஏற்ற வேண்டிய கோப்பை தீர்மானிக்க முடியவில்லை</string>
     <string name="failed_to_insert_image">படத்தைச் செருகுவதில் தோல்வி</string>
