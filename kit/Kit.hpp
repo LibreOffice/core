@@ -464,7 +464,18 @@ public:
     /// Get a thread-pool to perform an operation in
     /// all operations must complete by the time we
     /// return to the poll
+#if MOBILEAPP
+    // One tile-compression pool shared by every document in the single
+    // process. The app exits via std::_Exit, so the dtor isn't called. Its
+    // worker threads are reclaimed by the OS rather than joined.
+    ThreadPool& getSyncPool()
+    {
+        static ThreadPool sharedPool;
+        return sharedPool;
+    }
+#else
     ThreadPool& getSyncPool() { return _deltaPool; }
+#endif
 
     int getViewsCount() const;
 
@@ -514,7 +525,10 @@ private:
 
     std::atomic<bool> _stop;
 
+#if !MOBILEAPP
+    // Per-document pool for the multi-process build; the single process shares one.
     ThreadPool _deltaPool;
+#endif
     std::unique_ptr<DeltaGenerator> _deltaGen;
 
     int _editorId;

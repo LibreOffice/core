@@ -1058,7 +1058,7 @@ void Document::renderTiles(TileCombined &tileCombined)
     const auto errorMessageFunc = [&](const std::string_view msg)
     { session->sendTextFrameAndLogError(msg); };
 
-    if (!RenderTiles::doRender(_loKitDocument, *_deltaGen, tileCombined, _deltaPool,
+    if (!RenderTiles::doRender(_loKitDocument, *_deltaGen, tileCombined, getSyncPool(),
                                blenderFunc, postMessageFunc, errorMessageFunc, _mobileAppDocId,
                                session->getCanonicalViewId(), session->getDumpTiles()))
     {
@@ -1447,15 +1447,17 @@ bool Document::joinThreads()
 #if !MOBILEAPP
     if (SocketPoll::PollWatchdog)
         SocketPoll::PollWatchdog->joinThread();
-#endif
     _deltaPool.stop();
+#endif
     return true;
 }
 
 // Most threads are opportunisticaly created but some need to be started
 void Document::startThreads()
 {
+#if !MOBILEAPP
     _deltaPool.start();
+#endif
 
     getLOKit()->startThreads();
 
@@ -2626,7 +2628,9 @@ void Document::drainQueue()
             {
                 LOG_INF("_stop or TerminationFlag is set, breaking Document::drainQueue of loop");
                 _queue->clearTileQueue();
+#if !MOBILEAPP
                 _deltaPool.stop();
+#endif
                 break;
             }
 
@@ -2807,7 +2811,9 @@ void Document::disableBgSave(const std::string &reason)
 void Document::flushAndExit(int code)
 {
     flushTraceEventRecordings();
+#if !MOBILEAPP
     _deltaPool.stop();
+#endif
     if constexpr (!Util::isKitInProcess())
         Util::forcedExit(code);
     else
@@ -2851,7 +2857,7 @@ void Document::dumpState(std::ostream& oss)
     }
     oss << '\n';
 
-    _deltaPool.dumpState(oss);
+    getSyncPool().dumpState(oss);
     _sessions.dumpState(oss);
 
     _deltaGen->dumpState(oss);
