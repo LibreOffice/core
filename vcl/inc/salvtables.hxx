@@ -1681,7 +1681,7 @@ public:
 
     virtual void enable_toggle_buttons(weld::ColumnToggleType eType) override;
 
-    virtual void set_toggle(const weld::TreeIter& rIter, TriState eState, int col = -1) override;
+    virtual void do_set_toggle(const weld::TreeIter& rIter, TriState eState, int col = -1) override;
 
     virtual void set_clicks_to_toggle(int nToggleBehavior) override;
 

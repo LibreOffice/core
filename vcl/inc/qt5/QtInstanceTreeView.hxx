@@ -76,7 +76,8 @@ public:
     virtual void set_text_emphasis(const weld::TreeIter& rIter, bool bOn, int nCol) override;
     virtual bool get_text_emphasis(const weld::TreeIter& rIter, int nCol) const override;
     virtual void set_text_align(const weld::TreeIter& rIter, TxtAlign eAlign, int nCol) override;
-    virtual void set_toggle(const weld::TreeIter& rIter, TriState eState, int nCol = -1) override;
+    virtual void do_set_toggle(const weld::TreeIter& rIter, TriState eState,
+                               int nCol = -1) override;
     virtual TriState get_toggle(const weld::TreeIter& rIter, int nCol = -1) const override;
     virtual OUString get_text(const weld::TreeIter& rIter, int nCol = -1) const override;
     virtual void set_image(const weld::TreeIter& rIter, const OUString& rImage,

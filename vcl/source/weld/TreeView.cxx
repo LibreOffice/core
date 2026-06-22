@@ -37,6 +37,13 @@ void weld::TreeView::set_toggle(int row, TriState eState, int col)
         set_toggle(*pIter, eState, col);
 }
 
+void weld::TreeView::set_toggle(const TreeIter& rIter, TriState bOn, int col)
+{
+    disable_notify_events();
+    do_set_toggle(rIter, bOn, col);
+    enable_notify_events();
+}
+
 TriState weld::TreeView::get_toggle(int row, int col) const
 {
     if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))

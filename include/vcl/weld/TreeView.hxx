@@ -106,7 +106,12 @@ protected:
         m_aModelChangedHdl.Call(*this);
     }
 
-    void signal_toggled(const iter_col& rIterCol) { m_aRadioToggleHdl.Call(rIterCol); }
+    void signal_toggled(const iter_col& rIterCol)
+    {
+        if (notify_events_disabled())
+            return;
+        m_aRadioToggleHdl.Call(rIterCol);
+    }
 
     bool signal_editing_started(const TreeIter& rIter) { return m_aEditingStartedHdl.Call(rIter); }
 
@@ -143,6 +148,7 @@ protected:
         = 0;
     virtual void do_insert_separator(int pos, const OUString& rId) = 0;
     using weld::ItemView::do_set_cursor;
+    virtual void do_set_toggle(const TreeIter& rIter, TriState bOn, int col = -1) = 0;
     virtual void do_set_cursor(int pos) = 0;
     virtual void do_scroll_to_row(const TreeIter& rIter) = 0;
     virtual bool do_iter_children(TreeIter& rIter) const = 0;
@@ -237,7 +243,7 @@ public:
 
     // col index -1 sets the expander toggle, enable_toggle_buttons must have been called to create that column
     void set_toggle(int row, TriState eState, int col = -1);
-    virtual void set_toggle(const TreeIter& rIter, TriState bOn, int col = -1) = 0;
+    void set_toggle(const TreeIter& rIter, TriState bOn, int col = -1);
 
     // col index -1 gets the expander toggle, enable_toggle_buttons must have been called to create that column
     TriState get_toggle(int row, int col = -1) const;

@@ -352,7 +352,7 @@ void QtInstanceTreeView::set_text_align(const weld::TreeIter& rIter, TxtAlign eA
     });
 }
 
-void QtInstanceTreeView::set_toggle(const weld::TreeIter& rIter, TriState eState, int nCol)
+void QtInstanceTreeView::do_set_toggle(const weld::TreeIter& rIter, TriState eState, int nCol)
 {
     SolarMutexGuard g;
 

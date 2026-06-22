@@ -4223,7 +4223,7 @@ void SalInstanceTreeView::enable_toggle_buttons(weld::ColumnToggleType eType)
     m_xTreeView->EnableCheckButton(rData);
 }
 
-void SalInstanceTreeView::set_toggle(const weld::TreeIter& rIter, TriState eState, int col)
+void SalInstanceTreeView::do_set_toggle(const weld::TreeIter& rIter, TriState eState, int col)
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
     assert(rVclIter.iter && "Invalid iter");

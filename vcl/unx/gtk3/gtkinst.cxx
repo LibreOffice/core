@@ -15264,7 +15264,7 @@ public:
         return get_bool(rGtkIter.iter, col) ? TRISTATE_TRUE : TRISTATE_FALSE;
     }
 
-    virtual void set_toggle(const weld::TreeIter& rIter, TriState eState, int col) override
+    virtual void do_set_toggle(const weld::TreeIter& rIter, TriState eState, int col) override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         set_toggle(rGtkIter.iter, eState, col);
