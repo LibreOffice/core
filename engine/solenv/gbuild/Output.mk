@@ -51,9 +51,11 @@ gb_Output_BELL := $(shell echo|awk 'BEGIN { printf "%c", 7 }' -)
 # default to color output, if interactive
 ifeq ($(origin gb_COLOR),undefined)
 ifneq ($(MAKE_TERMOUT),)
-# Cygwin mintty has issues where gb_Output_error is swallowed
-# but git-bash/wsl-as-helper seems fine with it
-ifneq ($(OS)$(MSYSTEM),WNT)
+# Don't auto-enable color on Windows: mintty interleaves the colored $(info)
+# announce output with the output of the parallel child processes, splitting
+# escape sequences and garbling the display. Set gb_COLOR explicitly in the
+# environment to override.
+ifneq ($(OS),WNT)
 gb_COLOR=$(true)
 endif
 endif
