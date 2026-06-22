@@ -17,11 +17,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_dialogs_test, \
 
 $(eval $(call gb_CppunitTest_use_sdk_api,vcl_dialogs_test))
 
-$(eval $(call gb_CppunitTest_set_include,desktop_dialogs_test,\
-    -I$(SRCDIR)/vcl/inc \
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_CppunitTest_use_libraries,vcl_dialogs_test, \
     basegfx \
     comphelper \

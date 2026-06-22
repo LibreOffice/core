@@ -17,12 +17,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,reportdesign_dialogs_test, \
 
 $(eval $(call gb_CppunitTest_use_sdk_api,reportdesign_dialogs_test))
 
-$(eval $(call gb_CppunitTest_set_include,desktop_dialogs_test,\
-    -I$(SRCDIR)/reportdesign/source/inc \
-    -I$(SRCDIR)/reportdesign/inc \
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_CppunitTest_use_libraries,reportdesign_dialogs_test, \
     basegfx \
     comphelper \
