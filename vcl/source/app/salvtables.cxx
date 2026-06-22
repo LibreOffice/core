@@ -3689,7 +3689,7 @@ void SalInstanceTreeView::InvalidateModelEntry(SvTreeListEntry* pEntry)
     m_xTreeView->ModelHasEntryInvalidated(pEntry);
 }
 
-void SalInstanceTreeView::do_set_toggle(SvTreeListEntry& rEntry, TriState eState, int col)
+void SalInstanceTreeView::set_toggle(SvTreeListEntry& rEntry, TriState eState, int col)
 {
     assert(col >= 0 && o3tl::make_unsigned(col) < rEntry.ItemCount());
     // if it's the placeholder to allow a blank column, replace it now
@@ -4232,7 +4232,7 @@ void SalInstanceTreeView::set_toggle(const weld::TreeIter& rIter, TriState eStat
     if (col == -1)
     {
         assert(m_xTreeView->m_nTreeFlags & SvTreeFlags::CHKBTN);
-        do_set_toggle(rEntry, eState, 0);
+        set_toggle(rEntry, eState, 0);
         return;
     }
 
@@ -4249,7 +4249,7 @@ void SalInstanceTreeView::set_toggle(const weld::TreeIter& rIter, TriState eStat
         update_checkbutton_column_width(rEntry);
     }
 
-    do_set_toggle(rEntry, eState, col);
+    set_toggle(rEntry, eState, col);
 }
 
 void SalInstanceTreeView::set_clicks_to_toggle(int nToggleBehavior)

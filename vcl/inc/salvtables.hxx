@@ -1593,7 +1593,7 @@ protected:
 
     void InvalidateModelEntry(SvTreeListEntry* pEntry);
 
-    void do_set_toggle(SvTreeListEntry& rEntry, TriState eState, int col);
+    void set_toggle(SvTreeListEntry& rEntry, TriState eState, int col);
 
     static TriState do_get_toggle(SvTreeListEntry* pEntry, int col);
     static bool do_get_sensitive(SvTreeListEntry* pEntry, int col);
