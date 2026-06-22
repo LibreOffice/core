@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+                 xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+                 xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+                 office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:automatic-styles>
+    <style:page-layout style:name="NarrowPage">
+      <style:page-layout-properties fo:page-width="2cm" fo:page-height="29.7cm" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="0.2cm" fo:margin-right="0.2cm"/>
+    </style:page-layout>
+    <style:style style:name="MySmallCaps" style:family="text">
+      <style:text-properties fo:font-variant="small-caps"/>
+    </style:style>
+  </office:automatic-styles>
+  <office:master-styles>
+    <style:master-page style:name="Standard" style:page-layout-name="NarrowPage"/>
+  </office:master-styles>
+  <office:body>
+    <office:text>
+      <text:p><text:span text:style-name="MySmallCaps">Maﬄband Maﬄband Maﬄband Maﬄband</text:span></text:p>
+    </office:text>
+  </office:body>
+</office:document>

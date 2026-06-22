@@ -1805,6 +1805,34 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testHeaderImageAlignment)
     CPPUNIT_ASSERT_GREATER(nLogoBottom, nSeparatorTop);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testSmallCapsLigature)
+{
+    // Trigger bCaseMapLengthDiffers layout math using the ﬄ -> FFL character
+    createSwDoc("smallcaps_ligature.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // The first line must contain the ffl ligature intact.
+    // A regression in bCaseMapLengthDiffers would corrupt this portion string.
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[1]", "portion", u"Maﬄb");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testHiddenTextFieldExpansion)
+{
+    // Trigger the base class SwExpandPortion logic
+    // A Hidden Text field that evaluates to false is replaced with an empty SwExpandPortion.
+    createSwDoc("hidden_text_field.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // We expect the layout engine to process the field as a generic Portion
+    // Because it is hidden, its width must be zero.
+    assertXPath(pXmlDoc,
+                "/root/page/body/txt/SwParaPortion/SwLineLayout"
+                "/SwFieldPortion[@type='PortionType::Hidden' and @width='0']",
+                1);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
