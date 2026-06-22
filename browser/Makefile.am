@@ -430,11 +430,13 @@ COOL_JS_LST =\
 	src/canvas/sections/PreloadMapSection.ts \
 	src/canvas/sections/TilesSection.ts \
 	src/canvas/sections/CalcRTLAwareDocumentPosition.ts \
+	src/canvas/vector/DrawRasterOptions.ts \
 	src/canvas/vector/PendingPreview.ts \
 	src/canvas/vector/PreviewId.ts \
 	src/canvas/vector/RenderedPreview.ts \
 	src/canvas/vector/SlideObject.ts \
 	src/canvas/vector/primitive/BackgroundColorPrimitive.ts \
+	src/canvas/vector/primitive/BitmapAlphaPrimitive.ts \
 	src/canvas/vector/primitive/BitmapPrimitive.ts \
 	src/canvas/vector/primitive/ExclusiveEditViewPrimitive.ts \
 	src/canvas/vector/primitive/FilledRectanglePrimitive.ts \

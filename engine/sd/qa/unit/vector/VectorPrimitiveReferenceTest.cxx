@@ -26,6 +26,7 @@
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
+#include <drawinglayer/primitive2d/BitmapAlphaPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 
 #include <tools/stream.hxx>
@@ -664,6 +665,32 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testBitmap)
     assertJsonPath(aJson, "/primitives/0/width", sal_Int64(4));
     assertJsonPath(aJson, "/primitives/0/height", sal_Int64(4));
     assertJsonPathExists(aJson, "/primitives/0/checksum");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testBitmapAlpha)
+{
+    // bitmapAlpha is a raster image with a uniform transparency in
+    // [0, 1] where 0 is opaque. The wire shape mirrors bitmap
+    // (matrix, source pixel size, checksum) plus the transparency
+    // value when greater than zero.
+    Bitmap aBitmap(Size(4, 4), vcl::PixelFormat::N32_BPP);
+    aBitmap.Erase(COL_GREEN);
+    basegfx::B2DHomMatrix aTransform;
+    aTransform.scale(40.0, 30.0);
+    aTransform.translate(10.0, 20.0);
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(
+        new drawinglayer::primitive2d::BitmapAlphaPrimitive2D(aBitmap, aTransform, 0.25));
+
+    auto aJson = writeReference(u"testBitmapAlpha", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "bitmapAlpha");
+    CPPUNIT_ASSERT_EQUAL(size_t(6), aJson.getSize("/primitives/0/matrix").value_or(0));
+    assertJsonPath(aJson, "/primitives/0/width", sal_Int64(4));
+    assertJsonPath(aJson, "/primitives/0/height", sal_Int64(4));
+    assertJsonPathExists(aJson, "/primitives/0/checksum");
+    assertJsonPathDouble(aJson, "/primitives/0/transparency", 0.25, 1e-9);
 }
 
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGraphic)

@@ -92,6 +92,9 @@ namespace cool {
 				case BitmapPrimitive.type:
 					this._renderBitmap(context, primitive as BitmapPrimitive);
 					break;
+				case BitmapAlphaPrimitive.type:
+					this._renderBitmapAlpha(context, primitive as BitmapAlphaPrimitive);
+					break;
 				case GraphicPrimitive.type:
 					this._renderGraphic(context, primitive as GraphicPrimitive);
 					break;
@@ -426,6 +429,19 @@ namespace cool {
 			this._drawRaster(context, primitive.matrix, primitive.checksum);
 		}
 
+		private _renderBitmapAlpha(
+			context: CanvasRenderingContext2D,
+			primitive: BitmapAlphaPrimitive,
+		): void {
+			this._drawRaster(context, primitive.matrix, primitive.checksum, {
+				// The wire counts transparency up from 0 for opaque.
+				alpha:
+					typeof primitive.transparency === 'number'
+						? 1 - primitive.transparency
+						: undefined,
+			});
+		}
+
 		private _renderGraphic(
 			context: CanvasRenderingContext2D,
 			primitive: GraphicPrimitive,
@@ -434,52 +450,28 @@ namespace cool {
 			// already in slide coordinates, so let the post-switch
 			// recursion in renderPrimitive draw them.
 			if (primitive.vector) return;
-			this._drawRaster(
-				context,
-				primitive.matrix,
-				primitive.checksum,
-				primitive.imageRect,
-				primitive.rotation,
-				primitive.alpha,
-				primitive.mirror,
-				primitive.drawMode,
-			);
+			this._drawRaster(context, primitive.matrix, primitive.checksum, {
+				imageRect: primitive.imageRect,
+				rotation: primitive.rotation,
+				// The wire gives a byte, with 255 for opaque.
+				alpha:
+					typeof primitive.alpha === 'number'
+						? primitive.alpha / 255
+						: undefined,
+				mirror: primitive.mirror,
+				drawMode: primitive.drawMode,
+			});
 		}
 
 		// Resolve the image through the checksum lookup and draw it
 		// into the unit square mapped by the wire matrix. Skips when
 		// the matrix is missing, no lookup is registered, the lookup
 		// has no entry yet, or the image is still decoding.
-		//
-		// imageRect is present when the graphic is cropped: the whole
-		// image draws onto that rectangle of the unit square, clipped
-		// to the square.
-		//
-		// rotation is in tenths of a degree and rotates around the
-		// centre of the unit square, which the matrix maps to the
-		// centre of the image in slide space.
-		//
-		// alpha is a byte where 255 is opaque. Values below 255
-		// translate to a globalAlpha that scopes to the save and
-		// restore around the draw.
-		//
-		// mirror is a bitfield: bit 0 flips horizontally, bit 1
-		// flips vertically. The flip is scoped to the unit square,
-		// so the cropped or rotated content lands in the same place
-		// but with the chosen axes reflected.
-		//
-		// drawMode picks a CSS filter that recolours the image:
-		// greys desaturates, mono is one-bit black-and-white,
-		// watermark is a faded grey overlay.
 		private _drawRaster(
 			context: CanvasRenderingContext2D,
 			matrix: number[] | undefined,
 			checksum: number,
-			imageRect?: GraphicPrimitive['imageRect'],
-			rotation?: number,
-			alpha?: number,
-			mirror?: number,
-			drawMode?: GraphicPrimitive['drawMode'],
+			options: DrawRasterOptions = {},
 		): void {
 			if (!matrix || matrix.length < 6) return;
 			if (!this._bitmapLookup) return;
@@ -488,9 +480,10 @@ namespace cool {
 			if (!image) return;
 			if (!image.complete) return;
 
+			const { imageRect, rotation, alpha, mirror, drawMode } = options;
+
 			context.save();
-			if (typeof alpha === 'number' && alpha < 255)
-				context.globalAlpha = alpha / 255;
+			if (typeof alpha === 'number' && alpha < 1) context.globalAlpha = alpha;
 			// A drawMode recolour is the innermost colour modifier
 			// around its graphic, so its filter leads the list.
 			if (drawMode === 'greys')

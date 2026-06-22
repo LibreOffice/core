@@ -407,6 +407,36 @@ describe('VectorPrimitiveRenderer', function () {
 			nodeassert.ok(recorder.findCall('restore'), 'restore not called');
 		});
 
+		it('applies bitmapAlpha transparency as globalAlpha', function () {
+			// bitmapAlpha shares the bitmap shape and adds a
+			// transparency in [0, 1]. The renderer maps it to
+			// globalAlpha = 1 - transparency inside the save and
+			// restore around the draw.
+			const primitive = loadVectorRenderingReference('testBitmapAlpha')
+				.primitives[0];
+			nodeassert.strictEqual(primitive.type, 'bitmapAlpha');
+			nodeassert.strictEqual(typeof primitive.checksum, 'number');
+			nodeassert.strictEqual(typeof primitive.transparency, 'number');
+			nodeassert.ok(primitive.transparency > 0, 'fixture must be partly transparent');
+
+			const cachedImage = new ImageRecorder();
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer((checksum) =>
+				checksum === primitive.checksum
+					? (cachedImage as unknown as HTMLImageElement)
+					: undefined,
+			);
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			const draw = recorder.findCall('drawImage');
+			nodeassert.ok(draw, 'drawImage not called');
+			nodeassert.strictEqual(draw.args[0], cachedImage);
+			nodeassert.strictEqual(
+				draw.properties.globalAlpha,
+				1 - primitive.transparency,
+			);
+		});
+
 		it('renders a raster graphic like a bitmap', function () {
 			// A raster graphic carries a matrix and a checksum. The
 			// renderer resolves the image through the same checksum
