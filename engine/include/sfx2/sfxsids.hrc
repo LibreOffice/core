@@ -489,7 +489,6 @@ class SvxZoomItem;
 // default-ids for configuration
 #define SID_CONFIG                          TypedWhichId<SfxStringItem>(SID_SFX_START + 904)
 #define SID_TOOLBOXOPTIONS                  (SID_SFX_START + 907)
-#define SID_TOGGLEFUNCTIONBAR               (SID_SFX_START + 910)
 #define SID_MACROINFO                       TypedWhichId<SfxMacroInfoItem>(SID_SFX_START + 919)
 #define SID_TOGGLESTATUSBAR                 TypedWhichId<SfxBoolItem>(SID_SFX_START + 920)
 #define SID_CONFIGSTATUSBAR                 (SID_SFX_START + 921)

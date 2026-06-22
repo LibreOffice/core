@@ -77,14 +77,6 @@
 
 #define SV_EDIT_WARNING_STR                          NC_("SV_EDIT_WARNING_STR", "The inserted text exceeded the maximum length of this text field. The text was truncated.")
 
-#define SV_APP_CPUTHREADS                            NC_("SV_APP_CPUTHREADS", "CPU threads: ")
-#define SV_APP_OSVERSION                             NC_("SV_APP_OSVERSION", "OS: ")
-#define SV_APP_UIRENDER                              NC_("SV_APP_UIRENDER", "UI render: ")
-#define SV_APP_SKIA_VULKAN                           NC_("SV_APP_SKIA_VULKAN", "Skia/Vulkan")
-#define SV_APP_SKIA_METAL                            NC_("SV_APP_SKIA_METAL", "Skia/Metal")
-#define SV_APP_SKIA_RASTER                           NC_("SV_APP_SKIA_RASTER", "Skia/Raster")
-#define SV_APP_DEFAULT                               NC_("SV_APP_DEFAULT", "default")
-
 #define SV_MSGBOX_INFO                               NC_("SV_MSGBOX_INFO", "Information")
 #define SV_MSGBOX_WARNING                            NC_("SV_MSGBOX_WARNING", "Warning")
 #define SV_MSGBOX_ERROR                              NC_("SV_MSGBOX_ERROR", "Error")
@@ -102,7 +94,6 @@
 
 #define STR_SVT_CALENDAR_DAY                         NC_("STR_SVT_CALENDAR_DAY", "Day")
 #define STR_SVT_CALENDAR_WEEK                        NC_("STR_SVT_CALENDAR_WEEK", "Week")
-#define STR_SVT_CALENDAR_TODAY                       NC_("STR_SVT_CALENDAR_TODAY", "Today")
 
 #define STR_WIZDLG_ROADMAP_TITLE                     NC_("STR_WIZDLG_ROADMAP_TITLE", "Steps")
 #define STR_WIZDLG_FINISH                            NC_("STR_WIZDLG_FINISH", "~Finish")

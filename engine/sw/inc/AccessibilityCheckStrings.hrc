@@ -50,8 +50,6 @@
 #define STR_DOCUMENT_TITLE_DLG_DESC     NC_("STR_DOCUMENT_TITLE_DLG_DESC", "Enter document title:")
 #define STR_HYPERLINK_NO_NAME_DLG       NC_("STR_HYPERLINK_NO_NAME_DLG", "Enter a name of the hyperlink:")
 
-#define STR_ENTER_ALT                   NC_("STR_ENTER_ALT", "Enter alternative text:")
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

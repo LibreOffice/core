@@ -694,7 +694,6 @@
 #define STR_ACCESS_TL_GLOBAL                    NC_("STR_ACCESS_TL_GLOBAL", "Global View")
 #define STR_ACCESS_TL_CONTENT                   NC_("STR_ACCESS_TL_CONTENT", "Content Navigation View")
 #define STR_OUTLINE_LEVEL                       NC_("STR_OUTLINE_LEVEL", "Outline Level")
-#define STR_DRAGMODE                            NC_("STR_DRAGMODE", "Drag Mode")
 #define STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY     NC_("STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY", "Send Outline to Clipboard")
 #define STR_OUTLINE_TRACKING                    NC_("STR_OUTLINE_TRACKING", "Outline Tracking")
 #define STR_OUTLINE_TRACKING_DEFAULT            NC_("STR_OUTLINE_TRACKING_DEFAULT", "Default")
@@ -1122,7 +1121,6 @@
     Description:   ExchangeStrings for Edit/NameFT
  --------------------------------------------------------------------*/
 #define STR_COND                                NC_("STR_COND", "~Condition")
-#define STR_TEXT                                NC_("STR_TEXT", "Then, Else")
 #define STR_DDE_CMD                             NC_("STR_DDE_CMD", "DDE Statement")
 #define STR_INSTEXT                             NC_("STR_INSTEXT", "Hidden t~ext")
 #define STR_MACNAME                             NC_("STR_MACNAME", "~Macro name")

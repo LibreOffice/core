@@ -663,7 +663,6 @@ class XFillGradientItem;
 #define SID_FM_AUTOFILTER                               ( SID_SVX_START + 716 )
 #define SID_FM_NATIVESQL                                ( SID_SVX_START + 720 )
 #define SID_FM_EXECUTE                                  ( SID_SVX_START + 721 )
-#define SID_SBA_QRY_EXECUTE                                 SID_FM_EXECUTE
 #define SID_FM_ADDTABLE                                 ( SID_SVX_START + 722 )
 #define SID_FM_FORM_FILTERED                            TypedWhichId<SfxBoolItem>( SID_SVX_START + 723 )
 #define SID_FM_REFRESH                                  ( SID_SVX_START + 724 )

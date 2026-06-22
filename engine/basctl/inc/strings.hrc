@@ -115,9 +115,6 @@
 #define RID_STR_OB_GROUP_FUNCTIONS          NC_("RID_STR_OB_GROUP_FUNCTIONS", "Functions")
 #define RID_STR_OB_GROUP_OTHER              NC_("RID_STR_OB_GROUP_OTHER", "Other")
 #define RID_STR_OB_NO_DOCUMENTATION         NC_("RID_STR_OB_NO_DOCUMENTATION", "No documentation link is available for the selected item.")
-#define RID_STR_OB_SEARCH_PLACEHOLDER       NC_("RID_STR_OB_SEARCH_PLACEHOLDER", "Search objects and members...")
-#define RID_STR_OB_BACK_BUTTON              NC_("RID_STR_OB_BACK_BUTTON", "Back")
-#define RID_STR_OB_FORWARD_BUTTON           NC_("RID_STR_OB_FORWARD_BUTTON", "Forward")
 // For Details Pane Formatting and Symbol Types
 #define RID_STR_OB_AS                       NC_("RID_STR_OB_AS", " As ")
 #define RID_STR_OB_OPTIONAL                 NC_("RID_STR_OB_OPTIONAL", "Optional")
@@ -184,7 +181,6 @@
 #define RID_VARIABLE_TOO_LARGE_TO_DISPLAY   NC_("RID_VARIABLE_TOO_LARGE_TO_DISPLAY", "Variable too large to display in debugger")
 
 // Color scheme names
-#define RID_STR_COLORSCHEME_DEFAULT         NC_("RID_STR_COLORSCHEME_DEFAULT", "Default")
 #define RID_STR_COLORSCHEME_LIGHT           NC_("RID_STR_COLORSCHEME_LIGHT", "%PRODUCTNAME Light")
 #define RID_STR_COLORSCHEME_DARK            NC_("RID_STR_COLORSCHEME_DARK", "%PRODUCTNAME Dark")
 #define RID_STR_COLORSCHEME_BREEZE_LIGHT    NC_("RID_STR_COLORSCHEME_BREEZE_LIGHT", "Breeze Light")

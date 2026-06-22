@@ -25,7 +25,6 @@
 #define STR_ENTER_SIMPLE_PASSWORD               NC_("STR_ENTER_SIMPLE_PASSWORD", "Enter password: ")
 #define STR_CONFIRM_SIMPLE_PASSWORD             NC_("STR_CONFIRM_SIMPLE_PASSWORD", "Confirm password: ")
 #define STR_TITLE_CREATE_PASSWORD               NC_("STR_TITLE_CREATE_PASSWORD", "Set Password")
-#define STR_TITLE_ENTER_PASSWORD                NC_("STR_TITLE_ENTER_PASSWORD", "Enter Password")
 //: %TITLE is the base dialog title, %FILENAME is the document's filename, %PRODUCTNAME is the application name (e.g. "LibreOfficeDev")
 #define STR_TITLE_FULL_FORMAT                   NC_("STR_TITLE_FULL_FORMAT", "%TITLE - %FILENAME - %PRODUCTNAME")
 #define STR_PASSWORD_MISMATCH                   NC_("STR_PASSWORD_MISMATCH", "The confirmation password did not match the password. Set the password again by entering the same password in both boxes.")

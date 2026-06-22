@@ -292,7 +292,6 @@
 #define STR_PRESOBJ_OUTLINE                             NC_("STR_PRESOBJ_OUTLINE", "Click to add Text" )
 #define STR_PRESOBJ_TEXT                                NC_("STR_PRESOBJ_TEXT", "Click to add Text" )
 #define STR_PRESOBJ_NOTESTEXT                           NC_("STR_PRESOBJ_NOTESTEXT", "Click to add Notes" )
-#define STR_PRESOBJ_NOTESTEXT_MISSING                   NC_("STR_PRESOBJ_NOTESTEXT_MISSING", "Notes placeholder object is missing for the current slide." )
 #define STR_PRESOBJ_TITLE_MOBILE                        NC_("STR_PRESOBJ_TITLE_MOBILE", "Double-tap to add Title" )
 #define STR_PRESOBJ_OUTLINE_MOBILE                      NC_("STR_PRESOBJ_OUTLINE_MOBILE", "Double-tap to add Text" )
 #define STR_PRESOBJ_TEXT_MOBILE                         NC_("STR_PRESOBJ_TEXT_MOBILE", "Double-tap to add Text" )
@@ -426,7 +425,6 @@
 #define STR_ANNOTATION_WRAP_BACKWARD_DRAW               NC_("STR_ANNOTATION_WRAP_BACKWARD_DRAW", "%PRODUCTNAME Draw reached the beginning of the document. Do you want to continue at the end?")
 #define STR_ANNOTATION_UNDO_INSERT                      NC_("STR_ANNOTATION_UNDO_INSERT", "Insert Comment")
 #define STR_ANNOTATION_UNDO_DELETE                      NC_("STR_ANNOTATION_UNDO_DELETE", "Delete Comment(s)")
-#define STR_ANNOTATION_UNDO_MOVE                        NC_("STR_ANNOTATION_UNDO_MOVE", "Move Comment")
 #define STR_ANNOTATION_UNDO_EDIT                        NC_("STR_ANNOTATION_UNDO_EDIT", "Edit Comment")
 #define STR_ANNOTATION_REPLY                            NC_("STR_ANNOTATION_REPLY", "Reply to %1" )
 
@@ -475,12 +473,6 @@
 #define STR_MANY_MASTER_PAGES                           NC_("STR_MANY_MASTER_PAGES", "%n Master Slides")
 #define STR_MANY_MASTER_PAGES_DETAIL                    NC_("STR_MANY_MASTER_PAGES_DETAIL", "Large amounts of Master Slides degrade loading performance")
 
-#define STR_A11Y_PRESENTER_CONSOLE                      NC_("STR_A11Y_PRESENTER_CONSOLE", "Presenter Console")
-#define STR_A11Y_PRESENTER_PREVIEW                      NC_("STR_A11Y_PRESENTER_PREVIEW", "Current Slide Info")
-#define STR_A11Y_PRESENTER_NOTES                        NC_("STR_A11Y_PRESENTER_NOTES", "Presenter Notes")
-
-#define STR_ADD_SLIDE_SECTION                           NC_("STR_ADD_SLIDE_SECTION", "Add Section")
-#define STR_REMOVE_SLIDE_SECTION                        NC_("STR_REMOVE_SLIDE_SECTION", "Remove Section")
 #define STR_RENAME_SLIDE_SECTION                        NC_("STR_RENAME_SLIDE_SECTION", "Rename Section")
 #define STR_DEFAULT_SLIDE_SECTION_NAME                  NC_("STR_DEFAULT_SLIDE_SECTION_NAME", "Untitled Section")
 #define STR_UNDO_ADD_SLIDE_SECTION                      NC_("STR_UNDO_ADD_SLIDE_SECTION", "Add section")

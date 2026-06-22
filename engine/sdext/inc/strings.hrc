@@ -24,7 +24,6 @@
 #define STR_OPTIMIZE_IMAGES                     NC_("STR_OPTIMIZE_IMAGES", "Optimize %IMAGES images to %QUALITY% JPEG quality at %RESOLUTION DPI.")
 #define STR_CREATE_REPLACEMENT                  NC_("STR_CREATE_REPLACEMENT", "Create replacement images for %OLE objects.")
 #define STR_MY_SETTINGS                         NC_("STR_MY_SETTINGS", "My Settings ")
-#define STR_OK                                  NC_("STR_OK", "OK")
 #define STR_INFO_PRIMARY                        NC_("STR_INFO_PRIMARY", "Successfully updated the presentation “%TITLE”.")
 #define STR_INFO_SECONDARY_1                    NC_("STR_INFO_SECONDARY_1", "The file size has changed from %OLDFILESIZE MB to %NEWFILESIZE MB.")
 #define STR_INFO_SECONDARY_2                    NC_("STR_INFO_SECONDARY_2", "The file size has changed from %OLDFILESIZE MB to approximately %NEWFILESIZE MB.")

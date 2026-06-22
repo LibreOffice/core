@@ -82,7 +82,7 @@ class SvxZoomSliderItem;
 
 // other slot-IDs:
 #define SID_SCUSERLISTS         (SC_VIEW_START + 37)    // user defined lists
-#define RES_TBX_DUMMY           (SC_VIEW_START + 38)    // dummy-item
+    // free
 #define SID_SCVIEWOPTIONS       TypedWhichId<ScTpViewItem>(SC_VIEW_START + 39)
 #define SID_SCDOCOPTIONS        TypedWhichId<ScTpCalcItem>(SC_VIEW_START + 40)
 
