@@ -500,16 +500,16 @@ describe(['tagdesktop'], 'Top toolbar tests.', function() {
 	});
 });
 
-describe(['tagdesktop'], 'Top toolbar tests (German locale).', function() {
+describe(['tagdesktop'], 'Top toolbar styles combobox.', function() {
 	beforeEach(function() {
 		cy.viewport(1920,1080);
-		helper.setupAndLoadDocument('writer/top_toolbar.odt', false, false, 'de');
+		helper.setupAndLoadDocument('writer/top_toolbar.odt');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});
 	});
 
-	it('Compact styles combobox sends programmatic style name, not the localized label.', function() {
+	it('Compact styles combobox applies the programmatic style name, not the displayed label.', function() {
 		desktopHelper.switchUIToCompact();
 
 		const capturedStyles = [];
@@ -522,24 +522,19 @@ describe(['tagdesktop'], 'Top toolbar tests (German locale).', function() {
 			};
 		});
 
-		helper.typeIntoDocument('{ctrl+End}{enter}P2{enter}P3{enter}P4{enter}P5');
+		helper.typeIntoDocument('{ctrl+End}');
 		helper.processToIdle(this.win);
 
-		const labels = ['Überschrift 1', 'Überschrift 2', 'Überschrift 1', 'Überschrift 3', 'Überschrift 1'];
-		const expected = ['Heading 1', 'Heading 2', 'Heading 1', 'Heading 3', 'Heading 1'];
-
-		labels.forEach((label, i) => {
-			helper.typeIntoDocument('{ctrl+Home}');
-			for (let j = 0; j < i; j++) helper.typeIntoDocument('{downArrow}');
-			helper.typeIntoDocument('{home}{shift+end}');
-
-			cy.cGet('#styles .ui-combobox-button').click();
-			cy.cGet('[id^="styles-dropdown"].modalpopup')
-				.contains('.ui-combobox-entry span', label).click();
-		});
+		// 'Default Paragraph Style' is shown in the combobox, but its
+		// programmatic name is 'Standard'. Selecting it must send 'Standard'
+		// to core, not the displayed label. The two differ even with an
+		// en-US engine, so this does not need a localized build.
+		cy.cGet('#styles .ui-combobox-button').click();
+		cy.cGet('[id^="styles-dropdown"].modalpopup')
+			.contains('.ui-combobox-entry span', 'Default Paragraph Style').click();
 
 		cy.wrap(null).should(() => {
-			expect(capturedStyles).to.deep.equal(expected);
+			expect(capturedStyles).to.deep.equal(['Standard']);
 		});
 	});
 });

@@ -183,22 +183,24 @@ class NotebookbarBase extends JSDialogComponent {
 		if (!widgetData || !this.builder) return;
 
 		const entries: any[] = [];
-		styles.forEach((style: string, index: number) => {
-			let localeStyle: string;
-			if (style.startsWith('outline')) {
-				const parts = style.split('outline');
+		styles.forEach((style: any, index: number) => {
+			// The engine sends each style as { text: <localized display name>,
+			// id: <programmatic name> }. Display 'text', apply via 'id'.
+			const progName: string =
+				style && typeof style === 'object' ? style.id : style;
+			let localeStyle: string =
+				style && typeof style === 'object' ? style.text : style;
+			if (typeof progName === 'string' && progName.startsWith('outline')) {
+				const parts = progName.split('outline');
 				const outlineLevel = parts.length > 1 ? parts[1] : '';
 				localeStyle = _('Outline %OutlineLevel%').replace(
 					'%OutlineLevel%',
 					outlineLevel,
 				);
-			} else {
-				localeStyle = window.L.Styles.styleMappings[style];
-				localeStyle = localeStyle === undefined ? style : _(localeStyle);
 			}
 			entries.push({
 				text: localeStyle,
-				id: style,
+				id: progName,
 				row: index,
 				selected: false,
 				ondemand: true,

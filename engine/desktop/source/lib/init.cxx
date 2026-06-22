@@ -6856,6 +6856,35 @@ static char* getFontSubset (std::string_view aFontName)
     return pJson;
 }
 
+// Append one style to the command-values list as { text, id }, where text is the
+// localized display name (so the client toolbar/notebookbar can show it directly
+// without re-translating) and id is the programmatic name used to apply the style.
+static void addStyleEntry(boost::property_tree::ptree& rChildren,
+                          const uno::Reference<container::XNameAccess>& xStyleFamily,
+                          const OUString& rStyle)
+{
+    OUString aDisplayName = rStyle;
+    try
+    {
+        uno::Reference<beans::XPropertySet> xProperty(xStyleFamily->getByName(rStyle), uno::UNO_QUERY);
+        OUString aName;
+        if (xProperty.is()
+            && (xProperty->getPropertyValue(u"DisplayName"_ustr) >>= aName)
+            && !aName.isEmpty())
+        {
+            aDisplayName = aName;
+        }
+    }
+    catch (const uno::Exception&)
+    {
+    }
+
+    boost::property_tree::ptree aChild;
+    aChild.put("text", aDisplayName.toUtf8());
+    aChild.put("id", rStyle.toUtf8());
+    rChildren.push_back(std::make_pair("", aChild));
+}
+
 static char* getComponentStyles(const css::uno::Reference<css::lang::XComponent>& rComponent, int docType, const char* pCommand)
 {
     boost::property_tree::ptree aTree;
@@ -6899,10 +6928,7 @@ static char* getComponentStyles(const css::uno::Reference<css::lang::XComponent>
             for (const OUString& rStyle: aWriterStyles)
             {
                 aDefaultStyleNames.insert( rStyle );
-
-                boost::property_tree::ptree aChild;
-                aChild.put("", rStyle.toUtf8());
-                aChildren.push_back(std::make_pair("", aChild));
+                addStyleEntry(aChildren, xStyleFamily, rStyle);
             }
         }
 
@@ -6914,9 +6940,7 @@ static char* getComponentStyles(const css::uno::Reference<css::lang::XComponent>
             if (aDefaultStyleNames.find(rStyle) == aDefaultStyleNames.end() ||
                 (sStyleFam != "ParagraphStyles" || docType != KIT_DOCTYPE_TEXT) )
             {
-                boost::property_tree::ptree aChild;
-                aChild.put("", rStyle.toUtf8());
-                aChildren.push_back(std::make_pair("", aChild));
+                addStyleEntry(aChildren, xStyleFamily, rStyle);
             }
         }
 

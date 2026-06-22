@@ -494,14 +494,24 @@ class TopToolbar extends JSDialog.Toolbar {
 
 		var entries = [];
 		this.styleProgNames = [];
+
+		// The engine sends each style as { text: <localized display name>,
+		// id: <programmatic name> }. We display 'text' and apply via 'id'
+		// (kept in styleProgNames, parallel to entries).
+		const addStyleEntry = (style) => {
+			const progName = (style && typeof style === 'object') ? style.id : style;
+			let displayName = (style && typeof style === 'object') ? style.text : style;
+			if (typeof progName === 'string' && progName.startsWith('outline')) {
+				displayName = _('Outline') + ' ' + progName.split('outline')[1];
+			}
+			entries.push(displayName);
+			this.styleProgNames.push(progName);
+		};
+
 		var commands = commandValues.Commands;
 		if (commands && commands.length > 0) {
 			commands.forEach(function (command) {
-				var translated = command.text;
-				if (window.L.Styles.styleMappings[command.text]) {
-					translated = window.L.Styles.styleMappings[command.text].toLocaleString();
-				}
-				entries.push(translated);
+				entries.push(command.text);
 				this.styleProgNames.push(command.id);
 			}, this);
 		}
@@ -516,24 +526,10 @@ class TopToolbar extends JSDialog.Toolbar {
 			styles = commandValues.CellStyles;
 		}
 
-		topStyles.forEach(function (style) {
-			entries.push(window.L.Styles.styleMappings[style].toLocaleString());
-			this.styleProgNames.push(style);
-		}, this);
+		topStyles.forEach(addStyleEntry);
 
 		if (styles !== undefined && styles.length > 0) {
-			styles.forEach(function (style) {
-				var localeStyle;
-				if (style.startsWith('outline')) {
-					var outlineLevel = style.split('outline')[1];
-					localeStyle = 'Outline'.toLocaleString() + ' ' + outlineLevel;
-				} else {
-					localeStyle = window.L.Styles.styleMappings[style];
-					localeStyle = localeStyle === undefined ? style : localeStyle.toLocaleString();
-				}
-				entries.push(localeStyle);
-				this.styleProgNames.push(style);
-			}, this);
+			styles.forEach(addStyleEntry);
 		}
 
 		var container = document.getElementById('styles');
