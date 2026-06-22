@@ -185,6 +185,10 @@ AnnotationManagerImpl::AnnotationManagerImpl( ViewShellBase& rViewShellBase )
 {
     if (SdOptions* pOptions = SdModule::get()->GetSdOptions(mpDoc->GetDocumentType()))
         mbShowAnnotations = pOptions->IsShowComments();
+
+    // In COKit comments are drawn by the client
+    if (comphelper::COKit::isActive() && !mpDoc->IsPDFDocument())
+        mbShowAnnotations = false;
 }
 
 void AnnotationManagerImpl::init()
@@ -305,6 +309,9 @@ rtl::Reference<sdr::annotation::Annotation> AnnotationManagerImpl::GetAnnotation
 
 void AnnotationManagerImpl::ShowAnnotations( bool bShow )
 {
+    if (bShow && comphelper::COKit::isActive() && !mpDoc->IsPDFDocument())
+        bShow = false;
+
     // enforce show annotations if a new annotation is inserted
     if( mbShowAnnotations != bShow )
     {

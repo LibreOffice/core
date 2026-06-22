@@ -122,7 +122,6 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide operations', functio
 		desktopHelper.getNbIcon('ModifyPage').click();
 		desktopHelper.insertComment();
 		cy.cGet('[id^=annotation-content-area-]').should('include.text', 'some text0');
-		cy.cGet('#Insert-tab-label').click();
 		desktopHelper.getNbIcon('DuplicatePage', 'Insert').click();
 
 		impressHelper.assertSlidePreviewCountAfterIdle(this.win, 2);

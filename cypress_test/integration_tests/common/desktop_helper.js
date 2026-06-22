@@ -331,7 +331,10 @@ function insertComment(text = 'some text0', save = true) {
 
 	var mode = Cypress.env('USER_INTERFACE');
 	if (mode === 'notebookbar') {
-		cy.cGet('#Insert-tab-label').click();
+		cy.cGet('#Insert-tab-label').then(function($tab) {
+			if (!$tab.hasClass('selected'))
+				cy.wrap($tab).click();
+		});
 		cy.cGet('#Insert .unoInsertAnnotation').click();
 	} else {
 		cy.cGet('#menu-insert').click();
