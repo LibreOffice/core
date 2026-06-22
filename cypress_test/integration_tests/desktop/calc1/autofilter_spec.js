@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require */
+/* global describe it cy beforeEach expect require */
 
 var helper = require('../../common/helper');
 var calcHelper = require('../../common/calc_helper');
@@ -238,5 +238,48 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'AutoFilter Scroll Position
 		});
 
 		desktopHelper.assertScrollbarPosition('vertical', 180, 400);
+	});
+
+	it('View stays put when filtering after a plain scroll', function() {
+		// Scroll the view with the scrollbar rather than navigating by cell
+		// address. A plain scroll does not refresh the cached sheet geometry
+		// view range, so the anchor row has to be taken from the live scroll
+		// position. The view stays anchored to that live top row after the
+		// filter is applied, instead of jumping up to an earlier row.
+		var topBeforeScroll;
+		cy.getFrameWindow().then(function(win) {
+			topBeforeScroll = win.L.Map.THIS._getTopLeftPoint().y;
+			desktopHelper.scrollViewDown(win);
+			helper.processToIdle(win);
+		});
+
+		// The plain scroll moved the live view top further down the sheet.
+		cy.getFrameWindow().then(function(win) {
+			expect(win.L.Map.THIS._getTopLeftPoint().y).to.be.greaterThan(topBeforeScroll);
+		});
+
+		var positionBeforeFilter;
+		cy.cGet('#test-div-vertical-scrollbar').should(function($item) {
+			positionBeforeFilter = parseInt($item.text());
+		});
+
+		openAutoFilterAtCursor();
+
+		cy.cGet('#toggle_all-input').uncheck();
+		cy.cGet('#ok').click();
+		cy.cGet('div.autofilter').should('not.exist');
+
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
+
+		// The top row stays anchored, so the position barely moves and never
+		// drops back toward the earlier, stale row.
+		cy.cGet('#test-div-vertical-scrollbar').should(function($item) {
+			var positionAfterFilter = parseInt($item.text());
+			expect(positionAfterFilter).to.be.within(
+				positionBeforeFilter - 150,
+				positionBeforeFilter + 150);
+		});
 	});
 });

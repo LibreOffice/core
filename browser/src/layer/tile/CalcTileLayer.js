@@ -825,6 +825,19 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 	},
 
 	_handleSheetGeometryDataMsg: function (jsonMsgObj, differentSheet) {
+		// When an autofilter change is incoming, remember which row sits at
+		// the top of the view right now, so we can keep it there after the
+		// geometry update. The cached view range is only refreshed on header
+		// updates, not on every scroll, so read the row from the live scroll
+		// position against the current (pre-update) geometry instead.
+		let autoFilterAnchorRow = -1;
+		if (this.sheetGeometry && this.sheetGeometry.autoFilterChanged) {
+			this.sheetGeometry.setViewArea(
+				this._pixelsToTwips(this._map._getTopLeftPoint()),
+				this._pixelsToTwips(this._map.getSize()));
+			autoFilterAnchorRow = this.sheetGeometry.getViewRowRange().start;
+		}
+
 		if (!this.sheetGeometry) {
 			this._sheetGeomFirstWait = false;
 			this.sheetGeometry = new cool.SheetGeometry(jsonMsgObj,
@@ -843,8 +856,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 
 		if (this.sheetGeometry.autoFilterChanged) {
 			this.sheetGeometry.autoFilterChanged = false;
-			var targetRow = this.sheetGeometry.getViewRowRange().start;
-			var targetData = this.sheetGeometry.getRowsGeometry().getElementData(targetRow);
+			const targetData = this.sheetGeometry.getRowsGeometry().getElementData(autoFilterAnchorRow);
 			if (targetData) {
 				app.activeDocument.activeLayout.scrollTo(
 					this._map._getTopLeftPoint().x,
