@@ -274,7 +274,7 @@ inline constexpr sal_uInt16 RES_TXTATR_BEGIN(RES_CHRATR_END);
  */
 inline constexpr sal_uInt16 RES_TXTATR_WITHEND_BEGIN(RES_TXTATR_BEGIN);
 inline constexpr TypedWhichId<SwFormatRefMark> RES_TXTATR_REFMARK(RES_TXTATR_WITHEND_BEGIN
-                                                                  + 0); // 47
+                                                                  + 0); // 48
 inline constexpr TypedWhichId<SwTOXMark> RES_TXTATR_TOXMARK(RES_TXTATR_WITHEND_BEGIN + 1);
 inline constexpr TypedWhichId<SwFormatMeta> RES_TXTATR_META(RES_TXTATR_WITHEND_BEGIN + 2);
 inline constexpr TypedWhichId<SwFormatMeta> RES_TXTATR_METAFIELD(RES_TXTATR_WITHEND_BEGIN + 3);
@@ -291,7 +291,7 @@ inline constexpr sal_uInt16 RES_TXTATR_WITHEND_END(RES_TXTATR_WITHEND_BEGIN + 11
 
 // all TextAttributes without an end
 inline constexpr sal_uInt16 RES_TXTATR_NOEND_BEGIN(RES_TXTATR_WITHEND_END);
-inline constexpr TypedWhichId<SwFormatField> RES_TXTATR_FIELD(RES_TXTATR_NOEND_BEGIN + 0); // 58
+inline constexpr TypedWhichId<SwFormatField> RES_TXTATR_FIELD(RES_TXTATR_NOEND_BEGIN + 0); // 59
 inline constexpr TypedWhichId<SwFormatFlyCnt> RES_TXTATR_FLYCNT(RES_TXTATR_NOEND_BEGIN + 1);
 inline constexpr TypedWhichId<SwFormatFootnote> RES_TXTATR_FTN(RES_TXTATR_NOEND_BEGIN + 2);
 inline constexpr TypedWhichId<SwFormatField> RES_TXTATR_ANNOTATION(RES_TXTATR_NOEND_BEGIN + 3);
@@ -302,7 +302,7 @@ inline constexpr sal_uInt16 RES_TXTATR_END(RES_TXTATR_NOEND_END);
 
 inline constexpr sal_uInt16 RES_PARATR_BEGIN(RES_TXTATR_END);
 inline constexpr TypedWhichId<SvxLineSpacingItem> RES_PARATR_LINESPACING(RES_PARATR_BEGIN
-                                                                         + 0); // 64
+                                                                         + 0); // 65
 inline constexpr TypedWhichId<SvxAdjustItem> RES_PARATR_ADJUST(RES_PARATR_BEGIN + 1);
 inline constexpr TypedWhichId<SvxFormatSplitItem> RES_PARATR_SPLIT(RES_PARATR_BEGIN + 2);
 inline constexpr TypedWhichId<SvxOrphansItem> RES_PARATR_ORPHANS(RES_PARATR_BEGIN + 3);
@@ -333,13 +333,13 @@ inline constexpr sal_uInt16 RES_PARATR_END(RES_PARATR_BEGIN + 20);
 // list attributes for paragraphs.
 // intentionally these list attributes are not contained in paragraph styles
 inline constexpr sal_uInt16 RES_PARATR_LIST_BEGIN(RES_PARATR_END);
-inline constexpr TypedWhichId<SfxStringItem> RES_PARATR_LIST_ID(RES_PARATR_LIST_BEGIN + 0); // 83
+inline constexpr TypedWhichId<SfxStringItem> RES_PARATR_LIST_ID(RES_PARATR_LIST_BEGIN + 0); // 85
 inline constexpr TypedWhichId<SfxInt16Item> RES_PARATR_LIST_LEVEL(RES_PARATR_LIST_BEGIN + 1);
 inline constexpr TypedWhichId<SfxBoolItem> RES_PARATR_LIST_ISRESTART(RES_PARATR_LIST_BEGIN + 2);
 inline constexpr TypedWhichId<SfxInt16Item> RES_PARATR_LIST_RESTARTVALUE(RES_PARATR_LIST_BEGIN + 3);
 inline constexpr TypedWhichId<SfxBoolItem> RES_PARATR_LIST_ISCOUNTED(RES_PARATR_LIST_BEGIN + 4);
 inline constexpr TypedWhichId<SwFormatAutoFormat>
-    RES_PARATR_LIST_AUTOFMT(RES_PARATR_LIST_BEGIN + 5); //TypedWhichId<SfxSetItem>(88)
+    RES_PARATR_LIST_AUTOFMT(RES_PARATR_LIST_BEGIN + 5); //TypedWhichId<SfxSetItem>(90)
 inline constexpr sal_uInt16 RES_PARATR_LIST_END(RES_PARATR_LIST_BEGIN + 6);
 
 inline constexpr sal_uInt16 RES_FRMATR_BEGIN(RES_PARATR_LIST_END);
