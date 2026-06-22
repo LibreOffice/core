@@ -390,6 +390,7 @@ void SuggestionDisplay::InsertEntry(const OUString& rStr)
     m_xIconView->insert(nIndex, nullptr, nullptr, pNullIconName, nullptr);
     ScopedVclPtr<VirtualDevice> pDev = CreateIcon(rStr);
     m_xIconView->set_image(nIndex, *pDev);
+    m_xIconView->set_item_accessible_name(nIndex, rStr);
 }
 
 void SuggestionDisplay::SelectEntryPos(sal_uInt16 nPos)
