@@ -2752,12 +2752,13 @@ static void doc_destroy(COKitDocument *pThis)
 
     LibLODocument_Impl *pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
-    // Drop any original-document-URL mapping recorded for this document at load,
-    // keyed by the same canonical main URL used when it was set.
-    uno::Reference<frame::XModel> xModel(pDocument->mxComponent, uno::UNO_QUERY);
-    if (xModel.is())
-        comphelper::COKit::clearOriginalDocumentUrl(
-            INetURLObject(xModel->getURL()).GetMainURL(INetURLObject::DecodeMechanism::NONE));
+    // Drop any original-document-URL mapping recorded for this document at load.
+    // Clear it by the key we captured then, not via xModel->getURL(): the model
+    // may already be disposed by the time we get here (doc_destroy runs from
+    // ~Document()), and getURL() on a disposed model throws DisposedException,
+    // which would escape the destructor and call std::terminate().
+    if (!pDocument->maOriginalDocumentUrlKey.isEmpty())
+        comphelper::COKit::clearOriginalDocumentUrl(pDocument->maOriginalDocumentUrlKey);
 
     delete pDocument;
 }
@@ -3064,16 +3065,19 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
         // the original URL, remember it against this working URL so the Properties
         // dialog can show and reveal the real location. The value was percent-escaped
         // for the comma-separated options string, so decode it back.
+        OUString aOriginalDocumentUrlKey;
         OUString aOriginalDocumentUrl = extractParameter(aOptions, u"OriginalDocumentUrl");
         if (!aOriginalDocumentUrl.isEmpty())
         {
             aOriginalDocumentUrl = rtl::Uri::decode(aOriginalDocumentUrl, rtl_UriDecodeWithCharset,
                                                     RTL_TEXTENCODING_UTF8);
             // Key by the canonical main URL, matching how the Properties dialog
-            // looks it up (INetURLObject::GetMainURL with no decoding).
-            const OUString aWorkingKey
+            // looks it up (INetURLObject::GetMainURL with no decoding). Remember
+            // the key so doc_destroy can clear the mapping without dereferencing
+            // the (possibly already disposed) model.
+            aOriginalDocumentUrlKey
                 = INetURLObject(aURL).GetMainURL(INetURLObject::DecodeMechanism::NONE);
-            comphelper::COKit::setOriginalDocumentUrl(aWorkingKey, aOriginalDocumentUrl);
+            comphelper::COKit::setOriginalDocumentUrl(aOriginalDocumentUrlKey, aOriginalDocumentUrl);
         }
 
 #if defined(ANDROID) && HAVE_FEATURE_ANDROID_KIT
@@ -3140,6 +3144,7 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
         assert(comphelper::COKit::getDocId() == ViewShellDocId(nThisDocumentId) && "incorrect docid set on document");
 
         LibLODocument_Impl* pDocument = new LibLODocument_Impl(xComponent, nThisDocumentId);
+        pDocument->maOriginalDocumentUrlKey = aOriginalDocumentUrlKey;
 
         // After loading the document, its initial view is the "current" view.
         if (pLib->mpCallback)

@@ -281,6 +281,10 @@ namespace desktop {
         const int mnDocumentId;
         WaitUntilIdle maIdleHelper;
         std::set<OUString> maFontsMissing;
+        // Canonical main URL this document's original-document-URL mapping was
+        // keyed by at load (empty if none); used to clear it at destroy without
+        // touching the possibly-disposed model. See comphelper::COKit.
+        OUString maOriginalDocumentUrlKey;
 
         explicit LibLODocument_Impl(css::uno::Reference<css::lang::XComponent> xComponent,
                                     int nDocumentId);
