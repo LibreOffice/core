@@ -258,7 +258,7 @@ window.L.Map.include({
 
 		app.events.fire('updatepermission', {perm : perm});
 
-		if (this._docLayer._docType === 'text') {
+		if (this._docLayer._docType === 'text' && (window.mode.isSmallScreenDevice() || window.mode.isTablet())) {
 			this.setZoom(10);
 		}
 
