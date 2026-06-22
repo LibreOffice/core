@@ -20,7 +20,9 @@
 #include <document.hxx>
 #include <scitems.hxx>
 
+#include <algorithm>
 #include <chrono>
+#include <vector>
 
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XCellRangeMovement.hpp>
@@ -28,8 +30,11 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 
-#include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
+#include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <editeng/brushitem.hxx>
 
 using namespace ::com::sun::star;
@@ -751,6 +756,40 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf107572)
 
         CPPUNIT_ASSERT_EQUAL(COL_GRAY3, rColor2);
     }
+}
+
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testCool15956)
+{
+    // A Basic library enumerates its modules in insertion order, and that order must survive a
+    // save/reload unchanged: it determines the on-disk byte layout of the library index and module
+    // streams, which macro signatures sign over (cool#15956).
+    createScDoc();
+
+    // Deliberately non-sorted insertion order.
+    const OUString order[]{ u"Gamma"_ustr, u"Alpha"_ustr, u"Delta"_ustr, u"Beta"_ustr };
+
+    auto checkOrder = [&order](const uno::Sequence<OUString>& names) {
+        CPPUNIT_ASSERT(std::equal(names.begin(), names.end(), std::begin(order), std::end(order)));
+    };
+
+    auto xDocScr = mxComponent.queryThrow<document::XEmbeddedScripts>();
+    auto xLibs = xDocScr->getBasicLibraries().queryThrow<script::XLibraryContainer>();
+    auto xLibrary = xLibs->createLibrary(u"TestLibrary"_ustr);
+    for (const OUString& rName : order)
+        xLibrary->insertByName(rName, uno::Any(u"Sub "_ustr + rName + u"\nEnd Sub\n"_ustr));
+
+    // In memory, getElementNames() must reflect insertion order.
+    checkOrder(xLibrary->getElementNames());
+
+    saveAndReload(TestFilter::ODS);
+
+    // After the store/reload, the reloaded library keeps the same module order;
+    // without insertion-order preservation it came back permuted.
+    xDocScr = mxComponent.queryThrow<document::XEmbeddedScripts>();
+    xLibs = xDocScr->getBasicLibraries().queryThrow<script::XLibraryContainer>();
+    xLibs->loadLibrary(u"TestLibrary"_ustr);
+    auto xReloaded = xLibs->getByName(u"TestLibrary"_ustr).queryThrow<container::XNameAccess>();
+    checkOrder(xReloaded->getElementNames());
 }
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testShapeLayerId)
