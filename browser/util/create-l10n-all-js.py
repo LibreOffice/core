@@ -124,7 +124,6 @@ for lang in simple:
         + insert(
             f"po/ui-{lang}.po.json",
             f"l10n/uno/{lang_hyphen}.json",
-            f"l10n/locore/{lang_hyphen}.json",
         )
         + ";"
     )
@@ -147,7 +146,6 @@ for lang in sorted(aliases.keys()):
         + insert(
             f"po/ui-{lang}.po.json",
             f"l10n/uno/{lang_hyphen}.json",
-            f"l10n/locore/{lang_hyphen}.json",
         )
         + ";"
     )

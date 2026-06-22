@@ -536,7 +536,6 @@ bool FileServerRequestHandler::handleRequest(const HTTPRequest& request,
         if (endPoint == "cool.html" ||
             endPoint == "help-localizations.json" ||
             endPoint == "localizations.json" ||
-            endPoint == "locore-localizations.json" ||
             endPoint == "uno-localizations.json" ||
             endPoint == "uno-localizations-override.json")
         {
