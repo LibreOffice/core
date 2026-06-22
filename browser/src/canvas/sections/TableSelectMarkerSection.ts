@@ -65,8 +65,20 @@ class TableSelectMarkerSection extends HTMLObjectSection {
 	}
 
 	onContextMenu(point: cool.SimplePoint, e: MouseEvent): void {
-		const x = (this.position[0] + this.size[0]) * 0.5 * app.pixelsToTwips;
-		const y = (this.position[1] + this.size[1]) * 0.5 * app.pixelsToTwips;
+		Util.ensureValue(app.activeDocument);
+		let x: number;
+		let y: number;
+		if (this.sectionProperties.markerType === 'column') {
+			x = (this.position[0] + this.size[0] * 0.5) * app.pixelsToTwips;
+			y =
+				app.activeDocument.tableMiddleware.getTableTopY() * app.pixelsToTwips +
+				5;
+		} else {
+			x =
+				app.activeDocument.tableMiddleware.getTableLeftX() * app.pixelsToTwips +
+				5;
+			y = (this.position[1] + this.size[1] * 0.5) * app.pixelsToTwips;
+		}
 		app.map._docLayer._postMouseEvent('buttondown', x, y, 1, 4, 0);
 		this.sectionProperties.contextMenuActivated = true;
 	}
