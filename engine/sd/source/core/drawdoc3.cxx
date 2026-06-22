@@ -27,6 +27,7 @@
 #include <svl/itemset.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/kit.hxx>
 
 #include <sfx2/fcontnr.hxx>
 #include <svl/style.hxx>
@@ -439,7 +440,9 @@ bool SdDrawDocument::determineScaleObjects(bool bNoDialogs,
                                            PageInsertionParams& rParams)
 {
     // In dialog-less mode, decide based on transfer container and page settings.
-    if (bNoDialogs)
+    // No UI under COKit to host the synchronous scale-objects query (it
+    // would assert in Dialog::ImplStartExecute), so take the dialog-less path.
+    if (bNoDialogs || comphelper::COKit::isActive())
     {
         SdModule* mod = SdModule::get();
         // If this is clipboard, then no need to scale objects:
