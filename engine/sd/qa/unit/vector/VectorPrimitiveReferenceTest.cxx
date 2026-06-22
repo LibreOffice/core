@@ -759,6 +759,29 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGraphicMirror)
     assertJsonPath(aJson, "/primitives/0/mirror", sal_Int64(3));
 }
 
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGraphicDrawMode)
+{
+    // A raster graphic rendered as greyscale through the
+    // engine's special draw mode. The wire carries the chosen
+    // mode as a short string ("greys", "mono", "watermark").
+    Bitmap aBitmap(Size(10, 10), vcl::PixelFormat::N24_BPP);
+    basegfx::B2DHomMatrix aTransform;
+    aTransform.scale(100.0, 100.0);
+
+    GraphicObject aGraphicObject{ Graphic(aBitmap) };
+    GraphicAttr aAttribute;
+    aAttribute.SetDrawMode(GraphicDrawMode::Greys);
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(
+        new drawinglayer::primitive2d::GraphicPrimitive2D(aTransform, aGraphicObject, aAttribute));
+
+    auto aJson = writeReference(u"testGraphicDrawMode", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "graphic");
+    assertJsonPath(aJson, "/primitives/0/drawMode", "greys");
+}
+
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGraphicSvg)
 {
     // An SVG-backed Graphic goes through the writer's SVG branch.

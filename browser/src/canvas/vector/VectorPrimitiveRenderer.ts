@@ -414,6 +414,7 @@ namespace cool {
 				primitive.rotation,
 				primitive.alpha,
 				primitive.mirror,
+				primitive.drawMode,
 			);
 		}
 
@@ -440,6 +441,10 @@ namespace cool {
 		// flips vertically. The flip is scoped to the unit square,
 		// so the cropped or rotated content lands in the same place
 		// but with the chosen axes reflected.
+		//
+		// drawMode picks a CSS filter that recolours the image:
+		// greys desaturates, mono is one-bit black-and-white,
+		// watermark is a faded grey overlay.
 		private _drawRaster(
 			context: CanvasRenderingContext2D,
 			matrix: number[] | undefined,
@@ -448,6 +453,7 @@ namespace cool {
 			rotation?: number,
 			alpha?: number,
 			mirror?: number,
+			drawMode?: GraphicPrimitive['drawMode'],
 		): void {
 			if (!matrix || matrix.length < 6) return;
 			if (!this._bitmapLookup) return;
@@ -459,6 +465,11 @@ namespace cool {
 			context.save();
 			if (typeof alpha === 'number' && alpha < 255)
 				context.globalAlpha = alpha / 255;
+			if (drawMode === 'greys') context.filter = 'grayscale(1)';
+			else if (drawMode === 'mono')
+				context.filter = 'grayscale(1) contrast(1000%)';
+			else if (drawMode === 'watermark')
+				context.filter = 'grayscale(1) brightness(1.5) opacity(0.3)';
 			// The matrix maps the unit square to the image's bounds,
 			// so we draw the image into the unit square and let the
 			// transform place it on the slide.

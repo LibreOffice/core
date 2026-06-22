@@ -484,6 +484,29 @@ describe('VectorPrimitiveRenderer', function () {
 			nodeassert.strictEqual(draw.args[0], cachedImage);
 		});
 
+		it('recolours a graphic through a CSS filter for drawMode', function () {
+			// The drawMode wire value picks a CSS filter set on the
+			// context inside the save/restore. The greys mode maps to
+			// grayscale(1).
+			const primitive = loadVectorRenderingReference('testGraphicDrawMode')
+				.primitives[0];
+			nodeassert.strictEqual(primitive.type, 'graphic');
+			nodeassert.strictEqual(primitive.drawMode, 'greys');
+
+			const cachedImage = new ImageRecorder();
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer((checksum) =>
+				checksum === primitive.checksum
+					? (cachedImage as unknown as HTMLImageElement)
+					: undefined,
+			);
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			const draw = recorder.findCall('drawImage');
+			nodeassert.ok(draw, 'drawImage not called');
+			nodeassert.strictEqual(draw.properties.filter, 'grayscale(1)');
+		});
+
 		it('draws only the cropped portion of a graphic', function () {
 			// A graphic with crop attributes is drawn with a source
 			// rectangle inset by the crop fractions of the image's
