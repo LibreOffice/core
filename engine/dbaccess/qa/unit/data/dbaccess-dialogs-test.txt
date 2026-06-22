@@ -50,29 +50,16 @@
 #   in BrowseBox::AutoSizeLastColumn (svtools/source/brwbox/brwbox1.cxx) with Clang
 #   -fsanitize=implicit-signed-integer-truncation
 
-dbaccess/ui/advancedsettingsdialog.ui
 dbaccess/ui/admindialog.ui
 dbaccess/ui/fielddialog.ui
-dbaccess/ui/useradmindialog.ui
 dbaccess/ui/mysqlnativesettings.ui
 dbaccess/ui/textpage.ui
 dbaccess/ui/applycolpage.ui
 dbaccess/ui/copytablepage.ui
 dbaccess/ui/namematchingpage.ui
 dbaccess/ui/typeselectpage.ui
-dbaccess/ui/ldapconnectionpage.ui
-dbaccess/ui/dbwizmysqlintropage.ui
-dbaccess/ui/dbwizmysqlnativepage.ui
-dbaccess/ui/specialjdbcconnectionpage.ui
-dbaccess/ui/authentificationpage.ui
-dbaccess/ui/finalpagewizard.ui
-dbaccess/ui/tablesfilterpage.ui
-dbaccess/ui/useradminpage.ui
 dbaccess/ui/connectionpage.ui
 dbaccess/ui/dbwizconnectionpage.ui
-dbaccess/ui/dbwiztextpage.ui
-dbaccess/ui/jdbcconnectionpage.ui
-dbaccess/ui/dbwizspreadsheetpage.ui
 dbaccess/ui/dbasepage.ui
 dbaccess/ui/autocharsetpage.ui
 dbaccess/ui/odbcpage.ui
@@ -83,7 +70,6 @@ dbaccess/ui/mysqlnativepage.ui
 dbaccess/ui/ldappage.ui
 dbaccess/ui/emptypage.ui
 dbaccess/ui/generalpagedialog.ui
-dbaccess/ui/generalpagewizard.ui
 dbaccess/ui/collectionviewdialog.ui
 dbaccess/ui/dbaseindexdialog.ui
 dbaccess/ui/directsqldialog.ui
@@ -97,6 +83,4 @@ dbaccess/ui/queryfilterdialog.ui
 dbaccess/ui/sortdialog.ui
 dbaccess/ui/sqlexception.ui
 dbaccess/ui/textconnectionsettings.ui
-dbaccess/ui/password.ui
-dbaccess/ui/tablesfilterdialog.ui
 dbaccess/ui/savemodifieddialog.ui

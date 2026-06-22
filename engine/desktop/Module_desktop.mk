@@ -142,9 +142,4 @@ $(eval $(call gb_Module_add_check_targets,desktop, \
 ))
 endif
 
-# screenshots
-$(eval $(call gb_Module_add_screenshot_targets,desktop,\
-    CppunitTest_desktop_dialogs_test \
-))
-
 # vim: set ts=4 sw=4 et:
