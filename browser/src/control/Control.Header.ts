@@ -573,9 +573,14 @@ export class Header extends CanvasSectionObject {
 				type: 'comboboxentry',
 				text: _UNO(command, 'spreadsheet', true),
 				img: command,
+				class: this._commandClass(command),
 			});
 		}
 		return entries;
+	}
+
+	private _commandClass(command: string): string {
+		return command.replace(/[^a-zA-Z0-9]/g, '');
 	}
 
 	private _handleDropdownCallback(

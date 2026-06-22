@@ -325,6 +325,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 					type: 'comboboxentry',
 					text: _('Paste'),
 					img: 'Paste',
+					class: 'unoPaste',
 					pos: 0,
 				});
 			}
@@ -333,6 +334,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				type: 'comboboxentry',
 				text: _UNO(that._map._docLayer._docType == 'presentation' ? '.uno:InsertSlide' : '.uno:InsertPage', 'presentation'),
 				img: 'InsertPage',
+				class: 'unoInsertPage',
 				pos: 0,
 			});
 
@@ -389,6 +391,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 					type: 'comboboxentry',
 					text: _('Copy'),
 					img: 'Copy',
+					class: 'unoCopy',
 					pos: 0,
 				});
 			}
@@ -397,6 +400,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				type: 'comboboxentry',
 				text: _('Paste'),
 				img: 'Paste',
+				class: 'unoPaste',
 				pos: 0,
 			});
 			entries.push({
@@ -404,6 +408,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				type: 'comboboxentry',
 				text: _UNO(isPresentation ? '.uno:InsertSlide' : '.uno:InsertPage', 'presentation'),
 				img: 'InsertPage',
+				class: 'unoInsertPage',
 				pos: 0,
 			});
 			entries.push({
@@ -411,6 +416,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				type: 'comboboxentry',
 				text: _UNO(isPresentation ? '.uno:DuplicateSlide' : '.uno:DuplicatePage', 'presentation'),
 				img: 'DuplicatePage',
+				class: 'unoDuplicatePage',
 				pos: 0,
 			});
 			if (that._map._docLayer._parts > 1) {
@@ -419,6 +425,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 					type: 'comboboxentry',
 					text: _UNO(isPresentation ? '.uno:DeleteSlide' : '.uno:DeletePage', 'presentation'),
 					img: 'DeletePage',
+					class: 'unoDeletePage',
 					pos: 0,
 				});
 			}
@@ -427,6 +434,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				type: 'comboboxentry',
 				text: _UNO(isPresentation ? '.uno:SlideSetup' : '.uno:PageSetup', 'presentation'),
 				img: 'PageSetup',
+				class: 'slideproperties',
 				pos: 0,
 			});
 			if (isPresentation && app.impress.isSlideHidden(partIndex)) {
@@ -435,6 +443,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 					type: 'comboboxentry',
 					text: _UNO('.uno:ShowSlide', 'presentation'),
 					img: 'ShowSlide',
+					class: 'showslide',
 					pos: 0,
 				});
 			}
@@ -444,6 +453,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 					type: 'comboboxentry',
 					text: _UNO('.uno:HideSlide', 'presentation'),
 					img: 'Hideslide',
+					class: 'hideslide',
 					pos: 0,
 				});
 			}
@@ -465,6 +475,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 					type: 'comboboxentry',
 					text: _('Add Section'),
 					img: 'addslidesection',
+					class: 'addsection',
 					pos: 0,
 				});
 			}
