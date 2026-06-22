@@ -184,6 +184,7 @@ constexpr auto SUPPORTED_UI_FILES = frozen::make_unordered_set<std::u16string_vi
     u"modules/scalc/ui/inputstringdialog.ui",
     u"modules/scalc/ui/insertcells.ui",
     u"modules/scalc/ui/insertsheet.ui",
+    u"modules/scalc/ui/integerdialog.ui",
     u"modules/scalc/ui/movecopysheet.ui",
     u"modules/scalc/ui/optimalcolwidthdialog.ui",
     u"modules/scalc/ui/optimalrowheightdialog.ui",
