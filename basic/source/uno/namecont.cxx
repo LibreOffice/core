@@ -65,6 +65,8 @@
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <algorithm>
+#include <cassert>
 #include <memory>
 #include <string_view>
 
@@ -93,6 +95,21 @@ using com::sun::star::uno::Reference;
 // #i34411: Flag for error handling during migration
 static bool GbMigrationSuppressErrors = false;
 
+#ifndef NDEBUG
+namespace
+{
+// The name->value map and the insertion-order vector are redundant views of the
+// same set of names; verify they list exactly the same names, once each.
+bool mapAndOrderConsistent(const std::unordered_map<OUString, Any>& rMap,
+                           const std::vector<OUString>& rOrder)
+{
+    if (rMap.size() != rOrder.size())
+        return false;
+    return std::all_of(rMap.begin(), rMap.end(), [&rOrder](const auto& rEntry)
+        { return std::find(rOrder.begin(), rOrder.end(), rEntry.first) != rOrder.end(); });
+}
+}
+#endif
 
 // Implementation class NameContainer
 
@@ -120,7 +137,8 @@ Any NameContainer::getByName( const OUString& aName )
 
 Sequence< OUString > NameContainer::getElementNames()
 {
-    return comphelper::mapKeysToSequence(maMap);
+    // Return the names in insertion order.
+    return comphelper::containerToSequence(maNamesOrder);
 }
 
 sal_Bool NameContainer::hasByName( const OUString& aName )
@@ -179,7 +197,10 @@ void NameContainer::insertNoCheck(const OUString& aName, const Any& aElement,
         throw IllegalArgumentException(u"types do not match"_ustr, rOwner, 2);
     }
 
+    assert(!maMap.contains(aName) && "insertNoCheck: name already present");
     maMap[aName] = aElement;
+    maNamesOrder.push_back(aName);
+    assert(mapAndOrderConsistent(maMap, maNamesOrder));
 
     // Fire event
     if (maContainerListeners.getLength(guard) > 0)
@@ -223,6 +244,8 @@ void NameContainer::removeByName(const OUString& aName, std::unique_lock<std::mu
 
     Any aOldElement = aIt->second;
     maMap.erase(aIt);
+    std::erase(maNamesOrder, aName);
+    assert(mapAndOrderConsistent(maMap, maNamesOrder));
 
     // Fire event
     if (maContainerListeners.getLength(guard) > 0)
