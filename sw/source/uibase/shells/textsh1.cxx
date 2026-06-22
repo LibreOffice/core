@@ -122,10 +122,6 @@
 #include <comphelper/scopeguard.hxx>
 #include <authfld.hxx>
 #include <config_wasm_strip.h>
-#if HAVE_FEATURE_CURL && !ENABLE_WASM_STRIP_EXTRA
-#include <officecfg/Office/Common.hxx>
-#include <svl/visitem.hxx>
-#endif // HAVE_FEATURE_CURL && ENABLE_WASM_STRIP_EXTRA
 #include <IDocumentContentOperations.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <fmtcntnt.hxx>
