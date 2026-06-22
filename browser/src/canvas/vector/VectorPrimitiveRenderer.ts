@@ -413,6 +413,7 @@ namespace cool {
 				primitive.crop,
 				primitive.rotation,
 				primitive.alpha,
+				primitive.mirror,
 			);
 		}
 
@@ -434,6 +435,11 @@ namespace cool {
 		// alpha is a byte where 255 is opaque. Values below 255
 		// translate to a globalAlpha that scopes to the save and
 		// restore around the draw.
+		//
+		// mirror is a bitfield: bit 0 flips horizontally, bit 1
+		// flips vertically. The flip is scoped to the unit square,
+		// so the cropped or rotated content lands in the same place
+		// but with the chosen axes reflected.
 		private _drawRaster(
 			context: CanvasRenderingContext2D,
 			matrix: number[] | undefined,
@@ -441,6 +447,7 @@ namespace cool {
 			crop?: GraphicPrimitive['crop'],
 			rotation?: number,
 			alpha?: number,
+			mirror?: number,
 		): void {
 			if (!matrix || matrix.length < 6) return;
 			if (!this._bitmapLookup) return;
@@ -463,6 +470,15 @@ namespace cool {
 				matrix[4],
 				matrix[5],
 			);
+
+			if (mirror) {
+				// Translate to the far edge of each flipped axis so
+				// the scaled image still fills the unit square.
+				const mx = mirror & 1 ? -1 : 1;
+				const my = mirror & 2 ? -1 : 1;
+				context.translate(mx < 0 ? 1 : 0, my < 0 ? 1 : 0);
+				context.scale(mx, my);
+			}
 
 			if (rotation) {
 				const radians = ((rotation / 10) * Math.PI) / 180;

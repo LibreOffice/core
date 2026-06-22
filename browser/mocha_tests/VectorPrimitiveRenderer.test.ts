@@ -450,6 +450,40 @@ describe('VectorPrimitiveRenderer', function () {
 			nodeassert.ok(recorder.findCall('restore'), 'restore not called');
 		});
 
+		it('flips a mirrored graphic along the requested axes', function () {
+			// mirror is a bitfield: bit 0 flips horizontally, bit 1
+			// flips vertically. The renderer translates to the far
+			// edge of each flipped axis, then scales by -1 on that
+			// axis so the image still fills the unit square.
+			const primitive = loadVectorRenderingReference('testGraphicMirror')
+				.primitives[0];
+			nodeassert.strictEqual(primitive.type, 'graphic');
+			nodeassert.strictEqual(primitive.mirror, 3);
+
+			const cachedImage = new ImageRecorder();
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer((checksum) =>
+				checksum === primitive.checksum
+					? (cachedImage as unknown as HTMLImageElement)
+					: undefined,
+			);
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			// With both axes flipped, the translate goes to (1, 1)
+			// and the scale is (-1, -1).
+			const translate = recorder.findCall('translate');
+			nodeassert.ok(translate, 'translate not called');
+			nodeassert.deepStrictEqual(translate.args, [1, 1]);
+
+			const scale = recorder.findCall('scale');
+			nodeassert.ok(scale, 'scale not called');
+			nodeassert.deepStrictEqual(scale.args, [-1, -1]);
+
+			const draw = recorder.findCall('drawImage');
+			nodeassert.ok(draw, 'drawImage not called');
+			nodeassert.strictEqual(draw.args[0], cachedImage);
+		});
+
 		it('draws only the cropped portion of a graphic', function () {
 			// A graphic with crop attributes is drawn with a source
 			// rectangle inset by the crop fractions of the image's

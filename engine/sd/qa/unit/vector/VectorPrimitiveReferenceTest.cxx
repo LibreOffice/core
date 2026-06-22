@@ -736,6 +736,29 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGraphicAlpha)
     assertJsonPath(aJson, "/primitives/0/alpha", sal_Int64(128));
 }
 
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGraphicMirror)
+{
+    // A raster graphic mirrored on both axes. The engine writes
+    // the mirror bitfield as an integer (bit 0 horizontal, bit 1
+    // vertical).
+    Bitmap aBitmap(Size(10, 10), vcl::PixelFormat::N24_BPP);
+    basegfx::B2DHomMatrix aTransform;
+    aTransform.scale(100.0, 100.0);
+
+    GraphicObject aGraphicObject{ Graphic(aBitmap) };
+    GraphicAttr aAttribute;
+    aAttribute.SetMirrorFlags(BmpMirrorFlags::Horizontal | BmpMirrorFlags::Vertical);
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(
+        new drawinglayer::primitive2d::GraphicPrimitive2D(aTransform, aGraphicObject, aAttribute));
+
+    auto aJson = writeReference(u"testGraphicMirror", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "graphic");
+    assertJsonPath(aJson, "/primitives/0/mirror", sal_Int64(3));
+}
+
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGraphicSvg)
 {
     // An SVG-backed Graphic goes through the writer's SVG branch.
