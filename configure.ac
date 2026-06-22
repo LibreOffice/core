@@ -8296,7 +8296,7 @@ if test -z "${CXXFLAGS_CXX11+x}"; then
     elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         my_flags='-std=c++20 -std=c++2a'
         if test "$with_latest_c__" = yes; then
-            my_flags="-std=c++26 -std=c++2c -std=c++23 -std=c++2b $my_flags"
+            my_flags="-std=c++29 -std=c++2d -std=c++26 -std=c++2c -std=c++23 -std=c++2b $my_flags"
         fi
         for flag in $my_flags; do
             if test "$COM" = MSC; then
