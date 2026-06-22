@@ -67,6 +67,21 @@ public:
                 _ssl = (schemeProtocol != "http://");
                 _schemeAuthority = url.substr(pos, hostEndPos - pos);
                 _pathPlus = url.substr(hostEndPos);
+                // Strip a non-positive port from the authority. Some reverse
+                // proxies (e.g. Jetty behind HAProxy at the default HTTPS port)
+                // produce a ProxyPrefix with port -1 when the Host header
+                // carries no explicit port number.
+                const auto itColon = _schemeAuthority.rfind(':');
+                if (itColon != std::string::npos)
+                {
+                    const std::string portStr = _schemeAuthority.substr(itColon + 1);
+                    if (!portStr.empty() && portStr[0] == '-')
+                    {
+                        LOG_WRN("Stripping invalid port from ProxyPrefix authority ["
+                                << _schemeAuthority << ']');
+                        _schemeAuthority.erase(itColon);
+                    }
+                }
                 return;
             }
             else
