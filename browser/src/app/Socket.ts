@@ -488,7 +488,7 @@ class Socket {
 			let errorType: string = '';
 			let errorMsg: string;
 			let errorDetail: string | undefined;
-			const reason = event.reason;
+			const reason = event?.reason;
 			if (reason && reason.startsWith('error:')) {
 				var command = this.parseServerCmd(reason);
 				errorDetail = command.errorDetail;
