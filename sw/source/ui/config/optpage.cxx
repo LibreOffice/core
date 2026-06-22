@@ -112,6 +112,7 @@ SwContentOptPage::SwContentOptPage(weld::Container* pPage, weld::DialogControlle
     , m_xDrwCB(m_xBuilder->weld_check_button(u"drawings"_ustr))
     , m_xDrwImg(m_xBuilder->weld_widget(u"lockdrawings"_ustr))
     , m_xPostItCB(m_xBuilder->weld_check_button(u"comments"_ustr))
+    , m_xPostItImg(m_xBuilder->weld_widget(u"lockcomments"_ustr))
     , m_xSettingsFrame(m_xBuilder->weld_frame(u"settingsframe"_ustr))
     , m_xSettingsLabel(m_xBuilder->weld_label(u"settingslabel"_ustr))
     , m_xMetricLabel(m_xBuilder->weld_label(u"measureunitlabel"_ustr))
@@ -265,7 +266,7 @@ void SwContentOptPage::Reset(const SfxItemSet* rSet)
             officecfg::Office::WriterWeb::Content::Display::Note::isReadOnly();
         m_xPostItCB->set_active(pElemAttr->m_bNotes);
         m_xPostItCB->set_sensitive(!bReadOnly);
-        m_xPostItCB->set_visible(pElemAttr->m_bNotes);
+        m_xPostItImg->set_visible(bReadOnly);
 
         bReadOnly = !bWebOptionsPage ? officecfg::Office::Writer::Layout::Line::Guide::isReadOnly() :
             officecfg::Office::WriterWeb::Layout::Line::Guide::isReadOnly();
