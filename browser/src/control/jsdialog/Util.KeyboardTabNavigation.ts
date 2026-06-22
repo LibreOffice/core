@@ -92,22 +92,30 @@ function handleTabKeydown(
 	event: KeyboardEvent,
 	tabs: HTMLButtonElement[],
 	contentDivs: HTMLElement[],
+	vertical: boolean,
 ) {
 	const currentTab = event.currentTarget as HTMLButtonElement;
 	const currentIndex = tabs.indexOf(currentTab);
 
 	if (currentIndex === -1) return;
 
+	// Per the WAI-ARIA tabs pattern the axis that moves between tabs follows
+	// the rail orientation: Up/Down for a vertical rail, Left/Right for a
+	// horizontal row. The cross axis key enters the panel.
+	const prevTabKey = vertical ? 'ArrowUp' : 'ArrowLeft';
+	const nextTabKey = vertical ? 'ArrowDown' : 'ArrowRight';
+	const enterPanelKey = vertical ? 'ArrowRight' : 'ArrowDown';
+
 	switch (event.key) {
-		case 'ArrowLeft':
+		case prevTabKey:
 			moveFocusToPreviousTab(tabs, currentIndex);
 			break;
 
-		case 'ArrowRight':
+		case nextTabKey:
 			moveFocusToNextTab(tabs, currentIndex);
 			break;
 
-		case 'ArrowDown':
+		case enterPanelKey:
 		case 'PageDown':
 			moveFocusIntoTabPage(contentDivs, currentTab);
 			break;
@@ -141,11 +149,12 @@ function handleTabKeydown(
 JSDialog.KeyboardTabNavigation = function (
 	tabs: HTMLButtonElement[],
 	contentDivs: HTMLElement[],
+	vertical?: boolean,
 ) {
 	// Add keydown listeners to all tabs
 	tabs.forEach((tab) => {
 		tab.addEventListener('keydown', (event: KeyboardEvent) => {
-			handleTabKeydown(event, tabs, contentDivs);
+			handleTabKeydown(event, tabs, contentDivs, vertical === true);
 		});
 	});
 };

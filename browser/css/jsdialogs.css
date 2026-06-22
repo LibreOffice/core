@@ -631,6 +631,66 @@ body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton
 	padding-block-start: 24px
 }
 
+/* Vertical tab rail: used when a dialog has more tabs than comfortably fit a
+   horizontal row. The rail sits on the inline-start side and the panel fills
+   the rest. The rail has a fixed width and is taken out of the normal flow, so
+   the panel beside it stays a plain block that sizes to its own content. The
+   dialog measures each tab page from that panel to size itself, the same as in
+   the horizontal layout, and the panel reserves a margin for the rail. */
+
+.ui-tabs-root.vertical {
+	position: relative;
+	--cool-vertical-rail-width: 150px;
+}
+
+.ui-tabs.vertical.jsdialog.ui-widget {
+	position: absolute;
+	inset-block: 0;
+	inset-inline-start: 0;
+	width: var(--cool-vertical-rail-width);
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	overflow-y: auto;
+	border-inline-end: 1px solid var(--color-border-lighter);
+}
+
+.ui-tabs-root.vertical > .ui-tabs-content.jsdialog {
+	margin-inline-start: var(--cool-vertical-rail-width);
+}
+
+.ui-tabs.vertical .ui-tab.jsdialog {
+	float: none !important;
+	width: 100%;
+	height: auto !important;
+	min-height: var(--header-height);
+	min-width: 0;
+	justify-content: flex-start !important;
+	text-align: start;
+	padding-block: 6px !important;
+	padding-inline: 8px !important;
+	margin-inline-end: 0 !important;
+	margin-block: 0 !important;
+	/* A transparent edge on every tab so selecting one does not shift the tab. */
+	border-inline-start: 3px solid transparent !important;
+}
+
+/* The title is a flex item of the tab button. Without this it keeps its
+   content's natural width and overflows the fixed rail instead of wrapping. */
+.ui-tabs.vertical .ui-tab.jsdialog .ui-tab-label {
+	min-width: 0;
+	white-space: normal;
+	overflow-wrap: break-word;
+}
+
+/* Selected vertical tab: a left-edge accent bar replaces the underline that
+   marks the selected tab in the horizontal row. */
+.ui-tabs.vertical .ui-tab.selected.jsdialog {
+	text-decoration: none;
+	border-inline-start-color: rgba(var(--doc-type), 1) !important;
+	border-radius: 0 var(--border-radius) var(--border-radius) 0 !important;
+}
+
 /* Expander */
 
 .jsdialog.ui-linkbutton,

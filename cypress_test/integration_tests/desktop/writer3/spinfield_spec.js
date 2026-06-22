@@ -19,6 +19,12 @@ describe(['tagdesktop'], 'Spinfield unit and button tests', function () {
 	}
 
 	function openDialogAndSwitchToBorder() {
+		// The Character dialog has more than four tabs, so its tabs render as a
+		// vertical rail and the dialog is taller than the default test height.
+		// Give it enough room to show without an inner scrollbar, so the border
+		// spacing fields stay in view after switching to the Border tab.
+		cy.viewport(2000, 800);
+
 		cy.then(function () {
 			win.app.map.sendUnoCommand('.uno:FontDialog');
 		});
