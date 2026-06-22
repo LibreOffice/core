@@ -1411,9 +1411,6 @@ void Dialog::Resize()
     if (!mpDialogImpl)
         return;
 
-    if (!mpDialogImpl)
-        return;
-
     bool bTunnelingEnabled = mpDialogImpl->m_bLOKTunneling;
     const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier();
     if (pNotifier && bTunnelingEnabled)
