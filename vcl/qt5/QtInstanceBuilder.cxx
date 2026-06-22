@@ -203,6 +203,7 @@ constexpr auto SUPPORTED_UI_FILES = frozen::make_unordered_set<std::u16string_vi
     u"modules/scalc/ui/sortdialog.ui",
     u"modules/scalc/ui/subtotaldialog.ui",
     u"modules/scalc/ui/tabcolordialog.ui",
+    u"modules/scalc/ui/textimportoptions.ui",
     u"modules/scalc/ui/ttestdialog.ui",
     u"modules/scalc/ui/validationdialog.ui",
     u"modules/scalc/ui/ztestdialog.ui",
