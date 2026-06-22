@@ -48,8 +48,6 @@ interface StarCalc
     ]
 
     SID_CHOOSE_DESIGN   [ ExecMethod = Execute; ]
-    SID_EURO_CONVERTER  [ ExecMethod = Execute; ]
-
 
     SID_OPEN_XML_FILTERSETTINGS [ ExecMethod = Execute; ]
 

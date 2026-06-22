@@ -370,9 +370,6 @@ void ScModule::Execute( SfxRequest& rReq )
         case SID_CHOOSE_DESIGN:
             SfxApplication::CallAppBasic( u"Template.Samples.ShowStyles"_ustr );
             break;
-        case SID_EURO_CONVERTER:
-            SfxApplication::CallAppBasic( u"Euro.ConvertRun.Main"_ustr );
-            break;
         case SID_AUTOSPELL_CHECK:
             {
                 bool bSet;
