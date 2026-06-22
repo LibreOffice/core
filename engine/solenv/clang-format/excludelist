@@ -1203,6 +1203,7 @@ comphelper/source/container/enumhelper.cxx
 comphelper/source/container/interfacecontainer2.cxx
 comphelper/source/container/namecontainer.cxx
 comphelper/source/eventattachermgr/eventattachermgr.cxx
+comphelper/source/misc/DirectoryHelper.cxx
 comphelper/source/misc/OAccessible.cxx
 comphelper/source/misc/accessibleeventnotifier.cxx
 comphelper/source/misc/accessiblekeybindinghelper.cxx
