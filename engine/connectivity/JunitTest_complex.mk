@@ -17,14 +17,9 @@ $(eval $(call gb_JunitTest_set_defs,connectivity_complex,\
 	-Dorg.openoffice.test.arg.sce=$(SRCDIR)/connectivity/qa/scenarios.sce \
 ))
 
-$(eval $(call gb_JunitTest_use_externals,connectivity_complex,\
-	hsqldb \
-))
-
 $(eval $(call gb_JunitTest_add_sourcefiles,connectivity_complex,\
 	connectivity/qa/complex/connectivity/DBaseDriverTest \
 	connectivity/qa/complex/connectivity/FlatFileAccess \
-	connectivity/qa/complex/connectivity/HsqlDriverTest \
 	connectivity/qa/complex/connectivity/JdbcLongVarCharTest \
 	connectivity/qa/complex/connectivity/SubTestCase \
 	connectivity/qa/complex/connectivity/TestCase \
@@ -32,17 +27,12 @@ $(eval $(call gb_JunitTest_add_sourcefiles,connectivity_complex,\
 	connectivity/qa/complex/connectivity/dbase/DBaseNumericFunctions \
 	connectivity/qa/complex/connectivity/dbase/DBaseSqlTests \
 	connectivity/qa/complex/connectivity/dbase/DBaseStringFunctions \
-	connectivity/qa/complex/connectivity/hsqldb/TestCacheSize \
 	connectivity/qa/connectivity/tools/AbstractDatabase \
-	connectivity/qa/connectivity/tools/CRMDatabase \
 	connectivity/qa/connectivity/tools/CsvDatabase \
 	connectivity/qa/connectivity/tools/DataSource \
 	connectivity/qa/connectivity/tools/DatabaseAccess \
 	connectivity/qa/connectivity/tools/DbaseDatabase \
 	connectivity/qa/connectivity/tools/FlatFileDatabase \
-	connectivity/qa/connectivity/tools/HsqlColumnDescriptor \
-	connectivity/qa/connectivity/tools/HsqlDatabase \
-	connectivity/qa/connectivity/tools/HsqlTableDescriptor \
 	connectivity/qa/connectivity/tools/QueryDefinition \
 	connectivity/qa/connectivity/tools/RowSet \
 	connectivity/qa/connectivity/tools/sdb/Connection \

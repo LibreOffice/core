@@ -11583,7 +11583,6 @@ connectivity::sdbcx::OUser::getPrivileges(rtl::OUString const&, int)
 connectivity_calc_ODriver
 connectivity_dbase_ODriver
 connectivity_flat_ODriver
-connectivity_hsqldb_ODriverDelegator_implementation
 connectivity_writer_ODriver
 construct_duals
 construct_sensitivity_duals

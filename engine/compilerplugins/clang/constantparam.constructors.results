@@ -78,10 +78,6 @@ connectivity/source/inc/flat/ETable.hxx:76
     void connectivity::flat::OFlatTable::OFlatTable(class connectivity::sdbcx::OCollection *,class connectivity::flat::OFlatConnection *,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
     const class rtl::OUString & CatalogName
     ""
-connectivity/source/inc/hsqldb/HView.hxx:40
-    void connectivity::hsqldb::HView::HView(const class com::sun::star::uno::Reference<class com::sun::star::sdbc::XConnection> &,_Bool,const class rtl::OUString &,const class rtl::OUString &)
-    _Bool _bCaseSensitive
-    isCaseSensitive()
 connectivity/source/inc/OColumn.hxx:68
     void connectivity::OColumn::OColumn(class rtl::OUString,const class rtl::OUString &,int,int,int,int,int)
     class rtl::OUString _aTableName

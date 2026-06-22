@@ -515,49 +515,6 @@
         "AS IS" BASIS, AND THE COPYRIGHT HOLDER HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
         ENHANCEMENTS, OR MODIFICATIONS.</p>
     </div>
-    <div class="HSQLDB">
-        <h2>HSQLDB</h2>
-        <p>The following software may be included in this product: HSQLDB. Use of any of this software is governed by
-        the terms of the license below:</p>
-        <h3>ORIGINAL LICENSE (a.k.a. "hypersonic_lic.txt")</h3>
-        <p>For content, code, and products originally developed by Thomas Mueller and the Hypersonic SQL Group:</p>
-        <p>Copyright (c) 1995-2000 by the Hypersonic SQL Group. All rights reserved. Redistribution and use in source
-        and binary forms, with or without modification, are permitted provided that the following conditions are
-        met:</p>
-        <p>Redistribution of source code must retain the above copyright notice, this list of conditions and the
-        following disclaimer.</p>
-        <p>Redistribution in binary form must reproduce the above copyright notice, this list of conditions and the
-        following disclaimer in the documentation and/or other materials provided with the distribution.</p>
-        <p>Neither the name of the Hypersonic SQL Group nor the names of its contributors may be used to endorse or
-        promote products derived from this software without specific prior written permission.</p>
-        <p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
-        WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
-        PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE HYPERSONIC SQL GROUP, OR CONTRIBUTORS BE LIABLE FOR
-        ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-        PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-        CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
-        OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
-        DAMAGE. This software consists of voluntary contributions made by many individuals on behalf of the Hypersonic
-        SQL Group.</p>
-        <h3>For work added by the HSQL Development Group (a.k.a. hsqldb_lic.txt)</h3>
-        <p>Copyright (c) 2001-2004, The HSQL Development Group All rights reserved.</p>
-        <p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that
-        the following conditions are met:</p>
-        <p>Redistribution of source code must retain the above copyright notice, this list of conditions and the
-        following disclaimer.</p>
-        <p>Redistribution in binary form must reproduce the above copyright notice, this list of conditions and the
-        following disclaimer in the documentation and/or other materials provided with the distribution.</p>
-        <p>Neither the name of the HSQL Development Group nor the names of its contributors may be used to endorse or
-        promote products derived from this software without specific prior written permission.</p>
-        <p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
-        WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
-        PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL HSQL DEVELOPMENT GROUP, HSQLDB.ORG, OR CONTRIBUTORS BE
-        LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-        LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-        INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-        (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-        POSSIBILITY OF SUCH DAMAGE.</p>
-    </div>
     <div class="HUNSPELL">
         <h2>Hunspell</h2>
         <p>The following software may be included in this product: Hunspell. Use of any of this software is governed by

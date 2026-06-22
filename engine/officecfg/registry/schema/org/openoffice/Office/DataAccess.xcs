@@ -113,16 +113,6 @@
         </info>
       </prop>
     </group>
-    <group oor:name="DriverClassPath">
-      <info>
-        <desc>Specifies the path or jar to the Java driver class.</desc>
-      </info>
-      <prop oor:name="Path" oor:type="xs:string">
-        <info>
-          <desc>Specifies the class path where the JDBC driver class can be found.</desc>
-        </info>
-      </prop>
-    </group>
   </templates>
   <component>
     <info/>
@@ -192,7 +182,7 @@
         <info>
           <desc>Specifies order of database drivers in which they should be asked if the accept the connection string.</desc>
         </info>
-        <value oor:separator=";">com.sun.star.comp.sdbc.ODBCDriver;com.sun.star.comp.sdbc.JDBCDriver</value>
+        <value oor:separator=";">com.sun.star.comp.sdbc.ODBCDriver</value>
       </prop>
     </group>
     <group oor:name="ConnectionPool">
@@ -208,17 +198,6 @@
       <set oor:name="DriverSettings" oor:node-type="DriverPooling">
         <info>
           <desc>Specifies the connection pooling of used database drivers.</desc>
-        </info>
-      </set>
-    </group>
-    <group oor:name="JDBC">
-      <info>
-        <desc>Specifies all information which is needed for the connections established using JDBC.</desc>
-      </info>
-      <set oor:name="DriverClassPaths" oor:node-type="DriverClassPath">
-        <info>
-          <desc>Specifies the class paths where to find JDBC database drivers. The node name specifies the name
-            of the JDBC driver which is to be loaded.</desc>
         </info>
       </set>
     </group>
@@ -484,21 +463,6 @@
               <desc>Specifies the notes.</desc>
             </info>
           </prop>
-        </group>
-      </group>
-      <group oor:name="com.sun.star.sdbcx.comp.hsqldb.Driver">
-        <info>
-          <desc>Specifies settings for the driver accessing HSQL databases embedded into OpenOffice.org
-            database documents (.odb)</desc>
-        </info>
-        <group oor:name="PermittedJavaMethods" oor:extensible="true">
-          <info>
-            <desc>HSQLDB features calling Java code directly from SQL statements. For security
-              reasons, this is restricted to classes from the org.hsqldb.Library package,
-              the java.lang.math package, plus any methods specified in this configuration
-              setting. If a method specification ends with .*, then all methods
-              from the respective package are permitted.</desc>
-          </info>
         </group>
       </group>
     </group>

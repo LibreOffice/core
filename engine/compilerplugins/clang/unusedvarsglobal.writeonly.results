@@ -2,8 +2,6 @@ basctl/source/basicide/localizationmgr.cxx:58
     OUStringLiteral<2> aSemi
 chart2/source/view/inc/ViewDefines.hxx:29
     double ZDIRECTION
-connectivity/source/drivers/hsqldb/HDriver.cxx:377
-    Reference<XTerminateListener> s_xTerminateListener
 cppuhelper/source/servicemanager.cxx:2008
     std::vector<css::uno::Mapping> maMaps
 forms/source/inc/frm_strings.hxx:216

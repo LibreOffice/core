@@ -649,9 +649,6 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Java_Classpath_Urls
     Section = "Bootstrap";
     Key = "URE_MORE_JAVA_CLASSPATH_URLS";
     Value = "";
-#ifdef SYSTEM_HSQLDB
-    ValueList1 = HSQLDB_JAR;
-#endif
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Bin_Dir

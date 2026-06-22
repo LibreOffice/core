@@ -36,16 +36,6 @@ $(eval $(call gb_Module_add_l10n_targets,connectivity,\
        AllLangMoTarget_cnr \
 ))
 
-ifneq ($(ENABLE_JAVA),)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Configuration_hsqldb \
-	Configuration_jdbc \
-	Jar_sdbc_hsqldb \
-	Library_hsqldb \
-	Library_jdbc \
-))
-endif
-
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_macab \

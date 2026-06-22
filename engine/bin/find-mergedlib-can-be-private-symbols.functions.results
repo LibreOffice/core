@@ -18136,7 +18136,6 @@ connectivity::sdbcx::OUser::revokePrivileges(rtl::OUString const&, int, int)
 connectivity_calc_ODriver
 connectivity_dbase_ODriver
 connectivity_flat_ODriver
-connectivity_hsqldb_ODriverDelegator_implementation
 connectivity_writer_ODriver
 constructContainer
 constructStream

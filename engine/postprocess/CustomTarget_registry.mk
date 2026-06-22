@@ -410,13 +410,6 @@ postprocess_FILES_main += \
 postprocess_DRIVERS += evoab
 endif
 
-ifeq ($(ENABLE_JAVA),TRUE)
-postprocess_FILES_main += \
-	$(call gb_XcuModuleTarget_get_target,connectivity/registry/hsqldb)/org/openoffice/Office/DataAccess/Drivers-hsqldb.xcu \
-	$(call gb_XcuModuleTarget_get_target,connectivity/registry/jdbc)/org/openoffice/Office/DataAccess/Drivers-jdbc.xcu
-postprocess_DRIVERS += hsqldb jdbc
-endif
-
 ifeq (MACOSX,$(OS))
 postprocess_FILES_main += \
 	$(call gb_XcuModuleTarget_get_target,connectivity/registry/macab)/org/openoffice/Office/DataAccess/Drivers-macab.xcu

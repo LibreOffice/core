@@ -48,19 +48,5 @@ excludelist:
     connectivity/source/drivers/file/FCatalog.cxx:
     # Actually used
     - com/sun/star/sdbc/XRow.hpp
-    connectivity/source/drivers/hsqldb/HStorageAccess.cxx:
-    # Needed for HSQLDB_DBG
-    - accesslog.hxx
-    connectivity/source/drivers/hsqldb/StorageNativeInputStream.cxx:
-    # Needed for HSQLDB_DBG
-    - accesslog.hxx
-    connectivity/source/drivers/hsqldb/StorageNativeOutputStream.cxx:
-    # Needed for HSQLDB_DBG
-    - accesslog.hxx
-    connectivity/source/drivers/jdbc/ConnectionLog.cxx:
-    # Actually used
-    - com/sun/star/util/Date.hpp
-    - com/sun/star/util/Time.hpp
-    - com/sun/star/util/DateTime.hpp
     connectivity/source/drivers/writer/WDatabaseMetaData.cxx:
     - com/sun/star/text/XTextDocument.hpp

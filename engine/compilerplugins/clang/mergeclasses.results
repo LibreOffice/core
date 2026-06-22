@@ -476,7 +476,6 @@ merge connectivity::OKeySet_Base with connectivity::OKeySet
 merge connectivity::evoab::(anonymous namespace)::OEvoabVersion36Helper with connectivity::evoab::(anonymous namespace)::OEvoabVersion38Helper
 merge connectivity::evoab::OEvoabVersionHelper with connectivity::evoab::(anonymous namespace)::OEvoabVersion36Helper
 merge connectivity::file::OStatement_Base with connectivity::file::OStatement_BASE2
-merge connectivity::hsqldb::IMethodGuardAccess with connectivity::hsqldb::OHsqlConnection
 merge connectivity::java_lang_Exception with connectivity::java_sql_SQLException_BASE
 merge connectivity::java_sql_Statement_Base with connectivity::OStatement_BASE2
 merge connectivity::odbc::Functions with (anonymous namespace)::ORealOdbcDriver

@@ -16,6 +16,4 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 -o complex.connectivity.DBaseDriverTest
--o complex.connectivity.HsqlDriverTest
-#-o complex.connectivity.JdbcLongVarCharTest
 -o complex.connectivity.FlatFileAccess

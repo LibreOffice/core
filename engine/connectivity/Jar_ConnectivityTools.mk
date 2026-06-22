@@ -25,15 +25,11 @@ $(eval $(call gb_Jar_set_packageroot,ConnectivityTools,connectivity))
 
 $(eval $(call gb_Jar_add_sourcefiles,ConnectivityTools,\
 	connectivity/qa/connectivity/tools/AbstractDatabase \
-	connectivity/qa/connectivity/tools/CRMDatabase \
 	connectivity/qa/connectivity/tools/CsvDatabase \
 	connectivity/qa/connectivity/tools/DatabaseAccess \
 	connectivity/qa/connectivity/tools/DataSource \
 	connectivity/qa/connectivity/tools/DbaseDatabase \
 	connectivity/qa/connectivity/tools/FlatFileDatabase \
-	connectivity/qa/connectivity/tools/HsqlColumnDescriptor \
-	connectivity/qa/connectivity/tools/HsqlDatabase \
-	connectivity/qa/connectivity/tools/HsqlTableDescriptor \
 	connectivity/qa/connectivity/tools/QueryDefinition \
 	connectivity/qa/connectivity/tools/RowSet \
 	connectivity/qa/connectivity/tools/sdb/Connection \

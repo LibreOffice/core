@@ -29,7 +29,6 @@ gperf
 gstreamer
 harfbuzz
 helpcontent
-hsqldb
 idlc
 instdir
 instsetoo

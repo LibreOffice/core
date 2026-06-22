@@ -2430,15 +2430,6 @@ AC_ARG_WITH(system-gpgmepp,
         [Use gpgmepp already on system]),,
     [with_system_gpgmepp="$with_system_libs"])
 
-AC_ARG_WITH(system-hsqldb,
-    AS_HELP_STRING([--with-system-hsqldb],
-        [Use hsqldb already on system.]))
-
-AC_ARG_WITH(hsqldb-jar,
-    AS_HELP_STRING([--with-hsqldb-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    HSQLDB_JAR=$withval)
-
 AC_ARG_WITH(system-jfreereport,
     AS_HELP_STRING([--with-system-jfreereport],
         [Use JFreeReport already on system.]),,
@@ -6699,9 +6690,6 @@ AC_MSG_CHECKING([for required Perl modules])
 dnl Digest::MD5 seems only be used for packaging, but is basically a given
 perl_use_string="use Cwd ; use Digest::MD5"
 perl_use_string_spp="use Cwd ; use Digest::MD5"
-if test "$with_system_hsqldb" = "yes"; then
-    perl_use_string="$perl_use_string ; use Archive::Zip"
-fi
 if test "$enable_openssl" = "yes" -a "$with_system_openssl" != "yes"; then
     # OpenSSL needs that to build
     if test -n "$WSL_ONLY_AS_HELPER"; then
@@ -10428,70 +10416,6 @@ no|disable)
     ;;
 esac
 AC_SUBST(ENABLE_LIBRELOGO)
-
-dnl ===================================================================
-dnl Check for system hsqldb
-dnl ===================================================================
-if test "$with_java" != "no" -a "$cross_compiling" != "yes"; then
-    AC_MSG_CHECKING([which hsqldb to use])
-    if test "$with_system_hsqldb" = "yes"; then
-        AC_MSG_RESULT([external])
-        SYSTEM_HSQLDB=TRUE
-        if test -z $HSQLDB_JAR; then
-            HSQLDB_JAR=/usr/share/java/hsqldb.jar
-        fi
-        if ! test -f $HSQLDB_JAR; then
-               AC_MSG_ERROR(hsqldb.jar not found.)
-        fi
-        AC_MSG_CHECKING([whether hsqldb is 1.8.0.x])
-        export HSQLDB_JAR
-        if $PERL -e \
-           'use Archive::Zip;
-            my $file = "$ENV{'HSQLDB_JAR'}";
-            my $zip = Archive::Zip->new( $file );
-            my $mf = $zip->contents ( "META-INF/MANIFEST.MF" );
-            if ( $mf =~ m/Specification-Version: 1.8.*/ )
-            {
-                push @l, split(/\n/, $mf);
-                foreach my $line (@l)
-                {
-                    if ($line =~ m/Specification-Version:/)
-                    {
-                        ($t, $version) = split (/:/,$line);
-                        $version =~ s/^\s//;
-                        ($a, $b, $c, $d) = split (/\./,$version);
-                        if ($c == "0" && $d > "8")
-                        {
-                            exit 0;
-                        }
-                        else
-                        {
-                            exit 1;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                exit 1;
-            }'; then
-            AC_MSG_RESULT([yes])
-        else
-            AC_MSG_ERROR([no, you need hsqldb >= 1.8.0.9 but < 1.8.1])
-        fi
-    else
-        AC_MSG_RESULT([internal])
-        SYSTEM_HSQLDB=
-        BUILD_TYPE="$BUILD_TYPE HSQLDB"
-        NEED_ANT=TRUE
-    fi
-else
-    if test "$with_java" != "no" -a -z "$HSQLDB_JAR"; then
-        BUILD_TYPE="$BUILD_TYPE HSQLDB"
-    fi
-fi
-AC_SUBST(SYSTEM_HSQLDB)
-AC_SUBST(HSQLDB_JAR)
 
 AC_SUBST(WITH_KRB5)
 AC_SUBST(WITH_GSSAPI)

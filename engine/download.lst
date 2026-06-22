@@ -384,11 +384,6 @@ HARFBUZZ_TARBALL := harfbuzz-13.1.1.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-HSQLDB_SHA256SUM := d30b13f4ba2e3b6a2d4f020c0dee0a9fb9fc6fbcc2d561f36b78da4bf3802370
-HSQLDB_TARBALL := 17410483b5b5f267aa18b7e00b65e6e0-hsqldb_1_8_0.zip
-# three static lines
-# so that git cherry-pick
-# will not run into conflicts
 HUNSPELL_SHA256SUM := 433274dac0619cb00c2e18b43a3dd3a9d50da5b5613fa9b5c21781e35dd76bc1
 HUNSPELL_TARBALL := hunspell-1.7.3.tar.gz
 # three static lines

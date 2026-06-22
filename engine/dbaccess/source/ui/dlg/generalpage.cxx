@@ -240,9 +240,6 @@ namespace dbaui
                 _inout_rDisplayName.clear();
         }
 
-        if ( eType ==  ::dbaccess::DST_EMBEDDED_HSQLDB )
-            _inout_rDisplayName.clear();
-
         return _inout_rDisplayName.getLength() > 0;
     }
 

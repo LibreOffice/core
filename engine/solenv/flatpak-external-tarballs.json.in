@@ -532,13 +532,6 @@
         "dest-filename": "@JFREEREPORT_FLUTE_TARBALL@"
     },
     {
-        "url": "https://dev-www.libreoffice.org/src/@HSQLDB_TARBALL@",
-        "sha256": "@HSQLDB_SHA256SUM@",
-        "type": "file",
-        "dest": "external/tarballs",
-        "dest-filename": "@HSQLDB_TARBALL@"
-    },
-    {
         "url": "https://dev-www.libreoffice.org/src/@JFREEREPORT_LIBBASE_TARBALL@",
         "sha256": "@JFREEREPORT_LIBBASE_SHA256SUM@",
         "type": "file",

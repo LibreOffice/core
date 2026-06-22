@@ -611,7 +611,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbpool2) \
 	deployment \
 	embobj \
-	$(if $(ENABLE_JAVA),hsqldb) \
 	i18nutil \
 	$(if $(and $(ENABLE_GTK3), $(filter LINUX %BSD SOLARIS,$(OS))), kitgtk) \
 	$(if $(and $(ENABLE_GTKTILEDVIEWER), $(filter WNT,$(OS))), kitgtk) \
@@ -691,7 +690,6 @@ $(eval $(call gb_Helper_register_jars_for_install,OOO,ooo, \
 	ScriptFramework \
 	ScriptProviderForJava \
 	$(if $(filter-out MACOSX,$(OS)),officebean) \
-	sdbc_hsqldb \
 	smoketest \
 	unoil \
 ))

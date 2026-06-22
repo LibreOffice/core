@@ -2759,26 +2759,6 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 endef
 
-ifneq ($(SYSTEM_HSQLDB),)
-
-define gb_LinkTarget__use_hsqldb
-
-$(call gb_LinkTarget_add_defs,$(1),\
-	-DSYSTEM_HSQLDB \
-	-DHSQLDB_JAR=\""file://$(HSQLDB_JAR)"\" \
-)
-
-endef
-
-else # !SYSTEM_HSQLDB
-
-define gb_LinkTarget__use_hsqldb
-
-endef
-
-endif # SYSTEM_HSQLDB
-
-
 ifneq (,$(filter TRUE,$(ENABLE_KF5) $(ENABLE_GTK3_KDE5)))
 
 define gb_LinkTarget__use_kf5
@@ -3398,32 +3378,6 @@ $(call gb_LinkTarget_add_libs,$(1),$(DCONF_LIBS))
 endef
 
 ### Jars ############################################################
-
-ifneq ($(SYSTEM_HSQLDB),)
-
-define gb_Jar__use_hsqldb
-$(call gb_Jar_use_system_jar,$(1),$(HSQLDB_JAR))
-endef
-define gb_JunitTest__use_hsqldb
-$(call gb_JunitTest_use_system_jar,$(1),$(HSQLDB_JAR))
-endef
-
-else # !SYSTEM_HSQLDB
-
-ifeq ($(ENABLE_JAVA),TRUE)
-$(eval $(call gb_Helper_register_jars_for_install,OOO,ooo, \
-	hsqldb \
-))
-endif
-
-define gb_Jar__use_hsqldb
-$(call gb_Jar_use_jar,$(1),hsqldb)
-endef
-define gb_JunitTest__use_hsqldb
-$(call gb_JunitTest_use_jar,$(1),hsqldb)
-endef
-
-endif # SYSTEM_HSQLDB
 
 # As a guide, Java-Websocket was packaged for Fedora 35
 # https://src.fedoraproject.org/rpms/Java-WebSocket/tree/f35

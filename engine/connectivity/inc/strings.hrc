@@ -108,14 +108,6 @@
 // MACAB
 #define STR_NO_TABLE                            NC_("STR_NO_TABLE", "No such table!")
 #define STR_NO_MAC_OS_FOUND                     NC_("STR_NO_MAC_OS_FOUND", "No suitable macOS installation was found.")
-// hsqldb
-#define STR_NO_STORAGE                          NC_("STR_NO_STORAGE", "The connection can not be established. No storage or URL was given.")
-#define STR_INVALID_FILE_URL                    NC_("STR_INVALID_FILE_URL", "The given URL contains no valid local file system path. Please check the location of your database file.")
-#define STR_NO_TABLE_CONTAINER                  NC_("STR_NO_TABLE_CONTAINER", "An error occurred while obtaining the connection’s table container.")
-#define STR_NO_TABLENAME                        NC_("STR_NO_TABLENAME", "There is no table named “$tablename$”.")
-#define STR_NO_DOCUMENTUI                       NC_("STR_NO_DOCUMENTUI", "The provided DocumentUI is not allowed to be NULL.")
-#define STR_ERROR_NEW_VERSION                   NC_("STR_ERROR_NEW_VERSION", "The connection could not be established. The database was created by a newer version of %PRODUCTNAME.")
-
 #define STR_ROW_SET_OPERATION_VETOED            NC_("STR_ROW_SET_OPERATION_VETOED", "The record operation has been vetoed.")
 #define STR_PARSER_CYCLIC_SUB_QUERIES           NC_("STR_PARSER_CYCLIC_SUB_QUERIES", "The statement contains a cyclic reference to one or more subqueries.")
 #define STR_DB_OBJECT_NAME_WITH_SLASHES         NC_("STR_DB_OBJECT_NAME_WITH_SLASHES", "The name must not contain any slashes (“/”).")

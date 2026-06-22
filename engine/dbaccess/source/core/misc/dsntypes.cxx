@@ -264,9 +264,6 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(std::u16string_view _rDsn) con
     if (sDsn.startsWithIgnoreAsciiCase("jdbc:"))
         return DST_JDBC;
 
-    if (sDsn.equalsIgnoreAsciiCase("sdbc:embedded:hsqldb"))
-        return DST_EMBEDDED_HSQLDB;
-
     if (sDsn.startsWithIgnoreAsciiCase("sdbc:embedded:"))
         return DST_EMBEDDED_UNKNOWN;
 
