@@ -3,6 +3,45 @@
 /* global describe it cy require beforeEach */
 var helper = require('../../common/helper');
 
+describe(['tagdesktop'], 'Formulabar in readonly mode', function() {
+
+	beforeEach(function() {
+		helper.setupAndLoadDocument('calc/formulabar.ods');
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
+		cy.getFrameWindow().its('app').then(function(app) {
+			app.map.setPermission('readonly');
+		});
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
+	});
+
+	it('Formula bar is visible', function() {
+		cy.cGet('#formulabar').should('be.visible');
+		cy.cGet('#toolbar-row').should('not.be.visible');
+	});
+
+	it('Edit buttons are disabled', function() {
+		cy.cGet('.unoFunctionDialog.formulabar').should('have.attr', 'disabled');
+		cy.cGet('#startformula').should('have.attr', 'disabled');
+		cy.cGet('.AutoSumMenu').should('have.attr', 'disabled');
+	});
+
+	it('Clicking the input field does not clear its content', function() {
+		var expectedText = '=SUM(Z101:Z104,AB101:AB104)';
+		cy.cGet('#sc_input_window .ui-custom-textarea-cursor-layer')
+			.should('have.text', expectedText);
+		cy.cGet('#sc_input_window').click();
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
+		cy.cGet('#sc_input_window .ui-custom-textarea-cursor-layer')
+			.should('have.text', expectedText);
+	});
+});
+
 describe(['tagdesktop'], 'Formulabar tests', function() {
 
 	beforeEach(function() {

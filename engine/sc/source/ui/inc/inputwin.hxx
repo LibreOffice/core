@@ -168,6 +168,8 @@ private:
     void* nTipVisible;
     bool bFormulaMode;
     std::set<OUString> aRangeNames;
+    ScTabViewShell* mpViewShell;
+    bool mbWasKitReadOnly;
 
 public:
     ScPosWnd(vcl::Window* pParent, ScTabViewShell* pViewSh);

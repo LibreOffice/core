@@ -1566,7 +1566,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 						updateFunction();
 						// in some cases we will get both property like state and disabled
 						// to handle it we will set disable var based on INCOMING info (ex: .uno:ParaRightToLft)
-						setDisabled(e.disabled || e.state == 'disabled');
+						setDisabled(e.disabled || e.state == 'disabled' || (data.readOnlyDisabled && builder.map.isReadOnlyMode()));
 						updateVisibility();
 					}
 					else if (data.hideWhenEnabled && e.commandName === data.hideWhenEnabled) {

@@ -422,6 +422,10 @@ function _formulabarEditControl(parentContainer, data, builder) {
 		text = text.split('\n');
 
 		_setSelection(builder, container, wrapper, cursorLayer, handleLayer, textLayer, text, startX, endX, startY, endY);
+		if (container._readOnly) {
+			var cursor = cursorLayer.querySelector('.cursor');
+			if (cursor) cursor.style.display = 'none';
+		}
 	};
 
 	container.enable = function() {
@@ -431,6 +435,12 @@ function _formulabarEditControl(parentContainer, data, builder) {
 	container.disable = function() {
 		window.L.DomUtil.addClass(container, 'disabled');
 		textLayer.setAttribute('contenteditable', 'false');
+	};
+	container.setReadOnly = function(readOnly) {
+		container._readOnly = readOnly;
+		textLayer.setAttribute('contenteditable', readOnly ? 'false' : 'true');
+		var cursor = cursorLayer.querySelector('.cursor');
+		if (cursor) cursor.style.display = readOnly ? 'none' : '';
 	};
 
 	var textSelectionHandler = function(event) {

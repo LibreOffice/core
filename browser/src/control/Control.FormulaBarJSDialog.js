@@ -13,7 +13,7 @@
  * JSDialog.FormulaBar - implementation of formulabar toolbar
  */
 
-/* global JSDialog _ _UNO UNOKey WindowId */
+/* global JSDialog _ _UNO UNOKey WindowId app */
 
 const EXPAND_FORMULA_BAR_TEXT = _('Expand Formula Bar');
 const FUNCTION_WIZARD_TEXT = _('Function Wizard');
@@ -26,6 +26,8 @@ class FormulaBar {
 		this.map.on('jsdialogupdate', this.onJSUpdate, this);
 		this.map.on('jsdialogaction', this.onJSAction, this);
 		this.map.on('doclayerinit', this.onDocLayerInit, this);
+		this._onUpdatePermission = this.onUpdatePermission.bind(this);
+		app.events.on('updatepermission', this._onUpdatePermission);
 
 		this.builder = new window.L.control.jsDialogBuilder(
 			{
@@ -44,14 +46,43 @@ class FormulaBar {
 		this.map.off('formulabar', this.onFormulaBar, this);
 		this.map.off('jsdialogupdate', this.onJSUpdate, this);
 		this.map.off('jsdialogaction', this.onJSAction, this);
-
 		this.map.off('doclayerinit', this.onDocLayerInit, this);
+		app.events.off('updatepermission', this._onUpdatePermission);
 	}
 
 	onDocLayerInit() {
 		var docType = this.map.getDocType();
-		if (docType == 'spreadsheet')
+		if (docType == 'spreadsheet') {
 			this.showFormulabar();
+			this._updateEditButtons();
+		}
+	}
+
+	onUpdatePermission() {
+		if (this.map.getDocType() == 'spreadsheet')
+			this._updateEditButtons();
+	}
+
+	_updateEditButtons() {
+		var enabled = !this.map.isReadOnlyMode();
+		for (var btn of ['functiondialog', 'AutoSumMenu', 'startformula'])
+			this._setButtonEnabled(btn, enabled);
+		var inputField = this.getInputField();
+		if (inputField)
+			inputField.setReadOnly(!enabled);
+	}
+
+	_setButtonEnabled(action, enabled) {
+		this.onJSAction({
+			data: {
+				jsontype: 'formulabar',
+				id: this.builder.windowId,
+				data: {
+					'control_id': action,
+					'action_type': enabled ? 'enable' : 'disable'
+				}
+			}
+		});
 	}
 
 	createFormulabar(text) {
@@ -66,6 +97,7 @@ class FormulaBar {
 							type: 'toolitem',
 							text: FUNCTION_WIZARD_TEXT,
 							command: '.uno:FunctionDialog',
+							readOnlyDisabled: true,
 							accessibility: { focusBack: true, combination: 'ZF' }
 						},
 						{
@@ -75,6 +107,7 @@ class FormulaBar {
 							noLabel: true,
 							text: _('Select Function'),
 							command: '.uno:AutoSumMenu',
+							readOnlyDisabled: true,
 							accessibility: { focusBack: true, combination: 'AS' }
 						},
 						{
@@ -123,7 +156,8 @@ class FormulaBar {
 							id: 'functiondialog',
 							type: 'toolitem',
 							text: FUNCTION_WIZARD_TEXT,
-							command: '.uno:FunctionDialog'
+							command: '.uno:FunctionDialog',
+							readOnlyDisabled: true
 						}, {
 							id: 'sc_input_window',
 							type: 'formulabaredit',
@@ -198,6 +232,8 @@ class FormulaBar {
 			if (eventType === 'keypress' && data === UNOKey.RETURN || data === UNOKey.ESCAPE)
 				map.focus();
 			else if (eventType === 'grab_focus') {
+				if (app.isReadOnly())
+					return;
 				this.focusField();
 				map.onFormulaBarFocus();
 			}

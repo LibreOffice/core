@@ -2277,6 +2277,8 @@ ScPosWnd::ScPosWnd(vcl::Window* pParent, ScTabViewShell* pViewShell)
     , m_nAsyncGetFocusId(nullptr)
     , nTipVisible(nullptr)
     , bFormulaMode(false)
+    , mpViewShell(pViewShell)
+    , mbWasKitReadOnly(false)
 {
     InitControlBase(m_xWidget.get());
 
@@ -2382,15 +2384,20 @@ void ScPosWnd::FillRangeNames(bool initialize)
         }
     }
 
-    if (!bFormulaMode && !initialize && aSet == aRangeNames)
+    bool bKitReadOnly = mpViewShell && mpViewShell->IsKitReadOnlyView();
+    if (!bFormulaMode && !initialize && aSet == aRangeNames && bKitReadOnly == mbWasKitReadOnly)
         return;
 
     aRangeNames = aSet;
+    mbWasKitReadOnly = bKitReadOnly;
 
     m_xWidget->clear();
     m_xWidget->freeze();
-    m_xWidget->append_text(ScResId(STR_MANAGE_NAMES));
-    m_xWidget->append_separator(u"separator"_ustr);
+    if (!bKitReadOnly)
+    {
+        m_xWidget->append_text(ScResId(STR_MANAGE_NAMES));
+        m_xWidget->append_separator(u"separator"_ustr);
+    }
     for (const auto& rItem : aSet)
     {
         m_xWidget->append_text(rItem);
@@ -2633,6 +2640,8 @@ void ScPosWnd::DoEnter()
                 }
                 else if ( eType == SC_NAME_INPUT_DEFINE )
                 {
+                    if ( pViewSh->IsKitReadOnlyView() )
+                        return;
                     ScRangeName& rNames = rDoc.GetRangeName();
                     ScRange aSelection;
                     if ( !rNames.findByUpperName(ScGlobal::getCharClass().uppercase(aText)) &&
@@ -2651,6 +2660,8 @@ void ScPosWnd::DoEnter()
                 }
                 else if (eType == SC_MANAGE_NAMES)
                 {
+                    if ( pViewSh->IsKitReadOnlyView() )
+                        return;
                     // dialog is only set below after calling 'ReleaseFocus_Impl' to ensure it gets focus
                     bOpenManageNamesDialog = true;
                 }

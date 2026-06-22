@@ -3171,6 +3171,7 @@ void DesktopKitTest::testCalcValidityDropdownInReadonlyMode()
     int viewId = pDocument->m_pDocumentClass->getView(pDocument);
     KitHelper::setViewReadOnly(viewId, true);
     Scheduler::ProcessEventsToIdle();
+    aView.m_JSONDialog.clear();
 
     // Select row 1 from column 1.
     pDocument->pClass->postMouseEvent(pDocument, KIT_MOUSEEVENT_MOUSEBUTTONDOWN, 1000, 150, 1, 1, 0);

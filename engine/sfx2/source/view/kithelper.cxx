@@ -37,6 +37,7 @@
 #include <vcl/window.hxx>
 #include <sal/log.hxx>
 #include <sfx2/app.hxx>
+#include <svl/hint.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/msg.hxx>
@@ -406,7 +407,13 @@ void KitHelper::setViewReadOnly(int nId, bool readOnly)
         // SfxBindings caches slot states; flip needs an invalidate or
         // disabled-during-readonly slots stay stale once editable again.
         if (bChanged)
+        {
             pViewShell->GetViewFrame().GetBindings().InvalidateAll(true);
+            // ScPosWnd builds its dropdown at construction time before kit-RO
+            // is established. Broadcast ScAreasChanged so it rebuilds now that
+            // the readonly flag is set and can be checked correctly.
+            SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScAreasChanged));
+        }
     }
 }
 

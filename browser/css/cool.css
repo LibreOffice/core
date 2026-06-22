@@ -223,9 +223,14 @@ body {
 	font-family: var(--cool-font);
 }
 
-#toolbar-wrapper.readonly {
+#toolbar-wrapper.readonly:not(.spreadsheet) {
 	display: none;
 }
+
+#toolbar-wrapper.readonly.spreadsheet #toolbar-row {
+	display: none;
+}
+
 
 #map {
 	position: absolute;
