@@ -3,200 +3,202 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-06 18:17+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-06-23 08:01+0000\n"
+"Last-Translator: தமிழ்நேரம் <tamilneram247@gmail.com>\n"
+"Language-Team: Tamil <https://hosted.weblate.org/projects/collabora-online/"
+"collabora-office-macos-app/ta/>\n"
 "Language: ta\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 msgctxt "1UK-8n-QPP.title"
 msgid "Customize Toolbar…"
-msgstr ""
+msgstr "கருவிப்பட்டியைத் தனிப்பயனாக்கு…"
 
 #. Do not change the placeholder ProductName!
 msgctxt "1Xt-HY-uBw.title"
 msgid "ProductName"
-msgstr ""
+msgstr "தயாரிப்பு பெயர்"
 
 msgctxt "4J7-dP-txa.title"
 msgid "Enter Full Screen"
-msgstr ""
+msgstr "முழுத் திரையில் நுழையவும்"
 
 #. Do not change the placeholder ProductName!
 msgctxt "4sb-4s-VLi.title"
 msgid "Quit ProductName"
-msgstr ""
+msgstr "தயாரிப்புப் பெயரை விட்டு வெளியேறு"
 
 msgctxt "5QF-Oa-p0T.title"
 msgid "Edit"
-msgstr ""
+msgstr "தொகு"
 
 #. Do not change the placeholder ProductName!
 msgctxt "5kV-Vb-QxS.title"
 msgid "About ProductName"
-msgstr ""
+msgstr "தயாரிப்பு பெயர் பற்றி"
 
 msgctxt "6dh-zS-Vam.title"
 msgid "Redo"
-msgstr ""
+msgstr "மீண்டும்செய்"
 
 msgctxt "AYu-sK-qS6.title"
 msgid "Main Menu"
-msgstr ""
+msgstr "ப்ளே பட்டியல்"
 
 msgctxt "BOF-NM-1cW.title"
 msgid "Preferences…"
-msgstr ""
+msgstr "விருப்பத்தேர்வுகள்…"
 
 msgctxt "Bw7-FT-i3A.title"
 msgid "Save As…"
-msgstr ""
+msgstr "இவ்வாறு சேமி…"
 
 msgctxt "DVo-aG-piG.title"
 msgid "Close"
-msgstr ""
+msgstr "மூடு"
 
 msgctxt "F2S-fz-NVQ.title"
 msgid "Help"
-msgstr ""
+msgstr "உதவி"
 
 msgctxt "H8h-7b-M4v.title"
 msgid "View"
-msgstr ""
+msgstr "பார்வை"
 
 msgctxt "HyV-fh-RgO.title"
 msgid "View"
-msgstr ""
+msgstr "பார்வை"
 
 msgctxt "IAo-SY-fd9.title"
 msgid "Open…"
-msgstr ""
+msgstr "திற…"
 
 msgctxt "KaW-ft-85H.title"
 msgid "Revert to Saved"
-msgstr ""
+msgstr "சேமித்ததாக மாற்றவும்"
 
 msgctxt "Kd2-mp-pUS.title"
 msgid "Show All"
-msgstr ""
+msgstr "அனைத்தையும் காட்டு"
 
 msgctxt "LE2-aR-0XJ.title"
 msgid "Bring All to Front"
-msgstr ""
+msgstr "அனைத்தையும் முன்னால் கொண்டு வாருங்கள்"
 
 msgctxt "NMo-om-nkz.title"
 msgid "Services"
-msgstr ""
+msgstr "சேவைகள்"
 
 msgctxt "OY7-WF-poV.title"
 msgid "Minimize"
-msgstr ""
+msgstr "குறைக்கவும்"
 
 #. Do not change the placeholder ProductName!
 msgctxt "Olw-nP-bQN.title"
 msgid "Hide ProductName"
-msgstr ""
+msgstr "தயாரிப்பு பெயரை மறை"
 
 msgctxt "R4o-n2-Eq4.title"
 msgid "Zoom"
-msgstr ""
+msgstr "பெரிதாக்கு"
 
 msgctxt "Td7-aD-5lo.title"
 msgid "Window"
-msgstr ""
+msgstr "சாளரம்"
 
 msgctxt "Vdr-fp-XzO.title"
 msgid "Hide Others"
-msgstr ""
+msgstr "மற்றவை மறை"
 
 msgctxt "W48-6f-4Dl.title"
 msgid "Edit"
-msgstr ""
+msgstr "தொகு"
 
 msgctxt "Was-JA-tGl.title"
 msgid "New"
-msgstr ""
+msgstr "புதிய"
 
 msgctxt "WeT-3V-zwk.title"
 msgid "Paste and Match Style"
-msgstr ""
+msgstr "பேச்ட் மற்றும் மேட்ச் பாணி"
 
 msgctxt "aTl-1u-JFS.title"
 msgid "Print…"
-msgstr ""
+msgstr "அச்சிடுக…"
 
 msgctxt "aUF-d1-5bR.title"
 msgid "Window"
-msgstr ""
+msgstr "சாளரம்"
 
 msgctxt "bib-Uj-vzu.title"
 msgid "File"
-msgstr ""
+msgstr "கோப்பு"
 
 msgctxt "dMs-cI-mzQ.title"
 msgid "File"
-msgstr ""
+msgstr "கோப்பு"
 
 msgctxt "dRJ-4n-Yzg.title"
 msgid "Undo"
-msgstr ""
+msgstr "செயல்தவிர்"
 
 msgctxt "gVA-U4-sdL.title"
 msgid "Paste"
-msgstr ""
+msgstr "ஒட்டு"
 
 msgctxt "hz9-B4-Xy5.title"
 msgid "Services"
-msgstr ""
+msgstr "சேவைகள்"
 
 msgctxt "kIP-vf-haE.title"
 msgid "Show Sidebar"
-msgstr ""
+msgstr "பக்கப்பட்டியைக் காட்டு"
 
 msgctxt "oas-Oc-fiZ.title"
 msgid "Open Recent"
-msgstr ""
+msgstr "அண்மைக் கால திற"
 
 msgctxt "pxx-59-PXV.title"
 msgid "Save…"
-msgstr ""
+msgstr "சேமி…"
 
 msgctxt "qIS-W8-SiK.title"
 msgid "Page Setup…"
-msgstr ""
+msgstr "பக்க அமைவு…"
 
 msgctxt "snW-S8-Cw5.title"
 msgid "Show Toolbar"
-msgstr ""
+msgstr "கருவிப்பட்டியைக் காட்டு"
 
 msgctxt "tXI-mr-wws.title"
 msgid "Open Recent"
-msgstr ""
+msgstr "அண்மைக் கால திற"
 
 #. Do not change the placeholder ProductName!
 msgctxt "uQy-DD-JDr.title"
 msgid "ProductName"
-msgstr ""
+msgstr "தயாரிப்பு பெயர்"
 
 msgctxt "uRl-iY-unG.title"
 msgid "Cut"
-msgstr ""
+msgstr "வெட்டு"
 
 msgctxt "vFu-3Y-2xa.title"
 msgid "Window"
-msgstr ""
+msgstr "சாளரம்"
 
 msgctxt "vNY-rz-j42.title"
 msgid "Clear Menu"
-msgstr ""
+msgstr "மெனுவை அழிக்கவும்"
 
 msgctxt "wpr-3q-Mcd.title"
 msgid "Help"
-msgstr ""
+msgstr "உதவி"
 
 msgctxt "x3v-GG-iWU.title"
 msgid "Copy"
-msgstr ""
+msgstr "நகலெடு"
