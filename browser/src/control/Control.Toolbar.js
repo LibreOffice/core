@@ -658,6 +658,14 @@ function insertShapes(shapeType, grid = document.getElementsByClassName('inserts
 	}
 }
 
+function focusFirstShapeOnOpen(grid) {
+	app.layoutingService.appendLayoutingTask(function () {
+		const focusables = JSDialog.GetFocusableElements(grid);
+		if (focusables && focusables.length)
+			focusables[0].focus();
+	});
+}
+
 function getShapesPopupElements(closeCallback) {
 	lastClosePopupCallback = closeCallback;
 
@@ -685,6 +693,8 @@ function getShapesPopupElements(closeCallback) {
 	wrapperContainer.appendChild(popUp);
 
 	popUp.appendChild(grid);
+
+	focusFirstShapeOnOpen(grid);
 
 	return wrapperContainer;
 }
@@ -716,6 +726,8 @@ function getConnectorsPopupElements(closeCallback) {
 	wrapperContainer.appendChild(wrapper);
 	wrapperContainer.appendChild(popUp);
 	popUp.appendChild(grid);
+
+	focusFirstShapeOnOpen(grid);
 
 	return wrapperContainer;
 }
