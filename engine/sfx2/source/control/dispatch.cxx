@@ -1717,7 +1717,7 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer)
                 if (!IsCommandAllowedInKitReadOnlyViewMode(pSlot->GetCommand(),
                                                            *xImp->pFrame->GetViewShell()))
                 {
-                    SAL_WARN("sfx.control", "SfxDispatcher::FindServer_: rejecting command '"
+                    SAL_INFO("sfx.control", "SfxDispatcher::FindServer_: rejecting command '"
                                                 << pSlot->GetCommand()
                                                 << "', not allowed in COKit read-only view mode");
                     return false;
