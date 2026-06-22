@@ -2258,8 +2258,8 @@ bool AnimationImporter::importAttributeValue( const Atom* pAtom, Any& rAny )
                 {
                     if ( nRecLen == 2 )
                     {
-                        sal_uInt8 nByte(0);
-                        mrStCtrl.ReadUChar( nByte );
+                        sal_Int8 nByte(0);
+                        mrStCtrl.ReadSChar( nByte );
                         rAny <<= nByte;
 
                         bOk = true;

@@ -202,7 +202,7 @@ bool SvxChartColorPaletteItem::QueryValue(uno::Any& rVal, const sal_uInt8 nMembe
 {
     if (nMemberId == MID_CHART_COLOR_PALETTE_TYPE)
     {
-        rVal <<= static_cast<sal_uInt8>(meType);
+        rVal <<= static_cast<sal_Int8>(meType);
         return true;
     }
     if (nMemberId == MID_CHART_COLOR_PALETTE_INDEX)
@@ -217,7 +217,7 @@ bool SvxChartColorPaletteItem::PutValue(const uno::Any& rVal, const sal_uInt8 nM
 {
     if (nMemberId == MID_CHART_COLOR_PALETTE_TYPE)
     {
-        sal_uInt8 nType = 0;
+        sal_Int8 nType = 0;
         rVal >>= nType;
         meType = static_cast<ChartColorPaletteType>(nType);
         return true;
@@ -281,12 +281,12 @@ bool SvxChartGradientPresetItem::QueryValue(uno::Any& rVal, const sal_uInt8 nMem
 {
     if (nMemberId == MID_CHART_GRADIENT_PRESET_VARIATION)
     {
-        rVal <<= static_cast<sal_uInt8>(meVariation);
+        rVal <<= static_cast<sal_Int8>(meVariation);
         return true;
     }
     if (nMemberId == MID_CHART_GRADIENT_PRESET_TYPE)
     {
-        rVal <<= static_cast<sal_uInt8>(meType);
+        rVal <<= static_cast<sal_Int8>(meType);
         return true;
     }
     return false;
@@ -296,14 +296,14 @@ bool SvxChartGradientPresetItem::PutValue(const uno::Any& rVal, const sal_uInt8 
 {
     if (nMemberId == MID_CHART_GRADIENT_PRESET_VARIATION)
     {
-        sal_uInt8 nVariation = 0;
+        sal_Int8 nVariation = 0;
         rVal >>= nVariation;
         meVariation = static_cast<ChartGradientVariation>(nVariation);
         return true;
     }
     if (nMemberId == MID_CHART_GRADIENT_PRESET_TYPE)
     {
-        sal_uInt8 eType = 0;
+        sal_Int8 eType = 0;
         rVal >>= eType;
         meType = static_cast<ChartGradientType>(eType);
         return true;

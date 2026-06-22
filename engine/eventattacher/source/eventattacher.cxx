@@ -452,7 +452,7 @@ void FilterAllListenerImpl::convertToEventReturn( Any & rRet, const Type & rRetT
 
             case TypeClass_FLOAT:           rRet <<= float(0);  break;
             case TypeClass_DOUBLE:          rRet <<= 0.0;   break;
-            case TypeClass_BYTE:            rRet <<= sal_uInt8( 0 );    break;
+            case TypeClass_BYTE:            rRet <<= sal_Int8( 0 );    break;
             case TypeClass_SHORT:           rRet <<= sal_Int16( 0 );    break;
             case TypeClass_LONG:            rRet <<= sal_Int32( 0 );    break;
             case TypeClass_UNSIGNED_SHORT:  rRet <<= sal_uInt16( 0 );   break;
