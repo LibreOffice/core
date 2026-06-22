@@ -137,6 +137,33 @@ public:
     StanagLabel buildLabel(const OUString& rClassification, const std::vector<bool>& rSelected,
                            const OUString& rCreationDateTime,
                            const OUString& rReviewDateTime) const;
+
+    /// Whether this policy is the one rLabel was created under, matched by OID
+    /// (the label's PolicyIdentifier/@URI against this policy's securityPolicyId/@id,
+    /// tolerating an optional "urn:oid:" prefix). Drives the choice between
+    /// structured edit (match) and the foreign-policy read-only/re-label flow.
+    bool matchesLabel(const StanagLabel& rLabel) const;
+};
+
+/// The SPIF policies provisioned for this session (org + user). The label dialog
+/// offers all of them; an existing label is matched to one by OID.
+class SW_DLLPUBLIC SpifPolicySet
+{
+public:
+    std::vector<SpifPolicy> aPolicies;
+
+    /// Parse rFileUrl as a SPIF policy and append it on success. Returns false if
+    /// it is unreadable or not a SPIF document.
+    bool loadFile(const OUString& rFileUrl);
+
+    /// Parse every *.xml directly under rDirUrl as a SPIF policy, appending those
+    /// that parse, in filename order. A missing directory or non-SPIF files are skipped.
+    void loadFromDir(const OUString& rDirUrl);
+
+    /// The provisioned policy rLabel was created under (first OID match), or nullptr.
+    const SpifPolicy* findByLabel(const StanagLabel& rLabel) const;
+
+    bool empty() const { return aPolicies.empty(); }
 };
 
 } // namespace sw::seclabel

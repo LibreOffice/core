@@ -10,11 +10,13 @@
 #include <SpifPolicy.hxx>
 
 #include <o3tl/string_view.hxx>
+#include <osl/file.hxx>
 #include <tools/XmlWalker.hxx>
 #include <tools/stream.hxx>
 
 #include <algorithm>
 #include <set>
+#include <vector>
 
 namespace sw::seclabel
 {
@@ -339,6 +341,65 @@ std::vector<SpifViolation> SpifPolicy::validate(const OUString& rClassification,
         }
     }
     return aViolations;
+}
+
+bool SpifPolicy::matchesLabel(const StanagLabel& rLabel) const
+{
+    if (aId.isEmpty())
+        return false;
+    OUString sLabelId;
+    if (!rLabel.aPolicyId.startsWithIgnoreAsciiCase(u"urn:oid:", &sLabelId))
+        sLabelId = rLabel.aPolicyId;
+    return sLabelId == aId;
+}
+
+bool SpifPolicySet::loadFile(const OUString& rFileUrl)
+{
+    SvFileStream aStream(rFileUrl, StreamMode::READ);
+    if (!aStream.IsOpen())
+        return false;
+    SpifPolicy aPolicy;
+    if (!aPolicy.parse(aStream))
+        return false;
+    aPolicies.push_back(std::move(aPolicy));
+    return true;
+}
+
+void SpifPolicySet::loadFromDir(const OUString& rDirUrl)
+{
+    osl::Directory aDir(rDirUrl);
+    if (aDir.open() != osl::FileBase::E_None)
+        return;
+
+    // Collect the *.xml entries first so loading order is deterministic (the
+    // directory's own iteration order is not).
+    std::vector<OUString> aFiles;
+    osl::DirectoryItem aItem;
+    while (aDir.getNextItem(aItem) == osl::FileBase::E_None)
+    {
+        osl::FileStatus aStatus(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL);
+        if (aItem.getFileStatus(aStatus) != osl::FileBase::E_None)
+            continue;
+        if (aStatus.getFileType() == osl::FileStatus::Directory)
+            continue;
+        const OUString sUrl = aStatus.getFileURL();
+        if (sUrl.endsWithIgnoreAsciiCase(u".xml"))
+            aFiles.push_back(sUrl);
+    }
+    std::sort(aFiles.begin(), aFiles.end());
+
+    for (const auto& rUrl : aFiles)
+        loadFile(rUrl);
+}
+
+const SpifPolicy* SpifPolicySet::findByLabel(const StanagLabel& rLabel) const
+{
+    for (const auto& rPolicy : aPolicies)
+    {
+        if (rPolicy.matchesLabel(rLabel))
+            return &rPolicy;
+    }
+    return nullptr;
 }
 
 bool SpifTagCategory::isSelectable(const OUString& rClassification) const

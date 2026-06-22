@@ -14,6 +14,7 @@
 #include <SpifPolicy.hxx>
 
 #include <tools/stream.hxx>
+#include <unotools/tempfile.hxx>
 
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
@@ -25,12 +26,16 @@ class SpifPolicyTest : public CppUnit::TestFixture
     void testValidate();
     void testValidateRelationships();
     void testBuildLabel();
+    void testMatchesLabel();
+    void testPolicySet();
 
     CPPUNIT_TEST_SUITE(SpifPolicyTest);
     CPPUNIT_TEST(testParse);
     CPPUNIT_TEST(testValidate);
     CPPUNIT_TEST(testValidateRelationships);
     CPPUNIT_TEST(testBuildLabel);
+    CPPUNIT_TEST(testMatchesLabel);
+    CPPUNIT_TEST(testPolicySet);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -288,6 +293,83 @@ void SpifPolicyTest::testBuildLabel()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aLabel.aCategories[0].aValues.size());
     CPPUNIT_ASSERT_EQUAL(u"CANADA"_ustr, aLabel.aCategories[0].aValues[0]);
     CPPUNIT_ASSERT_EQUAL(u"UNITED KINGDOM"_ustr, aLabel.aCategories[0].aValues[1]);
+}
+
+void SpifPolicyTest::testMatchesLabel()
+{
+    static const OString aSpif(
+        R"xml(<?xml version="1.0" encoding="utf-8"?>
+<spif:SPIF xmlns:spif="http://www.xmlspif.org/spif" schemaVersion="1.0" version="1">
+  <spif:securityPolicyId name="SPIF Collabora" id="1.2.826.0.1310.1.2.0" />
+  <spif:securityClassifications>
+    <spif:securityClassification name="SECRET" color="red" lacv="4" hierarchy="4" />
+  </spif:securityClassifications>
+</spif:SPIF>)xml"_ostr);
+    SvMemoryStream aStream(const_cast<char*>(aSpif.getStr()), aSpif.getLength(), StreamMode::READ);
+    sw::seclabel::SpifPolicy aPolicy;
+    CPPUNIT_ASSERT(aPolicy.parse(aStream));
+
+    // A label naming this policy's OID (urn:oid: prefixed) is ours to edit.
+    sw::seclabel::StanagLabel aLabel;
+    aLabel.aPolicyId = u"urn:oid:1.2.826.0.1310.1.2.0"_ustr;
+    CPPUNIT_ASSERT(aPolicy.matchesLabel(aLabel));
+
+    // The bare OID (no urn:oid: prefix) matches too.
+    aLabel.aPolicyId = u"1.2.826.0.1310.1.2.0"_ustr;
+    CPPUNIT_ASSERT(aPolicy.matchesLabel(aLabel));
+
+    // A different OID is a foreign policy.
+    aLabel.aPolicyId = u"urn:oid:1.2.826.0.1310.9.9.9"_ustr;
+    CPPUNIT_ASSERT(!aPolicy.matchesLabel(aLabel));
+
+    // An empty policy URI never matches.
+    aLabel.aPolicyId.clear();
+    CPPUNIT_ASSERT(!aPolicy.matchesLabel(aLabel));
+}
+
+void SpifPolicyTest::testPolicySet()
+{
+    auto makeSpif = [](const char* pName, const char* pId) -> OString {
+        return OString::Concat("<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+                               "<spif:SPIF xmlns:spif=\"http://www.xmlspif.org/spif\" "
+                               "schemaVersion=\"1.0\" version=\"1\">"
+                               "<spif:securityPolicyId name=\"")
+               + pName + "\" id=\"" + pId
+               + "\" /><spif:securityClassifications>"
+                 "<spif:securityClassification name=\"SECRET\" color=\"red\" lacv=\"4\" "
+                 "hierarchy=\"4\" /></spif:securityClassifications></spif:SPIF>";
+    };
+
+    utl::TempFileNamed aTempDir(nullptr, /*bDirectory*/ true);
+    const OUString sDir = aTempDir.GetURL();
+
+    auto writeFile = [&sDir](const OUString& rName, const OString& rContent) {
+        SvFileStream aOut(sDir + "/" + rName, StreamMode::WRITE | StreamMode::TRUNC);
+        aOut.WriteBytes(rContent.getStr(), rContent.getLength());
+    };
+    writeFile(u"a.xml"_ustr, makeSpif("Policy A", "1.2.3"));
+    writeFile(u"b.xml"_ustr, makeSpif("Policy B", "4.5.6"));
+    writeFile(u"notspif.xml"_ustr, "<html/>"_ostr); // valid XML, wrong root -> skipped
+    writeFile(u"readme.txt"_ustr, makeSpif("Policy C", "7.8.9")); // not *.xml -> skipped
+
+    sw::seclabel::SpifPolicySet aSet;
+    aSet.loadFromDir(sDir);
+
+    // Only the two SPIF *.xml files load, in filename order.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aSet.aPolicies.size());
+    CPPUNIT_ASSERT_EQUAL(u"Policy A"_ustr, aSet.aPolicies[0].aName);
+    CPPUNIT_ASSERT_EQUAL(u"Policy B"_ustr, aSet.aPolicies[1].aName);
+
+    // findByLabel resolves a label's OID to the provisioned policy.
+    sw::seclabel::StanagLabel aLabel;
+    aLabel.aPolicyId = u"urn:oid:4.5.6"_ustr;
+    const sw::seclabel::SpifPolicy* pMatch = aSet.findByLabel(aLabel);
+    CPPUNIT_ASSERT(pMatch);
+    CPPUNIT_ASSERT_EQUAL(u"Policy B"_ustr, pMatch->aName);
+
+    // An OID none of the policies declare is foreign.
+    aLabel.aPolicyId = u"urn:oid:9.9.9"_ustr;
+    CPPUNIT_ASSERT(!aSet.findByLabel(aLabel));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SpifPolicyTest);

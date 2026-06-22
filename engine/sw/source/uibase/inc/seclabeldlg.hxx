@@ -25,11 +25,15 @@
 
 class SwWrtShell;
 
-// SPIF/STANAG security label dialog. Classifications and category tag sets come
-// from the SPIF policy; categories are shown as a flat checkable list.
+// SPIF/STANAG security label dialog. The provisioned policies populate the policy
+// selector; the chosen policy's classifications and category tag sets drive the
+// classification dropdown and the flat checkable category list.
 class SwSecurityLabelDlg final : public weld::GenericDialogController
 {
-    sw::seclabel::SpifPolicy m_aPolicy;
+    sw::seclabel::SpifPolicySet m_aPolicySet;
+    // The policy currently driving the editor (an entry of m_aPolicySet), or null
+    // when no policy is provisioned.
+    const sw::seclabel::SpifPolicy* m_pPolicy = nullptr;
     SwWrtShell& m_rSh;
 
     // Per category row: flat index of its owning tag, and whether that tag is
@@ -37,23 +41,40 @@ class SwSecurityLabelDlg final : public weld::GenericDialogController
     std::vector<sal_Int32> m_aRowTag;
     std::vector<bool> m_aTagSingle;
 
+    // The document carries a label whose policy this dialog cannot edit (its OID
+    // does not match the provisioned policy); the dialog shows it read-only and
+    // offers re-labeling. Cleared once the user chooses to re-label.
+    bool m_bForeignPolicy = false;
+
+    std::unique_ptr<weld::Widget> m_xEditBox;
+    std::unique_ptr<weld::ComboBox> m_xPolicy;
     std::unique_ptr<weld::ComboBox> m_xClassification;
     std::unique_ptr<weld::TreeView> m_xCategories;
     std::unique_ptr<weld::Label> m_xPreview;
     std::unique_ptr<weld::Label> m_xWarning;
     std::unique_ptr<weld::Button> m_xOkBtn;
+    std::unique_ptr<weld::Button> m_xRelabelBtn;
 
+    DECL_LINK(PolicyHdl, weld::ComboBox&, void);
     DECL_LINK(ClassificationHdl, weld::ComboBox&, void);
     DECL_LINK(CategoryToggleHdl, const weld::TreeView::iter_col&, void);
     DECL_LINK(OkHdl, weld::Button&, void);
+    DECL_LINK(RelabelHdl, weld::Button&, void);
 
     std::vector<bool> collectSelection() const;
     void applyLabel(const OUString& rClassification, const std::vector<bool>& rSelected);
+    void PopulatePolicies();
+    void PopulateClassifications();
     void PopulateCategories();
     void UpdatePreview();
+    // Make m_aPolicySet.aPolicies[nIndex] the active policy and rebuild the editor.
+    void setActivePolicy(int nIndex);
 
-    // Pre-select classification and categories from a label already in the document.
+    // Pre-select policy, classification and categories from a label already in the
+    // document, or enter the read-only foreign-policy view if its policy is not ours.
     void initFromExistingLabel();
+    // Show rLabel read-only and offer re-labeling (foreign/un-provisioned policy).
+    void enterForeignMode(const sw::seclabel::StanagLabel& rLabel);
 
 public:
     SwSecurityLabelDlg(weld::Window* pParent, SwWrtShell& rSh);

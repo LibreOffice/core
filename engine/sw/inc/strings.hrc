@@ -1410,6 +1410,8 @@
 #define STR_SECLABEL_MAX                        NC_("STR_SECLABEL_MAX", "Select at most %1 value(s) from '%2'.")
 #define STR_SECLABEL_EXCLUDED                   NC_("STR_SECLABEL_EXCLUDED", "'%1' cannot be combined with the current selection.")
 #define STR_SECLABEL_REQUIRED                   NC_("STR_SECLABEL_REQUIRED", "'%1' requires another category to be selected.")
+#define STR_SECLABEL_FOREIGN                    NC_("STR_SECLABEL_FOREIGN", "This document is labeled under policy '%1', which is not available here. You can view it, or re-label it under an available policy.")
+#define STR_SECLABEL_NOPOLICY                   NC_("STR_SECLABEL_NOPOLICY", "No security policies are available.")
 
 #define STR_WRITER_GLOBALDOC_FULLTYPE           NC_("STR_WRITER_GLOBALDOC_FULLTYPE", "%PRODUCTNAME %PRODUCTVERSION Master Document")
 

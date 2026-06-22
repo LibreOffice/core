@@ -25,7 +25,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uuid.h>
 #include <tools/datetime.hxx>
-#include <tools/stream.hxx>
 #include <rtl/bootstrap.hxx>
 #include <config_folders.h>
 #include <unotools/datetime.hxx>
@@ -106,37 +105,29 @@ SwSecurityLabelDlg::SwSecurityLabelDlg(weld::Window* pParent, SwWrtShell& rSh)
     : GenericDialogController(pParent, u"modules/swriter/ui/seclabeldialog.ui"_ustr,
                               u"SecurityLabelDialog"_ustr)
     , m_rSh(rSh)
+    , m_xEditBox(m_xBuilder->weld_widget(u"editbox"_ustr))
+    , m_xPolicy(m_xBuilder->weld_combo_box(u"policy"_ustr))
     , m_xClassification(m_xBuilder->weld_combo_box(u"classification"_ustr))
     , m_xCategories(m_xBuilder->weld_tree_view(u"categories"_ustr))
     , m_xPreview(m_xBuilder->weld_label(u"preview"_ustr))
     , m_xWarning(m_xBuilder->weld_label(u"seclabelwarning"_ustr))
     , m_xOkBtn(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xRelabelBtn(m_xBuilder->weld_button(u"relabel"_ustr))
 {
     m_xCategories->set_size_request(m_xCategories->get_approximate_digit_width() * 32,
                                     m_xCategories->get_height_rows(6));
-
-    SvFileStream aStream(getDevPolicyUrl(), StreamMode::READ);
-    if (aStream.IsOpen())
-        m_aPolicy.parse(aStream);
-
-    // Obsolete values are hidden for new labels (must still render when editing
-    // an existing label that uses them — once label loading exists).
-    for (const auto& rClass : m_aPolicy.aClassifications)
-    {
-        if (!rClass.bObsolete)
-            m_xClassification->append_text(rClass.aName);
-    }
-    if (m_xClassification->get_count())
-        m_xClassification->set_active(0);
-
     m_xCategories->enable_toggle_buttons(weld::ColumnToggleType::Check);
-    PopulateCategories();
 
+    m_aPolicySet.loadFile(getDevPolicyUrl());
+
+    PopulatePolicies();
     initFromExistingLabel();
 
+    m_xPolicy->connect_changed(LINK(this, SwSecurityLabelDlg, PolicyHdl));
     m_xClassification->connect_changed(LINK(this, SwSecurityLabelDlg, ClassificationHdl));
     m_xCategories->connect_toggled(LINK(this, SwSecurityLabelDlg, CategoryToggleHdl));
     m_xOkBtn->connect_clicked(LINK(this, SwSecurityLabelDlg, OkHdl));
+    m_xRelabelBtn->connect_clicked(LINK(this, SwSecurityLabelDlg, RelabelHdl));
 
     m_xWarning->set_label_type(weld::LabelType::Warning);
 
@@ -144,6 +135,56 @@ SwSecurityLabelDlg::SwSecurityLabelDlg(weld::Window* pParent, SwWrtShell& rSh)
 }
 
 SwSecurityLabelDlg::~SwSecurityLabelDlg() {}
+
+void SwSecurityLabelDlg::PopulatePolicies()
+{
+    m_xPolicy->clear();
+    for (const auto& rPolicy : m_aPolicySet.aPolicies)
+        m_xPolicy->append_text(rPolicy.aName);
+
+    if (m_aPolicySet.empty())
+    {
+        // Nothing to label with: hide the editor and Apply, leaving only the notice.
+        m_pPolicy = nullptr;
+        m_xWarning->set_label(SwResId(STR_SECLABEL_NOPOLICY));
+        m_xWarning->set_visible(true);
+        m_xEditBox->set_visible(false);
+        m_xOkBtn->set_visible(false);
+        return;
+    }
+
+    m_xPolicy->set_active(0);
+    setActivePolicy(0);
+}
+
+void SwSecurityLabelDlg::setActivePolicy(int nIndex)
+{
+    if (nIndex < 0 || nIndex >= static_cast<int>(m_aPolicySet.aPolicies.size()))
+    {
+        m_pPolicy = nullptr;
+        return;
+    }
+    m_pPolicy = &m_aPolicySet.aPolicies[nIndex];
+    PopulateClassifications();
+    PopulateCategories();
+}
+
+void SwSecurityLabelDlg::PopulateClassifications()
+{
+    m_xClassification->clear();
+    if (!m_pPolicy)
+        return;
+
+    // Obsolete values are hidden for new labels; initFromExistingLabel re-adds one
+    // when editing an existing label that uses it.
+    for (const auto& rClass : m_pPolicy->aClassifications)
+    {
+        if (!rClass.bObsolete)
+            m_xClassification->append_text(rClass.aName);
+    }
+    if (m_xClassification->get_count())
+        m_xClassification->set_active(0);
+}
 
 void SwSecurityLabelDlg::PopulateCategories()
 {
@@ -163,10 +204,12 @@ void SwSecurityLabelDlg::PopulateCategories()
     m_xCategories->clear();
     m_aRowTag.clear();
     m_aTagSingle.clear();
+    if (!m_pPolicy)
+        return;
 
     auto xIter = m_xCategories->make_iterator();
     sal_Int32 nTag = 0;
-    for (const auto& rTagSet : m_aPolicy.aTagSets)
+    for (const auto& rTagSet : m_pPolicy->aTagSets)
     {
         for (const auto& rTag : rTagSet.aTags)
         {
@@ -199,6 +242,20 @@ void SwSecurityLabelDlg::initFromExistingLabel()
     if (!sw::seclabel::readLabel(xModel, aLabel))
         return;
 
+    // A label written under a policy we don't have can't be edited structurally;
+    // show it read-only and offer re-labeling under an available policy.
+    const sw::seclabel::SpifPolicy* pMatch = m_aPolicySet.findByLabel(aLabel);
+    if (!pMatch)
+    {
+        enterForeignMode(aLabel);
+        return;
+    }
+
+    // Make the matching policy active in the selector and rebuild the editor for it.
+    const int nIndex = static_cast<int>(pMatch - m_aPolicySet.aPolicies.data());
+    m_xPolicy->set_active(nIndex);
+    setActivePolicy(nIndex);
+
     // Select the stored classification. An obsolete value is hidden for new
     // labels but must render when editing one that uses it, so append it.
     int nPos = m_xClassification->find_text(aLabel.aClassification);
@@ -227,6 +284,31 @@ void SwSecurityLabelDlg::initFromExistingLabel()
     }
 }
 
+void SwSecurityLabelDlg::enterForeignMode(const sw::seclabel::StanagLabel& rLabel)
+{
+    m_bForeignPolicy = true;
+
+    // The 4774 label is self-describing; reconstruct a readable summary from it,
+    // since the policy that defines its exact marking is not available here.
+    OUString sSummary = rLabel.aClassification;
+    for (const auto& rCategory : rLabel.aCategories)
+    {
+        for (const auto& rValue : rCategory.aValues)
+            sSummary += u" " + rValue;
+    }
+    m_xPreview->set_label(sSummary);
+
+    const OUString sPolicy = rLabel.aPolicyName.isEmpty() ? rLabel.aPolicyId : rLabel.aPolicyName;
+    m_xWarning->set_label(SwResId(STR_SECLABEL_FOREIGN).replaceFirst(u"%1", sPolicy));
+    m_xWarning->set_visible(true);
+
+    // View-only: hide the (provisioned-policy) editor and Apply. Offer Re-label only
+    // if there is a provisioned policy to re-label under.
+    m_xEditBox->set_visible(false);
+    m_xOkBtn->set_visible(false);
+    m_xRelabelBtn->set_visible(!m_aPolicySet.empty());
+}
+
 std::vector<bool> SwSecurityLabelDlg::collectSelection() const
 {
     const int nCount = m_xCategories->n_children();
@@ -238,13 +320,16 @@ std::vector<bool> SwSecurityLabelDlg::collectSelection() const
 
 void SwSecurityLabelDlg::UpdatePreview()
 {
+    if (m_bForeignPolicy || !m_pPolicy)
+        return; // the foreign/no-policy view owns the preview and notice
+
     const OUString sClassification = m_xClassification->get_active_text();
     const std::vector<bool> aSelected = collectSelection();
 
-    m_xPreview->set_label(m_aPolicy.buildMarking(sClassification, aSelected));
+    m_xPreview->set_label(m_pPolicy->buildMarking(sClassification, aSelected));
 
     OUString sWarning;
-    for (const auto& rViolation : m_aPolicy.validate(sClassification, aSelected))
+    for (const auto& rViolation : m_pPolicy->validate(sClassification, aSelected))
     {
         if (!sWarning.isEmpty())
             sWarning += u"\n";
@@ -295,14 +380,14 @@ void SwSecurityLabelDlg::applyLabel(const OUString& rClassification,
     aReview.AddYears(1);
 
     const sw::seclabel::StanagLabel aLabel
-        = m_aPolicy.buildLabel(rClassification, rSelected, utl::toISO8601(aNow.GetUNODateTime()),
-                               utl::toISO8601(aReview.GetUNODateTime()));
+        = m_pPolicy->buildLabel(rClassification, rSelected, utl::toISO8601(aNow.GetUNODateTime()),
+                                utl::toISO8601(aReview.GetUNODateTime()));
     const OUString sItemProps = sw::seclabel::buildItemProps(
         makeGuid(), u"urn:nato:stanag:4778:bindinginformation:1:0"_ustr);
     sw::seclabel::storeLabelPart(xModel, aLabel.toBindingXml(), sItemProps);
 
     sal_Int32 nColor = 0;
-    for (const auto& rClass : m_aPolicy.aClassifications)
+    for (const auto& rClass : m_pPolicy->aClassifications)
     {
         if (rClass.aName == rClassification)
         {
@@ -310,18 +395,38 @@ void SwSecurityLabelDlg::applyLabel(const OUString& rClassification,
             break;
         }
     }
-    sw::seclabel::applyMarking(xModel, m_aPolicy.buildMarking(rClassification, rSelected), nColor,
+    sw::seclabel::applyMarking(xModel, m_pPolicy->buildMarking(rClassification, rSelected), nColor,
                                getCurrentPageStyle(xModel));
+}
+
+IMPL_LINK_NOARG(SwSecurityLabelDlg, PolicyHdl, weld::ComboBox&, void)
+{
+    setActivePolicy(m_xPolicy->get_active());
+    UpdatePreview();
 }
 
 IMPL_LINK_NOARG(SwSecurityLabelDlg, OkHdl, weld::Button&, void)
 {
+    if (m_bForeignPolicy || !m_pPolicy)
+        return; // read-only foreign/no-policy view; nothing to apply
     const OUString sClassification = m_xClassification->get_active_text();
     const std::vector<bool> aSelected = collectSelection();
-    if (!m_aPolicy.validate(sClassification, aSelected).empty())
+    if (!m_pPolicy->validate(sClassification, aSelected).empty())
         return; // the warning label already shows why; keep the dialog open
     applyLabel(sClassification, aSelected);
     m_xDialog->response(RET_OK);
+}
+
+IMPL_LINK_NOARG(SwSecurityLabelDlg, RelabelHdl, weld::Button&, void)
+{
+    // Leave the read-only foreign view and start a fresh label under the policy
+    // selected in the selector: re-enable the editor, drop the notice, restore Apply.
+    m_bForeignPolicy = false;
+    m_xRelabelBtn->set_visible(false);
+    m_xEditBox->set_visible(true);
+    m_xOkBtn->set_visible(true);
+    setActivePolicy(m_xPolicy->get_active());
+    UpdatePreview();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
