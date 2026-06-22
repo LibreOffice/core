@@ -168,7 +168,7 @@ void NameContainer::replaceByName(const OUString& aName, const Any& aElement,
     if (maContainerListeners.getLength(guard) > 0)
     {
         ContainerEvent aEvent;
-        aEvent.Source = mpxEventSource;
+        aEvent.Source = rOwner.getXWeak();
         aEvent.Accessor <<= aName;
         aEvent.Element = aElement;
         aEvent.ReplacedElement = aOldElement;
@@ -181,7 +181,7 @@ void NameContainer::replaceByName(const OUString& aName, const Any& aElement,
     if (maChangesListeners.getLength(guard) > 0)
     {
         ChangesEvent aEvent;
-        aEvent.Source = mpxEventSource;
+        aEvent.Source = rOwner.getXWeak();
         aEvent.Base <<= aEvent.Source;
         aEvent.Changes = { { Any(aName), aElement, aOldElement } };
         maChangesListeners.notifyEach(guard, &XChangesListener::changesOccurred, aEvent);
@@ -206,7 +206,7 @@ void NameContainer::insertNoCheck(const OUString& aName, const Any& aElement,
     if (maContainerListeners.getLength(guard) > 0)
     {
         ContainerEvent aEvent;
-        aEvent.Source = mpxEventSource;
+        aEvent.Source = rOwner.getXWeak();
         aEvent.Accessor <<= aName;
         aEvent.Element = aElement;
         maContainerListeners.notifyEach(guard, &XContainerListener::elementInserted, aEvent);
@@ -218,7 +218,7 @@ void NameContainer::insertNoCheck(const OUString& aName, const Any& aElement,
     if (maChangesListeners.getLength(guard) > 0)
     {
         ChangesEvent aEvent;
-        aEvent.Source = mpxEventSource;
+        aEvent.Source = rOwner.getXWeak();
         aEvent.Base <<= aEvent.Source;
         aEvent.Changes = { { Any(aName), aElement, {} } };
         maChangesListeners.notifyEach(guard, &XChangesListener::changesOccurred, aEvent);
@@ -251,7 +251,7 @@ void NameContainer::removeByName(const OUString& aName, std::unique_lock<std::mu
     if (maContainerListeners.getLength(guard) > 0)
     {
         ContainerEvent aEvent;
-        aEvent.Source = mpxEventSource;
+        aEvent.Source = rOwner.getXWeak();
         aEvent.Accessor <<= aName;
         aEvent.Element = aOldElement;
         maContainerListeners.notifyEach(guard, &XContainerListener::elementRemoved, aEvent);
@@ -263,7 +263,7 @@ void NameContainer::removeByName(const OUString& aName, std::unique_lock<std::mu
     if (maChangesListeners.getLength(guard) > 0)
     {
         ChangesEvent aEvent;
-        aEvent.Source = mpxEventSource;
+        aEvent.Source = rOwner.getXWeak();
         aEvent.Base <<= aEvent.Source;
         aEvent.Changes = { { Any(aName),
                              {}, // Element remains empty (meaning "replaced with nothing")
@@ -2690,7 +2690,6 @@ void SAL_CALL SfxLibraryContainer::addContainerListener( const Reference< XConta
 {
     LibraryContainerMethodGuard aGuard( *this );
     std::unique_lock guard(m_aMutex);
-    maNameContainer.setEventSource( getXWeak() );
     maNameContainer.addContainerListener(xListener, guard);
 }
 
@@ -3110,7 +3109,6 @@ void SfxLibrary::removeByName( const OUString& Name )
 // Methods XContainer
 void SAL_CALL SfxLibrary::addContainerListener( const Reference< XContainerListener >& xListener )
 {
-    maNameContainer.setEventSource( getXWeak() );
     maNameContainer.addContainerListener(xListener, o3tl::temporary(std::unique_lock(m_aMutex)));
 }
 
@@ -3122,7 +3120,6 @@ void SAL_CALL SfxLibrary::removeContainerListener( const Reference< XContainerLi
 // Methods XChangesNotifier
 void SAL_CALL SfxLibrary::addChangesListener( const Reference< XChangesListener >& xListener )
 {
-    maNameContainer.setEventSource( getXWeak() );
     maNameContainer.addChangesListener(xListener, o3tl::temporary(std::unique_lock(m_aMutex)));
 }
 
