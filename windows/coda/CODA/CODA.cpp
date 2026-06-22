@@ -157,6 +157,7 @@ static HWND hiddenOwnerWindow;
 
 static const int CODA_WM_EXECUTESCRIPT = WM_APP + 1;
 static const int CODA_WM_LOADNEXTDOCUMENT = WM_APP + 2;
+static const int CODA_WM_POSTWEBMESSAGE = WM_APP + 3;
 
 static HMONITOR primaryMonitor;
 
@@ -624,38 +625,31 @@ static void do_other_message_handling_things(const WindowData& data, const char*
     fakeSocketWriteQueue(data.fakeClientFd, message, strlen(message));
 }
 
-// Escape a string for embedding in a single-quoted JavaScript string literal.
-// The native replies to postMobileCall() are injected as JS source and
-// evaluated, so any backslash, apostrophe or newline in the payload (Windows
-// paths, file names) would otherwise corrupt the literal.
 namespace
 {
-std::string escapeForJSString(const std::string& in)
+// Deliver a reply to a browser-side postMobileCall() as a posted web message,
+// i.e. structured data rather than generated JS source. We build the envelope
+// {"id":<id>,"reply":<value>} and marshal it to the WebView2 UI thread, where
+// PostWebMessageAsJson() hands the parsed value to the page's
+// chrome.webview 'message' listener (see global.js). The browser receives
+// <reply> as a real JS value (string or object), so Windows paths, file names
+// etc. never get interpolated into a JS string literal. This mirrors how the
+// macOS (WKScriptMessageHandlerWithReply) and Qt (QWebChannel) apps return
+// values; JSON encoding takes care of all escaping.
+void postReplyToCall(HWND hWnd, int id, const Poco::Dynamic::Var& reply)
 {
-    std::string out;
-    out.reserve(in.size() + 16);
-    for (const char c : in)
-    {
-        switch (c)
-        {
-            case '\\': out += "\\\\"; break;
-            case '\'': out += "\\'"; break;
-            case '\n': out += "\\n"; break;
-            case '\r': out += "\\r"; break;
-            default: out += c; break;
-        }
-    }
-    return out;
+    Poco::JSON::Object::Ptr envelope = new Poco::JSON::Object();
+    envelope->set("id", id);
+    envelope->set("reply", reply);
+    std::ostringstream oss;
+    envelope->stringify(oss);
+    PostMessageW(hWnd, CODA_WM_POSTWEBMESSAGE, (WPARAM)_strdup(oss.str().c_str()), 0);
 }
 } // namespace
 
 static void do_getrecentdocs(const WindowData& data, int id)
 {
-    PostMessageW(data.hWnd, CODA_WM_EXECUTESCRIPT,
-                 (WPARAM)_strdup(("window.replyFromNativeToCall(" +
-                                  std::to_string(id) +
-                                  ", '" + escapeForJSString(recentFiles.serialiseFiltered(currentlyOpenDocumens())) +
-                                  "')").c_str()), 0);
+    postReplyToCall(data.hWnd, id, recentFiles.serialiseFiltered(currentlyOpenDocumens()));
 }
 
 // It happens that some other process opens the clipboard for a short time, and if we happen to try
@@ -1515,6 +1509,12 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                         return S_OK;
                     })
                     .Get());
+            std::free((char*)wParam);
+            break;
+
+        case CODA_WM_POSTWEBMESSAGE:
+            windowData[hWnd].webView->PostWebMessageAsJson(
+                Util::string_to_wide_string(std::string((char*)wParam)).c_str());
             std::free((char*)wParam);
             break;
 
@@ -2882,37 +2882,17 @@ static void processMessage(WindowData& data, wil::unique_cotaskmem_string& messa
             auto result = Desktop::fetchSettingsFile(Util::wide_string_to_string(s.substr(strlen("FETCHSETTINGSFILE "))));
             if (!result.content.empty())
             {
-                // The JS caller reads result.content, so the reply must be an
-                // object literal (not a quoted string). The reply is injected as
-                // JS source and evaluated, so each value is escaped for a
-                // single-quoted string literal (the content can hold quotes,
-                // backslashes and newlines).
-                std::string resultAsJavaScriptData =
-                    "{"
-                      "fileName: '" + escapeForJSString(result.fileName) + "'"
-                      ","
-                      "mimeType: '" + escapeForJSString(result.mimeType) + "'"
-                      ","
-                      "content: '" + escapeForJSString(result.content) + "'"
-                    "}";
-
-                PostMessageW(data.hWnd, CODA_WM_EXECUTESCRIPT,
-                             (WPARAM)_strdup(("window.replyFromNativeToCall(" +
-                                              std::to_string(id) +
-                                              ", " + resultAsJavaScriptData + ")").c_str()), 0);
+                // The JS caller reads result.content, so the reply is an object.
+                Poco::JSON::Object::Ptr reply = new Poco::JSON::Object();
+                reply->set("fileName", result.fileName);
+                reply->set("mimeType", result.mimeType);
+                reply->set("content", result.content);
+                postReplyToCall(data.hWnd, id, reply);
             }
         }
         else if (s == L"FETCHSETTINGSCONFIG")
         {
-            // The reply is injected as JS source and evaluated, so the JSON
-            // (which contains Windows paths like C:\Users\...) must be escaped
-            // for a single-quoted string literal; otherwise the JS evaluator
-            // eats the backslashes and JSON.parse() chokes on "\U".
-            PostMessageW(data.hWnd, CODA_WM_EXECUTESCRIPT,
-                         (WPARAM)_strdup(("window.replyFromNativeToCall(" +
-                                          std::to_string(id) +
-                                          ", '" + escapeForJSString(Desktop::fetchSettingsConfig()) +
-                                          "')").c_str()), 0);
+            postReplyToCall(data.hWnd, id, Desktop::fetchSettingsConfig());
         }
         else if (s.starts_with(L"FETCHAIMODELS "))
         {
@@ -2927,10 +2907,7 @@ static void processMessage(WindowData& data, wil::unique_cotaskmem_string& messa
                 {
                     ProcUtil::setThreadName("aimodels");
                     const std::string result = fetchAIModels(payload);
-                    PostMessageW(hWnd, CODA_WM_EXECUTESCRIPT,
-                                 (WPARAM)_strdup(("window.replyFromNativeToCall(" +
-                                                  std::to_string(id) + ", '" +
-                                                  escapeForJSString(result) + "')").c_str()), 0);
+                    postReplyToCall(hWnd, id, result);
                 })
                 .detach();
         }

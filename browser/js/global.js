@@ -564,17 +564,24 @@ class WindowsAppInitializer extends MobileAppInitializer {
 		// The name "postMobileCall" is a bit misleading as this isn't just "posting" a
 		// message like the other postMobileFoo() functions, but to be used when a return
 		// value is expected. In other platforms, the postMobileMessage() can be used for
-		// that, too, but not on Windows. The WebView2 does not have the required
-		// functionality built-in.
+		// that, too, but not on Windows. The WebView2 has no built-in request/reply
+		// correlation, so we tag each call with an id and match the native reply to it.
 		window.postMobileCall = (() => {
 			let nextId = 1;
 			const pending = new Map();
 
-			window.replyFromNativeToCall = (id, reply) => {
-				const resolveFunc = pending.get(id);
-				pending.delete(id);
-				resolveFunc(reply);
-			};
+			// The native side replies with PostWebMessageAsJson({id, reply}); the
+			// value arrives here already parsed (not eval'd from injected JS source),
+			// so reply is a real JS value (string or object) exactly as the caller
+			// expects, and Windows paths in the payload can't corrupt anything.
+			window.chrome.webview.addEventListener('message', (event) => {
+				const data = event.data;
+				if (!data || typeof data.id !== 'number' || !pending.has(data.id))
+					return;
+				const resolveFunc = pending.get(data.id);
+				pending.delete(data.id);
+				resolveFunc(data.reply);
+			});
 
 			return function call(msg) {
 				return new Promise((resolveFunc) => {
