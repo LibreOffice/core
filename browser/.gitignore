@@ -11,11 +11,7 @@ component.json
 
 mocha.log
 mocha_tests/workdir/
-/eslint.done
-/prettier.done
-/tsc-emit.done
-/tsc-strict.done
-tscompile.done
+*.done
 duplication.log
 
 _site
