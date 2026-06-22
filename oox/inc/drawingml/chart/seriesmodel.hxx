@@ -186,6 +186,8 @@ struct BinningModel
 
     std::optional<std::variant<double, sal_uInt32>> maBinSizeOrCount;
     std::optional<ClosedSide> meIntervalClosed;   // Which side of an interval is closed
+    std::optional<double> mfUnderflow;
+    std::optional<double> mfOverflow;
 
     explicit            BinningModel();
 };

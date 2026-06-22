@@ -1405,6 +1405,7 @@ outline-style
 outset
 outside
 overflow-behavior
+overflow-bin-value
 overlap
 overlay
 p
@@ -2030,6 +2031,7 @@ suggested-signer-email
 suggested-signer-name
 suggested-signer-title
 wave
+underflow-bin-value
 unformatted-text
 union
 unit
@@ -2078,6 +2080,8 @@ user-index-mark-start
 user-index-source
 user-transformed
 username
+use-overflow-bin
+use-underflow-bin
 validation
 value
 value-type
