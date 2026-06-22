@@ -147,6 +147,8 @@ public:
     /// Fetch clipboard from the global pool.
     static rtl::Reference<KitClipboard> getClipboardForCurView();
 
+    static rtl::Reference<KitClipboard> getExistingClipboardForView(int nViewId);
+
     /// Release a clipboard before its document dies, nViewId of -1 clears all.
     static void releaseClipboardForView(int nViewId);
 };

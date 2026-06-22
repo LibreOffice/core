@@ -68,6 +68,8 @@ export const config = {
 			'./specs/document-lifecycle.spec.ts',
 			'./specs/open-file.spec.ts',
 		]],
+		// The cross-window slide copy/paste cases.
+		gui: ['./specs/slide-copy-paste.spec.ts'],
 	},
 
 	exclude: [],

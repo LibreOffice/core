@@ -219,6 +219,18 @@ void Bridge::evalJS(const std::string& script)
         Qt::QueuedConnection);
 }
 
+void Bridge::showProgressSnackbar()
+{
+    evalJS("if (window.app && window.app.map && window.app.map.uiManager) "
+           "window.app.map.uiManager.showProgressBar(window._(''), null, null, -1, false, true);");
+}
+
+void Bridge::closeSnackbar()
+{
+    evalJS("if (window.app && window.app.map && window.app.map.uiManager) "
+           "window.app.map.uiManager.closeSnackbar();");
+}
+
 void Bridge::send2JS(const std::vector<char>& buffer)
 {
     if (buffer.empty())
@@ -565,9 +577,20 @@ QVariant Bridge::cool(const QString& messageStr)
         if (commandName == ".uno:Copy" || commandName == ".uno:Cut"
             || commandName == ".uno:CopySlide")
         {
-            evalJS("if (window.app && window.app.map && window.app.map.uiManager) "
-                          "window.app.map.uiManager.closeSnackbar();");
+            // Copy is lazy and never deferred, so its snackbar always closes here.
+            closeSnackbar();
             _copyInProgress = false;
+        }
+        else if (commandName == ".uno:Paste" || commandName == ".uno:PasteSpecial")
+        {
+            // A deferred cross-window paste shows a progress snackbar; this
+            // result (enabled for the app via the kit notify list) is its
+            // deterministic completion signal, so dismiss the snackbar now.
+            if (_pasteInProgress)
+            {
+                closeSnackbar();
+                _pasteInProgress = false;
+            }
         }
 
         // only handle successful .uno:Save commands
@@ -668,11 +691,7 @@ QVariant Bridge::cool(const QString& messageStr)
     else if (tokens.equals(0, "COPY") || tokens.equals(0, "COPYSLIDE") || tokens.equals(0, "CUT"))
     {
         _copyInProgress = true;
-
-        // show a progress/snackbar while copy is in progress.
-        evalJS("if (window.app && window.app.map && window.app.map.uiManager) "
-               "window.app.map.uiManager.showProgressBar("
-               "window._(''), null, null, -1, false, true);");
+        showProgressSnackbar();
 
         std::string unoCmd;
         if (tokens.equals(0, "CUT"))
@@ -684,33 +703,21 @@ QVariant Bridge::cool(const QString& messageStr)
 
         fakeSocketWriteQueue(_document._fakeClientFd, unoCmd.c_str(), unoCmd.size());
     }
-    else if (tokens.equals(0, "PASTE"))
+    else if (tokens.equals(0, "PASTE") || tokens.equals(0, "PASTESPECIAL"))
     {
         if (_copyInProgress)
         {
-            LOG_DBG("Ignoring PASTE while copy is still in progress");
+            LOG_DBG("Ignoring paste while copy is still in progress");
             return {};
         }
-        // Sync system clipboard → LOKit internal clipboard only if an external app
-        // wrote the clipboard since our last copy (same logic as Windows do_paste_or_read).
-        if (!QApplication::clipboard()->ownsClipboard() ||
-            sClipboardSourceDocId.load() != _document._appDocId)
-            setClipboard(_document._appDocId);
-        static const std::string pasteCmd = "uno .uno:Paste";
-        fakeSocketWriteQueue(_document._fakeClientFd, pasteCmd.c_str(), pasteCmd.size());
-    }
-    else if (tokens.equals(0, "PASTESPECIAL"))
-    {
-        if (_copyInProgress)
+        // Show progress while a deferred (cross-window) paste runs.
+        const char* unoCmd
+            = tokens.equals(0, "PASTESPECIAL") ? "uno .uno:PasteSpecial" : "uno .uno:Paste";
+        if (pasteFromClipboard(_document._appDocId, _document._fakeClientFd, unoCmd))
         {
-            LOG_DBG("Ignoring PASTESPECIAL while copy is still in progress");
-            return {};
+            _pasteInProgress = true;
+            showProgressSnackbar();
         }
-        if (!QApplication::clipboard()->ownsClipboard() ||
-            sClipboardSourceDocId.load() != _document._appDocId)
-            setClipboard(_document._appDocId);
-        static const std::string pasteCmd = "uno .uno:PasteSpecial";
-        fakeSocketWriteQueue(_document._fakeClientFd, pasteCmd.c_str(), pasteCmd.size());
     }
     else if (tokens.equals(0, "GETRECENTDOCS"))
     {

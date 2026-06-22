@@ -34,7 +34,7 @@ export async function switchToNewWebView(
 	beforeHandles: string[],
 	timeoutMs = 30000,
 	intervalMs = 300,
-): Promise<void> {
+): Promise<string> {
 	const before = new Set(beforeHandles);
 	let newHandle: string | null = null;
 
@@ -57,4 +57,5 @@ export async function switchToNewWebView(
 	);
 
 	await webEngine.switchToWindow(newHandle!);
+	return newHandle!;
 }

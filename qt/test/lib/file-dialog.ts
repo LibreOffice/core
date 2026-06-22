@@ -27,7 +27,7 @@ export async function openFixture(
 	webEngine: WebdriverIO.Browser,
 	native: WebdriverIO.Browser,
 	fileName: string,
-): Promise<void> {
+): Promise<string> {
 	const onMacOS = process.env.CODA_PLATFORM === 'macos';
 
 	const fileSel = onMacOS
@@ -61,7 +61,7 @@ export async function openFixture(
 	await openBtn.waitForExist({ timeout: 5000 });
 	await openBtn.click();
 
-	await webview.switchToNewWebView(webEngine, beforeHandles);
+	const newHandle = await webview.switchToNewWebView(webEngine, beforeHandles);
 
 	await (webEngine as any).waitForCondition(
 		() =>
@@ -73,4 +73,6 @@ export async function openFixture(
 			timeoutMsg: `Document did not load after opening ${fileName}`,
 		},
 	);
+
+	return newHandle;
 }

@@ -37,6 +37,9 @@ class Bridge : public QObject
     // How many times we have reloaded the page because the server was still
     // cleaning up the previous use of this document when we tried to load it.
     int _docUnloadingRetries = 0;
+    // true between showing the deferred cross-window paste progress snackbar and
+    // receiving the paste's COMMANDRESULT; touched only on the GUI thread.
+    bool _pasteInProgress = false;
 
     void promptSaveLocation(std::function<void(const std::string&, const std::string&)> callback);
     void saveDocumentAs();
@@ -44,6 +47,9 @@ class Bridge : public QObject
     // Reconnect and load the document again after the server rejected the load
     // because the previous use of the same document was still being unloaded.
     void retryLoadAfterUnloading();
+
+    void showProgressSnackbar();
+    void closeSnackbar();
 
 public:
     explicit Bridge(QObject* parent, coda::DocumentData& document, QMainWindow* window, CODAWebEngineView* webView)

@@ -465,6 +465,18 @@ public:
     }
 
     /**
+     * Shares another view's live clipboard transferable into the current view's
+     * clipboard by reference, without serializing (same-process only). The caller
+     * must have made the destination the current view first.
+     *
+     * @param nSourceViewId the view whose clipboard contents to share.
+     */
+    void transferClipboardFromView(int nSourceViewId)
+    {
+        mpDoc->pClass->transferClipboardFromView(mpDoc, nSourceViewId);
+    }
+
+    /**
      * Pastes content at the current cursor position.
      *
      * @param pMimeType format of pData, for example text/plain;charset=utf-8.

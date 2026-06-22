@@ -56,6 +56,19 @@ rtl::Reference<KitClipboard> KitClipboardFactory::getClipboardForCurView()
     return xClip;
 }
 
+rtl::Reference<KitClipboard> KitClipboardFactory::getExistingClipboardForView(int nViewId)
+{
+    osl::MutexGuard aGuard(gMutex);
+
+    auto* pClipboards = getClipboards().get();
+    if (!pClipboards)
+        return {};
+    auto it = pClipboards->find(nViewId);
+    if (it != pClipboards->end())
+        return it->second;
+    return {};
+}
+
 void KitClipboardFactory::releaseClipboardForView(int nViewId)
 {
     osl::MutexGuard aGuard(gMutex);

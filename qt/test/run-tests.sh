@@ -18,6 +18,8 @@
 #   CODA_QT_BINARY      Path to coda-qt (default: ../coda-qt)
 #   AT_SPI_VENV         Path to the AT-SPI driver virtualenv (default: <AT_SPI_DRIVER_PATH>/venv)
 #   CODA_QT_TEST_GUI    Set to 1 to run on the host display instead of a virtual Wayland compositor.
+#
+# Extra args after the flags are forwarded to `wdio run` (e.g. --suite gui).
 
 set -euo pipefail
 
@@ -83,11 +85,11 @@ run_tests() {
     export WAYLAND_DISPLAY="$WAYLAND_SOCKET"
 
     cd "$SCRIPT_DIR"
-    npx wdio run wdio.conf.ts
+    npx wdio run wdio.conf.ts "$@"
 }
 
 if [ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ]; then
-    run_tests
+    run_tests "$@"
 else
     # run_tests needs access to WESTON_PID for cleanup, so exec into
     # dbus-run-session rather than spawning a subprocess.

@@ -183,10 +183,14 @@ EXTRA_DIST += \
 	$(TEST_DIR)/run-tests.sh \
 	$(TEST_DIR)/lib/coda-qt.service.ts \
 	$(TEST_DIR)/lib/webview.ts \
+	$(TEST_DIR)/lib/file-dialog.ts \
 	$(TEST_DIR)/fixtures/simple.odt \
+	$(TEST_DIR)/fixtures/slide_navigation.odp \
+	$(TEST_DIR)/fixtures/empty-presentation.odp \
 	$(TEST_DIR)/specs/harness.spec.ts \
 	$(TEST_DIR)/specs/document-lifecycle.spec.ts \
-	$(TEST_DIR)/specs/open-file.spec.ts
+	$(TEST_DIR)/specs/open-file.spec.ts \
+	$(TEST_DIR)/specs/slide-copy-paste.spec.ts
 
 ### --- WebdriverIO test integration end ---
 

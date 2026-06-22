@@ -17,6 +17,8 @@
 #include <COKit/COKit.hxx>
 
 #include <common/MobileApp.hpp>
+#include <kit/Kit.hpp>
+#include <net/FakeSocket.hpp>
 
 #include <QApplication>
 #include <QByteArray>
@@ -29,19 +31,30 @@
 
 #include <atomic>
 #include <cstdlib>
+#include <functional>
 #include <memory>
+#include <string>
 #include <vector>
 
 std::atomic<unsigned> sClipboardSourceDocId{0};
 
 namespace
 {
-/// Make the doc's view current before any clipboard API call: doc_getClipboard
-/// and doc_setClipboard both route by the kit's current view.
-bool selectDocViewAsCurrent(kit::Document* loKitDoc)
+/// coda-qt keeps one view per document, so the first view owns the clipboard;
+/// a multi-view document would need the specific copying view instead.
+int firstViewId(kit::Document* loKitDoc)
 {
     int nViewId = -1;
     if (!loKitDoc->getViewIds(&nViewId, 1) || nViewId < 0)
+        return -1;
+    return nViewId;
+}
+
+/// doc_getClipboard and doc_setClipboard both route by the kit's current view.
+bool selectDocViewAsCurrent(kit::Document* loKitDoc)
+{
+    const int nViewId = firstViewId(loKitDoc);
+    if (nViewId < 0)
         return false;
     loKitDoc->setView(nViewId);
     return true;
@@ -83,6 +96,98 @@ std::unique_ptr<QMimeData> fetchClipboardData(unsigned appDocId,
     free(outStreams);
 
     return mimeData;
+}
+
+/// MIME types LOKit can usefully consume on a paste; keeping the set small avoids
+/// serialising formats no paste uses.
+bool isLoKitFormat(const QString& f)
+{
+    return f.startsWith(QLatin1String("text/"))
+        || f == QLatin1String("image/png")
+        || f == QLatin1String("image/jpeg")
+        || f == QLatin1String("image/bmp")
+        || f.startsWith(QLatin1String("image/svg+"))   // image/svg+xml and ;params
+        || f.startsWith(QLatin1String("application/x-openoffice-"))
+        || f.startsWith(QLatin1String("application/x-libreoffice-"))
+        || f.startsWith(QLatin1String("application/vnd.oasis.opendocument."))
+        || f.startsWith(QLatin1String("application/vnd.sun.xml."))
+        || f == QLatin1String("application/msword")
+        || f == QLatin1String("application/mathml+xml")
+        || f == QLatin1String("application/pdf");
+}
+
+void writeMimeDataToDoc(kit::Document* dstDoc, const QMimeData* data)
+{
+    if (!dstDoc || !data)
+        return;
+
+    std::vector<std::string> mimeTypeStrings;
+    std::vector<QByteArray> byteArrays;
+
+    // Enforce UTF-8 for text data as that is what COKit expects.
+    if (data->hasText())
+    {
+        QByteArray utf8 = data->text().toUtf8();
+        if (!utf8.isEmpty())
+        {
+            mimeTypeStrings.push_back("text/plain;charset=utf-8");
+            byteArrays.push_back(std::move(utf8));
+        }
+    }
+
+    for (const QString& format : data->formats())
+    {
+        // Text already extracted as UTF-8 above; don't forward any raw text/plain* variant.
+        if (format.startsWith(QLatin1String("text/plain")))
+            continue;
+        if (!isLoKitFormat(format))
+            continue;
+        QByteArray bytes = data->data(format);
+        if (bytes.isEmpty())
+            continue;
+        mimeTypeStrings.push_back(format.toStdString());
+        byteArrays.push_back(std::move(bytes));
+    }
+
+    std::vector<const char*> mimeTypePtrs;
+    std::vector<size_t> sizes;
+    std::vector<const char*> streams;
+    for (size_t i = 0; i < mimeTypeStrings.size(); ++i)
+    {
+        mimeTypePtrs.push_back(mimeTypeStrings[i].c_str());
+        sizes.push_back(byteArrays[i].size());
+        streams.push_back(byteArrays[i].data());
+    }
+
+    // Make the destination the kit's current view even when there is nothing to
+    // forward: a preceding cross-document fetch left the source view current,
+    // and both the setClipboard below and the upcoming paste must run against
+    // this document's view.
+    if (!selectDocViewAsCurrent(dstDoc))
+        return;
+    if (!mimeTypePtrs.empty())
+        dstDoc->setClipboard(mimeTypePtrs.size(), mimeTypePtrs.data(), sizes.data(),
+                             streams.data());
+}
+
+bool transferClipboardOnKitThread(unsigned srcDocId, unsigned dstDocId)
+{
+    DocumentData* srcData = DocumentData::getIfExists(srcDocId);
+    DocumentData* dstData = DocumentData::getIfExists(dstDocId);
+    if (!srcData || !dstData)
+        return false;
+    kit::Document* srcDoc = srcData->loKitDocument;
+    kit::Document* dstDoc = dstData->loKitDocument;
+    if (!srcDoc || !dstDoc)
+        return false;
+
+    const int srcViewId = firstViewId(srcDoc);
+    if (srcViewId < 0 || !selectDocViewAsCurrent(dstDoc))
+        return false;
+
+    // Both documents live in one kit, so the by-reference transfer always suffices.
+    dstDoc->transferClipboardFromView(srcViewId);
+    return true;
 }
 }
 
@@ -162,80 +267,73 @@ protected:
     }
 };
 
-void setClipboard(unsigned appDocId)
+namespace
 {
-    kit::Document* loKitDoc = DocumentData::get(appDocId).loKitDocument;
-    if (!loKitDoc)
-        return;
-
-    const QMimeData* data = QApplication::clipboard()->mimeData();
+/// True when `data` was put on the system clipboard by some other application,
+/// rather than our own (in-process) lazy clipboard.
+bool clipboardHoldsForeignData(const QMimeData* data)
+{
     if (!data)
-        return;
+        return false;
+    if (dynamic_cast<const LazyClipboardMimeData*>(data))
+        return false;
+    return !data->formats().isEmpty();
+}
+}
 
-    // Limit MIME types that LOKit can consume. Keeping this set small also avoids IPC round-trips
-    // to clipboard owners for formats they won't provide usefully (e.g. Emacs advertises many X11
-    // atoms and app-specific types alongside text/plain).
-    auto isLoKitFormat = [](const QString& f)
+bool pasteFromClipboard(unsigned dstDocId, int dstFd, const std::string& unoCmd)
+{
+    const unsigned src = sClipboardSourceDocId.load();
+    const QMimeData* data = QApplication::clipboard()->mimeData();
+
+    // External app owns the clipboard: copy it into LOKit before pasting.
+    if (clipboardHoldsForeignData(data))
     {
-        return f.startsWith(QLatin1String("text/"))
-            || f == QLatin1String("image/png")
-            || f == QLatin1String("image/jpeg")
-            || f == QLatin1String("image/bmp")
-            || f.startsWith(QLatin1String("image/svg+"))   // image/svg+xml and ;params
-            || f.startsWith(QLatin1String("application/x-openoffice-"))
-            || f.startsWith(QLatin1String("application/x-libreoffice-"))
-            || f.startsWith(QLatin1String("application/vnd.oasis.opendocument."))
-            || f.startsWith(QLatin1String("application/vnd.sun.xml."))
-            || f == QLatin1String("application/msword")
-            || f == QLatin1String("application/mathml+xml")
-            || f == QLatin1String("application/pdf");
-    };
-
-    std::vector<std::string> mimeTypeStrings;
-    std::vector<QByteArray> byteArrays;
-
-    // Enforce UTF-8 for text data as that is what COKit expects.
-    if (data->hasText())
-    {
-        QByteArray utf8 = data->text().toUtf8();
-        if (!utf8.isEmpty())
-        {
-            mimeTypeStrings.push_back("text/plain;charset=utf-8");
-            byteArrays.push_back(std::move(utf8));
-        }
+        if (DocumentData* dstData = DocumentData::getIfExists(dstDocId))
+            writeMimeDataToDoc(dstData->loKitDocument, data);
+        fakeSocketWriteQueue(dstFd, unoCmd.c_str(), unoCmd.size());
+        return false;
     }
 
-    for (const QString& format : data->formats())
+    // Same document or our own copy: the bytes are already in LOKit's clipboard.
+    if (src == 0 || src == dstDocId)
     {
-        // Text already extracted as UTF-8 above; don't forward any raw text/plain* variant.
-        if (format.startsWith(QLatin1String("text/plain")))
-            continue;
-        if (!isLoKitFormat(format))
-            continue;
-        QByteArray bytes = data->data(format);
-        if (bytes.isEmpty())
-            continue;
-        mimeTypeStrings.push_back(format.toStdString());
-        byteArrays.push_back(std::move(bytes));
+        fakeSocketWriteQueue(dstFd, unoCmd.c_str(), unoCmd.size());
+        return false;
     }
 
-    std::vector<const char*> mimeTypePtrs;
-    std::vector<size_t> sizes;
-    std::vector<const char*> streams;
-    for (size_t i = 0; i < mimeTypeStrings.size(); ++i)
+    // Cross-window source whose document has since closed: its bytes survive in the
+    // Qt clipboard (materialized on BYE), but the kit-thread transfer below cannot
+    // read a gone view - so sync from the Qt clipboard here instead.
+    if (DocumentData* srcData = DocumentData::getIfExists(src);
+        !srcData || !srcData->loKitDocument)
     {
-        mimeTypePtrs.push_back(mimeTypeStrings[i].c_str());
-        sizes.push_back(byteArrays[i].size());
-        streams.push_back(byteArrays[i].data());
+        if (DocumentData* dstData = DocumentData::getIfExists(dstDocId))
+            writeMimeDataToDoc(dstData->loKitDocument, data);
+        fakeSocketWriteQueue(dstFd, unoCmd.c_str(), unoCmd.size());
+        return false;
     }
 
-    if (!mimeTypePtrs.empty())
+    // Cross-window paste: defer to the kit thread, where reading the non-active
+    // source view is safe.
+    KitSocketPoll* poll = KitSocketPoll::getMainPoll();
+    const bool scheduled = poll
+        && poll->addCallback(
+            [src, dstDocId, dstFd, unoCmd]()
+            {
+                // Either document may have closed between enqueuing this callback
+                // and its execution.
+                if (transferClipboardOnKitThread(src, dstDocId))
+                    fakeSocketWriteQueue(dstFd, unoCmd.c_str(), unoCmd.size());
+            });
+    if (!scheduled)
     {
-        if (!selectDocViewAsCurrent(loKitDoc))
-            return;
-        loKitDoc->setClipboard(mimeTypePtrs.size(), mimeTypePtrs.data(), sizes.data(),
-                               streams.data());
+        // No live kit poll to defer to (none exists, or its thread has already
+        // finished); paste synchronously so the command is not silently lost.
+        fakeSocketWriteQueue(dstFd, unoCmd.c_str(), unoCmd.size());
+        return false;
     }
+    return true;
 }
 
 void setLazyClipboard(unsigned appDocId, QStringList mimeTypes)

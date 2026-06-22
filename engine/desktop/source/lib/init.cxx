@@ -1256,6 +1256,7 @@ static int doc_setClipboard (COKitDocument* pThis,
                              const char   **pInMimeTypes,
                              const size_t  *pInSizes,
                              const char   **pInStreams);
+static void doc_transferClipboardFromView(COKitDocument* pThis, int nSourceViewId);
 static bool doc_paste(COKitDocument* pThis,
                       const char* pMimeType,
                       const char* pData,
@@ -1556,6 +1557,7 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
         m_pDocumentClass->getSelectionTypeAndText = doc_getSelectionTypeAndText;
         m_pDocumentClass->getClipboard = doc_getClipboard;
         m_pDocumentClass->setClipboard = doc_setClipboard;
+        m_pDocumentClass->transferClipboardFromView = doc_transferClipboardFromView;
         m_pDocumentClass->paste = doc_paste;
         m_pDocumentClass->installClipboardProvider = doc_installClipboardProvider;
         m_pDocumentClass->setGraphicSelection = doc_setGraphicSelection;
@@ -6642,6 +6644,37 @@ static void doc_installClipboardProvider(COKitDocument* pThis,
         return;
 
     forceSetClipboardForCurrentView(pThis)->setProvider(pProvider);
+}
+
+// See COKit's Document::transferClipboardFromView(); the caller must have
+// already made the destination the current view.
+static void doc_transferClipboardFromView(COKitDocument* pThis, int nSourceViewId)
+{
+    comphelper::ProfileZone aZone("doc_transferClipboardFromView");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    rtl::Reference<KitClipboard> xFrom
+        = KitClipboardFactory::getExistingClipboardForView(nSourceViewId);
+    if (!xFrom.is())
+    {
+        SAL_INFO("kit", "transferClipboardFromView: no clipboard for source view " << nSourceViewId);
+        return;
+    }
+    uno::Reference<datatransfer::XTransferable> xContents = xFrom->getContents();
+    if (!xContents.is())
+    {
+        SAL_INFO("kit", "transferClipboardFromView: source view " << nSourceViewId
+                                                                  << " has an empty clipboard");
+        return;
+    }
+
+    auto xClip = forceSetClipboardForCurrentView(pThis);
+    xClip->setContents(xContents, uno::Reference<datatransfer::clipboard::XClipboardOwner>());
+
+    SAL_INFO("kit", "Shared clipboard from view " << nSourceViewId
+                                                  << " into current view by reference");
 }
 
 static bool doc_paste(COKitDocument* pThis, const char* pMimeType, const char* pData, size_t nSize)

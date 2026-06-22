@@ -593,6 +593,9 @@ struct COKitDocumentClassStruct
     void (*installClipboardProvider) (COKitDocument* pThis,
                                       const COKitClipboardProvider* pProvider);
 
+    /// @see kit::Document::transferClipboardFromView().
+    void (*transferClipboardFromView)(COKitDocument* pThis, int nSourceViewId);
+
 #endif // defined KIT_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

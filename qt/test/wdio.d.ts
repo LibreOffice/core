@@ -31,11 +31,31 @@ declare const app: {
 	map: {
 		_docLoaded: boolean;
 		getDocType(): string;
+		// part is the part index, how is 0 deselect / 1 select / 2 toggle.
+		selectPart(part: number, how: number, external: boolean): void;
+		setPart(part: number): void;
+		deselectAll(): void;
+		isEditMode(): boolean;
+		_enterEditMode(permission: string): void;
+		_clip: {
+			setTextSelectionType(selectionType: string): void;
+			_execCopyCutPaste(operation: string, cmd?: string): void;
+		};
+		_docLayer: {
+			// Authoritative slide count, set from the server's partscount.
+			_parts: number;
+			_preview: {
+				_pasteSlide(nPos?: number): Promise<void>;
+			};
+		};
 		backstageView?: {
 			show(): void;
 			hide(): void;
 			toggle(): void;
 		};
+	};
+	impress: {
+		getSelectedSlidesCount(): number;
 	};
 	dispatcher: {
 		dispatch(action: string): void;
