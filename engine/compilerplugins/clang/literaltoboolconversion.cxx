@@ -133,12 +133,6 @@ void LiteralToBoolConversion::handleImplicitCastSubExpr(
                     loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
                 }
                 if (compiler.getSourceManager().isMacroBodyExpansion(loc)) {
-                    StringRef name { Lexer::getImmediateMacroName(
-                            loc, compiler.getSourceManager(), compiler.getLangOpts()) };
-                    if (name == "sal_False" || name == "sal_True") {
-                        loc = compat::getImmediateExpansionRange(compiler.getSourceManager(), loc)
-                            .first;
-                    }
                     if (isSharedCAndCppCode(loc)) {
                         return;
                     }
@@ -173,12 +167,12 @@ void LiteralToBoolConversion::handleImplicitCastSubExpr(
                     expr2->getEndLoc(), compiler.getSourceManager(),
                     compiler.getLangOpts());
                 std::string tok { s, n };
-                if (tok == "sal_False" || tok == "0") {
+                if (tok == "0") {
                     bRewritten = replaceText(
                         compiler.getSourceManager().getExpansionLoc(
                             expr2->getBeginLoc()),
                         n, "false");
-                } else if (tok == "sal_True" || tok == "1") {
+                } else if (tok == "1") {
                     bRewritten = replaceText(
                         compiler.getSourceManager().getExpansionLoc(
                             expr2->getBeginLoc()),

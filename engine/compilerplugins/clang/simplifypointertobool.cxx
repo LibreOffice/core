@@ -335,11 +335,6 @@ bool SimplifyPointerToBool::VisitImplicitCastExpr(ImplicitCastExpr const* castEx
     //        auto argTC = loplugin::TypeCheck(arg->getType());
     //        if (argTC.AnyBoolean())
     //            continue;
-    //        // sal_Bool is sometimes disguised
-    //        if (isa<SubstTemplateTypeParmType>(arg->getType()))
-    //            if (arg->getType()->getUnqualifiedDesugaredType()->isSpecificBuiltinType(
-    //                    clang::BuiltinType::UChar))
-    //                continue;
     //        if (arg->getType()->isDependentType())
     //            continue;
     //        if (arg->getType()->isIntegerType())

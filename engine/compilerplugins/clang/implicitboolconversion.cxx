@@ -79,8 +79,8 @@ QualType reconstructTemplateArgumentType(
 }
 
 bool areSameTypedef(QualType type1, QualType type2) {
-    // type1.getTypePtr() == typ2.getTypePtr() fails for e.g. ::sal_Bool vs.
-    // sal_Bool:
+    // type1.getTypePtr() == typ2.getTypePtr() fails for e.g. ::gboolean vs.
+    // gboolean:
     auto t1 = type1->getAs<TypedefType>();
     auto t2 = type2->getAs<TypedefType>();
     return t1 != nullptr && t2 != nullptr && t1->getDecl() == t2->getDecl();
@@ -95,11 +95,6 @@ bool isBool(Expr const * expr, bool allowTypedefs = true) {
 bool isMatchingBool(Expr const * expr, Expr const * comparisonExpr) {
     return isBool(expr, false)
         || areSameTypedef(expr->getType(), comparisonExpr->getType());
-}
-
-bool isSalBool(QualType type) {
-    auto t = type->getAs<TypedefType>();
-    return t != nullptr && t->getDecl()->getName() == "sal_Bool";
 }
 
 bool isBoolExpr(Expr const * expr) {
@@ -332,40 +327,6 @@ bool ImplicitBoolConversion::TraverseCallExpr(CallExpr * expr) {
                     reportWarning(i);
                 }
             } else {
-                // Filter out
-                //
-                //   template<typename T> void f(T);
-                //   f<sal_Bool>(true);
-                //
-                DeclRefExpr const * dr = dyn_cast<DeclRefExpr>(
-                    expr->getCallee()->IgnoreParenImpCasts());
-                if (dr != nullptr && dr->hasExplicitTemplateArgs()) {
-                    FunctionDecl const * fd
-                        = dyn_cast<FunctionDecl>(dr->getDecl());
-                    if (fd != nullptr
-                        && static_cast<std::size_t>(n) < fd->getNumParams())
-                    {
-                        SubstTemplateTypeParmType const * t2
-                            = getAsSubstTemplateTypeParmType(
-                                fd->getParamDecl(n)->getType()
-                                .getNonReferenceType());
-                        if (t2 != nullptr) {
-                            //TODO: fix this superficial nonsense check:
-                            if (dr->getNumTemplateArgs() == 1) {
-                                auto const ta = dr->getTemplateArgs();
-                                if ((ta[0].getArgument().getKind()
-                                     == TemplateArgument::Type)
-                                    && (loplugin::TypeCheck(
-                                            ta[0].getTypeSourceInfo()
-                                            ->getType())
-                                        .AnyBoolean()))
-                                {
-                                    continue;
-                                }
-                            }
-                        }
-                    }
-                }
                 reportWarning(i);
             }
         }
@@ -381,55 +342,6 @@ bool ImplicitBoolConversion::TraverseCXXMemberCallExpr(CXXMemberCallExpr * expr)
     bool bRet = RecursiveASTVisitor::TraverseCXXMemberCallExpr(expr);
     assert(!nested.empty());
     for (auto i: nested.top()) {
-        auto j = std::find_if(
-            expr->arg_begin(), expr->arg_end(),
-            [&i](Expr * e) {
-                return i == ignoreParenAndTemporaryMaterialization(e);
-            });
-        if (j != expr->arg_end()) {
-            // Filter out
-            //
-            //  template<typename T> struct S { void f(T); };
-            //  S<sal_Bool> s;
-            //  s.f(true);
-            //
-            std::ptrdiff_t n = j - expr->arg_begin();
-            assert(n >= 0);
-            CXXMethodDecl const * d = expr->getMethodDecl();
-            if (static_cast<std::size_t>(n) >= d->getNumParams()) {
-                // Ignore bool to int promotions of variadic arguments:
-                assert(d->isVariadic());
-                continue;
-            }
-            QualType ty
-                = ignoreParenImpCastAndComma(expr->getImplicitObjectArgument())
-                ->getType();
-            if (dyn_cast<MemberExpr>(expr->getCallee())->isArrow()) {
-                ty = ty->getAs<clang::PointerType>()->getPointeeType();
-            }
-            TemplateSpecializationType const * ct
-                = ty->getAs<TemplateSpecializationType>();
-            if (ct != nullptr) {
-                SubstTemplateTypeParmType const * pt
-                    = getAsSubstTemplateTypeParmType(
-                        d->getParamDecl(n)->getType().getNonReferenceType());
-                if (pt != nullptr) {
-                    TemplateDecl const * td
-                        = ct->getTemplateName().getAsTemplateDecl();
-                    if (td != nullptr) {
-                        //TODO: fix this superficial nonsense check:
-                        auto const args = ct->template_arguments();
-                        if (args.size() >= 1
-                            && args[0].getKind() == TemplateArgument::Type
-                            && (loplugin::TypeCheck(args[0].getAsType())
-                                .AnyBoolean()))
-                        {
-                            continue;
-                        }
-                    }
-                }
-            }
-        }
         reportWarning(i);
     }
     nested.pop();
@@ -693,11 +605,6 @@ bool ImplicitBoolConversion::VisitImplicitCastExpr(
         return true;
     }
     if (isBool(compat::getSubExprAsWritten(expr)) && !isBool(expr)) {
-        // Ignore NoOp from 'sal_Bool' (aka 'unsigned char') to 'const unsigned
-        // char' in makeAny(b) with b of type sal_Bool:
-        if (expr->getCastKind() == CK_NoOp) {
-            return true;
-        }
         // Ignore implicit conversions from bool to int in
         //
         //   #define _G_STR_NONNULL(x) (x + !x)
@@ -731,14 +638,6 @@ bool ImplicitBoolConversion::VisitImplicitCastExpr(
         if (subsub->getType().IgnoreParens() == expr->getType().IgnoreParens()
             && isBool(subsub))
         {
-            // Ignore "normalizing cast" bool(b) from sal_Bool b to bool, then
-            // implicitly cast back again to sal_Bool:
-            if (dyn_cast<CXXFunctionalCastExpr>(sub) != nullptr
-                && sub->getType()->isBooleanType() && isSalBool(expr->getType())
-                && isSalBool(subsub->getType()))
-            {
-                return true;
-            }
             report(
                 DiagnosticsEngine::Warning,
                 ("explicit conversion (%0) from %1 to %2 implicitly cast back"

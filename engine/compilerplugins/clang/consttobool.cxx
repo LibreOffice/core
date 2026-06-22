@@ -18,7 +18,7 @@
 #include "check.hxx"
 #include "plugin.hxx"
 
-// Find implicit conversions from non-'bool' constants (e.g., 'sal_False') to 'bool'.
+// Find implicit conversions from non-'bool' constants to 'bool'.
 
 namespace
 {
@@ -163,7 +163,7 @@ public:
         {
             auto const n = Lexer::getImmediateMacroName(l1, compiler.getSourceManager(),
                                                         compiler.getLangOpts());
-            if (n == "FALSE" || n == "TRUE" || n == "sal_False" || n == "sal_True")
+            if (n == "FALSE" || n == "TRUE")
             {
                 l1 = compiler.getSourceManager().getImmediateMacroCallerLoc(l1);
             }
@@ -183,11 +183,7 @@ public:
         }
         if (isSharedCAndCppCode(l1))
         {
-            // Cover just enough cases to handle things like `while (0)` or the use of `sal_True` in
-            //
-            //   #define OSL_FAIL(m) SAL_DETAIL_WARN_IF_FORMAT(sal_True, "legacy.osl", "%s", m)
-            //
-            // in include/osl/diagnose.h:
+            // Cover just enough cases to handle things like `while (0)`
             if (auto const t1 = t->getAs<BuiltinType>())
             {
                 if (t1->getKind() == BuiltinType::Int)
@@ -198,10 +194,6 @@ public:
                         return true;
                     }
                 }
-            }
-            if (loplugin::TypeCheck(t).Typedef("sal_Bool").GlobalNamespace())
-            {
-                return true;
             }
         }
         if (auto const e = dyn_cast<CallExpr>(sub->IgnoreParenImpCasts()))
