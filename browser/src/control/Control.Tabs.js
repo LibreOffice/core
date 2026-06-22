@@ -92,6 +92,7 @@ window.L.Control.Tabs = window.L.Control.extend({
 				isHtmlName: true,
 				callback: (this._protectSheet).bind(this),
 				_image: 'Spreadsheet_protected',
+				_checked: function() { return this._isProtectedSheet(this._tabForContextMenu); }.bind(this),
 			},
 			'.uno:SetTabBgColor': {
 				name: app.IconUtil.createMenuItemLink(_UNO('.uno:SetTabBgColor', 'spreadsheet', true), 'SetTabBgColor'),
@@ -401,11 +402,15 @@ window.L.Control.Tabs = window.L.Control.extend({
 			const isUNO = key.startsWith('.uno:');
 			if (Object.prototype.hasOwnProperty.call(data, '_uno')) key = data._uno;
 			let text = isUNO ? _UNO(key, 'spreadsheet', true) : data.text;
+			const checked = Object.prototype.hasOwnProperty.call(data, '_checked')
+				? data._checked()
+				: undefined;
 			entries.push({
 				id: key,
 				type: 'action',
 				text: text,
 				img: data._image,
+				checked: checked,
 			});
 		}
 

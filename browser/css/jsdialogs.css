@@ -1160,7 +1160,7 @@ img.context-menu-icon {
 	min-width: 160px !important;
 }
 
-#statusbar-context-menu-dropdown .ui-combobox-entry:not(.checked)::before {
+.ui-grid:has(.ui-combobox-entry.checked, .ui-combobox-entry.notchecked) .ui-combobox-entry:not(.checked):not(.notchecked)::before {
 	content: '\2713';
 	display: inline-block;
 	visibility: hidden;
