@@ -162,18 +162,6 @@ public:
     */
     virtual ExpressionFunct getType() const = 0;
 
-    /** Child sub-expression by index (0-based), or nullptr if out of range.
-
-        Lets a caller walk the expression tree: unary nodes have child 0, binary
-        nodes children 0 and 1, the ternary "if" node children 0..2. Leaf nodes
-        (constants, adjustment/equation/enum references) have no children.
-    */
-    virtual const ExpressionNode* getChild(sal_Int32 /*nIndex*/) const { return nullptr; }
-
-    /** Index of an adjustment ($n) or equation (?fn) reference, else -1.
-    */
-    virtual sal_Int32 getIndex() const { return -1; }
-
     /** Operator to retrieve the ms version of expression
     */
     virtual css::drawing::EnhancedCustomShapeParameter fillNode(

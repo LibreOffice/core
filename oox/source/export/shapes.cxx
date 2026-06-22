@@ -1103,10 +1103,8 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     pFS->startElementNS(mnXmlNamespace, XML_spPr);
 
     // we export non-primitive shapes to custom geometry
-    // we also export non-ooxml shapes which have handles/equations to custom geometry; their
-    // ODF equations, adjustment values and handles are converted to DrawingML guides in
-    // WriteCustomGeometry (a few constructs that cannot be expressed, e.g. polar handles, fall
-    // back to resolved coordinates)
+    // we also export non-ooxml shapes which have handles/equations to custom geometry, because
+    // we cannot convert ODF equations to DrawingML equations. TODO: see what binary DOC export filter does.
     // but our WritePolyPolygon()/WriteCustomGeometry() functions are incomplete, therefore we use a denylist
     // we use a allowlist for shapes where mapping to MSO preset shape is not optimal
     bool bCustGeom = true;

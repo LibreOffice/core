@@ -84,24 +84,6 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf169705_invalidValuesAOff)
                 OUString::number(std::numeric_limits<sal_Int32>::max()));
 }
 
-CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testEquationGuidesExport)
-{
-    // The shape's "Equations" are converted into <a:gd> guides ("f0", "f1", ...)
-    // by reusing the same flattening the binary export filter uses.
-    createSdImpressDoc("pptx/tdf165670.pptx");
-    save(TestFilter::PPTX);
-
-    xmlDocUniquePtr pXmlDoc1 = parseExport(u"ppt/slides/slide1.xml"_ustr);
-    OString aGdLst = "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:gdLst"_ostr;
-
-    // The equation guides follow the text-area (4) and glue-point (10) guides.
-    // Width/height stay symbolic ("w"/"h") instead of being baked to a fixed value.
-    assertXPath(pXmlDoc1, aGdLst + "/a:gd[@name='f0']", "fmla", u"*/ 690465 w 1");
-    assertXPath(pXmlDoc1, aGdLst + "/a:gd[@name='f2']", "fmla", u"*/ 802433 h 1");
-    // A guide referencing the result of an earlier guide by name.
-    assertXPath(pXmlDoc1, aGdLst + "/a:gd[@name='f1']", "fmla", u"*/ f0 1 2407298");
-}
-
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf165262)
 {
     createSdImpressDoc("ppt/tdf165262.ppt");

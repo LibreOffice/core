@@ -40,7 +40,6 @@
 #include <sax/fastattribs.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/string.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -59,7 +58,6 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/Gradient2.hpp>
-#include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -139,7 +137,6 @@
 #include <editeng/unonrule.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
 #include <svx/svdoashp.hxx>
-#include <svx/EnhancedCustomShapeFunctionParser.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/unoshape.hxx>
@@ -5068,416 +5065,6 @@ OUString GetFormula(const OUString& sEquation)
     return OUString();
 }
 
-// Convert a custom shape's ODF equations directly from the parsed expression tree
-// into OOXML guide formulas. Working from the expression tree (rather than the
-// flattened binary form the DOC filter uses) keeps width/height symbolic ("w"/"h")
-// and lets us express the trigonometric functions, because the angle-conversion
-// idiom is still visible; the angle unit is reconciled to OOXML's 60000ths of a
-// degree.
-using EnhancedCustomShape::ExpressionNode;
-using ExpressionFunct = EnhancedCustomShape::ExpressionFunct;
-
-// Carries the guides built so far while one expression tree is walked.
-struct OoxmlEqContext
-{
-    std::vector<Guide>& rGuides; // <a:gdLst> guides, in dependency order
-    std::set<sal_Int32>& rUsedAdjustments; // adjustment indices referenced
-    const std::vector<OString>& rEqNames; // source equation index -> its OOXML token
-    const std::vector<bool>& rEqIsAngle; // source equation index -> token is an angle (60000ths)
-    bool bFailed = false;
-
-    OString addGuide(const OString& rFormula)
-    {
-        OString aName = "f" + OString::number(rGuides.size());
-        rGuides.push_back({ aName, rFormula });
-        return aName;
-    }
-};
-
-OString lcl_EmitOoxmlNode(const ExpressionNode* pNode, OoxmlEqContext& rCtx);
-
-// Is p the sub-expression "pi / <const>"? Returns the constant in rConst.
-bool lcl_IsPiOverConst(const ExpressionNode* p, double& rConst)
-{
-    if (p && p->getType() == ExpressionFunct::BinaryDiv)
-    {
-        const ExpressionNode* pNum = p->getChild(0);
-        const ExpressionNode* pDen = p->getChild(1);
-        if (pNum && pDen && pNum->getType() == ExpressionFunct::EnumPi && pDen->isConstant())
-        {
-            rConst = (*pDen)();
-            return true;
-        }
-    }
-    return false;
-}
-
-// If pArg is a radians angle of the form X*(pi/c) or (pi*X)/c, emit it converted
-// to OOXML 60000ths of a degree (X*10800000/c) and return true; else return false
-// (leaving rCtx untouched). This is the only way to express an angle in OOXML,
-// whose guide formulas have no pi constant to cancel against. Used both for
-// standalone angle values (e.g. arc parameters) and trigonometric arguments.
-bool lcl_TryEmitAngle60000(const ExpressionNode* pArg, OoxmlEqContext& rCtx, OString& rResult)
-{
-    // A reference to an equation that is itself an angle is already in 60000ths.
-    if (pArg && pArg->getType() == ExpressionFunct::EnumEquation)
-    {
-        const sal_Int32 nEquation = pArg->getIndex();
-        if (nEquation >= 0 && o3tl::make_unsigned(nEquation) < rCtx.rEqIsAngle.size()
-            && rCtx.rEqIsAngle[nEquation] && !rCtx.rEqNames[nEquation].isEmpty())
-        {
-            rResult = rCtx.rEqNames[nEquation];
-            return true;
-        }
-        return false;
-    }
-    const ExpressionNode* pX = nullptr;
-    double fConst = 0.0;
-    if (pArg && pArg->getType() == ExpressionFunct::BinaryMul)
-    {
-        if (lcl_IsPiOverConst(pArg->getChild(0), fConst))
-            pX = pArg->getChild(1);
-        else if (lcl_IsPiOverConst(pArg->getChild(1), fConst))
-            pX = pArg->getChild(0);
-    }
-    else if (pArg && pArg->getType() == ExpressionFunct::BinaryDiv)
-    {
-        const ExpressionNode* pNum = pArg->getChild(0);
-        const ExpressionNode* pDen = pArg->getChild(1);
-        if (pNum && pDen && pDen->isConstant() && pNum->getType() == ExpressionFunct::BinaryMul)
-        {
-            const ExpressionNode* pA = pNum->getChild(0);
-            const ExpressionNode* pB = pNum->getChild(1);
-            if (pA && pA->getType() == ExpressionFunct::EnumPi)
-                pX = pB;
-            else if (pB && pB->getType() == ExpressionFunct::EnumPi)
-                pX = pA;
-            if (pX)
-                fConst = (*pDen)();
-        }
-    }
-    if (!pX || fConst == 0.0)
-        return false;
-    OString aX = lcl_EmitOoxmlNode(pX, rCtx);
-    rResult = rCtx.addGuide("*/ " + aX + " 10800000 "
-                            + OString::number(static_cast<sal_Int32>(std::lround(fConst))));
-    return true;
-}
-
-bool lcl_IsTrig(const ExpressionNode* p)
-{
-    const ExpressionFunct e = p->getType();
-    return e == ExpressionFunct::UnarySin || e == ExpressionFunct::UnaryCos
-           || e == ExpressionFunct::UnaryTan;
-}
-
-// Emit "sin|cos|tan <mul> <angle>"; pMul is the multiplier in "mul*sin(x)", or null (1).
-OString lcl_EmitTrig(const ExpressionNode* pTrig, const ExpressionNode* pMul, OoxmlEqContext& rCtx)
-{
-    OString aAngle;
-    if (!lcl_TryEmitAngle60000(pTrig->getChild(0), rCtx, aAngle))
-    {
-        // Angle not in the pi/const idiom (e.g. raw radians) - not expressible.
-        rCtx.bFailed = true;
-        return "0"_ostr;
-    }
-    const char* pOp = pTrig->getType() == ExpressionFunct::UnarySin
-                          ? "sin"
-                          : (pTrig->getType() == ExpressionFunct::UnaryCos ? "cos" : "tan");
-    OString aMul = pMul ? lcl_EmitOoxmlNode(pMul, rCtx) : "1"_ostr;
-    return rCtx.addGuide(OString::Concat(pOp) + " " + aMul + " " + aAngle);
-}
-
-OString lcl_EmitOoxmlNode(const ExpressionNode* pNode, OoxmlEqContext& rCtx)
-{
-    if (!pNode)
-    {
-        rCtx.bFailed = true;
-        return "0"_ostr;
-    }
-    // A constant sub-expression collapses to its literal value.
-    if (pNode->isConstant())
-        return OString::number(static_cast<sal_Int32>(std::lround((*pNode)())));
-
-    switch (pNode->getType())
-    {
-        case ExpressionFunct::EnumAdjustment:
-        {
-            const sal_Int32 nAdjustment = pNode->getIndex();
-            rCtx.rUsedAdjustments.insert(nAdjustment);
-            return "adj" + OString::number(nAdjustment + 1);
-        }
-        case ExpressionFunct::EnumEquation:
-        {
-            const sal_Int32 nEquation = pNode->getIndex();
-            if (nEquation >= 0 && o3tl::make_unsigned(nEquation) < rCtx.rEqNames.size()
-                && !rCtx.rEqNames[nEquation].isEmpty())
-                return rCtx.rEqNames[nEquation];
-            rCtx.bFailed = true;
-            return "0"_ostr;
-        }
-        case ExpressionFunct::EnumWidth:
-        case ExpressionFunct::EnumLogWidth:
-            return "w"_ostr;
-        case ExpressionFunct::EnumHeight:
-        case ExpressionFunct::EnumLogHeight:
-            return "h"_ostr;
-        case ExpressionFunct::EnumLeft:
-            return "l"_ostr;
-        case ExpressionFunct::EnumTop:
-            return "t"_ostr;
-        case ExpressionFunct::EnumRight:
-            return "r"_ostr;
-        case ExpressionFunct::EnumBottom:
-            return "b"_ostr;
-        case ExpressionFunct::BinaryPlus:
-            return rCtx.addGuide("+- " + lcl_EmitOoxmlNode(pNode->getChild(0), rCtx) + " "
-                                 + lcl_EmitOoxmlNode(pNode->getChild(1), rCtx) + " 0");
-        case ExpressionFunct::BinaryMinus:
-            return rCtx.addGuide("+- " + lcl_EmitOoxmlNode(pNode->getChild(0), rCtx) + " 0 "
-                                 + lcl_EmitOoxmlNode(pNode->getChild(1), rCtx));
-        case ExpressionFunct::BinaryMul:
-        {
-            OString aAngle;
-            if (lcl_TryEmitAngle60000(pNode, rCtx, aAngle))
-                return aAngle; // X*(pi/c) used as a standalone angle value
-            const ExpressionNode* pA = pNode->getChild(0);
-            const ExpressionNode* pB = pNode->getChild(1);
-            if (lcl_IsTrig(pA))
-                return lcl_EmitTrig(pA, pB, rCtx);
-            if (lcl_IsTrig(pB))
-                return lcl_EmitTrig(pB, pA, rCtx);
-            return rCtx.addGuide("*/ " + lcl_EmitOoxmlNode(pA, rCtx) + " "
-                                 + lcl_EmitOoxmlNode(pB, rCtx) + " 1");
-        }
-        case ExpressionFunct::BinaryDiv:
-        {
-            OString aAngle;
-            if (lcl_TryEmitAngle60000(pNode, rCtx, aAngle))
-                return aAngle; // (pi*X)/c used as a standalone angle value
-            return rCtx.addGuide("*/ " + lcl_EmitOoxmlNode(pNode->getChild(0), rCtx) + " 1 "
-                                 + lcl_EmitOoxmlNode(pNode->getChild(1), rCtx));
-        }
-        case ExpressionFunct::BinaryMin:
-            return rCtx.addGuide("min " + lcl_EmitOoxmlNode(pNode->getChild(0), rCtx) + " "
-                                 + lcl_EmitOoxmlNode(pNode->getChild(1), rCtx));
-        case ExpressionFunct::BinaryMax:
-            return rCtx.addGuide("max " + lcl_EmitOoxmlNode(pNode->getChild(0), rCtx) + " "
-                                 + lcl_EmitOoxmlNode(pNode->getChild(1), rCtx));
-        case ExpressionFunct::UnaryNeg:
-            return rCtx.addGuide("*/ " + lcl_EmitOoxmlNode(pNode->getChild(0), rCtx) + " -1 1");
-        case ExpressionFunct::UnaryAbs:
-            return rCtx.addGuide("abs " + lcl_EmitOoxmlNode(pNode->getChild(0), rCtx));
-        case ExpressionFunct::UnarySqrt:
-            return rCtx.addGuide("sqrt " + lcl_EmitOoxmlNode(pNode->getChild(0), rCtx));
-        case ExpressionFunct::TernaryIf:
-            return rCtx.addGuide("?: " + lcl_EmitOoxmlNode(pNode->getChild(0), rCtx) + " "
-                                 + lcl_EmitOoxmlNode(pNode->getChild(1), rCtx) + " "
-                                 + lcl_EmitOoxmlNode(pNode->getChild(2), rCtx));
-        case ExpressionFunct::UnarySin:
-        case ExpressionFunct::UnaryCos:
-        case ExpressionFunct::UnaryTan:
-            return lcl_EmitTrig(pNode, nullptr, rCtx);
-        default:
-            // atan2/cat2/sat2, bare pi, stretch/has-fill flags: not expressible yet.
-            rCtx.bFailed = true;
-            return "0"_ostr;
-    }
-}
-
-// Convert all of a shape's ODF "Equations" to OOXML guides. On success rGuides
-// holds the <a:gdLst> guides, rUsedAdjustments the adjustments for <a:avLst>, and
-// rEqNames maps each source equation to the OOXML token (guide name or literal)
-// that holds its value. Returns false if any equation uses a construct we cannot
-// express, so the caller can fall back to resolved coordinates.
-bool lcl_CreateOoxmlGuides(const EnhancedCustomShape2d& rCustomShape2d,
-                           const css::uno::Sequence<OUString>& rEquationStrings,
-                           std::vector<Guide>& rGuides, std::set<sal_Int32>& rUsedAdjustments,
-                           std::vector<OString>& rEqNames)
-{
-    rEqNames.assign(rEquationStrings.getLength(), OString());
-    std::vector<bool> aEqIsAngle(rEquationStrings.getLength(), false);
-    OoxmlEqContext aContext{ rGuides, rUsedAdjustments, rEqNames, aEqIsAngle };
-    for (sal_Int32 i = 0; i < rEquationStrings.getLength(); ++i)
-    {
-        std::shared_ptr<ExpressionNode> pNode;
-        try
-        {
-            pNode = EnhancedCustomShape::FunctionParser::parseFunction(rEquationStrings[i],
-                                                                       rCustomShape2d);
-        }
-        catch (...)
-        {
-            return false;
-        }
-        aContext.bFailed = false;
-        // An equation that is itself an angle (X*pi/c) is converted to 60000ths of
-        // a degree and remembered, so trig functions referencing it work.
-        OString aToken;
-        if (lcl_TryEmitAngle60000(pNode.get(), aContext, aToken))
-            aEqIsAngle[i] = true;
-        else
-            aToken = lcl_EmitOoxmlNode(pNode.get(), aContext);
-        if (aContext.bFailed)
-            return false;
-        rEqNames[i] = std::move(aToken);
-    }
-    return true;
-}
-
-// Format a single EnhancedCustomShapeParameter (a handle position or range
-// value) as an OOXML adjust-handle token: an adjustment as "adj<n>", an equation
-// result as its guide "f<n>", the built-in box edges as l/t/r/b, anything else
-// as its literal value.
-OString lcl_GetHandleValue(const css::drawing::EnhancedCustomShapeParameter& rParam,
-                           const std::vector<OString>* pEqNames)
-{
-    sal_Int32 nValue = 0;
-    if (double fValue = 0.0; rParam.Value >>= fValue)
-        nValue = std::lround(fValue);
-    else
-        rParam.Value >>= nValue;
-
-    switch (rParam.Type)
-    {
-        case css::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT:
-            return "adj" + OString::number(nValue + 1);
-        case css::drawing::EnhancedCustomShapeParameterType::EQUATION:
-            if (pEqNames && nValue >= 0 && o3tl::make_unsigned(nValue) < pEqNames->size()
-                && !(*pEqNames)[nValue].isEmpty())
-                return (*pEqNames)[nValue];
-            return OString::number(nValue);
-        case css::drawing::EnhancedCustomShapeParameterType::LEFT:
-            return "l"_ostr;
-        case css::drawing::EnhancedCustomShapeParameterType::TOP:
-            return "t"_ostr;
-        case css::drawing::EnhancedCustomShapeParameterType::RIGHT:
-            return "r"_ostr;
-        case css::drawing::EnhancedCustomShapeParameterType::BOTTOM:
-            return "b"_ostr;
-        default:
-            return OString::number(nValue);
-    }
-}
-
-// Write the <a:ahLst> adjust handles. An ODF handle whose position drives an
-// adjustment value becomes an <a:ahXY> handle that references the matching
-// adjustment guide ("adj<n>"), so the handle stays draggable after export. Only
-// adjustments declared in <a:avLst> (rUsedAdjustments) are referenced; polar
-// handles are not converted yet.
-void lcl_WriteAdjustHandles(const sax_fastparser::FSHelperPtr& rFS,
-                            const uno::Sequence<beans::PropertyValues>& rHandles,
-                            const std::vector<OString>* pEqNames,
-                            const std::set<sal_Int32>& rUsedAdjustments)
-{
-    struct XYHandle
-    {
-        OString aPosX, aPosY, aGdRefX, aMinX, aMaxX, aGdRefY, aMinY, aMaxY;
-    };
-    auto getAdjustment
-        = [&rUsedAdjustments](const css::drawing::EnhancedCustomShapeParameter& rParam,
-                              sal_Int32& rIndex) {
-              if (rParam.Type != css::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT)
-                  return false;
-              rIndex = -1;
-              rParam.Value >>= rIndex;
-              return rIndex >= 0 && rUsedAdjustments.count(rIndex) > 0;
-          };
-
-    std::vector<XYHandle> aHandlesOut;
-    for (const beans::PropertyValues& rHandle : rHandles)
-    {
-        comphelper::SequenceAsHashMap aMap(rHandle);
-        if (aMap.find(u"Polar"_ustr) != aMap.end())
-            continue; // polar handles are not converted yet
-
-        css::drawing::EnhancedCustomShapeParameterPair aPosition;
-        auto itPos = aMap.find(u"Position"_ustr);
-        if (itPos == aMap.end() || !(itPos->second >>= aPosition))
-            continue;
-
-        XYHandle aOut;
-        aOut.aPosX = lcl_GetHandleValue(aPosition.First, pEqNames);
-        aOut.aPosY = lcl_GetHandleValue(aPosition.Second, pEqNames);
-
-        auto readRange = [&aMap, pEqNames](std::u16string_view rName, OString& rOut) {
-            css::drawing::EnhancedCustomShapeParameter aParam;
-            if (auto it = aMap.find(OUString(rName)); it != aMap.end() && (it->second >>= aParam))
-                rOut = lcl_GetHandleValue(aParam, pEqNames);
-        };
-
-        sal_Int32 nAdjustment = -1;
-        if (getAdjustment(aPosition.First, nAdjustment))
-        {
-            aOut.aGdRefX = "adj" + OString::number(nAdjustment + 1);
-            readRange(u"RangeXMinimum", aOut.aMinX);
-            readRange(u"RangeXMaximum", aOut.aMaxX);
-        }
-        if (getAdjustment(aPosition.Second, nAdjustment))
-        {
-            aOut.aGdRefY = "adj" + OString::number(nAdjustment + 1);
-            readRange(u"RangeYMinimum", aOut.aMinY);
-            readRange(u"RangeYMaximum", aOut.aMaxY);
-        }
-
-        // Only a handle that drives an adjustment value is useful.
-        if (!aOut.aGdRefX.isEmpty() || !aOut.aGdRefY.isEmpty())
-            aHandlesOut.push_back(aOut);
-    }
-
-    if (aHandlesOut.empty())
-    {
-        rFS->singleElementNS(XML_a, XML_ahLst);
-        return;
-    }
-
-    rFS->startElementNS(XML_a, XML_ahLst);
-    for (const XYHandle& rHandle : aHandlesOut)
-    {
-        rtl::Reference<sax_fastparser::FastAttributeList> xAttrs
-            = sax_fastparser::FastSerializerHelper::createAttrList();
-        if (!rHandle.aGdRefX.isEmpty())
-            xAttrs->add(XML_gdRefX, rHandle.aGdRefX);
-        if (!rHandle.aMinX.isEmpty())
-            xAttrs->add(XML_minX, rHandle.aMinX);
-        if (!rHandle.aMaxX.isEmpty())
-            xAttrs->add(XML_maxX, rHandle.aMaxX);
-        if (!rHandle.aGdRefY.isEmpty())
-            xAttrs->add(XML_gdRefY, rHandle.aGdRefY);
-        if (!rHandle.aMinY.isEmpty())
-            xAttrs->add(XML_minY, rHandle.aMinY);
-        if (!rHandle.aMaxY.isEmpty())
-            xAttrs->add(XML_maxY, rHandle.aMaxY);
-        rFS->startElementNS(XML_a, XML_ahXY, xAttrs);
-        rFS->singleElementNS(XML_a, XML_pos, XML_x, rHandle.aPosX, XML_y, rHandle.aPosY);
-        rFS->endElementNS(XML_a, XML_ahXY);
-    }
-    rFS->endElementNS(XML_a, XML_ahLst);
-}
-
-// Format one path coordinate. When the coordinate is an equation, pCoordGuides
-// gives the token holding its value - a guide name ("f<n>") for a parametric
-// equation, or a plain number for a constant one - so the point follows the
-// guides. A stretched coordinate (StretchX/StretchY) keeps its resolved value,
-// because the guide does not carry the stretch adjustment.
-OString lcl_GetCustomGeometryCoordinate(const drawing::EnhancedCustomShapeParameter& rParam,
-                                        const EnhancedCustomShape2d& rCustomShape2d,
-                                        const std::vector<OString>* pCoordGuides,
-                                        const bool bReplaceGeoWidth, const bool bReplaceGeoHeight)
-{
-    if (pCoordGuides && !bReplaceGeoWidth && !bReplaceGeoHeight
-        && rParam.Type == css::drawing::EnhancedCustomShapeParameterType::EQUATION)
-    {
-        sal_Int32 nIndex = -1;
-        rParam.Value >>= nIndex;
-        if (nIndex >= 0 && o3tl::make_unsigned(nIndex) < pCoordGuides->size()
-            && !(*pCoordGuides)[nIndex].isEmpty())
-            return (*pCoordGuides)[nIndex];
-    }
-    return OString::number(
-        GetCustomGeometryPointValue(rParam, rCustomShape2d, bReplaceGeoWidth, bReplaceGeoHeight));
-}
-
 void prepareGluePoints(std::vector<Guide>& rGuideList,
                        const css::uno::Sequence<OUString>& aEquations,
                        const uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rGluePoints,
@@ -5718,50 +5305,9 @@ bool DrawingML::WriteCustomGeometry(
     std::vector<Guide> aGuideList; // for now only for <a:rect>
     prepareTextArea(aCustomShape2d, aGuideList, aTextAreaRect);
     prepareGluePoints(aGuideList, aEquationSeq, aGluePoints, nViewBoxWidth, nViewBoxHeight);
-
-    // Convert the shape's "Equations" into <a:gd> guides ("f0", "f1", ...) from the
-    // parsed expression tree (keeps width/height symbolic and handles the
-    // trigonometric functions). These are kept apart from aGuideList because they
-    // reference each other by name, which IsValidOOXMLFormula() (used to validate
-    // the text-area/glue-point guides below) does not accept.
-    std::vector<Guide> aEquationGuides;
-    std::set<sal_Int32> aUsedAdjustments;
-    std::vector<OString> aEqNames;
-    const bool bHaveEquationGuides = lcl_CreateOoxmlGuides(
-        aCustomShape2d, aEquationSeq, aEquationGuides, aUsedAdjustments, aEqNames);
-    // Declare the referenced adjustment values in <a:avLst> holding their current
-    // value, so the equation guides stay driven by the shape's handles.
-    std::vector<Guide> aAdjGuides;
-    if (bHaveEquationGuides)
-    {
-        for (const sal_Int32 nAdjustment : aUsedAdjustments)
-        {
-            css::drawing::EnhancedCustomShapeParameter aParam;
-            aParam.Type = css::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT;
-            aParam.Value <<= nAdjustment;
-            double fValue = 0.0;
-            aCustomShape2d.GetParameter(fValue, aParam, false, false);
-            aAdjGuides.push_back({ "adj" + OString::number(nAdjustment + 1),
-                                   "val " + OString::number(std::lround(fValue)) });
-        }
-    }
-    // Path coordinates and handles reference an equation by the token (guide name,
-    // literal, adjustment or w/h) holding its value.
-    const std::vector<OString>* pEqNames = bHaveEquationGuides ? &aEqNames : nullptr;
-
     mpFS->startElementNS(XML_a, XML_custGeom);
-    if (aAdjGuides.empty())
-    {
-        mpFS->singleElementNS(XML_a, XML_avLst);
-    }
-    else
-    {
-        mpFS->startElementNS(XML_a, XML_avLst);
-        for (auto const& elem : aAdjGuides)
-            mpFS->singleElementNS(XML_a, XML_gd, XML_name, elem.sName, XML_fmla, elem.sFormula);
-        mpFS->endElementNS(XML_a, XML_avLst);
-    }
-    if (aGuideList.empty() && aEquationGuides.empty())
+    mpFS->singleElementNS(XML_a, XML_avLst);
+    if (aGuideList.empty())
     {
         mpFS->singleElementNS(XML_a, XML_gdLst);
     }
@@ -5773,26 +5319,9 @@ bool DrawingML::WriteCustomGeometry(
             assert(IsValidOOXMLFormula(OUString::fromUtf8(elem.sFormula)));
             mpFS->singleElementNS(XML_a, XML_gd, XML_name, elem.sName, XML_fmla, elem.sFormula);
         }
-        for (auto const& elem : aEquationGuides)
-            mpFS->singleElementNS(XML_a, XML_gd, XML_name, elem.sName, XML_fmla, elem.sFormula);
         mpFS->endElementNS(XML_a, XML_gdLst);
     }
-
-    // Adjust handles. They reference the avLst/gdLst guides written above, so we
-    // can only write them when the equation guides were created successfully.
-    uno::Sequence<beans::PropertyValues> aHandles;
-    if (bHaveEquationGuides)
-    {
-        auto pHandlesProp = std::find_if(
-            std::cbegin(*pGeometrySeq), std::cend(*pGeometrySeq),
-            [](const beans::PropertyValue& rProp) { return rProp.Name == "Handles"; });
-        if (pHandlesProp != std::cend(*pGeometrySeq))
-            pHandlesProp->Value >>= aHandles;
-    }
-    if (aHandles.hasElements())
-        lcl_WriteAdjustHandles(mpFS, aHandles, pEqNames, aUsedAdjustments);
-    else
-        mpFS->singleElementNS(XML_a, XML_ahLst);
+    mpFS->singleElementNS(XML_a, XML_ahLst);
 
     if (!aGuideList.empty())
     {
@@ -5890,7 +5419,7 @@ bool DrawingML::WriteCustomGeometry(
             {
                 bOK = WriteCustomGeometrySegment(rSegment.Command, k, aPairs, nPairIndex, fCurrentX,
                                                  fCurrentY, bCurrentValid, aCustomShape2d,
-                                                 bReplaceGeoWidth, bReplaceGeoHeight, pEqNames);
+                                                 bReplaceGeoWidth, bReplaceGeoHeight);
             }
         } // end loop over all commands of subpath
         // finish this subpath in any case
@@ -5915,7 +5444,7 @@ bool DrawingML::WriteCustomGeometrySegment(
     const uno::Sequence<css::drawing::EnhancedCustomShapeParameterPair>& rPairs,
     sal_Int32& rnPairIndex, double& rfCurrentX, double& rfCurrentY, bool& rbCurrentValid,
     const EnhancedCustomShape2d& rCustomShape2d, const bool bReplaceGeoWidth,
-    const bool bReplaceGeoHeight, const std::vector<OString>* pCoordGuides)
+    const bool bReplaceGeoHeight)
 {
     switch (eCommand)
     {
@@ -5926,7 +5455,7 @@ bool DrawingML::WriteCustomGeometrySegment(
 
             mpFS->startElementNS(XML_a, XML_moveTo);
             WriteCustomGeometryPoint(rPairs[rnPairIndex], rCustomShape2d, bReplaceGeoWidth,
-                                     bReplaceGeoHeight, pCoordGuides);
+                                     bReplaceGeoHeight);
             mpFS->endElementNS(XML_a, XML_moveTo);
             rCustomShape2d.GetParameter(rfCurrentX, rPairs[rnPairIndex].First, bReplaceGeoWidth,
                                         false);
@@ -5947,14 +5476,14 @@ bool DrawingML::WriteCustomGeometrySegment(
             {
                 mpFS->startElementNS(XML_a, XML_lnTo);
                 WriteCustomGeometryPoint(rPairs[rnPairIndex], rCustomShape2d, bReplaceGeoWidth,
-                                         bReplaceGeoHeight, pCoordGuides);
+                                         bReplaceGeoHeight);
                 mpFS->endElementNS(XML_a, XML_lnTo);
             }
             else
             {
                 mpFS->startElementNS(XML_a, XML_moveTo);
                 WriteCustomGeometryPoint(rPairs[rnPairIndex], rCustomShape2d, bReplaceGeoWidth,
-                                         bReplaceGeoHeight, pCoordGuides);
+                                         bReplaceGeoHeight);
                 mpFS->endElementNS(XML_a, XML_moveTo);
             }
             rCustomShape2d.GetParameter(rfCurrentX, rPairs[rnPairIndex].First, bReplaceGeoWidth,
@@ -5974,7 +5503,7 @@ bool DrawingML::WriteCustomGeometrySegment(
             for (sal_uInt8 i = 0; i <= 2; ++i)
             {
                 WriteCustomGeometryPoint(rPairs[rnPairIndex + i], rCustomShape2d, bReplaceGeoWidth,
-                                         bReplaceGeoHeight, pCoordGuides);
+                                         bReplaceGeoHeight);
             }
             mpFS->endElementNS(XML_a, XML_cubicBezTo);
             rCustomShape2d.GetParameter(rfCurrentX, rPairs[rnPairIndex + 2].First, bReplaceGeoWidth,
@@ -6180,7 +5709,7 @@ bool DrawingML::WriteCustomGeometrySegment(
                 // faulty path, but we continue with the target point
                 mpFS->startElementNS(XML_a, XML_moveTo);
                 WriteCustomGeometryPoint(rPairs[rnPairIndex], rCustomShape2d, bReplaceGeoWidth,
-                                         bReplaceGeoHeight, pCoordGuides);
+                                         bReplaceGeoHeight);
                 mpFS->endElementNS(XML_a, XML_moveTo);
             }
             rfCurrentX = fX;
@@ -6198,7 +5727,7 @@ bool DrawingML::WriteCustomGeometrySegment(
             for (sal_uInt8 i = 0; i < 2; ++i)
             {
                 WriteCustomGeometryPoint(rPairs[rnPairIndex + i], rCustomShape2d, bReplaceGeoWidth,
-                                         bReplaceGeoHeight, pCoordGuides);
+                                         bReplaceGeoHeight);
             }
             mpFS->endElementNS(XML_a, XML_quadBezTo);
             rCustomShape2d.GetParameter(rfCurrentX, rPairs[rnPairIndex + 1].First, bReplaceGeoWidth,
@@ -6248,14 +5777,14 @@ bool DrawingML::WriteCustomGeometrySegment(
 void DrawingML::WriteCustomGeometryPoint(
     const drawing::EnhancedCustomShapeParameterPair& rParamPair,
     const EnhancedCustomShape2d& rCustomShape2d, const bool bReplaceGeoWidth,
-    const bool bReplaceGeoHeight, const std::vector<OString>* pCoordGuides)
+    const bool bReplaceGeoHeight)
 {
-    OString sX = lcl_GetCustomGeometryCoordinate(rParamPair.First, rCustomShape2d, pCoordGuides,
-                                                 bReplaceGeoWidth, false);
-    OString sY = lcl_GetCustomGeometryCoordinate(rParamPair.Second, rCustomShape2d, pCoordGuides,
-                                                 false, bReplaceGeoHeight);
+    sal_Int32 nX
+        = GetCustomGeometryPointValue(rParamPair.First, rCustomShape2d, bReplaceGeoWidth, false);
+    sal_Int32 nY
+        = GetCustomGeometryPointValue(rParamPair.Second, rCustomShape2d, false, bReplaceGeoHeight);
 
-    mpFS->singleElementNS(XML_a, XML_pt, XML_x, sX, XML_y, sY);
+    mpFS->singleElementNS(XML_a, XML_pt, XML_x, OString::number(nX), XML_y, OString::number(nY));
 }
 
 void DrawingML::WriteEmptyCustomGeometry()
