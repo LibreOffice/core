@@ -1584,13 +1584,17 @@ namespace {
 void notifyCellCursorAt(const ScTabViewShell* pViewShell, SCCOL nCol, SCROW nRow,
                         const tools::Rectangle& rCursor)
 {
-    std::stringstream ss;
-    ss << rCursor.getX() << ", " << rCursor.getY() << ", " << rCursor.GetWidth() << ", "
-       << rCursor.GetHeight() << ", " << nCol << ", " << nRow;
+    OString msg =
+        OString::number(rCursor.getX())
+        + ", " + OString::number(rCursor.getY())
+        + ", " + OString::number(rCursor.GetWidth())
+        + ", " + OString::number(rCursor.GetHeight())
+        + ", " + OString::number(nCol)
+        + ", " + OString::number(nRow);
 
-    pViewShell->viewCallback(KIT_CALLBACK_CELL_CURSOR, ss.str().c_str());
+    pViewShell->viewCallback(KIT_CALLBACK_CELL_CURSOR, msg);
     KitHelper::notifyOtherViews(pViewShell, KIT_CALLBACK_CELL_VIEW_CURSOR, "rectangle",
-                                   ss.str().c_str());
+                                   msg);
 }
 
 }
