@@ -960,7 +960,6 @@
         "--disable-epm",
         "--disable-evolution2",
         "--disable-gio",
-        "--disable-gstreamer-1-0",
         "--disable-gtk3",
         "--disable-gui",
         "--disable-kf5",
