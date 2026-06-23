@@ -1039,7 +1039,7 @@ check-snap-langs:
 		exit 1; \
 	fi
 
-check-recursive: eslint
+check-recursive: eslint presets-dir
 
 check: all-local check-for-system-nss check-snap-langs prettier eslint presets-dir check-apparmour-namespaces check-recursive
 	$(GEN_COVERAGE_COMMAND)
