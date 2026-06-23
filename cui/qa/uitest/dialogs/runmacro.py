@@ -15,6 +15,7 @@ from com.sun.star.script.provider import ScriptURIHelper
 from com.sun.star.ucb import SimpleFileAccess
 import uno
 
+import contextlib
 import tempfile
 import os
 
@@ -37,21 +38,24 @@ def MyMacro():
 
 
 class RunMacroTest(UITestCase):
+    def select_macro(self, xDialog, *parts):
+        xNode = xDialog.getChild("categories")
+
+        for i, part in enumerate(parts):
+            if i > 0:
+                xNode.executeAction("EXPAND", tuple())
+
+            # Find the node in the tree with this part name
+            xNode = \
+                next(x for x in map(lambda i: xNode.getChild(i),
+                                    range(int(get_state_as_dict(xNode)["Children"])))
+                     if get_state_as_dict(x)["Text"] == part)
+
+            xNode.executeAction("SELECT", tuple())
+
     def run_macro(self, *parts):
         with self.ui_test.execute_dialog_through_command(".uno:RunMacro") as xDialog:
-            xNode = xDialog.getChild("categories")
-
-            for i, part in enumerate(parts):
-                if i > 0:
-                    xNode.executeAction("EXPAND", tuple())
-
-                # Find the node in the tree with this part name
-                xNode = \
-                    next(x for x in map(lambda i: xNode.getChild(i),
-                                        range(int(get_state_as_dict(xNode)["Children"])))
-                         if get_state_as_dict(x)["Text"] == part)
-
-                xNode.executeAction("SELECT", tuple())
+            self.select_macro(xDialog, *parts)
 
     def run_user_script(self):
         script_dir = get_user_script_directory(self.xContext)
@@ -107,7 +111,16 @@ class RunMacroTest(UITestCase):
 
                     # We shouldn’t be able to run the embedded script because the security policy
                     # disallows it
-                    self.run_macro(os.path.basename(doc_file.name), "MyScript")
+                    with contextlib.ExitStack() as stack:
+                        xDialog = stack.enter_context(
+                            self.ui_test.execute_dialog_through_command(".uno:RunMacro"))
+                        self.select_macro(xDialog, os.path.basename(doc_file.name), "MyScript")
+                        # We want to start the EventListener for the blocking action of showing the
+                        # error dialog *after* creating the run macro dialog so that it doesn’t pick
+                        # up the wrong event.
+                        with self.ui_test.execute_blocking_action(stack.close):
+                            pass
+
                     self.assertFalse(os.path.exists(os.path.join(check_file_dir, 'script-ran')))
 
                 # Temporarily disable macro security

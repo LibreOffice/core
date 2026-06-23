@@ -1624,6 +1624,28 @@ namespace
         }
         return nullptr;
     }
+    void lcl_callXScript( const Reference < XFrame >& rxFrame,
+                          const Reference < css::uno::XInterface >& rxScriptContext,
+                          const OUString& rScriptURL )
+    {
+        Sequence< Any > args;
+        Sequence< sal_Int16 > outIndex;
+        Sequence< Any > outArgs;
+        Any ret;
+
+        if (SfxObjectShell::CallXScript( rxScriptContext, rScriptURL, args,
+                                         ret, outIndex, outArgs ) == ERRCODE_IO_ACCESSDENIED)
+        {
+            if (weld::Window* pParent = lcl_getDialogParent(rxFrame))
+            {
+                std::unique_ptr<weld::MessageDialog> xBox(
+                    Application::CreateMessageDialog(pParent, VclMessageType::Warning,
+                                                     VclButtonsType::Ok,
+                                                     SfxResId(STR_CANNOTRUNMACRO)));
+                xBox->run();
+            }
+        }
+    }
 #endif // HAVE_FEATURE_SCRIPTING
 }
 
@@ -1843,13 +1865,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                         return;
                     }
 
-                    Sequence< Any > args;
-                    Sequence< sal_Int16 > outIndex;
-                    Sequence< Any > outArgs;
-                    Any ret;
-
-                    SfxObjectShell::CallXScript( pDlg->GetScriptModel(), pDlg->GetScriptURL(), args,
-                                                 ret, outIndex, outArgs );
+                    lcl_callXScript(xFrame, pDlg->GetScriptModel(), pDlg->GetScriptURL());
                     pDlg->disposeOnce();
                 });
             }
@@ -1910,11 +1926,6 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                             return;
                         }
 
-                        Sequence<Any> args;
-                        Sequence<sal_Int16> outIndex;
-                        Sequence<Any> outArgs;
-                        Any ret;
-
                         Reference<XInterface> xScriptContext;
 
                         Reference<XController> xController;
@@ -1925,8 +1936,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                         if (!xScriptContext.is())
                             xScriptContext = xController;
 
-                        SfxObjectShell::CallXScript(xScriptContext, pDlg->GetScriptURL(), args, ret,
-                                                    outIndex, outArgs);
+                        lcl_callXScript(xFrame, xScriptContext, pDlg->GetScriptURL());
                         pDlg->disposeOnce();
                     });
                 pDlg->LoadLastUsedMacro();
