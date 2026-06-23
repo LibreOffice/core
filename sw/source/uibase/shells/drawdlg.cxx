@@ -168,7 +168,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxLineTabDialog(rReq.GetFrameWeld(),
-                    &aNewAttr,
+                &aNewAttr,
                 &rModel,
                 pObj,
                 bHasMarked));
@@ -210,6 +210,24 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 
                 pDlg->disposeOnce();
             });
+        }
+        break;
+        case SID_CONNECTION_DLG:
+        {
+            bool bHasMarked = pView->GetMarkedObjectList().GetMarkCount() != 0;
+
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog(rReq.GetFrameWeld(),
+                                                 aNewAttr, pView, RID_SVXPAGE_CONNECTION));
+            if (pDlg->Execute() == RET_OK)
+            {
+                pSh->StartAction();
+                if (bHasMarked)
+                    pView->SetAttrToMarked(*pDlg->GetOutputItemSet(), false);
+                else
+                    pView->SetDefaultAttr(*pDlg->GetOutputItemSet(), false);
+                pSh->EndAction();
+            }
         }
         break;
 
