@@ -1846,6 +1846,11 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		return resultList;
 	},
 
+	_isMultiPageView: function() {
+		const layout = app.activeDocument ? (app.activeDocument.activeLayout ?  app.activeDocument.activeLayout.type : "") : "";
+		return layout === 'ViewLayoutMultiPage';
+	},
+
 	_onInvalidateCursorMsg: function (textMsg) {
 		textMsg = textMsg.substring('invalidatecursor:'.length + 1);
 		var obj = JSON.parse(textMsg);
@@ -1916,8 +1921,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		// Normally we don't need to refresh the ruler offset.
 		// But in multi page view, user may have clicked at the page next to the current one.
 		// In that case, we need to fix offset again (if required - it checks values before changing offset).
-		const layout = app.activeDocument ? (app.activeDocument.activeLayout ?  app.activeDocument.activeLayout.type : "") : "";
-		if (layout === 'ViewLayoutMultiPage' && app.UI.horizontalRuler)
+		if (this._isMultiPageView() && app.UI.horizontalRuler)
 			app.UI.horizontalRuler.fixOffset();
 	},
 
