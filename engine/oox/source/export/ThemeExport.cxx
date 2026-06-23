@@ -162,6 +162,7 @@ namespace
 {
 constexpr auto constTransformTypeTokenMap
     = frozen::make_unordered_map<model::TransformationType, sal_Int32>({
+        { model::TransformationType::SatMod, XML_satMod },
         { model::TransformationType::Tint, XML_tint },
         { model::TransformationType::Shade, XML_shade },
         { model::TransformationType::LumMod, XML_lumMod },

@@ -83,6 +83,18 @@ CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_GlowShadowReflection)
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection", "kx").match("0"));
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection", "ky").match("0"));
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection", "algn").match("bl"));
+
+    // Some tests on exporting theme color transformations, not specific to w14
+    pXmlDoc = parseExport(u"word/theme/theme1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    OString sBasePath = "/a:theme/a:themeElements/a:fmtScheme/a:fillStyleLst"
+                        "/a:gradFill[1]/a:gsLst/a:gs[1]/a:schemeClr"_ostr;
+
+    /// Same values as in original theme1.xml must remain
+    assertXPath(pXmlDoc, sBasePath, "val", u"phClr");
+    assertXPath(pXmlDoc, sBasePath + "/a:lumMod", "val", u"110000");
+    assertXPath(pXmlDoc, sBasePath + "/a:satMod", "val", u"105000");
+    assertXPath(pXmlDoc, sBasePath + "/a:tint", "val", u"67000");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_TextOutline)
