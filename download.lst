@@ -420,8 +420,8 @@ LIBEXTTEXTCAT_TARBALL := libexttextcat-3.4.8.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBFFI_SHA256SUM := f3a3082a23b37c293a4fcd1053147b371f2ff91fa7ea1b2a52e335676bac82dc
-LIBFFI_TARBALL := libffi-3.5.2.tar.gz
+LIBFFI_SHA256SUM := 31ff1fe32deaebfbb388727f32677bb254bf2a41382c51464c0b1837c9ee9828
+LIBFFI_TARBALL := libffi-3.6.0.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
