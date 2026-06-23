@@ -536,8 +536,7 @@ bool FileServerRequestHandler::handleRequest(const HTTPRequest& request,
         if (endPoint == "cool.html" ||
             endPoint == "help-localizations.json" ||
             endPoint == "localizations.json" ||
-            endPoint == "uno-localizations.json" ||
-            endPoint == "uno-localizations-override.json")
+            endPoint == "uno-localizations.json")
         {
             accessDetails = preprocessFile(request, response, requestDetails, message, socket);
             return true;

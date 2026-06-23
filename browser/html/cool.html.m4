@@ -100,12 +100,10 @@ m4_ifelse(MOBILEAPP,[true],
   [
    m4_ifelse(IOSAPP,[true],
      [],
-     [<link rel="localizations" href="l10n/uno-localizations-override.json" type="application/vnd.oftn.l10n+json"/>
-      <link rel="localizations" href="l10n/localizations.json" type="application/vnd.oftn.l10n+json"/>
+     [<link rel="localizations" href="l10n/localizations.json" type="application/vnd.oftn.l10n+json"/>
       <link rel="localizations" href="l10n/help-localizations.json" type="application/vnd.oftn.l10n+json"/>
       <link rel="localizations" href="l10n/uno-localizations.json" type="application/vnd.oftn.l10n+json"/>])],
-  [<link rel="localizations" href="%SERVICE_ROOT%/browser/%VERSION%/l10n/uno-localizations-override.json" type="application/vnd.oftn.l10n+json"/>
-   <link rel="localizations" href="%SERVICE_ROOT%/browser/%VERSION%/l10n/localizations.json" type="application/vnd.oftn.l10n+json"/>
+  [<link rel="localizations" href="%SERVICE_ROOT%/browser/%VERSION%/l10n/localizations.json" type="application/vnd.oftn.l10n+json"/>
    <link rel="localizations" href="%SERVICE_ROOT%/browser/%VERSION%/l10n/help-localizations.json" type="application/vnd.oftn.l10n+json"/>
    <link rel="localizations" href="%SERVICE_ROOT%/browser/%VERSION%/l10n/uno-localizations.json" type="application/vnd.oftn.l10n+json"/>]
 )m4_dnl
