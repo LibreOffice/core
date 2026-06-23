@@ -312,10 +312,6 @@ More info on Qt WASM emscripten pthreads:
 
 - <https://wiki.qt.io/Qt_for_WebAssembly#Multithreading_Support>
 
-WASM needs `-pthread` at compile, not just link time for atomics support. Alternatively you can provide
-`-s USE_PTHREADS=1`, but both don't seem to work reliable, so best provide both.
-<https://github.com/emscripten-core/emscripten/issues/10370>
-
 The output file must have the prefix .o, otherwise the WASM files will get a
 `node.js` shebang (!) and ranlib won't be able to index the library (link errors).
 

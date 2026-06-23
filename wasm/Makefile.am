@@ -17,7 +17,7 @@ QUIET_M4_0 = @echo "  M4      " $@;
 EXEEXT = .js
 
 AM_CXXFLAGS = \
-	-pthread -s USE_PTHREADS=1 \
+	-pthread \
 	-fwasm-exceptions
 
 AM_CPPFLAGS = \
@@ -114,7 +114,7 @@ endif
 
 # TODO these are just copypasta from core
 online_LDFLAGS = \
-	-pthread -s MODULARIZE -s EXPORT_NAME=createOnlineModule -s USE_PTHREADS=1 -s TOTAL_MEMORY=1GB -s PTHREAD_POOL_SIZE_STRICT=0 --bind -s FORCE_FILESYSTEM=1 -s WASM_BIGINT=1 -s ERROR_ON_UNDEFINED_SYMBOLS=1 -s FETCH=1 -s ASSERTIONS=1 -s EXIT_RUNTIME=0 -s EXPORTED_RUNTIME_METHODS=["UTF16ToString","stringToUTF16","UTF8ToString","stringToNewUTF8","ccall","cwrap","FS","registerType","ClassHandle","HEAPU16","HEAPU32"] -pthread -s USE_PTHREADS=1 -fwasm-exceptions -s EXPORTED_FUNCTIONS=@exports \
+	-pthread -s MODULARIZE -s EXPORT_NAME=createOnlineModule -s TOTAL_MEMORY=1GB -s PTHREAD_POOL_SIZE_STRICT=0 --bind -s FORCE_FILESYSTEM=1 -s WASM_BIGINT=1 -s ERROR_ON_UNDEFINED_SYMBOLS=1 -s FETCH=1 -s ASSERTIONS=1 -s EXIT_RUNTIME=0 -s EXPORTED_RUNTIME_METHODS=["UTF16ToString","stringToUTF16","UTF8ToString","stringToNewUTF8","ccall","cwrap","FS","registerType","ClassHandle","HEAPU16","HEAPU32"] -fwasm-exceptions -s EXPORTED_FUNCTIONS=@exports \
 	--pre-js @LOSOURCEDIR@/static/emscripten/environment.js \
 	--pre-js @LOBUILDDIR@/workdir/CustomTarget/static/emscripten_fs_image/soffice.data.js.link
 
