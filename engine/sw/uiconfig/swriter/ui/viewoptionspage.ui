@@ -101,7 +101,7 @@
                 <property name="label-xalign">0</property>
                 <property name="shadow-type">none</property>
                 <child>
-                  <!-- n-columns=2 n-rows=5 -->
+                  <!-- n-columns=2 n-rows=4 -->
                   <object class="GtkGrid" id="grid3">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -183,20 +183,6 @@
                       <packing>
                         <property name="left-attach">1</property>
                         <property name="top-attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="resolvedcomments">
-                        <property name="label" translatable="yes" context="viewoptionspage|resolvedcomments">_Resolved comments</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="use-underline">True</property>
-                        <property name="draw-indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">4</property>
                       </packing>
                     </child>
                     <child>
@@ -868,9 +854,6 @@
                 <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
             </child>
             <child>
               <object class="GtkFrame" id="zoomframe">
