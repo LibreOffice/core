@@ -380,7 +380,6 @@ OUString SwContentOptPage::GetAllStrings()
                                u"tables"_ustr,
                                u"drawings"_ustr,
                                u"comments"_ustr,
-                               u"resolvedcomments"_ustr,
                                u"hiddentextfield"_ustr,
                                u"hiddenparafield"_ustr,
                                u"changesinmargin"_ustr,
