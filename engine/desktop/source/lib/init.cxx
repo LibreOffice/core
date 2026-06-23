@@ -3029,12 +3029,21 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
 
         rtl::Reference<KitInteractionHandler> const pInteraction(
             new KitInteractionHandler("load"_ostr, pLib));
-        auto const pair(pLib->mInteractionMap.insert(std::make_pair(aURL.toUtf8(), pInteraction)));
-        comphelper::ScopeGuard g([&] () {
-                if (pair.second)
-                {
-                    pLib->mInteractionMap.erase(aURL.toUtf8());
-                }
+        // Take over the interaction handler entry for this URL. A successful
+        // load keeps its entry past the load (the scope guard is dismissed
+        // below) so a view-to-edit reload can still get the password. Once that
+        // document is gone the entry is stale, so a fresh load of the same URL
+        // overwrites it instead of tripping over the leftover.
+        const OString aInteractionKey(aURL.toUtf8());
+        pLib->mInteractionMap[aInteractionKey] = pInteraction;
+        comphelper::ScopeGuard g(
+            [&]()
+            {
+                // The load failed: drop our handler, unless a later load of the
+                // same URL has already replaced it with its own.
+                auto const it = pLib->mInteractionMap.find(aInteractionKey);
+                if (it != pLib->mInteractionMap.end() && it->second == pInteraction)
+                    pLib->mInteractionMap.erase(it);
             });
 
         int nMacroSecurityLevel = 1;
@@ -3135,8 +3144,6 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
         uno::Reference<lang::XComponent> xComponent = xComponentLoader->loadComponentFromURL(
                                             aURL, u"_blank"_ustr, 0,
                                             aFilterOptions);
-
-        assert(!xComponent.is() || pair.second); // concurrent loading of same URL ought to fail
 
         if (!xComponent.is())
         {

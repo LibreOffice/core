@@ -93,6 +93,7 @@ void Bridge::createAndStartMessagePumpThread()
         {
             ProcUtil::setThreadName("app2js");
             bool unexpectedClose = false;
+            bool docUnloading = false;
             while (true)
             {
                 struct pollfd pfd[2];
@@ -117,6 +118,21 @@ void Bridge::createAndStartMessagePumpThread()
                         }
                         std::vector<char> buf(n);
                         fakeSocketRead(_document._fakeClientFd, buf.data(), n);
+
+                        // The server rejects the load when the previous use of
+                        // the same document is still being cleaned up, then it
+                        // drops the connection. Reload and try again rather than
+                        // forwarding the error and letting the window close.
+                        const std::string_view message(buf.data(), buf.size());
+                        if (message.find("error: cmd=load kind=docunloading") !=
+                            std::string_view::npos)
+                        {
+                            LOG_TRC("Load rejected while the document is still "
+                                    "unloading; will reconnect and retry");
+                            docUnloading = true;
+                            break;
+                        }
+
                         send2JS(buf);
                     }
                     if (pfd[0].revents & POLLERR)
@@ -129,12 +145,68 @@ void Bridge::createAndStartMessagePumpThread()
             }
             LOG_TRC("Closing message pump thread");
             fakeSocketClose(_closeNotificationPipeForForwardingThread[1]);
+            _closeNotificationPipeForForwardingThread[1] = -1;
             fakeSocketClose(_document._fakeClientFd);
-            if (unexpectedClose) {
+            _document._fakeClientFd = -1;
+            if (docUnloading)
+            {
+                QMetaObject::invokeMethod(
+                    this, [this] { retryLoadAfterUnloading(); }, Qt::QueuedConnection);
+            }
+            else if (unexpectedClose)
+            {
                 LOG_WRN("Unexpected closing of message pump thread; closing window now");
                 QMetaObject::invokeMethod(_window, "close", Qt::QueuedConnection);
             }
         });
+}
+
+void Bridge::retryLoadAfterUnloading()
+{
+    // Up to this many reloads while the previous use of the document keeps
+    // unloading. The server frees a closed document in about two seconds, so
+    // this back-off comfortably outlasts that.
+    constexpr int maxRetries = 10;
+
+    // The pump thread that asked for this retry has finished, so let it join
+    // before a fresh one starts.
+    if (_app2js.joinable())
+        _app2js.join();
+
+    // That pump created a close-notification pipe; its read end is still open.
+    if (_closeNotificationPipeForForwardingThread[0] != -1)
+    {
+        fakeSocketClose(_closeNotificationPipeForForwardingThread[0]);
+        _closeNotificationPipeForForwardingThread[0] = -1;
+    }
+
+    if (_docUnloadingRetries++ >= maxRetries)
+    {
+        LOG_WRN("Document [" << _document._fileURL.toString() << "] was still unloading after "
+                             << maxRetries << " attempts; closing window");
+        QMetaObject::invokeMethod(_window, "close", Qt::QueuedConnection);
+        return;
+    }
+
+    // A fresh client socket for the next attempt; the previous one was closed
+    // when the pump thread saw the server drop the connection.
+    _document._fakeClientFd = fakeSocketSocket();
+
+    // Quadratic back-off, the same shape the browser client uses when it
+    // retries on a docunloading error.
+    const int delayMs = 500 * _docUnloadingRetries * _docUnloadingRetries;
+    LOG_TRC("Document still unloading; reloading to retry (attempt " << _docUnloadingRetries
+                                                                     << ") in " << delayMs << "ms");
+
+    // Reloading the page re-runs the startup script, which reconnects the fake
+    // socket through the HULLO handler and sends the load request again.
+    QPointer<CODAWebEngineView> webView(_webView);
+    QTimer::singleShot(delayMs, this,
+                       [webView]
+                       {
+                           if (webView)
+                               webView->reload();
+                       });
 }
 
 void Bridge::evalJS(const std::string& script)
@@ -350,6 +422,10 @@ QVariant Bridge::cool(const QString& messageStr)
         }
 
         LOG_TRC_NOFILE("loaddocument: switching to URL: " << newFileUrl);
+
+        // A different document gets its own retry budget for the case where it
+        // too is still unloading from an earlier use.
+        _docUnloadingRetries = 0;
 
         // Close the existing fakesocket
         if (_document._fakeClientFd != -1) {

@@ -34,10 +34,16 @@ class Bridge : public QObject
     std::thread _app2js;
     // true between sending a copy/cut command and receiving its COMMANDRESULT
     bool _copyInProgress = false;
+    // How many times we have reloaded the page because the server was still
+    // cleaning up the previous use of this document when we tried to load it.
+    int _docUnloadingRetries = 0;
 
     void promptSaveLocation(std::function<void(const std::string&, const std::string&)> callback);
     void saveDocumentAs();
     void createAndStartMessagePumpThread();
+    // Reconnect and load the document again after the server rejected the load
+    // because the previous use of the same document was still being unloaded.
+    void retryLoadAfterUnloading();
 
 public:
     explicit Bridge(QObject* parent, coda::DocumentData& document, QMainWindow* window, CODAWebEngineView* webView)
