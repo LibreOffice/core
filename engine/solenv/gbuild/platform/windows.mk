@@ -20,14 +20,19 @@ gb_MKTEMP := mktemp --tmpdir=$(TMPDIR) gbuild.XXXXXX
 
 # dash is cheaper to spawn than bash: use it for the external configure
 # scripts when present, and as the recipe shell too when it supports pipefail.
+# Some dash builds empty a here-document whose body is larger than the input
+# read buffer, which breaks the config.status step of every external project.
+# Only trust dash when it copies a here-document larger than that buffer back
+# intact: feed it a 5000-space body and check the 5001 bytes come back.
 gb_DASH := $(shell command -v dash 2>/dev/null)
+gb_RUN_CONFIGURE := CONFIG_SHELL=$(shell cygpath -ms /bin/sh)
 ifneq ($(gb_DASH),)
+ifeq ($(shell printf 'cat <<EOF\n%5000s\nEOF\n' | $(gb_DASH) 2>/dev/null | wc -c | tr -dc 0-9),5001)
 gb_RUN_CONFIGURE := CONFIG_SHELL=$(shell cygpath -ms $(gb_DASH))
 ifeq ($(shell $(gb_DASH) -c 'set -o pipefail' >/dev/null 2>&1 && echo yes),yes)
 SHELL := $(shell cygpath -ms $(gb_DASH))
 endif
-else
-gb_RUN_CONFIGURE := CONFIG_SHELL=$(shell cygpath -ms /bin/sh)
+endif
 endif
 
 # define _WIN32_WINNT and WINVER will be derived from it in sdkddkver.h
