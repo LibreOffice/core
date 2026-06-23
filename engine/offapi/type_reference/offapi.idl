@@ -4867,11 +4867,6 @@ module com {
      const long MEDIUM = 2;
      const long QUARTILE = 3;
     };
-    /** @deprecated */ published struct BezierPoint {
-     ::com::sun::star::awt::Point Position;
-     ::com::sun::star::awt::Point ControlPoint1;
-     ::com::sun::star::awt::Point ControlPoint2;
-    };
     published service BitmapTable {
      interface ::com::sun::star::container::XNameContainer;
     };

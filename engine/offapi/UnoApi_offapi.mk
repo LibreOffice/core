@@ -2158,7 +2158,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing,\
 	Arrangement \
 	BarCode \
 	BarCodeErrorCorrection \
-	BezierPoint \
 	BitmapMode \
 	BoundVolume \
 	CameraGeometry \
