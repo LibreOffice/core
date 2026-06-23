@@ -613,18 +613,10 @@
                             <child>
                               <object class="GtkCellRendererToggle" id="cellrenderer2"/>
                               <attributes>
-                                <attribute name="active">0</attribute>
                                 <attribute name="sensitive">6</attribute>
+                                <attribute name="active">0</attribute>
                               </attributes>
                             </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="treeviewcolumn1">
-                            <property name="resizable">True</property>
-                            <property name="spacing">6</property>
-                            <property name="sort-indicator">True</property>
-                            <property name="sort-column-id">0</property>
                             <child>
                               <object class="GtkCellRendererText" id="cellrenderer1"/>
                               <attributes>
