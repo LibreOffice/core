@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkBox" id="OptFontTabPage">
@@ -501,7 +501,7 @@
           </object>
         </child>
         <child type="label">
-          <object class="GtkLabel" id="label1">
+          <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="optfonttabpage|label1">Basic Fonts (%1)</property>
