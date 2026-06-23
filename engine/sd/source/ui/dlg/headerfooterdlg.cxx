@@ -32,6 +32,7 @@
 #include <DrawDocShell.hxx>
 #include <drawdoc.hxx>
 #include <ViewShell.hxx>
+#include <ViewShellBase.hxx>
 #include <sdmod.hxx>
 
 // preview control for presentation layout
@@ -345,6 +346,17 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
 
     // give the undo group to the undo manager
     mrViewShell.GetViewFrame()->GetObjectShell()->GetUndoManager()->AddUndoAction(std::move(pUndoGroup));
+
+    // The header/footer objects live on the shared master page
+    // Invalidate every slide so the client refetches them all.
+    if (comphelper::COKit::isActive())
+    {
+        SfxViewShell& rSfxViewShell = mrViewShell.GetViewShellBase();
+        const int nEditMode = rSfxViewShell.getEditMode();
+        const int nPageCount = mrDoc.GetSdPageCount(PageKind::Standard);
+        for (int nSlide = 0; nSlide < nPageCount; ++nSlide)
+            rSfxViewShell.viewInvalidateTilesCallback(nullptr, nSlide, nEditMode);
+    }
 }
 
 void HeaderFooterDialog::change( SdUndoGroup* pUndoGroup, SdPage* pPage, const HeaderFooterSettings& rNewSettings )
