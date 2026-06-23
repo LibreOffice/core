@@ -139,6 +139,9 @@
 #define STR_ERROR_PARSING_STATEMENT                 NC_("STR_ERROR_PARSING_STATEMENT", "$object$ is based on an SQL command which could not be parsed.")
 // To translators: for $object$, one of the values of the RSC_QUERY_OBJECT_TYPE resource (except \"SQL command\", which doesn't make sense here) will be inserted.
 #define STR_INFO_OPENING_IN_SQL_VIEW                NC_("STR_INFO_OPENING_IN_SQL_VIEW", "$object$ will be opened in SQL view.")
+// tdf#42713: warn before switching to Design View when SQL contains comments
+// To translators: for $object$, one of the values of the RSC_QUERY_OBJECT_TYPE resource will be inserted.
+#define STR_QRY_COMMENTS_WARNING                    NC_("STR_QRY_COMMENTS_WARNING", "$object$ contains SQL comments.\n\nIf you edit it in Design View, the comments will be lost.\n\nContinue anyway?")
 #define STR_STATEMENT_WITHOUT_RESULT_SET            NC_("STR_STATEMENT_WITHOUT_RESULT_SET", "The query does not create a result set, and thus cannot be part of another query.")
 
 #define RID_STR_COLUMN_FORMAT                       NC_("RID_STR_COLUMN_FORMAT", "Column ~Format...")

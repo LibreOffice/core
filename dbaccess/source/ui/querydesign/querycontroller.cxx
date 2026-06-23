@@ -68,6 +68,7 @@
 #include <vcl/weld/MessageDialog.hxx>
 #include <osl/mutex.hxx>
 #include <o3tl/string_view.hxx>
+#include <o3tl/test_info.hxx>
 #include <memory>
 #include <vector>
 
@@ -420,6 +421,90 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId) const
     return aReturn;
 }
 
+namespace {
+struct CommentStrip
+{
+    OUString maComment;
+    bool            mbLastOnLine;
+    CommentStrip( OUString sComment, bool bLastOnLine )
+        : maComment(std::move( sComment)), mbLastOnLine( bLastOnLine) {}
+};
+
+}
+
+/** Obtain all comments in a query.
+
+    See also delComment() implementation for OSQLParser::parseTree().
+ */
+static std::vector< CommentStrip > getComment( const OUString& rQuery )
+{
+    std::vector< CommentStrip > aRet;
+    // First a quick search if there is any "--" or "//" or "/*", if not then
+    // the whole copying loop is pointless.
+    if (rQuery.indexOf( "--" ) < 0 && rQuery.indexOf( "//" ) < 0 &&
+            rQuery.indexOf( "/*" ) < 0)
+        return aRet;
+
+    const sal_Unicode* pCopy = rQuery.getStr();
+    const sal_Int32 nQueryLen = rQuery.getLength();
+    bool bIsText1  = false;     // "text"
+    bool bIsText2  = false;     // 'text'
+    bool bComment2 = false;     // /* comment */
+    bool bComment  = false;     // -- or // comment
+    OUStringBuffer aBuf;
+    for (sal_Int32 i=0; i < nQueryLen; ++i)
+    {
+        if (bComment2)
+        {
+            aBuf.append( &pCopy[i], 1);
+            if ((i+1) < nQueryLen)
+            {
+                if (pCopy[i]=='*' && pCopy[i+1]=='/')
+                {
+                    bComment2 = false;
+                    aBuf.append( &pCopy[++i], 1);
+                    aRet.emplace_back( aBuf.makeStringAndClear(), false);
+                }
+            }
+            else
+            {
+                // comment can't close anymore, actually an error, but...
+                aRet.emplace_back( aBuf.makeStringAndClear(), false);
+            }
+            continue;
+        }
+        if (pCopy[i] == '\n' || i == nQueryLen-1)
+        {
+            if (bComment)
+            {
+                if (i == nQueryLen-1 && pCopy[i] != '\n')
+                    aBuf.append( &pCopy[i], 1);
+                aRet.emplace_back( aBuf.makeStringAndClear(), true);
+                bComment = false;
+            }
+            else if (!aRet.empty())
+                aRet.back().mbLastOnLine = true;
+        }
+        else if (!bComment)
+        {
+            if (pCopy[i] == '\"' && !bIsText2)
+                bIsText1 = !bIsText1;
+            else if (pCopy[i] == '\'' && !bIsText1)
+                bIsText2 = !bIsText2;
+            if (!bIsText1 && !bIsText2 && (i+1) < nQueryLen)
+            {
+                if ((pCopy[i]=='-' && pCopy[i+1]=='-') || (pCopy[i]=='/' && pCopy[i+1]=='/'))
+                    bComment = true;
+                else if (pCopy[i]=='/' && pCopy[i+1]=='*')
+                    bComment2 = true;
+            }
+        }
+        if (bComment || bComment2)
+            aBuf.append( &pCopy[i], 1);
+    }
+    return aRet;
+}
+
 void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& aArgs)
 {
     switch(_nId)
@@ -522,6 +607,30 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                             }
                             else
                             {
+                                // Check for SQL comments before switching to Design View (tdf#42713)
+                                if (!m_bGraphicalDesign)
+                                {
+                                    std::vector<CommentStrip> aComments = getComment(m_sStatement);
+                                    if (!aComments.empty())
+                                    {
+                                        bool bUserSaysNo = true; // safe default
+                                        if (!Application::IsHeadlessModeEnabled()
+                                            && !o3tl::IsRunningUITest())
+                                        {
+                                            OUString aMessage = lcl_getObjectResourceString(
+                                                STR_QRY_COMMENTS_WARNING, m_nCommandType);
+                                            std::unique_ptr<weld::MessageDialog> xDlg(
+                                                Application::CreateMessageDialog(
+                                                    getFrameWeld(), VclMessageType::Warning,
+                                                    VclButtonsType::YesNo, aMessage));
+                                            xDlg->set_default_response(RET_NO);
+                                            bUserSaysNo = (xDlg->run() == RET_NO);
+                                        }
+                                        if (bUserSaysNo)
+                                            break; // stay in SQL view
+                                    }
+                                }
+
                                 // change the view of the data
                                 m_bGraphicalDesign = !m_bGraphicalDesign;
 
@@ -1432,90 +1541,6 @@ bool OQueryController::doSaveAsDoc(bool _bSaveAs)
     return bSuccess;
 }
 
-namespace {
-struct CommentStrip
-{
-    OUString maComment;
-    bool            mbLastOnLine;
-    CommentStrip( OUString sComment, bool bLastOnLine )
-        : maComment(std::move( sComment)), mbLastOnLine( bLastOnLine) {}
-};
-
-}
-
-/** Obtain all comments in a query.
-
-    See also delComment() implementation for OSQLParser::parseTree().
- */
-static std::vector< CommentStrip > getComment( const OUString& rQuery )
-{
-    std::vector< CommentStrip > aRet;
-    // First a quick search if there is any "--" or "//" or "/*", if not then
-    // the whole copying loop is pointless.
-    if (rQuery.indexOf( "--" ) < 0 && rQuery.indexOf( "//" ) < 0 &&
-            rQuery.indexOf( "/*" ) < 0)
-        return aRet;
-
-    const sal_Unicode* pCopy = rQuery.getStr();
-    const sal_Int32 nQueryLen = rQuery.getLength();
-    bool bIsText1  = false;     // "text"
-    bool bIsText2  = false;     // 'text'
-    bool bComment2 = false;     // /* comment */
-    bool bComment  = false;     // -- or // comment
-    OUStringBuffer aBuf;
-    for (sal_Int32 i=0; i < nQueryLen; ++i)
-    {
-        if (bComment2)
-        {
-            aBuf.append( &pCopy[i], 1);
-            if ((i+1) < nQueryLen)
-            {
-                if (pCopy[i]=='*' && pCopy[i+1]=='/')
-                {
-                    bComment2 = false;
-                    aBuf.append( &pCopy[++i], 1);
-                    aRet.emplace_back( aBuf.makeStringAndClear(), false);
-                }
-            }
-            else
-            {
-                // comment can't close anymore, actually an error, but...
-                aRet.emplace_back( aBuf.makeStringAndClear(), false);
-            }
-            continue;
-        }
-        if (pCopy[i] == '\n' || i == nQueryLen-1)
-        {
-            if (bComment)
-            {
-                if (i == nQueryLen-1 && pCopy[i] != '\n')
-                    aBuf.append( &pCopy[i], 1);
-                aRet.emplace_back( aBuf.makeStringAndClear(), true);
-                bComment = false;
-            }
-            else if (!aRet.empty())
-                aRet.back().mbLastOnLine = true;
-        }
-        else if (!bComment)
-        {
-            if (pCopy[i] == '\"' && !bIsText2)
-                bIsText1 = !bIsText1;
-            else if (pCopy[i] == '\'' && !bIsText1)
-                bIsText2 = !bIsText2;
-            if (!bIsText1 && !bIsText2 && (i+1) < nQueryLen)
-            {
-                if ((pCopy[i]=='-' && pCopy[i+1]=='-') || (pCopy[i]=='/' && pCopy[i+1]=='/'))
-                    bComment = true;
-                else if (pCopy[i]=='/' && pCopy[i+1]=='*')
-                    bComment2 = true;
-            }
-        }
-        if (bComment || bComment2)
-            aBuf.append( &pCopy[i], 1);
-    }
-    return aRet;
-}
-
 /** Concat/insert comments that were previously obtained with getComment().
 
     NOTE: The current parser implementation does not preserve newlines, so all
@@ -1584,18 +1609,30 @@ OUString OQueryController::translateStatement( bool _bFireStatementChange )
         try
         {
             OUString aErrorMsg;
+            std::unique_ptr<::connectivity::OSQLParseNode> pNode
+                = m_aSqlParser.parseTree( aErrorMsg, m_sStatement, m_bGraphicalDesign );
 
-            std::vector< CommentStrip > aComments = getComment( m_sStatement);
-
-            std::unique_ptr<::connectivity::OSQLParseNode> pNode = m_aSqlParser.parseTree( aErrorMsg, m_sStatement, m_bGraphicalDesign );
-            if(pNode)
+            if (pNode)
             {
-                pNode->parseNodeToStr( sTranslatedStmt, getConnection() );
+                if (m_bGraphicalDesign)
+                {
+                    // Design view: need composer to assemble query from parts.
+                    // Extract comments first, then re-attach after composition.
+                    std::vector<CommentStrip> aComments = getComment(m_sStatement);
+                    pNode->parseNodeToStr(sTranslatedStmt, getConnection());
+                    m_xComposer->setQuery(sTranslatedStmt);
+                    sTranslatedStmt = m_xComposer->getComposedQuery();
+                    sTranslatedStmt = concatComment(sTranslatedStmt, aComments);
+                }
+                else
+                {
+                    // SQL view (tdf#42713): preserve the raw SQL text as written
+                    // by the user, including original formatting and comment
+                    // positions. Parse above validated syntax; no need for
+                    // compose/recompose round-trip.
+                    sTranslatedStmt = m_sStatement;
+                }
             }
-
-            m_xComposer->setQuery(sTranslatedStmt);
-            sTranslatedStmt = m_xComposer->getComposedQuery();
-            sTranslatedStmt = concatComment( sTranslatedStmt, aComments);
         }
         catch(const SQLException& e)
         {
@@ -1768,16 +1805,42 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
         setQueryComposer();
     OSL_ENSURE(m_pSqlIterator,"No SQLIterator set!");
 
-    // When loading (or re-loading) in Design view, restore the statement (possible with comments)
-    // but only if the user didn't change the statement while in Design view
-    // Then parse the statement to canonical form and update the cached statement
+    // When loading (or re-loading) in Design view, check for SQL comments (tdf#42713)
+    // Ask the user if they want to proceed (comments may be lost) or open in SQL view.
+    // If proceeding, cache the statement with comments for roundtrip preservation.
     if (m_bGraphicalDesign && !m_sStatement.isEmpty() && m_sStatementWithComments.isEmpty())
     {
-        m_sStatementWithComments = m_sStatement;
-        if (m_pSqlIterator && m_pSqlIterator->getParseTree())
+        bool bProceed = true;
+        std::vector<CommentStrip> aComments = getComment(m_sStatement);
+        if (!aComments.empty())
         {
-            m_sStatementCanonical.clear();
-            m_pSqlIterator->getParseTree()->parseNodeToStr(m_sStatementCanonical, getConnection());
+            bool bUserSaysNo = true; // safe default for headless/test mode
+            if (!Application::IsHeadlessModeEnabled() && !o3tl::IsRunningUITest())
+            {
+                OUString aMessage = lcl_getObjectResourceString(
+                    STR_QRY_COMMENTS_WARNING, m_nCommandType);
+                std::unique_ptr<weld::MessageDialog> xDlg(
+                    Application::CreateMessageDialog(
+                        getFrameWeld(), VclMessageType::Warning,
+                        VclButtonsType::YesNo, aMessage));
+                xDlg->set_default_response(RET_NO);
+                bUserSaysNo = (xDlg->run() == RET_NO);
+            }
+            if (bUserSaysNo)
+            {
+                m_bGraphicalDesign = false;
+                bProceed = false;
+            }
+        }
+        if (bProceed)
+        {
+            m_sStatementWithComments = m_sStatement;
+            if (m_pSqlIterator && m_pSqlIterator->getParseTree())
+            {
+                m_sStatementCanonical.clear();
+                m_pSqlIterator->getParseTree()->parseNodeToStr(
+                    m_sStatementCanonical, getConnection());
+            }
         }
     }
 
