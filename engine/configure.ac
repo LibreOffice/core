@@ -1674,9 +1674,10 @@ libo_FUZZ_ARG_ENABLE(epm,
 )
 
 AC_ARG_ENABLE(mpl-subset,
-    AS_HELP_STRING([--enable-mpl-subset],
-        [Don't compile any pieces which are not MPL or more liberally licensed])
-)
+    AS_HELP_STRING([--disable-mpl-subset],
+        [Also compile pieces which are not MPL or more liberally licensed.
+         The MPL subset is enabled by default.]),
+,enable_mpl_subset=yes)
 
 libo_FUZZ_ARG_ENABLE(evolution2,
     AS_HELP_STRING([--enable-evolution2],

@@ -972,7 +972,6 @@
         "--enable-cairo-rgba",
         "--enable-hardening-flags",
         "--enable-mergelibs",
-        "--enable-mpl-subset",
         "--enable-symbols",
         "--with-branding=icon-themes/galaxy/brand_cp",
         "--with-docrepair-fonts",

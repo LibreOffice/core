@@ -147,7 +147,6 @@ parts:
         --enable-hardening-flags \
         --enable-ld \
         --enable-mergelibs \
-        --enable-mpl-subset \
         --with-branding=icon-themes/galaxy/brand_cp \
         --with-docrepair-fonts \
         --with-fonts \
