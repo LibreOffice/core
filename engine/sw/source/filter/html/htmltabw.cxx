@@ -488,7 +488,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
 
     if (rWrt.IsLFPossible())
         rWrt.OutNewLine();
-    aTag = bHead ? OOO_STRING_SVTOOLS_HTML_tableheader : OOO_STRING_SVTOOLS_HTML_tabledata;
+    aTag = bHead ? OOO_STRING_SVTOOLS_HTML_tableheader ""_ostr : OOO_STRING_SVTOOLS_HTML_tabledata ""_ostr;
     HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rWrt.GetNamespace() + aTag), false);
     rWrt.SetLFPossible(true);
 }
@@ -833,7 +833,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
             if( bTHead && nRow==m_nHeadEndRow )
                 bTHead = false;
 
-            aTag = bTHead ? OOO_STRING_SVTOOLS_HTML_thead : OOO_STRING_SVTOOLS_HTML_tbody;
+            aTag = bTHead ? OOO_STRING_SVTOOLS_HTML_thead ""_ostr : OOO_STRING_SVTOOLS_HTML_tbody ""_ostr;
             HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rWrt.GetNamespace() + aTag));
             rWrt.IncIndentLevel(); // indent content of <THEAD>/<TDATA>
         }

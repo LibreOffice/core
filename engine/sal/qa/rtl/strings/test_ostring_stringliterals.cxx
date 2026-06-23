@@ -143,9 +143,6 @@ void test::ostring::StringLiterals::checkUsage()
     rtl_string_unittest_const_literal = false; // start checking for OString conversions
     rtl_string_unittest_non_const_literal_function = false; // and check for non-const variants
     rtl_string_unittest_const_literal_function = false;
-    CPPUNIT_ASSERT_EQUAL( foo, rtl::OString() = "foo" );
-    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function );
-    rtl_string_unittest_const_literal_function = false;
     CPPUNIT_ASSERT( FoO.equalsIgnoreAsciiCase( "fOo" ));
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function );
     rtl_string_unittest_const_literal_function = false;

@@ -476,26 +476,13 @@ public:
 #endif
 
     /**
-     @overload
-     This function accepts an ASCII string literal as its argument.
+      @overload
+      Prevent assigning a new string from an 8-Bit string literal. We delete this
+      to prevent it being converted to a string_view, we rather want to use a OString literal.
     */
     template< typename T >
-    typename libreoffice_internal::ConstCharArrayDetector< T, OString& >::Type operator=( T& literal )
-    {
-        RTL_STRING_CONST_FUNCTION
-        assert(
-            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
-        if (libreoffice_internal::ConstCharArrayDetector<T>::length == 0) {
-            rtl_string_new(&pData);
-        } else {
-            rtl_string_newFromLiteral(
-                &pData,
-                libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
-                    literal),
-                libreoffice_internal::ConstCharArrayDetector<T>::length, 0);
-        }
-        return *this;
-    }
+    typename libreoffice_internal::ConstCharArrayDetector< T, OString& >::Type operator=( T& )
+        = delete;
 
     /**
       Append a string to this string.
