@@ -381,7 +381,7 @@ IMPL_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, /*unused*/, vo
                     // and replaced it with a list of absolute file URLs.
                     // However, the code below was not updated to match the
                     // change so when the multiple files were selected and all
-                    // of the following conditions were true, tdf#167298 would
+                    // of the following conditions were true, tdf#161298 would
                     // occur:
                     // - Running on macOS or running on Windows with the
                     //   LibreOffice QuickStarter service also running
