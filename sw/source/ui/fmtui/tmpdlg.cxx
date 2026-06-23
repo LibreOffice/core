@@ -205,13 +205,6 @@ SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
                                SwTextGridPage::Create, SwTextGridPage::GetRanges,
                                RID_M + RID_TAB_TEXTGRID.sIconName);
             }
-            else
-            {
-                RemoveTabPage(u"borders"_ustr);
-                RemoveTabPage(u"columns"_ustr);
-                RemoveTabPage(u"footnotes"_ustr);
-                RemoveTabPage(u"textgrid"_ustr);
-            }
         }
         break;
         // numbering styles
