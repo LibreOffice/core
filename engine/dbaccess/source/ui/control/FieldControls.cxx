@@ -19,32 +19,30 @@
 
 #include <FieldControls.hxx>
 #include <SqlNameEdit.hxx>
-#include <core_resource.hxx>
 
 namespace dbaui {
 
 OPropColumnEditCtrl::OPropColumnEditCtrl(std::unique_ptr<weld::Entry> xEntry,
                                          OUString const & _rAllowedChars,
-                                         TranslateId pHelpId,
                                          short nPosition)
-    : OSQLNameEntry(std::move(xEntry), _rAllowedChars, pHelpId, nPosition)
+    : OSQLNameEntry(std::move(xEntry), _rAllowedChars, nPosition)
 {
 }
 
-OPropEditCtrl::OPropEditCtrl(std::unique_ptr<weld::Entry> xEntry, TranslateId pHelpId, short nPosition)
-    : OWidgetBase(xEntry.get(), pHelpId, nPosition)
+OPropEditCtrl::OPropEditCtrl(std::unique_ptr<weld::Entry> xEntry, short nPosition)
+    : OWidgetBase(xEntry.get(), nPosition)
     , m_xEntry(std::move(xEntry))
 {
 }
 
-OPropNumericEditCtrl::OPropNumericEditCtrl(std::unique_ptr<weld::SpinButton> xSpinButton, TranslateId pHelpId, short nPosition)
-    : OWidgetBase(xSpinButton.get(), pHelpId, nPosition)
+OPropNumericEditCtrl::OPropNumericEditCtrl(std::unique_ptr<weld::SpinButton> xSpinButton, short nPosition)
+    : OWidgetBase(xSpinButton.get(), nPosition)
     , m_xSpinButton(std::move(xSpinButton))
 {
 }
 
-OPropListBoxCtrl::OPropListBoxCtrl(std::unique_ptr<weld::ComboBox> xComboBox, TranslateId pHelpId, short nPosition)
-    : OWidgetBase(xComboBox.get(), pHelpId, nPosition)
+OPropListBoxCtrl::OPropListBoxCtrl(std::unique_ptr<weld::ComboBox> xComboBox, short nPosition)
+    : OWidgetBase(xComboBox.get(), nPosition)
     , m_xComboBox(std::move(xComboBox))
 {
 }

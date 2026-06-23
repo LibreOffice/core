@@ -23,7 +23,6 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include "TypeInfo.hxx"
-#include <unotools/resmgr.hxx>
 
 // field description columns of a table
 #define FIELD_NAME                      1
@@ -112,7 +111,7 @@ namespace dbaui
         void                UpdateFormatSample(OFieldDescription const * pFieldDescr);
 
         bool                isTextFormat(const OFieldDescription* _pFieldDescr,sal_uInt32& _nFormatKey) const;
-        std::unique_ptr<OPropNumericEditCtrl> CreateNumericControl(const OUString& rId, TranslateId pHelpId, short _nProperty, const OUString& _sHelpId);
+        std::unique_ptr<OPropNumericEditCtrl> CreateNumericControl(const OUString& rId, short _nProperty, const OUString& _sHelpId);
         void                InitializeControl(weld::Widget* _pControl,const OUString& _sHelpId);
         void                InitializeControl(OPropListBoxCtrl* _pControl,const OUString& _sHelpId,bool _bAddChangeHandler);
 

@@ -19,13 +19,10 @@
 
 #include <SqlNameEdit.hxx>
 
-#include <core_resource.hxx>
-
 namespace dbaui
 {
-    OWidgetBase::OWidgetBase(weld::Widget *pWidget, TranslateId pHelpId, short nPosition)
+    OWidgetBase::OWidgetBase(weld::Widget *pWidget, short nPosition)
         : m_pWidget(pWidget)
-        , m_strHelpText(DBA_RES(pHelpId))
         , m_nPos(nPosition)
     {
     }

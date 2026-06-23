@@ -19,7 +19,6 @@
 #pragma once
 
 #include <svtools/editbrowsebox.hxx>
-#include <unotools/resmgr.hxx>
 #include <utility>
 #include <vcl/weld.hxx>
 
@@ -47,11 +46,10 @@ namespace dbaui
     {
     private:
         weld::Widget* m_pWidget;
-        OUString m_strHelpText;
         short m_nPos;
 
     public:
-        OWidgetBase(weld::Widget *pWidget, TranslateId pHelpId, short nPosition);
+        OWidgetBase(weld::Widget *pWidget, short nPosition);
 
         void hide() { m_pWidget->hide(); }
         void show() { m_pWidget->show(); }
@@ -77,8 +75,8 @@ namespace dbaui
 
     public:
         OSQLNameEntry(std::unique_ptr<weld::Entry> xEntry, const OUString& _rAllowedChars,
-                      TranslateId pHelpId, short nPosition)
-            : OWidgetBase(xEntry.get(), pHelpId, nPosition)
+                      short nPosition)
+            : OWidgetBase(xEntry.get(), nPosition)
             , OSQLNameChecker(_rAllowedChars)
             , m_xEntry(std::move(xEntry))
         {
