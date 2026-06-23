@@ -80,6 +80,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		map.on('scrolltopart', this._scrollToPart, this);
 		map.on('beforerequestpreview', this._beforeRequestPreview, this);
 		map.on('updatesections', this._updateSections, this);
+		map.on('docloaded', this._focusCurrentSlideOnLoad, this);
 
 		window.addEventListener('resize', window.L.bind(this._resize, this));
 	},
@@ -1603,6 +1604,23 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 	focusCurrentSlide: function () {
 		if (this._previewTiles[this._map._docLayer._selectedPart])
 			this._previewTiles[this._map._docLayer._selectedPart].focus();
+	},
+
+	// On load, move focus to the current slide preview so arrow keys
+	// navigate the slides right away. Only take focus while it still rests
+	// on the document itself; if the user has already moved it to another
+	// control, leave it where they put it.
+	_focusCurrentSlideOnLoad: function () {
+		if (!this._previewInitialized)
+			return;
+
+		var active = document.activeElement;
+		if (active && active !== document.body &&
+		    active !== this._map.getContainer() && !this._map.hasFocus())
+			return;
+
+		this.focusCurrentSlide();
+		this.partsFocused = true;
 	},
 });
 
