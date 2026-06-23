@@ -2221,7 +2221,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing,\
 	RectanglePoint \
 	ShadeMode \
 	ShadingPattern \
-	SnapObjectType \
 	TextAdjust \
 	TextAnimationDirection \
 	TextAnimationKind \

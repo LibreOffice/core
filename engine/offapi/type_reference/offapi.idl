@@ -5647,11 +5647,6 @@ module com {
     published service Shapes {
      interface ::com::sun::star::drawing::XShapes;
     };
-    /** @deprecated */ published enum SnapObjectType {
-     POINT = 0,
-     VERTICAL = 1,
-     HORIZONTAL = 2
-    };
     /** @deprecated */ published enum TextAdjust {
      LEFT = 0,
      CENTER = 1,
