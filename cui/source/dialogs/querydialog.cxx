@@ -53,6 +53,10 @@ void QueryDialog::SetYesLabel(const OUString& rLabel)
 void QueryDialog::SetNoLabel(const OUString& rLabel)
 {
     m_pNoLarge->set_label(rLabel);
-    m_pNoLarge->set_visible(true);
+    m_pNoLarge->set_visible(!rLabel.isEmpty());
     m_pNo->set_visible(false);
 }
+
+void QueryDialog::SetTypeWarn() { m_pImage->set_from_icon_name(RID_CUIBMP_WARN); }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

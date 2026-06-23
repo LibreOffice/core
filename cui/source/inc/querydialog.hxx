@@ -43,7 +43,8 @@ public:
                 const OUString& sQuestion, bool bHideShowAgain = false);
     bool DontShowAgain() const { return m_pCheckBox->get_active(); }
     void SetYesLabel(const OUString& rLabel);
-    void SetNoLabel(const OUString& rLabel);
+    void SetNoLabel(const OUString& rLabel); //empty to hide the button
+    void SetTypeWarn();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
