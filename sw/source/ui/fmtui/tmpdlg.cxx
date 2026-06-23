@@ -166,10 +166,7 @@ SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
                 RemoveTabPage(u"outline"_ustr);
                 RemoveTabPage(u"asianlayout"_ustr);
                 if(!(m_nHtmlMode & HTMLMODE_FULL_STYLES))
-                {
-                    RemoveTabPage(u"background"_ustr);
                     RemoveTabPage(u"dropcaps"_ustr);
-                }
             }
             else
             {
