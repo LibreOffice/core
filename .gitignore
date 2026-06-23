@@ -258,6 +258,7 @@ windows/coda/x64/
 
 # CODA-W generated files
 windows/coda/config.props
+windows/coda/ccache-shim/
 
 # CODA-Q
 .flatpak-builder/

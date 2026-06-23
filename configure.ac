@@ -2669,6 +2669,44 @@ if test "$enable_windowsapp" = "yes"; then
     # it has detected, as that is very misleading because it is run on
     # WSL. Ideally we shouldn't need to run the configure script when
     # building CODA-W at all. Later.
+
+    # Cache the clang-cl compiles of the windows app with ccache, the same
+    # way the engine build caches its compiles. MSBuild runs the compiler
+    # without naming it on the command line, so ccache cannot be handed the
+    # compiler as an argument. The way round it is a directory holding a
+    # clang-cl.exe that is really ccache: point the C++ tool at that
+    # directory and ccache, seeing it was invoked as clang-cl, runs the real
+    # clang-cl that the Visual Studio environment puts on PATH. Make that
+    # clang-cl as a hard link to ccache, and fall back to a copy when ccache
+    # sits on another volume than the build tree. The shim goes in a
+    # directory of its own under the build tree so it is gitignored and out
+    # of the way. CODA_CCACHE holds that directory, or stays empty when no
+    # ccache is found, in which case the build keeps the stock clang-cl.
+    CODA_CCACHE=
+    AC_ARG_WITH([coda-ccache],
+        AS_HELP_STRING([--with-coda-ccache=PATH],
+            [Path to the ccache program used to wrap the windows app
+             clang-cl compiles. Defaults to the ccache found on PATH; pass
+             --without-coda-ccache to build without it.]))
+    coda_ccache_prog=
+    AS_IF([test "$with_coda_ccache" = "no"],
+              [coda_ccache_prog=no],
+          [test -n "$with_coda_ccache" -a "$with_coda_ccache" != "yes"],
+              [coda_ccache_prog="$with_coda_ccache"],
+          [AC_PATH_PROG([coda_ccache_prog], [ccache])])
+    AS_IF([test -n "$coda_ccache_prog" -a "$coda_ccache_prog" != "no"],
+        [coda_ccache_shim="`pwd`/windows/coda/ccache-shim"
+         AS_MKDIR_P([$coda_ccache_shim])
+         rm -f "$coda_ccache_shim/clang-cl.exe"
+         ln "$coda_ccache_prog" "$coda_ccache_shim/clang-cl.exe" 2>/dev/null \
+             || cp -f "$coda_ccache_prog" "$coda_ccache_shim/clang-cl.exe"
+         AS_IF([command -v wslpath >/dev/null 2>&1],
+                   [CODA_CCACHE=`wslpath -w "$coda_ccache_shim"`],
+               [command -v cygpath >/dev/null 2>&1],
+                   [CODA_CCACHE=`cygpath -w "$coda_ccache_shim"`],
+               [CODA_CCACHE="$coda_ccache_shim"])])
+    AC_SUBST([CODA_CCACHE])
+
     AC_CONFIG_FILES([windows/coda/config.h
                      windows/coda/config.props])
 fi

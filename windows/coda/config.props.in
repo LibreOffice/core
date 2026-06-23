@@ -6,4 +6,12 @@
     <APP_NAME>@APP_NAME@</APP_NAME>
     <APP_VENDOR>@VENDOR@</APP_VENDOR>
   </PropertyGroup>
+  <!-- Run the clang-cl compiles through the ccache masquerade directory
+       configure created. When CODA_CCACHE is empty the condition is false
+       and the stock ClangCL toolset is used, so a build without ccache is
+       unchanged. -->
+  <PropertyGroup Condition="'@CODA_CCACHE@' != ''">
+    <CLToolPath>@CODA_CCACHE@</CLToolPath>
+    <CLToolExe>clang-cl.exe</CLToolExe>
+  </PropertyGroup>
 </Project>
