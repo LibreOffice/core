@@ -5553,13 +5553,6 @@ module com {
      DIMENSIONIANG_LINES = 2,
      USER_DEFINED = 3
     };
-    /** @deprecated */ published enum LineEndType {
-     NONE = 0,
-     ARROW = 1,
-     CIRCLE = 2,
-     SQUARE = 3,
-     SPECIAL = 4
-    };
     published service PolyPolygonDescriptor {
      [property, readonly] ::com::sun::star::drawing::PolygonKind PolygonKind;
      [property] ::com::sun::star::drawing::PointSequenceSequence PolyPolygon;

@@ -2204,7 +2204,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing,\
 	LayerType \
 	LineCap \
 	LineDash \
-	LineEndType \
 	LineJoint \
 	LineStyle \
 	MeasureKind \
