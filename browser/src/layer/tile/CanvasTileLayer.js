@@ -3352,7 +3352,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	/* in impress, we always recalculate zoom on resize to keep the slide in-view.
 	 * so the second condition is unnecessary, but we keep it for consistency. */
 	recalculateZoomOnResize: function() {
-		if (this.isWriter() || this.isImpress())
+		const isWriterSinglePageView = this.isWriter() && !this._isMultiPageView();
+		if (isWriterSinglePageView || this.isImpress())
 			this._invalidateZoomFirstFit = true;
 	},
 
@@ -3428,7 +3429,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	 * 		parameter is set to `true`, in case smartZoom is disabled (== false).
 	 */
 	_fitWidthZoom: function (e, maxZoom, recalcFirstFit=false) {
-		if (this.isCalc() || this.isDraw())
+		if (this.isCalc() || this.isDraw() || this._isMultiPageView())
 			return;
 		if (app.activeDocument.fileSize.x === 0)
 			return;
