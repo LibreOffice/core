@@ -145,11 +145,19 @@ class GraphicSelection {
 			messageJSON[3],
 		);
 
-		if (hasGridOffset)
+		if (hasGridOffset) {
 			this.rectangle.moveBy([
 				app.map._docLayer._shapeGridOffset.x,
 				app.map._docLayer._shapeGridOffset.y,
 			]);
+		} else if (app.map._docLayer._docType === 'spreadsheet') {
+			const tl = new cool.SimplePoint(
+				Math.abs(this.rectangle.x1),
+				this.rectangle.y1,
+			);
+			app.map._docLayer.sheetGeometry.convertToTileTwips(tl);
+			this.rectangle.moveTo(tl.toArray());
+		}
 
 		this.extraInfo = extraInfo;
 

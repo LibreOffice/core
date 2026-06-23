@@ -93,17 +93,33 @@ tools::Rectangle KitChartHelper::GetChartBoundingBox()
         SfxInPlaceClient* pIPClient = mpViewShell->GetIPClient();
         if (pIPClient)
         {
-            vcl::Window* pRootWin = pIPClient->GetEditWin();
-            if (pRootWin)
+            if (pIPClient->HasGridOffset())
+            {
+                // FIXME: Handle RTL case.
+                tools::Rectangle aArea = pIPClient->GetObjArea();
+                Point aGridOffset(0, 0);
+                pIPClient->GetGridOffset(aGridOffset);
+                aArea.Move(aGridOffset.X(), aGridOffset.Y());
+                constexpr auto p2 = o3tl::getConversionMulDiv(o3tl::Length::mm100, o3tl::Length::twip);
+                double fFactor = static_cast<double>(p2.first) / p2.second;
+                // Convert position and size to (display) twips.
+                Point aTopLeft = aArea.TopLeft().scale(fFactor, fFactor);;
+                Size aSize = aArea.GetSize().scale(fFactor, fFactor);
+                aBBox = tools::Rectangle(aTopLeft, aSize);
+            }
+            else if (vcl::Window* pRootWin = pIPClient->GetEditWin())
             {
                 vcl::Window* pWindow = GetWindow();
                 if (pWindow)
                 {
                     // In all cases, the following code fragment
                     // returns the chart bounding box in twips.
+                    const MapMode& aCWMapMode = pWindow->GetMapMode();
                     constexpr auto p = o3tl::getConversionMulDiv(o3tl::Length::px, o3tl::Length::twip);
-                    const double nX = static_cast<double>(p.first) / p.second;
-                    const double nY = static_cast<double>(p.first) / p.second;
+                    const double scaleX = aCWMapMode.GetScaleX();
+                    const double scaleY = aCWMapMode.GetScaleY();
+                    const double nX = p.first * scaleX / p.second;
+                    const double nY = p.first * scaleY / p.second;
 
                     Point aOffset = pWindow->GetOffsetPixelFrom(*pRootWin);
                     if (mbNegativeX && AllSettings::GetLayoutRTL())

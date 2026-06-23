@@ -67,7 +67,6 @@
 #include <officecfg/Office/Common.hxx>
 
 #include <comphelper/kit.hxx>
-#include <basegfx/vector/b2dvector.hxx>
 #include <tools/json_writer.hxx>
 #include <COKit/COKitEnums.h>
 
@@ -217,20 +216,13 @@ void ScTabViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
                 pClient->SetSizeScale(fScaleWidth,fScaleHeight);
             }
 
-            basegfx::B2DVector aGridOffset(0, 0);
-            if (GetScDrawView() &&
-                    GetScDrawView()->calculateGridOffsetForSdrObject(*pObj,
-                        aGridOffset)) {
-                pClient->SetGridOffset(Point(static_cast<tools::Long>(aGridOffset.getX()),
-                        static_cast<tools::Long>(aGridOffset.getY())));
-            } else {
-                // Reset it just in case
-                pClient->SetGridOffset(Point());
-            }
-
             // visible section is only changed inplace!
             // the object area must be set after the scaling since it triggers the resizing
-            aRect.SetSize( aOleSize );
+            aRect.SetSize( aOleSize ); // in print mm100 units.
+            basegfx::B2DVector aGridOffset(0, 0);
+            GetScDrawView()->calculateGridOffsetForSdrObject(*pObj, aGridOffset);
+            // This is needed when painting the chart onto the tiles.
+            pClient->SetGridOffset(Point(aGridOffset.getX(), aGridOffset.getY()));
             pClient->SetObjArea( aRect );
 
             nErr = pClient->DoVerb( nVerb );

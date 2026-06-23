@@ -4241,6 +4241,121 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentDocModifiedAndUndo
     comphelper::COKit::setTiledAnnotations(true);
 }
 
+namespace {
+
+void lcl_getStartDimPos(const boost::property_tree::ptree& tree, double twipsPerPixel, size_t queryIndex, size_t& displayTwips, size_t& printTwips)
+{
+    std::stringstream ss(tree.get<std::string>("sizes"));
+    size_t size = 0;
+    size_t index = 0;
+    size_t prevIndex = 0;
+    char tmp;
+    printTwips = 0;
+    displayTwips = 0;
+    while ((ss >> size) && (ss >> tmp) && (ss >> index))
+    {
+        CPPUNIT_ASSERT(index >= prevIndex);
+        size_t pxOne = size_t(size / twipsPerPixel);
+        if (queryIndex > index)
+        {
+            size_t numIndices = index - prevIndex + 1;
+            printTwips += (numIndices * size);
+            displayTwips += size_t(pxOne * numIndices * twipsPerPixel);
+            prevIndex = index + 1;
+            continue;
+        }
+
+        printTwips += ((queryIndex - prevIndex) * size);
+        displayTwips += size_t((queryIndex - prevIndex) * pxOne * twipsPerPixel);
+        return;
+    }
+    CPPUNIT_FAIL("Bad queryIndex passed to lcl_getStartDimPos()");
+}
+
+void lcl_getShapeRectangle(OString& selection, tools::Rectangle& rectangle)
+{
+    std::stringstream ss((std::string(selection)));
+    size_t x = 0, y = 0, width = 0, height = 0;
+    char tmp;
+    CPPUNIT_ASSERT_MESSAGE("Parse of graphicselection message failed!", ss >> x >> tmp >> y >> tmp >> width >> tmp >> height);
+    rectangle.SetPos(Point(x, y));
+    rectangle.SetSize(Size(width, height));
+}
+
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testChartSelectionCoords)
+{
+    ScModelObj* pModelObj = createDoc("chartsel.ods");
+    auto* pTabViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    ScTestViewCallback aView1;
+    OString aJson = pModelObj->getSheetGeometryData(/*bColumns*/ true, /*bRows*/ true, /*bSizes*/ true,
+                /*bHidden*/ true, /*bFiltered*/ true, /*bGroups*/ true);
+    boost::property_tree::ptree aTree;
+    std::stringstream ss((std::string(aJson)));
+    boost::property_tree::read_json(ss, aTree);
+    auto& aCols = aTree.get_child("columns");
+    auto& aRows = aTree.get_child("rows");
+
+    constexpr double zoomFraction = 1.5;
+    constexpr size_t tilePx = 256;
+    constexpr size_t tileTwips = tilePx * 15.0 / zoomFraction;
+    constexpr double twipsPerPixel = tileTwips / static_cast<double>(tilePx);
+
+    pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, tileTwips * 5, tileTwips * 5));
+    pModelObj->setClientZoom(tilePx, tilePx, tileTwips, tileTwips);
+
+    size_t x1ptwips = 0, x1dtwips = 0;
+    size_t y1ptwips = 0, y1dtwips = 0;
+    size_t x2ptwips = 0, x2dtwips = 0;
+    size_t y2ptwips = 0, y2dtwips = 0;
+
+    // Top-left of cell AT17(45, 16) is nearly the top-left of the chart.
+    // Top-left of cell BA37(52, 36) is nearly the bottom-right of the chart.
+    lcl_getStartDimPos(aCols, twipsPerPixel, 45, x1dtwips, x1ptwips);
+    lcl_getStartDimPos(aRows, twipsPerPixel, 16, y1dtwips, y1ptwips);
+    lcl_getStartDimPos(aCols, twipsPerPixel, 52, x2dtwips, x2ptwips);
+    lcl_getStartDimPos(aRows, twipsPerPixel, 36, y2dtwips, y2ptwips);
+    // Chart area in print twips.
+    tools::Rectangle aChartAreaPtwips(Point(x1ptwips, y1ptwips), Size(x2ptwips - x1ptwips, y2ptwips - y1ptwips));
+    // Chart area in display twips.
+    tools::Rectangle aChartAreaDtwips(Point(x1dtwips, y1dtwips), Size(x2dtwips - x1dtwips, y2dtwips - y1dtwips));
+
+    pTabViewShell->SetCursor(53, 40);
+    Scheduler::ProcessEventsToIdle();
+
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
+            /*x=*/ aChartAreaDtwips.Left() + 300,
+            /*y=*/ aChartAreaDtwips.Top() + 300,
+            /*count=*/ 2, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP,
+            /*x=*/ aChartAreaDtwips.Left() + 300,
+            /*y=*/ aChartAreaDtwips.Top() + 300,
+            /*count=*/ 2, /*buttons=*/ 1, /*modifier=*/0);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(!aView1.m_ShapeSelection.isEmpty());
+    tools::Rectangle aActualChartRect;
+    lcl_getShapeRectangle(aView1.m_ShapeSelection, aActualChartRect);
+    CPPUNIT_ASSERT_MESSAGE("Actual chart area spills out of the expected bounds", aChartAreaPtwips.Contains(aActualChartRect));
+
+    // Click again for chart wall area.
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
+            /*x=*/ aChartAreaDtwips.Left() + 300,
+            /*y=*/ aChartAreaDtwips.Top() + 300,
+            /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP,
+            /*x=*/ aChartAreaDtwips.Left() + 300,
+            /*y=*/ aChartAreaDtwips.Top() + 300,
+            /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(!aView1.m_ShapeSelection.isEmpty());
+    tools::Rectangle aActualChartWall;
+    lcl_getShapeRectangle(aView1.m_ShapeSelection, aActualChartWall);
+    CPPUNIT_ASSERT_MESSAGE("Actual chart wall area spills out of the expected bounds", aChartAreaPtwips.Contains(aActualChartWall));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

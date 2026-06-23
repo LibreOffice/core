@@ -114,6 +114,7 @@ class SfxInPlaceClient_Impl : public ::cppu::WeakImplHelper< embed::XEmbeddedCli
 public:
     Timer                           m_aTimer { "sfx::SfxInPlaceClient m_xImpl::m_aTimer" }; // activation timeout, starts after object connection
     tools::Rectangle                       m_aObjArea;             // area of object in coordinate system of the container (without scaling)
+    Point                           m_aGridOffset; // in mm100.
     double                          m_fScaleWidth;          // scaling that was applied to the object when it was not active
     double                          m_fScaleHeight;
     SfxInPlaceClient*               m_pClient;
@@ -122,6 +123,7 @@ public:
     bool                            m_bUIActive;            // set and cleared when notification for UI (de)activation is sent
     bool                            m_bResizeNoScale;
     bool                            m_bNegativeX;
+    bool                            m_bHasGridOffset;
 
     uno::Reference < embed::XEmbeddedObject > m_xObject;
 
@@ -133,6 +135,7 @@ public:
     , m_bUIActive( false )
     , m_bResizeNoScale( false )
     , m_bNegativeX( false )
+    , m_bHasGridOffset( false )
     {}
 
     void SizeHasChanged();
@@ -352,9 +355,6 @@ void SAL_CALL SfxInPlaceClient_Impl::activatingInplace()
     {
         tools::Rectangle aRect(m_pClient->GetObjArea());
 
-        // Compensate for the grid offset
-        aRect.Move(m_pClient->GetGridOffset().X(), m_pClient->GetGridOffset().Y());
-
         if (m_pClient->GetEditWin())
         {
             if (m_pClient->GetEditWin()->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
@@ -440,9 +440,6 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getPlacement()
     aRealObjArea.SetSize( Size( tools::Long( aRealObjArea.GetWidth() * m_fScaleWidth),
                                 tools::Long( aRealObjArea.GetHeight() * m_fScaleHeight) ) );
 
-    // Compensate for grid offset
-    aRealObjArea.Move(m_pClient->GetGridOffset().X(), m_pClient->GetGridOffset().Y());
-
     vcl::Window* pEditWin = m_pClient->GetEditWin();
     // In Writer and Impress the map mode is disabled. So when a chart is
     // activated (for in place editing) we get the chart win size in 100th mm
@@ -477,9 +474,6 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getClipRectangle()
     tools::Rectangle aRealObjArea( m_aObjArea );
     aRealObjArea.SetSize( Size( tools::Long( aRealObjArea.GetWidth() * m_fScaleWidth),
                                 tools::Long( aRealObjArea.GetHeight() * m_fScaleHeight) ) );
-
-    // Compensate for grid offset
-    aRealObjArea.Move(m_pClient->GetGridOffset().X(), m_pClient->GetGridOffset().Y());
 
     vcl::Window* pEditWin = m_pClient->GetEditWin();
     // See comment for SfxInPlaceClient_Impl::getPlacement.
@@ -1153,6 +1147,22 @@ void SfxInPlaceClient::SetNegativeX(bool bSet)
 bool SfxInPlaceClient::IsNegativeX() const
 {
     return m_xImp->m_bNegativeX;
+}
+
+bool SfxInPlaceClient::HasGridOffset() const
+{
+    return m_xImp->m_bHasGridOffset;
+}
+
+void SfxInPlaceClient::SetGridOffset(const Point& aOffset)
+{
+    m_xImp->m_bHasGridOffset = true;
+    m_xImp->m_aGridOffset = aOffset;
+}
+
+void SfxInPlaceClient::GetGridOffset(Point& aOffset)
+{
+    aOffset = m_xImp->m_aGridOffset;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
