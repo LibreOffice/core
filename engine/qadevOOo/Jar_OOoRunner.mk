@@ -322,7 +322,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/drawing/_MeasureShape \
     qadevOOo/tests/java/ifc/drawing/_PolyPolygonBezierDescriptor \
     qadevOOo/tests/java/ifc/drawing/_PolyPolygonDescriptor \
-    qadevOOo/tests/java/ifc/drawing/_RotationDescriptor \
     qadevOOo/tests/java/ifc/drawing/_ShadowDescriptor \
     qadevOOo/tests/java/ifc/drawing/_ShadowProperties \
     qadevOOo/tests/java/ifc/drawing/_Shape \

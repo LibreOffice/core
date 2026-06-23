@@ -68,7 +68,7 @@ private:
         @param [in] nLat, nLon, nRev in unit 1/60000 deg with same orientation as the attributes lat,
         lon and rev of the <rot> child element of the <scene3d> element in OOXML markup.
         @param [out] fX, fY, fZ values in unit radians with correct orientation for API properties
-            EnhancedCustomShapeExtrusion::RotateAngle and RotationDescriptor::RotateAngle*/
+            EnhancedCustomShapeExtrusion::RotateAngle*/
     static void getAPIAnglesFromOOXAngle(const sal_Int32 nLat, const sal_Int32 nLon,
                                          const sal_Int32 nRev, double& fX, double& fY, double& fZ);
 
@@ -79,7 +79,7 @@ private:
         @param [in] rnMSOShapeRotation rotation in 1/60000 deg as given in 'rot' attribute of 'xfrm'
             element in OOXML.
         @param [out] fX, fY, fZ values in unit radians with correct orientation for API properties
-            EnhancedCustomShapeExtrusion::RotateAngle and RotationDescriptor::RotateAngle*/
+            EnhancedCustomShapeExtrusion::RotateAngle*/
     void getAPIAnglesFrom3DProperties(const oox::drawingml::Shape3DPropertiesPtr p3DProperties,
                                       const sal_Int32& rnMSOShapeRotation, double& fX, double& fY,
                                       double& fZ);

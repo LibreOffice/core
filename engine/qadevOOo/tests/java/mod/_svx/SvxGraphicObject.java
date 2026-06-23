@@ -45,7 +45,6 @@ import com.sun.star.uno.XInterface;
  * Object implements the following interfaces :
  * <ul>
  *  <li> <code>com::sun::star::drawing::ShadowProperties</code></li>
- *  <li> <code>com::sun::star::drawing::RotationDescriptor</code></li>
  *  <li> <code>com::sun::star::text::XSimpleText</code></li>
  *  <li> <code>com::sun::star::drawing::XShape</code></li>
  *  <li> <code>com::sun::star::drawing::GraphicObjectShape</code></li>
@@ -65,7 +64,6 @@ import com.sun.star.uno.XInterface;
  * threads concurrently.
  *
  * @see com.sun.star.drawing.ShadowProperties
- * @see com.sun.star.drawing.RotationDescriptor
  * @see com.sun.star.text.XSimpleText
  * @see com.sun.star.drawing.XShape
  * @see com.sun.star.drawing.GraphicObjectShape
@@ -80,7 +78,6 @@ import com.sun.star.uno.XInterface;
  * @see com.sun.star.text.XText
  * @see com.sun.star.lang.XComponent
  * @see ifc.drawing._ShadowProperties
- * @see ifc.drawing._RotationDescriptor
  * @see ifc.text._XSimpleText
  * @see ifc.drawing._XShape
  * @see ifc.drawing._GraphicObjectShape

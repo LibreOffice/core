@@ -35,8 +35,6 @@ service CustomShape
 
     service com::sun::star::drawing::Text;
 
-    service com::sun::star::drawing::RotationDescriptor;
-
     /** This property contains the CustomShapeEngine service name that has to
         be used for rendering.
     */

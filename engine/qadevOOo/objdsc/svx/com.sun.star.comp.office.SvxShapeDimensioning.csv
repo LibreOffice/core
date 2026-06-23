@@ -105,8 +105,6 @@
 "SvxShapeDimensioning";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharPostureComplex"
 "SvxShapeDimensioning";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharLocaleComplex"
 "SvxShapeDimensioning";"com::sun::star::drawing::XShapeDescriptor";"getShapeType()"
-"SvxShapeDimensioning";"com::sun::star::drawing::RotationDescriptor";"RotateAngle"
-"SvxShapeDimensioning";"com::sun::star::drawing::RotationDescriptor";"ShearAngle#optional"
 "SvxShapeDimensioning";"com::sun::star::drawing::LineProperties";"LineStyle"
 "SvxShapeDimensioning";"com::sun::star::drawing::LineProperties";"LineDash"
 "SvxShapeDimensioning";"com::sun::star::drawing::LineProperties";"LineColor"

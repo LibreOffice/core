@@ -4889,10 +4889,6 @@ module com {
      const short horizontal = 0;
      const short vertical = 1;
     };
-    /** @deprecated */ published service RotationDescriptor {
-     /** @deprecated */ [property] long RotateAngle;
-     /** @deprecated */ [property, optional] long ShearAngle;
-    };
     published service ShadowProperties {
      [property] boolean Shadow;
      [property] ::com::sun::star::util::Color ShadowColor;
@@ -5022,7 +5018,6 @@ module com {
      service ::com::sun::star::drawing::LineProperties;
      service ::com::sun::star::drawing::ShadowProperties;
      service ::com::sun::star::drawing::Text;
-     service ::com::sun::star::drawing::RotationDescriptor;
      [property] long CornerRadius;
      [property] ::com::sun::star::awt::Point CaptionPoint;
      [property] short CaptionType;
@@ -5070,7 +5065,6 @@ module com {
      service ::com::sun::star::drawing::PolyPolygonBezierDescriptor;
      service ::com::sun::star::drawing::Text;
      service ::com::sun::star::drawing::ShadowProperties;
-     service ::com::sun::star::drawing::RotationDescriptor;
     };
     published enum ColorMode {
      STANDARD = 0,
@@ -5107,7 +5101,6 @@ module com {
      service ::com::sun::star::drawing::ConnectorProperties;
      service ::com::sun::star::drawing::ShadowProperties;
      service ::com::sun::star::drawing::Text;
-     service ::com::sun::star::drawing::RotationDescriptor;
      [property] ::com::sun::star::drawing::XShape StartShape;
      [property] long StartGluePointIndex;
      [property] ::com::sun::star::awt::Point StartPosition;
@@ -5409,7 +5402,6 @@ module com {
      service ::com::sun::star::drawing::FillProperties;
      service ::com::sun::star::drawing::Text;
      service ::com::sun::star::drawing::ShadowProperties;
-     service ::com::sun::star::drawing::RotationDescriptor;
      [property] ::com::sun::star::drawing::CircleKind CircleKind;
      [property] long CircleStartAngle;
      [property] long CircleEndAngle;
@@ -5459,7 +5451,6 @@ module com {
      service ::com::sun::star::drawing::Shape;
      service ::com::sun::star::drawing::Text;
      service ::com::sun::star::drawing::ShadowProperties;
-     service ::com::sun::star::drawing::RotationDescriptor;
      /** @deprecated */ [property] string GraphicURL;
      [property] string GraphicStreamURL;
      /** @deprecated */ [property, optional] ::com::sun::star::awt::XBitmap GraphicObjectFillBitmap;
@@ -5564,7 +5555,6 @@ module com {
      service ::com::sun::star::drawing::PolyPolygonDescriptor;
      service ::com::sun::star::drawing::Text;
      service ::com::sun::star::drawing::ShadowProperties;
-     service ::com::sun::star::drawing::RotationDescriptor;
     };
     published service MarkerTable {
      interface ::com::sun::star::container::XNameContainer;
@@ -5581,7 +5571,6 @@ module com {
      service ::com::sun::star::drawing::LineProperties;
      service ::com::sun::star::drawing::Text;
      service ::com::sun::star::drawing::ShadowProperties;
-     service ::com::sun::star::drawing::RotationDescriptor;
      [property] ::com::sun::star::awt::Point StartPosition;
      [property] ::com::sun::star::awt::Point EndPosition;
     };
@@ -5607,7 +5596,6 @@ module com {
      service ::com::sun::star::drawing::PolyPolygonBezierDescriptor;
      service ::com::sun::star::drawing::Text;
      service ::com::sun::star::drawing::ShadowProperties;
-     service ::com::sun::star::drawing::RotationDescriptor;
     };
     published service PageShape {
      service ::com::sun::star::drawing::Shape;
@@ -5625,7 +5613,6 @@ module com {
      service ::com::sun::star::drawing::PolyPolygonDescriptor;
      service ::com::sun::star::drawing::Text;
      service ::com::sun::star::drawing::ShadowProperties;
-     service ::com::sun::star::drawing::RotationDescriptor;
     };
     published service PolyPolygonBezierShape {
      service ::com::sun::star::drawing::Shape;
@@ -5634,7 +5621,6 @@ module com {
      service ::com::sun::star::drawing::PolyPolygonBezierDescriptor;
      service ::com::sun::star::drawing::Text;
      service ::com::sun::star::drawing::ShadowProperties;
-     service ::com::sun::star::drawing::RotationDescriptor;
     };
     published service PolyPolygonShape {
      service ::com::sun::star::drawing::Shape;
@@ -5643,7 +5629,6 @@ module com {
      service ::com::sun::star::drawing::PolyPolygonDescriptor;
      service ::com::sun::star::drawing::Text;
      service ::com::sun::star::drawing::ShadowProperties;
-     service ::com::sun::star::drawing::RotationDescriptor;
     };
     published struct PolyPolygonShape3D {
      ::com::sun::star::drawing::DoubleSequenceSequence SequenceX;
@@ -5656,7 +5641,6 @@ module com {
      service ::com::sun::star::drawing::LineProperties;
      service ::com::sun::star::drawing::Text;
      service ::com::sun::star::drawing::ShadowProperties;
-     service ::com::sun::star::drawing::RotationDescriptor;
      [property] long CornerRadius;
     };
     published service ShapeCollection: ::com::sun::star::drawing::XShapes;
@@ -5681,7 +5665,6 @@ module com {
      service ::com::sun::star::drawing::LineProperties;
      service ::com::sun::star::drawing::ShadowProperties;
      service ::com::sun::star::drawing::Text;
-     service ::com::sun::star::drawing::RotationDescriptor;
      [property] long CornerRadius;
     };
     /** @deprecated */ published enum TextureKind {

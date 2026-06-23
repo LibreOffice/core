@@ -36,8 +36,6 @@ published service OpenBezierShape
 
     service com::sun::star::drawing::ShadowProperties;
 
-    service com::sun::star::drawing::RotationDescriptor;
-
 };
 
 

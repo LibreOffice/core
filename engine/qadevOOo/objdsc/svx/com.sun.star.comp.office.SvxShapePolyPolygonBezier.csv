@@ -90,8 +90,6 @@
 "SvxShapePolyPolygonBezier";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharPostureComplex"
 "SvxShapePolyPolygonBezier";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharLocaleComplex"
 "SvxShapePolyPolygonBezier";"com::sun::star::drawing::XShapeDescriptor";"getShapeType()"
-"SvxShapePolyPolygonBezier";"com::sun::star::drawing::RotationDescriptor";"RotateAngle"
-"SvxShapePolyPolygonBezier";"com::sun::star::drawing::RotationDescriptor";"ShearAngle#optional"
 "SvxShapePolyPolygonBezier";"com::sun::star::drawing::LineProperties";"LineStyle"
 "SvxShapePolyPolygonBezier";"com::sun::star::drawing::LineProperties";"LineDash"
 "SvxShapePolyPolygonBezier";"com::sun::star::drawing::LineProperties";"LineColor"

@@ -31,8 +31,6 @@ published service GraphicObjectShape
 
     service com::sun::star::drawing::ShadowProperties;
 
-    service com::sun::star::drawing::RotationDescriptor;
-
     /** This is a url to the source bitmap for this graphic shape.
 
         @deprecated as of LibreOffice 6.1 - use Graphic instead

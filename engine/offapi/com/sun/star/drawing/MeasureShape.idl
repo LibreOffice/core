@@ -35,8 +35,6 @@ published service MeasureShape
 
     service com::sun::star::drawing::ShadowProperties;
 
-    service com::sun::star::drawing::RotationDescriptor;
-
     /** this point is the start of the measured distance */
     [property] com::sun::star::awt::Point StartPosition;
 

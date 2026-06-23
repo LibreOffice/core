@@ -53,7 +53,6 @@ import com.sun.star.uno.XInterface;
  *  <li> <code>com::sun::star::drawing::ShadowProperties</code></li>
  *  <li> <code>com::sun::star::drawing::XGluePointsSupplier</code></li>
  *  <li> <code>com::sun::star::style::CharacterProperties</code></li>
- *  <li> <code>com::sun::star::drawing::RotationDescriptor</code></li>
  *  <li> <code>com::sun::star::text::XTextRange</code></li>
  *  <li> <code>com::sun::star::drawing::XShape</code></li>
  *  <li> <code>com::sun::star::lang::XComponent</code></li>
@@ -81,7 +80,6 @@ import com.sun.star.uno.XInterface;
  * @see com.sun.star.drawing.ShadowProperties
  * @see com.sun.star.drawing.XGluePointsSupplier
  * @see com.sun.star.style.CharacterProperties
- * @see com.sun.star.drawing.RotationDescriptor
  * @see com.sun.star.text.XTextRange
  * @see com.sun.star.drawing.XShape
  * @see com.sun.star.lang.XComponent
@@ -98,7 +96,6 @@ import com.sun.star.uno.XInterface;
  * @see ifc.drawing._ShadowProperties
  * @see ifc.drawing._XGluePointsSupplier
  * @see ifc.style._CharacterProperties
- * @see ifc.drawing._RotationDescriptor
  * @see ifc.text._XTextRange
  * @see ifc.drawing._XShape
  * @see ifc.lang._XComponent

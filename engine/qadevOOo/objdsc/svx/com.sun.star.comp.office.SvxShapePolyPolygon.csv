@@ -87,8 +87,6 @@
 "SvxShapePolyPolygon";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharPostureComplex"
 "SvxShapePolyPolygon";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharLocaleComplex"
 "SvxShapePolyPolygon";"com::sun::star::drawing::XShapeDescriptor";"getShapeType()"
-"SvxShapePolyPolygon";"com::sun::star::drawing::RotationDescriptor";"RotateAngle"
-"SvxShapePolyPolygon";"com::sun::star::drawing::RotationDescriptor";"ShearAngle#optional"
 "SvxShapePolyPolygon";"com::sun::star::drawing::LineProperties";"LineStyle"
 "SvxShapePolyPolygon";"com::sun::star::drawing::LineProperties";"LineDash"
 "SvxShapePolyPolygon";"com::sun::star::drawing::LineProperties";"LineColor"

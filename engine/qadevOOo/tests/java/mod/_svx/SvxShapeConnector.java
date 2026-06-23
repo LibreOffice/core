@@ -47,7 +47,6 @@ import com.sun.star.uno.XInterface;
  * @see com.sun.star.drawing.ConnectorShapeDescriptor
  * @see com.sun.star.drawing.LineShapeDescriptor
  * @see com.sun.star.drawing.PolyPolygonDescriptor
- * @see com.sun.star.drawing.RotationDescriptor
  * @see com.sun.star.drawing.ShadowDescriptor
  * @see com.sun.star.drawing.ShapeDescriptor
  * @see com.sun.star.drawing.Text

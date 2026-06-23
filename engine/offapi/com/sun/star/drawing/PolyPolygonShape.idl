@@ -40,8 +40,6 @@ published service PolyPolygonShape
 
     service com::sun::star::drawing::ShadowProperties;
 
-    service com::sun::star::drawing::RotationDescriptor;
-
 };
 
 

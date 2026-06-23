@@ -40,8 +40,6 @@ published service CaptionShape
 
     service com::sun::star::drawing::Text;
 
-    service com::sun::star::drawing::RotationDescriptor;
-
     /** This is the radius of the caption area corners.
      */
     [property] long CornerRadius;

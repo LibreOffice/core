@@ -36,8 +36,6 @@ published service RectangleShape
 
     service com::sun::star::drawing::ShadowProperties;
 
-    service com::sun::star::drawing::RotationDescriptor;
-
 
     /** For Shapes with rounded corners, this is the radius
         of the corners.

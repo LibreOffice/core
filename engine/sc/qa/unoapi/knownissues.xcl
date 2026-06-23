@@ -144,7 +144,6 @@ sc.ScAccessiblePageHeaderArea::com::sun::star::accessibility::XAccessibleEventBr
 sc.ScAnnotationShapeObj::com::sun::star::beans::XPropertySet
 sc.ScAnnotationShapeObj::com::sun::star::drawing::CaptionShape
 sc.ScAnnotationShapeObj::com::sun::star::drawing::LineProperties
-sc.ScAnnotationShapeObj::com::sun::star::drawing::RotationDescriptor
 sc.ScAnnotationShapeObj::com::sun::star::drawing::ShadowProperties
 sc.ScAnnotationShapeObj::com::sun::star::drawing::Shape
 sc.ScAnnotationShapeObj::com::sun::star::drawing::XShape
@@ -211,7 +210,6 @@ sc.ScAnnotationShapeObj::com::sun::star::style::ParagraphProperties
 sc.ScAnnotationShapeObj::com::sun::star::drawing::Shape
 sc.ScAnnotationShapeObj::com::sun::star::style::CharacterPropertiesComplex
 sc.ScAnnotationShapeObj::com::sun::star::drawing::XShapeDescriptor
-sc.ScAnnotationShapeObj::com::sun::star::drawing::RotationDescriptor
 sc.ScAnnotationShapeObj::com::sun::star::drawing::LineProperties
 sc.ScAnnotationShapeObj::com::sun::star::text::XSimpleText
 sc.ScAnnotationShapeObj::com::sun::star::drawing::TextProperties

@@ -3177,8 +3177,6 @@ constexpr OUString sUNO_service_drawing_ConnectorProperties = u"com.sun.star.dra
 constexpr OUString sUNO_service_drawing_MeasureProperties = u"com.sun.star.drawing.MeasureProperties"_ustr;
 constexpr OUString sUNO_service_drawing_ShadowProperties  = u"com.sun.star.drawing.ShadowProperties"_ustr;
 
-constexpr OUString sUNO_service_drawing_RotationDescriptor = u"com.sun.star.drawing.RotationDescriptor"_ustr;
-
 constexpr OUString sUNO_service_drawing_Text              = u"com.sun.star.drawing.Text"_ustr;
 constexpr OUString sUNO_service_drawing_GroupShape        = u"com.sun.star.drawing.GroupShape"_ustr;
 
@@ -3254,8 +3252,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterProperties,
                             sUNO_service_style_CharacterPropertiesComplex,
                             sUNO_service_style_CharacterPropertiesAsian,
-                            sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor };
+                            sUNO_service_drawing_ShadowProperties };
                 return aSvxShape_CustomShapeServices;
             }
         case SdrObjKind::Line:
@@ -3276,8 +3273,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_PolyPolygonDescriptor,
-                            sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor };
+                            sUNO_service_drawing_ShadowProperties };
                 return aSvxShape_LineServices;
             }
 
@@ -3298,8 +3294,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesComplex,
                             sUNO_service_style_CharacterPropertiesAsian,
 
-                            sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor };
+                            sUNO_service_drawing_ShadowProperties };
                 return aSvxShape_RectServices;
             }
 
@@ -3324,8 +3319,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesComplex,
                             sUNO_service_style_CharacterPropertiesAsian,
 
-                            sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor };
+                            sUNO_service_drawing_ShadowProperties };
                 return aSvxShape_CircServices;
             }
 
@@ -3349,8 +3343,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesComplex,
                             sUNO_service_style_CharacterPropertiesAsian,
 
-                            sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor };
+                            sUNO_service_drawing_ShadowProperties };
                 return aSvxShape_PathServices;
             }
 
@@ -3375,8 +3368,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesComplex,
                             sUNO_service_style_CharacterPropertiesAsian,
 
-                            sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor };
+                            sUNO_service_drawing_ShadowProperties };
                 return aSvxShape_PolyServices;
             }
 
@@ -3401,8 +3393,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesComplex,
                             sUNO_service_style_CharacterPropertiesAsian,
 
-                            sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor };
+                            sUNO_service_drawing_ShadowProperties };
                 return aSvxShape_FreeLineServices;
             }
 
@@ -3427,8 +3418,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesComplex,
                             sUNO_service_style_CharacterPropertiesAsian,
 
-                            sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor };
+                            sUNO_service_drawing_ShadowProperties };
                 return aSvxShape_FreeFillServices;
             }
 
@@ -3452,8 +3442,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesComplex,
                             sUNO_service_style_CharacterPropertiesAsian,
 
-                            sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor };
+                            sUNO_service_drawing_ShadowProperties };
                 return aSvxShape_TextServices;
             }
         case SdrObjKind::Annotation:
@@ -3474,8 +3463,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesComplex,
                             sUNO_service_style_CharacterPropertiesAsian,
 
-                            sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor
+                            sUNO_service_drawing_ShadowProperties
                 };
                 return aSvxShape_AnnotationServices;
             }
@@ -3496,8 +3484,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesComplex,
                             sUNO_service_style_CharacterPropertiesAsian,
 
-                            sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor};
+                            sUNO_service_drawing_ShadowProperties};
                 return aSvxShape_GrafServices;
             }
 
@@ -3517,8 +3504,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesComplex,
                             sUNO_service_style_CharacterPropertiesAsian,
 
-                            sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor };
+                            sUNO_service_drawing_ShadowProperties };
                 return aSvxShape_Ole2Services;
             }
 
@@ -3540,8 +3526,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesComplex,
                             sUNO_service_style_CharacterPropertiesAsian,
 
-                            sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor };
+                            sUNO_service_drawing_ShadowProperties };
                 return aSvxShape_CaptionServices;
             }
 
@@ -3573,8 +3558,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_PolyPolygonDescriptor,
-                            sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor };
+                            sUNO_service_drawing_ShadowProperties };
                 return aSvxShape_MeasureServices;
             }
 
@@ -3613,8 +3597,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_style_CharacterPropertiesAsian,
 
                             sUNO_service_drawing_PolyPolygonDescriptor,
-                            sUNO_service_drawing_ShadowProperties,
-                            sUNO_service_drawing_RotationDescriptor };
+                            sUNO_service_drawing_ShadowProperties };
                 return aSvxShape_EdgeServices;
             }
         case SdrObjKind::Media:

@@ -87,8 +87,6 @@
 "SvxGraphicObject";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharPostureComplex"
 "SvxGraphicObject";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharLocaleComplex"
 "SvxGraphicObject";"com::sun::star::drawing::XShapeDescriptor";"getShapeType()"
-"SvxGraphicObject";"com::sun::star::drawing::RotationDescriptor";"RotateAngle"
-"SvxGraphicObject";"com::sun::star::drawing::RotationDescriptor";"ShearAngle#optional"
 "SvxGraphicObject";"com::sun::star::text::XSimpleText";"createTextCursor()"
 "SvxGraphicObject";"com::sun::star::text::XSimpleText";"createTextCursorByRange()"
 "SvxGraphicObject";"com::sun::star::text::XSimpleText";"insertString()"

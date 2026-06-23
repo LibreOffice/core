@@ -36,8 +36,6 @@ published service PolyLineShape
     service com::sun::star::drawing::Text;
 
     service com::sun::star::drawing::ShadowProperties;
-
-    service com::sun::star::drawing::RotationDescriptor;
 };
 
 

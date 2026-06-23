@@ -88,8 +88,6 @@
 "SvxShape";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharPostureComplex"
 "SvxShape";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharLocaleComplex"
 "SvxShape";"com::sun::star::drawing::XShapeDescriptor";"getShapeType()"
-"SvxShape";"com::sun::star::drawing::RotationDescriptor";"RotateAngle"
-"SvxShape";"com::sun::star::drawing::RotationDescriptor";"ShearAngle#optional"
 "SvxShape";"com::sun::star::drawing::LineProperties";"LineStyle"
 "SvxShape";"com::sun::star::drawing::LineProperties";"LineDash"
 "SvxShape";"com::sun::star::drawing::LineProperties";"LineColor"
