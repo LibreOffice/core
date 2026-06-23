@@ -610,16 +610,6 @@ static LB lcl_GetLBRelationsForStrID( const FrameMap* _pMap,
 }
 
 // standard frame TabPage
-namespace
-{
-    void HandleAutoCB(bool _bChecked, weld::Label& _rFT_man, weld::Label& _rFT_auto, weld::MetricSpinButton& _rPF_Edit)
-    {
-        _rFT_man.set_visible( !_bChecked );
-        _rFT_auto.set_visible( _bChecked );
-        OUString accName = _bChecked ? _rFT_auto.get_label() : _rFT_man.get_label();
-        _rPF_Edit.set_accessible_name(accName);
-    }
-}
 
 SwFramePage::SwFramePage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet)
     : SfxTabPage(pPage, pController, u"modules/swriter/ui/frmtypepage.ui"_ustr, u"FrameTypePage"_ustr, &rSet)
@@ -649,12 +639,10 @@ SwFramePage::SwFramePage(weld::Container* pPage, weld::DialogController* pContro
     , m_aRatioTop(ConnectorType::Top)
     , m_aRatioBottom(ConnectorType::Bottom)
     , m_xWidthFT(m_xBuilder->weld_label(u"widthft"_ustr))
-    , m_xWidthAutoFT(m_xBuilder->weld_label(u"autowidthft"_ustr))
     , m_xRelWidthCB(m_xBuilder->weld_check_button(u"relwidth"_ustr))
     , m_xRelWidthRelationLB(m_xBuilder->weld_combo_box(u"relwidthrelation"_ustr))
     , m_xAutoWidthCB(m_xBuilder->weld_check_button(u"autowidth"_ustr))
     , m_xHeightFT(m_xBuilder->weld_label(u"heightft"_ustr))
-    , m_xHeightAutoFT(m_xBuilder->weld_label(u"autoheightft"_ustr))
     , m_xRelHeightCB(m_xBuilder->weld_check_button(u"relheight"_ustr))
     , m_xRelHeightRelationLB(m_xBuilder->weld_combo_box(u"relheightrelation"_ustr))
     , m_xAutoHeightCB(m_xBuilder->weld_check_button(u"autoheight"_ustr))
@@ -916,12 +904,7 @@ void SwFramePage::EnableGraficMode()
     // i#39692 - mustn't be called more than once
     if (!m_xRealSizeBT->get_visible())
     {
-        m_xWidthFT->show();
-        m_xWidthAutoFT->hide();
         m_xAutoHeightCB->hide();
-
-        m_xHeightFT->show();
-        m_xHeightAutoFT->hide();
         m_xAutoWidthCB->hide();
 
         m_xRealSizeBT->show();
@@ -2210,13 +2193,15 @@ IMPL_LINK_NOARG(SwFramePage, RealSizeHdl, weld::Button&, void)
 IMPL_LINK_NOARG(SwFramePage, AutoWidthClickHdl, weld::Toggleable&, void)
 {
     if( !IsInGraficMode() )
-        HandleAutoCB( m_xAutoWidthCB->get_active(), *m_xWidthFT, *m_xWidthAutoFT, *m_xWidthED->get() );
+        m_xWidthFT->set_label(m_xAutoWidthCB->get_active() ? SwResId(STR_FRMUI_MIN_WIDTH)
+                                                           : SwResId(STR_FRMUI_WIDTH));
 }
 
 IMPL_LINK_NOARG(SwFramePage, AutoHeightClickHdl, weld::Toggleable&, void)
 {
     if (!IsInGraficMode())
-        HandleAutoCB(m_xAutoHeightCB->get_active(), *m_xHeightFT, *m_xHeightAutoFT, *m_xWidthED->get());
+        m_xHeightFT->set_label(m_xAutoHeightCB->get_active() ? SwResId(STR_FRMUI_MIN_HEIGHT)
+                                                             : SwResId(STR_FRMUI_HEIGHT));
 }
 
 IMPL_LINK_NOARG(SwFramePage, RatioClickHdl, weld::Toggleable&, void)
@@ -2357,14 +2342,14 @@ void SwFramePage::Init(const SfxItemSet& rSet)
         SwFrameSize eSize = rSize.GetHeightSizeType();
         bool bCheck = eSize != SwFrameSize::Fixed;
         m_xAutoHeightCB->set_active(bCheck);
-        HandleAutoCB( bCheck, *m_xHeightFT, *m_xHeightAutoFT, *m_xWidthED->get() );
+        m_xHeightFT->set_label(bCheck ? SwResId(STR_FRMUI_MIN_HEIGHT) : SwResId(STR_FRMUI_HEIGHT));
         if( eSize == SwFrameSize::Variable )
             m_xHeightED->set_value(m_xHeightED->get_min());
 
         eSize = rSize.GetWidthSizeType();
         bCheck = eSize != SwFrameSize::Fixed;
         m_xAutoWidthCB->set_active(bCheck);
-        HandleAutoCB( bCheck, *m_xWidthFT, *m_xWidthAutoFT, *m_xWidthED->get() );
+        m_xWidthFT->set_label(bCheck ? SwResId(STR_FRMUI_MIN_WIDTH) : SwResId(STR_FRMUI_WIDTH));
         if( eSize == SwFrameSize::Variable )
             m_xWidthED->set_value(m_xWidthED->get_min());
 

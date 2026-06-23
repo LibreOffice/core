@@ -1409,6 +1409,10 @@
 #define STR_FRMUI_COLL_HEADER                   NC_("STR_FRMUI_COLL_HEADER", " (Template: ")
 #define STR_FRMUI_BORDER                        NC_("STR_FRMUI_BORDER", "Borders")
 #define STR_FRMUI_PATTERN                       NC_("STR_FRMUI_PATTERN", "Background")
+#define STR_FRMUI_WIDTH                         NC_("STR_FRMUI_WIDTH", "~Width")
+#define STR_FRMUI_MIN_WIDTH                     NC_("STR_FRMUI_MIN_WIDTH", "~Width (at least)")
+#define STR_FRMUI_HEIGHT                        NC_("STR_FRMUI_HEIGHT", "H~eight")
+#define STR_FRMUI_MIN_HEIGHT                    NC_("STR_FRMUI_MIN_HEIGHT", "H~eight (at least)")
 
 #define STR_TEXTCOLL_HEADER                     NC_("STR_TEXTCOLL_HEADER", "(Paragraph Style: ")
 #define STR_ILLEGAL_PAGENUM                     NC_("STR_ILLEGAL_PAGENUM", "Page numbers cannot be applied to the current page. Even numbers can be used on left pages, odd numbers on right pages.")

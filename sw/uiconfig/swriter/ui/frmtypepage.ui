@@ -61,39 +61,13 @@
                 <property name="row-spacing">12</property>
                 <property name="column-spacing">3</property>
                 <child>
-                  <object class="GtkBox" id="bxWidth">
+                  <object class="GtkLabel" id="widthft">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="valign">center</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkLabel" id="widthft">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="frmtypepage|widthft">_Width</property>
-                        <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="autowidthft">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="frmtypepage|autowidthft">_Width (at least)</property>
-                        <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
+                    <property name="label" translatable="yes" context="frmtypepage|widthft">_Width</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">width</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -178,39 +152,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="bxHeight">
+                  <object class="GtkLabel" id="heightft">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="valign">center</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkLabel" id="heightft">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="frmtypepage|heightft">H_eight</property>
-                        <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="autoheightft">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="frmtypepage|autoheightft">H_eight (at least)</property>
-                        <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
+                    <property name="label" translatable="yes" context="frmtypepage|heightft">H_eight</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">height</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
