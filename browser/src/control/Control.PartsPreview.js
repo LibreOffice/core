@@ -298,9 +298,13 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		var that = this;
 		window.L.DomEvent.on(frame, 'contextmenu', function(e) {
 			var isMasterView = this._map['stateChangeHandler'].getItemValue('.uno:SlideMasterPage');
-			if (isMasterView === 'true' || app.map.isReadOnlyMode())
+			if (isMasterView === 'true')
 				return;
 			e.preventDefault();
+			// The frame area only offers Paste and Insert, both of which need
+			// edit access, so in read-only mode just suppress the system menu.
+			if (app.map.isReadOnlyMode())
+				return;
 
 			var nPos = undefined;
 			if (this.isPaddingClick(frame, e, 'top'))
@@ -372,7 +376,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		window.L.DomEvent.on(img, 'contextmenu', function(e) {
 			e.stopPropagation();
 			var isMasterView = this._map['stateChangeHandler'].getItemValue('.uno:SlideMasterPage');
-			if (isMasterView === 'true' || app.map.isReadOnlyMode())
+			if (isMasterView === 'true')
 				return;
 			e.preventDefault();
 
@@ -479,6 +483,15 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 					pos: 0,
 				});
 			}
+
+			// In read-only mode the slide cannot be changed, but copying it is
+			// still allowed, so keep only Copy and drop the editing entries. The
+			// system menu is already suppressed, so when nothing is left (for
+			// example the overview page, which has no Copy entry) just close out.
+			if (app.map.isReadOnlyMode())
+				entries = entries.filter(function(entry) { return entry.id === 'copy'; });
+			if (entries.length === 0)
+				return;
 
 			var menuPosEl = that._getMenuPosEl();
 			var rect = that._container.getBoundingClientRect();
