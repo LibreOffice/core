@@ -66,6 +66,9 @@
                     <property name="headers-visible">False</property>
                     <property name="search-column">0</property>
                     <property name="show-expanders">False</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection"/>
+                    </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="treeviewcolumn4">
                         <property name="resizable">True</property>
@@ -74,10 +77,10 @@
                         <child>
                           <object class="GtkCellRendererToggle" id="cellrenderer5"/>
                           <attributes>
+                            <attribute name="sensitive">7</attribute>
                             <attribute name="visible">3</attribute>
                             <attribute name="active">0</attribute>
                             <attribute name="inconsistent">4</attribute>
-                            <attribute name="sensitive">7</attribute>
                           </attributes>
                         </child>
                       </object>
