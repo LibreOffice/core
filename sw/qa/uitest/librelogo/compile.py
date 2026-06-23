@@ -7,22 +7,16 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-from uitest.framework import UITestCase
-
 import re
+from uitest.framework import UITestCase
+from com.sun.star.script.provider import theMasterScriptProviderFactory
 
 class LibreLogoCompileTest(UITestCase):
     LIBRELOGO_PATH = "vnd.sun.star.script:LibreLogo|LibreLogo.py$%s?language=Python&location=share"
     LS = "#_@L_i_N_e@_#" # LibreLogo line separator for debug feature "jump to the bad LibreLogo program line"
 
-    def createMasterScriptProviderFactory(self):
-        xServiceManager = self.xContext.ServiceManager
-        return xServiceManager.createInstanceWithContext(
-            "com.sun.star.script.provider.MasterScriptProviderFactory",
-            self.xContext)
-
     def getScript(self, command):
-        xMasterScriptProviderFactory = self.createMasterScriptProviderFactory()
+        xMasterScriptProviderFactory = theMasterScriptProviderFactory.get(self.xContext)
         document = self.ui_test.get_component()
         xScriptProvider = xMasterScriptProviderFactory.createScriptProvider(document)
         xScript = xScriptProvider.getScript(self.LIBRELOGO_PATH %command)

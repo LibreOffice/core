@@ -14,18 +14,13 @@ from com.sun.star.awt.FontUnderline import NONE as __Underline_NONE__
 from com.sun.star.awt.FontUnderline import SINGLE as __Underline_SINGLE__
 from com.sun.star.awt.FontStrikeout import NONE as __Strikeout_NONE__
 from com.sun.star.awt.FontStrikeout import SINGLE as __Strikeout_SINGLE__
+from com.sun.star.script.provider import theMasterScriptProviderFactory
 
 class LibreLogoTest(UITestCase):
     LIBRELOGO_PATH = "vnd.sun.star.script:LibreLogo|LibreLogo.py$%s?language=Python&location=share"
 
-    def createMasterScriptProviderFactory(self):
-        xServiceManager = self.xContext.ServiceManager
-        return xServiceManager.createInstanceWithContext(
-            "com.sun.star.script.provider.MasterScriptProviderFactory",
-            self.xContext)
-
     def getScript(self, command):
-        xMasterScriptProviderFactory = self.createMasterScriptProviderFactory()
+        xMasterScriptProviderFactory = theMasterScriptProviderFactory.get(self.xContext)
         document = self.ui_test.get_component()
         xScriptProvider = xMasterScriptProviderFactory.createScriptProvider(document)
         xScript = xScriptProvider.getScript(self.LIBRELOGO_PATH %command)
