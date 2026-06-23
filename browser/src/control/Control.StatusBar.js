@@ -622,7 +622,7 @@ class StatusBar extends JSDialog.Toolbar {
 			this.updateHtmlItem('RowColSelCount', state ? state : _('Select multiple cells'), !state);
 		}
 		else if (commandName === '.uno:InsertMode') {
-			this.updateHtmlItem('InsertMode', state ? window.L.Styles.insertMode[state].toLocaleString() : ' ', !state);
+			this.updateHtmlItem('InsertMode', state ? window.L.Styles.insertMode[state] : ' ', !state);
 
 			$('#InsertMode').removeClass();
 			$('#InsertMode').addClass('jsdialog ui-badge insert-mode-' + state);

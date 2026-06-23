@@ -35,8 +35,8 @@ window.L.Styles = {
 	],
 
 	insertMode : {
-		'true'  : 'Insert',
-		'false' : 'Overwrite'
+		'true'  : _('Insert'),
+		'false' : _('Overwrite')
 	},
 
 	selectionMode : [

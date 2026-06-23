@@ -541,7 +541,8 @@ const shapeGroupTitles = {
 	'Block Arrows': _UNO('.uno:ArrowShapes'),
 	'Stars and Banners': _UNO('.uno:StarShapes'),
 	'Callouts': _UNO('.uno:CalloutShapes'),
-	'Flowchart': _UNO('.uno:FlowChartShapes')
+	'Flowchart': _UNO('.uno:FlowChartShapes'),
+	'Connectors': _UNO('.uno:ConnectorToolbox')
 };
 
 function createShapesPanel(shapeType) {
