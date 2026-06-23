@@ -51,6 +51,8 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/sfxresid.hxx>
+#include <sfx2/strings.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <sot/exchange.hxx>
 #include <svl/eitem.hxx>
@@ -324,7 +326,7 @@ void ModulWindow::BasicExecute()
     {
         std::unique_ptr<weld::MessageDialog> xBox(
             Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Warning,
-                                             VclButtonsType::Ok, IDEResId(RID_STR_CANNOTRUNMACRO)));
+                                             VclButtonsType::Ok, SfxResId(STR_CANNOTRUNMACRO)));
         xBox->run();
         return;
     }

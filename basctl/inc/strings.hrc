@@ -37,7 +37,6 @@
 #define RID_STR_SBXNAMEALLREADYUSED         NC_("RID_STR_SBXNAMEALLREADYUSED", "Name already exists")
 #define RID_STR_SIGNED                      NC_("RID_STR_SIGNED", "(Signed)")
 #define RID_STR_SBXNAMEALLREADYUSED2        NC_("RID_STR_SBXNAMEALLREADYUSED2", "Object with same name already exists")
-#define RID_STR_CANNOTRUNMACRO              NC_("RID_STR_CANNOTRUNMACRO", "For security reasons, you cannot run this macro.\n\nFor more information, check the security settings.")
 #define RID_STR_SEARCHNOTFOUND              NC_("RID_STR_SEARCHNOTFOUND", "Search key not found")
 #define RID_STR_SEARCHFROMSTART             NC_("RID_STR_SEARCHFROMSTART", "Search to last module complete. Continue at first module?")
 #define RID_STR_SEARCHREPLACES              NC_("RID_STR_SEARCHREPLACES", "Search key replaced XX times")

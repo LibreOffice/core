@@ -40,7 +40,9 @@
 #include <sfx2/frame.hxx>
 #include <sfx2/minfitem.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/sfxresid.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <sfx2/strings.hrc>
 #include <tools/debug.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
@@ -466,7 +468,7 @@ IMPL_LINK_NOARG(MacroChooser, MacroDoubleClickHdl, const weld::TreeIter&, bool)
     {
         std::unique_ptr<weld::MessageDialog> xError(
             Application::CreateMessageDialog(m_xDialog.get(), VclMessageType::Warning,
-                                             VclButtonsType::Ok, IDEResId(RID_STR_CANNOTRUNMACRO)));
+                                             VclButtonsType::Ok, SfxResId(STR_CANNOTRUNMACRO)));
         xError->run();
         return true;
     }
@@ -599,7 +601,7 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
                 if ( aDocument.isDocument() && !aDocument.allowMacros() )
                 {
                     std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(m_xDialog.get(),
-                                                                VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_CANNOTRUNMACRO)));
+                                                                VclMessageType::Warning, VclButtonsType::Ok, SfxResId(STR_CANNOTRUNMACRO)));
                     xError->run();
                     return;
                 }

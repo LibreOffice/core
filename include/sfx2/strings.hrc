@@ -325,6 +325,7 @@
 #define STR_MACROS_DISABLED_SIGNATURE_INVALID   NC_("STR_MACROS_DISABLED_SIGNATURE_INVALID", "Macros are signed, but at least one signature has problems.")
 #define STR_MACROS_DISABLED_CONTENT_UNSIGNED    NC_("STR_MACROS_DISABLED_CONTENT_UNSIGNED", "Macros are signed, but the document (containing document events) is not signed.")
 #define STR_MACROS                              NC_("STR_MACROS", "Show Macros")
+#define STR_CANNOTRUNMACRO                      NC_("STR_CANNOTRUNMACRO", "For security reasons, you cannot run this macro.\n\nFor more information, check the security settings.")
 #define STR_SECURITY_OPTIONS                    NC_("STR_MACROS", "Show Security Options")
 #define STR_EVENTS                              NC_("STR_EVENTS", "Show Events")
 #define STR_VCLGEN_TITLE                        NC_("STR_VCLGEN_TITLE", "Fallback UI controls in use")
