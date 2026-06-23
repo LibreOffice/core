@@ -3,8 +3,6 @@ CTAGS = ctags
 BUILT_SOURCES = node_modules
 MAINTAINERCLEANFILES = Makefile.in
 
-L10N_PO = $(if $(filter true,$(ENABLE_ANDROIDAPP)),$(filter-out %-ca-valencia.po,$(wildcard $(srcdir)/po/*.po)),$(wildcard $(srcdir)/po/*.po))
-# See https://issuetracker.google.com/issues/293294923 for why we need to filter out ca-valencian
 IS_BUNDLE = $(if $(filter true,$(ENABLE_BUNDLE)),true,)
 IS_SEPARATE = $(if $(filter false,$(ENABLE_BUNDLE)),true,)
 
@@ -22,23 +20,37 @@ ENGINE_UI_XCU_DIR = $(ENGINE_SRCDIR)/officecfg/registry/data/org/openoffice/Offi
 UNO_GENERATED_STAMP = $(DIST_FOLDER)/.uno-l10n-generated.stamp
 UNO_L10N_STAMP = $(DIST_FOLDER)/l10n/uno/.uno-l10n.stamp
 
+# The localization map files (localizations.json, help-localizations.json,
+# uno-localizations.json) are generated from engine/distro-configs/Langs.conf,
+# the single curated list of shipped languages. Like the maps' targets they are
+# generated when the engine is present and shipped in the dist tarball otherwise.
+LANGS_CONF = $(ENGINE_SRCDIR)/distro-configs/Langs.conf
+L10N_MAPS_STAMP = $(DIST_FOLDER)/.l10n-maps.stamp
+# Shipped UI/help languages, in the underscore file-name form (en_GB, pt_BR):
+# from Langs.conf when the engine is present, else from the shipped map.
+L10N_LANGS = $(shell if test -f "$(LANGS_CONF)"; then sed -n 's/^--with-lang=//p' "$(LANGS_CONF)" | tr ' ' '\n' | grep -vx en-US | tr '-' '_'; else sed -n 's@.*/ui-\([A-Za-z_]*\)\.json.*@\1@p' "$(srcdir)/l10n/localizations.json" 2>/dev/null | sort -u; fi)
+
 export NODE_PATH=$(abs_builddir)/node_module
 
 if !ENABLE_MOBILEAPP
-L10N_JSON = $(patsubst $(srcdir)/po/help-%.po,$(DIST_FOLDER)/l10n/help-%.json,$(L10N_PO))
-L10N_JSON += $(patsubst $(srcdir)/po/ui-%.po,$(DIST_FOLDER)/l10n/ui-%.json,$(L10N_PO))
+# Only convert the po files for languages in Langs.conf (and only when a po
+# actually exists), so we don't ship languages the engine does not support.
+L10N_JSON = $(foreach L,$(L10N_LANGS),$(if $(wildcard $(srcdir)/po/help-$(L).po),$(DIST_FOLDER)/l10n/help-$(L).json))
+L10N_JSON += $(foreach L,$(L10N_LANGS),$(if $(wildcard $(srcdir)/po/ui-$(L).po),$(DIST_FOLDER)/l10n/ui-$(L).json))
 else
 L10N_ALL_JS = $(DIST_FOLDER)/l10n-all.js
 L10N_JSON = $(L10N_ALL_JS)
 L10N_ALL_JS_ENTRY = l10n-all.js
 
 $(L10N_ALL_JS) : $(wildcard $(srcdir)/po/ui-*.po) $(wildcard $(srcdir)/po/help-*.po) $(UNO_GENERATED_STAMP) $(shell find $(srcdir)/l10n -name '*.*') $(srcdir)/util/create-l10n-all-js.py
-	find $(srcdir)/po -name 'ui-*.po' -exec $(srcdir)/util/po2json.py {} -o {}.json \;
-	find $(srcdir)/po -name 'help-*.po' -exec $(srcdir)/util/po2json.py {} -o {}.json \;
+	@for lang in $(L10N_LANGS); do \
+		$(srcdir)/util/po2json.py --quiet $(srcdir)/po/ui-$$lang.po -o $(srcdir)/po/ui-$$lang.po.json || exit 1; \
+		if test -f $(srcdir)/po/help-$$lang.po; then $(srcdir)/util/po2json.py --quiet $(srcdir)/po/help-$$lang.po -o $(srcdir)/po/help-$$lang.po.json || exit 1; fi; \
+	done
 	@mkdir -p $(dir $@)
 	python3 $(srcdir)/util/create-l10n-all-js.py >$@
-	find $(srcdir)/po -name 'ui-*.po.json' -delete
-	find $(srcdir)/po -name 'help-*.po.json' -delete
+	@find $(srcdir)/po -name 'ui-*.po.json' -delete
+	@find $(srcdir)/po -name 'help-*.po.json' -delete
 
 # Scoped translations for the Options (integrator settings) dialog, which runs
 # in a file:// iframe where the <link rel="localizations"> loader does not work.
@@ -92,6 +104,9 @@ QUIET_STYLELINT_0 = @echo "  STYLELINT" $@;
 QUIET_UNOCOMMANDS = $(QUIET_UNOCOMMANDS_$(V))
 QUIET_UNOCOMMANDS_ = $(QUIET_UNOCOMMANDS_$(AM_DEFAULT_VERBOSITY))
 QUIET_UNOCOMMANDS_0 = @echo "  UNOCOMMANDS " $@;
+QUIET_GENLANGMAPS = $(QUIET_GENLANGMAPS_$(V))
+QUIET_GENLANGMAPS_ = $(QUIET_GENLANGMAPS_$(AM_DEFAULT_VERBOSITY))
+QUIET_GENLANGMAPS_0 = @echo "  GENLANGMAPS " $@;
 QUIET_UNOSHORTCUTS = $(QUIET_UNOSHORTCUTS_$(V))
 QUIET_UNOSHORTCUTS_ = $(QUIET_UNOSHORTCUTS_$(AM_DEFAULT_VERBOSITY))
 QUIET_UNOSHORTCUTS_0 = @echo "  UNOSHORTCUTS " $@;
@@ -115,12 +130,9 @@ COOL_IMAGES_SRC = $(shell find $(srcdir)/images \( -name '*.png' -o -name '*.svg
 COOL_IMAGES_DST = $(patsubst $(srcdir)/%,$(DIST_FOLDER)/%,$(COOL_IMAGES_SRC))
 COOL_IMAGES_CUSTOM_SRC = $(shell if test -n "$(CUSTOM_ICONS_DIRECTORY)"; then find $(CUSTOM_ICONS_DIRECTORY) -name '*.*'; fi)
 COOL_IMAGES_CUSTOM_DST = $(patsubst $(CUSTOM_ICONS_DIRECTORY)/%,$(DIST_FOLDER)/images/%,$(COOL_IMAGES_CUSTOM_SRC))
-# l10n/uno is generated (see UNO_L10N_STAMP), so it is excluded here and copied
-# to the dist folder separately.
-COOL_L10N_SRC = $(shell find $(srcdir)/l10n -name '*.json' -not -path '*/uno/*')
-if !ENABLE_MOBILEAPP
-COOL_L10N_DST =  $(patsubst $(srcdir)/l10n/%,$(DIST_FOLDER)/l10n/%,$(COOL_L10N_SRC))
-endif
+# Everything under l10n/ is generated: the *-localizations.json maps (see
+# L10N_MAPS_STAMP), l10n/uno/*.json (UNO_L10N_STAMP) and the ui-/help- json
+# (po2json rules). There is nothing to copy verbatim from srcdir/l10n.
 
 COOL_HTML_SRC = $(shell find $(srcdir)/html -name '*.html')
 COOL_HTML_DST = $(patsubst $(srcdir)/html/%.html,$(DIST_FOLDER)/%.html,$(COOL_HTML_SRC))
@@ -1010,7 +1022,7 @@ $(TYPESCRIPT_JS_DIR)/%.js: $(srcdir)/%.ts
 build-cool: \
 	eslint.done \
 	prettier.done \
-	$(COOL_L10N_DST) \
+	$(L10N_MAPS_STAMP) \
 	$(UNO_L10N_STAMP) \
 	$(L10N_JSON) \
 	$(SETTINGS_L10N_JS) \
@@ -1085,6 +1097,16 @@ prettier.done: $(COOL_JS_SRC) $(COOL_TS_SRC) $(COOL_TSX_SRC)
 	$(call run_prettier_check,--debug-check $(srcdir)/src $(srcdir)/js/global.js)
 	@touch $@
 
+# Generate the localization map files from Langs.conf (the single source of
+# truth for shipped languages) and copy them to the dist folder. git build only;
+# in a dist tarball they are already shipped, so the recipe just copies.
+$(L10N_MAPS_STAMP): $(abs_top_srcdir)/scripts/genlangmaps.py $(wildcard $(LANGS_CONF)) \
+		$(wildcard $(srcdir)/po/ui-*.po) $(wildcard $(srcdir)/po/help-*.po)
+	$(QUIET_GENLANGMAPS) test ! -f "$(LANGS_CONF)" || $(abs_top_srcdir)/scripts/genlangmaps.py $(abs_top_srcdir) $(ENGINE_SRCDIR)
+	@mkdir -p $(DIST_FOLDER)/l10n
+	@cp $(srcdir)/l10n/localizations.json $(srcdir)/l10n/help-localizations.json $(srcdir)/l10n/uno-localizations.json $(DIST_FOLDER)/l10n/
+	@touch $@
+
 # Generate unocommands.js and l10n/uno/*.json from the engine command
 # descriptions and translations. In a git checkout the engine is present and
 # they are regenerated; in a dist tarball the engine is absent, they are already
@@ -1097,7 +1119,7 @@ $(srcdir)/src/unocommands.js: $(abs_top_srcdir)/scripts/unocommands.py \
 			$(srcdir)/src/control/jsdialog/*.js $(srcdir)/src/control/jsdialog/*.ts)
 	$(QUIET_UNOCOMMANDS) test ! -d "$(ENGINE_UI_XCU_DIR)" || $(abs_top_srcdir)/scripts/unocommands.py --update $(abs_top_srcdir) $(ENGINE_SRCDIR)
 
-$(UNO_GENERATED_STAMP): $(abs_top_srcdir)/scripts/unocommands.py $(srcdir)/src/unocommands.js \
+$(UNO_GENERATED_STAMP): $(abs_top_srcdir)/scripts/unocommands.py $(L10N_MAPS_STAMP) $(srcdir)/src/unocommands.js \
 		$(wildcard $(ENGINE_SRCDIR)/translations/source/*/officecfg/registry/data/org/openoffice/Office/UI.po)
 	$(QUIET_UNOCOMMANDS) test ! -d "$(ENGINE_UI_XCU_DIR)" || $(abs_top_srcdir)/scripts/unocommands.py --translate $(abs_top_srcdir) $(ENGINE_SRCDIR)/translations
 	@mkdir -p $(dir $@)
@@ -1307,10 +1329,6 @@ $(DIST_FOLDER)/$(JQUERY_MINIFIED_IMAGE_PATH)/%.png: $(JQUERY_MINIFIED_IMAGE_PATH
 	@cp $< $@
 
 $(DIST_FOLDER)/images/%.png: $(JQUERY_MINIFIED_IMAGE_PATH)/%.png
-	@mkdir -p $(dir $@)
-	@cp $< $@
-
-$(DIST_FOLDER)/l10n/%: $(srcdir)/l10n/%
 	@mkdir -p $(dir $@)
 	@cp $< $@
 

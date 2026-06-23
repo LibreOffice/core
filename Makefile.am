@@ -573,10 +573,13 @@ dist-hook:
 	   @LOKIT_PATH@/COKit/COKitInit.h \
 	   @LOKIT_PATH@/COKit/COKitTypes.h \
 	   $(distdir)/bundled/include/COKit/
-# Generate browser/src/unocommands.js and browser/l10n/uno/*.json into the
-# tarball from the engine sources. These are not committed to git and the engine
-# is not part of the tarball, so the from-tarball build relies on these shipped
-# copies (the engine is present here, in the git checkout where make dist runs).
+# Generate the localization maps and browser/src/unocommands.js +
+# browser/l10n/uno/*.json into the tarball from the engine sources. These are
+# not committed to git and the engine is not part of the tarball, so the
+# from-tarball build relies on these shipped copies (the engine is present here,
+# in the git checkout where make dist runs). genlangmaps runs first because
+# unocommands.py --translate is driven by the generated uno-localizations.json.
+	$(abs_top_srcdir)/scripts/genlangmaps.py $(distdir) $(abs_top_srcdir)/engine
 	$(abs_top_srcdir)/scripts/unocommands.py --update $(distdir) $(abs_top_srcdir)/engine
 	$(abs_top_srcdir)/scripts/unocommands.py --translate $(distdir) $(abs_top_srcdir)/engine/translations
 

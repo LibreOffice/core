@@ -33,3 +33,6 @@ dist/l10n/help-*.json
 # Generated from the engine sources at build time (see Makefile.am).
 src/unocommands.js
 l10n/uno/
+l10n/localizations.json
+l10n/help-localizations.json
+l10n/uno-localizations.json

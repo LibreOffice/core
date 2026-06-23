@@ -99,21 +99,39 @@ if (false) {
 }
 """)
 
-# Languages that match directly on onlylang
-simple = [
-   "ar", "ca", "cs", "cy", "da", "de", "el", "es", "eu", "fi",
-   "fr", "ga", "gl", "he", "hr", "hu", "hy", "id", "is", "it",
-   "ja", "kk", "ko", "nl", "pl", "pt", "ro", "ru", "sk", "sl",
-   "sq", "sv", "tr", "uk"
-]
+# The shipped languages come from engine/distro-configs/Langs.conf (the single
+# source of truth), or from the generated localizations.json map when the engine
+# is absent.
+def read_langs():
+    conf = os.path.join(BASE_PATH, "..", "engine", "distro-configs", "Langs.conf")
+    if os.path.isfile(conf):
+        for line in readwhole(conf).splitlines():
+            if line.startswith("--with-lang="):
+                return line[len("--with-lang="):].split()
+    mapping = json.loads(readwhole(os.path.join(BASE_PATH, "l10n", "localizations.json")))
+    langs = set()
+    for value in mapping.values():
+        if isinstance(value, str):  # ".../ui-en_GB.json" -> "en-GB"
+            base = os.path.basename(value)[:-len(".json")]
+            langs.add(base[len("ui-"):].replace("_", "-"))
+    return sorted(langs)
 
-# Languages that need explicit alias checks on window.LANG
-aliases = {
-    "en_GB": ["en-GB", "en_GB"],
-    "pt_BR": ["pt-BR", "pt_BR"],
-    "zh_CN": ["zh-CN", "zh-Hans-CN", "zh_CN", "zh_Hans_CN"],
-    "zh_TW": ["zh-TW", "zh-Hant-TW", "zh_TW", "zh_Hant_TW"],
+
+all_langs = [lang for lang in read_langs() if lang != "en-US"]
+
+# Languages without a region subtag match directly on the stripped onlylang.
+simple = sorted(lang for lang in all_langs if "-" not in lang)
+
+# Region languages need explicit window.LANG checks, keyed by the underscore
+# file-name form. Chinese also accepts the script-qualified forms.
+script_variants = {
+    "zh-CN": ["zh-Hans-CN", "zh_Hans_CN"],
+    "zh-TW": ["zh-Hant-TW", "zh_Hant_TW"],
 }
+aliases = {}
+for lang in sorted(lang for lang in all_langs if "-" in lang):
+    key = lang.replace("-", "_")
+    aliases[key] = [lang, key] + script_variants.get(lang, [])
 
 for lang in simple:
     lang_hyphen = lang.replace("_", "-")

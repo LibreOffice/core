@@ -481,7 +481,6 @@ def writeTranslations(onlineDir, translationsDir, strings):
         # exists and the UNO labels fall back to the po/ui translations.
         translations = {}
         if os.path.isfile(poFile):
-            sys.stderr.write('Generating ' + lang + '...\n')
             po = polib.pofile(poFile, autodetect_encoding=False,
                               encoding="utf-8", wrapwidth=-1)
             for entry in po.translated_entries():
