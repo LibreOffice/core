@@ -370,6 +370,8 @@ class BackstageView extends window.L.Class {
 				doc.doctype = 'calc';
 			} else if (['odp', 'otp', 'ppt', 'pptx', 'fodp'].includes(ext)) {
 				doc.doctype = 'impress';
+			} else if (['odg', 'otg', 'svg', 'vsd', 'vsdx', 'fodg'].includes(ext)) {
+				doc.doctype = 'draw';
 			} else if (ext === 'pdf') {
 				doc.doctype = 'pdf';
 			} else {
@@ -420,6 +422,8 @@ class BackstageView extends window.L.Class {
 				return 'backstage-doc-icon-calc';
 			case 'impress':
 				return 'backstage-doc-icon-impress';
+			case 'draw':
+				return 'backstage-doc-icon-draw';
 			case 'pdf':
 				return 'backstage-doc-icon-pdf';
 			case 'writer':
