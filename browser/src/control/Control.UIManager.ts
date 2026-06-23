@@ -1942,7 +1942,7 @@ class UIManager extends window.L.Control {
 		elem.tooltip('enable');
 		this._setTooltipText(elem, tooltipInfo.text);
 		elem.tooltip('option', 'items', elem[0]);
-		elem.tooltip('option', 'position', { my: 'left bottom',  at: 'left+' + pt.x + ' top+' + pt.y, collision: 'fit fit' });
+		elem.tooltip('option', 'position', { my: 'left bottom-50%',  at: 'left+' + pt.x + ' top+' + pt.y, collision: 'fit fit' });
 		elem.tooltip('open');
 
 		if (
