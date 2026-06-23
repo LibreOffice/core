@@ -222,15 +222,18 @@ window.L.Map.include({
 		}
 	},
 
-	// Tell core whether this view is read-only, and flip the client-side
-	// comment/redline gates the UI checks via isCommentEditingAllowed()/
-	// isRedlineManagementAllowed(). Only meaningful for users that actually
-	// have WOPI write permission: users without write permission already
-	// get read-only set up server-side at session start, and their
-	// app.file.editComment / allowManageRedlines flags already reflect the
-	// real doc state (e.g. comment-only PDFs) and must not be touched.
+	// Tell core whether this view is read-only, and update the client-side
+	// comment and redline edit flags to match. This applies only to a session
+	// that is editing-capable but currently viewing, so toggling between view
+	// and edit must flip the flags. A session whose document is genuinely
+	// read-only is skipped: core already set it read-only at session start,
+	// and its comment and redline flags already reflect the real document
+	// state (for example comments allowed on an otherwise read-only PDF), so
+	// they must not be overwritten here. app.isReadOnly() carries the real
+	// document permission for every host, online or desktop, and the view
+	// and edit toggle does not change it, so it is the right gate to use.
 	_applyViewReadOnly: function (readOnly) {
-		if (!this['wopi'] || !this['wopi'].UserCanWrite)
+		if (app.isReadOnly())
 			return;
 		if (app.socket)
 			app.socket.sendMessage('setviewreadonly value=' + readOnly);
