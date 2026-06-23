@@ -259,6 +259,7 @@ sw/uiconfig/swriter/ui/notebookbar.ui://GtkMenuItem[@id='MenuTools-OpenXMLFilter
 sw/uiconfig/swriter/ui/notebookbar.ui://GtkRadioMenuItem[@id='MenuView-PrintLayout'] button-no-label
 sw/uiconfig/swriter/ui/notebookbar.ui://GtkRadioMenuItem[@id='MenuView-BrowseView'] button-no-label
 sw/uiconfig/swriter/ui/notebookbar.ui://GtkMenuItem[@id='MenuView-ShowWhitespace'] button-no-label
+sw/uiconfig/swriter/ui/notebookbar.ui://GtkMenuItem[@id='MenuView-ResolvedComments'] button-no-label
 sw/uiconfig/swriter/ui/notebookbar.ui://GtkMenuItem[@id='MenuView-Menubar'] button-no-label
 sw/uiconfig/swriter/ui/notebookbar.ui://GtkMenuItem[@id='MenuView-Sidebar'] button-no-label
 sw/uiconfig/swriter/ui/notebookbar.ui://GtkMenuItem[@id='MenuView-StatusBarVisible'] button-no-label

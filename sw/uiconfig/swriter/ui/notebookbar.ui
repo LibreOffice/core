@@ -2251,6 +2251,13 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="MenuView-ResolvedComments">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="action-name">.uno:ShowResolvedAnnotations</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkSeparatorMenuItem" id="MenuView-separator1">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
