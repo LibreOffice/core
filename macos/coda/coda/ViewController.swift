@@ -39,6 +39,45 @@ final class ConsoleController: NSWindowController {
     required init?(coder: NSCoder) { fatalError("doesn't seem to matter") }
 }
 
+// A borderless window cannot normally become key, so it would not get the keys
+// that drive the slideshow. Allow it to.
+final class KeyableWindow: NSWindow {
+    override var canBecomeKey: Bool { return true }
+    override var canBecomeMain: Bool { return true }
+}
+
+final class PresentationController: NSWindowController {
+    let webView: WKWebView
+
+    init(webView: WKWebView) {
+        self.webView = webView
+        // Borderless and floating, filled to a screen by setting its frame.
+        let window = KeyableWindow(contentRect: NSRect(x: 0, y: 0, width: 800, height: 600),
+                                   styleMask: .borderless, backing: .buffered, defer: false)
+        window.level = .floating
+        window.isReleasedWhenClosed = false
+        // Black, so any moment before the slide shows or during teardown is not
+        // a flash of white.
+        window.backgroundColor = .black
+        super.init(window: window)
+
+        // put the webView into the window
+        webView.translatesAutoresizingMaskIntoConstraints = false
+        window.contentView?.addSubview(webView)
+
+        if let content = window.contentView {
+            NSLayoutConstraint.activate([
+                webView.leadingAnchor.constraint(equalTo: content.leadingAnchor),
+                webView.trailingAnchor.constraint(equalTo: content.trailingAnchor),
+                webView.topAnchor.constraint(equalTo: content.topAnchor),
+                webView.bottomAnchor.constraint(equalTo: content.bottomAnchor),
+            ])
+        }
+    }
+
+    required init?(coder: NSCoder) { fatalError("doesn't seem to matter") }
+}
+
 class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavigationDelegate, WKUIDelegate {
 
     /// Access to the NSDocument (document loading & saving infrastructure).
@@ -48,6 +87,8 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
     var webView: WKWebView!
 
     var consoleController: ConsoleController!
+
+    var presentationController: PresentationController!
 
     /// Whether UI testing mode is active.
     private lazy var isUITesting: Bool = {
@@ -60,18 +101,8 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
     /// Handle this document webview is registered under in WebDriverManager.
     private var webDriverHandle: String?
 
-    var savedViewFrame: NSRect!
-    var savedConsoleViewFrame: NSRect!
-
     var displayConnectionObserver: AnyObject!
     var screenCount: Int = 0
-    var needRearrange: Bool = false
-    var mainFullScreenActive: Bool = false
-    var consoleFullScreenActive: Bool = false
-    var mainWindowExitFSObserver: AnyObject!
-    var mainMonitorExchangeObserver: AnyObject!
-    var consoleWindowExitFSObserver: AnyObject!
-    var consoleMonitorExchangeObserver: AnyObject!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -255,22 +286,6 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
                 }
                 else if body == "EXCHANGEMONITORS" {
                     exchangeMonitors()
-                }
-                else if body.hasPrefix("FULLSCREENPRESENTATION ") {
-                    let fullScreen = body.dropFirst("FULLSCREENPRESENTATION ".count) == "true"
-                    // this type of full screen window is under our control
-                    // so it can be moved to another monitor
-                    if (fullScreen) {
-
-                        installDisplayConnectionMonitor()
-                        let mainWindow = view.window!
-                        self.savedViewFrame = mainWindow.frame
-                        arrangePresentationWindows()
-
-                        arrangePresentationWindows()
-                    } else {
-                        endPresentation();
-                    }
                 }
                 else if body == "FOCUSIFHWKBD" {
                     COWrapper.LOG_ERR("TODO: Implement FOCUSIFHWKBD")
@@ -697,7 +712,7 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
             return
         }
 
-        let mainWindow = view.window!
+        let presWindow = self.presentationController != nil ? self.presentationController.window : nil
         let consoleWindow = self.consoleController != nil ? self.consoleController.window : nil
 
         var origConsoleScreen = 0
@@ -706,7 +721,7 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
             if (consoleWindow != nil && NSContainsRect(screens[i].frame, consoleWindow!.frame)) {
                 origConsoleScreen = i
             }
-            if NSContainsRect(screens[i].frame, mainWindow.frame) {
+            if (presWindow != nil && NSContainsRect(screens[i].frame, presWindow!.frame)) {
                 origPresentationScreen = i
             }
         }
@@ -726,223 +741,145 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
             newPresentationScreen = (newPresentationScreen + 1) % screens.count
         }
 
-        NotificationCenter.default.removeObserver(self.mainWindowExitFSObserver!)
-        installChangeMainMonitor(window: mainWindow, frame: screens[newPresentationScreen].frame)
-        // toggle to normal to trigger restore full screen elsewhere
-        showNormal(window: mainWindow)
-
-        if (consoleWindow != nil) {
-            if (self.consoleWindowExitFSObserver != nil) {
-                NotificationCenter.default.removeObserver(self.consoleWindowExitFSObserver!)
-            }
-            installChangeConsoleMonitor(window: consoleWindow!, frame: screens[newConsoleScreen].frame)
-            showNormal(window: consoleWindow!)
+        if (presWindow != nil) {
+            placeWindow(presWindow!, onScreen: screens[newPresentationScreen], fillScreen: true)
+            presWindow!.makeFirstResponder(self.presentationController.webView)
         }
-    }
-
-    func startPresentation() {
-        let mainWindow = self.view.window!
-
-        installDisplayConnectionMonitor()
-
-        self.savedViewFrame = mainWindow.frame
-
-        arrangePresentationWindows()
+        if (consoleWindow != nil) {
+            placeWindow(consoleWindow!, onScreen: screens[newConsoleScreen], fillScreen: true)
+        }
     }
 
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
 
-        let consoleWebView = WKWebView(frame: .zero, configuration: configuration)
-        consoleWebView.uiDelegate = self
-
-        self.consoleController = ConsoleController(webView: consoleWebView)
-        let consoleWindow = consoleController.window
-        if (consoleWindow != nil) {
-            consoleWindow!.collectionBehavior.insert(.fullScreenPrimary)
-            // If forced to share screen with presentation allow it to participate in full screen mode
-            consoleWindow!.collectionBehavior.insert(.fullScreenAuxiliary)
-            // Float over the presentation in full screen mode if they share a screen (auxiliary mode)
-            consoleWindow!.level = .floating
-            self.savedConsoleViewFrame = consoleWindow!.frame
-            self.savedConsoleViewFrame = NSRect(x: 0, y: 0, width: 640, height: 640)
+        // The fragment values are set where window.open is called, in
+        // browser/src/slideshow/SlideShowPresenter.ts and PresenterConsole.js.
+        // The # arrives percent encoded (about:blank%23coda-...), so the
+        // fragment accessor is nil; match the token in the whole URL string
+        // instead. Only the slideshow and presenter console are claimed here;
+        // any other window.open is left to the default behaviour.
+        let urlString = navigationAction.request.url?.absoluteString ?? ""
+        let isConsole = urlString.contains("coda-console")
+        let isPresentation = urlString.contains("coda-presentation")
+        if (!isConsole && !isPresentation) {
+            return nil
         }
 
-        self.startPresentation()
+        let childWebView = WKWebView(frame: .zero, configuration: configuration)
+        childWebView.uiDelegate = self
 
-        return consoleWebView
+        installDisplayConnectionMonitor()
+
+        NSApp.presentationOptions = [.autoHideMenuBar, .autoHideDock]
+
+        // Place only the new window. Re-framing the live slideshow window can
+        // disturb its rendering.
+        if (isConsole) {
+            self.consoleController = ConsoleController(webView: childWebView)
+            placeConsoleWindow()
+            kickPresentationWindow()
+        } else {
+            self.presentationController = PresentationController(webView: childWebView)
+            placePresentationWindow()
+        }
+
+        return childWebView
     }
 
-    func showFullScreen(window: NSWindow) {
-        if (!window.styleMask.contains(NSWindow.StyleMask.fullScreen)) {
-            window.toggleFullScreen(nil)
-        }
-    }
-
-    func showNormal(window: NSWindow) {
-        if (window.styleMask.contains(NSWindow.StyleMask.fullScreen)) {
-            window.toggleFullScreen(nil)
-        }
-    }
-
-    func arrangePresentationWindows() {
-        // The windows should not be full screen at this point
-        self.needRearrange = false
-
-        let screens = NSScreen.screens
-
-        var laptopScreen: NSScreen! = nil
-        var externalScreen: NSScreen! = nil
-
-        // Lets see if there is are two monitors where one is built-in and one is not.
-        for screen in screens {
-            let viewDisplayID = screen.deviceDescription[NSDeviceDescriptionKey(rawValue: "NSScreenNumber")] as! CGDirectDisplayID
-            if (CGDisplayIsBuiltin(viewDisplayID) != 0) {
-                if (laptopScreen == nil) {
-                    laptopScreen = screen
-                }
-            } else {
-                if (externalScreen == nil) {
-                    externalScreen = screen
-                }
-            }
-        }
-
-        // If not then assume the main screen, which is just where the current activity is,
-        // is the laptop screen and pick another to be the external
-        if (laptopScreen == nil || externalScreen == nil) {
-            laptopScreen = NSScreen.main
-            externalScreen = nil
-            for screen in screens {
-                if (screen != laptopScreen) {
-                    externalScreen = screen
-                    break
-                }
-            }
-        }
-
-        let consoleWindow = self.consoleController != nil ? self.consoleController.window : nil
-        if (consoleWindow != nil) {
-            consoleWindow!.setIsVisible(false)
-        }
-
-        let presenterScreen: NSScreen = externalScreen != nil ? externalScreen : laptopScreen
-        let mainWindow = self.view.window!
-        mainWindow.setIsVisible(false)
-
-        installRestorePresOnFullScreenExit(mainWindow: mainWindow, frame: self.savedViewFrame)
-
-        mainWindow.setFrame(presenterScreen.frame, display: true, animate: false)
-        showFullScreen(window: mainWindow)
-        mainWindow.makeKeyAndOrderFront(nil)
-        self.mainFullScreenActive = true
-
-        if (consoleWindow != nil) {
-            installRestoreConsoleOnFullScreenExit(consoleWindow: consoleWindow!, frame: self.savedConsoleViewFrame)
-
-            if (externalScreen != nil) {
-                consoleWindow!.setFrame(laptopScreen.frame, display: true, animate: false)
-                showFullScreen(window: consoleWindow!)
-                self.consoleFullScreenActive = true
-            } else {
-                consoleWindow!.setFrame(self.savedConsoleViewFrame, display: true, animate: false)
-            }
-
-            consoleWindow!.makeKeyAndOrderFront(nil)
-        }
-    }
-
-    func maybeDispatchRearrange() {
-        if (!self.needRearrange) {
-            return
-        }
-        if (self.mainFullScreenActive) {
-            // considering rearrange, main is still fullscreen, defer
-            return
-        }
-        if (self.consoleFullScreenActive) {
-            // considering rearrange, console is still fullscreen, defer
+    // Opening the console window can drop the slideshow window's first presented
+    // frame. A static slide renders only once, so force the window to lay out and
+    // present again. A frame that really changes is needed; the same frame can be
+    // optimised away.
+    func kickPresentationWindow() {
+        if (self.presentationController == nil) {
             return
         }
         DispatchQueue.main.async {
-            self.arrangePresentationWindows()
+            guard let presWindow = self.presentationController?.window else { return }
+            let (laptopScreen, externalScreen) = self.pickScreens()
+            let target = (externalScreen ?? laptopScreen).frame
+            var nudge = target
+            nudge.origin.y += 1
+            presWindow.setFrame(nudge, display: false, animate: false)
+            presWindow.setFrame(target, display: true, animate: false)
+            presWindow.makeFirstResponder(self.presentationController?.webView)
         }
     }
 
-    func installRestorePresOnFullScreenExit(mainWindow: NSWindow, frame: NSRect) {
-        // Observe full-screen exit, and at that point dispatch the attempt to restore
-        // original monitor, size & position. Otherwise we remain on the monitor we are
-        // presenting to.
-        let center = NotificationCenter.default
-        // didExitFullScreenNotification may not be fired on removing/adding screens
-        // but the window will have lost its fullscreen bit
-        if (self.mainWindowExitFSObserver != nil) {
-            center.removeObserver(self.mainWindowExitFSObserver!)
+    // The console stays on the document window's screen; the slideshow goes on
+    // any other screen. Keying off the document window's screen is stable: it
+    // does not shift when a window becomes key, unlike a main-screen test.
+    func pickScreens() -> (NSScreen, NSScreen?) {
+        let documentScreen = self.view.window?.screen ?? NSScreen.main ?? NSScreen.screens.first!
+        var externalScreen: NSScreen? = nil
+        for screen in NSScreen.screens {
+            if (screen != documentScreen) {
+                externalScreen = screen
+                break
+            }
         }
-        self.mainWindowExitFSObserver = center.addObserver(
-            forName: NSWindow.didExitFullScreenNotification,
-            object: mainWindow,
-            queue: OperationQueue.main) { _ in
+        return (documentScreen, externalScreen)
+    }
 
-                DispatchQueue.main.async {
-                    mainWindow.setFrame(frame, display: true, animate: false)
-                    mainWindow.makeKeyAndOrderFront(nil)
+    func placeWindow(_ window: NSWindow, onScreen screen: NSScreen, fillScreen: Bool) {
+        if (fillScreen) {
+            window.setFrame(screen.frame, display: true, animate: false)
+        }
+        window.setIsVisible(true)
+        window.makeKeyAndOrderFront(nil)
+    }
 
-                    self.mainFullScreenActive = false
-                    self.maybeDispatchRearrange()
-                }
+    func placePresentationWindow() {
+        guard let presWindow = presentationController?.window else { return }
+        let (laptopScreen, externalScreen) = pickScreens()
+        let presenterScreen = externalScreen ?? laptopScreen
+        placeWindow(presWindow, onScreen: presenterScreen, fillScreen: true)
+        presWindow.makeFirstResponder(presentationController.webView)
+    }
 
-                center.removeObserver(self.mainWindowExitFSObserver!)
-                self.mainWindowExitFSObserver = nil
+    func placeConsoleWindow() {
+        guard let consoleWindow = consoleController?.window else { return }
+        let (laptopScreen, externalScreen) = pickScreens()
+        if (externalScreen != nil) {
+            // Fill the screen but stay a titled window, because borderless stops
+            // its web view rendering. Hide the title bar and buttons and extend
+            // the content over them so it still looks full screen.
+            consoleWindow.styleMask.insert(.fullSizeContentView)
+            consoleWindow.titlebarAppearsTransparent = true
+            consoleWindow.titleVisibility = .hidden
+            consoleWindow.titlebarSeparatorStyle = .none
+            consoleWindow.standardWindowButton(.closeButton)?.isHidden = true
+            consoleWindow.standardWindowButton(.miniaturizeButton)?.isHidden = true
+            consoleWindow.standardWindowButton(.zoomButton)?.isHidden = true
+            placeWindow(consoleWindow, onScreen: laptopScreen, fillScreen: true)
+        } else {
+            // One screen: the console floats on top of the full screen
+            // presentation. Give it most of the work area, but leave a margin
+            // so the presentation stays visible around the edges and the user
+            // can see it is running underneath.
+            // The presentation window is at the floating level, so the console
+            // has to be at least that level too, otherwise it would be drawn
+            // behind the presentation no matter the front-to-back order.
+            consoleWindow.level = .floating
+            let area = laptopScreen.visibleFrame
+            let size = NSSize(width: area.width * 17 / 20, height: area.height * 17 / 20)
+            let origin = NSPoint(x: area.minX + (area.width - size.width) / 2,
+                                 y: area.minY + (area.height - size.height) / 2)
+            consoleWindow.setFrame(NSRect(origin: origin, size: size), display: true, animate: false)
+            consoleWindow.makeKeyAndOrderFront(nil)
         }
     }
 
-    func installRestoreConsoleOnFullScreenExit(consoleWindow: NSWindow, frame: NSRect) {
-        // Observe full-screen exit, and at that point dispatch the attempt to restore
-        // original monitor, size & position. Otherwise we remain on the monitor we are
-        // presenting to.
-        let center = NotificationCenter.default
-        // didExitFullScreenNotification may not be fired on removing/adding screens
-        // but the window will have lost its fullscreen bit
-        if (self.consoleWindowExitFSObserver != nil) {
-            center.removeObserver(self.consoleWindowExitFSObserver!)
-        }
-        self.consoleWindowExitFSObserver = center.addObserver(
-            forName: NSWindow.didExitFullScreenNotification,
-            object: consoleWindow,
-            queue: OperationQueue.main) { _ in
-
-                DispatchQueue.main.async {
-                    consoleWindow.setFrame(frame, display: true, animate: false)
-                    consoleWindow.makeKeyAndOrderFront(nil)
-
-                    self.consoleFullScreenActive = false
-                    self.maybeDispatchRearrange()
-                }
-
-                center.removeObserver(self.consoleWindowExitFSObserver!)
-                self.consoleWindowExitFSObserver = nil
-        }
-    }
-
-    func installChangeMainMonitor(window: NSWindow, frame: NSRect) {
-        let center = NotificationCenter.default
-        self.mainMonitorExchangeObserver = center.addObserver(
-            forName: NSWindow.didExitFullScreenNotification,
-            object: window,
-            queue: OperationQueue.main) { _ in
-
-                DispatchQueue.main.async {
-                    window.setFrame(frame, display: true, animate: false)
-                    self.showFullScreen(window: window)
-                }
-
-                self.installRestorePresOnFullScreenExit(mainWindow: window, frame: self.savedViewFrame)
-                center.removeObserver(self.mainMonitorExchangeObserver!)
-                self.mainMonitorExchangeObserver = nil
-        }
+    // Re-place both windows, for when the screen layout changes.
+    func arrangePresentationWindows() {
+        placePresentationWindow()
+        placeConsoleWindow()
     }
 
     func installDisplayConnectionMonitor() {
+        if (self.displayConnectionObserver != nil) {
+            return
+        }
         self.screenCount = NSScreen.screens.count
         let center = NotificationCenter.default
         self.displayConnectionObserver = center.addObserver(
@@ -951,68 +888,38 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
             queue: OperationQueue.main) { _ in
                 if (self.screenCount != NSScreen.screens.count) {
                     self.screenCount = NSScreen.screens.count
-                    if (!self.needRearrange) {
-                        self.needRearrange = true
-                        // dispatch setting windows back to normal and rearrange,
-                        // which will recreate at least the presentation window
-                        // as fullscreen, when that is completed
-                        DispatchQueue.main.async {
-                            self.showNormal(window: self.view.window!)
-                            let consoleWindow = self.consoleController != nil ? self.consoleController.window : nil
-                            if (consoleWindow != nil) {
-                                self.showNormal(window: consoleWindow!)
-                            }
-                        }
-                    }
+                    self.arrangePresentationWindows()
                 }
-        }
-    }
-
-    func installChangeConsoleMonitor(window: NSWindow, frame: NSRect) {
-        let center = NotificationCenter.default
-        self.consoleMonitorExchangeObserver = center.addObserver(
-            forName: NSWindow.didExitFullScreenNotification,
-            object: window,
-            queue: OperationQueue.main) { _ in
-
-                DispatchQueue.main.async {
-                    window.setFrame(frame, display: true, animate: false)
-                    self.showFullScreen(window: window)
-                    window.makeKeyAndOrderFront(nil)
-                }
-
-                self.installRestoreConsoleOnFullScreenExit(consoleWindow: window, frame: self.savedConsoleViewFrame)
-                center.removeObserver(self.consoleMonitorExchangeObserver!)
-                self.consoleMonitorExchangeObserver = nil
         }
     }
 
     func endPresentation() {
-            if (self.displayConnectionObserver != nil) {
-                NotificationCenter.default.removeObserver(self.displayConnectionObserver!)
-            }
-            if (self.mainMonitorExchangeObserver != nil) {
-                NotificationCenter.default.removeObserver(self.mainMonitorExchangeObserver!)
-            }
-            if (self.consoleMonitorExchangeObserver != nil) {
-                NotificationCenter.default.removeObserver(self.consoleMonitorExchangeObserver!)
-            }
-            if (self.consoleWindowExitFSObserver != nil) {
-                NotificationCenter.default.removeObserver(self.consoleWindowExitFSObserver!)
-            }
+        if (self.displayConnectionObserver != nil) {
+            NotificationCenter.default.removeObserver(self.displayConnectionObserver!)
+            self.displayConnectionObserver = nil
+        }
 
-            // this will trigger the restoration of original location/size
-            // via the convoluted observer stuff.
-            showNormal(window: self.view.window!)
+        if (self.presentationController != nil) {
+            self.presentationController.window?.orderOut(nil)
+            self.presentationController.close()
+            self.presentationController = nil
+        }
+        if (self.consoleController != nil) {
+            self.consoleController.window?.orderOut(nil)
+            self.consoleController.close()
+            self.consoleController = nil
+        }
+
+        // Bring back the menu bar and Dock.
+        NSApp.presentationOptions = []
     }
 
     func webViewDidClose(_ webView: WKWebView) {
-        if (self.consoleController != nil && webView == self.consoleController.webView) {
-            self.consoleController.close()
-            self.consoleController = nil
-            self.consoleFullScreenActive = false
-
-            self.endPresentation();
+        // Closing either window ends the show and tears down the other too.
+        let isPresentation = self.presentationController != nil && webView == self.presentationController.webView
+        let isConsole = self.consoleController != nil && webView == self.consoleController.webView
+        if (isPresentation || isConsole) {
+            endPresentation()
         }
     }
 }

@@ -232,8 +232,9 @@ class PresenterConsole {
 			window.mode.isCODesktop() && window.origOpen
 				? window.origOpen
 				: window.open;
-		// The fragment names this window's role to the Qt app, which reads it
-		// in createWindow (qt/WebView.cpp claimChildWindow). Keep in sync.
+		// The fragment names the window's role to the shell. Read in
+		// qt/WebView.cpp claimChildWindow and macos ViewController.swift
+		// webView(_:createWebViewWith:). Keep these in sync.
 		return windowopen(
 			'about:blank#coda-console',
 			'_blank',
