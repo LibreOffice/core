@@ -1300,13 +1300,11 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testChainedRangeAdditionSpills)
     CPPUNIT_ASSERT_EQUAL(20.0, pDoc->GetValue(ScAddress(3, 4, 0)));
 }
 
-CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testIfWithRangeBranchesStaysScalar)
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testIfWithRangeBranchesSpills)
 {
-    // Jump commands like IF encode their branches with jump tokens that
-    // do not fit the pop-N push-1 model the pre-Interpret RPN walk uses,
-    // so the walk bails out and leaves the cell as a plain single-cell
-    // formula. The cell shows the upper-left of the selected branch
-    // rather than spilling.
+    // An IF whose true and false branches are multi-cell ranges has
+    // an array-shaped result. The cell promotes to a dynamic-array
+    // master and spills the chosen branch.
 
     createScDoc();
     ScDocument* pDoc = getScDoc();
@@ -1325,14 +1323,14 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testIfWithRangeBranchesStaysScalar)
 
     ScFormulaCell* pCell = pDoc->GetFormulaCell(ScAddress(3, 0, 0));
     CPPUNIT_ASSERT(pCell);
-    CPPUNIT_ASSERT(!pCell->IsDynamicArrayMaster());
-    CPPUNIT_ASSERT_EQUAL(ScMatrixMode::NONE, pCell->GetMatrixFlag());
+    CPPUNIT_ASSERT(pCell->IsDynamicArrayMaster());
+    CPPUNIT_ASSERT_EQUAL(ScMatrixMode::Formula, pCell->GetMatrixFlag());
 
-    // D1 takes the true branch and shows B1, with no spill into D2:D4.
+    // A1 is 1 so the true branch wins. The B column spills into D1:D4.
     CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(3, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(3, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(3, 2, 0)));
-    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(3, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(20.0, pDoc->GetValue(ScAddress(3, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(30.0, pDoc->GetValue(ScAddress(3, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(40.0, pDoc->GetValue(ScAddress(3, 3, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testRangeTimesScalarSpills)

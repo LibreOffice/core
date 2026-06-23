@@ -1589,14 +1589,11 @@ bool rpnTopIsImplicitIntersection(const ScTokenArray& rCode)
 // function known to return a matrix (UNIQUE, TRANSPOSE, MMULT ...) pushes
 // an array, every other function reduces to a scalar. Returns false if
 // the walk cannot decide: jump commands, arity mismatch, null tokens.
-bool rpnIntendsArrayResult(const ScTokenArray& rCode)
+bool intendsArrayResultInRange(formula::FormulaToken* const* pRpn,
+                               sal_uInt16 nStart, sal_uInt16 nEnd)
 {
-    const sal_uInt16 nRpnLength = rCode.GetCodeLen();
-    if (nRpnLength == 0)
-        return false;
-    formula::FormulaToken* const* pRpn = rCode.GetCode();
     std::vector<bool> aStackIsArray;
-    for (sal_uInt16 i = 0; i < nRpnLength; ++i)
+    for (sal_uInt16 i = nStart; i < nEnd; ++i)
     {
         const formula::FormulaToken* p = pRpn[i];
         if (!p)
@@ -1609,9 +1606,41 @@ bool rpnIntendsArrayResult(const ScTokenArray& rCode)
                                     || eType == formula::svMatrix);
             continue;
         }
-        // Jump commands like IF, CHOOSE, IFERROR, LET encode multiple
-        // branches with embedded jump tokens. The pop-N push-1 model
-        // below mis-counts their operands, so bail out.
+        // Jump commands like IF, IFERROR, IFNA expose their branches
+        // through a FormulaJumpToken. Pop the condition and run the
+        // walk on each branch slice. The token returns an array if any
+        // of its branches does.
+        if (eOp == ocIf || eOp == ocIfError || eOp == ocIfNA)
+        {
+            if (aStackIsArray.empty())
+                return false;
+            aStackIsArray.pop_back();
+            const auto* pJumpTok = static_cast<const formula::FormulaJumpToken*>(p);
+            const short* pJump = pJumpTok->GetJump();
+            const short nJumpCount = pJump[0];
+            // jump[nBranch] points at the token that precedes branch
+            // nBranch. The branch body sits in (jump[nBranch],
+            // jump[nBranch+1]). The closing jump[nJumpCount] points at
+            // the end-of-block token, which the outer loop's increment
+            // then steps past.
+            bool bAnyBranchArray = false;
+            for (short nBranch = 1; nBranch < nJumpCount && !bAnyBranchArray; ++nBranch)
+            {
+                const sal_uInt16 nBranchStart = pJump[nBranch] + 1;
+                const sal_uInt16 nBranchEnd = pJump[nBranch + 1];
+                if (nBranchEnd <= nBranchStart || nBranchEnd > nEnd)
+                    continue;
+                if (intendsArrayResultInRange(pRpn, nBranchStart, nBranchEnd))
+                    bAnyBranchArray = true;
+            }
+            aStackIsArray.push_back(bAnyBranchArray);
+            i = pJump[nJumpCount];
+            continue;
+        }
+        // CHOOSE, LET and other jump commands fall through to the
+        // bail branch below. CHOOSE's first arg is the selector and
+        // the rest are alternatives, but its jump-offset layout
+        // differs from the IF family. LET binds names along the way.
         if (formula::FormulaCompiler::IsOpCodeJumpCommand(eOp))
             return false;
         const sal_uInt8 nParameters = p->GetParamCount();
@@ -1644,6 +1673,14 @@ bool rpnIntendsArrayResult(const ScTokenArray& rCode)
         aStackIsArray.push_back(bResultArray);
     }
     return !aStackIsArray.empty() && aStackIsArray.back();
+}
+
+bool rpnIntendsArrayResult(const ScTokenArray& rCode)
+{
+    const sal_uInt16 nRpnLength = rCode.GetCodeLen();
+    if (nRpnLength == 0)
+        return false;
+    return intendsArrayResultInRange(rCode.GetCode(), 0, nRpnLength);
 }
 
 // Prepend @ to a token array. The parse array gets it at index 0 (a
