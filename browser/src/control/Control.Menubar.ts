@@ -1519,7 +1519,7 @@ class Menubar extends window.L.Control {
 			'downloadas-odp', 'downloadas-ppt', 'downloadas-pptx', 'downloadas-odg', 'exportpdf' , // file menu
 			!window.ThisIsAMobileApp ? 'exportdirectpdf' : 'downloadas-pdf', !window.ThisIsAMobileApp ? 'exportepub' : 'downloadas-epub', // file menu
 			'downloadas-ods', 'downloadas-xls', 'downloadas-xlsx', 'downloadas-csv', 'closedocument', // file menu
-			() => !window.L.Browser.edge ? 'fullscreen' : undefined, 'zoomin', 'zoomout', 'zoomreset', 'fitwidthzoom', 'showstatusbar', 'showresolved', 'showannotations', 'toggledarktheme', // view menu
+			() => !window.L.Browser.edge ? 'fullscreen' : undefined, 'zoomin', 'zoomout', 'zoomreset', 'fitwidthzoom', 'showruler', 'showstatusbar', 'showresolved', 'showannotations', 'toggledarktheme', // view menu
 			'insert-signatureline', // insert menu
 			'about', 'keyboard-shortcuts', 'latestupdates', 'feedback', 'serveraudit', 'online-help', 'report-an-issue', // help menu
 			'insertcomment',
@@ -2261,6 +2261,30 @@ class Menubar extends window.L.Control {
 						allowed = false;
 					if (!allowed) {
 						$(aItem).hide();
+					} else if (id === 'presentation-in-console') {
+						if (this._map.uiManager.shouldShowPresenterConsole()) {
+							$(aItem).addClass(constChecked);
+						} else {
+							$(aItem).removeClass(constChecked);
+						}
+					} else if (id === 'showruler') {
+						if (this._map.uiManager.isRulerVisible()) {
+							$(aItem).addClass(constChecked);
+						} else {
+							$(aItem).removeClass(constChecked);
+						}
+					} else if (id === 'showstatusbar') {
+						if (this._map.uiManager.isStatusBarVisible()) {
+							$(aItem).addClass(constChecked);
+						} else {
+							$(aItem).removeClass(constChecked);
+						}
+					} else if (id === 'toggledarktheme') {
+						if (window.prefs.getBoolean('darkTheme')) {
+							$(aItem).addClass(constChecked);
+						} else {
+							$(aItem).removeClass(constChecked);
+						}
 					} else if (uno !== undefined) {
 						itemState = this._map['stateChangeHandler'].getItemValue(uno);
 						if (itemState === 'disabled') {
