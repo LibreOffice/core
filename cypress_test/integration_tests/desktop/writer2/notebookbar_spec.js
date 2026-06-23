@@ -135,6 +135,11 @@ describe(['tagdesktop'], 'Notebookbar checkbox widgets', function() {
 
 		cy.cGet('#lo-fline-marker').should('exist');
 
+		cy.cGet('#lo-fline-marker').should(function($marker) {
+			const left = parseFloat($marker[0].style.left);
+			expect(left).to.be.finite;
+		});
+
 		// Drag the first-line indentation marker right by 100px.
 		var marker;
 		cy.cGet('#lo-fline-marker').then(function(items) {
