@@ -38,6 +38,7 @@ class PresenterConsole {
 			restart: _('Restart'),
 			resume: _('Resume'),
 			presentToAll: _('Present to all'),
+			exit: _('Exit'),
 			goBack: _('Go Back'),
 			zoomIn: _('Zoom In'),
 			zoomOut: _('Zoom Out'),
@@ -79,6 +80,9 @@ class PresenterConsole {
 											<button type="button" id="presentToAll" data-cooltip="${this.labels.presentToAll}" aria-label="${this.labels.presentToAll}">
 												<img src="${LOUtil.getImageURL('presenterscreen-ButtonFollowMeNormal.svg')}">
 												<span>${this.labels.presentToAll}</span>
+											</button>
+											<button type="button" id="exit" data-cooltip="${this.labels.exit}" aria-label="${this.labels.exit}">
+												<img src="${LOUtil.getImageURL('presenterscreen-ButtonExitPresenterNormal.svg')}">
 											</button>
 										</div>
                                         <div id='current-slide-container'>
@@ -614,6 +618,12 @@ class PresenterConsole {
 			}.bind(this),
 		);
 
+		// Keep Exit at the far end of the row, away from pause and restart, so it
+		// is not next to the other controls where it could be hit by accident
+		// while presenting.
+		this._proxyPresenter.document.querySelector('#exit').style.marginLeft =
+			'auto';
+
 		if (window.ThisIsAMobileApp) {
 			presentToAllBtn.style.display = 'none';
 		}
@@ -935,6 +945,11 @@ class PresenterConsole {
 				break;
 			case 'close-slides':
 				this._onHideSlides();
+				break;
+			case 'exit':
+				// Closing the console window runs the unload handler, which ends
+				// the presentation and closes the slideshow window too.
+				this._proxyPresenter.close();
 				break;
 			case 'increase':
 				this._adjustFontSize(2);
