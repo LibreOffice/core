@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -364,175 +364,6 @@
             <property name="row-spacing">12</property>
             <property name="column-spacing">12</property>
             <child>
-              <!-- n-columns=3 n-rows=4 -->
-              <object class="GtkGrid" id="grid5">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="row-spacing">6</property>
-                <property name="column-spacing">18</property>
-                <child>
-                  <object class="GtkLabel" id="label10">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="opttablepage|label10">Behavior of rows/columns</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkRadioButton" id="fix">
-                    <property name="label" translatable="yes" context="opttablepage|fix">_Fixed</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="margin-start">12</property>
-                    <property name="use-underline">True</property>
-                    <property name="active">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="fix-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|fix">Specifies that changes to a row or column only affect the corresponding adjacent area.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkRadioButton" id="fixprop">
-                    <property name="label" translatable="yes" context="opttablepage|fixprop">Fi_xed, proportional</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="margin-start">12</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                    <property name="group">fix</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="fixprop-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|fixprop">Specifies that changes to a row or column have an effect on the entire table.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkRadioButton" id="var">
-                    <property name="label" translatable="yes" context="opttablepage|var">_Variable</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="margin-start">12</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                    <property name="group">fix</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="var-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|var">Specifies that changes to a row or column affect the table size.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label11">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="opttablepage|label11">Changes affect the adjacent area only</property>
-                    <property name="wrap">True</property>
-                    <property name="wrap-mode">char</property>
-                    <property name="width-chars">50</property>
-                    <property name="max-width-chars">50</property>
-                    <property name="xalign">0</property>
-                    <attributes>
-                      <attribute name="scale" value="0.90000000000000002"/>
-                    </attributes>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label12">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="opttablepage|label12">Changes affect the entire table</property>
-                    <property name="wrap">True</property>
-                    <property name="width-chars">50</property>
-                    <property name="max-width-chars">50</property>
-                    <property name="xalign">0</property>
-                    <attributes>
-                      <attribute name="scale" value="0.90000000000000002"/>
-                    </attributes>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label13">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="opttablepage|label13">Changes affect the table size</property>
-                    <property name="wrap">True</property>
-                    <property name="width-chars">50</property>
-                    <property name="max-width-chars">50</property>
-                    <property name="xalign">0</property>
-                    <attributes>
-                      <attribute name="scale" value="0.90000000000000002"/>
-                    </attributes>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkImage" id="lockbehaviorof">
-                    <property name="can-focus">False</property>
-                    <property name="no-show-all">True</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="icon-name">res/lock.png</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkBox" id="box1">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -797,6 +628,175 @@
               <packing>
                 <property name="left-attach">0</property>
                 <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <!-- n-columns=3 n-rows=4 -->
+              <object class="GtkGrid" id="grid5">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">18</property>
+                <child>
+                  <object class="GtkLabel" id="label10">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="opttablepage|label10">Behavior of rows/columns</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="fix">
+                    <property name="label" translatable="yes" context="opttablepage|fix">_Fixed</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="margin-start">12</property>
+                    <property name="use-underline">True</property>
+                    <property name="active">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="fix-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|fix">Specifies that changes to a row or column only affect the corresponding adjacent area.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="fixprop">
+                    <property name="label" translatable="yes" context="opttablepage|fixprop">Fi_xed, proportional</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="margin-start">12</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                    <property name="group">fix</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="fixprop-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|fixprop">Specifies that changes to a row or column have an effect on the entire table.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="var">
+                    <property name="label" translatable="yes" context="opttablepage|var">_Variable</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="margin-start">12</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                    <property name="group">fix</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="var-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|var">Specifies that changes to a row or column affect the table size.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label11">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes" context="opttablepage|label11">Changes affect the adjacent area only</property>
+                    <property name="wrap">True</property>
+                    <property name="wrap-mode">char</property>
+                    <property name="width-chars">50</property>
+                    <property name="max-width-chars">50</property>
+                    <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="scale" value="0.90000000000000002"/>
+                    </attributes>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label12">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes" context="opttablepage|label12">Changes affect the entire table</property>
+                    <property name="wrap">True</property>
+                    <property name="width-chars">50</property>
+                    <property name="max-width-chars">50</property>
+                    <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="scale" value="0.90000000000000002"/>
+                    </attributes>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label13">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes" context="opttablepage|label13">Changes affect the table size</property>
+                    <property name="wrap">True</property>
+                    <property name="width-chars">50</property>
+                    <property name="max-width-chars">50</property>
+                    <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="scale" value="0.90000000000000002"/>
+                    </attributes>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkImage" id="lockbehaviorof">
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="icon-name">res/lock.png</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
           </object>
