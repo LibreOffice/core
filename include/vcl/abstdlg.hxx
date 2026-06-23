@@ -165,6 +165,7 @@ public:
     virtual bool DontShowAgain() const = 0;
     virtual void SetYesLabel(const OUString& sLabel) = 0;
     virtual void SetNoLabel(const OUString& sLabel) = 0;
+    virtual void SetTypeWarn() = 0;
 };
 
 class VCL_DLLPUBLIC VclAbstractDialogFactory

@@ -1560,6 +1560,7 @@ public:
     bool DontShowAgain() const override { return m_pDlg->DontShowAgain(); }
     void SetYesLabel(const OUString& sLabel) override { m_pDlg->SetYesLabel(sLabel); }
     void SetNoLabel(const OUString& sLabel) override { m_pDlg->SetNoLabel(sLabel); }
+    void SetTypeWarn() override { m_pDlg->SetTypeWarn(); }
 };
 }
 

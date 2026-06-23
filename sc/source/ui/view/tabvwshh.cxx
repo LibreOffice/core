@@ -28,16 +28,18 @@
 #include <basic/sbxcore.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
+#include <vcl/abstdlg.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
 
 #include <tabvwsh.hxx>
 #include <document.hxx>
+#include <globstr.hrc>
 #include <sc.hrc>
+#include <scresid.hxx>
 #include <drwlayer.hxx>
 #include <retypepassdlg.hxx>
 #include <tabprotection.hxx>
-#include <onlyactivesheetsaveddlg.hxx>
 
 #include <com/sun/star/embed/EmbedVerbs.hpp>
 
@@ -263,8 +265,17 @@ bool ScTabViewShell::ExecuteRetypePassDlg(ScPasswordHash eDesiredHash)
 
 void ScTabViewShell::ExecuteOnlyActiveSheetSavedDlg()
 {
-    ScOnlyActiveSheetSavedDlg aDlg(GetFrameWeld());
-    aDlg.run();
+    VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+    auto pDlg(pFact->CreateQueryDialog(
+        GetFrameWeld(), ScResId(STR_WARN_ONLYACTIVESHEET_TITLE),
+        ScResId(STR_WARN_ONLYACTIVESHEET_TEXT), ScResId(STR_WARN_ONLYACTIVESHEET_QUEST), true));
+    OUString sLabel;
+    sLabel.clear();
+    pDlg->SetNoLabel(sLabel); //empty to hide the button
+    sLabel = ScResId(STR_WARN_ONLYACTIVESHEET_BUTTON);
+    pDlg->SetYesLabel(sLabel);
+    pDlg->SetTypeWarn();
+    pDlg->Execute();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
