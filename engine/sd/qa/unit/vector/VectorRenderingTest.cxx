@@ -237,6 +237,50 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testSingleRectangle)
     assertJsonPathExists(*oStroke, "path");
 }
 
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPartVersionRisesOnObjectChange)
+{
+    // Changing an object on a slide must raise that slide's reported
+    // content version.
+    createBlankDoc();
+    addRectangle(tools::Rectangle(Point(5000, 5000), Size(5000, 3000)), Color(0x4472c4), COL_BLACK);
+
+    const sal_Int64 nBefore
+        = getVectorPrimitives(u"testPartVersion").getInt("/version").value_or(-1);
+
+    // The rectangle was inserted without a broadcast, so fire the
+    // object change the model would send on a real edit.
+    page(1)->GetObj(0)->BroadcastObjectChange();
+
+    const sal_Int64 nAfter
+        = getVectorPrimitives(u"testPartVersion").getInt("/version").value_or(-1);
+
+    CPPUNIT_ASSERT_EQUAL(nBefore + 1, nAfter);
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPartVersionRisesOnMasterChange)
+{
+    // Changing an object on a slide master must raise the reported
+    // content version of the slide that uses that master.
+    createBlankDoc();
+    CPPUNIT_ASSERT(page(1)->TRG_HasMasterPage());
+
+    const sal_Int64 nBefore
+        = getVectorPrimitives(u"testMasterVersion").getInt("/version").value_or(-1);
+
+    // Put a rectangle on the master of the first slide and fire the
+    // object change the model would send on a real edit.
+    SdrPage& rMasterPage = page(1)->TRG_GetMasterPage();
+    rtl::Reference<SdrRectObj> pRect = new SdrRectObj(
+        rMasterPage.getSdrModelFromSdrPage(), tools::Rectangle(Point(0, 0), Size(4000, 2000)));
+    rMasterPage.NbcInsertObject(pRect.get());
+    pRect->BroadcastObjectChange();
+
+    const sal_Int64 nAfter
+        = getVectorPrimitives(u"testMasterVersion").getInt("/version").value_or(-1);
+
+    CPPUNIT_ASSERT_EQUAL(nBefore + 1, nAfter);
+}
+
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testStrokedRectangle)
 {
     // A stroke-only rectangle decomposes to a polygonStroke primitive

@@ -100,6 +100,15 @@ public:
     /// Cache of graphics from vector rendering, keyed by checksum.
     std::unordered_map<sal_Int64, Graphic>& getBitmapCache() { return maBitmapCache; }
 
+    /// Content version of a vector-rendering part (0-based slide index),
+    /// counted up each time an object on that part changes. A part that
+    /// has not changed since the document was opened reports 0.
+    sal_uInt64 getVectorPartVersion(sal_Int32 nPart) const
+    {
+        auto aIterator = maVectorPartVersions.find(nPart);
+        return aIterator != maVectorPartVersions.end() ? aIterator->second : 0;
+    }
+
 private:
     ::sd::DrawDocShell* mpDocShell;
     SdDrawDocument* mpDoc;
@@ -107,6 +116,8 @@ private:
 
     std::unique_ptr<sd::SlideshowLayerRenderer> mpSlideshowLayerRenderer;
     std::unordered_map<sal_Int64, Graphic> maBitmapCache;
+    /// Per-part content version, keyed by 0-based slide index.
+    std::unordered_map<sal_Int32, sal_uInt64> maVectorPartVersions;
 
     css::uno::Reference<css::uno::XInterface> create(
         OUString const & aServiceSpecifier, OUString const & referer);

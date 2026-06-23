@@ -13,6 +13,7 @@ namespace cool {
 	/// Interface for the vector primitives response from core.
 	export interface VectorPrimitivesResponse {
 		part?: number;
+		version?: number;
 		slideWidth?: number;
 		slideHeight?: number;
 		masterPage?: SlideObject;

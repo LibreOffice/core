@@ -2143,6 +2143,49 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     notifyEvent( aEvent );
             }
 
+            // A changed, inserted or removed object changes the vector
+            // content of its slide, so count that slide's version up.
+            const SdrHintKind eKind = pSdrHint->GetKind();
+            if (eKind == SdrHintKind::ObjectChange
+                || eKind == SdrHintKind::ObjectInserted
+                || eKind == SdrHintKind::ObjectRemoved)
+            {
+                if (const SdrObject* pObject = pSdrHint->GetObject())
+                {
+                    const SdPage* pPage
+                        = dynamic_cast<const SdPage*>(pObject->getSdrPageFromSdrObject());
+                    if (pPage && pPage->GetPageKind() == PageKind::Standard)
+                    {
+                        if (pPage->IsMasterPage())
+                        {
+                            // An object on a slide master is drawn on every
+                            // slide that uses that master, so count up the
+                            // version of each of those slides. The page
+                            // number of a master is its position in the
+                            // separate master-page list, so it does not
+                            // name a slide.
+                            const sal_uInt16 nPageCount
+                                = mpDoc->GetSdPageCount(PageKind::Standard);
+                            for (sal_uInt16 nPage = 0; nPage < nPageCount; ++nPage)
+                            {
+                                const SdPage* pStandardPage
+                                    = mpDoc->GetSdPage(nPage, PageKind::Standard);
+                                if (pStandardPage && pStandardPage->TRG_HasMasterPage()
+                                    && &pStandardPage->TRG_GetMasterPage() == pPage)
+                                {
+                                    ++maVectorPartVersions[nPage];
+                                }
+                            }
+                        }
+                        else if (pPage->GetPageNum() > 0)
+                        {
+                            const sal_Int32 nPart = (pPage->GetPageNum() - 1) / 2;
+                            ++maVectorPartVersions[nPart];
+                        }
+                    }
+                }
+            }
+
             if( pSdrHint->GetKind() == SdrHintKind::ModelCleared )
             {
                 if( mpDoc )
@@ -2237,6 +2280,7 @@ private:
     {
         rWriter.put("type", "vectorprimitives");
         rWriter.put("part", sal_Int32(mnResolvedPage));
+        rWriter.put("version", sal_Int64(mpModel->getVectorPartVersion(mnResolvedPage)));
 
         rWriter.put("slideWidth",
                     static_cast<sal_Int64>(pPage->GetWidth() * constTwipConversionFactor));

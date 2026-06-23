@@ -156,6 +156,7 @@ class VectorManager extends RenderManagerBase {
 		const objects = values.objects || [];
 
 		const data: cool.VectorPrimitivesData = {
+			version: values.version,
 			slideWidth: values.slideWidth || 0,
 			slideHeight: values.slideHeight || 0,
 			masterPage: masterPage,

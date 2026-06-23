@@ -12,6 +12,10 @@
 namespace cool {
 	/// Vector representation of a slide.
 	export interface VectorPrimitivesData {
+		/// Content version the engine reported for this part. It counts
+		/// up each time the part changes, so two trees with the same
+		/// version describe the same content.
+		version?: number;
 		slideWidth: number; // twips
 		slideHeight: number; // twips
 		masterPage: Primitive[];
