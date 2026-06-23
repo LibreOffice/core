@@ -461,11 +461,6 @@
           <value xml:lang="en-US">Master Slides</value>
         </prop>
       </node>
-      <node oor:name=".uno:ConnectorAttributes" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Connector...</value>
-        </prop>
-      </node>
       <node oor:name=".uno:PresentationDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">S~lide Show Settings...</value>

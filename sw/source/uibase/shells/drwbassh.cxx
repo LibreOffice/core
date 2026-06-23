@@ -1069,7 +1069,7 @@ void SwDrawBaseShell::DisableState( SfxItemSet& rSet )
     SdrView*    pSdrView = pSh->GetDrawView();
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nMarkCount = rMarkList.GetMarkCount();
-    bool bShowArea = true, bShowMeasure = true;
+    bool bShowArea = true, bShowMeasure = true, bShowConnector = true;
 
     for (size_t i = 0; i < nMarkCount && i < 50; ++i)
     {
@@ -1078,6 +1078,9 @@ void SwDrawBaseShell::DisableState( SfxItemSet& rSet )
 
         if ( nObjType != SdrObjKind::Measure )
             bShowMeasure = false;
+
+        if ( nObjType != SdrObjKind::Edge )
+            bShowConnector = false;
 
         // If marked object is 2D, disable format area command.
         if ( nObjType == SdrObjKind::PolyLine     ||
@@ -1098,6 +1101,9 @@ void SwDrawBaseShell::DisableState( SfxItemSet& rSet )
 
     if (!bShowMeasure)
         rSet.DisableItem(SID_MEASURE_DLG);
+
+    if (!bShowConnector)
+        rSet.DisableItem(SID_CONNECTION_DLG);
 
     Disable(rSet);
 
