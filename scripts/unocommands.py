@@ -10,6 +10,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+import json
 import os
 import re
 import sys
@@ -449,29 +450,48 @@ def parseUnocommandsJS(onlineDir):
 
 
 # Generate translation JSONs for the .uno: commands
+# The set of uno/<lang>.json files to generate is driven by the curated
+# uno-localizations.json map (the basename of each referenced file), not by what
+# engine/translations happens to ship. This keeps the generated set and the map
+# in lockstep and makes generation work even when engine/translations (a separate
+# repo) is absent.
+def languagesFromMap(onlineDir):
+    mapFile = onlineDir + '/browser/l10n/uno-localizations.json'
+    with open(mapFile, 'r', encoding='utf-8') as f:
+        mapping = json.load(f)
+
+    langs = set()
+    for value in mapping.values():
+        if isinstance(value, str) and value.endswith('.json'):
+            langs.add(os.path.basename(value)[:-len('.json')])
+    return langs
+
+
 def writeTranslations(onlineDir, translationsDir, strings):
     keys = set(strings.keys())
 
-    dir = translationsDir + '/source/'
-    for lang in os.listdir(dir):
-        poFile = dir + lang + '/officecfg/registry/data/org/openoffice/Office/UI.po'
-        if not os.path.isfile(poFile):
-            continue
+    os.makedirs(onlineDir + '/browser/l10n/uno', exist_ok=True)
 
-        sys.stderr.write('Generating ' + lang + '...\n')
+    for lang in sorted(languagesFromMap(onlineDir)):
+        poFile = translationsDir + '/source/' + lang + \
+            '/officecfg/registry/data/org/openoffice/Office/UI.po'
 
-        po = polib.pofile(poFile, autodetect_encoding=False,
-                          encoding="utf-8", wrapwidth=-1)
-
+        # engine/translations may be absent, and not every mapped language has a
+        # .po; in those cases we still write an empty file so the map's target
+        # exists and the UNO labels fall back to the po/ui translations.
         translations = {}
-        for entry in po.translated_entries():
-            m = re.search(r"\.uno:([^\n]*)\n", entry.msgctxt)
-            if m:
-                command = m.group(1)
-                if command in keys:
-                    for text in strings[command]:
-                        if text == entry.msgid:
-                            translations[entry.msgid] = entry.msgstr
+        if os.path.isfile(poFile):
+            sys.stderr.write('Generating ' + lang + '...\n')
+            po = polib.pofile(poFile, autodetect_encoding=False,
+                              encoding="utf-8", wrapwidth=-1)
+            for entry in po.translated_entries():
+                m = re.search(r"\.uno:([^\n]*)\n", entry.msgctxt)
+                if m:
+                    command = m.group(1)
+                    if command in keys:
+                        for text in strings[command]:
+                            if text == entry.msgid:
+                                translations[entry.msgid] = entry.msgstr
 
         f = open(onlineDir + '/browser/l10n/uno/' +
                  lang + '.json', 'w', encoding='utf-8')
