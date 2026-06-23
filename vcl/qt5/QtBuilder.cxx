@@ -225,6 +225,10 @@ QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, std::
     {
         QComboBox* pComboBox = new QComboBox(pParentWidget);
         pComboBox->setEditable(extractEntry(rProps));
+        // use a model that supports sorting
+        QSortFilterProxyModel* pModel = new QSortFilterProxyModel(pComboBox);
+        pModel->setSourceModel(new QStandardItemModel(0, 1, pComboBox));
+        pComboBox->setModel(pModel);
         pObject = pComboBox;
     }
     else if (rClass == u"GtkDialog")

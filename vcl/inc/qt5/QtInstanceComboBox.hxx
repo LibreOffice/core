@@ -22,7 +22,6 @@ class QtInstanceComboBox : public QtInstanceWidget, public virtual weld::ComboBo
     Q_OBJECT
 
     QComboBox* m_pComboBox;
-    bool m_bSorted;
 
     virtual void do_insert(int nPos, const OUString& rStr, const OUString* pId,
                            const OUString* pIconName, VirtualDevice* pImageSurface) override;
@@ -86,9 +85,6 @@ public:
     virtual void set_mru_entries(const std::vector<OUString>& rEntries) override;
 
     virtual void set_max_drop_down_rows(int nRows) override;
-
-private:
-    void sortItems();
 
 private slots:
     void signalChanged();

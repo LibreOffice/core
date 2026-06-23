@@ -15,13 +15,13 @@
 
 #include <vcl/qt/QtUtils.hxx>
 
+#include <QtCore/QSortFilterProxyModel>
 #include <QtWidgets/QCompleter>
 #include <QtWidgets/QLineEdit>
 
 QtInstanceComboBox::QtInstanceComboBox(QComboBox* pComboBox)
     : QtInstanceWidget(pComboBox)
     , m_pComboBox(pComboBox)
-    , m_bSorted(false)
 {
     assert(pComboBox);
 
@@ -49,9 +49,6 @@ void QtInstanceComboBox::do_insert(int nPos, const OUString& rStr, const OUStrin
             m_pComboBox->setItemIcon(nPos, loadQPixmapIcon(*pIconName));
         else if (pImageSurface)
             m_pComboBox->setItemIcon(nPos, toQPixmap(*pImageSurface));
-
-        if (m_bSorted)
-            sortItems();
     });
 }
 
@@ -63,20 +60,12 @@ void QtInstanceComboBox::insert_vector(const std::vector<weld::ComboBoxEntry>& r
         if (!bKeepExisting)
             m_pComboBox->clear();
 
-        // if sorted, only sort once at the end
-        const bool bSorted = m_bSorted;
-        m_bSorted = false;
-
         for (const weld::ComboBoxEntry& rEntry : rItems)
         {
             const OUString* pId = rEntry.sId.isEmpty() ? nullptr : &rEntry.sId;
             const OUString* pImage = rEntry.sImage.isEmpty() ? nullptr : &rEntry.sImage;
             insert(m_pComboBox->count(), rEntry.sString, pId, pImage, nullptr);
         }
-
-        m_bSorted = bSorted;
-        if (m_bSorted)
-            sortItems();
     });
 }
 
@@ -101,8 +90,11 @@ int QtInstanceComboBox::get_count() const
 void QtInstanceComboBox::make_sorted()
 {
     SolarMutexGuard g;
-    m_bSorted = true;
-    GetQtInstance().RunInMainThread([&] { sortItems(); });
+    GetQtInstance().RunInMainThread([&] {
+        QSortFilterProxyModel* pModel = qobject_cast<QSortFilterProxyModel*>(m_pComboBox->model());
+        assert(pModel && "combobox has a wrong model set (no QSortFilterProxyModel)");
+        pModel->sort(0);
+    });
 }
 
 void QtInstanceComboBox::clear()
@@ -432,8 +424,6 @@ void QtInstanceComboBox::set_mru_entries(const std::vector<OUString>&)
 }
 
 void QtInstanceComboBox::set_max_drop_down_rows(int) { assert(false && "Not implemented yet"); }
-
-void QtInstanceComboBox::sortItems() { m_pComboBox->model()->sort(0, Qt::AscendingOrder); }
 
 void QtInstanceComboBox::signalChanged()
 {
