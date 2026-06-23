@@ -306,8 +306,16 @@ void CODAWebEngineView::arrangePresentationWindows()
         }
         else
         {
+            // One screen: the console floats on top of the full screen
+            // presentation. Give it most of the work area, but leave a margin
+            // so the presentation stays visible around the edges and the user
+            // can see it is running underneath. An arbitrary small default
+            // size left it too small to use.
+            const QRect area = laptopScreen->availableGeometry();
+            const QSize size(area.width() * 17 / 20, area.height() * 17 / 20);
+            consoleWindow->resize(size);
+            consoleWindow->move(area.center() - QPoint(size.width() / 2, size.height() / 2));
             consoleWindow->showNormal();
-            consoleWindow->resize(consoleWindow->sizeHint());
             consoleWindow->show();
         }
     }
