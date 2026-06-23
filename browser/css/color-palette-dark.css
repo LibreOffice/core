@@ -23,7 +23,7 @@
 	--color-background-lighter: #262626; /* hover, toolbar, dialog, disabled */
 	--color-overlay: #1c5fa814;
 	--color-background-tabs-group: #303030;
-	--color-stylesview-background: white;
+	--color-stylesview-background: var(--color-background-lighter);
 	--brightness-stylesview: 0.9;
 
 	--color-canvas: #141414;

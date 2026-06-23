@@ -811,6 +811,10 @@ label.notebookbar.ui-checkbox-label {
 	scroll-snap-align: start;
 }
 
+[data-theme='dark'] .notebookbar #transitions_icons.ui-iconview .ui-iconview-entry img {
+	filter: invert(1);
+}
+
 /* Animation Tab */
 #Animation.notebookbar .ui-grid,
 #Animation.notebookbar #effect_list,
