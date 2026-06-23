@@ -38,6 +38,7 @@ $(eval $(call gb_UnpackedTarball_set_post_action,poco,\
 	cp -RPf Crypto/include/. include/ && \
 	cp -RPf Net/include/. include/ && \
 	cp -RPf NetSSL_OpenSSL/include/. include/ && \
+	cp -RPf Zip/include/. include/ && \
 	cp -RPf dependencies/tessil/include/. include/ \
 ))
 

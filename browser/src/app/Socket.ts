@@ -1394,6 +1394,12 @@ class Socket {
 			this._onHyperlinkClickedMsg(textMsg);
 		} else if (textMsg.startsWith('browsersetting:')) {
 			window.prefs._initializeBrowserSetting(textMsg);
+		} else if (textMsg.startsWith('presetconfigid:')) {
+			app.presetConfigId = textMsg.substring('presetconfigid:'.length).trim();
+		} else if (textMsg.startsWith('userpresetconfigid:')) {
+			app.userPresetConfigId = textMsg
+				.substring('userpresetconfigid:'.length)
+				.trim();
 		} else if (textMsg.startsWith('viewsetting:')) {
 			const settingJSON = JSON.parse(
 				textMsg.substring('viewsetting:'.length + 1),

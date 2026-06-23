@@ -18,6 +18,14 @@ $(eval $(call gb_Module_add_targets,poco,\
     StaticLibrary_PocoNet \
 ))
 
+# PocoZip is only consumed by wsd, which is server-only; skip it on the app targets that never link
+# wsd/Unzip.cpp:
+ifeq ($(filter ANDROID iOS EMSCRIPTEN WNT MACOSX,$(OS)),)
+$(eval $(call gb_Module_add_targets,poco,\
+    StaticLibrary_PocoZip \
+))
+endif
+
 # PocoCrypto and PocoNetSSL need OpenSSL and are only used by the COOL server
 # (SSL) build.  None of the CODA app targets (Android, iOS, Emscripten, Windows,
 # macOS) build with SSL or link them, and some ship a reduced OpenSSL (e.g.

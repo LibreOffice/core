@@ -219,7 +219,7 @@ void RequestVettingStation::launchInstallPresets()
     Poco::File(Poco::Path(configIdPresets, "template")).createDirectories();
     // ensure the server config is downloaded and populate a subforkit when config is available
     _asyncInstallTask = DocumentBroker::asyncInstallPresets(_poll, configId, sharedSettings.getUri(), configIdPresets,
-                                                            nullptr, finishedCallback);
+                                                            {}, nullptr, finishedCallback);
 }
 
 #endif

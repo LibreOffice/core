@@ -26,6 +26,7 @@
 #include <common/ConfigUtil.hpp>
 #include <common/FileUtil.hpp>
 #include <common/HexUtil.hpp>
+#include <common/JailUtil.hpp>
 #include <common/JsonUtil.hpp>
 #include <common/Log.hpp>
 #include <common/Message.hpp>
@@ -48,8 +49,10 @@
 #include <wsd/QuarantineUtil.hpp>
 #include <wsd/Storage.hpp>
 #include <wsd/TileCache.hpp>
+#include <wsd/Unzip.hpp>
 
 #include <Poco/DigestStream.h>
+#include <Poco/DirectoryIterator.h>
 #include <Poco/DOM/AutoPtr.h>
 #include <Poco/DOM/DOMParser.h>
 #include <Poco/DOM/DOMWriter.h>
@@ -72,6 +75,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <string_view>
 #include <sys/types.h>
 #ifndef _WIN32
 #include <sysexits.h>
@@ -1628,8 +1632,18 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
         std::string jailPresetsPath = FileUtil::buildLocalPathToJail(COOLWSD::EnableMountNamespaces,
                                                                      getJailRoot(),
                                                                      JAILED_CONFIG_ROOT);
-        std::string configId = "user-" + userId + "-" + Cache::getConfigId(userSettingsUri);
-        asyncInstallPresets(session, configId, userSettingsUri, jailPresetsPath);
+        _userConfigId = "user-" + userId + "-" + Cache::getConfigId(userSettingsUri);
+
+        // The browser-consumed "extensions" group needs to land in sharedpresets (where the wsd
+        // file server can see it), not in the kit user profile where every other user-level group
+        // lives:
+        auto const userExtensionsBase
+            = Poco::Path(COOLWSD::ChildRoot, JailUtil::CHILDROOT_TMP_SHARED_PRESETS_PATH);
+        auto const userExtensionsDir = Poco::Path(userExtensionsBase, Uri::encode(_userConfigId));
+        Poco::File(Poco::Path(userExtensionsDir, "extensions")).createDirectories();
+
+        asyncInstallPresets(session, _userConfigId, userSettingsUri, jailPresetsPath,
+                            {{"extensions", userExtensionsDir.toString()}});
     }
 
     session->setUserSettingsPersistenceAvailable(!userSettingsUri.empty());
@@ -1694,10 +1708,49 @@ void PresetsInstallTask::installPresetFinished(const std::string& id, bool prese
     }
 }
 
+void PresetsInstallTask::sweepStaleExtensions() {
+    // The destination dir is resolved the same way addGroup does for the extensions group, so a
+    // sweep still works when the integrator just turned the array empty (addGroup bails early but
+    // stale entries from the previous round are still on disk):
+    auto const overrideIt = _groupOverridePath.find("extensions");
+    auto const & base = overrideIt != _groupOverridePath.end() ? overrideIt->second : _presetsPath;
+    Poco::Path const extDir(base, "extensions");
+    try {
+        Poco::File dir(extDir);
+        if (!dir.exists() || !dir.isDirectory()) {
+            return;
+        }
+        for (Poco::DirectoryIterator it(extDir), end; it != end; ++it) {
+            if (!it->isDirectory()) {
+                continue;
+            }
+            std::string const name = it.name();
+            if (_expectedExtensions.contains(name)) {
+                continue;
+            }
+            // Anything modified after this task started belongs to a concurrent install (its own
+            // ~new/~old swap intermediates, or an extension a sibling task just finished unpacking
+            // with its own newer expected set); leave it alone (crashed-prior ~new/~old leftovers
+            // fall outside the window and get swept here, which is what we want; a skewed FS clock
+            // could theoretically defeat this filter):
+            if (it->getLastModified() > _installStartTime) {
+                continue;
+            }
+            LOG_DBG("Sweeping stale extension preset [" << it->path() << ']');
+            FileUtil::removeFile(it->path(), true);
+        }
+    } catch (Poco::Exception const & e) {
+        LOG_WRN(
+            "Failed to sweep stale extensions in [" << extDir.toString() << "]: "
+            << e.displayText());
+    }
+}
+
 void PresetsInstallTask::completed()
 {
     auto selfLifecycle = shared_from_this();
     _reportedStatus = true;
+    sweepStaleExtensions();
     for (const auto& cb : _installFinishedCBs)
         cb(_overallSuccess);
 }
@@ -1718,7 +1771,11 @@ void PresetsInstallTask::addGroup(const Poco::JSON::Object::Ptr& settings, const
         const std::string uri = JsonUtil::getJSONValue<std::string>(elem, "uri");
         const std::string stamp = JsonUtil::getJSONValue<std::string>(elem, "stamp");
 
-        Poco::Path destDir(_presetsPath, groupName);
+        // A group with no entry in _groupOverridePath falls back to _presetsPath:
+        auto const overrideIt = _groupOverridePath.find(groupName);
+        auto const & groupBase
+            = overrideIt != _groupOverridePath.end() ? overrideIt->second : _presetsPath;
+        Poco::Path destDir(groupBase, groupName);
         Poco::File(destDir).createDirectories();
         std::string filePath;
         // browsersetting/viewsetting are read by fixed name; other groups
@@ -1750,6 +1807,22 @@ void PresetsInstallTask::addGroup(const Poco::JSON::Object::Ptr& settings, const
                 continue;
             }
 
+            if (groupName == "extensions") {
+                if (!fileName.ends_with(".zip")) {
+                    LOG_WRN("Skipping non-zip extensions entry: " << fileName);
+                    continue;
+                }
+                // Reserve ~new/~old suffixes for the atomic-swap unpack in asyncInstallPreset; an
+                // ID whose name ends in either would collide with the intermediate directory of a
+                // sibling unpack (and '~' is illegal in reverse-DNS names, so a well-formed ID
+                // should never trip this):
+                if (fileName.ends_with("~new.zip") || fileName.ends_with("~old.zip")) {
+                    LOG_WRN("Skipping extensions entry with reserved suffix: " << fileName);
+                    continue;
+                }
+                _expectedExtensions.insert(fileName.substr(0, fileName.size() - 4));
+            }
+
             filePath = Poco::Path(destDir.toString(), fileName).toString();
         }
 
@@ -1760,9 +1833,11 @@ void PresetsInstallTask::addGroup(const Poco::JSON::Object::Ptr& settings, const
 PresetsInstallTask::PresetsInstallTask(const std::shared_ptr<SocketPoll>& poll,
                    const std::string& configId,
                    const std::string& presetsPath,
+                   std::map<std::string, std::string> groupOverridePath,
                    const std::function<void(bool)>& installFinishedCB)
     : _configId(configId)
     , _presetsPath(presetsPath)
+    , _groupOverridePath(std::move(groupOverridePath))
     , _poll(poll)
     , _idCount(0)
     , _reportedStatus(false)
@@ -1928,6 +2003,7 @@ void PresetsInstallTask::install(const Poco::JSON::Object::Ptr& settings,
             addGroup(settings, "xcu", presets);
             addGroup(settings, "template", presets);
             addGroup(settings, "themes", presets);
+            addGroup(settings, "extensions", presets);
 
             // Ensure round-trip group directories exist in the jail even
             // when the host advertised no entries for them. Without this
@@ -2109,7 +2185,8 @@ static std::string extractViewSettings(const std::string& viewSettingsPath,
 void DocumentBroker::asyncInstallPresets(const std::shared_ptr<ClientSession>& session,
                                          const std::string& configId,
                                          const std::string& userSettingsUri,
-                                         const std::string& presetsPath)
+                                         const std::string& presetsPath,
+                                         std::map<std::string, std::string> groupOverridePath)
 {
     auto installFinishedCB =
         [selfWeak = weak_from_this(), this, session, userSettingsUri, presetsPath](bool success)
@@ -2169,7 +2246,8 @@ void DocumentBroker::asyncInstallPresets(const std::shared_ptr<ClientSession>& s
     UNITWSD_CALL_INSTANCE(_unitWsd, onDocBrokerPresetsInstallStart());
     loadTimings().record("presetsInstallStart");
     _asyncInstallTask = asyncInstallPresets(_poll, configId, userSettingsUri,
-                                            presetsPath, session, installFinishedCB);
+                                            presetsPath, std::move(groupOverridePath),
+                                            session, installFinishedCB);
     _asyncInstallTask->appendCallback([selfWeak = weak_from_this(), this,
                                        keepPollAlive=_poll](bool){
         // For the edge case where the DocumentBroker lifecycle ends before the document
@@ -2278,6 +2356,7 @@ std::shared_ptr<PresetsInstallTask>
 DocumentBroker::asyncInstallPresets(const std::shared_ptr<SocketPoll>& poll, const std::string& configId,
                                     const std::string& userSettingsUri,
                                     const std::string& presetsPath,
+                                    std::map<std::string, std::string> groupOverridePath,
                                     const std::shared_ptr<ClientSession>& session,
                                     const std::function<void(bool)>& installFinishedCB)
 {
@@ -2290,6 +2369,7 @@ DocumentBroker::asyncInstallPresets(const std::shared_ptr<SocketPoll>& poll, con
     LOG_DBG("Getting settings from [" << uriAnonym << ']');
 
     auto presetTasks = std::make_shared<PresetsInstallTask>(poll, configId, presetsPath,
+                                                            std::move(groupOverridePath),
                                                             installFinishedCB);
 
     // When result arrives, extract uris of what we want to install to the jail's user presets
@@ -2384,6 +2464,57 @@ void DocumentBroker::asyncInstallPreset(
             // we only saved it to make sure cache util can copy it
             if (presetFile.ends_with("browsersetting.json"))
                 FileUtil::removeFile(presetFile);
+
+            // Extension preset .zip files unpack into a sibling directory (the layout
+            // serveBrowserPresetExtensionFile expects); the zip itself is removed so the index
+            // synthesis only sees the unpacked extension roots:
+            if (presetFile.ends_with(".zip")) {
+                auto const lastSlash = presetFile.find_last_of('/');
+                auto const prevSlash = lastSlash == std::string::npos
+                    ? std::string::npos : presetFile.find_last_of('/', lastSlash - 1);
+                if (prevSlash != std::string::npos
+                    && std::string_view(presetFile).substr(prevSlash + 1, lastSlash - prevSlash - 1)
+                       == "extensions")
+                {
+                    // Unpack into a sibling ~new directory, then swap it over destDir with two
+                    // renames (TODO: the window in which destDir does not exist is just one rename
+                    // syscall, so a concurrent fileserver fetch can only race over that narrow gap
+                    // rather than over the whole extract, but it can still race):
+                    auto const destDir = presetFile.substr(0, presetFile.size() - 4);
+                    auto const newDir = destDir + "~new";
+                    auto const oldDir = destDir + "~old";
+                    if (FileUtil::Stat(newDir).exists()) {
+                        FileUtil::removeFile(newDir, true);
+                    }
+                    if (FileUtil::Stat(oldDir).exists()) {
+                        FileUtil::removeFile(oldDir, true);
+                    }
+                    if (Unzip::extract(presetFile, newDir)) {
+                        try {
+                            if (FileUtil::Stat(destDir).exists()) {
+                                Poco::File(destDir).renameTo(oldDir);
+                            }
+                            Poco::File(newDir).renameTo(destDir);
+                            if (FileUtil::Stat(oldDir).exists()) {
+                                FileUtil::removeFile(oldDir, true);
+                            }
+                            LOG_INF("Unzipped extension preset to [" << destDir << ']');
+                        } catch (Poco::Exception const & e) {
+                            LOG_ERR(
+                                "Failed to swap unpacked extension into [" << destDir << "]: "
+                                << e.displayText());
+                            success = false;
+                        }
+                    } else {
+                        LOG_ERR("Failed to unzip extension preset [" << presetFile << ']');
+                        if (FileUtil::Stat(newDir).exists()) {
+                            FileUtil::removeFile(newDir, true);
+                        }
+                        success = false;
+                    }
+                    FileUtil::removeFile(presetFile);
+                }
+            }
         }
 
         if (finishedCB)
@@ -4298,6 +4429,15 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
         forwardToChild(session,
                        std::string("userpersistence ") +
                            (session->isUserSettingsPersistenceAvailable() ? "true" : "false"));
+
+        // Both configIds are pre-encoded so they match the on-disk sharedpresets/<configId>/
+        // directory names; loadExtensions queries each preset/<configId>/extensions/ index in turn:
+        if (!_configId.empty()) {
+            session->sendTextFrame("presetconfigid: " + Uri::encode(_configId));
+        }
+        if (!_userConfigId.empty()) {
+            session->sendTextFrame("userpresetconfigid: " + Uri::encode(_userConfigId));
+        }
 
         return count;
     }

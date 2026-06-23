@@ -174,6 +174,7 @@ wsd_sources = \
 	../wsd/SpecialBrokers.cpp \
 	../wsd/Storage.cpp \
 	../wsd/TileCache.cpp \
+	../wsd/Unzip.cpp \
 	../wsd/dumpWsdState.cpp \
 	../wsd/wopi/CheckFileInfo.cpp \
 	../wsd/wopi/StorageConnectionManager.cpp \

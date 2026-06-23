@@ -627,7 +627,8 @@ public:
     void asyncInstallPresets(const std::shared_ptr<ClientSession>& session,
                              const std::string& configId,
                              const std::string& userSettingsUri,
-                             const std::string& presetsPath);
+                             const std::string& presetsPath,
+                             std::map<std::string, std::string> groupOverridePath);
 
     static void getBrowserSettingSync(const std::shared_ptr<ClientSession>& session,
                                       const std::string& userSettingsUri);
@@ -645,6 +646,7 @@ public:
                                     const std::string& configId,
                                     const std::string& userSettingsUri,
                                     const std::string& presetsPath,
+                                    std::map<std::string, std::string> groupOverridePath,
                                     const std::shared_ptr<ClientSession>& session,
                                     const std::function<void(bool)>& finishedCB);
 
@@ -1824,6 +1826,10 @@ private:
     std::string _lastEditingSessionId; ///< The last session edited, for auto-saving.
 
     std::string _configId;
+
+    // configId for the user-level preset stream; empty when no integrator userSettingsUri is in
+    // play:
+    std::string _userConfigId;
 
     std::shared_ptr<ChildProcess> _childProcess;
 

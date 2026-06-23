@@ -182,6 +182,14 @@ private:
                                        std::istream& message,
                                        const std::shared_ptr<StreamSocket>& socket);
 
+    // Serve "/browser/dist/preset/<encodedConfigId>/extensions/..." out of
+    // <ChildRoot>/tmp/sharedpresets/<configId>/extensions/:  "index.json" synthesises a JSON array
+    // of the per-id directories present; anything else is read from disk.  Returns true when the
+    // request has been handled and a response has been sent:
+    static bool serveBrowserPresetExtensionFile(std::string const & relPath,
+                                                http::Response & response, bool noCache,
+                                                std::shared_ptr<StreamSocket> const & socket);
+
     /// Construct a JSON to be accepted by the cool.html from a list like
     /// UIMode=classic;TextRuler=true;PresentationStatusbar=false
     /// that is passed as "ui_defaults" hidden input during the iframe setup.
@@ -215,10 +223,7 @@ public:
 
     void readDirToHash(const std::string& basePath, const std::string& path);
 
-    // Build the extension discovery index ("/browser/dist/extensions/index.json") by
-    // collecting every "/browser/dist/extensions/<id>/manifest.json" already cached in
-    // FileHash and emitting a JSON array of the <id>s; called once after readDirToHash:
-    void synthesizeExtensionsIndex();
+    void synthesizeBuiltinExtensionsIndex();
 
     const std::string *getCompressedFile(const std::string &path);
 

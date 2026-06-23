@@ -49,6 +49,7 @@ interface ConfigData {
 	viewsetting: ConfigItem[] | null;
 	xcu: ConfigItem[] | null;
 	themes: ConfigItem[] | null;
+	extensions: ConfigItem[] | null;
 }
 
 interface ViewSettings {
@@ -666,6 +667,7 @@ class SettingIframe {
 		viewSettingsUpload: () => this.settingConfigBasePath() + '/viewsetting/',
 		XcuUpload: () => this.settingConfigBasePath() + '/xcu/',
 		themesUpload: () => this.settingConfigBasePath() + '/themes/',
+		extensionsUpload: () => this.settingConfigBasePath() + '/extensions/',
 	};
 	private browserSettingOptions: Record<string, any> = {};
 
@@ -877,6 +879,20 @@ class SettingIframe {
 				fileAccept: '.theme',
 				buttonText: _('Upload Theme'),
 				uploadPath: this.PATH.themesUpload(),
+				element: null,
+			},
+			{
+				id: 'extensions',
+				sectionTitle: _('Extensions'),
+				sectionDesc: _(
+					'Upload a packaged extension as a .zip; its contents (manifest.json, ...) are unpacked on the server.',
+				),
+				listId: 'extensionsList',
+				inputId: 'extensionsFile',
+				buttonId: 'uploadExtensionsButton',
+				fileAccept: '.zip',
+				buttonText: _('Upload Extension'),
+				uploadPath: this.PATH.extensionsUpload(),
 				element: null,
 			},
 		];
@@ -3198,6 +3214,8 @@ class SettingIframe {
 				this.populateList('wordbookList', data.wordbook, '/wordbook');
 			if (data.xcu) this.populateList('XcuList', data.xcu, '/xcu');
 			if (data.themes) this.populateList('themesList', data.themes, '/themes');
+			if (data.extensions)
+				this.populateList('extensionsList', data.extensions, '/extensions');
 		}
 
 		var navItem = document.querySelector<HTMLElement>(

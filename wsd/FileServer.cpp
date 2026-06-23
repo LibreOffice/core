@@ -53,8 +53,11 @@
 #include <Poco/DateTime.h>
 #include <Poco/DateTimeFormat.h>
 #include <Poco/DateTimeFormatter.h>
+#include <Poco/DirectoryIterator.h>
 #include <Poco/Exception.h>
+#include <Poco/File.h>
 #include <Poco/FileStream.h>
+#include <Poco/JSON/Array.h>
 #include <Poco/MemoryStream.h>
 #include <Poco/Net/HTMLForm.h>
 #include <Poco/Net/HTTPBasicCredentials.h>
@@ -66,6 +69,7 @@
 #include <Poco/Net/NameValueCollection.h>
 #include <Poco/Net/NetException.h>
 #include <Poco/Net/PartHandler.h>
+#include <Poco/Path.h>
 #include <Poco/Runnable.h>
 #include <Poco/SHA1Engine.h>
 #include <Poco/StreamCopier.h>
@@ -278,7 +282,7 @@ FileServerRequestHandler::FileServerRequestHandler(const std::string& root)
     {
         FileHash.reserve(4096); // We have ~3964 files.
         readDirToHash(root, "/browser/dist");
-        synthesizeExtensionsIndex();
+        synthesizeBuiltinExtensionsIndex();
     }
     catch (...)
     {
@@ -517,6 +521,10 @@ bool FileServerRequestHandler::handleRequest(const HTTPRequest& request,
         {
             fetchModels(request, message, socket);
             return false;
+        }
+
+        if (serveBrowserPresetExtensionFile(relPath, response, noCache, socket)) {
+            return true;
         }
 
         // Is this a file we read at startup - if not; it's not for serving.
@@ -908,11 +916,12 @@ const std::string *FileServerRequestHandler::getCompressedFile(const std::string
     return pair.second.empty() ? &pair.first : &pair.second;
 }
 
-void FileServerRequestHandler::synthesizeExtensionsIndex()
+// For the dev-only "drop a directory into browser/dist/extensions/" feature, emit
+// /browser/dist/extensions/index.json as a JSON array of the <id>s with a cached
+// <id>/manifest.json.  Called once after readDirToHash.
+void FileServerRequestHandler::synthesizeBuiltinExtensionsIndex()
 {
-    // Walk FileHash for "/browser/dist/extensions/<id>/manifest.json" entries; <id> is
-    // the directory that an admin has dropped under $(DIST_FOLDER)/extensions/ to
-    // deploy an extension (see browser/Makefile.am and browser/extensions/README.md).
+#if ENABLE_DEBUG
     static const std::string prefix = "/browser/dist/extensions/";
     static const std::string suffix = "/manifest.json";
     std::vector<std::string> ids;
@@ -969,6 +978,148 @@ void FileServerRequestHandler::synthesizeExtensionsIndex()
 
     // Replaces any stale build-time index.json so the runtime view always wins:
     FileHash[prefix + "index.json"] = std::make_pair(std::move(json), std::move(gzipped));
+#endif
+}
+
+namespace {
+// Pick a Content-Type for a preset-extension file by its name extension (the browser refuses to
+// render anything without one because sendFile sets X-Content-Type-Options: nosniff):
+std::string extensionMimeType(std::string const & fileName) {
+    if (fileName.ends_with(".css")) {
+        return "text/css";
+    }
+    if (fileName.ends_with(".html") || fileName.ends_with(".htm")) {
+        return "text/html";
+    }
+    if (fileName.ends_with(".js")) {
+        return "application/javascript";
+    }
+    if (fileName.ends_with(".json")) {
+        return "application/json";
+    }
+    if (fileName.ends_with(".png")) {
+        return "image/png";
+    }
+    if (fileName.ends_with(".svg")) {
+        return "image/svg+xml";
+    }
+    return "application/octet-stream";
+}
+}
+
+bool FileServerRequestHandler::serveBrowserPresetExtensionFile(
+    std::string const & relPath, http::Response & response, bool noCache,
+    std::shared_ptr<StreamSocket> const & socket)
+{
+    static std::string const urlPrefix = "/browser/dist/preset/";
+    if (!relPath.starts_with(urlPrefix)) {
+        return false;
+    }
+    auto const tail = relPath.substr(urlPrefix.size());
+    auto const firstSlash = tail.find('/');
+    if (firstSlash == std::string::npos) {
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, socket);
+        return true;
+    }
+    auto const configId = tail.substr(0, firstSlash);
+    if (configId.empty() || configId == "." || configId == "..") {
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, socket);
+        return true;
+    }
+    auto const rest = tail.substr(firstSlash + 1);
+    static std::string const extensionsSegment = "extensions/";
+    if (!rest.starts_with(extensionsSegment) && rest != "extensions") {
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, socket);
+        return true;
+    }
+    auto const subPath = rest.size() > extensionsSegment.size()
+        ? rest.substr(extensionsSegment.size()) : std::string();
+
+    // On-disk root: <ChildRoot>/tmp/sharedpresets/<configId>/extensions/
+    Poco::Path extDir(COOLWSD::ChildRoot);
+    extDir.pushDirectory("tmp");
+    extDir.pushDirectory("sharedpresets");
+    extDir.pushDirectory(configId);
+    extDir.pushDirectory("extensions");
+
+    if (subPath.empty() || subPath == "index.json") {
+        // An absent or empty preset directory yields "[]":
+        Poco::JSON::Array::Ptr ids = new Poco::JSON::Array;
+        try {
+            Poco::File extDirFile(extDir);
+            if (extDirFile.exists() && extDirFile.isDirectory()) {
+                for (Poco::DirectoryIterator it(extDir), end; it != end; ++it) {
+                    if (!it->isDirectory()) {
+                        continue;
+                    }
+                    auto const name = it.name();
+                    // Hide the ~new/~old swap-rename siblings that the unpack in asyncInstallPreset
+                    // transiently creates:
+                    if (name.ends_with("~new") || name.ends_with("~old")) {
+                        continue;
+                    }
+                    ids->add(name);
+                }
+            }
+        } catch (Poco::Exception const & e) {
+            LOG_WRN(
+                "Failed to enumerate preset extensions for [" << configId << "]: "
+                << e.displayText());
+        }
+
+        std::ostringstream oss;
+        ids->stringify(oss);
+        std::string const body = oss.str();
+        response.setContentType("application/json");
+        response.add("X-Content-Type-Options", "nosniff");
+        response.set("Content-Length", std::to_string(body.size()));
+        if (noCache) {
+            response.set("Cache-Control", "no-cache");
+        }
+        socket->send(response);
+        socket->send(body);
+        return true;
+    }
+
+    // A single-segment subPath is a shared resource: map it to the/ build-time
+    // browser/dist/extensions/ root so an iframe at preset/<configId>/extensions/<id>/ can resolve
+    // <script src="../cool.js"> to the same cool.js a build-time extension would reach:
+    auto const idSlash = subPath.find('/');
+    if (idSlash == std::string::npos) {
+        if (subPath == "." || subPath == "..") {
+            HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, socket);
+            return true;
+        }
+        Poco::Path const distFile(COOLWSD::FileServerRoot, "browser/dist/extensions/" + subPath);
+        if (!Poco::File(distFile).exists()) {
+            HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, socket);
+            return true;
+        }
+        response.setContentType(extensionMimeType(subPath));
+        HttpHelper::sendFile(socket, distFile.toString(), response, noCache);
+        return true;
+    }
+    auto const id = subPath.substr(0, idSlash);
+    auto const file = subPath.substr(idSlash + 1);
+    if (id.empty() || id == "." || id == ".." || file.empty() || file == "." || file == ".."
+        || file.find("../") != std::string::npos || file.find("/..") != std::string::npos)
+    {
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, socket);
+        return true;
+    }
+
+    Poco::Path filePath(extDir);
+    filePath.pushDirectory(id);
+    // file may carry "/" for nested resources; the traversal check above already rejected ".." and
+    // absolute paths:
+    filePath.append(file);
+    if (!Poco::File(filePath).exists()) {
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, socket);
+        return true;
+    }
+    response.setContentType(extensionMimeType(file));
+    HttpHelper::sendFile(socket, filePath.toString(), response, noCache);
+    return true;
 }
 
 const std::string *FileServerRequestHandler::getUncompressedFile(const std::string &path)

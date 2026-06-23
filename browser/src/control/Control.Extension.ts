@@ -427,30 +427,54 @@ window.L.control.extension = function (
 	});
 };
 
-// Fetch the discovery index (a JSON array of extension directory names that coolwsd synthesises at
-// startup from whatever subdirectories happen to be present under
-// <install>/browser/dist/extensions/) and then each extension's manifest.json, instantiate one
-// extension control per manifest, and register them on `map._extensions` keyed by directory name
-// (and manifests with an unsupported manifestVersion or that don't apply to the current document
-// type are skipped with a warning rather than aborting discovery):
+// Discover and register the JS extensions for this document by fetching three discovery indexes
+// (built-in, admin preset, per-user preset), in that order, merging with per-user > admin >
+// built-in precedence on ID collision, then loading each surviving manifest.json and registering
+// one Control.Extension per entry on `map._extensions` (and manifests with an unsupported
+// manifestVersion or that don't apply to the current docType are skipped/ with a console warning
+// rather than aborting discovery):
 window.L.loadExtensions = async function (map: any, docType: string) {
 	// Gated on the experimental-features flag so deployments not opting in to
 	// experimental functionality never fetch the discovery index:
 	if (!window.enableExperimentalFeatures) return {};
-	const indexPath = 'extensions/index.json';
-	let ids: string[];
-	try {
-		const resp = await fetch(app.LOUtil.getURL(indexPath));
-		if (!resp.ok) throw new Error('HTTP ' + resp.status);
-		ids = await resp.json();
-	} catch (err) {
-		console.warn('extension discovery: ' + indexPath + ' unreadable:', err);
-		return {};
+
+	const sources: { baseRel: string; ids: string[] }[] = [];
+	const fetchIndex = async (indexBase: string): Promise<string[]> => {
+		try {
+			const resp = await fetch(app.LOUtil.getURL(indexBase + 'index.json'));
+			if (!resp.ok) throw new Error('HTTP ' + resp.status);
+			return await resp.json();
+		} catch (err) {
+			console.warn(
+				'extension discovery: ' + indexBase + 'index.json unreadable:',
+				err,
+			);
+			return [];
+		}
+	};
+	const addPresetSource = async (configId: string) => {
+		const presetBase =
+			'preset/' + encodeURIComponent(configId) + '/extensions/';
+		const presetIds = await fetchIndex(presetBase);
+		sources.push({ baseRel: presetBase, ids: presetIds });
+	};
+	const builtinIds = await fetchIndex('extensions/');
+	sources.push({ baseRel: 'extensions/', ids: builtinIds });
+	if (app.presetConfigId) await addPresetSource(app.presetConfigId);
+	if (app.userPresetConfigId) await addPresetSource(app.userPresetConfigId);
+
+	// Flatten the sources into one list of (id, baseRel) entries; Map.set's last-write-wins
+	// behavior causes per-user extensions to override admin extensions to overrride built-in
+	// ones:
+	const byId = new Map<string, string>();
+	for (const src of sources) {
+		for (const id of src.ids) byId.set(id, src.baseRel);
 	}
+
 	// Fetch all the manifests in parallel; the loop afterwards just registers what survived:
 	const loaded = await Promise.all(
-		ids.map(async (id) => {
-			const baseRel = 'extensions/' + id + '/';
+		Array.from(byId.entries()).map(async ([id, baseSourceRel]) => {
+			const baseRel = baseSourceRel + id + '/';
 			try {
 				const resp = await fetch(app.LOUtil.getURL(baseRel + 'manifest.json'));
 				if (!resp.ok) throw new Error('HTTP ' + resp.status);

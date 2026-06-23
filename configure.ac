@@ -1993,7 +1993,7 @@ if test "$host_os" != "emscripten"; then
           [POCO_LIBS="$POCO_LIBS -lPocoNetSSL${POCO_DEBUG_SUFFIX}"])
     AS_IF([test "$mobile_app" != "true"],
           [POCO_LIBS="$POCO_LIBS -lPocoCrypto${POCO_DEBUG_SUFFIX}"])
-    POCO_LIBS="$POCO_LIBS -lPocoNet${POCO_DEBUG_SUFFIX} -lPocoUtil${POCO_DEBUG_SUFFIX} -lPocoJSON${POCO_DEBUG_SUFFIX} -lPocoXML${POCO_DEBUG_SUFFIX} -lPocoFoundation${POCO_DEBUG_SUFFIX}"
+    POCO_LIBS="$POCO_LIBS -lPocoNet${POCO_DEBUG_SUFFIX} -lPocoZip${POCO_DEBUG_SUFFIX} -lPocoUtil${POCO_DEBUG_SUFFIX} -lPocoJSON${POCO_DEBUG_SUFFIX} -lPocoXML${POCO_DEBUG_SUFFIX} -lPocoFoundation${POCO_DEBUG_SUFFIX}"
     # The engine builds PocoXML against the engine's expat (unbundled), so the
     # PocoXML archive references expat and we must link it explicitly (after
     # PocoXML for static-link ordering).  It goes in the global LIBS rather than
@@ -2019,7 +2019,7 @@ if test "$host_os" != "emscripten"; then
                  [poco_whole="$poco_whole,$POCOLIB/libPocoNetSSL${POCO_DEBUG_SUFFIX}.a"])
            AS_IF([test "$mobile_app" != "true"],
                  [poco_whole="$poco_whole,$POCOLIB/libPocoCrypto${POCO_DEBUG_SUFFIX}.a"])
-           poco_whole="$poco_whole,$POCOLIB/libPocoNet${POCO_DEBUG_SUFFIX}.a,$POCOLIB/libPocoUtil${POCO_DEBUG_SUFFIX}.a,$POCOLIB/libPocoJSON${POCO_DEBUG_SUFFIX}.a,$POCOLIB/libPocoXML${POCO_DEBUG_SUFFIX}.a,$POCOLIB/libPocoFoundation${POCO_DEBUG_SUFFIX}.a"
+           poco_whole="$poco_whole,$POCOLIB/libPocoNet${POCO_DEBUG_SUFFIX}.a,$POCOLIB/libPocoZip${POCO_DEBUG_SUFFIX}.a,$POCOLIB/libPocoUtil${POCO_DEBUG_SUFFIX}.a,$POCOLIB/libPocoJSON${POCO_DEBUG_SUFFIX}.a,$POCOLIB/libPocoXML${POCO_DEBUG_SUFFIX}.a,$POCOLIB/libPocoFoundation${POCO_DEBUG_SUFFIX}.a"
            POCO_LIBS_WHOLE="-Wl,--whole-archive$poco_whole,--no-whole-archive"],
           [POCO_LIBS_HOST="$POCO_LIBS"])
 fi

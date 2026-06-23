@@ -18,7 +18,10 @@
 
 #include <net/Socket.hpp>
 
+#include <Poco/Timestamp.h>
+
 #include <functional>
+#include <map>
 #include <memory>
 #include <set>
 #include <string>
@@ -32,6 +35,17 @@ private:
     std::set<std::string> _installingPresets;
     std::string _configId;
     std::string _presetsPath;
+    // Per-group destination override; a group listed here goes under <override>/<group>/ instead of
+    // the default <_presetsPath>/<group>/:
+    std::map<std::string, std::string> _groupOverridePath;
+    // Extension ids the integrator advertised for this round; anything present on disk under
+    // <extensions>/ but not in this set after the install completes is a leftover from a prior
+    // round (the integrator dropped that entry) and gets swept on completion:
+    std::set<std::string> _expectedExtensions;
+    // Time when this task started; the stale-extension sweep skips dirs whose last-modified time is
+    // newer than this so a concurrent install task on the same configId (e.g. another
+    // DocumentBroker for a sibling doc) cannot have its just-unpacked content wiped by ours:
+    Poco::Timestamp _installStartTime;
     std::vector<std::function<void(bool)>> _installFinishedCBs;
     std::weak_ptr<SocketPoll> _poll;
     int _idCount;
@@ -48,12 +62,17 @@ private:
 
     void completed();
 
+    // Remove on-disk extension directories that the integrator no longer advertises in the current
+    // settings round:
+    void sweepStaleExtensions();
+
     void addGroup(const Poco::JSON::Object::Ptr& settings, const std::string& groupName,
                   std::vector<CacheQuery>& queries);
 
 public:
     PresetsInstallTask(const std::shared_ptr<SocketPoll>& poll, const std::string& configId,
                        const std::string& presetsPath,
+                       std::map<std::string, std::string> groupOverridePath,
                        const std::function<void(bool)>& installFinishedCB);
 
     bool empty() const
