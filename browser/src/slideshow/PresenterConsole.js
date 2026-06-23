@@ -568,7 +568,10 @@ class PresenterConsole {
 		elem.style.marginBottom = '1vh';
 
 		elem = this._proxyPresenter.document.querySelector('#timer');
-		elem.style.fontSize = '80px';
+		// Scale with the window width like the rest of the console, so the timer
+		// and the clock keep their gap at any size instead of running together in
+		// a small window. The browser recomputes the viewport unit on resize.
+		elem.style.fontSize = 'clamp(24px, 5vw, 80px)';
 		elem.style.fontWeight = '600';
 		elem.style.color = window
 			.getComputedStyle(document.documentElement)
@@ -637,7 +640,7 @@ class PresenterConsole {
 
 		elem = this._proxyPresenter.document.querySelector('#today');
 		elem.style.textAlign = 'right';
-		elem.style.fontSize = '80px';
+		elem.style.fontSize = 'clamp(24px, 5vw, 80px)';
 		elem.style.fontWeight = '600';
 		elem.style.marginLeft = 'auto';
 		elem.style.color = window
