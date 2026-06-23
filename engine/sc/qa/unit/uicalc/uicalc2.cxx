@@ -1385,6 +1385,56 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testSumOfRangeStaysScalar)
     CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(1, 0, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testAtOperatorOnOperandsControlsSpill)
+{
+    // @ on every operand keeps the cell scalar. @ on only one still
+    // lets the other spill.
+
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    insertStringToCell(u"A1"_ustr, u"1");
+    insertStringToCell(u"A2"_ustr, u"2");
+    insertStringToCell(u"A3"_ustr, u"3");
+    insertStringToCell(u"A4"_ustr, u"4");
+    insertStringToCell(u"B1"_ustr, u"10");
+    insertStringToCell(u"B2"_ustr, u"20");
+    insertStringToCell(u"B3"_ustr, u"30");
+    insertStringToCell(u"B4"_ustr, u"40");
+
+    // @ on both operands keeps the result scalar.
+    insertStringToCell(u"C1"_ustr, u"=@A1:A4 + @B1:B4");
+    ScFormulaCell* pBoth = pDoc->GetFormulaCell(ScAddress(2, 0, 0));
+    CPPUNIT_ASSERT(pBoth);
+    CPPUNIT_ASSERT(!pBoth->IsDynamicArrayMaster());
+    CPPUNIT_ASSERT_EQUAL(ScMatrixMode::NONE, pBoth->GetMatrixFlag());
+    CPPUNIT_ASSERT_EQUAL(11.0, pDoc->GetValue(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, pDoc->GetCellType(ScAddress(2, 1, 0)));
+
+    // @ on the first operand only. The second operand stays a range,
+    // so the binary + still produces an array result.
+    insertStringToCell(u"D1"_ustr, u"=@A1:A4 + B1:B4");
+    ScFormulaCell* pFirst = pDoc->GetFormulaCell(ScAddress(3, 0, 0));
+    CPPUNIT_ASSERT(pFirst);
+    CPPUNIT_ASSERT(pFirst->IsDynamicArrayMaster());
+    CPPUNIT_ASSERT_EQUAL(ScMatrixMode::Formula, pFirst->GetMatrixFlag());
+    CPPUNIT_ASSERT_EQUAL(11.0, pDoc->GetValue(ScAddress(3, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(21.0, pDoc->GetValue(ScAddress(3, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(31.0, pDoc->GetValue(ScAddress(3, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(41.0, pDoc->GetValue(ScAddress(3, 3, 0)));
+
+    // @ on the second operand only. Same outcome.
+    insertStringToCell(u"E1"_ustr, u"=A1:A4 + @B1:B4");
+    ScFormulaCell* pSecond = pDoc->GetFormulaCell(ScAddress(4, 0, 0));
+    CPPUNIT_ASSERT(pSecond);
+    CPPUNIT_ASSERT(pSecond->IsDynamicArrayMaster());
+    CPPUNIT_ASSERT_EQUAL(ScMatrixMode::Formula, pSecond->GetMatrixFlag());
+    CPPUNIT_ASSERT_EQUAL(11.0, pDoc->GetValue(ScAddress(4, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(12.0, pDoc->GetValue(ScAddress(4, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(13.0, pDoc->GetValue(ScAddress(4, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(14.0, pDoc->GetValue(ScAddress(4, 3, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf152014)
 {
     createScDoc();

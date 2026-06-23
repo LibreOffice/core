@@ -1654,7 +1654,12 @@ bool intendsArrayResultInRange(formula::FormulaToken* const* pRpn,
             aStackIsArray.pop_back();
         }
         bool bResultArray = false;
-        if (formula::FormulaCompiler::IsMatrixFunction(eOp) || p->IsInForceArray())
+        if (eOp == ocSingleValue)
+            // The @ implicit-intersection operator extracts the upper-
+            // left scalar from its operand. The result is scalar even
+            // when the operand was an array.
+            bResultArray = false;
+        else if (formula::FormulaCompiler::IsMatrixFunction(eOp) || p->IsInForceArray())
             bResultArray = true;
         else if (eOp == ocRange || eOp == ocUnion || eOp == ocIntersect)
             // The ODFF parser keeps A:B style range constructors as
