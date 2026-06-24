@@ -47,6 +47,26 @@ using namespace formula;
 
 namespace {
 
+// True when the stack token carries a boolean value, recognised
+// by the LOGICAL tag on its FormulaTypedDoubleToken.
+bool isLogicalDoubleToken(const FormulaToken* pToken)
+{
+    return static_cast<const FormulaDoubleToken*>(pToken)->GetDoubleType()
+        == static_cast<sal_Int16>(SvNumFormatType::LOGICAL);
+}
+
+// Format a value through the LOGICAL standard format so the string
+// is "TRUE" for non-zero or "FALSE" for zero.
+OUString formatLogical(ScInterpreterContext& rContext, double fVal)
+{
+    sal_uInt32 nKey = rContext.NFGetStandardFormat(
+        SvNumFormatType::LOGICAL, ScGlobal::eLnge);
+    OUString aStr;
+    const Color* pColor = nullptr;
+    rContext.NFGetOutputString(fVal, nKey, aStr, &pColor);
+    return aStr;
+}
+
 double MatrixAdd(const double& lhs, const double& rhs)
 {
     return ::rtl::math::approxAdd( lhs,rhs);
@@ -1961,6 +1981,13 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
     }
 }
 
+OUString ScInterpreter::PopOperandStringForConcat()
+{
+    if (GetStackType() == svDouble && isLogicalDoubleToken(pStack[sp - 1]))
+        return formatLogical(mrContext, PopDouble());
+    return GetString().getString();
+}
+
 void ScInterpreter::ScAmpersand()
 {
     ScMatrixRef pMat1 = nullptr;
@@ -1969,11 +1996,11 @@ void ScInterpreter::ScAmpersand()
     if ( GetStackType() == svMatrix )
         pMat2 = GetMatrix();
     else
-        sStr2 = GetString().getString();
+        sStr2 = PopOperandStringForConcat();
     if ( GetStackType() == svMatrix )
         pMat1 = GetMatrix();
     else
-        sStr1 = GetString().getString();
+        sStr1 = PopOperandStringForConcat();
     if (pMat1 && pMat2)
     {
         ScMatrixRef pResMat = MatConcat(pMat1, pMat2);

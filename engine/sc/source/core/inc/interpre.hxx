@@ -513,6 +513,11 @@ private:
     /// returns TRUE if double (or error, check nGlobalError), else FALSE
     bool GetDoubleOrString( double& rValue, svl::SharedString& rString );
     svl::SharedString GetString();
+    // Pop a non-matrix operand as a string for the & concatenation
+    // operator. A boolean operand (a LOGICAL-typed double) formats
+    // as "TRUE" or "FALSE", everything else routes through
+    // GetString.
+    OUString PopOperandStringForConcat();
     svl::SharedString GetStringFromMatrix(const ScMatrixRef& pMat);
     svl::SharedString GetStringFromDouble( const double fVal);
     // pop matrix and obtain one element, upper left or according to jump matrix

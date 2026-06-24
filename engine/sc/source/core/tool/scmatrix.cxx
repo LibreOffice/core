@@ -90,6 +90,18 @@ double convertStringToValue( ScInterpreter* pErrorInterpreter, const OUString& r
     return CreateDoubleError( FormulaError::NoValue);
 }
 
+// Format a value through the LOGICAL key so the string form is
+// "TRUE" for a non-zero value or "FALSE" for zero.
+OUString formatLogical(ScInterpreterContext& rContext, double fValue)
+{
+    sal_uInt32 nKey = rContext.NFGetStandardFormat(SvNumFormatType::LOGICAL,
+            ScGlobal::eLnge);
+    OUString aString;
+    const Color* pColor = nullptr;
+    rContext.NFGetOutputString(fValue, nKey, aString, &pColor);
+    return aString;
+}
+
 struct ElemEqualZero
 {
     double operator() (double val) const
@@ -740,6 +752,7 @@ svl::SharedString ScMatrixImpl::GetString( ScInterpreterContext& rContext, SCSIZ
     }
 
     double fVal = 0.0;
+    SvNumFormatType eFormatType = SvNumFormatType::NUMBER;
     MatrixImplType::const_position_type aPos = maMat.position(nR, nC);
     switch (maMat.get_type(aPos))
     {
@@ -759,8 +772,13 @@ svl::SharedString ScMatrixImpl::GetString( ScInterpreterContext& rContext, SCSIZ
             rContext.NFGetOutputString( 0.0, nKey, aStr, &pColor);
             return svl::SharedString( aStr);    // string not interned
         }
-        case mdds::mtm::element_numeric:
         case mdds::mtm::element_boolean:
+            // Format the cell through the LOGICAL key so the string
+            // form is "TRUE" or "FALSE".
+            fVal = maMat.get_numeric(aPos);
+            eFormatType = SvNumFormatType::LOGICAL;
+        break;
+        case mdds::mtm::element_numeric:
             fVal = maMat.get_numeric(aPos);
         break;
         default:
@@ -773,6 +791,9 @@ svl::SharedString ScMatrixImpl::GetString( ScInterpreterContext& rContext, SCSIZ
         SetErrorAtInterpreter( nError);
         return svl::SharedString( ScGlobal::GetErrorString( nError));   // string not interned
     }
+
+    if (eFormatType == SvNumFormatType::LOGICAL)
+        return svl::SharedString(formatLogical(rContext, fVal)); // string not interned
 
     sal_uInt32 nKey = rContext.NFGetStandardFormat( SvNumFormatType::NUMBER,
             ScGlobal::eLnge);
@@ -2828,8 +2849,9 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
     std::function<void(size_t, size_t, bool)> aBoolFunc =
         [&](size_t nRow, size_t nCol, bool nVal)
         {
-            OUString aStr = rContext.NFGetInputLineString( nVal ? 1.0 : 0.0, nKey);
-            aString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] = aString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] + aStr;
+            OUString aLogicalText = formatLogical(rContext, nVal ? 1.0 : 0.0);
+            size_t nIndex = get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset);
+            aString[nIndex] = aString[nIndex] + aLogicalText;
         };
 
     std::function<void(size_t, size_t, const svl::SharedString&)> aStringFunc =
@@ -2888,8 +2910,9 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
     std::function<void(size_t, size_t, bool)> aBoolFunc2 =
         [&](size_t nRow, size_t nCol, bool nVal)
         {
-            OUString aStr = rContext.NFGetInputLineString( nVal ? 1.0 : 0.0, nKey);
-            aSharedString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] = rStringPool.intern(aString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] + aStr);
+            OUString aLogicalText = formatLogical(rContext, nVal ? 1.0 : 0.0);
+            size_t nIndex = get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset);
+            aSharedString[nIndex] = rStringPool.intern(aString[nIndex] + aLogicalText);
         };
 
     std::function<void(size_t, size_t, const svl::SharedString&)> aStringFunc2 =

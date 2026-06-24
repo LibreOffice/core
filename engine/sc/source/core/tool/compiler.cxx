@@ -3304,7 +3304,7 @@ static bool lcl_ParenthesisFollows( const sal_Unicode* p )
     return *p == '(';
 }
 
-bool ScCompiler::ParseValue( const OUString& rSym )
+bool ScCompiler::ParseValue(const OUString& rSym, bool bInArray)
 {
     const sal_Int32 nFormulaLanguage = FormulaGrammar::extractFormulaLanguage( GetGrammar());
     if (nFormulaLanguage == css::sheet::FormulaLanguage::ODFF || nFormulaLanguage == css::sheet::FormulaLanguage::OOXML)
@@ -3333,9 +3333,12 @@ bool ScCompiler::ParseValue( const OUString& rSym )
             if (eOpFunc != ocNone)
             {
                 maRawToken.SetOpCode(eOpFunc);
-                // add missing trailing parentheses
-                maPendingOpCodes.push(ocOpen);
-                maPendingOpCodes.push(ocClose);
+                if (!bInArray)
+                {
+                    // add missing trailing parentheses
+                    maPendingOpCodes.push(ocOpen);
+                    maPendingOpCodes.push(ocClose);
+                }
                 return true;
             }
             return false;
@@ -3360,6 +3363,27 @@ bool ScCompiler::ParseValue( const OUString& rSym )
             SetError( FormulaError::IllegalArgument );
         }
         maRawToken.SetDouble( fVal );
+        return true;
+    }
+
+    // Compile bare TRUE / FALSE as the ocTrue / ocFalse function
+    // call so the interpreter pushes a typed double tagged LOGICAL.
+    // Inside an inline array, leave the bare opcode for MergeArray
+    // to consume as element_boolean.
+    OpCode eBooleanOp = ocNone;
+    if (rSym.equalsIgnoreAsciiCase("TRUE"))
+        eBooleanOp = ocTrue;
+    else if (rSym.equalsIgnoreAsciiCase("FALSE"))
+        eBooleanOp = ocFalse;
+    if (eBooleanOp != ocNone
+        && !lcl_ParenthesisFollows(aFormula.getStr() + nSrcPos))
+    {
+        maRawToken.SetOpCode(eBooleanOp);
+        if (!bInArray)
+        {
+            maPendingOpCodes.push(ocOpen);
+            maPendingOpCodes.push(ocClose);
+        }
         return true;
     }
 
@@ -4963,7 +4987,7 @@ Label_Rewind:
                 return true;
             }
 
-            if (ParseValue( aUpper ))
+            if (ParseValue(aUpper, bInArray))
                 return true;
 
             // User defined names and such do need i18n upper also in ODF.

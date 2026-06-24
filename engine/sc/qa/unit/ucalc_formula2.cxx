@@ -6466,6 +6466,40 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testCallableWhereNumberExpected)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testMatrixConcatRendersBooleansAsTrueFalse)
+{
+    // A boolean value pulled into a string context renders as the
+    // string "TRUE" or "FALSE", not "1" or "0". The plain non-matrix
+    // concatenation already does this; the matrix paths through
+    // ScMatrixImpl::GetString and ScMatrixImpl::MatConcat are the
+    // ones the fix in this commit covers.
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // Plain scalar concatenation. Already works, kept here so a
+    // regression in this baseline path shows up too.
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"=TRUE&\"!\""_ustr);
+    m_pDoc->SetString(ScAddress(0, 1, 0), u"=FALSE&\"!\""_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"TRUE!"_ustr, m_pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"FALSE!"_ustr, m_pDoc->GetString(ScAddress(0, 1, 0)));
+
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+
+    // Matrix concatenated with a scalar string -> ScMatrixImpl::GetString.
+    m_pDoc->InsertMatrixFormula(1, 0, 1, 1, aMark, u"={TRUE|FALSE}&\"!\""_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"TRUE!"_ustr, m_pDoc->GetString(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"FALSE!"_ustr, m_pDoc->GetString(ScAddress(1, 1, 0)));
+
+    // Matrix concatenated with another matrix -> ScMatrixImpl::MatConcat.
+    m_pDoc->InsertMatrixFormula(2, 0, 2, 1, aMark, u"={TRUE|FALSE}&{\"a\"|\"b\"}"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"TRUEa"_ustr, m_pDoc->GetString(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"FALSEb"_ustr, m_pDoc->GetString(ScAddress(2, 1, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

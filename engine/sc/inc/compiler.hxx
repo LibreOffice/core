@@ -351,7 +351,7 @@ private:
 
     std::vector<Whitespace> NextSymbol(bool bInArray);
 
-    bool ParseValue( const OUString& );
+    bool ParseValue( const OUString&, bool bInArray = false );
     bool ParseOpCode( const OUString&, bool bInArray );
     bool ParseOpCode2( std::u16string_view );
     bool ParseLiteralString();
