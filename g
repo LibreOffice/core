@@ -1,5 +1,9 @@
 #!/bin/bash -e
 #
+# './g log [-p] file.cxx' to see the entire 'git log [-p] --follow file.cxx'
+# across the engine subtree merge (normal 'git log [-p] --follow' just stops
+# at the 'merge-engine' commit and does not show anything further).
+#
 # './g pull -r' just forwards to 'git pull -r'.
 #
 # './g review [branch]' to submit changes for review on Collabora's Gerrit,
@@ -84,5 +88,13 @@ if [ "$1" == "pull" ]; then
     git pull "$@"
     exit 0
 fi
+
+if [ "$1" == "log" ]; then
+    shift
+    "$(dirname -- "${BASH_SOURCE[0]}")"/engine/bin/engine-git-log.sh "$@"
+    exit 0
+fi
+
+git "$@"
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
