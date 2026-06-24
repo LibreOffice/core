@@ -87,7 +87,8 @@ SvxJavaOptionsPage::SvxJavaOptionsPage(weld::Container* pPage, weld::DialogContr
     m_xJavaList->set_size_request(m_xJavaList->get_approximate_digit_width() * 30,
                                   m_xJavaList->get_height_rows(8));
 
-    m_xJavaList->enable_toggle_buttons(weld::ColumnToggleType::Radio);
+    m_xJavaList->enable_toggle_buttons();
+    m_xJavaList->set_toggle_button_type(weld::ColumnToggleType::Radio);
     m_xJavaList->connect_toggled( LINK( this, SvxJavaOptionsPage, CheckHdl_Impl ) );
     m_xJavaList->connect_selection_changed(LINK(this, SvxJavaOptionsPage, SelectHdl_Impl));
 

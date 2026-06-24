@@ -39,7 +39,8 @@ CertPathDialog::CertPathDialog(weld::Window* pParent)
     int nControlWidth = m_xCertPathList->get_approximate_digit_width() * 40;
     m_xCertPathList->set_column_fixed_widths({nControlWidth});
 
-    m_xCertPathList->enable_toggle_buttons(weld::ColumnToggleType::Radio);
+    m_xCertPathList->enable_toggle_buttons();
+    m_xCertPathList->set_toggle_button_type(weld::ColumnToggleType::Radio);
     m_xCertPathList->connect_toggled(LINK(this, CertPathDialog, CheckHdl_Impl));
 
     m_xManualButton->connect_clicked( LINK( this, CertPathDialog, ManualHdl_Impl ) );

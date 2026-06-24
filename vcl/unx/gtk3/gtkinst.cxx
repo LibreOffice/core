@@ -15270,8 +15270,13 @@ public:
         set_toggle(rGtkIter.iter, eState, col);
     }
 
-    virtual void enable_toggle_buttons(weld::ColumnToggleType eType
-                                       = weld::ColumnToggleType::Check) override
+    virtual void enable_toggle_buttons() override
+    {
+        // ctor already enables expander toggle column based on columns/renderers defined in the .ui file
+    }
+
+    virtual void set_toggle_button_type(weld::ColumnToggleType eType
+                                        = weld::ColumnToggleType::Check) override
     {
         for (GList* pEntry = g_list_first(m_pColumns); pEntry; pEntry = g_list_next(pEntry))
         {

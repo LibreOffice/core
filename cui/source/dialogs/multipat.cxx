@@ -197,7 +197,8 @@ SvxMultiPathDialog::SvxMultiPathDialog(weld::Window* pParent)
 {
     m_xRadioLB->set_size_request(m_xRadioLB->get_approximate_digit_width() * 60,
                                  m_xRadioLB->get_text_height() * 10);
-    m_xRadioLB->enable_toggle_buttons(weld::ColumnToggleType::Radio);
+    m_xRadioLB->enable_toggle_buttons();
+    m_xRadioLB->set_toggle_button_type(weld::ColumnToggleType::Radio);
     m_xRadioLB->connect_toggled(LINK(this, SvxMultiPathDialog, CheckHdl_Impl));
     m_xRadioLB->connect_selection_changed(LINK(this, SvxMultiPathDialog, SelectHdl_Impl));
 

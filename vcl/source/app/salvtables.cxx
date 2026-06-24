@@ -4214,13 +4214,22 @@ TriState SalInstanceTreeView::get_toggle(const weld::TreeIter& rIter, int col) c
     return get_toggle(rVclIter.iter, col);
 }
 
-void SalInstanceTreeView::enable_toggle_buttons(weld::ColumnToggleType eType)
+void SalInstanceTreeView::enable_toggle_buttons()
+{
+    assert(n_children() == 0 && "tree must be empty");
+
+    SvLBoxButtonData& rData = m_bTogglesAsRadio ? m_aRadioButtonData : m_aCheckButtonData;
+    m_xTreeView->EnableCheckButton(rData);
+}
+
+void SalInstanceTreeView::set_toggle_button_type(weld::ColumnToggleType eType)
 {
     assert(n_children() == 0 && "tree must be empty");
     m_bTogglesAsRadio = eType == weld::ColumnToggleType::Radio;
 
-    SvLBoxButtonData& rData = m_bTogglesAsRadio ? m_aRadioButtonData : m_aCheckButtonData;
-    m_xTreeView->EnableCheckButton(rData);
+    // Update type of check buttons to use for the special toggle button column, if active
+    if (m_xTreeView->m_nTreeFlags & SvTreeFlags::CHKBTN)
+        enable_toggle_buttons();
 }
 
 void SalInstanceTreeView::do_set_toggle(const weld::TreeIter& rIter, TriState eState, int col)

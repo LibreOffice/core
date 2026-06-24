@@ -223,7 +223,15 @@ public:
     // call before inserting any content and connecting to toggle signals,
     // an pre-inserted checkbutton column will exist at the start of every row
     // inserted after this call which can be accessed with col index -1
-    virtual void enable_toggle_buttons(ColumnToggleType eType = ColumnToggleType::Check) = 0;
+    virtual void enable_toggle_buttons() = 0;
+
+    /**
+     * Set the type of all toggle buttons used in the TreeView.
+     * (By default, check buttons are used.)
+     *
+     * Call before inserting any entries.
+     */
+    virtual void set_toggle_button_type(ColumnToggleType eType) = 0;
 
     virtual void set_clicks_to_toggle(int nToggleBehavior) = 0;
 
