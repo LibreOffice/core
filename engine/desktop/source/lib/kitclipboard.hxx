@@ -116,12 +116,12 @@ class KitProviderTransferable : public cppu::WeakImplHelper<css::datatransfer::X
 {
     COKitClipboardProvider m_aProvider;
     css::uno::Sequence<css::datatransfer::DataFlavor> m_aFlavors;
-    mutable std::map<OUString, css::uno::Any> m_aCache;
+    mutable std::map<OUString, cpo::uno::Any> m_aCache;
 
 public:
     explicit KitProviderTransferable(const COKitClipboardProvider& rProvider);
 
-    css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override;
+    cpo::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override;
     css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
     bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
 };

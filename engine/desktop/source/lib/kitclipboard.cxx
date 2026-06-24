@@ -372,7 +372,7 @@ KitProviderTransferable::KitProviderTransferable(const COKitClipboardProvider& r
     m_aFlavors = comphelper::containerToSequence(aFlavors);
 }
 
-uno::Any SAL_CALL KitProviderTransferable::getTransferData(const datatransfer::DataFlavor& rFlavor)
+cpo::uno::Any SAL_CALL KitProviderTransferable::getTransferData(const datatransfer::DataFlavor& rFlavor)
 {
     auto itCache = m_aCache.find(rFlavor.MimeType);
     if (itCache != m_aCache.end())
@@ -402,7 +402,7 @@ uno::Any SAL_CALL KitProviderTransferable::getTransferData(const datatransfer::D
     if (nSavedView >= 0 && KitHelper::getCurrentView() != nSavedView)
         KitHelper::setView(nSavedView);
 
-    uno::Any aRet;
+    cpo::uno::Any aRet;
     if (nOk && pData)
     {
         if (bText)
