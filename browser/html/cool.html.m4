@@ -29,6 +29,16 @@ m4_ifelse(IOSAPP,[true],
 ,
 <html %UI_RTL_SETTINGS%><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 )m4_dnl
+<!--
+  SPDX-License-Identifier: MPL-2.0
+
+  Copyright the Collabora Online contributors.
+  Copyright Collabora Productivity Limited.
+
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+-->
 <title>Online Editor</title>
 <meta charset="utf-8">
 m4_ifelse(MOBILEAPP, [true],
