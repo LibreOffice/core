@@ -104,7 +104,7 @@ void SAL_CALL DropTarget::disposing()
 
 }
 
-void SAL_CALL DropTarget::initialize( const Sequence< Any >& aArguments )
+void SAL_CALL DropTarget::initialize(const Sequence<cpo::uno::Any>& aArguments)
 {
     // The window must be registered for Dnd by RegisterDragDrop. We must ensure
     // that RegisterDragDrop is called from an STA ( OleInitialize) thread.

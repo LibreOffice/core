@@ -81,7 +81,7 @@ public:
     DragSource &operator= ( const DragSource&) = delete;
 
   // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& aArguments) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& aArguments) override;
 
     // XDragSource
     virtual bool SAL_CALL isDragImageSupported(  ) override;
