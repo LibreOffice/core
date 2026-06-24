@@ -37,6 +37,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/cvtgrf.hxx>
+#include <rtl/crc.h>
 #include <vcl/graph.hxx>
 #include <vcl/metaact.hxx>
 #include <impgraph.hxx>
@@ -1719,6 +1720,14 @@ BitmapChecksum ImpGraphic::getChecksum() const
 {
     if (mnChecksum != 0)
         return mnChecksum;
+
+    if (mpGfxLink && mpGfxLink->GetDataSize() && mpGfxLink->GetData())
+    {
+        // We have a compressed stream: then do the CRC on it to avoid
+        // decompressing just for checksum purposes.
+        mnChecksum = rtl_crc32(0, mpGfxLink->GetData(), mpGfxLink->GetDataSize());
+        return mnChecksum;
+    }
 
     ensureAvailable();
 
