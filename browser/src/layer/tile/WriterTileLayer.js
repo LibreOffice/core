@@ -203,6 +203,20 @@ window.L.WriterTileLayer = window.L.CanvasTileLayer.extend({
 		// Needed for ViewLayoutMultiPage where the viewSize setter is a no-op.
 		if (app.activeDocument.activeLayout.type === 'ViewLayoutMultiPage')
 			app.activeDocument.activeLayout.reset();
+
+		// Restore the multi-page view the user last used for this document. The
+		// server sends the remembered mode in the viewsetting: message; we apply
+		// it once, now that the first status has populated pageRectangleList
+		// (which ViewLayoutMultiPage needs to lay out). Reuse the dispatcher
+		// toggle so the UI state, visible area and redraw all go through the
+		// normal path.
+		if (!this._viewModeRestored) {
+			this._viewModeRestored = true;
+			var notYetMultiPage = app.activeDocument.activeLayout.type !== 'ViewLayoutMultiPage';
+			var havePages = app.file.writer.pageRectangleList.length > 0;
+			if (app.writer.savedViewMode === 'multipage' && notYetMultiPage && havePages)
+				app.dispatcher.dispatch('multipageview');
+		}
 		this._map.fire('pagenumberchanged', {
 			currentPage: this._currentPage,
 			pages: this._pages,

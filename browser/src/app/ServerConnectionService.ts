@@ -64,9 +64,13 @@ class ServerConnectionService {
 			return;
 		}
 
-		// Remember the view mode the user last used for this document. Only
-		// ImpressTileLayer acts on this, so it is harmless for other doc types.
+		// Remember the view mode the user last used for this document. The
+		// server keys a single mode per document, so the value is whichever the
+		// document's type understands: ImpressTileLayer acts on notes/master,
+		// WriterTileLayer on multipage. Each consumer ignores values it does
+		// not recognise, so mirroring into both is harmless.
 		app.impress.savedViewMode = viewSetting.presentationViewMode ?? null;
+		app.writer.savedViewMode = viewSetting.presentationViewMode ?? null;
 
 		app.map.isAIConfigured = !!viewSetting.aiConfigured;
 		app.map.aiRequestTimeout = viewSetting.aiRequestTimeout

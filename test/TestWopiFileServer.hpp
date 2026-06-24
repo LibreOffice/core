@@ -447,7 +447,7 @@ enum class PresetType : std::uint8_t
 };
 
 // search for presets file in test/data/presets directory
-static std::vector<asset> getAssetVec(PresetType type, const std::string& userId = std::string())
+static std::vector<asset> getAssetVec(PresetType type)
 {
     std::string searchDir = "test/data/presets";
     std::vector<asset> assetVec;
@@ -457,10 +457,14 @@ static std::vector<asset> getAssetVec(PresetType type, const std::string& userId
         return assetVec;
     }
 
+    // Static presets (xcu config, autotext, dictionary, templates) are common
+    // defaults served to every user. The per-user store (userPresetDir) only
+    // holds runtime-uploaded browsersetting/viewsetting json, served separately
+    // in handlePresetRequest, so it is never searched here.
     if (type == PresetType::Shared)
         searchDir.append("/shared");
     else if (type == PresetType::User)
-        searchDir = userPresetDir(userId);
+        searchDir.append("/user");
 
     auto searchInDir = [&assetVec](const std::string& directory)
     {
@@ -546,7 +550,7 @@ void handleSettingsRequest(const Poco::Net::HTTPRequest& request, const std::str
                 if (useridIt != params.end())
                     presetUser = useridIt->second;
             }
-            auto items = getAssetVec(PresetType::User, presetUser);
+            auto items = getAssetVec(PresetType::User);
             handlePresetRequest("user", etagString, prefix, socket, items, serveBrowerSettings,
                                 unittest, presetUser);
         }

@@ -1917,7 +1917,7 @@ bool ClientSession::handleUpdateViewMode(const StringVector& tokens)
 {
     std::string mode;
     if (!getTokenString(tokens[1], "mode", mode) ||
-        (mode != "normal" && mode != "notes" && mode != "master"))
+        (mode != "normal" && mode != "notes" && mode != "master" && mode != "multipage"))
     {
         LOG_WRN("Ignoring updateviewmode with invalid payload [" << tokens[1] << ']');
         return true;

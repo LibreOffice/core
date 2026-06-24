@@ -2114,9 +2114,10 @@ static std::string extractViewSettings(const std::string& viewSettingsPath,
         session->resolveAndApplyAIImageCredentials(viewSettings, userPrivateInfoObj,
                                                    viewSettingsNeedUpdate);
 
-        // Resolve the remembered Impress view mode for this document. The full
-        // per-document map stays server-side; only this document's mode is sent
-        // to the client (see the sanitized copy below).
+        // Resolve the remembered view mode for this document (Impress notes/
+        // master, Writer multi-page). The full per-document map stays
+        // server-side; only this document's mode is sent to the client (see the
+        // sanitized copy below).
         std::string presentationViewMode;
         if (viewSettings->has("presentationViewModes"))
         {

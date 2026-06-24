@@ -72,6 +72,7 @@
 	writer: {
 		compareDocumentProperties: null,
 		compareDocumentOldFileName: null,
+		savedViewMode: null as string | null, // Remembered view mode ('multipage'|'normal') for this document, sent by the server on load.
 	},
 	map: null, // Make map object a part of this.
 	util: null, // Attach the Util class.

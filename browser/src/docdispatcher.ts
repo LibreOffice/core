@@ -825,6 +825,15 @@ class Dispatcher {
 				});
 				app.activeDocument.activeLayout.sendClientVisibleArea();
 				app.sectionContainer.requestReDraw();
+
+				// Remember the choice per user per document so the next open
+				// restores it. updateviewmode persists through the WOPI host;
+				// the native app builds have no WOPI host and no handler for
+				// it, so the bridge rejects it as an unknown command.
+				if (!window.ThisIsAMobileApp)
+					app.socket.sendMessage(
+						'updateviewmode mode=' + (commandState ? 'multipage' : 'normal'),
+					);
 			}
 		};
 
