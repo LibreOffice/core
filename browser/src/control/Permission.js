@@ -147,11 +147,15 @@ window.L.Map.include({
 		if (window.mode.isSmallScreenDevice() || window.mode.isTablet() || window.mode.isCODesktop()) {
 			this.fire('editorgotfocus');
 			this.fire('closemobilewizard');
-			// In the iOS/android app, just clicking the mobile-edit-button is
-			// not reason enough to pop up the on-screen keyboard.
-			if (!(window.ThisIsTheiOSApp || window.ThisIsTheAndroidApp))
-				this.focus();
 		}
+
+		// Defer focus until the layouting queue drains; on desktop the
+		// notebookbar dropdown queues a task on close that would otherwise
+		// steal focus back. In the iOS/android app, just clicking the
+		// mobile-edit-button is not reason enough to pop up the on-screen
+		// keyboard, so skip the focus there.
+		if (!(window.ThisIsTheiOSApp || window.ThisIsTheAndroidApp))
+			app.layoutingService.onDrain(this.focus.bind(this));
 	},
 
 	_offerSaveAs: function() {
