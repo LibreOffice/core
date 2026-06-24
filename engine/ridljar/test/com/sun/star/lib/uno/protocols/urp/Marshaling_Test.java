@@ -19,7 +19,7 @@
 package com.sun.star.lib.uno.protocols.urp;
 
 import com.sun.star.lib.uno.typedesc.TypeDescription;
-import cpo.uno.Any;
+import com.sun.star.uno.Any;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.XInterface;
@@ -153,7 +153,7 @@ public final class Marshaling_Test {
             TypeDescription.getTypeDescription(TestPrimitiveSeqStruct.class),
             TypeDescription.getTypeDescription(Class.forName("[B")),
             TypeDescription.getTypeDescription(Class.forName("[I")),
-            TypeDescription.getTypeDescription(Class.forName("[Lcpo.uno.Any;")),
+            TypeDescription.getTypeDescription(Class.forName("[Lcom.sun.star.uno.Any;")),
             TypeDescription.getTypeDescription(
                 Class.forName(
                     "[Lcom.sun.star.lib.uno.protocols.urp."

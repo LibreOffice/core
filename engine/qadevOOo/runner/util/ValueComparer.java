@@ -25,8 +25,8 @@ import java.lang.reflect.Modifier;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.Enum;
 import com.sun.star.uno.XInterface;
-import cpo.uno.Any;
-import cpo.uno.AnyConverter;
+import com.sun.star.uno.Any;
+import com.sun.star.uno.AnyConverter;
 import java.util.HashMap;
 
 
@@ -35,13 +35,13 @@ public class ValueComparer {
     // Method to change a Value, thought for properties
     public static boolean equalValue( Object first, Object second ) {
 
-        if (first instanceof cpo.uno.Any) {
+        if (first instanceof com.sun.star.uno.Any) {
             try {
                 first = AnyConverter.toObject(((Any) first).getType(),first);
             } catch (com.sun.star.lang.IllegalArgumentException iae) {
             }
         }
-        if (second instanceof cpo.uno.Any) {
+        if (second instanceof com.sun.star.uno.Any) {
             try {
                 second = AnyConverter.toObject(((Any) second).getType(),second);
             } catch (com.sun.star.lang.IllegalArgumentException iae) {
@@ -125,7 +125,7 @@ public class ValueComparer {
             if((fields[i].getModifiers() & (Modifier.STATIC | Modifier.TRANSIENT)) == 0) { // neither static nor transient ?
                 Object obj1 = fields[i].get(op1);
                 Object obj2 = fields[i].get(op2);
-                if (obj1 instanceof cpo.uno.Any) {
+                if (obj1 instanceof com.sun.star.uno.Any) {
                     try {
                         if (utils.isVoid(obj1)) {
                             obj1 = null;
@@ -135,7 +135,7 @@ public class ValueComparer {
                     } catch (com.sun.star.lang.IllegalArgumentException iae) {
                     }
                 }
-                if (obj2 instanceof cpo.uno.Any) {
+                if (obj2 instanceof com.sun.star.uno.Any) {
                     try {
                         if (utils.isVoid(obj2)) {
                             obj2 = null;

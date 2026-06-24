@@ -21,9 +21,9 @@ import com.sun.star.uno.Type;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.uno.TypeClass;
-import cpo.uno.AnyConverter;
+import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.XInterface;
-import cpo.uno.Any;
+import com.sun.star.uno.Any;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.beans.XPropertyChangeListener;
 import com.sun.star.beans.XVetoableChangeListener;
@@ -429,7 +429,7 @@ XMultiPropertySet
     /** Sets the value of a property.
      *  The idl description for this interfaces, stipulates that the argument value is an Any. Since a java.lang.Object
      *  reference has the same meaning as an Any this function accepts
-     *  java anys (cpo.uno.Any) and all other appropriate objects as arguments. The value argument can be one
+     *  java anys (com.sun.star.uno.Any) and all other appropriate objects as arguments. The value argument can be one
      *  of these:
      *  <ul>
      *  <li>java.lang.Boolean</li>
@@ -444,7 +444,7 @@ XMultiPropertySet
      *  <li>com.sun.star.uno.Type</li>
      *  <li><em>objects which implement UNO interfaces</em></li>
      *  <li><em>arrays which contain elements of the types above</em></li>
-     *  <li>cpo.uno.Any containing an instance of one of the above types</li>
+     *  <li>com.sun.star.uno.Any containing an instance of one of the above types</li>
      *  </ul>
      *
      *  Properties can have the attribute com.sun.star.beans.PropertyAttribute.MAYBEVOID, which means that the value
@@ -571,7 +571,7 @@ XMultiPropertySet
      *  The actual modification of a property's value is done by {@link #setPropertyValueNoBroadcast setPropertyValueNoBroadcast}
      *  which is called subsequent to convertPropertyValue.
      *<p>
-     *  This method converts values by help of the cpo.uno.AnyConverter which only does a few widening
+     *  This method converts values by help of the com.sun.star.uno.AnyConverter which only does a few widening
      *  conversions on integer types and floating point types. For example, there is the property PropA with a Type equivalent
      *  to int.class and the
      *  value of the property is to be stored in a member variable of type int with name intProp. Then setPropertyValue is
@@ -587,8 +587,8 @@ XMultiPropertySet
      *  from the object and be assigned to the member intProp.
      *  <p>
      *  The method handles Any arguments the same as Object arguments. That is, the <em>setVal</em> argument can
-     *  be a java.lang.Boolean or a cpo.uno.Any containing a java.lang.Boolean. Likewise, a member
-     *  containing a property value can be a cpo.uno.Any or a java.lang.Object.
+     *  be a java.lang.Boolean or a com.sun.star.uno.Any containing a java.lang.Boolean. Likewise, a member
+     *  containing a property value can be a com.sun.star.uno.Any or a java.lang.Object.
      *  Then, no conversion is necessary, since they can hold all possible values. However, if
      *  the member is an Object and <em>setVal</em> is an Any then the object contained in the any is assigned to
      *  the member. The extra type information which exists as Type object in the Any will get lost. If this is not

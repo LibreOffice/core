@@ -28,7 +28,7 @@ import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.beans.XPropertyState;
-import cpo.uno.Any;
+import com.sun.star.uno.Any;
 import com.sun.star.uno.UnoRuntime;
 
 

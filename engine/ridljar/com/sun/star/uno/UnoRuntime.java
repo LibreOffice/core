@@ -290,7 +290,7 @@ public class UnoRuntime {
                     && ((IQueryInterface) v2).isSame(v1));
         default:
             throw new java.lang.RuntimeException(
-                "cpo.uno.Any has bad com.sun.star.uno.TypeClass");
+                "com.sun.star.uno.Any has bad com.sun.star.uno.TypeClass");
         }
     }
 

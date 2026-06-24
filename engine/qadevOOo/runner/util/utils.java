@@ -42,7 +42,7 @@ import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
-import cpo.uno.AnyConverter;
+import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XMacroExpander;
@@ -496,8 +496,8 @@ public class utils {
      *
      */
     public static boolean isVoid(Object aObject) {
-        if (aObject instanceof cpo.uno.Any) {
-            cpo.uno.Any oAny = (cpo.uno.Any) aObject;
+        if (aObject instanceof com.sun.star.uno.Any) {
+            com.sun.star.uno.Any oAny = (com.sun.star.uno.Any) aObject;
             return oAny.getType().getTypeName().equals("void");
         } else {
             return false;

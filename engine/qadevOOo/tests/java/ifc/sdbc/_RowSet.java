@@ -20,7 +20,7 @@ package ifc.sdbc;
 
 import lib.MultiPropertyTest;
 
-import cpo.uno.Any;
+import com.sun.star.uno.Any;
 
 
 /**

@@ -472,7 +472,7 @@ void Bridge::map_to_uno(
             {
                 throw BridgeRuntimeError(
                     "[map_to_uno():" + OUString::unacquired( &type->pTypeName )
-                    + "] no type set at cpo.uno.Any!"
+                    + "] no type set at com.sun.star.uno.Any!"
                     + jni.get_stack_trace() );
             }
             // wrapped value
@@ -1578,7 +1578,7 @@ void Bridge::map_to_java(
                         getJniInfo()->m_class_Short,
                         getJniInfo()->m_ctor_Short_with_short, args ) );
                 jni.ensure_no_exception();
-                // box up in cpo.uno.Any
+                // box up in com.sun.star.uno.Any
                 args[ 0 ].l = getJniInfo()->m_object_Type_UNSIGNED_SHORT;
                 args[ 1 ].l = jo_val.get();
                 jo_any.reset(
@@ -1597,7 +1597,7 @@ void Bridge::map_to_java(
                         getJniInfo()->m_class_Integer,
                         getJniInfo()->m_ctor_Integer_with_int, args ) );
                 jni.ensure_no_exception();
-                // box up in cpo.uno.Any
+                // box up in com.sun.star.uno.Any
                 args[ 0 ].l = getJniInfo()->m_object_Type_UNSIGNED_LONG;
                 args[ 1 ].l = jo_val.get();
                 jo_any.reset(
@@ -1616,7 +1616,7 @@ void Bridge::map_to_java(
                         getJniInfo()->m_class_Long,
                         getJniInfo()->m_ctor_Long_with_long, args ) );
                 jni.ensure_no_exception();
-                // box up in cpo.uno.Any
+                // box up in com.sun.star.uno.Any
                 args[ 0 ].l = getJniInfo()->m_object_Type_UNSIGNED_HYPER;
                 args[ 1 ].l = jo_val.get();
                 jo_any.reset(
@@ -1701,7 +1701,7 @@ void Bridge::map_to_java(
                     {
                         jo_any.reset( map_to_java( jni, pUnoI, iface_info ) );
                     }
-                    // box up in cpo.uno.Any
+                    // box up in com.sun.star.uno.Any
                     jvalue args[ 2 ];
                     args[ 0 ].l = iface_info->m_type;
                     args[ 1 ].l = jo_any.get();
@@ -1722,7 +1722,7 @@ void Bridge::map_to_java(
                 assert(!name.isEmpty());
                 if (name[name.getLength() - 1] == '>')
                 {
-                    // Box up in cpo.uno.Any:
+                    // Box up in com.sun.star.uno.Any:
                     JLocalAutoRef jo_type(jni, create_type(jni, pAny->pType));
                     jvalue java_data2;
                     map_to_java(

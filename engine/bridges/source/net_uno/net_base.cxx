@@ -35,7 +35,7 @@ const std::unordered_map<std::u16string_view, std::u16string_view> s_typeNames{
     { u"System.Double", u"double" },
     { u"System.String", u"string" },
     { u"System.Type", u"type" },
-    { u"cpo.uno.Any", u"any" },
+    { u"com.sun.star.uno.Any", u"any" },
     { u"com.sun.star.uno.UnoException", u"com.sun.star.uno.Exception" },
     { u"com.sun.star.uno.IQueryInterface", u"com.sun.star.uno.XInterface" },
 };
@@ -55,7 +55,7 @@ const std::unordered_map<OUString, typelib_TypeClass> s_typeClasses{
     { u"System.Double"_ustr, typelib_TypeClass_DOUBLE },
     { u"System.String"_ustr, typelib_TypeClass_STRING },
     { u"System.Type"_ustr, typelib_TypeClass_TYPE },
-    { u"cpo.uno.Any"_ustr, typelib_TypeClass_ANY },
+    { u"com.sun.star.uno.Any"_ustr, typelib_TypeClass_ANY },
 };
 
 void map_uno_type_to_net(typelib_TypeDescriptionReference* pTDRef, OUStringBuffer& buffer)
@@ -105,7 +105,7 @@ void map_uno_type_to_net(typelib_TypeDescriptionReference* pTDRef, OUStringBuffe
             buffer.append(u"System.Type");
             break;
         case typelib_TypeClass_ANY:
-            buffer.append(u"cpo.uno.Any");
+            buffer.append(u"com.sun.star.uno.Any");
             break;
 
         case typelib_TypeClass_ENUM:

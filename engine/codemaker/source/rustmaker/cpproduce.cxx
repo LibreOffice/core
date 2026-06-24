@@ -534,8 +534,8 @@ void CppProducer::generateStructHeader(std::string_view name,
     std::replace(headerName.begin(), headerName.end(), '.', '/');
     file.beginLine().append("#include <").append(headerName).append(".hpp>").endLine();
     file.beginLine().append("").endLine();
-    file.beginLine().append("using namespace com::sun::star::uno;
-using namespace cpo::uno;").endLine();
+    file.beginLine().append("using namespace com::sun::star::uno;").endLine();
+    file.beginLine().append("using namespace cpo::uno;").endLine();
 
     file.beginLine().append("extern \"C\"").endLine().beginBlock();
     // Add struct-specific namespace
@@ -804,8 +804,8 @@ void CppProducer::generateEnumSource(std::string_view name,
 // Unified namespace generation function to eliminate duplication
 void CppProducer::generateSourceNamespaces(CppFile& file, std::string_view name)
 {
-    file.beginLine().append("using namespace com::sun::star::uno;
-using namespace cpo::uno;").endLine();
+    file.beginLine().append("using namespace com::sun::star::uno;").endLine();
+    file.beginLine().append("using namespace cpo::uno;").endLine();
 
     // Add type-specific namespace
     std::string cppNamespace(name);
@@ -2261,7 +2261,7 @@ OString CppProducer::getCppTypeName(std::u16string_view unoType) const
         return "void"_ostr;
     else if (resolvedType == u"string")
         return "rtl_uString*"_ostr;
-    else if (resolvedType == u"any" || resolvedType == u"cpo.uno.Any")
+    else if (resolvedType == u"any" || resolvedType == u"com.sun.star.uno.Any")
         return "uno_Any*"_ostr;
 
     // Try primitive type mapping

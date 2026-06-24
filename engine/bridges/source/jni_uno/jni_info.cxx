@@ -505,7 +505,7 @@ JNI_info::JNI_info(
     JLocalAutoRef jo_UnoRuntime(
         jni, find_class( jni, "com.sun.star.uno.UnoRuntime" ) );
     JLocalAutoRef jo_Any(
-        jni, find_class( jni, "cpo.uno.Any" ) );
+        jni, find_class( jni, "com.sun.star.uno.Any" ) );
     JLocalAutoRef jo_Enum(
         jni, find_class( jni, "com.sun.star.uno.Enum" ) );
     JLocalAutoRef jo_Type(
@@ -758,9 +758,9 @@ JNI_info::JNI_info(
         jni, jni->CallStaticObjectMethodA(
             static_cast<jclass>(jo_UnoRuntime.get()), method_getEnvironment, args ) );
 
-    // get cpo.uno.Any.VOID
+    // get com.sun.star.uno.Any.VOID
     jfieldID field_Any_VOID = jni->GetStaticFieldID(
-        static_cast<jclass>(jo_Any.get()), "VOID", "Lcpo/uno/Any;" );
+        static_cast<jclass>(jo_Any.get()), "VOID", "Lcom/sun/star/uno/Any;" );
     jni.ensure_no_exception();
     assert( field_Any_VOID != nullptr );
     JLocalAutoRef jo_Any_VOID(

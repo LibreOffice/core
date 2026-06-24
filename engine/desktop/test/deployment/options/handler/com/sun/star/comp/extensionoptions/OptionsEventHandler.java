@@ -25,7 +25,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.uno.UnoRuntime;
-import cpo.uno.AnyConverter;
+import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.Exception;
 import com.sun.star.registry.XRegistryKey;
@@ -213,7 +213,7 @@ public class OptionsEventHandler {
                 Object aText = xProp.getPropertyValue("Text");
                 String sValue = null;
 
-                //The value is still contained in a cpo.uno.Any - so convert it.
+                //The value is still contained in a com.sun.star.uno.Any - so convert it.
                 try {
                     sValue = AnyConverter.toString(aText);
                 } catch (com.sun.star.lang.IllegalArgumentException ex) {
@@ -346,7 +346,7 @@ public class OptionsEventHandler {
             //Get the "Name" property of the window
             Object aWindowName = xPropDlg.getPropertyValue("Name");
 
-            //Get the string from the returned cpo.uno.Any
+            //Get the string from the returned com.sun.star.uno.Any
             String sName = null;
             try {
                 sName = AnyConverter.toString(aWindowName);

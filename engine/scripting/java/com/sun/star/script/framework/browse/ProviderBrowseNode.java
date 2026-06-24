@@ -33,8 +33,8 @@ import com.sun.star.script.framework.provider.ScriptProvider;
 
 import com.sun.star.ucb.XSimpleFileAccess;
 
-import cpo.uno.Any;
-import cpo.uno.AnyConverter;
+import com.sun.star.uno.Any;
+import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;

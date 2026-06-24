@@ -67,7 +67,7 @@ public:
      * Analyzes a single UNO type string and updates the TypeInfo accordingly.
      *
      * @param typeInfo The TypeInfo to update.
-     * @param unoType The UNO type string to analyze (e.g., "cpo.uno.Any").
+     * @param unoType The UNO type string to analyze (e.g., "com.sun.star.uno.Any").
      */
     void analyzeType(TypeInfo& typeInfo, std::u16string_view unoType);
 
