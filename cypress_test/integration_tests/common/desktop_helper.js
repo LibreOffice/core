@@ -617,22 +617,57 @@ function getDropdown(dropdownId) {
 	return cy.cGet('[id^="' + dropdownId + '"].modalpopup');
 }
 
-// Undo all changes until undo is no longer possible
+// Ask core for the current undo depth with a commandvalues round-trip,
+// answered from the live undo manager. The reply is a bare number, for
+// example "commandvalues: 3".
+function getUndoCount(win) {
+	var spy;
+	var ownSpy = false;
+	var baseline = 0;
+	var result = { count: 0 };
+
+	cy.then(function() {
+		if (win.app.socket._onMessage.restore) {
+			spy = win.app.socket._onMessage;
+		} else {
+			spy = Cypress.sinon.spy(win.app.socket, '_onMessage');
+			ownSpy = true;
+		}
+		baseline = spy.callCount;
+		win.app.socket.sendMessage('commandvalues command=.uno:UndoCount');
+	});
+
+	cy.wrap(null).should(function() {
+		var reply = spy.getCalls().slice(baseline).reverse().find(function(call) {
+			var textMsg = call.args && call.args[0] && call.args[0].textMsg;
+			return textMsg && /^commandvalues:\s*\d+\s*$/.test(textMsg);
+		});
+		expect(reply, '.uno:UndoCount reply').to.exist;
+		result.count = parseInt(reply.args[0].textMsg.replace('commandvalues:', '').trim(), 10);
+	});
+
+	return cy.then(function() {
+		if (ownSpy && spy && spy.restore)
+			spy.restore();
+		return result.count;
+	});
+}
+
+// Undo every change, undoing as many steps as core reports on the stack.
 function undoAll() {
 	cy.log('>> undoAll - start');
 
 	cy.getFrameWindow().then(function(win) {
 		helper.processToIdle(win);
-		cy.cGet('#Home-container .unoUndo').then(function undoStep($undo) {
-			if ($undo.attr('disabled') === undefined) {
-				cy.cGet('#Home-container .unoUndo button').click({force: true});
-				helper.processToIdle(win);
-				cy.cGet('#Home-container .unoUndo').then(undoStep);
-			}
+		getUndoCount(win).then(function(count) {
+			for (var i = 0; i < count; i++)
+				win.app.map.sendUnoCommand('.uno:Undo');
+			helper.processToIdle(win);
 		});
 	});
 
-	cy.cGet('#Home-container .unoUndo').should('not.have','disabled');
+	// Nothing left to undo, so the Undo control is disabled.
+	cy.cGet('#Home-container .unoUndo').should('have.attr', 'disabled');
 
 	cy.log('<< undoAll - end');
 }
