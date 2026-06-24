@@ -30,7 +30,7 @@ namespace oox::crypto
 {
 StrongEncryptionDataSpace::StrongEncryptionDataSpace(const Reference<XComponentContext>& rxContext)
     : mxContext(rxContext)
-    , mCryptoEngine(new Standard2007Engine)
+    , mCryptoEngine(new AgileEngine)
 {
 }
 
