@@ -302,6 +302,11 @@ window.L.Map.WOPI = window.L.Handler.extend({
 	resetAppLoaded: function() {
 		this._appLoaded = false;
 		for (var key in this._appLoadedConditions) {
+			// this happens when we reload document eg. save as
+			// UI is already initialized as it is done once per HTML load
+			// without skip -> we will be locked
+			if (key === 'initializedui') continue;
+
 			this._appLoadedConditions[key] = false;
 		}
 	},
