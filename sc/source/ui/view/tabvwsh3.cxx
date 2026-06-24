@@ -686,8 +686,13 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     if ( rDoc.GetTable( aAddress, nNameTab ) )
                     {
                         bFound = true;
-                        if ( nNameTab != nTab )
-                            SetTabNo( nNameTab );
+                        if (nNameTab != nTab)
+                        {
+                            if (!rDoc.IsVisible(nNameTab))
+                                ErrorMessage(STR_ERR_HIDDEN_SHEET);
+                            else
+                                SetTabNo(nNameTab);
+                        }
                     }
                 }
 
