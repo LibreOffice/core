@@ -79,31 +79,18 @@ window.L.Clipboard = window.L.Class.extend({
 		var that = this;
 		var beforeSelect = function(ev) { return that._beforeSelect(ev); };
 
-		if (window.ThisIsTheWindowsApp)
-		{
-			// We can have very trivial implementations, native code does everything
-			document.oncut = function(ev) {
-				if (ev.srcElement['id'] === 'copy-paste-container')
-					window.postMobileMessage('CUT');
-			};
-			document.oncopy = function(ev) {
-				if (ev.srcElement['id'] === 'copy-paste-container')
-					window.postMobileMessage('COPY');
-			};
-			document.onpaste = function(ev) {
-				if (ev.srcElement['id'] === 'pre-space' || ev.srcElement['id'] === 'clipboard-area') {
-					ev.preventDefault();
-					if (ev.clipboardData.types.length == 1 && ev.clipboardData.types[0] === 'text/plain')
-						window.postMobileMessage('PASTEUNFORMATTED');
-					else
-						window.postMobileMessage('PASTE');
-				}
-			};
-		} else {
-			document.oncut = function(ev)   { return that.cut(ev); };
-			document.oncopy = function(ev)  { return that.copy(ev); };
-			document.onpaste = function(ev) { return that.paste(ev); };
-		}
+		document.oncut = function(ev)   { return that.cut(ev); };
+		document.oncopy = function(ev)  { return that.copy(ev); };
+		document.onpaste = function(ev) {
+			if (window.ThisIsTheWindowsApp) {
+				// Most likely this could be done for the macOS app, too.
+				ev.preventDefault();
+				window.postMobileMessage('uno .uno:Paste');
+				return;
+			}
+			return that.paste(ev);
+		};
+
 		document.onbeforecut = beforeSelect;
 		document.onbeforecopy = beforeSelect;
 		document.onbeforepaste = beforeSelect;
@@ -494,7 +481,9 @@ window.L.Clipboard = window.L.Class.extend({
 		if (window.ThisIsTheiOSApp || window.ThisIsTheMacOSApp) {
 			await window.webkit.messageHandlers.clipboard.postMessage(`sendToInternal ${await content.text()}`); // no need to base64 in this direction...
 		} else if (window.ThisIsTheWindowsApp) {
-			await window.postMobileMessage(`CLIPBOARDSET ${await content.text()}`);
+			// Unclear what to do. In macOS, the sendToInternal thing above seems to be
+			// handled by sendToInternalWith in COWrapper.mm, but that does nothing,
+			// just returns true. So do we need to do anything here then either?
 		} else {
 			var formData = new FormData();
 			formData.append('file', content);
@@ -973,18 +962,13 @@ window.L.Clipboard = window.L.Class.extend({
 				return; // Either wrong command or a pending event.
 
 			await window.webkit.messageHandlers.clipboard.postMessage(`write`);
-		} else if (window.ThisIsTheMacOSApp) {
-			// macOS advertises the clipboard lazily: when the copy completes the
-			// engine reports the available formats through the clipboardmimetypes
-			// message, and the native side puts those formats on the pasteboard
-			// and fetches the bytes only when something pastes them. So there is
-			// no eager write to make here; just confirm the copy went through.
+		} else if (window.ThisIsTheMacOSApp || window.ThisIsTheWindowsApp) {
+			// On macOS and Windows we advertise the clipboard lazily: when the copy
+			// completes the engine reports the available formats through the
+			// clipboardmimetypes message, and the native side puts those formats on the
+			// pasteboard and fetches the bytes only when something pastes them. So
+			// there is no eager write to make here; just confirm the copy went through.
 			await check_;
-		} else if (window.ThisIsTheWindowsApp) {
-			// As above.
-			if (await check_ === null)
-				return;
-			await window.postMobileMessage(`CLIPBOARDWRITE`);
 		} else {
 			const url = this.getMetaURL() + '&MimeType=text/html,text/plain;charset=utf-8';
 
@@ -1126,30 +1110,17 @@ window.L.Clipboard = window.L.Class.extend({
 		return this._MobileAppReadClipboard(encodedClipboardData);
 	},
 
-	_WindowsReadClipboard: async function() {
-		// FIXME: Unclear whether this function ever is invoked and whether it actually
-		// would do anything sane if invoked. Especially the expectation that
-		// window.postMobileMessage() would return some value is surely wrong. The
-		// CLIPBOARDREAD handling in CODA.cpp certainly does not attempt to return any
-		// value, and I don't see how one would even do that in the WebView2 API.
-		const encodedClipboardData = await window.postMobileMessage('CLIPBOARDREAD');
-		// FIXME: Is the same code as for iOS OK? Will see.
-		return this._MobileAppReadClipboard(encodedClipboardData);
-	},
-
 	// Read clipboard items, routing through the native bridge on the CODA/mobile
 	// apps and the dummy clipboard under cypress. Returns a ClipboardItem array,
 	// or null when the native app reports an internal copy ("(internal)").
 	_readClipboardItems: async function() {
-		if (window.ThisIsTheMacOSApp)
+		if (window.ThisIsTheMacOSApp || window.ThisIsTheWindowsApp)
 			// The engine clipboard provider reads the pasteboard itself on
 			// .uno:Paste, so there is nothing to fetch here. Reporting null
 			// drops straight to an internal paste.
 			return null;
 		if (window.ThisIsTheiOSApp)
 			return this._iOSReadClipboard();
-		if (window.ThisIsTheWindowsApp)
-			return this._WindowsReadClipboard();
 		const clipboard = window.L.Browser.cypressTest ? this._dummyClipboard : navigator.clipboard;
 		return clipboard.read();
 	},
@@ -1226,20 +1197,6 @@ window.L.Clipboard = window.L.Class.extend({
 			// perform internal operations
 			app.socket.sendMessage('uno ' + cmd);
 			return true;
-		}
-
-		if (window.ThisIsTheWindowsApp) {
-			// Here, too, just let native code handle it
-			if (cmd === '.uno:Cut') {
-				window.postMobileMessage('CUT');
-				return true;
-			} else if (cmd === '.uno:Copy') {
-				window.postMobileMessage('COPY');
-				return true;
-			} else if (cmd === '.uno:Paste') {
-				window.postMobileMessage('PASTE');
-				return true;
-			}
 		}
 
 		if (window.ThisIsTheQtApp) {
@@ -1368,7 +1325,7 @@ window.L.Clipboard = window.L.Class.extend({
 			this._clipboardSerial++;
 
 			if (window.ThisIsTheQtApp) {
-				// Like Windows: native code handles clipboard sync + paste entirely.
+				// Native code handles clipboard sync + paste entirely.
 				window.postMobileMessage('PASTE');
 				return false;
 			}

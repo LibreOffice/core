@@ -63,15 +63,6 @@ extern std::mutex DocBrokersMutex;
 // first with Util::string_to_wide_string(). URIs one the other hand are valid as such as narrow
 // strings.
 
-enum class ClipboardOp
-{
-    CUT,
-    COPY,
-    PASTE,
-    PASTEUNFORMATTED,
-    READ
-};
-
 enum class DocumentType
 {
     TEXT,
@@ -108,8 +99,6 @@ struct WindowData
     FilenameAndUri filenameAndUri;
     DocumentMode mode;
     int appDocId;
-    DWORD lastOwnClipboardModification;
-    DWORD lastAnyonesClipboardModification;
     wil::com_ptr<ICoreWebView2Controller> webViewController;
     wil::com_ptr<ICoreWebView2> webView;
     std::thread app2js;
@@ -127,6 +116,8 @@ static bool enableWebDriver = false;
 
 static HINSTANCE appInstance;
 static int appShowMode;
+
+static bool weOwnTheClipboard = false;
 
 const char* user_name = nullptr;
 int coolwsd_server_socket_fd = -1;
@@ -171,6 +162,10 @@ static FilenameAndUri fileSaveDialog(const std::string& name,
                                      const std::vector<COMDLG_FILTERSPEC>& extensions);
 
 static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mode);
+
+static HANDLE copyEngineClipboardData(int appDocId, UINT format, const std::string& mimeType);
+
+static std::string MIME_type_for_clipboard_format(UINT format);
 
 static std::set<std::string> currentlyOpenDocumens()
 {
@@ -655,112 +650,17 @@ static void do_getrecentdocs(const WindowData& data, int id)
 // It happens that some other process opens the clipboard for a short time, and if we happen to try
 // during that time it will fail. Workaround for that: a function that tries a couple of times.
 
-static BOOL try_open_clipboard()
+static BOOL try_open_clipboard(HWND hWnd)
 {
     const int NTRIES = 10;
     for (int i = 0; i < NTRIES; i++)
     {
-        if (OpenClipboard(NULL))
+        if (OpenClipboard(hWnd))
             return TRUE;
         Sleep(5);
     }
     LOG_ERR("OpenClipboard() failed repeatedly, last error: " << GetLastError());
     return FALSE;
-}
-
-static void do_cut_or_copy(ClipboardOp op, WindowData& data)
-{
-    // Tell core to copy the selection into its internal clipboard
-    DocumentData::get(data.appDocId).loKitDocument->postUnoCommand(".uno:Copy");
-
-    size_t count = 0;
-    char** mimeTypes = nullptr;
-    size_t* sizes = nullptr;
-    char** streams = nullptr;
-
-    // Get core's internal clipboard
-    DocumentData::get(data.appDocId).loKitDocument->getClipboard(nullptr, &count, &mimeTypes, &sizes,
-                                                            &streams);
-    if (!try_open_clipboard())
-        return;
-
-    if (!EmptyClipboard())
-    {
-        CloseClipboard();
-        return;
-    }
-
-    for (int i = 0; i < count; i++)
-    {
-        // We check whether there is a corresponding standard or well-known Windows clipboard
-        // format.
-        int format = 0;
-        int format2 = 0;
-        int wformat = 0;
-
-        if (strcmp(mimeTypes[i], "text/plain;charset=utf-8") == 0)
-            wformat = CF_UNICODETEXT;
-        else if (strcmp(mimeTypes[i], "text/rtf") == 0)
-            format = RegisterClipboardFormatW(L"Rich Text Format");
-        else if (strcmp(mimeTypes[i], "text/html") == 0)
-            format = RegisterClipboardFormatW(L"HTML (HyperText Markup Language)");
-        else if (strcmp(mimeTypes[i], "image/png") == 0)
-        {
-            // For PNG two clipboard formats seem to occur
-            format = RegisterClipboardFormatW(L"image/png");
-            format2 = RegisterClipboardFormatW(L"PNG");
-        }
-        else if (strcmp(mimeTypes[i], "application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"") == 0)
-            format = RegisterClipboardFormatW(L"Star Embed Source (XML)");
-        else if (std::string(mimeTypes[i]).starts_with("application/x-openoffice-objectdescriptor-xml;"))
-            format = RegisterClipboardFormatW(L"Star Object Descriptor (XML)");
-
-        if (wformat == CF_UNICODETEXT)
-        {
-            std::wstring wtext =
-                sizes[i] ? Util::string_to_wide_string(std::string(streams[i], sizes[i])) : L"";
-            // CF_UNICODETEXT *must* have a terminating zero wchar_t
-            const int byteSize = wtext.size() * 2 + 2;
-            HANDLE hglData = GlobalAlloc(GMEM_MOVEABLE, byteSize);
-            if (hglData)
-            {
-                wchar_t* wcopy = (wchar_t*)GlobalLock(hglData);
-                memcpy(wcopy, wtext.c_str(), byteSize - 2);
-                wcopy[wtext.size()] = 0;
-                GlobalUnlock(hglData);
-                SetClipboardData(CF_UNICODETEXT, hglData);
-            }
-        }
-        else if (format)
-        {
-            HANDLE hglData = GlobalAlloc(GMEM_MOVEABLE, sizes[i]);
-            if (hglData)
-            {
-                char* copy = (char*)GlobalLock(hglData);
-                memcpy(copy, streams[i], sizes[i]);
-                GlobalUnlock(hglData);
-                SetClipboardData(format, hglData);
-            }
-            if (format2)
-            {
-                // Must allocate another handle for the other format
-                HANDLE hglData2 = GlobalAlloc(GMEM_MOVEABLE, sizes[i]);
-                if (hglData2)
-                {
-                    char* copy2 = (char*)GlobalLock(hglData2);
-                    memcpy(copy2, streams[i], sizes[i]);
-                    GlobalUnlock(hglData2);
-                    SetClipboardData(format2, hglData2);
-                }
-            }
-        }
-    }
-    CloseClipboard();
-
-    data.lastOwnClipboardModification = GetClipboardSequenceNumber();
-
-    if (op == ClipboardOp::CUT)
-        DocumentData::get(data.appDocId).loKitDocument->postUnoCommand(".uno:Cut");
 }
 
 static std::wstring get_clipboard_format_name(UINT format)
@@ -797,157 +697,6 @@ static std::string get_html_clipboard_fragment(const char* data)
         return "";
 
     return htmlData.substr(startPos, endPos - startPos);
-}
-
-static void do_paste_or_read(ClipboardOp op, WindowData& data)
-{
-    if (data.lastAnyonesClipboardModification > data.lastOwnClipboardModification)
-    {
-        if (!try_open_clipboard())
-            return;
-
-        std::vector<const char*> mimeTypes;
-        std::vector<size_t> sizes;
-        std::vector<const char*> streams;
-
-        UINT format = 0;
-
-        std::set<std::string> doneMimeTypes;
-
-        while ((format = EnumClipboardFormats(format)) != 0)
-        {
-            if (format == CF_UNICODETEXT)
-            {
-                HANDLE data = GetClipboardData(format);
-                if (!data)
-                    continue;
-                wchar_t* wtext = (wchar_t*)GlobalLock(data);
-                if (!wtext)
-                    continue;
-                std::string text = Util::wide_string_to_string(std::wstring(wtext));
-                GlobalUnlock(data);
-
-                mimeTypes.push_back(_strdup("text/plain;charset=utf-8"));
-                doneMimeTypes.insert("text/plain;charset=utf-8");
-                sizes.push_back(text.size());
-                streams.push_back(_strdup(text.c_str()));
-            }
-            else
-            {
-                auto name = get_clipboard_format_name(format);
-
-                std::string mimeType;
-
-                if (name == L"Star Embed Source (XML)")
-                    mimeType = "application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"";
-                else if (name == L"Star Object Descriptor (XML)")
-                    mimeType = "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"";
-                else if (name == L"PNG")
-                    mimeType = "image/png";
-                else if (name == L"Rich Text Format")
-                    mimeType = "text/rtf";
-                else if (name == L"text/rtf" || name == L"image/png" ||
-                         // Not handled yet if ever by the rest of the code here and in core, I think,
-                         // but why not be future-safe.
-                         name == L"image/svg+xml")
-                    mimeType = Util::wide_string_to_string(name);
-                else if (name == L"HTML (HyperText Markup Language)" ||
-                         name == L"HTML Format")
-                    mimeType = "text/html";
-
-                if (mimeType != "" && doneMimeTypes.count(mimeType) == 0)
-                {
-                    HANDLE data = GetClipboardData(format);
-                    if (!data)
-                        continue;
-                    size_t size = GlobalSize(data);
-                    const char* source = (const char*)GlobalLock(data);
-                    if (!source)
-                        continue;
-
-                    std::string fragment;
-                    if (name == L"HTML Format")
-                    {
-                        fragment = get_html_clipboard_fragment(source).c_str();
-                        source = fragment.c_str();
-                        size = strlen(source);
-                    }
-
-                    doneMimeTypes.insert(mimeType);
-
-                    char* copy = (char*)std::malloc(size);
-                    std::memcpy(copy, source, size);
-
-                    GlobalUnlock(data);
-
-                    mimeTypes.push_back(_strdup(mimeType.c_str()));
-                    sizes.push_back(size);
-                    streams.push_back(copy);
-                }
-            }
-        }
-
-        // Populate core's internal clipboard
-        DocumentData::get(data.appDocId).loKitDocument->setClipboard(mimeTypes.size(), mimeTypes.data(),
-                                                                     sizes.data(), streams.data());
-
-        for (int i = 0; i < mimeTypes.size(); i++)
-        {
-            std::free((void*)mimeTypes[i]);
-            std::free((void*)streams[i]);
-        }
-
-        CloseClipboard();
-    }
-
-    if (op == ClipboardOp::PASTE)
-    {
-        DocumentData::get(data.appDocId).loKitDocument->postUnoCommand(".uno:Paste");
-    }
-    else if (op == ClipboardOp::PASTEUNFORMATTED)
-    {
-        DocumentData::get(data.appDocId).loKitDocument->postUnoCommand(".uno:PasteUnformatted");
-    }
-}
-
-static void do_clipboard_set(int appDocId, const char* text)
-{
-    size_t nData;
-    std::vector<size_t> sizes;
-    std::vector<const char*> mimeTypes;
-    std::vector<const char*> streams;
-    ClipboardData data;
-
-    if (memcmp(text, "<!DOCTYPE html>", 15) == 0)
-    {
-        nData = 1;
-        sizes.resize(1);
-        sizes[0] = strlen(text);
-        mimeTypes.resize(1);
-        mimeTypes[0] = "text/html";
-        streams.resize(1);
-        streams[0] = text;
-    }
-    else
-    {
-        Poco::MemoryInputStream stream(text, strlen(text));
-        data.read(stream);
-
-        nData = data.size();
-        sizes.resize(nData);
-        mimeTypes.resize(nData);
-        streams.resize(nData);
-
-        for (size_t i = 0; i < nData; ++i)
-        {
-            sizes[i] = data._content[i].length();
-            streams[i] = data._content[i].c_str();
-            mimeTypes[i] = data._mimeTypes[i].c_str();
-        }
-    }
-
-    DocumentData::get(appDocId).loKitDocument->setClipboard(nData, mimeTypes.data(), sizes.data(),
-                                                            streams.data());
 }
 
 static void do_open_hyperlink(HWND hWnd, std::wstring url)
@@ -1495,8 +1244,19 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
             break;
         }
 
-        case WM_CLIPBOARDUPDATE:
-            windowData[hWnd].lastAnyonesClipboardModification = GetClipboardSequenceNumber();
+        case WM_RENDERFORMAT:
+        {
+            UINT format = (UINT)wParam;
+            std::string mimeType = MIME_type_for_clipboard_format(format);
+            if (mimeType == "")
+                break;
+            HANDLE hData = copyEngineClipboardData(windowData[hWnd].appDocId, format, mimeType);
+            SetClipboardData(format, hData);
+            break;
+        }
+
+        case WM_DESTROYCLIPBOARD:
+            weOwnTheClipboard = false;
             break;
 
         case CODA_WM_EXECUTESCRIPT:
@@ -2073,8 +1833,6 @@ static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mo
         data.fakeClientFd = fakeSocketSocket();
         data.appDocId = generate_new_app_doc_id();
     }
-    data.lastOwnClipboardModification = 0;
-    data.lastAnyonesClipboardModification = 1;
     data.filenameAndUri = filenameAndUri;
     data.mode = mode;
 
@@ -2519,8 +2277,296 @@ std::string fetchAIModels(const std::string& payload)
 }
 } // namespace
 
+static HANDLE copyEngineClipboardData(int appDocId, UINT format, const std::string& mimeType)
+{
+    DocumentData* docData = DocumentData::getIfExists(appDocId);
+    if (!docData)
+        return 0;               // Huh?
+
+    kit::Document* loKitDoc = docData->loKitDocument;
+    if (!loKitDoc)
+        return 0;               // Even more huh?
+
+    int nViewId = -1;
+    if (!loKitDoc->getViewIds(&nViewId, 1) || nViewId < 0)
+        return 0;
+    loKitDoc->setView(nViewId);
+
+    const char *filter[] = { mimeType.c_str(), nullptr };
+    size_t outCount = 0;
+    char **outMimeTypes = nullptr;
+    size_t *outSizes = nullptr;
+    char **outStreams = nullptr;
+    if (!loKitDoc->getClipboard(filter, &outCount, &outMimeTypes, &outSizes, &outStreams) ||
+        outCount == 0)
+        return 0;
+
+    HGLOBAL hMem;
+    const void *src;
+    size_t size;
+    std::wstring temp;
+    if (format == CF_UNICODETEXT && mimeType == "text/plain;charset=utf-8")
+    {
+        temp = Util::string_to_wide_string(outStreams[0]);
+        src = temp.c_str();
+        size = (temp.length() + 1) * 2;
+    }
+    else
+    {
+        src = outStreams[0];
+        size = outSizes[0];
+    }
+    hMem = GlobalAlloc(GMEM_MOVEABLE, size);
+    void* dest = GlobalLock(hMem);
+    std::memcpy(dest, src, size);
+    GlobalUnlock(hMem);
+
+    return hMem;
+}
+
+static std::string MIME_type_for_clipboard_format(UINT format)
+{
+    if (format == CF_UNICODETEXT)
+        return "text/plain;charset=utf-8";
+
+    auto name = get_clipboard_format_name(format);
+
+    if (name == L"text/rtf" || name == L"image/png" || name == L"image/svg+xml")
+        // Clipboard format names that are directly MIME types
+        return Util::wide_string_to_string(name);
+    else if (name == L"Star Embed Source (XML)")
+        return "application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"";
+    else if (name == L"Star Object Descriptor (XML)")
+        return "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"";
+    else if (name == L"PNG")
+        return "image/png";
+    else if (name == L"Rich Text Format")
+        return "text/rtf";
+    else if (name == L"HTML (HyperText Markup Language)" || name == L"HTML Format")
+        return "text/html";
+
+    return "";
+}
+
+static std::vector<int> clipboard_formats_for_MIME_type(const char* mimeType)
+{
+    std::vector<int> result;
+
+    if (std::strcmp(mimeType, "text/plain;charset=utf-8") == 0)
+        result.push_back(CF_UNICODETEXT);
+    else if (std::strcmp(mimeType, "text/rtf") == 0)
+        result.push_back(RegisterClipboardFormatW(L"Rich Text Format"));
+    else if (std::strcmp(mimeType, "text/html") == 0)
+        result.push_back(RegisterClipboardFormatW(L"HTML (HyperText Markup Language)"));
+    else if (std::strcmp(mimeType, "text/markdown") == 0)
+    {
+        result.push_back(RegisterClipboardFormatW(L"text/markdown"));
+        result.push_back(RegisterClipboardFormatW(L"Markdown"));
+    }
+    else if (std::strcmp(mimeType, "image/png") == 0)
+    {
+        result.push_back(RegisterClipboardFormatW(L"image/png"));
+        result.push_back(RegisterClipboardFormatW(L"PNG"));
+    }
+    else if (std::strcmp(mimeType, "application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"") == 0)
+        result.push_back(RegisterClipboardFormatW(L"Star Embed Source (XML)"));
+    else if (std::string(mimeType).starts_with("application/x-openoffice-objectdescriptor-xml;"))
+        result.push_back(RegisterClipboardFormatW(L"Star Object Descriptor (XML)"));
+
+    return result;
+}
+
+/**
+ * The clipboard provider the engine drives. On copy the engine advertises its
+ * formats through advertise; on an external paste it reads the pasteboard one
+ * format at a time. pUserData is a retained Document so the callbacks can reuse
+ * the document's clipboard helpers.
+ */
+
+static void clipboardProviderAdvertise(void* pUserData, const char** pMimeTypes)
+{
+    WindowData& data = *(WindowData*)pUserData;
+
+    if (!try_open_clipboard(data.hWnd))
+        return;
+
+    if (!EmptyClipboard())
+    {
+        CloseClipboard();
+        return;
+    }
+
+    bool didSetData = false;
+
+    for (size_t i = 0; pMimeTypes && pMimeTypes[i]; ++i)
+    {
+        auto formats = clipboard_formats_for_MIME_type(pMimeTypes[i]);
+        if (formats.size() != 0)
+        {
+            for (auto const &format : formats)
+                SetClipboardData(format, NULL);
+            didSetData = true;
+        }
+    }
+
+    if (didSetData)
+        weOwnTheClipboard = true;
+
+    CloseClipboard();
+}
+
+static int clipboardProviderOwns(void* /*pUserData*/)
+{
+    return weOwnTheClipboard;
+}
+
+static char** clipboardProviderGetMimeTypes(void* pUserData)
+{
+    WindowData& data = *(WindowData*)pUserData;
+
+    if (!try_open_clipboard(data.hWnd))
+        return NULL;
+
+    UINT format = 0;
+
+    std::vector<char*> mimeTypes;
+    std::set<std::string> doneMimeTypes;
+
+    while ((format = EnumClipboardFormats(format)) != 0)
+    {
+        if (format == CF_UNICODETEXT)
+        {
+                mimeTypes.push_back(_strdup("text/plain;charset=utf-8"));
+                doneMimeTypes.insert("text/plain;charset=utf-8");
+        }
+        else
+        {
+            auto mimeType = MIME_type_for_clipboard_format(format);
+
+            if (mimeType != "" && doneMimeTypes.count(mimeType) == 0)
+                {
+                    doneMimeTypes.insert(mimeType);
+                    mimeTypes.push_back(_strdup(mimeType.c_str()));
+                }
+        }
+    }
+
+    CloseClipboard();
+
+    char** result = (char**)std::malloc(sizeof(char*) * (mimeTypes.size() + 1));
+
+    for (int i = 0; i < mimeTypes.size(); i++)
+    {
+        result[i] = mimeTypes[i];
+        mimeTypes[i] = nullptr;
+    }
+    result[mimeTypes.size()] = nullptr;
+
+    return result;
+}
+
+static int clipboardProviderGetData(void* pUserData, const char* pMimeType, char** pOutData,
+                                    size_t* pOutSize)
+{
+    auto formats = clipboard_formats_for_MIME_type(pMimeType);
+
+    if (formats.size() == 0)
+        return 0;
+
+    WindowData& data = *(WindowData*)pUserData;
+
+    if (!try_open_clipboard(data.hWnd))
+        return 0;
+
+    for (const auto& format : formats)
+    {
+        HANDLE handle;
+
+        if (format == CF_UNICODETEXT)
+        {
+            handle = GetClipboardData(format);
+            if (!handle)
+                continue;
+            wchar_t* wtext = (wchar_t*)GlobalLock(handle);
+            if (!wtext)
+                continue;
+
+            std::string text = Util::wide_string_to_string(std::wstring(wtext));
+            GlobalUnlock(handle);
+            *pOutData = (char*)std::malloc(text.length());
+            *pOutSize = text.length();
+            std::memcpy(*pOutData, text.c_str(), text.length());
+
+            CloseClipboard();
+
+            return 1;
+        }
+
+        handle = GetClipboardData(format);
+        if (!handle)
+            continue;
+        size_t size = GlobalSize(handle);
+        const char* source = (const char*)GlobalLock(handle);
+        if (!source)
+            continue;
+        std::string fragment;
+        if (std::strcmp(pMimeType, "text/html") == 0)
+        {
+            fragment = get_html_clipboard_fragment(source).c_str();
+            source = fragment.c_str();
+            size = std::strlen(source);
+        }
+        *pOutData = (char*)std::malloc(size);
+        *pOutSize = size;
+        std::memcpy(*pOutData, source, size);
+        GlobalUnlock(handle);
+        CloseClipboard();
+
+        return 1;
+    }
+
+    CloseClipboard();
+    return 0;
+}
+
+static void clipboardProviderRelease(void* /* pUserData */)
+{
+    // ???
+}
+
+static void ensureClipboardProviderFor(WindowData& data)
+{
+    static std::set<int> registeredDocs;
+
+    if (registeredDocs.count(data.appDocId))
+        return;
+
+    DocumentData* docData = DocumentData::getIfExists(data.appDocId);
+    if (!docData)
+        return;                 // The document is not loaded yet; try again on the next message
+
+    kit::Document* loKitDoc = docData->loKitDocument;
+    if (!loKitDoc)
+        return;                 // Unclear when this could happen
+
+    COKitClipboardProvider provider{};
+    provider.nSize = sizeof(provider);
+    provider.pUserData = &data;
+    provider.advertiseToPlatform = clipboardProviderAdvertise;
+    provider.ownsClipboard = clipboardProviderOwns;
+    provider.getMimeTypes = clipboardProviderGetMimeTypes;
+    provider.getDataForMimeType = clipboardProviderGetData;
+    provider.release = clipboardProviderRelease;
+
+    loKitDoc->installClipboardProvider(&provider);
+
+    registeredDocs.insert(data.appDocId);
+}
+
 static void processMessage(WindowData& data, wil::unique_cotaskmem_string& message)
 {
+    ensureClipboardProviderFor(data);
+
     std::wstring s(message.get());
     LOG_TRC(Util::wide_string_to_string(s));
     if (s.starts_with(L"MSG "))
@@ -2546,30 +2592,10 @@ static void processMessage(WindowData& data, wil::unique_cotaskmem_string& messa
         {
             do_print(data.appDocId);
         }
-        else if (s == L"CUT")
-        {
-            do_cut_or_copy(ClipboardOp::CUT, data);
-        }
-        else if (s == L"COPY" || s == L"CLIPBOARDWRITE")
-        {
-            do_cut_or_copy(ClipboardOp::COPY, data);
-        }
-        else if (s == L"PASTE")
-        {
-            do_paste_or_read(ClipboardOp::PASTE, data);
-        }
-        else if (s == L"PASTEUNFORMATTED")
-        {
-            do_paste_or_read(ClipboardOp::PASTEUNFORMATTED, data);
-        }
-        else if (s == L"CLIPBOARDREAD")
-        {
-            do_paste_or_read(ClipboardOp::READ, data);
-        }
         else if (s.starts_with(L"TEXTCLIPBOARD "))
         {
             std::wstring text = s.substr(14);
-            if (try_open_clipboard())
+            if (try_open_clipboard(data.hWnd))
             {
                 EmptyClipboard();
                 HGLOBAL hMem = GlobalAlloc(GMEM_MOVEABLE, (text.size() + 1) * sizeof(wchar_t));
@@ -2581,10 +2607,6 @@ static void processMessage(WindowData& data, wil::unique_cotaskmem_string& messa
                 }
                 CloseClipboard();
             }
-        }
-        else if (s.starts_with(L"CLIPBOARDSET "))
-        {
-            do_clipboard_set(data.appDocId, Util::wide_string_to_string(s.substr(13)).c_str());
         }
         else if (s.starts_with(L"HYPERLINK "))
         {
