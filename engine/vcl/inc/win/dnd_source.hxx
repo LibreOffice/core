@@ -27,6 +27,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <oleidl.h>
+#include <cpo/uno/Any.hxx>
 
 #include <systools/win32/comtools.hxx>
 

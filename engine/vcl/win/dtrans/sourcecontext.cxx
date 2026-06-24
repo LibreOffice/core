@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
+#include <cppuhelper/interfacecontainer.hxx>
 
 #include "sourcecontext.hxx"
 

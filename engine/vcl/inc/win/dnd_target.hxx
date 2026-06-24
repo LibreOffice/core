@@ -22,6 +22,7 @@
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/datatransfer/dnd/DropTargetDragEnterEvent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <cpo/uno/Any.hxx>
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
