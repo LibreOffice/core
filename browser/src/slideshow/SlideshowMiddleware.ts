@@ -65,7 +65,10 @@ class SlideBitmapManager {
 		const img = (window as any).fzstd.decompress(imgRawData);
 		const clampedArray = new Uint8ClampedArray(img);
 		const imgData = new ImageData(clampedArray, width, height);
-		return createImageBitmap(imgData);
+		// Keep straight (non-premultiplied) alpha; the WebGL upload premultiplies
+		// once via UNPACK_PREMULTIPLY_ALPHA_WEBGL. Letting the browser decide here
+		// double-premultiplies in Chromium and frames images with alpha edges.
+		return createImageBitmap(imgData, { premultiplyAlpha: 'none' });
 	}
 
 	private static onWorkerDecompressedImageData(e: any) {

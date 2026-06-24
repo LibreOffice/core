@@ -113,18 +113,18 @@ if ('undefined' === typeof window) {
 				const img = new Uint8ClampedArray(
 					self.fzstd.decompress(e.data.rawData),
 				);
-				createImageBitmap(new ImageData(img, e.data.width, e.data.height)).then(
-					(bitmap) => {
-						postMessage(
-							{
-								message: 'decompressedImageData',
-								id: e.data.id,
-								bitmap: bitmap,
-							},
-							[bitmap],
-						);
-					},
-				);
+				createImageBitmap(new ImageData(img, e.data.width, e.data.height), {
+					premultiplyAlpha: 'none',
+				}).then((bitmap) => {
+					postMessage(
+						{
+							message: 'decompressedImageData',
+							id: e.data.id,
+							bitmap: bitmap,
+						},
+						[bitmap],
+					);
+				});
 				break;
 			}
 
