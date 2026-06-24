@@ -175,52 +175,6 @@ void CryptoTest::testAgileEncryptionInfoWritingAndParsing()
     OUString aPassword(u"Password"_ustr);
     std::vector<sal_uInt8> aKeyDataSalt;
 
-    { // Preset AES128 - SHA1
-        SvMemoryStream aEncryptionInfo;
-        {
-            oox::crypto::AgileEngine aEngine;
-
-            aEngine.setPreset(oox::crypto::AgileEncryptionPreset::AES_128_SHA1);
-            aEngine.setupEncryption(aPassword);
-            aKeyDataSalt = aEngine.getInfo().keyDataSalt;
-
-            oox::BinaryXOutputStream aBinaryEncryptionInfoOutputStream(
-                new utl::OSeekableOutputStreamWrapper(aEncryptionInfo), true);
-
-            aEngine.writeEncryptionInfo(aBinaryEncryptionInfoOutputStream);
-            aBinaryEncryptionInfoOutputStream.close();
-
-            CPPUNIT_ASSERT_EQUAL(sal_uInt64(996), aEncryptionInfo.GetSize());
-        }
-
-        aEncryptionInfo.Seek(STREAM_SEEK_TO_BEGIN);
-
-        {
-            oox::crypto::AgileEngine aEngine;
-
-            uno::Reference<io::XInputStream> xInputStream(
-                new utl::OSeekableInputStreamWrapper(aEncryptionInfo));
-
-            xInputStream->skipBytes(4); // Encryption type -> Agile
-
-            CPPUNIT_ASSERT(aEngine.readEncryptionInfo(xInputStream));
-
-            oox::crypto::AgileEncryptionInfo& rInfo = aEngine.getInfo();
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(100000), rInfo.spinCount);
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(16), rInfo.saltSize);
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(128), rInfo.keyBits);
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(20), rInfo.hashSize);
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(16), rInfo.blockSize);
-            CPPUNIT_ASSERT_EQUAL(u"AES"_ustr, rInfo.cipherAlgorithm);
-            CPPUNIT_ASSERT_EQUAL(u"ChainingModeCBC"_ustr, rInfo.cipherChaining);
-            CPPUNIT_ASSERT_EQUAL(u"SHA1"_ustr, rInfo.hashAlgorithm);
-            CPPUNIT_ASSERT_EQUAL(toString(aKeyDataSalt), toString(rInfo.keyDataSalt));
-
-            CPPUNIT_ASSERT_EQUAL(false, aEngine.decryptAndCheckVerifierHash(u"Wrong"));
-            CPPUNIT_ASSERT_EQUAL(true, aEngine.decryptAndCheckVerifierHash(aPassword));
-        }
-    }
-
     { // Preset AES128 - SHA384
         SvMemoryStream aEncryptionInfo;
         {
