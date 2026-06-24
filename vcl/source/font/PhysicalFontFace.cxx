@@ -116,9 +116,26 @@ static int PitchMatchValue(FontSelectPattern const& rFSP, FontPitch ePitch)
     return 0;
 }
 
-static int PreferNormalFontWidthMatchValue(FontWidth eWidthType)
+static int WidthMatchValue(FontSelectPattern const& rFSP, FontWidth eWidthType)
 {
-    // TODO: change when the upper layers can tell their width preference
+    if (rFSP.GetWidthType() != WIDTH_DONTKNOW)
+    {
+        // A width was requested: prefer the closest width.
+        int nWidthDiff = static_cast<int>(rFSP.GetWidthType()) - static_cast<int>(eWidthType);
+        if (nWidthDiff < 0)
+            nWidthDiff = -nWidthDiff;
+
+        if (nWidthDiff == 0)
+            return 1000;
+        else if (nWidthDiff == 1)
+            return 700;
+        else if (nWidthDiff == 2)
+            return 200;
+
+        return 0;
+    }
+
+    // prefer NORMAL font width
     if (eWidthType == WIDTH_NORMAL)
         return 400;
     else if ((eWidthType == WIDTH_SEMI_EXPANDED) || (eWidthType == WIDTH_SEMI_CONDENSED))
@@ -197,7 +214,7 @@ bool PhysicalFontFace::IsBetterMatch(const FontSelectPattern& rFSP, FontMatchSta
     int nMatch = FamilyNameMatchValue(rFSP, GetFamilyName());
     nMatch += StyleNameMatchValue(rStatus, GetStyleName());
     nMatch += PitchMatchValue(rFSP, GetPitch());
-    nMatch += PreferNormalFontWidthMatchValue(GetWidthType());
+    nMatch += WidthMatchValue(rFSP, GetWidthType());
     nMatch += WeightMatchValue(rFSP, GetWeight());
     nMatch += ItalicMatchValue(rFSP, GetItalic());
 

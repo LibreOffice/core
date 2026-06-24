@@ -45,6 +45,7 @@ public:
     void testShouldCompareAsGreaterFontFaceWithLesserAlphabeticalStyleName();
     void testShouldCompareAsSameFontFace();
     void testMatchStatusValue();
+    void testWidthAwareMatch();
 
     CPPUNIT_TEST_SUITE(VclPhysicalFontFaceTest);
     CPPUNIT_TEST(testShouldCompareAsLesserFontFaceWithShorterWidth);
@@ -59,6 +60,7 @@ public:
     CPPUNIT_TEST(testShouldCompareAsGreaterFontFaceWithLesserAlphabeticalStyleName);
     CPPUNIT_TEST(testShouldCompareAsSameFontFace);
     CPPUNIT_TEST(testMatchStatusValue);
+    CPPUNIT_TEST(testWidthAwareMatch);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -294,6 +296,36 @@ void VclPhysicalFontFaceTest::testMatchStatusValue()
 
     CPPUNIT_ASSERT(aTestedFontFace->IsBetterMatch(aFSP, aFontMatchStatus));
     CPPUNIT_ASSERT_EQUAL(EXPECTED_MATCH, aFontMatchStatus.mnFaceMatch);
+}
+
+void VclPhysicalFontFaceTest::testWidthAwareMatch()
+{
+    // A condensed request must prefer a condensed face over a normal one.
+    FontAttributes aNormalAttrs;
+    aNormalAttrs.SetFamilyName(u"Test"_ustr);
+    aNormalAttrs.SetWeight(WEIGHT_NORMAL);
+    aNormalAttrs.SetWidthType(WIDTH_NORMAL);
+    rtl::Reference<TestFontFace> aNormalFace(new TestFontFace(aNormalAttrs, FONTID));
+
+    FontAttributes aCondensedAttrs;
+    aCondensedAttrs.SetFamilyName(u"Test"_ustr);
+    aCondensedAttrs.SetWeight(WEIGHT_NORMAL);
+    aCondensedAttrs.SetWidthType(WIDTH_CONDENSED);
+    rtl::Reference<TestFontFace> aCondensedFace(new TestFontFace(aCondensedAttrs, FONTID));
+
+    vcl::Font aReqFont(u"Test"_ustr, Size(0, 36));
+    vcl::font::FontSelectPattern aFSP(aReqFont, u"Test"_ustr, Size(0, 36), 36, true);
+    aFSP.maTargetName = "Test";
+    aFSP.SetWeight(WEIGHT_NORMAL);
+    aFSP.SetWidthType(WIDTH_CONDENSED);
+
+    vcl::font::FontMatchStatus aNormalStatus = { 0, nullptr };
+    aNormalFace->IsBetterMatch(aFSP, aNormalStatus);
+    vcl::font::FontMatchStatus aCondensedStatus = { 0, nullptr };
+    aCondensedFace->IsBetterMatch(aFSP, aCondensedStatus);
+
+    CPPUNIT_ASSERT_MESSAGE("condensed face should outscore normal for a condensed request",
+                           aCondensedStatus.mnFaceMatch > aNormalStatus.mnFaceMatch);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclPhysicalFontFaceTest);
