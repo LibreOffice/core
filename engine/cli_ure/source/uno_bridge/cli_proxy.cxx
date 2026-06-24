@@ -227,10 +227,10 @@ bool UnoInterfaceProxy::CanCastTo(System::Type^ fromType,
         array<System::Object^>^ args = gcnew array<System::Object^>(1);
 
         args[0] = fromType;
-        cpo::uno::Any ^ pAny;
+        uno::Any ^ pAny;
         System::Object^ pException = nullptr;
 
-        pAny= static_cast<cpo::uno::Any ^>(
+        pAny= static_cast<uno::Any ^>(
             m_bridge->call_uno(
                 info->m_unoI,
                 membertd.get(),
