@@ -297,6 +297,13 @@ public:
     const FormulaToken* CreateStringFromToken( OUStringBuffer& rBuffer, const FormulaToken* pToken,
                                     bool bAllowArrAdvance = false );
 
+private:
+    // Emit a non-parenthesised @ operand on OOXML save. The caller
+    // supplies the wrapper's parentheses. Advances maArrIterator past
+    // the operand and leaves rpToken at the next token.
+    void EmitSingleValueOperandOOXML(OUStringBuffer& rBuffer, const FormulaToken*& rpToken);
+public:
+
     void AppendBoolean( OUStringBuffer& rBuffer, bool bVal ) const;
     void AppendDouble( OUStringBuffer& rBuffer, double fVal ) const;
     static void AppendString( OUStringBuffer& rBuffer, const OUString & rStr );

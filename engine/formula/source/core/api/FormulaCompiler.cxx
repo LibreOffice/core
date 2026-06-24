@@ -2702,6 +2702,44 @@ void FormulaCompiler::CreateStringFromTokenArray( OUString& rFormula )
     rFormula = aBuffer.makeStringAndClear();
 }
 
+void FormulaCompiler::EmitSingleValueOperandOOXML(
+    OUStringBuffer& rBuffer, const FormulaToken*& rpToken)
+{
+    // Emit one @ operand: a nested @, a function call, or a primary
+    // push.
+    if (!rpToken)
+        return;
+    if (rpToken->GetOpCode() == ocSingleValue)
+    {
+        rBuffer.append(u"_xlfn.SINGLE(");
+        rpToken = maArrIterator.Next();
+        EmitSingleValueOperandOOXML(rBuffer, rpToken);
+        rBuffer.append(u")");
+        return;
+    }
+    // Primary push or function name. Emit the current token first.
+    rpToken = CreateStringFromToken(rBuffer, rpToken, true);
+    // If the next token is ocOpen, this token was a function name
+    // and the call's argument list still has to be emitted.
+    if (rpToken && rpToken->GetOpCode() == ocOpen)
+    {
+        sal_uInt16 nDepth = 0;
+        while (rpToken)
+        {
+            OpCode eOp = rpToken->GetOpCode();
+            if (eOp == ocOpen)
+                ++nDepth;
+            rpToken = CreateStringFromToken(rBuffer, rpToken, true);
+            if (eOp == ocClose)
+            {
+                --nDepth;
+                if (nDepth == 0)
+                    return;
+            }
+        }
+    }
+}
+
 void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
 {
     rBuffer.setLength(0);
@@ -2791,6 +2829,20 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
         {
             rBuffer.append(GetNativeSymbol(ocErrRef));
             t = maArrIterator.Next();
+            continue;
+        }
+
+        // Wrap a bare or function-call @ operand in the parentheses
+        // that _xlfn.SINGLE needs. The symbol-table walk handles the
+        // parenthesised case on its own.
+        if (FormulaGrammar::isOOXML(meGrammar) && t->GetOpCode() == ocSingleValue
+            && maArrIterator.PeekNext()
+            && maArrIterator.PeekNext()->GetOpCode() != ocOpen)
+        {
+            rBuffer.append(u"_xlfn.SINGLE(");
+            t = maArrIterator.Next();
+            EmitSingleValueOperandOOXML(rBuffer, t);
+            rBuffer.append(u")");
             continue;
         }
 
