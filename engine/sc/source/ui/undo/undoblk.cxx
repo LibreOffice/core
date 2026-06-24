@@ -2016,11 +2016,13 @@ bool ScUndoSelectionStyle::CanRepeat(SfxRepeatTarget& rTarget) const
 
 ScUndoEnterMatrix::ScUndoEnterMatrix( ScDocShell& rNewDocShell, const ScRange& rArea,
                                       ScDocumentUniquePtr pNewUndoDoc, OUString aForm,
-                                      std::unique_ptr<ScTokenArray> pArray ) :
+                                      std::unique_ptr<ScTokenArray> pArray,
+                                      bool bDynamicArrayMaster) :
     ScBlockUndo( rNewDocShell, rArea, SC_UNDO_SIMPLE ),
     pUndoDoc( std::move(pNewUndoDoc) ),
     aFormula(std::move( aForm )),
-    pTokenArray(std::move( pArray ))
+    pTokenArray(std::move(pArray)),
+    mbDynamicArrayMaster(bDynamicArrayMaster)
 {
     SetChangeTrack();
 }
@@ -2078,7 +2080,9 @@ void ScUndoEnterMatrix::Redo()
 
     rDoc.InsertMatrixFormula( aBlockRange.aStart.Col(), aBlockRange.aStart.Row(),
                                aBlockRange.aEnd.Col(),   aBlockRange.aEnd.Row(),
-                               aDestMark, aFormula, pTokenArray.get() );
+                               aDestMark, aFormula, pTokenArray.get(),
+                               formula::FormulaGrammar::GRAM_DEFAULT,
+                               mbDynamicArrayMaster);
 
     SetChangeTrack();
 

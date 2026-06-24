@@ -744,7 +744,8 @@ public:
                                        const ScRange& rArea,
                                        ScDocumentUniquePtr pNewUndoDoc,
                                        OUString aForm,
-                                       std::unique_ptr<ScTokenArray> pTokenArray = nullptr );
+                                       std::unique_ptr<ScTokenArray> pTokenArray = nullptr,
+                                       bool bDynamicArrayMaster = false);
     virtual         ~ScUndoEnterMatrix() override;
 
     virtual void    Undo() override;
@@ -761,6 +762,7 @@ private:
     std::unique_ptr<ScTokenArray> pTokenArray;
     sal_uLong       nStartChangeAction;
     sal_uLong       nEndChangeAction;
+    bool mbDynamicArrayMaster;
 
     void            SetChangeTrack();
 };

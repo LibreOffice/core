@@ -6080,6 +6080,47 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testDynamicArrayResizeDuringCopyUpdated)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testEnterMatrixUndoRedoKeepsDynamicFlag)
+{
+    // Entering a dynamic-array master through EnterMatrix, undoing,
+    // and redoing must restore the dynamic-array flag on the redone
+    // cell.
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetValue(ScAddress(1, 0, 0), 10.0);
+    m_pDoc->SetValue(ScAddress(1, 1, 0), 20.0);
+    m_pDoc->SetValue(ScAddress(1, 2, 0), 30.0);
+    m_pDoc->SetValue(ScAddress(1, 3, 0), 40.0);
+
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+
+    rFunc.EnterMatrix(ScRange(ScAddress(0, 0, 0)), &aMark, nullptr, u"=UNIQUE(B1:B4)"_ustr, true,
+                      false, OUString(), formula::FormulaGrammar::GRAM_DEFAULT,
+                      /*bDynamicArrayMaster*/ true);
+
+    ScFormulaCell* pCell = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pCell);
+    CPPUNIT_ASSERT(pCell->IsDynamicArrayMaster());
+
+    SfxUndoManager* pUndoManager = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT(!m_pDoc->GetFormulaCell(ScAddress(0, 0, 0)));
+
+    pUndoManager->Redo();
+
+    pCell = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pCell);
+    CPPUNIT_ASSERT(pCell->IsDynamicArrayMaster());
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

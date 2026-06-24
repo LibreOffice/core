@@ -124,7 +124,8 @@ bool EnterMatrixOperation::runImplementation()
             if (mpTokenArray)
                 pUndoArray = mpTokenArray->Clone();
             mrDocShell.GetUndoManager()->AddUndoAction(std::make_unique<ScUndoEnterMatrix>(
-                mrDocShell, aRange, std::move(pUndoDoc), maString, std::move(pUndoArray)));
+                mrDocShell, aRange, std::move(pUndoDoc), maString, std::move(pUndoArray),
+                mbDynamicArrayMaster));
         }
 
         syncSheetViews();
