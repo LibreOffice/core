@@ -183,6 +183,34 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testSingleValueDroppedOnXlsExport)
     CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(0, 0, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testSingleValueOnArithmeticSurvivesXlsRoundTrip)
+{
+    // The @ marker survives an XLS round trip even when the array
+    // intent comes from a plain arithmetic operator on a range, not
+    // from a matrix function.
+
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    pDoc->SetValue(ScAddress(0, 0, 0), 1.0);
+    pDoc->SetValue(ScAddress(0, 1, 0), 2.0);
+    pDoc->SetValue(ScAddress(0, 2, 0), 3.0);
+    pDoc->SetValue(ScAddress(0, 3, 0), 4.0);
+
+    pDoc->SetFormula(ScAddress(1, 0, 0), u"=@A1:A4 + 10"_ustr,
+                     formula::FormulaGrammar::GRAM_NATIVE);
+    CPPUNIT_ASSERT_EQUAL(11.0, pDoc->GetValue(ScAddress(1, 0, 0)));
+
+    saveAndReload(TestFilter::XLS);
+
+    pDoc = getScDoc();
+    ScFormulaCell* pCell = pDoc->GetFormulaCell(ScAddress(1, 0, 0));
+    CPPUNIT_ASSERT(pCell);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::NONE), sal_Int32(pCell->GetErrCode()));
+    CPPUNIT_ASSERT_EQUAL(u"=@A1:A4+10"_ustr, pDoc->GetFormula(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(11.0, pDoc->GetValue(ScAddress(1, 0, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf85553)
 {
     createScDoc("ods/tdf85553.ods");

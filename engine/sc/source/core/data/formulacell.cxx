@@ -2749,8 +2749,9 @@ void ScFormulaCell::ResolveImplicitIntersection(ScTokenArray& rCode, ScDocument&
     if (rCode.GetCodeLen() == 0)
     {
         // Parse has tokens but RPN was not built yet. Build it so the
-        // walk has post-fix order to inspect.
-        ScCompiler aComp(rDoc, rPos, rCode, formula::FormulaGrammar::GRAM_DEFAULT, true, false);
+        // walk has post-fix order to inspect. Keep multi-cell range
+        // tokens unfolded so the array-intent walk can see them.
+        ScCompiler aComp(rDoc, rPos, rCode, formula::FormulaGrammar::GRAM_DEFAULT, false, false);
         aComp.CompileTokenArray();
     }
     if (rpnTopIsImplicitIntersection(rCode))
