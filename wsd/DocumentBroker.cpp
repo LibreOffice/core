@@ -1392,7 +1392,15 @@ bool DocumentBroker::doDownloadDocument(const Authorization& auth,
             timepoint); // Used to detect modifications.
     }
 
+#if defined(QTAPP) || defined(MACOS) || defined(_WIN32)
+    // The Qt, macOS and Windows apps run the kit in-process. Keep the
+    // in-memory tile cache so the delta generator has a stored keyframe to
+    // diff against and repeat tile requests are answered without re-rendering
+    // in the kit.
+    const bool dontUseCache = false;
+#else
     const bool dontUseCache = Util::isMobileApp();
+#endif
 
     _tileCache = std::make_unique<TileCache>(_storage->getUri().toString(),
                                              _saveManager.getLastModifiedLocalTime(), dontUseCache);
