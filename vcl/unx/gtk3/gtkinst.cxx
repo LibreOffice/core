@@ -14839,7 +14839,6 @@ public:
         {
             gtk_tree_view_column_pack_start(pColumn, pToggle, false);
             gtk_tree_view_column_add_attribute(pColumn, pToggle, "active", m_nExpanderToggleCol);
-            gtk_tree_view_column_add_attribute(pColumn, pToggle, "active", m_nExpanderToggleCol);
             gtk_tree_view_column_add_attribute(pColumn, pToggle, "visible", m_aToggleTriStateMap[m_nExpanderToggleCol]);
             g_object_unref(pToggle);
         }
