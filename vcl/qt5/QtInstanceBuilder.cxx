@@ -329,6 +329,7 @@ constexpr auto SUPPORTED_UI_FILES = frozen::make_unordered_set<std::u16string_vi
     u"svt/ui/restartdialog.ui",
     u"svx/ui/addconditiondialog.ui",
     u"svx/ui/adddataitemdialog.ui",
+    u"svx/ui/addinstancedialog.ui",
     u"svx/ui/addnamespacedialog.ui",
     u"svx/ui/addsubmissiondialog.ui",
     u"svx/ui/compressgraphicdialog.ui",
