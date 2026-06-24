@@ -246,7 +246,18 @@ static basegfx::B2DPolygon lcl_buildSmoothSubPolygon(
     }
     else if (eCurveStyle == CurveStyle_B_SPLINES)
     {
-        basegfx::BSpline aSpline(aPoints, nSplineOrder);
+        // A degree-p B-spline needs at least p + 1 distinct points to
+        // pin it down. When the input is short, drop the degree to
+        // what the data can carry so the line stays visible.
+        size_t nDistinct = 1;
+        for (size_t nI = 1; nI < aPoints.size(); ++nI)
+            if (aPoints[nI] != aPoints[nI - 1])
+                ++nDistinct;
+        sal_uInt32 nEffectiveDegree = nSplineOrder;
+        if (nDistinct >= 2 && nEffectiveDegree >= nDistinct)
+            nEffectiveDegree = static_cast<sal_uInt32>(nDistinct - 1);
+
+        basegfx::BSpline aSpline(aPoints, nEffectiveDegree);
         if (aSpline.isValid())
             return aSpline.getPolygon();
     }
