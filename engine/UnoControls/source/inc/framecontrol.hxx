@@ -46,7 +46,7 @@ public:
 
     //  XInterface
 
-    virtual cpo::uno::Any SAL_CALL queryInterface(
+    virtual cpo::uno::Any queryInterface(
         const css::uno::Type& aType
     ) override;
 
@@ -57,7 +57,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual void SAL_CALL acquire() noexcept override;
+    virtual void acquire() noexcept override;
 
     /**
         @short      decrement refcount
@@ -66,55 +66,55 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual void SAL_CALL release() noexcept override;
+    virtual void release() noexcept override;
 
     //  XTypeProvider
 
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual css::uno::Sequence< css::uno::Type > getTypes() override;
 
-    OUString SAL_CALL getImplementationName() override;
+    OUString getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    css::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     //  XControl
 
-    virtual void SAL_CALL createPeer(
+    virtual void createPeer(
         const css::uno::Reference< css::awt::XToolkit >&      xToolkit ,
         const css::uno::Reference< css::awt::XWindowPeer >&   xParent
     ) override;
 
-    virtual bool SAL_CALL setModel(
+    virtual bool setModel(
         const css::uno::Reference< css::awt::XControlModel >& xModel
     ) override;
 
-    virtual css::uno::Reference< css::awt::XControlModel > SAL_CALL getModel() override;
+    virtual css::uno::Reference< css::awt::XControlModel > getModel() override;
 
     //  XComponent
 
-    virtual void SAL_CALL dispose() override;
+    virtual void dispose() override;
 
     //  XView
 
-    virtual bool SAL_CALL setGraphics(
+    virtual bool setGraphics(
         const css::uno::Reference< css::awt::XGraphics >& xDevice
     ) override;
 
-    virtual css::uno::Reference< css::awt::XGraphics > SAL_CALL getGraphics() override;
+    virtual css::uno::Reference< css::awt::XGraphics > getGraphics() override;
 
     //  XConnectionPointContainer
 
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getConnectionPointTypes() override;
+    virtual css::uno::Sequence< css::uno::Type > getConnectionPointTypes() override;
 
-    virtual css::uno::Reference< css::lang::XConnectionPoint > SAL_CALL queryConnectionPoint(
+    virtual css::uno::Reference< css::lang::XConnectionPoint > queryConnectionPoint(
         const css::uno::Type& aType
     ) override;
 
-    virtual void SAL_CALL advise(
+    virtual void advise(
         const css::uno::Type&                                aType       ,
         const css::uno::Reference< css::uno::XInterface >&    xListener
     ) override;
 
-    virtual void SAL_CALL unadvise(
+    virtual void unadvise(
         const css::uno::Type&                                aType ,
         const css::uno::Reference< css::uno::XInterface >&    xListener
     ) override;
@@ -125,26 +125,26 @@ private:
 
     //  OPropertySetHelper
 
-    virtual bool SAL_CALL convertFastPropertyValue(
+    virtual bool convertFastPropertyValue(
         cpo::uno::Any&       rConvertedValue   ,
         cpo::uno::Any&       rOldValue         ,
         sal_Int32           nHandle           ,
         const cpo::uno::Any& rValue
     ) override;
 
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
+    virtual void setFastPropertyValue_NoBroadcast(
         sal_Int32 nHandle ,
         const cpo::uno::Any& rValue
     ) override;
 
-    virtual void SAL_CALL getFastPropertyValue( cpo::uno::Any&   rValue  ,
+    virtual void getFastPropertyValue( cpo::uno::Any&   rValue  ,
                                                 sal_Int32       nHandle ) const override;
 
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     //  XPropertySet
 
-    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
+    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
 
     //  BaseControl
 

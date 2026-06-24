@@ -51,7 +51,7 @@ BaseContainerControl::~BaseContainerControl()
 
 //  XControl
 
-void SAL_CALL BaseContainerControl::createPeer( const   Reference< XToolkit >&      xToolkit    ,
+void BaseContainerControl::createPeer( const   Reference< XToolkit >&      xToolkit    ,
                                                 const   Reference< XWindowPeer >&   xParent     )
 {
     if ( getPeer().is() )
@@ -71,7 +71,7 @@ void SAL_CALL BaseContainerControl::createPeer( const   Reference< XToolkit >&  
 
 //  XControl
 
-bool SAL_CALL BaseContainerControl::setModel( const Reference< XControlModel >& )
+bool BaseContainerControl::setModel( const Reference< XControlModel >& )
 {
     // This object has NO model.
     return false;
@@ -79,7 +79,7 @@ bool SAL_CALL BaseContainerControl::setModel( const Reference< XControlModel >& 
 
 //  XControl
 
-Reference< XControlModel > SAL_CALL BaseContainerControl::getModel()
+Reference< XControlModel > BaseContainerControl::getModel()
 {
     // This object has NO model.
     // return (XControlModel*)this;
@@ -88,7 +88,7 @@ Reference< XControlModel > SAL_CALL BaseContainerControl::getModel()
 
 //  XComponent
 
-void SAL_CALL BaseContainerControl::dispose()
+void BaseContainerControl::dispose()
 {
     // Tell everything that this container is now gone.
     // It's faster if you listen to both the control and the container.
@@ -119,7 +119,7 @@ void SAL_CALL BaseContainerControl::dispose()
 
 //  XEventListener
 
-void SAL_CALL BaseContainerControl::disposing( const EventObject& rEvent )
+void BaseContainerControl::disposing( const EventObject& rEvent )
 {
     Reference< XControl > xControl( rEvent.Source, UNO_QUERY );
 
@@ -129,7 +129,7 @@ void SAL_CALL BaseContainerControl::disposing( const EventObject& rEvent )
 
 //  XControlContainer
 
-void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Reference< XControl > & rControl )
+void BaseContainerControl::addControl ( const OUString& rName, const Reference< XControl > & rControl )
 {
     if ( !rControl.is () )
         return;
@@ -182,7 +182,7 @@ void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Re
 
 //  XControlContainer
 
-void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > & rControl )
+void BaseContainerControl::removeControl ( const Reference< XControl > & rControl )
 {
     if ( !rControl.is() )
         return;
@@ -227,7 +227,7 @@ void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > 
 
 //  XControlContainer
 
-void SAL_CALL BaseContainerControl::setStatusText ( const OUString& rStatusText )
+void BaseContainerControl::setStatusText ( const OUString& rStatusText )
 {
     // go down to each parent
     Reference< XControlContainer >  xContainer ( getContext(), UNO_QUERY );
@@ -240,7 +240,7 @@ void SAL_CALL BaseContainerControl::setStatusText ( const OUString& rStatusText 
 
 //  XControlContainer
 
-Reference< XControl > SAL_CALL BaseContainerControl::getControl ( const OUString& rName )
+Reference< XControl > BaseContainerControl::getControl ( const OUString& rName )
 {
     // Ready for multithreading
     MutexGuard  aGuard ( Mutex::getGlobalMutex() );
@@ -262,7 +262,7 @@ Reference< XControl > SAL_CALL BaseContainerControl::getControl ( const OUString
 
 //  XControlContainer
 
-Sequence< Reference< XControl > > SAL_CALL BaseContainerControl::getControls ()
+Sequence< Reference< XControl > > BaseContainerControl::getControls ()
 {
     // Ready for multithreading
     MutexGuard  aGuard ( Mutex::getGlobalMutex() );
@@ -284,7 +284,7 @@ Sequence< Reference< XControl > > SAL_CALL BaseContainerControl::getControls ()
 
 //  XWindow
 
-void SAL_CALL BaseContainerControl::setVisible ( bool bVisible )
+void BaseContainerControl::setVisible ( bool bVisible )
 {
     // override baseclass definition
     BaseControl::setVisible ( bVisible );

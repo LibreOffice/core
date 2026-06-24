@@ -80,18 +80,18 @@ public:
                     RELEASE = nothing
     */
 
-    virtual void SAL_CALL addText(
+    virtual void addText(
         const OUString& sTopic ,
         const OUString& sText ,
         bool bbeforeProgress
     ) override;
 
-    virtual void SAL_CALL removeText(
+    virtual void removeText(
         const OUString& sTopic ,
         bool bbeforeProgress
     ) override;
 
-    virtual void SAL_CALL updateText(
+    virtual void updateText(
         const OUString&  sTopic ,
         const OUString&  sText ,
         bool bbeforeProgress
@@ -99,57 +99,57 @@ public:
 
     //  XProgressBar
 
-    virtual void SAL_CALL setForegroundColor( sal_Int32 nColor ) override;
+    virtual void setForegroundColor( sal_Int32 nColor ) override;
 
-    virtual void SAL_CALL setBackgroundColor( sal_Int32 nColor ) override;
+    virtual void setBackgroundColor( sal_Int32 nColor ) override;
 
-    virtual void SAL_CALL setValue( sal_Int32 nValue ) override;
+    virtual void setValue( sal_Int32 nValue ) override;
 
-    virtual void SAL_CALL setRange( sal_Int32   nMin    ,
+    virtual void setRange( sal_Int32   nMin    ,
                                     sal_Int32   nMax    ) override;
 
-    virtual sal_Int32 SAL_CALL getValue() override;
+    virtual sal_Int32 getValue() override;
 
     //  XButton
 
-    virtual void SAL_CALL addActionListener(
+    virtual void addActionListener(
         const css::uno::Reference< css::awt::XActionListener >& xListener
     ) override;
 
-    virtual void SAL_CALL removeActionListener(
+    virtual void removeActionListener(
         const css::uno::Reference< css::awt::XActionListener >& xListener
     ) override;
 
-    virtual void SAL_CALL setLabel( const OUString& sLabel ) override;
+    virtual void setLabel( const OUString& sLabel ) override;
 
-    virtual void SAL_CALL setActionCommand( const OUString& sCommand ) override;
+    virtual void setActionCommand( const OUString& sCommand ) override;
 
     //  XLayoutConstrains
 
-    virtual css::awt::Size SAL_CALL getMinimumSize() override;
+    virtual css::awt::Size getMinimumSize() override;
 
-    virtual css::awt::Size SAL_CALL getPreferredSize() override;
+    virtual css::awt::Size getPreferredSize() override;
 
-    virtual css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& aNewSize ) override;
+    virtual css::awt::Size calcAdjustedSize( const css::awt::Size& aNewSize ) override;
 
     //  XControl
 
-    virtual void SAL_CALL createPeer(
+    virtual void createPeer(
         const css::uno::Reference< css::awt::XToolkit     >& xToolkit ,
         const css::uno::Reference< css::awt::XWindowPeer  >& xParent
     ) override;
 
-    virtual bool SAL_CALL setModel( const css::uno::Reference< css::awt::XControlModel >& xModel ) override;
+    virtual bool setModel( const css::uno::Reference< css::awt::XControlModel >& xModel ) override;
 
-    virtual css::uno::Reference< css::awt::XControlModel > SAL_CALL getModel() override;
+    virtual css::uno::Reference< css::awt::XControlModel > getModel() override;
 
     //  XComponent
 
-    virtual void SAL_CALL dispose() override;
+    virtual void dispose() override;
 
     //  XWindow
 
-    virtual void SAL_CALL setPosSize(   sal_Int32   nX      ,
+    virtual void setPosSize(   sal_Int32   nX      ,
                                         sal_Int32   nY      ,
                                         sal_Int32   nWidth  ,
                                         sal_Int32   nHeight ,

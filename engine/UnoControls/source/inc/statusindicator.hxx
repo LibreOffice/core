@@ -51,45 +51,45 @@ public:
 
     //  XStatusIndicator
 
-    virtual void SAL_CALL start(
+    virtual void start(
         const OUString&  sText   ,
         sal_Int32 nRange
     ) override;
 
-    virtual void SAL_CALL end() override;
+    virtual void end() override;
 
-    virtual void SAL_CALL reset() override;
+    virtual void reset() override;
 
-    virtual void SAL_CALL setText( const OUString& sText ) override;
+    virtual void setText( const OUString& sText ) override;
 
-    virtual void SAL_CALL setValue( sal_Int32 nValue ) override;
+    virtual void setValue( sal_Int32 nValue ) override;
 
     //  XLayoutConstrains
 
-    virtual css::awt::Size SAL_CALL getMinimumSize() override;
+    virtual css::awt::Size getMinimumSize() override;
 
-    virtual css::awt::Size SAL_CALL getPreferredSize() override;
+    virtual css::awt::Size getPreferredSize() override;
 
-    virtual css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& aNewSize ) override;
+    virtual css::awt::Size calcAdjustedSize( const css::awt::Size& aNewSize ) override;
 
     //  XControl
 
-    virtual void SAL_CALL createPeer(
+    virtual void createPeer(
         const   css::uno::Reference< css::awt::XToolkit >&    xToolkit    ,
         const   css::uno::Reference< css::awt::XWindowPeer >& xParent
     ) override;
 
-    virtual bool SAL_CALL setModel( const css::uno::Reference< css::awt::XControlModel >& xModel ) override;
+    virtual bool setModel( const css::uno::Reference< css::awt::XControlModel >& xModel ) override;
 
-    virtual css::uno::Reference< css::awt::XControlModel > SAL_CALL getModel() override;
+    virtual css::uno::Reference< css::awt::XControlModel > getModel() override;
 
     //  XComponent
 
-    virtual void SAL_CALL dispose() override;
+    virtual void dispose() override;
 
     //  XWindow
 
-    virtual void SAL_CALL setPosSize(   sal_Int32   nX      ,
+    virtual void setPosSize(   sal_Int32   nX      ,
                                         sal_Int32   nY      ,
                                         sal_Int32   nWidth  ,
                                         sal_Int32   nHeight ,

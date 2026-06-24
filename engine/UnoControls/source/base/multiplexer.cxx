@@ -31,7 +31,7 @@ using namespace ::com::sun::star::lang;
 namespace unocontrols {
 
 template <class Interface, typename Event>
-void OMRCListenerMultiplexerHelper::Multiplex(void (SAL_CALL Interface::*method)(const Event&),
+void OMRCListenerMultiplexerHelper::Multiplex(void (Interface::*method)(const Event&),
                                               const Event& event)
 {
     std::unique_lock aGuard(m_aMutex);
@@ -99,7 +99,7 @@ void OMRCListenerMultiplexerHelper::disposeAndClear()
 
 //  XEventListener
 
-void SAL_CALL OMRCListenerMultiplexerHelper::disposing( const EventObject& /*aSource*/ )
+void OMRCListenerMultiplexerHelper::disposing( const EventObject& /*aSource*/ )
 {
     std::unique_lock aGuard(m_aMutex);
     // peer is disposed, clear the reference

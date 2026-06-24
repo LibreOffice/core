@@ -47,49 +47,49 @@ public:
 
     //  XControl
 
-    virtual void SAL_CALL createPeer(
+    virtual void createPeer(
         const css::uno::Reference< css::awt::XToolkit >&      xToolkit ,
         const css::uno::Reference< css::awt::XWindowPeer >&   xParent
     ) override;
 
-    virtual bool SAL_CALL setModel(
+    virtual bool setModel(
         const css::uno::Reference< css::awt::XControlModel >& xModel
     ) override;
 
-    virtual css::uno::Reference< css::awt::XControlModel > SAL_CALL getModel() override;
+    virtual css::uno::Reference< css::awt::XControlModel > getModel() override;
 
     //  XComponent
 
-    virtual void SAL_CALL dispose() override;
+    virtual void dispose() override;
 
     //  XEventListener
 
-    virtual void SAL_CALL disposing( const css::lang::EventObject& rEvent ) override;
+    virtual void disposing( const css::lang::EventObject& rEvent ) override;
 
     //  XControlContainer
 
-    virtual void SAL_CALL addControl(
+    virtual void addControl(
         const OUString&                                     sName    ,
         const css::uno::Reference< css::awt::XControl >&    xControl
     ) override;
 
-    virtual void SAL_CALL removeControl(
+    virtual void removeControl(
         const css::uno::Reference< css::awt::XControl >& xControl
     ) override;
 
-    virtual void SAL_CALL setStatusText(
+    virtual void setStatusText(
         const OUString& sStatusText
     ) override;
 
-    virtual css::uno::Reference< css::awt::XControl > SAL_CALL getControl(
+    virtual css::uno::Reference< css::awt::XControl > getControl(
         const OUString& sName
     ) override;
 
-    virtual css::uno::Sequence< css::uno::Reference< css::awt::XControl > > SAL_CALL getControls() override;
+    virtual css::uno::Sequence< css::uno::Reference< css::awt::XControl > > getControls() override;
 
     //  XWindow
 
-    virtual void SAL_CALL setVisible( bool bVisible ) override;
+    virtual void setVisible( bool bVisible ) override;
 
 protected:
     using WeakComponentImplHelperBase::disposing;

@@ -67,28 +67,28 @@ BaseControl::~BaseControl()
 
 //  XServiceInfo
 
-OUString SAL_CALL BaseControl::getImplementationName()
+OUString BaseControl::getImplementationName()
 {
     return OUString();
 }
 
 //  XServiceInfo
 
-bool SAL_CALL BaseControl::supportsService( const OUString& sServiceName )
+bool BaseControl::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 //  XServiceInfo
 
-Sequence< OUString > SAL_CALL BaseControl::getSupportedServiceNames()
+Sequence< OUString > BaseControl::getSupportedServiceNames()
 {
     return Sequence< OUString >();
 }
 
 //  XComponent
 
-void SAL_CALL BaseControl::dispose()
+void BaseControl::dispose()
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -128,7 +128,7 @@ void SAL_CALL BaseControl::dispose()
 
 //  XComponent
 
-void SAL_CALL BaseControl::addEventListener( const Reference< XEventListener >& xListener )
+void BaseControl::addEventListener( const Reference< XEventListener >& xListener )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -137,7 +137,7 @@ void SAL_CALL BaseControl::addEventListener( const Reference< XEventListener >& 
 
 //  XComponent
 
-void SAL_CALL BaseControl::removeEventListener( const Reference< XEventListener >& xListener )
+void BaseControl::removeEventListener( const Reference< XEventListener >& xListener )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -146,7 +146,7 @@ void SAL_CALL BaseControl::removeEventListener( const Reference< XEventListener 
 
 //  XControl
 
-void SAL_CALL BaseControl::createPeer(  const   Reference< XToolkit >&      xToolkit    ,
+void BaseControl::createPeer(  const   Reference< XToolkit >&      xToolkit    ,
                                         const   Reference< XWindowPeer >&   xParentPeer )
 {
     // Ready for multithreading
@@ -204,7 +204,7 @@ void SAL_CALL BaseControl::createPeer(  const   Reference< XToolkit >&      xToo
 
 //  XControl
 
-void SAL_CALL BaseControl::setContext( const Reference< XInterface >& xContext )
+void BaseControl::setContext( const Reference< XInterface >& xContext )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -213,7 +213,7 @@ void SAL_CALL BaseControl::setContext( const Reference< XInterface >& xContext )
 
 //  XControl
 
-void SAL_CALL BaseControl::setDesignMode( bool bOn )
+void BaseControl::setDesignMode( bool bOn )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -222,7 +222,7 @@ void SAL_CALL BaseControl::setDesignMode( bool bOn )
 
 //  XControl
 
-Reference< XInterface > SAL_CALL BaseControl::getContext()
+Reference< XInterface > BaseControl::getContext()
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -231,7 +231,7 @@ Reference< XInterface > SAL_CALL BaseControl::getContext()
 
 //  XControl
 
-Reference< XWindowPeer > SAL_CALL BaseControl::getPeer()
+Reference< XWindowPeer > BaseControl::getPeer()
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -240,7 +240,7 @@ Reference< XWindowPeer > SAL_CALL BaseControl::getPeer()
 
 //  XControl
 
-Reference< XView > SAL_CALL BaseControl::getView()
+Reference< XView > BaseControl::getView()
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -249,7 +249,7 @@ Reference< XView > SAL_CALL BaseControl::getView()
 
 //  XControl
 
-bool SAL_CALL BaseControl::isDesignMode()
+bool BaseControl::isDesignMode()
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -258,14 +258,14 @@ bool SAL_CALL BaseControl::isDesignMode()
 
 //  XControl
 
-bool SAL_CALL BaseControl::isTransparent()
+bool BaseControl::isTransparent()
 {
     return false;
 }
 
 //  XWindow
 
-void SAL_CALL BaseControl::setPosSize(  sal_Int32   nX      ,
+void BaseControl::setPosSize(  sal_Int32   nX      ,
                                         sal_Int32   nY      ,
                                         sal_Int32   nWidth  ,
                                         sal_Int32   nHeight ,
@@ -310,7 +310,7 @@ void SAL_CALL BaseControl::setPosSize(  sal_Int32   nX      ,
 
 //  XWindow
 
-void SAL_CALL BaseControl::setVisible( bool bVisible )
+void BaseControl::setVisible( bool bVisible )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -327,7 +327,7 @@ void SAL_CALL BaseControl::setVisible( bool bVisible )
 
 //  XWindow
 
-void SAL_CALL BaseControl::setEnable( bool bEnable )
+void BaseControl::setEnable( bool bEnable )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -344,7 +344,7 @@ void SAL_CALL BaseControl::setEnable( bool bEnable )
 
 //  XWindow
 
-void SAL_CALL BaseControl::setFocus()
+void BaseControl::setFocus()
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -357,7 +357,7 @@ void SAL_CALL BaseControl::setFocus()
 
 //  XWindow
 
-Rectangle SAL_CALL BaseControl::getPosSize()
+Rectangle BaseControl::getPosSize()
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -366,91 +366,91 @@ Rectangle SAL_CALL BaseControl::getPosSize()
 
 //  XWindow
 
-void SAL_CALL BaseControl::addWindowListener( const Reference< XWindowListener >& xListener )
+void BaseControl::addWindowListener( const Reference< XWindowListener >& xListener )
 {
     impl_getMultiplexer()->advise(xListener);
 }
 
 //  XWindow
 
-void SAL_CALL BaseControl::addFocusListener( const Reference< XFocusListener >& xListener )
+void BaseControl::addFocusListener( const Reference< XFocusListener >& xListener )
 {
     impl_getMultiplexer()->advise(xListener);
 }
 
 //  XWindow
 
-void SAL_CALL BaseControl::addKeyListener( const Reference< XKeyListener >& xListener )
+void BaseControl::addKeyListener( const Reference< XKeyListener >& xListener )
 {
     impl_getMultiplexer()->advise(xListener);
 }
 
 //  XWindow
 
-void SAL_CALL BaseControl::addMouseListener( const Reference< XMouseListener >& xListener )
+void BaseControl::addMouseListener( const Reference< XMouseListener >& xListener )
 {
     impl_getMultiplexer()->advise(xListener);
 }
 
 //  XWindow
 
-void SAL_CALL BaseControl::addMouseMotionListener( const Reference< XMouseMotionListener >& xListener )
+void BaseControl::addMouseMotionListener( const Reference< XMouseMotionListener >& xListener )
 {
     impl_getMultiplexer()->advise(xListener);
 }
 
 //  XWindow
 
-void SAL_CALL BaseControl::addPaintListener( const Reference< XPaintListener >& xListener )
+void BaseControl::addPaintListener( const Reference< XPaintListener >& xListener )
 {
     impl_getMultiplexer()->advise(xListener);
 }
 
 //  XWindow
 
-void SAL_CALL BaseControl::removeWindowListener( const Reference< XWindowListener >& xListener )
+void BaseControl::removeWindowListener( const Reference< XWindowListener >& xListener )
 {
     impl_getMultiplexer()->unadvise(xListener);
 }
 
 //  XWindow
 
-void SAL_CALL BaseControl::removeFocusListener( const Reference< XFocusListener >& xListener )
+void BaseControl::removeFocusListener( const Reference< XFocusListener >& xListener )
 {
     impl_getMultiplexer()->unadvise(xListener);
 }
 
 //  XWindow
 
-void SAL_CALL BaseControl::removeKeyListener( const Reference< XKeyListener >& xListener )
+void BaseControl::removeKeyListener( const Reference< XKeyListener >& xListener )
 {
     impl_getMultiplexer()->unadvise(xListener);
 }
 
 //  XWindow
 
-void SAL_CALL BaseControl::removeMouseListener( const Reference< XMouseListener >& xListener )
+void BaseControl::removeMouseListener( const Reference< XMouseListener >& xListener )
 {
     impl_getMultiplexer()->unadvise(xListener);
 }
 
 //  XWindow
 
-void  SAL_CALL BaseControl::removeMouseMotionListener( const Reference< XMouseMotionListener >& xListener )
+void  BaseControl::removeMouseMotionListener( const Reference< XMouseMotionListener >& xListener )
 {
     impl_getMultiplexer()->unadvise(xListener);
 }
 
 //  XWindow
 
-void SAL_CALL BaseControl::removePaintListener( const Reference< XPaintListener >& xListener )
+void BaseControl::removePaintListener( const Reference< XPaintListener >& xListener )
 {
     impl_getMultiplexer()->unadvise(xListener);
 }
 
 //  XView
 
-void SAL_CALL BaseControl::draw(    sal_Int32   nX  ,
+void BaseControl::draw(    sal_Int32   nX  ,
                                     sal_Int32   nY  )
 {
     // Ready for multithreading
@@ -464,7 +464,7 @@ void SAL_CALL BaseControl::draw(    sal_Int32   nX  ,
 
 //  XView
 
-bool SAL_CALL BaseControl::setGraphics( const Reference< XGraphics >& xDevice )
+bool BaseControl::setGraphics( const Reference< XGraphics >& xDevice )
 {
     // - set the graphics for a view
     // - in this class exist 2 graphics-member ... one for peer[_xGraphicsPeer] and one for view[_xGraphicsView]
@@ -484,7 +484,7 @@ bool SAL_CALL BaseControl::setGraphics( const Reference< XGraphics >& xDevice )
 
 //  XView
 
-void SAL_CALL BaseControl::setZoom( float   /*fZoomX*/  ,
+void BaseControl::setZoom( float   /*fZoomX*/  ,
                                     float   /*fZoomY*/  )
 {
     // Not implemented yet
@@ -492,7 +492,7 @@ void SAL_CALL BaseControl::setZoom( float   /*fZoomX*/  ,
 
 //  XView
 
-Reference< XGraphics > SAL_CALL BaseControl::getGraphics()
+Reference< XGraphics > BaseControl::getGraphics()
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -501,7 +501,7 @@ Reference< XGraphics > SAL_CALL BaseControl::getGraphics()
 
 //  XView
 
-Size SAL_CALL BaseControl::getSize()
+Size BaseControl::getSize()
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -510,7 +510,7 @@ Size SAL_CALL BaseControl::getSize()
 
 //  XEventListener
 
-void SAL_CALL BaseControl::disposing( const EventObject& /*aSource*/ )
+void BaseControl::disposing( const EventObject& /*aSource*/ )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -532,7 +532,7 @@ void SAL_CALL BaseControl::disposing( const EventObject& /*aSource*/ )
 
 //  XPaintListener
 
-void SAL_CALL BaseControl::windowPaint( const PaintEvent& /*aEvent*/ )
+void BaseControl::windowPaint( const PaintEvent& /*aEvent*/ )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -545,7 +545,7 @@ void SAL_CALL BaseControl::windowPaint( const PaintEvent& /*aEvent*/ )
 
 //  XWindowListener
 
-void SAL_CALL BaseControl::windowResized( const WindowEvent& aEvent )
+void BaseControl::windowResized( const WindowEvent& aEvent )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -560,7 +560,7 @@ void SAL_CALL BaseControl::windowResized( const WindowEvent& aEvent )
 
 //  XWindowListener
 
-void SAL_CALL BaseControl::windowMoved( const WindowEvent& aEvent )
+void BaseControl::windowMoved( const WindowEvent& aEvent )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -575,13 +575,13 @@ void SAL_CALL BaseControl::windowMoved( const WindowEvent& aEvent )
 
 //  XWindowListener
 
-void SAL_CALL BaseControl::windowShown( const EventObject& /*aEvent*/ )
+void BaseControl::windowShown( const EventObject& /*aEvent*/ )
 {
 }
 
 //  XWindowListener
 
-void SAL_CALL BaseControl::windowHidden( const EventObject& /*aEvent*/ )
+void BaseControl::windowHidden( const EventObject& /*aEvent*/ )
 {
 }
 

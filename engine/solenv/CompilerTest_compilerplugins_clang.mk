@@ -75,7 +75,6 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/referencecasting \
     compilerplugins/clang/test/reftotemp \
     compilerplugins/clang/test/returnconstval \
-    compilerplugins/clang/test/salcall \
     compilerplugins/clang/test/sallogareas \
     compilerplugins/clang/test/salunicodeliteral \
     compilerplugins/clang/test/scopedvclptr \

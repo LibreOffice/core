@@ -55,22 +55,22 @@ public:
 
     //  XProgressBar
 
-    virtual void SAL_CALL setForegroundColor( sal_Int32 nColor ) override;
+    virtual void setForegroundColor( sal_Int32 nColor ) override;
 
-    virtual void SAL_CALL setBackgroundColor( sal_Int32 nColor ) override;
+    virtual void setBackgroundColor( sal_Int32 nColor ) override;
 
-    virtual void SAL_CALL setValue( sal_Int32 nValue ) override;
+    virtual void setValue( sal_Int32 nValue ) override;
 
-    virtual void SAL_CALL setRange(
+    virtual void setRange(
         sal_Int32   nMin    ,
         sal_Int32   nMax
     ) override;
 
-    virtual sal_Int32 SAL_CALL getValue() override;
+    virtual sal_Int32 getValue() override;
 
     //  XWindow
 
-    virtual void SAL_CALL setPosSize(
+    virtual void setPosSize(
         sal_Int32   nX      ,
         sal_Int32   nY      ,
         sal_Int32   nWidth  ,
@@ -80,11 +80,11 @@ public:
 
     //  XControl
 
-    virtual bool SAL_CALL setModel(
+    virtual bool setModel(
         const css::uno::Reference< css::awt::XControlModel >& xModel
     ) override;
 
-    virtual css::uno::Reference< css::awt::XControlModel > SAL_CALL getModel() override;
+    virtual css::uno::Reference< css::awt::XControlModel > getModel() override;
 
 private:
     virtual void impl_paint(

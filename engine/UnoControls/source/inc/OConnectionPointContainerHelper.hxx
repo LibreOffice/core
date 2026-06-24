@@ -48,7 +48,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+    virtual cpo::uno::Any queryInterface( const css::uno::Type& aType ) override;
 
     /**
         @short      increment refcount
@@ -57,7 +57,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual void SAL_CALL acquire() noexcept override;
+    virtual void acquire() noexcept override;
 
     /**
         @short      decrement refcount
@@ -66,22 +66,22 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual void SAL_CALL release() noexcept override;
+    virtual void release() noexcept override;
 
     //  XConnectionPointContainer
 
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getConnectionPointTypes() override;
+    virtual css::uno::Sequence< css::uno::Type > getConnectionPointTypes() override;
 
-    virtual css::uno::Reference< css::lang::XConnectionPoint > SAL_CALL queryConnectionPoint(
+    virtual css::uno::Reference< css::lang::XConnectionPoint > queryConnectionPoint(
         const css::uno::Type& aType
     ) override;
 
-    virtual void SAL_CALL advise(
+    virtual void advise(
         const   css::uno::Type&                              aType ,
         const   css::uno::Reference< css::uno::XInterface >&  xListener
     ) override;
 
-    virtual void SAL_CALL unadvise(
+    virtual void unadvise(
         const   css::uno::Type&                              aType       ,
         const   css::uno::Reference< css::uno::XInterface >&  xListener
     ) override;

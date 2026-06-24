@@ -72,7 +72,7 @@ FrameControl::~FrameControl()
 }
 
 //  XInterface
-Any SAL_CALL FrameControl::queryInterface( const Type& rType )
+Any FrameControl::queryInterface( const Type& rType )
 {
     Any aReturn = OPropertySetHelper::queryInterface(rType);
     if (aReturn.hasValue())
@@ -81,7 +81,7 @@ Any SAL_CALL FrameControl::queryInterface( const Type& rType )
 }
 
 //  XInterface
-void SAL_CALL FrameControl::acquire() noexcept
+void FrameControl::acquire() noexcept
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -91,7 +91,7 @@ void SAL_CALL FrameControl::acquire() noexcept
 }
 
 //  XInterface
-void SAL_CALL FrameControl::release() noexcept
+void FrameControl::release() noexcept
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -102,7 +102,7 @@ void SAL_CALL FrameControl::release() noexcept
 
 //  XTypeProvider
 
-Sequence< Type > SAL_CALL FrameControl::getTypes()
+Sequence< Type > FrameControl::getTypes()
 {
     static Sequence myTypes = comphelper::concatSequences(FrameControl_BASE::getTypes(),
                                                           OPropertySetHelper::getTypes());
@@ -121,7 +121,7 @@ css::uno::Sequence<OUString> FrameControl::getSupportedServiceNames()
 
 //  XControl
 
-void SAL_CALL FrameControl::createPeer( const   Reference< XToolkit >&      xToolkit    ,
+void FrameControl::createPeer( const   Reference< XToolkit >&      xToolkit    ,
                                         const   Reference< XWindowPeer >&   xParentPeer )
 {
     BaseControl::createPeer( xToolkit, xParentPeer );
@@ -136,7 +136,7 @@ void SAL_CALL FrameControl::createPeer( const   Reference< XToolkit >&      xToo
 
 //  XControl
 
-bool SAL_CALL FrameControl::setModel( const Reference< XControlModel >& /*xModel*/ )
+bool FrameControl::setModel( const Reference< XControlModel >& /*xModel*/ )
 {
     // We have no model.
     return false;
@@ -144,7 +144,7 @@ bool SAL_CALL FrameControl::setModel( const Reference< XControlModel >& /*xModel
 
 //  XControl
 
-Reference< XControlModel > SAL_CALL FrameControl::getModel()
+Reference< XControlModel > FrameControl::getModel()
 {
     // We have no model.
     return Reference< XControlModel >();
@@ -152,7 +152,7 @@ Reference< XControlModel > SAL_CALL FrameControl::getModel()
 
 //  XControl
 
-void SAL_CALL FrameControl::dispose()
+void FrameControl::dispose()
 {
     Reference< XFrame2 >  xOldFrame;
     {
@@ -178,7 +178,7 @@ void SAL_CALL FrameControl::dispose()
 
 //  XView
 
-bool SAL_CALL FrameControl::setGraphics( const Reference< XGraphics >& /*xDevice*/ )
+bool FrameControl::setGraphics( const Reference< XGraphics >& /*xDevice*/ )
 {
     // it is not possible to print this control
     return false;
@@ -186,7 +186,7 @@ bool SAL_CALL FrameControl::setGraphics( const Reference< XGraphics >& /*xDevice
 
 //  XView
 
-Reference< XGraphics > SAL_CALL FrameControl::getGraphics()
+Reference< XGraphics > FrameControl::getGraphics()
 {
     // when it's not possible to set graphics ! then it's possible to return null
     return Reference< XGraphics >();
@@ -194,7 +194,7 @@ Reference< XGraphics > SAL_CALL FrameControl::getGraphics()
 
 //  XConnectionPointContainer
 
-Sequence< Type > SAL_CALL FrameControl::getConnectionPointTypes()
+Sequence< Type > FrameControl::getConnectionPointTypes()
 {
     // Forwarded to helper class
     return m_aConnectionPointContainer->getConnectionPointTypes();
@@ -202,7 +202,7 @@ Sequence< Type > SAL_CALL FrameControl::getConnectionPointTypes()
 
 //  XConnectionPointContainer
 
-Reference< XConnectionPoint > SAL_CALL FrameControl::queryConnectionPoint( const Type& aType )
+Reference< XConnectionPoint > FrameControl::queryConnectionPoint( const Type& aType )
 {
     // Forwarded to helper class
     return m_aConnectionPointContainer->queryConnectionPoint( aType );
@@ -210,7 +210,7 @@ Reference< XConnectionPoint > SAL_CALL FrameControl::queryConnectionPoint( const
 
 //  XConnectionPointContainer
 
-void SAL_CALL FrameControl::advise( const   Type&                       aType       ,
+void FrameControl::advise( const   Type&                       aType       ,
                                     const   Reference< XInterface >&    xListener   )
 {
     // Forwarded to helper class
@@ -219,7 +219,7 @@ void SAL_CALL FrameControl::advise( const   Type&                       aType   
 
 //  XConnectionPointContainer
 
-void SAL_CALL FrameControl::unadvise(   const   Type&                       aType       ,
+void FrameControl::unadvise(   const   Type&                       aType       ,
                                         const   Reference< XInterface >&    xListener   )
 {
     // Forwarded to helper class
@@ -322,7 +322,7 @@ IPropertyArrayHelper& FrameControl::getInfoHelper()
 
 //  OPropertySetHelper
 
-Reference< XPropertySetInfo > SAL_CALL FrameControl::getPropertySetInfo()
+Reference< XPropertySetInfo > FrameControl::getPropertySetInfo()
 {
     // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
     // (Use method "getInfoHelper()".)

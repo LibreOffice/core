@@ -48,7 +48,7 @@ OConnectionPointContainerHelper::~OConnectionPointContainerHelper()
 }
 
 //  XInterface
-Any SAL_CALL OConnectionPointContainerHelper::queryInterface( const Type& aType )
+Any OConnectionPointContainerHelper::queryInterface( const Type& aType )
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -68,7 +68,7 @@ Any SAL_CALL OConnectionPointContainerHelper::queryInterface( const Type& aType 
 }
 
 //  XInterface
-void SAL_CALL OConnectionPointContainerHelper::acquire() noexcept
+void OConnectionPointContainerHelper::acquire() noexcept
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -78,7 +78,7 @@ void SAL_CALL OConnectionPointContainerHelper::acquire() noexcept
 }
 
 //  XInterface
-void SAL_CALL OConnectionPointContainerHelper::release() noexcept
+void OConnectionPointContainerHelper::release() noexcept
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -89,7 +89,7 @@ void SAL_CALL OConnectionPointContainerHelper::release() noexcept
 
 //  XConnectionPointContainer
 
-Sequence< Type > SAL_CALL OConnectionPointContainerHelper::getConnectionPointTypes()
+Sequence< Type > OConnectionPointContainerHelper::getConnectionPointTypes()
 {
     // Container is threadsafe himself !
     return comphelper::containerToSequence(m_aMultiTypeContainer.getContainedTypes());
@@ -97,7 +97,7 @@ Sequence< Type > SAL_CALL OConnectionPointContainerHelper::getConnectionPointTyp
 
 //  XConnectionPointContainer
 
-Reference< XConnectionPoint > SAL_CALL OConnectionPointContainerHelper::queryConnectionPoint( const Type& aType )
+Reference< XConnectionPoint > OConnectionPointContainerHelper::queryConnectionPoint( const Type& aType )
 {
     // Set default return value, if method failed.
     rtl::Reference< OConnectionPointHelper > xConnectionPoint;
@@ -117,7 +117,7 @@ Reference< XConnectionPoint > SAL_CALL OConnectionPointContainerHelper::queryCon
 
 //  XConnectionPointContainer
 
-void SAL_CALL OConnectionPointContainerHelper::advise(  const   Type&                       aType       ,
+void OConnectionPointContainerHelper::advise(  const   Type&                       aType       ,
                                                         const   Reference< XInterface >&    xListener   )
 {
     // Container is threadsafe himself !
@@ -126,7 +126,7 @@ void SAL_CALL OConnectionPointContainerHelper::advise(  const   Type&           
 
 //  XConnectionPointContainer
 
-void SAL_CALL OConnectionPointContainerHelper::unadvise(    const   Type&                       aType       ,
+void OConnectionPointContainerHelper::unadvise(    const   Type&                       aType       ,
                                                             const   Reference< XInterface >&    xListener   )
 {
     // Container is threadsafe himself !

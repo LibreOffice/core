@@ -69,7 +69,7 @@ protected:
 
     template <class Ifc1>
     void notifyPeer(const css::uno::Reference<css::awt::XWindow>& peer,
-                    void (SAL_CALL css::awt::XWindow::*func)(const css::uno::Reference<Ifc1>&))
+                    void (css::awt::XWindow::*func)(const css::uno::Reference<Ifc1>&))
     {
         if (peer)
             (peer.get()->*func)(this);
@@ -159,53 +159,53 @@ public:
 
     //  XEventListener
 
-    virtual void SAL_CALL disposing(const css::lang::EventObject& aSource) override;
+    virtual void disposing(const css::lang::EventObject& aSource) override;
 
     //  XFocusListener
 
-    virtual void SAL_CALL focusGained(const css::awt::FocusEvent& aEvent ) override;
+    virtual void focusGained(const css::awt::FocusEvent& aEvent ) override;
 
-    virtual void SAL_CALL focusLost(const css::awt::FocusEvent& aEvent ) override;
+    virtual void focusLost(const css::awt::FocusEvent& aEvent ) override;
 
     //  XWindowListener
 
-    virtual void SAL_CALL windowResized(const css::awt::WindowEvent& aEvent ) override;
+    virtual void windowResized(const css::awt::WindowEvent& aEvent ) override;
 
-    virtual void SAL_CALL windowMoved(const css::awt::WindowEvent& aEvent ) override;
+    virtual void windowMoved(const css::awt::WindowEvent& aEvent ) override;
 
-    virtual void SAL_CALL windowShown(const css::lang::EventObject& aEvent ) override;
+    virtual void windowShown(const css::lang::EventObject& aEvent ) override;
 
-    virtual void SAL_CALL windowHidden(const css::lang::EventObject& aEvent ) override;
+    virtual void windowHidden(const css::lang::EventObject& aEvent ) override;
 
     //  XKeyListener
 
-    virtual void SAL_CALL keyPressed( const css::awt::KeyEvent& aEvent ) override;
+    virtual void keyPressed( const css::awt::KeyEvent& aEvent ) override;
 
-    virtual void SAL_CALL keyReleased( const css::awt::KeyEvent& aEvent ) override;
+    virtual void keyReleased( const css::awt::KeyEvent& aEvent ) override;
 
     //  XMouseListener
 
-    virtual void SAL_CALL mousePressed(const css::awt::MouseEvent& aEvent ) override;
+    virtual void mousePressed(const css::awt::MouseEvent& aEvent ) override;
 
-    virtual void SAL_CALL mouseReleased(const css::awt::MouseEvent& aEvent ) override;
+    virtual void mouseReleased(const css::awt::MouseEvent& aEvent ) override;
 
-    virtual void SAL_CALL mouseEntered(const css::awt::MouseEvent& aEvent ) override;
+    virtual void mouseEntered(const css::awt::MouseEvent& aEvent ) override;
 
-    virtual void SAL_CALL mouseExited(const css::awt::MouseEvent& aEvent ) override;
+    virtual void mouseExited(const css::awt::MouseEvent& aEvent ) override;
 
     //  XMouseMotionListener
 
-    virtual void SAL_CALL mouseDragged(const css::awt::MouseEvent& aEvent ) override;
+    virtual void mouseDragged(const css::awt::MouseEvent& aEvent ) override;
 
-    virtual void SAL_CALL mouseMoved(const css::awt::MouseEvent& aEvent ) override;
+    virtual void mouseMoved(const css::awt::MouseEvent& aEvent ) override;
 
     //  XPaintListener
 
-    virtual void SAL_CALL windowPaint(const css::awt::PaintEvent& aEvent ) override;
+    virtual void windowPaint(const css::awt::PaintEvent& aEvent ) override;
 
 private:
     template <class Interface, typename Event>
-    void Multiplex(void (SAL_CALL Interface::*method)(const Event&), const Event& event);
+    void Multiplex(void (Interface::*method)(const Event&), const Event& event);
 
 //  private variables
 

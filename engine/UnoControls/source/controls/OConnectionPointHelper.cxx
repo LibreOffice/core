@@ -53,7 +53,7 @@ OConnectionPointHelper::~OConnectionPointHelper()
 }
 
 //  XInterface
-Any SAL_CALL OConnectionPointHelper::queryInterface( const Type& aType )
+Any OConnectionPointHelper::queryInterface( const Type& aType )
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -73,7 +73,7 @@ Any SAL_CALL OConnectionPointHelper::queryInterface( const Type& aType )
 }
 
 //  XInterface
-void SAL_CALL OConnectionPointHelper::acquire() noexcept
+void OConnectionPointHelper::acquire() noexcept
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -83,7 +83,7 @@ void SAL_CALL OConnectionPointHelper::acquire() noexcept
 }
 
 //  XInterface
-void SAL_CALL OConnectionPointHelper::release() noexcept
+void OConnectionPointHelper::release() noexcept
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -94,7 +94,7 @@ void SAL_CALL OConnectionPointHelper::release() noexcept
 
 //  XConnectionPoint
 
-Type SAL_CALL OConnectionPointHelper::getConnectionType()
+Type OConnectionPointHelper::getConnectionType()
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aSharedMutex );
@@ -115,7 +115,7 @@ Type SAL_CALL OConnectionPointHelper::getConnectionType()
 
 //  XConnectionPoint
 
-Reference< XConnectionPointContainer > SAL_CALL OConnectionPointHelper::getConnectionPointContainer()
+Reference< XConnectionPointContainer > OConnectionPointHelper::getConnectionPointContainer()
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aSharedMutex );
@@ -125,7 +125,7 @@ Reference< XConnectionPointContainer > SAL_CALL OConnectionPointHelper::getConne
 
 //  XConnectionPoint
 
-void SAL_CALL OConnectionPointHelper::advise( const Reference< XInterface >& xListener )
+void OConnectionPointHelper::advise( const Reference< XInterface >& xListener )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aSharedMutex );
@@ -155,7 +155,7 @@ void SAL_CALL OConnectionPointHelper::advise( const Reference< XInterface >& xLi
 
 //  XConnectionPoint
 
-void SAL_CALL OConnectionPointHelper::unadvise( const Reference< XInterface >& xListener )
+void OConnectionPointHelper::unadvise( const Reference< XInterface >& xListener )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aSharedMutex );
@@ -173,7 +173,7 @@ void SAL_CALL OConnectionPointHelper::unadvise( const Reference< XInterface >& x
 
 //  XConnectionPoint
 
-Sequence< Reference< XInterface > > SAL_CALL OConnectionPointHelper::getConnections()
+Sequence< Reference< XInterface > > OConnectionPointHelper::getConnections()
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aSharedMutex );

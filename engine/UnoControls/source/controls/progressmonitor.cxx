@@ -100,7 +100,7 @@ ProgressMonitor::~ProgressMonitor()
 }
 
 //  XProgressMonitor
-void SAL_CALL ProgressMonitor::addText(
+void ProgressMonitor::addText(
     const OUString& rTopic,
     const OUString& rText,
     bool bbeforeProgress
@@ -143,7 +143,7 @@ void SAL_CALL ProgressMonitor::addText(
 }
 
 //  XProgressMonitor
-void SAL_CALL ProgressMonitor::removeText ( const OUString& rTopic, bool bbeforeProgress )
+void ProgressMonitor::removeText ( const OUString& rTopic, bool bbeforeProgress )
 {
     // Safe impossible cases
     // Check valid call of this method.
@@ -182,7 +182,7 @@ void SAL_CALL ProgressMonitor::removeText ( const OUString& rTopic, bool bbefore
 }
 
 //  XProgressMonitor
-void SAL_CALL ProgressMonitor::updateText (
+void ProgressMonitor::updateText (
     const OUString& rTopic,
     const OUString& rText,
     bool bbeforeProgress
@@ -210,7 +210,7 @@ void SAL_CALL ProgressMonitor::updateText (
 }
 
 //  XProgressBar
-void SAL_CALL ProgressMonitor::setForegroundColor ( sal_Int32 nColor )
+void ProgressMonitor::setForegroundColor ( sal_Int32 nColor )
 {
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex );
@@ -219,7 +219,7 @@ void SAL_CALL ProgressMonitor::setForegroundColor ( sal_Int32 nColor )
 }
 
 //  XProgressBar
-void SAL_CALL ProgressMonitor::setBackgroundColor ( sal_Int32 nColor )
+void ProgressMonitor::setBackgroundColor ( sal_Int32 nColor )
 {
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex );
@@ -228,7 +228,7 @@ void SAL_CALL ProgressMonitor::setBackgroundColor ( sal_Int32 nColor )
 }
 
 //  XProgressBar
-void SAL_CALL ProgressMonitor::setValue ( sal_Int32 nValue )
+void ProgressMonitor::setValue ( sal_Int32 nValue )
 {
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex );
@@ -237,7 +237,7 @@ void SAL_CALL ProgressMonitor::setValue ( sal_Int32 nValue )
 }
 
 //  XProgressBar
-void SAL_CALL ProgressMonitor::setRange ( sal_Int32 nMin, sal_Int32 nMax )
+void ProgressMonitor::setRange ( sal_Int32 nMin, sal_Int32 nMax )
 {
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex );
@@ -246,7 +246,7 @@ void SAL_CALL ProgressMonitor::setRange ( sal_Int32 nMin, sal_Int32 nMax )
 }
 
 //  XProgressBar
-sal_Int32 SAL_CALL ProgressMonitor::getValue ()
+sal_Int32 ProgressMonitor::getValue ()
 {
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex );
@@ -255,7 +255,7 @@ sal_Int32 SAL_CALL ProgressMonitor::getValue ()
 }
 
 //  XButton
-void SAL_CALL ProgressMonitor::addActionListener ( const css::uno::Reference< XActionListener > & rListener )
+void ProgressMonitor::addActionListener ( const css::uno::Reference< XActionListener > & rListener )
 {
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex );
@@ -267,7 +267,7 @@ void SAL_CALL ProgressMonitor::addActionListener ( const css::uno::Reference< XA
 }
 
 //  XButton
-void SAL_CALL ProgressMonitor::removeActionListener ( const css::uno::Reference< XActionListener > & rListener )
+void ProgressMonitor::removeActionListener ( const css::uno::Reference< XActionListener > & rListener )
 {
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex );
@@ -279,7 +279,7 @@ void SAL_CALL ProgressMonitor::removeActionListener ( const css::uno::Reference<
 }
 
 //  XButton
-void SAL_CALL ProgressMonitor::setLabel ( const OUString& rLabel )
+void ProgressMonitor::setLabel ( const OUString& rLabel )
 {
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex );
@@ -291,7 +291,7 @@ void SAL_CALL ProgressMonitor::setLabel ( const OUString& rLabel )
 }
 
 //  XButton
-void SAL_CALL ProgressMonitor::setActionCommand ( const OUString& rCommand )
+void ProgressMonitor::setActionCommand ( const OUString& rCommand )
 {
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex );
@@ -303,13 +303,13 @@ void SAL_CALL ProgressMonitor::setActionCommand ( const OUString& rCommand )
 }
 
 //  XLayoutConstrains
-css::awt::Size SAL_CALL ProgressMonitor::getMinimumSize ()
+css::awt::Size ProgressMonitor::getMinimumSize ()
 {
     return css::awt::Size (PROGRESSMONITOR_DEFAULT_WIDTH, PROGRESSMONITOR_DEFAULT_HEIGHT);
 }
 
 //  XLayoutConstrains
-css::awt::Size SAL_CALL ProgressMonitor::getPreferredSize ()
+css::awt::Size ProgressMonitor::getPreferredSize ()
 {
     // Ready for multithreading
     ClearableMutexGuard aGuard ( m_aMutex );
@@ -350,13 +350,13 @@ css::awt::Size SAL_CALL ProgressMonitor::getPreferredSize ()
 }
 
 //  XLayoutConstrains
-css::awt::Size SAL_CALL ProgressMonitor::calcAdjustedSize ( const css::awt::Size& /*rNewSize*/ )
+css::awt::Size ProgressMonitor::calcAdjustedSize ( const css::awt::Size& /*rNewSize*/ )
 {
     return getPreferredSize ();
 }
 
 //  XControl
-void SAL_CALL ProgressMonitor::createPeer ( const css::uno::Reference< XToolkit > & rToolkit, const css::uno::Reference< XWindowPeer > & rParent    )
+void ProgressMonitor::createPeer ( const css::uno::Reference< XToolkit > & rToolkit, const css::uno::Reference< XWindowPeer > & rParent    )
 {
     if (!getPeer().is())
     {
@@ -371,14 +371,14 @@ void SAL_CALL ProgressMonitor::createPeer ( const css::uno::Reference< XToolkit 
 }
 
 //  XControl
-bool SAL_CALL ProgressMonitor::setModel ( const css::uno::Reference< XControlModel > & /*rModel*/ )
+bool ProgressMonitor::setModel ( const css::uno::Reference< XControlModel > & /*rModel*/ )
 {
     // We have no model.
     return false;
 }
 
 //  XControl
-css::uno::Reference< XControlModel > SAL_CALL ProgressMonitor::getModel ()
+css::uno::Reference< XControlModel > ProgressMonitor::getModel ()
 {
     // We have no model.
     // return (XControlModel*)this;
@@ -386,7 +386,7 @@ css::uno::Reference< XControlModel > SAL_CALL ProgressMonitor::getModel ()
 }
 
 //  XComponent
-void SAL_CALL ProgressMonitor::dispose ()
+void ProgressMonitor::dispose ()
 {
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex );
@@ -413,7 +413,7 @@ void SAL_CALL ProgressMonitor::dispose ()
 }
 
 //  XWindow
-void SAL_CALL ProgressMonitor::setPosSize ( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nFlags )
+void ProgressMonitor::setPosSize ( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nFlags )
 {
     Rectangle   aBasePosSize = getPosSize ();
     BaseContainerControl::setPosSize (nX, nY, nWidth, nHeight, nFlags);

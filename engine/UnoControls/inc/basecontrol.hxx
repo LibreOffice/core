@@ -50,152 +50,152 @@ public:
 
     //  XServiceInfo
 
-    virtual bool SAL_CALL supportsService(
+    virtual bool supportsService(
         const OUString& sServiceName
     ) override;
 
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual css::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     //  XComponent
 
-    virtual void SAL_CALL dispose() override;
+    virtual void dispose() override;
 
-    virtual void SAL_CALL addEventListener(
+    virtual void addEventListener(
         const css::uno::Reference< css::lang::XEventListener >& xListener
     ) override;
 
-    virtual void SAL_CALL removeEventListener(
+    virtual void removeEventListener(
         const css::uno::Reference< css::lang::XEventListener >& xListener
     ) override;
 
     //  XControl
 
-    virtual void SAL_CALL createPeer(
+    virtual void createPeer(
         const css::uno::Reference< css::awt::XToolkit >& xToolkit,
         const css::uno::Reference< css::awt::XWindowPeer >& xParent
     ) override;
 
-    virtual void SAL_CALL setContext(
+    virtual void setContext(
         const css::uno::Reference< css::uno::XInterface >& xContext
     ) override;
 
-    virtual bool SAL_CALL setModel(
+    virtual bool setModel(
         const css::uno::Reference< css::awt::XControlModel >& xModel
     ) override = 0;
 
-    virtual void SAL_CALL setDesignMode( bool bOn ) override;
+    virtual void setDesignMode( bool bOn ) override;
 
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getContext() override;
+    virtual css::uno::Reference< css::uno::XInterface > getContext() override;
 
-    virtual css::uno::Reference< css::awt::XControlModel > SAL_CALL getModel() override = 0;
+    virtual css::uno::Reference< css::awt::XControlModel > getModel() override = 0;
 
-    virtual css::uno::Reference< css::awt::XWindowPeer > SAL_CALL getPeer() override;
+    virtual css::uno::Reference< css::awt::XWindowPeer > getPeer() override;
 
-    virtual css::uno::Reference< css::awt::XView > SAL_CALL getView() override;
+    virtual css::uno::Reference< css::awt::XView > getView() override;
 
-    virtual bool SAL_CALL isDesignMode() override;
+    virtual bool isDesignMode() override;
 
-    virtual bool SAL_CALL isTransparent() override;
+    virtual bool isTransparent() override;
 
     //  XWindow
 
-    virtual void SAL_CALL setPosSize(   sal_Int32   nX      ,
+    virtual void setPosSize(   sal_Int32   nX      ,
                                         sal_Int32   nY      ,
                                         sal_Int32   nWidth  ,
                                         sal_Int32   nHeight ,
                                         sal_Int16   nFlags  ) override;
 
-    virtual void SAL_CALL setVisible( bool bVisible ) override;
+    virtual void setVisible( bool bVisible ) override;
 
-    virtual void SAL_CALL setEnable( bool bEnable ) override;
+    virtual void setEnable( bool bEnable ) override;
 
-    virtual void SAL_CALL setFocus() override;
+    virtual void setFocus() override;
 
-    virtual css::awt::Rectangle SAL_CALL getPosSize() override;
+    virtual css::awt::Rectangle getPosSize() override;
 
-    virtual void SAL_CALL addWindowListener(
+    virtual void addWindowListener(
         const css::uno::Reference< css::awt::XWindowListener >& xListener
     ) override;
 
-    virtual void SAL_CALL addFocusListener(
+    virtual void addFocusListener(
         const css::uno::Reference< css::awt::XFocusListener >& xListener
     ) override;
 
-    virtual void SAL_CALL addKeyListener(
+    virtual void addKeyListener(
         const css::uno::Reference< css::awt::XKeyListener >& xListener ) override;
 
-    virtual void SAL_CALL addMouseListener(
+    virtual void addMouseListener(
         const css::uno::Reference< css::awt::XMouseListener >& xListener
     ) override;
 
-    virtual void SAL_CALL addMouseMotionListener(
+    virtual void addMouseMotionListener(
         const css::uno::Reference< css::awt::XMouseMotionListener >& xListener
     ) override;
 
-    virtual void SAL_CALL addPaintListener(
+    virtual void addPaintListener(
         const css::uno::Reference< css::awt::XPaintListener >& xListener
     ) override;
 
-    virtual void SAL_CALL removeWindowListener(
+    virtual void removeWindowListener(
         const css::uno::Reference< css::awt::XWindowListener >& xListener
     ) override;
 
-    virtual void SAL_CALL removeFocusListener(
+    virtual void removeFocusListener(
         const css::uno::Reference< css::awt::XFocusListener >& xListener
     ) override;
 
-    virtual void SAL_CALL removeKeyListener(
+    virtual void removeKeyListener(
         const css::uno::Reference< css::awt::XKeyListener >& xListener
     ) override;
 
-    virtual void SAL_CALL removeMouseListener(
+    virtual void removeMouseListener(
         const css::uno::Reference< css::awt::XMouseListener >& xListener
     ) override;
 
-    virtual void SAL_CALL removeMouseMotionListener(
+    virtual void removeMouseMotionListener(
         const css::uno::Reference< css::awt::XMouseMotionListener >& xListener
     ) override;
 
-    virtual void SAL_CALL removePaintListener(
+    virtual void removePaintListener(
         const css::uno::Reference< css::awt::XPaintListener >& xListener
     ) override;
 
     //  XView
 
-    virtual void SAL_CALL draw( sal_Int32   nX  ,
+    virtual void draw( sal_Int32   nX  ,
                                 sal_Int32   nY  ) override;
 
-    virtual bool SAL_CALL setGraphics(
+    virtual bool setGraphics(
         const css::uno::Reference< css::awt::XGraphics >& xDevice
     ) override;
 
-    virtual void SAL_CALL setZoom(  float   fZoomX  ,
+    virtual void setZoom(  float   fZoomX  ,
                                     float   fZoomY  ) override;
 
-    virtual css::uno::Reference< css::awt::XGraphics > SAL_CALL getGraphics() override;
+    virtual css::uno::Reference< css::awt::XGraphics > getGraphics() override;
 
-    virtual css::awt::Size SAL_CALL getSize() override;
+    virtual css::awt::Size getSize() override;
 
     //  css::lang::XEventListener
 
-    virtual void SAL_CALL disposing(
+    virtual void disposing(
         const css::lang::EventObject& rSource
     ) override;
 
     //  XPaintListener
 
-    virtual void SAL_CALL windowPaint(
+    virtual void windowPaint(
         const css::awt::PaintEvent& rEvent
     ) override;
 
     //  XWindowListener
 
-    virtual void SAL_CALL windowResized( const css::awt::WindowEvent& aEvent ) override;
-    virtual void SAL_CALL windowMoved( const css::awt::WindowEvent& aEvent ) override;
-    virtual void SAL_CALL windowShown( const css::lang::EventObject& aEvent ) override;
-    virtual void SAL_CALL windowHidden( const css::lang::EventObject& aEvent ) override;
+    virtual void windowResized( const css::awt::WindowEvent& aEvent ) override;
+    virtual void windowMoved( const css::awt::WindowEvent& aEvent ) override;
+    virtual void windowShown( const css::lang::EventObject& aEvent ) override;
+    virtual void windowHidden( const css::lang::EventObject& aEvent ) override;
 
 protected:
     using WeakComponentImplHelperBase::disposing;

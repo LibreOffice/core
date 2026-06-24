@@ -53,7 +53,7 @@ ProgressBar::~ProgressBar()
 
 //  XProgressBar
 
-void SAL_CALL ProgressBar::setForegroundColor( sal_Int32 nColor )
+void ProgressBar::setForegroundColor( sal_Int32 nColor )
 {
     // Ready for multithreading
     MutexGuard  aGuard (m_aMutex);
@@ -67,7 +67,7 @@ void SAL_CALL ProgressBar::setForegroundColor( sal_Int32 nColor )
 
 //  XProgressBar
 
-void SAL_CALL ProgressBar::setBackgroundColor ( sal_Int32 nColor )
+void ProgressBar::setBackgroundColor ( sal_Int32 nColor )
 {
     // Ready for multithreading
     MutexGuard  aGuard (m_aMutex);
@@ -81,7 +81,7 @@ void SAL_CALL ProgressBar::setBackgroundColor ( sal_Int32 nColor )
 
 //  XProgressBar
 
-void SAL_CALL ProgressBar::setValue ( sal_Int32 nValue )
+void ProgressBar::setValue ( sal_Int32 nValue )
 {
     // This method is defined for follow things:
     //      1) Values >= _nMinRange
@@ -110,7 +110,7 @@ void SAL_CALL ProgressBar::setValue ( sal_Int32 nValue )
 
 //  XProgressBar
 
-void SAL_CALL ProgressBar::setRange ( sal_Int32 nMin, sal_Int32 nMax )
+void ProgressBar::setRange ( sal_Int32 nMin, sal_Int32 nMax )
 {
     // This method is defined for follow things:
     //      1) All values of sal_Int32
@@ -152,7 +152,7 @@ void SAL_CALL ProgressBar::setRange ( sal_Int32 nMin, sal_Int32 nMax )
 
 //  XProgressBar
 
-sal_Int32 SAL_CALL ProgressBar::getValue ()
+sal_Int32 ProgressBar::getValue ()
 {
     // Ready for multithreading
     MutexGuard aGuard (m_aMutex);
@@ -162,7 +162,7 @@ sal_Int32 SAL_CALL ProgressBar::getValue ()
 
 //  XWindow
 
-void SAL_CALL ProgressBar::setPosSize (
+void ProgressBar::setPosSize (
     sal_Int32 nX,
     sal_Int32 nY,
     sal_Int32 nWidth,
@@ -188,7 +188,7 @@ void SAL_CALL ProgressBar::setPosSize (
 
 //  XControl
 
-bool SAL_CALL ProgressBar::setModel( const Reference< XControlModel >& /*xModel*/ )
+bool ProgressBar::setModel( const Reference< XControlModel >& /*xModel*/ )
 {
     // A model is not possible for this control.
     return false;
@@ -196,7 +196,7 @@ bool SAL_CALL ProgressBar::setModel( const Reference< XControlModel >& /*xModel*
 
 //  XControl
 
-Reference< XControlModel > SAL_CALL ProgressBar::getModel()
+Reference< XControlModel > ProgressBar::getModel()
 {
     // A model is not possible for this control.
     return Reference< XControlModel >();

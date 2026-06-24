@@ -69,7 +69,7 @@ StatusIndicator::~StatusIndicator() {}
 
 //  XStatusIndicator
 
-void SAL_CALL StatusIndicator::start( const OUString& sText, sal_Int32 nRange )
+void StatusIndicator::start( const OUString& sText, sal_Int32 nRange )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -83,7 +83,7 @@ void SAL_CALL StatusIndicator::start( const OUString& sText, sal_Int32 nRange )
 
 //  XStatusIndicator
 
-void SAL_CALL StatusIndicator::end()
+void StatusIndicator::end()
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -96,7 +96,7 @@ void SAL_CALL StatusIndicator::end()
 
 //  XStatusIndicator
 
-void SAL_CALL StatusIndicator::setText( const OUString& sText )
+void StatusIndicator::setText( const OUString& sText )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -107,7 +107,7 @@ void SAL_CALL StatusIndicator::setText( const OUString& sText )
 
 //  XStatusIndicator
 
-void SAL_CALL StatusIndicator::setValue( sal_Int32 nValue )
+void StatusIndicator::setValue( sal_Int32 nValue )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -118,7 +118,7 @@ void SAL_CALL StatusIndicator::setValue( sal_Int32 nValue )
 
 //  XStatusIndicator
 
-void SAL_CALL StatusIndicator::reset()
+void StatusIndicator::reset()
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -131,14 +131,14 @@ void SAL_CALL StatusIndicator::reset()
 
 //  XLayoutConstrains
 
-css::awt::Size SAL_CALL StatusIndicator::getMinimumSize ()
+css::awt::Size StatusIndicator::getMinimumSize ()
 {
     return css::awt::Size(STATUSINDICATOR_DEFAULT_WIDTH, STATUSINDICATOR_DEFAULT_HEIGHT);
 }
 
 //  XLayoutConstrains
 
-css::awt::Size SAL_CALL StatusIndicator::getPreferredSize ()
+css::awt::Size StatusIndicator::getPreferredSize ()
 {
     // Ready for multithreading
     ClearableMutexGuard aGuard ( m_aMutex );
@@ -168,14 +168,14 @@ css::awt::Size SAL_CALL StatusIndicator::getPreferredSize ()
 
 //  XLayoutConstrains
 
-css::awt::Size SAL_CALL StatusIndicator::calcAdjustedSize ( const css::awt::Size& /*rNewSize*/ )
+css::awt::Size StatusIndicator::calcAdjustedSize ( const css::awt::Size& /*rNewSize*/ )
 {
     return getPreferredSize ();
 }
 
 //  XControl
 
-void SAL_CALL StatusIndicator::createPeer (
+void StatusIndicator::createPeer (
     const css::uno::Reference< XToolkit > & rToolkit,
     const css::uno::Reference< XWindowPeer > & rParent
 )
@@ -194,7 +194,7 @@ void SAL_CALL StatusIndicator::createPeer (
 
 //  XControl
 
-bool SAL_CALL StatusIndicator::setModel ( const css::uno::Reference< XControlModel > & /*rModel*/ )
+bool StatusIndicator::setModel ( const css::uno::Reference< XControlModel > & /*rModel*/ )
 {
     // We have no model.
     return false;
@@ -202,7 +202,7 @@ bool SAL_CALL StatusIndicator::setModel ( const css::uno::Reference< XControlMod
 
 //  XControl
 
-css::uno::Reference< XControlModel > SAL_CALL StatusIndicator::getModel ()
+css::uno::Reference< XControlModel > StatusIndicator::getModel ()
 {
     // We have no model.
     // return (XControlModel*)this;
@@ -211,7 +211,7 @@ css::uno::Reference< XControlModel > SAL_CALL StatusIndicator::getModel ()
 
 //  XComponent
 
-void SAL_CALL StatusIndicator::dispose ()
+void StatusIndicator::dispose ()
 {
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex );
@@ -232,7 +232,7 @@ void SAL_CALL StatusIndicator::dispose ()
 
 //  XWindow
 
-void SAL_CALL StatusIndicator::setPosSize (
+void StatusIndicator::setPosSize (
     sal_Int32 nX,
     sal_Int32 nY,
     sal_Int32 nWidth,
