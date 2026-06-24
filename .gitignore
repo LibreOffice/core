@@ -51,6 +51,7 @@ macos/coolwsd/gmake-wrapper.sh
 macos/coda/coda/Assets.xcassets
 /qt/run-from-build
 scripts/__pycache__
+browser/introdocs/__pycache__
 
 # Test stuff
 systemplate

@@ -1,0 +1,130 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-06 16:07+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: Impress-Intro-Template.odp:1
+msgid "👋Introduction"
+msgstr ""
+
+#: Impress-Intro-Template.odp:2
+msgid "Collabora Office "
+msgstr ""
+
+#: Impress-Intro-Template.odp:3
+msgid "Next Chapter: 🖼 Slides & Layouts"
+msgstr ""
+
+#: Impress-Intro-Template.odp:4
+msgid "Here's what you'll discover"
+msgstr ""
+
+#: Impress-Intro-Template.odp:5
+msgid "🖼 Slides & Layouts"
+msgstr ""
+
+#: Impress-Intro-Template.odp:6
+msgid "Every presentation is a sequence of slides. "
+msgstr ""
+
+#: Impress-Intro-Template.odp:7
+msgid "Useful tip"
+msgstr ""
+
+#: Impress-Intro-Template.odp:8
+msgid "Next Chapter: 🎨 Design & Master Slides"
+msgstr ""
+
+#: Impress-Intro-Template.odp:9
+msgid "🎨 Design & Master Slides"
+msgstr ""
+
+#: Impress-Intro-Template.odp:10
+msgid ""
+"If a single slide needs a different look, create a second master slide and "
+"apply it just to that slide. The rest of your deck stays on the original "
+"master."
+msgstr ""
+
+#: Impress-Intro-Template.odp:11
+msgid "Next Chapter: ✏️ Style & Visual"
+msgstr ""
+
+#: Impress-Intro-Template.odp:12
+msgid "✏️ Style & Visual"
+msgstr ""
+
+#: Impress-Intro-Template.odp:13
+msgid ""
+"Less is more. One strong visual, a clear headline, and a few well-formatted "
+"lines will always beat a slide packed with text and decorations."
+msgstr ""
+
+#: Impress-Intro-Template.odp:14
+msgid "Next Chapter: 🎬 Slide Transitions"
+msgstr ""
+
+#: Impress-Intro-Template.odp:15
+msgid "🎬 Slide Transitions"
+msgstr ""
+
+#: Impress-Intro-Template.odp:16
+msgid ""
+"Use one transition across your whole deck to keep things consistent. Save a "
+"different transition for the slides you really want to stand out."
+msgstr ""
+
+#: Impress-Intro-Template.odp:17
+msgid "Next Chapter: 🎤 Presenting "
+msgstr ""
+
+#: Impress-Intro-Template.odp:18
+msgid "🎤 Presenting "
+msgstr ""
+
+#: Impress-Intro-Template.odp:19
+msgid "Next Chapter: 🤝 Productivity & Collaboration"
+msgstr ""
+
+#: Impress-Intro-Template.odp:20
+msgid "📤 Document sharing"
+msgstr ""
+
+#: Impress-Intro-Template.odp:21
+msgid ""
+"Work together in real time. Multiple people can edit the same presentation "
+"at once. Click the "
+msgstr ""
+
+#: Impress-Intro-Template.odp:22
+msgid "⌨️ Shortcuts"
+msgstr ""
+
+#: Impress-Intro-Template.odp:23
+msgid ""
+"Keyboard shortcuts speed up your workflow. Find the full list under Help tab"
+" in "
+msgstr ""
+
+#: Impress-Intro-Template.odp:24
+msgid "▶️ Video tutorials"
+msgstr ""
+
+#: Impress-Intro-Template.odp:25
+msgid ""
+"Want to keep learning? Short video introductions cover additional features "
+"and help you build on what you’ve learned. "
+msgstr ""
+
+#: Impress-Intro-Template.odp:26
+msgid "🤝 Productivity & Collaboration"
+msgstr ""
