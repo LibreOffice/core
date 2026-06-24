@@ -1962,7 +1962,7 @@ PDFiumLinkImpl::PDFiumLinkImpl(FPDF_DOCUMENT pDocument, FPDF_LINK pLink)
 
     char* pBuffer = new char[nLen];
     FPDFAction_GetURIPath(pDocument, pAction, pBuffer, nLen);
-    maURI = OUString::fromUtf8(std::string_view(pBuffer, nLen - 1));
+    maURI = OUString(pBuffer, nLen - 1, RTL_TEXTENCODING_UTF8);
     delete[] pBuffer;
 }
 
