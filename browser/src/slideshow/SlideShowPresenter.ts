@@ -1407,7 +1407,7 @@ class SlideShowPresenter {
 		this._map.fire('commandstatechanged', {
 			commandName: 'presenterconsole',
 			disabled: disabled,
-			state: app.map.uiManager.isPresenterConsoleEnabled() ? 'true' : 'false',
+			state: app.map.uiManager.shouldShowPresenterConsole() ? 'true' : 'false',
 		});
 	}
 

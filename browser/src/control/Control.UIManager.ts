@@ -667,7 +667,7 @@ class UIManager extends window.L.Control {
 		this.initDarkModeFromSettings();
 
 		if (docType === 'presentation')
-			this.syncPresenterConsoleToggle(this.isPresenterConsoleEnabled());
+			this.syncPresenterConsoleToggle(this.shouldShowPresenterConsole());
 
 		if (docType === 'spreadsheet') {
 			this.sheetsBar = JSDialog.SheetsBar(this.map, isDesktop || window.mode.isTablet());
@@ -2823,15 +2823,15 @@ class UIManager extends window.L.Control {
 	 * Whether the start-presentation buttons open the presenter console.
 	 * Defaults on for the CODA desktop app and off for browser-based online.
 	 */
-	isPresenterConsoleEnabled(): boolean {
+	shouldShowPresenterConsole(): boolean {
 		return this.getBooleanDocTypePref(
 			'ShowPresenterConsole',
-			(window as any).mode.isCODesktop(),
+			window.mode.isCODesktop(),
 		);
 	}
 
 	togglePresenterConsole(): void {
-		const isOn = !this.isPresenterConsoleEnabled();
+		const isOn = !this.shouldShowPresenterConsole();
 		window.prefs.set(this.map.getDocType() + '.ShowPresenterConsole', isOn);
 		this.syncPresenterConsoleToggle(isOn);
 	}
