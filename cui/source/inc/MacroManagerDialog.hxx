@@ -29,9 +29,12 @@
 struct ScriptContainerInfo
 {
     css::script::browse::XBrowseNode* pBrowseNode;
+    css::uno::Reference<css::frame::XModel> xModel;
 
-    ScriptContainerInfo(css::script::browse::XBrowseNode* pObj)
+    ScriptContainerInfo(css::script::browse::XBrowseNode* pObj,
+                        const css::uno::Reference<css::frame::XModel>& xModel_)
         : pBrowseNode(pObj)
+        , xModel(xModel_)
     {
     }
 };
@@ -41,12 +44,14 @@ struct ScriptInfo
     css::script::browse::XBrowseNode* pBrowseNode;
     OUString sURL;
     OUString sDescription;
+    css::uno::Reference<css::frame::XModel> xModel;
 
     ScriptInfo(css::script::browse::XBrowseNode* pObj, const OUString& rsUrl,
-               const OUString& rsDesc)
+               const OUString& rsDesc, const css::uno::Reference<css::frame::XModel>& xModel_)
         : pBrowseNode(pObj)
         , sURL(rsUrl)
         , sDescription(rsDesc)
+        , xModel(xModel_)
     {
     }
 };
@@ -162,6 +167,7 @@ public:
     void ScriptContainerSelected();
 
     void Insert(const css::uno::Reference<css::script::browse::XBrowseNode>& xInsertNode,
+                const css::uno::Reference<css::frame::XModel>& xDocumentModel,
                 const weld::TreeIter* pParentEntry, const OUString& rsUiName,
                 const OUString& rsImage, bool bChildOnDemand = false, int nPos = -1,
                 weld::TreeIter* pRet = nullptr);
@@ -243,6 +249,7 @@ public:
     virtual ~MacroManagerDialog() override;
 
     OUString GetScriptURL() const;
+    css::uno::Reference<css::frame::XModel> GetScriptModel() const;
 
     void SaveLastUsedMacro();
     void LoadLastUsedMacro();
