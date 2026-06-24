@@ -508,7 +508,12 @@ namespace {
 
                     ::std::vector<OUString> aLocales;
                     if (comphelper::COKit::isActive())
-                        aLocales = comphelper::COKit::getLanguageTag().getFallbackStrings(true);
+                    {
+                        LanguageTag aL10nLang = comphelper::COKit::getLoadLanguageTag();
+                        if (aL10nLang.getLanguageType() == LANGUAGE_NONE)
+                            aL10nLang = comphelper::COKit::getLanguageTag();
+                        aLocales = aL10nLang.getFallbackStrings(true);
+                    }
                     else
                         aLocales = LanguageTag(css::uno::Reference< css::lang::XLocalizable >(
                                                    css::configuration::theDefaultProvider::get(xContext),

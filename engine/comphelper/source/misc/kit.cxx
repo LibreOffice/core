@@ -94,12 +94,14 @@ class LanguageAndLocale
 private:
     LanguageTag maLanguageTag;
     LanguageTag maLocaleLanguageTag;
+    LanguageTag maLoadLanguageTag;
 
 public:
 
     LanguageAndLocale()
         : maLanguageTag(LANGUAGE_NONE)
         , maLocaleLanguageTag(LANGUAGE_NONE)
+        , maLoadLanguageTag(LANGUAGE_NONE)
     {}
 
     const LanguageTag& getLanguage() const
@@ -114,6 +116,16 @@ public:
             SAL_INFO("comphelper.kit", "Setting language from " << maLanguageTag.getBcp47() << " to " << rLanguageTag.getBcp47());
             maLanguageTag = rLanguageTag;
         }
+    }
+
+    const LanguageTag& getLoadLanguage() const
+    {
+        return maLoadLanguageTag;
+    }
+
+    void setLoadLanguage(const LanguageTag& rLanguageTag)
+    {
+        maLoadLanguageTag = rLanguageTag;
     }
 
     const LanguageTag& getLocale() const
@@ -286,6 +298,16 @@ const LanguageTag& getLanguageTag()
     const LanguageTag& rLanguage = g_aLanguageAndLocale.getLanguage();
     SAL_INFO_IF(rLanguage.getLanguageType() == LANGUAGE_NONE, "comphelper.kit", "Language not set");
     return rLanguage;
+}
+
+void setLoadLanguageTag(const LanguageTag& rLanguageTag)
+{
+    g_aLanguageAndLocale.setLoadLanguage(rLanguageTag);
+}
+
+const LanguageTag& getLoadLanguageTag()
+{
+    return g_aLanguageAndLocale.getLoadLanguage();
 }
 
 bool isAllowlistedLanguage(const OUString& lang)

@@ -2972,18 +2972,11 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
 
         if (!aLanguage.isEmpty() && LanguageTag::isValidBcp47(aLanguage, nullptr))
         {
-            static bool isLoading = true;
-            if (isLoading)
-            {
-                // Capture the language used to load the document.
-                KitHelper::setLoadLanguage(aLanguage);
-                isLoading = false;
-            }
-
             KitHelper::setDefaultLanguage(aLanguage);
             // Set the COKit language tag, used for dialog tunneling.
             comphelper::COKit::setLanguageTag(LanguageTag(aLanguage));
             comphelper::COKit::setLocale(LanguageTag(aLanguage));
+            comphelper::COKit::setLoadLanguageTag(LanguageTag(aLanguage));
 
             SAL_INFO("kit", "Set document language to " << aLanguage);
             // use with care - it sets it for the entire core, not just the

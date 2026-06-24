@@ -99,7 +99,6 @@ int DisableCallbacks::m_nDisabled = 0;
 namespace
 {
 LanguageTag g_defaultLanguageTag(u"en-US"_ustr, true);
-LanguageTag g_loadLanguageTag(u"en-US"_ustr, true); //< The language used to load.
 KitDeviceFormFactor g_deviceFormFactor = KitDeviceFormFactor::UNKNOWN;
 bool g_isDefaultTimezoneSet = false;
 OUString g_DefaultTimezone;
@@ -393,11 +392,12 @@ void KitHelper::setDefaultLanguage(const OUString& rBcp47LanguageTag)
     g_defaultLanguageTag = LanguageTag(rBcp47LanguageTag, true);
 }
 
-const LanguageTag& KitHelper::getLoadLanguage() { return g_loadLanguageTag; }
-
-void KitHelper::setLoadLanguage(const OUString& rBcp47LanguageTag)
+const LanguageTag& KitHelper::getLoadLanguage()
 {
-    g_loadLanguageTag = LanguageTag(rBcp47LanguageTag, true);
+    const LanguageTag& rLoadLanguage = comphelper::COKit::getLoadLanguageTag();
+    if (rLoadLanguage.getLanguageType() == LANGUAGE_NONE)
+        return g_defaultLanguageTag;
+    return rLoadLanguage;
 }
 
 void KitHelper::setViewLanguage(int nId, const OUString& rBcp47LanguageTag)

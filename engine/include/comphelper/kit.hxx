@@ -140,6 +140,10 @@ COMPHELPER_DLLPUBLIC const LanguageTag& getLocale();
 COMPHELPER_DLLPUBLIC void setLanguageTag(const LanguageTag& languageTag);
 /// Get the current Kit's language.
 COMPHELPER_DLLPUBLIC const LanguageTag& getLanguageTag();
+/// Set the language the current document was requested to load with
+COMPHELPER_DLLPUBLIC void setLoadLanguageTag(const LanguageTag& languageTag);
+/// Get the requested load language
+COMPHELPER_DLLPUBLIC const LanguageTag& getLoadLanguageTag();
 /// If the language name should be used for this Kit instance.
 COMPHELPER_DLLPUBLIC bool isAllowlistedLanguage(const OUString& lang);
 
