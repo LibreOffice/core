@@ -30,6 +30,7 @@
 #include <svx/unodraw/SvxTableShape.hxx>
 #include <svx/unopage.hxx>
 
+namespace basegfx { class B2DPolyPolygon; }
 namespace chart { struct VLineProperties; }
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::chart2 { class XFormattedString; }
@@ -172,6 +173,10 @@ public:
     static rtl::Reference<SvxShapePolyPolygon>
         createLine2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const std::vector<std::vector<css::drawing::Position3D>>& rPoints
+                    , const VLineProperties* pLineProperties = nullptr );
+    static rtl::Reference<SvxShapePolyPolygon>
+        createLine2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
+                    , const basegfx::B2DPolyPolygon& rPolyPolygon
                     , const VLineProperties* pLineProperties = nullptr );
 
     static rtl::Reference<SvxShapePolyPolygon>

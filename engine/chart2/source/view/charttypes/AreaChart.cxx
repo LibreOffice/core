@@ -35,6 +35,14 @@
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 
+#include <basegfx/curve/BSpline.hxx>
+#include <basegfx/curve/CubicSpline.hxx>
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygonclipper.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/range/b2drange.hxx>
+
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
@@ -207,6 +215,131 @@ static void lcl_removeDuplicatePoints( std::vector<std::vector<css::drawing::Pos
     rPolyPoly = std::move(aTmp);
 }
 
+// Build a Bezier polygon that interpolates one polyline of input data.
+// Returns an empty polygon when the solver fails or the input is too
+// small for the chosen degree.
+static basegfx::B2DPolygon lcl_buildSmoothSubPolygon(
+    chart2::CurveStyle eCurveStyle,
+    const std::vector<css::drawing::Position3D>& rSubSeries,
+    sal_uInt32 nSplineOrder)
+{
+    if (rSubSeries.size() <= 1)
+        return basegfx::B2DPolygon();
+
+    std::vector<basegfx::B2DPoint> aPoints;
+    aPoints.reserve(rSubSeries.size());
+    for (const auto& rPoint : rSubSeries)
+        aPoints.emplace_back(rPoint.PositionX, rPoint.PositionY);
+
+    if (eCurveStyle == CurveStyle_CUBIC_SPLINES)
+    {
+        const bool bPeriodic
+            = rSubSeries.size() >= 3
+              && rSubSeries.front().PositionX == rSubSeries.back().PositionX
+              && rSubSeries.front().PositionY == rSubSeries.back().PositionY;
+        basegfx::CubicSpline aSpline(aPoints,
+                                     bPeriodic
+                                         ? basegfx::CubicSpline::BoundaryCondition::Periodic
+                                         : basegfx::CubicSpline::BoundaryCondition::Natural);
+        if (aSpline.isValid())
+            return aSpline.getPolygon();
+    }
+    else if (eCurveStyle == CurveStyle_B_SPLINES)
+    {
+        basegfx::BSpline aSpline(aPoints, nSplineOrder);
+        if (aSpline.isValid())
+            return aSpline.getPolygon();
+    }
+    return basegfx::B2DPolygon();
+}
+
+// Transform every data point and control point in rPolyPolygon from
+// scaled-logic to scene coordinates. B2DPolygon stores control points
+// as offsets from their data points, so each point's control points
+// are read as absolute values before the data point is overwritten.
+static void lcl_transformBezierToScene(basegfx::B2DPolyPolygon& rPolyPolygon, double fZ,
+                                       PlottingPositionHelper& rPosHelper)
+{
+    for (sal_uInt32 nI = 0; nI < rPolyPolygon.count(); ++nI)
+    {
+        basegfx::B2DPolygon aPolygon = rPolyPolygon.getB2DPolygon(nI);
+        for (sal_uInt32 nJ = 0; nJ < aPolygon.count(); ++nJ)
+        {
+            basegfx::B2DPoint aPoint = aPolygon.getB2DPoint(nJ);
+            const bool bHasPrev = aPolygon.isPrevControlPointUsed(nJ);
+            basegfx::B2DPoint aPrev;
+            if (bHasPrev)
+                aPrev = aPolygon.getPrevControlPoint(nJ);
+            const bool bHasNext = aPolygon.isNextControlPointUsed(nJ);
+            basegfx::B2DPoint aNext;
+            if (bHasNext)
+                aNext = aPolygon.getNextControlPoint(nJ);
+
+            auto aScene = rPosHelper.transformScaledLogicToScene(aPoint.getX(), aPoint.getY(), fZ, false);
+            aPolygon.setB2DPoint(nJ, basegfx::B2DPoint(aScene.PositionX, aScene.PositionY));
+
+            if (bHasPrev)
+            {
+                auto aScenePrev = rPosHelper.transformScaledLogicToScene(aPrev.getX(), aPrev.getY(), fZ, false);
+                aPolygon.setPrevControlPoint(nJ, basegfx::B2DPoint(aScenePrev.PositionX, aScenePrev.PositionY));
+            }
+            if (bHasNext)
+            {
+                auto aSceneNext = rPosHelper.transformScaledLogicToScene(aNext.getX(), aNext.getY(), fZ, false);
+                aPolygon.setNextControlPoint(nJ, basegfx::B2DPoint(aSceneNext.PositionX, aSceneNext.PositionY));
+            }
+        }
+        rPolyPolygon.setB2DPolygon(nI, aPolygon);
+    }
+}
+
+// Render a 2D smooth line as a native Bezier path. Returns false when
+// nothing visible would be drawn (empty input, all points clipped
+// away, solver failure).
+static bool lcl_createSmoothLine2DBezier(
+    const rtl::Reference<SvxShapeGroupAnyD>& xTarget, VDataSeries* pSeries,
+    chart2::CurveStyle eCurveStyle, sal_uInt32 nSplineOrder,
+    const std::vector<std::vector<css::drawing::Position3D>>& rSeriesPoly,
+    PlottingPositionHelper& rPosHelper)
+{
+    basegfx::B2DPolyPolygon aPolyPolygon;
+    for (const auto& rSubSeries : rSeriesPoly)
+    {
+        basegfx::B2DPolygon aSub = lcl_buildSmoothSubPolygon(eCurveStyle, rSubSeries, nSplineOrder);
+        if (aSub.count() > 0)
+            aPolyPolygon.append(aSub);
+    }
+    if (aPolyPolygon.count() == 0)
+        return false;
+
+    // Bezier-aware clip against the scaled-logic view rectangle.
+    basegfx::B2DRange aClipRect(rPosHelper.getScaledLogicClipDoubleRect());
+    aPolyPolygon = basegfx::utils::clipPolyPolygonOnRange(aPolyPolygon, aClipRect,
+                                                         true /*bInside*/, true /*bStroke*/);
+    if (aPolyPolygon.count() == 0)
+        return false;
+
+    // Z is uniform across the series; take it from the first input point.
+    double fZ = 0.0;
+    for (const auto& rSubSeries : rSeriesPoly)
+    {
+        if (!rSubSeries.empty())
+        {
+            fZ = rSubSeries.front().PositionZ;
+            break;
+        }
+    }
+    lcl_transformBezierToScene(aPolyPolygon, fZ, rPosHelper);
+
+    rtl::Reference<SvxShape> xShape = ShapeFactory::createLine2D(xTarget, aPolyPolygon);
+    PropertyMapper::setMappedProperties(*xShape, pSeries->getPropertiesOfSeries(),
+                                        PropertyMapper::getPropertyNameMapForLineSeriesProperties());
+    // The shape name MarkHandles marks the shape that represents the
+    // data series for selection.
+    ::chart::ShapeFactory::setShapeName(xShape, u"MarkHandles"_ustr);
+    return true;
+}
+
 bool AreaChart::create_stepped_line(
         std::vector<std::vector<css::drawing::Position3D>> aStartPoly,
         chart2::CurveStyle eCurveStyle,
@@ -326,6 +459,16 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
 {
     //return true if a line was created successfully
     rtl::Reference<SvxShapeGroupAnyD> xSeriesGroupShape_Shapes = getSeriesGroupShapeBackChild(pSeries, m_xSeriesTarget);
+
+    // 2D smooth lines render as a native Bezier path, so the curve
+    // stays smooth at every zoom level. 3D stays on the sampled path
+    // below because the stripe renderer takes a polyline.
+    if (m_nDimension != 3
+        && (m_eCurveStyle == CurveStyle_CUBIC_SPLINES || m_eCurveStyle == CurveStyle_B_SPLINES))
+    {
+        return lcl_createSmoothLine2DBezier(xSeriesGroupShape_Shapes, pSeries, m_eCurveStyle,
+                                            m_nSplineOrder, *pSeriesPoly, *pPosHelper);
+    }
 
     std::vector<std::vector<css::drawing::Position3D>> aPoly;
     if(m_eCurveStyle==CurveStyle_CUBIC_SPLINES)

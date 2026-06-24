@@ -49,6 +49,8 @@
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdorect.hxx>
@@ -1851,6 +1853,27 @@ rtl::Reference<Svx3DPolygonObject>
     return xShape;
 }
 
+namespace
+{
+// Push the populated entries of VLineProperties onto the shape; empty
+// entries leave the shape's existing property values alone.
+void lcl_applyLineProperties(SvxShape& rShape, const VLineProperties& rLineProperties)
+{
+    if (rLineProperties.Transparence.hasValue())
+        rShape.SvxShape::setPropertyValue(UNO_NAME_LINETRANSPARENCE, rLineProperties.Transparence);
+    if (rLineProperties.LineStyle.hasValue())
+        rShape.SvxShape::setPropertyValue(UNO_NAME_LINESTYLE, rLineProperties.LineStyle);
+    if (rLineProperties.Width.hasValue())
+        rShape.SvxShape::setPropertyValue(UNO_NAME_LINEWIDTH, rLineProperties.Width);
+    if (rLineProperties.Color.hasValue())
+        rShape.SvxShape::setPropertyValue(UNO_NAME_LINECOLOR, rLineProperties.Color);
+    if (rLineProperties.DashName.hasValue())
+        rShape.SvxShape::setPropertyValue(u"LineDashName"_ustr, rLineProperties.DashName);
+    if (rLineProperties.LineCap.hasValue())
+        rShape.SvxShape::setPropertyValue(UNO_NAME_LINECAP, rLineProperties.LineCap);
+}
+}
+
 rtl::Reference<SvxShapePolyPolygon>
         ShapeFactory::createLine2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const drawing::PointSequenceSequence& rPoints
@@ -1867,45 +1890,12 @@ rtl::Reference<SvxShapePolyPolygon>
     xShape->setShapeKind(SdrObjKind::PolyLine);
     xTarget->addShape(*xShape);
 
-    //set properties
     try
     {
-        //Polygon
         xShape->SvxShape::setPropertyValue( UNO_NAME_POLYPOLYGON
             , cpo::uno::Any( rPoints ) );
-
-        if(pLineProperties)
-        {
-            //Transparency
-            if(pLineProperties->Transparence.hasValue())
-                xShape->SvxShape::setPropertyValue( UNO_NAME_LINETRANSPARENCE
-                    , pLineProperties->Transparence );
-
-            //LineStyle
-            if(pLineProperties->LineStyle.hasValue())
-                xShape->SvxShape::setPropertyValue( UNO_NAME_LINESTYLE
-                    , pLineProperties->LineStyle );
-
-            //LineWidth
-            if(pLineProperties->Width.hasValue())
-                xShape->SvxShape::setPropertyValue( UNO_NAME_LINEWIDTH
-                    , pLineProperties->Width );
-
-            //LineColor
-            if(pLineProperties->Color.hasValue())
-                xShape->SvxShape::setPropertyValue( UNO_NAME_LINECOLOR
-                    , pLineProperties->Color );
-
-            //LineDashName
-            if(pLineProperties->DashName.hasValue())
-                xShape->SvxShape::setPropertyValue( u"LineDashName"_ustr
-                    , pLineProperties->DashName );
-
-            //LineCap
-            if(pLineProperties->LineCap.hasValue())
-                xShape->SvxShape::setPropertyValue( UNO_NAME_LINECAP
-                    , pLineProperties->LineCap );
-        }
+        if (pLineProperties)
+            lcl_applyLineProperties(*xShape, *pLineProperties);
     }
     catch( const uno::Exception& )
     {
@@ -1932,45 +1922,44 @@ rtl::Reference<SvxShapePolyPolygon>
 
     drawing::PointSequenceSequence aAnyPoints = PolyToPointSequence(rPoints);
 
-    //set properties
     try
     {
-        //Polygon
         xShape->SvxShape::setPropertyValue( UNO_NAME_POLYPOLYGON
             , cpo::uno::Any( aAnyPoints ) );
+        if (pLineProperties)
+            lcl_applyLineProperties(*xShape, *pLineProperties);
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
+    }
+    return xShape;
+}
 
-        if(pLineProperties)
-        {
-            //Transparency
-            if(pLineProperties->Transparence.hasValue())
-                xShape->SvxShape::setPropertyValue( UNO_NAME_LINETRANSPARENCE
-                    , pLineProperties->Transparence );
+rtl::Reference<SvxShapePolyPolygon>
+        ShapeFactory::createLine2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
+                    , const basegfx::B2DPolyPolygon& rPolyPolygon
+                    , const VLineProperties* pLineProperties )
+{
+    if( !xTarget.is() )
+        return nullptr;
 
-            //LineStyle
-            if(pLineProperties->LineStyle.hasValue())
-                xShape->SvxShape::setPropertyValue( UNO_NAME_LINESTYLE
-                    , pLineProperties->LineStyle );
+    if(!rPolyPolygon.count())
+        return nullptr;
 
-            //LineWidth
-            if(pLineProperties->Width.hasValue())
-                xShape->SvxShape::setPropertyValue( UNO_NAME_LINEWIDTH
-                    , pLineProperties->Width );
+    // A Bezier path shape keeps the curve as control points in the
+    // drawing layer.
+    rtl::Reference<SvxShapePolyPolygon> xShape = new SvxShapePolyPolygon(nullptr);
+    xShape->setShapeKind(SdrObjKind::PathLine);
+    xTarget->addShape(*xShape);
 
-            //LineColor
-            if(pLineProperties->Color.hasValue())
-                xShape->SvxShape::setPropertyValue( UNO_NAME_LINECOLOR
-                    , pLineProperties->Color );
-
-            //LineDashName
-            if(pLineProperties->DashName.hasValue())
-                xShape->SvxShape::setPropertyValue( u"LineDashName"_ustr
-                    , pLineProperties->DashName );
-
-            //LineCap
-            if(pLineProperties->LineCap.hasValue())
-                xShape->SvxShape::setPropertyValue( UNO_NAME_LINECAP
-                    , pLineProperties->LineCap );
-        }
+    try
+    {
+        drawing::PolyPolygonBezierCoords aCoords;
+        basegfx::utils::B2DPolyPolygonToUnoPolyPolygonBezierCoords(rPolyPolygon, aCoords);
+        xShape->SvxShape::setPropertyValue(u"PolyPolygonBezier"_ustr, cpo::uno::Any(aCoords));
+        if (pLineProperties)
+            lcl_applyLineProperties(*xShape, *pLineProperties);
     }
     catch( const uno::Exception& )
     {
