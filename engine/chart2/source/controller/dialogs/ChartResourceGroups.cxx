@@ -211,7 +211,7 @@ const std::shared_ptr<SplinePropertiesDialog>& SplineResourceGroup::getSplinePro
 {
     if (!m_xSplinePropertiesDialog)
     {
-        m_xSplinePropertiesDialog.reset(new SplinePropertiesDialog(m_pParent));
+        m_xSplinePropertiesDialog.reset(new SplinePropertiesDialog(m_pParent, m_b3DLook));
     }
     return m_xSplinePropertiesDialog;
 }
@@ -244,6 +244,8 @@ PosLineType SplineResourceGroup::getActiveLineType() const
 
 void SplineResourceGroup::fillControls(const ChartTypeParameter& rParameter)
 {
+    m_b3DLook = rParameter.b3DLook;
+
     switch (rParameter.eCurveStyle)
     {
         case CurveStyle_LINES:

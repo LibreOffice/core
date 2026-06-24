@@ -28,7 +28,10 @@ class ChartTypeParameter;
 class SplinePropertiesDialog final : public weld::GenericDialogController
 {
 public:
-    explicit SplinePropertiesDialog(weld::Window* pParent);
+    // b3DLook indicates whether the chart this dialog edits is a 3D
+    // chart. Resolution only affects the 3D renderer, so the control
+    // stays sensitive only when the chart is 3D.
+    SplinePropertiesDialog(weld::Window* pParent, bool b3DLook);
 
     void fillControls(const ChartTypeParameter& rParameter);
     void fillParameter(ChartTypeParameter& rParameter, bool bSmoothLines);
@@ -37,7 +40,9 @@ private:
     DECL_LINK(SplineTypeListBoxHdl, weld::ComboBox&, void);
 
 private:
+    bool m_bIs3D = false;
     std::unique_ptr<weld::ComboBox> m_xLB_Spline_Type;
+    std::unique_ptr<weld::Label> m_xFT_SplineResolution;
     std::unique_ptr<weld::SpinButton> m_xMF_SplineResolution;
     std::unique_ptr<weld::Label> m_xFT_SplineOrder;
     std::unique_ptr<weld::SpinButton> m_xMF_SplineOrder;

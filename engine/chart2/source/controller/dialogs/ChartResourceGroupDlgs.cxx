@@ -31,10 +31,12 @@ using namespace ::com::sun::star::chart2;
 const sal_uInt16 CUBIC_SPLINE_POS = 0;
 const sal_uInt16 B_SPLINE_POS = 1;
 
-SplinePropertiesDialog::SplinePropertiesDialog(weld::Window* pParent)
+SplinePropertiesDialog::SplinePropertiesDialog(weld::Window* pParent, bool b3DLook)
     : GenericDialogController(pParent, u"modules/schart/ui/smoothlinesdlg.ui"_ustr,
                               u"SmoothLinesDialog"_ustr)
+    , m_bIs3D(b3DLook)
     , m_xLB_Spline_Type(m_xBuilder->weld_combo_box(u"SplineTypeComboBox"_ustr))
+    , m_xFT_SplineResolution(m_xBuilder->weld_label(u"ResolutionLabel"_ustr))
     , m_xMF_SplineResolution(m_xBuilder->weld_spin_button(u"ResolutionSpinbutton"_ustr))
     , m_xFT_SplineOrder(m_xBuilder->weld_label(u"PolynomialsLabel"_ustr))
     , m_xMF_SplineOrder(m_xBuilder->weld_spin_button(u"PolynomialsSpinButton"_ustr))
@@ -64,6 +66,13 @@ void SplinePropertiesDialog::fillControls(const ChartTypeParameter& rParameter)
     //dis/enabling
     m_xFT_SplineOrder->set_sensitive(m_xLB_Spline_Type->get_active() == B_SPLINE_POS);
     m_xMF_SplineOrder->set_sensitive(m_xLB_Spline_Type->get_active() == B_SPLINE_POS);
+
+    // Resolution is the number of samples between consecutive input
+    // points that the 3D renderer uses to draw the curve as a polyline.
+    // 2D rendering goes through native Bezier paths and never reads
+    // this value, so leave the control insensitive when not in 3D.
+    m_xFT_SplineResolution->set_sensitive(m_bIs3D);
+    m_xMF_SplineResolution->set_sensitive(m_bIs3D);
 }
 
 void SplinePropertiesDialog::fillParameter(ChartTypeParameter& rParameter, bool bSmoothLines)

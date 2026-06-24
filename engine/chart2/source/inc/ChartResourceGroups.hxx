@@ -123,6 +123,7 @@ private:
 
 private:
     weld::Window* m_pParent;
+    bool m_b3DLook = false;
     std::unique_ptr<weld::Label> m_xFT_LineType;
     std::unique_ptr<weld::ComboBox> m_xLB_LineType;
     std::unique_ptr<weld::Button> m_xPB_DetailsDialog;
