@@ -84,8 +84,7 @@ public:
 
     void AddFontFace(PhysicalFontFace*);
 
-    SAL_DLLPRIVATE PhysicalFontFace*
-    FindBestFontFace(const vcl::font::FontSelectPattern& rFSD) const;
+    PhysicalFontFace* FindBestFontFace(const vcl::font::FontSelectPattern& rFSD) const;
 
     SAL_DLLPRIVATE void UpdateDevFontList(PhysicalFontFaceCollection&) const;
     SAL_DLLPRIVATE void UpdateCloneFontList(PhysicalFontCollection&) const;

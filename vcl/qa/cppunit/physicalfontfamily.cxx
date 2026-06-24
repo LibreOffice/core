@@ -16,6 +16,8 @@
 #include <unotools/fontcfg.hxx>
 
 #include <font/PhysicalFontFamily.hxx>
+#include <font/FontSelectPattern.hxx>
+#include <vcl/font.hxx>
 
 #include "fontmocks.hxx"
 
@@ -33,12 +35,14 @@ public:
     void testAddFontFace_Default();
     void testAddOneFontFace();
     void testAddTwoFontFaces();
+    void testFindBestFontFaceByStyleName();
 
     CPPUNIT_TEST_SUITE(VclPhysicalFontFamilyTest);
     CPPUNIT_TEST(testCreateFontFamily);
     CPPUNIT_TEST(testAddFontFace_Default);
     CPPUNIT_TEST(testAddOneFontFace);
     CPPUNIT_TEST(testAddTwoFontFaces);
+    CPPUNIT_TEST(testFindBestFontFaceByStyleName);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -126,6 +130,36 @@ void VclPhysicalFontFamilyTest::testAddTwoFontFaces()
                               | FontTypeFaces::Light | FontTypeFaces::Bold
                               | FontTypeFaces::NoneItalic | FontTypeFaces::Italic;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Type faces", eTypeFace, aFamily.GetTypeFaces());
+}
+
+void VclPhysicalFontFamilyTest::testFindBestFontFaceByStyleName()
+{
+    // An explicit style name must pick the matching face even though all faces
+    // share the family name.
+    PhysicalFontFamily aFamily(u"Test"_ustr);
+
+    FontAttributes aRegular;
+    aRegular.SetFamilyName(u"Test"_ustr);
+    aRegular.SetStyleName(u"Regular"_ustr);
+    aRegular.SetWeight(WEIGHT_NORMAL);
+    aRegular.SetWidthType(WIDTH_NORMAL);
+    aFamily.AddFontFace(new TestFontFace(aRegular, 1));
+
+    FontAttributes aCondensed;
+    aCondensed.SetFamilyName(u"Test"_ustr);
+    aCondensed.SetStyleName(u"Condensed"_ustr);
+    aCondensed.SetWeight(WEIGHT_NORMAL);
+    aCondensed.SetWidthType(WIDTH_CONDENSED);
+    TestFontFace* pCondensedFace = new TestFontFace(aCondensed, 2);
+    aFamily.AddFontFace(pCondensedFace);
+
+    vcl::Font aFont(u"Test"_ustr, Size(0, 12));
+    FontSelectPattern aFSP(aFont, u"Test"_ustr, Size(0, 12), 12.0f);
+    aFSP.SetStyleName(u"Condensed"_ustr);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("explicit style name should select the matching face",
+                                 static_cast<PhysicalFontFace*>(pCondensedFace),
+                                 aFamily.FindBestFontFace(aFSP));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclPhysicalFontFamilyTest);

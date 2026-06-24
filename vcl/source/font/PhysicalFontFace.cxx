@@ -99,13 +99,23 @@ static int FamilyNameMatchValue(FontSelectPattern const& rFSP, std::u16string_vi
     return 0;
 }
 
-static int StyleNameMatchValue(FontMatchStatus const& rStatus, std::u16string_view rStyle)
+static int StyleNameMatchValue(FontSelectPattern const& rFSP, FontMatchStatus const& rStatus,
+                               const PhysicalFontFace& rFontFace)
 {
-    if (rStatus.mpTargetStyleName
-        && o3tl::equalsIgnoreAsciiCase(rStyle, *rStatus.mpTargetStyleName))
-        return 120000;
+    if (!rStatus.mpTargetStyleName
+        || !o3tl::equalsIgnoreAsciiCase(rFontFace.GetStyleName(), *rStatus.mpTargetStyleName))
+        return 0;
 
-    return 0;
+    // The style name selects an extended subfamily (a width, an optical size,
+    // a named instance, ...); it must not override an explicitly requested
+    // weight or posture, which a document may contradict by carrying a stale
+    // RIBBI subfamily such as "Regular" on bold text (tdf#152396).
+    if (rFSP.GetWeight() != WEIGHT_DONTKNOW && rFSP.GetWeight() != rFontFace.GetWeight())
+        return 0;
+    if (rFSP.GetItalic() != ITALIC_DONTKNOW && rFSP.GetItalic() != rFontFace.GetItalic())
+        return 0;
+
+    return 120000;
 }
 
 static int PitchMatchValue(FontSelectPattern const& rFSP, FontPitch ePitch)
@@ -212,7 +222,7 @@ static int ItalicMatchValue(FontSelectPattern const& rFSP, FontItalic eItalic)
 bool PhysicalFontFace::IsBetterMatch(const FontSelectPattern& rFSP, FontMatchStatus& rStatus) const
 {
     int nMatch = FamilyNameMatchValue(rFSP, GetFamilyName());
-    nMatch += StyleNameMatchValue(rStatus, GetStyleName());
+    nMatch += StyleNameMatchValue(rFSP, rStatus, *this);
     nMatch += PitchMatchValue(rFSP, GetPitch());
     nMatch += WidthMatchValue(rFSP, GetWidthType());
     nMatch += WeightMatchValue(rFSP, GetWeight());
