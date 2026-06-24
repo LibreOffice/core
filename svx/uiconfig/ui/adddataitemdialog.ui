@@ -88,6 +88,20 @@
                 <property name="row-spacing">6</property>
                 <property name="column-spacing">12</property>
                 <child>
+                  <object class="GtkLabel" id="nameft">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="adddataitemdialog|nameft">_Name:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">name</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkEntry" id="name">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
@@ -108,20 +122,6 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="nameft">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="adddataitemdialog|nameft">_Name:</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">name</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkLabel" id="valueft">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -132,20 +132,6 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="browse">
-                    <property name="label" translatable="yes" context="adddataitemdialog|browse">_Add...</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="valign">center</property>
-                    <property name="use-underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
                     <property name="top-attach">1</property>
                   </packing>
                 </child>
@@ -165,6 +151,20 @@
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="browse">
+                    <property name="label" translatable="yes" context="adddataitemdialog|browse">_Add...</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="valign">center</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
                     <property name="top-attach">1</property>
                   </packing>
                 </child>
@@ -330,6 +330,25 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkButton" id="constraintcond">
+                    <property name="label" translatable="yes" context="adddataitemdialog|constraintcond">Condition</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="halign">start</property>
+                    <property name="use-underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="constraintcond-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="adddataitemdialog|extended_tip|constraintcond">The Condition button opens the Add Condition dialog where you can specify the constraint condition.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkCheckButton" id="readonly">
                     <property name="label" translatable="yes" context="adddataitemdialog|readonly">Read-_only</property>
                     <property name="visible">True</property>
@@ -345,6 +364,25 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
+                    <property name="top-attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="readonlycond">
+                    <property name="label" translatable="yes" context="adddataitemdialog|readonlycond">Condition</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="halign">start</property>
+                    <property name="use-underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="readonlycond-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="adddataitemdialog|extended_tip|readonlycond">Declares that the item is calculated.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
                     <property name="top-attach">4</property>
                   </packing>
                 </child>
@@ -365,44 +403,6 @@
                   <packing>
                     <property name="left-attach">0</property>
                     <property name="top-attach">5</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="constraintcond">
-                    <property name="label" translatable="yes" context="adddataitemdialog|constraintcond">Condition</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="halign">start</property>
-                    <property name="use-underline">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="constraintcond-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="adddataitemdialog|extended_tip|constraintcond">The Condition button opens the Add Condition dialog where you can specify the constraint condition.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="readonlycond">
-                    <property name="label" translatable="yes" context="adddataitemdialog|readonlycond">Condition</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="halign">start</property>
-                    <property name="use-underline">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="readonlycond-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="adddataitemdialog|extended_tip|readonlycond">Declares that the item is calculated.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">4</property>
                   </packing>
                 </child>
                 <child>
