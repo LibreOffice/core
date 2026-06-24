@@ -622,33 +622,14 @@ function undoAll() {
 	cy.log('>> undoAll - start');
 
 	cy.getFrameWindow().then(function(win) {
-		var stateOf = function(command) {
-			return win.app.map['stateChangeHandler'].getItemValue(command);
-		};
-
-		function undoStep() {
-			helper.processToIdle(win);
-			// Core recomputes the .uno:Undo state on its own timer and sends
-			// it after it answers the idle request, so the Undo button can
-			// still read its pre-edit disabled value right after the idle.
-			// The modified flag arrives promptly, so while the document has
-			// unsaved changes wait for core to report Undo as enabled before
-			// treating the stack as empty.
-			cy.wrap(null).should(function() {
-				expect(
-					stateOf('.uno:Undo') === 'enabled'
-						|| stateOf('.uno:ModifiedStatus') !== 'true',
-					'.uno:Undo state caught up with the edit'
-				).to.be.true;
-			}).then(function() {
-				if (stateOf('.uno:Undo') === 'enabled') {
-					cy.cGet('#Home-container .unoUndo button').click({force: true});
-					undoStep();
-				}
-			});
-		}
-
-		undoStep();
+		helper.processToIdle(win);
+		cy.cGet('#Home-container .unoUndo').then(function undoStep($undo) {
+			if ($undo.attr('disabled') === undefined) {
+				cy.cGet('#Home-container .unoUndo button').click({force: true});
+				helper.processToIdle(win);
+				cy.cGet('#Home-container .unoUndo').then(undoStep);
+			}
+		});
 	});
 
 	cy.cGet('#Home-container .unoUndo').should('not.have','disabled');
