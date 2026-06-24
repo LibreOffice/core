@@ -10,7 +10,6 @@
 #include <sfx2/kit/componenthelpers.hxx>
 
 #include <comphelper/dispatchcommand.hxx>
-#include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <COKit/COKitEnums.h>
 #include <sfx2/ipclient.hxx>
@@ -220,9 +219,6 @@ void KitChartHelper::PaintAllChartsOnTile(VirtualDevice& rDevice,
                                           tools::Long nTileWidth, tools::Long nTileHeight,
                                           bool bNegativeX)
 {
-    if (comphelper::COKit::isTiledAnnotations())
-        return;
-
     // Resizes the virtual device so to contain the entries context
     rDevice.SetOutputSizePixel(Size(nOutputWidth, nOutputHeight), /*bErase*/false);
 

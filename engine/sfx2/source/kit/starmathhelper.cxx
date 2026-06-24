@@ -15,7 +15,6 @@
 #include <sfx2/objsh.hxx>
 
 #include <comphelper/dispatchcommand.hxx>
-#include <comphelper/kit.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/fract.hxx>
 #include <tools/UnitConversion.hxx>
@@ -210,9 +209,6 @@ void KitStarMathHelper::PaintAllInPlaceOnTile(VirtualDevice& rDevice, int nOutpu
                                               int nOutputHeight, int nTilePosX, int nTilePosY,
                                               tools::Long nTileWidth, tools::Long nTileHeight)
 {
-    if (comphelper::COKit::isTiledAnnotations())
-        return;
-
     SfxViewShell* pCurView = SfxViewShell::Current();
     if (!pCurView)
         return;
