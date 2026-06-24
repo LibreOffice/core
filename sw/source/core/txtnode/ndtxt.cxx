@@ -1123,10 +1123,24 @@ SwContentNode *SwTextNode::JoinNext()
         }
         bool bOldHasNumberingWhichNeedsLayoutUpdate = HasNumberingWhichNeedsLayoutUpdate(*pTextNode);
 
+        // The "orig" numbering list is not synced when insert redlines come and go,
+        // so its membership must survive the join.
+        // After a tracked split the inserted (empty) node carries the orig entry
+        // while the surviving node holds the real content; transfer it so the
+        // merged node stays in the orig list.
+
+        const bool bJoinedWasInOrig =
+            pTextNode->GetNum(nullptr, SwListRedlineType::ORIGTEXT) != nullptr;
+        const bool bThisInOrig =
+            GetNum(nullptr, SwListRedlineType::ORIGTEXT) != nullptr;
+
         rNds.Delete(aIdx);
         SetWrong( std::move(pList) );
         SetGrammarCheck( std::move(pList3) );
         SetSmartTags( std::move(pList2) );
+
+        if (bJoinedWasInOrig && !bThisInOrig && GetNumRule())
+            AddToListOrig();
 
         resetAndQueueAccessibilityCheck();
 
@@ -1227,10 +1241,25 @@ void SwTextNode::JoinPrev()
         {
             sw::MoveDeletedPrevFrames(*pTextNode, *this);
         }
+
+        // The "orig" numbering list is not synced when insert redlines come and go,
+        // so its membership must survive the join.
+        // After a tracked split the inserted node may carry the orig entry while
+        // the surviving node holds the real content.
+        // Transfer it so the merged node stays in the orig list.
+        const bool bJoinedWasInOrig =
+            pTextNode->GetNum(nullptr, SwListRedlineType::ORIGTEXT) != nullptr;
+        const bool bThisInOrig =
+            GetNum(nullptr, SwListRedlineType::ORIGTEXT) != nullptr;
+
         rNds.Delete(aIdx);
         SetWrong( std::move(pList) );
         SetGrammarCheck( std::move(pList3) );
         SetSmartTags( std::move(pList2) );
+
+        if (bJoinedWasInOrig && !bThisInOrig && GetNumRule())
+            AddToListOrig();
+
         resetAndQueueAccessibilityCheck();
         InvalidateNumRule();
         sw::CheckResetRedlineMergeFlag(*this,
