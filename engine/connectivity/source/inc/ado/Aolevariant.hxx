@@ -40,7 +40,6 @@ namespace connectivity::ado
         OLEVariant(const VARIANT& varSrc);
         OLEVariant(const OLEVariant& varSrc)    ;
         OLEVariant(bool x)  ;
-        OLEVariant(bool) = delete;
         OLEVariant(sal_Int8 n)  ;
         OLEVariant(sal_Int16 n) ;
         OLEVariant(sal_Int32 n) ;
