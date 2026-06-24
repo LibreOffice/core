@@ -1237,9 +1237,9 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                         break;
                     case typelib_TypeClass_BOOLEAN:
                         seq = seq_allocate(nElements, sizeof (bool));
-                        // TODO the below code should be using System::Bool, not System::Char
+                        // TODO the below code should be using System::Boolean, not System::Char
                         // so we check against what it should be using.
-                        static_assert(sizeof(bool) == sizeof(System::Bool));
+                        static_assert(sizeof(bool) == sizeof(System::Boolean));
                         sri::Marshal::Copy(safe_cast<cli::array<System::Char>^>(cli_data), 0,
                                            IntPtr(& ((uno_Sequence*) seq.get())->elements), nElements);
                         break;
