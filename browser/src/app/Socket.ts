@@ -2227,6 +2227,10 @@ class Socket {
 				// upon socket close.
 				this.close();
 			} else if (command.errorKind === 'documentconflict') {
+				console.error(
+					'Document conflict: storage copy changed underneath unsaved edits.',
+					'\nTechnical details: ' + command.errorDetail,
+				);
 				if (this._map.isReadOnlyMode())
 					return true; // caller should exit immediately.
 				else this._showDocumentConflictPopUp(command.errorDetail);
