@@ -46,7 +46,6 @@ class NotebookbarBase extends JSDialogComponent {
 				this.builder.onCommandStateChanged,
 				this.builder,
 			);
-			this.map.on('updatetoolbarcommandvalues', this.onCommandValues, this);
 		}
 
 		this.registerDPIChangeListener();
@@ -60,7 +59,6 @@ class NotebookbarBase extends JSDialogComponent {
 				this.builder.onCommandStateChanged,
 				this.builder,
 			);
-			this.map.off('updatetoolbarcommandvalues', this.onCommandValues, this);
 		}
 
 		this.unregisterDPIChangeListener();
@@ -156,24 +154,6 @@ class NotebookbarBase extends JSDialogComponent {
 			return true;
 		}
 		return false;
-	}
-
-	private onCommandValues(e: any) {
-		if (e.commandName === '.uno:StyleApply') {
-			const commandValues = e.commandValues;
-			if (!commandValues) return;
-
-			let styles: any[] = [];
-			if (this.map.getDocType() === 'text') {
-				styles = commandValues.ParagraphStyles;
-			} else if (this.map.getDocType() === 'spreadsheet') {
-				styles = commandValues.CellStyles;
-			}
-
-			if (styles && styles.length > 0) {
-				this.updateStylesView(styles);
-			}
-		}
 	}
 
 	private updateStylesView(styles: any[]) {
