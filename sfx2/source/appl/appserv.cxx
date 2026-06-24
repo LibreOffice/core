@@ -1926,17 +1926,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                             return;
                         }
 
-                        Reference<XInterface> xScriptContext;
-
-                        Reference<XController> xController;
-                        if (xFrame.is())
-                            xController = xFrame->getController();
-                        if (xController.is())
-                            xScriptContext = xController->getModel();
-                        if (!xScriptContext.is())
-                            xScriptContext = xController;
-
-                        lcl_callXScript(xFrame, xScriptContext, pDlg->GetScriptURL());
+                        lcl_callXScript(xFrame, pDlg->GetScriptModel(), pDlg->GetScriptURL());
                         pDlg->disposeOnce();
                     });
                 pDlg->LoadLastUsedMacro();

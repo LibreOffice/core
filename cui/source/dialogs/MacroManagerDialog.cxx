@@ -14,6 +14,7 @@
 #include <bitmaps.hlst>
 #include <cfgutil.hxx>
 #include <dialmgr.hxx>
+#include <GetDocumentModel.hxx>
 #include <scriptdlg.hxx>
 #include <strings.hrc>
 #include <basctl/basctldllpublic.hxx>
@@ -225,6 +226,7 @@ void ScriptContainersListBox::Fill(const weld::TreeIter* pEntryIter)
     weld::WaitObject aWait(m_pMacroManagerDialog->getDialog());
 
     css::uno::Reference<css::script::browse::XBrowseNode> xNode;
+    css::uno::Reference<css::frame::XModel> xParentDocumentModel;
     if (pEntryIter == nullptr)
     {
         ClearAll();
@@ -250,6 +252,7 @@ void ScriptContainersListBox::Fill(const weld::TreeIter* pEntryIter)
             = weld::fromId<ScriptContainerInfo*>(m_xTreeView->get_id(*pEntryIter));
 
         xNode.set(pScriptContainerInfoEntry->pBrowseNode);
+        xParentDocumentModel.set(pScriptContainerInfoEntry->xModel);
 
         Remove(pEntryIter, /*bRemoveEntryIter*/ false);
     }
@@ -301,6 +304,7 @@ void ScriptContainersListBox::Fill(const weld::TreeIter* pEntryIter)
                 continue;
 
             OUString uiName = theChild->getName();
+            css::uno::Reference<css::frame::XModel> xDocumentModel;
             if (bIsRootNode)
             {
                 if (uiName == user)
@@ -319,6 +323,14 @@ void ScriptContainersListBox::Fill(const weld::TreeIter* pEntryIter)
                     // containers.
                     continue;
                 }
+                else
+                {
+                    xDocumentModel = getDocumentModel(m_xContext, uiName);
+                }
+            }
+            else
+            {
+                xDocumentModel = xParentDocumentModel;
             }
 
             // We call acquire on the XBrowseNode so that it does not
@@ -344,7 +356,7 @@ void ScriptContainersListBox::Fill(const weld::TreeIter* pEntryIter)
             }
 
             OUString aImage = CuiConfigGroupListBox::GetImage(theChild, m_xContext, bIsRootNode);
-            Insert(theChild, pEntryIter, uiName, aImage, bChildOnDemand);
+            Insert(theChild, xDocumentModel, pEntryIter, uiName, aImage, bChildOnDemand);
         }
     }
 
@@ -381,7 +393,8 @@ void ScriptContainersListBox::Fill(const weld::TreeIter* pEntryIter)
 
             for (const OUString& rDlgName : aDocument.getObjectNames(basctl::E_DIALOGS, aLibName))
             {
-                Insert(nullptr, pEntryIter, rDlgName, RID_CUIBMP_DIALOG, false);
+                Insert(nullptr, xParentDocumentModel, pEntryIter, rDlgName, RID_CUIBMP_DIALOG,
+                       false);
             }
         }
     }
@@ -389,12 +402,13 @@ void ScriptContainersListBox::Fill(const weld::TreeIter* pEntryIter)
 
 void ScriptContainersListBox::Insert(
     const css::uno::Reference<css::script::browse::XBrowseNode>& xInsertNode,
-    const weld::TreeIter* pIter, const OUString& rsUiName, const OUString& rsImage,
-    bool bChildOnDemand, int nPos, weld::TreeIter* pRet)
+    const css::uno::Reference<css::frame::XModel>& xDocumentModel, const weld::TreeIter* pIter,
+    const OUString& rsUiName, const OUString& rsImage, bool bChildOnDemand, int nPos,
+    weld::TreeIter* pRet)
 {
     std::unique_ptr<weld::TreeIter> xNewEntryIter = m_xTreeView->make_iterator();
 
-    OUString sId(weld::toId(new ScriptContainerInfo(xInsertNode.get())));
+    OUString sId(weld::toId(new ScriptContainerInfo(xInsertNode.get(), xDocumentModel)));
     m_xTreeView->insert(pIter, nPos, &rsUiName, &sId, nullptr, nullptr, bChildOnDemand,
                         xNewEntryIter.get());
     m_xTreeView->set_image(*xNewEntryIter, rsImage);
@@ -503,8 +517,8 @@ void ScriptContainersListBox::ScriptContainerSelected()
 
                         childNode->acquire();
 
-                        m_pScriptsListBox->aArr.push_back(
-                            std::make_unique<ScriptInfo>(childNode.get(), sURI, sDescription));
+                        m_pScriptsListBox->aArr.push_back(std::make_unique<ScriptInfo>(
+                            childNode.get(), sURI, sDescription, pScriptContainerInfo->xModel));
 
                         OUString sId(weld::toId(m_pScriptsListBox->aArr.back().get()));
                         m_pScriptsListBox->append(sId, childNode->getName(), RID_CUIBMP_MACRO);
@@ -2430,6 +2444,20 @@ OUString MacroManagerDialog::GetScriptURL() const
             result = pScriptInfo->sURL;
     }
     return result;
+}
+
+css::uno::Reference<css::frame::XModel> MacroManagerDialog::GetScriptModel() const
+{
+    css::uno::Reference<css::frame::XModel> xModel;
+
+    if (std::unique_ptr<weld::TreeIter> xIter = m_xScriptsListBox->get_selected())
+    {
+        ScriptInfo* pScriptInfo = weld::fromId<ScriptInfo*>(m_xScriptsListBox->get_id(*xIter));
+        if (pScriptInfo)
+            xModel = pScriptInfo->xModel;
+    }
+
+    return xModel;
 }
 
 constexpr OUString MACRO_MANAGER_CONFIGNAME = u"MacroManagerDialog"_ustr;
